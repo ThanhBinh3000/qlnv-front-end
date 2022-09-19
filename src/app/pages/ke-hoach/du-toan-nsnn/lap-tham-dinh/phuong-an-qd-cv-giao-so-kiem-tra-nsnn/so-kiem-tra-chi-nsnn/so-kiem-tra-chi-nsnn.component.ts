@@ -10,7 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, LTD, ROLE_CAN_BO, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, LTD, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
 export class ItemData {
@@ -36,7 +36,6 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     //thong tin dang nhap
     id!: string;
     userInfo: any;
-    roles: string[] = [];
     //thong tin chung bao cao
     ngayNhap: string;
     maBaoCao: string;
@@ -82,7 +81,6 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
         this.spinner.show();
         this.id = this.routerActive.snapshot.paramMap.get('id');
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
 
         //lay danh sach danh muc
         this.danhMucService.dMDonVi().toPromise().then(
@@ -121,9 +119,9 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
 
     getStatusButtom() {
         if (this.maDviNhan == this.userInfo?.MA_DVI) {
-            this.statusBtnEx = false;
-            this.statusBtnNew = !this.roles.includes(LTD.ADD_PA_GIAO_SKT);
-            this.statusBtnEdit = !this.roles.includes(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT);
+            this.statusBtnEx = !this.userService.isAccessPermisson(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT);
+            this.statusBtnNew = !this.userService.isAccessPermisson(LTD.ADD_PA_GIAO_SKT);
+            this.statusBtnEdit = !this.userService.isAccessPermisson(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT);
             // if (this.lstBcao.length == 0) {
             //     this.statusBtnEdit = false;
             //     this.statusBtnNew = true;

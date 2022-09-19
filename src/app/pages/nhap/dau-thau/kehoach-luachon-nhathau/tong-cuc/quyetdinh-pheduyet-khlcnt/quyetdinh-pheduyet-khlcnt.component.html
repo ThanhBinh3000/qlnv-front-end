@@ -36,16 +36,17 @@
       <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH LỰA CHỌN NHÀ THẦU </h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
-          *ngIf="userService.isTongCuc() && tabSelected != 'chua-phe-duyet'">
+          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
-          <i class="icon htvbdh_chuyen-xu-ly"></i>
+        <button type="button" class="btn btn-sub" (click)="exportData()"
+          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_EXP')">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>f
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="insert()"
-          *ngIf="userService.isTongCuc() && tabSelected != 'chua-phe-duyet'">
+          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tạo quyết định</span>
         </button>
@@ -78,13 +79,10 @@
             <th></th>
             <th></th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
                   (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
@@ -92,72 +90,51 @@
                   (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
+                <i nz-icon nzType="calendar"></i>
               </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
                   (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
 
             <th *ngIf="userService.isTongCuc()">
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.idThHdr"
                   (input)="filterInTable('idThHdr',filterTable.idThHdr)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
                   (input)="filterInTable('namKhoach',filterTable.namKhoach)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenVthh"
                   (input)="filterInTable('tenVthh',filterTable.tenVthh)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
                   (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGthau"
                   (input)="filterInTable('soGthau',filterTable.soGthau)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongTien"
                   (input)="filterInTable('tongTien',filterTable.tongTien)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th></th>
             <th></th>
@@ -181,16 +158,17 @@
             <td>{{data.tenCloaiVthh}}</td>
             <td>{{data.soGthau}}</td>
             <td>{{data.tongTien}}</td>
-            <td *ngIf="userService.isTongCuc()  ">{{ data.tenTrangThai }}</td>
+            <td *ngIf="userService.isTongCuc()">{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="detail(data)">
+              <a (click)="detail(data)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai == '00' || data.trangThai == '03') && userService.isTongCuc()"
-                (click)="detail(data)">
+              <a *ngIf="(data.trangThai == '00' || data.trangThai == '03') 
+                && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_SUA'))" (click)="detail(data)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == '00' && userService.isTongCuc()" (click)="delete(data)">
+              <a *ngIf="data.trangThai == '00' 
+                && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XOA'))" (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

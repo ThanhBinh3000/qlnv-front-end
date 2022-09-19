@@ -21,7 +21,6 @@ import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von
 export class TongHopComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	roles: string[] = [];
 	userRole: string;
 	loai: string;
 	//thong tin tim kiem
@@ -95,7 +94,6 @@ export class TongHopComponent implements OnInit {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.spinner.show();
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo.roles;
 
 		this.searchFilter.denNgay = new Date();
 		const newDate = new Date();
@@ -104,16 +102,16 @@ export class TongHopComponent implements OnInit {
 
 		this.searchFilter.maDviTao = this.userInfo?.MA_DVI;
 
-		if (!this.roles.includes(CVNC.ADD_SYNTHETIC_CKV)) {
+		if (!this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV)) {
 			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.THOP_TU_CUC_KV);
 		}
 
-		if (!this.roles.includes(CVNC.ADD_SYNTHETIC_TC)) {
+		if (!this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_TC)) {
 			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.THOP_TAI_TC);
 		}
 
 		if (this.loai == "0") {
-			if (this.roles.includes(CVNC.ADD_SYNTHETIC_CKV) || this.roles.includes(CVNC.ADD_SYNTHETIC_TC)) {
+			if (this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV) || this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_TC)) {
 				this.statusTaoMoi = false;
 			}
 			this.status = false;
@@ -121,7 +119,7 @@ export class TongHopComponent implements OnInit {
 		} else {
 			this.status = true;
 			this.disable = true;
-			if (this.roles.includes(CVNC.DUYET_SYNTHETIC_CKV) && this.roles.includes(CVNC.DUYET_SYNTHETIC_TC)) {
+			if (this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_CKV) && this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_TC)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
 				this.searchFilter.trangThai = Utils.TT_BC_4;
@@ -306,17 +304,17 @@ export class TongHopComponent implements OnInit {
 	}
 
 	checkViewReport(loaiDn: string) {
-		return loaiDn == Utils.THOP_TU_CUC_KV ? this.roles.includes(CVNC.VIEW_SYNTHETIC_CKV) : this.roles.includes(CVNC.VIEW_SYNTHETIC_TC);
+		return loaiDn == Utils.THOP_TU_CUC_KV ? this.userService.isAccessPermisson(CVNC.VIEW_SYNTHETIC_CKV) : this.userService.isAccessPermisson(CVNC.VIEW_SYNTHETIC_TC);
 	}
 
 	checkEditReport(trangThai: string, loaiDn: string) {
 		return Utils.statusSave.includes(trangThai) &&
-			(loaiDn == Utils.THOP_TU_CUC_KV ? this.roles.includes(CVNC.EDIT_SYNTHETIC_CKV) : this.roles.includes(CVNC.EDIT_SYNTHETIC_TC));
+			(loaiDn == Utils.THOP_TU_CUC_KV ? this.userService.isAccessPermisson(CVNC.EDIT_SYNTHETIC_CKV) : this.userService.isAccessPermisson(CVNC.EDIT_SYNTHETIC_TC));
 	}
 
 	checkDeleteReport(trangThai: string, loaiDn: string) {
 		return Utils.statusDelete.includes(trangThai) &&
-			(loaiDn == Utils.THOP_TU_CUC_KV ? this.roles.includes(CVNC.DELETE_SYNTHETIC_CKV) : this.roles.includes(CVNC.DELETE_SYNTHETIC_TC));
+			(loaiDn == Utils.THOP_TU_CUC_KV ? this.userService.isAccessPermisson(CVNC.DELETE_SYNTHETIC_CKV) : this.userService.isAccessPermisson(CVNC.DELETE_SYNTHETIC_TC));
 	}
 
 	changeListIdDelete(id: string) {

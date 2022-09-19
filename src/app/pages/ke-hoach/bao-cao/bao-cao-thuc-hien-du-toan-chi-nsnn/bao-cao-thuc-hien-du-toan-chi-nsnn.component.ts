@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { UserService } from 'src/app/services/user.service';
 import { BAO_CAO_THUC_HIEN_CHI_NSNN_LIST } from './bao-cao-thuc-hien-du-toan-chi-nsnn.constant';
 
@@ -17,7 +14,6 @@ export class BaoCaoThucHienDuToanChiNSNNComponent implements OnInit {
 
     //thong tin dang nhap
     userInfo: any;
-    roles: string[] = [];
     donVis: any[] = [];
     capDvi: string;
 
@@ -29,18 +25,15 @@ export class BaoCaoThucHienDuToanChiNSNNComponent implements OnInit {
         private router: Router,
         private userService: UserService,
         private spinner: NgxSpinnerService,
-        private notification: NzNotificationService,
     ) { }
 
     async ngOnInit() {
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
-        console.log(this.roles.filter(e => e.startsWith('KHVDTNSNN_BAOCAO_DTOANCHI')))
         this.BaoCaoThucHienChiNSNNList.forEach(data => {
             let check = false;
             data.Role.forEach(item => {
-                if (this.roles.includes(item)) {
+                if (this.userService.isAccessPermisson(item)) {
                     check = true;
                     return;
                 }

@@ -13,6 +13,8 @@ import { UserService } from 'src/app/services/user.service';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
@@ -21,58 +23,30 @@ import { saveAs } from 'file-saver';
 })
 export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
   @Input() typeVthh: string;
-  toDay = new Date();
-  last30Day = new Date(
-    new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000),
-  );
+
+  formData: FormGroup;
+
   isView = false;
   dataTable: any[] = [];
   dataTableAll: any[] = [];
-  searchFilter = {
-    soQdNhap: '',
-    ngayBanGiaoMau: [this.last30Day, this.toDay],
-    soHopDong: '',
-    diemkho: '',
-    nhaKho: '',
-    nganLoBaoQuan: '',
-    maDvi: '',
-    maHhoa: '',
-    maKho: '',
-    maNgan: '',
-    ngayKnghiemDenNgay: '',
-    ngayKnghiemTuNgay: '',
-    orderBy: '',
-    orderDirection: '',
+
+  filterTable: any = {
     soPhieu: '',
-    str: '',
-    trangThai: '',
-    pageNumber: '',
-    pageSize: '',
-    soBbBanGiao: '',
-  };
-  filterTable = {
-    soPhieu: '',
-    ngayKnghiem: null,
-    soBienBanLayMau: '',
-    ngayLayMau: null,
+    ngayKnghiem: '',
+    soPhieuNhapKho: '',
+    ngayLayMau: '',
     tenDiemKho: '',
     tenNhaKho: '',
     tenNganKho: '',
-    tenNganLo: '',
-    trangThaiDuyet: '',
+    tenLoKho: '',
+    tenTrangThai: '',
   };
-  listDiemKho: any[] = [];
-  listNganKho: any[] = [];
-  listNganLo: any[] = [];
 
-  loaiVthh: string;
-  loaiStr: string;
-  maVthh: string;
-  idVthh: number;
-  routerVthh: string;
   isTatCa: boolean = false;
 
   userInfo: UserLogin;
+  detail: any = {};
+
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -89,8 +63,9 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public userService: UserService,
+    private fb: FormBuilder,
+    public globals: Globals
   ) { }
 
   async ngOnInit() {
@@ -100,6 +75,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
         this.isTatCa = true;
       }
       this.userInfo = this.userService.getUserLogin();
+      this.initForm()
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -108,7 +84,19 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
+  initForm(): void {
+    this.formData = this.fb.group({
+      soPhieuKN: [null],
+      ngayKN: [null],
+      soBienBanLayMau: [null],
+    })
+  }
+  initData(): void {
+    this.userInfo = this.userService.getUserLogin();
+    this.detail.maDvi = this.userInfo.MA_DVI;
+    this.detail.tenDvi = this.userInfo.TEN_DVI;
+    this.detail.capDvi = this.userInfo.CAP_DVI;
+  }
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
@@ -143,24 +131,29 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "capDvis": '3',
-      maDvi: this.userInfo.MA_DVI,
-      maVatTuCha: this.isTatCa ? null : this.typeVthh,
-      ngayBanGiaoMauTu: this.searchFilter.ngayBanGiaoMau
-        ? dayjs(this.searchFilter.ngayBanGiaoMau[0]).format('YYYY-MM-DD')
-        : null,
-      ngayBanGiaoMauDen: this.searchFilter.ngayBanGiaoMau
-        ? dayjs(this.searchFilter.ngayBanGiaoMau[1]).format('YYYY-MM-DD')
-        : null,
-      soPhieu: this.searchFilter.soPhieu || null,
-      soQdNhap: this.searchFilter.soQdNhap || null,
-      soBbBanGiao: this.searchFilter.soBbBanGiao || null,
-      pageNumber: this.page,
-      pageSize: this.pageSize,
+      "capDvis": this.detail.capDvi,
+      "kqDanhGia": null,
+      "maDonVi": this.detail.maDvi,
+      "maVatTuCha": null,
+      "maNganKho": null,
+      "ngayKiemTraDenNgay": null,
+      "ngayKiemTraTuNgay": null,
+      "ngayLapPhieu": null,
+      "orderBy": null,
+      "orderDirection": null,
+      "paggingReq": {
+        "limit": this.pageSize,
+        "orderBy": null,
+        "orderType": null,
+        "page": this.page,
+      },
+      "soPhieu": this.formData.value.soPhieuKN ? this.formData.value.soPhieuKN : null,
+      "soQd": null,
+      "str": null,
+      "tenNguoiGiao": null,
+      "trangThai": null,
     };
     let res = await this.phieuKiemNghiemChatLuongHangService.timKiem(body);
-
-    console.log(res);
 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -207,29 +200,19 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter = {
-      soQdNhap: '',
-      ngayBanGiaoMau: [this.last30Day, this.toDay],
-      soHopDong: '',
-      diemkho: '',
-      nhaKho: '',
-      nganLoBaoQuan: '',
-      maDvi: '',
-      maHhoa: '',
-      maKho: '',
-      maNgan: '',
-      ngayKnghiemDenNgay: '',
-      ngayKnghiemTuNgay: '',
-      orderBy: '',
-      orderDirection: '',
-      soPhieu: '',
-      str: '',
-      trangThai: '',
-      pageNumber: '',
-      pageSize: '',
-      soBbBanGiao: '',
-    };
+    this.formData.reset()
     this.search();
+    this.filterTable = {
+      soPhieu: '',
+      ngayKnghiem: '',
+      soPhieuNhapKho: '',
+      ngayLayMau: '',
+      tenDiemKho: '',
+      tenNhaKho: '',
+      tenNganKho: '',
+      tenLoKho: '',
+      tenTrangThai: '',
+    };
   }
 
   xoaItem(id) {
@@ -306,31 +289,6 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     }
   }
 
-  getTitleVthh() {
-    if (this.router.url.indexOf('/thoc/')) {
-      this.loaiStr = 'Thóc';
-      this.loaiVthh = '01';
-      this.maVthh = '0101';
-      this.idVthh = 2;
-      this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf('/gao/')) {
-      this.loaiStr = 'Gạo';
-      this.loaiVthh = '00';
-      this.maVthh = '0102';
-      this.idVthh = 6;
-      this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf('/muoi/')) {
-      this.loaiStr = 'Muối';
-      this.loaiVthh = '02';
-      this.maVthh = '04';
-      this.idVthh = 78;
-      this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf('/vat-tu/')) {
-      this.loaiStr = 'Vật tư';
-      this.loaiVthh = '03';
-      this.routerVthh = 'vat-tu';
-    }
-  }
 
   redirectToChiTiet(isView: boolean, id: number) {
     this.selectedId = id;
@@ -360,43 +318,37 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     }
   }
 
-  clearFilterTable() {
-    this.filterTable = {
-      soPhieu: '',
-      ngayKnghiem: null,
-      soBienBanLayMau: '',
-      ngayLayMau: null,
-      tenDiemKho: '',
-      tenNhaKho: '',
-      tenNganKho: '',
-      tenNganLo: '',
-      trangThaiDuyet: '',
-    };
-  }
-
   async export() {
     if (this.totalRecord && this.totalRecord > 0) {
       this.spinner.show();
       try {
         let body = {
-          maDvi: this.userInfo.MA_DVI,
-          maVatTuCha: this.isTatCa ? null : this.typeVthh,
-          ngayBanGiaoMauTu: this.searchFilter.ngayBanGiaoMau
-            ? dayjs(this.searchFilter.ngayBanGiaoMau[0]).format('YYYY-MM-DD')
-            : null,
-          ngayBanGiaoMauDen: this.searchFilter.ngayBanGiaoMau
-            ? dayjs(this.searchFilter.ngayBanGiaoMau[1]).format('YYYY-MM-DD')
-            : null,
-          soPhieu: this.searchFilter.soPhieu || null,
-          soQdNhap: this.searchFilter.soQdNhap || null,
-          soBbBanGiao: this.searchFilter.soBbBanGiao || null,
-          pageNumber: this.page,
-          pageSize: this.pageSize,
+          "capDvis": null,
+          "kqDanhGia": null,
+          "maDonVi": null,
+          "maVatTuCha": null,
+          "maNganKho": null,
+          "ngayKiemTraDenNgay": null,
+          "ngayKiemTraTuNgay": null,
+          "ngayLapPhieu": null,
+          "orderBy": null,
+          "orderDirection": null,
+          "paggingReq": {
+            "limit": this.pageSize,
+            "orderBy": null,
+            "orderType": null,
+            "page": this.page,
+          },
+          "soPhieu": this.formData.value.soPhieuKN ? this.formData.value.soPhieuKN : null,
+          "soQd": null,
+          "str": null,
+          "tenNguoiGiao": null,
+          "trangThai": null,
         };
         const blob = await this.phieuKiemNghiemChatLuongHangService.exportList(
           body,
         );
-        saveAs(blob, 'danh-sach-phieu-kiem-nghiem-chat-luong.xlsx');
+        saveAs(blob, 'danh-sach-phieu-kiem-nghiem-chat-luong-xuat.xlsx');
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);
@@ -408,21 +360,4 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     }
   }
 
-  printTable() {
-    let WindowPrt = window.open(
-      '',
-      '',
-      'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0',
-    );
-    let printContent = '';
-    printContent = printContent + '<div>';
-    printContent =
-      printContent + document.getElementById('table-phieu-kncl').innerHTML;
-    printContent = printContent + '</div>';
-    WindowPrt.document.write(printContent);
-    WindowPrt.document.close();
-    WindowPrt.focus();
-    WindowPrt.print();
-    WindowPrt.close();
-  }
 }

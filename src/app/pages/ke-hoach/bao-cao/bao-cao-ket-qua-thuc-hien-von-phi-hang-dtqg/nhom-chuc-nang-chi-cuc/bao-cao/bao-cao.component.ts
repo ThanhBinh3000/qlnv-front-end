@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { BAO_CAO_DOT, BAO_CAO_NAM, BCVP, DON_VI_TIEN, NOT_OK, OK, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
+import { BAO_CAO_DOT, BAO_CAO_NAM, BCVP, DON_VI_TIEN, NOT_OK, OK, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { BAO_CAO_KET_QUA, MAIN_ROUTE_BAO_CAO, MAIN_ROUTE_KE_HOACH } from '../../bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg.constant';
 import { BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM, SOLAMA, TAB_SELECTED } from './bao-cao.constant';
@@ -121,7 +121,6 @@ export class BaoCaoComponent implements OnInit {
 
 	donVis: any[] = [];
 	userInfo: any;
-	roles: string[] = [];
 	maDonViTao: any;
 	donvitien: string;
 	listFile: File[] = [];
@@ -165,7 +164,6 @@ export class BaoCaoComponent implements OnInit {
 		const lbc = this.router.snapshot.paramMap.get('baoCao');
 
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo?.roles;
 
 		this.getListUser();
 		if (this.idDialog) {
@@ -335,14 +333,14 @@ export class BaoCaoComponent implements OnInit {
 
 	getStatusButton() {
 		const isSynthetic = this.baoCao.lstBcaoDviTrucThuocs.length != 0;
-		const checkSave = isSynthetic ? this.roles.includes(BCVP.EDIT_SYNTHETIC_REPORT) : this.roles.includes(BCVP.EDIT_REPORT);
-		const checkApprove = isSynthetic ? this.roles.includes(BCVP.APPROVE_SYNTHETIC_REPORT) : this.roles.includes(BCVP.APPROVE_REPORT);
-		const checkDuyet = isSynthetic ? this.roles.includes(BCVP.DUYET_SYNTHETIC_REPORT) : this.roles.includes(BCVP.DUYET_REPORT);
-		const checkPheDuyet = isSynthetic ? this.roles.includes(BCVP.PHE_DUYET_SYNTHETIC_REPORT) : this.roles.includes(BCVP.PHE_DUYET_REPORT);
-		const checkTiepNhan = this.roles.includes(BCVP.TIEP_NHAN_REPORT);
-		const checkCopy = isSynthetic ? this.roles.includes(BCVP.COPY_SYNTHETIC_REPORT) : this.roles.includes(BCVP.COPY_REPORT);
-		const checkPrint = isSynthetic ? this.roles.includes(BCVP.PRINT_SYTHETIC_REPORT) : this.roles.includes(BCVP.PRINT_REPORT);
-		const checkExport = this.roles.includes(BCVP.EXPORT_EXCEL_REPORT);
+		const checkSave = isSynthetic ? this.userService.isAccessPermisson(BCVP.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.EDIT_REPORT);
+		const checkApprove = isSynthetic ? this.userService.isAccessPermisson(BCVP.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.APPROVE_REPORT);
+		const checkDuyet = isSynthetic ? this.userService.isAccessPermisson(BCVP.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.DUYET_REPORT);
+		const checkPheDuyet = isSynthetic ? this.userService.isAccessPermisson(BCVP.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.PHE_DUYET_REPORT);
+		const checkTiepNhan = this.userService.isAccessPermisson(BCVP.TIEP_NHAN_REPORT);
+		const checkCopy = isSynthetic ? this.userService.isAccessPermisson(BCVP.COPY_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.COPY_REPORT);
+		const checkPrint = isSynthetic ? this.userService.isAccessPermisson(BCVP.PRINT_SYTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.PRINT_REPORT);
+		const checkExport = this.userService.isAccessPermisson(BCVP.EXPORT_EXCEL_REPORT);
 		if (Utils.statusSave.includes(this.baoCao.trangThai) && checkSave) {
 			this.status = false;
 		} else {

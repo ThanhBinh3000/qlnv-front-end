@@ -107,7 +107,6 @@ export class BaoCaoComponent implements OnInit {
 	];
 	trangThaiBieuMaus: any[] = TRANG_THAI_PHU_LUC;
 	canBos: any[];
-	roles: string[] = [];
 	lstFiles: any[] = []; //show file ra man hinh
 	//file
 	listFile: File[] = [];                      // list file chua ten va id de hien tai o input
@@ -183,7 +182,6 @@ export class BaoCaoComponent implements OnInit {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.id = this.routerActive.snapshot.paramMap.get('id');
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo?.roles;
 
 		this.spinner.show();
 		await this.getListUser();
@@ -253,13 +251,13 @@ export class BaoCaoComponent implements OnInit {
 	//nhóm các nút chức năng --báo cáo-----
 	getStatusButton() {
 		const isSynthetic = this.lstDviTrucThuoc.length != 0;
-		const checkSave = isSynthetic ? this.roles.includes(LTD.EDIT_SYNTHETIC_REPORT) : this.roles.includes(LTD.EDIT_REPORT);
-		const checkAppove = isSynthetic ? this.roles.includes(LTD.APPROVE_SYNTHETIC_REPORT) : this.roles.includes(LTD.APPROVE_REPORT);
-		const checkDuyet = isSynthetic ? this.roles.includes(LTD.DUYET_SYNTHETIC_REPORT) : this.roles.includes(LTD.DUYET_REPORT);
-		const checkPheDuyet = isSynthetic ? this.roles.includes(LTD.PHE_DUYET_SYNTHETIC_REPORT) : this.roles.includes(LTD.PHE_DUYET_REPORT);
-		const checkTiepNhan = this.roles.includes(LTD.TIEP_NHAN_REPORT);
-		const checkCopy = isSynthetic ? this.roles.includes(LTD.COPY_SYNTHETIC_REPORT) : this.roles.includes(LTD.COPY_REPORT);
-		const checkPrint = isSynthetic ? this.roles.includes(LTD.PRINT_SYNTHETIC_REPORT) : this.roles.includes(LTD.PRINT_REPORT);
+		const checkSave = isSynthetic ? this.userService.isAccessPermisson(LTD.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.EDIT_REPORT);
+		const checkAppove = isSynthetic ? this.userService.isAccessPermisson(LTD.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.APPROVE_REPORT);
+		const checkDuyet = isSynthetic ? this.userService.isAccessPermisson(LTD.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.DUYET_REPORT);
+		const checkPheDuyet = isSynthetic ? this.userService.isAccessPermisson(LTD.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.PHE_DUYET_REPORT);
+		const checkTiepNhan = this.userService.isAccessPermisson(LTD.TIEP_NHAN_REPORT);
+		const checkCopy = isSynthetic ? this.userService.isAccessPermisson(LTD.COPY_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.COPY_REPORT);
+		const checkPrint = isSynthetic ? this.userService.isAccessPermisson(LTD.PRINT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.PRINT_REPORT);
 		if (checkSave && Utils.statusSave.includes(this.trangThaiBaoCao)) {
 			this.status = false;
 		} else {
@@ -296,7 +294,7 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	getBtnStatus(status: string[], role: string, check: boolean) {
-		return !(status.includes(this.trangThaiBaoCao) && this.roles.includes(role) && check);
+		return !(status.includes(this.trangThaiBaoCao) && this.userService.isAccessPermisson(role) && check);
 	}
 
 	getListUser() {

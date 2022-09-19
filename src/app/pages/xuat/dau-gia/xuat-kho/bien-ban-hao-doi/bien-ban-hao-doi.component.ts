@@ -17,6 +17,11 @@ import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienTh
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
+import { Globals } from 'src/app/shared/globals';
+import { QuanLyBienBanHaoDoiService } from 'src/app/services/quanLyBienBanHaoDoi.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+
+
 // cần thay đổi services khi có
 @Component({
   selector: 'app-bien-ban-hao-doi',
@@ -26,11 +31,7 @@ import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.s
 export class BienBanHaoDoiComponent implements OnInit {
   @Input() typeVthh: string;
 
-  searchFilter = {
-    soBienBan: '',
-    ngayBienBan: '',
-    soQuyetDinh: '',
-  };
+  formData: FormGroup;
 
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
@@ -52,14 +53,14 @@ export class BienBanHaoDoiComponent implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soQuyetDinhXuat: '',
     soBienBan: '',
-    ngayBienBan: '',
-    tenDiemKho: '',
-    tenNhaKho: '',
-    tenNganKho: '',
-    tenLoKho: '',
-    trangThaiDuyet: '',
+    soQd: '',
+    ngayLapPhieu: '',
+    diemKho: '',
+    nhaKho: '',
+    nganKho: '',
+    loKho: '',
+    tenTrangThai: '',
   };
 
   constructor(
@@ -71,11 +72,15 @@ export class BienBanHaoDoiComponent implements OnInit {
     public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private modal: NzModalService,
-  ) {}
+    public globals: Globals,
+    private quanLyBienBanHaoDoiService: QuanLyBienBanHaoDoiService,
+    private fb: FormBuilder,
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.initForm();
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
         // this.loadDiemKho(),
@@ -90,16 +95,62 @@ export class BienBanHaoDoiComponent implements OnInit {
     }
   }
 
-  async loadDiemKho() {
-    let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
+  // tạo form
+  initForm(): void {
+    this.formData = this.fb.group({
+      "soQuyetDinh": [null],
+      "soBienBan": [null],
+      "ngayBienBan": [[]],
+    })
+  }
+
+  // tìm kiếm
+  async search() {
+    let body = {
+      quyetDinhId: this.formData.value.soQuyetDinh ? this.formData.value.soQuyetDinh : null,
+      soBienBan: this.formData.value.soBienBan ? this.formData.value.soBienBan : null,
+      ngayBienBanDen:
+        this.formData.value.ngayBienBan &&
+          this.formData.value.ngayBienBan.length > 1
+          ? dayjs(this.formData.value.ngayBienBan[1]).format('YYYY-MM-DD')
+          : null,
+      ngayBienBanTu:
+        this.formData.value.ngayBienBan &&
+          this.formData.value.ngayBienBan.length > 0
+          ? dayjs(this.formData.value.ngayBienBan[0]).format('YYYY-MM-DD')
+          : null,
+      pageNumber: this.page,
+      pageSize: this.pageSize,
+    };
+
+    let res = await this.quanLyBienBanHaoDoiService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listDiemKho = res.data;
+      let data = res.data;
+      this.dataTable = data.content;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
       }
+      this.dataTableAll = cloneDeep(this.dataTable);
+      this.totalRecord = data.totalElements;
     } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
+
+  // async loadDiemKho() {
+  //   let res = await this.tinhTrangKhoHienThoiService.getAllDiemKho();
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     if (res.data) {
+  //       this.listDiemKho = res.data;
+  //     }
+  //   } else {
+  //     this.notification.error(MESSAGE.ERROR, res.msg);
+  //   }
+  // }
 
   updateAllChecked(): void {
     this.indeterminate = false;
@@ -215,12 +266,9 @@ export class BienBanHaoDoiComponent implements OnInit {
     }
   }
 
+  // xóa tìm kiếm
   clearFilter() {
-    this.searchFilter = {
-      soBienBan: '',
-      ngayBienBan: '',
-      soQuyetDinh: '',
-    };
+    this.formData.reset();
     this.search();
   }
 
@@ -228,7 +276,8 @@ export class BienBanHaoDoiComponent implements OnInit {
     return convertTrangThai(status);
   }
 
-  xoaItem(item: any) {
+  // Xóa 1 bản ghi
+  xoaItem(id: number) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -240,7 +289,7 @@ export class BienBanHaoDoiComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyBienBanTinhKhoService.deleteData(item.id).then((res) => {
+          this.quanLyBienBanHaoDoiService.deleteData(id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -261,69 +310,28 @@ export class BienBanHaoDoiComponent implements OnInit {
     });
   }
 
-  async search() {
-    let body = {
-      denngayBienBan:
-        this.searchFilter.ngayBienBan &&
-        this.searchFilter.ngayBienBan.length > 1
-          ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
-          : null,
-      maDvi: this.userInfo.MA_DVI,
-      orderBy: null,
-      orderDirection: null,
-      pageNumber: this.page,
-      pageSize: this.pageSize,
-      soBienBan: this.searchFilter.soBienBan,
-      soQdNhap: this.searchFilter.soQuyetDinh,
-      str: null,
-      trangThai: null,
-      tungayBienBan:
-        this.searchFilter.ngayBienBan &&
-        this.searchFilter.ngayBienBan.length > 0
-          ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
-          : null,
-    };
-    let res = await this.quanLyBienBanTinhKhoService.timKiem(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.dataTable = data.content;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-      this.dataTableAll = cloneDeep(this.dataTable);
-      this.totalRecord = data.totalElements;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
+  // Xuất file
   export() {
     if (this.totalRecord && this.totalRecord > 0) {
       this.spinner.show();
       try {
         let body = {
-          denngayBienBan:
-            this.searchFilter.ngayBienBan &&
-            this.searchFilter.ngayBienBan.length > 1
-              ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
-              : null,
-          maDvi: this.userInfo.MA_DVI,
-          orderBy: null,
-          orderDirection: null,
-          paggingReq: null,
-          soBienBan: this.searchFilter.soBienBan,
-          soQdXuat: this.searchFilter.soQuyetDinh,
-          str: null,
-          trangThai: null,
-          tungayBienBan:
-            this.searchFilter.ngayBienBan &&
-            this.searchFilter.ngayBienBan.length > 0
-              ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
-              : null,
-        };
-        this.quanLyBienBanTinhKhoService
+          "ngayBienBanDen": this.formData.value.ngayBienBan &&
+            this.formData.value.ngayBienBan.length > 1
+            ? dayjs(this.formData.value.ngayBienBan[1]).format('YYYY-MM-DD')
+            : null,
+          "ngayBienBanTu": this.formData.value.ngayBienBan &&
+            this.formData.value.ngayBienBan.length > 0
+            ? dayjs(this.formData.value.ngayBienBan[0]).format('YYYY-MM-DD')
+            : null,
+          "paggingReq": {
+            "limit": this.pageSize,
+            "page": this.page
+          },
+          "quyetDinhId": this.formData.value.soQuyetDinh ? this.formData.value.soQuyetDinh : null,
+          "soBienBan": this.formData.value.soBienBan ? this.formData.value.soBienBan : null
+        }
+        this.quanLyBienBanHaoDoiService
           .exportList(body)
           .subscribe((blob) => saveAs(blob, 'danh-sach-bien-ban-hao-doi.xlsx'));
         this.spinner.hide();
@@ -337,6 +345,7 @@ export class BienBanHaoDoiComponent implements OnInit {
     }
   }
 
+  // Xóa nhiều bản ghi
   deleteSelect() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
@@ -358,7 +367,7 @@ export class BienBanHaoDoiComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyBienBanTinhKhoService.deleteMultiple({
+            let res = await this.quanLyBienBanHaoDoiService.deleteMultiple({
               ids: dataDelete,
             });
             if (res.msg == MESSAGE.SUCCESS) {
@@ -386,21 +395,27 @@ export class BienBanHaoDoiComponent implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string) {
+  // tìm kiếm trong bảng
+  filterInTable(key: string, value: string, date: boolean) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (
-            item[key].toString().toLowerCase().indexOf(value.toLowerCase()) !=
-            -1
-          ) {
-            temp.push(item);
-          }
-        });
+        if (date) {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase() === dayjs(value).format('YYYY-MM-DD')) {
+              temp.push(item)
+            }
+          });
+        } else {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
+          });
+        }
       }
-      this.dataTable = [...this.dataTable, ...temp];
+      this.dataTable = [...this.dataTable, ...temp]
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
@@ -408,12 +423,14 @@ export class BienBanHaoDoiComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQuyetDinhNhap: '',
       soBienBan: '',
-      ngayBienBan: '',
-      tenDiemKho: '',
-      tenNhaKho: '',
-      tenNganLo: '',
+      soQd: '',
+      ngayLapPhieu: '',
+      diemKho: '',
+      nhaKho: '',
+      nganKho: '',
+      loKho: '',
+      tenTrangThai: '',
     };
   }
 }

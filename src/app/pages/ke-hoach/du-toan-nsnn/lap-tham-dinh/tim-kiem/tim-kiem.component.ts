@@ -30,7 +30,6 @@ export class TimKiemComponent implements OnInit {
 	};
 	newDate = new Date();
 	listIdDelete: string[] = [];
-	roles: string[] = [];
 	//danh muc
 	danhSachBaoCao: any[] = [];
 	trangThais: any[] = [
@@ -95,9 +94,8 @@ export class TimKiemComponent implements OnInit {
 		this.searchFilter.tuNgay = newDate;
 
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo.roles;
 
-		if (this.roles.includes(LTD.ADD_REPORT)) {
+		if (this.userService.isAccessPermisson(LTD.ADD_REPORT)) {
 			this.statusTaoMoi = false;
 		}
 
@@ -257,19 +255,19 @@ export class TimKiemComponent implements OnInit {
 	}
 
 	checkViewReport() {
-		return this.roles.includes(LTD.VIEW_REPORT);
+		return this.userService.isAccessPermisson(LTD.VIEW_REPORT);
 	}
 
 	checkEditReport(item: any) {
 		const isSynthetic = item.tongHopTu != "[]";
 		return Utils.statusSave.includes(item.trangThai) &&
-			(isSynthetic ? this.roles.includes(LTD.EDIT_SYNTHETIC_REPORT) : this.roles.includes(LTD.EDIT_REPORT));
+			(isSynthetic ? this.userService.isAccessPermisson(LTD.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.EDIT_REPORT));
 	}
 
 	checkDeleteReport(item: any) {
 		const isSynthetic = item.tongHopTu != "[]";
 		return Utils.statusDelete.includes(item.trangThai) &&
-			(isSynthetic ? this.roles.includes(LTD.DELETE_SYNTHETIC_REPORT) : this.roles.includes(LTD.DELETE_REPORT));
+			(isSynthetic ? this.userService.isAccessPermisson(LTD.DELETE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.DELETE_REPORT));
 	}
 
 	changeListIdDelete(id: string) {

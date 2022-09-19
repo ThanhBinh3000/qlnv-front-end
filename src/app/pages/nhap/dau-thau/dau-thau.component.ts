@@ -20,7 +20,7 @@ export class DauThauComponent implements OnInit {
       this.visibleTab = value;
     });
   }
-  tabSelected = 'khlcnt';
+  tabSelected = this.userService.isChiCuc() ? 'qdgnvnh' : 'khlcnt';
   selectTab(tab) {
     this.tabSelected = tab;
   }

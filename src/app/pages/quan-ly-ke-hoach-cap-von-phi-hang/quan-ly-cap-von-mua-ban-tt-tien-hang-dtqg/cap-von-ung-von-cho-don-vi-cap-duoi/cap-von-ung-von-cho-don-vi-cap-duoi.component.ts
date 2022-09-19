@@ -1,6 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -16,7 +15,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_VON, MONEY_LIMIT, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_VON, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
@@ -51,7 +50,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     id: string;
     loai: string;
     userInfo: any;
-    roles: string[] = [];
     //thong tin chung bao cao
     maCvUvDuoi: string;
     maCvUvTren: string;
@@ -131,7 +129,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         //lay thong tin user
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
         //lay danh sach danh muc
         await this.danhMuc.dMDviCon().toPromise().then(
             (res) => {
@@ -203,7 +200,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (Utils.statusSave.includes(this.trangThai) && this.roles.includes(CVMB.EDIT_REPORT_CV)) {
+        if (Utils.statusSave.includes(this.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_CV)) {
             this.status = false;
         } else {
             this.status = true;
@@ -218,7 +215,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     }
 
     getBtnStatus(status: string[], role: string, check: boolean) {
-        return !(status.includes(this.trangThai) && this.roles.includes(role) && check);
+        return !(status.includes(this.trangThai) && this.userService.isAccessPermisson(role) && check);
     }
 
     //upload file

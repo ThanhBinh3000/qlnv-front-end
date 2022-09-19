@@ -8,6 +8,9 @@ import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { UserAPIService } from 'src/app/services/user/userApi.service';
+import { StorageService } from 'src/app/services/storage.service';
+import { STORAGE_KEY } from 'src/app/constants/config';
 declare var vgcapluginObject: any;
 
 @Component({
@@ -25,8 +28,10 @@ export class LoginComponent implements OnInit {
     private notification: NzNotificationService,
     private apiService: ApiService,
     private authService: AuthService,
+    private userAPIService: UserAPIService,
     public router: Router,
-  ) {}
+    private storageService: StorageService,
+  ) { }
 
   ngOnInit(): void {
     this.initForm();
@@ -51,10 +56,21 @@ export class LoginComponent implements OnInit {
         username: form.UserName,
         password: form.Password,
       };
-      this.apiService.login(user).subscribe((res: OldResponseData) => {
+      this.apiService.login(user).subscribe(async (res: OldResponseData) => {
         if (res.data) {
           this.authService.saveToken(res.data.token);
           this.router.navigate(['/']);
+          let jsonData = '';
+          let permission = await this.userAPIService.getPermission();
+          if (permission.msg == MESSAGE.SUCCESS) {
+            let data = permission.data;
+            if (data && data.length > 0) {
+              jsonData = JSON.stringify(data);
+            }
+          } else {
+            this.notification.error(MESSAGE.ERROR, permission.msg);
+          }
+          this.storageService.set(STORAGE_KEY.PERMISSION, jsonData);
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
         }

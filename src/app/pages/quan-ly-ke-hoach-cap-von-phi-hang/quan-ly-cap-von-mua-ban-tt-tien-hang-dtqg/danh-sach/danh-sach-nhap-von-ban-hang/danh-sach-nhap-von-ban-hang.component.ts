@@ -20,7 +20,6 @@ import { TRANG_THAI_TIM_KIEM_CON } from '../../quan-ly-cap-von-mua-ban-tt-tien-h
 export class DanhSachNhapVonBanHangComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	roles: string[] = [];
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -65,7 +64,6 @@ export class DanhSachNhapVonBanHangComponent implements OnInit {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.spinner.show();
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo?.roles;
 
 		this.searchFilter.denNgay = new Date();
 		const newDate = new Date();
@@ -75,7 +73,7 @@ export class DanhSachNhapVonBanHangComponent implements OnInit {
 		this.searchFilter.maDvi = this.userInfo?.MA_DVI;
 
 		if (this.loai == "0") {
-			if (this.roles.includes(CVMB.ADD_REPORT_NTV_BH)) {
+			if (this.userService.isAccessPermisson(CVMB.ADD_REPORT_NTV_BH)) {
 				this.statusTaoMoi = false;
 			}
 			this.status = true;
@@ -83,7 +81,7 @@ export class DanhSachNhapVonBanHangComponent implements OnInit {
 		} else {
 			this.status = false;
 			this.disable = true;
-			if (this.roles.includes(CVMB.DUYET_REPORT_NTV_BH)) {
+			if (this.userService.isAccessPermisson(CVMB.DUYET_REPORT_NTV_BH)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
 				this.searchFilter.trangThai = Utils.TT_BC_4;
@@ -223,11 +221,11 @@ export class DanhSachNhapVonBanHangComponent implements OnInit {
 	}
 
 	checkEditReport(trangThai: string) {
-		return Utils.statusSave.includes(trangThai) && this.roles.includes(CVMB.EDIT_REPORT_NTV_BH);
+		return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTV_BH);
 	}
 
 	checkDeleteReport(trangThai: string) {
-		return Utils.statusDelete.includes(trangThai) && this.roles.includes(CVMB.DELETE_REPORT_NTV_BH);
+		return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DELETE_REPORT_NTV_BH);
 	}
 
 	changeListIdDelete(id: string) {

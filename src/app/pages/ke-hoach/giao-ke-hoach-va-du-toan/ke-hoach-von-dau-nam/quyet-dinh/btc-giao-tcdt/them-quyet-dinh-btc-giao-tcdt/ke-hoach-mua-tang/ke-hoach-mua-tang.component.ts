@@ -40,13 +40,11 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
 
   editItem(index: number): void {
     this.dataEdit[index].edit = true;
-    console.log(this.dataEdit[index].data);
     this.onChangeLoaiVthh(this.dataEdit[index].data.loaiVthh, 'edit', index);
   }
 
 
   xoaItem(index: number) {
-    console.log(index, this.dataTable);
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -122,11 +120,13 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
 
 
   calcTong() {
-    const sum = this.dataTable.reduce((prev, cur) => {
-      prev += cur.duToan;
-      return prev;
-    }, 0);
-    return sum;
+    if (this.dataTable) {
+      const sum = this.dataTable.reduce((prev, cur) => {
+        prev += cur.tongTien;
+        return prev;
+      }, 0);
+      return sum;
+    }
   }
 
   onChangeLoaiVthh(event, typeChange, index?) {
@@ -144,7 +144,6 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
       this.dsChungLoaiHangHoaTable = [];
       this.rowItem.dviTinh = null;
       const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
-      console.log(loaiVthh);
       if (loaiVthh.length > 0) {
         this.dataEdit[index].data.dviTinh = loaiVthh[0].maDviTinh;
         this.dataEdit[index].data.tenVthh = loaiVthh[0].ten;

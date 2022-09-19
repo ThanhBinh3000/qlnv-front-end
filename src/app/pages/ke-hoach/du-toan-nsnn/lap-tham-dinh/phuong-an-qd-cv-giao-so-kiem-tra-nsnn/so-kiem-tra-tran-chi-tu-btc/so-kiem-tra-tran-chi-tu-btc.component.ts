@@ -1,6 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -11,12 +10,11 @@ import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-th
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, LTD, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, LTD, MONEY_LIMIT, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { DataService } from 'src/app/services/data.service';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
 
 
@@ -47,7 +45,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     //thong tin dang nhap
     id: string;
     userInfo: any;
-    roles: string[] = [];
     //thong tin chung bao cao
     maBaoCao: string;
     ngayTao: string;
@@ -134,7 +131,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         this.spinner.show();
         //lay thong tin user
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
         this.maDonViTao = this.userInfo?.MA_DVI;
 
         if (this.id) {
@@ -195,13 +191,13 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (!this.roles.includes(LTD.EDIT_SKT_BTC)) {
+        if (!this.userService.isAccessPermisson(LTD.EDIT_SKT_BTC)) {
             this.status = true;
         } else {
             this.status = false;
         }
         const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
-        this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(LTD.EDIT_SKT_BTC) && checkChirld);
+        this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(LTD.EDIT_SKT_BTC) && checkChirld);
         if (this.id) {
             this.statusBtnSave = true;
         }
@@ -210,13 +206,13 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             this.statusBtnEdit = true;
         } else {
             const edit = this.lstBcao.length == 0;
-            this.statusBtnEdit = !(edit && this.roles.includes(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT) && checkChirld);
-            this.statusChinhXac = !(!edit && this.roles.includes(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT) && checkChirld);
+            this.statusBtnEdit = !(edit && this.userService.isAccessPermisson(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT) && checkChirld);
+            this.statusChinhXac = !(!edit && this.userService.isAccessPermisson(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT) && checkChirld);
         }
         this.statusBtnCopy = !(this.id && checkChirld);
-        this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBanGhi) && this.roles.includes(LTD.PRINT_PA_GIAO_SKT) && checkChirld);
+        this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(LTD.PRINT_PA_GIAO_SKT) && checkChirld);
 
-        if (!this.roles.includes(LTD.ADD_PA_GIAO_SKT)) {
+        if (!this.userService.isAccessPermisson(LTD.ADD_PA_GIAO_SKT)) {
             this.statusBtnNew = true;
         }
     }

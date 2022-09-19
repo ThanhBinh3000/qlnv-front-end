@@ -22,6 +22,7 @@ export class ThongTinKhaoSatGia {
 export class ThongTinChungPag {
   id: number;
   cloaiVthh?: string;
+  tenCloaiVthh?: string;
   tchuanCluong?: string;
   soLuong?: number;
   donViTinh?: string;

@@ -4,11 +4,12 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD" type="button" class="btn btn-sub" (click)="taoQdinh()">
+    <button *ngIf="formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD" type="button" class="btn btn-sub"
+      (click)="taoQdinh()">
       <i class="icon htvbdh_tcdt_tao-qd"></i>
       <span>Tạo quyết định</span>
     </button>
-    <button *ngIf="((formData.value.trangThai == globals.prop.NHAP_CHUA_TAO_QD || formData.value.trangThai == globals.prop.NHAP_DA_DU_THAO_QD)  && isTongHop)" type="button" class="btn btn-main" (click)="save()">
+    <button *ngIf="(formData.value.trangThai == '' && isTongHop)" type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>

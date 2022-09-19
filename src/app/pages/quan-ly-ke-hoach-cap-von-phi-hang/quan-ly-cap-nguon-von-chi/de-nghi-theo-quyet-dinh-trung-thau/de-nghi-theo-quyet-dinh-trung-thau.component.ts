@@ -15,7 +15,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 
 export class ItemCongVan {
@@ -34,7 +34,6 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     //thong tin dang nhap
     id: string;
     userInfo: any;
-    roles: string[] = [];
     loai: string;
     //thong tin chung bao cao
     maDeNghi: string;
@@ -140,7 +139,6 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         //lay thong tin user
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
 
         await this.danhMuc.dMVatTu().toPromise().then(
             (res) => {
@@ -218,24 +216,24 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     //check role cho các nut trinh duyet
     getStatusButton() {
         if (Utils.statusSave.includes(this.trangThai) &&
-            (this.loaiDn == Utils.MUA_VTU ? this.roles.includes(CVNC.EDIT_DN_MVT) : this.roles.includes(CVNC.EDIT_DN_MLT))) {
+            (this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT) : this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT))) {
             this.status = false;
         } else {
             this.status = true;
         }
 
         const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-        const checkSave = this.loaiDn == Utils.MUA_VTU ? this.roles.includes(CVNC.EDIT_DN_MVT) : this.roles.includes(CVNC.EDIT_DN_MLT);
+        const checkSave = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT) : this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT);
         this.statusBtnSave = !(Utils.statusSave.includes(this.trangThai) && checkSave && checkChirld);
-        const checkApprove = this.loaiDn == Utils.MUA_VTU ? this.roles.includes(CVNC.APPROVE_DN_MVT) : this.roles.includes(CVNC.APPROVE_DN_MLT);
+        const checkApprove = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.APPROVE_DN_MVT) : this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT);
         this.statusBtnApprove = !(Utils.statusApprove.includes(this.trangThai) && checkApprove && checkChirld);
-        const checkPheDuyet = this.loaiDn == Utils.MUA_VTU ? this.roles.includes(CVNC.PHE_DUYET_DN_MVT) : this.roles.includes(CVNC.PHE_DUYET_DN_MLT);
+        const checkPheDuyet = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT) : this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT);
         if (this.trangThai == Utils.TT_BC_2) {
             this.statusBtnLD = !(checkPheDuyet && checkChirld);
         } else {
             this.statusBtnLD = !(Utils.statusPheDuyet.includes(this.trangThai) && checkPheDuyet && checkChirld);
         }
-        const checkCopy = this.loaiDn == Utils.MUA_VTU ? this.roles.includes(CVNC.COPY_DN_MVT) : this.roles.includes(CVNC.COPY_DN_MLT);
+        const checkCopy = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.COPY_DN_MVT) : this.userService.isAccessPermisson(CVNC.COPY_DN_MLT);
         this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThai) && checkCopy && checkChirld);
     }
 

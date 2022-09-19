@@ -10,43 +10,17 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="4">
-            <label class="search__label">Số QĐ</label>
+            <label class="search__label">Số quyết định</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.soQD" placeholder="Số QĐ" />
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="12">
             <label class="search__label">Trích yếu</label>
             <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" placeholder="Trích yếu" />
           </div>
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="6">
             <label class="search__label">Ngày ký</label>
-            <!-- <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-              [(ngModel)]="startValue" nzPlaceHolder="Ngày ký từ ngày"></nz-date-picker> -->
             <nz-range-picker nzFormat="dd/MM/yyyy" [(ngModel)]="startValue">
             </nz-range-picker>
-          </div>
-          <!-- <div nz-col nzSpan="5">
-            <label class="search__label">Đến ngày</label>
-            <nz-date-picker class="search__input" #endDatePicker [nzDisabledDate]="disabledEndDate"
-              nzFormat="yyyy-MM-dd" [(ngModel)]="endValue" nzPlaceHolder="Đến ngày"></nz-date-picker>
-          </div> -->
-          <div nz-col nzSpan="8">
-            <label class="search__label">Đơn vị</label>
-            <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
-              <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
-                [nzAutocomplete]="auto" />
-            </nz-input-group>
-            <ng-template #suffixIcon>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-            <nz-autocomplete #auto>
-              <ng-container>
-                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi"
-                  (click)="selectDonVi(option)">
-                  {{
-                  option.labelDonVi }}
-                </nz-auto-option>
-              </ng-container>
-            </nz-autocomplete>
           </div>
         </div>
         <div class="cangiua group-button-search">
@@ -62,82 +36,6 @@
       </nz-card>
       <div class="tab-giao-chi-tieu mt12">
         <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="extraTemplate">
-          <!-- <nz-tab [nzTitle]="title_1">
-            <ng-template #title_1>
-              Tất cả
-              (<span class="number-title-tab">125</span>)
-            </ng-template>
-            <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-              [nzShowPagination]="false" nzBordered>
-              <thead>
-                <tr>
-                  <th width="45px">
-                    <label nz-checkbox nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                      [nzIndeterminate]="indeterminate"></label>
-                  </th>
-                  <th width="60px">STT</th>
-                  <th width="130px">Số quyết định</th>
-                  <th width="175px">Ngày ký</th>
-                  <th width="175px">Năm kế hoạch</th>
-                  <th width="" class="text-center">Trích yếu</th>
-                  <th width="175px" class="text-center">Trạng thái</th>
-                  <th width="130px" class="text-right"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
-                  <td><input class="search__input" nz-input nzSize="small" /></td>
-                  <td>
-                  </td>
-                </tr>
-                <tr *ngFor="let data of basicTable.data; let i = index">
-                  <td>
-                    <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                      [nzDisabled]="data.trangThai != '00'"></label>
-                  </td>
-                  <td>{{(page-1)*pageSize+i+1}}</td>
-                  <td>{{ data.soQuyetDinh }}</td>
-                  <td>{{ data.ngayKy }}</td>
-                  <td>{{ data.namKeHoach }}</td>
-                  <td class="text-center">{{ data.trichYeu }}</td>
-                  <td class="text-center">{{ data.trangThaiDuyet }}</td>
-                  <td>
-                    <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)">
-                      <i class="icon htvbdh_eye"></i>
-                    </a>
-                    <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)"
-                      *ngIf="data.trangThai === globals.prop.DU_THAO">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                    <a (click)="xoaItem(data)" *ngIf="data.trangThai === globals.prop.DU_THAO">
-                      <i class="fa fa-trash-o do"></i>
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </nz-table>
-            <div class="tab-content tab-menu" id="myTabContent">
-              <div class="tab-pane fade show active justify-content-between">
-                <div class="trai">
-                </div>
-                <div class="canphai">
-                  <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-                    [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-                    (nzPageSizeChange)="changePageSize($event)">
-                    <ng-template #rangeTemplate let-range="range" let-total>
-                      {{ range[0] }}-{{ range[1] }} of {{ total }} items
-                    </ng-template>
-                  </nz-pagination>
-                </div>
-              </div>
-            </div>
-          </nz-tab> -->
           <nz-tab [nzTitle]="title_2" *ngIf="!userService.isChiCuc()" (nzClick)="selectTab('tong-cuc')">
             <ng-template #title_2>
               QĐ giao chỉ tiêu của Tổng Cục
@@ -228,7 +126,7 @@
                       <i class=" icon htvbdh_eye"></i>
                     </a>
                     <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)"
-                      *ngIf="data.trangThai === globals.prop.DU_THAO && !userService.isCuc()">
+                      *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LDC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP || data.trangThai === globals.prop.NHAP_TU_CHOI_LDV) && !userService.isCuc() && !userService.isChiCuc()">
                       <i class="fa fa-pencil"></i>
                     </a>
                     <a (click)="xoaItem(data)" *ngIf="data.trangThai === globals.prop.DU_THAO && !userService.isCuc()">
@@ -238,7 +136,7 @@
                 </tr>
               </tbody>
             </nz-table>
-            <div class="tab-paging tab-content tab-menu" id="myTabContent">
+            <div class="tab-paging tab-content tab-menu" >
               <div class="tab-pane fade show active justify-content-between">
                 <div class="trai">
                 </div>
@@ -344,11 +242,11 @@
                       <i class="icon htvbdh_eye"></i>
                     </a>
                     <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)"
-                      *ngIf="data.trangThai === globals.prop.DU_THAO && !userService.isTongCuc() && !userService.isChiCuc()">
+                      *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LDC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP)  && !userService.isTongCuc() && !userService.isChiCuc()">
                       <i class="fa fa-pencil"></i>
                     </a>
                     <a (click)="xoaItem(data)"
-                      *ngIf="data.trangThai === globals.prop.DU_THAO && !userService.isTongCuc() && !userService.isChiCuc()">
+                      *ngIf="data.trangThai === globals.prop.NHAP_DU_THAO && !userService.isChiCuc()">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>

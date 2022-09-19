@@ -1,14 +1,13 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import { UserService } from 'src/app/services/user.service';
-import { CVMB, LOAI_VON, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
+import { CVMB, LOAI_VON, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { TRANG_THAI_TIM_KIEM_CHA } from '../../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
@@ -20,7 +19,6 @@ import { TRANG_THAI_TIM_KIEM_CHA } from '../../quan-ly-cap-von-mua-ban-tt-tien-h
 export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	roles: string[] = [];
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -65,7 +63,6 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.spinner.show();
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo.roles;
 
 		this.searchFilter.denNgay = new Date();
 		const newDate = new Date();
@@ -92,7 +89,7 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 		} else {
 			this.status = false;
 			this.disable = true;
-			if (this.roles.includes(CVMB.DUYET_REPORT_GNV_TH)) {
+			if (this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_TH)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
 				this.searchFilter.trangThai = Utils.TT_BC_4;
@@ -202,7 +199,7 @@ export class DanhSachGhiNhanTienVonThuaComponent implements OnInit {
 	// }
 
 	checkEditReport(trangThai: string) {
-		return Utils.statusSave.includes(trangThai) && this.roles.includes(CVMB.EDIT_REPORT_GNV_TH);
+		return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_TH);
 	}
 
 	close() {

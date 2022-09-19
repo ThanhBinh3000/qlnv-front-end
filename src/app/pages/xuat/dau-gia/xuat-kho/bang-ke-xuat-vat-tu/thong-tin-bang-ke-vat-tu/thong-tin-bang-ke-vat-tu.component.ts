@@ -33,8 +33,8 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() typeVthh: string;
-  @Output()
-  showListEvent = new EventEmitter<any>();
+  @Output('close') onClose = new EventEmitter<any>();
+
 
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   isVisibleChangeTab$ = new Subject();
@@ -254,7 +254,7 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
       "tuNgayQd": null,
       "veViec": null
     }
-    let res = await this.quyetDinhGiaoNhapHangService.timKiem(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listSoQuyetDinh = data.content;
@@ -717,7 +717,7 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
   }
 
   back() {
-    this.showListEvent.emit();
+    this.onClose.emit();
   }
 
   async save(isOther: boolean) {
@@ -774,21 +774,26 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
-  print() {
-
+  isDisableField() {
+    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
+      return true;
+    }
   }
-
   thongTinTrangThai(trangThai: string): string {
-    if (
-      trangThai === '00' ||
-      trangThai === '01' ||
-      trangThai === '04' ||
-      trangThai === '03'
-    ) {
-      return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === '02') {
+    // if (
+    //   trangThai === '00' ||
+    //   trangThai === '01' ||
+    //   trangThai === '04' ||
+    //   trangThai === '03'
+    // ) {
+    //   return 'du-thao-va-lanh-dao-duyet';
+    // } else if (trangThai === '02') {
+    //   return 'da-ban-hanh';
+    // }
+    if (trangThai === '02') {
       return 'da-ban-hanh';
+    } else {
+      return 'du-thao-va-lanh-dao-duyet';
     }
   }
 }

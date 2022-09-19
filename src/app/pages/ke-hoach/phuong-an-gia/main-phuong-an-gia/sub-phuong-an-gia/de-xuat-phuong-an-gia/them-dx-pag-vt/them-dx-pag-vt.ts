@@ -134,20 +134,17 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   luuEdit(id: number, page: string): void {
     if (page == 'ttc') {
-      const index = this.pagTtChungs.findIndex((item) => item.id === id);
-      Object.assign(this.pagTtChungs[index], this.dataEdit[id].data);
+      Object.assign(this.pagTtChungs[id], this.dataEdit[id].data);
       this.dataEdit[id].edit = false;
     }
 
     if (page == 'ccXdg') {
-      const index = this.dataTableCanCuXdg.findIndex((item) => item.id === id);
-      Object.assign(this.dataTableCanCuXdg[index], this.dataEditCc[id].data);
+      Object.assign(this.dataTableCanCuXdg[id], this.dataEditCc[id].data);
       this.dataEditCc[id].edit = false;
     }
     if (page == 'ppxdg') {
       this.dataEditPp[id].data.tongChiPhi = this.dataEditPp[id].data.giaVonNk + this.dataEditPp[id].data.chiPhiChung + this.dataEditPp[id].data.chiPhiPhanBo;
-      const index = this.pagPpXacDinhGias.findIndex((item) => item.id === id);
-      Object.assign(this.pagPpXacDinhGias[index], this.dataEditPp[id].data);
+      Object.assign(this.pagPpXacDinhGias[id], this.dataEditPp[id].data);
       this.dataEditPp[id].edit = false;
     }
 
@@ -246,8 +243,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   updateEditCache(page): void {
     if (page == 'ttc') {
       if (this.pagTtChungs) {
-        this.pagTtChungs.forEach((item) => {
-          this.dataEdit[item.id] = {
+        this.pagTtChungs.forEach((item, index) => {
+          this.dataEdit[index] = {
             edit: false,
             data: {...item},
           };
@@ -256,8 +253,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
     if (page == 'ccXdg') {
       if (this.dataTableCanCuXdg) {
-        this.dataTableCanCuXdg.forEach((item) => {
-          this.dataEditCc[item.id] = {
+        this.dataTableCanCuXdg.forEach((item, index) => {
+          this.dataEditCc[index] = {
             edit: false,
             data: {...item},
           };
@@ -266,8 +263,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
     if (page == 'ppxdg') {
       if (this.pagPpXacDinhGias) {
-        this.pagPpXacDinhGias.forEach((item) => {
-          this.dataEditPp[item.id] = {
+        this.pagPpXacDinhGias.forEach((item, index) => {
+          this.dataEditPp[index] = {
             edit: false,
             data: {...item},
           };
@@ -423,16 +420,18 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.rowItemTtc.donViTinh = null;
     const cloaiVthh = this.listCloaiVthh.filter(item => item.ma == event);
     if (cloaiVthh.length > 0) {
+      this.rowItemTtc.tenCloaiVthh = cloaiVthh[0].ten
       this.rowItemTtc.donViTinh = cloaiVthh[0].maDviTinh
       this.rowItemTtc.tchuanCluong = cloaiVthh[0].tchuanCluong
     }
   }
-  async onChangecloaiVthh123(event, id) {
-    this.dataEdit[id].data.donViTinh = null;
+  async onChangecloaiVthh123(event, idx) {
+    this.dataEdit[idx].data.donViTinh = null;
     const cloaiVthh = this.listCloaiVthh.filter(item => item.ma == event);
     if (cloaiVthh.length > 0) {
-      this.dataEdit[id].data.donViTinh = cloaiVthh[0].maDviTinh
-      this.dataEdit[id].data.tchuanCluong = cloaiVthh[0].tchuanCluong
+      this.dataEdit[idx].data.tenCloaiVthh = cloaiVthh[0].ten
+      this.dataEdit[idx].data.donViTinh = cloaiVthh[0].maDviTinh
+      this.dataEdit[idx].data.tchuanCluong = cloaiVthh[0].tchuanCluong
     }
   }
 

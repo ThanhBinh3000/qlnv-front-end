@@ -1,6 +1,5 @@
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -8,11 +7,11 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { UserService } from 'src/app/services/user.service';
-import { LTD, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { DataService } from 'src/app/services/data.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
+import { LTD, Utils } from 'src/app/Utility/utils';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
 
 export class ItemCongVan {
@@ -28,7 +27,6 @@ export class ItemCongVan {
 export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     //thong tin dang nhap
     userInfo: any;
-    roles: string[] = [];
     userRole: string;
     loai: string;
     title: string;
@@ -98,10 +96,8 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         private routerActive: ActivatedRoute,
         private datePipe: DatePipe,
         private notification: NzNotificationService,
-        private fb: FormBuilder,
         private spinner: NgxSpinnerService,
         private userService: UserService,
-        private location: Location,
         private dataSource: DataService,
     ) {
     }
@@ -119,7 +115,6 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         }
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
         this.searchFilter.donViTao = this.userInfo?.MA_DVI;
 
         this.searchFilter.denNgay = new Date();
@@ -140,7 +135,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         );
         this.spinner.hide();
 
-        if ((this.loai == '0' && this.roles.includes(LTD.ADD_SKT_BTC)) || (this.loai == '1' && this.roles.includes(LTD.ADD_QDCV_GIAO_SKT))) {
+        if ((this.loai == '0' && this.userService.isAccessPermisson(LTD.ADD_SKT_BTC)) || (this.loai == '1' && this.userService.isAccessPermisson(LTD.ADD_QDCV_GIAO_SKT))) {
             this.statusTaoMoi = false;
         }
         if (!this.status && this.userService.isTongCuc()) {
@@ -409,15 +404,15 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     }
 
     checkViewReport() {
-        return this.roles.includes(LTD.VIEW_PA_GIAO_SKT);
+        return this.userService.isAccessPermisson(LTD.VIEW_PA_GIAO_SKT);
     }
 
     checkEditReport(trangThai: string) {
-        return Utils.statusSave.includes(trangThai) && this.roles.includes(LTD.EDIT_PA_GIAO_SKT);
+        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(LTD.EDIT_PA_GIAO_SKT);
     }
 
     checkDeleteReport(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) && this.roles.includes(LTD.DELETE_PA_GIAO_SKT);
+        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(LTD.DELETE_PA_GIAO_SKT);
     }
 
     changeListIdDelete(id: string) {

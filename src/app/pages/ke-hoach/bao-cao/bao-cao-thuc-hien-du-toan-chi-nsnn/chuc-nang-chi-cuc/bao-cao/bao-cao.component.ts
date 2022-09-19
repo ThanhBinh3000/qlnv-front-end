@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { BCDTC, KHOAN_MUC, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
+import { BCDTC, KHOAN_MUC, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { BAO_CAO_THUC_HIEN, MAIN_ROUTE_BAO_CAO, MAIN_ROUTE_KE_HOACH } from '../../bao-cao-thuc-hien-du-toan-chi-nsnn.constant';
 import { PHULUCLIST, TAB_SELECTED } from './bao-cao.constant';
@@ -81,7 +81,6 @@ export class BaoCaoComponent implements OnInit {
 	//thong tin chung bao cao
 	baoCao: ItemDanhSach = new ItemDanhSach();
 	userInfo: any;
-	roles: string[] = [];
 
 	//bien don
 	listIdDelete: any = [];                     // list id delete
@@ -144,7 +143,6 @@ export class BaoCaoComponent implements OnInit {
 		const lbc = this.routerActive.snapshot.paramMap.get('baoCao');
 
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo?.roles;
 
 		this.getListUser();
 		this.spinner.show();
@@ -291,7 +289,7 @@ export class BaoCaoComponent implements OnInit {
 	getStatusButton() {
 		const isSynthetic = this.baoCao.lstBcaoDviTrucThuocs.length != 0;
 		if (Utils.statusSave.includes(this.baoCao.trangThai) &&
-			(isSynthetic ? this.roles.includes(BCDTC.EDIT_SYNTHETIC_REPORT) : this.roles.includes(BCDTC.EDIT_REPORT))) {
+			(isSynthetic ? this.userService.isAccessPermisson(BCDTC.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.EDIT_REPORT))) {
 			this.status = false;
 		} else {
 			this.status = true;
@@ -300,19 +298,19 @@ export class BaoCaoComponent implements OnInit {
 		const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
 		const checkParent = this.donVis.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
 
-		const checkSave = isSynthetic ? this.roles.includes(BCDTC.EDIT_SYNTHETIC_REPORT) : this.roles.includes(BCDTC.EDIT_REPORT);
+		const checkSave = isSynthetic ? this.userService.isAccessPermisson(BCDTC.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.EDIT_REPORT);
 		this.statusBtnSave = !(Utils.statusSave.includes(this.baoCao.trangThai) && checkSave && checkChirld);
-		const checkApprove = isSynthetic ? this.roles.includes(BCDTC.APPROVE_SYNTHETIC_REPORT) : this.roles.includes(BCDTC.APPROVE_REPORT);
+		const checkApprove = isSynthetic ? this.userService.isAccessPermisson(BCDTC.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.APPROVE_REPORT);
 		this.statusBtnApprove = !(Utils.statusApprove.includes(this.baoCao.trangThai) && checkApprove && checkChirld);
-		const checkDuyet = isSynthetic ? this.roles.includes(BCDTC.DUYET_SYNTHETIC_REPORT) : this.roles.includes(BCDTC.DUYET_REPORT);
+		const checkDuyet = isSynthetic ? this.userService.isAccessPermisson(BCDTC.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.DUYET_REPORT);
 		this.statusBtnTBP = !(Utils.statusDuyet.includes(this.baoCao.trangThai) && checkDuyet && checkChirld);
-		const checkPheDuyet = isSynthetic ? this.roles.includes(BCDTC.PHE_DUYET_SYNTHETIC_REPORT) : this.roles.includes(BCDTC.PHE_DUYET_REPORT);
+		const checkPheDuyet = isSynthetic ? this.userService.isAccessPermisson(BCDTC.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.PHE_DUYET_REPORT);
 		this.statusBtnLD = !(Utils.statusPheDuyet.includes(this.baoCao.trangThai) && checkPheDuyet && checkChirld);
-		const checkTiepNhan = this.roles.includes(BCDTC.TIEP_NHAN_REPORT);
+		const checkTiepNhan = this.userService.isAccessPermisson(BCDTC.TIEP_NHAN_REPORT);
 		this.statusBtnDVCT = !(Utils.statusTiepNhan.includes(this.baoCao.trangThai) && checkTiepNhan && checkParent);
-		const checkCopy = isSynthetic ? this.roles.includes(BCDTC.COPY_SYNTHETIC_REPORT) : this.roles.includes(BCDTC.COPY_REPORT);
+		const checkCopy = isSynthetic ? this.userService.isAccessPermisson(BCDTC.COPY_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.COPY_REPORT);
 		this.statusBtnCopy = !(Utils.statusCopy.includes(this.baoCao.trangThai) && checkCopy && checkChirld);
-		const checkPrint = isSynthetic ? this.roles.includes(BCDTC.PRINT_SYTHETIC_REPORT) : this.roles.includes(BCDTC.PRINT_REPORT);
+		const checkPrint = isSynthetic ? this.userService.isAccessPermisson(BCDTC.PRINT_SYTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.PRINT_REPORT);
 		this.statusBtnPrint = !(Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && checkChirld);
 
 		if (!this.statusBtnDVCT || !this.statusBtnLD || !this.statusBtnTBP) {

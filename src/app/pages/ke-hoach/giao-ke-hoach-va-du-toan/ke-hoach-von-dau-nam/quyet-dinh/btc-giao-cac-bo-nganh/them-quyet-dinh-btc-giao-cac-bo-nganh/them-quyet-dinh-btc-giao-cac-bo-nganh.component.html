@@ -4,8 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00' " type="button" class="btn btn-sub"
-      (click)="save(true)">
+    <button *ngIf="formData.value.trangThai == '00' " type="button" class="btn btn-sub" (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Ban hành</span>
     </button>
@@ -33,7 +32,7 @@
           <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="namQd"   [nzDisabled]="isView"
+              <nz-select formControlName="namQd" (ngModelChange)="onChangeNamQd($event)" [nzDisabled]="isView"
                 nzAllowClear="true">
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
@@ -49,8 +48,8 @@
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
-                <nz-input-number [nzDisabled]="isView" type="text" nz-input formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                  [nzSize]="'small'">
+                <nz-input-number [nzDisabled]="isView" type="text" nz-input formControlName="soQd" [nzMin]="1"
+                  [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
               <ng-template #error let-control>
@@ -61,9 +60,11 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày quyết định</nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày quyết định
+            </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzDisabled]="isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy" id="ngay-qd" class="search__input">
+              <nz-date-picker [nzDisabled]="isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy" id="ngay-qd"
+                class="search__input">
               </nz-date-picker>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
@@ -75,8 +76,8 @@
           <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Bộ ngành</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="idTtcpBoNganh" [nzDisabled]="isView"
-                         nzAllowClear="true">
+              <nz-select formControlName="idTtcpBoNganh" (ngModelChange)="onChangeBoNganh($event)" [nzDisabled]="isView"
+                nzAllowClear="true">
                 <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -90,7 +91,8 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
             <nz-form-control>
-              <textarea [readOnly]="isView" formControlName="trichYeu" rows="3" class="search__input" nz-input></textarea>
+              <textarea [readOnly]="isView" formControlName="trichYeu" rows="3" class="search__input"
+                nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -107,7 +109,8 @@
   </nz-card>
   <nz-tabset nzType="card">
     <nz-tab [nzTitle]="'Danh sách nội dung dự toán'">
-      <app-ke-hoach-mua-tang [isView]="isView" [(dataTable)]="muaTangList"></app-ke-hoach-mua-tang>
+      <app-ke-hoach-mua-tang [isView]="isView" [(dataTable)]="muaTangList" [tongGiaTri]="tongGiaTri">
+      </app-ke-hoach-mua-tang>
     </nz-tab>
     <!-- <nz-tab [nzTitle]="'Xuất giảm'">
         <app-ke-hoach-mua-tang [(dataTable)]="xuatGiamList"></app-ke-hoach-mua-tang>

@@ -10,10 +10,8 @@ export class KeHoachNhapXuatLtComponent implements OnInit {
 
   @Input()
   keHoachNhapXuat: any;
-
   @Output()
   keHoachNhapXuatChange = new EventEmitter<any>();
-
   @Input()
   isView: boolean = false;
 
