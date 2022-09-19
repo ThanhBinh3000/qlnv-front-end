@@ -32,7 +32,7 @@ export class QuanLyCapNguonVonChiNSNNComponent implements OnInit {
 	) { }
 
 	async ngOnInit(): Promise<void> {
-		this.spinner.show();
+		// this.spinner.show();
 		const userName = this.userService.getUserName();
 		await this.getUserInfo(userName); //get user info
 		this.user = this.userService.getUserLogin();
@@ -58,7 +58,7 @@ export class QuanLyCapNguonVonChiNSNNComponent implements OnInit {
 				}
 			})
 		})
-		this.spinner.hide();
+		// this.spinner.hide();
 	}
 
 	//get user info
