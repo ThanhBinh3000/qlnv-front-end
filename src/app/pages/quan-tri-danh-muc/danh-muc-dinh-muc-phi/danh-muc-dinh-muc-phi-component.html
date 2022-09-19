@@ -122,13 +122,10 @@
         <th></th>
         <th></th>
         <th>
-          <nz-form-control [nzErrorTip]="error">
+          <nz-form-control>
             <nz-input-group  >
               <input type="text" nz-input formControlName="maDinhMuc" />
             </nz-input-group>
-            <ng-template #error let-control>
-              <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
-            </ng-template>
           </nz-form-control>
         </th>
         <th>
@@ -278,7 +275,7 @@
               </nz-input-group>
             </nz-form-control>
           </th>
-          <th style="text-align: center;">
+          <th style="text-align: center;" >
           <a  (click)="themmoi(dataEdit[i].data, data.id)" >
             <i class="fa fa-save mr-3"></i>
           </a>
