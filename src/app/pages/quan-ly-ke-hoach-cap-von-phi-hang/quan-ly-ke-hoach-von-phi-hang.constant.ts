@@ -3,13 +3,22 @@ import { ChiTietMenu } from 'src/app/models/ChiTietMenu';
 
 export const MAIN_ROUTE_CAPVON = MAIN_ROUTES.capVon;
 export const CAP_VON_NGUON_CHI = 'quan-ly-cap-nguon-von-chi';
+export const CAP_VON_CHI = 'cap-von-chi';
 export const CAP_VON_MUA_BAN = 'quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg';
 
 export const ROUTE_LIST_CAP_VON: Array<ChiTietMenu> = [
+	// {
+	// 	icon: 'htvbdh_tcdt_chitieukehoachnam',
+	// 	title: 'Cấp vốn chi DTQG',
+	// 	url: `/${MAIN_ROUTE_CAPVON}/${CAP_VON_NGUON_CHI}`,
+	// 	dropdown: 'giao-chi-tieu',
+	// 	idHover: 'giao-chi-tieu',
+	// 	hasTab: false,
+	// },
 	{
 		icon: 'htvbdh_tcdt_chitieukehoachnam',
 		title: 'Cấp vốn chi DTQG',
-		url: `/${MAIN_ROUTE_CAPVON}/${CAP_VON_NGUON_CHI}`,
+		url: `/${MAIN_ROUTE_CAPVON}/${CAP_VON_CHI}`,
 		dropdown: 'giao-chi-tieu',
 		idHover: 'giao-chi-tieu',
 		hasTab: false,
