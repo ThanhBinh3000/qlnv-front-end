@@ -212,6 +212,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     }
     const obj = {
       namHienTai: new Date().getFullYear() + 1,
+      dotBcao: this.searchFilter.dotBcao,
     }
     if (this.searchFilter.nam) {
       obj.namHienTai = this.searchFilter.nam;

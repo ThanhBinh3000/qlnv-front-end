@@ -733,7 +733,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     }
 
     this.spinner.show();
-    await this.quanLyVonPhiService.tongHopGiaoDuToan1(request).toPromise().then(
+    await this.quanLyVonPhiService.tongHopGiaoDuToan(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           const modalCopy = this.modal.create({
