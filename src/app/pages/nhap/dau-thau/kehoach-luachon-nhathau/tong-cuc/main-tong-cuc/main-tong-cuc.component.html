@@ -3,10 +3,10 @@
         <li nz-menu-item nzSelected (click)="selectTab(0)">
             Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu
         </li>
-        <li nz-menu-item (click)="selectTab(1)">
+        <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isCuc()">
             Đề xuất kế hoạch lựa chọn nhà thầu
         </li>
-        <li nz-menu-item (click)="selectTab(2)">
+        <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isCuc()">
             Quyết định phê duyệt kế hoạch lựa chọn nhà thầu
         </li>
     </ul>
