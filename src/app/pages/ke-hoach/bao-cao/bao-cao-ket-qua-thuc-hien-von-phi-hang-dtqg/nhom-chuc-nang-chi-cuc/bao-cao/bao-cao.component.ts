@@ -176,7 +176,7 @@ export class BaoCaoComponent implements OnInit {
 			await this.getDetailReport();
 		} else if (lbc == 'tong-hop') {
 			await this.callSynthetic();
-			this.maDonViTao = this.userInfo?.MA_DVI;
+			this.baoCao.maDvi = this.userInfo?.MA_DVI;
 			this.spinner.show();
 			this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
 				(data) => {
@@ -194,7 +194,7 @@ export class BaoCaoComponent implements OnInit {
 			this.baoCao.ngayTao = new Date().toDateString();
 			this.baoCao.trangThai = "1";
 		} else {
-			this.maDonViTao = this.userInfo?.MA_DVI;
+			this.baoCao.maDvi = this.userInfo?.MA_DVI;
 			//tạo mã báo cáo
 			this.spinner.show();
 			this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
@@ -402,7 +402,7 @@ export class BaoCaoComponent implements OnInit {
 
 				this.lstFiles = data.data.lstFiles;
 				this.listFile = [];
-				this.maDonViTao = data.data.maDvi;
+				//this.maDonViTao = data.data.maDvi;
 				this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
 				this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
 				this.baoCao.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
@@ -729,7 +729,7 @@ export class BaoCaoComponent implements OnInit {
 			baoCaoTemp.fileDinhKems = listFile;
 			baoCaoTemp.listIdFiles = this.listIdFilesDelete;
 			baoCaoTemp.trangThai = "1";
-			baoCaoTemp.maDvi = this.maDonViTao;
+			//baoCaoTemp.maDvi = this.maDonViTao;
 			baoCaoTemp.maPhanBcao = '1';
 
 			//call service them moi
@@ -782,7 +782,7 @@ export class BaoCaoComponent implements OnInit {
 		// day file len server
 		const upfile: FormData = new FormData();
 		upfile.append('file', file);
-		upfile.append('folder', this.maDonViTao + '/' + this.baoCao?.maBcao);
+		upfile.append('folder', this.baoCao.maDvi + '/' + this.baoCao?.maBcao);
 		const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
 			(data) => {
 				const objfile = {
@@ -791,7 +791,7 @@ export class BaoCaoComponent implements OnInit {
 					// fileUrl: data.url,
 					fileName: file.name,
 					fileSize: file.size,
-					fileUrl: this.maDonViTao + '/' + this.baoCao?.maBcao,
+					fileUrl: this.baoCao.maDvi + '/' + this.baoCao?.maBcao,
 				}
 				return objfile;
 			},
@@ -804,10 +804,10 @@ export class BaoCaoComponent implements OnInit {
 
 	getStatusName(Status: any) {
 		const utils = new Utils();
-		if (this.maDonViTao == this.userInfo?.MA_DVI) {
+		if (this.baoCao.maDvi == this.userInfo?.MA_DVI) {
 			return utils.getStatusName(Status == '7' ? '6' : Status);
 		}
-		if (this.donVis.findIndex(e => e.maDvi == this.maDonViTao) != -1) {
+		if (this.donVis.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1) {
 			return utils.getStatusNameParent(Status == '7' ? '6' : Status);
 		}
 	}
@@ -1060,7 +1060,7 @@ export class BaoCaoComponent implements OnInit {
 		baoCaoTemp.fileDinhKems = [];
 		baoCaoTemp.listIdFiles = null;
 		baoCaoTemp.trangThai = "1";
-		baoCaoTemp.maDvi = this.maDonViTao;
+		//baoCaoTemp.maDvi = this.maDonViTao;
 		baoCaoTemp.maPhanBcao = '1';
 
 		//call service them moi
