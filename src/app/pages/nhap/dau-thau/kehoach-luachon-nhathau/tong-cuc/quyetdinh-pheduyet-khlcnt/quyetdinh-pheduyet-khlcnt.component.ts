@@ -139,11 +139,11 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   detail(data?) {
-    this.isDetail = true;
-    this.selectedId = data.id;
     if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_SUA")) {
       return;
     }
+    this.isDetail = true;
+    this.selectedId = data.id;
   }
 
   delete(data?) {

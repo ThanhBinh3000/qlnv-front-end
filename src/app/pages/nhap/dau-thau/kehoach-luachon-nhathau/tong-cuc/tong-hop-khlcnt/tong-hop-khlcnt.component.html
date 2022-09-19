@@ -45,7 +45,8 @@
     <div class="group-button">
       <h3> THÔNG TIN TỔNG HỢP KẾ HOẠCH LỰA CHỌN NHÀ THẦU </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()">
+        <button type="button" class="btn btn-do" (click)="deleteSelect()"
+          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
@@ -53,7 +54,8 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()">
+        <button type="button" class="btn btn-main" (click)="themMoi()"
+          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tổng hợp</span>
         </button>
@@ -177,13 +179,16 @@
             <!--            <td>{{ convertTrangThai(data.trangThai) }}</td>-->
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="redirectToChiTiet(true, data.id)">
+              <a (click)="redirectToChiTiet(true, data.id)"
+                *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai=='26' || data.trangThai=='27')" (click)="redirectToChiTiet(false, data.id)">
+              <a *ngIf="(data.trangThai=='26' || data.trangThai=='27') && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_SUA'))"
+                (click)="redirectToChiTiet(false, data.id)">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>
-              <a *ngIf="data.trangThai=='26' || data.trangThai=='27'" (click)="xoaItem(data)">
+              <a *ngIf="(data.trangThai=='26' || data.trangThai=='27') && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XOA'))"
+                (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
