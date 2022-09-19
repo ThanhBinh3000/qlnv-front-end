@@ -46,7 +46,6 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 	donViTaos: any = [];
 	userInfo: any;
-	roles: string[] = [];
 	roleUser: string;
 
 	baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
@@ -67,16 +66,15 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 	async ngOnInit() {
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo.roles;
 
-		if (this.roles.includes(BCVP.ADD_REPORT)) {
+		if (this.userService.isAccessPermisson(BCVP.ADD_REPORT)) {
 			this.trangThai = '1';
 			this.roleUser = 'canbo';
 			this.statusThemMoi = false;
-		} else if (this.roles.includes(BCVP.DUYET_REPORT) || this.roles.includes(BCVP.DUYET_SYNTHETIC_REPORT)) {
+		} else if (this.userService.isAccessPermisson(BCVP.DUYET_REPORT) || this.userService.isAccessPermisson(BCVP.DUYET_SYNTHETIC_REPORT)) {
 			this.trangThai = '2';
 			this.roleUser = 'truongBoPhan';
-		} else if (this.roles.includes(BCVP.PHE_DUYET_REPORT) || this.roles.includes(BCVP.PHE_DUYET_SYNTHETIC_REPORT)) {
+		} else if (this.userService.isAccessPermisson(BCVP.PHE_DUYET_REPORT) || this.userService.isAccessPermisson(BCVP.PHE_DUYET_SYNTHETIC_REPORT)) {
 			this.trangThai = '4';
 			this.roleUser = 'lanhDao';
 		}
@@ -293,20 +291,20 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 	checkEditReport(item: any) {
 		const isSynthetic = item.tongHopTu != "[]";
-		return Utils.statusSave &&
-			(isSynthetic ? this.roles.includes(BCVP.EDIT_SYNTHETIC_REPORT) : this.roles.includes(BCVP.EDIT_REPORT));
+		return Utils.statusSave.includes(item.trangThai) &&
+			(isSynthetic ? this.userService.isAccessPermisson(BCVP.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.EDIT_REPORT));
 	}
 
 	checkDeleteReport(item: any): boolean {
 		const isSynthetic = item.tongHopTu != "[]";
-		return Utils.statusDelete &&
-			(isSynthetic ? this.roles.includes(BCVP.DELETE_SYNTHETIC_REPORT) : this.roles.includes(BCVP.DELETE_REPORT));
+		return Utils.statusDelete.includes(item.trangThai) &&
+			(isSynthetic ? this.userService.isAccessPermisson(BCVP.DELETE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.DELETE_REPORT));
 	}
 
 	checkApproveReport(item: any): boolean {
 		const isSynthetic = item.tongHopTu != "[]";
-		return Utils.statusApprove &&
-			(isSynthetic ? this.roles.includes(BCVP.APPROVE_SYNTHETIC_REPORT) : this.roles.includes(BCVP.APPROVE_REPORT));
+		return Utils.statusApprove.includes(item.trangThai) &&
+			(isSynthetic ? this.userService.isAccessPermisson(BCVP.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.APPROVE_REPORT));
 	}
 
 	checkViewReport(item: any): boolean {

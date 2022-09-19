@@ -52,7 +52,6 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     //thong tin dang nhap
     id: string;
     userInfo: any;
-    roles: string[] = [];
     loai: string;
     //thong tin chung bao cao
     maDeNghi: string;
@@ -199,7 +198,6 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         //lay thong tin user
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo.roles;
         //lay danh sach danh muc
         await this.danhMuc.dMDviCon().toPromise().then(
             (res) => {
@@ -255,7 +253,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (Utils.statusSave.includes(this.trangThai) && this.roles.includes(CVNC.EDIT_SYNTHETIC_CKV)) {
+        if (Utils.statusSave.includes(this.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_SYNTHETIC_CKV)) {
             this.status = false;
         } else {
             this.status = true;
@@ -269,7 +267,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     }
 
     getBtnStatus(status: string[], role: string, check: boolean) {
-        return !(status.includes(this.trangThai) && this.roles.includes(role) && check);
+        return !(status.includes(this.trangThai) && this.userService.isAccessPermisson(role) && check);
     }
 
     //upload file

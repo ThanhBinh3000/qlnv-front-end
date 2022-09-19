@@ -19,7 +19,6 @@ import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von
 export class TimKiemComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	roles: string[] = [];
 	userRole: string;
 	loai: string;
 	//thong tin tim kiem
@@ -87,7 +86,6 @@ export class TimKiemComponent implements OnInit {
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo?.roles;
 		this.spinner.show();
 
 		this.searchFilter.denNgay = new Date();
@@ -97,7 +95,7 @@ export class TimKiemComponent implements OnInit {
 		this.searchFilter.maDviTao = this.userInfo?.MA_DVI;
 
 		if (this.loai == "0") {
-			if (this.roles.includes(CVNC.ADD_DN_MLT) || this.roles.includes(CVNC.ADD_DN_MVT)) {
+			if (this.userService.isAccessPermisson(CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(CVNC.ADD_DN_MVT)) {
 				this.statusTaoMoi = false;
 			}
 			this.status = false;
@@ -106,7 +104,7 @@ export class TimKiemComponent implements OnInit {
 			this.searchFilter.trangThai = Utils.TT_BC_2;
 		}
 
-		if (this.userService.isTongCuc() && (this.loai == "0" || this.roles.includes(CVNC.PHE_DUYET_DN_MVT))) {
+		if (this.userService.isTongCuc() && (this.loai == "0" || this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT))) {
 			this.searchFilter.canCuGia = Utils.HD_TRUNG_THAU;
 			this.searchFilter.loaiDn = Utils.MUA_VTU;
 			this.disable = true;
@@ -330,17 +328,17 @@ export class TimKiemComponent implements OnInit {
 	}
 
 	checkViewReport() {
-		return (this.userInfo?.CAP_DVI == '2' && this.roles.includes(CVNC.VIEW_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.roles.includes(CVNC.VIEW_DN_MVT));
+		return (this.userInfo?.CAP_DVI == '2' && this.userService.isAccessPermisson(CVNC.VIEW_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(CVNC.VIEW_DN_MVT));
 	}
 
 	checkEditReport(trangThai: string) {
 		return Utils.statusSave.includes(trangThai) &&
-			((this.userInfo?.CAP_DVI == '2' && this.roles.includes(CVNC.EDIT_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.roles.includes(CVNC.EDIT_DN_MVT)));
+			((this.userInfo?.CAP_DVI == '2' && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT)));
 	}
 
 	checkDeleteReport(trangThai: string) {
 		return Utils.statusDelete.includes(trangThai) &&
-			((this.userInfo?.CAP_DVI == '2' && this.roles.includes(CVNC.DELETE_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.roles.includes(CVNC.DELETE_DN_MVT)));
+			((this.userInfo?.CAP_DVI == '2' && this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT)));
 	}
 
 	changeListIdDelete(id: string) {

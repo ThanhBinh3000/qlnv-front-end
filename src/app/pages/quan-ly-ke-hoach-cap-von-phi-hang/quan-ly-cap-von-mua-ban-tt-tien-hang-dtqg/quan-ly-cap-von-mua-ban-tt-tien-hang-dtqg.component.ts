@@ -13,7 +13,6 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 	@ViewChild('nzTreeComponent', { static: false })
 	//thong tin chung
 	userInfo: any;
-	roles: string[] = [];
 	isTongCuc: boolean;
 	danhSach: any[] = [];
 
@@ -26,14 +25,12 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 	async ngOnInit(): Promise<void> {
 		this.spinner.show();
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo?.roles;
 		this.isTongCuc = this.userService.isTongCuc();
-		console.log(this.roles.filter(e => e.startsWith('VONPHIHANG_VONMBANTT')))
 
 		QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST.forEach(data => {
 			let check = false;
 			data.Role.forEach(item => {
-				if (this.roles.includes(item)) {
+				if (this.userService.isAccessPermisson(item)) {
 					check = true;
 					return;
 				}

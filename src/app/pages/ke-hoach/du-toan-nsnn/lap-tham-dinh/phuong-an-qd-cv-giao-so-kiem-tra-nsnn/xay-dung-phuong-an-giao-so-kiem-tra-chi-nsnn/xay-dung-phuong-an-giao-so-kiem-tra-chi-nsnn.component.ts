@@ -15,7 +15,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, LTD, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, LTD, MONEY_LIMIT, mulMoney, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
 
@@ -52,7 +52,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     id: string;
     idSoTranChi: string;
     userInfo: any;
-    roles: string[] = [];
     //thong tin chung bao cao
     maBaoCao: string;
     ngayTao: string;
@@ -139,7 +138,6 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         //lay thong tin user
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
         this.maDonViTao = this.userInfo?.MA_DVI;
 
         //lay danh sach danh muc
@@ -207,7 +205,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(LTD.EDIT_PA_GIAO_SKT)) {
+        if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(LTD.EDIT_PA_GIAO_SKT)) {
             this.status = false;
         } else {
             this.status = true;
@@ -220,7 +218,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, LTD.PHE_DUYET_PA_GIAO_SKT, checkChirld);
         this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, LTD.COPY_PA_GIAO_SKT, checkChirld);
         this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, LTD.PRINT_PA_GIAO_SKT, checkChirld);
-        if (this.roles.includes(LTD.GIAO_SKT) && this.soQdCv) {
+        if (this.userService.isAccessPermisson(LTD.GIAO_SKT) && this.soQdCv) {
             this.statusBtnGiao = false;
         } else {
             this.statusBtnGiao = true;
@@ -234,7 +232,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
     }
 
     getBtnStatus(status: string[], role: string, check: boolean) {
-        return !(status.includes(this.trangThaiBanGhi) && this.roles.includes(role) && check);
+        return !(status.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(role) && check);
     }
 
     //upload file

@@ -56,7 +56,6 @@ export class TienThuaComponent implements OnInit {
     id: string;
     loai: string;
     userInfo: any;
-    roles: string[] = [];
     //thong tin chung bao cao
     maTienThua: string;
     maCvUv: string;
@@ -153,7 +152,6 @@ export class TienThuaComponent implements OnInit {
         //lay thong tin user
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
 
         //lay danh sach danh muc
         await this.danhMuc.dMDviCon().toPromise().then(
@@ -220,12 +218,12 @@ export class TienThuaComponent implements OnInit {
     //check role cho các nut trinh duyet
     getStatusButton() {
         const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-        if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(CVMB.EDIT_REPORT_NTVT) && checkChirld) {
+        if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTVT) && checkChirld) {
             this.statusGui = false;
         } else {
             this.statusGui = true;
         }
-        if (Utils.statusSave.includes(this.trangThaiCha) && this.roles.includes(CVMB.EDIT_REPORT_GNV_TH) && !this.statusBtnParent) {
+        if (Utils.statusSave.includes(this.trangThaiCha) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_TH) && !this.statusBtnParent) {
             this.statusNhan = false;
         } else {
             this.statusNhan = true;
@@ -249,11 +247,11 @@ export class TienThuaComponent implements OnInit {
     }
 
     getBtnStatus(status: string[], role: string, check: boolean) {
-        return !(status.includes(this.trangThaiBanGhi) && this.roles.includes(role) && check);
+        return !(status.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(role) && check);
     }
 
     getBtnStatusParent(status: string[], role: string, check: boolean) {
-        return !(status.includes(this.trangThaiCha) && this.roles.includes(role) && check);
+        return !(status.includes(this.trangThaiCha) && this.userService.isAccessPermisson(role) && check);
     }
 
     //upload file

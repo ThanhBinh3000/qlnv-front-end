@@ -28,7 +28,6 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
     //thong tin nguoi dang nhap
     id!: string;
     userInfo: any;
-    roles: string[] = [];
     //thong tin chung bao cao
     ngayTao: string;
     maDviTao: string;
@@ -93,7 +92,6 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         this.id = this.routerActive.snapshot.paramMap.get('id');
         this.spinner.show();
         this.userInfo = this.userService.getUserLogin();
-        this.roles = this.userInfo?.roles;
         this.maDviTao = this.userInfo?.MA_DVI;
 
         this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);

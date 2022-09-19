@@ -36,7 +36,6 @@ export class PheDuyetComponent implements OnInit {
 	newDate = new Date();
 	//danh muc
 	danhSachBaoCao: any = [];
-	roles: string[] = [];
 	trangThais: any[] = [];
 	donVis: any[] = [];
 	//phan trang
@@ -67,7 +66,6 @@ export class PheDuyetComponent implements OnInit {
 		this.searchFilter.tuNgay = this.newDate;
 
 		this.userInfo = this.userService.getUserLogin();
-		this.roles = this.userInfo?.roles;
 		this.maDviTao = this.userInfo.MA_DVI;
 
 		//lay danh sach danh muc
@@ -85,7 +83,7 @@ export class PheDuyetComponent implements OnInit {
 			}
 		);
 
-		if (this.roles.includes(LTD.TIEP_NHAN_REPORT)) {
+		if (this.userService.isAccessPermisson(LTD.TIEP_NHAN_REPORT)) {
 			this.status = false;
 			this.searchFilter.trangThai = Utils.TT_BC_7;
 			this.searchFilter.loaiTimKiem = '1';
@@ -100,7 +98,7 @@ export class PheDuyetComponent implements OnInit {
 			this.status = true;
 			this.searchFilter.loaiTimKiem = '0';
 			this.searchFilter.donViTao = this.maDviTao;
-			if (this.roles.includes(LTD.DUYET_REPORT)) {
+			if (this.userService.isAccessPermisson(LTD.DUYET_REPORT)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 				this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
 			} else {
@@ -121,7 +119,7 @@ export class PheDuyetComponent implements OnInit {
 				return;
 			}
 		}
-		if (!this.roles.includes(LTD.TIEP_NHAN_REPORT)) {
+		if (!this.userService.isAccessPermisson(LTD.TIEP_NHAN_REPORT)) {
 			this.searchFilter.loaiTimKiem = "0";
 		} else {
 			if (this.searchFilter.donViTao && this.searchFilter.donViTao != this.maDviTao) {
@@ -132,9 +130,9 @@ export class PheDuyetComponent implements OnInit {
 		}
 		let lstTrangThai = [];
 		if (!this.searchFilter.trangThai) {
-			if (this.roles.includes(LTD.TIEP_NHAN_REPORT)) {
+			if (this.userService.isAccessPermisson(LTD.TIEP_NHAN_REPORT)) {
 				lstTrangThai = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9];
-			} else if (this.roles.includes(LTD.DUYET_REPORT) || this.roles.includes(LTD.DUYET_SYNTHETIC_REPORT)) {
+			} else if (this.userService.isAccessPermisson(LTD.DUYET_REPORT) || this.userService.isAccessPermisson(LTD.DUYET_SYNTHETIC_REPORT)) {
 				lstTrangThai = [Utils.TT_BC_2];
 			} else {
 				lstTrangThai = [Utils.TT_BC_4];
