@@ -47,7 +47,7 @@
         <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24">
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select formControlName="loaiVthh" (ngModelChange)="changeLoaiHangHoa()">
                 <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
@@ -57,15 +57,9 @@
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
-<<<<<<< HEAD
-            <nz-form-control nz-col [nzSpan]="24">
-              <nz-select formControlName="loaiVthh" (ngModelChange)="changeLoaiHangHoa()">
-                <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-=======
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select formControlName="cloaiVthh">
                 <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
->>>>>>> develop
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -73,8 +67,8 @@
         <div nz-col [nzSpan]="11">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24">
-              <input nz-input formControlName="moTaHangHoa" />
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <input nz-input formControlName="trichYeu" />
             </nz-form-control>
           </nz-form-item>
         </div>
