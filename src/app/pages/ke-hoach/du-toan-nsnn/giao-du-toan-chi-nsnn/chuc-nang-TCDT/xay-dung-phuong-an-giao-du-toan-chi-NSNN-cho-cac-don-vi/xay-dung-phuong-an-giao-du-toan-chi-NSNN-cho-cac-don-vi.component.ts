@@ -1390,7 +1390,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
         });
       }
     }
-    this.quanLyVonPhiService.giaoSoTranChiGiaoDuToan1(lstGiao).toPromise().then(
+    this.quanLyVonPhiService.giaoSoTranChiGiaoDuToan(lstGiao).toPromise().then(
       data => {
         if (data.statusCode == 0) {
           if (maDviNhan) {
