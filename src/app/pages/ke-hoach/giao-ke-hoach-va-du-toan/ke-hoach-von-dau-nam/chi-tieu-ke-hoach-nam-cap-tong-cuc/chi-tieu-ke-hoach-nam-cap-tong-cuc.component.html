@@ -271,7 +271,7 @@
           </nz-tab>
         </nz-tabset>
         <ng-template #extraTemplate>
-          <div *ngIf="!userService.isChiCuc()">
+          <div *ngIf=" (capDvi == 2 && userService.isCuc()) || (capDvi ==1 && userService.isTongCuc())">
             <button type="button" class="btn btn-do" (click)="deleteSelect()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>

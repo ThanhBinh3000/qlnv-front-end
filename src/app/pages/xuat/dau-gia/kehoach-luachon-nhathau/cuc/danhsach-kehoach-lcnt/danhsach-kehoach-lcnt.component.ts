@@ -47,6 +47,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     ngayKy: null,
     loaiVthh: null,
     trichYeu: null,
+    soQuyetDinhPheDuyet: null,
+    soQuyetDinhGiaoChiTieu: null,
   };
   filterTable: any = {
     soKeHoach: '',
@@ -158,11 +160,13 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       loaiVatTuHangHoa: this.searchFilter.loaiVthh,
       namKeHoach: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
-      maDvis: this.userInfo.MA_DVI,
+      soQuyetDinhPheDuyet: this.searchFilter.soQuyetDinhPheDuyet,
+      soQuyetDinhGiaoChiTieu: this.searchFilter.soQuyetDinhGiaoChiTieu,
+      maDv: this.userInfo.MA_DVI,
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
-    let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
+    let res = await this.deXuatKeHoachBanDauGiaService.search(body);
 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -316,6 +320,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
           soKeHoach: this.searchFilter.soKeHoach ?? null,
           namKeHoach: this.searchFilter.namKh,
           trichYeu: this.searchFilter.trichYeu ?? null,
+          soQuyetDinhPheDuyet: this.searchFilter.soQuyetDinhPheDuyet ?? null,
+          soQuyetDinhGiaoChiTieu: this.searchFilter.soQuyetDinhGiaoChiTieu ?? null,
           maDvis: [this.userInfo.MA_DVI],
           pageable: null,
         };
