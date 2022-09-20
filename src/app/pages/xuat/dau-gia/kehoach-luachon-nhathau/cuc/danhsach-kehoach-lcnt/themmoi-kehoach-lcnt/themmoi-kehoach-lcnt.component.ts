@@ -196,10 +196,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       ],
       qdGiaoChiTieuNam: [
         {
-          // value: this.khBanDauGia
-          //   ? this.khBanDauGia.soQuyetDinhGiaoChiTieu
-          //   : null,
-          value :'150/QĐ-TCDT',
+          value: this.khBanDauGia ? this.khBanDauGia.qdGiaoChiTieuNam : null,
           disabled: this.isView ? true : false,
         },
         [Validators.required],
@@ -361,7 +358,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         if (data) {
           this.formData.patchValue({
             qdGiaoChiTieuId: data ? data.id : null,
-            qdGiaoChiTieuNam: data ? data.soQuyetDinh : '150/QĐ-TCDT',
+            qdGiaoChiTieuNam: data ? data.soQuyetDinh : null,
           });
           this.spinner.hide();
         }
@@ -709,7 +706,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
               body.trangThaiId = this.globals.prop.NHAP_CHO_DUYET_LD_CUC;
               break;
             case this.globals.prop.NHAP_CHO_DUYET_LD_CUC:
-              body.trangThaiId = this.globals.prop.NHAP_BAN_HANH;
+              body.trangThaiId = this.globals.prop.NHAP_DA_DUYET_LD_CUC;
               break;
           }
 
@@ -809,9 +806,9 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         this.titleStatus = 'Từ chối - LĐ Cục';
         break;
       }
-      case this.globals.prop.NHAP_BAN_HANH: {
-        this.titleStatus = 'Ban hành';
-        this.styleStatus = 'da-ban-hanh';
+      case this.globals.prop.NHAP_DA_DUYET_LD_CUC: {
+        this.titleStatus = 'Đã duyệt lãnh đạo cục';
+        this.styleStatus = 'da-duyet-ld-cuc';
         break;
       }
     }
