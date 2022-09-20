@@ -942,32 +942,9 @@ export class BaoCaoComponent implements OnInit {
 								item.nguoiBcao = this.userInfo.sub;
 							}
 						}
-						// voi loai bc 02 thi chi tong hop so luong
-						if (item.maLoai == '4') {
-							item?.lstCtietBcaos.forEach(element => {
-								element.khGiaMuaTd = null;
-								element.khTtien = null;
-								element.thGiaMuaTd = null;
-								element.thTtien = null;
-							});
-						} else if (item.maLoai == '5') {     // voi loai bc 03 thi chi tong hop so luong
-							item?.lstCtietBcaos.forEach(element => {
-								element.dgGiaBanTte = null;
-								element.dgGiaBanTthieu = null;
-								element.dgGiaKhoach = null;
-							});
-						}
 					})
 					this.listFile = [];
 					this.baoCao.trangThai = "1";
-					if (this.baoCao.trangThai == Utils.TT_BC_1 ||
-						this.baoCao.trangThai == Utils.TT_BC_3 ||
-						this.baoCao.trangThai == Utils.TT_BC_5 ||
-						this.baoCao.trangThai == Utils.TT_BC_8) {
-						this.status = false;
-					} else {
-						this.status = true;
-					}
 				} else {
 					this.notification.error(MESSAGE.ERROR, data?.msg);
 				}

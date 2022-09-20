@@ -107,8 +107,13 @@ export class BaoCao02Component implements OnInit {
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnExport = this.data?.statusBtnExport;
-        this.tuNgay = this.data?.tuNgay;
-        this.denNgay = this.data?.denNgay;
+        if (this.status){
+            this.tuNgay = this.datePipe.transform(this.data?.tuNgay, Utils.FORMAT_DATE_STR);
+            this.denNgay = this.datePipe.transform(this.data?.denNgay, Utils.FORMAT_DATE_STR);
+        } else {
+            this.tuNgay = this.data?.tuNgay;
+            this.denNgay = this.data?.denNgay;
+        }
         this.idBaoCao = this.data?.idBaoCao;
         this.trangThaiPhuLuc = this.data?.trangThai;
         //tinh toan theo don vi tien va dua vao bieu mau
@@ -126,6 +131,7 @@ export class BaoCao02Component implements OnInit {
                 }
             })
             this.sortAppendix(id);
+            console.log(this.lstCtietBcao[id].data);
             this.changeModel(id);
             this.updateEditCache(id);
         })
