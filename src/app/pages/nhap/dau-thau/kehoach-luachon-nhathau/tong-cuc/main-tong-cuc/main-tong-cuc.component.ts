@@ -1,3 +1,4 @@
+import { UserService } from 'src/app/services/user.service';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
@@ -10,7 +11,7 @@ export class MainTongCucComponent implements OnInit {
 
   @Input() loaiVthh: string;
 
-  constructor() { }
+  constructor(public userService: UserService) { }
 
   ngOnInit(): void {
 

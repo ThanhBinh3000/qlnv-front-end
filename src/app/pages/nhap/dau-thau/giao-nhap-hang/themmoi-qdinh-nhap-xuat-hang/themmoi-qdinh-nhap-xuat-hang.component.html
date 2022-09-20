@@ -211,11 +211,11 @@
         <th class="text-center">Trạng thái</th>
         <th nzWidth="80px" class="text-center"></th>
       </tr>
-      <tr *ngIf="userService.isCuc()">
+      <tr *ngIf="userService.isCuc() && typeVthh == '02'">
         <th></th>
         <th></th>
         <th>
-          <nz-select [(ngModel)]="rowItem.maDiemKho">
+          <nz-select [(ngModel)]="rowItem.maDvi" (ngModelChange)="changeChiCuc()">
             <nz-option *ngFor="let item of listChiCuc" [nzValue]="item.key" [nzLabel]="item.title">
             </nz-option>
           </nz-select>
@@ -231,7 +231,7 @@
         </th>
         <th> </th>
         <th style="text-align: center;">
-          <a (click)="themDiaDiemNhap()" [ngClass]="{'isDisabled': !validateButtonThem()}">
+          <a (click)="themChiCuc()" [ngClass]="{'isDisabled': !validateButtonThem('chiCuc')}">
             <i class="fa fa-plus"></i>
           </a>
           <a>
@@ -252,7 +252,14 @@
           <td></td>
           <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ item.tenTrangThai }}</td>
-          <td></td>
+          <td>
+            <a *ngIf="userService.isCuc()">
+              <i class="fa fa-pencil"></i>
+            </a>
+            <a *ngIf="userService.isCuc()">
+              <i (click)=" xoaDiaDiemNhap(i)" class="fa fa-trash-o do"></i>
+            </a>
+          </td>
         </tr>
         <ng-container *ngIf="expandSet.has(i)">
           <tr *ngIf="userService.isChiCuc() && item.trangThai != STATUS.HOAN_THANH_CAP_NHAT ">
@@ -290,7 +297,7 @@
             </td>
             <td> </td>
             <td style="text-align: center;">
-              <a (click)="themDiaDiemNhap(i)" [ngClass]="{'isDisabled': !validateButtonThem()}">
+              <a (click)="themDiaDiemNhap(i)" [ngClass]="{'isDisabled': !validateButtonThem('ddiemNhap')}">
                 <i class="fa fa-plus"></i>
               </a>
               <a>
@@ -318,7 +325,7 @@
               </a>
             </td>
           </tr>
-          <tr>
+          <tr *ngIf="item.diaDiemNhapList.length > 0 && this.userService.isChiCuc()">
             <td style="text-align: right; font-weight: 700" colspan="7">Tổng số</td>
             <td>{{ calcTong(i) | number : '1.0-1' : 'vi_VN' }}</td>
             <td></td>
@@ -326,5 +333,12 @@
         </ng-container>
       </ng-container>
     </tbody>
+    <tfoot>
+      <tr *ngIf="dataTable.length > 0 && this.userService.isCuc()">
+        <td style="text-align: right; font-weight: 700" colspan="7">Tổng số</td>
+        <td>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
+        <td></td>
+      </tr>
+    </tfoot>
   </nz-table>
 </div>

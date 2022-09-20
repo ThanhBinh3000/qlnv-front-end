@@ -6,9 +6,9 @@ export class KeHoachBanDauGia {
     fileDinhKems: Array<FileDinhKem>;
     id: number;
     khoanTienDatTruoc: number;
-    loaiHangHoa: string;
+    loaiVthh: string;
     loaiHopDong: string;
-    loaiVatTuHangHoa: string;
+    cloaiVthh: string;
     maDv: string;
     namKeHoach: number;
     ngayKy: string;
@@ -33,10 +33,12 @@ export class KeHoachBanDauGia {
     tieuChuanChatLuong: string;
     trangThai: string;
     trichYeu: string;
+    moTaHangHoa: string;
     tenQdGiaoChiTieu: string;
     thoiGianDuKien: string;
     ghiChu: string;
     tenTrangThai: string;
+    loaiHangHoa: string;
     constructor(
         diaDiemGiaoNhanList: Array<DiaDiemGiaoNhan> = [],
         phanLoTaiSanList: Array<PhanLoTaiSan> = [],

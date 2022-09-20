@@ -15,7 +15,8 @@ import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'app-tong-hop-khlcnt',
@@ -33,7 +34,8 @@ export class TongHopKhlcntComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     private route: ActivatedRoute,
-    private helperService: HelperService
+    private helperService: HelperService,
+    public globals: Globals,
   ) {
     this.danhMucDonVi = JSON.parse(sessionStorage.getItem('danhMucDonVi'));
   }
@@ -66,7 +68,7 @@ export class TongHopKhlcntComponent implements OnInit {
     tenNguonVon: '',
     trangThai: '',
   }
-
+  STATUS = STATUS;
   dataTableAll: any[] = [];
   isDetail: boolean = false;
   selectedId: number = 0;
@@ -83,6 +85,9 @@ export class TongHopKhlcntComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XEM")) {
+        window.location.href = '/error/401'
+      }
       this.userInfo = this.userService.getUserLogin();
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
@@ -266,11 +271,18 @@ export class TongHopKhlcntComponent implements OnInit {
   }
 
   themMoi() {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP")) {
+      return;
+    }
     this.isDetail = true;
     this.selectedId = null;
   }
 
   redirectToChiTiet(isView: boolean, id: number) {
+    if ((isView && !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XEM"))
+      || (!isView && !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_SUA"))) {
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
@@ -306,6 +318,9 @@ export class TongHopKhlcntComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XOA")) {
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -342,19 +357,19 @@ export class TongHopKhlcntComponent implements OnInit {
     return '';
   }
 
-  convertTrangThai(status: string) {
-    switch (status) {
-      case '00': {
-        return 'Chưa tạo QĐ'
-      }
-      case '24': {
-        return 'Đã dự thảo QĐ'
-      }
-      case '25': {
-        return 'Đã ban hành QĐ'
-      }
-    }
-  }
+  // convertTrangThai(status: string) {
+  //   switch (status) {
+  //     case STATUS.CHUA_TAO_QD: {
+  //       return 'Chưa tạo QĐ'
+  //     }
+  //     case STATUS.DA_DU_THAO_QD: {
+  //       return 'Đã dự thảo QĐ'
+  //     }
+  //     case STATUS.DA_BAN_HANH_QD: {
+  //       return 'Đã ban hành QĐ'
+  //     }
+  //   }
+  // }
 
   exportData() {
     if (this.totalRecord > 0) {
@@ -393,6 +408,9 @@ export class TongHopKhlcntComponent implements OnInit {
   }
 
   deleteSelect() {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XOA")) {
+      return;
+    }
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
@@ -413,13 +431,13 @@ export class TongHopKhlcntComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple({ ids: dataDelete });
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            //   await this.search();
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.tongHopDeXuatKHLCNTService.deleteMuti({ idList: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);
@@ -473,7 +491,7 @@ export class TongHopKhlcntComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == STATUS.DA_BAN_HANH_QD) {
             item.checked = true;
           }
         });

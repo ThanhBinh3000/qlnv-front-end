@@ -73,12 +73,12 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   async ngOnInit() {
     try {
       if (this.loaiVthh === "02") {
-        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT")) {
+        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM")) {
           window.location.href = '/error/401'
         }
       }
       else {
-        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT")) {
+        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XEM")) {
           window.location.href = '/error/401'
         }
       }
