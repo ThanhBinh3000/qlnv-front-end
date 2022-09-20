@@ -408,7 +408,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     for (const iterator of this.listFile) {
       listFile.push(await this.uploadFile(iterator));
     }
-    this.spinner.show();
+
     const request = JSON.parse(JSON.stringify({
       id: this.id,
       fileDinhKems: this.lstFiles,
@@ -442,7 +442,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
     }
 
     //call service them moi
-
+    this.spinner.show();
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
         async data => {
