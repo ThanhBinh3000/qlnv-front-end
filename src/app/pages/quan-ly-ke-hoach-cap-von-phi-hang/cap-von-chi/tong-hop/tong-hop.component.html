@@ -33,7 +33,7 @@
     <div class="group-button">
       <h3 class="text-uppercase">Thông tin tổng hợp</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
+        <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isTongCuc()">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
@@ -41,7 +41,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isCuc()">
+        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isTongCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
