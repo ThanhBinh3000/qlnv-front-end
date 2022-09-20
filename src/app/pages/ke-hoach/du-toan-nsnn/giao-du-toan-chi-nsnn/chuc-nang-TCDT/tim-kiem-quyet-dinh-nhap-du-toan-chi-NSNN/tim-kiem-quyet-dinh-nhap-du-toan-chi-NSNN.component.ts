@@ -47,7 +47,6 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
   date: any = new Date()
   userRole: string;
   status: boolean;
-  roles: string[] = [];
   statusTaoMoi = true;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -64,14 +63,13 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
 
     this.spinner.show()
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo.roles;
 
     this.searchFilter.ngayTaoDen = new Date();
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = new Date();
     this.searchFilter.namPa = new Date().getFullYear()
 
-    if (this.roles.includes(GDT.ADD_REPORT_BTC)) {
+    if (this.userService.isAccessPermisson(GDT.ADD_REPORT_BTC)) {
       this.statusTaoMoi = false;
     }
 
@@ -256,11 +254,11 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
   }
 
   checkDeleteReport(trangThai: string) {
-    return Utils.statusDelete.includes(trangThai) && this.roles.includes(GDT.DELETE_REPORT_BTC);
+    return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(GDT.DELETE_REPORT_BTC);
   }
 
   checkViewReport() {
-    return this.roles.includes(GDT.VIEW_REPORT_PA_PBDT);
+    return this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT);
   }
 
   close() {

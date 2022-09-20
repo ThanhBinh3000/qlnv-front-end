@@ -19,7 +19,6 @@ export class QuanLyThongTinQuyetToanComponent implements OnInit {
   userInfo: any;
   donVis: any[] = [];
   capDvi: string;
-  roles: string[] = [];
 
   QuanLyThongTinQuyetToanList = QUAN_LY_THONG_TIN_QUYET_TOAN_LIST;
   danhSach: any[] = [];
@@ -35,11 +34,10 @@ export class QuanLyThongTinQuyetToanComponent implements OnInit {
 
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo?.roles;
     this.QuanLyThongTinQuyetToanList.forEach(data => {
       let check = false;
-      this.roles.forEach(item => {
-        if (data.Role.includes(item)) {
+      data.Role.forEach(item => {
+        if (this.userService.isAccessPermisson(item)) {
           check = true;
           return;
         }

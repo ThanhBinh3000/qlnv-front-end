@@ -91,7 +91,7 @@
                 </div>
               </td>
               <td>
-                <a>
+                <a (click)="xemCtietPaBTC()" style="color: #1890ff;">
                   {{maPaCha}}
                 </a>
               </td>
@@ -193,13 +193,14 @@
                       </div>
                     </td>
                     <td>
-                      {{displayValue(data.tongCong)}}
+                      {{displayValue(editCache[data.id].data.tongCong)}}
                     </td>
                     <td *ngFor="let item of lstDvi">
                       <div *ngFor="let e of editCache[data.id].data.lstCtietDvis">
                         <div *ngIf="e.maDviNhan == item.maDvi">
                           <fm-input-number class="search__input" [(ngModel)]="e.soTranChi"
-                            [class]="e.soTranChi >= 0?'' : 'input-error-validate'">
+                            [class]="(e.soTranChi || e.soTranChi === 0) && e.soTranChi >= 0 ?'' : 'input-error-validate'"
+                            (ngModelChange)="changeModel(data.id)">
                           </fm-input-number>
                         </div>
                       </div>

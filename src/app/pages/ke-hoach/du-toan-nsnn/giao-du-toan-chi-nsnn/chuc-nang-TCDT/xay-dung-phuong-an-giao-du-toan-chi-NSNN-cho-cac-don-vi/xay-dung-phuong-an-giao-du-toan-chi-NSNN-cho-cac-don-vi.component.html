@@ -91,9 +91,21 @@
                 </div>
               </td>
               <td>
-                <a>
+                <!-- <ng-container *ngIf="checkCtietPaBTC()">
+                </ng-container> -->
+                <a (click)="xemCtietPaBTC()" style="color: #1890ff;">
                   {{maPaCha}}
                 </a>
+                <!-- <ng-container >
+                  <a (click)="xemCtietPaPB()" style="color: #1890ff;">
+                    {{maPaCha}}
+                  </a>
+                </ng-container>
+                <ng-container >
+                  <a (click)="xemCtietPaGiao()" style="color: #1890ff;">
+                    {{maPaCha}}
+                  </a>
+                </ng-container> -->
               </td>
               <td>{{maPa}}</td>
               <td>{{namPa}}</td>
@@ -108,23 +120,22 @@
         <nz-tabset nzType="card" class="tab__container">
           <nz-tab [nzTitle]="'Xây dựng phương án giao dự toán chi NSNN cho các đơn vị'">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-							<div nz-col [nzSpan]="1">
-								Đơn vị:
-							</div>
-							<div nz-col [nzSpan]="2">
-								<ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
-									<span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
-								</ng-container>
-								<ng-template #editMoney>
-									<nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-										(ngModelChange)="editMoneyUnit=false">
-										<nz-option *ngFor="let item of donViTiens" [nzValue]="item.id"
-											[nzLabel]="item.tenDm">
-										</nz-option>
-									</nz-select>
-								</ng-template>
-							</div>
-						</div>
+              <div nz-col [nzSpan]="1">
+                Đơn vị:
+              </div>
+              <div nz-col [nzSpan]="2">
+                <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+                  <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+                </ng-container>
+                <ng-template #editMoney>
+                  <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                    (ngModelChange)="editMoneyUnit=false">
+                    <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    </nz-option>
+                  </nz-select>
+                </ng-template>
+              </div>
+            </div>
             <nz-table nzBordered class="table__body">
               <thead>
                 <tr>

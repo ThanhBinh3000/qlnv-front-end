@@ -100,7 +100,6 @@ export class DuyetPhuongAnTaiDonViComponent implements OnInit {
   status: boolean;
   listIdDelete: any[] = [];
   userRole: string;
-  roles: string[] = [];
   statusTaoMoi = true;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -117,24 +116,23 @@ export class DuyetPhuongAnTaiDonViComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo?.roles;
     this.searchFilter.donViTao = this.userInfo?.MA_DVI;
     this.spinner.show()
     this.searchFilter.ngayTaoDen = new Date();
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.ngayTaoTu = new Date();
     this.searchFilter.namPa = new Date().getFullYear()
-    if (this.roles.includes(GDT.ADD_REPORT_PA_PBDT)) {
+    if (this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT)) {
       this.statusTaoMoi = false;
     }
-    if (this.roles.includes(GDT.DUYET_REPORT_PA_PBDT)) {
+    if (this.userService.isAccessPermisson(GDT.DUYET_REPORT_PA_PBDT)) {
       this.status = false;
       this.trangThai = '2';
       this.trangThais.push({
         id: "2",
         tenDm: 'Trình duyệt'
       });
-    } else if (this.roles.includes(GDT.PHE_DUYET_REPORT_PA_PBDT)) {
+    } else if (this.userService.isAccessPermisson(GDT.PHE_DUYET_REPORT_PA_PBDT)) {
       this.status = false;
       this.trangThai = '4';
       this.trangThais.push({
@@ -392,11 +390,11 @@ export class DuyetPhuongAnTaiDonViComponent implements OnInit {
   }
 
   checkDeleteReport(trangThai: string) {
-    return Utils.statusDelete.includes(trangThai) && this.roles.includes(GDT.DELETE_REPORT_CV_QD_GIAO_PA_PBDT);
+    return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(GDT.DELETE_REPORT_CV_QD_GIAO_PA_PBDT);
   }
 
   checkViewReport() {
-    return this.roles.includes(GDT.VIEW_REPORT_PA_PBDT);
+    return this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT);
   }
 
   close() {

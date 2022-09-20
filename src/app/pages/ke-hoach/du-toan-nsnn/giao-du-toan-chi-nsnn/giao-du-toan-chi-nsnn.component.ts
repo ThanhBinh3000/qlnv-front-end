@@ -24,7 +24,6 @@ export class GiaoDuToanChiNSNNComponent implements OnInit {
 
   GiaoDuToanChiNSNNList = GIAO_DU_TOAN_CHI_NSNN_NSNN_LIST;
   danhSach: any[] = [];
-  roles: string[] = [];
 
   constructor(
     private router: Router,
@@ -35,12 +34,10 @@ export class GiaoDuToanChiNSNNComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo?.roles;
-    console.log(this.roles);
     this.GiaoDuToanChiNSNNList.forEach(data => {
       let check = false;
-      this.roles.forEach(item => {
-        if (data.Role.includes(item)) {
+      data.Role.forEach(item => {
+        if (this.userService.isAccessPermisson(item)) {
           check = true;
           return;
         }

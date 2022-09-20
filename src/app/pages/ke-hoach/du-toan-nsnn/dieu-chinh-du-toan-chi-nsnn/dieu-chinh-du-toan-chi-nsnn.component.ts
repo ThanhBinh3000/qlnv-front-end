@@ -20,7 +20,7 @@ export class DieuChinhDuToanChiNSNNComponent implements OnInit {
   user: any;
   donVis: any[] = [];
   capDvi: string;
-  roles: string[] = [];
+
 
   DieuChinhDuToanChiNSNNList = DIEU_CHINH_DU_TOAN_NSNN_LIST;
   danhSach: any[] = [];
@@ -36,11 +36,11 @@ export class DieuChinhDuToanChiNSNNComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo?.roles;
+    // this.roles = this.userInfo?.roles;
     this.DieuChinhDuToanChiNSNNList.forEach(data => {
       let check = false;
-      this.roles.forEach(item => {
-        if (data.Role.includes(item)) {
+      data.Role.forEach(item => {
+        if (this.userService.isAccessPermisson(item)) {
           check = true;
           return;
         }
@@ -50,23 +50,6 @@ export class DieuChinhDuToanChiNSNNComponent implements OnInit {
       }
     })
     this.spinner.hide();
-  }
-
-  //get user info
-  async getUserInfo(username: string) {
-    await this.userService.getUserInfo(username).toPromise().then(
-      (data) => {
-        if (data?.statusCode == 0) {
-          this.userInfo = data?.data
-          return data?.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
   }
 
   redirectThongTinChiTieuKeHoachNam() {

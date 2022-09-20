@@ -77,7 +77,6 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
   trangThais: any[] = TRANG_THAI_GIAO_DU_TOAN;
   noiDungs: any[] = NOI_DUNG;
   soLaMa: any[] = LA_MA;
-  roles: string[] = [];
   //file
   fileDetail: NzUploadFile;
   // khac
@@ -102,9 +101,8 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
     this.spinner.show();
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo?.roles;
     this.maDviTao = this.userInfo?.MA_DVI;
-    console.log(this.roles);
+
 
     //lay danh sach danh muc
     await this.danhMucService.dMDonVi().toPromise().then(
@@ -294,10 +292,10 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
   }
 
   checkAddReport() {
-    return this.roles.includes(GDT.ADD_REPORT_PA_PBDT);
+    return this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT);
   }
   checkTiepNhan(){
-    return this.roles.includes(GDT.NHAN_PA_PBDT)
+    return this.userService.isAccessPermisson(GDT.NHAN_PA_PBDT)
   }
   // luu
   async save() {

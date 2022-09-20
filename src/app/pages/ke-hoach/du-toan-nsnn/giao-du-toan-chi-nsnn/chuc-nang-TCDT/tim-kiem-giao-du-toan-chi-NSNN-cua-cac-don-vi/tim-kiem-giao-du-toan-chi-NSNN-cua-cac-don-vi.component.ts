@@ -77,7 +77,6 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
   }
   date: any = new Date()
   roleUser: string;
-  roles: string[] = [];
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -94,14 +93,13 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show()
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo.roles;
     this.searchFilter.maDvi = this.userInfo?.MA_DVI;
     this.searchFilter.ngayGiaoDen = new Date().toISOString().slice(0, 16);
     this.date.setMonth(this.date.getMonth() - 1);
     this.searchFilter.ngayGiaoTu = this.date.toISOString().slice(0, 16);
     this.searchFilter.namDtoan = new Date().getFullYear()
 
-    if (this.roles.includes(GDT.VIEW_REPORT_PA_PBDT)) {
+    if (this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT)) {
       this.trangThai = '1';
     }
     //lay danh sach danh muc
@@ -243,6 +241,6 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
   };
 
   checkViewReport() {
-    return this.roles.includes(GDT.VIEW_REPORT_PA_PBDT);
+    return this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT);
   }
 }

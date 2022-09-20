@@ -112,7 +112,6 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   listFile: File[] = []; // list file chua ten va id de hien tai o input
   lstDviChon: any[] = []; //danh sach don vi chua duoc chon
   soLaMa: any[] = LA_MA; // danh sách ký tự la mã
-  roles: string[] = [];
 
   // khác
   editMoneyUnit = false;
@@ -168,7 +167,6 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
 
     // lấy role người dùng
     this.userInfo = this.userService.getUserLogin();
-    this.roles = this.userInfo.roles;
 
     // set năm tạo PA
     this.namPa = this.newDate.getFullYear();
@@ -762,7 +760,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
 
   //check role cho các nut trinh duyet
   getStatusButton() {
-    // if (this.id && this.roles.includes(GDT.ADD_REPORT_PA_PBDT)) {
+    // if (this.id && this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT)) {
     //   this.status = false;
     // } else {
     //   this.status = true;
@@ -773,7 +771,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     //   this.trangThaiBanGhi == Utils.TT_BC_5 ||
     //   this.trangThaiBanGhi == Utils.TT_BC_8
     // ) {
-    //   if (this.id && this.roles.includes(GDT.VIEW_REPORT_PA_PBDT)) {
+    //   if (this.id && this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT)) {
     //     this.status = true;
     //   } else {
     //     this.status = false;
@@ -781,7 +779,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     // } else {
     //   this.status = true;
     // }
-    if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.roles.includes(GDT.EDIT_REPORT_PA_PBDT)) {
+    if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(GDT.EDIT_REPORT_PA_PBDT)) {
       this.status = false;
     } else {
       this.status = true;
@@ -812,17 +810,17 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, GDT.PRINT_REPORT_PA_PBDT, checkChirld);
     this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
 
-    if (this.roles.includes(GDT.GIAO_PA_PBDT) && this.soQd) {
+    if (this.userService.isAccessPermisson(GDT.GIAO_PA_PBDT) && this.soQd) {
       this.statusBtnGiao = false;
     } else {
       this.statusBtnGiao = true;
       this.statusGiaoToanBo = true;
     }
 
-    // if (this.roles.includes(GDT.GIAODT_TRINHTONGCUC_PA_PBDT || GDT.TRINHDUYET_PA_TONGHOP_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
+    // if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT || GDT.TRINHDUYET_PA_TONGHOP_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
     //   this.statusBtnGuiDVCT = false;
     // }
-    if (this.roles.includes(GDT.GIAODT_TRINHTONGCUC_PA_PBDT)  && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
+    if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT)  && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
       this.statusBtnGuiDVCT = false;
     }
     if (this.trangThaiBanGhi == "7") {
@@ -833,7 +831,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   }
 
   getBtnStatus(status: string[], role: string, check: boolean) {
-    return !(status.includes(this.trangThaiBanGhi) && this.roles.includes(role) && check);
+    return !(status.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(role) && check);
   }
 
   // submit các nút chức năng check role
@@ -908,6 +906,27 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
   //   }
   //   window.open(url, '_blank');
   // };
+  // xem chi tiết PA cha
+  xemCtietPaBTC() {
+    // debugger
+    if (!this.idPaBTC) {
+      return;
+    }
+    let url: string;
+    if (this.userService.isTongCuc()) {
+
+      url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
+
+      window.open(url, '_blank')
+    }
+    else {
+
+      url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhan-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
+      window.open(url, '_blank')
+
+    }
+
+  };
 
   // lấy tên đơn vị
   getUnitName() {
