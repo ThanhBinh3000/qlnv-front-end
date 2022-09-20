@@ -8,6 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { DeXuatDieuChinhService } from 'src/app/services/deXuatDieuChinh.service';
 import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'dialog-quyet-dinh-giao-chi-tieu',
@@ -25,6 +26,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
   isDexuat: boolean = false;
   type?: string;
   maDVi?: string;
+  STATUS = STATUS
   namKeHoach?: number;
   capDonVi: number;
   constructor(
@@ -79,7 +81,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       soQuyetDinh: this.text,
       trichYeu: null,
       ngayKyTuNgay: null,
-      trangThai: '02',
+      trangThai: STATUS.BAN_HANH,
       capDvi: this.capDonVi,
     };
     if (this.type && this, this.type == 'de-xuat') {

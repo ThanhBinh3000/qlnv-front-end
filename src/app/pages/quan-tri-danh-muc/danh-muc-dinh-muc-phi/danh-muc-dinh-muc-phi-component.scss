@@ -43,3 +43,23 @@
     }
   }
 }
+
+.label_dm {
+  width: 439px;
+  height: 19px;
+
+  font-family: 'Roboto';
+  font-style: normal;
+  /* identical to box height */
+
+  text-transform: uppercase;
+
+  color: #444444;
+
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
