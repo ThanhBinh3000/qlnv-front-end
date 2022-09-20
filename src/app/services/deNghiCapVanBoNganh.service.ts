@@ -66,8 +66,8 @@ export class DeNghiCapVonBoNganhService extends BaseService {
   }
 
   updateStatus(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/trang-thai`
-    return this.httpClient.put(url, body).toPromise();
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/trang-thai?id=${body.id}&trangThaiId=${body.trangThaiId}`;
+    return this.httpClient.put(url, null).toPromise();
   }
 
   exportList(body: any): Observable<Blob> {

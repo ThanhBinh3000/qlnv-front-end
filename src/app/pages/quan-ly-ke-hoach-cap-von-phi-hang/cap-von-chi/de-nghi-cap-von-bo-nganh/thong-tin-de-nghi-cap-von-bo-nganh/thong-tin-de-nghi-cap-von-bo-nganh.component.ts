@@ -68,7 +68,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   listFileDinhKem: any[] = [];
   expandSet = new Set<number>();
   bangPhanBoList: Array<any> = [];
-  khBanDauGia: KeHoachBanDauGia = new KeHoachBanDauGia();
+  khBanDauGia: any = {};
   diaDiemGiaoNhan: DiaDiemGiaoNhan = new DiaDiemGiaoNhan();
   diaDiemGiaoNhanList: Array<DiaDiemGiaoNhan> = [];
   phanLoTaiSanList: Array<PhanLoTaiSan> = [];
@@ -120,6 +120,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     private deNghiCapVonBoNganhService: DeNghiCapVonBoNganhService,
   ) {
   }
+
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
@@ -130,16 +131,32 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
-
     await Promise.all([
       this.initForm(),
       this.getListBoNganh(),
       this.loaiVTHHGetAll(),
     ]);
-
+    await this.loadChiTiet(this.idInput);
     this.spinner.hide();
   }
 
+  async loadChiTiet(id) {
+    if (id > 0) {
+      let res = await this.deNghiCapVonBoNganhService.loadChiTiet(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.khBanDauGia = res.data;
+          this.initForm();
+          if (this.khBanDauGia.fileDinhKems) {
+            this.listFileDinhKem = this.khBanDauGia.fileDinhKems;
+          }
+          if (this.khBanDauGia.chiTietList) {
+            this.chiTietList = this.khBanDauGia.chiTietList;
+          }
+        }
+      }
+    }
+  }
 
   async getListBoNganh() {
     this.dsBoNganh = [];
@@ -151,11 +168,11 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      nam: [null],
-      boNganh: [null],
-      soDeNghi: [null],
-      ngayDeNghi: [new Date()],
-      ghiChu: [null],
+      nam: [this.khBanDauGia ? this.khBanDauGia.nam : null],
+      boNganh: [this.khBanDauGia ? this.khBanDauGia.maBoNganh : null],
+      soDeNghi: [this.khBanDauGia ? this.khBanDauGia.soDeNghi : null],
+      ngayDeNghi: [this.khBanDauGia ? this.khBanDauGia.ngayDeNghi : new Date()],
+      ghiChu: [this.khBanDauGia ? this.khBanDauGia.ghiChu : null],
 
     });
     this.setTitle();
@@ -393,7 +410,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
             trangThaiId: this.globals.prop.NHAP_BAN_HANH,
           };
 
-          let res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
+          let res = await this.deNghiCapVonBoNganhService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
               MESSAGE.SUCCESS,
