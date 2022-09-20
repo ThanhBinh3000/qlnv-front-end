@@ -6,8 +6,8 @@ import { QuanLyCapNguonVonChiNSNNRoutingModule } from './quan-ly-cap-nguon-von-c
 import { QuanLyCapNguonVonChiNSNNComponent } from './quan-ly-cap-nguon-von-chi.component';
 @NgModule({
   declarations: [
-    QuanLyCapNguonVonChiNSNNComponent
+    QuanLyCapNguonVonChiNSNNComponent,
   ],
   imports: [CommonModule, QuanLyCapNguonVonChiNSNNRoutingModule, ComponentsModule],
 })
-export class QuanLyCapNguonVonChiNSNNModule {}
+export class QuanLyCapNguonVonChiNSNNModule { }

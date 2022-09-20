@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from 'src/app/guard/auth.guard';
 import { DinhMucPhiBaoQuanComponent } from './dinh-muc-phi-bao-quan/dinh-muc-phi-bao-quan.component';
 import { DinhMucComponent } from './dinh-muc.component';
 
@@ -7,6 +8,7 @@ const routes: Routes = [
     {
         path: '',
         component: DinhMucComponent,
+        canActivate: [AuthGuard],
         children: [
             {
                 path: '',
@@ -15,7 +17,8 @@ const routes: Routes = [
             },
             {
                 path: 'dinh-muc-phi-bao-quan',
-                component: DinhMucPhiBaoQuanComponent
+                component: DinhMucPhiBaoQuanComponent,
+                canActivate: [AuthGuard],
             },
             {
                 path: 'dinh-muc-trang-bi-cong-cu',
@@ -23,6 +26,7 @@ const routes: Routes = [
                     import(
                         '../dinh-muc/dinh-muc-trang-bi-cong-cu/dinh-muc-trang-bi-cong-cu.module'
                     ).then((m) => m.DinhMucTrangBiCongCuModule),
+                canActivate: [AuthGuard],
             },
             {
                 path: 'mang-pvc-cong-cu-dung-cu',
@@ -30,6 +34,7 @@ const routes: Routes = [
                     import(
                         '../dinh-muc/mang-pvc-cong-cu-dung-cu/mang-pvc-cong-cu-dung-cu.module'
                     ).then((m) => m.MangPvcCongCuDungCuModule),
+                canActivate: [AuthGuard],
             },
             {
                 path: 'may-moc-thiet-bi',
@@ -37,6 +42,7 @@ const routes: Routes = [
                     import(
                         '../dinh-muc/may-moc-thiet-bi/may-moc-thiet-bi.module'
                     ).then((m) => m.MayMocThietBiModule),
+                canActivate: [AuthGuard],
             },
             {
                 path: 'bao-hiem',
@@ -44,6 +50,7 @@ const routes: Routes = [
                     import(
                         '../dinh-muc/bao-hiem/bao-hiem.module'
                     ).then((m) => m.BaoHiemModule),
+                canActivate: [AuthGuard],
             },
         ],
     },

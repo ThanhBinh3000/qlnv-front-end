@@ -535,110 +535,97 @@
                         [(ngModel)]="editCache[data.id].data.qddtSoQdinh">
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.qddtTmdtTso"
+                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.qddtTmdtTso"
                         (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
+                    </fm-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.qddtTmdtNsnn"
+                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.qddtTmdtNsnn"
                         (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
+                    </fm-input-number>
                 </td>
                 <td>
                     {{displayValue(editCache[data.id].data.luyKeVonTso)}}
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.luyKeVonNsnn"
+                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.luyKeVonNsnn"
                         (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
+                    </fm-input-number>
                 </td>
 
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.luyKeVonDt"
+                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.luyKeVonDt"
                         (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
+                    </fm-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.luyKeVonThue"
+                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.luyKeVonThue"
                         (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
+                    </fm-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.luyKeVonScl"
+                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.luyKeVonScl"
                         (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
+                    </fm-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamTso"
-                        (ngModelChange)="changeModel(data.id)"></nz-input-number>
+                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamTso"
+                        (ngModelChange)="changeModel(data.id)"></fm-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamNsnnTso"
-                        (ngModelChange)="changeModel(data.id)"></nz-input-number>
+                    <fm-input-number class="search__input"
+                        [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamNsnnTso"
+                        (ngModelChange)="changeModel(data.id)"></fm-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamNsnnKhNamTruoc"
-                        (ngModelChange)="changeModel(data.id)"></nz-input-number>
+                    <fm-input-number class="search__input"
+                        [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamNsnnKhNamTruoc"
+                        (ngModelChange)="changeModel(data.id)"></fm-input-number>
                 </td>
                 <td>
                     {{displayValue(editCache[data.id].data.khoachVonNamTruocKeoDaiTso)}}
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.khoachVonNamTruocKeoDaiDtpt"
-                        (ngModelChange)="changeModel(data.id)"></nz-input-number>
+                    <fm-input-number class="search__input"
+                        [(ngModel)]="editCache[data.id].data.khoachVonNamTruocKeoDaiDtpt"
+                        (ngModelChange)="changeModel(data.id)"></fm-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.khoachVonNamTruocKeoDaiVonKhac"
-                        (ngModelChange)="changeModel(data.id)"></nz-input-number>
+                    <fm-input-number class="search__input"
+                        [(ngModel)]="editCache[data.id].data.khoachVonNamTruocKeoDaiVonKhac"
+                        (ngModelChange)="changeModel(data.id)"></fm-input-number>
                 </td>
                 <td>
                     {{displayValue(editCache[data.id].data.khoachNamVonTso)}}
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.khoachNamVonNsnn"
+                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.khoachNamVonNsnn"
                         (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
+                    </fm-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.khoachNamVonDt"
+                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.khoachNamVonDt"
                         (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
+                    </fm-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.khoachNamVonThue"
+                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.khoachNamVonThue"
                         (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
+                    </fm-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.khoachNamVonScl"
+                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.khoachNamVonScl"
                         (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
+                    </fm-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.kluongThienTso"
+                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kluongThienTso"
                         (ngModelChange)="changeModel(data.id)">
-                    </nz-input-number>
+                    </fm-input-number>
                 </td>
                 <td>
-                    <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                        [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.kluongThienThangBcao"
-                        (ngModelChange)="changeModel(data.id)"></nz-input-number>
+                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kluongThienThangBcao"
+                        (ngModelChange)="changeModel(data.id)"></fm-input-number>
                 </td>
                 <ng-container *ngIf="maLoaiBcao != '527'; else bcaoNam">
                     <td>
@@ -648,27 +635,23 @@
                         {{displayValue(editCache[data.id].data.giaiNganTsoTle)}}
                     </td>
                     <td>
-                        <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                            [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.giaiNganNsnn"
+                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaiNganNsnn"
                             (ngModelChange)="changeModel(data.id)">
-                        </nz-input-number>
+                        </fm-input-number>
                     </td>
                     <td>
-                        <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                            [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonDt"
+                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonDt"
                             (ngModelChange)="changeModel(data.id)">
-                        </nz-input-number>
+                        </fm-input-number>
                     </td>
                     <td>
-                        <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                            [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonThue"
-                            (ngModelChange)="changeModel(data.id)"></nz-input-number>
+                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonThue"
+                            (ngModelChange)="changeModel(data.id)"></fm-input-number>
                     </td>
                     <td>
-                        <nz-input-number [nzMin]="0" class="search__input" [nzSize]="'small'" [nzFormatter]="formatter"
-                            [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonScl"
+                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonScl"
                             (ngModelChange)="changeModel(data.id)">
-                        </nz-input-number>
+                        </fm-input-number>
                     </td>
                     <td>
                         {{displayValue(editCache[data.id].data.giaiNganNsnnTle)}}

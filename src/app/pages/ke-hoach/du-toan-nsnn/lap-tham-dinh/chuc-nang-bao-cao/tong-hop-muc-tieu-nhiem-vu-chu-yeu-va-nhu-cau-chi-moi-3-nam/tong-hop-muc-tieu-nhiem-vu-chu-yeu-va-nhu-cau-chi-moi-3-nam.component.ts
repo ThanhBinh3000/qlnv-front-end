@@ -7,7 +7,7 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, sumNumber } from "src/app/Utility/utils";
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC_CHI } from './tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam.constant';
 
@@ -24,12 +24,12 @@ export class ItemData {
     ncauChiTrongDoChiCs: number;
     ncauChiTrongDoChiMoi: number;
     ncauChiChiaRaDtuPtrien: number;
-    ncauChiChiaRaChiCs1!: number;
-    ncauChiChiaRaChiMoi1!: number;
+    ncauChiChiaRaChiCs1: number;
+    ncauChiChiaRaChiMoi1: number;
     ncauChiChiaRaChiTx: number;
-    ncauChiChiaRaChiCs2!: number;
-    ncauChiChiaRaChiMoi2!: number;
-    checked!: boolean;
+    ncauChiChiaRaChiCs2: number;
+    ncauChiChiaRaChiMoi2: number;
+    checked: boolean;
 }
 
 
@@ -49,14 +49,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
     donViTiens: any[] = DON_VI_TIEN;
     //thong tin chung
     initItem: ItemData = {
-        id: null,
-        stt: "0",
-        maLvuc: 0,
-        level: 0,
-        mtieuNvu: "",
-        csPhapLyThien: "",
-        hdongChuYeu: "",
-        nguonKphi: "",
+        ...new ItemData(),
         ncauChiTongSo: 0,
         ncauChiTrongDoChiCs: 0,
         ncauChiTrongDoChiMoi: 0,
@@ -68,32 +61,13 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         ncauChiChiaRaChiMoi2: 0,
         checked: false,
     };
-    total: ItemData = {
-        id: null,
-        stt: "0",
-        maLvuc: 0,
-        level: 0,
-        mtieuNvu: "",
-        csPhapLyThien: "",
-        hdongChuYeu: "",
-        nguonKphi: "",
-        ncauChiTongSo: 0,
-        ncauChiTrongDoChiCs: 0,
-        ncauChiTrongDoChiMoi: 0,
-        ncauChiChiaRaDtuPtrien: 0,
-        ncauChiChiaRaChiCs1: 0,
-        ncauChiChiaRaChiMoi1: 0,
-        ncauChiChiaRaChiTx: 0,
-        ncauChiChiaRaChiCs2: 0,
-        ncauChiChiaRaChiMoi2: 0,
-        checked: false,
-    };
+    total: ItemData = new ItemData();
     id: string;
     namHienHanh: number;
     maBieuMau: string;
     thuyetMinh: string;
     lyDoTuChoi: string;
-    maDviTien: string;
+    maDviTien = '1';
     listIdDelete = "";
     trangThaiPhuLuc: string;
     //trang thai cac nut
@@ -104,7 +78,6 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -119,7 +92,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         this.spinner.show();
         this.id = this.data?.id;
         this.maBieuMau = this.data?.maBieuMau;
-        this.maDviTien = this.data?.maDviTien;
+        this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
         this.trangThaiPhuLuc = this.data?.trangThai;
         this.namHienHanh = this.data?.namHienHanh;
@@ -140,19 +113,6 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         }
         this.getTotal();
         this.updateEditCache();
-        // //lay danh sach danh muc don vi
-        // await this.danhMucService.dMDonVi().toPromise().then(
-        //     (data) => {
-        //         if (data.statusCode == 0) {
-        //             this.donVis = data.data;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //     }
-        // );
         this.getStatusButton();
         this.spinner.hide();
     }

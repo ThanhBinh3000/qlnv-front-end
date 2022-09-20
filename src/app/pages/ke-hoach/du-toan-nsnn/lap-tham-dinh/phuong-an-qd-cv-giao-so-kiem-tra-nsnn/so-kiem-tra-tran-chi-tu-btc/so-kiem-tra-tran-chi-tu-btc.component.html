@@ -20,18 +20,18 @@
 					<i class="icon htvbdh_tcdt_guiduyet"></i>
 					<span>Sửa</span>
 				</button>
-				<a class="btn btn-main" [hidden]="statusBtnCopy">
+				<!-- <a class="btn btn-main" [hidden]="statusBtnCopy">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Copy</span>
-				</a>
+				</a> -->
 				<a class="btn btn-main" [hidden]="!status || statusChinhXac">
 					<i nz-icon nzType="copy" nzTheme="outline"></i>
 					<span>Chính xác</span>
 				</a>
-				<a class="btn btn-main" [hidden]="statusBtnPrint">
+				<!-- <a class="btn btn-main" [hidden]="statusBtnPrint">
 					<i nz-icon nzType="printer" nzTheme="outline"></i>
 					<span>In</span>
-				</a>
+				</a> -->
 				<a class="btn btn-main" (click)="close()">
 					<i nz-icon nzType="stop" nzTheme="outline"></i>
 					<span>Đóng</span>
@@ -66,7 +66,7 @@
 										Select File
 									</button>
 								</nz-upload>
-								<div class="tep" (click)="downloadFileCv()">
+								<div class="tep__sqd" (click)="downloadFileCv()">
 									<!-- <i class="icon htvbdh_tcdt_tep"></i> -->
 									<span>{{soQdCv?.fileName}}</span>
 								</div>
@@ -164,20 +164,18 @@
 											{{displayValue(data.tongSo)}}
 										</td>
 										<td>
-											<nz-input-number class="search__input" nzSize="small"
-												[nzFormatter]="formatter" [nzPrecision]="0"
+											<fm-input-number class="search__input"
 												[(ngModel)]="editCache[data.id].data.nguonNsnn"
 												[class]="(editCache[data.id].data.nguonNsnn || editCache[data.id].data.nguonNsnn ===0) && editCache[data.id].data.nguonNsnn >= 0?'' : 'input-error-validate'"
 												(ngModelChange)="changeModel(data.id)">
-											</nz-input-number>
+											</fm-input-number>
 										</td>
 										<td>
-											<nz-input-number class="search__input" nzSize="small"
-												[nzFormatter]="formatter" [nzPrecision]="0"
+											<fm-input-number class="search__input"
 												[(ngModel)]="editCache[data.id].data.nguonKhac"
 												[class]="(editCache[data.id].data.nguonKhac || editCache[data.id].data.nguonKhac ===0) && editCache[data.id].data.nguonKhac >= 0?'' : 'input-error-validate'"
 												(ngModelChange)="changeModel(data.id)">
-											</nz-input-number>
+											</fm-input-number>
 										</td>
 										<td nzWidth="2.5%" [hidden]="status">
 											<i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>

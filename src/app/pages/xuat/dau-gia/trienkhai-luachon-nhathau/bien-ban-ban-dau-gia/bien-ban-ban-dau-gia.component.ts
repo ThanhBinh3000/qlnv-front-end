@@ -11,12 +11,10 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuanLyBienBanBanDauGiaService } from 'src/app/services/quanLyBienBanBanDauGia.service';
-import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import {
   convertTrangThai,
-  convertTrangThaiGt,
+  convertTrangThaiGt
 } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 @Component({
@@ -34,11 +32,11 @@ export class BienBanBanDauGiaComponent implements OnInit {
     private quanLyBienBanBanDauGiaService: QuanLyBienBanBanDauGiaService,
     private danhMucService: DanhMucService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   listNam: any[] = [];
   yearNow: number = 0;
-
+  isView: boolean = false;
   searchFilter = {
     nam: dayjs().get('year'),
     loaiVthh: '',
@@ -48,17 +46,17 @@ export class BienBanBanDauGiaComponent implements OnInit {
     ngayToChucBdg: '',
   };
   filterTable: any = {
-    soQd: '',
-    ngayQd: '',
+    soBienBan: '',
+    ngayToChucTu: '',
     trichYeu: '',
-    tenGthau: '',
-    statusGT: '',
-    tenNhaThau: '',
-    lyDoHuy: '',
-    donGiaTrcVat: '',
-    tenHdong: '',
-    tgianThienHd: '',
-    statusConvert: '',
+    soQdPdKhBdg: '',
+    maThongBaoBdg: '',
+    hinhThucDauGia: '',
+    phuongThucDauGia: '',
+    tenVatTuCha: '',
+    nam: '',
+    soQdPdKqBdg: '',
+    tenTrangThai: '',
   };
   dataTableAll: any[] = [];
   dataTable: any[] = [];
@@ -149,6 +147,7 @@ export class BienBanBanDauGiaComponent implements OnInit {
       trichYeu: '',
       ngayToChucBdg: '',
     };
+    this.search();
   }
 
   async search() {
@@ -215,7 +214,7 @@ export class BienBanBanDauGiaComponent implements OnInit {
   redirectToChiTiet(id: number, isView?: boolean) {
     this.selectedId = id;
     this.isDetail = true;
-    this.isViewDetail = isView ?? false;
+    this.isView = isView;
   }
 
   async showList() {
@@ -236,13 +235,14 @@ export class BienBanBanDauGiaComponent implements OnInit {
         this.spinner.show();
         try {
           this.quanLyBienBanBanDauGiaService
-            .deleteData(item.id)
+            .deleteData(item)
             .then(async (res) => {
               if (res.msg == MESSAGE.SUCCESS) {
                 this.notification.success(
                   MESSAGE.SUCCESS,
                   MESSAGE.DELETE_SUCCESS,
                 );
+                this.allChecked = false;
                 this.search();
               } else {
                 this.notification.error(MESSAGE.ERROR, res.msg);
@@ -375,17 +375,17 @@ export class BienBanBanDauGiaComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQd: '',
-      ngayQd: '',
+      soBienBan: '',
+      ngayToChucTu: '',
       trichYeu: '',
-      tenGthau: '',
-      statusGT: '',
-      tenNhaThau: '',
-      lyDoHuy: '',
-      donGiaTrcVat: '',
-      tenHdong: '',
-      tgianThienHd: '',
-      statusConvert: '',
+      soQdPdKhBdg: '',
+      maThongBaoBdg: '',
+      hinhThucDauGia: '',
+      phuongThucDauGia: '',
+      tenVatTuCha: '',
+      nam: '',
+      soQdPdKqBdg: '',
+      tenTrangThai: '',
     };
   }
 }

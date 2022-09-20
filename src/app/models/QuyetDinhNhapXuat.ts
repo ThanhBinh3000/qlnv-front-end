@@ -51,3 +51,21 @@ export class DetailQuyetDinhNhapXuat {
     stt: number;
     chungLoaiHh: string;
 }
+
+export class ThongTinDiaDiemNhap {
+    maDvi: string;
+    tenDvi: string;
+    maCuc: string;
+    tenCuc: string;
+    maChiCuc: string;
+    tenChiCuc: string;
+    maDiemKho: string;
+    tenDiemKho: string;
+    maNhaKho: string;
+    tenNhaKho: string;
+    maNganKho: string;
+    tenNganKho: string;
+    maLoKho: string;
+    tenLoKho: string;
+    soLuong: number;
+}

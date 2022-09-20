@@ -25,6 +25,7 @@ import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
 import { Globals } from 'src/app/shared/globals';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
@@ -63,7 +64,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   selectedId: number = 0;
   errorInputRequired: string = null;
   isQuyetDinh: boolean = false;
-
+  STATUS = STATUS;
   userInfo: UserLogin;
   dataDeXuat: any[] = [];
   mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
@@ -263,8 +264,16 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
+  isDetailPermission() {
+    if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP")) {
+      return true;
+    }
+    return false;
+  }
   async save() {
+    if (!this.isDetailPermission()) {
+      return;
+    }
     this.helperService.markFormGroupTouched(this.formData);
     this.spinner.show();
     try {

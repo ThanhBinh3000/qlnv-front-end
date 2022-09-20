@@ -1,6 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -11,12 +10,11 @@ import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-th
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, LTD, MONEY_LIMIT, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { DataService } from 'src/app/services/data.service';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
 
 
@@ -61,7 +59,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     thuyetMinh: string;
     //danh muc
     lstCtietBcao: ItemData[] = [];
-    donVis: any[] = [];
     noiDungs: any[] = KHOAN_MUC;
     donViTiens: any[] = DON_VI_TIEN;
     trangThais: any[] = TRANG_THAI_TIM_KIEM;
@@ -87,7 +84,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     fileDetail: NzUploadFile;
     //beforeUpload: any;
     listIdFilesDelete: any = [];                        // id file luc call chi tiet
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -118,11 +114,9 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
 
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private danhMuc: DanhMucHDVService,
         private spinner: NgxSpinnerService,
         private routerActive: ActivatedRoute,
         private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
         private router: Router,
         private userService: UserService,
         private notification: NzNotificationService,
@@ -136,28 +130,14 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         this.id = this.routerActive.snapshot.paramMap.get('id');
         this.spinner.show();
         //lay thong tin user
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName);
-        this.maDonViTao = this.userInfo?.dvql;
+        this.userInfo = this.userService.getUserLogin();
+        this.maDonViTao = this.userInfo?.MA_DVI;
 
-        //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
         if (this.id) {
             await this.getDetailReport();
         } else {
             this.trangThaiBanGhi = '1';
-            this.maDonViTao = this.userInfo?.dvql;
+            this.maDonViTao = this.userInfo?.MA_DVI;
             this.maDviTien = '1';
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             await this.dataSource.currentData.subscribe(obj => {
@@ -209,39 +189,15 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         this.location.back()
     }
 
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
-    }
-
     //check role cho các nut trinh duyet
     getStatusButton() {
-        const userRole = this.userInfo?.roles[0]?.code;
-        if (this.id && !ROLE_CAN_BO.includes(userRole)) {
+        if (!this.userService.isAccessPermisson(LTD.EDIT_SKT_BTC)) {
             this.status = true;
         } else {
             this.status = false;
         }
-
-        let checkChirld = false;
-        const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
-        if (dVi && dVi.maDvi == this.userInfo?.dvql) {
-            checkChirld = true;
-        }
-        const utils = new Utils();
-        this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, userRole);
+        const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
+        this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(LTD.EDIT_SKT_BTC) && checkChirld);
         if (this.id) {
             this.statusBtnSave = true;
         }
@@ -249,22 +205,15 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             this.statusBtnNew = true;
             this.statusBtnEdit = true;
         } else {
-            if (this.lstBcao.length > 0) {
-                this.statusBtnNew = false;
-                this.statusBtnEdit = true;
-            } else {
-                this.statusBtnNew = true;
-                this.statusBtnEdit = false;
-            }
+            const edit = this.lstBcao.length == 0;
+            this.statusBtnEdit = !(edit && this.userService.isAccessPermisson(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT) && checkChirld);
+            this.statusChinhXac = !(!edit && this.userService.isAccessPermisson(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT) && checkChirld);
         }
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, userRole);
-        if (!ROLE_CAN_BO.includes(userRole)) {
-            this.statusBtnEdit = true;
+        this.statusBtnCopy = !(this.id && checkChirld);
+        this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(LTD.PRINT_PA_GIAO_SKT) && checkChirld);
+
+        if (!this.userService.isAccessPermisson(LTD.ADD_PA_GIAO_SKT)) {
             this.statusBtnNew = true;
-            this.statusChinhXac = true;
-        } else {
-            this.statusChinhXac = false;
         }
     }
 
@@ -527,11 +476,6 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             );
         }
         this.spinner.hide();
-    }
-
-    //lay ten don vi tạo
-    getUnitName() {
-        return this.donVis.find((item) => item.maDvi == this.maDonViTao)?.tenDvi;
     }
 
     getStatusName() {
@@ -1007,8 +951,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         }
         let check = false;
         const trangThais = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8, Utils.TT_BC_9];
-        const capDvi = this.donVis.find(e => e.maDvi == this.maDonViTao)?.capDvi;
-        if (capDvi == Utils.TONG_CUC) {
+        if (this.userInfo?.CAP_DVI == Utils.TONG_CUC) {
             trangThais.push(Utils.TT_BC_7);
         }
         const requestReport = {

@@ -40,7 +40,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
   searchFilter = {
     maPhanGiao: '2',
     maLoai: '1',
-    loaiTimKiem: "1",
+    loaiTimKiem: "2",
     maDvi: '',
     ngayTaoTu: '',
     ngayTaoDen: '',

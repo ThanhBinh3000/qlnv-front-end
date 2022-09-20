@@ -13,15 +13,17 @@
         <td></td>
         <td>
           <nz-input-group>
-            <nz-select [nzDisabled]="isView" [(ngModel)]="rowItem.idDanhMuc" (ngModelChange)="onChangeNoiDung($event)" nzAllowClear>
-              <nz-option nzValue="{{item.id}}" nzLabel="{{item.noiDung}}" *ngFor="let item of dsNoiDung">
+            <nz-select [nzDisabled]="isView" [(ngModel)]="rowItem.loaiChi" (ngModelChange)="onChangeNoiDung($event)"
+              nzAllowClear>
+              <nz-option [nzValue]="item.ma" [nzLabel]="item.giaTri" *ngFor="let item of dsNoiDung">
               </nz-option>
             </nz-select>
           </nz-input-group>
         </td>
         <td>
           <nz-input-group>
-            <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" nz-input [(ngModel)]="rowItem.sluongDtoan" [nzMin]="0">
+            <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" nz-input [(ngModel)]="rowItem.sluongDtoan"
+              [nzMin]="0">
             </nz-input-number>
           </nz-input-group>
         </td>
@@ -34,11 +36,13 @@
           </a>
         </td>
       </tr>
+    </tbody>
+    <tbody>
       <tr *ngFor="let data of dataTable; let idx = index">
         <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
           <td>{{ idx + 1 }}</td>
-          <td>{{ data.noiDung }}</td>
-          <td>{{ data.sluongDtoan }}</td>
+          <td>{{ data.tenLoaiChi }}</td>
+          <td>{{ data.sluongDtoan | number : '1.0-1' : 'vi_VN' }}</td>
           <td style="text-align: center;">
             <a (click)="editItem(idx)" *ngIf="!isView">
               <i class=" fa fa-pencil"></i>
@@ -52,8 +56,9 @@
           <td></td>
           <td>
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.idDanhMuc">
-                <nz-option [nzValue]="item.id" [nzLabel]="item.noiDung" *ngFor="let item of dsNoiDung">
+              <nz-select [nzDisabled]="isView" [(ngModel)]="dataEdit[idx].data.loaiChi" (ngModelChange)="onChangeNoiDung($event, dataEdit[idx].data )"
+                         nzAllowClear>
+                <nz-option [nzValue]="item.ma" [nzLabel]="item.giaTri" *ngFor="let item of dsNoiDung">
                 </nz-option>
               </nz-select>
             </nz-input-group>
@@ -78,12 +83,12 @@
     <tfoot>
       <tr>
         <td style="text-align: right; font-weight: 700" colspan="2">Cộng</td>
-        <td>{{ calcTong() }}</td>
+        <td>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
         <td></td>
       </tr>
       <tr>
         <td style="text-align: right; font-weight: 700" colspan="2">Tổng giá trị theo QĐ của TTCP</td>
-        <td class="xanh">600</td>
+        <td class="xanh">{{tongGiaTri | number : '1.0-1' : 'vi_VN' }}</td>
         <td></td>
       </tr>
     </tfoot>

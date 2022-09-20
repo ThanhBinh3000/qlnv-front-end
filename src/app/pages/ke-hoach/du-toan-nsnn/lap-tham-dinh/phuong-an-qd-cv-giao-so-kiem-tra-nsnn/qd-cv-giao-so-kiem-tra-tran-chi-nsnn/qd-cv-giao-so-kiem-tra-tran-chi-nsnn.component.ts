@@ -1,7 +1,5 @@
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -9,7 +7,6 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
@@ -84,12 +81,8 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
         private router: Router,
         private routerActive: ActivatedRoute,
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private danhMuc: DanhMucHDVService,
         private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
         private notification: NzNotificationService,
-        private location: Location,
-        private fb: FormBuilder,
         private spinner: NgxSpinnerService,
     ) {
         // this.namgiao = this.currentYear.getFullYear();
@@ -98,9 +91,8 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
     async ngOnInit() {
         this.id = this.routerActive.snapshot.paramMap.get('id');
         this.spinner.show();
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName);
-        this.maDviTao = this.userInfo?.dvql;
+        this.userInfo = this.userService.getUserLogin();
+        this.maDviTao = this.userInfo?.MA_DVI;
 
         this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
         this.namGiao = this.newDate.getFullYear();
@@ -120,23 +112,6 @@ export class QdCvGiaoSoKiemTraTranChiNsnnComponent implements OnInit {
 
         this.getPhuongAn();
 
-    }
-
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
     }
 
     async getPhuongAn() {

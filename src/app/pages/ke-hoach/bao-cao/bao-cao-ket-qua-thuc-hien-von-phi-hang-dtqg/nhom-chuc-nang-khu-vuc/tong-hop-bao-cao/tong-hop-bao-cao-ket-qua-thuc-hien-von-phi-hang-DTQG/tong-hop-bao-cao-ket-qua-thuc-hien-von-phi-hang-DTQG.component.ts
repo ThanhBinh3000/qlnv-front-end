@@ -54,7 +54,6 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
 		private router: Router,
 		private datePipe: DatePipe,
 		private notification: NzNotificationService,
-		private location: Location,
 		private spinner: NgxSpinnerService,
 		private dataSource: DataService,
 	) {
@@ -62,7 +61,7 @@ export class TongHopBaoCaoKetQuaThucHienVonPhiHangDTQGComponent implements OnIni
 
 	async ngOnInit(): Promise<void> {
 		//lay danh sach danh muc
-		this.danhMuc.dMDonVi().toPromise().then(
+		this.danhMuc.dMDviCon().toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
 					this.donViTaos = data.data;

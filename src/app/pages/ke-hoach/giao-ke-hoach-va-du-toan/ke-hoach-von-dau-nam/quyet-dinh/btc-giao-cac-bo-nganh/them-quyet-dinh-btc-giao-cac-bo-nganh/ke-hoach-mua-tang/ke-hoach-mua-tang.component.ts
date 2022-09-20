@@ -1,10 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, DoCheck, IterableDiffers, OnChanges, SimpleChanges } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
 import { KeHoachMuaXuat } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
@@ -17,12 +16,16 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   @Output()
   dataTableChange = new EventEmitter<any[]>();
   @Input('isView') isView: boolean;
+  @Input() tongGiaTri: number;
   rowItem: KeHoachMuaXuat = new KeHoachMuaXuat();
   dsNoiDung = [];
   dataEdit: { [key: string]: { edit: boolean; data: KeHoachMuaXuat } } = {};
 
+  lastIndex = 0;
   constructor(
     private modal: NzModalService,
+    private danhMucService: DanhMucService,
+    private notification: NzNotificationService,
   ) {
   }
 
@@ -31,26 +34,19 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     this.emitDataTable();
   }
 
-  ngOnInit(): void {
-    this.dsNoiDung = [
-      {
-        id: 1,
-        noiDung: 'Chi dự trữ quốc gia',
-      },
-      {
-        id: 2,
-        noiDung: 'Chi thường xuyên',
-      },
-      {
-        id: 3,
-        noiDung: 'Khác',
-      },
-    ];
-
+  async ngOnInit() {
+    this.getListDmLoaiChi();
   }
 
   initData() {
 
+  }
+
+  async getListDmLoaiChi() {
+    let res = await this.danhMucService.danhMucChungGetAll("DM_ND_DT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsNoiDung = res.data;
+    }
   }
 
   emitDataTable() {
@@ -89,6 +85,11 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     this.rowItem = new KeHoachMuaXuat();
     this.updateEditCache();
     this.emitDataTable();
+    // Validate tổng dự toán
+    if ((this.dataEdit[this.lastIndex - 1].data?.sluongDtoan + this.calcTong()) > this.tongGiaTri) {
+      this.dataTable.splice(this.lastIndex - 1, 1);
+      this.notification.error(MESSAGE.ERROR, "Tổng Dự toán không được lớn hơn Tổng giá trị theo QĐ của TTCP");
+    }
   }
 
   clearData() { }
@@ -102,10 +103,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   }
 
   luuEdit(index: number): void {
-    let dataSaved = this.dataEdit[index].data;
-    const dataNd = this.dsNoiDung.filter(d => d.id == dataSaved.idDanhMuc);
-    dataSaved.noiDung = dataNd[0].noiDung;
-    Object.assign(this.dataTable[index], dataSaved);
+    Object.assign(this.dataTable[index], this.dataEdit[index].data);
     this.dataEdit[index].edit = false;
     this.emitDataTable();
   }
@@ -123,13 +121,22 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
           data: { ...item },
         };
         i++
+        // Validate tổng dự toán
+        this.lastIndex = i;
       });
     }
   }
 
-  onChangeNoiDung(idDanhMuc) {
-    const dataNd = this.dsNoiDung.filter(d => d.id == idDanhMuc)
-    this.rowItem.noiDung = dataNd[0].noiDung;
+  onChangeNoiDung(loaiChi, typeData?) {
+    const dataNd = this.dsNoiDung.filter(d => d.ma == loaiChi)
+    if (typeData) {
+      if (dataNd.length > 0) {
+        typeData.tenLoaiChi= dataNd[0].giaTri;
+      }
+    }
+    if (dataNd.length > 0) {
+      this.rowItem.tenLoaiChi = dataNd[0].giaTri;
+    }
   }
 
   calcTong() {

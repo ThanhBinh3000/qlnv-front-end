@@ -1,6 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -16,7 +15,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, ROLE_CAN_BO, sumNumber, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, ROLE_CAN_BO, sumNumber, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 import { TRANG_THAI_TIM_KIEM_CHA, TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
@@ -97,7 +96,6 @@ export class TienThuaComponent implements OnInit {
     statusBtnParent: boolean;
     allChecked = false;
     editMoneyUnit = false;
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     // before uploaf file
     beforeUploadGui = (file: NzUploadFile): boolean => {
@@ -138,7 +136,6 @@ export class TienThuaComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private routerActive: ActivatedRoute,
         private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
         private router: Router,
         private userService: UserService,
         private notification: NzNotificationService,
@@ -154,11 +151,10 @@ export class TienThuaComponent implements OnInit {
 
         //lay thong tin user
         this.spinner.show();
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName);
+        this.userInfo = this.userService.getUserLogin();
 
         //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
+        await this.danhMuc.dMDviCon().toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
@@ -182,7 +178,7 @@ export class TienThuaComponent implements OnInit {
             if (!this.maCvUv) {
                 this.close();
             }
-            this.maDviTao = this.userInfo?.dvql;
+            this.maDviTao = this.userInfo?.MA_DVI;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.ngayLap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.ngayLapTemp = this.datePipe.transform(this.newDate, "yyyy-MM-dd");
@@ -190,9 +186,8 @@ export class TienThuaComponent implements OnInit {
             this.quanLyVonPhiService.maNopTienVon().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
-                        const capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
                         let str: string;
-                        if (capDvi == Utils.CUC_KHU_VUC) {
+                        if (this.userInfo?.CAP_DVI == Utils.CUC_KHU_VUC) {
                             str = "CKV";
                         } else {
                             str = "CC";
@@ -220,59 +215,43 @@ export class TienThuaComponent implements OnInit {
         this.location.back()
     }
 
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
-    }
-
     //check role cho các nut trinh duyet
     getStatusButton() {
-        const userRole = this.userInfo?.roles[0]?.code;
-        if ((this.trangThaiBanGhi == Utils.TT_BC_1 || this.trangThaiBanGhi == Utils.TT_BC_3 || this.trangThaiBanGhi == Utils.TT_BC_5)
-            && (ROLE_CAN_BO.includes(userRole)) && this.statusBtnParent) {
+        const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
+        if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTVT) && checkChirld) {
             this.statusGui = false;
         } else {
             this.statusGui = true;
         }
-        if ((this.trangThaiCha == Utils.TT_BC_1 || this.trangThaiCha == Utils.TT_BC_3 || this.trangThaiCha == Utils.TT_BC_5)
-            && (ROLE_CAN_BO.includes(userRole)) && !this.statusBtnParent) {
+        if (Utils.statusSave.includes(this.trangThaiCha) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_TH) && !this.statusBtnParent) {
             this.statusNhan = false;
         } else {
             this.statusNhan = true;
         }
-        let checkChirld = false;
-        const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-        if (dVi && dVi.maDvi == this.userInfo?.dvql) {
-            checkChirld = true;
-        }
-        const utils = new Utils();
-        this.statusBtnDel = utils.getRoleDel(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, userRole);
-        this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, userRole);
+
+        this.statusBtnDel = this.getBtnStatus(Utils.statusDelete, CVMB.DELETE_REPORT_NTVT, checkChirld);
+        this.statusBtnSave = this.getBtnStatus(Utils.statusSave, CVMB.EDIT_REPORT_NTVT, checkChirld);;
+        this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, CVMB.APPROVE_REPORT_NTVT, checkChirld);;
+        this.statusBtnTBP = this.getBtnStatus(Utils.statusDuyet, CVMB.DUYET_REPORT_NTVT, checkChirld);;
+        this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, CVMB.PHE_DUYET_REPORT_NTVT, checkChirld);;
         if (this.statusBtnParent) {
-            this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, userRole);
+            this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, CVMB.COPY_REPORT_NTVT, checkChirld);;
         } else {
             this.statusBtnCopy = true;
         }
         //
-        this.statusSaveParent = utils.getRoleSave(this.trangThaiCha, !this.statusBtnParent, userRole);
-        this.statusApproveParent = utils.getRoleApprove(this.trangThaiCha, !this.statusBtnParent, userRole);
-        this.statusTBPParent = utils.getRoleTBP(this.trangThaiCha, !this.statusBtnParent, userRole);
-        this.statusLDParent = utils.getRoleLD(this.trangThaiCha, !this.statusBtnParent, userRole);
+        this.statusSaveParent = this.getBtnStatusParent(Utils.statusSave, CVMB.EDIT_REPORT_GNV_TH, !this.statusBtnParent);
+        this.statusApproveParent = this.getBtnStatusParent(Utils.statusApprove, CVMB.APPROVE_REPORT_GNV_TH, !this.statusBtnParent);
+        this.statusTBPParent = this.getBtnStatusParent(Utils.statusDuyet, CVMB.DUYET_REPORT_GNV_TH, !this.statusBtnParent);
+        this.statusLDParent = this.getBtnStatusParent(Utils.statusPheDuyet, CVMB.PHE_DUYET_REPORT_GNV_TH, !this.statusBtnParent);
+    }
+
+    getBtnStatus(status: string[], role: string, check: boolean) {
+        return !(status.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(role) && check);
+    }
+
+    getBtnStatusParent(status: string[], role: string, check: boolean) {
+        return !(status.includes(this.trangThaiCha) && this.userService.isAccessPermisson(role) && check);
     }
 
     //upload file
@@ -360,8 +339,7 @@ export class TienThuaComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.statusEdit = false;
                     this.maDviTao = data.data.maDvi;
-                    const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-                    if (dVi && dVi?.maDviCha == this.userInfo?.dvql) {
+                    if (this.donVis.findIndex(e => e.maDvi == this.maDviTao) != -1) {
                         this.statusBtnParent = false;
                     } else {
                         this.statusBtnParent = true;
@@ -653,7 +631,7 @@ export class TienThuaComponent implements OnInit {
         const requestReport = {
             loaiTimKiem: "0",
             maCapUngVonTuCapTren: "",
-            maDvi: this.userInfo?.dvql,
+            maDvi: this.userInfo?.MA_DVI,
             maLoai: "1",
             ngayLap: "",
             ngayTaoDen: "",
@@ -706,9 +684,8 @@ export class TienThuaComponent implements OnInit {
         await this.quanLyVonPhiService.maNopTienVon().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
-                    const capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
                     let str: string;
-                    if (capDvi == Utils.CUC_KHU_VUC) {
+                    if (this.userInfo.CAP_DVI == Utils.CUC_KHU_VUC) {
                         str = "CKV";
                     } else {
                         str = "CC";

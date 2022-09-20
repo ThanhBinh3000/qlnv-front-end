@@ -13,7 +13,8 @@
         <li nz-menu-item (click)="selectTab('hopdong')" *ngIf="!userService.isChiCuc()">
             Hợp đồng
         </li>
-        <li nz-menu-item (click)="selectTab('qdgnvnh')" *ngIf="!userService.isTongCuc()">
+        <li nz-menu-item [nzSelected]="userService.isChiCuc()" (click)="selectTab('qdgnvnh')"
+            *ngIf="!userService.isTongCuc()">
             Quyết định giao nhiệm vụ nhập hàng
         </li>
         <li nz-menu-item (click)="selectTab('ktcl')" *ngIf="!userService.isTongCuc()">

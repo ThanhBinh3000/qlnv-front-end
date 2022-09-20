@@ -137,7 +137,7 @@
 							</td>
 							<td>
 								<ng-container *ngIf="status; else pheDuyet">
-									<ng-container *ngIf="checkDeleteReport(item); else xem">
+									<ng-container *ngIf="checkEditReport(item.trangThaiDviCha); else xem">
 										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
 											<span>Nhập/Sửa dữ liệu</span>
 										</button>

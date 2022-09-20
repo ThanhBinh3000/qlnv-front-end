@@ -1,17 +1,16 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
+import { CVNC, LOAI_DE_NGHI, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
-import { DataService } from 'src/app/services/data.service';
 
 
 
@@ -52,6 +51,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 	}
 	//trang thai
 	statusBtnNew = true;
+	statusSynthetic = true;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -60,23 +60,22 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 		private datePipe: DatePipe,
 		private userService: UserService,
 		private notification: NzNotificationService,
-		private fb: FormBuilder,
 		private location: Location,
 		private spinner: NgxSpinnerService,
 		private dataSource: DataService,
 	) { }
 
 	async ngOnInit() {
-		const userName = this.userService.getUserName();
+		this.userInfo = this.userService.getUserLogin();
 		this.spinner.show();
-		await this.getUserInfo(userName); //get user info
-		this.searchFilter.maDviTao = this.userInfo?.dvql;
+		this.searchFilter.maDviTao = this.userInfo?.MA_DVI;
+		this.statusSynthetic = !this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV);
 
 		await this.dataSource.currentData.subscribe(obj => {
 			this.searchFilter.qdChiTieu = obj?.qdChiTieu;
 		})
 		//lay danh sach danh muc
-		this.danhMuc.dMDonVi().toPromise().then(
+		this.danhMuc.dMDviCon().toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
 					this.donVis = data.data;
@@ -92,26 +91,8 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 		this.onSubmit();
 	}
 
-	//get user info
-	async getUserInfo(username: string) {
-		await this.userService.getUserInfo(username).toPromise().then(
-			(data) => {
-				if (data?.statusCode == 0) {
-					this.userInfo = data?.data
-					return data?.data;
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			(err) => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-			}
-		);
-	}
-
 	//search list bao cao theo tieu chi
 	async onSubmit() {
-
 		let trangThais = [];
 		if (this.searchFilter.trangThai) {
 			trangThais = [this.searchFilter.trangThai];
@@ -219,16 +200,5 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
 
 	getUnitName(maDvi: string) {
 		return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
-	}
-
-	checkDeleteReport(item: any): boolean {
-		let check: boolean;
-		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-			this.userInfo?.username == item.nguoiTao) {
-			check = true;
-		} else {
-			check = false;
-		}
-		return check;
 	}
 }

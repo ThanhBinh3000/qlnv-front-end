@@ -8,7 +8,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
+import { GDT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 // import { TRANGTHAIBAOCAO } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 @Component({
@@ -24,8 +24,8 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
     maPhanGiao: '1',
     maLoai: '2',
     namPa: null,
-    ngayTaoTu: "",
-    ngayTaoDen: "",
+    ngayTaoTu: null,
+    ngayTaoDen: null,
     maPa: "",
     trangThais: ["1"],
     trangThaiGiaos: [],
@@ -47,6 +47,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
   date: any = new Date()
   userRole: string;
   status: boolean;
+  statusTaoMoi = true;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -59,20 +60,26 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const userName = this.userService.getUserName();
+
     this.spinner.show()
-    await this.getUserInfo(userName);
-    this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
+    this.userInfo = this.userService.getUserLogin();
+
+    this.searchFilter.ngayTaoDen = new Date();
     this.date.setMonth(this.date.getMonth() - 1);
-    this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
+    this.searchFilter.ngayTaoTu = new Date();
     this.searchFilter.namPa = new Date().getFullYear()
-    if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code) ||
-      ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
-      this.status = true;
-    } else {
-      this.status = false;
+
+    if (this.userService.isAccessPermisson(GDT.ADD_REPORT_BTC)) {
+      this.statusTaoMoi = false;
     }
-    this.userRole = this.userInfo?.roles[0].code;
+
+    // if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code) ||
+    //   ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
+    //   this.status = true;
+    // } else {
+    //   this.status = false;
+    // }
+    // this.userRole = this.userInfo?.roles[0].code;
     this.onSubmit()
     this.spinner.hide()
   }
@@ -179,7 +186,7 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
           this.onSubmit()
         } else {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+          this.notification.error(MESSAGE.WARNING, data?.msg);
         }
       },
       (err) => {
@@ -239,23 +246,19 @@ export class TimKiemQuyetDinhNhapDuToanChiNSNNComponent implements OnInit {
 
   updateAllCheck() {
     this.danhSachQuyetDinh.forEach(item => {
-      if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
-        && ROLE_CAN_BO.includes(this.userRole)) {
+      if (this.checkDeleteReport(item.trangThai)) {
         item.checked = true;
         this.listIdDelete.push(item.id);
       }
     })
   }
 
-  checkDeleteReport(item: any): boolean {
-    let check: boolean;
-    if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-      ROLE_CAN_BO.includes(this.userRole)) {
-      check = true;
-    } else {
-      check = false;
-    }
-    return check;
+  checkDeleteReport(trangThai: string) {
+    return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(GDT.DELETE_REPORT_BTC);
+  }
+
+  checkViewReport() {
+    return this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT);
   }
 
   close() {

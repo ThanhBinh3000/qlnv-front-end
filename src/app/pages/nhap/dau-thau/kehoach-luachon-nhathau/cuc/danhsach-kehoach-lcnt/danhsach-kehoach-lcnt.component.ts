@@ -72,6 +72,16 @@ export class DanhsachKehoachLcntComponent implements OnInit {
 
   async ngOnInit() {
     try {
+      if (this.loaiVthh === "02") {
+        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM")) {
+          window.location.href = '/error/401'
+        }
+      }
+      else {
+        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XEM")) {
+          window.location.href = '/error/401'
+        }
+      }
       this.userInfo = this.userService.getUserLogin();
       this.listVthh = LIST_VAT_TU_HANG_HOA;
       this.yearNow = dayjs().get('year');
@@ -195,6 +205,16 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   themMoi() {
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
+        return;
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM")) {
+        return;
+      }
+    }
     this.isDetail = true;
     if (this.userService.isTongCuc()) {
       this.isVatTu = true;
@@ -219,6 +239,16 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     } else {
       this.isVatTu = false;
     }
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA")) {
+        return;
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_SUA")) {
+        return;
+      }
+    }
   }
 
   clearFilter() {
@@ -231,6 +261,16 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA")) {
+        return;
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA")) {
+        return;
+      }
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -294,6 +334,16 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   // }
 
   exportData() {
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_EXP")) {
+        return;
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_EXP")) {
+        return;
+      }
+    }
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
@@ -326,6 +376,16 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
 
   deleteSelect() {
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA")) {
+        return;
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA")) {
+        return;
+      }
+    }
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {

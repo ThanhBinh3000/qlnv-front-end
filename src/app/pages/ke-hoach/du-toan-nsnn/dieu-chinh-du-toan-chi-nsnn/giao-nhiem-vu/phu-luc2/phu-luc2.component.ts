@@ -10,11 +10,11 @@ import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-th
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney } from "src/app/Utility/utils";
 import { LINH_VUC } from './phu-luc2.constant';
 
 export class ItemData {
@@ -56,7 +56,7 @@ export class PhuLuc2Component implements OnInit {
   namBcao: number;
   maBieuMau: string;
   thuyetMinh: string;
-  maDviTien: '1';
+  maDviTien: string;
   listIdDelete: "";
   trangThaiPhuLuc = '1';
   initItem: ItemData = {
@@ -100,18 +100,13 @@ export class PhuLuc2Component implements OnInit {
 
   allChecked = false;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
+  editMoneyUnit = false;
 
-  constructor(private router: Router,
-    private routerActive: ActivatedRoute,
+  constructor(
     private spinner: NgxSpinnerService,
     private quanLyVonPhiService: QuanLyVonPhiService,
-    private datePipe: DatePipe,
-    private sanitizer: DomSanitizer,
-    private userService: UserService,
     private danhMucService: DanhMucHDVService,
     private notification: NzNotificationService,
-    private location: Location,
-    private fb: FormBuilder,
     private modal: NzModalService,
   ) {
   }
@@ -120,7 +115,7 @@ export class PhuLuc2Component implements OnInit {
     this.spinner.show();
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
-    this.maDviTien = this.data?.maDviTien;
+    this.maDviTien = "1";
     this.thuyetMinh = this.data?.thuyetMinh;
     this.trangThaiPhuLuc = this.data?.trangThai;
     this.namBcao = this.data?.namHienHanh;
@@ -130,9 +125,6 @@ export class PhuLuc2Component implements OnInit {
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
-        thienDinhMuc: divMoney(item.thienDinhMuc, this.maDviTien),
-        thienThanhTien: divMoney(item.thienThanhTien, this.maDviTien),
-        kphiThieuNtruoc: divMoney(item.kphiThieuNtruoc, this.maDviTien),
         ncauKphi: item.ncauKphi,
       })
     })
@@ -207,24 +199,17 @@ export class PhuLuc2Component implements OnInit {
     const lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      const thienDinhMuc = mulMoney(item.thienDinhMuc, this.maDviTien);
-      const thienThanhTien = mulMoney(item.thienThanhTien, this.maDviTien);
-      const kphiThieuNtruoc = mulMoney(item.kphiThieuNtruoc, this.maDviTien);
-      const ncauKphi = mulMoney(item.ncauKphi, this.maDviTien);
       if (
-        thienDinhMuc > MONEY_LIMIT ||
-        thienThanhTien > MONEY_LIMIT ||
-        kphiThieuNtruoc > MONEY_LIMIT ||
-        ncauKphi > MONEY_LIMIT
+        item.thienDinhMuc > MONEY_LIMIT ||
+        item.thienThanhTien > MONEY_LIMIT ||
+        item.kphiThieuNtruoc > MONEY_LIMIT ||
+        item.ncauKphi > MONEY_LIMIT
       ) {
         checkMoneyRange = false;
         return;
       }
       lstCtietBcaoTemp.push({
         ...item,
-        thienDinhMuc: thienDinhMuc,
-        thienThanhTien: thienThanhTien,
-        kphiThieuNtruoc: kphiThieuNtruoc
       })
     })
 
@@ -905,5 +890,14 @@ export class PhuLuc2Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
+  }
+
+  getMoneyUnit() {
+    return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+  }
+
+  displayValue(num: number): string {
+    num = exchangeMoney(num, '1', this.maDviTien);
+    return displayNumber(num);
   }
 }

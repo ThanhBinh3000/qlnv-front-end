@@ -196,19 +196,16 @@
                                             {{displayValue(ttGuiCache.soTien)}}
                                         </td>
                                         <td>
-                                            <nz-input-number class="search__input" nzSize="small"
-                                                [nzFormatter]="formatter" [nzPrecision]="0"
+                                            <fm-input-number class="search__input"
                                                 [class]="ttGuiCache.nopThue >= 0?'' : 'input-error-validate' "
                                                 [(ngModel)]="ttGuiCache.nopThue" (ngModelChange)="changeModel()">
-                                            </nz-input-number>
+                                            </fm-input-number>
                                         </td>
                                         <td>
-                                            <nz-input-number class="search__input" [nzFormatter]="formatter"
-                                                [nzPrecision]="0"
+                                            <fm-input-number class="search__input"
                                                 [class]="(ttGuiCache.ttChoDviHuong || ttGuiCache.ttChoDviHuong === 0) && ttGuiCache.ttChoDviHuong >= 0 ?'' : 'input-error-validate' "
-                                                nzSize="small" [(ngModel)]="ttGuiCache.ttChoDviHuong"
-                                                (ngModelChange)="changeModel()">
-                                            </nz-input-number>
+                                                [(ngModel)]="ttGuiCache.ttChoDviHuong" (ngModelChange)="changeModel()">
+                                            </fm-input-number>
                                         </td>
                                         <td>
                                             <input nz-input class="search__input"

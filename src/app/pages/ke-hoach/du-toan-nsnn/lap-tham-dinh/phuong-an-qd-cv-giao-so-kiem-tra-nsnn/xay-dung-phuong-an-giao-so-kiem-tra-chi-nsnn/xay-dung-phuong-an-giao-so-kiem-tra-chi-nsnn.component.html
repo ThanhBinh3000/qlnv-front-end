@@ -203,12 +203,10 @@
 											<td *ngFor="let item of lstDvi">
 												<div *ngFor="let e of editCache[data.id].data.listCtietDvi">
 													<div *ngIf="e.maBcao == item.maBcao">
-														<nz-input-number class="search__input" nzSize="small"
-															[nzFormatter]="formatter" [nzPrecision]="0"
-															[(ngModel)]="e.soTranChi"
+														<fm-input-number class="search__input" [(ngModel)]="e.soTranChi"
 															[class]="(e.soTranChi || e.soTranChi === 0) && e.soTranChi >= 0 ?'' : 'input-error-validate'"
 															(ngModelChange)="changeModel(data.id)">
-														</nz-input-number>
+														</fm-input-number>
 													</div>
 												</div>
 											</td>

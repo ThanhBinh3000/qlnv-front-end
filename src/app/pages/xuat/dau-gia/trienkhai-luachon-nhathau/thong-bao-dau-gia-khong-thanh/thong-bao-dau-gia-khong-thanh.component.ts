@@ -10,10 +10,10 @@ import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import { ThongBaoDauGiaKhongThanhCongService } from 'src/app/services/thongBaoDauGiaKhongThanhCong.service';
 @Component({
   selector: 'app-thong-bao-dau-gia-khong-thanh',
   templateUrl: './thong-bao-dau-gia-khong-thanh.component.html',
@@ -28,6 +28,7 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
     soBienBan: '',
     ngayBienBan: '',
     namKh: '',
+    trichYeu: '',
   };
 
   optionsDonVi: any[] = [];
@@ -55,23 +56,29 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
   indeterminate = false;
 
   filterTable: any = {
-    soPhieu: '',
-    ngayGdinh: '',
-    ketLuan: '',
-    soQuyetDinhNhap: '',
-    soBienBan: '',
+    maThongBao: '',
+    ngayToChuc: '',
+    trichYeu: '',
+    soQdPdKhBdg: '',
+    maThongBaoBdg: '',
+    hinhThucDauGia: '',
+    phuongThucDauGia: '',
+    tenVatTuCha: '',
+    nam: '',
+    soQdPdKqBdg: '',
+    tenTrangThai: '',
   };
 
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
-    private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
+    private thongBaoDauGiaKhongThanhCongService: ThongBaoDauGiaKhongThanhCongService,
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -132,20 +139,19 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
 
   async search() {
     let body = {
-      maDonVi: this.userInfo.MA_DVI,
+      maDvis: this.userInfo.MA_DVI,
       maVatTuCha: this.typeVthh,
-      maNganKho: null,
-      ngayKiemTraDenNgay:
+      maThongBaoBdg: null,
+      ngayToChucBdgTu:
         this.searchFilter.ngayBienBan &&
-        this.searchFilter.ngayBienBan.length > 1
+          this.searchFilter.ngayBienBan.length > 1
           ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
           : null,
-      ngayKiemTraTuNgay:
+      ngayToChucBdgDen:
         this.searchFilter.ngayBienBan &&
-        this.searchFilter.ngayBienBan.length > 0
+          this.searchFilter.ngayBienBan.length > 0
           ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
           : null,
-      ngayLapPhieu: null,
       orderBy: null,
       orderDirection: null,
       paggingReq: {
@@ -157,10 +163,12 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
       soBienBan: this.searchFilter.soBienBan,
       soQd: this.searchFilter.soQuyetDinhNhap,
       str: null,
-      tenNguoiGiao: null,
       trangThai: null,
+      nam: this.searchFilter.namKh,
+      trichYeu: this.searchFilter.trichYeu
     };
-    let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
+    let res = await this.thongBaoDauGiaKhongThanhCongService.timKiem(body);
+    console.log(res.data.content)
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -208,6 +216,7 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
       soBienBan: '',
       ngayBienBan: '',
       namKh: '',
+      trichYeu: '',
     };
     this.search();
   }
@@ -228,7 +237,7 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuKiemTraChatLuongHangService
+          this.thongBaoDauGiaKhongThanhCongService
             .deleteData(item.id)
             .then((res) => {
               if (res.msg == MESSAGE.SUCCESS) {
@@ -272,12 +281,12 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
           maNganKho: null,
           ngayKiemTraDenNgay:
             this.searchFilter.ngayBienBan &&
-            this.searchFilter.ngayBienBan.length > 1
+              this.searchFilter.ngayBienBan.length > 1
               ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
               : null,
           ngayKiemTraTuNgay:
             this.searchFilter.ngayBienBan &&
-            this.searchFilter.ngayBienBan.length > 0
+              this.searchFilter.ngayBienBan.length > 0
               ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
               : null,
           ngayLapPhieu: null,
@@ -290,7 +299,7 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
           tenNguoiGiao: null,
           trangThai: null,
         };
-        this.quanLyPhieuKiemTraChatLuongHangService
+        this.thongBaoDauGiaKhongThanhCongService
           .exportList(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-phieu-kiem-tra-chat-luong-hang.xlsx'),
@@ -328,7 +337,7 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
           this.spinner.show();
           try {
             let res =
-              await this.quanLyPhieuKiemTraChatLuongHangService.deleteMultiple({
+              await this.thongBaoDauGiaKhongThanhCongService.deleteMultiple({
                 ids: dataDelete,
               });
             if (res.msg == MESSAGE.SUCCESS) {
@@ -378,13 +387,19 @@ export class ThongBaoDauGiaKhongThanhComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soPhieu: '',
-      ngayGdinh: '',
-      ketLuan: '',
-      soQuyetDinhNhap: '',
-      soBienBan: '',
+      maThongBao: '',
+      ngayToChuc: '',
+      trichYeu: '',
+      soQdPdKhBdg: '',
+      maThongBaoBdg: '',
+      hinhThucDauGia: '',
+      phuongThucDauGia: '',
+      tenVatTuCha: '',
+      nam: '',
+      soQdPdKqBdg: '',
+      tenTrangThai: '',
     };
   }
 
-  print() {}
+  print() { }
 }

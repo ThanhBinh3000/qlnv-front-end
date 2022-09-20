@@ -126,28 +126,24 @@
                         </div>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter"
-                            [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.thNamHienHanhN1"
+                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.thNamHienHanhN1"
                             [class]="(editCache[data.id].data.thNamHienHanhN1 || editCache[data.id].data.thNamHienHanhN1 ===0) && editCache[data.id].data.thNamHienHanhN1 >= 0 ?'' : 'input-error-validate'">
-                        </nz-input-number>
+                        </fm-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter"
-                            [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.ncauNamDtoanN"
+                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.ncauNamDtoanN"
                             [class]="(editCache[data.id].data.ncauNamDtoanN || editCache[data.id].data.ncauNamDtoanN ===0) && editCache[data.id].data.ncauNamDtoanN >= 0 ?'' : 'input-error-validate'">
-                        </nz-input-number>
+                        </fm-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter"
-                            [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.ncauNamN1"
+                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.ncauNamN1"
                             [class]="(editCache[data.id].data.ncauNamN1 || editCache[data.id].data.ncauNamN1 ===0) && editCache[data.id].data.ncauNamN1 >= 0 ?'' : 'input-error-validate'">
-                        </nz-input-number>
+                        </fm-input-number>
                     </td>
                     <td>
-                        <nz-input-number class="search__input" nzSize="small" [nzFormatter]="formatter"
-                            [nzPrecision]="0" [(ngModel)]="editCache[data.id].data.ncauNamN2"
+                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.ncauNamN2"
                             [class]="(editCache[data.id].data.ncauNamN2 || editCache[data.id].data.ncauNamN2 ===0) && editCache[data.id].data.ncauNamN2 >= 0 ?'' : 'input-error-validate'">
-                        </nz-input-number>
+                        </fm-input-number>
                     </td>
                     <td [hidden]="status">
                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>

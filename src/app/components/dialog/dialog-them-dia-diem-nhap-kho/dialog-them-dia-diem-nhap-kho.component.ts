@@ -47,6 +47,11 @@ export class ChiTietDiaDiemNhapKho {
   giaKhoiDiem: number;
   soTienDatTruoc: number;
   idVirtual: number;
+  soLanTraGia: number;
+  donGiaCaoNhat: number;
+  traGiaCaoNhat: string;
+  hoTen: string;
+  thanhTien: number;
   isEdit: boolean;
   constructor(tonKho: number = 0) {
     this.tonKho = tonKho;

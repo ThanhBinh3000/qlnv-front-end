@@ -9,7 +9,7 @@ export class ThongTinChiTieuKeHoachNam {
   ngayKy: string;
   soQuyetDinh: string;
   tenTrangThai: string;
-  trangThai: string;
+  trangThai: string = '00';
   trichYeu: string;
   khLuongThuc: Array<KeHoachLuongThuc> = [];
   khMuoiDuTru: Array<KeHoachMuoi> = [];
@@ -18,15 +18,13 @@ export class ThongTinChiTieuKeHoachNam {
   khMuoi: Array<KeHoachMuoi> = [];
   canCu: string;
   fileDinhKemReqs: Array<FileDinhKem>;
-  canCus: Array<FileDinhKem>;
   qdGocId: number;
   soQdGoc: string;
+  chiTieuId: number;
   constructor(
     fileDinhKemReqs: Array<FileDinhKem> = [],
-    canCus: Array<FileDinhKem> = [],
   ) {
     this.fileDinhKemReqs = fileDinhKemReqs;
-    this.canCus = canCus;
   }
 }
 export class TonKhoDauNamLuongThuc {

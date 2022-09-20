@@ -87,11 +87,15 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     public userService: UserService,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XEM")) {
+        window.location.href = '/error/401'
+      }
       this.listVthh = LIST_VAT_TU_HANG_HOA;
       this.userInfo = this.userService.getUserLogin();
       this.isVisibleChangeTab$.subscribe((value: boolean) => {
@@ -127,16 +131,25 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   insert() {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
+      return;
+    }
     this.isDetail = true;
     this.selectedId = null;
   }
 
-  detail(data) {
+  detail(data?) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_SUA")) {
+      return;
+    }
     this.isDetail = true;
     this.selectedId = data.id;
   }
 
   delete(data?) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -335,6 +348,9 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   exportData() {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_EXP")) {
+      return;
+    }
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
@@ -370,6 +386,9 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   deleteSelect() {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
+      return;
+    }
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {

@@ -14,6 +14,7 @@ export class GiaoNhapHangComponent implements OnInit {
   loaiVthhSelected: string;
   tabs: any[] = [];
   count: Array<number> = [];
+  listVthh: any[] = []
   constructor(
     private danhMucService: DanhMucService,
     private spinner: NgxSpinnerService,
@@ -25,7 +26,6 @@ export class GiaoNhapHangComponent implements OnInit {
   ngOnInit() {
     this.spinner.show();
     this.loaiVTHHGetAll();
-    this.getCount();
   }
   async loaiVTHHGetAll() {
     this.tabs = [
@@ -37,6 +37,7 @@ export class GiaoNhapHangComponent implements OnInit {
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
+        this.listVthh = res.data;
         res.data.forEach((element) => {
           element.count = 0;
           this.tabs.push(element);
@@ -44,29 +45,29 @@ export class GiaoNhapHangComponent implements OnInit {
       }
     }
   }
-  async getCount() {
-    try {
-      let res = await this.quyetDinhNhapXuatService.getCount();
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          this.count = [
-            res.data.tatCa,
-            res.data.thoc,
-            res.data.gao,
-            res.data.muoi,
-            res.data.vatTu,
-          ];
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
+  // async getCount() {
+  //   try {
+  //     let res = await this.quyetDinhNhapXuatService.getCount();
+  //     if (res.msg == MESSAGE.SUCCESS) {
+  //       if (res.data) {
+  //         this.count = [
+  //           res.data.tatCa,
+  //           res.data.thoc,
+  //           res.data.gao,
+  //           res.data.muoi,
+  //           res.data.vatTu,
+  //         ];
+  //       }
+  //     } else {
+  //       this.notification.error(MESSAGE.ERROR, res.msg);
+  //     }
+  //     this.spinner.hide();
+  //   } catch (e) {
+  //     console.log('error: ', e);
+  //     this.spinner.hide();
+  //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //   }
+  // }
 
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;

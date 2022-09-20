@@ -1,17 +1,15 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { NGUON_BAO_CAO, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
+import { CVNC, NGUON_BAO_CAO, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
-import { DataService } from 'src/app/services/data.service';
 
 
 
@@ -82,12 +80,10 @@ export class TongHopComponent implements OnInit {
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
-		private danhMuc: DanhMucHDVService,
 		private router: Router,
 		private datePipe: DatePipe,
 		private userService: UserService,
 		private notification: NzNotificationService,
-		private fb: FormBuilder,
 		private location: Location,
 		private spinner: NgxSpinnerService,
 		private routerActive: ActivatedRoute,
@@ -97,18 +93,25 @@ export class TongHopComponent implements OnInit {
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.spinner.show();
-		const userName = this.userService.getUserName();
-		await this.getUserInfo(userName); //get user info
+		this.userInfo = this.userService.getUserLogin();
 
 		this.searchFilter.denNgay = new Date();
 		const newDate = new Date();
 		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
 
-		this.searchFilter.maDviTao = this.userInfo?.dvql;
+		this.searchFilter.maDviTao = this.userInfo?.MA_DVI;
+
+		if (!this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV)) {
+			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.THOP_TU_CUC_KV);
+		}
+
+		if (!this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_TC)) {
+			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.THOP_TAI_TC);
+		}
 
 		if (this.loai == "0") {
-			if (ROLE_CAN_BO.includes(this.userRole)) {
+			if (this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV) || this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_TC)) {
 				this.statusTaoMoi = false;
 			}
 			this.status = false;
@@ -116,25 +119,12 @@ export class TongHopComponent implements OnInit {
 		} else {
 			this.status = true;
 			this.disable = true;
-			if (ROLE_TRUONG_BO_PHAN.includes(this.userRole)) {
+			if (this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_CKV) && this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_TC)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
 				this.searchFilter.trangThai = Utils.TT_BC_4;
 			}
 		}
-		//lay danh sach danh muc
-		// this.danhMuc.dMDonVi().toPromise().then(
-		// 	data => {
-		// 		if (data.statusCode == 0) {
-		// 			this.donVis = data.data;
-		// 		} else {
-		// 			this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-		// 		}
-		// 	},
-		// 	err => {
-		// 		this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		// 	}
-		// );
 		this.spinner.hide();
 		this.onSubmit();
 	}
@@ -313,15 +303,18 @@ export class TongHopComponent implements OnInit {
 		this.spinner.hide();
 	}
 
-	checkDeleteReport(item: any): boolean {
-		let check: boolean;
-		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
-			&& ROLE_CAN_BO.includes(this.userRole)) {
-			check = true;
-		} else {
-			check = false;
-		}
-		return check;
+	checkViewReport(loaiDn: string) {
+		return loaiDn == Utils.THOP_TU_CUC_KV ? this.userService.isAccessPermisson(CVNC.VIEW_SYNTHETIC_CKV) : this.userService.isAccessPermisson(CVNC.VIEW_SYNTHETIC_TC);
+	}
+
+	checkEditReport(trangThai: string, loaiDn: string) {
+		return Utils.statusSave.includes(trangThai) &&
+			(loaiDn == Utils.THOP_TU_CUC_KV ? this.userService.isAccessPermisson(CVNC.EDIT_SYNTHETIC_CKV) : this.userService.isAccessPermisson(CVNC.EDIT_SYNTHETIC_TC));
+	}
+
+	checkDeleteReport(trangThai: string, loaiDn: string) {
+		return Utils.statusDelete.includes(trangThai) &&
+			(loaiDn == Utils.THOP_TU_CUC_KV ? this.userService.isAccessPermisson(CVNC.DELETE_SYNTHETIC_CKV) : this.userService.isAccessPermisson(CVNC.DELETE_SYNTHETIC_TC));
 	}
 
 	changeListIdDelete(id: string) {
@@ -344,8 +337,7 @@ export class TongHopComponent implements OnInit {
 
 	updateAllCheck() {
 		this.danhSachBaoCao.forEach(item => {
-			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
-				&& ROLE_CAN_BO.includes(this.userRole)) {
+			if (this.checkDeleteReport(item.trangThai, item.loaiDnghi)) {
 				item.checked = true;
 				this.listIdDelete.push(item.id);
 			}

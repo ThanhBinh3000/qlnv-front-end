@@ -95,11 +95,11 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    statusBtnPrint: boolean;
     editMoneyUnit = false;
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -119,6 +119,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         this.namHienHanh = this.data?.namHienHanh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
+        this.statusBtnPrint = this.statusBtnPrint;
         this.data?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,

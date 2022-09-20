@@ -63,139 +63,28 @@ export class Utils {
   public static UNG_VON = "2";
 
   public static FILE_SIZE = 2097152;
-  //role xoa
-  //role xoa
-  // public static btnRoleDel = {
-  //     "status": ['1', '3', '5', '8', '10'],
-  //     "unit": [1, 2],
-  //     "role": ['3'],
-  // }
 
-  // //role luu
-  // public static btnRoleSave = {
-  //     "status": ['1', '3', '5', '8', '10'],
-  //     "unit": [1, 2],
-  //     "role": ['3'],
-  // }
-
-  // //role trinh duyet
-  // public static btnRoleApprove = {
-  //     "status": ['1'],
-  //     "unit": [1, 2],
-  //     "role": ['3'],
-  // }
-
-  // //role truong bo phan
-  // public static btnRoleTBP = {
-  //     "status": ['2'],
-  //     "unit": [1, 2],
-  //     "role": ['2'],
-  // }
-
-  // //role lanh dao
-  // public static btnRoleLD = {
-  //     "status": ['4'],
-  //     "unit": [1, 2],
-  //     "role": ['1'],
-  // }
-
-  // //role gui don vi cap tren
-  // public static btnRoleGuiDVCT = {
-  //     "status": ['6'],
-  //     "unit": [1, 2],
-  //     "role": ['1'],
-  // }
-
-  // //role don vi cap tren
-  // public static btnRoleDVCT = {
-  //     "status": ['7'],
-  //     "unit": [1, 2],
-  //     "role": ['3'],
-  // }
-
-  // //role lanh dao dieu chinh
-  // public static btnRoleLDDC = {
-  //     "status": ['4'],
-  //     "unit": [1, 2],
-  //     "role": ['1'],
-  // }
-
-  // //role copy
-  // public static btnRoleCOPY = {
-  //     "status": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
-  //     "unit": [1, 2],
-  //     "role": ['3'],
-  // }
-
-  // //role in
-  // public static btnRolePRINT = {
-  //     "status": ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
-  //     "unit": [1, 2],
-  //     "role": ['1', '2', '3'],
-  // }
-
-  // //role copy
-  // public static btnRoleOK = {
-  //     "statusBaoCao": ['2', '4', '7'],
-  //     "statusChiTiet": ['2'],
-  //     "unit": ['1']
-  // }
-
-  // //get role xoa
-  // public getRoleDel(status: any, unit: any, role: any) {
-  //     return !(Utils.btnRoleDel.status.includes(status) && unit == true && Utils.btnRoleDel.role.includes(role));
-  // }
-
-  // //get role luu
-  // public getRoleSave(status: any, unit: any, role: any) {
-  //     return !(Utils.btnRoleSave.status.includes(status) && unit == true && Utils.btnRoleSave.role.includes(role));
-  // }
-
-  // //get role trinh duyet
-  // public getRoleApprove(status: any, unit: any, role: any) {
-  //     return !(Utils.btnRoleApprove.status.includes(status) && unit == true && Utils.btnRoleApprove.role.includes(role));
-  // }
-
-  // //get role truong bo phan
-  // public getRoleTBP(status: any, unit: any, role: any) {
-  //     return !(Utils.btnRoleTBP.status.includes(status) && unit == true && Utils.btnRoleTBP.role.includes(role));
-  // }
-
-  // //get role button lanh dao
-  // public getRoleLD(status: any, unit: any, role: any) {
-  //     return !(Utils.btnRoleLD.status.includes(status) && unit == true && Utils.btnRoleLD.role.includes(role));
-  // }
-
-  // //get role button gui don vi cap tren
-  // public getRoleGuiDVCT(status: any, unit: any, role: any) {
-  //     return !(Utils.btnRoleGuiDVCT.status.includes(status) && unit == true && Utils.btnRoleGuiDVCT.role.includes(role));
-  // }
-
-  // //get role button don vi cap tren
-  // public getRoleDVCT(status: any, unit: any, role: any) {
-  //     return !(Utils.btnRoleDVCT.status.includes(status) && unit == true && Utils.btnRoleDVCT.role.includes(role));
-  // }
-
-  // //role lanh dao dieu chinh
-  // public getRoleLDDC(status: any, unit: any, role: any) {
-  //     return !(Utils.btnRoleLDDC.status.includes(status) && unit == true && Utils.btnRoleLDDC.role.includes(role));
-  // }
-
-  // //role copy
-  // public getRoleCopy(status: any, unit: any, role: any) {
-  //     return !(Utils.btnRoleCOPY.status.includes(status) && unit == true && Utils.btnRoleCOPY.role.includes(role));
-  // }
-
-  // //role in
-  // public getRolePrint(status: any, unit: any, role: any) {
-  //     return !(Utils.btnRolePRINT.status.includes(status) && unit == true && Utils.btnRolePRINT.role.includes(role));
-  // }
-
-  // //role OK/not Ok
-  // public getRoleOk(statusBaoCao: any, unit: any, statusChiTiet: any) {
-  //     return !(Utils.btnRoleOK.statusBaoCao.includes(statusBaoCao) && unit == true && Utils.btnRoleOK.statusChiTiet.includes(statusChiTiet));
-  // }
-
+  ////////// TRANG THAI BAO CAO DE THUC HIEN THAO TAC /////////////////////////////////
+  //xoa
+  public static statusDelete = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8];
+  //luu
+  public static statusSave = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8];
+  // trinh duyet
+  public static statusApprove = [Utils.TT_BC_1];
+  // duyet, tu choi
+  public static statusDuyet = [Utils.TT_BC_2];
+  //phe duyet, tu choi
+  public static statusPheDuyet = [Utils.TT_BC_4];
+  //tiep nhan, tu choi
+  public static statusTiepNhan = [Utils.TT_BC_6, Utils.TT_BC_7];
+  //copy
+  public static statusCopy = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9];
+  //print
+  public static statusPrint = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9];
+  //ok, not ok
+  public static statusOK = [Utils.TT_BC_2, Utils.TT_BC_4, Utils.TT_BC_6, Utils.TT_BC_7];
+  //export
+  public static statusExport = [Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_9];
 
   //role xoa
   public btnRoleDel = {
@@ -494,201 +383,303 @@ export const ROLE_CAN_BO = ['TC_KH_VP_NV', 'C_KH_VP_NV_KH', 'C_KH_VP_NV_TVQT', '
 export const ROLE_TRUONG_BO_PHAN = ['TC_KH_VP_TBP', 'C_KH_VP_TBP_TVQT', 'C_KH_VP_TBP_KH', 'CC_KH_VP_TBP'];
 export const ROLE_LANH_DAO = ['TC_KH_VP_LD', 'C_KH_VP_LD', 'CC_KH_VP_LD'];
 
-// loai bao cao quan ly von phi
-export const LOAI_BAO_CAO = [
-  {
-    id: '12',
-    tenDm: 'Xây dựng Chi thường xuyên giai đoạn 03 năm'
-  },
-  {
-    id: '01',
-    tenDm: 'Xây dựng Kế hoạch danh mục, vốn đầu tư XDCB giai đoạn 03 năm'
-  },
-  {
-    id: '02',
-    tenDm: 'Xây dựng Nhu cầu nhập xuất hàng DTQG hàng năm'
-  },
-  {
-    id: '03',
-    tenDm: 'Xây dựng Kế hoạch bảo quản hàng năm'
-  },
-  {
-    id: '04',
-    tenDm: 'Xây dựng Nhu cầu xuất hàng DTQG viện trợ cứu trợ hàng năm'
-  },
-  {
-    id: '05',
-    tenDm: 'Xây dựng Kế hoạch quỹ tiền lương giai đoạn 03 năm'
-  },
-  {
-    id: '06',
-    tenDm: 'Xây dựng Kế hoạch quỹ tiền lương hàng năm'
-  },
-  {
-    id: '07',
-    tenDm: 'Xây dựng Thuyết minh chi các đề tài, dự án nghiên cứu khoa học giai đoạn 03 năm'
-  },
-  {
-    id: '08',
-    tenDm: 'Kế hoạch xây dựng văn bản quy phạm pháp luật dự trữ quốc gia giai đoạn 03 năm'
-  },
-  {
-    id: '09',
-    tenDm: 'Kế hoạch Xây dựng dự toán chi ứng dụng CNTT giai đoạn 03 năm'
-  },
-  {
-    id: '10',
-    tenDm: 'Xây dựng Dự toán chi mua sắm máy móc, thiết bị chuyên dùng 03 năm'
-  },
-  {
-    id: '11',
-    tenDm: 'Xây dựng Nhu cầu chi ngân sách nhà nước giai đoạn 03 năm'
-  },
-  {
-    id: '13',
-    tenDm: 'Xây dựng Nhu cầu phí nhập, xuất theo các năm của giai đoạn 03 năm'
-  },
-  {
-    id: '14',
-    tenDm: 'Xây dựng Kế hoạch cải tạo và sửa chữa lớn 03 năm'
-  },
-  {
-    id: '15',
-    tenDm: 'Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm'
-  },
-  {
-    id: '32',
-    tenDm: 'Xây dựng Kế hoạch đào tạo bồi dưỡng giai đoạn 03 năm (TC)'
-  },
-  {
-    id: '16',
-    tenDm: 'Nhu cầu kế hoạch ĐTXD 03 năm'
-  },
-  {
-    id: '17',
-    tenDm: 'Tổng hợp dự toán chi thường xuyên hàng năm'
-  },
-  {
-    id: '18',
-    tenDm: 'Dự toán phí nhập xuất hàng DTQG hàng năm'
-  },
-  {
-    id: '19',
-    tenDm: 'Kế hoạch bảo quản hàng năm (Phần kinh phí được hưởng theo định mức và Dự kiến kinh phí của các mặt hàng chưa có định mức)'
-  },
-  {
-    id: '20',
-    tenDm: 'Dự toán phí xuất hàng DTQG viện trợ cứu trợ hàng năm'
-  },
-  {
-    id: '21',
-    tenDm: 'Kế hoạch dự toán cải tạo sửa chữa hệ thống kho tàng 03 năm'
-  },
-  {
-    id: '22',
-    tenDm: 'Kế hoạch quỹ tiền lương năm N+1'
-  },
-  {
-    id: '23',
-    tenDm: 'Dự toán chi dự trữ quốc gia giai đoạn 03 năm'
-  },
-  {
-    id: '24',
-    tenDm: 'Thuyết minh chi các đề tài, dự án nghiên cứu khoa học giai đoạn 03 năm'
-  },
-  {
-    id: '25',
-    tenDm: 'Kế hoạch xây dựng văn bản quy phạm pháp luật dự trữ quốc gia giai đoạn 03 năm'
-  },
-  {
-    id: '26',
-    tenDm: 'Dự toán chi ứng dụng CNTT giai đoạn 03 năm'
-  },
-  {
-    id: '27',
-    tenDm: 'Dự toán chi mua sắm máy móc thiết bị chuyên dùng 03 năm'
-  },
-  {
-    id: '28',
-    tenDm: 'Tổng hợp nhu cầu chi ngân sách nhà nước giai đoạn 03 năm'
-  },
-  {
-    id: '29',
-    tenDm: 'Tổng hợp nhu cầu chi thường xuyên giai đoạn 03 năm'
-  },
-  {
-    id: '30',
-    tenDm: 'Chi tiết nhu cầu chi thường xuyên giai đoạn 03 năm'
-  },
-  {
-    id: '31',
-    tenDm: 'Tổng hợp mục tiêu nhiệm vụ chủ yếu và nhu cầu chi mới giai đoạn 03 năm'
-  },
-]
-// Loai bao cao
-// 3.2.4.3.1
-export const QLNV_KHVONPHI_DM_VONDT_XDCBGD3N = "01";
+//////////////////// LAP THAM DINH /////////////////////////////////
+export const LTD = {
+  ADD_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_LAP_BC',  									//lap bao cao
+  APPROVE_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_TRINHDUYET_BC',							//trinh duyet bao cao
+  EDIT_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_BC',									//sua bao cao
+  DELETE_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XOA_BC',									//xoa bao cao
+  COPY_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_COPY_BC',									//copy bao cao
+  DUYET_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_DUYET_TUCHOIDUYET_BC',					//duyet bao cao
+  PHE_DUYET_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_PHEDUYET_TUCHOIPHEDUYET_BC',			//phe duyet bao cao
+  VIEW_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XEM_BC',									//xem bao cao
+  PRINT_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_IN_BC',									//in bao cao
+  EXPORT_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XUAT_BC',								//xuat bao cao
+  TIEP_NHAN_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_TIEPNHAN_TUCHOI_BC',					//tiep nhan bao cao
+  SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_TONGHOP_BC',							//tong hop bao cao
+  APPROVE_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_TRINHDUYET_BC_TONGHOP',		//trinh duyet bao cao tong hop
+  EDIT_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_BC_TONGHOP',					//sua bao cao tong hop
+  DELETE_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XOA_BC_TONGHOP',				//xoa bao cao tong hop
+  COPY_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_COPY_BC_TONGHOP',				//copy bao cao tong hop
+  DUYET_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_DUYET_TUCHOI_BC_TH',			//duyet bao cao tong hop
+  PHE_DUYET_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_PHEDUYET_TUCHOI_BC_TH',		//phe duyet bao cao tong hop
+  VIEW_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XEM_BC_TONGHOP',					//xem bao cao tong hop
+  PRINT_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_IN_BC_TONGHOP',					//in bao cao tong hop
+  EXPORT_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_LAPTD_XUAT_BC_TONGHOP',				//xuat bao cao tong hop
+  ADD_SKT_BTC: 'KHVDTNSNN_DTNSNN_LAPTD_NHAP_SO_KIEMTRA_BTC',						//lap skt tran chi tu btc
+  EDIT_SKT_BTC: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_SO_KIEMTRA_BTC',						//sua skt tran chi tu btc
+  DELETE_SKT_BTC: 'KHVDTNSNN_DTNSNN_LAPTD_XOA_SO_KIEMTRA_BTC',					//xoa skt tran chi tu btc
+  ADD_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_LAP_PA_GIAO_SOKIEMTRA',				//lap pa giao skt tran chi cho cac don vi
+  EDIT_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_PA_GIAO_SOKIEMTRA',				//sua phuong an
+  DELETE_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_XOA_PA_GIAO_SOKIEMTRA',				//xoa phuong an
+  COPY_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_COPY_PA_GIAO_SOKIEMTRA',				//copy phuong an
+  APPROVE_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_LAP_PA_GIAO_SOKIEMTRA',			//trinh duyet phuong an
+  DUYET_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_DUYET_TUCHOI_PA_GIAO_SKT',			//duyet phuong an
+  PHE_DUYET_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_PHEDUYET_TUCHOI_PA_GIAO_SKT',	//phe duyet phuong an
+  VIEW_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_XEM_PA_GIAO_SOKIEMTRA',				//xem phuong an
+  PRINT_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_IN_PA_GIAO_SOKIEMTRA',				//in phuong an
+  EXPORT_PA_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_XUAT_PA_GIAO_SOKIEMTRA',			//xuat phuong an
+  ADD_QDCV_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_NHAP_CV_QD_GIAO_SOKIEMTRA',			//nhap so qdcv
+  EDIT_QDCV_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_CV_QD_GIAO_SOKIEMTRA',			//sua so qdcv
+  DELETE_QDCV_GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_XOA_CV_QD_GIAO_SOKIEMTRA',		//xoa so qdcv
+  GIAO_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_GIAO_SOKIEMTRA',								//giao skt tran chi
+  NHAN_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_NHAN_SO_KIEMTRA',								//nhan skt tran chi
+  EDIT_REPORT_AFTER_RECEIVE_SKT: 'KHVDTNSNN_DTNSNN_LAPTD_SUA_BC_SAU_SOKIEMTRA',	//sua bao cao sau khi nhan skt ran chi
+};
 
-// 3.2.4.3.2
-export const QLNV_KHVONPHI_NXUAT_DTQG_HNAM_VATTU = "02";
+///////////////////// GIAO DU TOAN /////////////////////////////////
+export const GDT = {
+  ADD_REPORT_BTC: 'KHVDTNSNN_DTNSNN_GIAODT_NHAP_QUYETDINH_BTC',
+  EDIT_REPORT_BTC: 'KHVDTNSNN_DTNSNN_GIAODT_SUA_QUYETDINH_BTC',
+  DELETE_REPORT_BTC: 'KHVDTNSNN_DTNSNN_GIAODT_XOA_QUYETDINH_BTC',
 
-// 3.2.4.3.3
-export const QLNV_KHVONPHI_KHOACH_BQUAN_HNAM_MAT_HANG = "03";
+  ADD_REPORT_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_LAP_PA_PBDT',
+  APPROVE_REPORT_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_TRINHDUYET_PA_PBDT',
+  EDIT_REPORT_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_SUA_PA_PBDT',
+  DELETE_REPORT_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_XOA_PA_PBDT',
+  COPY_REPORT_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_COPY_PA_PBDT',
+  DUYET_REPORT_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_DUYET_TUCHOI_PA_PBDT',
+  PHE_DUYET_REPORT_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_PHEDUYET_TUCHOI_PA_PBDT',
+  VIEW_REPORT_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_XEM_PA_PBDT',
+  PRINT_REPORT_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_IN_PA_PBDT',
+  EXPORT_REPORT_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_XUAT_PA_PBDT',
 
-// 3.2.4.3.4
-export const QLNV_KHVONPHI_NCAU_XUAT_DTQG_VTRO_HNAM = "04";
+  ADD_REPORT_CV_QD_GIAO_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_NHAP_CV_QD_GIAO_PA_PBDT',
+  EDIT_REPORT_CV_QD_GIAO_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_SUA_CV_QD_GIAO_PA_PBDT',
+  DELETE_REPORT_CV_QD_GIAO_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_XOA_CV_QD_GIAO_PA_PBDT',
 
-// 3.2.4.3.5
-export const QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_GD3N = "05";
+  GIAO_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_GIAO_PA_PBDT',
+  NHAN_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_NHAN_PA_PBDT',
 
-// 3.2.4.3.6
-export const QLNV_KHVONPHI_KHOACH_QUY_TIEN_LUONG_HNAM = "06";
+  GIAODT_TRINHTONGCUC_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_TRINHTONGCUC_PA_PBDT',
+  TIEPNHAN_TUCHOI_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_TIEPNHAN_TUCHOI_PA_PBDT',
+  TONGHOP_PA_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_TONGHOP_PA_PBDT',
+  TRINHDUYET_PA_TONGHOP_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_TRINHDUYET_PA_TONGHOP_PBDT',
+  SUA_PA_TONGHOP_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_SUA_PA_TONGHOP_PBDT',
+  XOA_PA_TONGHOP_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_XOA_PA_TONGHOP_PBDT',
+  COPY_PA_TONGHOP_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_COPY_PA_TONGHOP_PBDT',
+  DUYET_TUCHOI_PA_TH_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_DUYET_TUCHOI_PA_TH_PBDT',
+  PHEDUYET_TUCHOI_PA_TH_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_PHEDUYET_TUCHOI_PA_TH_PBDT',
+  XEM_PA_TONGHOP_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_XEM_PA_TONGHOP_PBDT',
+  IN_PA_TONGHOP_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_IN_PA_TONGHOP_PBDT',
+  XUAT_PA_TONGHOP_PBDT: 'KHVDTNSNN_DTNSNN_GIAODT_XUAT_PA_TONGHOP_PBDT',
+}
 
-// 3.2.4.3.7
-export const QLNV_KHVONPHI_CHI_DTAI_DAN_NCKH_GD3N = "07";
+///////////////////// DIEU CHINH DU TOAN ////////////////////////////
+export const DCDT = {
+  ADD_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_LAP_BC',
+  APPROVE_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_TRINHDUYET_BC',
+  EDIT_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_SUA_BC',
+  DELETE_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_XOA_BC',
+  COPY_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_COPY_BC',
+  DUYET_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_DUYET_TUCHOI_BC',
+  PHE_DUYET_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_PHEDUYET_TUCHOI_BC',
+  VIEW_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_XEM_BC',
+  PRINT_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_IN_BC',
+  EXPORT_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_XUAT_BC',
+  TIEP_NHAN_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_TIEPNHAN_TUCHOI_BC',
+  SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_TONGHOP_BC',
+  APPROVE_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_TRINHDUYET_BC_TONGHOP',
+  EDIT_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_SUA_BC_TONGHOP',
+  DELETE_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_XOA_BC_TONGHOP',
+  COPY_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_COPY_BC_TONGHOP',
+  DUYET_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_DUYET_TUCHOI_BC_TH',
+  PHE_DUYET_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_PHEDUYET_TUCHOI_BC_TH',
+  VIEW_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_XEM_BC_TONGHOP',
+  PRINT_SYTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_IN_BC_TONGHOP',
+  EXPORT_SYNTHETIC_REPORT: 'KHVDTNSNN_DTNSNN_DIEUCHINHDT_XUAT_BC_TONGHOP',
+};
 
-// 3.2.4.3.8
-export const QLNV_KHVONPHI_VBAN_QPHAM_PLUAT_DTQG_GD3N = "08";
+//////////////////// BAO CAO THUC HIEN DU TOAN CHI ////////////////////////////
+export const BCDTC = {
+  ADD_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_LAP_BC',
+  APPROVE_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_TRINHDUYET_BC',
+  EDIT_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_SUA_BC',
+  DELETE_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_XOA_BC',
+  COPY_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_COPY_BC',
+  DUYET_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_DUYET_TUCHOIDUYET_BC',
+  PHE_DUYET_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_PHEDUYET_TUCHOIPHEDUYET_BC',
+  VIEW_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_XEM_BC',
+  PRINT_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_IN_BC',
+  EXPORT_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_XUAT_BC',
+  TIEP_NHAN_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_TIEPNHAN_TUCHOI_BC',
+  SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_TONGHOP_BC',
+  APPROVE_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_TRINHDUYET_BC_TONGHOP',
+  EDIT_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_SUA_BC_TONGHOP',
+  DELETE_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_XOA_BC_TONGHOP',
+  COPY_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_COPY_BC_TONGHOP',
+  DUYET_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_DUYET_TUCHOIDUYET_BC_TONGHOP',
+  PHE_DUYET_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_PHEDUYET_TUCHOIPHEDUYET_BC_TONGHOP',
+  VIEW_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_XEM_BC_TONGHOP',
+  PRINT_SYTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_IN_BC_TONGHOP',
+  EXPORT_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_DTOANCHI_XUAT_BC_TONGHOP',
+};
 
-// 3.2.4.3.9
-export const QLNV_KHVONPHI_CHI_UDUNG_CNTT_GD3N = "09";
+/////////////////// BAO CAO THUC HIEN VON PHI /////////////////////////////
+export const BCVP = {
+  ADD_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_LAP_BC',
+  APPROVE_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_TRINHDUYET_BC',
+  EDIT_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_SUA_BC',
+  DELETE_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_XOA_BC',
+  COPY_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_COPY_BC',
+  DUYET_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_DUYET_TUCHOIDUYET_BC',
+  PHE_DUYET_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_PHEDUYET_TUCHOIPHEDUYET_BC',
+  VIEW_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_XEM_BC',
+  PRINT_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_IN_BC',
+  EXPORT_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_XUAT_BC',
+  TIEP_NHAN_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_TIEPNHAN_TUCHOI_BC',
+  SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_TONGHOP_BC',
+  APPROVE_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_TRINHDUYET_BC_TONGHOP',
+  EDIT_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_SUA_BC_TONGHOP',
+  DELETE_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_XOA_BC_TONGHOP',
+  COPY_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_COPY_BC_TONGHOP',
+  DUYET_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_DUYET_TUCHOIDUYET_BC_TONGHOP',
+  PHE_DUYET_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_PHEDUYET_BC_TONGHOP',
+  VIEW_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_XEM_BC_TONGHOP',
+  PRINT_SYTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_IN_BC_TONGHOP',
+  EXPORT_SYNTHETIC_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_XUAT_BC_TONGHOP',
+  EXPORT_EXCEL_REPORT: 'KHVDTNSNN_BAOCAO_THVONPHI_XUAT_BC_EXCEL',
+};
 
-// 3.2.4.3.10
-export const QLNV_KHVONPHI_DTOAN_CHI_MUASAM_MAYMOC_TBI_GD3N = "10";
+/////////////////// CAP VON MUA  BAN //////////////////////////////////
+export const CVMB = {
+  //thanh toan cho khach hang
+  ADD_REPORT_TTKH: 'VONPHIHANG_VONMBANTT_LAP_BC_TT_KH',
+  APPROVE_REPORT_TTKH: 'VONPHIHANG_VONMBANTT_TRINHDUYET_BC_TT_KH',
+  EDIT_REPORT_TTKH: 'VONPHIHANG_VONMBANTT_SUA_BC_TT_KH',
+  DELETE_REPORT_TTKH: 'VONPHIHANG_VONMBANTT_XOA_BC_TT_KH',
+  COPY_REPORT_TTKH: 'VONPHIHANG_VONMBANTT_COPY_BC_TT_KH',
+  DUYET_REPORT_TTKH: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOIDUYET_BC_TT_KH',
+  PHE_DUYET_REPORT_TTKH: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOIPHEDUYET_BC_TT_KH',
+  VIEW_REPORT_TTKH: 'VONPHIHANG_VONMBANTT_XEM_BC_TT_KH',
+  PRINT_REPORT_TTKH: 'VONPHIHANG_VONMBANTT_IN_BC_TT_KH',
+  EXPORT_REPORT_TTKH: 'VONPHIHANG_VONMBANTT_XUAT_BC_TT_KH',
+  //bao cao cap von
+  ADD_REPORT_CV: 'VONPHIHANG_VONMBANTT_LAP_CV',
+  APPROVE_REPORT_CV: 'VONPHIHANG_VONMBANTT_TRINHDUYET_CV',
+  EDIT_REPORT_CV: 'VONPHIHANG_VONMBANTT_SUA_CV',
+  DELETE_REPORT_CV: 'VONPHIHANG_VONMBANTT_XOA_CV',
+  COPY_REPORT_CV: 'VONPHIHANG_VONMBANTT_COPY_CV',
+  DUYET_REPORT_CV: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOIDUYET_CV',
+  PHE_DUYET_REPORT_CV: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOIPHEDUYET_CV',
+  VIEW_REPORT_CV: 'VONPHIHANG_VONMBANTT_XEM_CV',
+  PRINT_REPORT_CV: 'VONPHIHANG_VONMBANTT_IN_CV',
+  EXPORT_REPORT_CV: 'VONPHIHANG_VONMBANTT_XUAT_CV',
+  //nop tien von ban hang
+  ADD_REPORT_NTV_BH: 'VONPHIHANG_VONMBANTT_LAP_BC_NTV_BH',
+  APPROVE_REPORT_NTV_BH: 'VONPHIHANG_VONMBANTT_TRINHDUYET_BC_NTV_BH',
+  EDIT_REPORT_NTV_BH: 'VONPHIHANG_VONMBANTT_SUA_BC_NTV_BH',
+  DELETE_REPORT_NTV_BH: 'VONPHIHANG_VONMBANTT_XOA_BC_NTV_BH',
+  COPY_REPORT_NTV_BH: 'VONPHIHANG_VONMBANTT_COPY_BC_NTV_BH',
+  DUYET_REPORT_NTV_BH: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOIDUYET_BC_NTV_BH',
+  PHE_DUYET_REPORT_NTV_BH: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOIPHEDUYET_NTV_BH',
+  VIEW_REPORT_NTV_BH: 'VONPHIHANG_VONMBANTT_XEM_BC_NTV_BH',
+  PRINT_REPORT_NTV_BH: 'VONPHIHANG_VONMBANTT_IN_BC_NTV_BH',
+  EXPORT_REPORT_NTV_BH: 'VONPHIHANG_VONMBANTT_XUAT_BC_NTV_BH',
+  //ghi nhan von
+  ADD_REPORT_GNV: 'VONPHIHANG_VONMBANTT_LAP_BC_GNV',
+  ADD_REPORT_TC_GNV: 'VONPHIHANG_VONMBANTT_TC_LAP_BC_GNV',
+  APPROVE_REPORT_GNV: 'VONPHIHANG_VONMBANTT_TRINHDUYET_BC_GNV',
+  EDIT_REPORT_GNV: 'VONPHIHANG_VONMBANTT_SUA_BC_GNV',
+  DELETE_REPORT_GNV: 'VONPHIHANG_VONMBANTT_XOA_BC_GNV',
+  COPY_REPORT_GNV: 'VONPHIHANG_VONMBANTT_COPY_BC_GNV',
+  DUYET_REPORT_GNV: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOIDUYET_BC_GNV',
+  PHE_DUYET_REPORT_GNV: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOIPHEDUYET_GNV',
+  VIEW_REPORT_GNV: 'VONPHIHANG_VONMBANTT_XEM_BC_GNV',
+  PRINT_REPORT_GNV: 'VONPHIHANG_VONMBANTT_IN_BC_GNV',
+  EXPORT_REPORT_GNV: 'VONPHIHANG_VONMBANTT_XUAT_BC_GNV',
+  //ghi nhan von ban hang
+  ADD_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_LAP_BC_GNV_BH',
+  APPROVE_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_TRINHDUYET_BC_GNV_BH',
+  EDIT_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_SUA_BC_GNV_BH',
+  COPY_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_COPY_BC_GNV_BH',
+  DUYET_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOIDUYET_BC_GNV_BH',
+  PHE_DUYET_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOIPHEDUYET_BC_GNV_BH',
+  VIEW_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_XEM_BC_GNV_BH',
+  PRINT_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_IN_BC_GNV_BH',
+  EXPORT_REPORT_GNV_BH: 'VONPHIHANG_VONMBANTT_XUAT_BC_GNV_BH',
+  //nop tien von thua
+  ADD_REPORT_NTVT: 'VONPHIHANG_VONMBANTT_LAP_BC_NTV_TH',
+  APPROVE_REPORT_NTVT: 'VONPHIHANG_VONMBANTT_TRINHDUYET_BC_NTV_TH',
+  EDIT_REPORT_NTVT: 'VONPHIHANG_VONMBANTT_SUA_BC_NTV_TH',
+  DELETE_REPORT_NTVT: 'VONPHIHANG_VONMBANTT_XOA_BC_NTV_TH',
+  COPY_REPORT_NTVT: 'VONPHIHANG_VONMBANTT_COPY_BC_NTV_TH',
+  DUYET_REPORT_NTVT: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOIDUYET_BC_NTV_TH',
+  PHE_DUYET_REPORT_NTVT: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOIPHEDUYET_NTV_TH',
+  VIEW_REPORT_NTVT: 'VONPHIHANG_VONMBANTT_XEM_BC_NTV_TH',
+  PRINT_REPORT_NTVT: 'VONPHIHANG_VONMBANTT_IN_BC_NTV_TH',
+  EXPORT_REPORT_NTVT: 'VONPHIHANG_VONMBANTT_XUAT_BC_NTV_TH',
+  //ghi nhan tien von thua
+  ADD_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_LAP_BC_GNV_TH',
+  APPROVE_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_TRINHDUYET_BC_GNV_TH',
+  EDIT_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_SUA_BC_GNV_TH',
+  COPY_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_COPY_BC_GNV_TH',
+  DUYET_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_DUYET_TUCHOIDUYET_BC_GNV_TH',
+  PHE_DUYET_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_PHEDUYET_TUCHOIPHEDUYET_BC_GNV_TH',
+  VIEW_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_XEM_BC_GNV_TH',
+  PRINT_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_IN_BC_GNV_TH',
+  EXPORT_REPORT_GNV_TH: 'VONPHIHANG_VONMBANTT_XUAT_BC_GNV_TH',
+};
 
-// 3.2.4.3.11
-export const QLNV_KHVONPHI_NCAU_CHI_NSNN_GD3N = "11";
+////////////////// CAP VON NGUON CHI /////////////////////////////////
+export const CVNC = {
+  ADD_DN_MLT: 'VONPHIHANG_VONCHIDTQG_LAP_DN_MLT',
+  APPROVE_DN_MLT: 'VONPHIHANG_VONCHIDTQG_TRINHDUYET_DN_MLT',
+  EDIT_DN_MLT: 'VONPHIHANG_VONCHIDTQG_SUA_DN_MLT',
+  DELETE_DN_MLT: 'VONPHIHANG_VONCHIDTQG_XOA_DN_MLT',
+  COPY_DN_MLT: 'VONPHIHANG_VONCHIDTQG_COPY_DN_MLT',
+  PHE_DUYET_DN_MLT: 'VONPHIHANG_VONCHIDTQG_PHEDUYET_TUCHOIPHEDUYET_DN_MLT',
+  VIEW_DN_MLT: 'VONPHIHANG_VONCHIDTQG_XEM_DN_MLT',
+  PRINT_DN_MLT: 'VONPHIHANG_VONCHIDTQG_IN_DN_MLT',
+  EXPORT_DN_MLT: 'VONPHIHANG_VONCHIDTQG_XUAT_DN_MLT',
+  ADD_SYNTHETIC_CKV: 'VONPHIHANG_VONCHIDTQG_TONGHOP_DN_MLT',
+  APPROVE_SYNTHETIC_CKV: 'VONPHIHANG_VONCHIDTQG_TRINHDUYET_DN_MLT_TONGHOP',
+  EDIT_SYNTHETIC_CKV: 'VONPHIHANG_VONCHIDTQG_SUA_DN_MLT_TONGHOP',
+  DELETE_SYNTHETIC_CKV: 'VONPHIHANG_VONCHIDTQG_XOA_DN_MLT_TONGHOP',
+  COPY_SYNTHETIC_CKV: 'VONPHIHANG_VONCHIDTQG_COPY_DN_MLT_TONGHOP',
+  DUYET_SYNTHETIC_CKV: 'VONPHIHANG_VONCHIDTQG_DUYET_TUCHOIDUYET_DN_MLT_TONGHOP',
+  PHE_DUYET_SYNTHETIC_CKV: 'VONPHIHANG_VONCHIDTQG_PHEDUYET_TUCHOIPHEDUYET_DN_MLT_TONGHOP',
+  VIEW_SYNTHETIC_CKV: 'VONPHIHANG_VONCHIDTQG_XEM_DN_MLT_TONGHOP',
+  PRINT_SYNTHETIC_CKV: 'VONPHIHANG_VONCHIDTQG_IN_DN_MLT_TONGHOP',
+  EXPORT_SYNTHETIC_CKV: 'VONPHIHANG_VONCHIDTQG_XUAT_DN_MLT_TONGHOP',
+  ADD_DN_MVT: 'VONPHIHANG_VONCHIDTQG_LAP_DN_MVT',
+  APPROVE_DN_MVT: 'VONPHIHANG_VONCHIDTQG_TRINHDUYET_DN_MVT',
+  EDIT_DN_MVT: 'VONPHIHANG_VONCHIDTQG_SUA_DN_MVT',
+  DELETE_DN_MVT: 'VONPHIHANG_VONCHIDTQG_XOA_DN_MVT',
+  COPY_DN_MVT: 'VONPHIHANG_VONCHIDTQG_COPY_DN_MVT',
+  PHE_DUYET_DN_MVT: 'VONPHIHANG_VONCHIDTQG_PHEDUYET_TUCHOIPHEDUYET_DN_MVT',
+  VIEW_DN_MVT: 'VONPHIHANG_VONCHIDTQG_XEM_DN_MVT',
+  PRINT_DN_MVT: 'VONPHIHANG_VONCHIDTQG_IN_DN_MVT',
+  EXPORT_DN_MVT: 'VONPHIHANG_VONCHIDTQG_XUAT_DN_MVT',
+  ADD_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_TONGHOP_DN_MLT',
+  APPROVE_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_TRINHDUYET_DN_MLT_VT',
+  EDIT_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_SUA_DN_MLT_VT',
+  DELETE_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_XOA_DN_MLT_VT',
+  COPY_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_COPY_DN_MLT_VT',
+  DUYET_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_DUYET_TUCHOIDUYET_DN_MLT_VT',
+  PHE_DUYET_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_PHEDUYET_TUCHOIPHEDUYET_DN_MLT_VT',
+  VIEW_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_XEM_DN_MLT_VT',
+  PRINT_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_IN_DN_MLT_VT',
+  EXPORT_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_XUAT_DN_MLT_VT',
+};
 
-// 3.2.4.3.12
-export const QLNV_KHVONPHI_CHI_TX_GD3N = "12";
-
-// 3.2.4.3.13
-export const QLNV_KHVONPHI_NCAU_PHI_NHAP_XUAT_GD3N = "13";
-
-// 3.2.4.3.14
-export const QLNV_KHVONPHI_KHOACH_CTAO_SCHUA_GD3N = "14";
-
-// 3.2.4.3.15
-export const QLNV_KHVONPHI_KHOACH_DTAO_BOI_DUONG_GD3N = "15";
-
-// Loai bao cao Tổng cục
-export const QLNV_KHVONPHI_TC_NCAU_KHOACH_DTXD_GD3N = "16";
-export const QLNV_KHVONPHI_TC_THOP_DTOAN_CHI_TX_HNAM = "17";
-export const QLNV_KHVONPHI_TC_DTOAN_PHI_NXUAT_DTQG_THOC_GAO_HNAM = "18";
-export const QLNV_KHVONPHI_TC_KHOACH_BQUAN_THOC_GAO_HNAM = "19";
-export const QLNV_KHVONPHI_TC_DTOAN_PHI_XUAT_DTQG_VTRO_CTRO_HNAM = "20";
-export const QLNV_KHVONPHI_TC_KHOACH_DTOAN_CTAO_SCHUA_HTHONG_KHO_TANG_GD3N = "21";
-export const QLNV_KHVONPHI_TC_KHOACHC_QUY_LUONG_N1 = "22";
-export const QLNV_KHVONPHI_TC_DTOAN_CHI_DTQG_GD3N = "23";
-export const QLNV_KHVONPHI_TC_TMINH_CHI_CAC_DTAI_DAN_NCKH_GD3N = "24";
-export const QLNV_KHVONPHI_TC_KHOACH_XDUNG_VBAN_QPHAM_PLUAT_DTQG_GD3N = "25";
-export const QLNV_KHVONPHI_TC_DTOAN_CHI_UDUNG_CNTT_GD3N = "26";
-export const QLNV_KHVONPHI_TC_DTOAN_CHI_MSAM_MMOC_TBI_CHUYEN_DUNG_GD3N = "27";
-export const QLNV_KHVONPHI_TC_THOP_NCAU_CHI_NSNN_GD3N = "28";
-export const QLNV_KHVONPHI_TC_THOP_NNCAU_CHI_TX_GD3N = "29";
-export const QLNV_KHVONPHI_TC_CTIET_NCAU_CHI_TX_GD3N = "30";
-export const QLNV_KHVONPHI_TC_THOP_MTIEU_NVU_CYEU_NCAU_CHI_MOI_GD3N = "31";
-export const QLNV_KHVONPHI_TC_KHOACH_DTAO_BOI_DUONG_GD3N = "32";
+/////////////////////// QUYET TOAN VON PHI ///////////////////////////
+export const QTVP = {
+  ADD_REPORT: 'QTOANVONPHI_LAP_BC',
+  APPROVE_REPORT: 'QTOANVONPHI_TRINHDUYET_BC',
+  EDIT_REPORT: 'QTOANVONPHI_SUA_BC',
+  DELETE_REPORT: 'QTOANVONPHI_XOA_BC',
+  COPY_REPORT: 'QTOANVONPHI_COPY_BC',
+  DIEU_CHINH_REPORT: 'QTOANVONPHI_DIEUCHINH_BC',
+  EDIT_DIEU_CHINH_REPORT: 'QTOANVONPHI_SUA_BC_DIEUCHINH',
+  DELETE_DIEU_CHINH_REPORT: 'QTOANVONPHI_XOA_BC_DIEUCHINH',
+  COPY_DIEU_CHINH: 'QTOANVONPHI_COPY_BC_DIEUCHINH',
+  DUYET_QUYET_TOAN_REPORT: 'QTOANVONPHI_DUYET_TUCHOIDUYET_BC',
+  PHE_DUYET_QUYET_TOAN_REPORT: 'QTOANVONPHI_PHEDUYET_TUCHOIPHEDUYET_BC',
+  VIEW_REPORT: 'QTOANVONPHI_XEM_BC',
+  PRINT_REPORT: 'QTOANVONPHI_IN_BC',
+  EXPORT_REPORT: 'QTOANVONPHI_XUAT_BC',
+};
 
 // loai bao cao quy trinh thuc hien du toan chi
 export const LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI = [
@@ -918,77 +909,6 @@ export const TRANG_THAI_PHU_LUC = [
     id: 5,
     ten: 'Hoàn tất nhập liệu'
   }
-]
-
-export const LIST_BAO_CAO_TONG_HOP = [
-  {
-    id: '01',
-    tenDm: 'Xây dựng Kế hoạch danh mục, vốn đầu tư XDCB giai đoạn 03 năm'
-  },
-  {
-    id: '16',
-    tenDm: 'Nhu cầu kế hoạch ĐTXD 03 năm'
-  },
-  {
-    id: '17',
-    tenDm: 'Tổng hợp dự toán chi thường xuyên hàng năm'
-  },
-  {
-    id: '18',
-    tenDm: 'Dự toán phí nhập xuất hàng DTQG hàng năm'
-  },
-  {
-    id: '19',
-    tenDm: 'Kế hoạch bảo quản hàng năm (Phần kinh phí được hưởng theo định mức và Dự kiến kinh phí của các mặt hàng chưa có định mức)'
-  },
-  {
-    id: '20',
-    tenDm: 'Dự toán phí xuất hàng DTQG viện trợ cứu trợ hàng năm'
-  },
-  {
-    id: '21',
-    tenDm: 'Kế hoạch dự toán cải tạo sửa chữa hệ thống kho tàng 03 năm'
-  },
-  {
-    id: '22',
-    tenDm: 'Kế hoạch quỹ tiền lương năm N+1'
-  },
-  {
-    id: '23',
-    tenDm: 'Dự toán chi dự trữ quốc gia giai đoạn 03 năm'
-  },
-  {
-    id: '24',
-    tenDm: 'Thuyết minh chi các đề tài, dự án nghiên cứu khoa học giai đoạn 03 năm'
-  },
-  {
-    id: '25',
-    tenDm: 'Kế hoạch xây dựng văn bản quy phạm pháp luật dự trữ quốc gia giai đoạn 03 năm'
-  },
-  {
-    id: '26',
-    tenDm: 'Dự toán chi ứng dụng CNTT giai đoạn 03 năm'
-  },
-  {
-    id: '27',
-    tenDm: 'Dự toán chi mua sắm máy móc thiết bị chuyên dùng 03 năm'
-  },
-  {
-    id: '28',
-    tenDm: 'Tổng hợp nhu cầu chi ngân sách nhà nước giai đoạn 03 năm'
-  },
-  {
-    id: '29',
-    tenDm: 'Tổng hợp nhu cầu chi thường xuyên giai đoạn 03 năm'
-  },
-  {
-    id: '30',
-    tenDm: 'Chi tiết nhu cầu chi thường xuyên giai đoạn 03 năm'
-  },
-  {
-    id: '31',
-    tenDm: 'Tổng hợp mục tiêu nhiệm vụ chủ yếu và nhu cầu chi mới giai đoạn 03 năm'
-  },
 ]
 
 // loai bao cao quy trinh thuc hien du toan chi

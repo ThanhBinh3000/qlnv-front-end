@@ -167,11 +167,10 @@
                                                 [(ngModel)]="ttGuiCache.maNdkt" />
                                         </td>
                                         <td>
-                                            <nz-input-number class="search__input" [nzFormatter]="formatter"
-                                                [nzPrecision]="0"
+                                            <fm-input-number class="search__input"
                                                 [class]="(ttGuiCache.soTien || ttGuiCache.soTien === 0) && ttGuiCache.soTien >= 0 ?'' : 'input-error-validate' "
-                                                nzSize="small" [(ngModel)]="ttGuiCache.soTien">
-                                            </nz-input-number>
+                                                [(ngModel)]="ttGuiCache.soTien">
+                                            </fm-input-number>
                                         </td>
                                         <td>
                                             <input nz-input class="search__input" [(ngModel)]="ttGuiCache.soTienChu" />

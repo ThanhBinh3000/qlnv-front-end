@@ -77,6 +77,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
+    await this.search();
     this.userInfo = this.userService.getUserLogin();
     if (this.userService.isTongCuc()) {
       this.lastBreadcrumb = LEVEL.TONG_CUC_SHOW;
@@ -111,7 +112,6 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.getCount();
-      await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -126,9 +126,10 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     this.isViewDetail = isView ?? false;
   }
 
-  showList() {
+  async showList() {
+    await this.search();
     this.isDetail = false;
-    this.getCount();
+    await this.getCount();
   }
   onInput(e: Event): void {
     const value = (e.target as HTMLInputElement).value.trim();
