@@ -290,22 +290,11 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
       try {
 
         let body = {
-          "capDvis": [
-            null
-          ],
-          "maBoNganh": null,
-          "maDvis": [
-            null
-          ],
-          "nam": 0,
-          "ngayDeNghiDenNgay": null,
-          "ngayDeNghiTuNgay": null,
-          "soDeNghi": null,
-          "str": null,
-          "trangThai": null,
-          "trangThais": [
-            null
-          ]
+          soDeNghi: this.searchFilter.soKeHoach,
+          maBoNganh: null,
+          nam: this.searchFilter.namKh,
+          ngayDeNghiTuNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
+          ngayDeNghiDenNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
         }
         this.deNghiCapVonBoNganhService.exportList(body).subscribe((blob) => {
           saveAs(blob, 'danh-sach-de-nghi-cap-von-bo-nganh.xlsx')

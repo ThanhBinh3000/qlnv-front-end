@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
@@ -58,18 +58,17 @@ export class DeNghiCapVonBoNganhService extends BaseService {
 
   deleteMultiple(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh`;
-    return this.httpClient.delete(url, body).toPromise();
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: body
+    }
+    return this.httpClient.delete(url, httpOptions).toPromise();
   }
 
-  // updateStatus(body: any): Promise<any> {
-  //   let url_ = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/trang-thai?`
-  //   if (body.id)
-  //     url_ += 'id=' + encodeURIComponent('' + body.id) + '&';
-  //   if (body.trangThaiId)
-  //     url_ += 'trangThaiId=' + encodeURIComponent('' + body.trangThaiId) + '&';
-  //   url_ = url_.replace(/[?&]$/, '');
-  //   return this.httpClient.put<any>(url_).toPromise();
-  // }
+  updateStatus(body: any): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/trang-thai`
+    return this.httpClient.put(url, body).toPromise();
+  }
 
   exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/export/list`;

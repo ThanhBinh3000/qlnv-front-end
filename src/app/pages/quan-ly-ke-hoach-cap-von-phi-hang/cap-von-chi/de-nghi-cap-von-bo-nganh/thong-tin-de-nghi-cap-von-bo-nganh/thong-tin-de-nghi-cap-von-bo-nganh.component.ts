@@ -123,13 +123,12 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-
+    this.khBanDauGia.trangThai = this.globals.prop.NHAP_DU_THAO;
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,
       });
-
     }
 
     await Promise.all([
@@ -238,9 +237,6 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       this.maxYeuCauCapThem = thanhTien;
       this.rowItem.thanhTien = thanhTien;
     }
-  }
-
-  changeYeuCauCapThem() {
     if (this.rowItem.kinhPhiDaCap && this.rowItem.thanhTien) {
       let yeuCauCapThem = this.rowItem.thanhTien - this.rowItem.kinhPhiDaCap;
       this.rowItem.ycCapThem = yeuCauCapThem;
@@ -332,58 +328,42 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     //   return;
     // }
     this.spinner.show();
-
-    let listFile: any[] = [];
-
-    this.listFileDinhKem.forEach(item => {
-      listFile = [...listFile,
-      {
-        "fileName": item.fileName,
-        "fileSize": item.fileSize,
-        "fileUrl": item.fileUrl,
-        "noiDung": item.noiDung
-      }
-      ]
-    })
-
     try {
       let body = {
         "chiTietList": this.chiTietList,
-        "fileDinhKemReqs": listFile,
+        "fileDinhKemReqs": this.listFileDinhKem,
         "ghiChu": this.formData.value.ghiChu,
         "maBoNganh": this.formData.value.boNganh,
         "nam": this.formData.value.nam,
         "ngayDeNghi": dayjs(this.formData.value.ngayDeNghi).format("YYYY-MM-DD"),
-        "soDeNghi": this.formData.value.soDeNghi
+        "soDeNghi": this.formData.value.soDeNghi,
+        "id": this.idInput,
       }
-
-      console.log(body);
-      // if (this.idInput > 0) {
-      //   let res = await this.deXuatKeHoachBanDauGiaService.sua(body);
-      //   if (res.msg == MESSAGE.SUCCESS) {
-      //     if (!isOther) {
-      //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      //       this.back();
-      //     } else {
-      //       return res.data.id;
-      //     }
-      //   } else {
-      //     this.notification.error(MESSAGE.ERROR, res.msg);
-      //   }
-      // } else {
-      let res = await this.deNghiCapVonBoNganhService.them(body);
-      console.log(res);
-      //   if (res.msg == MESSAGE.SUCCESS) {
-      //     if (!isOther) {
-      //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-      //       this.back();
-      //     } else {
-      //       return res.data.id;
-      //     }
-      //   } else {
-      //     this.notification.error(MESSAGE.ERROR, res.msg);
-      //   }
-      // }
+      if (this.idInput > 0) {
+        let res = await this.deNghiCapVonBoNganhService.sua(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (!isOther) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.back();
+          } else {
+            return res.data.id;
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      } else {
+        let res = await this.deNghiCapVonBoNganhService.them(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (!isOther) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.back();
+          } else {
+            return res.data.id;
+          }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -410,19 +390,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            trangThaiId: this.globals.prop.NHAP_CHO_DUYET_TP,
+            trangThaiId: this.globals.prop.NHAP_BAN_HANH,
           };
-          switch (this.khBanDauGia.trangThai) {
-            case this.globals.prop.NHAP_DU_THAO:
-              body.trangThaiId = this.globals.prop.NHAP_CHO_DUYET_TP;
-              break;
-            case this.globals.prop.NHAP_CHO_DUYET_TP:
-              body.trangThaiId = this.globals.prop.NHAP_CHO_DUYET_LD_CUC;
-              break;
-            case this.globals.prop.NHAP_CHO_DUYET_LD_CUC:
-              body.trangThaiId = this.globals.prop.NHAP_BAN_HANH;
-              break;
-          }
 
           let res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
