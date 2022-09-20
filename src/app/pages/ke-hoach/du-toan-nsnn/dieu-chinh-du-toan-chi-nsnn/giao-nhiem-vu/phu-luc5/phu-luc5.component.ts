@@ -192,9 +192,10 @@ export class PhuLuc5Component implements OnInit {
   async save(trangThai: string) {
     this.spinner.show()
     //get list file url
-    const listFile: any = [];
+    debugger
+    const listFilePl5: any = [];
     for (const iterator of this.listFile) {
-      listFile.push(await this.uploadFile(iterator));
+      listFilePl5.push(await this.uploadFile(iterator));
     }
 
     const request = {
@@ -205,10 +206,11 @@ export class PhuLuc5Component implements OnInit {
       thuyetMinh: this.thuyetMinh,
       trangThai: trangThai,
       maLoai: this.data?.maLoai,
-      fileData: this.lstFiles,
+      fileData: listFilePl5,
       listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
     };
-    console.log(this.listFile);
+    console.log(listFilePl5);
+
 
     await this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
       async data => {
@@ -219,7 +221,7 @@ export class PhuLuc5Component implements OnInit {
             lyDoTuChoi: null,
           };
           this.dataChange.emit(obj);
-          this.listFile = []
+          this.listFile = [];
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
