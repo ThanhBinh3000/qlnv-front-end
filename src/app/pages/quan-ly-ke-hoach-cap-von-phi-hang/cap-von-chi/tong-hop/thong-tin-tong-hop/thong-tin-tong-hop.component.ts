@@ -56,6 +56,7 @@ export class ThongTinTonghopComponent implements OnInit {
   listFileDinhKem: any[] = [];
   listThongTinChiTiet: any[] = []
   totalRecord: number = 0;
+  isTonghop: boolean = false
 
   constructor(
     private modal: NzModalService,
@@ -85,16 +86,13 @@ export class ThongTinTonghopComponent implements OnInit {
   }
   initForm() {
     this.formData = this.fb.group({
-      "id": [null],
-      "maTongHop": [null, [Validators.required]],
-      "khDnCapVonIds": [null, [Validators.required]],
-      "maDonVi": [null],
-      "nguonTongHop": [null, [Validators.required]],
       "nam": [null, [Validators.required]],
-      "noiDung": [null, [Validators.required]],
-      "capDvi": [null],
-      "ngayTongHop": [null, [Validators.required]],
-      "ghiChu": [null, [Validators.required]],
+      "nguonTongHop": [null, [Validators.required]],
+      "maTongHop": [null],
+      "ngayTongHop": [null],
+      "maToTrinh": [null],
+      "fileTCDuyet": [null],
+      "noiDung": [null],
     });
     this.formData.patchValue({ id: this.idInput })
     this.formData.patchValue({ maDonVi: this.userInfo.MA_DVI })
@@ -256,6 +254,9 @@ export class ThongTinTonghopComponent implements OnInit {
       }
     });
   }
+  banHanh() {
+
+  }
   async changePageIndex(event) {
     this.spinner.show();
     try {
@@ -284,7 +285,9 @@ export class ThongTinTonghopComponent implements OnInit {
     }
   }
   async loadThongTinChiTiet(nam) {
+
     this.spinner.show();
+    this.isTonghop = true;
     let body = {
       soDeNghi: null,
       maBoNganh: null,
@@ -296,7 +299,6 @@ export class ThongTinTonghopComponent implements OnInit {
     };
 
     let res = await this.deNghiCapVonBoNganhService.timKiem(body);
-
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listThongTinChiTiet = data.content;
@@ -310,11 +312,6 @@ export class ThongTinTonghopComponent implements OnInit {
     }
     this.spinner.hide();
   }
-
-
-
-
-
   thongTinTrangThai(trangThai: string): string {
     return thongTinTrangThaiNhap(trangThai);
   }
