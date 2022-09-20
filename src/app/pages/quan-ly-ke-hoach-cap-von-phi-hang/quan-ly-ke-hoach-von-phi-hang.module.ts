@@ -17,4 +17,4 @@ import { QuanLyKeHoachVonPhiHangComponent } from './quan-ly-ke-hoach-von-phi-han
     NzAffixModule,
   ],
 })
-export class QuanLyKeHoachVonPhiHangModule {}
+export class QuanLyKeHoachVonPhiHangModule { }
