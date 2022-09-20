@@ -1362,6 +1362,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.thongTinChiTieuKeHoachNam.trichYeu =
       this.formData.get('trichYeu').value;
     this.thongTinChiTieuKeHoachNam.canCu = this.formData.get('canCu').value;
+    this.thongTinChiTieuKeHoachNam.chiTieuId = this.formData.get('chiTieuId').value;
     this.thongTinChiTieuKeHoachNamInput = cloneDeep(
       this.thongTinChiTieuKeHoachNam,
     );
@@ -1507,6 +1508,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, resp.msg);
                   }
                 })
+            }
+            else  {
+              this.notification.error(MESSAGE.SUCCESS,MESSAGE.ADD_SUCCESS);
+              this.redirectChiTieuKeHoachNam()
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
