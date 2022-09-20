@@ -4,7 +4,8 @@
             *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP')">
             Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu
         </li>
-        <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT')">
+        <li nz-menu-item (click)="selectTab(1)"
+            *ngIf="loaiVthh == '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT')">
             Đề xuất kế hoạch lựa chọn nhà thầu
         </li>
         <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT')">
