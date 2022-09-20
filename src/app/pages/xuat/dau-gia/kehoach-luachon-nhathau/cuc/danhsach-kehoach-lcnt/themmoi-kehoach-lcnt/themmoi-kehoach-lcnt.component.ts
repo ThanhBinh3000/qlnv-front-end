@@ -420,7 +420,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         phanLoTaiSanEdit: item ?? null,
-        loaiHangHoa: this.formData.get('loaiHangHoa').value,
+        loaiHangHoa: this.formData.get('loaiVthh').value,
         idChiTieu: this.formData.get('qdGiaoChiTieuId').value,
         khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
       },
@@ -850,7 +850,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
   async loadTieuChuanChatLuong() {
     this.dmTieuChuanService
-      .getDetailByMaHh(this.formData.get('loaiHangHoa').value)
+      .getDetailByMaHh(this.formData.get('loaiVthh').value)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.khBanDauGia.tieuChuanChatLuong = res.data?.tenQchuan;
