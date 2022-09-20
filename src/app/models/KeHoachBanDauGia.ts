@@ -38,6 +38,7 @@ export class KeHoachBanDauGia {
     thoiGianDuKien: string;
     ghiChu: string;
     tenTrangThai: string;
+    loaiHangHoa: string;
     constructor(
         diaDiemGiaoNhanList: Array<DiaDiemGiaoNhan> = [],
         phanLoTaiSanList: Array<PhanLoTaiSan> = [],

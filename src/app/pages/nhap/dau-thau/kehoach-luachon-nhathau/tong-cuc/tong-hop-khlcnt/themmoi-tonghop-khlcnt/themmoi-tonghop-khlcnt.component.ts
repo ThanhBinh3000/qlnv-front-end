@@ -264,8 +264,16 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
+  isDetailPermission() {
+    if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP")) {
+      return true;
+    }
+    return false;
+  }
   async save() {
+    if (!this.isDetailPermission()) {
+      return;
+    }
     this.helperService.markFormGroupTouched(this.formData);
     this.spinner.show();
     try {

@@ -1,4 +1,3 @@
-// import { Component, OnInit } from '@angular/core';
 import {
 	AfterViewInit,
 	Component,
@@ -8,7 +7,6 @@ import {
 } from '@angular/core';
 import { UserLogin } from 'src/app/models/userlogin';
 import { Router } from '@angular/router';
-import { LEVEL } from 'src/app/constants/config';
 import { UserService } from 'src/app/services/user.service';
 import { ROUTE_LIST_CAP_VON } from './quan-ly-ke-hoach-von-phi-hang.constant';
 
