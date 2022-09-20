@@ -39,7 +39,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as XLSX from 'xlsx';
 import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
   templateUrl: './thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component.html',
@@ -727,9 +727,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           );
           this.yearNow = this.thongTinChiTieuKeHoachNam.namKeHoach;
           if (this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV) {
-           this.formData.controls['ngayKy'].setValidators([Validators.required])
-           this.formData.controls['ngayHieuLuc'].setValidators([Validators.required])
-           this.formData.controls['soQd'].setValidators([Validators.required])
+            this.formData.controls['ngayKy'].setValidators([Validators.required])
+            this.formData.controls['ngayHieuLuc'].setValidators([Validators.required])
+            this.formData.controls['soQd'].setValidators([Validators.required])
           } else {
             this.formData.controls['ngayKy'].setValidators([])
             this.formData.controls['ngayHieuLuc'].setValidators([])
@@ -1295,15 +1295,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         try {
           let trangThai;
           switch (this.thongTinChiTieuKeHoachNam.trangThai) {
-            case STATUS.CHO_DUYET_TP:{
+            case STATUS.CHO_DUYET_TP: {
               trangThai = STATUS.TU_CHOI_TP
               break;
             }
-            case STATUS.CHO_DUYET_LDC:{
+            case STATUS.CHO_DUYET_LDC: {
               trangThai = STATUS.TU_CHOI_LDC
               break;
             }
-            case STATUS.CHO_DUYET_LDV:{
+            case STATUS.CHO_DUYET_LDV: {
               trangThai = STATUS.TU_CHOI_LDV
               break;
             }
@@ -1347,11 +1347,11 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   save(isGuiDuyet?: boolean) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
-      if (this.formData.invalid) {
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
-        return;
-      }
+    if (this.formData.invalid) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      return;
+    }
     this.thongTinChiTieuKeHoachNam.soQuyetDinh = this.formData.get('soQd').value ? `${this.formData.get('soQd').value
       }/${this.qdTCDT}` : null;
     this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value ?? null;
@@ -1361,6 +1361,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.formData.get('namKeHoach').value;
     this.thongTinChiTieuKeHoachNam.trichYeu =
       this.formData.get('trichYeu').value;
+
+    this.thongTinChiTieuKeHoachNam.chiTieuId = this.formData.get('chiTieuId').value;
     this.thongTinChiTieuKeHoachNam.canCu = this.formData.get('canCu').value;
     this.thongTinChiTieuKeHoachNam.chiTieuId = this.formData.get('chiTieuId').value;
     this.thongTinChiTieuKeHoachNamInput = cloneDeep(
@@ -1413,11 +1415,11 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               let trangThai;
               if (this.userService.isTongCuc()) {
                 switch (this.thongTinChiTieuKeHoachNam.trangThai) {
-                  case STATUS.DU_THAO : {
+                  case STATUS.DU_THAO: {
                     trangThai = STATUS.CHO_DUYET_LDV
                     break;
                   }
-                  case STATUS.TU_CHOI_LDV : {
+                  case STATUS.TU_CHOI_LDV: {
                     trangThai = STATUS.CHO_DUYET_LDV
                     break;
                   }
@@ -1425,15 +1427,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               }
               if (this.userService.isCuc()) {
                 switch (this.thongTinChiTieuKeHoachNam.trangThai) {
-                  case STATUS.DU_THAO : {
+                  case STATUS.DU_THAO: {
                     trangThai = STATUS.CHO_DUYET_TP
                     break;
                   }
-                  case STATUS.TU_CHOI_TP : {
+                  case STATUS.TU_CHOI_TP: {
                     trangThai = STATUS.CHO_DUYET_TP
                     break;
                   }
-                  case STATUS.TU_CHOI_LDC : {
+                  case STATUS.TU_CHOI_LDC: {
                     trangThai = STATUS.CHO_DUYET_LDC
                     break;
                   }
@@ -1445,7 +1447,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               };
               this.chiTieuKeHoachNamService.updateStatus(body)
                 .then((resp) => {
-                  if (resp.msg ==  MESSAGE.SUCCESS) {
+                  if (resp.msg == MESSAGE.SUCCESS) {
                     if (res.msg == MESSAGE.SUCCESS) {
                       this.notification.success(
                         MESSAGE.SUCCESS,
@@ -1493,7 +1495,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               }
               this.chiTieuKeHoachNamService.updateStatus(body)
                 .then((resp) => {
-                  if (resp.msg ==  MESSAGE.SUCCESS) {
+                  if (resp.msg == MESSAGE.SUCCESS) {
                     if (res.msg == MESSAGE.SUCCESS) {
                       this.notification.success(
                         MESSAGE.SUCCESS,
