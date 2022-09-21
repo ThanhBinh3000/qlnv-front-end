@@ -137,6 +137,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
       loaiTimKiem: "0",
       maBcao: this.searchFilter.maBcao,
       maDvi: this.searchFilter.donViTao,
+      dotBcao: this.searchFilter.dotBcao,
       namBcao: this.searchFilter.nam,
       ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
       ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
