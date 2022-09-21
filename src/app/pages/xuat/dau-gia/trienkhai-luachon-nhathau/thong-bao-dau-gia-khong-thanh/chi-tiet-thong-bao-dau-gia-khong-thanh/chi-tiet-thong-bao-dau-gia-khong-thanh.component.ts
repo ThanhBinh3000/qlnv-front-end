@@ -192,16 +192,14 @@ export class ChiTietThongBaoDauGiaKhongThanhComponent implements OnInit {
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
           hangHoa.data.forEach((item) => {
+            if (this.typeVthh && this.typeVthh !== item.ma) {
+              return;
+            }
             if (item.cap === "1" && item.ma !== '01') {
               this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, item];
-              console.log(this.dsLoaiHangHoa)
             }
             else {
-              if (item.child && item.child.length > 0) {
-                item.child.forEach((itemHH) => {
-                  if (itemHH.ma === this.maLoaiVthh) { this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, itemHH]; }
-                });
-              }
+              this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, ...item.child];
             }
           })
         }
