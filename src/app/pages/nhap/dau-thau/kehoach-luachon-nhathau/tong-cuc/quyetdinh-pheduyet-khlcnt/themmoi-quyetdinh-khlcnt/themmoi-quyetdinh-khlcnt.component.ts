@@ -374,7 +374,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   async danhSachTongHopGetAll() {
     this.spinner.show();
     let body = {
-      trangThai: STATUS.CHUA_TAO_QD,
+      trangThai: STATUS.DA_BAN_HANH_QD,
       loaiVthh: this.formData.get('loaiVthh').value,
       cloaiVthh: this.formData.get('cloaiVthh').value,
       namKhoach: this.formData.get('namKhoach').value

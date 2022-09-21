@@ -68,7 +68,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
       tgianNhang: [''],
       ghiChu: ['', [Validators.required]],
       loaiVthh: ['', [Validators.required]],
-      tenVthh: ['', [Validators.required]],
+      tenloaiVthh: ['', [Validators.required]],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
@@ -184,7 +184,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
           ngayQd: data.ngayQd,
           ngayHluc: data.ngayHluc,
           loaiVthh: data.loaiVthh,
-          tenVthh: data.tenVthh,
+          tenloaiVthh: data.tenloaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           moTaHangHoa: data.moTaHangHoa,
@@ -233,7 +233,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
         this.formData.patchValue({
           canCu: data.soQd ?? null,
           loaiVthh: data.loaiVthh ?? null,
-          tenVthh: data.tenVthh ?? null,
+          tenloaiVthh: data.tenloaiVthh ?? null,
           cLoaiVthh: data.cloaiVthh ?? null,
           tenCloaiVthh: data.tenCloaiVthh ?? null,
           moTaHangHoa: data.moTaHangHoa ?? null,
@@ -305,14 +305,14 @@ export class ThemMoiDieuChinhComponent implements OnInit {
         cloaiVthh: data.ma,
         tenCloaiVthh: data.ten,
         loaiVthh: data.parent.ma,
-        tenVthh: data.parent.ten
+        tenloaiVthh: data.parent.ten
       })
       this.isVatTu = false;
     }
     if (data.loaiHang == "VT") {
       this.formData.patchValue({
         loaiVthh: data.ma,
-        tenVthh: data.ten,
+        tenloaiVthh: data.ten,
         cloaiVthh: null,
         tenCloaiVthh: null,
       })
