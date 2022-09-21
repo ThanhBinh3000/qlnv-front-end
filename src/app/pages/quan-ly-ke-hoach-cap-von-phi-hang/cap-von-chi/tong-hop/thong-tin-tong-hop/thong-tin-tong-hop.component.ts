@@ -297,7 +297,6 @@ export class ThongTinTonghopComponent implements OnInit {
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
-
     let res = await this.deNghiCapVonBoNganhService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
