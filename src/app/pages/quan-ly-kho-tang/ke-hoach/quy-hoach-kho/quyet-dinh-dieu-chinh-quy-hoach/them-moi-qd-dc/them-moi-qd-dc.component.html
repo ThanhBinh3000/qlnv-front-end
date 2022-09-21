@@ -125,7 +125,7 @@
         <td class="text-center" style="width: 2%;"></td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.cucDtnnKv" [nzShowArrow]="false" nzAllowClear>
+            <nz-select [(ngModel)]="rowItem.maCuc" [nzShowArrow]="false" nzAllowClear>
               <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsCuc">
               </nz-option>
             </nz-select>
@@ -133,7 +133,7 @@
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.chiCuc" [nzShowArrow]="false">
+            <nz-select [(ngModel)]="rowItem.maChiCuc" [nzShowArrow]="false">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
               <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChiCuc">
               </nz-option>
@@ -143,7 +143,7 @@
 
         <td style="width: 9%;">
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.diemKho" [readonly]="true" />
+            <input nz-input [(ngModel)]="rowItem.maDiemKho" [readonly]="true" />
           </nz-input-group>
         </td>
         <td style="width: 9%;">
@@ -209,7 +209,7 @@
           <td style="width: 2%;"></td>
           <td style="width: 8%;">
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.cucDtnnKv" [nzShowArrow]="false" nzAllowClear
+              <nz-select [(ngModel)]="dataEdit[idx].data.maCuc" [nzShowArrow]="false" nzAllowClear
               >
                 <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsCuc">
                 </nz-option>
@@ -218,7 +218,7 @@
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.chiCuc" [nzShowArrow]="false"
+              <nz-select [(ngModel)]="dataEdit[idx].data.maChiCuc" [nzShowArrow]="false"
               >
                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                 <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChiCuc">
@@ -228,7 +228,7 @@
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.diemKho" [readonly]="true" />
+              <input nz-input [(ngModel)]="dataEdit[idx].data.maDiemKho" [readonly]="true" />
             </nz-input-group>
           </td>
           <td style="width: 8%;">
