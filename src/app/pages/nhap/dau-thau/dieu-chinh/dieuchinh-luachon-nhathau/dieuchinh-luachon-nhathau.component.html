@@ -37,7 +37,7 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH LỰA CHỌN NHÀ THẦU</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa">
+        <button *ngIf="userService.isTongCuc()" type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
@@ -76,13 +76,13 @@
             <th></th>
             <th></th>
             <th>
-              <nz-input-group >
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
                   (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group  [nzSuffix]="suffixTemplateInfo" >
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
                   (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
               </nz-input-group>
@@ -103,7 +103,7 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group >
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
                   (input)="filterInTable('namKhoach',filterTable.namKhoach)" size="small" />
               </nz-input-group>
@@ -115,13 +115,13 @@
               </nz-input-group>
             </th>
             <th *ngIf="userService.isCuc()">
-              <nz-input-group >
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGoiThau"
                   (input)="filterInTable('soGoiThau',filterTable.soGoiThau)" size="small" />
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group >
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
                   (input)="filterInTable('trangThai',filterTable.trangThai)" size="small" />
               </nz-input-group>
@@ -142,7 +142,7 @@
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.soQdGoc }}</td>
             <td>{{data.namKhoach}}</td>
-            <td>{{data.tenVthh}}</td>
+            <td>{{data.tenloaiVthh}}</td>
             <td>{{data.soGoiThau}}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
