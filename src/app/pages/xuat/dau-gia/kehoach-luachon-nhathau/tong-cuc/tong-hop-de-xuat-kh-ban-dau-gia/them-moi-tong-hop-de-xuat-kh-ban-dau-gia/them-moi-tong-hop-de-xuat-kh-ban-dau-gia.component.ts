@@ -34,6 +34,7 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { TongHopDeXuatKHBanDauGiaService } from 'src/app/services/tongHopDeXuatKHBanDauGia.service';
 import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-them-moi-tong-hop-de-xuat-kh-ban-dau-gia',
@@ -131,7 +132,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   isTongHop: boolean = false;
-
+  STATUS = STATUS;
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
 
@@ -161,6 +162,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       noiDungTongHop: [null, [Validators.required]],
       tgDuKienTcbdg: [[dayjs().toDate(), dayjs().toDate()], [Validators.required]],
       ghiChu: [null],
+      trangThai: [STATUS.DA_DUYET_LDC]
     });
   }
 
@@ -178,6 +180,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.loadDonVi();
     if (this.idInput > 0) {
       this.isTongHop = true;
+      console.log(this.isTongHop);
       this.loadThongTinDeXuatKeHoachLuaChonNhaThau(this.idInput);
     } else {
       this.initForm();
@@ -200,39 +203,50 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     let body = {
       ngayKyTuNgay: this.formData.get('ngayKyDeXuat').value ? dayjs(this.formData.get('ngayKyDeXuat').value[0]).format('YYYY-MM-DD') : null,
       ngayKyDenNgay: this.formData.get('ngayKyDeXuat').value ? dayjs(this.formData.get('ngayKyDeXuat').value[1]).format('YYYY-MM-DD') : null,
-      loaiVatTuHangHoa: this.formData.get('maVatTuCha').value,
+      loaiVthh: this.formData.get('maVatTuCha').value,
       namKeHoach: this.formData.get('namKeHoach').value,
+      trangThai: this.formData.get('trangThai').value,
       pageNumber: this.page,
       pageSize: 1000,
     };
-    let res = await this.deXuatKeHoachBanDauGiaService.search(body);
-    console.log(res);
+    try {
+      let res = await this.deXuatKeHoachBanDauGiaService.search(body);
 
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.isTongHop = true;
-      if (data.content && data.content.length > 0) {
-        data.content.forEach((item) => {
-          let itemAdd = {
-            "tenDonVi": item.tenDonVi,
-            "soKeHoach": item.soKeHoach,
-            "bhDgKeHoachId": item.id,
-            "bhTongHopDeXuatId": 0,
-            "giaKhoiDiem": item.tongGiaKhoiDiem,
-            "id": 0,
-            "khoanTienDatTruoc": item.tongKhoanTienDatTruoc,
-            "maDonVi": item.maDv,
-            "ngayKy": item.ngayKy,
-            "soLuongDvTaiSan": item.tongSoLuongDonViTaiSan,
-            "trichYeu": item.trichYeu,
-          }
-          this.listOfData.push(itemAdd);
-        });
+      console.log(res);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        if (data.content && data.content.length > 0) {
+          this.isTongHop = true;
+          data.content.forEach((item) => {
+            let itemAdd = {
+              "tenDonVi": item.tenDonVi,
+              "soKeHoach": item.soKeHoach,
+              "bhDgKeHoachId": item.id,
+              "bhTongHopDeXuatId": 0,
+              "giaKhoiDiem": item.giaKhoiDiem,
+              "id": 0,
+              "khoanTienDatTruoc": item.khoanTienDatTruoc,
+              "maDonVi": item.maDv,
+              "ngayKy": item.ngayKy,
+              "soLuong": item.soLuong,
+              "trichYeu": item.trichYeu,
+            }
+            this.listOfData.push(itemAdd);
+          });
+        }
+        else {
+          this.notification.error(MESSAGE.ERROR, "Không có dữ liệu để tổng hợp");
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      this.spinner.hide();
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu để tổng hợp");
+      console.log(e);
+    } finally {
+      this.spinner.hide();
     }
-    this.spinner.hide();
   }
 
   initForm(dataDetail?) {

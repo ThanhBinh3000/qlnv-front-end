@@ -20,7 +20,7 @@ import { DieuChinhQuyetDinhPdKhlcntService } from 'src/app/services/qlnv-hang/nh
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-themmoi-dieuchinh',
@@ -78,7 +78,6 @@ export class ThemMoiDieuChinhComponent implements OnInit {
   }
   maQd: string = '';
   isVatTu: boolean = false;
-
   listNam: any[] = [];
   listQdGoc: any[] = [];
   listNthauNopHs: any[] = [];
@@ -327,7 +326,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     this.listQdGoc = [];
     console.log(this.formData)
     let body = {
-      trangThai: "11",
+      trangThai: STATUS.BAN_HANH,
       loaiVthh: this.formData.get('loaiVthh') ? this.formData.get('loaiVthh').value : null,
       cloaiVthh: this.formData.get('cloaiVthh') ? this.formData.get('cloaiVthh').value : null,
       namKhoach: this.formData.get('namKhoach') ? this.formData.get('namKhoach').value : null,
