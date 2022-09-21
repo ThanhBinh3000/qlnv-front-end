@@ -1,20 +1,18 @@
 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-    <div nz-col [nzSpan]="3">
-        <div nz-col [nzSpan]="1">
-            Đơn vị:
-        </div>
-        <div nz-col [nzSpan]="2">
-            <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
-                <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
-            </ng-container>
-            <ng-template #editMoney>
-                <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                    (ngModelChange)="editMoneyUnit=false">
-                    <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                    </nz-option>
-                </nz-select>
-            </ng-template>
-        </div>
+    <div nz-col [nzSpan]="1">
+        Đơn vị:
+    </div>
+    <div nz-col [nzSpan]="2">
+        <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+            <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+        </ng-container>
+        <ng-template #editMoney>
+            <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                (ngModelChange)="editMoneyUnit=false">
+                <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                </nz-option>
+            </nz-select>
+        </ng-template>
     </div>
     <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
         <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
@@ -312,7 +310,9 @@
                 <td>{{displayValue(data.luyKeGiaiNganCkTle)}}</td>
 
                 <td [hidden]="status">
-                    <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                    <ng-container *ngIf="!getDeleteStatus(data.maNdung)">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                    </ng-container>
                 </td>
                 <td [hidden]="status">
                     <ng-container *ngIf="!getLowStatus(data.stt)">
@@ -323,8 +323,10 @@
                     <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                 </td>
                 <td [hidden]="status">
-                    <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                        (ngModelChange)="updateChecked(data.id)"></label>
+                    <ng-container *ngIf="!getDeleteStatus(data.maNdung)">
+                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                            (ngModelChange)="updateChecked(data.id)"></label>
+                    </ng-container>
                 </td>
             </ng-container>
             <ng-template #editTemplate>
@@ -540,7 +542,9 @@
                     {{displayValue(editCache[data.id].data.luyKeGiaiNganCkTle)}}
                 </td>
                 <td [hidden]="status">
-                    <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                    <ng-container *ngIf="getDeleteStatus(data.maNdung)">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                    </ng-container>
                 </td>
                 <td>
                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>
@@ -552,8 +556,10 @@
                     </a>
                 </td>
                 <td [hidden]="status">
-                    <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                        (ngModelChange)="updateChecked(data.id)"></label>
+                    <ng-container *ngIf="getDeleteStatus(data.maNdung)">
+                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                            (ngModelChange)="updateChecked(data.id)"></label>
+                    </ng-container>
                 </td>
             </ng-template>
         </tr>

@@ -176,6 +176,21 @@ export class PhuLucIComponent implements OnInit {
             } else {
                 this.sortByIndex();
             }
+        } else {
+            this.luyKeDetail.forEach(item => {
+                this.lstCtietBcao.push({
+                    ...item,
+                    luyKeGiaiNganTcongTle: divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong),
+                    luyKeGiaiNganDtoanTle: divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan),
+                    luyKeGiaiNganNguonKhacTle: divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac),
+                    luyKeGiaiNganNguonQuyTle: divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy),
+                    luyKeGiaiNganNsttTle: divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt),
+                    luyKeGiaiNganCkTle: divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk),
+                    checked: false,
+                    id: uuid.v4() + 'FE',
+                })
+            })
+            this.sortByIndex();
         }
         this.getTotal();
         this.updateEditCache();
@@ -433,19 +448,19 @@ export class PhuLucIComponent implements OnInit {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: head + "." + (tail + 1).toString(),
-                luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
-                luyKeGiaiNganDtoan: itemLine?.luyKeGiaiNganDtoan ? itemLine?.luyKeGiaiNganDtoan : 0,
-                luyKeGiaiNganNguonKhac: itemLine?.luyKeGiaiNganNguonKhac ? itemLine?.luyKeGiaiNganNguonKhac : 0,
-                luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
-                luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
-                luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
+                // luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
+                // luyKeGiaiNganDtoan: itemLine?.luyKeGiaiNganDtoan ? itemLine?.luyKeGiaiNganDtoan : 0,
+                // luyKeGiaiNganNguonKhac: itemLine?.luyKeGiaiNganNguonKhac ? itemLine?.luyKeGiaiNganNguonKhac : 0,
+                // luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
+                // luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
+                // luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
             }
-            item.luyKeGiaiNganTcongTle = divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong);
-            item.luyKeGiaiNganDtoanTle = divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan);
-            item.luyKeGiaiNganNguonKhacTle = divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac);
-            item.luyKeGiaiNganNguonQuyTle = divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy);
-            item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
-            item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
+            // item.luyKeGiaiNganTcongTle = divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong);
+            // item.luyKeGiaiNganDtoanTle = divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan);
+            // item.luyKeGiaiNganNguonKhacTle = divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac);
+            // item.luyKeGiaiNganNguonQuyTle = divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy);
+            // item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
+            // item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
             this.lstCtietBcao.splice(ind + 1, 0, item);
             this.sum(item.stt);
             this.editCache[item.id] = {
@@ -502,19 +517,19 @@ export class PhuLucIComponent implements OnInit {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: stt,
-                luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
-                luyKeGiaiNganDtoan: itemLine?.luyKeGiaiNganDtoan ? itemLine?.luyKeGiaiNganDtoan : 0,
-                luyKeGiaiNganNguonKhac: itemLine?.luyKeGiaiNganNguonKhac ? itemLine?.luyKeGiaiNganNguonKhac : 0,
-                luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
-                luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
-                luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
+                // luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
+                // luyKeGiaiNganDtoan: itemLine?.luyKeGiaiNganDtoan ? itemLine?.luyKeGiaiNganDtoan : 0,
+                // luyKeGiaiNganNguonKhac: itemLine?.luyKeGiaiNganNguonKhac ? itemLine?.luyKeGiaiNganNguonKhac : 0,
+                // luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
+                // luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
+                // luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
             }
-            item.luyKeGiaiNganTcongTle = divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong);
-            item.luyKeGiaiNganDtoanTle = divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan);
-            item.luyKeGiaiNganNguonKhacTle = divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac);
-            item.luyKeGiaiNganNguonQuyTle = divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy);
-            item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
-            item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
+            // item.luyKeGiaiNganTcongTle = divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong);
+            // item.luyKeGiaiNganDtoanTle = divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan);
+            // item.luyKeGiaiNganNguonKhacTle = divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac);
+            // item.luyKeGiaiNganNguonQuyTle = divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy);
+            // item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
+            // item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
             this.lstCtietBcao.splice(index + 1, 0, item);
             this.sum(stt);
             this.updateEditCache();
@@ -654,19 +669,19 @@ export class PhuLucIComponent implements OnInit {
                 level: 0,
                 id: uuid.v4() + 'FE',
                 stt: "0.1",
-                luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
-                luyKeGiaiNganDtoan: itemLine?.luyKeGiaiNganDtoan ? itemLine?.luyKeGiaiNganDtoan : 0,
-                luyKeGiaiNganNguonKhac: itemLine?.luyKeGiaiNganNguonKhac ? itemLine?.luyKeGiaiNganNguonKhac : 0,
-                luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
-                luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
-                luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
+                // luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
+                // luyKeGiaiNganDtoan: itemLine?.luyKeGiaiNganDtoan ? itemLine?.luyKeGiaiNganDtoan : 0,
+                // luyKeGiaiNganNguonKhac: itemLine?.luyKeGiaiNganNguonKhac ? itemLine?.luyKeGiaiNganNguonKhac : 0,
+                // luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
+                // luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
+                // luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
             }
-            item.luyKeGiaiNganTcongTle = divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong);
-            item.luyKeGiaiNganDtoanTle = divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan);
-            item.luyKeGiaiNganNguonKhacTle = divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac);
-            item.luyKeGiaiNganNguonQuyTle = divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy);
-            item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
-            item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
+            // item.luyKeGiaiNganTcongTle = divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong);
+            // item.luyKeGiaiNganDtoanTle = divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan);
+            // item.luyKeGiaiNganNguonKhacTle = divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac);
+            // item.luyKeGiaiNganNguonQuyTle = divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy);
+            // item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
+            // item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
             this.lstCtietBcao.push(item);
             this.getTotal();
             this.editCache[item.id] = {
@@ -798,6 +813,13 @@ export class PhuLucIComponent implements OnInit {
             return false;
         }
         return true;
+    }
+
+    getDeleteStatus(maNdung: number){
+        if (this.luyKeDetail.findIndex(e => e.maNdung == maNdung) != -1){
+            return true;
+        }
+        return false;
     }
 
     sum(stt: string) {
