@@ -303,8 +303,12 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 
 	checkApproveReport(item: any): boolean {
 		const isSynthetic = item.tongHopTu != "[]";
-		return Utils.statusApprove.includes(item.trangThai) &&
-			(isSynthetic ? this.userService.isAccessPermisson(BCVP.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.APPROVE_REPORT));
+		const checkDuyet = isSynthetic ? this.userService.isAccessPermisson(BCVP.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.DUYET_REPORT);
+		const checkPheDuyet = isSynthetic ? this.userService.isAccessPermisson(BCVP.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.PHE_DUYET_REPORT);
+		const checkTiepNhan = this.userService.isAccessPermisson(BCVP.TIEP_NHAN_REPORT);
+		return (Utils.statusDuyet.includes(item.trangThai) && checkDuyet) ||
+			(Utils.statusPheDuyet.includes(item.trangThai) && checkPheDuyet) ||
+			(Utils.statusTiepNhan.includes(item.trangThai) && checkTiepNhan);
 	}
 
 	checkViewReport(item: any): boolean {

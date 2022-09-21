@@ -179,6 +179,20 @@ export class PhuLucIIIComponent implements OnInit {
             } else {
                 this.sortByIndex();
             }
+        } else {
+            this.luyKeDetail.forEach(item => {
+                this.lstCtietBcao.push({
+                    ...item,
+                    luyKeGiaiNganDauNamTsoTle: divNumber(item.luyKeGiaiNganDauNamTso, item.khoachNamVonTso),
+                    luyKeGiaiNganDauNamNsnnTle: divNumber(item.luyKeGiaiNganDauNamNsnn, item.khoachNamVonNsnn),
+                    luyKeGiaiNganDauNamNsnnTleVonDt: divNumber(item.luyKeGiaiNganDauNamNsnnVonDt, item.khoachNamVonDt),
+                    luyKeGiaiNganDauNamNsnnTleVonThue: divNumber(item.luyKeGiaiNganDauNamNsnnVonThue, item.khoachNamVonThue),
+                    luyKeGiaiNganDauNamNsnnTleVonScl: divNumber(item.luyKeGiaiNganDauNamNsnnVonScl, item.khoachNamVonScl),
+                    checked: false,
+                    id: uuid.v4() + 'FE',
+                })
+            })
+            this.sortByIndex();
         }
 
         this.getTotal();
@@ -804,6 +818,13 @@ export class PhuLucIIIComponent implements OnInit {
             return false;
         }
         return true;
+    }
+
+    getDeleteStatus(maDan: number){
+        if (this.luyKeDetail.findIndex(e => e.maDan == maDan) != -1){
+            return true;
+        }
+        return false;
     }
 
     sum(stt: string) {
