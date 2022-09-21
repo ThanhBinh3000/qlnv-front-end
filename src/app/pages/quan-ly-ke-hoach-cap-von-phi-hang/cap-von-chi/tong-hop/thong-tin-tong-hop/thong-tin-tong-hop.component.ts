@@ -442,6 +442,7 @@ export class ThongTinTonghopComponent implements OnInit {
   }
 
   addPhuongAn() {
+    //TODO
     const deNghiCapVon = this.listThongTinChiTiet?.find(ct => ct.id === this.chiTietCtsTongHopCreate.khDnCapVonId);
     if (this.dsChiTietCtsTonghop) {
       let indexExist = this.dsChiTietCtsTonghop.findIndex(
