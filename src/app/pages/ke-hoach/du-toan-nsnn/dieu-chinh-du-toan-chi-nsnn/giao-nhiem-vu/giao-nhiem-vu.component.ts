@@ -820,6 +820,7 @@ export class GiaoNhiemVuComponent implements OnInit {
         statusBtnFinish: this.statusBtnFinish,
         status: this.status,
         namBcao: this.namBcao,
+        maBaoCao:this.maBaoCao
       }
       this.tabs = [];
       this.tabs.push(PHU_LUC.find(e => e.id === id));
@@ -841,6 +842,7 @@ export class GiaoNhiemVuComponent implements OnInit {
         statusBtnFinish: this.statusBtnFinish,
         status: this.status,
         namBcao: this.namBcao,
+        maBaoCao:this.maBaoCao
       }
       this.tabs = [];
       this.tabs.push(PHU_LUC.find(e => e.id == this.lstDieuChinhs[index].maLoai));
@@ -929,7 +931,7 @@ export class GiaoNhiemVuComponent implements OnInit {
       })
       lstDieuChinhTemps.push({
         ...data,
-        giaoCho: this.userInfo?.username,
+        giaoCho: this.userInfo?.sub,
         lstCtietDchinh: lstCtietTemp,
         id: null,
       })

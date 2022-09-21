@@ -26,6 +26,8 @@ export class PhuLuc5Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  maDviTao: string;
+  maBaoCao: string;
 
   // khac
   lstFiles: any[] = []; //show file ra man hinh
@@ -60,6 +62,9 @@ export class PhuLuc5Component implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
+    console.log(this.data);
+    this.maDviTao = this.data?.maDviTao;
+    this.maBaoCao = this.data?.maBaoCao;
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
     this.thuyetMinh = this.data?.thuyetMinh;
@@ -84,7 +89,7 @@ export class PhuLuc5Component implements OnInit {
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', "phuluc5-dieu-chinh/file");
+    upfile.append('folder', this.maDviTao + '/' + this.maBaoCao + '/' +'phuluc5-dieu-chinh');
     const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
       (data) => {
         const objfile = {
@@ -114,8 +119,7 @@ export class PhuLuc5Component implements OnInit {
     if (!file) {
       const fileAttach = this.lstFiles.find(element => element?.id == id);
       if (fileAttach) {
-        `phuluc5-dieu-chinh/${this.namHienHanh}/${fileAttach.fileName}`
-        await this.quanLyVonPhiService.downloadFile(`phuluc5-dieu-chinh/file/${fileAttach.fileName}`).toPromise().then(
+        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
           (data) => {
             fileSaver.saveAs(data, fileAttach.fileName);
           },
@@ -192,7 +196,6 @@ export class PhuLuc5Component implements OnInit {
   async save(trangThai: string) {
     this.spinner.show()
     //get list file url
-    debugger
     const listFilePl5: any = [];
     for (const iterator of this.listFile) {
       listFilePl5.push(await this.uploadFile(iterator));
