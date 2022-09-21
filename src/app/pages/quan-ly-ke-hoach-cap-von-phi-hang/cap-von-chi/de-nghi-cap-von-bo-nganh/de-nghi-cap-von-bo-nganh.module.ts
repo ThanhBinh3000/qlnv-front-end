@@ -17,6 +17,7 @@ import { ThongTinDeNghiCapVonBoNganhComponent } from './thong-tin-de-nghi-cap-vo
   ],
   exports: [
     DeNghiCapVonBoNganhComponent,
+    ThongTinDeNghiCapVonBoNganhComponent,
   ]
 })
 export class DeNghiCapVonBoNganhModule { }
