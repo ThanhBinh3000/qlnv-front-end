@@ -93,7 +93,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT")) {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XEM")) {
         window.location.href = '/error/401'
       }
       this.listVthh = LIST_VAT_TU_HANG_HOA;
@@ -139,11 +139,11 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   detail(data?) {
-    this.isDetail = true;
-    this.selectedId = data.id;
     if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_SUA")) {
       return;
     }
+    this.isDetail = true;
+    this.selectedId = data.id;
   }
 
   delete(data?) {
@@ -409,13 +409,13 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            // let res = await this.deXuatDieuChinhService.deleteMultiple({ ids: dataDelete });
-            // if (res.msg == MESSAGE.SUCCESS) {
-            //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-            //   await this.search();
-            // } else {
-            //   this.notification.error(MESSAGE.ERROR, res.msg);
-            // }
+            let res = await this.quyetDinhPheDuyetKeHoachLCNTService.deleteMuti({ idList: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
             this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);

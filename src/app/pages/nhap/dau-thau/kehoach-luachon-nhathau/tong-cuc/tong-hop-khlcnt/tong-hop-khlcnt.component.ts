@@ -85,6 +85,9 @@ export class TongHopKhlcntComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XEM")) {
+        window.location.href = '/error/401'
+      }
       this.userInfo = this.userService.getUserLogin();
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
@@ -268,11 +271,18 @@ export class TongHopKhlcntComponent implements OnInit {
   }
 
   themMoi() {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP")) {
+      return;
+    }
     this.isDetail = true;
     this.selectedId = null;
   }
 
   redirectToChiTiet(isView: boolean, id: number) {
+    if ((isView && !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XEM"))
+      || (!isView && !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_SUA"))) {
+      return;
+    }
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
@@ -308,6 +318,9 @@ export class TongHopKhlcntComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XOA")) {
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -395,6 +408,9 @@ export class TongHopKhlcntComponent implements OnInit {
   }
 
   deleteSelect() {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XOA")) {
+      return;
+    }
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
@@ -475,7 +491,7 @@ export class TongHopKhlcntComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == this.globals.prop.CHUA_TAO_QD || item.trangThai == this.globals.prop.DA_DU_THAO_QD) {
+          if (item.trangThai == STATUS.DA_BAN_HANH_QD) {
             item.checked = true;
           }
         });

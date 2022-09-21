@@ -53,6 +53,8 @@ export class DetailQuyetDinhNhapXuat {
 }
 
 export class ThongTinDiaDiemNhap {
+    maDvi: string;
+    tenDvi: string;
     maCuc: string;
     tenCuc: string;
     maChiCuc: string;
