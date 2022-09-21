@@ -17,21 +17,14 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { isEmpty } from 'lodash';
 import { Globals } from 'src/app/shared/globals';
 
+import { DeNghiCapVonBoNganhService } from 'src/app/services/deNghiCapVanBoNganh.service';
+
 @Component({
   selector: 'app-de-nghi-cap-von-bo-nganh',
   templateUrl: './de-nghi-cap-von-bo-nganh.component.html',
   styleUrls: ['./de-nghi-cap-von-bo-nganh.component.scss']
 })
 export class DeNghiCapVonBoNganhComponent implements OnInit {
-  constructor(
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
-    private modal: NzModalService,
-    public userService: UserService,
-    private donviService: DonviService,
-    public globals: Globals,
-  ) { }
   @Input()
   loaiVthh: string;
   @Input()
@@ -43,29 +36,23 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
   yearNow: number = 0;
   searchFilter = {
     soKeHoach: null,
-    tenDvi: null,
-    namKh: dayjs().get('year'),
-    ngayKy: null,
-    loaiVthh: null,
-    trichYeu: null,
+    maBoNganh: null,
+    namKh: null,
+    ngayKy: null
   };
   filterTable: any = {
-    soKeHoach: '',
-    tenDonVi: '',
-    ngayLapKeHoach: '',
-    ngayKy: '',
-    trichYeu: '',
-    tenHangHoa: '',
-    soQuyetDinhGiaoChiTieu: '',
-    soQuyetDinhPheDuyet: '',
-    namKeHoach: '',
-    tenVthh: '',
-    tenCloaiVthh: '',
+    soDeNghi: '',
+    tenBoNganh: '',
+    ngayDeNghi: '',
+    nam: '',
+    tongTien: '',
+    kinhPhiDaCap: '',
+    ycCapThem: '',
     tenTrangThai: '',
   };
   dataTableAll: any[] = [];
-  listVthh: any[] = [];
   dataTable: any[] = [];
+  // listVthh: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -82,10 +69,20 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
   indeterminate = false;
 
   isView = false;
+  constructor(
+    private spinner: NgxSpinnerService,
+    private notification: NzNotificationService,
+    private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
+    private modal: NzModalService,
+    public userService: UserService,
+    private donviService: DonviService,
+    public globals: Globals,
+    private deNghiCapVonBoNganhService: DeNghiCapVonBoNganhService,
+  ) { }
 
   async ngOnInit() {
     try {
-      this.listVthh = LIST_VAT_TU_HANG_HOA;
+      // this.listVthh = LIST_VAT_TU_HANG_HOA;
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -93,7 +90,6 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      this.searchFilter.loaiVthh = this.loaiVthh;
       this.initData()
       await this.search();
     } catch (e) {
@@ -153,17 +149,16 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      ngayKyTuNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
-      ngayKyDenNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
-      soKeHoach: this.searchFilter.soKeHoach,
-      loaiVatTuHangHoa: this.searchFilter.loaiVthh,
-      namKeHoach: this.searchFilter.namKh,
-      trichYeu: this.searchFilter.trichYeu,
-      maDvis: this.userInfo.MA_DVI,
+      soDeNghi: this.searchFilter.soKeHoach,
+      maBoNganh: null,
+      nam: this.searchFilter.namKh,
+      ngayDeNghiTuNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
+      ngayDeNghiDenNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
-    let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
+
+    let res = await this.deNghiCapVonBoNganhService.timKiem(body);
 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -211,6 +206,7 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
     }
   }
 
+  // Hiện thị màn hình thêm mới
   themMoi() {
     this.isDetail = true;
     this.isView = false;
@@ -223,11 +219,13 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
     this.loaiVthh = this.loaiVthhCache;
   }
 
+  // Hàm truyền qua thêm mới
   showList() {
     this.isDetail = false;
     this.search();
   }
 
+  // Hiện thị Edit, View
   detail(data?: any, isView?: boolean) {
     this.selectedId = data.id;
     this.isDetail = true;
@@ -240,15 +238,19 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
     // }
   }
 
+  // Reset tìm kiếm
   clearFilter() {
-    this.searchFilter.namKh = dayjs().get('year');
-    this.searchFilter.soKeHoach = null;
-    this.searchFilter.ngayKy = null;
-    this.searchFilter.trichYeu = null;
+    this.searchFilter = {
+      soKeHoach: null,
+      maBoNganh: null,
+      namKh: null,
+      ngayKy: null
+    };
     this.search();
   }
 
-  xoaItem(item: any) {
+  // Xóa bản ghi
+  xoaItem(id: any) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -260,7 +262,7 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.deXuatKeHoachBanDauGiaService.xoa(item.id).then((res) => {
+          this.deNghiCapVonBoNganhService.deleteData(id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -281,50 +283,34 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
     });
   }
 
-  convertTrangThai(status: string) {
-    switch (status) {
-      case '00': {
-        return 'Dự thảo';
-      }
-      case '03': {
-        return 'Từ chối - TP';
-      }
-      case '12': {
-        return 'Từ chối - LĐ Cục';
-      }
-      case '01': {
-        return 'Chờ duyệt - TP';
-      }
-      case '09': {
-        return 'Chờ duyệt - LĐ Cục';
-      }
-      case '02': {
-        return 'Đã duyệt';
-      }
-      case '05': {
-        return 'Tổng hợp';
-      }
-    }
-  }
-
+  // Đang lỗi khi mở file excel
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
+
         let body = {
-          ngayKyTuNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
-          ngayKyDenNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
-          soKeHoach: this.searchFilter.soKeHoach ?? null,
-          namKeHoach: this.searchFilter.namKh,
-          trichYeu: this.searchFilter.trichYeu ?? null,
-          maDvis: [this.userInfo.MA_DVI],
-          pageable: null,
-        };
-        this.deXuatKeHoachBanDauGiaService
-          .exportList(body)
-          .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-de-xuat-ke-hoach-ban-dau-gia.xlsx'),
-          );
+          "capDvis": [
+            null
+          ],
+          "maBoNganh": null,
+          "maDvis": [
+            null
+          ],
+          "nam": 0,
+          "ngayDeNghiDenNgay": null,
+          "ngayDeNghiTuNgay": null,
+          "soDeNghi": null,
+          "str": null,
+          "trangThai": null,
+          "trangThais": [
+            null
+          ]
+        }
+        this.deNghiCapVonBoNganhService.exportList(body).subscribe((blob) => {
+          saveAs(blob, 'danh-sach-de-nghi-cap-von-bo-nganh.xlsx')
+        });
+
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);
@@ -336,6 +322,7 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
     }
   }
 
+  // Xóa nhiều
   deleteSelect() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
@@ -360,7 +347,8 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
             const body = {
               ids: dataDelete
             }
-            let res = await this.deXuatKeHoachBanDauGiaService.deleteMultiple(body);
+
+            let res = await this.deNghiCapVonBoNganhService.deleteMultiple(body);
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -382,23 +370,25 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
       );
     }
   }
-
-  filterInTable(key: string, value: string) {
+  // Tìm kiếm trong bảng
+  filterInTable(key: string, value: string, date: boolean) {
     if (value && value != '') {
       this.dataTable = [];
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (
-            item[key] &&
-            item[key]
-              .toString()
-              .toLowerCase()
-              .indexOf(value.toString().toLowerCase()) != -1
-          ) {
-            temp.push(item);
-          }
-        });
+        if (date) {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase() === dayjs(value).format('YYYY-MM-DD')) {
+              temp.push(item)
+            }
+          });
+        } else {
+          this.dataTableAll.forEach((item) => {
+            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+              temp.push(item)
+            }
+          });
+        }
       }
       this.dataTable = [...this.dataTable, ...temp];
     } else {
@@ -406,19 +396,4 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
     }
   }
 
-  clearFilterTable() {
-    this.filterTable = {
-      soKeHoach: '',
-      ngayLapKeHoach: '',
-      ngayKy: '',
-      trichYeu: '',
-      tenHangHoa: '',
-      soQuyetDinhGiaoChiTieu: '',
-      soQuyetDinhPheDuyet: '',
-      namKeHoach: '',
-      tenVthh: '',
-      tenCloaiVthh: '',
-      tenTrangThai: '',
-    };
-  }
 }

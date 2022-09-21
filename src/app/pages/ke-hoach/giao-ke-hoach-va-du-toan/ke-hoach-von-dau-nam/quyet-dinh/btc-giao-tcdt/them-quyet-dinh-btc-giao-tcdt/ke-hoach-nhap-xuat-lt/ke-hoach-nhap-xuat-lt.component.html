@@ -10,7 +10,7 @@
         </thead>
         <tbody>
             <tr>
-                <td>Vốn chỉ mua lương thực</td>
+                <td>Vốn chi mua lương thực</td>
                 <td>
                     {{ (keHoachNhapXuat.soLuongMuaGaoLpdh + keHoachNhapXuat.soLuongMuaGaoXcht ) * 2 +
                     keHoachNhapXuat.soLuongMuaThoc | number : '1.0-1' : 'vi_VN'}}
@@ -76,7 +76,8 @@
                     </div>
                 </td>
                 <td>
-                    {{( keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLqdh) / 1000 | number : '1.0-1' :
+                    {{( keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLqdh) / 1000 | number : '1.0-1'
+                    :
                     'vi_VN' }}
                 </td>
             </tr>
@@ -173,7 +174,7 @@
                 </td>
                 <td>
                     {{ (keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao)/1000 | number : '1.0-1' :
-                  'vi_VN' }}
+                    'vi_VN' }}
                 </td>
             </tr>
             <tr>

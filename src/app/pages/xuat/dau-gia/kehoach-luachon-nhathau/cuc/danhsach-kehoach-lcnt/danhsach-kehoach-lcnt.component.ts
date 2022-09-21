@@ -47,6 +47,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     ngayKy: null,
     loaiVthh: null,
     trichYeu: null,
+    soQuyetDinhPheDuyet: null,
+    soQuyetDinhGiaoChiTieu: null,
   };
   filterTable: any = {
     soKeHoach: '',
@@ -158,11 +160,15 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       loaiVatTuHangHoa: this.searchFilter.loaiVthh,
       namKeHoach: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
-      maDvis: this.userInfo.MA_DVI,
-      pageNumber: this.page,
-      pageSize: this.pageSize,
+      soQuyetDinhPheDuyet: this.searchFilter.soQuyetDinhPheDuyet,
+      soQuyetDinhGiaoChiTieu: this.searchFilter.soQuyetDinhGiaoChiTieu,
+      maDv: this.userInfo.MA_DVI,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
+      },
     };
-    let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
+    let res = await this.deXuatKeHoachBanDauGiaService.search(body);
 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -280,31 +286,31 @@ export class DanhsachKehoachLcntComponent implements OnInit {
     });
   }
 
-  convertTrangThai(status: string) {
-    switch (status) {
-      case '00': {
-        return 'Dự thảo';
-      }
-      case '03': {
-        return 'Từ chối - TP';
-      }
-      case '12': {
-        return 'Từ chối - LĐ Cục';
-      }
-      case '01': {
-        return 'Chờ duyệt - TP';
-      }
-      case '09': {
-        return 'Chờ duyệt - LĐ Cục';
-      }
-      case '02': {
-        return 'Đã duyệt';
-      }
-      case '05': {
-        return 'Tổng hợp';
-      }
-    }
-  }
+  // convertTrangThai(status: string) {
+  //   switch (status) {
+  //     case '00': {
+  //       return 'Dự thảo';
+  //     }
+  //     case '03': {
+  //       return 'Từ chối - TP';
+  //     }
+  //     case '12': {
+  //       return 'Từ chối - LĐ Cục';
+  //     }
+  //     case '01': {
+  //       return 'Chờ duyệt - TP';
+  //     }
+  //     case '09': {
+  //       return 'Chờ duyệt - LĐ Cục';
+  //     }
+  //     case '02': {
+  //       return 'Đã duyệt';
+  //     }
+  //     case '05': {
+  //       return 'Tổng hợp';
+  //     }
+  //   }
+  // }
 
   exportData() {
     if (this.totalRecord > 0) {
@@ -316,6 +322,8 @@ export class DanhsachKehoachLcntComponent implements OnInit {
           soKeHoach: this.searchFilter.soKeHoach ?? null,
           namKeHoach: this.searchFilter.namKh,
           trichYeu: this.searchFilter.trichYeu ?? null,
+          soQuyetDinhPheDuyet: this.searchFilter.soQuyetDinhPheDuyet ?? null,
+          soQuyetDinhGiaoChiTieu: this.searchFilter.soQuyetDinhGiaoChiTieu ?? null,
           maDvis: [this.userInfo.MA_DVI],
           pageable: null,
         };

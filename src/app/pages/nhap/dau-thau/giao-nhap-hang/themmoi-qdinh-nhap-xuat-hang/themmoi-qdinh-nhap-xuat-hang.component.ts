@@ -522,8 +522,17 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             donViTinh: data.donViTinh,
             tgianNkho: data.tiganNkho
           });
-          this.dataTable = data.dtlList;
+          if (this.userService.isCuc()) {
+            this.dataTable = data.dtlList
+          } else {
+            this.dataTable = data.dtlList.filter(x => x.maDvi == this.userInfo.MA_DVI);
+          }
           this.listFileDinhKem = data.children2;
+          if (data.loaiVthh.startsWith('02')) {
+            this.typeVthh = '02';
+          } else {
+            this.typeVthh = data.loaiVthh;
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -679,14 +688,18 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   themDiaDiemNhap(indexTable?) {
-    if (this.validatorDdiemNhap(indexTable) && this.validateButtonThem()) {
+    if (this.validatorDdiemNhap(indexTable) && this.validateButtonThem('ddiemNhap')) {
       this.dataTable[indexTable].diaDiemNhapList = [...this.dataTable[indexTable].diaDiemNhapList, this.rowItem]
       this.rowItem = new ThongTinDiaDiemNhap();
     }
   }
 
-  validatorDdiemNhap(indexTable): boolean {
+  themChiCuc() {
+    this.dataTable = [...this.dataTable, this.rowItem];
+    this.rowItem = new ThongTinDiaDiemNhap();
+  }
 
+  validatorDdiemNhap(indexTable): boolean {
     let soLuong = 0;
     this.dataTable[indexTable].diaDiemNhapList.forEach(item => {
       soLuong += item.soLuong;
@@ -700,9 +713,15 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     return true
   }
 
-  calcTong(index) {
-    if (this.dataTable) {
+  calcTong(index?) {
+    if (this.dataTable && index) {
       const sum = this.dataTable[index].diaDiemNhapList.reduce((prev, cur) => {
+        prev += cur.soLuong;
+        return prev;
+      }, 0);
+      return sum;
+    } else if (this.dataTable) {
+      const sum = this.dataTable.reduce((prev, cur) => {
         prev += cur.soLuong;
         return prev;
       }, 0);
@@ -710,15 +729,24 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
   }
 
-  validateButtonThem(): boolean {
-    if (this.rowItem.maDiemKho && this.rowItem.maNhaKho && this.rowItem.maNganKho && this.rowItem.soLuong > 0) {
-      return true
+  validateButtonThem(typeButton): boolean {
+    if (typeButton == 'ddiemNhap') {
+      if (this.rowItem.maDiemKho && this.rowItem.maNhaKho && this.rowItem.maNganKho && this.rowItem.soLuong > 0) {
+        return true
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      if (this.rowItem.maChiCuc && this.rowItem.soLuong > 0) {
+        return true
+      } else {
+        return false;
+      }
     }
+
   }
 
-  xoaDiaDiemNhap(indexTable, indexRow) {
+  xoaDiaDiemNhap(indexTable, indexRow?) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -728,7 +756,11 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.dataTable[indexTable].diaDiemNhapList.splice(indexRow, 1);
+        if (indexRow) {
+          this.dataTable[indexTable].diaDiemNhapList.splice(indexRow, 1);
+        } else {
+          this.dataTable.splice(indexTable, 1);
+        }
       },
     });
   }
@@ -765,17 +797,18 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     }
   }
 
+  changeChiCuc() {
+    let chiCuc = this.listChiCuc.filter(x => x.key == this.rowItem.maDvi);
+    if (chiCuc && chiCuc.length > 0) {
+      this.rowItem.tenDvi = chiCuc[0].tenDvi
+    }
+  }
+
   changeDiemKho() {
     let diemKho = this.listDiemKho.filter(x => x.key == this.rowItem.maDiemKho);
     if (diemKho && diemKho.length > 0) {
       this.listNhaKho = diemKho[0].children;
       this.rowItem.tenDiemKho = diemKho[0].tenDvi
-      // if (fromChiTiet) {
-      //   this.changeNhaKho(fromChiTiet);
-      // }
-      // else {
-      //   this.rowItem.maNhaKho = null;
-      // }
     }
   }
 
