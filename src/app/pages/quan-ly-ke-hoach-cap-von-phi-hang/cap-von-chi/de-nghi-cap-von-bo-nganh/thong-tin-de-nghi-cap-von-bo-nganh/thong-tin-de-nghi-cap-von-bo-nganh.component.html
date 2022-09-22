@@ -34,7 +34,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Năm </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="nam">
+              <nz-select formControlName="nam" [nzDisabled]="isView">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -44,7 +44,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Bộ ngành </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="boNganh">
+              <nz-select formControlName="boNganh" [nzDisabled]="isView">
                 <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -61,7 +61,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số đề nghị </nz-form-label>
             <nz-input-group nzAddOnAfter="{{titleSoDeNghi}}" nz-col [nzSpan]="24">
-              <input nz-input formControlName="soDeNghi" />
+              <input nz-input formControlName="soDeNghi" [readonly]="isView" />
             </nz-input-group>
           </nz-form-item>
         </div>
@@ -70,7 +70,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày đề nghị </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker class="search__input" formControlName="ngayDeNghi">
+                <nz-date-picker class="search__input" formControlName="ngayDeNghi" [nzDisabled]="isView">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -101,11 +101,11 @@
             <th style="width: 6%">Thành tiền</th>
             <th style="width: 6%">Kinh phí đã cấp</th>
             <th style="width: 6%">Yêu cầu cấp thêm</th>
-            <th style="width: 4%">Hành động</th>
+            <th style="width: 4%" *ngIf="!isView">Hành động</th>
           </tr>
         </thead>
         <tbody>
-          <tr class="search-table">
+          <tr class="search-table" *ngIf="!isView">
             <th></th>
             <th>
               <nz-input-group>
@@ -206,7 +206,7 @@
               <td>{{item.thanhTien}}</td>
               <td>{{item.kinhPhiDaCap}}</td>
               <td>{{item.ycCapThem}}</td>
-              <td class="text-center">
+              <td class="text-center" *ngIf="!isView">
                 <a (click)="showEditItem(idx, 'show')">
                   <i class="fa fa-pencil"></i>
                 </a>
@@ -281,7 +281,7 @@
             Ghi chú
           </nz-form-label>
           <div class="list-file">
-            <textarea rows="3" nz-input class="search__input" formControlName="ghiChu"></textarea>
+            <textarea rows="3" nz-input class="search__input" formControlName="ghiChu" [readonly]="isView"></textarea>
           </div>
         </nz-form-item>
       </div>
