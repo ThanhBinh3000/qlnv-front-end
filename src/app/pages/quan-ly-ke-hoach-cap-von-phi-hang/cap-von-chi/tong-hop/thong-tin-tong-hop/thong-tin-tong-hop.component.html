@@ -57,7 +57,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Nguồn tổng hợp </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select formControlName="nguonTongHop">
-                <nz-option *ngFor="let item of listNguonTongHop" [nzValue]="item.id" [nzLabel]="item.soDeNghi">
+                <nz-option *ngFor="let item of nguonTongHopList" [nzValue]="item.id" [nzLabel]="item.value">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -88,7 +88,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Mã Tờ Trình </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                  <input nz-input formControlName="maToTrinh" placeholder="ID tự động tăng " />
+                  <input nz-input formControlName="maToTrinh" />
                 </nz-form-control>
               </nz-form-item>
             </div>
