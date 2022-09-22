@@ -7,6 +7,7 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
 import { CapVonChiRoutingModule } from './cap-von-chi-routing.module';
 import { CapVonChiComponent } from './cap-von-chi.component';
 import { TongHopModule } from './tong-hop/tong-hop.module';
+import { TongHopTheoDoiCapVonModule } from './tong-hop-theo-doi-cap-von/tong-hop-theo-doi-cap-von.module';
 @NgModule({
   declarations: [
     CapVonChiComponent,
@@ -18,7 +19,8 @@ import { TongHopModule } from './tong-hop/tong-hop.module';
     DirectivesModule,
     DeNghiCapVonBoNganhModule,
     TongHopModule,
-    ThongTinTriDuyetYDuToanModule
+    ThongTinTriDuyetYDuToanModule,
+    TongHopTheoDoiCapVonModule
   ],
 })
 export class CapVonChiModule { }

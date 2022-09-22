@@ -1,5 +1,6 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnInit,
 } from '@angular/core';
@@ -55,6 +56,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   dataTableAll: any[] = [];
+  getCount = new EventEmitter<any>();
   dataTable: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -224,6 +226,51 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
     this.search();
   }
 
+  xoa() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.dieuChinhQuyetDinhPdKhlcntService.deleteMuti({ idList: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.getCount.emit();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+
   xoaItem(item: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -240,7 +287,7 @@ export class DieuchinhLuachonNhathauComponent implements OnInit {
             id: item.id,
             maDvi: '',
           };
-          this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
+          this.dieuChinhQuyetDinhPdKhlcntService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
