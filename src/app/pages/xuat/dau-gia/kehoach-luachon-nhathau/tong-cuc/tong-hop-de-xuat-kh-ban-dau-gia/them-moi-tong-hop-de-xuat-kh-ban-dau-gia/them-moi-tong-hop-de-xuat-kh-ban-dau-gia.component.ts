@@ -165,7 +165,8 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       noiDungTongHop: [null, [Validators.required]],
       tgDuKienTcbdg: [[dayjs().toDate(), dayjs().toDate()], [Validators.required]],
       ghiChu: [null],
-      trangThai: [STATUS.DA_DUYET_LDC]
+      trangThai: [STATUS.DA_DUYET_LDC],
+      trangThaiTh: [STATUS.CHUA_TONG_HOP]
     });
   }
 
@@ -209,12 +210,12 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       loaiVthh: this.formData.get('loaiVthh').value,
       namKeHoach: this.formData.get('namKeHoach').value,
       trangThai: this.formData.get('trangThai').value,
+      trangThaiTh: this.formData.get('trangThaiTh').value,
       pageNumber: this.page,
       pageSize: 1000,
     };
     try {
       let res = await this.deXuatKeHoachBanDauGiaService.search(body);
-
       console.log(res);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
