@@ -19,7 +19,7 @@ export class ItemData {
   id!: any;
   stt!: number;
   maDvi: string;
-  khoachQdGiaoNvu: number;
+  khoachQdGiaoNvu: string;
   khoachLuong: number;
   tdiemBcaoLuong: number;
   tdiemBcaoDtoan: number;
@@ -58,7 +58,7 @@ export class PhuLuc3Component implements OnInit {
     id: null,
     stt: 0,
     maDvi: "",
-    khoachQdGiaoNvu: null,
+    khoachQdGiaoNvu: '',
     khoachLuong: null,
     tdiemBcaoLuong: null,
     tdiemBcaoDtoan: null,
@@ -202,7 +202,7 @@ export class PhuLuc3Component implements OnInit {
       id: uuid.v4(),
       stt: 0,
       maDvi: '',
-      khoachQdGiaoNvu: null,
+      khoachQdGiaoNvu: '',
       khoachLuong: null,
       tdiemBcaoLuong: null,
       tdiemBcaoDtoan: null,
