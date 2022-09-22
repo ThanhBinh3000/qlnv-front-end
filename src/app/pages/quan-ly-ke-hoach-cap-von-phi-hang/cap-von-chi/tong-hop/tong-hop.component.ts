@@ -6,16 +6,13 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import {
-  LIST_VAT_TU_HANG_HOA,
   PAGE_SIZE_DEFAULT,
 } from 'src/app/constants/config';
-import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { TongHopDeNghiCapVonService } from 'src/app/services/tongHopDeNghiCapVon.service';
 import { UserService } from 'src/app/services/user.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { isEmpty } from 'lodash';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
@@ -32,7 +29,7 @@ export class TongHopComponent implements OnInit {
     private donviService: DonviService,
     public globals: Globals,
     private TongHopDeNghiCapVonService: TongHopDeNghiCapVonService,
-  ) {}
+  ) { }
   @Input()
   loaiVthh: string;
   @Input()
@@ -42,30 +39,12 @@ export class TongHopComponent implements OnInit {
   listNam: any[] = [];
   yearNow: number = 0;
   searchFilter = {
-    /* soKeHoach: null,
-    tenDvi: null,
-    namKh: dayjs().get('year'),
-    ngayKy: null,
-    loaiVthh: null,
-    trichYeu: null, */
+
     maTongHop: null,
     nam: null,
     ngayTongHop: null,
   };
   filterTable: any = {
-    /*  soKeHoach: '',
-    tenDonVi: '',
-    ngayLapKeHoach: '',
-    ngayKy: '',
-    trichYeu: '',
-    tenHangHoa: '',
-    soQuyetDinhGiaoChiTieu: '',
-    soQuyetDinhPheDuyet: '',
-    namKeHoach: '',
-    tenVthh: '',
-    tenCloaiVthh: '',
-    tenTrangThai: '', */
-    //
     maTongHop: '',
     nam: '',
     ngayTongHop: '',
@@ -96,7 +75,6 @@ export class TongHopComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      /* this.listVthh = LIST_VAT_TU_HANG_HOA; */
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -104,7 +82,6 @@ export class TongHopComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      /* this.searchFilter.loaiVthh = this.loaiVthh; */
       this.initData();
       await this.search();
     } catch (e) {
@@ -117,18 +94,8 @@ export class TongHopComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-    await this.loadDsTong();
   }
-  async loadDsTong() {
-    const body = {
-      maDviCha: this.userdetail.maDvi,
-      trangThai: '01',
-    };
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
-    if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong[DANH_MUC_LEVEL.CUC];
-    }
-  }
+
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
@@ -159,23 +126,10 @@ export class TongHopComponent implements OnInit {
       this.indeterminate = true;
     }
   }
-
+  // Đang lỗi API phần GET 
   async search() {
     this.spinner.show();
     let body = {
-      /* ngayKyTuNgay: this.searchFilter.ngayKy
-        ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
-        : null,
-      ngayKyDenNgay: this.searchFilter.ngayKy
-        ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
-        : null,
-      soKeHoach: this.searchFilter.soKeHoach,
-      loaiVatTuHangHoa: this.searchFilter.loaiVthh,
-      namKeHoach: this.searchFilter.namKh,
-      trichYeu: this.searchFilter.trichYeu,
-      maDvis: this.userInfo.MA_DVI,
-      pageNumber: this.page,
-      pageSize: this.pageSize, */
       maTongHop: this.searchFilter.maTongHop,
       nam: this.searchFilter.nam,
       ngayTongHopTuNgay: this.searchFilter.ngayTongHop
@@ -189,9 +143,9 @@ export class TongHopComponent implements OnInit {
     };
     let res = await this.TongHopDeNghiCapVonService.timKiem(body);
 
-    console.log(res);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
+      console.log(data);
       this.dataTable = data.content;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
@@ -239,13 +193,7 @@ export class TongHopComponent implements OnInit {
   themMoi() {
     this.isDetail = true;
     this.isView = false;
-    if (this.userService.isTongCuc()) {
-      this.isVatTu = true;
-    } else {
-      this.isVatTu = false;
-    }
     this.selectedId = 0;
-    this.loaiVthh = this.loaiVthhCache;
   }
 
   showList() {
@@ -256,21 +204,10 @@ export class TongHopComponent implements OnInit {
   detail(data?: any, isView?: boolean) {
     this.selectedId = data.id;
     this.isDetail = true;
-    this.loaiVthh = data.loaiVthh;
     this.isView = isView;
-    // if (data.loaiVthh.startsWith('02')) {
-    //   this.isVatTu = true;
-    // } else {
-    //   this.isVatTu = false;
-    // }
   }
 
   clearFilter() {
-    /* this.searchFilter.namKh = dayjs().get('year');
-    this.searchFilter.soKeHoach = null;
-    this.searchFilter.ngayKy = null;
-    this.searchFilter.trichYeu = null;
-    this.search(); */
     this.searchFilter = {
       maTongHop: null,
       nam: null,
@@ -343,27 +280,42 @@ export class TongHopComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          /* ngayKyTuNgay: this.searchFilter.ngayKy
-            ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
-            : null,
-          ngayKyDenNgay: this.searchFilter.ngayKy
-            ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
-            : null,
-          soKeHoach: this.searchFilter.soKeHoach ?? null,
-          namKeHoach: this.searchFilter.namKh,
-          trichYeu: this.searchFilter.trichYeu ?? null,
-          maDvis: [this.userInfo.MA_DVI],
-          pageable: null, */
-          capDvis: [null],
-          maDvis: [null],
-          maTongHop: null,
-          nam: null,
-          ngayTongHopTuNgay: null,
-          ngayTongHopDenNgay: null,
-          str: null,
-          trangThai: null,
-          trangThais: [null],
-        };
+          "capDvis": [
+            "string"
+          ],
+          "maDvis": [
+            "string"
+          ],
+          "maTongHop": "string",
+          "nam": 0,
+          "ngayTongHopDenNgay": "string",
+          "ngayTongHopTuNgay": "string",
+          "orderBy": "string",
+          "orderDirection": "string",
+          "pageable": {
+            "offset": 0,
+            "pageNumber": 0,
+            "pageSize": 0,
+            "paged": true,
+            "sort": {
+              "empty": true,
+              "sorted": true,
+              "unsorted": true
+            },
+            "unpaged": true
+          },
+          "paggingReq": {
+            "limit": 20,
+            "orderBy": "string",
+            "orderType": "string",
+            "page": 0
+          },
+          "str": "string",
+          "trangThai": "string",
+          "trangThais": [
+            "string"
+          ]
+        }
         this.TongHopDeNghiCapVonService.exportList(body).subscribe((blob) =>
           saveAs(blob, 'tong-hop-de-nghi-cap-von-chi.xlsx'),
         );
@@ -377,7 +329,7 @@ export class TongHopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
-
+  // Đợi API sửa xem cái hàm deleteMultiple là POST hay DELETE rồi sửa trong service
   deleteSelect() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
@@ -455,17 +407,13 @@ export class TongHopComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      /* soKeHoach: '',
-      ngayLapKeHoach: '',
-      ngayKy: '',
-      trichYeu: '',
-      tenHangHoa: '',
-      soQuyetDinhGiaoChiTieu: '',
-      soQuyetDinhPheDuyet: '',
-      namKeHoach: '',
-      tenVthh: '',
-      tenCloaiVthh: '',
-      tenTrangThai: '', */
+      maTongHop: '',
+      nam: '',
+      ngayTongHop: '',
+      tongTien: '',
+      kinhPhiDaCap: '',
+      ycCapThem: '',
+      tenTrangThai: '',
     };
   }
 }

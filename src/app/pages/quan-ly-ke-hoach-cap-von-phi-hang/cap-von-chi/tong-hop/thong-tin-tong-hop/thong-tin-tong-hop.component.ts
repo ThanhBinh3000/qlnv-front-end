@@ -39,7 +39,7 @@ export class ThongTinTonghopComponent implements OnInit {
   detail: any = {};
   pageSize: number = PAGE_SIZE_DEFAULT;
   page: number = 1;
-  cacheData: any[] = [];
+  dataTableAll: any[] = [];
   date: any = new Date();
   userLogin: UserLogin;
   titleButtonDuyet: string = '';
@@ -91,8 +91,23 @@ export class ThongTinTonghopComponent implements OnInit {
       "maTongHop": [null],
       "ngayTongHop": [null],
       "maToTrinh": [null],
-      "fileTCDuyet": [null],
       "noiDung": [null],
+      "khDnCapVonIds": [null],
+      "ct1s": [null, [Validators.required]],
+      "fileDinhKem": [null, [Validators.required]],
+      //Ex:  "ct1s": [
+      //   {
+      //     "khDnCapVonId": 0,
+      //     "tcCapThem": 0
+      //   }
+      // ],
+      // "fileDinhKem": {
+      //   "fileName": "string",
+      //   "fileSize": "string",
+      //   "fileUrl": "string",
+      //   "id": 0,
+      //   "noiDung": "string"
+      // }
     });
     this.formData.patchValue({ id: this.idInput })
     this.formData.patchValue({ maDonVi: this.userInfo.MA_DVI })
@@ -139,7 +154,8 @@ export class ThongTinTonghopComponent implements OnInit {
         "nam": this.formData.value.nam,
         "noiDung": this.formData.value.noiDung,
         "capDvi": this.formData.value.capDvi,
-        "ghiChu": this.formData.value.ghiChu,
+        "ct1s": this.formData.value.ct1s,
+        "fileDinhKem": this.formData.value.fileDinhKem,
         "ngayTongHop": this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop).format('YYYY-MM-DD') : null,
       };
       if (this.idInput > 0) {
@@ -261,6 +277,7 @@ export class ThongTinTonghopComponent implements OnInit {
     this.spinner.show();
     try {
       this.page = event;
+
       await this.loadThongTinChiTiet(this.formData.value.nam);
       this.spinner.hide();
     } catch (e) {
@@ -274,9 +291,7 @@ export class ThongTinTonghopComponent implements OnInit {
     this.spinner.show();
     try {
       this.pageSize = event;
-      if (this.page === 1) {
-        await this.loadThongTinChiTiet(this.formData.value.nam);
-      }
+      await this.loadThongTinChiTiet(this.formData.value.nam);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -303,6 +318,7 @@ export class ThongTinTonghopComponent implements OnInit {
       this.listThongTinChiTiet = data.content;
       this.khDnCapVonIds = data.content.map(item => item.id)
       this.formData.patchValue({ khDnCapVonIds: this.khDnCapVonIds })
+      this.dataTableAll = cloneDeep(this.listThongTinChiTiet);
       this.totalRecord = data.totalElements;
     } else {
       this.listThongTinChiTiet = [];
@@ -313,5 +329,19 @@ export class ThongTinTonghopComponent implements OnInit {
   }
   thongTinTrangThai(trangThai: string): string {
     return thongTinTrangThaiNhap(trangThai);
+  }
+  clearFilter() {
+    // this.isTonghop = false
+    this.formData = this.fb.group({
+      "nam": [null, [Validators.required]],
+      "nguonTongHop": [null, [Validators.required]],
+      "maTongHop": [null],
+      "ngayTongHop": [null],
+      "maToTrinh": [null],
+      "noiDung": [null],
+      "khDnCapVonIds": [null],
+      "ct1s": [null, [Validators.required]],
+      "fileDinhKem": [null, [Validators.required]],
+    })
   }
 }
