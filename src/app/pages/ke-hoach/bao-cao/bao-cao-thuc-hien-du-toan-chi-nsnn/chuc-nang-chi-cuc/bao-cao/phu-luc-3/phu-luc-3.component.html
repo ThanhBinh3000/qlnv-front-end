@@ -497,7 +497,9 @@
                 <td>{{ data.ghiChu }}</td>
 
                 <td [hidden]="status">
-                    <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                    <ng-container *ngIf="!getDeleteStatus(data.maDan)">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                    </ng-container>
                 </td>
                 <td [hidden]="status">
                     <ng-container *ngIf="!getLowStatus(data.stt)">
@@ -508,8 +510,10 @@
                     <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                 </td>
                 <td [hidden]="status">
-                    <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                        (ngModelChange)="updateChecked(data.id)"></label>
+                    <ng-container *ngIf="!getDeleteStatus(data.maDan)">
+                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                            (ngModelChange)="updateChecked(data.id)"></label>
+                    </ng-container>
                 </td>
             </ng-container>
             <ng-template #editTemplate>
@@ -745,7 +749,9 @@
                         nz-input />
                 </td>
                 <td [hidden]="status">
-                    <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                    <ng-container *ngIf="!getDeleteStatus(data.maDan)">
+                        <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                    </ng-container>
                 </td>
                 <td>
                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>
@@ -757,8 +763,10 @@
                     </a>
                 </td>
                 <td [hidden]="status">
-                    <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                        (ngModelChange)="updateChecked(data.id)"></label>
+                    <ng-container *ngIf="!getDeleteStatus(data.maDan)">
+                        <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                            (ngModelChange)="updateChecked(data.id)"></label>
+                    </ng-container>
                 </td>
             </ng-template>
         </tr>

@@ -55,17 +55,27 @@
 					Tổng Cộng
 				</th>
 				<th nzWidth="100px" *ngFor="let col of listColTemp">
-					<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-						(nzOnConfirm)="deleteCol(col.maVtu)">{{col.colName}}
-					</a>
+					<ng-container *ngIf="statusDeleteCol(col.maVtu); else xoa">
+						{{col.colName}}
+					</ng-container>
+					<ng-template #xoa>
+						<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+							(nzOnConfirm)="deleteCol(col.maVtu)">{{col.colName}}
+						</a>
+					</ng-template>
 				</th>
 				<th nzWidth="100px">
 					Tổng Cộng
 				</th>
 				<th nzWidth="100px" *ngFor="let col of listColTemp">
-					<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
-						(nzOnConfirm)="deleteCol(col.maVtu)">{{col.colName}}
-					</a>
+					<ng-container *ngIf="statusDeleteCol(col.maVtu); else xoa">
+						{{col.colName}}
+					</ng-container>
+					<ng-template #xoa>
+						<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa cột này?"
+							(nzOnConfirm)="deleteCol(col.maVtu)">{{col.colName}}
+						</a>
+					</ng-template>
 				</th>
 				<th nzWidth="2%" [hidden]="status"></th>
 				<th nzWidth="2%" [hidden]="status"></th>
@@ -116,7 +126,7 @@
 					</ng-container>
 					<td>{{item.ghiChu}}</td>
 					<td nzWidth="2.5%" [hidden]="status">
-						<ng-container *ngIf="item.level > 2">
+						<ng-container *ngIf="!statusDeleteRow(item)">
 							<i class="fa fa-trash-o do" (click)="deleteLine(item.id)"></i>
 						</ng-container>
 					</td>
@@ -133,7 +143,7 @@
 
 					</td>
 					<td nzWidth="2.5%" [hidden]="status">
-						<ng-container *ngIf="item.level > 2">
+						<ng-container *ngIf="!statusDeleteRow(item)">
 							<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
 								(ngModelChange)="updateChecked(item.id)"></label>
 						</ng-container>
@@ -176,7 +186,7 @@
 							[(ngModel)]="editCache[item.id].data.ghiChu" />
 					</td>
 					<td nzWidth="2.5%" [hidden]="status">
-						<ng-container *ngIf="item.level > 2">
+						<ng-container *ngIf="!statusDeleteRow(item)">
 							<i class="fa fa-trash-o do" (click)="deleteLine(item.id)"></i>
 						</ng-container>
 					</td>
@@ -189,7 +199,7 @@
 						<i class="fa fa-plus" (click)="addLine(item.id)"></i>
 					</td>
 					<td nzWidth="2.5%" [hidden]="status">
-						<ng-container *ngIf="item.level > 2">
+						<ng-container *ngIf="!statusDeleteRow(item)">
 							<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
 								(ngModelChange)="updateChecked(item.id)"></label>
 						</ng-container>

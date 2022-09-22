@@ -306,8 +306,12 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamComponent implements OnInit {
 
 	checkApproveReport(item: any): boolean {
 		const isSynthetic = item.tongHopTu != "[]";
-		return Utils.statusApprove.includes(item.trangThai) &&
-			(isSynthetic ? this.userService.isAccessPermisson(BCDTC.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.APPROVE_REPORT));
+		const checkDuyet = isSynthetic ? this.userService.isAccessPermisson(BCDTC.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.DUYET_REPORT);
+		const checkPheDuyet = isSynthetic ? this.userService.isAccessPermisson(BCDTC.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.PHE_DUYET_REPORT);
+		const checkTiepNhan = this.userService.isAccessPermisson(BCDTC.TIEP_NHAN_REPORT);
+		return (Utils.statusDuyet.includes(item.trangThai) && checkDuyet) ||
+			(Utils.statusPheDuyet.includes(item.trangThai) && checkPheDuyet) ||
+			(Utils.statusTiepNhan.includes(item.trangThai) && checkTiepNhan);
 	}
 
 	checkViewReport(item: any): boolean {

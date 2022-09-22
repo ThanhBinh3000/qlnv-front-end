@@ -58,9 +58,9 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
     noiDungTongHop: '',
     soQd: '',
     namKeHoach: '',
-    tenVthh: '',
+    tenLoaiVthh: '',
     soQdPheDuyet: '',
-    statusConvert: '',
+    tenTrangThai: '',
   };
   dataTableAll: any[] = [];
   listVthh: any[] = [];
@@ -149,20 +149,19 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
       maVatTuCha: this.searchFilter.loaiVthh,
       namKeHoach: this.searchFilter.namKh,
       noiDungTongHop: this.searchFilter.noiDungTongHop,
-      pageSize: this.pageSize,
-      pageNumber: this.page,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
+      },
     };
-    let res = await this.tongHopDeXuatKHBanDauGiaService.timKiem(body);
+    let res = await this.tongHopDeXuatKHBanDauGiaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
-          item.soQdPheDuyet = item.qdPheDuyetKhbdg.soQuyetDinh;
-          item.statusConvert = item.trangThai.name;
-          item.status = item.trangThai.ma;
-          item.tenVthh = item.vatTuCha.name;
+          // item.soQdPheDuyet = item.qdPheDuyetKhbdg.soQuyetDinh;
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);
@@ -384,9 +383,9 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
       noiDungTongHop: '',
       soQd: '',
       namKeHoach: '',
-      tenVthh: '',
+      tenLoaiVthh: '',
       soQdPheDuyet: '',
-      statusConvert: '',
+      tenTrangThai: '',
     };
   }
 }
