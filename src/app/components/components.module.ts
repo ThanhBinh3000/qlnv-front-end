@@ -248,7 +248,7 @@ import { DialogDiaDiemNhapKhoComponent } from './dialog/dialog-dia-diem-nhap-kho
     DialogCanCuQdPheDuyetKqdgComponent,
     TemplateErrorComponent,
     DialogTableSelectionComponent,
-    DialogSoQuyetDinhQlyKhoTangComponent
+    DialogSoQuyetDinhQlyKhoTangComponent,
     DialogTableSelectionComponent,
     DialogDiaDiemNhapKhoComponent
   ],
