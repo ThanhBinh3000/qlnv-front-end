@@ -159,6 +159,7 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
     };
 
     let res = await this.deNghiCapVonBoNganhService.timKiem(body);
+    console.log(res);
 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
