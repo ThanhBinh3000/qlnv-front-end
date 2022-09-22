@@ -24,7 +24,7 @@ import {STATUS} from "../../../../../../constants/status";
 })
 export class ThemMoiQdComponent implements OnInit {
   @Input() isViewDetail: boolean;
-  @Input() typeHangHoa: string;
+  @Input() type: string;
   @Input() idInput: number;
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -36,6 +36,7 @@ export class ThemMoiQdComponent implements OnInit {
   rowItem: QuyHoachKho = new QuyHoachKho();
   dataEdit: { [key: string]: { edit: boolean; data: QuyHoachKho } } = {};
   danhSachPhuongAn: any[] = [];
+  dsCuc: any[] = [];
   danhSachChiCuc: any[] = [];
   danhSachDiemKho: any[] = [];
 
@@ -65,21 +66,22 @@ export class ThemMoiQdComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.spinner.show();
+    await this.loadListPa();
     this.userInfo = this.userService.getUserLogin();
-    this.maQd = '/QĐ-BTC'
+    this.loadCuc()
+    await Promise.all([
+      this.maQd = '/QĐ-BTC',
+      this.loadDanhSachChiCuc(this.userInfo.MA_DVI),
+      this.getDataDetail(this.idInput)
+  ])
     for (let i = -3; i < 23; i++) {
       this.danhSachNam.push({
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,
       });
     }
-    if (this.idInput > 0) {
-      await this.getDataDetail(this.idInput)
-    }
-    await this.loadCuc()
-    await this.loadListPa();
-    await this.loadDanhSachChiCuc();
-
+    this.spinner.hide();
   }
   async loadListPa() {
     this.danhSachPhuongAn = [];
@@ -93,14 +95,15 @@ export class ThemMoiQdComponent implements OnInit {
     this.rowItem.maCuc = this.userInfo.MA_DVI
   }
 
-  async loadDanhSachChiCuc() {
+  async loadDanhSachChiCuc(maCuc) {
     const body = {
-      maDviCha: this.userInfo.MA_DVI,
+      maDviCha:maCuc,
       trangThai: '01',
     };
 
     const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
     this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.dsCuc = dsTong[DANH_MUC_LEVEL.CUC];
   }
 
 
@@ -125,7 +128,7 @@ export class ThemMoiQdComponent implements OnInit {
   }
 
 
-  async save() {
+  async save(isBanHanh?) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -133,39 +136,87 @@ export class ThemMoiQdComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    if (this.formData.value.namBatDau > this.formData.value.namKetThuc) {
+      this.notification.error(MESSAGE.ERROR, "Năm bắt đàu không được lớn hơn năm kết thúc!")
+      this.spinner.hide();
+      return
+    }
     if (this.dataTable.length == 0) {
       this.notification.error(MESSAGE.ERROR, "Không được để trống thông tin chi tiết quy hoạch")
+      this.spinner.hide();
       return
     }
     let body = this.formData.value;
     body.soQuyetDinh = body.soQuyetDinh + this.maQd;
     body.quyetDinhQuyHoachCTietReqs = this.dataTable
     body.maDvi = this.userInfo.MA_DVI;
+    body.type = this.type;
     let res
     if (this.idInput > 0) {
       res = await this.quyHoachKhoService.update(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS)
-        this.quayLai();
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
     } else {
       res = await this.quyHoachKhoService.create(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS)
-        this.quayLai();
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (isBanHanh) {
+        this.formData.patchValue({
+          id: res.data.id,
+          trangThai: res.data.trangThai
+        })
+        this.banHanh();
       } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
+        if (this.idInput > 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+        this.quayLai();
       }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
   }
 
-
-  guiDuyet() {
+  banHanh() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn ban hành?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.formData.get('id').value,
+            lyDoTuChoi: null,
+            trangThai: STATUS.BAN_HANH,
+          };
+          let res =
+            await this.quyHoachKhoService.approve(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.BAN_HANH_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
 
   }
+
+
 
   editItem(index: number): void {
     this.dataEdit[index].edit = true;
@@ -175,7 +226,6 @@ export class ThemMoiQdComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyHoachKhoService.getDetail(id);
       const data = res.data;
-      console.log(res.data)
       this.formData.patchValue({
         id: data.id,
         trangThai: data.trangThai,
@@ -188,8 +238,36 @@ export class ThemMoiQdComponent implements OnInit {
         moTa: data.moTa
       });
       this.dataTable = data.quyetDinhQuyHoachCTiets;
+      this.updateEditCache()
+      for (const item of this.dataTable) {
+        console.log(item)
+        const listPhuongAn = this.danhSachPhuongAn.filter(pa => pa.ma == item.phuongAnQuyHoach);
+        if (listPhuongAn.length > 0) {
+          item.tenPhuongAn = listPhuongAn[0].giaTri
+        }
+         await this.loadDanhSachChiCuc(item.maCuc);
+        item.tenCuc = this.dsCuc[0].tenDvi
+        const listChiCuc = this.danhSachChiCuc.filter(chiCuc => chiCuc.maDvi == item.maChiCuc);
+        if (listChiCuc.length > 0) {
+          item.tenChiCuc = listChiCuc[0].tenDvi
+          await this.loadDanhSachDiemKho(item.maChiCuc)
+        }
+        const listDiemKho =  this.danhSachDiemKho.filter(diemKho => diemKho.maDvi == item.maDiemKho);
+        if (listDiemKho.length > 0) {
+          item.tenDiemKho = listDiemKho[0].tenDvi
+        }
+      }
+      this.updateEditCache()
     }
-    this.updateEditCache()
+  }
+
+  async loadDanhSachDiemKho(maChiCuc) {
+    const body = {
+      maDviCha: maChiCuc,
+      trangThai: '01',
+    };
+    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
   }
 
   xoaItem(index: number) {
@@ -275,4 +353,5 @@ export class ThemMoiQdComponent implements OnInit {
       }
     }
   }
+
 }

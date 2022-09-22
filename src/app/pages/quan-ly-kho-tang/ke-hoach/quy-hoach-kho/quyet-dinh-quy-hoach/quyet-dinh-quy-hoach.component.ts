@@ -26,6 +26,7 @@ import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
 })
 export class QuyetDinhQuyHoachComponent implements OnInit {
   @Input() typeVthh: string;
+  @Input() type: string;
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
@@ -36,8 +37,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
 
   searchFilter = {
     soQuyetDinh: '',
-    ngayKyTu: '',
-    ngayKyDen: '',
+    ngayKy: '',
     namBatDau: '',
     namKetThuc: '',
     phuongAnQuyHoach: '',
@@ -173,18 +173,16 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      ngayKyTu: this.searchFilter.ngayKyTu
-        ? dayjs(this.searchFilter.ngayKyTu[0]).format('dd-MM-yyyy')
-        : null,
-      ngayKyDen: this.searchFilter.ngayKyDen
-        ? dayjs(this.searchFilter.ngayKyDen[1]).format('dd-MM-yyyy')
-        : null,
+      ngayKyTu: this.searchFilter.ngayKy[0],
+      ngayKyDen: this.searchFilter.ngayKy[1],
       soQuyetDinh: this.searchFilter.soQuyetDinh,
       namBatDau: this.searchFilter.namBatDau,
       namKetThuc: this.searchFilter.namKetThuc,
       maCuc: this.searchFilter.maCuc,
       maChiCuc: this.searchFilter.maChiCuc,
       maDiemKho: this.searchFilter.maDiemKho,
+      phuongAnQuyHoach: this.searchFilter.phuongAnQuyHoach,
+      type: this.type,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -282,8 +280,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
   clearFilter() {
     this.searchFilter = {
       soQuyetDinh: '',
-      ngayKyTu: '',
-      ngayKyDen: '',
+      ngayKy: '',
       namBatDau: '',
       namKetThuc: '',
       phuongAnQuyHoach: '',
@@ -332,6 +329,8 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
           "maCuc": this.searchFilter.maCuc,
           "maDiemKho": this.searchFilter.maDiemKho,
           "namBatDau":this.searchFilter.namBatDau,
+          "ngayKyDen": this.searchFilter.ngayKy[1],
+          "ngayKyTu": this.searchFilter.ngayKy[0],
           "namKetThuc": this.searchFilter.namKetThuc,
           "paggingReq": {
             "limit": 20,
@@ -339,6 +338,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
           },
           "phuongAnQuyHoach": this.searchFilter.phuongAnQuyHoach,
           "soQuyetDinh": this.searchFilter.soQuyetDinh,
+          "type" : this.type
         }
         this.quyHoachKhoService
           .export(body)
@@ -375,17 +375,52 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
   }
 
   clearFilterTable() {
-    this.filterTable = {
-      soQd: '',
-      ngayQd: '',
-      trichYeu: '',
-      soQdGoc: '',
-      namKhoach: '',
-      tenVthh: '',
-      soGoiThau: '',
-      trangThai: '',
-    };
+
   }
+
+  xoa() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quyHoachKhoService.deleteMuti({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
 
 
 }

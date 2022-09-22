@@ -8,7 +8,7 @@
         </div>
         <div nz-col nzSpan="3">
           <label class="search__label">Ngày ký</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayKyTu" nzFormat="dd/MM/yyyy"></nz-range-picker>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
         <div nz-col nzSpan="5">
           <label class="search__label">Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)</label>
@@ -34,7 +34,7 @@
           <label class="search__label">Phương án quy hoạch</label>
           <nz-form-control >
             <nz-input-group>
-              <nz-select  nzAllowClear>
+              <nz-select [(ngModel)]="searchFilter.phuongAnQuyHoach"  nzAllowClear>
                 <nz-option *ngFor="let p of danhSachPhuongAn" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -91,7 +91,7 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH KHO TÀNG DTQG</h3>
       <div class="buttons" >
-        <button type="button" class="btn btn-sub btn-xoa" *ngIf="userService.isCuc()">
+        <button type="button" class="btn btn-sub btn-xoa" *ngIf="userService.isCuc()" (click)="xoa()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
@@ -195,11 +195,11 @@
             <a (click)="redirectToChiTiet(data.id,true)">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="userService.isCuc()"
+            <a *ngIf="userService.isCuc() && data.trangThai == globals.prop.NHAP_DU_THAO"
                (click)="redirectToChiTiet(data.id,false)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="userService.isCuc()" (click)="xoaItem(data)">
+            <a *ngIf="userService.isCuc() && data.trangThai == globals.prop.NHAP_DU_THAO " (click)="xoaItem(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
@@ -228,7 +228,7 @@
 </ng-container>
 <ng-template #templateThemmoi>
   <div class="chi-tiet">
-    <app-them-moi-qd [idInput]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
+    <app-them-moi-qd [idInput]="selectedId" [type]="type" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
                           >
     </app-them-moi-qd>
   </div>

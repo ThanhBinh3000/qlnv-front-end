@@ -4,12 +4,12 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="!isViewDetail"
-      class="btn btn-sub btn-sm waves-effect waves-light" (click)="save()">
+    <button *ngIf="!isViewDetail && formData.value.trangThai == globals.prop.NHAP_DU_THAO"
+      class="btn btn-sub btn-sm waves-effect waves-light" (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="!isViewDetail"
+    <button *ngIf="!isViewDetail && formData.value.trangThai == globals.prop.NHAP_DU_THAO"
       class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
