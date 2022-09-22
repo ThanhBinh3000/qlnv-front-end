@@ -1,0 +1,38 @@
+<nz-card class="mt-2px flex-card data-table card-border-content table-card">
+    <nz-table #basicTable nzBordered class="nowrap" [nzFrontPagination]="false"
+              [nzShowPagination]="false" nzBordered>
+      <tr>
+        <th class="text-center" style="width: 2%;">STT</th>
+        <th class="text-center" style="width: 20%;">Số quyết định</th>
+        <th class="text-center" style="width: 15%;">Ngày ký</th>
+        <th class="text-center" style="width: 15%;">Năm bắt đầu</th>
+        <th class="text-center" style="width: 15%;">Năm kết thúc</th>
+        <th class="text-center" style="width: 20%;">Trích yếu</th>
+        <th class="text-center" style="width: 13%;"></th>
+      </tr>
+      <tr class="text-center" *ngFor="let data of dsQdGoc; let idx = index">
+        <td>{{idx + 1}}</td>
+        <td>{{data.soQuyetDinh}}</td>
+        <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+        <td>{{data.namBatDau}}</td>
+        <td>{{data.namKetThuc}}</td>
+        <td>{{data.trichYeu}}</td>
+        <td style="text-align: center">
+          <div> <i nz-icon nzType="plus" nzTheme="outline" nzColor (click)="selectHangHoa(data)"></i>
+          </div>
+        </td>
+      </tr>
+    </nz-table>
+</nz-card>
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button nz-button (click)="onCancel()" class="modal__button--cancel">
+        <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+        Đóng
+      </button>
+    </div>
+  </div>
+</div>

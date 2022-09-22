@@ -75,7 +75,7 @@
     <div class="group-button">
       <h3> DANH SÁCH ĐỀ XUẤT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM)</h3>
       <div class="buttons">
-        <button  type="button" class="btn btn-sub btn-xoa">
+        <button *ngIf="userService.isCuc"  type="button" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
@@ -83,7 +83,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button  type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
+        <button  *ngIf="userService.isCuc"  type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
           <i class="icon htvbdh_soanthao"></i>
           <span>Thêm</span>
         </button>
@@ -168,15 +168,15 @@
           <td>{{data.namKhoach}}</td>
           <td>{{data.tenVthh}}</td>
           <td>{{ data.tenTrangThai }}</td>
-          <td class="text-left">
+          <td class="text-left" >
             <a (click)="redirectToChiTiet(data.id,false)">
               <i class="fa fa-eye"></i>
             </a>
-            <a
+            <a *ngIf="userService.isCuc"
                (click)="redirectToChiTiet(data.id,true)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a>
+            <a *ngIf="userService.isCuc">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
