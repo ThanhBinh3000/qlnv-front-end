@@ -45,6 +45,8 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
   @Input()
   loaiVthhInput: string;
   @Input()
+  cloaiVthhInput: string;
+  @Input()
   idInput: number;
   @Input()
   isView: boolean;
@@ -132,6 +134,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   isTongHop: boolean = false;
+  isTaoQd: boolean = false;
   STATUS = STATUS;
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -155,14 +158,15 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.formData = this.fb.group({
       id: [],
       namKeHoach: [null],
-      maVatTuCha: [, [Validators.required]],
-      maChungLoaiHH: [null],
+      loaiVthh: [, [Validators.required]],
+      cloaiVthh: [null],
       ngayKyDeXuat: [[dayjs().toDate(), dayjs().toDate()], [Validators.required]],
       ngayTongHop: [null, [Validators.required]],
       noiDungTongHop: [null, [Validators.required]],
       tgDuKienTcbdg: [[dayjs().toDate(), dayjs().toDate()], [Validators.required]],
       ghiChu: [null],
-      trangThai: [STATUS.DA_DUYET_LDC]
+      trangThai: [STATUS.DA_DUYET_LDC],
+      trangThaiTh: [STATUS.CHUA_TONG_HOP]
     });
   }
 
@@ -203,15 +207,15 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     let body = {
       ngayKyTuNgay: this.formData.get('ngayKyDeXuat').value ? dayjs(this.formData.get('ngayKyDeXuat').value[0]).format('YYYY-MM-DD') : null,
       ngayKyDenNgay: this.formData.get('ngayKyDeXuat').value ? dayjs(this.formData.get('ngayKyDeXuat').value[1]).format('YYYY-MM-DD') : null,
-      loaiVthh: this.formData.get('maVatTuCha').value,
+      loaiVthh: this.formData.get('loaiVthh').value,
       namKeHoach: this.formData.get('namKeHoach').value,
       trangThai: this.formData.get('trangThai').value,
+      trangThaiTh: this.formData.get('trangThaiTh').value,
       pageNumber: this.page,
       pageSize: 1000,
     };
     try {
       let res = await this.deXuatKeHoachBanDauGiaService.search(body);
-
       console.log(res);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
@@ -253,7 +257,8 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.formData.patchValue({
       id: dataDetail ? dataDetail.id : null,
       namKeHoach: dataDetail ? dataDetail.namKeHoach : dayjs().get('year'),
-      maVatTuCha: dataDetail ? dataDetail.maVatTuCha : null,
+      loaiVthh: dataDetail ? dataDetail.loaiVthh : null,
+      cloaiVthh: dataDetail ? dataDetail.cloaiVthh : null,
       ngayKyDeXuat: dataDetail ? [dataDetail.ngayKyTuNgay, dataDetail.ngayKyDenNgay] : [dayjs().toDate(), dayjs().toDate()],
       ngayTongHop: dataDetail ? dataDetail.ngayTongHop : null,
       noiDungTongHop: dataDetail ? dataDetail.noiDungTongHop : null,
@@ -431,7 +436,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
-      console.log(this.formData);
       return;
     }
     if (this.listOfData.length == 0) {
@@ -460,6 +464,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
         await this.loadThongTinDeXuatKeHoachLuaChonNhaThau(res.data.id);
+        this.taoQuyetDinh();
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -519,7 +524,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     }
   }
   async changeLoaiHangHoa() {
-    let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ma == this.formData.value.maVatTuCha);
+    let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ma == this.formData.value.loaiVthh);
     if (loaiHangHoa && loaiHangHoa.length > 0) {
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }
@@ -538,6 +543,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         this.detail = res.data;
         this.initForm(res.data);
+        this.changeLoaiHangHoa();
         this.listOfData = this.detail.chiTietList;
       }
     }
@@ -547,7 +553,9 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
+  taoQuyetDinh(){
+    this.isTaoQd = true;
+  }
   convertTienTobangChu(tien: number): string {
     return VNnum2words(tien);
   }

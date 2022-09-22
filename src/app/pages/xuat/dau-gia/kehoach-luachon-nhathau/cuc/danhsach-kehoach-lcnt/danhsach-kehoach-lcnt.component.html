@@ -79,6 +79,7 @@
             <th width="">Số QĐ phê duyệt KH bán đấu giá</th>
             <th width="">Năm kế hoạch</th>
             <th width="">Trạng thái</th>
+            <th width="">Trạng thái tổng hợp</th>
             <th width="90px">Hành động</th>
           </tr>
           <tr class="search-table">
@@ -174,6 +175,15 @@
                 <i nz-icon nzType="search"></i>
               </ng-template>
             </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThaiTh"
+                       (input)="filterInTable('tenTrangThaiTh',filterTable.tenTrangThaiTh)" size="small" />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="search"></i>
+              </ng-template>
+            </th>
             <th></th>
           </tr>
         </thead>
@@ -194,6 +204,7 @@
             <td>{{ data.soQuyetDinhPheDuyet }}</td>
             <td>{{ data.namKeHoach }}</td>
             <td>{{ data.tenTrangThai }}</td>
+            <td>{{ data.tenTrangThaiTh }}</td>
             <td class="text-left">
               <a (click)="detail(data, true)">
                 <i class="fa fa-eye"></i>
