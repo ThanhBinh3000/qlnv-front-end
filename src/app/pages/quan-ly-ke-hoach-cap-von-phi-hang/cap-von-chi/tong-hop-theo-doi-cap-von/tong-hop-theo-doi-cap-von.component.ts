@@ -6,48 +6,61 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import {
-  PAGE_SIZE_DEFAULT,
+  LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT,
 } from 'src/app/constants/config';
+import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { TongHopDeNghiCapVonService } from 'src/app/services/tongHopDeNghiCapVon.service';
+import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
 import { UserService } from 'src/app/services/user.service';
 import { DonviService } from 'src/app/services/donvi.service';
+import { isEmpty } from 'lodash';
 import { Globals } from 'src/app/shared/globals';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { DeNghiCapVonBoNganhService } from 'src/app/services/deNghiCapVanBoNganh.service';
 
 @Component({
-  selector: 'app-tong-hop',
-  templateUrl: './tong-hop.component.html',
-  styleUrls: ['./tong-hop.component.scss'],
+  selector: 'app-tong-hop-theo-doi-cap-von',
+  templateUrl: './tong-hop-theo-doi-cap-von.component.html',
+  styleUrls: ['./tong-hop-theo-doi-cap-von.component.scss']
 })
-export class TongHopComponent implements OnInit {
-
+export class TongHopTheoDoiCapVonComponent implements OnInit {
   @Input()
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
 
+
   isDetail: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
 
-  formData: FormGroup
+
+  searchFilter = {
+    soThongTri: null,
+    donViDuocDuyet: null,
+    soLenhChiTien: null,
+    chuong: null,
+    loai: null,
+    khoan: null,
+  };
+
 
   filterTable: any = {
-    maTongHop: '',
-    nam: '',
-    ngayTongHop: '',
-    tongTien: '',
-    kinhPhiDaCap: '',
-    ycCapThem: '',
-    tenTrangThai: '',
+    soThongTri: '',
+    donViDuocDuyet: '',
+    soLenhChiTien: '',
+    chuong: '',
+    loai: '',
+    khoan: '',
+    liDoChi: '',
+    soTien: '',
+    donViHuongThi: '',
+    trangThai: '',
   };
-  dataTable: any[] = [];
   dataTableAll: any[] = [];
-
-  listVthh: any[] = [];
-
+  dataTable: any[] = [];
+  // listVthh: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -64,29 +77,21 @@ export class TongHopComponent implements OnInit {
   indeterminate = false;
 
   isView = false;
-
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
+    private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
     private modal: NzModalService,
     public userService: UserService,
     private donviService: DonviService,
     public globals: Globals,
-    private TongHopDeNghiCapVonService: TongHopDeNghiCapVonService,
-    private fb: FormBuilder
+    private deNghiCapVonBoNganhService: DeNghiCapVonBoNganhService,
   ) { }
 
   async ngOnInit() {
     try {
-      this.initForm()
-      this.yearNow = dayjs().get('year');
-      for (let i = -3; i < 23; i++) {
-        this.listNam.push({
-          value: this.yearNow - i,
-          text: this.yearNow - i,
-        });
-      }
-      this.initData();
+
+      this.initData()
       await this.search();
     } catch (e) {
       console.log('error: ', e);
@@ -94,19 +99,23 @@ export class TongHopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-  initForm() {
-    this.formData = this.fb.group({
-      maTongHop: [null],
-      nam: [null],
-      ngayTongHop: [null],
-    })
-  }
   async initData() {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
+    await this.loadDsTong();
   }
+  async loadDsTong() {
+    const body = {
+      maDviCha: this.userdetail.maDvi,
+      trangThai: '01',
+    };
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    if (!isEmpty(dsTong)) {
+      this.dsDonvi = dsTong[DANH_MUC_LEVEL.CUC];
+    }
 
+  }
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
@@ -137,22 +146,17 @@ export class TongHopComponent implements OnInit {
       this.indeterminate = true;
     }
   }
-  // Đang lỗi API phần GET
+
   async search() {
     this.spinner.show();
     let body = {
-      maTongHop: this.formData.value.maTongHop ? this.formData.value.maTongHop : "",
-      nam: this.formData.value.nam ? this.formData.value.nam : "",
-      thisngayTongHopTuNgay: "",
-      ngayTongHopDenNgay: " ",
+
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
-    if (this.formData.value.ngayTongHop != null) {
-      body.thisngayTongHopTuNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD') : null,
-        body.ngayTongHopDenNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD') : null
-    }
-    let res = await this.TongHopDeNghiCapVonService.timKiem(body);
+
+    let res = await this.deNghiCapVonBoNganhService.timKiem(body);
+
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -199,38 +203,54 @@ export class TongHopComponent implements OnInit {
     }
   }
 
+  // Hiện thị màn hình thêm mới
   themMoi() {
     this.isDetail = true;
     this.isView = false;
+    if (this.userService.isTongCuc()) {
+      this.isVatTu = true;
+    } else {
+      this.isVatTu = false;
+    }
     this.selectedId = 0;
+    this.loaiVthh = this.loaiVthhCache;
   }
 
+  // Hàm truyền qua thêm mới
   showList() {
     this.isDetail = false;
     this.search();
   }
 
+  // Hiện thị Edit, View
   detail(data?: any, isView?: boolean) {
     this.selectedId = data.id;
     this.isDetail = true;
+    this.loaiVthh = data.loaiVthh;
     this.isView = isView;
+    // if (data.loaiVthh.startsWith('02')) {
+    //   this.isVatTu = true;
+    // } else {
+    //   this.isVatTu = false;
+    // }
   }
 
+  // Reset tìm kiếm
   clearFilter() {
-    this.formData.reset();
-    this.filterTable = {
-      maTongHop: '',
-      nam: '',
-      ngayTongHop: '',
-      tongTien: '',
-      kinhPhiDaCap: '',
-      ycCapThem: '',
-      tenTrangThai: '',
+    this.searchFilter = {
+      soThongTri: null,
+      donViDuocDuyet: null,
+      soLenhChiTien: null,
+      chuong: null,
+      loai: null,
+      khoan: null,
     };
+
     this.search();
   }
 
-  xoaItem(item: any) {
+  // Xóa bản ghi
+  xoaItem(id: any) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -242,7 +262,7 @@ export class TongHopComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.TongHopDeNghiCapVonService.deleteData(item.id).then((res) => {
+          this.deNghiCapVonBoNganhService.deleteData(id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -263,76 +283,16 @@ export class TongHopComponent implements OnInit {
     });
   }
 
-  convertTrangThai(status: string) {
-    switch (status) {
-      case '00': {
-        return 'Dự thảo';
-      }
-      case '03': {
-        return 'Từ chối - TP';
-      }
-      case '12': {
-        return 'Từ chối - LĐ Cục';
-      }
-      case '01': {
-        return 'Chờ duyệt - TP';
-      }
-      case '09': {
-        return 'Chờ duyệt - LĐ Cục';
-      }
-      case '02': {
-        return 'Đã duyệt';
-      }
-      case '05': {
-        return 'Tổng hợp';
-      }
-    }
-  }
-
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        let body = {
-          "capDvis": [
-            "string"
-          ],
-          "maDvis": [
-            "string"
-          ],
-          "maTongHop": "string",
-          "nam": 0,
-          "ngayTongHopDenNgay": "string",
-          "ngayTongHopTuNgay": "string",
-          "orderBy": "string",
-          "orderDirection": "string",
-          "pageable": {
-            "offset": 0,
-            "pageNumber": 0,
-            "pageSize": 0,
-            "paged": true,
-            "sort": {
-              "empty": true,
-              "sorted": true,
-              "unsorted": true
-            },
-            "unpaged": true
-          },
-          "paggingReq": {
-            "limit": 20,
-            "orderBy": "string",
-            "orderType": "string",
-            "page": 0
-          },
-          "str": "string",
-          "trangThai": "string",
-          "trangThais": [
-            "string"
-          ]
-        }
-        this.TongHopDeNghiCapVonService.exportList(body).subscribe((blob) =>
-          saveAs(blob, 'tong-hop-de-nghi-cap-von-chi.xlsx'),
-        );
+
+        let body = {}
+        this.deNghiCapVonBoNganhService.exportList(body).subscribe((blob) => {
+          saveAs(blob, 'danh-sach-tong-hop-theo-doi-cap-von.xlsx')
+        });
+
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);
@@ -343,7 +303,8 @@ export class TongHopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
-  // Đợi API sửa xem cái hàm deleteMultiple là POST hay DELETE rồi sửa trong service
+
+  // Xóa nhiều
   deleteSelect() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
@@ -366,16 +327,12 @@ export class TongHopComponent implements OnInit {
           this.spinner.show();
           try {
             const body = {
-              ids: dataDelete,
-            };
-            let res = await this.TongHopDeNghiCapVonService.deleteMultiple(
-              body,
-            );
+              ids: dataDelete
+            }
+
+            let res = await this.deNghiCapVonBoNganhService.deleteMultiple(body);
             if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.DELETE_SUCCESS,
-              );
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
@@ -395,34 +352,22 @@ export class TongHopComponent implements OnInit {
       );
     }
   }
-
-  filterInTable(key: string, value: string | Date) {
-    if (value instanceof Date) {
-      value = dayjs(value).format('YYYY-MM-DD');
-    }
-
+  // Tìm kiếm trong bảng
+  filterInTable(key: string, value: string) {
     if (value && value != '') {
-      this.dataTable = this.dataTableAll.filter((item) =>
-        item[key]
-          ?.toString()
-          .toLowerCase()
-          .includes(value.toString().toLowerCase()),
-      );
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
 
-
-  clearFilterTable() {
-    this.filterTable = {
-      maTongHop: '',
-      nam: '',
-      ngayTongHop: '',
-      tongTien: '',
-      kinhPhiDaCap: '',
-      ycCapThem: '',
-      tenTrangThai: '',
-    };
-  }
 }
