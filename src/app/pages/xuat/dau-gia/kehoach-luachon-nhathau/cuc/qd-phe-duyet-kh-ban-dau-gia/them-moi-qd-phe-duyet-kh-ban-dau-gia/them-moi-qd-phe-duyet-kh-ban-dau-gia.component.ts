@@ -753,6 +753,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
   }
 
   async loadChiTiet(id: number) {
+    // console.log('hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
     this.qdPheDuyetKhBanDauGiaService
       .chiTiet(id)
       .then((res) => {
