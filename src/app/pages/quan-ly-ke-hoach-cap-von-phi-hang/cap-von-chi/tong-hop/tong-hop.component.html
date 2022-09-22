@@ -1,34 +1,42 @@
 <div *ngIf="!isDetail" class="luong-thuc__danh-sach">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
-      <div nz-row [nzGutter]="24">
-        <div nz-col nzSpan="4">
-          <label class="search__label"> Mã tổng hợp </label>
-          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.maTongHop" />
+      <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="tong-hop">
+        <div class="search__body" nz-row [nzGutter]="24">
+          <nz-form-item nz-col nzSpan="4" class="form-item">
+            <nz-form-label nzFor="math">Mã tổng hợp</nz-form-label>
+            <nz-form-control>
+              <input nz-input type="text" formControlName="maTongHop" id="math">
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item nz-col nzSpan="2" class="form-item">
+            <nz-form-label nzFor="nam">Năm</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="nam" id="nam">
+                <nz-option *ngFor="let item of listNam" nzValue="{{item.value}}" nzLabel="{{item.text}}">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+            </nz-form-item>
+            <nz-form-item nz-col nzSpan="4" class="form-item">
+              <nz-form-label nzFor="ngay-th">Ngày tổng hợp </nz-form-label>
+              <nz-form-control>
+                <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy" id="ngay-th">
+                </nz-range-picker>
+              </nz-form-control>
+            </nz-form-item>
         </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Năm</label>
-          <nz-select [(ngModel)]="searchFilter.nam">
-            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-          </nz-select>
-        </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Ngày tổng hợp</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
-        </div>
-      </div>
-      <div nz-col class="cangiua group-button-search">
-        <div>
-          <button nz-button class="search__button--clear" (click)="clearFilter()">
-            <i class="icon  htvbdh_nhap-lai1"></i>
-            Xóa điều kiện
+      </form>
+      <div class="cangiua group-button-search">
+        <button nz-button class="search__button--clear" (click)="clearFilter()">
+          <i class="icon htvbdh_nhap-lai1"></i>
+          Xóa điều kiện
           </button>
           <button nz-button class="search__button--search" (click)="search()">
             <i nz-icon nzType="search"></i>
             Tìm kiếm
           </button>
-        </div>
-      </div>
+          </div>
     </nz-card>
     <div class="group-button">
       <h3 class="text-uppercase">Thông tin tổng hợp</h3>
@@ -47,26 +55,24 @@
         </button>
       </div>
     </div>
-
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable" [nzFrontPagination]="false"
         [nzShowPagination]="false" nzBordered>
         <thead>
           <tr>
-            <th width="45px">
+            <th width="2.5%">
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
-            <th width="60px" class="text-center">STT</th>
-            <th width="">Mã tổng hợp</th>
-            <th width="">Năm</th>
-            <th width="">Ngày tổng hợp</th>
-            <th width="">Tổng tiền</th>
+            <th width="2.5%" class="text-center">STT</th>
+            <th width="7.5%">Mã tổng hợp</th>
+            <th width="7%">Năm</th>
+            <th width="7.5%">Ngày tổng hợp</th>
+            <th>Tổng tiền</th>
             <th width="">Kinh phí đã cấp</th>
             <th width="">Yêu cầu cấp thêm</th>
-            <th width="">Trạng thái</th>
-            <th width="90px">Hành động</th>
+            <th width="7.5%">Trạng thái</th>
+            <th width="7.5%">Hành động</th>
           </tr>
           <tr class="search-table">
             <th></th>
@@ -74,67 +80,48 @@
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
-                  (input)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
+                  (ngModelChange)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"
-                  (input)="filterInTable('nam',filterTable.nam)" size="small" />
-              </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
+              <nz-select (ngModelChange)="filterInTable('nam',filterTable.nam)">
+                <nz-option *ngFor="let item of listNam" nzValue="{{item.value}}" nzLabel="{{item.text}}">
+                </nz-option>
+              </nz-select>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTongHop"
-                  (input)="filterInTable('ngayTongHop',filterTable.ngayTongHop)" size="small" />
-              </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
+              <nz-date-picker nzFormat="dd-MM-yyyy" [(ngModel)]="filterTable.ngayTongHop"
+                (ngModelChange)="filterInTable('ngayTongHop',filterTable.ngayTongHop)">
+              </nz-date-picker>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongTien"
-                  (input)="filterInTable('tongTien',filterTable.tongTien)" size="small" />
+                  (ngModelChange)="filterInTable('tongTien',filterTable.tongTien)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.kinhPhiDaCap"
-                  (input)="filterInTable('kinhPhiDaCap',filterTable.kinhPhiDaCap)" size="small" />
+                  (ngModelChange)="filterInTable('kinhPhiDaCap',filterTable.kinhPhiDaCap)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ycCapThem"
-                  (input)="filterInTable('ycCapThem',filterTable.ycCapThem)" size="small" />
+                  (ngModelChange)="filterInTable('ycCapThem',filterTable.ycCapThem)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tentrangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                  (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th></th>
+            <ng-template #suffixTemplateInfo>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
           </tr>
         </thead>
         <tbody>

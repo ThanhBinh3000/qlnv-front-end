@@ -57,7 +57,12 @@ export class ThongTinTonghopComponent implements OnInit {
   listThongTinChiTiet: any[] = []
   totalRecord: number = 0;
   isTonghop: boolean = false
+  dayNow: any
 
+  create: any = {};
+  editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
+
+  filePA: any
   constructor(
     private modal: NzModalService,
     private tongHopDeNghiCapVonService: TongHopDeNghiCapVonService,
@@ -73,14 +78,15 @@ export class ThongTinTonghopComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
+    this.dayNow = dayjs().format('DD/MM/YYYY')
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,
       });
     }
-
     this.initForm();
+    await this.loadAllDeNghiCapVonBoNganh()
     this.loadChiTiet(this.idInput);
     this.spinner.hide();
   }
@@ -93,21 +99,6 @@ export class ThongTinTonghopComponent implements OnInit {
       "maToTrinh": [null],
       "noiDung": [null],
       "khDnCapVonIds": [null],
-      "ct1s": [null, [Validators.required]],
-      "fileDinhKem": [null, [Validators.required]],
-      //Ex:  "ct1s": [
-      //   {
-      //     "khDnCapVonId": 0,
-      //     "tcCapThem": 0
-      //   }
-      // ],
-      // "fileDinhKem": {
-      //   "fileName": "string",
-      //   "fileSize": "string",
-      //   "fileUrl": "string",
-      //   "id": 0,
-      //   "noiDung": "string"
-      // }
     });
     this.formData.patchValue({ id: this.idInput })
     this.formData.patchValue({ maDonVi: this.userInfo.MA_DVI })
@@ -122,76 +113,91 @@ export class ThongTinTonghopComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS && res.data) {
 
         if (res.data) {
-
-
-
-
           this.formData.patchValue({
-
           });
-
         }
       }
     }
   }
   async save(isOther?: boolean) {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
-      console.log(this.formData);
-      return;
+    console.log(this.detail);
+    // chờ API và body request
+    let body = {
+      "capDvi": this.userInfo.CAP_DVI,
+      "ct1s": [
+        ...this.detail.tCThem
+      ],
+      "fileDinhKem": [...this.listFileDinhKem],
+      "id": 0,
+      "khDnCapVonIds": [
+        0
+      ],
+      "maDvi": this.userInfo.MA_DVI,
+      "maTongHop": this.formData.value.maTongHop ? this.formData.value.maTongHop : "",
+      "nam": this.formData.value.nam ? this.formData.value.nam : "",
+      "ngayTongHop": this.formData.value.ngayTongHop ? this.formData.value.ngayTongHop : "",
+      "nguonTongHop": this.formData.value.nguonTongHop ? this.formData.value.nguonTongHop : "",
+      "noiDung": this.formData.value.noiDung ? this.formData.value.noiDung : ""
     }
-    this.spinner.show();
+    console.log(body);
 
-    try {
+    // this.helperService.markFormGroupTouched(this.formData);
+    // if (this.formData.invalid) {
+    //   this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+    //   console.log(this.formData);
+    //   return;
+    // }
+    // this.spinner.show();
 
-      let body = {
-        "id": this.idInput,
-        "maTongHop": this.formData.value.maTongHop,
-        "khDnCapVonIds": this.formData.value.khDnCapVonIds,
-        "maDonVi": this.formData.value.maDonVi,
-        "nguonTongHop": this.formData.value.nguonTongHop,
-        "nam": this.formData.value.nam,
-        "noiDung": this.formData.value.noiDung,
-        "capDvi": this.formData.value.capDvi,
-        "ct1s": this.formData.value.ct1s,
-        "fileDinhKem": this.formData.value.fileDinhKem,
-        "ngayTongHop": this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop).format('YYYY-MM-DD') : null,
-      };
-      if (this.idInput > 0) {
-        let res = await this.tongHopDeNghiCapVonService.sua(body);
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
-          } else {
-            return res.data.id;
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-      } else {
-        let res = await this.tongHopDeNghiCapVonService.them(body);
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
-          } else {
-            return res.data.id;
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-      }
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(
-        MESSAGE.ERROR,
-        e?.error?.message ?? MESSAGE.SYSTEM_ERROR,
-      );
-    }
+    // try {
+
+    //   let body = {
+    //     "id": this.idInput,
+    //     "maTongHop": this.formData.value.maTongHop,
+    //     "khDnCapVonIds": this.formData.value.khDnCapVonIds,
+    //     "maDonVi": this.formData.value.maDonVi,
+    //     "nguonTongHop": this.formData.value.nguonTongHop,
+    //     "nam": this.formData.value.nam,
+    //     "noiDung": this.formData.value.noiDung,
+    //     "capDvi": this.formData.value.capDvi,
+    //     "ct1s": this.formData.value.ct1s,
+    //     "fileDinhKem": this.listFileDinhKem.length > 0 ? [...this.listFileDinhKem] : [null],
+    //     "ngayTongHop": this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop).format('YYYY-MM-DD') : null,
+    //   };
+    //   if (this.idInput > 0) {
+    //     let res = await this.tongHopDeNghiCapVonService.sua(body);
+    //     if (res.msg == MESSAGE.SUCCESS) {
+    //       if (!isOther) {
+    //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+    //         this.back();
+    //       } else {
+    //         return res.data.id;
+    //       }
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, res.msg);
+    //     }
+    //   } else {
+    //     let res = await this.tongHopDeNghiCapVonService.them(body);
+    //     if (res.msg == MESSAGE.SUCCESS) {
+    //       if (!isOther) {
+    //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+    //         this.back();
+    //       } else {
+    //         return res.data.id;
+    //       }
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, res.msg);
+    //     }
+    //   }
+    //   this.spinner.hide();
+    // } catch (e) {
+    //   console.log('error: ', e);
+    //   this.spinner.hide();
+    //   this.notification.error(
+    //     MESSAGE.ERROR,
+    //     e?.error?.message ?? MESSAGE.SYSTEM_ERROR,
+    //   );
+    // }
   }
   back() {
     this.showListEvent.emit();
@@ -270,6 +276,26 @@ export class ThongTinTonghopComponent implements OnInit {
       }
     });
   }
+  async loadAllDeNghiCapVonBoNganh() {
+    let body = {
+      soDeNghi: '',
+      maBoNganh: '',
+      nam: '',
+      ngayDeNghiTuNgay: '',
+      ngayDeNghiDenNgay: '',
+      pageNumber: this.page,
+      pageSize: this.pageSize,
+    };
+    let res = await this.deNghiCapVonBoNganhService.timKiem(body);
+    console.log(res);
+
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listNguonTongHop = res.data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
+  }
   banHanh() {
 
   }
@@ -278,7 +304,7 @@ export class ThongTinTonghopComponent implements OnInit {
     try {
       this.page = event;
 
-      await this.loadThongTinChiTiet(this.formData.value.nam);
+      await this.loadThongTinChiTiet();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -291,7 +317,7 @@ export class ThongTinTonghopComponent implements OnInit {
     this.spinner.show();
     try {
       this.pageSize = event;
-      await this.loadThongTinChiTiet(this.formData.value.nam);
+      await this.loadThongTinChiTiet();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -299,18 +325,18 @@ export class ThongTinTonghopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-  async loadThongTinChiTiet(nam) {
+  async loadThongTinChiTiet() {
 
     this.spinner.show();
     this.isTonghop = true;
     let body = {
-      soDeNghi: null,
-      maBoNganh: null,
-      nam: nam,
-      ngayDeNghiTuNgay: null,
-      ngayDeNghiDenNgay: null,
-      pageNumber: this.page,
-      pageSize: this.pageSize,
+      // soDeNghi: null,
+      // maBoNganh: null,
+      // nam: ,
+      // ngayDeNghiTuNgay: null,
+      // ngayDeNghiDenNgay: null,
+      // pageNumber: this.page,
+      // pageSize: this.pageSize,
     };
     let res = await this.deNghiCapVonBoNganhService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -341,7 +367,82 @@ export class ThongTinTonghopComponent implements OnInit {
       "noiDung": [null],
       "khDnCapVonIds": [null],
       "ct1s": [null, [Validators.required]],
-      "fileDinhKem": [null, [Validators.required]],
     })
+    this.listFileDinhKem = []
+  }
+  cancelEdit(stt: number): void {
+    const index = this.detail?.tCThem.findIndex(item => item.stt === stt);
+    this.editDataCache[stt] = {
+      data: { ...this.detail?.tCThem[index] },
+      edit: false
+    };
+  }
+
+  saveEdit(stt: number): void {
+    const index = this.detail?.tCThem.findIndex(item => item.stt === stt);
+    Object.assign(this.detail?.tCThem[index], this.editDataCache[stt].data);
+    this.editDataCache[stt].edit = false;
+  }
+
+  updateEditCache(): void {
+    if (this.detail?.tCThem && this.detail?.tCThem.length > 0) {
+      this.detail?.tCThem.forEach((item) => {
+        this.editDataCache[item.stt] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
+  }
+  sortTableId() {
+    this.detail?.tCThem.forEach((lt, i) => {
+      lt.stt = i + 1;
+    });
+  }
+  isDisableField() {
+    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
+      return true;
+    }
+  }
+
+  deleteRow(data: any) {
+    this.detail.tCThem = this.detail?.tCThem.filter(x => x.stt != data.stt);
+    this.sortTableId();
+    this.updateEditCache();
+  }
+
+  editRow(stt: number) {
+    this.editDataCache[stt].edit = true;
+  }
+
+  addRow() {
+    if (!this.detail?.tCThem) {
+      this.detail.tCThem = [];
+    }
+    this.sortTableId();
+    let item = cloneDeep(this.create);
+    item.stt = this.detail?.tCThem.length + 1;
+    this.detail.tCThem = [
+      ...this.detail?.tCThem,
+      item,
+    ]
+    this.updateEditCache();
+    this.clearItemRow();
+  }
+
+  clearItemRow() {
+    this.create = {};
+  }
+  changeSoDeNghi(item) {
+    if (item) {
+      let getSoDeNghi = this.listNguonTongHop.filter(x => x.soDeNghi == item.soDeNghi);
+      if (getSoDeNghi && getSoDeNghi.length > 0) {
+        item.nam = getSoDeNghi[0].nam;
+        item.ngayDeNghi = getSoDeNghi[0].ngayDeNghi;
+        item.tenBoNganh = getSoDeNghi[0].tenBoNganh;
+        item.tongTien = getSoDeNghi[0].tongTien;
+        item.kinhPhiDaCap = getSoDeNghi[0].kinhPhiDaCap;
+      }
+    }
   }
 }
