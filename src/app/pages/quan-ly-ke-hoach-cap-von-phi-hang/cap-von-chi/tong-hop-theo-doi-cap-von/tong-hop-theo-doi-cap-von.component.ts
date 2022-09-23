@@ -16,8 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { isEmpty } from 'lodash';
 import { Globals } from 'src/app/shared/globals';
-
-import { DeNghiCapVonBoNganhService } from 'src/app/services/deNghiCapVanBoNganh.service';
+import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
 
 @Component({
   selector: 'app-tong-hop-theo-doi-cap-von',

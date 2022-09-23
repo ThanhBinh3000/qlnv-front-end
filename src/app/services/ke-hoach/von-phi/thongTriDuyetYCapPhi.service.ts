@@ -16,23 +16,8 @@ export class ThongTriDuyetYCapPhiService extends BaseService {
     }
 
     timKiem(body: any): Promise<any> {
-        let url_ = `${environment.SERVICE_API}${this.GATEWAY}/${this.router}?`
-        if (body.maTongHop)
-            url_ += 'maTongHop=' + encodeURIComponent('' + body.maTongHop) + '&';
-        if (body.maDvis)
-            url_ += 'maDvis=' + encodeURIComponent('' + body.maDvis) + '&';
-        if (body.nam)
-            url_ += 'nam=' + encodeURIComponent('' + body.nam) + '&';
-        if (body.ngayTongHopDenNgay)
-            url_ += 'ngayTongHopDenNgay=' + encodeURIComponent('' + body.ngayTongHopDenNgay) + '&';
-        if (body.ngayTongHopTuNgay)
-            url_ += 'ngayTongHopTuNgay=' + encodeURIComponent('' + body.ngayTongHopTuNgay) + '&';
-        if (body.pageNumber != null || body.pageNumber != undefined)
-            url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
-        if (body.pageSize)
-            url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
-        url_ = url_.replace(/[?&]$/, '');
-        return this.httpClient.get<any>(url_).toPromise();
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.router}/search`;
+        return this.httpClient.post(url, body).toPromise();
     }
 
     loadChiTiet(id: number): Promise<any> {
