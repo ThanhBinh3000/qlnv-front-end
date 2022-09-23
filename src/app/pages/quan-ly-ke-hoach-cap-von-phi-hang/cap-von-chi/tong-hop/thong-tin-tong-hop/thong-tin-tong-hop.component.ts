@@ -82,6 +82,7 @@ export class ThongTinTonghopComponent implements OnInit {
     private fb: FormBuilder,
     public globals: Globals,
     public userService: UserService,
+    private helperService: HelperService,
   ) {
   }
   async ngOnInit() {
