@@ -6,7 +6,6 @@ import {
   Output,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -16,10 +15,8 @@ import { ThongTinTongHopDeXuatLCNT } from 'src/app/models/ThongTinTongHopDeXuatL
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as dayjs from 'dayjs';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
-import { LEVEL, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG } from 'src/app/constants/config';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
-import { convertVthhToId } from 'src/app/shared/commonFunction';
 import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
@@ -60,7 +57,6 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   listLoaiHopDong: any[] = [];
   listVthh: any[] = [];
   idPA: number = 0;
-  tabSelected: string = 'thongTinChung';
   selectedId: number = 0;
   errorInputRequired: string = null;
   isQuyetDinh: boolean = false;
@@ -71,8 +67,6 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
 
   constructor(
     private modal: NzModalService,
-    private router: Router,
-    private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
@@ -85,7 +79,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     this.formTraCuu = this.fb.group(
       {
         loaiVthh: [null, [Validators.required]],
-        tenVthh: [null, [Validators.required]],
+        tenLoaiVthh: [null, [Validators.required]],
         cloaiVthh: [null, [Validators.required]],
         tenCloaiVthh: [null, [Validators.required]],
         namKhoach: [dayjs().get('year'), [Validators.required]],
@@ -110,9 +104,9 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       tgianMthau: ['', [Validators.required]],
       tgianDthau: ['', [Validators.required]],
       tgianNhang: ['', [Validators.required]],
-      ghiChu: ['', [Validators.required]],
+      ghiChu: ['',],
       trangThai: [''],
-      tenVthh: [''],
+      tenLoaiVthh: [''],
       tenCloaiVthh: [''],
       tchuanCluong: ['']
     })
@@ -121,16 +115,11 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.listVthh = LIST_VAT_TU_HANG_HOA;
-      this.formTraCuu.patchValue({
-        loaiVthh: convertVthhToId(this.loaiVthh)
-      })
       this.userInfo = this.userService.getUserLogin();
-      this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
-          value: this.yearNow - i,
-          text: this.yearNow - i,
+          value: dayjs().get('year') - i,
+          text: dayjs().get('year') - i,
         });
       }
       this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
@@ -147,24 +136,6 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-
-  collapse2(array: DanhSachGoiThau[], data: DanhSachGoiThau, $event: boolean): void {
-    if (!$event) {
-      if (data.children) {
-        data.children.forEach(d => {
-          const target = array.find(a => a.idVirtual === d.idVirtual)!;
-          target.expand = false;
-          this.collapse2(array, target, false);
-        });
-      } else {
-        return;
-      }
-    }
-  }
-
-  convertTienTobangChu(tien: number): string {
-    return VNnum2words(tien);
   }
 
   async loadChiTiet() {
@@ -213,6 +184,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
 
   initForm(dataDetail?) {
     if (dataDetail) {
+      console.log(dataDetail);
       this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
       this.formData.patchValue({
         id: dataDetail.id,
@@ -231,11 +203,21 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
         tgianNhang: [dataDetail.tgianNhangTu, dataDetail.tgianNhangDen],
         ghiChu: dataDetail.ghiChu,
         trangThai: dataDetail.trangThai == null ? '' : dataDetail.trangThai,
-        tenVthh: dataDetail.tenVthh,
+        tenLoaiVthh: dataDetail.tenLoaiVthh,
         tenCloaiVthh: dataDetail.tenCloaiVthh,
         tchuanCluong: dataDetail.tchuanCluong
+      });
+      this.formTraCuu.patchValue({
+        namKhoach: +dataDetail.namKhoach,
+        loaiVthh: dataDetail.loaiVthh,
+        tenLoaiVthh: dataDetail.tenLoaiVthh,
+        cloaiVthh: dataDetail.cloaiVthh,
+        tenCloaiVthh: dataDetail.tenCloaiVthh,
+        loaiHdong: dataDetail.loaiHdong,
+        pthucLcnt: dataDetail.pthucLcnt,
+        hthucLcnt: dataDetail.hthucLcnt,
+        nguonVon: dataDetail.nguonVon,
       })
-      console.log(this.formData.get('trangThai').value);
       this.isTongHop = true;
     }
   }
@@ -264,12 +246,14 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   isDetailPermission() {
     if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP")) {
       return true;
     }
     return false;
   }
+
   async save() {
     if (!this.isDetailPermission()) {
       return;
@@ -278,7 +262,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     this.spinner.show();
     try {
       if (this.formData.invalid) {
-        console.log(this.formData.value);
+        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
         this.spinner.hide();
         return;
       }
@@ -336,7 +320,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
         cloaiVthh: data.ma,
         tenCloaiVthh: data.ten,
         loaiVthh: data.parent.ma,
-        tenVthh: data.parent.ten
+        tenLoaiVthh: data.parent.ten
       })
     }
     if (data.loaiHang == "VT") {
@@ -348,7 +332,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
           cloaiVthh: data.parent.ma,
           tenCloaiVthh: data.parent.ten,
           loaiVthh: data.parent.parent.ma,
-          tenVthh: data.parent.parent.ten
+          tenLoaiVthh: data.parent.parent.ten
         })
       }
       if (data.cap == "2") {
@@ -358,7 +342,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
           cloaiVthh: data.ma,
           tenCloaiVthh: data.ten,
           loaiVthh: data.parent.ma,
-          tenVthh: data.parent.ten
+          tenLoaiVthh: data.parent.ten
         })
       }
     }
@@ -381,11 +365,11 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   }
 
   taoQdinh() {
-    let elem = document.getElementById('selectedTab');
-    let tabActive = elem.getElementsByClassName('ant-tabs-tab-active')[0];
-    tabActive.classList.remove('ant-tabs-tab-active')
-    let setActive = elem.getElementsByClassName('ant-tabs-tab')[2];
-    setActive.classList.add('ant-tabs-tab-active');
+    // let elem = document.getElementById('selectedTab');
+    // let tabActive = elem.getElementsByClassName('ant-tabs-tab-active')[0];
+    // tabActive.classList.remove('ant-tabs-tab-active')
+    // let setActive = elem.getElementsByClassName('ant-tabs-tab')[2];
+    // setActive.classList.add('ant-tabs-tab-active');
     this.isQuyetDinh = true;
   }
 
@@ -394,7 +378,5 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   }
 }
 
-function VNnum2words(tien: number): string {
-  throw new Error('Function not implemented.');
-}
+
 
