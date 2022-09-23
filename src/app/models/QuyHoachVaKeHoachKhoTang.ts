@@ -1,12 +1,16 @@
 export class QuyHoachKho {
   id: number;
-  cucDtnnKv: string;
-  chiCuc: string;
-  diemKho: string;
+  maCuc: string;
+  tenCuc: string;
+  maChiCuc: string;
+  tenChiCuc: string;
+  maDiemKho: string;
+  tenDiemKho: string;
   diaDiem: string;
   dienTich : string;
   tongTichLuong: string;
   phuongAnQuyHoach: string;
+  tenPhuongAn: string;
   ghiChu: string;
 }
 

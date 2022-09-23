@@ -12,12 +12,15 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DieuChinhQuyetDinhPdKhlcntService } from 'src/app/services/qlnv-hang/nhap-hang/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service';
+import { DieuChinhQuyetDinhPdKhlcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
+import { QuyHoachKhoService } from "../../../../../services/quy-hoach-kho.service";
+import { DonviService } from "../../../../../services/donvi.service";
+import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
 
 @Component({
   selector: 'app-quyet-dinh-quy-hoach',
@@ -26,20 +29,24 @@ import { saveAs } from 'file-saver';
 })
 export class QuyetDinhQuyHoachComponent implements OnInit {
   @Input() typeVthh: string;
+  @Input() type: string;
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
-  listNam: any[] = [];
+  danhSachNam: any[] = [];
+  dsTong: any = {};
 
   searchFilter = {
-    soQd: '',
-    namKh: dayjs().get('year'),
-    ngayQd: '',
-    loaiVthh: '',
-    trichYeu: '',
-    soGoiThau: '',
+    soQuyetDinh: '',
+    ngayKy: '',
+    namBatDau: '',
+    namKetThuc: '',
+    phuongAnQuyHoach: '',
+    maCuc: '',
+    maChiCuc: '',
+    maDiemKho: '',
   };
 
   filterTable: any = {
@@ -61,15 +68,18 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   userInfo: UserLogin;
+  danhSachPhuongAn: any[] = [];
+  danhSachChiCuc: any[] = [];
+  danhSachCuc: any[] = [];
+  danhSachDiemKho: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhSachDauThauService: DanhSachDauThauService,
+    private quyHoachKhoService: QuyHoachKhoService,
+    private donViService: DonviService,
     private modal: NzModalService,
     public userService: UserService,
-    private dieuChinhQuyetDinhPdKhlcntService: DieuChinhQuyetDinhPdKhlcntService,
     public globals: Globals,
   ) { }
 
@@ -78,44 +88,110 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
     try {
       this.userInfo = this.userService.getUserLogin();
       for (let i = -3; i < 23; i++) {
-        this.listNam.push({
+        this.danhSachNam.push({
           value: dayjs().get('year') - i,
           text: dayjs().get('year') - i,
         });
       }
       await this.search();
+      await this.loadListPa();
+      if (this.userService.isTongCuc()) {
+        await this.loadDanhSachCuc();
+      }
+      if (this.userService.isCuc()) {
+        await this.loadDanhSachChiCuc();
+      }
+      if (this.userService.isChiCuc()) {
+        await this.loadDanhSachDiemKho();
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    console.log(
-      this.dataTable
-    )
   }
+
+  async loadListPa() {
+    this.danhSachPhuongAn = [];
+    let res = await this.quyHoachKhoService.danhMucChungGetAll('PA_QUY_HOACH');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.danhSachPhuongAn = res.data;
+    }
+  }
+
+  async ongChangMaCuc(event) {
+    const body = {
+      maDviCha: event,
+      trangThai: '01',
+    };
+    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+  }
+
+  async loadDanhSachChiCuc() {
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    this.dsTong = dsTong;
+    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+  }
+
+
+  async loadDanhSachCuc() {
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
+  }
+  async loadDanhSachDiemKho() {
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+  }
+
+
+
+  async onChangChiCuc(event) {
+    const body = {
+      maDviCha: event,
+      trangThai: '01',
+    };
+    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+  }
+
+
 
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-        : null,
-      denNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-        : null,
-      soQdinh: this.searchFilter.soQd,
-      loaiVthh: this.searchFilter.loaiVthh,
-      namKhoach: this.searchFilter.namKh,
-      soGoiThau: this.searchFilter.soGoiThau,
-      trichYeu: this.searchFilter.trichYeu,
+      ngayKyTu: this.searchFilter.ngayKy[0],
+      ngayKyDen: this.searchFilter.ngayKy[1],
+      soQuyetDinh: this.searchFilter.soQuyetDinh,
+      namBatDau: this.searchFilter.namBatDau,
+      namKetThuc: this.searchFilter.namKetThuc,
+      maCuc: this.searchFilter.maCuc,
+      maChiCuc: this.searchFilter.maChiCuc,
+      maDiemKho: this.searchFilter.maDiemKho,
+      phuongAnQuyHoach: this.searchFilter.phuongAnQuyHoach,
+      type: this.type,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi: this.userInfo.MA_DVI
     };
-    let res = await this.dieuChinhQuyetDinhPdKhlcntService.search(body);
+    let res = await this.quyHoachKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -132,11 +208,6 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
-  }
-
-  searchDanhSachDauThau(body, trangThai) {
-    body.trangThai = trangThai;
-    return this.danhSachDauThauService.search(body);
   }
 
   async changePageIndex(event) {
@@ -211,17 +282,15 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soQd: '',
-      namKh: dayjs().get('year'),
-      ngayQd: '',
-      loaiVthh: '',
-      trichYeu: '',
-      soGoiThau: '',
+      soQuyetDinh: '',
+      ngayKy: '',
+      namBatDau: '',
+      namKetThuc: '',
+      phuongAnQuyHoach: '',
+      maCuc: '',
+      maChiCuc: '',
+      maDiemKho: '',
     };
-    // this.namKeHoach = null;
-    // this.loaiVthh = null;
-    // this.startValue = null;
-    // this.endValue = null;
     this.search();
   }
 
@@ -238,10 +307,10 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: item.id,
-            maDvi: '',
+            id: item.id
           };
-          this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
+          this.quyHoachKhoService.delete(body).then(async () => {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             await this.search();
             this.spinner.hide();
           });
@@ -259,21 +328,25 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          tuNgayTao: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-            : null,
-          denNgayTao: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-            : null,
-          soQd: this.searchFilter.soQd,
-          loaiVthh: this.searchFilter.loaiVthh,
-          namKhoach: this.searchFilter.namKh,
-          soGoiThau: this.searchFilter.soGoiThau,
-        };
-        this.dieuChinhQuyetDinhPdKhlcntService
+          "maChiCuc": this.searchFilter.maChiCuc,
+          "maCuc": this.searchFilter.maCuc,
+          "maDiemKho": this.searchFilter.maDiemKho,
+          "namBatDau": this.searchFilter.namBatDau,
+          "ngayKyDen": this.searchFilter.ngayKy[1],
+          "ngayKyTu": this.searchFilter.ngayKy[0],
+          "namKetThuc": this.searchFilter.namKetThuc,
+          "paggingReq": {
+            "limit": 20,
+            "page": 1
+          },
+          "phuongAnQuyHoach": this.searchFilter.phuongAnQuyHoach,
+          "soQuyetDinh": this.searchFilter.soQuyetDinh,
+          "type": this.type
+        }
+        this.quyHoachKhoService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
+            saveAs(blob, 'quyet-dinh-quy-hoach-kho.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -305,15 +378,52 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
   }
 
   clearFilterTable() {
-    this.filterTable = {
-      soQd: '',
-      ngayQd: '',
-      trichYeu: '',
-      soQdGoc: '',
-      namKhoach: '',
-      tenVthh: '',
-      soGoiThau: '',
-      trangThai: '',
-    };
+
   }
+
+  xoa() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quyHoachKhoService.deleteMuti({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+
+
 }
