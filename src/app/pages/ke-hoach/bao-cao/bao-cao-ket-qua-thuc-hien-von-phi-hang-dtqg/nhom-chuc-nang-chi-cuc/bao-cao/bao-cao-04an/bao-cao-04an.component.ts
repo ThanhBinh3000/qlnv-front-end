@@ -76,6 +76,7 @@ export class BaoCao04anComponent implements OnInit {
     statusBtnExport: boolean;
     allChecked = false;
     editMoneyUnit = false;
+    isDataAvailable = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 
     constructor(
@@ -88,8 +89,12 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     async ngOnInit() {
-        this.spinner.show();
-        //lay thong tin chung cho bao cao 04an
+        this.initialization().then(() =>{
+            this.isDataAvailable = true;
+        })
+    }
+
+    async initialization() {
         this.id = this.data?.id;
         this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
@@ -99,7 +104,7 @@ export class BaoCao04anComponent implements OnInit {
         this.lstCtietBcao = this.data?.lstCtietBcaos;
         this.namBcao = this.data?.namBcao;
         this.trangThaiPhuLuc = this.data?.trangThai;
-        this.luyKes = await this.data?.luyKes.find(item => item.maLoai == '7')?.lstCtietBcaos;
+        this.luyKes = this.data?.luyKes.find(item => item.maLoai == '7')?.lstCtietBcaos;
 
         //lay danh muc noi dung chi
         await this.danhMucService.dMNoiDungChi04a().toPromise().then(res => {
@@ -111,7 +116,7 @@ export class BaoCao04anComponent implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        await this.noiDungChis.forEach(item => {
+        this.noiDungChis.forEach(item => {
             if (!item.maCha) {
                 this.noiDungChiFull.push({
                     ...item,
@@ -122,7 +127,7 @@ export class BaoCao04anComponent implements OnInit {
                 })
             }
         })
-        await this.addListNoiDungChi(this.noiDungChiFull);
+        this.addListNoiDungChi(this.noiDungChiFull);
         //lay danh sach vat tu
         await this.danhMucService.dMVatTu().toPromise().then(res => {
             if (res.statusCode == 0) {
@@ -133,7 +138,7 @@ export class BaoCao04anComponent implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        await this.addListVatTu(this.listVattu);
+        this.addListVatTu(this.listVattu);
 
         if (this.lstCtietBcao.length > 0) {
             //xap xep lai cac phan tu va lay thong tin cac vat tu da duoc chon
@@ -181,7 +186,7 @@ export class BaoCao04anComponent implements OnInit {
                 })
             } else {
                 const dataPL = new ItemData();
-                await this.noiDungChiFull.forEach(element => {
+                this.noiDungChiFull.forEach(element => {
                     const data: any = {
                         ...dataPL,
                         maNdungChi: element.id,
@@ -199,19 +204,21 @@ export class BaoCao04anComponent implements OnInit {
 
         //sap xep lai so thu tu
         if (!this.lstCtietBcao[0].stt) {
-            // const lstTemp = [];
-            // await this.noiDungChiFull.forEach(element => {
-            //     lstTemp.push(this.lstCtietBcao.find(item => item.maNdungChi == element.id));
-            // });
-            // this.lstCtietBcao = lstTemp;
-            await this.sortWithoutIndex();
+            const lstTemp = [];
+            await this.noiDungChiFull.forEach(element => {
+                const temp: ItemData = this.lstCtietBcao.find(item => item.maNdungChi == element.id);
+                if (temp){
+                    lstTemp.push(temp);
+                }
+            });
+            this.lstCtietBcao = lstTemp;
+            this.sortWithoutIndex();
         } else {
-            await this.sortByIndex();
+            this.sortByIndex();
         }
 
         this.updateEditCache();
         this.getStatusButton();
-        this.spinner.hide();
     }
 
     getStatusButton() {
@@ -919,6 +926,9 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     getLowStatus(str: string) {
+        if (!str) {
+            return false;
+        }
         //kiem tra xem hang dang xet cos phai la hieu cua 2 hang khac ko
         const maNdung = this.lstCtietBcao.find(e => e.stt == str)?.maNdungChi;
         if (this.getRoleCalculate(maNdung) == '7') {
@@ -1136,7 +1146,6 @@ export class BaoCao04anComponent implements OnInit {
     }
     //tinh toan chech lech giua cac hang
     calcuDeviant(maNdung: number) {
-        //debugger
         const maCap = this.noiDungChiFull.find(e => e.id == maNdung)?.ghiChu;
         if (maCap || maCap === 0) {
             const indexI: number = this.lstCtietBcao.findIndex(e => this.getMaCap(e.maNdungChi) == maCap && this.getRoleCalculate(e.maNdungChi) == '5');
