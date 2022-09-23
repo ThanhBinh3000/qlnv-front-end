@@ -5,25 +5,29 @@
             <span>Quay lại</span>
         </button>
         <button
-            *ngIf="(formData.value.trangThai ==globals.prop.NHAP_DU_THAO || formData.value.trangThai ==globals.prop.NHAP_CHO_DUYET_LD_CUC ) && userService.isTongCuc()"
+            *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isTongCuc()"
             class="btn btn-sub xanh-nhat" (click)="save(true)">
             <i
                 [class]="formData.value.loaiVthh.startsWith('02') ? 'icon htvbdh_tcdt_guiduyet' : 'icon htvbdh_chuyenvanthu'"></i>
             <span>{{formData.value.loaiVthh.startsWith('02') ? 'Lưu và gửi duyệt' : 'Ban hành'}}</span>
         </button>
-        <button *ngIf="formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_TP && userService.isTongCuc()"
-            type="button" class="btn btn-sub do" (click)="tuChoi()">
+        <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()" type="button"
+            class="btn btn-sub do" (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
         </button>
-        <button
-            *ngIf="(formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_TP|| formData.value.trangThai ==globals.prop.NHAP_TU_CHOI_TP) && userService.isTongCuc()"
-            type="button" class="btn btn-main xanh-nhat" (click)="guiDuyet()">
+        <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV  && userService.isTongCuc()" type="button"
+            class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
         </button>
+        <button *ngIf="formData.value.trangThai == STATUS.DA_DUYET_LDV && userService.isTongCuc()" type="button"
+            class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
+            <i class="icon htvbdh_chuyenvanthu"></i>
+            <span>Ban hành</span>
+        </button>
         <button
-            *ngIf="(formData.value.trangThai ==globals.prop.NHAP_DU_THAO || formData.value.trangThai ==globals.prop.NHAP_CHO_DUYET_LD_CUC ) && userService.isTongCuc()"
+            *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isTongCuc()"
             class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
@@ -42,6 +46,9 @@
                 </div>
             </div>
         </div>
+        <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV" nzShowIcon nzType="error"
+            nzMessage="Lý do từ chối" nzDescription="{{formData.value.ldoTuchoi}}">
+        </nz-alert>
         <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
             <div nz-row [nzGutter]="20">
                 <div nz-col nzSpan="2">
@@ -373,7 +380,7 @@
             </nz-table>
             <!-- </nz-card> -->
         </nz-tab>
-        <nz-tab [nzTitle]="'Phụ lục kế hoạch lựa chọn nhà thầu'" class="tab-table" *ngIf="isVatTu">
+        <nz-tab [nzTitle]="'Thông tin quyết định phê duyệt khlcnt'" class="tab-table" *ngIf="isVatTu">
             <!-- <nz-card class="mt16 flex-card p-lr16 card-table"> -->
             <nz-table #dataTable nzBordered [nzData]="danhsachDx" [nzFrontPagination]="false"
                 [nzShowPagination]="false">
@@ -405,9 +412,6 @@
                         <td>{{ data.tgianThienHd }}</td>
                         <td>{{ data.diaDiemNhap }}</td>
                         <td class="text-left">
-                            <a (click)="openDialogGoiThau(data,i)">
-                                <i class="fa fa-eye"></i>
-                            </a>
                             <a *ngIf="formData.value.trangThai ==globals.prop.NHAP_DU_THAO || formData.value.trangThai ==globals.prop.NHAP_CHO_DUYET_LD_CUC"
                                 (click)="openDialogGoiThau(data,i)">
                                 <i class="fa fa-pencil"></i>
