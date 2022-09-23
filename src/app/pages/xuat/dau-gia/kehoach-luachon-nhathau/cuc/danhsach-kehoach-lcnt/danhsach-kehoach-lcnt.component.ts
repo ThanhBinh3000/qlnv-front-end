@@ -157,7 +157,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       ngayKyTuNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
       ngayKyDenNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
       soKeHoach: this.searchFilter.soKeHoach,
-      loaiVatTuHangHoa: this.searchFilter.loaiVthh,
+      loaiVthh: this.searchFilter.loaiVthh,
       namKeHoach: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
       soQuyetDinhPheDuyet: this.searchFilter.soQuyetDinhPheDuyet,

@@ -491,7 +491,7 @@ export class TongHopKhlcntComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == STATUS.DA_BAN_HANH_QD) {
+          if (item.trangThai == STATUS.CHUA_TAO_QD) {
             item.checked = true;
           }
         });
