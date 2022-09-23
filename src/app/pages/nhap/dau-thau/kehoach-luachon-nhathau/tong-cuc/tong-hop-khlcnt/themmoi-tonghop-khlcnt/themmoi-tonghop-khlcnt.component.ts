@@ -142,7 +142,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     if (this.id > 0) {
       let res = await this.tongHopDeXuatKHLCNTService.loadChiTiet(this.id);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.initForm(res.data)
+        this.bindingDataDetail(res.data)
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -182,14 +182,33 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     }
   }
 
-  initForm(dataDetail?) {
+  bindingDataTh(dataDetail?) {
     if (dataDetail) {
-      console.log(dataDetail);
+      this.formData.patchValue({
+        namKhoach: +dataDetail.namKhoach,
+        loaiVthh: dataDetail.loaiVthh,
+        cloaiVthh: dataDetail.cloaiVthh,
+        loaiHdong: dataDetail.loaiHdong,
+        pthucLcnt: dataDetail.pthucLcnt,
+        hthucLcnt: dataDetail.hthucLcnt,
+        nguonVon: dataDetail.nguonVon,
+        ngayThop: dayjs().format("YYYY-MM-DD"),
+        tgianBdauTchuc: [dataDetail.tgianBdauTchucTu, dataDetail.tgianBdauTchucDen],
+        tgianDthau: [dataDetail.tgianDthauTu, dataDetail.tgianDthauDen],
+        tgianMthau: [dataDetail.tgianMthauTu, dataDetail.tgianMthauDen],
+        tgianNhang: [dataDetail.tgianNhangTu, dataDetail.tgianNhangDen],
+      })
+      this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
+    }
+  }
+
+  bindingDataDetail(dataDetail?) {
+    if (dataDetail) {
       this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
       this.formData.patchValue({
         id: dataDetail.id,
         namKhoach: dataDetail.namKhoach,
-        ngayThop: dataDetail.ngayTao ? dataDetail.ngayTao : dayjs().format("YYYY-MM-DD"),
+        ngayThop: dataDetail.ngayTao,
         noiDung: dataDetail.noiDung,
         loaiVthh: dataDetail.loaiVthh,
         cloaiVthh: dataDetail.cloaiVthh,
@@ -233,7 +252,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       let body = this.formTraCuu.value;
       let res = await this.tongHopDeXuatKHLCNTService.deXuatCuc(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.initForm(res.data);
+        this.bindingDataTh(res.data);
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -270,8 +289,6 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       let res = await this.tongHopDeXuatKHLCNTService.create(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        let tongHop = await this.tongHopDeXuatKHLCNTService.loadChiTiet(res.data.id);
-        this.initForm(tongHop.data)
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -365,15 +382,21 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   }
 
   taoQdinh() {
-    // let elem = document.getElementById('selectedTab');
-    // let tabActive = elem.getElementsByClassName('ant-tabs-tab-active')[0];
-    // tabActive.classList.remove('ant-tabs-tab-active')
-    // let setActive = elem.getElementsByClassName('ant-tabs-tab')[2];
-    // setActive.classList.add('ant-tabs-tab-active');
+    let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
+    setActive.classList.add('ant-menu-item-selected');
     this.isQuyetDinh = true;
   }
 
   showTongHop() {
+    this.loadChiTiet()
+    let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[2];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[0];
+    setActive.classList.add('ant-menu-item-selected');
     this.isQuyetDinh = false;
   }
 }

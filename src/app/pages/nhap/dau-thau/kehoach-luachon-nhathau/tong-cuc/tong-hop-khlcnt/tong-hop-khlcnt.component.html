@@ -55,7 +55,7 @@
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="themMoi()"
-          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP')">
+          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP') && loaiVthh != '02'">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tổng hợp</span>
         </button>
