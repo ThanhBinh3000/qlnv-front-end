@@ -6,7 +6,7 @@
     </button>
     <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isViewDetail" type="button"
       class="btn btn-sub xanh-nhat" (click)="save(true)">
-      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
     <button *ngIf="formData.value.trangThai == STATUS.DU_THAO " type="
@@ -151,7 +151,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Số Quyết định duyệt KHLCNT
+            <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ duyệt KH LCNT
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="canCuErr">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdKhlcnt()">
@@ -171,7 +171,7 @@
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày quyết định duyệt KHLCNT
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngày QĐ duyệt KH LCNT
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="ngayQdErr">
               <nz-input-group>

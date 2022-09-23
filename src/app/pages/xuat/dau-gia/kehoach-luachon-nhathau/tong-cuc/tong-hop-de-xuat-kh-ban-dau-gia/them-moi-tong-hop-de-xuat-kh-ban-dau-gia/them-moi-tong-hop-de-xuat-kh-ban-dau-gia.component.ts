@@ -161,8 +161,8 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       loaiVthh: [, [Validators.required]],
       cloaiVthh: [null],
       ngayKyDeXuat: [[dayjs().toDate(), dayjs().toDate()], [Validators.required]],
-      ngayTongHop: [null, [Validators.required]],
-      noiDungTongHop: [null, [Validators.required]],
+      ngayTongHop: [],
+      noiDungTongHop: [],
       tgDuKienTcbdg: [[dayjs().toDate(), dayjs().toDate()], [Validators.required]],
       ghiChu: [null],
       trangThai: [STATUS.DA_DUYET_LDC],
@@ -202,6 +202,12 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
   }
 
   async tongHopDeXuatTuCuc() {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+      console.log(this.formData);
+      return;
+    }
     this.spinner.show();
     this.listOfData = [];
     let body = {
@@ -264,6 +270,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       noiDungTongHop: dataDetail ? dataDetail.noiDungTongHop : null,
       tgDuKienTcbdg: dataDetail ? [dataDetail.tgDuKienTcbdgTuNgay, dataDetail.tgDuKienTcbdgDenNgay] : [dayjs().toDate(), dayjs().toDate()],
       ghiChu: dataDetail ? dataDetail.ghiChu : null,
+      trangThai: dataDetail ? dataDetail.trangThai : null,
     });
   }
 
@@ -553,7 +560,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-  taoQuyetDinh(){
+  taoQuyetDinh() {
     this.isTaoQd = true;
   }
   convertTienTobangChu(tien: number): string {

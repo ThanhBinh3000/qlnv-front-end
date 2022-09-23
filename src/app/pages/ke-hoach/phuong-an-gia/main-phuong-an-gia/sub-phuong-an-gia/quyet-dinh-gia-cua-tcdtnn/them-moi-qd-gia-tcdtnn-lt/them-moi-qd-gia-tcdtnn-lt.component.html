@@ -6,7 +6,7 @@
         </button>
         <button *ngIf="formData.value.trangThai == '00' && idInput > 0" type="button" class="btn btn-sub"
             (click)="banHanh()">
-            <i class="icon htvbdh_tcdt_guiduyet"></i>
+            <i class="icon htvbdh_chuyenvanthu"></i>
             <span>Ban hành</span>
         </button>
         <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub xanh" (click)="save()">
@@ -34,8 +34,7 @@
                         <nz-form-label [nzNoColon]="true">Năm kế hoạch
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-select formControlName="namKeHoach"
-                                [nzDisabled]="isView" nzAllowClear="true">
+                            <nz-select formControlName="namKeHoach" [nzDisabled]="isView" nzAllowClear="true">
                                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
                                 </nz-option>
                             </nz-select>

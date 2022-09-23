@@ -16,7 +16,7 @@ import { LOAI_HANG_DTQG, LOAI_QUYET_DINH } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { ChiTietGiaoNhiemVuNhapXuat } from 'src/app/models/ChiTietGiaoNhiemVuNhapXuat';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 
 @Component({
   selector: 'thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang',

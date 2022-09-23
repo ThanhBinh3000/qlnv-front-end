@@ -18,6 +18,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { ItemDetail } from 'src/app/models/itemDetail';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-quyetdinh-pheduyet-khlcnt',
@@ -49,6 +50,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     soGthau: '',
     tongTien: '',
   };
+  STATUS = STATUS
   dataTableAll: any[] = [];
   isDetail: boolean = false;
   selectedId: number = 0;

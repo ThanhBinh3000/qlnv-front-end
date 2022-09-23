@@ -125,14 +125,14 @@ export class QuanLyQuyenComponent implements OnInit {
     const stack: TreeNodeInterface[] = [];
     const array: TreeNodeInterface[] = [];
     const hashMap = {};
-    stack.push({ ...root, level: 0, expand: true });
+    stack.push({ ...root, level: 0, expand: false });
 
     while (stack.length !== 0) {
       const node = stack.pop()!;
       this.visitNode(node, hashMap, array);
       if (node.children.length > 0) {
         for (let i = node.children.length - 1; i >= 0; i--) {
-          stack.push({ ...node.children[i], level: node.level! + 1, expand: node.level! + 1 == 1 ? true : false, parent: node });
+          stack.push({ ...node.children[i], level: node.level! + 1, expand: false, parent: node });
         }
       } else {
         delete node.children
