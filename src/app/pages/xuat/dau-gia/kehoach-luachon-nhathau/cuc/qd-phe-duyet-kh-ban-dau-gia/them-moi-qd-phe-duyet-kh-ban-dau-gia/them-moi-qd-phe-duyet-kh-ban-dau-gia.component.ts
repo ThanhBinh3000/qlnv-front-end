@@ -142,11 +142,11 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         this.loaiHangDTQGGetAll(),
         this.phuongThucDauThauGetAll(),
         this.nguonVonGetAll(),
+        this.loaiVTHHGetAll(),
         this.hinhThucDauThauGetAll(),
         this.loaiHopDongGetAll(),
-        this.bindingDataTongHop(this.dataTongHop),
         this.loadMaTongHop(),
-        this.loaiVTHHGetAll()
+        this.bindingDataTongHop(this.dataTongHop)
       ]);
       if (this.idInput > 0) {
         this.loadChiTiet(this.idInput);
@@ -154,6 +154,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         this.firstInitUpdate = false;
       }
       this.spinner.hide();
+      console.log(this.formData);
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
@@ -207,9 +208,9 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
-      maVatTuCha: [
+      cloaiVthh: [
         {
           value: this.qdPheDuyetKhBanDauGia
             ? this.qdPheDuyetKhBanDauGia.maVatTuCha
@@ -218,14 +219,13 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         },
         [Validators.required],
       ],
-      maVatTu: [
+      tenVthh: [
         {
           value: this.qdPheDuyetKhBanDauGia
-            ? this.qdPheDuyetKhBanDauGia.maVatTu
+            ? this.qdPheDuyetKhBanDauGia.tenVthh
             : null,
           disabled: this.isView ? true : false
         },
-        [Validators.required],
       ],
       loaiVthh: [
         {
@@ -276,9 +276,10 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         loaiVthh: dataTongHop.loaiVthh,
         tenVthh: dataTongHop.tenVthh,
         namKhoach: dataTongHop.namKhoach,
-        idThHdr: dataTongHop.id,
+        tongHopDeXuatKhbdgId: dataTongHop.id + "",
         tchuanCluong: dataTongHop.tchuanCluong,
       });
+      this.getPhuLuc(dataTongHop.id+ "");
     }
   }
 
@@ -565,7 +566,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
     this.spinner.hide();
   }
 
-  async save(isOther?: boolean) {
+  async save(isBanHanh?: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
@@ -592,18 +593,17 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         }
         arr.push(tempTT);
       });
-
-
       const body = {
         "capDonVi": this.userInfo.CAP_DVI,
         "chiTietList": arr,
         "fileDinhKems": this.listFileDinhKem,
         "id": this.qdPheDuyetKhBanDauGia.id,
         "loaiVthh": this.formData.get("loaiVthh").value,
+        "cloaiVthh": this.formData.get("cloaiVthh").value,
         "lyDoTuChoi": null,
         "maDonVi": this.userInfo.MA_DVI,
-        "maVatTu": this.formData.get("maVatTu").value,
-        "maVatTuCha": this.qdPheDuyetKhBanDauGia.maVatTuCha,
+        // "maVatTu": this.formData.get("maVatTu").value,
+        // "maVatTuCha": this.qdPheDuyetKhBanDauGia.maVatTuCha,
         "namKeHoach": this.formData.get("namKeHoach").value,
         "ngayHieuLuc": this.formData.get("ngayHieuLuc").value ? dayjs(this.formData.get("ngayHieuLuc").value).format("YYYY-MM-DD") : null,
         "ngayKy": this.formData.get("ngayKy").value ? dayjs(this.formData.get("ngayKy").value).format("YYYY-MM-DD") : null,
@@ -620,13 +620,11 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
-            this.notification.success(
-              MESSAGE.SUCCESS,
-              MESSAGE.UPDATE_SUCCESS,
-            );
-            this.back();
-          }
+          this.notification.success(
+            MESSAGE.SUCCESS,
+            MESSAGE.UPDATE_SUCCESS,
+          );
+          this.back();
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -635,7 +633,9 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
+          if(isBanHanh){
+            this.guiDuyet(res.data.id);
+          } else{
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.back();
           }
@@ -695,7 +695,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  async guiDuyet() {
+  async guiDuyet(id?) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -708,7 +708,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
+            id: id ? id :  this.idInput,
             trangThai: STATUS.BAN_HANH,
           };
           let res = await this.qdPheDuyetKhBanDauGiaService.updateStatus(
@@ -753,6 +753,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
   }
 
   async loadChiTiet(id: number) {
+    // console.log('hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
     this.qdPheDuyetKhBanDauGiaService
       .chiTiet(id)
       .then((res) => {
@@ -941,10 +942,8 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
     this.spinner.show();
     let res = await this.qdPheDuyetKhBanDauGiaService.getPhuLuc(id);
     if (res.msg == MESSAGE.SUCCESS) {
-
       this.thongTinPhuLucs = res.data;
       console.log("this.thongTinPhuLucs: ", this.thongTinPhuLucs);
-
     } else {
       this.listOfData = [];
       this.notification.error(MESSAGE.ERROR, res.msg);

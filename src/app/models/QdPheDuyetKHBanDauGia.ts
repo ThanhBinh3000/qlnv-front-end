@@ -6,9 +6,11 @@ export class QuyetDinhPheDuyetKeHoachBanDauGia {
     fileDinhKems: Array<FileDinhKem>;
     id: number;
     loaiVthh: string;
+    cloaiVthh: string;
     lyDoTuChoi: string;
     maDonVi: string;
     maVatTu: string;
+    tenVthh:string;
     maVatTuCha: string;
     namKeHoach: number;
     ngayHieuLuc: string;

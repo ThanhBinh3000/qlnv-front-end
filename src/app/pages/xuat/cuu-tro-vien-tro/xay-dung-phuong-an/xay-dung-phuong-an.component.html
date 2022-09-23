@@ -175,28 +175,28 @@
           <tr *ngFor="let data of basicTable.data; let i = index">
             <th width="45px">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
+                [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
             </th>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-            <td>{{ data.soKeHoach }}</td>
-            <td>{{ data.ngayLapKeHoach | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.loaiHinhNhapXuat }}</td>
+            <td>{{ data.soDxuat}}</td>
+            <td>{{ data.tenDvi }}</td>
+            <td>{{ data.ngayDxuat | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.tenVthh }}</td>
+            <td>{{ data.tenCloaiVthh }}</td>
+            <td>{{ data.tongSoLuong }}</td>
             <td>{{ data.trichYeu }}</td>
-            <td>{{ data.tenHangHoa }}</td>
-            <td>{{ data.soQuyetDinhGiaoChiTieu }}</td>
-            <td>{{ data.soQuyetDinhPheDuyet }}</td>
-            <td>{{ data.namKeHoach }}</td>
-            <td>{{ data.namKeHoach }}</td>
             <td>{{ data.tenTrangThai }}</td>
+            <td>{{ data.tenTrangThaiTh }}</td>
             <td class="text-left">
               <a (click)="detail(data, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai==globals.prop.NHAP_DU_THAO || data.trangThai==globals.prop.NHAP_TU_CHOI_TP || data.trangThai==globals.prop.NHAP_TU_CHOI_LD_CUC) && userService.isCuc()"
+              <a *ngIf="(data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_TP || data.trangThai==STATUS.TU_CHOI_LDC) && userService.isCuc()"
                 (click)="detail(data, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isCuc()" (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai==STATUS.DU_THAO && userService.isCuc()" (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

@@ -16,10 +16,10 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
 import { DonviService } from 'src/app/services/donvi.service';
+import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import { DeNghiCapVonBoNganhService } from 'src/app/services/deNghiCapVanBoNganh.service';
 
 @Component({
   selector: 'app-thong-tin-tong-hop-theo-doi-cap-von',

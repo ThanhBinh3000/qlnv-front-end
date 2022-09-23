@@ -1,29 +1,28 @@
+import { Ct1sTonghop } from './../../../../../models/TongHopDeNghiCapVon';
 import {
   Component,
   EventEmitter,
   Input,
   OnInit,
-  Output,
+  Output
 } from '@angular/core';
-import { cloneDeep } from 'lodash';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {
+  PAGE_SIZE_DEFAULT
+} from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { TongHopDeNghiCapVonService } from 'src/app/services/tongHopDeNghiCapVon.service';
-import { DeNghiCapVonBoNganhService } from 'src/app/services/deNghiCapVanBoNganh.service';
-import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import {
-  PAGE_SIZE_DEFAULT,
-} from 'src/app/constants/config';
-import { T } from '@angular/cdk/keycodes';
+import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
+import { TongHopDeNghiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
 @Component({
   selector: 'app-thong-tin-tong-hop',
   templateUrl: './thong-tin-tong-hop.component.html',
@@ -59,6 +58,21 @@ export class ThongTinTonghopComponent implements OnInit {
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   filePA: any
+
+  nguonTongHopList: any[] = [
+    {
+      id: "TCDT",
+      value: "TCDT"
+    },
+    {
+      id: "Bộ, ngành",
+      value: "Bộ, ngành"
+    },
+    {
+      id: "Tất cả",
+      value: "Tất cả"
+    },
+  ]
   constructor(
     private modal: NzModalService,
     private tongHopDeNghiCapVonService: TongHopDeNghiCapVonService,
@@ -133,50 +147,63 @@ export class ThongTinTonghopComponent implements OnInit {
       }
     }
   }
-  async save(isDuyet?: boolean) {
+  async save(isOther?: boolean) {
+    console.log(this.detail);
+    // chờ API và body request
+    let phuongAnList = [];
+    this.detail.tCThem.forEach(pa => {
+      const phuongAn = new Ct1sTonghop();
+      phuongAn.khDnCapVonId = pa.id;
+      phuongAn.tcCapThem = +pa.tCThem;
+      phuongAnList = [...phuongAnList, phuongAn];
+    });
+    let body = {
+      "capDvi": this.userInfo.CAP_DVI,
+      "ct1s": phuongAnList,
+      "fileDinhKem": null, // truyền đối tượng, ko phải truyền mảng
+      "khDnCapVonIds": this.formData.value.khDnCapVonIds,
+      "maDvi": this.userInfo.MA_DVI,
+      "maToTrinh": this.formData.value.maToTrinh,
+      "maTongHop": this.formData.value.maTongHop ? this.formData.value.maTongHop : "",
+      "nam": this.formData.value.nam ? this.formData.value.nam : "",
+      "ngayTongHop": this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop).format(
+        'YYYY-MM-DD') : "",
+      "nguonTongHop": this.formData.value.nguonTongHop ? this.formData.value.nguonTongHop : "",
+      "noiDung": this.formData.value.noiDung ? this.formData.value.noiDung : ""
+    }
+    console.log(body);
+
+    this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+      console.log(this.formData);
       return;
     }
     this.spinner.show();
-    let ct1s = this.detail.tCThem.map((item) => {
-      return item = {
-        'khDnCapVonId': item.id,
-        'tcCapThem': item.tCThem
-      }
-    })
+
     try {
-      let body = {
-        "capDvi": this.userInfo.CAP_DVI,
-        "ct1s": [
-          ...ct1s
-        ],
-        // đang để { } để đúng theo body request 23/09
-        // "fileDinhKem": [...this.listFileDinhKem],
-        "fileDinhKem": {
-          "fileName": "string",
-          "fileSize": "string",
-          "fileUrl": "string",
-          "id": 0,
-          "noiDung": "string"
-        },
-        "id": this.idInput ? this.idInput : "",
-        "khDnCapVonIds": [
-          ... this.khDnCapVonIds
-        ],
-        "maDvi": this.userInfo.MA_DVI,
-        "maTongHop": this.formData.value.maTongHop ? this.formData.value.maTongHop : "",
-        "nam": this.formData.value.nam ? this.formData.value.nam : "",
-        "ngayTongHop": this.formData.value.ngayTongHop ? this.formData.value.ngayTongHop : "",
-        "nguonTongHop": this.formData.value.nguonTongHop ? this.formData.value.nguonTongHop : "",
-        "noiDung": this.formData.value.noiDung ? this.formData.value.noiDung : ""
-      };
+
+      // let body = {
+      //   "id": this.idInput,
+      //   "maTongHop": this.formData.value.maTongHop,
+      //   "khDnCapVonIds": this.formData.value.khDnCapVonIds,
+      //   "maDonVi": this.formData.value.maDonVi,
+      //   "nguonTongHop": this.formData.value.nguonTongHop,
+      //   "nam": this.formData.value.nam,
+      //   "noiDung": this.formData.value.noiDung,
+      //   "capDvi": this.formData.value.capDvi,
+      //   "ct1s": this.formData.value.ct1s,
+      //   "fileDinhKem": this.listFileDinhKem.length > 0 ? [...this.listFileDinhKem] : [null],
+      //   "ngayTongHop": this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop).format('YYYY-MM-DD') : null,
+      // };
       if (this.idInput > 0) {
         let res = await this.tongHopDeNghiCapVonService.sua(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isDuyet) {
+          if (!isOther) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.back();
+          } else {
+            return res.data.id;
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -184,9 +211,11 @@ export class ThongTinTonghopComponent implements OnInit {
       } else {
         let res = await this.tongHopDeNghiCapVonService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isDuyet) {
+          if (!isOther) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.back();
+          } else {
+            return res.data.id;
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -201,8 +230,6 @@ export class ThongTinTonghopComponent implements OnInit {
         e?.error?.message ?? MESSAGE.SYSTEM_ERROR,
       );
     }
-    this.spinner.hide();
-
   }
   back() {
     this.showListEvent.emit();
@@ -464,6 +491,7 @@ export class ThongTinTonghopComponent implements OnInit {
         item.ngayDeNghi = getSoDeNghi[0].ngayDeNghi;
         item.tenBoNganh = getSoDeNghi[0].tenBoNganh;
         item.tongTien = getSoDeNghi[0].tongTien;
+        item.id = getSoDeNghi[0].id;
         item.kinhPhiDaCap = getSoDeNghi[0].kinhPhiDaCap;
       }
     }

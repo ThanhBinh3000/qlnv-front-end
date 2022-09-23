@@ -23,10 +23,10 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import { DeNghiCapVonBoNganhService } from 'src/app/services/deNghiCapVanBoNganh.service';
 
 @Component({
   selector: 'app-thong-tin-de-nghi-cap-von-bo-nganh',
