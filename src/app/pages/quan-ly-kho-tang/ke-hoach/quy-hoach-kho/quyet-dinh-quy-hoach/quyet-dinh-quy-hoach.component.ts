@@ -18,6 +18,7 @@ import { saveAs } from 'file-saver';
 import {QuyHoachKhoService} from "../../../../../services/quy-hoach-kho.service";
 import {DonviService} from "../../../../../services/donvi.service";
 import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-quyet-dinh-quy-hoach',
@@ -75,6 +76,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
     private notification: NzNotificationService,
     private quyHoachKhoService: QuyHoachKhoService,
     private donViService: DonviService,
+    private dmService: DanhMucService,
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
@@ -111,7 +113,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
 
   async loadListPa() {
     this.danhSachPhuongAn = [];
-    let res = await this.quyHoachKhoService.danhMucChungGetAll('PA_QUY_HOACH');
+    let res = await this.dmService.danhMucChungGetAll('PA_QUY_HOACH');
     if (res.msg == MESSAGE.SUCCESS) {
       this.danhSachPhuongAn = res.data;
     }
@@ -122,7 +124,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
       maDviCha: event,
       trangThai: '01',
     };
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
   }
 
@@ -132,7 +134,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
       trangThai: '01',
     };
 
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
       this.dsTong = dsTong;
       this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
   }
@@ -144,7 +146,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
       trangThai: '01',
     };
 
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
   }
   async loadDanhSachDiemKho() {
@@ -153,7 +155,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
       trangThai: '01',
     };
 
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
   }
 
@@ -164,7 +166,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
       maDviCha: event,
       trangThai: '01',
     };
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
   }
 
