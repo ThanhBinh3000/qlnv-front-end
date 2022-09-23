@@ -18,12 +18,12 @@ import {
 } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DeNghiCapVonBoNganhService } from 'src/app/services/deNghiCapVanBoNganh.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { TongHopDeNghiCapVonService } from 'src/app/services/tongHopDeNghiCapVon.service';
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
+import { TongHopDeNghiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
 @Component({
   selector: 'app-thong-tin-tong-hop',
   templateUrl: './thong-tin-tong-hop.component.html',

@@ -10,11 +10,11 @@ import {
 } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { TongHopDeNghiCapVonService } from 'src/app/services/tongHopDeNghiCapVon.service';
 import { UserService } from 'src/app/services/user.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { Globals } from 'src/app/shared/globals';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TongHopDeNghiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
 
 @Component({
   selector: 'app-tong-hop',
