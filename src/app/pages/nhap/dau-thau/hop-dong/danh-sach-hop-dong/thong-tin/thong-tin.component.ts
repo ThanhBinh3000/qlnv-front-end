@@ -253,6 +253,7 @@ export class ThongTinComponent implements OnInit {
           this.dvLQuan = this.listDviLquan.find(item => item.id == this.detail.idNthau);
           await this.getListGoiThau(this.detail.canCuId);
           this.diaDiemNhapListCuc = this.detail.hhDdiemNhapKhoList;
+          this.fileDinhKem = this.detail.fileDinhKems;
         }
       }
     }
