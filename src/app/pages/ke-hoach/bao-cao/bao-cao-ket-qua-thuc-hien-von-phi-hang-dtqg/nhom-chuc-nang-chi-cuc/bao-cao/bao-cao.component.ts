@@ -108,6 +108,8 @@ export class BaoCaoComponent implements OnInit {
 	statusBtnFinish = true;                    // trang thai hoan tat nhap lieu
 	statusBtnOk = true;                        // trang thai ok/ not ok
 	statusBtnExport = true;                        // trang thai export
+
+	isDataAvailable = false;
 	lstFiles: any = [];                          // list File de day vao api
 
 	maDviTien = "1";                    // ma don vi tien
@@ -160,6 +162,12 @@ export class BaoCaoComponent implements OnInit {
 	selectedIndex = 1;
 
 	async ngOnInit() {
+		this.initialization().then(() => {
+			this.isDataAvailable = true;
+		})
+	}
+
+	async initialization(){
 		this.id = this.router.snapshot.paramMap.get('id');
 		const lbc = this.router.snapshot.paramMap.get('baoCao');
 
@@ -301,27 +309,6 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	getListUser() {
-		// const request = {
-		// 	dvql: this.userInfo?.MA_DVI,
-		// 	fullName: "",
-		// 	paggingReq: {
-		// 		limit: 1000,
-		// 		page: 1
-		// 	},
-		// 	roleId: "",
-		// 	status: "",
-		// 	sysType: "",
-		// 	username: ""
-		// }
-		// this.quanLyVonPhiService.getListUserByManage(request).toPromise().then(res => {
-		// 	if (res.statusCode == 0) {
-		// 		this.allUsers = res.data?.content;
-		// 	} else {
-		// 		this.notification.error(MESSAGE.ERROR, res?.msg);
-		// 	}
-		// }, (err) => {
-		// 	this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		// })
 		this.quanLyVonPhiService.getListUser().toPromise().then(res => {
 			if (res.statusCode == 0) {
 				this.nguoiBcaos = res.data;

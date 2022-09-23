@@ -72,6 +72,7 @@ export class PhuLucIIComponent implements OnInit {
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
     editMoneyUnit = false;
+    isDataAvailable = false;
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -84,7 +85,13 @@ export class PhuLucIIComponent implements OnInit {
     ) {
     }
 
-    async ngOnInit() {
+    ngOnInit() {
+        this.initialization().then(() => {
+            this.isDataAvailable = true;
+        })
+    }
+
+    async initialization(){
         this.spinner.show();
         this.id = this.data?.id;
         this.idBcao = this.data.idBcao;

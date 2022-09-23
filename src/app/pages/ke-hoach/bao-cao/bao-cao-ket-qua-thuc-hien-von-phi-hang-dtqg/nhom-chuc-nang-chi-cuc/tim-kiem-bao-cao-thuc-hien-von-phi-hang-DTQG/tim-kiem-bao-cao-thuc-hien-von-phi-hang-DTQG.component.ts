@@ -1,4 +1,4 @@
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -10,7 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { BCVP, LBC_KET_QUA_THUC_HIEN_HANG_DTQG, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { BCVP, LBC_KET_QUA_THUC_HIEN_HANG_DTQG, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { BAO_CAO_KET_QUA, MAIN_ROUTE_BAO_CAO } from '../../bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg.constant';
 @Component({
 	selector: 'app-tim-kiem-bao-cao-thuc-hien-von-phi-hang-DTQG',
@@ -51,6 +51,7 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 	baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
 	statusBtnNew = true;
 	statusThemMoi = true;
+	isDataAvailable = false;
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
@@ -64,7 +65,13 @@ export class TimKiemBaoCaoThucHienVonPhiHangDTQGComponent implements OnInit {
 	) {
 	}
 
-	async ngOnInit() {
+	ngOnInit() {
+		this.initialization().then(() => {
+			this.isDataAvailable = true;
+		})
+	}
+
+	async initialization(){
 		this.userInfo = this.userService.getUserLogin();
 
 		if (this.userService.isAccessPermisson(BCVP.ADD_REPORT)) {

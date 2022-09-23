@@ -102,11 +102,15 @@ export class TongHopComponent implements OnInit {
 
 		this.searchFilter.maDviTao = this.userInfo?.MA_DVI;
 
-		if (!this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV)) {
+		if (!this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV) &&
+			!this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_CKV) &&
+			!this.userService.isAccessPermisson(CVNC.PHE_DUYET_SYNTHETIC_CKV)) {
 			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.THOP_TU_CUC_KV);
 		}
 
-		if (!this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_TC)) {
+		if (!this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_TC) &&
+			!this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_TC) &&
+			!this.userService.isAccessPermisson(CVNC.PHE_DUYET_SYNTHETIC_TC)) {
 			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.THOP_TAI_TC);
 		}
 
@@ -127,24 +131,6 @@ export class TongHopComponent implements OnInit {
 		}
 		this.spinner.hide();
 		this.onSubmit();
-	}
-
-	//get user info
-	async getUserInfo(username: string) {
-		await this.userService.getUserInfo(username).toPromise().then(
-			(data) => {
-				if (data?.statusCode == 0) {
-					this.userInfo = data?.data;
-					this.userRole = this.userInfo?.roles[0]?.code;
-					return data?.data;
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			(err) => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-			}
-		);
 	}
 
 	//search list bao cao theo tieu chi

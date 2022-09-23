@@ -11,8 +11,6 @@ import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumbe
 import * as uuid from "uuid";
 import { NOI_DUNG } from './tong-hop-nhu-cau-chi-dau-tu-phat-trien-3-nam.constant';
 
-
-
 export class ItemData {
     id: string;
     stt!: string;
@@ -74,6 +72,7 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
     editMoneyUnit = false;
+    isDataAvailable = false; 
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -88,6 +87,12 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
 
 
     async ngOnInit() {
+        this.initialization().then(() => {
+            this.isDataAvailable = true;
+        })
+    }
+
+    async initialization(){
         this.spinner.show();
         this.id = this.data?.id;
         this.maBieuMau = this.data?.maBieuMau;
@@ -112,20 +117,6 @@ export class TongHopNhuCauChiDauTuPhatTrien3NamComponent implements OnInit {
         }
 
         this.updateEditCache();
-
-        // //lay danh sach danh muc don vi
-        // await this.danhMucService.dMDonVi().toPromise().then(
-        //     (data) => {
-        //         if (data.statusCode == 0) {
-        //             this.donVis = data.data;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //     }
-        // );
         this.getStatusButton();
         this.spinner.hide();
     }
