@@ -111,6 +111,8 @@ export class PhuLuc4Component implements OnInit {
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
   dsDinhMuc: any[] = [];
+  maDviTao!: string;
+
 
   allChecked = false;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -134,6 +136,7 @@ export class PhuLuc4Component implements OnInit {
     this.trangThaiPhuLuc = this.data?.trangThai;
     this.namBcao = this.data?.namHienHanh;
     this.status = this.data?.status;
+    this.maDviTao = this.data?.maDviTao;
     this.statusBtnFinish = this.data?.statusBtnFinish;
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({

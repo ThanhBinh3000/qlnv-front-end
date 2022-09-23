@@ -141,7 +141,6 @@ export class PhuLuc5Component implements OnInit {
       this.statusBtnOk = true;
     }
   }
-
   // chuc nang check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
     if (this.id) {
