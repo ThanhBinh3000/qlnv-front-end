@@ -625,6 +625,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
             this.router.navigate([
               MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
             ])
+            this.listFile = [];
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
