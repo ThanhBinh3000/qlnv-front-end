@@ -1,10 +1,10 @@
 <nz-affix [nzOffsetTop]="98" class="level2">
   <ul nz-menu nzMode="horizontal">
     <li nz-menu-item nzSelected (click)="selectTab('DXDC')">
-      Đề xuất điều chỉnh chỉ tiêu KH
+      Đề xuất điều chỉnh chỉ tiêu kế hoạch
     </li>
     <li nz-menu-item (click)="selectTab('QDDC')">
-      Quyết định điều chỉnh chỉ tiêu KH
+      Quyết định điều chỉnh chỉ tiêu hoạch
     </li>
   </ul>
 </nz-affix>
@@ -16,7 +16,7 @@
 </ng-container>
 
 
-<!-- 
+<!--
 <nz-tabset nzType="card" class="tab-level-2" [nzSelectedIndex]="tabSelect">
   <nz-tab [nzTitle]="'Đề xuất điều chỉnh chỉ tiêu KH'" *ngIf="!userService.isChiCuc()">
     <ng-template nz-tab>
