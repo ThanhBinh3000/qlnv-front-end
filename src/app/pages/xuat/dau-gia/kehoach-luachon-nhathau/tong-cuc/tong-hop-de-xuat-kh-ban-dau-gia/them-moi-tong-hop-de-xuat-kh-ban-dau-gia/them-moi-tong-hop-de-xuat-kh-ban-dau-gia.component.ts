@@ -264,6 +264,7 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       noiDungTongHop: dataDetail ? dataDetail.noiDungTongHop : null,
       tgDuKienTcbdg: dataDetail ? [dataDetail.tgDuKienTcbdgTuNgay, dataDetail.tgDuKienTcbdgDenNgay] : [dayjs().toDate(), dayjs().toDate()],
       ghiChu: dataDetail ? dataDetail.ghiChu : null,
+      trangThai: dataDetail ? dataDetail.trangThai : null,
     });
   }
 

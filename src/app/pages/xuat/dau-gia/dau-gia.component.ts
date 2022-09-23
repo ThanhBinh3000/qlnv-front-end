@@ -23,5 +23,6 @@ export class DauGiaComponent implements OnInit {
   tabSelected: number = 0;
   selectTab(tab: number) {
     this.tabSelected = tab;
+    // this.loaiVthhSelected = '';
   }
 }
