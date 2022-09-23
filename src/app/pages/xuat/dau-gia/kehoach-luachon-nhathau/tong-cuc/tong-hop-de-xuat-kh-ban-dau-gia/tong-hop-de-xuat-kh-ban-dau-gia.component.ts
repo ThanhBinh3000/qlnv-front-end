@@ -149,7 +149,7 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
       ngayTongHopDenNgay: this.searchFilter.ngayTongHop
         ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
         : null,
-      maVatTuCha: this.searchFilter.loaiVthh,
+      loaiVthh: this.searchFilter.loaiVthh,
       namKeHoach: this.searchFilter.namKh,
       noiDungTongHop: this.searchFilter.noiDungTongHop,
       paggingReq: {
