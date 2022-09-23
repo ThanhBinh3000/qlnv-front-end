@@ -55,8 +55,8 @@ export class TongHopDeNghiCapVonService extends BaseService {
     }
 
     deleteMultiple(body: any): Promise<any> {
-        const url = `${environment.SERVICE_API}${this.GATEWAY}/tong-hop-de-nghi-cap-von`;
-        return this.httpClient.delete(url, body).toPromise();
+      const url = `${environment.SERVICE_API}${this.GATEWAY}/tong-hop-de-nghi-cap-von/delete/multiple`;
+      return this.httpClient.post(url, body).toPromise();
     }
 
     updateStatus(body: any): Promise<any> {

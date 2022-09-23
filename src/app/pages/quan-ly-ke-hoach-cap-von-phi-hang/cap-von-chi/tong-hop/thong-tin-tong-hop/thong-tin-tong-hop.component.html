@@ -1,28 +1,25 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
   <div class="btn-group">
-    <!--  chờ design -->
     <button type="button" class="btn btn-sub" (click)="back()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="tuChoi()">
+    <button *ngIf="(idInput>0 && detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_VU)" type="button" class="btn btn-sub"
+      (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="banHanh()">
+    <button *ngIf="(idInput>0 && detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_VU) " type="button" class="btn btn-sub"
+      (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Ban hành</span>
+      <span>Duyệt</span>
     </button>
-    <!-- <button type="button" class="btn btn-sub" (click)="guiDuyet()">
-      <i class="icon {{iconButtonDuyet}}"></i>
-      <span>{{titleButtonDuyet}}</span>
-    </button> -->
-    <button *ngIf="userService.isChiCuc()" type="button" class="btn btn-sub"
+    <button *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO" type="button" class="btn btn-sub"
       (click)="idInput===0 ? save(false) :guiDuyet()">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button type="button" class="btn btn-main" (click)="save(false)">
+    <button *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO" type="button" class="btn btn-main" (click)="save(false)">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -33,8 +30,8 @@
     <div class="header mg-t-16">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span class="du-thao-va-lanh-dao-duyet">
-            Dự Thảo
+          <span [ngClass]="(detail.trangThai == globals.prop.NHAP_DA_DUYET_LD_VU )? 'da-ban-hanh' :'du-thao-va-lanh-dao-duyet'">
+            {{detail.tenTrangThai}}
           </span>
           <span>Tổng hợp đề nghị cấp vốn chi DTQG</span>
         </div>
@@ -46,7 +43,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Năm </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="nam">
+              <nz-select [nzDisabled]="isView" formControlName="nam">
                 <nz-option *ngFor="let nam of listNam" [nzValue]="nam.value" [nzLabel]="nam.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -56,8 +53,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Nguồn tổng hợp </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="nguonTongHop">
-                <nz-option *ngFor="let item of listNguonTongHop" [nzValue]="item.soDeNghi" [nzLabel]="item.soDeNghi">
+              <nz-select [nzDisabled]="isView" formControlName="nguonTongHop">
+                <nz-option *ngFor="let item of listNguonTongHop" [nzValue]="item.id" [nzLabel]="item.soDeNghi">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -79,7 +76,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Ngày tổng hợp </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                  <nz-date-picker formControlName="ngayTongHop" nzFormat="dd/MM/YYYY">
+                  <nz-date-picker [nzDisabled]="isView" formControlName="ngayTongHop" nzFormat="dd/MM/YYYY">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>
@@ -88,7 +85,7 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> Mã Tờ Trình </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                  <input nz-input formControlName="maToTrinh" placeholder="ID tự động tăng " />
+                  <input [readonly]="isView" nz-input formControlName="maToTrinh" placeholder="ID tự động tăng " />
                 </nz-form-control>
               </nz-form-item>
             </div>
@@ -110,7 +107,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Nội dung tổng hợp </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <textarea nz-input formControlName="noiDung" rows="4"></textarea>
+              <textarea [readonly]="isView" nz-input formControlName="noiDung" rows="4"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -155,7 +152,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let data of basicTable.data; let i = index">
-
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
           <td>{{ data.soDeNghi }}</td>
           <td>{{ data.nam }}</td>
@@ -214,7 +210,7 @@
             <tr>
               <td></td>
               <td>
-                <nz-select [(ngModel)]="create.soDeNghi" class="w-300" (ngModelChange)="changeSoDeNghi(create)">
+                <nz-select [nzDisabled]="isView" [(ngModel)]="create.soDeNghi" class="w-300" (ngModelChange)="changeSoDeNghi(create)">
                   <nz-option *ngFor="let item of listNguonTongHop" [nzValue]="item.soDeNghi" [nzLabel]="item.soDeNghi">
                   </nz-option>
                 </nz-select>
@@ -225,7 +221,7 @@
               <td> {{create.tongTien}} </td>
               <td> {{create.kinhPhiDaCap}} </td>
               <td>
-                <input type="text" nz-input class="w-300" [(ngModel)]="create.tCThem" />
+                <input [disabled]="isView" type="text" nz-input class="w-300" [(ngModel)]="create.tCThem" />
               </td>
               <td>
                 <a (click)="addRow()" [class.disabled]="!create.soDeNghi || create.soDeNghi == ''">
