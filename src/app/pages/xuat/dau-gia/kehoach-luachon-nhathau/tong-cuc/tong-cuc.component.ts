@@ -15,7 +15,7 @@ export class TongCucComponent implements OnInit, OnChanges {
     this.loaiVTHHGetAll();
   }
   ngOnInit() {
-
+    this.loaiVthhSelected = '';
   }
   tabs: any
   async loaiVTHHGetAll() {
