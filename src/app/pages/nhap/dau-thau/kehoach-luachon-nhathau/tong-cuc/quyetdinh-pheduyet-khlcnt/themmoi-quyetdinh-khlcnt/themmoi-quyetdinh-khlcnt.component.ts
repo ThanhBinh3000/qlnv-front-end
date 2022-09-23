@@ -227,16 +227,14 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      if (this.idInput > 0) {
-        this.loadChiTiet(this.idInput)
-      }
       await Promise.all([
         this.loaiHangDTQGGetAll(),
         this.phuongThucDauThauGetAll(),
         this.nguonVonGetAll(),
         this.hinhThucDauThauGetAll(),
         this.loaiHopDongGetAll(),
-        this.bindingDataTongHop(this.dataTongHop)
+        this.bindingDataTongHop(this.dataTongHop),
+        this.loadChiTiet(this.idInput)
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -458,7 +456,8 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           tgianDthau: data.tgianDthauTu,
           tgianMthau: data.tgianMthauTu,
           tgianNhang: data.tgianNhangTu,
-          tchuanCluong: data?.tchuanCluong
+          tchuanCluong: data?.tchuanCluong,
+          idThHdr: event,
         })
         this.danhsachDx = data.hhDxKhLcntThopDtlList;
         this.danhsachDx.forEach(async (item, index) => {
@@ -626,7 +625,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           }
           let res = await this.quyetDinhPheDuyetKeHoachLCNTService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TRINH_DUYET_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
