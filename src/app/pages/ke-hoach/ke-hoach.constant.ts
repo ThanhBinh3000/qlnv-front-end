@@ -12,7 +12,7 @@ export const DU_TOAN_NSNN = 'du-toan-nsnn';
 export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
-    title: 'Giao kế hoạch và dự toán',
+    title: 'Giao kế hoạch và vốn',
     url: `/${MAIN_ROUTE_KE_HOACH}/${GIAO_KE_HOACH_VA_DU_TOAN}`,
     dropdown: 'giao-chi-tieu',
     idHover: 'giao-chi-tieu',

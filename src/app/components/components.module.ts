@@ -148,6 +148,7 @@ import { DialogToTrinhDeXuatComponent } from "./dialog/dialog-ke-hoach-phuong-an
 import { TemplateErrorComponent } from './template-error/template-error.component';
 import { DialogTableSelectionComponent } from './dialog/dialog-table-selection/dialog-table-selection.component';
 import { DialogSoQuyetDinhQlyKhoTangComponent } from './dialog/dialog-so-quyet-dinh-qly-kho-tang/dialog-so-quyet-dinh-qly-kho-tang.component';
+import { DialogDiaDiemNhapKhoComponent } from './dialog/dialog-dia-diem-nhap-kho/dialog-dia-diem-nhap-kho.component';
 @NgModule({
   declarations: [
     //components
@@ -247,7 +248,9 @@ import { DialogSoQuyetDinhQlyKhoTangComponent } from './dialog/dialog-so-quyet-d
     DialogCanCuQdPheDuyetKqdgComponent,
     TemplateErrorComponent,
     DialogTableSelectionComponent,
-    DialogSoQuyetDinhQlyKhoTangComponent
+    DialogSoQuyetDinhQlyKhoTangComponent,
+    DialogTableSelectionComponent,
+    DialogDiaDiemNhapKhoComponent
   ],
   imports: [
     CommonModule,
@@ -366,7 +369,8 @@ import { DialogSoQuyetDinhQlyKhoTangComponent } from './dialog/dialog-so-quyet-d
     FileListComponent,
     NzResultModule,
     TemplateErrorComponent,
-    DialogTableSelectionComponent
+    DialogTableSelectionComponent,
+    DialogDiaDiemNhapKhoComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

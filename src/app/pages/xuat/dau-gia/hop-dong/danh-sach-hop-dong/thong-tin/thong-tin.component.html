@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="approve()"
+    <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="approve()"
             *ngIf="(detail.trangThai == globals.prop.NHAP_DU_THAO && id > 0) && !isView">
       <i class="icon htvbdh_trinh"></i>
       <span>Ký</span>
@@ -26,14 +26,14 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span [ngClass]="formData.value.trangThai == '00' ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
-            {{ formData.value.trangThai == '00' ? 'Dự Thảo' : 'Ban Hành' }}
+            {{ formData.value.tenTrangThai}}
           </span>
           <span>Nhập hợp đồng</span>
         </div>
       </div>
     </div>
     <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
-      <div nz-row [nzGutter]="[24]">
+      <div nz-row [nzGutter]="[16,12]">
         <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Căn cứ</nz-form-label>
@@ -196,7 +196,7 @@
           <div nz-col [nzSpan]="6">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Số ngày thực hiện</nz-form-label>
-              <input [readonly]="isView" nz-input [readonly]="true" placeholder="Số ngày thực hiện"
+              <input [readonly]="isView" nz-input placeholder="Số ngày thực hiện"
                      formControlName="soNgayThien"/>
             </nz-form-item>
           </div>
@@ -204,7 +204,7 @@
           <div nz-col [nzSpan]="3">
             <nz-form-item>
               <nz-form-label [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
-              <input class="search__input" [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true"/>
+              <input class="search__input" [readonly]="true" nz-input formControlName="tenVthh" readonly="true"/>
             </nz-form-item>
           </div>
           <!--          <div nz-col [nzSpan]="3">-->
@@ -231,7 +231,7 @@
                 File đính kèm
               </nz-form-label>
               <div class="list-file">
-                <file-list></file-list>
+                <file-list [data]="fileDinhKem"></file-list>
               </div>
             </nz-form-item>
           </div>
@@ -300,9 +300,11 @@
                 [(nzExpand)]="item.expand"
                 (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)"
               >
-                {{ item.name }}
               </td>
+              <td>{{ item.name }}</td>
               <td>{{ item.tenDiemKho }}</td>
+              <td>{{ item.tenNganKho }}</td>
+              <td>{{ item.age }}</td>
             </tr>
           </ng-container>
         </ng-container>

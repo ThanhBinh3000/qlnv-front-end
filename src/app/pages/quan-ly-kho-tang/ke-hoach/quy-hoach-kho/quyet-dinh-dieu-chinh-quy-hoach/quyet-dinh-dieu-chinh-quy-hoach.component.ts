@@ -321,7 +321,7 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
           "maChiCuc": this.searchFilter.maChiCuc,
           "maCuc": this.searchFilter.maCuc,
           "maDiemKho": this.searchFilter.maDiemKho,
-          "namBatDau":this.searchFilter.namBatDau,
+          "namBatDau": this.searchFilter.namBatDau,
           "ngayKyDen": this.searchFilter.ngayKy[1],
           "ngayKyTu": this.searchFilter.ngayKy[0],
           "namKetThuc": this.searchFilter.namKetThuc,
@@ -331,7 +331,7 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
           },
           "phuongAnQuyHoach": this.searchFilter.phuongAnQuyHoach,
           "soQuyetDinh": this.searchFilter.soQuyetDinh,
-          "type" : this.type
+          "type": this.type
         }
         this.quyHoachKhoService
           .export(body)
