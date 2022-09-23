@@ -36,7 +36,7 @@
       </nz-card>
       <div class="tab-giao-chi-tieu mt12">
         <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="extraTemplate">
-          <nz-tab [nzTitle]="title_2" *ngIf="!userService.isChiCuc()" (nzClick)="selectTab('tong-cuc')">
+          <nz-tab [nzTitle]="title_2" (nzClick)="selectTab('tong-cuc')">
             <ng-template #title_2>
               QĐ giao chỉ tiêu của Tổng Cục
               (<span class="number-title-tab">{{countChiTieu.chiTieuKeHoachNamTongCuc}}</span>)
@@ -136,7 +136,7 @@
                 </tr>
               </tbody>
             </nz-table>
-            <div class="tab-paging tab-content tab-menu" >
+            <div class="tab-paging tab-content tab-menu">
               <div class="tab-pane fade show active justify-content-between">
                 <div class="trai">
                 </div>
