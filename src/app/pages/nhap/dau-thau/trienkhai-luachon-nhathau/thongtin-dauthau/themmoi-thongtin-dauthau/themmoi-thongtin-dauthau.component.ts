@@ -362,12 +362,12 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
   pipe = new DatePipe('en-US');
 
   async save(trangThaiLuu) {
-    if (trangThaiLuu == STATUS.HOAN_THANH_CAP_NHAT) {
-      this.helperService.markFormGroupTouched(this.formGoiThau);
-      if (this.formGoiThau.invalid) {
-        return;
-      }
-    }
+    // if (trangThaiLuu == STATUS.HOAN_THANH_CAP_NHAT) {
+    //   this.helperService.markFormGroupTouched(this.formGoiThau);
+    //   if (this.formGoiThau.invalid) {
+    //     return;
+    //   }
+    // }
     let body = this.formGoiThau.value;
     body.tgianDthau = this.pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
     body.tgianMthau = this.pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
