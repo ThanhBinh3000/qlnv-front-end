@@ -42,11 +42,11 @@
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()"
           *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_EXP')">
-          <i class="icon htvbdh_chuyen-xu-ly"></i>f
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="insert()"
-          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM')">
+          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM') && userService.isTongCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tạo quyết định</span>
         </button>
@@ -107,7 +107,7 @@
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group>
+              <nz-input-group *ngIf="userService.isTongCuc()">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
                   (input)="filterInTable('namKhoach',filterTable.namKhoach)" size="small" />
               </nz-input-group>
@@ -136,8 +136,7 @@
                   (input)="filterInTable('tongTien',filterTable.tongTien)" size="small" />
               </nz-input-group>
             </th>
-            <th></th>
-            <th></th>
+            <th *ngIf="userService.isTongCuc()"></th>
             <th></th>
           </tr>
         </thead>
@@ -163,12 +162,14 @@
               <a (click)="detail(data)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai == '00' || data.trangThai == '03') 
-                && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_SUA'))" (click)="detail(data)">
+              <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == '03') 
+                && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_SUA')) && userService.isTongCuc()"
+                (click)="detail(data)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == '00' 
-                && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XOA'))" (click)="delete(data)">
+              <a *ngIf="data.trangThai == STATUS.DU_THAO 
+                && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XOA')) && userService.isTongCuc()"
+                (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

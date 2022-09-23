@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!isQuyetDinh">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
@@ -44,7 +44,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-                <input class="search__input" [readonly]="true" nz-input formControlName="tenVthh" readonly="true" />
+                <input class="search__input" [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
               </nz-input-group>
               <ng-template #loaiVthhError let-control>
                 <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -119,7 +119,7 @@
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24" *ngIf="!formData.value.id">
-          <div class="tong-hop-button group-button-search">
+          <div class="tong-hop-button group-button-search mt-16">
             <button class="btn btn-main btn-sm waves-effect waves-light" (click)="tongHopDeXuatTuCuc()"
               *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == ''">
               <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
@@ -132,7 +132,7 @@
   </nz-card>
   <div class="tab-padding-10" *ngIf="isTongHop">
     <nz-tabset nzType="card">
-      <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container" (nzClick)="tabSelected = 'thongTinChung'">
+      <nz-tab [nzTitle]="'Thông tin chung'" class="tt-chung__container">
         <form nzLayout="vertical" nz-form [formGroup]="formData" class="mt-16">
           <div nz-row [nzGutter]="10">
             <div nz-col [nzSpan]="6">
@@ -152,7 +152,7 @@
             </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
+                <nz-form-label nzRequired [nzNoColon]="true">
                   Nội dung tổng hợp
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="veViecError">
@@ -263,7 +263,7 @@
             </div>
             <div nz-col [nzSpan]="24">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">
+                <nz-form-label [nzNoColon]="true">
                   Ghi chú
                 </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
@@ -317,16 +317,9 @@
         </nz-card>
       </nz-tab>
     </nz-tabset>
-    <!-- <ng-template #tableCard2>
-      <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub" (click)="taoQdinh()">
-        <i class="icon htvbdh_tcdt_tao-qd"></i>
-        <span>Tạo quyết định</span>
-      </button>
-    </ng-template> -->
   </div>
 </div>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-themmoi-quyetdinh-khlcnt [id]="selectedId" [dataTongHop]="formData.value" [loaiVthh]="loaiVthh"
-    (showListEvent)="showTongHop()">
+  <app-themmoi-quyetdinh-khlcnt [id]="selectedId" [dataTongHop]="formData.value" (showListEvent)="showTongHop()">
   </app-themmoi-quyetdinh-khlcnt>
 </div>

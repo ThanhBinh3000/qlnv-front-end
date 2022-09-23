@@ -10,7 +10,7 @@ import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { Subject } from 'rxjs';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
@@ -72,7 +72,7 @@ export class BienBanTinhKhoComponent implements OnInit {
     private modal: NzModalService,
     private quyetDinhGiaoNhiemVuXuatHangService: QuyetDinhGiaoNhiemVuXuatHangService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -220,12 +220,12 @@ export class BienBanTinhKhoComponent implements OnInit {
       quyetDinhId: this.quyetDinhId,
       ngayXuatDen:
         this.searchFilter.ngayBienBan &&
-        this.searchFilter.ngayBienBan.length > 1
+          this.searchFilter.ngayBienBan.length > 1
           ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
           : null,
       ngayXuatTu:
         this.searchFilter.ngayBienBan &&
-        this.searchFilter.ngayBienBan.length > 0
+          this.searchFilter.ngayBienBan.length > 0
           ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
           : null,
       orderBy: null,
@@ -273,12 +273,12 @@ export class BienBanTinhKhoComponent implements OnInit {
         let body = {
           ngayXuatDen:
             this.searchFilter.ngayBienBan &&
-            this.searchFilter.ngayBienBan.length > 1
+              this.searchFilter.ngayBienBan.length > 1
               ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
               : null,
           ngayXuatTu:
             this.searchFilter.ngayBienBan &&
-            this.searchFilter.ngayBienBan.length > 0
+              this.searchFilter.ngayBienBan.length > 0
               ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
               : null,
           quyetDinhId: this.quyetDinhId,
@@ -360,7 +360,7 @@ export class BienBanTinhKhoComponent implements OnInit {
             if (
               item[key] &&
               item[key].toString().toLowerCase() ===
-                dayjs(value).format('YYYY-MM-DD')
+              dayjs(value).format('YYYY-MM-DD')
             ) {
               temp.push(item);
             }
@@ -398,5 +398,5 @@ export class BienBanTinhKhoComponent implements OnInit {
     };
   }
 
-  print() {}
+  print() { }
 }
