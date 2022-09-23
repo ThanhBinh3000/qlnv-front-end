@@ -20,7 +20,6 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
-import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
 import { TongHopDeNghiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
@@ -42,10 +41,6 @@ export class ThongTinTonghopComponent implements OnInit {
   dataTableAll: any[] = [];
   date: any = new Date();
   userLogin: UserLogin;
-  titleButtonDuyet: string = '';
-  iconButtonDuyet: string = '';
-  styleStatus: string = 'du-thao-va-lanh-dao-duyet';
-  tabSelected: string = 'thongTinChung';
   listNam: any[] = [];
   noiDung: string = "";
   khDnCapVonIds: any[] = [];
@@ -87,12 +82,13 @@ export class ThongTinTonghopComponent implements OnInit {
     private fb: FormBuilder,
     public globals: Globals,
     public userService: UserService,
-    private helperService: HelperService,
   ) {
   }
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
+    this.detail.trangThai = this.globals.prop.NHAP_DU_THAO
+    this.detail.tenTrangThai = "Dự Thảo"
     this.dayNow = dayjs().format('DD/MM/YYYY')
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
@@ -101,8 +97,10 @@ export class ThongTinTonghopComponent implements OnInit {
       });
     }
     this.initForm();
-    await this.loadAllDeNghiCapVonBoNganh()
-    this.loadChiTiet(this.idInput);
+    await this.loadListNguonTongHop()
+    if (this.idInput) {
+      this.loadChiTiet(this.idInput);
+    }
     this.spinner.hide();
   }
   initForm() {
@@ -124,12 +122,27 @@ export class ThongTinTonghopComponent implements OnInit {
   async loadChiTiet(id: number) {
     if (id > 0) {
       let res = await this.tongHopDeNghiCapVonService.loadChiTiet(id);
-
       if (res.msg == MESSAGE.SUCCESS && res.data) {
+        this.isTonghop = true
+        let data = res.data
+        if (data) {
+          this.detail.trangThai = data.trangThai
+          this.detail.tenTrangThai = data.tenTrangThai
 
-        if (res.data) {
+          console.log(data);
           this.formData.patchValue({
+            "nam": data.nam,
+            "nguonTongHop": Number(data.nguonTongHop),
+            "maTongHop": data.maTongHop,
+            "ngayTongHop": data.ngayTongHop,
+            "maToTrinh": data.maToTrinh,
+            "noiDung": data.noiDung,
           });
+          // đang để tạm
+          this.listFileDinhKem = [data.fileDinhKem];
+          this.listThongTinChiTiet = [...data.cts];
+          this.detail.tCThem = [...data.ct1s]
+          // this.loadDeNghiCapVonBoNganh()
         }
       }
     }
@@ -232,12 +245,15 @@ export class ThongTinTonghopComponent implements OnInit {
       nzWidth: 350,
       nzOnOk: async () => {
         this.spinner.show();
+        await this.save(true);
         try {
           let body = {
             id: this.idInput,
-            trangThai: "",
-            lyDoTuChoi: ""
+            lyDoTuChoi: null,
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_VU,
           };
+          console.log(body);
+
           let res = await this.tongHopDeNghiCapVonService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(
@@ -274,10 +290,10 @@ export class ThongTinTonghopComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            lyDo: text,
-            trangThaiId: this.globals.prop.NHAP_TU_CHOI_TP,
+            lyDoTuChoi: text,
+            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_VU,
           };
-
+          console.log(body);
 
           const res = await this.tongHopDeNghiCapVonService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -295,19 +311,43 @@ export class ThongTinTonghopComponent implements OnInit {
       }
     });
   }
-  async loadAllDeNghiCapVonBoNganh() {
-    let body = {
-      soDeNghi: '',
-      maBoNganh: '',
-      nam: '',
-      ngayDeNghiTuNgay: '',
-      ngayDeNghiDenNgay: '',
-      pageNumber: this.page,
-      pageSize: this.pageSize,
-    };
-    let res = await this.deNghiCapVonBoNganhService.timKiem(body);
-    console.log(res);
+  pheDuyet() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn phê duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            lyDoTuChoi: null,
+            trangThai: this.globals.prop.NHAP_DA_DUYET_LD_VU,
+          };
+          console.log(body);
 
+          let res = await this.tongHopDeNghiCapVonService.updateStatus(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.back();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+  async loadListNguonTongHop() {
+    let res = await this.deNghiCapVonBoNganhService.timKiem({});
     if (res.msg == MESSAGE.SUCCESS) {
       this.listNguonTongHop = res.data.content;
     } else {
@@ -315,15 +355,13 @@ export class ThongTinTonghopComponent implements OnInit {
     }
     this.spinner.hide();
   }
-  banHanh() {
 
-  }
   async changePageIndex(event) {
     this.spinner.show();
     try {
       this.page = event;
 
-      await this.loadThongTinChiTiet();
+      await this.loadDeNghiCapVonBoNganh();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -331,12 +369,11 @@ export class ThongTinTonghopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
   async changePageSize(event) {
     this.spinner.show();
     try {
       this.pageSize = event;
-      await this.loadThongTinChiTiet();
+      await this.loadDeNghiCapVonBoNganh();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -344,26 +381,25 @@ export class ThongTinTonghopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-  async loadThongTinChiTiet() {
-
+  async loadDeNghiCapVonBoNganh() {
     this.spinner.show();
     this.isTonghop = true;
     let body = {
-      // soDeNghi: null,
-      // maBoNganh: null,
-      // nam: ,
-      // ngayDeNghiTuNgay: null,
-      // ngayDeNghiDenNgay: null,
-      // pageNumber: this.page,
-      // pageSize: this.pageSize,
+      soDeNghi: null,
+      maBoNganh: null,
+      nam: this.formData.value.nam,
+      ngayDeNghiTuNgay: null,
+      ngayDeNghiDenNgay: null,
+      pageNumber: this.page,
+      pageSize: this.pageSize,
     };
     let res = await this.deNghiCapVonBoNganhService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listThongTinChiTiet = data.content;
-      this.khDnCapVonIds = data.content.map(item => item.id)
-      this.formData.patchValue({ khDnCapVonIds: this.khDnCapVonIds })
-      this.dataTableAll = cloneDeep(this.listThongTinChiTiet);
+      let data = res.data.content;
+      this.listThongTinChiTiet = data.filter((item) => item.nam == this.formData.value.nam);
+
+      this.khDnCapVonIds = this.listThongTinChiTiet.map(item => item.id)
+      // this.formData.patchValue({ khDnCapVonIds: this.khDnCapVonIds })
       this.totalRecord = data.totalElements;
     } else {
       this.listThongTinChiTiet = [];
@@ -372,20 +408,14 @@ export class ThongTinTonghopComponent implements OnInit {
     }
     this.spinner.hide();
   }
-  thongTinTrangThai(trangThai: string): string {
-    return thongTinTrangThaiNhap(trangThai);
-  }
   clearFilter() {
-    // this.isTonghop = false
     this.formData = this.fb.group({
-      "nam": [null, [Validators.required]],
-      "nguonTongHop": [null, [Validators.required]],
       "maTongHop": [null],
       "ngayTongHop": [null],
       "maToTrinh": [null],
       "noiDung": [null],
       "khDnCapVonIds": [null],
-      "ct1s": [null, [Validators.required]],
+      "ct1s": [null],
     })
     this.listFileDinhKem = []
   }
@@ -456,6 +486,7 @@ export class ThongTinTonghopComponent implements OnInit {
     if (item) {
       let getSoDeNghi = this.listNguonTongHop.filter(x => x.soDeNghi == item.soDeNghi);
       if (getSoDeNghi && getSoDeNghi.length > 0) {
+        item.id = getSoDeNghi[0].id;
         item.nam = getSoDeNghi[0].nam;
         item.ngayDeNghi = getSoDeNghi[0].ngayDeNghi;
         item.tenBoNganh = getSoDeNghi[0].tenBoNganh;
