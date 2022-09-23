@@ -57,7 +57,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Nguồn tổng hợp </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select formControlName="nguonTongHop">
-                <nz-option *ngFor="let item of listNguonTongHop" [nzValue]="item.id" [nzLabel]="item.soDeNghi">
+                <nz-option *ngFor="let item of listNguonTongHop" [nzValue]="item.soDeNghi" [nzLabel]="item.soDeNghi">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -125,7 +125,7 @@
             <span>Nhập lại</span>
           </button>
           <button [disabled]="!formData.valid" class="btn btn-main btn-sm waves-effect waves-light"
-            (click)="loadThongTinChiTiet()">
+            (click)="loadDeNghiCapVonBoNganh()">
             <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
             <span>Tổng hợp</span>
           </button>

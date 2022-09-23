@@ -400,6 +400,7 @@ export class TongHopComponent implements OnInit {
     if (value instanceof Date) {
       value = dayjs(value).format('YYYY-MM-DD');
     }
+    console.log(key, value);
 
     if (value && value != '') {
       this.dataTable = this.dataTableAll.filter((item) =>

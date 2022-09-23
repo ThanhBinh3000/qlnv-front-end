@@ -19,11 +19,11 @@ import { DeNghiCapVonBoNganhService } from 'src/app/services/deNghiCapVanBoNganh
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
-import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import {
   PAGE_SIZE_DEFAULT,
 } from 'src/app/constants/config';
+import { T } from '@angular/cdk/keycodes';
 @Component({
   selector: 'app-thong-tin-tong-hop',
   templateUrl: './thong-tin-tong-hop.component.html',
@@ -86,7 +86,7 @@ export class ThongTinTonghopComponent implements OnInit {
       });
     }
     this.initForm();
-    await this.loadAllDeNghiCapVonBoNganh()
+    await this.loadListNguonTongHop()
     this.loadChiTiet(this.idInput);
     this.spinner.hide();
   }
@@ -276,19 +276,8 @@ export class ThongTinTonghopComponent implements OnInit {
       }
     });
   }
-  async loadAllDeNghiCapVonBoNganh() {
-    let body = {
-      soDeNghi: '',
-      maBoNganh: '',
-      nam: '',
-      ngayDeNghiTuNgay: '',
-      ngayDeNghiDenNgay: '',
-      pageNumber: this.page,
-      pageSize: this.pageSize,
-    };
-    let res = await this.deNghiCapVonBoNganhService.timKiem(body);
-    console.log(res);
-
+  async loadListNguonTongHop() {
+    let res = await this.deNghiCapVonBoNganhService.timKiem({});
     if (res.msg == MESSAGE.SUCCESS) {
       this.listNguonTongHop = res.data.content;
     } else {
@@ -304,7 +293,7 @@ export class ThongTinTonghopComponent implements OnInit {
     try {
       this.page = event;
 
-      await this.loadThongTinChiTiet();
+      await this.loadDeNghiCapVonBoNganh();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -312,12 +301,11 @@ export class ThongTinTonghopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
   async changePageSize(event) {
     this.spinner.show();
     try {
       this.pageSize = event;
-      await this.loadThongTinChiTiet();
+      await this.loadDeNghiCapVonBoNganh();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -325,18 +313,18 @@ export class ThongTinTonghopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-  async loadThongTinChiTiet() {
+  async loadDeNghiCapVonBoNganh() {
 
     this.spinner.show();
     this.isTonghop = true;
     let body = {
-      // soDeNghi: null,
-      // maBoNganh: null,
-      // nam: ,
-      // ngayDeNghiTuNgay: null,
-      // ngayDeNghiDenNgay: null,
-      // pageNumber: this.page,
-      // pageSize: this.pageSize,
+      soDeNghi: this.formData.value.nguonTongHop,
+      maBoNganh: null,
+      nam: this.formData.value.nam,
+      ngayDeNghiTuNgay: null,
+      ngayDeNghiDenNgay: null,
+      pageNumber: this.page,
+      pageSize: this.pageSize,
     };
     let res = await this.deNghiCapVonBoNganhService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -353,14 +341,8 @@ export class ThongTinTonghopComponent implements OnInit {
     }
     this.spinner.hide();
   }
-  thongTinTrangThai(trangThai: string): string {
-    return thongTinTrangThaiNhap(trangThai);
-  }
   clearFilter() {
-    // this.isTonghop = false
     this.formData = this.fb.group({
-      "nam": [null, [Validators.required]],
-      "nguonTongHop": [null, [Validators.required]],
       "maTongHop": [null],
       "ngayTongHop": [null],
       "maToTrinh": [null],
