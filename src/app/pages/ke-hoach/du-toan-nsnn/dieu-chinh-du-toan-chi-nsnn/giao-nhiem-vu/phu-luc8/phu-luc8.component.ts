@@ -76,6 +76,7 @@ export class PhuLuc8Component implements OnInit {
   allChecked = false;                         // check all checkbox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
   editMoneyUnit = false;
+  maDviTao!: string;
   constructor(private router: Router,
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
@@ -102,6 +103,7 @@ export class PhuLuc8Component implements OnInit {
     this.trangThaiPhuLucGetDeTail = this.data?.lstDchinhs?.trangThai;
     this.namHienHanh = this.data?.namHienHanh;
     this.namBcao = this.data?.namBcao;
+    this.maDviTao = this.data?.maDviTao;
     // this.lstDchinh = this.data?.lstCtiet;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
@@ -130,7 +132,7 @@ export class PhuLuc8Component implements OnInit {
   }
 
   getStatusButton() {
-    if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5") || (this.trangThaiPhuLuc == "4" || this.trangThaiPhuLucGetDeTail == "7")) {
+    if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
       this.statusBtnOk = false;
     } else {
       this.statusBtnOk = true;

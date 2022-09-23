@@ -54,7 +54,7 @@ export class PhuLuc7Component implements OnInit {
   lstCtietBcao: ItemData[] = [];
   donViTiens: any[] = DON_VI_TIEN;
   soLaMa: any[] = LA_MA;
-
+  maDviTao!: string;
   //thong tin chung
   id: any;
   namBcao: number;
@@ -135,6 +135,7 @@ export class PhuLuc7Component implements OnInit {
     this.trangThaiPhuLuc = this.data?.trangThai;
     this.namBcao = this.data?.namHienHanh;
     this.status = this.data?.status;
+    this.maDviTao = this.data?.maDviTao;
     this.statusBtnFinish = this.data?.statusBtnFinish;
     this.maDviTien = "1";
     this.data?.lstCtietDchinh.forEach(item => {
