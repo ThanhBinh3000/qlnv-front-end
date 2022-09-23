@@ -50,17 +50,11 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
     lyDoChi: null,
   };
   filterTable: any = {
-    soKeHoach: '',
-    tenDonVi: '',
-    ngayLapKeHoach: '',
-    ngayKy: '',
-    trichYeu: '',
-    tenHangHoa: '',
-    soQuyetDinhGiaoChiTieu: '',
-    soQuyetDinhPheDuyet: '',
-    namKeHoach: '',
-    tenVthh: '',
-    tenCloaiVthh: '',
+    soThongTri: '',
+    nam: '',
+    ngayLap: '',
+    lyDoChi: '',
+    soDnCapPhi: '',
     tenTrangThai: '',
   };
   dataTableAll: any[] = [];
@@ -231,7 +225,7 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
     this.searchFilter = {
       soThongChi: null,
       tenDvi: null,
-      namKh: dayjs().get('year'),
+      namKh: null,
       ngayKy: null,
       lyDoChi: null,
     }
@@ -373,16 +367,11 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soKeHoach: '',
-      ngayLapKeHoach: '',
-      ngayKy: '',
-      trichYeu: '',
-      tenHangHoa: '',
-      soQuyetDinhGiaoChiTieu: '',
-      soQuyetDinhPheDuyet: '',
-      namKeHoach: '',
-      tenVthh: '',
-      tenCloaiVthh: '',
+      soThongTri: '',
+      nam: '',
+      ngayLap: '',
+      lyDoChi: '',
+      soDnCapPhi: '',
       tenTrangThai: '',
     };
   }
