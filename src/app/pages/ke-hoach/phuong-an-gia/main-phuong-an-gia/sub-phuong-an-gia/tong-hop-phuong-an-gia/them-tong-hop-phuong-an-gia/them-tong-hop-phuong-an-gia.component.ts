@@ -124,7 +124,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       this.isTongHop = true;
       let res = await this.tongHopPhuongAnGiaService.getDetail(id);
       const data = res.data;
-      console.log(data);
       this.formTraCuu.patchValue({
         namTongHop: data.namTongHop,
         loaiVthh: data.loaiVthh,
@@ -257,7 +256,6 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   }
 
   bindingDataTongHop(data, reqBody) {
-    console.log(data);
     let giaKsTt = data.giaKsTtTu && data.giaKsTtDen ? data.giaKsTtTu + " - " + data.giaKsTtDen : null;
     let giaKsTtVat = data.giaKsTtVatTu && data.giaKsTtVatDen ? data.giaKsTtVatTu + " - " + data.giaKsTtVatDen : null;
     let kqTd = data.giaTdTu && data.giaTdDen ? data.giaTdTu + " - " + data.giaTdDen : null;

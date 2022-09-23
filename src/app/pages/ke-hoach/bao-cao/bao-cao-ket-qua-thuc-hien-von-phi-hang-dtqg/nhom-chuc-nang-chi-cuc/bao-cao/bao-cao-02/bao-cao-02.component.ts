@@ -71,6 +71,7 @@ export class BaoCao02Component implements OnInit {
     statusBtnExport: boolean;
     allChecked = false;
     editMoneyUnit = false;
+    isDataAvailable = false;
 
     total: ItemData[] = [new ItemData(), new ItemData()];
     dviMua = new ItemData();
@@ -88,6 +89,12 @@ export class BaoCao02Component implements OnInit {
     }
 
     async ngOnInit() {
+        this.initialization().then(() => {
+            this.isDataAvailable = true;
+        })
+    }
+
+    async initialization() {
         this.spinner.show();
         //lấy danh sách vật tư
         await this.danhMucService.dMVatTu().toPromise().then(res => {
@@ -107,7 +114,7 @@ export class BaoCao02Component implements OnInit {
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnExport = this.data?.statusBtnExport;
-        if (this.status){
+        if (this.status) {
             this.tuNgay = this.datePipe.transform(this.data?.tuNgay, Utils.FORMAT_DATE_STR);
             this.denNgay = this.datePipe.transform(this.data?.denNgay, Utils.FORMAT_DATE_STR);
         } else {
@@ -131,7 +138,6 @@ export class BaoCao02Component implements OnInit {
                 }
             })
             this.sortAppendix(id);
-            console.log(this.lstCtietBcao[id].data);
             this.changeModel(id);
             this.updateEditCache(id);
         })

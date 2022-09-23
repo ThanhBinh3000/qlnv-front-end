@@ -404,7 +404,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             return;
         }
         if (this.kphiDaCap > this.tongTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            this.notification.warning(MESSAGE.WARNING, 'Kinh phí đã cấp không được vượt quá tổng tiền');
             return;
         }
         //get list file url

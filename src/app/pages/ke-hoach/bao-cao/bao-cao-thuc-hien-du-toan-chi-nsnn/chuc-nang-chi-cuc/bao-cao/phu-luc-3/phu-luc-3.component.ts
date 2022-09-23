@@ -102,6 +102,7 @@ export class PhuLucIIIComponent implements OnInit {
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
     editMoneyUnit = false;
+    isDataAvailable = false;
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -116,6 +117,12 @@ export class PhuLucIIIComponent implements OnInit {
     }
 
     async ngOnInit() {
+        this.initialization().then(() => {
+            this.isDataAvailable = true;
+        })
+    }
+
+    async initialization() {
         this.spinner.show();
         await this.danhMucService.dMMaDuAnPhuLuc3().toPromise().then(
             (data) => {

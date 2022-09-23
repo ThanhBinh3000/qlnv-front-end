@@ -107,6 +107,7 @@ export class BaoCaoComponent implements OnInit {
 	statusBtnOk = true;                        // trang thai ok/ not ok
 	statusBtnClose = false;                    // trang thai ok/ not ok
 	statusBtnFinish = true;                    // trang thai hoan tat nhap lieu
+	isDataAvailable = false;
 	//file
 	listFile: File[] = [];                      // list file chua ten va id de hien tai o input
 	listIdFilesDelete: any = [];                        // id file luc call chi tiet
@@ -139,6 +140,12 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	async ngOnInit() {
+		this.initialization().then(() => {
+			this.isDataAvailable = true;
+		})
+	}
+
+	async initialization() {
 		this.baoCao.id = this.routerActive.snapshot.paramMap.get('id');
 		const lbc = this.routerActive.snapshot.paramMap.get('baoCao');
 

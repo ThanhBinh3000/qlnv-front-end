@@ -39,9 +39,12 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
   @Input()
   loaiVthh: string;
   @Input()
+  cloaiVthh: string;
+  @Input()
   loaiVthhCache: string;
 
   isDetail: boolean = false;
+  isTaoQd: boolean = false;
   listNam: any[] = [];
   dsLoaiHangHoa = [];
   yearNow: number = 0;
@@ -217,11 +220,17 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.isDetail = false;
     this.search();
   }
-
+  // async changeLoaiHangHoa() {
+  //   let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ma == this.formData.value.loaiVthh);
+  //   if (loaiHangHoa && loaiHangHoa.length > 0) {
+  //     this.listChungLoaiHangHoa = loaiHangHoa[0].child;
+  //   }
+  // }
   detail(data?: any, isView?: boolean) {
     this.selectedId = data.id;
     this.isDetail = true;
     this.loaiVthh = data.loaiVthh;
+    this.cloaiVthh = data.cloaiVthh;
     if (isView) {
       this.isView = isView;
     }
