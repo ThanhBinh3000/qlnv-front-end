@@ -97,6 +97,7 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     statusBtnOk: boolean;
     statusBtnPrint: boolean;
     editMoneyUnit = false;
+    isDataAvailable = false;
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -110,6 +111,12 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
     }
 
     async ngOnInit() {
+        this.initialization().then(() => {
+            this.isDataAvailable = true;
+        })
+    }
+
+    async initialization(){
         this.spinner.show();
         this.id = this.data?.id;
         this.maBieuMau = this.data?.maBieuMau;
@@ -136,19 +143,6 @@ export class ChiTietNhuCauChiThuongXuyen3NamComponent implements OnInit {
         this.getTotal();
         this.updateEditCache();
 
-        // //lay danh sach danh muc don vi
-        // await this.danhMucService.dMDonVi().toPromise().then(
-        //     (data) => {
-        //         if (data.statusCode == 0) {
-        //             this.donVis = data.data;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, data?.msg);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //     }
-        // );
         this.getStatusButton();
         this.spinner.hide();
     }

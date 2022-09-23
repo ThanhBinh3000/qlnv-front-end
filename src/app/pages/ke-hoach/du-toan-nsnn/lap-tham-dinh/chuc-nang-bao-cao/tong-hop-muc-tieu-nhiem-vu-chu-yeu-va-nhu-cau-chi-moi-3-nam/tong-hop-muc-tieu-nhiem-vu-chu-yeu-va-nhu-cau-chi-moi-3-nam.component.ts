@@ -75,6 +75,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
     editMoneyUnit = false;
+    isDataAvailable = false;
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -89,6 +90,12 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
 
 
     async ngOnInit() {
+        this.initialization().then(() => {
+            this.isDataAvailable = true;
+        })
+    }
+
+    async initialization(){
         this.spinner.show();
         this.id = this.data?.id;
         this.maBieuMau = this.data?.maBieuMau;

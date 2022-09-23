@@ -1,11 +1,11 @@
 <nz-affix class="btn-affix" [nzOffsetTop]="globals.prop.MENU_LV2">
   <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="quayLai()">
+    <button type="button" class="btn btn-main" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-main" (click)="guiDuyet()" *ngIf="!isView">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
+    <button type="button" class="btn btn-main" (click)="save(true)" *ngIf="!isView">
+      <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
     <button type="button" class="btn btn-main" (click)="save()" *ngIf="!isView">
@@ -90,7 +90,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="maVatTuCha" (ngModelChange)="changeHangHoa($event)">
+              <nz-select formControlName="loaiVthh" (ngModelChange)="changeHangHoa($event)">
                 <nz-option *ngFor="let item of listLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
                 </nz-option>
               </nz-select>
@@ -101,7 +101,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="maVatTu" (ngModelChange)="changeChungLoaiHangHoa($event)">
+              <nz-select formControlName="cloaiVthh" (ngModelChange)="changeChungLoaiHangHoa($event)">
                 <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
                 </nz-option>
               </nz-select>
@@ -112,7 +112,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input class="search__input" nz-input formControlName="loaiVthh" />
+              <input class="search__input" nz-input formControlName="tenVthh" />
             </nz-form-control>
           </nz-form-item>
         </div>

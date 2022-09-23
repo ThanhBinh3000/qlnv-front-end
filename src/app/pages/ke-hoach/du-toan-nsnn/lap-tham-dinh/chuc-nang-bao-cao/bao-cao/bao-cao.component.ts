@@ -131,6 +131,7 @@ export class BaoCaoComponent implements OnInit {
 	checkParent = false;
 	statusBtnUser: boolean;
 	statusBtnNhap: boolean;
+	isDataAvailable = false;
 	//khac
 	data: any;
 	selectedIndex = 1;
@@ -179,6 +180,12 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	async ngOnInit() {
+		this.initialization().then(() => {
+			this.isDataAvailable = true;
+		})
+	}
+
+	async initialization(){
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.id = this.routerActive.snapshot.paramMap.get('id');
 		this.userInfo = this.userService.getUserLogin();

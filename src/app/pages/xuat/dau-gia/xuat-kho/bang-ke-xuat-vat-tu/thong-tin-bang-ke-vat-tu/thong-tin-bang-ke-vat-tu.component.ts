@@ -17,7 +17,7 @@ import { QuanLyBangKeVatTuService } from 'src/app/services/quanLyBangKeVatTu.ser
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
 import { QuanLyPhieuSoKhoService } from 'src/app/services/quanLySoKho.service';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';

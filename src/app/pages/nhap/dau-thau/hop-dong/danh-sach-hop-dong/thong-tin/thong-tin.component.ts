@@ -84,7 +84,7 @@ export class ThongTinComponent implements OnInit {
   idPhuLuc: number = 0;
 
   isVatTu: boolean = false;
-
+  STATUS = STATUS;
   formDetailHopDong: FormGroup;
   maHopDongSuffix: string = '';
   dvLQuan: DonviLienQuanModel = {
@@ -225,7 +225,7 @@ export class ThongTinComponent implements OnInit {
             namHd: +this.detail.namHd ?? null,
             ngayHieuLuc: this.detail.tuNgayHluc && this.detail.denNgayHluc ? [this.detail.tuNgayHluc, this.detail.denNgayHluc] : null,
             soNgayThien: this.detail.soNgayThien ?? null,
-            tenLoaiVthh: this.detail.tenLoaiVthh ?? null,
+            tenLoaiVthh: this.detail.tenVthh ?? null,
             loaiVthh: this.detail.loaiVthh ?? null,
             cloaiVthh: this.detail.cloaiVthh ?? null,
             moTaHangHoa: this.detail.moTaHangHoa ?? null,
@@ -253,6 +253,7 @@ export class ThongTinComponent implements OnInit {
           this.dvLQuan = this.listDviLquan.find(item => item.id == this.detail.idNthau);
           await this.getListGoiThau(this.detail.canCuId);
           this.diaDiemNhapListCuc = this.detail.hhDdiemNhapKhoList;
+          this.fileDinhKem = this.detail.fileDinhKems;
         }
       }
     }
@@ -487,7 +488,7 @@ export class ThongTinComponent implements OnInit {
         console.log("🚀 ~ file: thong-tin.component.ts ~ line 416 ~ ThongTinComponent ~ onChangeGoiThau ~ data", data)
         this.formDetailHopDong.patchValue({
           soNgayThien: data.tgianThienHd ?? null,
-          tenLoaiVthh: data.tenLoaiVthh ?? null,
+          tenLoaiVthh: data.tenVthh ?? null,
           loaiVthh: data.loaiVthh ?? null,
           cloaiVthh: data.cloaiVthh ?? null,
           tenCloaiVthh: data.tenCloaiVthh ?? null,

@@ -13,7 +13,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyBienBanLayMauService } from 'src/app/services/quanLyBienBanLayMau.service';
+import { QuanLyBienBanLayMauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanLayMau.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';

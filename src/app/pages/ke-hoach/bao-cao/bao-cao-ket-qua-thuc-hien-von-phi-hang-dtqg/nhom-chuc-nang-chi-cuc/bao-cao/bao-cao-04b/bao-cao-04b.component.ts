@@ -76,6 +76,7 @@ export class BaoCao04bComponent implements OnInit {
     statusBtnExport: boolean;
     allChecked = false;
     editMoneyUnit = false;
+    isDataAvailable = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 
     constructor(
@@ -87,9 +88,15 @@ export class BaoCao04bComponent implements OnInit {
     ) {
     }
 
-    async ngOnInit() {
+    ngOnInit() {
+        this.initialization().then(() => {
+            this.isDataAvailable = true;
+        })
+    }
+
+    async initialization() {
         this.spinner.show();
-        //lay thong tin chung cho bao cao 04an
+        //thong tin chung bieu mau
         this.id = this.data?.id;
         this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
@@ -99,40 +106,10 @@ export class BaoCao04bComponent implements OnInit {
         this.lstCtietBcao = this.data?.lstCtietBcaos;
         this.namBcao = this.data?.namBcao;
         this.trangThaiPhuLuc = this.data?.trangThai;
-        this.luyKes = await this.data?.luyKes.find(item => item.maLoai == '8')?.lstCtietBcaos;
-        //lay danh muc noi dung chi
-        await this.danhMucService.dMNoiDungChi04b().toPromise().then(res => {
-            if (res.statusCode == 0) {
-                this.noiDungChis = res.data;
-            } else {
-                this.notification.error(MESSAGE.ERROR, res?.msg);
-            }
-        }, err => {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        })
-        await this.noiDungChis.forEach(item => {
-            if (!item.maCha) {
-                this.noiDungChiFull.push({
-                    ...item,
-                    tenDm: item.giaTri,
-                    ten: item.giaTri,
-                    level: 0,
-                    idCha: 0,
-                })
-            }
-        })
-        await this.addListNoiDungChi(this.noiDungChiFull);
-        //lay danh sach vat tu
-        await this.danhMucService.dMVatTu().toPromise().then(res => {
-            if (res.statusCode == 0) {
-                this.listVattu = res.data;
-            } else {
-                this.notification.error(MESSAGE.ERROR, res?.msg);
-            }
-        }, err => {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        })
-        await this.addListVatTu(this.listVattu);
+        this.luyKes = this.data?.luyKes.find(item => item.maLoai == '8')?.lstCtietBcaos;
+
+        await this.getListNdung();
+        await this.getListVtu();
 
         if (this.lstCtietBcao.length > 0) {
             //xap xep lai cac phan tu va lay thong tin cac vat tu da duoc chon
@@ -179,7 +156,7 @@ export class BaoCao04bComponent implements OnInit {
                 })
             } else {
                 const dataPL = new ItemData();
-                await this.noiDungChiFull.forEach(element => {
+                this.noiDungChiFull.forEach(element => {
                     const data: any = {
                         ...dataPL,
                         maNdungChi: element.id,
@@ -196,19 +173,62 @@ export class BaoCao04bComponent implements OnInit {
 
         //sap xep lai so thu tu
         if (!this.lstCtietBcao[0].stt) {
-            // const lstTemp = [];
-            // await this.noiDungChiFull.forEach(element => {
-            //     lstTemp.push(this.lstCtietBcao.find(item => item.maNdungChi == element.id));
-            // });
-            // this.lstCtietBcao = lstTemp;
-            await this.sortWithoutIndex();
+            const lstTemp = [];
+            await this.noiDungChiFull.forEach(element => {
+                const temp: ItemData = this.lstCtietBcao.find(item => item.maNdungChi == element.id);
+                if (temp){
+                    lstTemp.push(temp);
+                }
+            });
+            this.lstCtietBcao = lstTemp;
+            this.sortWithoutIndex();
         } else {
-            await this.sortByIndex();
+            this.sortByIndex();
         }
 
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
+    }
+
+    async getListNdung(){
+        //lay danh muc noi dung chi
+        await this.danhMucService.dMNoiDungChi04b().toPromise().then(res => {
+            if (res.statusCode == 0) {
+                this.noiDungChis = res.data;
+            } else {
+                this.notification.error(MESSAGE.ERROR, res?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
+        this.noiDungChis.forEach(item => {
+            if (!item.maCha) {
+                this.noiDungChiFull.push({
+                    ...item,
+                    tenDm: item.giaTri,
+                    ten: item.giaTri,
+                    level: 0,
+                    idCha: 0,
+                })
+            }
+        })
+        this.addListNoiDungChi(this.noiDungChiFull);
+        this.noiDungChiFull.sort((item1, item2) => {
+            if (item1.level > item2.level) {
+                return -1;
+            }
+            if (item1.level < item2.level) {
+                return 1;
+            }
+            if (this.getTail(item1.ma) > this.getTail(item2.ma)) {
+                return 1;
+            }
+            if (this.getTail(item1.ma) < this.getTail(item2.ma)) {
+                return -1;
+            }
+            return 0;
+        });
     }
 
     addListNoiDungChi(noiDungChiTemp) {
@@ -233,8 +253,18 @@ export class BaoCao04bComponent implements OnInit {
         }
     }
 
-    addListVatTu(listVattu) {
-        listVattu.forEach(data => {
+    async getListVtu(){
+        //lay danh sach vat tu
+        await this.danhMucService.dMVatTu().toPromise().then(res => {
+            if (res.statusCode == 0) {
+                this.listVattu = res.data;
+            } else {
+                this.notification.error(MESSAGE.ERROR, res?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
+        this.listVattu.forEach(data => {
             switch (data.ma) {
                 case '04':
                     data.child.forEach(item => {

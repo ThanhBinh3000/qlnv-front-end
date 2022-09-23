@@ -105,13 +105,7 @@
               <td>{{ngayDuyetLD}}</td>
               <td>{{ngayCapTrenTraKq}}</td>
               <td>
-                <ng-container
-                  *ngIf="trangThaiBaoCao == '3' || trangThaiBaoCao == '5' || trangThaiBaoCao == '8'; else chapnhan">
-                  {{getStatusName(trangThaiBaoCao)}} - {{lyDoTuChoi}}
-                </ng-container>
-                <ng-template #chapnhan>
-                  {{getStatusName(trangThaiBaoCao)}}
-                </ng-template>
+                {{getStatusName(trangThaiBaoCao)}}
               </td>
             </tr>
           </tbody>
@@ -171,12 +165,12 @@
                   </td>
                   <td>
                     <ng-container *ngIf="data.trangThai == '0'; else ok">
-                      {{ getStatusBM(data.trangThai) }}<br>
-                      Lý do: {{data.lyDoTuChoi}}
-                    </ng-container>
-                    <ng-template #ok>
-                      {{ getStatusBM(data.trangThai) }}
-                    </ng-template>
+											{{ getStatusBM(data.trangThai) }}<br>
+											Lý do: {{data.lyDoTuChoi}}
+										</ng-container>
+										<ng-template #ok>
+											{{ getStatusBM(data.trangThai) }}
+										</ng-template>
 
                   </td>
                   <td>

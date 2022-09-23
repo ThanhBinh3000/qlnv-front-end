@@ -1,37 +1,39 @@
-<nz-affix class="btn-affix" [nzOffsetTop]="globals.prop.MENU_LV2">
+<nz-affix class="btn-affix" [nzOffsetTop]="globals.prop.MENU_LV2" *ngIf="!isTaoQd">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <!--    <button-->
+    <!--      *ngIf="detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_TONG_CUC && detail.trangThai != globals.prop.NHAP_DA_DUYET_LD_TONG_CUC"-->
+    <!--      type="button" class="btn btn-sub" (click)="tuChoi()">-->
+    <!--      <i class="icon htvbdh_tcdt_tuchoi do"></i>-->
+    <!--      <span>Từ chối</span>-->
+    <!--    </button>-->
+    <!--    <button *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO" type="button" class="btn btn-sub"-->
+    <!--      (click)="guiDuyet()">-->
+    <!--      <i class="icon htvbdh_tcdt_guiduyet"></i>-->
+    <!--      <span>Lưu và gửi duyệt</span>-->
+    <!--    </button>-->
+    <!--    <button class="btn btn-sub" *ngIf="detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_TONG_CUC"-->
+    <!--      (click)="pheDuyet()">-->
+    <!--      <i class="icon htvbdh_tcdt_pheduyet"></i>-->
+    <!--      <span>Duyệt</span>-->
+    <!--    </button>-->
+    <button *ngIf="isTongHop && (idInput == 0 || detail.trangThai === globals.prop.NHAP_CHUA_TAO_QD)" type="button"
+      class="btn btn-sub" (click)="save(true)">
+      <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <span>Lưu và tạo quyết định</span>
+    </button>
     <button
-      *ngIf="detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_TONG_CUC && detail.trangThai != globals.prop.NHAP_DA_DUYET_LD_TONG_CUC"
-      type="button" class="btn btn-sub" (click)="tuChoi()">
-      <i class="icon htvbdh_tcdt_tuchoi do"></i>
-      <span>Từ chối</span>
-    </button>
-    <button *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO" type="button" class="btn btn-sub"
-      (click)="guiDuyet()">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Lưu và gửi duyệt</span>
-    </button>
-    <button class="btn btn-sub" *ngIf="detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_TONG_CUC"
-      (click)="pheDuyet()">
-      <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span>Duyệt</span>
-    </button>
-    <button *ngIf="detail.trangThai == globals.prop.NHAP_DA_DUYET_LD_TONG_CUC" type="button" class="btn btn-sub"
-      (click)="save(true)">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Tạo quyết định</span>
-    </button>
-    <button *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO" type="button" class="btn btn-main" (click)="save()">
+      *ngIf="isTongHop && (detail.trangThai === globals.prop.NHAP_DU_THAO || detail.trangThai === globals.prop.NHAP_CHUA_TAO_QD )"
+      type="button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
   </div>
 </nz-affix>
-<div class="bg-trang">
+<div class="bg-trang" *ngIf="!isTaoQd">
   <nz-card class="mt16 flex-card p-lr16">
     <form nzLayout="vertical" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="24">
@@ -49,7 +51,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hoá </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="maVatTuCha" [nzDisabled]="isDisableField() || isView"
+              <nz-select formControlName="loaiVthh" [nzDisabled]="isDisableField() || isView"
                 (ngModelChange)="changeLoaiHangHoa()">
                 <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
               </nz-select>
@@ -60,7 +62,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Chủng Loại hàng hoá </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="maChungLoaiHH" [nzDisabled]="isDisableField() || isView">
+              <nz-select formControlName="cloaiVthh" [nzDisabled]="isDisableField() || isView">
                 <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -81,11 +83,14 @@
             <button class="btn btn-main btn-sm waves-effect waves-light" (click)="tongHopDeXuatTuCuc()"
               *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO && idInput == 0 && !isTongHop">
               <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
-              <span>Tổng hợp KH bán đáu giá</span>
+              <span>Tổng hợp KH bán đấu giá</span>
             </button>
           </div>
         </div>
       </div>
+      <ng-template #error let-control>
+        <app-template-error #error [control]="control"></app-template-error>
+      </ng-template>
     </form>
   </nz-card>
   <div *ngIf="isTongHop">
@@ -134,6 +139,9 @@
             </nz-form-item>
           </div>
         </div>
+        <ng-template #error let-control>
+          <app-template-error #error [control]="control"></app-template-error>
+        </ng-template>
       </form>
     </nz-card>
     <div class="header">
@@ -184,7 +192,11 @@
       </nz-form-item>
     </form>
   </div>
-  <ng-template #error let-control>
-    <app-template-error #error [control]="control"></app-template-error>
-  </ng-template>
+
+</div>
+<div class="tao-quyet-dinh" *ngIf="isTaoQd">
+  <ng-container>
+    <app-them-moi-qd-phe-duyet-kh-ban-dau-gia [loaiVthh]="loaiVthhInput" [idInput]="0" [dataTongHop]="formData.value">
+    </app-them-moi-qd-phe-duyet-kh-ban-dau-gia>
+  </ng-container>
 </div>
