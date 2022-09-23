@@ -138,9 +138,6 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
     let body = {
       "tuNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
       "denNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
-      "maDvis": [
-        this.userInfo.MA_DVI
-      ],
       "nam": this.searchFilter.namKh,
       "soThongTri": this.searchFilter.soThongChi,
       "lyDoChi": this.searchFilter.lyDoChi,
@@ -272,9 +269,6 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
         let body = {
           "tuNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
           "denNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
-          "maDvis": [
-            this.userInfo.MA_DVI
-          ],
           "nam": this.searchFilter.namKh,
           "soThongTri": this.searchFilter.soThongChi,
           "lyDoChi": this.searchFilter.lyDoChi,

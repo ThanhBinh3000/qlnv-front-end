@@ -77,7 +77,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Số đề nghị cấp phí </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select formControlName="soDnCapPhi">
-                <nz-option *ngFor="let p of listDeNghi" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                <nz-option *ngFor="let p of listDeNghi" [nzValue]="p.id" [nzLabel]="p.soDeNghi"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -123,19 +123,10 @@
     </form>
   </div>
   <div class="mt-16 flex-card p-lr16">
-    <div class="d-flex flex-row-reverse">
-      <button type="button" class="btn btn-do">
-        <i class="fa fa-trash-o do"></i>
-        <span>Xóa</span>
-      </button>
-    </div>
     <nz-card class="mt-16 flex-card data-table card-border-content table-card">
-      <nz-table #phanBo class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="bangPhanBoList">
+      <nz-table #phanBo class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="chiTietList">
         <thead>
           <tr>
-            <th width="45px">
-              <label nz-checkbox></label>
-            </th>
             <th style="width: 35px">STT</th>
             <th>Mục</th>
             <th>Tiểu mục</th>
@@ -143,62 +134,88 @@
             <th>Chú thích</th>
             <th>Hành động</th>
           </tr>
+          <tr>
+            <th></th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input [(ngModel)]="rowItem.muc" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input [(ngModel)]="rowItem.tieuMuc" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.soTien">
+                </nz-input-number>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input [(ngModel)]="rowItem.chuThich" />
+              </nz-input-group>
+            </th>
+            <th>
+              <a (click)="them()">
+                <i class="table-icon icon htvbdh_dau-cong"></i>
+              </a>
+              <a (click)="clear()">
+                <i class="table-icon icon  htvbdh_nhap-lai1"></i>
+              </a>
+            </th>
+          </tr>
         </thead>
         <tbody>
-          <tr class="search-table">
-            <th></th>
-            <th></th>
-            <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
-              </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
-            </th>
-            <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
-              </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
-            </th>
-            <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
-              </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
-            </th>
-            <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" />
-              </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
-            </th>
-            <th></th>
-          </tr>
-          <tr>
-            <td>
-              <label nz-checkbox></label>
-            </td>
-            <td>1</td>
-            <td>456</td>
-            <td>2022</td>
-            <td>1.000.000</td>
-            <td>Gạo</td>
-            <td>
-              <a>
-                <i class="fa fa-pencil"></i>
-              </a>
-              <a>
-                <i class="fa fa-trash-o do"></i>
-              </a>
-            </td>
+          <tr *ngFor="let item of chiTietList, let idx = index">
+            <ng-container *ngIf="!item.edit; else editTemplate">
+              <td>{{idx+1}}</td>
+              <td>{{item.muc}}</td>
+              <td>{{item.tieuMuc}}</td>
+              <td>{{item.soTien}}</td>
+              <td>{{item.chuThich}}</td>
+              <td>
+                <a (click)="showEditItem(idx, 'show')">
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <a (click)="xoaItem(idx)">
+                  <i class="fa fa-trash-o do"></i>
+                </a>
+              </td>
+            </ng-container>
+            <ng-template #editTemplate>
+              <td>{{idx+1}}</td>
+              <td>
+                <nz-input-group>
+                  <input type="text" nz-input [(ngModel)]="item.muc" />
+                </nz-input-group>
+              </td>
+              <th>
+                <nz-input-group>
+                  <input type="text" nz-input [(ngModel)]="item.tieuMuc" />
+                </nz-input-group>
+              </th>
+              <th>
+                <nz-input-group>
+                  <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="item.soTien">
+                  </nz-input-number>
+                </nz-input-group>
+              </th>
+              <th>
+                <nz-input-group>
+                  <input type="text" nz-input [(ngModel)]="item.chuThich" />
+                </nz-input-group>
+              </th>
+              <td>
+                <a class="save" (click)="showEditItem(idx, 'save')">
+                  <i class="fa fa-save"></i>
+                </a>
+                <a (click)="showEditItem(idx, 'huy')">
+                  <i class="fa fa-times do"></i>
+                </a>
+              </td>
+            </ng-template>
           </tr>
         </tbody>
       </nz-table>
