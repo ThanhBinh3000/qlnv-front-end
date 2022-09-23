@@ -23,6 +23,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
 import { ThongTriDuyetYCapPhiService } from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
@@ -76,6 +77,9 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   listChungLoaiHangHoa: any[] = [];
   maKeHoach: string;
   listLoaiHopDong: any[] = [];
+  dsBoNganh: any[] = [];
+  listDeNghi: any[] = [];
+
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -88,6 +92,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     private thongTriDuyetYCapPhiService: ThongTriDuyetYCapPhiService,
     private cdr: ChangeDetectorRef,
     private helperService: HelperService,
+    private deNghiCapPhiBoNganhService: DeNghiCapPhiBoNganhService,
   ) {
   }
   async ngOnInit() {
@@ -100,7 +105,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
-    this.loadDonVi();
     if (this.idInput > 0) {
       this.loadDeXuatKHBanDauGia(this.idInput);
     } else {
@@ -108,7 +112,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     this.khBanDauGia.nam = dayjs().year();
     this.initForm();
     await Promise.all([
-
+      this.getListBoNganh(),
     ]);
     this.spinner.hide();
   }
@@ -190,17 +194,11 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     }
   }
 
-  async loadDonVi() {
-    const res = await this.donviService.layDonViCon();
-    this.listChiCuc = [];
+  async getListBoNganh() {
+    this.dsBoNganh = [];
+    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
     if (res.msg == MESSAGE.SUCCESS) {
-      for (let i = 0; i < res.data.length; i++) {
-        const item = {
-          value: res.data[i].maDvi,
-          text: res.data[i].tenDvi,
-        };
-        this.listChiCuc.push(item);
-      }
+      this.dsBoNganh = res.data;
     }
   }
 

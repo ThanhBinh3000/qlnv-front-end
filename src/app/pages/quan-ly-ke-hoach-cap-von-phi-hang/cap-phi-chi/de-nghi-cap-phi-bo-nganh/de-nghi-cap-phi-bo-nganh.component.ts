@@ -1,18 +1,18 @@
-import { saveAs } from 'file-saver';
 import { Component, Input, OnInit } from '@angular/core';
 import dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import {
-  LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT,
+  LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT
 } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
-import { UserService } from 'src/app/services/user.service';
 import { DonviService } from 'src/app/services/donvi.service';
+import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
+import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
@@ -24,7 +24,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
+    private deNghiCapPhiBoNganhService: DeNghiCapPhiBoNganhService,
     private modal: NzModalService,
     public userService: UserService,
     private donviService: DonviService,
@@ -34,7 +34,6 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
 
   isDetail: boolean = false;
   listNam: any[] = [];
@@ -154,7 +153,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
       trangThai: "",
       trangThais: []
     };
-    let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
+    let res = await this.deNghiCapPhiBoNganhService.timKiem(body);
 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -251,7 +250,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.deXuatKeHoachBanDauGiaService.xoa(item.id).then((res) => {
+          this.deNghiCapPhiBoNganhService.delete(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -313,7 +312,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
           trangThai: "",
           trangThais: []
         };
-        this.deXuatKeHoachBanDauGiaService
+        this.deNghiCapPhiBoNganhService
           .exportList(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-de-xuat-ke-hoach-ban-dau-gia.xlsx'),
@@ -353,7 +352,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
             const body = {
               ids: dataDelete
             }
-            let res = await this.deXuatKeHoachBanDauGiaService.deleteMultiple(body);
+            let res = await this.deNghiCapPhiBoNganhService.deleteMultiple(body);
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
