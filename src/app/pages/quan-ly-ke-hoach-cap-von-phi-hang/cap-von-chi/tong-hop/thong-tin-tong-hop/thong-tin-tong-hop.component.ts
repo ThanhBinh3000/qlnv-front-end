@@ -479,6 +479,7 @@ export class ThongTinTonghopComponent implements OnInit {
       ...this.detail?.tCThem,
       item,
     ]
+
     this.updateEditCache();
     this.clearItemRow();
   }
