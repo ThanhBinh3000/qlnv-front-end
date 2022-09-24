@@ -143,13 +143,13 @@ export class TongHopComponent implements OnInit {
     let body = {
       maTongHop: this.formData.value.maTongHop ? this.formData.value.maTongHop : "",
       nam: this.formData.value.nam ? this.formData.value.nam : "",
-      thisngayTongHopTuNgay: "",
-      ngayTongHopDenNgay: " ",
+      ngayTongHopTuNgay: "",
+      ngayTongHopDenNgay: "",
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
     if (this.formData.value.ngayTongHop != null) {
-      body.thisngayTongHopTuNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD') : null,
+      body.ngayTongHopTuNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD') : null,
         body.ngayTongHopDenNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD') : null
     }
     let res = await this.TongHopDeNghiCapVonService.timKiem(body);
