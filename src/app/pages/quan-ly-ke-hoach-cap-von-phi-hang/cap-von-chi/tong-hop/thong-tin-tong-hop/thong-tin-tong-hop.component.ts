@@ -151,11 +151,13 @@ export class ThongTinTonghopComponent implements OnInit {
             "noiDung": data.noiDung,
             nameFilePhuongAn: data.fileDinhKem.fileName
           });
-          console.log(this.formData.value);
-
           this.listFileDinhKem = [data.fileDinhKem];
           this.listThongTinChiTiet = [...data.cts];
           this.detail.tCThem = [...data.ct1s]
+          this.detail.tCThem.forEach(dt => {
+            dt.tcCapThem = dt.ycCapThem;
+          });
+          this.updateEditCache();
           let phuongAnList = [];
           this.detail.ct1s.forEach(pa => {
             const phuongAn = new Ct1sTonghop();
@@ -439,7 +441,8 @@ export class ThongTinTonghopComponent implements OnInit {
 
   updateEditCache(): void {
     if (this.detail?.tCThem && this.detail?.tCThem.length > 0) {
-      this.detail?.tCThem.forEach((item) => {
+      this.detail?.tCThem.forEach((item, index) => {
+        item.stt = index + 1;
         this.editDataCache[item.stt] = {
           edit: false,
           data: { ...item },
