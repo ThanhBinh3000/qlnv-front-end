@@ -9,7 +9,7 @@
         <div nz-col nzSpan="3">
           <label class="search__label">Đơn vị được duyệt</label>
           <nz-select [(ngModel)]="searchFilter.donViDuocDuyet">
-            <nz-option></nz-option>
+            <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
           </nz-select>
         </div>
         <div nz-col nzSpan="3">
@@ -59,8 +59,6 @@
         </button>
       </div>
     </div>
-
-
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable" [nzFrontPagination]="false"
         [nzShowPagination]="false" nzBordered>
