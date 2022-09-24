@@ -7,12 +7,12 @@ import { BaseService } from '../../base.service';
 @Injectable({
     providedIn: 'root',
 })
-export class TongHopTheoDoiCapVonService extends BaseService {
+export class TongHopTheoDoiCapPhiService extends BaseService {
     GATEWAY = '/qlnv-khoach';
-    router = 'von-tong-hop-theo-doi';
+    router = 'phi-tong-hop-theo-doi';
 
     constructor(public httpClient: HttpClient) {
-        super(httpClient, 'von-tong-hop-theo-doi', '');
+        super(httpClient, 'phi-tong-hop-theo-doi', '');
     }
 
     timKiem(body: any): Promise<any> {

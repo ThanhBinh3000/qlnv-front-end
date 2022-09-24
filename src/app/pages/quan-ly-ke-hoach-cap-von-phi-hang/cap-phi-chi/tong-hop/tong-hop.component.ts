@@ -1,21 +1,19 @@
-import { saveAs } from 'file-saver';
 import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import dayjs from 'dayjs';
+import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import {
-  LIST_VAT_TU_HANG_HOA,
-  PAGE_SIZE_DEFAULT,
+  PAGE_SIZE_DEFAULT
 } from 'src/app/constants/config';
-import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
-import { UserService } from 'src/app/services/user.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { isEmpty } from 'lodash';
+import { TongHopDeNghiCapPhiService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapPhi.service';
+import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
@@ -24,15 +22,7 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./tong-hop.component.scss'],
 })
 export class TongHopComponent implements OnInit {
-  constructor(
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
-    private modal: NzModalService,
-    public userService: UserService,
-    private donviService: DonviService,
-    public globals: Globals,
-  ) {}
+
   @Input()
   loaiVthh: string;
   @Input()
@@ -41,31 +31,23 @@ export class TongHopComponent implements OnInit {
   isDetail: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
-  searchFilter = {
-    soKeHoach: null,
-    tenDvi: null,
-    namKh: dayjs().get('year'),
-    ngayKy: null,
-    loaiVthh: null,
-    trichYeu: null,
-  };
+
+  formData: FormGroup
+
   filterTable: any = {
-    soKeHoach: '',
-    tenDonVi: '',
-    ngayLapKeHoach: '',
-    ngayKy: '',
-    trichYeu: '',
-    tenHangHoa: '',
-    soQuyetDinhGiaoChiTieu: '',
-    soQuyetDinhPheDuyet: '',
-    namKeHoach: '',
-    tenVthh: '',
-    tenCloaiVthh: '',
+    maTongHop: '',
+    nam: '',
+    ngayTongHop: '',
+    tongTien: '',
+    kinhPhiDaCap: '',
+    ycCapThem: '',
     tenTrangThai: '',
   };
-  dataTableAll: any[] = [];
-  listVthh: any[] = [];
   dataTable: any[] = [];
+  dataTableAll: any[] = [];
+
+  listVthh: any[] = [];
+
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -83,9 +65,20 @@ export class TongHopComponent implements OnInit {
 
   isView = false;
 
+  constructor(
+    private spinner: NgxSpinnerService,
+    private notification: NzNotificationService,
+    private modal: NzModalService,
+    public userService: UserService,
+    private donviService: DonviService,
+    public globals: Globals,
+    private tongHopDeNghiCapPhiService: TongHopDeNghiCapPhiService,
+    private fb: FormBuilder
+  ) { }
+
   async ngOnInit() {
     try {
-      this.listVthh = LIST_VAT_TU_HANG_HOA;
+      this.initForm()
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -93,7 +86,6 @@ export class TongHopComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      this.searchFilter.loaiVthh = this.loaiVthh;
       this.initData();
       await this.search();
     } catch (e) {
@@ -102,22 +94,19 @@ export class TongHopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+  initForm() {
+    this.formData = this.fb.group({
+      maTongHop: [null],
+      nam: [null],
+      ngayTongHop: [null],
+    })
+  }
   async initData() {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-    await this.loadDsTong();
   }
-  async loadDsTong() {
-    const body = {
-      maDviCha: this.userdetail.maDvi,
-      trangThai: '01',
-    };
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
-    if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong[DANH_MUC_LEVEL.CUC];
-    }
-  }
+
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
@@ -148,25 +137,23 @@ export class TongHopComponent implements OnInit {
       this.indeterminate = true;
     }
   }
-
+  // Đang lỗi API phần GET
   async search() {
     this.spinner.show();
     let body = {
-      ngayKyTuNgay: this.searchFilter.ngayKy
-        ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
-        : null,
-      ngayKyDenNgay: this.searchFilter.ngayKy
-        ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
-        : null,
-      soKeHoach: this.searchFilter.soKeHoach,
-      loaiVatTuHangHoa: this.searchFilter.loaiVthh,
-      namKeHoach: this.searchFilter.namKh,
-      trichYeu: this.searchFilter.trichYeu,
-      maDvis: this.userInfo.MA_DVI,
+      maTongHop: this.formData.value.maTongHop ? this.formData.value.maTongHop : "",
+      nam: this.formData.value.nam ? this.formData.value.nam : "",
+      ngayTongHopTuNgay: "",
+      ngayTongHopDenNgay: "",
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
-    let res = await this.deXuatKeHoachBanDauGiaService.timKiem(body);
+    if (this.formData.value.ngayTongHop != null) {
+      body.ngayTongHopTuNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD') : null,
+        body.ngayTongHopDenNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD') : null
+    }
+    let res = await this.tongHopDeNghiCapPhiService.timKiem(body);
+    console.log(res);
 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -217,13 +204,7 @@ export class TongHopComponent implements OnInit {
   themMoi() {
     this.isDetail = true;
     this.isView = false;
-    if (this.userService.isTongCuc()) {
-      this.isVatTu = true;
-    } else {
-      this.isVatTu = false;
-    }
     this.selectedId = 0;
-    this.loaiVthh = this.loaiVthhCache;
   }
 
   showList() {
@@ -234,20 +215,20 @@ export class TongHopComponent implements OnInit {
   detail(data?: any, isView?: boolean) {
     this.selectedId = data.id;
     this.isDetail = true;
-    this.loaiVthh = data.loaiVthh;
     this.isView = isView;
-    // if (data.loaiVthh.startsWith('02')) {
-    //   this.isVatTu = true;
-    // } else {
-    //   this.isVatTu = false;
-    // }
   }
 
   clearFilter() {
-    this.searchFilter.namKh = dayjs().get('year');
-    this.searchFilter.soKeHoach = null;
-    this.searchFilter.ngayKy = null;
-    this.searchFilter.trichYeu = null;
+    this.formData.reset();
+    this.filterTable = {
+      maTongHop: '',
+      nam: '',
+      ngayTongHop: '',
+      tongTien: '',
+      kinhPhiDaCap: '',
+      ycCapThem: '',
+      tenTrangThai: '',
+    };
     this.search();
   }
 
@@ -263,7 +244,7 @@ export class TongHopComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.deXuatKeHoachBanDauGiaService.xoa(item.id).then((res) => {
+          this.tongHopDeNghiCapPhiService.deleteData(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -315,23 +296,20 @@ export class TongHopComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          ngayKyTuNgay: this.searchFilter.ngayKy
-            ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
-            : null,
-          ngayKyDenNgay: this.searchFilter.ngayKy
-            ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
-            : null,
-          soKeHoach: this.searchFilter.soKeHoach ?? null,
-          namKeHoach: this.searchFilter.namKh,
-          trichYeu: this.searchFilter.trichYeu ?? null,
-          maDvis: [this.userInfo.MA_DVI],
-          pageable: null,
+          maTongHop: this.formData.value.maTongHop ? this.formData.value.maTongHop : "",
+          nam: this.formData.value.nam ? this.formData.value.nam : "",
+          thisngayTongHopTuNgay: "",
+          ngayTongHopDenNgay: " ",
+          pageNumber: this.page,
+          pageSize: this.pageSize,
         };
-        this.deXuatKeHoachBanDauGiaService
-          .exportList(body)
-          .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-de-xuat-ke-hoach-ban-dau-gia.xlsx'),
-          );
+        if (this.formData.value.ngayTongHop != null) {
+          body.thisngayTongHopTuNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD') : null,
+            body.ngayTongHopDenNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD') : null
+        }
+        this.tongHopDeNghiCapPhiService.exportList(body).subscribe((blob) =>
+          saveAs(blob, 'tong-hop-de-nghi-cap-von-chi.xlsx'),
+        );
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);
@@ -342,7 +320,6 @@ export class TongHopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
-
   deleteSelect() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
@@ -367,9 +344,7 @@ export class TongHopComponent implements OnInit {
             const body = {
               ids: dataDelete,
             };
-            let res = await this.deXuatKeHoachBanDauGiaService.deleteMultiple(
-              body,
-            );
+            let res = await this.tongHopDeNghiCapPhiService.deleteMultiple(body);
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -395,41 +370,33 @@ export class TongHopComponent implements OnInit {
     }
   }
 
-  filterInTable(key: string, value: string) {
+  filterInTable(key: string, value: string | Date) {
+    if (value instanceof Date) {
+      value = dayjs(value).format('YYYY-MM-DD');
+    }
+    console.log(key, value);
+
     if (value && value != '') {
-      this.dataTable = [];
-      let temp = [];
-      if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (
-            item[key] &&
-            item[key]
-              .toString()
-              .toLowerCase()
-              .indexOf(value.toString().toLowerCase()) != -1
-          ) {
-            temp.push(item);
-          }
-        });
-      }
-      this.dataTable = [...this.dataTable, ...temp];
+      this.dataTable = this.dataTableAll.filter((item) =>
+        item[key]
+          ?.toString()
+          .toLowerCase()
+          .includes(value.toString().toLowerCase()),
+      );
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
 
+
   clearFilterTable() {
     this.filterTable = {
-      soKeHoach: '',
-      ngayLapKeHoach: '',
-      ngayKy: '',
-      trichYeu: '',
-      tenHangHoa: '',
-      soQuyetDinhGiaoChiTieu: '',
-      soQuyetDinhPheDuyet: '',
-      namKeHoach: '',
-      tenVthh: '',
-      tenCloaiVthh: '',
+      maTongHop: '',
+      nam: '',
+      ngayTongHop: '',
+      tongTien: '',
+      kinhPhiDaCap: '',
+      ycCapThem: '',
       tenTrangThai: '',
     };
   }

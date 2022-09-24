@@ -7,17 +7,32 @@ import { BaseService } from '../../base.service';
 @Injectable({
     providedIn: 'root',
 })
-export class TongHopTheoDoiCapVonService extends BaseService {
+export class TongHopDeNghiCapPhiService extends BaseService {
     GATEWAY = '/qlnv-khoach';
-    router = 'von-tong-hop-theo-doi';
+    router = 'tong-hop-de-nghi-cap-phi'
 
     constructor(public httpClient: HttpClient) {
-        super(httpClient, 'von-tong-hop-theo-doi', '');
+        super(httpClient, 'tong-hop-de-nghi-cap-phi', '');
     }
 
     timKiem(body: any): Promise<any> {
-        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.router}/search`;
-        return this.httpClient.post(url, body).toPromise();
+        let url_ = `${environment.SERVICE_API}${this.GATEWAY}/${this.router}?`
+        if (body.maTongHop)
+            url_ += 'maTongHop=' + encodeURIComponent('' + body.maTongHop) + '&';
+        if (body.maDvis)
+            url_ += 'maDvis=' + encodeURIComponent('' + body.maDvis) + '&';
+        if (body.nam)
+            url_ += 'nam=' + encodeURIComponent('' + body.nam) + '&';
+        if (body.ngayTongHopDenNgay)
+            url_ += 'ngayTongHopDenNgay=' + encodeURIComponent('' + body.ngayTongHopDenNgay) + '&';
+        if (body.ngayTongHopTuNgay)
+            url_ += 'ngayTongHopTuNgay=' + encodeURIComponent('' + body.ngayTongHopTuNgay) + '&';
+        if (body.pageNumber != null || body.pageNumber != undefined)
+            url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
+        if (body.pageSize)
+            url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
+        url_ = url_.replace(/[?&]$/, '');
+        return this.httpClient.get<any>(url_).toPromise();
     }
 
     loadChiTiet(id: number): Promise<any> {
@@ -54,4 +69,5 @@ export class TongHopTheoDoiCapVonService extends BaseService {
         const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.router}/export/list`;
         return this.httpClient.post(url, body, { responseType: 'blob' });
     }
+
 }

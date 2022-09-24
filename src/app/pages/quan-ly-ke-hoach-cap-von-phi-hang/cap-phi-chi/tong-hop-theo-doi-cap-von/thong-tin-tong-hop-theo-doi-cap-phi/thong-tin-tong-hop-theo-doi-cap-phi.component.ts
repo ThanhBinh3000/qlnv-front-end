@@ -14,17 +14,17 @@ import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { TongHopTheoDoiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
+import { TongHopTheoDoiCapPhiService } from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 
 @Component({
-  selector: 'app-thong-tin-tong-hop-theo-doi-cap-von',
-  templateUrl: './thong-tin-tong-hop-theo-doi-cap-von.component.html',
-  styleUrls: ['./thong-tin-tong-hop-theo-doi-cap-von.component.scss']
+  selector: 'app-thong-tin-tong-hop-theo-doi-cap-phi',
+  templateUrl: './thong-tin-tong-hop-theo-doi-cap-phi.component.html',
+  styleUrls: ['./thong-tin-tong-hop-theo-doi-cap-phi.component.scss']
 })
-export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
+export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
   @Input() loaiVthhInput: string;
   @Input() idInput: number;
   @Input() isView: boolean;
@@ -57,7 +57,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
     public globals: Globals,
     public userService: UserService,
     private donviService: DonviService,
-    private tongHopTheoDoiCapVonService: TongHopTheoDoiCapVonService,
+    private tongHopTheoDoiCapVonService: TongHopTheoDoiCapPhiService,
   ) {
   }
 
@@ -216,5 +216,3 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
     return thongTinTrangThaiNhap(trangThai);
   }
 }
-
-
