@@ -190,7 +190,7 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            trangThaiId: this.globals.prop.NHAP_BAN_HANH,
+            trangThai: this.globals.prop.NHAP_BAN_HANH,
           };
           let res = await this.tongHopTheoDoiCapVonService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
