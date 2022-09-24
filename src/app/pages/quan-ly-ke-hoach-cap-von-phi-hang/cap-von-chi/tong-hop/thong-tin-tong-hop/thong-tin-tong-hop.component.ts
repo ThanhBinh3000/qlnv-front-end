@@ -513,7 +513,9 @@ export class ThongTinTonghopComponent implements OnInit {
         .then((resUpload) => {
           const fileDinhKem = new FileDinhKem();
           fileDinhKem.fileName = resUpload.filename;
-          this.nameFilePhuongAn = resUpload.filename;
+          this.formData.patchValue({
+            nameFilePhuongAn: resUpload.filename
+          })
           fileDinhKem.fileSize = resUpload.size;
           fileDinhKem.fileUrl = resUpload.url;
           this.filePhuongAn = fileDinhKem;
@@ -530,6 +532,7 @@ export class ThongTinTonghopComponent implements OnInit {
         break;
       // bộ ngành
       case "Bộ, ngành":
+      case "Tất cả":
         this.spinner.show();
         let body = {
           soDeNghi: null,
@@ -555,9 +558,9 @@ export class ThongTinTonghopComponent implements OnInit {
         }
         break;
       // tất cả
-      case "Tất cả":
+      // case "Tất cả":
 
-        break;
+      //   break;
 
       default:
         break;
@@ -567,6 +570,7 @@ export class ThongTinTonghopComponent implements OnInit {
   }
   showList() {
     this.isDetail = false;
+    this.isView = false;
   }
   goToDetail(data?: any, isView?: boolean) {
     this.selectedId = data.id;
