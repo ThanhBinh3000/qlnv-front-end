@@ -63,16 +63,16 @@
             </nz-select>
           </td>
           <td>
-            <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.maNganLo"
-              (ngModelChange)="changeNganLo(chiTietDiemNhapKhoCreate.maNganLo)" class="w-150">
-              <nz-option *ngFor="let item of listNganLo" [nzValue]="item.key" [nzLabel]="item.title">
+            <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.maLoKho"
+              (ngModelChange)="changeNganLo(chiTietDiemNhapKhoCreate.maLoKho)" class="w-150">
+              <nz-option *ngFor="let item of listLoKho" [nzValue]="item.key" [nzLabel]="item.title">
               </nz-option>
             </nz-select>
           </td>
           <td>
             <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.chungLoaiHh"
               (ngModelChange)="changeChungLoaiHang(chiTietDiemNhapKhoCreate.chungLoaiHh)" class="w-150">
-              <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.id" [nzLabel]="item.ten">
+              <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
               </nz-option>
             </nz-select>
           </td>
@@ -151,16 +151,16 @@
               </nz-select>
             </td>
             <td>
-              <nz-select [(ngModel)]="dsChiTietDiemNhapKhoClone[i].maNganLo"
-                (ngModelChange)="changeNganKho(dsChiTietDiemNhapKhoClone[i].maNganLo,i,true)" class="w-150">
-                <nz-option *ngFor="let item of listNganLoEdit" [nzValue]="item.key" [nzLabel]="item.title">
+              <nz-select [(ngModel)]="dsChiTietDiemNhapKhoClone[i].maLoKho"
+                (ngModelChange)="changeNganKho(dsChiTietDiemNhapKhoClone[i].maLoKho,i,true)" class="w-150">
+                <nz-option *ngFor="let item of listLoKhoEdit" [nzValue]="item.key" [nzLabel]="item.title">
                 </nz-option>
               </nz-select>
             </td>
             <td>
               <nz-select [(ngModel)]="dsChiTietDiemNhapKhoClone[i].chungLoaiHh"
                 (ngModelChange)="changeChungLoaiHang(dsChiTietDiemNhapKhoClone[i].chungLoaiHh,i,true)" class="w-150">
-                <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.id" [nzLabel]="item.ten">
+                <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
                 </nz-option>
               </nz-select>
             </td>
