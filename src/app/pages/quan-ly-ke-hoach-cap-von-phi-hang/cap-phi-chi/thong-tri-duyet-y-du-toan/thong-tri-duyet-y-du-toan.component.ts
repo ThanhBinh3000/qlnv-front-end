@@ -241,7 +241,7 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.thongTriDuyetYCapPhiService.delete(item.id).then((res) => {
+          this.thongTriDuyetYCapPhiService.deleteData(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
