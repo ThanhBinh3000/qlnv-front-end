@@ -125,7 +125,8 @@ export class ThongTinTonghopComponent implements OnInit {
     this.formData.patchValue({
       id: this.idInput,
       maDonVi: this.userInfo.MA_DVI,
-      capDvi: this.userInfo.CAP_DVI
+      capDvi: this.userInfo.CAP_DVI,
+      nam: this.yearNow,
     })
 
   }
