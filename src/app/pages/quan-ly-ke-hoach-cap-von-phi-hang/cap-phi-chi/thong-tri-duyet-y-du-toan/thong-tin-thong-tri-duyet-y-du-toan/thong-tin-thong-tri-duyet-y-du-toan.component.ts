@@ -314,7 +314,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            trangThaiId: this.globals.prop.NHAP_CHO_DUYET_LD_VU,
+            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_VU,
           };
           let res = await this.thongTriDuyetYCapPhiService.updateStatus(body);
           await this.save(true);
@@ -351,7 +351,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.id,
+            id: this.idInput,
             lyDoTuChoi: null,
             trangThai: trangThai,
           };
@@ -392,7 +392,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDo: text,
-            trangThaiId: this.globals.prop.NHAP_TU_CHOI_LD_VU,
+            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_VU,
           };
           const res = await this.thongTriDuyetYCapPhiService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {

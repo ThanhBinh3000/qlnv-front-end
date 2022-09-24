@@ -40,19 +40,19 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
     khoan: null,
   };
 
-
   filterTable: any = {
     soThongTri: '',
-    donViDuocDuyet: '',
+    tenDviDuocDuyet: '',
     soLenhChiTien: '',
     chuong: '',
     loai: '',
     khoan: '',
-    liDoChi: '',
+    lyDoChi: '',
     soTien: '',
-    donViHuongThi: '',
-    trangThai: '',
+    dviThuHuong: '',
+    tenTrangThai: '',
   };
+
   dataTableAll: any[] = [];
   dataTable: any[] = [];
   // listVthh: any[] = [];
@@ -152,7 +152,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
       "maDviDuocDuyet": this.searchFilter.donViDuocDuyet,
       "paggingReq": {
         "limit": this.pageSize,
-        "page": this.page
+        "page": this.page - 1
       },
       "soLenhChiTien": this.searchFilter.soLenhChiTien,
       "soThongTri": this.searchFilter.soThongTri,
