@@ -1,22 +1,18 @@
-import { saveAs } from 'file-saver';
 import { Component, Input, OnInit } from '@angular/core';
-import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
+import { saveAs } from 'file-saver';
+import { cloneDeep, isEmpty } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import {
-  LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT,
-} from 'src/app/constants/config';
-import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
-import { UserService } from 'src/app/services/user.service';
+import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { isEmpty } from 'lodash';
+import { TongHopTheoDoiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
+import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
 
 @Component({
   selector: 'app-tong-hop-theo-doi-cap-von',
@@ -67,6 +63,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
   dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
+  dsBoNganh: any[] = [];
 
   selectedId: number = 0;
 
@@ -79,18 +76,17 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
     private modal: NzModalService,
     public userService: UserService,
     private donviService: DonviService,
     public globals: Globals,
-    private deNghiCapVonBoNganhService: DeNghiCapVonBoNganhService,
+    private tongHopTheoDoiCapVonService: TongHopTheoDoiCapVonService,
+    private danhMucService: DanhMucService,
   ) { }
 
   async ngOnInit() {
     try {
-
-      this.initData()
+      await this.initData()
       await this.search();
     } catch (e) {
       console.log('error: ', e);
@@ -98,23 +94,24 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   async initData() {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-    await this.loadDsTong();
+    await Promise.all([
+      this.getListBoNganh(),
+    ]);
   }
-  async loadDsTong() {
-    const body = {
-      maDviCha: this.userdetail.maDvi,
-      trangThai: '01',
-    };
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
-    if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong[DANH_MUC_LEVEL.CUC];
-    }
 
+  async getListBoNganh() {
+    this.dsBoNganh = [];
+    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsBoNganh = res.data;
+    }
   }
+
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
@@ -149,12 +146,19 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-
-      pageNumber: this.page,
-      pageSize: this.pageSize,
+      "chuong": this.searchFilter.chuong,
+      "khoan": this.searchFilter.khoan,
+      "loai": this.searchFilter.loai,
+      "maDviDuocDuyet": this.searchFilter.donViDuocDuyet,
+      "paggingReq": {
+        "limit": this.pageSize,
+        "page": this.page
+      },
+      "soLenhChiTien": this.searchFilter.soLenhChiTien,
+      "soThongTri": this.searchFilter.soThongTri,
     };
 
-    let res = await this.deNghiCapVonBoNganhService.timKiem(body);
+    let res = await this.tongHopTheoDoiCapVonService.timKiem(body);
 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -227,11 +231,6 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
     this.isDetail = true;
     this.loaiVthh = data.loaiVthh;
     this.isView = isView;
-    // if (data.loaiVthh.startsWith('02')) {
-    //   this.isVatTu = true;
-    // } else {
-    //   this.isVatTu = false;
-    // }
   }
 
   // Reset tìm kiếm
@@ -261,7 +260,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.deNghiCapVonBoNganhService.deleteData(id).then((res) => {
+          this.tongHopTheoDoiCapVonService.deleteData(id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -286,9 +285,15 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-
-        let body = {}
-        this.deNghiCapVonBoNganhService.exportList(body).subscribe((blob) => {
+        let body = {
+          "chuong": this.searchFilter.chuong,
+          "khoan": this.searchFilter.khoan,
+          "loai": this.searchFilter.loai,
+          "maDviDuocDuyet": this.searchFilter.donViDuocDuyet,
+          "soLenhChiTien": this.searchFilter.soLenhChiTien,
+          "soThongTri": this.searchFilter.soThongTri,
+        }
+        this.tongHopTheoDoiCapVonService.exportList(body).subscribe((blob) => {
           saveAs(blob, 'danh-sach-tong-hop-theo-doi-cap-von.xlsx')
         });
 
@@ -328,8 +333,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
             const body = {
               ids: dataDelete
             }
-
-            let res = await this.deNghiCapVonBoNganhService.deleteMultiple(body);
+            let res = await this.tongHopTheoDoiCapVonService.deleteMultiple(body);
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -351,6 +355,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
       );
     }
   }
+
   // Tìm kiếm trong bảng
   filterInTable(key: string, value: string) {
     if (value && value != '') {
@@ -368,5 +373,4 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
-
 }
