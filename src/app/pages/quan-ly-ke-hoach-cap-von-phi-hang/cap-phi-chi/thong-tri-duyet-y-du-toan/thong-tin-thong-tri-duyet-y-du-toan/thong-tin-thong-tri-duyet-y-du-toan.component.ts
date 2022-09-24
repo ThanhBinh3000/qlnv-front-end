@@ -179,6 +179,24 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         },
         [Validators.required],
       ],
+      chuong: [
+        {
+          value: this.khBanDauGia
+            ? this.khBanDauGia.chuong
+            : null,
+          disabled: this.isView ? true : false,
+        },
+        [Validators.required],
+      ],
+      nhanXet: [
+        {
+          value: this.khBanDauGia
+            ? this.khBanDauGia.nhanXet
+            : null,
+          disabled: this.isView ? true : false,
+        },
+        [Validators.required],
+      ],
     });
   }
 
@@ -242,6 +260,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     this.spinner.show();
     try {
       let body = this.formData.value;
+      body.nam = this.formData.controls.nam.value;
       body.chiTietList = this.chiTietList;
       body.fileDinhKems = this.listFileDinhKem;
       body.id = this.idInput;
