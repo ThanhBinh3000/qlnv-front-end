@@ -340,7 +340,9 @@ export class ThongTinTongHopComponent implements OnInit {
   }
 
   async loadListNguonTongHop() {
-    let res = await this.deNghiCapPhiBoNganhService.timKiem({});
+    let res = await this.deNghiCapPhiBoNganhService.timKiem({
+      trangThai: this.globals.prop.NHAP_BAN_HANH
+    });
     if (res.msg == MESSAGE.SUCCESS) {
       this.listNguonTongHop = res.data.content;
     } else {

@@ -25,6 +25,8 @@ export class DeNghiCapPhiBoNganhService extends BaseService {
       url_ += 'maDvis=' + encodeURIComponent('' + body.maDvis) + '&';
     if (body.nam)
       url_ += 'nam=' + encodeURIComponent('' + body.nam) + '&';
+    if (body.trangThai)
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     if (body.ngayDeNghiDenNgay)
       url_ += 'ngayDeNghiDenNgay=' + encodeURIComponent('' + body.ngayDeNghiDenNgay) + '&';
     if (body.ngayDeNghiTuNgay)
