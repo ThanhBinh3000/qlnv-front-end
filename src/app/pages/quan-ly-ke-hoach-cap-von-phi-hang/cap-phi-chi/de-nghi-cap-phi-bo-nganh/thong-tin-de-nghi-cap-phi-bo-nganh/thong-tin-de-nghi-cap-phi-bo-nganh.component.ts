@@ -2,7 +2,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { DeNghiCapPhiBoNganh } from './../../../../../models/DeNghiCapPhiBoNganh';
 // import { Component, OnInit } from '@angular/core';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -285,7 +285,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       maBoNganh: [
         {
@@ -294,7 +294,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       soDeNghi: [
         {
@@ -303,7 +303,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       ngayDeNghi: [
         {
@@ -312,7 +312,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
     });
   }
