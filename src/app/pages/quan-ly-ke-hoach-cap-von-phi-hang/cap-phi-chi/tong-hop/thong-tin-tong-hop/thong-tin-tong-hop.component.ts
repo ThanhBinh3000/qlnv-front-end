@@ -18,6 +18,7 @@ import {
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
 import { TongHopDeNghiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
@@ -51,9 +52,11 @@ export class ThongTinTongHopComponent implements OnInit {
   listNguonTongHop: any[] = [];
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   userInfo: UserLogin;
+
   listFileDinhKem: any[] = [];
-  listThongTinChiTiet: any[] = []
-  totalRecord: number = 0;
+  cts: any[] = [];
+  ct1s: any[] = [];
+
   isTonghop: boolean = false
   dayNow: string;
   yearNow: number;
@@ -66,7 +69,15 @@ export class ThongTinTongHopComponent implements OnInit {
   selectedId: number = 0;
   isDetail: boolean = false;
 
-  rowDisplay: any = [];
+  rowDisplay: any = {};
+  rowEdit: any = {};
+
+  oldDataEdit1: any = {};
+  oldDataEdit2: any = {};
+
+  listLoaiHangHoa: any[] = [];
+  listChungLoaiHangHoa: any[] = [];
+  listLoaiChiPhi: any[] = [];
 
   constructor(
     private modal: NzModalService,
@@ -79,6 +90,7 @@ export class ThongTinTongHopComponent implements OnInit {
     public userService: UserService,
     private helperService: HelperService,
     private uploadFileService: UploadFileService,
+    private danhMucService: DanhMucService,
   ) {
   }
 
@@ -97,6 +109,7 @@ export class ThongTinTongHopComponent implements OnInit {
     }
     this.initForm();
     await this.loadListNguonTongHop();
+    await this.loaiVTHHGetAll();
     if (this.idInput) {
       this.loadChiTiet(this.idInput);
     }
@@ -110,7 +123,6 @@ export class ThongTinTongHopComponent implements OnInit {
       "ngayTongHop": [null],
       "maToTrinh": [null],
       "noiDung": [null],
-      "khDnCapVonIds": [null],
       "nameFilePhuongAn": [null],
     });
     this.formData.patchValue({
@@ -119,7 +131,34 @@ export class ThongTinTongHopComponent implements OnInit {
       capDvi: this.userInfo.CAP_DVI,
       nam: this.yearNow,
     })
+  }
 
+  async loaiVTHHGetAll() {
+    try {
+      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          hangHoa.data.forEach((item) => {
+            if (item.cap === "1" && item.ma != '01') {
+              this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
+            }
+            else {
+              this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
+            }
+          })
+        }
+      })
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changeLoaiHangHoa(id: any) {
+    console.log(id);
+    if (id && id > 0) {
+      let loaiHangHoa = this.listLoaiHangHoa.filter(item => item.ma === id);
+      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
+    }
   }
 
   async loadChiTiet(id: number) {
@@ -143,7 +182,7 @@ export class ThongTinTongHopComponent implements OnInit {
             nameFilePhuongAn: data.fileDinhKem.fileName
           });
           this.listFileDinhKem = [data.fileDinhKem];
-          this.listThongTinChiTiet = [...data.cts];
+          this.cts = [...data.cts];
           this.detail.tCThem = [...data.ct1s]
           let phuongAnList = [];
           this.detail.ct1s.forEach(pa => {
@@ -341,7 +380,7 @@ export class ThongTinTongHopComponent implements OnInit {
 
   async loadListNguonTongHop() {
     let res = await this.deNghiCapPhiBoNganhService.timKiem({
-      trangThai: this.globals.prop.NHAP_BAN_HANH
+      // trangThai: this.globals.prop.NHAP_BAN_HANH
     });
     if (res.msg == MESSAGE.SUCCESS) {
       this.listNguonTongHop = res.data.content;
@@ -382,23 +421,14 @@ export class ThongTinTongHopComponent implements OnInit {
     this.spinner.show();
     this.isTonghop = true;
     let body = {
-      soDeNghi: null,
-      maBoNganh: null,
       nam: this.formData.value.nam,
-      ngayDeNghiTuNgay: null,
-      ngayDeNghiDenNgay: null,
-      pageNumber: this.page,
-      pageSize: this.pageSize,
+      pageNumber: 1,
+      pageSize: 1000,
     };
     let res = await this.deNghiCapPhiBoNganhService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data.content;
-      this.listThongTinChiTiet = data.filter((item) => item.nam == this.formData.value.nam);
-      this.khDnCapVonIds = this.listThongTinChiTiet.map(item => item.id);
-      this.totalRecord = data.totalElements;
+      this.cts = res.data.content;
     } else {
-      this.listThongTinChiTiet = [];
-      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
@@ -406,45 +436,31 @@ export class ThongTinTongHopComponent implements OnInit {
 
   clearFilter() {
     this.formData = this.fb.group({
+      "nam": [null, [Validators.required]],
       "maTongHop": [null],
       "ngayTongHop": [null],
       "maToTrinh": [null],
       "noiDung": [null],
-      "khDnCapVonIds": [null],
-      "ct1s": [null],
+      "nameFilePhuongAn": [null],
     })
-    this.listFileDinhKem = []
+    this.isTonghop = false;
+    this.cts = [];
+    this.ct1s = [];
+    this.rowDisplay = {};
+    this.rowEdit = {};
   }
 
-  cancelEdit(stt: number): void {
-    const index = this.detail?.tCThem.findIndex(item => item.stt === stt);
-    this.editDataCache[stt] = {
-      data: { ...this.detail?.tCThem[index] },
-      edit: false
-    };
-  }
-
-  saveEdit(stt: number): void {
-    const index = this.detail?.tCThem.findIndex(item => item.stt === stt);
-    Object.assign(this.detail?.tCThem[index], this.editDataCache[stt].data);
-    this.editDataCache[stt].edit = false;
-  }
-
-  updateEditCache(): void {
-    if (this.detail?.tCThem && this.detail?.tCThem.length > 0) {
-      this.detail?.tCThem.forEach((item) => {
-        this.editDataCache[item.stt] = {
-          edit: false,
-          data: { ...item },
-        };
+  sortTableId(type) {
+    if (type === 'ct1s') {
+      this.ct1s.forEach((lt, i) => {
+        lt.stt = i + 1;
       });
     }
-  }
-
-  sortTableId() {
-    this.detail?.tCThem.forEach((lt, i) => {
-      lt.stt = i + 1;
-    });
+    else if (type === 'ct2s') {
+      this.rowEdit.ct2s.forEach((lt, i) => {
+        lt.stt = i + 1;
+      });
+    }
   }
 
   isDisableField() {
@@ -453,49 +469,79 @@ export class ThongTinTongHopComponent implements OnInit {
     }
   }
 
-  deleteRow(data: any) {
-    this.detail.tCThem = this.detail?.tCThem.filter(x => x.stt != data.stt);
-    this.sortTableId();
-    this.updateEditCache();
+  cancelEdit(item, type) {
+    if (type === 'ct1s') {
+      let index = this.ct1s.findIndex(x => x.stt === item.stt);
+      if (index != -1) {
+        let temp = cloneDeep(this.ct1s);
+        temp[index] = cloneDeep(this.oldDataEdit1);
+        this.ct1s = temp;
+      }
+      this.rowEdit.isView = true;
+    }
+    else if (type === 'ct2s') {
+      let index = this.rowEdit.ct2s.findIndex(x => x.stt === item.stt);
+      if (index != -1) {
+        let temp = cloneDeep(this.rowEdit.ct2s);
+        temp[index] = cloneDeep(this.oldDataEdit2);
+        this.rowEdit.ct2s = temp;
+      }
+    }
+    item.edit = false;
   }
 
-  editRow(stt: number) {
-    this.editDataCache[stt].edit = true;
+  saveEdit(item, type) {
+    item.edit = false;
+    if (type === 'ct1s') {
+      item.maVatTuCha = this.rowEdit.maVatTuCha;
+      item.maVatTu = this.rowEdit.maVatTu;
+      item.tenHangHoa = this.rowEdit.tenHangHoa;
+      item.ct2s = cloneDeep(this.rowEdit.ct2s);
+      this.rowEdit.isView = true;
+    }
+  }
+
+  deleteRow(item: any, type) {
+    if (type === 'ct1s') {
+      let temp = this.ct1s.filter(x => x.stt !== item.stt);
+      this.ct1s = temp;
+      this.sortTableId('ct1s');
+    }
+    else if (type === 'ct2s') {
+      let temp = this.rowEdit.ct2s.filter(x => x.stt !== item.stt);
+      this.rowEdit.ct2s = temp;
+      this.sortTableId('ct2s');
+    }
+  }
+
+  editRow(item, type) {
+    if (type === 'ct1s') {
+      this.rowEdit = cloneDeep(item);
+      this.rowEdit.isView = false;
+      this.oldDataEdit1 = cloneDeep(item);
+    }
+    else if (type === 'ct2s') {
+      this.oldDataEdit2 = cloneDeep(item);
+    }
+    item.edit = true;
   }
 
   addRow() {
-    if (!this.detail?.tCThem) {
-      this.detail.tCThem = [];
+    if (!this.rowEdit.ct2s) {
+      this.rowEdit.ct2s = [];
     }
-    this.sortTableId();
+    this.sortTableId('ct2s');
     let item = cloneDeep(this.create);
-    item.stt = this.detail?.tCThem.length + 1;
-    this.detail.tCThem = [
-      ...this.detail?.tCThem,
+    item.stt = this.rowEdit.ct2s.length + 1;
+    this.rowEdit.ct2s = [
+      ...this.rowEdit.ct2s,
       item,
     ]
-
-    this.updateEditCache();
     this.clearItemRow();
   }
 
   clearItemRow() {
     this.create = {};
-  }
-
-  changeSoDeNghi(item) {
-    if (item) {
-      let getSoDeNghi = this.listNguonTongHop.filter(x => x.soDeNghi == item.soDeNghi);
-      if (getSoDeNghi && getSoDeNghi.length > 0) {
-        item.id = getSoDeNghi[0].id;
-        item.nam = getSoDeNghi[0].nam;
-        item.ngayDeNghi = getSoDeNghi[0].ngayDeNghi;
-        item.tenBoNganh = getSoDeNghi[0].tenBoNganh;
-        item.tongTien = getSoDeNghi[0].tongTien;
-        item.id = getSoDeNghi[0].id;
-        item.kinhPhiDaCap = getSoDeNghi[0].kinhPhiDaCap;
-      }
-    }
   }
 
   getNameFile(event?: any, item?: FileDinhKem) {
@@ -523,26 +569,49 @@ export class ThongTinTongHopComponent implements OnInit {
 
   async loadThongTinChiTiet() {
     this.isTonghop = true;
+    this.cts = [];
+    this.ct1s = [];
     this.spinner.show();
     let body = {
-      soDeNghi: null,
-      maBoNganh: null,
-      nam: this.yearNow,
-      ngayDeNghiTuNgay: null,
-      ngayDeNghiDenNgay: null,
-      pageNumber: this.page,
-      pageSize: this.pageSize,
+      pageNumber: 1,
+      pageSize: 1000,
     };
+    let index = 0;
     let res = await this.deNghiCapPhiBoNganhService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listThongTinChiTiet = data.content;
-      this.khDnCapVonIds = data.content.map(item => item.id)
-      this.formData.patchValue({ khDnCapVonIds: this.khDnCapVonIds })
-      this.totalRecord = data.totalElements;
+      let data = res.data.content;
+      if (data && data.length > 0) {
+        let listItem = [];
+        for (let i = 0; i < data.length; i++) {
+          let resCt = await this.deNghiCapPhiBoNganhService.loadChiTiet(data[i].id);
+          if (resCt.msg == MESSAGE.SUCCESS) {
+            let chiTiet = resCt.data;
+            if (chiTiet && chiTiet.ct1List && chiTiet.ct1List.length > 0) {
+              chiTiet.ct1List.forEach((elementCt) => {
+                let item = {
+                  "maBoNganh": chiTiet.maBoNganh,
+                  "tenBoNganh": chiTiet.tenBoNganh,
+                  "tenDvCungCap": elementCt.tenDvCungCap ?? null,
+                  "soTaiKhoan": elementCt.soTaiKhoan ?? null,
+                  "nganHang": elementCt.nganHang ?? null,
+                  "ycCapThemPhi": elementCt.ycCapThemPhi ?? 0,
+                  "maVatTuCha": elementCt.maVatTuCha ?? null,
+                  "maVatTu": elementCt.maVatTu ?? null,
+                  "tenVatTuCha": elementCt.tenVatTuCha ?? null,
+                  "tenVatTu": elementCt.tenVatTu ?? null,
+                  "tenHangHoa": elementCt.tenHangHoa ?? null,
+                  "ct2s": elementCt.ct2List ?? [],
+                  "stt": index + 1
+                }
+                listItem.push(item);
+              });
+            }
+          }
+        }
+        this.cts = listItem;
+        this.ct1s = cloneDeep(this.cts);
+      }
     } else {
-      this.listThongTinChiTiet = [];
-      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
@@ -559,16 +628,23 @@ export class ThongTinTongHopComponent implements OnInit {
     this.isView = isView;
   }
 
-  selectRow(row) {
-
+  selectRow(row, rowSet) {
+    if (row) {
+      if (rowSet === 'rowDisplay') {
+        this.rowDisplay = cloneDeep(row);
+        this.rowDisplay.isView = true;
+      }
+      else if (rowSet === 'rowEdit') {
+        this.rowEdit = cloneDeep(row);
+        this.rowEdit.isView = true;
+        this.sortTableId('ct2s');
+      }
+    }
   }
 
   tongBang1(data) {
     if (data && data.length > 0) {
-      let sum = 0;
-      data.forEach((element: any) => {
-        sum += element.chiTiets.map((item) => item.ycCapThemPhi).reduce((prev, next) => Number(prev) + Number(next));
-      });
+      let sum = data.map((item) => item.ycCapThemPhi).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
       return 0
@@ -576,8 +652,8 @@ export class ThongTinTongHopComponent implements OnInit {
   }
 
   tongChiPhiBang2(data) {
-    if (data && data?.chiTiets && data?.chiTiets.length > 0) {
-      let sum = data.chiTiets.map((item) => item.tongTien).reduce((prev, next) => Number(prev) + Number(next));
+    if (data && data?.ct2s && data?.ct2s.length > 0) {
+      let sum = data.ct2s.map((item) => item.tongTien).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
       return 0
@@ -585,8 +661,17 @@ export class ThongTinTongHopComponent implements OnInit {
   }
 
   tongKinhPhiBang2(data) {
-    if (data && data?.chiTiets && data?.chiTiets.length > 0) {
-      let sum = data.chiTiets.map((item) => item.kinhPhiDaCap).reduce((prev, next) => Number(prev) + Number(next));
+    if (data && data?.ct2s && data?.ct2s.length > 0) {
+      let sum = data.ct2s.map((item) => item.kinhPhiDaCap).reduce((prev, next) => Number(prev) + Number(next));
+      return sum ?? 0;
+    } else {
+      return 0
+    }
+  }
+
+  tongCapThemBang2(data) {
+    if (data && data?.ct2s && data?.ct2s.length > 0) {
+      let sum = data.ct2s.map((item) => item.yeuCauCapThem).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
       return 0

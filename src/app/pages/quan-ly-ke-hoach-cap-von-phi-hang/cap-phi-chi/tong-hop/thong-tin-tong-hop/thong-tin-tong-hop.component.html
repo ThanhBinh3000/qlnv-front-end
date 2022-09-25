@@ -140,33 +140,28 @@
         <div *ngIf="isTonghop" class="title-form-chi-tiet pd-10">Chi tiết thông tin tổng hợp</div>
         <nz-card *ngIf="isTonghop" class="mt-2px flex-card data-table card-border-content table-card">
             <div nz-row [nzGutter]="[18, 6]" class="pd-10">
-                <div nz-col nzSpan="12" class="table-ket-qua">
-                    <nz-table #basicTable class="nowrap table__container-tt" [nzData]="listThongTinChiTiet"
-                        [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+                <div nz-col nzSpan="12">
+                    <nz-table #basicTable class="nowrap table__container-tt" [nzData]="cts" [nzFrontPagination]="false"
+                        [nzShowPagination]="false" nzBordered>
                         <thead>
                             <tr>
                                 <th style="width: 35px">STT</th>
                                 <th>Bộ ngành</th>
-                                <th>Số đề nghị</th>
-                                <th>Năm</th>
-                                <th>Ngày đề nghị</th>
-                                <th>Nguồn dữ liệu tổng hợp</th>
-                                <th>Tổng tiền</th>
-                                <th>Kinh phí đã cấp</th>
+                                <th>Tên đơn vị cung cấp</th>
+                                <th>Số tài khoản</th>
+                                <th>Ngân hàng</th>
                                 <th>Yêu cầu cấp thêm</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let data of basicTable.data; let i = index" (click)="selectRow(data)">
+                            <tr *ngFor="let data of basicTable.data; let i = index"
+                                (click)="selectRow(data, 'rowDisplay')">
                                 <td class="text-center">{{i+1}}</td>
                                 <td>{{ data.tenBoNganh }}</td>
-                                <td>{{ data.soDeNghi }}</td>
-                                <td>{{ data.nam }}</td>
-                                <td>{{ data.ngayDeNghi }}</td>
-                                <td>{{ data.tenBoNganh }}</td>
-                                <td>{{ data.tongTien }}</td>
-                                <td>{{ data.kinhPhiDaCap }}</td>
-                                <td>{{ data.ycCapThem }}</td>
+                                <td>{{ data.tenDvCungCap }}</td>
+                                <td>{{ data.soTaiKhoan }}</td>
+                                <td>{{ data.nganHang }}</td>
+                                <td>{{ data.ycCapThemPhi | number: '1.0-1' }}</td>
                             </tr>
                             <tr>
                                 <th></th>
@@ -174,68 +169,62 @@
                                 <th></th>
                                 <th></th>
                                 <th class="text-right"> Tổng</th>
-                                <th class="bg-gray  text-money text-specical-money">{{tongBang1(listThongTinChiTiet)}}
+                                <th class="bg-gray  text-money text-specical-money">{{tongBang1(cts) | number: '1.0-1'}}
                                 </th>
                             </tr>
                         </tbody>
                     </nz-table>
                 </div>
                 <div nz-col nzSpan="12" class="table-ket-qua">
-                    <div nz-row [nzGutter]="[18, 6]">
-                        <div class="text-center title-form-chi-tiet pd-10">Thông tin chi tiết đề nghị cấp phí chi chuyên
-                            nghiệp vụ DTQG</div>
-                        <nz-table class="nowrap">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" width="33%">Loại hàng hoá</th>
-                                    <th class="text-center" width="33%">Chủng loại hàng hoá</th>
-                                    <th class="text-center" width="34%">Tên hàng hoá</th>
-                                </tr>
-                                <tr>
-                                    <th> <input nz-input type="text" readonly /></th>
-                                    <th> <input nz-input type="text" readonly /></th>
-                                    <th> <input nz-input type="text" readonly /></th>
-                                </tr>
-                            </thead>
-                        </nz-table>
-                    </div>
-                    <div nz-row [nzGutter]="[18, 6]">
-                        <nz-table #basicTable2 class="nowrap " [nzFrontPagination]="false" [nzShowPagination]="false"
-                            [nzData]="rowDisplay">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" width="15%">Chi phí</th>
-                                    <th class="text-center" width="15%">Năm phát sinh</th>
-                                    <th class="text-center" width="15%">Tổng chi phí</th>
-                                    <th class="text-center" width="15%">Kinh phí đã cấp</th>
-                                    <th class="text-center" width="30%">Yêu cầu cấp thêm</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let data of basicTable2.data; let i = index">
-                                    <td>{{data.capPhiBoNghanhCt1Id}}</td>
-                                    <td>{{data.namPhatSinh}}</td>
-                                    <td>{{data.tongTien}}</td>
-                                    <td>{{data.kinhPhiDaCap}}</td>
-                                    <td>{{data.yeuCauCapThem}}</td>
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <th class="text-right"> Tổng</th>
-                                    <th class="bg-gray  text-money text-specical-money">{{tongChiPhiBang2(rowDisplay)|
-                                        number:
-                                        '1.0-1'}}</th>
-                                    <th class="bg-gray  text-money text-specical-money">{{tongKinhPhiBang2(rowDisplay)|
-                                        number:
-                                        '1.0-1'}}</th>
-                                    <th class="bg-gray  text-money text-specical-money">
-                                        {{( tongChiPhiBang2(rowDisplay) - tongKinhPhiBang2(rowDisplay))|number:'1.0-1'}}
-                                    </th>
-                                    <th></th>
-                                </tr>
-                            </tbody>
-                        </nz-table>
-                    </div>
+                    <nz-table #basicTable2 class="nowrap " [nzFrontPagination]="false" [nzShowPagination]="false"
+                        [nzData]="rowDisplay.ct2s">
+                        <thead>
+                            <tr>
+                                <th colSpan="5" class="text-center">
+                                    Thông tin chi tiết đề nghị cấp phí chi chuyên nghiệp vụ DTQG
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="text-center" colSpan="2">Loại hàng hoá</th>
+                                <th class="text-center" colSpan="2">Chủng loại hàng hoá</th>
+                                <th class="text-center">Tên hàng hoá</th>
+                            </tr>
+                            <tr>
+                                <th colSpan="2"> <input nz-input type="text" (ngModel)="rowDisplay.tenVatTuCha"
+                                        readonly /></th>
+                                <th colSpan="2"> <input nz-input type="text" (ngModel)="rowDisplay.tenVatTu" readonly />
+                                </th>
+                                <th> <input nz-input type="text" (ngModel)="rowDisplay.tenHangHoa" readonly /></th>
+                            </tr>
+                            <tr>
+                                <th class="text-center">Loại chi phí</th>
+                                <th class="text-center">Năm phát sinh</th>
+                                <th class="text-center">Tổng chi phí</th>
+                                <th class="text-center">Kinh phí đã cấp</th>
+                                <th class="text-center">Yêu cầu cấp thêm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of basicTable2.data; let i = index">
+                                <td>{{data.loaiChiPhi}}</td>
+                                <td>{{data.namPhatSinh}}</td>
+                                <td>{{data.tongTien | number: '1.0-1'}}</td>
+                                <td>{{data.kinhPhiDaCap | number: '1.0-1'}}</td>
+                                <td>{{data.yeuCauCapThem | number: '1.0-1'}}</td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th class="text-right"> Tổng</th>
+                                <th class="bg-gray  text-money text-specical-money">
+                                    {{tongChiPhiBang2(rowDisplay) | number: '1.0-1'}}</th>
+                                <th class="bg-gray  text-money text-specical-money">
+                                    {{tongKinhPhiBang2(rowDisplay) | number: '1.0-1'}}</th>
+                                <th class="bg-gray  text-money text-specical-money">
+                                    {{tongCapThemBang2(rowDisplay) | number : '1.0-1'}}
+                                </th>
+                            </tr>
+                        </tbody>
+                    </nz-table>
                 </div>
             </div>
         </nz-card>
@@ -243,66 +232,35 @@
         <div *ngIf="isTonghop" class="title-form-chi-tiet pd-10">Phương án của tổng cục</div>
         <nz-card *ngIf="isTonghop" class="flex-card p-lr16">
             <div nz-row [nzGutter]="[18, 6]" class="pd-10">
-                <div nz-col nzSpan="12" class="table-ket-qua">
+                <div nz-col nzSpan="12">
                     <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
-                        [nzData]="detail?.tCThem">
+                        [nzData]="ct1s">
                         <thead>
                             <tr>
-                                <th width="60px">STT</th>
-                                <th> Số đề nghị</th>
-                                <th>Năm</th>
-                                <th> Ngày đề nghị</th>
-                                <th>Nguồn dữ liệu tổng hợp</th>
-                                <th>Tổng tiền </th>
-                                <th>Kinh phí đã cấp </th>
-                                <th>Tổng cục thêm </th>
-                                <th>Hành động </th>
+                                <th style="width: 35px">STT</th>
+                                <th>Bộ ngành</th>
+                                <th>Tên đơn vị cung cấp</th>
+                                <th>Số tài khoản</th>
+                                <th>Ngân hàng</th>
+                                <th>Yêu cầu cấp thêm</th>
+                                <th *ngIf="!(isDisableField() || isView)">Hành động </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <nz-select [nzDisabled]="isView" [(ngModel)]="create.soDeNghi" class="w-300"
-                                        (ngModelChange)="changeSoDeNghi(create)">
-                                        <nz-option *ngFor="let item of listNguonTongHop" [nzValue]="item.soDeNghi"
-                                            [nzLabel]="item.soDeNghi">
-                                        </nz-option>
-                                    </nz-select>
-                                </td>
-                                <td> {{create.nam}} </td>
-                                <td> {{create.ngayDeNghi}} </td>
-                                <td> {{create.tenBoNganh}} </td>
-                                <td> {{create.tongTien}} </td>
-                                <td> {{create.kinhPhiDaCap}} </td>
-                                <td>
-                                    <nz-input-number [disabled]="isView" nz-input class="w-300" nzSize="small"
-                                        [(ngModel)]="create.tcCapThem"></nz-input-number>
-                                </td>
-                                <td>
-                                    <a (click)="addRow()" [class.disabled]="!create.soDeNghi || create.soDeNghi == ''">
-                                        <i class="fa fa-plus"></i>
-                                    </a>
-                                    <a (click)="clearItemRow()">
-                                        <i class="fa fa-trash-o do"></i>
-                                    </a>
-                                </td>
-                            </tr>
                             <tr *ngFor="let data of basicTable.data; let i = index">
-                                <ng-container *ngIf="!editDataCache[data.stt]?.edit; else editTemplate">
-                                    <td class="text-center">{{i+1}}</td>
-                                    <td>{{data.soDeNghi}}</td>
-                                    <td>{{data.nam}}</td>
-                                    <td>{{data.ngayDeNghi}}</td>
-                                    <td>{{data.tenBoNganh}}</td>
-                                    <td>{{data.tongTien}}</td>
-                                    <td>{{data.kinhPhiDaCap}}</td>
-                                    <td>{{data.tcCapThem}}</td>
+                                <ng-container *ngIf="!data.edit; else editTemplate">
+                                    <td class="text-center" (click)="selectRow(data, 'rowEdit')">{{i+1}}</td>
+                                    <td (click)="selectRow(data, 'rowEdit')">{{ data.tenBoNganh }}</td>
+                                    <td (click)="selectRow(data, 'rowEdit')">{{ data.tenDvCungCap }}</td>
+                                    <td (click)="selectRow(data, 'rowEdit')">{{ data.soTaiKhoan }}</td>
+                                    <td (click)="selectRow(data, 'rowEdit')">{{ data.nganHang }}</td>
+                                    <td (click)="selectRow(data, 'rowEdit')">{{ data.ycCapThemPhi | number:
+                                        '1.0-1' }}</td>
                                     <td *ngIf="!(isDisableField() || isView)">
-                                        <a (click)="editRow(data.stt)">
+                                        <a (click)="editRow(data, 'ct1s')">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a (click)="deleteRow(data)">
+                                        <a (click)="deleteRow(data, 'ct1s')">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
                                     </td>
@@ -310,44 +268,192 @@
                                 <ng-template #editTemplate>
                                     <td></td>
                                     <td>
-                                        <nz-select [(ngModel)]="editDataCache[data.stt]?.data.soDeNghi" class="w-300"
-                                            (ngModelChange)="changeSoDeNghi(editDataCache[data.stt]?.data)">
-                                            <nz-option *ngFor="let item of listNguonTongHop" [nzValue]="item.soDeNghi"
-                                                [nzLabel]="item.soDeNghi">
-                                            </nz-option>
-                                        </nz-select>
-                                    </td>
-                                    <td>{{editDataCache[data.stt]?.data.nam}}</td>
-                                    <td>{{editDataCache[data.stt]?.data.ngayDeNghi}}</td>
-                                    <td>{{editDataCache[data.stt]?.data.tenBoNganh}}</td>
-                                    <td>{{editDataCache[data.stt]?.data.tongTien}}</td>
-                                    <td>{{editDataCache[data.stt]?.data.kinhPhiDaCap}}</td>
-                                    <td>
-                                        <input type="text" nz-input class="w-300"
-                                            [(ngModel)]="editDataCache[data.stt]?.data.tcCapThem" />
+                                        {{data.tenBoNganh}}
                                     </td>
                                     <td>
-                                        <a (click)="saveEdit(data.stt)" class="save"
-                                            [class.disabled]="!editDataCache[data.stt]?.data.soDeNghi || editDataCache[data.stt]?.data.soDeNghi == ''">
+                                        <input type="text" nz-input class="w-300" [(ngModel)]="data.tenDvCungCap" />
+                                    </td>
+                                    <td>
+                                        <input type="text" nz-input class="w-300" [(ngModel)]="data.soTaiKhoan" />
+                                    </td>
+                                    <td>
+                                        <input type="text" nz-input class="w-300" [(ngModel)]="data.nganHang" />
+                                    </td>
+                                    <td>
+                                        {{data.ycCapThemPhi | number: '1.0-1'}}
+                                    </td>
+                                    <td>
+                                        <a (click)="saveEdit(data, 'ct1s')" class="save">
                                             <i class="fa fa-save"></i>
                                         </a>
-                                        <a (click)="cancelEdit(data.stt)">
+                                        <a (click)="cancelEdit(data, 'ct1s')">
                                             <i class="fa fa-times do"></i>
                                         </a>
                                     </td>
                                 </ng-template>
                             </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th class="text-right"> Tổng</th>
+                                <th class="bg-gray  text-money text-specical-money">{{tongBang1(ct1s) | number:
+                                    '1.0-1'}}</th>
+                                <th></th>
+                            </tr>
                         </tbody>
                     </nz-table>
                 </div>
                 <div nz-col nzSpan="12" class="table-ket-qua">
-
+                    <nz-table #basicTable3 class="nowrap " [nzFrontPagination]="false" [nzShowPagination]="false"
+                        [nzData]="rowEdit.ct2s">
+                        <thead>
+                            <tr>
+                                <th colSpan="6" class="text-center">
+                                    Thông tin chi tiết đề nghị cấp phí chi chuyên nghiệp vụ DTQG
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="text-center" colSpan="2">Loại hàng hoá</th>
+                                <th class="text-center" colSpan="2">Chủng loại hàng hoá</th>
+                                <th class="text-center" colSpan="2">Tên hàng hoá</th>
+                            </tr>
+                            <tr>
+                                <th colSpan="2">
+                                    <nz-select name="" id="" [(ngModel)]="rowEdit.maVatTuCha"
+                                        (ngModelChange)="changeLoaiHangHoa($event)" [nzDisabled]="rowEdit.isView">
+                                        <nz-option *ngFor="let item of listLoaiHangHoa" [nzValue]="item.ma"
+                                            [nzLabel]="item.ten">
+                                        </nz-option>
+                                    </nz-select>
+                                </th>
+                                <th colSpan="2">
+                                    <nz-select [(ngModel)]="rowEdit.maVatTu" [nzDisabled]="rowEdit.isView">
+                                        <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.ma"
+                                            [nzLabel]="item.ten">
+                                        </nz-option>
+                                    </nz-select>
+                                </th>
+                                <th colSpan="2">
+                                    <input nz-input type="text" (ngModel)="rowEdit.tenHangHoa"
+                                        [readonly]="rowEdit.isView" />
+                                </th>
+                            </tr>
+                            <tr>
+                                <th class="text-center">Loại chi phí</th>
+                                <th class="text-center">Năm phát sinh</th>
+                                <th class="text-center">Tổng chi phí</th>
+                                <th class="text-center">Kinh phí đã cấp</th>
+                                <th class="text-center">Yêu cầu cấp thêm</th>
+                                <th>Hành động </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <input nz-input type="text" [(ngModel)]="create.loaiChiPhi"
+                                        [readonly]="rowEdit.isView" />
+                                </td>
+                                <td>
+                                    <nz-select [(ngModel)]="create.namPhatSinh" [nzDisabled]="rowEdit.isView">
+                                        <nz-option *ngFor="let nam of listNam" [nzValue]="nam.value"
+                                            [nzLabel]="nam.text">
+                                        </nz-option>
+                                    </nz-select>
+                                </td>
+                                <td>
+                                    <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0"
+                                        [(ngModel)]="create.tongTien" [nzDisabled]="rowEdit.isView"></nz-input-number>
+                                </td>
+                                <td>
+                                    <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0"
+                                        [nzMax]="(create.tongTien ?? 0)" [(ngModel)]="create.kinhPhiDaCap"
+                                        [nzDisabled]="rowEdit.isView">
+                                    </nz-input-number>
+                                </td>
+                                <td>
+                                    <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0"
+                                        [nzMax]="(create.tongTien ?? 0) - (create.kinhPhiDaCap ?? 0)"
+                                        [(ngModel)]="create.yeuCauCapThem" [nzDisabled]="rowEdit.isView">
+                                    </nz-input-number>
+                                </td>
+                                <td>
+                                    <a (click)="addRow()" [class.disabled]="rowEdit.isView">
+                                        <i class="table-icon icon htvbdh_dau-cong"></i>
+                                    </a>
+                                    <a (click)="clearItemRow()" [class.disabled]="rowEdit.isView">
+                                        <i class="table-icon icon  htvbdh_nhap-lai1"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let data of basicTable3.data; let i = index">
+                                <ng-container *ngIf="!data.edit; else editItemTemplate">
+                                    <td>{{data.loaiChiPhi}}</td>
+                                    <td>{{data.namPhatSinh}}</td>
+                                    <td>{{data.tongTien | number: '1.0-1'}}</td>
+                                    <td>{{data.kinhPhiDaCap | number: '1.0-1'}}</td>
+                                    <td>{{data.yeuCauCapThem | number: '1.0-1'}}</td>
+                                    <td>
+                                        <a (click)="editRow(data, 'ct2s')" [class.disabled]="rowEdit.isView">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a (click)="deleteRow(data, 'ct2s')" [class.disabled]="rowEdit.isView">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <ng-template #editItemTemplate>
+                                    <td>
+                                        <input nz-input type="text" [(ngModel)]="data.loaiChiPhi" />
+                                    </td>
+                                    <td>
+                                        <nz-select [(ngModel)]="data.namPhatSinh">
+                                            <nz-option *ngFor="let nam of listNam" [nzValue]="nam.value"
+                                                [nzLabel]="nam.text">
+                                            </nz-option>
+                                        </nz-select>
+                                    </td>
+                                    <td>
+                                        <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0"
+                                            [(ngModel)]="data.tongTien"></nz-input-number>
+                                    </td>
+                                    <td>
+                                        <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0"
+                                            [nzMax]="(data.tongTien ?? 0)" [(ngModel)]="data.kinhPhiDaCap">
+                                        </nz-input-number>
+                                    </td>
+                                    <td>
+                                        <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="0"
+                                            [nzMax]="(data.tongTien ?? 0) - (data.kinhPhiDaCap ?? 0)"
+                                            [(ngModel)]="data.yeuCauCapThem"></nz-input-number>
+                                    </td>
+                                    <td>
+                                        <a (click)="saveEdit(data, 'ct2s')" class="save">
+                                            <i class="fa fa-save"></i>
+                                        </a>
+                                        <a (click)="cancelEdit(data, 'ct2s')">
+                                            <i class="fa fa-times do"></i>
+                                        </a>
+                                    </td>
+                                </ng-template>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th class="text-right"> Tổng</th>
+                                <th class="bg-gray  text-money text-specical-money">
+                                    {{tongChiPhiBang2(rowEdit) | number: '1.0-1'}}</th>
+                                <th class="bg-gray  text-money text-specical-money">
+                                    {{tongKinhPhiBang2(rowEdit) | number: '1.0-1'}}</th>
+                                <th class="bg-gray  text-money text-specical-money">
+                                    {{tongCapThemBang2(rowEdit) | number : '1.0-1'}}
+                                </th>
+                                <th></th>
+                            </tr>
+                        </tbody>
+                    </nz-table>
                 </div>
             </div>
         </nz-card>
     </div>
-</div>
-<div class="chi-tiet" *ngIf="isDetail">
-    <app-thong-tin-de-nghi-cap-phi-bo-nganh [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
-    </app-thong-tin-de-nghi-cap-phi-bo-nganh>
 </div>
