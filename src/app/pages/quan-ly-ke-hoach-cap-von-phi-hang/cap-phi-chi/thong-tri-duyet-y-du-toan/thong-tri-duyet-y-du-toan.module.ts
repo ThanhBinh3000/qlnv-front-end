@@ -17,7 +17,8 @@ import { ThongTriDuyetYDuToanComponent } from './thong-tri-duyet-y-du-toan.compo
 
     ],
     exports: [
-        ThongTriDuyetYDuToanComponent,
+        ThongTriDuyetYDuToanComponent
     ]
 })
 export class ThongTriDuyetYDuToanModule { }
+
