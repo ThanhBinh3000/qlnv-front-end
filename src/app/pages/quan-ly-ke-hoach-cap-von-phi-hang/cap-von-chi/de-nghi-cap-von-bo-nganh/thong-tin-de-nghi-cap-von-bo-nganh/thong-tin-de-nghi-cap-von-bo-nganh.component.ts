@@ -168,10 +168,10 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      nam: [this.khBanDauGia ? this.khBanDauGia.nam : null],
-      boNganh: [this.khBanDauGia ? this.khBanDauGia.maBoNganh : null],
-      soDeNghi: [this.khBanDauGia ? this.khBanDauGia.soDeNghi : null],
-      ngayDeNghi: [this.khBanDauGia ? this.khBanDauGia.ngayDeNghi : new Date()],
+      nam: [this.khBanDauGia ? this.khBanDauGia.nam : null, [Validators.required],],
+      boNganh: [this.khBanDauGia ? this.khBanDauGia.maBoNganh : null, [Validators.required],],
+      soDeNghi: [this.khBanDauGia ? this.khBanDauGia.soDeNghi : null, [Validators.required],],
+      ngayDeNghi: [this.khBanDauGia ? this.khBanDauGia.ngayDeNghi : new Date(), [Validators.required],],
       ghiChu: [this.khBanDauGia ? this.khBanDauGia.ghiChu : null],
 
     });

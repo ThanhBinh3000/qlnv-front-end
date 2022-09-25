@@ -40,7 +40,7 @@ export class TongHopComponent implements OnInit {
     ngayTongHop: '',
     tongTien: '',
     kinhPhiDaCap: '',
-    ycCapThem: '',
+    ycCapThemPhi: '',
     tenTrangThai: '',
   };
   dataTable: any[] = [];
@@ -396,7 +396,7 @@ export class TongHopComponent implements OnInit {
       ngayTongHop: '',
       tongTien: '',
       kinhPhiDaCap: '',
-      ycCapThem: '',
+      ycCapThemPhi: '',
       tenTrangThai: '',
     };
   }
