@@ -21,7 +21,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
+import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
 import { ThongTriDuyetYCapVonService } from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapVon.service';
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
@@ -81,7 +81,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     private thongTriDuyetYCapVonService: ThongTriDuyetYCapVonService,
     private cdr: ChangeDetectorRef,
     private helperService: HelperService,
-    private deNghiCapPhiBoNganhService: DeNghiCapPhiBoNganhService,
+    private deNghiCapPhiBoNganhService: DeNghiCapVonBoNganhService,
   ) {
   }
 
@@ -138,13 +138,13 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         },
         [Validators.required],
       ],
-      lyDoChi: [
-        {
-          value: this.khBanDauGia ? this.khBanDauGia.lyDoChi : null,
-          disabled: this.isView ? true : false,
-        },
-        [Validators.required],
-      ],
+      // lyDoChi: [
+      //   {
+      //     value: this.khBanDauGia ? this.khBanDauGia.lyDoChi : null,
+      //     disabled: this.isView ? true : false,
+      //   },
+      //   [Validators.required],
+      // ],
       soDnCapVon: [
         {
           value: this.khBanDauGia ? this.khBanDauGia.soDnCapVon : null,
@@ -256,7 +256,6 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   async save(isOther?: boolean) {
     this.spinner.show();
     try {
-      debugger
       let body = this.formData.value;
       body.nam = this.formData.controls.nam.value;
       body.chiTietList = this.chiTietList;

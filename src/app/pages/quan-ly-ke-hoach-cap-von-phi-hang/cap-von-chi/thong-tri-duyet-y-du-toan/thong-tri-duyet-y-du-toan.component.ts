@@ -52,7 +52,7 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
     nam: '',
     ngayLap: '',
     lyDoChi: '',
-    soDnCapPhi: '',
+    soDnCapVon: '',
     tenTrangThai: '',
   };
   dataTableAll: any[] = [];
@@ -363,7 +363,7 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
       nam: '',
       ngayLap: '',
       lyDoChi: '',
-      soDnCapPhi: '',
+      soDnCapVon: '',
       tenTrangThai: '',
     };
   }

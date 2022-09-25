@@ -16,12 +16,12 @@
         <span>Duyệt</span>
       </button>
       <button *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO" type="button" class="btn btn-sub"
-        (click)="idInput===0 ? save(false) :guiDuyet()">
+        (click)="idInput===0 ? save(false) :guiDuyet()" [disabled]="!formData.valid">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button *ngIf="detail.trangThai == globals.prop.NHAP_DU_THAO" type="button" class="btn btn-main"
-        (click)="save(false)">
+        (click)="save(false)" [disabled]="!formData.valid">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>

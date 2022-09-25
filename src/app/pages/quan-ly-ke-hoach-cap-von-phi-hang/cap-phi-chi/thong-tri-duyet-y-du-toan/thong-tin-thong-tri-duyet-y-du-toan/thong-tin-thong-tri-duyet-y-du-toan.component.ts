@@ -141,13 +141,13 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         },
         [Validators.required],
       ],
-      lyDoChi: [
-        {
-          value: this.khBanDauGia ? this.khBanDauGia.lyDoChi : null,
-          disabled: this.isView ? true : false,
-        },
-        [Validators.required],
-      ],
+      // lyDoChi: [
+      //   {
+      //     value: this.khBanDauGia ? this.khBanDauGia.lyDoChi : null,
+      //     disabled: this.isView ? true : false,
+      //   },
+      //   [Validators.required],
+      // ],
       soDnCapPhi: [
         {
           value: this.khBanDauGia ? this.khBanDauGia.soDnCapPhi : null,

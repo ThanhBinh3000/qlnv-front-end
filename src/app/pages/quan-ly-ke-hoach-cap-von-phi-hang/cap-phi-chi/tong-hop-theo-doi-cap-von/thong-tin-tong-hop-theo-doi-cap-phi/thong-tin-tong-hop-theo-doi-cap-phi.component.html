@@ -9,7 +9,7 @@
       <span>Hoàn thành</span>
     </button>
     <button *ngIf="khBanDauGia.trangThai == globals.prop.NHAP_DU_THAO && !isView" type="button" class="btn btn-main"
-      [disabled]="!formData.valid" (click)="save(false)">
+      [disabled]="!formData.valid" (click)="save(false)" [disabled]="!formData.valid">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
