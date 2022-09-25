@@ -436,7 +436,7 @@ export class ThongTinTongHopComponent implements OnInit {
 
   clearFilter() {
     this.formData = this.fb.group({
-      "nam": [null, [Validators.required]],
+      "nam": [this.yearNow, [Validators.required]],
       "maTongHop": [null],
       "ngayTongHop": [null],
       "maToTrinh": [null],
