@@ -113,8 +113,10 @@
                         </th>
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ycCapThem"
-                                    (ngModelChange)="filterInTable('ycCapThem',filterTable.ycCapThem)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm"
+                                    [(ngModel)]="filterTable.ycCapThemPhi"
+                                    (ngModelChange)="filterInTable('ycCapThemPhi',filterTable.ycCapThemPhi)"
+                                    size="small" />
                             </nz-input-group>
                         </th>
                         <th>
@@ -143,7 +145,7 @@
                         <td>{{ data.ngayTongHop|date: 'dd/MM/YYYY'}}</td>
                         <td>{{ data.tongTien }}</td>
                         <td>{{ data.kinhPhiDaCap }}</td>
-                        <td>{{ data.ycCapThem }}</td>
+                        <td>{{ data.ycCapThemPhi }}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td class="text-left">
                             <a (click)="detail(data, true)">

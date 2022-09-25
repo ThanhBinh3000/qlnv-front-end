@@ -21,7 +21,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
-import { TongHopDeNghiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
+import { TongHopDeNghiCapPhiService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapPhi.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
@@ -37,7 +37,6 @@ export class ThongTinTongHopComponent implements OnInit {
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-  @Input() id: number;
   formData: FormGroup;
   detail: any = {};
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -81,7 +80,7 @@ export class ThongTinTongHopComponent implements OnInit {
 
   constructor(
     private modal: NzModalService,
-    private tongHopDeNghiCapVonService: TongHopDeNghiCapVonService,
+    private tongHopDeNghiCapVonService: TongHopDeNghiCapPhiService,
     private deNghiCapPhiBoNganhService: DeNghiCapPhiBoNganhService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
@@ -169,8 +168,6 @@ export class ThongTinTongHopComponent implements OnInit {
         let data = res.data
         if (data) {
           this.detail = res.data;
-          this.detail.trangThai = data.trangThai;
-          this.detail.tenTrangThai = data.tenTrangThai;
           this.filePhuongAn = res.data.fileDinhKem;
           this.formData.patchValue({
             "nam": res.data.nam,
@@ -181,52 +178,26 @@ export class ThongTinTongHopComponent implements OnInit {
             "noiDung": data.noiDung,
             nameFilePhuongAn: data.fileDinhKem.fileName
           });
-          this.listFileDinhKem = [data.fileDinhKem];
           this.cts = [...data.cts];
-          this.detail.tCThem = [...data.ct1s]
-          let phuongAnList = [];
-          this.detail.ct1s.forEach(pa => {
-            const phuongAn = new Ct1sTonghop();
-            phuongAn.khDnCapVonId = pa.id;
-            phuongAn.tcCapThem = pa.tcCapThem;
-            phuongAnList = [...phuongAnList, phuongAn];
-          });
-          this.khDnCapVonIds = res.data.cts.map(item => item.id);
-          this.formData.patchValue({ khDnCapVonIds: this.khDnCapVonIds });
+          this.ct1s = [...data.ct1s];
+          this.sortTableId('ct1s');
+          this.sortTableId('ct2s');
         }
       }
     }
   }
 
   async save(isOther?: boolean) {
-    // chờ API và body request
-    let phuongAnList = [];
-    this.detail.tCThem.forEach(pa => {
-      const phuongAn = new Ct1sTonghop();
-      phuongAn.khDnCapVonId = pa.id;
-      phuongAn.tcCapThem = +pa.tCThem;
-      phuongAnList = [...phuongAnList, phuongAn];
-    });
-    let body = {
-      id: this.detail.id,
-      "capDvi": this.userInfo.CAP_DVI,
-      "ct1s": phuongAnList,
-      "fileDinhKem": this.filePhuongAn,
-      "khDnCapVonIds": this.formData.value.khDnCapVonIds,
-      "maDvi": this.userInfo.MA_DVI,
-      "maToTrinh": this.formData.value.maToTrinh,
-      "maTongHop": this.formData.value.maTongHop ? this.formData.value.maTongHop : "",
-      "nam": this.formData.value.nam ? this.formData.value.nam : "",
-      "ngayTongHop": this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop).format(
-        'YYYY-MM-DD') : "",
-      "nguonTongHop": this.formData.value.nguonTongHop ? this.formData.value.nguonTongHop : "",
-      "noiDung": this.formData.value.noiDung ? this.formData.value.noiDung : ""
-    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
       return;
     }
+    let body = this.formData.value;
+    body.id = this.idInput;
+    body.ct1s = this.ct1s;
+    body.cts = this.cts;
+    body.fileDinhKem = this.filePhuongAn;
     this.spinner.show();
     try {
       if (this.idInput > 0) {
@@ -450,6 +421,8 @@ export class ThongTinTongHopComponent implements OnInit {
     this.rowEdit = {};
   }
 
+  /*-------------------------------------------------*/
+
   sortTableId(type) {
     if (type === 'ct1s') {
       this.ct1s.forEach((lt, i) => {
@@ -516,6 +489,9 @@ export class ThongTinTongHopComponent implements OnInit {
 
   editRow(item, type) {
     if (type === 'ct1s') {
+      this.ct1s.forEach(element => {
+        element.edit = false;
+      });
       this.rowEdit = cloneDeep(item);
       this.rowEdit.isView = false;
       this.oldDataEdit1 = cloneDeep(item);
@@ -610,6 +586,7 @@ export class ThongTinTongHopComponent implements OnInit {
         }
         this.cts = listItem;
         this.ct1s = cloneDeep(this.cts);
+        this.sortTableId('ct1s');
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -637,6 +614,9 @@ export class ThongTinTongHopComponent implements OnInit {
       else if (rowSet === 'rowEdit') {
         this.rowEdit = cloneDeep(row);
         this.rowEdit.isView = true;
+        this.ct1s.forEach(element => {
+          element.edit = false;
+        });
         this.sortTableId('ct2s');
       }
     }
