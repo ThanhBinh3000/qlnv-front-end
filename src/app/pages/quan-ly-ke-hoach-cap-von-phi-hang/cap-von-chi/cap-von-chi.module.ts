@@ -1,4 +1,4 @@
-import { ThongTinTriDuyetYDuToanModule } from './thong-tri-duyet-y-du-toan/thong-tri-duyet-y-du-toan.module';
+import { ThongTriDuyetYDuToanModule } from './thong-tri-duyet-y-du-toan/thong-tri-duyet-y-du-toan.module';
 import { DeNghiCapVonBoNganhModule } from './de-nghi-cap-von-bo-nganh/de-nghi-cap-von-bo-nganh.module';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -19,7 +19,7 @@ import { TongHopTheoDoiCapVonModule } from './tong-hop-theo-doi-cap-von/tong-hop
     DirectivesModule,
     DeNghiCapVonBoNganhModule,
     TongHopModule,
-    ThongTinTriDuyetYDuToanModule,
+    ThongTriDuyetYDuToanModule,
     TongHopTheoDoiCapVonModule
   ],
 })

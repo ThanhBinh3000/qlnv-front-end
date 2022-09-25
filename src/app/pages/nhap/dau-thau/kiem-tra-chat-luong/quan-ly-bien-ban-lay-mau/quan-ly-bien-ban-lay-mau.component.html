@@ -1,23 +1,21 @@
 <ng-container class="luong-thuc__danh-sach" *ngIf="!isDetail">
-
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div class="search__body" nz-row [nzGutter]="20">
-        <div nz-col nzSpan="4">
-          <label class="search__label">Số Quyết định</label>
-          <input class="search__input" placeholder="Số biên bản" nz-input [(ngModel)]="searchFilter.soQuyetDinhNhap" />
+        <div nz-col nzSpan="6">
+          <label>Số biên bản lấy mẫu/bàn giao mẫu</label>
+          <input nz-input [(ngModel)]="searchFilter.soQuyetDinhNhap" />
         </div>
-        <div nz-col nzSpan="16">
-          <label class="search__label">Số biên bản</label>
-          <input class="search__input" placeholder="Số biên bản" nz-input [(ngModel)]="searchFilter.soBienBan" />
+        <div nz-col nzSpan="6">
+          <label>Số QĐ giao nhiệm vụ nhập hàng</label>
+          <input nz-input [(ngModel)]="searchFilter.soBienBan" />
         </div>
-        <div nz-col nzSpan="4" *ngIf="typeVthh == '02'">
-          <label class="search__label">Ngày lấy mẫu</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayLayMau" nzFormat="dd/MM/yyyy">
-          </nz-range-picker>
+        <div nz-col nzSpan="6">
+          <label>Đơn vị kiểm nghiệm</label>
+          <input nz-input [(ngModel)]="searchFilter.soBienBan" />
         </div>
-        <div nz-col nzSpan="4" *ngIf="typeVthh != '02'">
-          <label class="search__label">Ngày biên bản</label>
+        <div nz-col nzSpan="6">
+          <label>Ngày lấy mẫu</label>
           <nz-range-picker [(ngModel)]="searchFilter.ngayLayMau" nzFormat="dd/MM/yyyy">
           </nz-range-picker>
         </div>
@@ -45,7 +43,8 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()" (click)="redirectToChiTiet(false, 0)">
+        <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc() && typeVthh "
+          (click)="redirectToChiTiet(false, 0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -76,7 +75,7 @@
             <td></td>
             <td></td>
             <td>
-              <nz-input-group >
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBienBan"
                   (input)="filterInTable('soBienBan',filterTable.soBienBan)" size="small" />
               </nz-input-group>
@@ -103,7 +102,7 @@
               </nz-input-group>
             </td>
             <td>
-              <nz-input-group >
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDiemKho"
                   (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small" />
               </nz-input-group>
@@ -115,13 +114,13 @@
               </nz-input-group>
             </td>
             <td>
-              <nz-input-group >
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNganLo"
                   (input)="filterInTable('tenNganLo',filterTable.tenNganLo)" size="small" />
               </nz-input-group>
             </td>
             <td>
-              <nz-input-group >
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
                   (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
               </nz-input-group>

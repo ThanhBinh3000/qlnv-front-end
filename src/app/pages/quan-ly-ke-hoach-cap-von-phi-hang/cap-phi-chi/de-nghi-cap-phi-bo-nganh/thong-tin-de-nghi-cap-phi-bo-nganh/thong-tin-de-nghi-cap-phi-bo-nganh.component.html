@@ -1,1 +1,285 @@
-<p>thong-tin-de-nghi-cap-phi-bo-nganh works!</p>
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+    <div class="btn-group">
+        <button type="button" class="btn btn-sub" (click)="back()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+        </button>
+        <button type="button" class="btn btn-sub">
+            <i class="icon  htvbdh_da-xu-ly"></i>
+            <span>Hoàn thành</span>
+        </button>
+        <button type="button" class="btn btn-sub">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+        </button>
+    </div>
+</nz-affix>
+<div class="bg-trang">
+    <div class="mt16 flex-card p-lr16">
+        <div class="header mg-t-16">
+            <div class="header-text">
+                <div class="title-chi-tieu">
+                    <span class="du-thao-va-lanh-dao-duyet">Dự Thảo</span>
+                    <span>Đề nghị cấp phí chi nghiệp vụ dự trữ quốc gia của bộ ngành</span>
+                </div>
+            </div>
+        </div>
+        <form nzLayout="vertical" nz-form [formGroup]="formData">
+            <div nz-row [nzGutter]="[24]">
+                <div nz-col [nzSpan]="2">
+                    <nz-form-item>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Năm </nz-form-label>
+                        <nz-select formControlName="nam">
+                            <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Bộ Ngành </nz-form-label>
+                        <nz-select formControlName="maBoNganh">
+                            <nz-option *ngFor="let item of listBoNganh" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                            </nz-option>
+                        </nz-select>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Số đề nghị </nz-form-label>
+                        <input nz-input type="text" formControlName="soDeNghi" />
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Ngày đề nghị </nz-form-label>
+                        <nz-date-picker formControlName="ngayDeNghi">
+                        </nz-date-picker>
+                    </nz-form-item>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="pt-16 mt-16 flex-card p-lr16">
+        <nz-card class="mt16 flex-card p-lr16">
+            <div nz-row [nzGutter]="[18, 6]">
+                <div nz-col nzSpan="12" class="table-ket-qua">
+                    <nz-table #basicTable class="nowrap " [nzFrontPagination]="false" [nzShowPagination]="false"
+                        [nzData]="ct1List?.chiTiets">
+                        <thead>
+                            <tr>
+                                <th width="60px">STT</th>
+                                <th>Tên đơn vị cung cấp</th>
+                                <th>Số tài khoản</th>
+                                <th>Ngân hàng</th>
+                                <th>Yêu cầu cấp thêm phí</th>
+                                <th class="text-left">Hành động </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td><input nz-input type="text" [(ngModel)]="create.tenDvCungCap" /></td>
+                                <td><input nz-input type="text" [(ngModel)]="create.soTaiKhoan" /></td>
+                                <td><input nz-input type="text" [(ngModel)]="create.nganHang" /> </td>
+                                <td><input nz-input type="text" [(ngModel)]="create.ycCapThemPhi" /> </td>
+                                <td class="text-left">
+                                    <a (click)="addRow()"
+                                        [class.disabled]="!create||create.tenDvCungCap =='' ||create.soTaiKhoan ==''||create.nganHang ==''||create.ycCapThemPhi ==''  ">
+                                        <i class="table-icon icon htvbdh_dau-cong"></i>
+                                    </a>
+                                    <a (click)="clearItemRow()">
+                                        <i class="table-icon icon  htvbdh_nhap-lai1"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr *ngFor="let data of basicTable.data; let i = index">
+                                <ng-container *ngIf="!editDataCache[data.stt]?.edit; else editTemplate">
+                                    <td class="text-center">{{i+1}}</td>
+                                    <td>{{data.tenDvCungCap}}</td>
+                                    <td>{{data.soTaiKhoan}}</td>
+                                    <td>{{data.nganHang}}</td>
+                                    <td>{{data.ycCapThemPhi}}</td>
+                                    <td>
+                                        <a (click)="editRow(data.stt)">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a (click)="deleteRow(data)">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </td>
+                                </ng-container>
+                                <ng-template #editTemplate>
+                                    <td></td>
+                                    <td>
+                                        <input type="text" nz-input
+                                            [(ngModel)]="editDataCache[data.stt]?.data.tenDvCungCap" />
+                                    </td>
+                                    <td>
+                                        <input type="text" nz-input
+                                            [(ngModel)]="editDataCache[data.stt]?.data.soTaiKhoan" />
+                                    </td>
+                                    <td>
+                                        <input type="text" nz-input
+                                            [(ngModel)]="editDataCache[data.stt]?.data.nganHang" />
+                                    </td>
+                                    <td>
+                                        <input type="text" nz-input
+                                            [(ngModel)]="editDataCache[data.stt]?.data.ycCapThemPhi" />
+                                    </td>
+                                    <td>
+                                        <a (click)="saveEdit(data.stt)" class="save">
+                                            <i class="fa fa-save"></i>
+                                        </a>
+                                        <a (click)="cancelEdit(data.stt)">
+                                            <i class="fa fa-times do"></i>
+                                        </a>
+                                    </td>
+                                </ng-template>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th class="text-right"> Tổng</th>
+                                <th class="bg-gray  text-money text-specical-money">{{tongBang1()}}</th>
+                                <th></th>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+                <div nz-col nzSpan="12" class="table-ket-qua">
+                    <div nz-row [nzGutter]="[18, 6]">
+                        <div class="text-center title-form-chi-tiet pd-10">Thông tin chi tiết đề nghị cấp phí chi chuyên
+                            nghiệp vụ
+                            DTQG</div>
+                        <nz-table class="nowrap">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" width="30%">Loại hàng hoá</th>
+                                    <th class="text-center" width="30%">Chủng loại hàng hoá</th>
+                                    <th class="text-center" width="30%">Tên hàng hoá</th>
+                                    <th class="text-center"> Hành động</th>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        <nz-select name="" id="" [(ngModel)]="hanghoa.maLoaiHangHoa"
+                                            (ngModelChange)="changeLoaiHangHoa($event)">
+                                            <nz-option *ngFor="let item of listLoaiHangHoa" [nzValue]="item.ma"
+                                                [nzLabel]="item.ten">
+                                            </nz-option>
+                                        </nz-select>
+                                    </th>
+                                    <th>
+                                        <nz-select [(ngModel)]="hanghoa.maChungLoaiHangHoa"
+                                            (ngModelChange)="onChangeChungLoaiHH($event)">
+                                            <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.ma"
+                                                [nzLabel]="item.ten">
+                                            </nz-option>
+                                        </nz-select>
+                                    </th>
+                                    <th> <input nz-input type="text" /></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                        </nz-table>
+                    </div>
+                    <div nz-row [nzGutter]="[18, 6]">
+                        <nz-table #basicTable2 class="nowrap " [nzFrontPagination]="false" [nzShowPagination]="false"
+                            [nzData]="ct2List?.chiTiets">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" width="15%">Chi phí</th>
+                                    <th class="text-center" width="15%">Năm phát sinh</th>
+                                    <th class="text-center" width="15%">Tổng chi phí</th>
+                                    <th class="text-center" width="15%">Kinh phí đã cấp</th>
+                                    <th class="text-center" width="30%">Yêu cầu cấp thêm</th>
+                                    <th width=""></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input nz-input type="text" [(ngModel)]="create2.capPhiBoNghanhCt1Id" /></td>
+                                    <td><input nz-input type="text" [(ngModel)]="create2.namPhatSinh" /></td>
+                                    <td><input nz-input type="text" [(ngModel)]="create2.tongTien" /></td>
+                                    <td><input nz-input type="text" [(ngModel)]="create2.kinhPhiDaCap" /> </td>
+                                    <td><input nz-input type="text" [(ngModel)]="create2.yeuCauCapThem" /> </td>
+                                    <td class="text-left">
+                                        <a [class.disabled]="!create2||create2.capPhiBoNghanhCt1Id =='' ||create2.namPhatSinh ==''||create2.tongTien ==''||create2.kinhPhiDaCap =='' ||create2.yeuCauCapThem =='' "
+                                            (click)="addRow2()">
+                                            <i class="table-icon icon htvbdh_dau-cong"></i>
+                                        </a>
+                                        <a (click)="clearItemRow2()">
+                                            <i class="table-icon icon  htvbdh_nhap-lai1"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr *ngFor="let data of basicTable2.data; let i = index">
+                                    <ng-container *ngIf="!editDataCache2[data.stt]?.edit; else editTemplate2">
+                                        <td>{{data.capPhiBoNghanhCt1Id}}</td>
+                                        <td>{{data.namPhatSinh}}</td>
+                                        <td>{{data.tongTien}}</td>
+                                        <td>{{data.kinhPhiDaCap}}</td>
+                                        <td>{{data.yeuCauCapThem}}</td>
+                                        <td>
+                                            <a (click)="editRow2(data.stt)">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                            <a (click)="deleteRow2(data)">
+                                                <i class="fa fa-trash-o do"></i>
+                                            </a>
+                                        </td>
+                                    </ng-container>
+                                    <ng-template #editTemplate2>
+                                        <td>
+                                            <input type="text" nz-input
+                                                [(ngModel)]="editDataCache2[data.stt]?.data.capPhiBoNghanhCt1Id" />
+                                        </td>
+                                        <td>
+                                            <input type="text" nz-input
+                                                [(ngModel)]="editDataCache2[data.stt]?.data.namPhatSinh" />
+                                        </td>
+                                        <td>
+                                            <input type="text" nz-input
+                                                [(ngModel)]="editDataCache2[data.stt]?.data.tongTien" />
+                                        </td>
+                                        <td>
+                                            <input type="text" nz-input
+                                                [(ngModel)]="editDataCache2[data.stt]?.data.kinhPhiDaCap" />
+                                        </td>
+                                        <td>
+                                            <input type="text" nz-input
+                                                [(ngModel)]="editDataCache2[data.stt]?.data.yeuCauCapThem" />
+                                        </td>
+                                        <td>
+                                            <a (click)="saveEdit2(data.stt)" class="save">
+                                                <i class="fa fa-save"></i>
+                                            </a>
+                                            <a (click)="cancelEdit2(data.stt)">
+                                                <i class="fa fa-times do"></i>
+                                            </a>
+                                        </td>
+                                    </ng-template>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th class="text-right"> Tổng</th>
+                                    <th class="bg-gray  text-money text-specical-money">{{tongChiPhiBang2()| number:
+                                        '1.0-1'}}</th>
+                                    <th class="bg-gray  text-money text-specical-money">{{tongKinhPhiBang2()| number:
+                                        '1.0-1'}}</th>
+                                    <th class="bg-gray  text-money text-specical-money">
+                                        {{( tongChiPhiBang2() - tongKinhPhiBang2())|number:'1.0-1'}}</th>
+                                    <th></th>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+
+                    </div>
+
+                </div>
+            </div>
+        </nz-card>
+    </div>
+</div>

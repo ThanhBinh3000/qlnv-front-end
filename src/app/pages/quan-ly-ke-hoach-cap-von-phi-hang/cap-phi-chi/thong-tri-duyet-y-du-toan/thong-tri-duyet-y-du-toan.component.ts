@@ -11,11 +11,13 @@ import {
 import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
+import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
 import { UserService } from 'src/app/services/user.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { isEmpty } from 'lodash';
 import { Globals } from 'src/app/shared/globals';
-import { ThongTriDuyetYDuToanService } from 'src/app/services/thongTriDuyetYDuToan.service';
+import { ThongTriDuyetYCapPhiService } from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapPhi.service';
+
 @Component({
     selector: 'app-thong-tri-duyet-y-du-toan',
     templateUrl: './thong-tri-duyet-y-du-toan.component.html',
@@ -25,11 +27,11 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
     constructor(
         private spinner: NgxSpinnerService,
         private notification: NzNotificationService,
+        private thongTriDuyetYCapPhiService: ThongTriDuyetYCapPhiService,
         private modal: NzModalService,
         public userService: UserService,
         private donviService: DonviService,
         public globals: Globals,
-        private thongTriDuyetYDuToanService: ThongTriDuyetYDuToanService,
     ) { }
     @Input()
     loaiVthh: string;
@@ -41,25 +43,18 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
     listNam: any[] = [];
     yearNow: number = 0;
     searchFilter = {
-        soKeHoach: null,
+        soThongChi: null,
         tenDvi: null,
         namKh: dayjs().get('year'),
         ngayKy: null,
-        loaiVthh: null,
-        trichYeu: null,
+        lyDoChi: null,
     };
     filterTable: any = {
-        soKeHoach: '',
-        tenDonVi: '',
-        ngayLapKeHoach: '',
-        ngayKy: '',
-        trichYeu: '',
-        tenHangHoa: '',
-        soQuyetDinhGiaoChiTieu: '',
-        soQuyetDinhPheDuyet: '',
-        namKeHoach: '',
-        tenVthh: '',
-        tenCloaiVthh: '',
+        soThongTri: '',
+        nam: '',
+        ngayLap: '',
+        lyDoChi: '',
+        soDnCapPhi: '',
         tenTrangThai: '',
     };
     dataTableAll: any[] = [];
@@ -92,7 +87,6 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
                     text: this.yearNow - i,
                 });
             }
-            this.searchFilter.loaiVthh = this.loaiVthh;
             this.initData()
             await this.search();
         } catch (e) {
@@ -101,23 +95,13 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
     }
+
     async initData() {
         this.userInfo = this.userService.getUserLogin();
         this.userdetail.maDvi = this.userInfo.MA_DVI;
         this.userdetail.tenDvi = this.userInfo.TEN_DVI;
-        await this.loadDsTong();
     }
-    async loadDsTong() {
-        const body = {
-            maDviCha: this.userdetail.maDvi,
-            trangThai: '01',
-        };
-        const dsTong = await this.donviService.layDonViTheoCapDo(body);
-        if (!isEmpty(dsTong)) {
-            this.dsDonvi = dsTong[DANH_MUC_LEVEL.CUC];
-        }
 
-    }
     updateAllChecked(): void {
         this.indeterminate = false;
         if (this.allChecked) {
@@ -151,19 +135,19 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
 
     async search() {
         this.spinner.show();
-        const body = {
-            "denNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
+        let body = {
             "tuNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
+            "denNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
             "nam": this.searchFilter.namKh,
+            "soThongTri": this.searchFilter.soThongChi,
+            "lyDoChi": this.searchFilter.lyDoChi,
             "paggingReq": {
                 "limit": this.pageSize,
-                "orderBy": null,
-                "orderType": null,
-                "page": this.page,
+                "page": this.page - 1,
             },
-            "soThongTri": "",
-        }
-        let res = await this.thongTriDuyetYDuToanService.timKiem(body);
+        };
+        let res = await this.thongTriDuyetYCapPhiService.timKiem(body);
+
         if (res.msg == MESSAGE.SUCCESS) {
             let data = res.data;
             this.dataTable = data.content;
@@ -232,18 +216,16 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
         this.isDetail = true;
         this.loaiVthh = data.loaiVthh;
         this.isView = isView;
-        // if (data.loaiVthh.startsWith('02')) {
-        //   this.isVatTu = true;
-        // } else {
-        //   this.isVatTu = false;
-        // }
     }
 
     clearFilter() {
-        this.searchFilter.namKh = dayjs().get('year');
-        this.searchFilter.soKeHoach = null;
-        this.searchFilter.ngayKy = null;
-        this.searchFilter.trichYeu = null;
+        this.searchFilter = {
+            soThongChi: null,
+            tenDvi: null,
+            namKh: null,
+            ngayKy: null,
+            lyDoChi: null,
+        }
         this.search();
     }
 
@@ -259,7 +241,7 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
             nzOnOk: () => {
                 this.spinner.show();
                 try {
-                    this.thongTriDuyetYDuToanService.deleteData(item.id).then((res) => {
+                    this.thongTriDuyetYCapPhiService.deleteData(item.id).then((res) => {
                         if (res.msg == MESSAGE.SUCCESS) {
                             this.notification.success(
                                 MESSAGE.SUCCESS,
@@ -280,49 +262,21 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
         });
     }
 
-    convertTrangThai(status: string) {
-        switch (status) {
-            case '00': {
-                return 'Dự thảo';
-            }
-            case '03': {
-                return 'Từ chối - TP';
-            }
-            case '12': {
-                return 'Từ chối - LĐ Cục';
-            }
-            case '01': {
-                return 'Chờ duyệt - TP';
-            }
-            case '09': {
-                return 'Chờ duyệt - LĐ Cục';
-            }
-            case '02': {
-                return 'Đã duyệt';
-            }
-            case '05': {
-                return 'Tổng hợp';
-            }
-        }
-    }
-
     exportData() {
         if (this.totalRecord > 0) {
             this.spinner.show();
             try {
                 let body = {
-                    ngayKyTuNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
-                    ngayKyDenNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
-                    soKeHoach: this.searchFilter.soKeHoach ?? null,
-                    namKeHoach: this.searchFilter.namKh,
-                    trichYeu: this.searchFilter.trichYeu ?? null,
-                    maDvis: [this.userInfo.MA_DVI],
-                    pageable: null,
+                    "tuNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
+                    "denNgay": this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
+                    "nam": this.searchFilter.namKh,
+                    "soThongTri": this.searchFilter.soThongChi,
+                    "lyDoChi": this.searchFilter.lyDoChi,
                 };
-                this.thongTriDuyetYDuToanService
+                this.thongTriDuyetYCapPhiService
                     .exportList(body)
                     .subscribe((blob) =>
-                        saveAs(blob, 'thong-tri-duyet-y-du-toan.xlsx'),
+                        saveAs(blob, 'danh-sach-thong-tri-duyet-y-du-toan.xlsx'),
                     );
                 this.spinner.hide();
             } catch (e) {
@@ -359,7 +313,7 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
                         const body = {
                             ids: dataDelete
                         }
-                        let res = await this.thongTriDuyetYDuToanService.deleteMultiple(body);
+                        let res = await this.thongTriDuyetYCapPhiService.deleteMultiple(body);
                         if (res.msg == MESSAGE.SUCCESS) {
                             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
                             await this.search();
@@ -407,16 +361,11 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
 
     clearFilterTable() {
         this.filterTable = {
-            soKeHoach: '',
-            ngayLapKeHoach: '',
-            ngayKy: '',
-            trichYeu: '',
-            tenHangHoa: '',
-            soQuyetDinhGiaoChiTieu: '',
-            soQuyetDinhPheDuyet: '',
-            namKeHoach: '',
-            tenVthh: '',
-            tenCloaiVthh: '',
+            soThongTri: '',
+            nam: '',
+            ngayLap: '',
+            lyDoChi: '',
+            soDnCapPhi: '',
             tenTrangThai: '',
         };
     }

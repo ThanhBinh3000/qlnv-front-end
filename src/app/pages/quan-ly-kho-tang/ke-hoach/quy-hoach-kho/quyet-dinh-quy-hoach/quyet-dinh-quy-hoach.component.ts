@@ -11,13 +11,16 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
+import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DieuChinhQuyetDinhPdKhlcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service';
+import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
-import {QuyHoachKhoService} from "../../../../../services/quy-hoach-kho.service";
-import {DonviService} from "../../../../../services/donvi.service";
-import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
+import { QuyHoachKhoService } from "../../../../../services/quy-hoach-kho.service";
+import { DonviService } from "../../../../../services/donvi.service";
+import { DANH_MUC_LEVEL } from "../../../../luu-kho/luu-kho.constant";
 
 @Component({
   selector: 'app-quyet-dinh-quy-hoach',
@@ -133,8 +136,8 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
     };
 
     const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
-      this.dsTong = dsTong;
-      this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.dsTong = dsTong;
+    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
   }
 
 
@@ -328,7 +331,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
           "maChiCuc": this.searchFilter.maChiCuc,
           "maCuc": this.searchFilter.maCuc,
           "maDiemKho": this.searchFilter.maDiemKho,
-          "namBatDau":this.searchFilter.namBatDau,
+          "namBatDau": this.searchFilter.namBatDau,
           "ngayKyDen": this.searchFilter.ngayKy[1],
           "ngayKyTu": this.searchFilter.ngayKy[0],
           "namKetThuc": this.searchFilter.namKetThuc,
@@ -338,7 +341,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
           },
           "phuongAnQuyHoach": this.searchFilter.phuongAnQuyHoach,
           "soQuyetDinh": this.searchFilter.soQuyetDinh,
-          "type" : this.type
+          "type": this.type
         }
         this.quyHoachKhoService
           .export(body)

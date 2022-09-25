@@ -92,7 +92,7 @@ export class KiemSoatQuyenTruyCapComponent implements OnInit {
       children: [
         {
           key: `1-1`,
-          name: 'Giao kế hoạch và dự toán',
+          name: 'Giao kế hoạch và vốn',
           children: [
             {
               key: `1-2-1`,

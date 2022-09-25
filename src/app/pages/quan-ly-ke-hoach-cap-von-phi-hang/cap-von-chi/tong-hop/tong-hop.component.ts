@@ -10,11 +10,11 @@ import {
 } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { TongHopDeNghiCapVonService } from 'src/app/services/tongHopDeNghiCapVon.service';
 import { UserService } from 'src/app/services/user.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { Globals } from 'src/app/shared/globals';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TongHopDeNghiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
 
 @Component({
   selector: 'app-tong-hop',
@@ -143,16 +143,18 @@ export class TongHopComponent implements OnInit {
     let body = {
       maTongHop: this.formData.value.maTongHop ? this.formData.value.maTongHop : "",
       nam: this.formData.value.nam ? this.formData.value.nam : "",
-      thisngayTongHopTuNgay: "",
-      ngayTongHopDenNgay: " ",
+      ngayTongHopTuNgay: "",
+      ngayTongHopDenNgay: "",
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
     if (this.formData.value.ngayTongHop != null) {
-      body.thisngayTongHopTuNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD') : null,
+      body.ngayTongHopTuNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD') : null,
         body.ngayTongHopDenNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD') : null
     }
     let res = await this.TongHopDeNghiCapVonService.timKiem(body);
+    console.log(res);
+
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -294,41 +296,16 @@ export class TongHopComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "capDvis": [
-            "string"
-          ],
-          "maDvis": [
-            "string"
-          ],
-          "maTongHop": "string",
-          "nam": 0,
-          "ngayTongHopDenNgay": "string",
-          "ngayTongHopTuNgay": "string",
-          "orderBy": "string",
-          "orderDirection": "string",
-          "pageable": {
-            "offset": 0,
-            "pageNumber": 0,
-            "pageSize": 0,
-            "paged": true,
-            "sort": {
-              "empty": true,
-              "sorted": true,
-              "unsorted": true
-            },
-            "unpaged": true
-          },
-          "paggingReq": {
-            "limit": 20,
-            "orderBy": "string",
-            "orderType": "string",
-            "page": 0
-          },
-          "str": "string",
-          "trangThai": "string",
-          "trangThais": [
-            "string"
-          ]
+          maTongHop: this.formData.value.maTongHop ? this.formData.value.maTongHop : "",
+          nam: this.formData.value.nam ? this.formData.value.nam : "",
+          thisngayTongHopTuNgay: "",
+          ngayTongHopDenNgay: " ",
+          pageNumber: this.page,
+          pageSize: this.pageSize,
+        };
+        if (this.formData.value.ngayTongHop != null) {
+          body.thisngayTongHopTuNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[0]).format('YYYY-MM-DD') : null,
+            body.ngayTongHopDenNgay = this.formData.value.ngayTongHop ? dayjs(this.formData.value.ngayTongHop[1]).format('YYYY-MM-DD') : null
         }
         this.TongHopDeNghiCapVonService.exportList(body).subscribe((blob) =>
           saveAs(blob, 'tong-hop-de-nghi-cap-von-chi.xlsx'),
@@ -343,7 +320,6 @@ export class TongHopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
-  // Đợi API sửa xem cái hàm deleteMultiple là POST hay DELETE rồi sửa trong service
   deleteSelect() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
@@ -368,9 +344,7 @@ export class TongHopComponent implements OnInit {
             const body = {
               ids: dataDelete,
             };
-            let res = await this.TongHopDeNghiCapVonService.deleteMultiple(
-              body,
-            );
+            let res = await this.TongHopDeNghiCapVonService.deleteMultiple(body);
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -400,6 +374,7 @@ export class TongHopComponent implements OnInit {
     if (value instanceof Date) {
       value = dayjs(value).format('YYYY-MM-DD');
     }
+    console.log(key, value);
 
     if (value && value != '') {
       this.dataTable = this.dataTableAll.filter((item) =>

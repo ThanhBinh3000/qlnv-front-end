@@ -112,7 +112,7 @@ export class ThemMoiQuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
       soQd: ['', [Validators.required]],
       ngayKy: ['', [Validators.required]],
       ngayHluc: ['', [Validators.required]],
-      idThHdr: [''],
+      idThHdr: ['', [Validators.required]],
       idTrHdr: [''],
       trichYeu: [''],
       hthucLcnt: ['', [Validators.required]],

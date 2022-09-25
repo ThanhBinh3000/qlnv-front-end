@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { BaseService } from '../../base.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +24,8 @@ export class DeNghiCapVonBoNganhService extends BaseService {
       url_ += 'maDvis=' + encodeURIComponent('' + body.maDvis) + '&';
     if (body.nam)
       url_ += 'nam=' + encodeURIComponent('' + body.nam) + '&';
+    if (body.trangThai)
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     if (body.ngayDeNghiDenNgay)
       url_ += 'ngayDeNghiDenNgay=' + encodeURIComponent('' + body.ngayDeNghiDenNgay) + '&';
     if (body.ngayDeNghiTuNgay)

@@ -27,6 +27,7 @@ export const MESSAGE = {
   KY_UYQUYEN: 'Chuyển ký ủy quyền thành công',
   MAXIMUM_FILE_UPLOAD: 'File đính kèm không vượt quá 20MB',
   TRINH_DUYET_SUCCESS: 'Trình duyệt thành công',
+  THAO_TAC_SUCCESS: 'Thao tác thành công',
   QD_TCDT: 'QD-TCDT',
   ERROR_NOT_EMPTY: 'Dữ liệu không được để trống.',
   TU_CHOI_SUCCESS: 'Từ chối thành công.',

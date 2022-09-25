@@ -11,7 +11,7 @@
             Thông tri duyệt y dự toán
         </li>
         <li nz-menu-item (click)="selectTab(3)">
-            Tổng hợp theo dõi cấp vốn
+            Tổng hợp theo dõi cấp phí
         </li>
     </ul>
 </nz-affix>
@@ -27,16 +27,7 @@
             <app-thong-tri-duyet-y-du-toan></app-thong-tri-duyet-y-du-toan>
         </ng-container>
         <ng-container *ngIf="tabSelected == 3">
-            <!-- <app-hop-dong></app-hop-dong> -->
-        </ng-container>
-        <ng-container *ngIf="tabSelected == 4">
-            <!-- <app-giao-nhap-hang></app-giao-nhap-hang> -->
-        </ng-container>
-        <ng-container *ngIf="tabSelected == 5">
-            <!-- <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong> -->
-        </ng-container>
-        <ng-container *ngIf="tabSelected == 6">
-            <!-- <app-xuat-kho></app-xuat-kho> -->
+            <app-tong-hop-theo-doi-cap-von></app-tong-hop-theo-doi-cap-von>
         </ng-container>
     </div>
 </div>
