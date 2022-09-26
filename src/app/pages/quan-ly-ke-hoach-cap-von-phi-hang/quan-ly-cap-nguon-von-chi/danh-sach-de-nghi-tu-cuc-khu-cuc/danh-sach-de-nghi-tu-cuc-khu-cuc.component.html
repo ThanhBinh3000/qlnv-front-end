@@ -33,11 +33,7 @@
 								[class]="statusBtnNew || searchFilter.qdChiTieu ?'' : 'input-error-validate'" />
 						</nz-descriptions-item>
 						<nz-descriptions-item nzTitle="Đơn vị lập" [nzSpan]="1">
-							<div *ngFor="let item of donVis">
-								<div *ngIf="item.maDvi == searchFilter.maDviTao">
-									{{item.tenDvi}}
-								</div>
-							</div>
+							{{userInfo.TEN_DVI}}
 						</nz-descriptions-item>
 						<nz-descriptions-item nzTitle="Loại đề nghị" [nzSpan]="1">
 							<div *ngFor="let item of loaiDns">
@@ -133,7 +129,7 @@
 				</div>
 			</nz-card>
 			<ng-template #tableCard1>
-				<button type="button" class="btn btn-main" (click)="tongHop()">
+				<button type="button" class="btn btn-main" (click)="tongHop()" [hidden]="statusSynthetic">
 					<i class="icon htvbdh_dau-cong"></i>
 					<span>Tổng hợp</span>
 				</button>

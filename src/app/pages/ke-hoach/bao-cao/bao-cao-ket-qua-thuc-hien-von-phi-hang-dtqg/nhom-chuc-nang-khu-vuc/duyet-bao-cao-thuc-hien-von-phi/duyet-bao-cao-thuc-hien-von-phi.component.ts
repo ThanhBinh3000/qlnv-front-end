@@ -32,7 +32,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 	errorMessage = "";
 	url = '/bao-cao/';
 
-	userInfor: any;
+	userInfo: any;
 	maDonVi: any;
 	listDonViTao: any[] = [];
 	listBcaoKqua: any[] = [];
@@ -74,9 +74,8 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 		private router: Router,
 		private datePipe: DatePipe,
 		private notification: NzNotificationService,
-		private nguoiDungSerivce: UserService,
+		private userSerivce: UserService,
 		private spinner: NgxSpinnerService,
-		private location: Location,
 		private dataSource: DataService,
 	) {
 	}
@@ -87,10 +86,9 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 		this.trangThai = '7';
 		this.searchFilter.maLoaiBcao = '1';
 		this.onSubmit();
-		const userName = this.nguoiDungSerivce.getUserName();
-		await this.getUserInfo(userName); //get user info
+		this.userInfo = this.userSerivce.getUserLogin();
 		//lay danh sach danh muc
-		this.danhMuc.dMDonVi().toPromise().then(
+		this.danhMuc.dMDviCon().toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
 					this.donViTaos = data.data;
@@ -107,7 +105,7 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 			capDvi: null,
 			kieuDvi: null,
 			loaiDvi: null,
-			maDvi: this.userInfor.dvql,
+			maDvi: this.userInfo.MA_DVI,
 			maKbnn: null,
 			maNsnn: null,
 			maPhuong: null,
@@ -134,26 +132,6 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 		})
 	}
 
-
-	//get user info
-	async getUserInfo(username: string) {
-		await this.nguoiDungSerivce
-			.getUserInfo(username)
-			.toPromise()
-			.then(
-				(data) => {
-					if (data?.statusCode == 0) {
-						this.userInfor = data?.data;
-						return data?.data;
-					} else {
-						this.notification.error(MESSAGE.ERROR, data?.msg);
-					}
-				},
-				(err) => {
-					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-				},
-			);
-	}
 	// lay ten don vi tao
 	getUnitName(dvitao: any) {
 		return this.donViTaos.find(item => item.maDvi == dvitao)?.tenDvi;
@@ -191,15 +169,6 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 		})
 		this.spinner.hide();
 	}
-	themMoi() {
-		if (this.searchFilter.maLoaiBcao == '') {
-			this.notification.error('Thêm mới', 'Bạn chưa chọn loại báo cáo!');
-			return;
-		}
-		this.router.navigate([
-			MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_BAO_CAO + '/' + BAO_CAO_THUC_HIEN + "/" + this.url
-		])
-	}
 
 	//set url khi
 	setUrl(lbaocao: any) {
@@ -220,11 +189,13 @@ export class DuyetBaoCaoThucHienVonPhiComponent implements OnInit {
 	//doi so trang
 	onPageIndexChange(page) {
 		this.pages.page = page;
+		this.onSubmit();
 	}
 
 	//doi so luong phan tu tren 1 trang
 	onPageSizeChange(size) {
 		this.pages.size = size;
+		this.onSubmit();
 	}
 
 	close() {

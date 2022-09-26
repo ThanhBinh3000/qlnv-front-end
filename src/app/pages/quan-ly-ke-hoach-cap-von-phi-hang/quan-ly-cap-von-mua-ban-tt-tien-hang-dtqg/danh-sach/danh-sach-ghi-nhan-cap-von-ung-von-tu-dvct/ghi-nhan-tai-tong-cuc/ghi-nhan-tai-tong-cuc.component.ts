@@ -1,17 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from 'src/app/pages/quan-ly-ke-hoach-cap-von-phi-hang/quan-ly-ke-hoach-von-phi-hang.constant';
-import { UserService } from 'src/app/services/user.service';
-import { LOAI_VON, ROLE_CAN_BO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
-import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { QuanLyVonPhiService } from '../../../../../../services/quanLyVonPhi.service';
 import { DataService } from 'src/app/services/data.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
+import { CVMB, LOAI_VON, Utils } from 'src/app/Utility/utils';
 import { TRANG_THAI_TIM_KIEM_CON } from '../../../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 @Component({
@@ -22,7 +20,6 @@ import { TRANG_THAI_TIM_KIEM_CON } from '../../../quan-ly-cap-von-mua-ban-tt-tie
 export class GhiNhanTaiTongCucComponent implements OnInit {
 	//thong tin dang nhap
 	userInfo: any;
-	userRole: string;
 	loai: string;
 	//thong tin tim kiem
 	searchFilter = {
@@ -55,12 +52,10 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 
 	constructor(
 		private quanLyVonPhiService: QuanLyVonPhiService,
-		private danhMuc: DanhMucHDVService,
 		private routerActive: ActivatedRoute,
 		private router: Router,
 		private datePipe: DatePipe,
 		private notification: NzNotificationService,
-		private fb: FormBuilder,
 		private spinner: NgxSpinnerService,
 		private userService: UserService,
 		private dataSource: DataService,
@@ -70,18 +65,17 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 	async ngOnInit() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.spinner.show();
-		const userName = this.userService.getUserName();
-		await this.getUserInfo(userName); //get user info
+		this.userInfo = this.userService.getUserLogin();
 
 		this.searchFilter.denNgay = new Date();
 		const newDate = new Date();
 		newDate.setMonth(newDate.getMonth() - 1);
 		this.searchFilter.tuNgay = newDate;
 
-		this.searchFilter.maDvi = this.userInfo?.dvql;
+		this.searchFilter.maDvi = this.userInfo?.MA_DVI;
 
 		if (this.loai == "0") {
-			if (ROLE_CAN_BO.includes(this.userRole)) {
+			if (this.userService.isAccessPermisson(CVMB.ADD_REPORT_TC_GNV)) {
 				this.statusTaoMoi = false;
 			}
 			this.status = true;
@@ -89,7 +83,7 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 		} else {
 			this.status = false;
 			this.disable = true;
-			if (ROLE_TRUONG_BO_PHAN.includes(this.userRole)) {
+			if (this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV)) {
 				this.searchFilter.trangThai = Utils.TT_BC_2;
 			} else {
 				this.searchFilter.trangThai = Utils.TT_BC_4;
@@ -97,24 +91,6 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 		}
 		this.spinner.hide();
 		this.onSubmit();
-	}
-
-	//get user info
-	async getUserInfo(username: string) {
-		await this.userService.getUserInfo(username).toPromise().then(
-			(data) => {
-				if (data?.statusCode == 0) {
-					this.userInfo = data?.data;
-					this.userRole = this.userInfo?.roles[0]?.code;
-					return data?.data;
-				} else {
-					this.notification.error(MESSAGE.ERROR, data?.msg);
-				}
-			},
-			(err) => {
-				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-			}
-		);
 	}
 
 	//search list bao cao theo tieu chi
@@ -125,7 +101,7 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 		// }
 		const requestReport = {
 			maCapUngVonTuCapTren: this.searchFilter.maCvUv,
-			maDvi: this.userInfo?.dvql,
+			maDvi: this.userInfo?.MA_DVI,
 			maLoai: "1",
 			ngayLap: this.datePipe.transform(this.searchFilter.ngayLap, Utils.FORMAT_DATE_STR),
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
@@ -250,15 +226,16 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 		this.spinner.hide();
 	}
 
-	checkDeleteReport(item: any): boolean {
-		let check: boolean;
-		if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-			ROLE_CAN_BO.includes(this.userRole)) {
-			check = true;
-		} else {
-			check = false;
-		}
-		return check;
+	checkViewReport() {
+		return this.userService.isAccessPermisson(CVMB.VIEW_REPORT_GNV);
+	}
+
+	checkEditReport(trangThai: string) {
+		return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV);
+	}
+
+	checkDeleteReport(trangThai: string) {
+		return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DELETE_REPORT_GNV);
 	}
 
 	changeListIdDelete(id: string) {
@@ -281,8 +258,7 @@ export class GhiNhanTaiTongCucComponent implements OnInit {
 
 	updateAllCheck() {
 		this.danhSach.forEach(item => {
-			if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
-				&& ROLE_CAN_BO.includes(this.userRole)) {
+			if (this.checkDeleteReport(item.trangThai)) {
 				item.checked = true;
 				this.listIdDelete.push(item.id);
 			}

@@ -15,6 +15,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 export class PhuLuc5Component implements OnInit {
   @Input() data;
   @Output() dataChange = new EventEmitter();
+
   id: any;
   namHienHanh: number;
   maBieuMau: string;
@@ -25,6 +26,8 @@ export class PhuLuc5Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  maDviTao: string;
+  maBaoCao: string;
 
   // khac
   lstFiles: any[] = []; //show file ra man hinh
@@ -59,6 +62,9 @@ export class PhuLuc5Component implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
+    console.log(this.data);
+    this.maDviTao = this.data?.maDviTao;
+    this.maBaoCao = this.data?.maBaoCao;
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
     this.thuyetMinh = this.data?.thuyetMinh;
@@ -83,7 +89,7 @@ export class PhuLuc5Component implements OnInit {
     // day file len server
     const upfile: FormData = new FormData();
     upfile.append('file', file);
-    upfile.append('folder', this.maBieuMau + '/' + this.namHienHanh);
+    upfile.append('folder', this.maDviTao + '/' + this.maBaoCao + '/' +'phuluc5-dieu-chinh');
     const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
       (data) => {
         const objfile = {
@@ -135,7 +141,6 @@ export class PhuLuc5Component implements OnInit {
       this.statusBtnOk = true;
     }
   }
-
   // chuc nang check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
     if (this.id) {
@@ -188,11 +193,13 @@ export class PhuLuc5Component implements OnInit {
 
   // luu
   async save(trangThai: string) {
+    this.spinner.show()
     //get list file url
-    const listFile: any = [];
+    const listFilePl5: any = [];
     for (const iterator of this.listFile) {
-      listFile.push(await this.uploadFile(iterator));
+      listFilePl5.push(await this.uploadFile(iterator));
     }
+
     const request = {
       id: this.id,
       maBieuMau: this.maBieuMau,
@@ -201,10 +208,13 @@ export class PhuLuc5Component implements OnInit {
       thuyetMinh: this.thuyetMinh,
       trangThai: trangThai,
       maLoai: this.data?.maLoai,
-      fileData: this.lstFiles,
+      fileData: listFilePl5,
       listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
     };
-    this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
+    console.log(listFilePl5);
+
+
+    await this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -213,6 +223,7 @@ export class PhuLuc5Component implements OnInit {
             lyDoTuChoi: null,
           };
           this.dataChange.emit(obj);
+          this.listFile = [];
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
