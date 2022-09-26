@@ -155,8 +155,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         {
           value: this.khBanDauGia ? this.khBanDauGia.moTaHangHoa : null,
           disabled: this.isView ? true : false,
-        },
-        [Validators.required],
+        }
       ],
       ngayLapKeHoach: [
         {
@@ -480,7 +479,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
-      console.log(this.formData);
+      return;
+    }
+    if (this.formData.value.ngayKy < this.formData.value.ngayLapKeHoach) {
+      this.notification.error(MESSAGE.ERROR, 'Ngày ký không hợp lệ!');
       return;
     }
     this.spinner.show();

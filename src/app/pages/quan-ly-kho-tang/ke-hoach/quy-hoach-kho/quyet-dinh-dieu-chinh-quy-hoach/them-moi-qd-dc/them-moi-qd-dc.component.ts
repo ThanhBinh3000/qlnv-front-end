@@ -22,6 +22,7 @@ import {MESSAGE} from "../../../../../../constants/message";
 import {DANH_MUC_LEVEL} from "../../../../../luu-kho/luu-kho.constant";
 import {UserLogin} from "../../../../../../models/userlogin";
 import {STATUS} from "../../../../../../constants/status";
+import {DonviService} from "../../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-them-moi-qd-dc',
@@ -56,6 +57,7 @@ export class ThemMoiQdDcComponent implements OnInit {
     public quyHoachKhoService: QuyHoachKhoService,
     public globals: Globals,
     private danhMucService: DanhMucService,
+    private dmDviService: DonviService,
     private fb: FormBuilder,
     private modal: NzModalService,
     private helperService: HelperService
@@ -96,7 +98,7 @@ export class ThemMoiQdDcComponent implements OnInit {
 
   async loadListPa() {
     this.danhSachPhuongAn = [];
-    let res = await this.quyHoachKhoService.danhMucChungGetAll('PA_QUY_HOACH');
+    let res = await this.danhMucService.danhMucChungGetAll('PA_QUY_HOACH');
     if (res.msg == MESSAGE.SUCCESS) {
       this.danhSachPhuongAn = res.data;
     }
@@ -112,7 +114,7 @@ export class ThemMoiQdDcComponent implements OnInit {
       trangThai: '01',
     };
 
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.dsCuc =  dsTong[DANH_MUC_LEVEL.CUC];
     this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
   }
@@ -124,7 +126,7 @@ export class ThemMoiQdDcComponent implements OnInit {
       maDviCha: event,
       trangThai: '01',
     };
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
     const chiCuc = this.danhSachChiCuc.filter(item => item.maDvi == event);
     if (type) {
@@ -294,7 +296,7 @@ export class ThemMoiQdDcComponent implements OnInit {
       maDviCha: maChiCuc,
       trangThai: '01',
     };
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
   }
 
