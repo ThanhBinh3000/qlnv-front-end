@@ -1,21 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Router } from "@angular/router";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { UserService } from "../../../../../../services/user.service";
-import { Globals } from "../../../../../../shared/globals";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { HelperService } from "../../../../../../services/helper.service";
-import { ThongTinQuyetDinh } from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
-import { QuyHoachKho } from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
-import { QuyHoachKhoService } from "../../../../../../services/quy-hoach-kho.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Router} from "@angular/router";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {UserService} from "../../../../../../services/user.service";
+import {Globals} from "../../../../../../shared/globals";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {HelperService} from "../../../../../../services/helper.service";
+import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import {QuyHoachKho} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
+import {QuyHoachKhoService} from "../../../../../../services/quy-hoach-kho.service";
 import dayjs from "dayjs";
-import { MESSAGE } from "../../../../../../constants/message";
-import { DANH_MUC_LEVEL } from "../../../../../luu-kho/luu-kho.constant";
-import { UserLogin } from "../../../../../../models/userlogin";
-import { STATUS } from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
+import {DANH_MUC_LEVEL} from "../../../../../luu-kho/luu-kho.constant";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-qd',
@@ -37,7 +37,6 @@ export class ThemMoiQdComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: QuyHoachKho } } = {};
   danhSachPhuongAn: any[] = [];
   dsCuc: any[] = [];
-  dsChiCuc: any[] = [];
   danhSachChiCuc: any[] = [];
   danhSachDiemKho: any[] = [];
 
@@ -48,6 +47,7 @@ export class ThemMoiQdComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
     private danhMucService: DanhMucService,
+    private dmDviService: DonviService,
     private quyHoachKhoService: QuyHoachKhoService,
     private fb: FormBuilder,
     private modal: NzModalService,
@@ -75,7 +75,7 @@ export class ThemMoiQdComponent implements OnInit {
       this.maQd = '/QĐ-BTC',
       this.loadDanhSachChiCuc(this.userInfo.MA_DVI),
       this.getDataDetail(this.idInput)
-    ])
+  ])
     for (let i = -3; i < 23; i++) {
       this.danhSachNam.push({
         value: dayjs().get('year') - i,
@@ -86,7 +86,7 @@ export class ThemMoiQdComponent implements OnInit {
   }
   async loadListPa() {
     this.danhSachPhuongAn = [];
-    let res = await this.quyHoachKhoService.danhMucChungGetAll('PA_QUY_HOACH');
+    let res = await this.danhMucService.danhMucChungGetAll('PA_QUY_HOACH');
     if (res.msg == MESSAGE.SUCCESS) {
       this.danhSachPhuongAn = res.data;
     }
@@ -98,11 +98,11 @@ export class ThemMoiQdComponent implements OnInit {
 
   async loadDanhSachChiCuc(maCuc) {
     const body = {
-      maDviCha: maCuc,
+      maDviCha:maCuc,
       trangThai: '01',
     };
 
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
     this.dsCuc = dsTong[DANH_MUC_LEVEL.CUC];
   }
@@ -114,12 +114,12 @@ export class ThemMoiQdComponent implements OnInit {
       maDviCha: event,
       trangThai: '01',
     };
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
     const chiCuc = this.danhSachChiCuc.filter(item => item.maDvi == event);
     if (type) {
       type.tenChiCuc = chiCuc[0].tenDvi;
-    } else {
+    } else  {
       this.rowItem.tenChiCuc = chiCuc[0].tenDvi;
     }
   }
@@ -231,8 +231,8 @@ export class ThemMoiQdComponent implements OnInit {
         id: data.id,
         trangThai: data.trangThai,
         trichYeu: data.trichYeu,
-        tenTrangThai: data.tenTrangThai,
-        soQuyetDinh: data.soQuyetDinh.split('/')[0],
+        tenTrangThai:data.tenTrangThai,
+        soQuyetDinh :data.soQuyetDinh.split('/')[0],
         ngayKy: data.ngayKy,
         namBatDau: data.namBatDau,
         namKetThuc: data.namKetThuc,
@@ -246,14 +246,14 @@ export class ThemMoiQdComponent implements OnInit {
         if (listPhuongAn.length > 0) {
           item.tenPhuongAn = listPhuongAn[0].giaTri
         }
-        await this.loadDanhSachChiCuc(item.maCuc);
+         await this.loadDanhSachChiCuc(item.maCuc);
         item.tenCuc = this.dsCuc[0].tenDvi
         const listChiCuc = this.danhSachChiCuc.filter(chiCuc => chiCuc.maDvi == item.maChiCuc);
         if (listChiCuc.length > 0) {
           item.tenChiCuc = listChiCuc[0].tenDvi
           await this.loadDanhSachDiemKho(item.maChiCuc)
         }
-        const listDiemKho = this.danhSachDiemKho.filter(diemKho => diemKho.maDvi == item.maDiemKho);
+        const listDiemKho =  this.danhSachDiemKho.filter(diemKho => diemKho.maDvi == item.maDiemKho);
         if (listDiemKho.length > 0) {
           item.tenDiemKho = listDiemKho[0].tenDvi
         }
@@ -267,7 +267,7 @@ export class ThemMoiQdComponent implements OnInit {
       maDviCha: maChiCuc,
       trangThai: '01',
     };
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
   }
 
@@ -336,8 +336,8 @@ export class ThemMoiQdComponent implements OnInit {
     const phuongAn = this.danhSachPhuongAn.filter(item => item.ma == event);
     if (phuongAn) {
       if (type) {
-        type.tenPhuongAn = phuongAn[0].giaTri
-      } else {
+        type.tenPhuongAn =  phuongAn[0].giaTri
+      } else  {
         this.rowItem.tenPhuongAn = phuongAn[0].giaTri
       }
     }
@@ -348,8 +348,8 @@ export class ThemMoiQdComponent implements OnInit {
     const diemKho = this.danhSachDiemKho.filter(item => item.maDvi == event);
     if (diemKho) {
       if (type) {
-        type.tenDiemKho = diemKho[0].tenDvi
-      } else {
+        type.tenDiemKho= diemKho[0].tenDvi
+      } else  {
         this.rowItem.tenDiemKho = diemKho[0].tenDvi
       }
     }
