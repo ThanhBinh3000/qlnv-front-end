@@ -364,6 +364,7 @@ export class BaoCao03Component implements OnInit {
         this.lstCtietBcao[idAppendix].data[ind].soLuongTte = slThucTe;
         this.lstCtietBcao[idAppendix].data[ind].ttGiaHtoan = ttHachToan;
         this.lstCtietBcao[idAppendix].data[ind].ttGiaBanTte = ttThucTe;
+        this.lstCtietBcao[idAppendix].data[ind].ttClechGiaTteVaGiaHtoan = sumNumber([ttThucTe, -ttHachToan]);
     }
 
     updateChecked(id: string, idAppendix: number) {
