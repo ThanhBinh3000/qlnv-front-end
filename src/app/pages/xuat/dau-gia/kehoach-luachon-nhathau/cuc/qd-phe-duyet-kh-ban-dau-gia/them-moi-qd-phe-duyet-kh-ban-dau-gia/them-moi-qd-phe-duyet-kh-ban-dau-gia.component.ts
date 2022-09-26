@@ -264,7 +264,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         [],
       ],
     });
-    // this.setTitle();
+    this.setTitle();
   }
 
 
@@ -753,7 +753,6 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
   }
 
   async loadChiTiet(id: number) {
-    // console.log('hAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
     this.qdPheDuyetKhBanDauGiaService
       .chiTiet(id)
       .then((res) => {
@@ -762,19 +761,16 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           this.initForm();
           this.formData.patchValue({
             tongHopDeXuatKhbdgId: res.data.maTongHopDeXuatkhbdg,
-            maVatTuCha: res.data.maVatTuCha,
-            maVatTu: res.data.maVatTu,
+            loaiVthh: res.data.loaiVthh,
+            cloaiVthh: res.data.cloaiVthh,
+            trangThai: res.data.trangThai
           })
-          // if (this.formData.get("tongHopDeXuatKhbdgId").value) {
-          //   this.getPhuLuc(+this.formData.get("tongHopDeXuatKhbdgId").value);
-          // }
           this.thongTinPhuLucs = res.data.chiTietList;
           this.listFileDinhKem = res.data.fileDinhKems;
-          console.log("res.data.chiTietList: ", res.data);
-
-          if (res.data.maVatTuCha) {
-            this.changeHangHoa(res.data.maVatTuCha);
+          if (res.data.loaiVthh) {
+            this.changeHangHoa(res.data.loaiVthh);
           }
+          this.setTitle();
         }
       });
   }
@@ -1036,6 +1032,20 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
       }
       case '05': {
         this.titleStatus = 'Tổng hợp';
+        this.styleStatus = 'da-ban-hanh';
+        break;
+      }
+      case '26': {
+        this.titleStatus = 'Chưa tạo QĐ';
+        break;
+      }
+      case '27': {
+        this.titleStatus = 'Đã dự thảo QĐ';
+        this.styleStatus = 'da-ban-hanh';
+        break;
+      }
+      case '28': {
+        this.titleStatus = 'Đã ban hành QĐ';
         this.styleStatus = 'da-ban-hanh';
         break;
       }
