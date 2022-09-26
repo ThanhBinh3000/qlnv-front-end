@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DieuChinhDuToanChiNSNNModule } from './dieu-chinh-du-toan-chi-nsnn/dieu-chinh-du-toan-chi-nsnn.module';
@@ -19,5 +19,6 @@ import { LapThamDinhModule } from './lap-tham-dinh/lap-tham-dinh.module';
         DieuChinhDuToanChiNSNNModule,
         GiaoDuToanChiNSNNModule,
     ],
+    providers: [DatePipe]
 })
 export class DuToanNsnnModule { }

@@ -1,16 +1,15 @@
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
-import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { QuanLyVonPhiService } from '../../../../../../services/quanLyVonPhi.service';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
 
 @Component({
@@ -51,29 +50,25 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
         private router: Router,
         private datePipe: DatePipe,
         private notification: NzNotificationService,
-        private fb: FormBuilder,
         private spinner: NgxSpinnerService,
         private userService: UserService,
-        private location: Location,
         private dataSource: DataService,
     ) {
     }
 
     async ngOnInit() {
         this.spinner.show();
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName); //get user info
-        this.searchFilter.maDviTao = this.userInfo?.dvql;
+        this.userInfo = this.userService.getUserLogin();
+        this.searchFilter.maDviTao = this.userInfo?.MA_DVI;
 
         this.searchFilter.denNgay = new Date();
         this.newDate.setMonth(this.newDate.getMonth() - 1);
         this.searchFilter.tuNgay = this.newDate;
         //lay danh sach danh muc
-        this.danhMuc.dMDonVi().toPromise().then(
+        this.danhMuc.dMDviCon().toPromise().then(
             data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
-                    this.donVis = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                 }
@@ -86,24 +81,6 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
 
         this.onSubmit();
     }
-
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
-    }
-
     //search list bao cao theo tieu chi
     async onSubmit() {
         if (this.searchFilter.namGiao || this.searchFilter.namGiao === 0) {
@@ -138,7 +115,7 @@ export class TimKiemSoKiemTraChiNsnnComponent implements OnInit {
                     this.totalElements = data.data.totalElements;
                     this.totalPages = data.data.totalPages;
                 } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.notification.error(MESSAGE.ERROR, data.msg);
                 }
             },
             (err) => {

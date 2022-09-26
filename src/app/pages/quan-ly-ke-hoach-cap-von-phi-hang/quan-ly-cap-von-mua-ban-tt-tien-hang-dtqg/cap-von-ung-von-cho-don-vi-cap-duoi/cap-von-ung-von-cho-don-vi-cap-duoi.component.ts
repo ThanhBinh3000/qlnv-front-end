@@ -1,6 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -13,12 +12,12 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LOAI_VON, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_VON, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { CAP_VON_MUA_BAN, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
-import { DataService } from 'src/app/services/data.service';
 import { TRANG_THAI_TIM_KIEM_CON } from '../quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.constant';
 
 export class ItemData {
@@ -61,7 +60,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     ngayPheDuyet: string;
     trangThai: string;
     maDviTien: string;
-    moneyUnit: string;
     maDviTao: string;
     thuyetMinh: string;
     newDate = new Date();
@@ -81,6 +79,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     statusBtnTBP = true;                       // trang thai an/hien nut truong bo phan
     statusBtnLD = true;                        // trang thai an/hien nut lanh dao
     statusBtnCopy = true;                      // trang thai copy
+    editMoneyUnit = false;
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
@@ -108,7 +107,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     allChecked = false;                         // check all checkbox
     indeterminate = true;                       // properties allCheckBox
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
@@ -116,7 +114,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private routerActive: ActivatedRoute,
         private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
         private router: Router,
         private userService: UserService,
         private notification: NzNotificationService,
@@ -131,14 +128,12 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
         this.spinner.show();
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName);
+        this.userInfo = this.userService.getUserLogin();
         //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
+        await this.danhMuc.dMDviCon().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
-                    this.donVis = res.data;
-                    this.unitChilds = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
+                    this.unitChilds = res.data;
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -151,9 +146,8 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             await this.getDetailReport();
         } else {
             this.trangThai = '1';
-            this.maDviTao = this.userInfo?.dvql;
-            this.maDviTien = '3';
-            this.moneyUnit = this.maDviTien;
+            this.maDviTao = this.userInfo?.MA_DVI;
+            this.maDviTien = '1';
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             await this.dataSource.currentData.subscribe(obj => {
                 this.maCvUvTren = obj?.maCvUv;
@@ -204,44 +198,24 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         this.location.back()
     }
 
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
-    }
-
     //check role cho các nut trinh duyet
     getStatusButton() {
-        const userRole = this.userInfo?.roles[0]?.code;
-        if ((this.trangThai == Utils.TT_BC_1 || this.trangThai == Utils.TT_BC_3 || this.trangThai == Utils.TT_BC_5)
-            && (ROLE_CAN_BO.includes(userRole))) {
+        if (Utils.statusSave.includes(this.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_CV)) {
             this.status = false;
         } else {
             this.status = true;
         }
-        let checkChirld = false;
-        const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-        if (dVi && dVi.maDvi == this.userInfo.dvql) {
-            checkChirld = true;
-        }
-        const utils = new Utils();
-        this.statusBtnDel = utils.getRoleDel(this.trangThai, checkChirld, userRole);
-        this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, userRole);
-        this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, userRole);
-        this.statusBtnTBP = utils.getRoleTBP(this.trangThai, checkChirld, userRole);
-        this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, userRole);
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThai, checkChirld, userRole);
+        const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
+        this.statusBtnDel = this.getBtnStatus(Utils.statusDelete, CVMB.DELETE_REPORT_CV, checkChirld);
+        this.statusBtnSave = this.getBtnStatus(Utils.statusSave, CVMB.EDIT_REPORT_CV, checkChirld);
+        this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, CVMB.APPROVE_REPORT_CV, checkChirld);
+        this.statusBtnTBP = this.getBtnStatus(Utils.statusDuyet, CVMB.DUYET_REPORT_CV, checkChirld);
+        this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, CVMB.PHE_DUYET_REPORT_CV, checkChirld);
+        this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, CVMB.COPY_REPORT_CV, checkChirld);
+    }
+
+    getBtnStatus(status: string[], role: string, check: boolean) {
+        return !(status.includes(this.trangThai) && this.userService.isAccessPermisson(role) && check);
     }
 
     //upload file
@@ -305,9 +279,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                     this.lstCtietBcao.forEach(item => {
                         item.ngayLapTemp = this.datePipe.transform(item.ngayLap, Utils.FORMAT_DATE_STR);
                         item.ngayNhanTemp = this.datePipe.transform(item.ngayNhan, Utils.FORMAT_DATE_STR);
-                        item.tongSoTien = divMoney(item.tongSoTien, this.maDviTien);
-                        item.nopThue = divMoney(item.nopThue, this.maDviTien);
-                        item.ttChoDviHuong = divMoney(item.ttChoDviHuong, this.maDviTien);
                     })
                     this.maCvUvDuoi = data.data.maCapUngVonChoCapDuoi;
                     this.maCvUvTren = data.data.maCapUngVonTuCapTren;
@@ -389,10 +360,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     // luu
     async save() {
-        if (!this.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-            return;
-        }
         let checkMoneyRange = true;
         let checkSave = true;
 
@@ -424,15 +391,12 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
         const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            if (mulMoney(item.tongSoTien, this.maDviTien) > MONEY_LIMIT) {
+            if (item.tongSoTien > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
             lstCtietBcaoTemp.push({
                 ...item,
-                tongSoTien: mulMoney(item.tongSoTien, this.maDviTien),
-                nopThue: mulMoney(item.nopThue, this.maDviTien),
-                ttChoDviHuong: mulMoney(item.ttChoDviHuong, this.maDviTien),
             })
         })
 
@@ -562,15 +526,11 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
     //lay ten don vi tạo
     getUnitName(maDvi: string) {
-        return this.donVis.find((item) => item.maDvi == maDvi)?.tenDvi;
+        return this.unitChilds.find((item) => item.maDvi == maDvi)?.tenDvi;
     }
 
     getStatusName(id: string) {
         return this.trangThais.find(e => e.id == id)?.tenDm;
-    }
-
-    getMaDviTien() {
-        return this.dviTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
 
     close() {
@@ -599,9 +559,9 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
                 noiDung: item.noiDung,
                 maNguonNs: item.maNguonNs,
                 nienDoNs: item.nienDoNs,
-                soTien: mulMoney(item.tongSoTien, this.maDviTien),
-                nopThue: mulMoney(item.nopThue, this.maDviTien),
-                ttChoDviHuong: mulMoney(item.ttChoDviHuong, this.maDviTien),
+                soTien: item.tongSoTien,
+                nopThue: item.nopThue,
+                ttChoDviHuong: item.ttChoDviHuong,
                 soTienBangChu: item.soTienBangChu,
                 tkNhan: null,
                 trangThai: "1",
@@ -624,7 +584,7 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
         const requestReport = {
             loaiTimKiem: "0",
             maCapUngVonTuCapTren: "",
-            maDvi: this.userInfo?.dvql,
+            maDvi: this.userInfo?.MA_DVI,
             maLoai: "1",
             ngayLap: "",
             ngayTaoDen: "",
@@ -685,10 +645,6 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
             },
         );
 
-        if (!this.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-            return;
-        }
         let checkMoneyRange = true;
         let checkSave = true;
 
@@ -705,15 +661,12 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
 
         const lstCtietBcaoTemp: ItemData[] = [];
         this.lstCtietBcao.forEach(item => {
-            if (mulMoney(item.tongSoTien, this.maDviTien) > MONEY_LIMIT) {
+            if (item.tongSoTien > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
             lstCtietBcaoTemp.push({
                 ...item,
-                tongSoTien: mulMoney(item.tongSoTien, this.maDviTien),
-                nopThue: mulMoney(item.nopThue, this.maDviTien),
-                ttChoDviHuong: mulMoney(item.ttChoDviHuong, this.maDviTien),
                 id: null,
             })
         })
@@ -764,20 +717,26 @@ export class CapVonUngVonChoDonViCapDuoiComponent implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-    changeMoney() {
-        if (!this.moneyUnit) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-            return;
-        }
-        this.lstCtietBcao.forEach(item => {
-            item.tongSoTien = exchangeMoney(item.tongSoTien, this.maDviTien, this.moneyUnit);
-            item.nopThue = exchangeMoney(item.nopThue, this.maDviTien, this.moneyUnit);
-            item.ttChoDviHuong = exchangeMoney(item.ttChoDviHuong, this.maDviTien, this.moneyUnit);
-        })
-        this.maDviTien = this.moneyUnit;
+    getMoneyUnit() {
+        return this.dviTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
+
+    // changeMoney() {
+    //     if (!this.moneyUnit) {
+    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+    //         return;
+    //     }
+    //     this.lstCtietBcao.forEach(item => {
+    //         item.tongSoTien = exchangeMoney(item.tongSoTien, this.maDviTien, this.moneyUnit);
+    //         item.nopThue = exchangeMoney(item.nopThue, this.maDviTien, this.moneyUnit);
+    //         item.ttChoDviHuong = exchangeMoney(item.ttChoDviHuong, this.maDviTien, this.moneyUnit);
+    //     })
+    //     this.maDviTien = this.moneyUnit;
+    //     this.updateEditCache();
+    // }
 
 }

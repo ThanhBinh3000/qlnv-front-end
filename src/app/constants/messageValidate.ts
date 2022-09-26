@@ -24,4 +24,5 @@ export const MESSAGEVALIDATE = {
   LOCAL_EXIST: "Địa phương nhận đã tồn tại",
   NOT_EXIST_REPORT: "Không tồn tại báo cáo cho việc tổng hợp",
   EXIST_MONEY: "Vui lòng chọn đơn vị tiền",
+  MONEY_LIMIT: "Giá trị tiền nằm trong khoảng từ 0 đến 9.000.000.000.000.000 đồng",
 };

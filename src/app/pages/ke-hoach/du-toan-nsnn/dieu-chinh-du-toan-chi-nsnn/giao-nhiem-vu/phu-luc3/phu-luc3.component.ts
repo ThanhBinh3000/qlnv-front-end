@@ -12,14 +12,14 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 
 export class ItemData {
   id!: any;
   stt!: number;
   maDvi: string;
-  khoachQdGiaoNvu: number;
+  khoachQdGiaoNvu: string;
   khoachLuong: number;
   tdiemBcaoLuong: number;
   tdiemBcaoDtoan: number;
@@ -58,7 +58,7 @@ export class PhuLuc3Component implements OnInit {
     id: null,
     stt: 0,
     maDvi: "",
-    khoachQdGiaoNvu: null,
+    khoachQdGiaoNvu: '',
     khoachLuong: null,
     tdiemBcaoLuong: null,
     tdiemBcaoDtoan: null,
@@ -75,7 +75,7 @@ export class PhuLuc3Component implements OnInit {
 
   namBcao: number;
   thuyetMinh: string;
-  maDviTien: any;
+  maDviTien: string;
   listIdDelete = "";
   //trang thai cac nut
   status = false;
@@ -84,18 +84,15 @@ export class PhuLuc3Component implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
-  idItem: any
-  constructor(private router: Router,
-    private routerActive: ActivatedRoute,
+  idItem: any;
+  editMoneyUnit = false;
+  maDviTao!: string;
+  constructor(
     private spinner: NgxSpinnerService,
     private quanLyVonPhiService: QuanLyVonPhiService,
-    private datePipe: DatePipe,
-    private sanitizer: DomSanitizer,
-    private userService: UserService,
     private danhMucService: DanhMucHDVService,
     private notification: NzNotificationService,
     private location: Location,
-    private fb: FormBuilder,
     private modal: NzModalService,
   ) {
   }
@@ -105,24 +102,20 @@ export class PhuLuc3Component implements OnInit {
     this.spinner.show();
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
-    this.maDviTien = this.data?.maDviTien;
+    this.maDviTien = "1";
     this.thuyetMinh = this.data?.thuyetMinh;
     this.trangThaiPhuLuc = this.data?.trangThai;
     this.trangThaiPhuLucGetDeTail = this.data?.lstDchinhs?.trangThai;
     this.namHienHanh = this.data?.namHienHanh;
     this.namBcao = this.data?.namBcao;
+    this.maDviTao = this.data?.maDviTao;
     // this.lstDchinh = this.data?.lstCtiet;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstDchinh.push({
         ...item,
-        tdiemBcaoDtoan: divMoney(item.tdiemBcaoDtoan, this.maDviTien),
-        dkienThienDtoan: divMoney(item.dkienThienDtoan, this.maDviTien),
-        dtoanThieuNtruoc: divMoney(item.dtoanThieuNtruoc, this.maDviTien),
         tongNcauDtoanN: item.tongNcauDtoanN,
-        dtoanLke: divMoney(item.dtoanLke, this.maDviTien),
-        dtoanDchinh: divMoney(item.dtoanDchinh, this.maDviTien),
       })
     })
     this.updateEditCache();
@@ -211,7 +204,7 @@ export class PhuLuc3Component implements OnInit {
       id: uuid.v4(),
       stt: 0,
       maDvi: '',
-      khoachQdGiaoNvu: null,
+      khoachQdGiaoNvu: '',
       khoachLuong: null,
       tdiemBcaoLuong: null,
       tdiemBcaoDtoan: null,
@@ -390,26 +383,17 @@ export class PhuLuc3Component implements OnInit {
     const lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstDchinh.forEach(item => {
-      const tdiemBcaoDtoan = mulMoney(item.tdiemBcaoDtoan, this.maDviTien)
-      const dkienThienDtoan = mulMoney(item.dkienThienDtoan, this.maDviTien)
-      const dtoanThieuNtruoc = mulMoney(item.dtoanThieuNtruoc, this.maDviTien)
+
       const tongNcauDtoanN = item.tongNcauDtoanN
-      const dtoanLke = mulMoney(item.dtoanLke, this.maDviTien)
-      const dtoanDchinh = mulMoney(item.dtoanDchinh, this.maDviTien)
-      if (tdiemBcaoDtoan > MONEY_LIMIT ||
-        dkienThienDtoan > MONEY_LIMIT || dtoanThieuNtruoc > MONEY_LIMIT || tongNcauDtoanN > MONEY_LIMIT || dtoanLke > MONEY_LIMIT || dtoanDchinh > MONEY_LIMIT
+      if (item.tdiemBcaoDtoan > MONEY_LIMIT ||
+        item.dkienThienDtoan > MONEY_LIMIT || item.dtoanThieuNtruoc > MONEY_LIMIT || item.tongNcauDtoanN > MONEY_LIMIT || item.dtoanLke > MONEY_LIMIT || item.dtoanDchinh > MONEY_LIMIT
       ) {
         checkMoneyRange = false;
         return;
       }
       lstCtietBcaoTemp.push({
         ...item,
-        tdiemBcaoDtoan: tdiemBcaoDtoan,
-        dkienThienDtoan: dkienThienDtoan,
-        dtoanThieuNtruoc: dtoanThieuNtruoc,
         tongNcauDtoanN: tongNcauDtoanN,
-        dtoanLke: dtoanLke,
-        dtoanDchinh: dtoanDchinh,
       })
     })
 
@@ -471,4 +455,13 @@ export class PhuLuc3Component implements OnInit {
     WindowPrt.print();
     WindowPrt.close();
   }
+  getMoneyUnit() {
+    return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+  }
+  displayValue(num: number): string {
+    num = exchangeMoney(num, '1', this.maDviTien);
+    return displayNumber(num);
+  }
+
+
 }

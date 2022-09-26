@@ -12,7 +12,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, MONEY_LIMIT, mulMoney } from 'src/app/Utility/utils';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, mulMoney } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 
 export class ItemData {
@@ -67,7 +67,7 @@ export class PhuLuc8Component implements OnInit {
 
   namBcao: number;
   thuyetMinh: string;
-  maDviTien: any;
+  maDviTien: string;
   listIdDelete = "";
   //trang thai cac nut
   status = false;
@@ -75,7 +75,8 @@ export class PhuLuc8Component implements OnInit {
   statusBtnOk: boolean;
   allChecked = false;                         // check all checkbox
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};     // phuc vu nut chinh
-
+  editMoneyUnit = false;
+  maDviTao!: string;
   constructor(private router: Router,
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
@@ -96,25 +97,19 @@ export class PhuLuc8Component implements OnInit {
     this.spinner.show();
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
-    this.maDviTien = this.data?.maDviTien;
+    this.maDviTien = "1";
     this.thuyetMinh = this.data?.thuyetMinh;
     this.trangThaiPhuLuc = this.data?.trangThai;
     this.trangThaiPhuLucGetDeTail = this.data?.lstDchinhs?.trangThai;
     this.namHienHanh = this.data?.namHienHanh;
     this.namBcao = this.data?.namBcao;
+    this.maDviTao = this.data?.maDviTao;
     // this.lstDchinh = this.data?.lstCtiet;
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstDchinh.push({
         ...item,
-        kh2021: divMoney(item.kh2021, this.maDviTien),
-        lkeVcap: divMoney(item.lkeVcap, this.maDviTien),
-        gtriCtrinh: divMoney(item.gtriCtrinh, this.maDviTien),
-        dxuatDchinhTong: divMoney(item.dxuatDchinhTong, this.maDviTien),
-        dxuatDchinhTang: divMoney(item.dxuatDchinhTang, this.maDviTien),
-        dxuatDchinhGiam: divMoney(item.dxuatDchinhGiam, this.maDviTien),
-        kh2021SauDchinh: divMoney(item.kh2021SauDchinh, this.maDviTien),
       })
     })
     this.updateEditCache();
@@ -137,7 +132,7 @@ export class PhuLuc8Component implements OnInit {
   }
 
   getStatusButton() {
-    if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5") || (this.trangThaiPhuLuc == "4" || this.trangThaiPhuLucGetDeTail == "7")) {
+    if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
       this.statusBtnOk = false;
     } else {
       this.statusBtnOk = true;
@@ -353,28 +348,14 @@ export class PhuLuc8Component implements OnInit {
     const lstCtietBcaoTemp: any = [];
     let checkMoneyRange = true;
     this.lstDchinh.forEach(item => {
-      const kh2021 = mulMoney(item.kh2021, this.maDviTien)
-      const lkeVcap = mulMoney(item.lkeVcap, this.maDviTien)
-      const gtriCtrinh = mulMoney(item.gtriCtrinh, this.maDviTien)
-      const dxuatDchinhTong = mulMoney(item.dxuatDchinhTong, this.maDviTien)
-      const dxuatDchinhTang = mulMoney(item.dxuatDchinhTang, this.maDviTien)
-      const dxuatDchinhGiam = mulMoney(item.dxuatDchinhGiam, this.maDviTien)
-      const kh2021SauDchinh = mulMoney(item.kh2021SauDchinh, this.maDviTien)
-      if (kh2021 > MONEY_LIMIT || lkeVcap > MONEY_LIMIT ||
-        gtriCtrinh > MONEY_LIMIT || dxuatDchinhTong > MONEY_LIMIT || dxuatDchinhTang > MONEY_LIMIT || dxuatDchinhGiam > MONEY_LIMIT || kh2021SauDchinh > MONEY_LIMIT
+      if (item.kh2021 > MONEY_LIMIT || item.lkeVcap > MONEY_LIMIT ||
+        item.gtriCtrinh > MONEY_LIMIT || item.dxuatDchinhTong > MONEY_LIMIT || item.dxuatDchinhTang > MONEY_LIMIT || item.dxuatDchinhGiam > MONEY_LIMIT || item.kh2021SauDchinh > MONEY_LIMIT
       ) {
         checkMoneyRange = false;
         return;
       }
       lstCtietBcaoTemp.push({
         ...item,
-        kh2021: kh2021,
-        lkeVcap: lkeVcap,
-        gtriCtrinh: gtriCtrinh,
-        dxuatDchinhTong: dxuatDchinhTong,
-        dxuatDchinhTang: dxuatDchinhTang,
-        dxuatDchinhGiam: dxuatDchinhGiam,
-        kh2021SauDchinh: kh2021SauDchinh,
       })
     })
 
@@ -436,5 +417,14 @@ export class PhuLuc8Component implements OnInit {
     WindowPrt.focus();
     WindowPrt.print();
     WindowPrt.close();
+  };
+
+  displayValue(num: number): string {
+    num = exchangeMoney(num, '1', this.maDviTien);
+    return displayNumber(num);
+  }
+
+  getMoneyUnit() {
+    return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }
 }

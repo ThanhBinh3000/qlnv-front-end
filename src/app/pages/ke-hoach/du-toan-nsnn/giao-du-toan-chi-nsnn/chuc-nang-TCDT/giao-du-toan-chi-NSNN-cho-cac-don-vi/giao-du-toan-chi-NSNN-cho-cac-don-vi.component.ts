@@ -11,7 +11,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { DON_VI_TIEN, LA_MA, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, Utils } from 'src/app/Utility/utils';
 import { MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 import { NOI_DUNG } from './giao-du-toan-chi-NSNN-cho-cac-don-vi.constant';
 
@@ -61,7 +61,7 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
   maGiao: string;
   trangThai: string;
   namDtoan: number;
-  maDviTien: any;
+  maDviTien: string;
   newDate = new Date();
   tenDvi: string;
   maDviNhan: string;
@@ -74,6 +74,7 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
   soLaMa: any[] = LA_MA;
   //file
   fileDetail: NzUploadFile;
+  editMoneyUnit = false;
 
   constructor(
     private userService: UserService,
@@ -92,9 +93,7 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show()
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName); //get user info
-
+    this.userInfo = this.userService.getUserLogin();
     //lay danh sach danh muc
     this.danhMucService.dMDonVi().toPromise().then(
       data => {
@@ -113,23 +112,6 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
       this.getDetailReport();
     }
 
-  }
-
-  //get user info
-  async getUserInfo(username: string) {
-    await this.userService.getUserInfo(username).toPromise().then(
-      (data) => {
-        if (data?.statusCode == 0) {
-          this.userInfo = data?.data
-          return data?.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
   }
 
   //download file về máy tính
@@ -165,6 +147,7 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
           this.ngayNhap = this.datepipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.maDviTao = data.data.maDvi;
           this.maDviNhan = data.data.maDviNhan;
+          this.maDviTien = data.data.maDviTien;
           // this.trangThai = data.data.trangThai;
 
           this.tenDvi = this.donVis.find((item) => item.maDvi == data.data.maDvi)?.tenDvi;
@@ -279,5 +262,13 @@ export class GiaoDuToanChiNSNNChoCacDonViComponent implements OnInit {
     return this.trangThais.find(e => e.id == this.trangThai)?.tenDm;
   }
 
+  displayValue(num: number): string {
+    num = exchangeMoney(num, '1', this.maDviTien);
+    return displayNumber(num);
+  }
+
+  getMoneyUnit() {
+    return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+  }
 
 }
