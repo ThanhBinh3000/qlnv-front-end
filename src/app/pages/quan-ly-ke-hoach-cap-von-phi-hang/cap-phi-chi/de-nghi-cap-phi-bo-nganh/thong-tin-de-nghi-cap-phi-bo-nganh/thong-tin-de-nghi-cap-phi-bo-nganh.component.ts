@@ -11,6 +11,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
 import { Globals } from 'src/app/shared/globals';
+import { isEmpty } from 'lodash';
 
 export class DeNghiCapPhi {
   stt: string;
@@ -74,16 +75,23 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     "tenHangHoa": "",
   }
 
-
   cts: any[] = [];
   ct1s: any[] = [];
   detail: any = {};
-  rowDisplay: any = {};
+
+  // lưu thông tin bảng 2 để add nào item con bảng 1 khi sử lý sự kiện click vào hàng
+  dataSelect: any = {};
+  // data bảng 1
   rowEdit: any = {};
 
+  // xử lý  data bảng 1
   oldDataEdit1: any = {};
+  // xử lý data bảng 1
   oldDataEdit2: any = {};
+
+  // dùng add new bảng 1
   create: any = {};
+  // dùng add new bảng 2
   create1: any = {};
 
 
@@ -95,11 +103,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
     private modal: NzModalService,
-
   ) { }
-
-
-
 
   isDisableField() {
     if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_VU)) {
@@ -108,17 +112,16 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   }
 
 
-  selectRow(row, rowSet) {
+  selectRow(row, i) {
     if (row) {
-      if (rowSet === 'rowDisplay') {
-        this.rowDisplay = cloneDeep(row);
-        this.rowDisplay.isView = true;
+      // this.rowEdit.isView = true;
+      this.dataSelect = cloneDeep(row)
+      if (this.rowEdit.ct1s[i].ct2List) {
+        this.dataSelect.ct2List = [...this.rowEdit.ct1s[i].ct2List]
+      } else {
+        this.dataSelect.ct2List = []
       }
-      else if (rowSet === 'rowEdit') {
-        this.rowEdit = cloneDeep(row);
-        this.rowEdit.isView = true;
-        this.sortTableId('ct2s');
-      }
+      this.sortTableId('ct2List');
     }
   }
   sortTableId(type) {
@@ -127,8 +130,8 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         lt.stt = i + 1;
       });
     }
-    else if (type === 'ct2s') {
-      this.rowEdit.ct2s.forEach((lt, i) => {
+    else if (type === 'ct2List' && this.dataSelect.ct2List && this.dataSelect.ct2List.length > 0) {
+      this.dataSelect.ct2List.forEach((lt, i) => {
         lt.stt = i + 1;
       });
     }
@@ -140,10 +143,10 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       this.ct1s = temp;
       this.sortTableId('ct1s');
     }
-    else if (type === 'ct2s') {
-      let temp = this.rowEdit.ct2s.filter(x => x.stt !== item.stt);
-      this.rowEdit.ct2s = temp;
-      this.sortTableId('ct2s');
+    else if (type === 'ct2List') {
+      let temp = this.dataSelect.ct2List.filter(x => x.stt !== item.stt);
+      this.dataSelect.ct2List = temp;
+      this.sortTableId('ct2List');
     }
   }
 
@@ -153,46 +156,54 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       this.rowEdit.isView = false;
       this.oldDataEdit1 = cloneDeep(item);
     }
-    else if (type === 'ct2s') {
+    else if (type === 'ct2List') {
       this.oldDataEdit2 = cloneDeep(item);
     }
     item.edit = true;
   }
 
   addRow() {
-    if (!this.rowEdit.ct2s) {
-      this.rowEdit.ct2s = [];
+    if (!this.dataSelect.ct2List) {
+      this.dataSelect.ct2List = [];
     }
-    this.sortTableId('ct2s');
+    this.sortTableId('ct2List');
     let item = cloneDeep(this.create);
-    item.stt = this.rowEdit.ct2s.length + 1;
-    this.rowEdit.ct2s = [
-      ...this.rowEdit.ct2s,
+    item.stt = this.dataSelect.ct2List.length + 1;
+    this.dataSelect.ct2List = [
+      ... this.dataSelect.ct2List,
       item,
     ]
-    this.clearItemRow();
+    this.clearItemRow("ct2List");
+    this.rowEdit.ct1s.forEach((item, i) => {
+      if (item.stt == this.dataSelect.stt) {
+        this.rowEdit.ct1s[i] = this.dataSelect
+      }
+    })
+    console.log(this.rowEdit);
+
   }
 
-  clearItemRow() {
+  clearItemRow(type) {
+    if (type == "ct1s") {
+      this.create1 = {};
+    } else if (type == "ct2List") {
+      this.create = {};
+    }
     this.create = {};
   }
 
   addRow1() {
-    if (!this.rowEdit.ct2s) {
-      this.rowEdit.ct2s = [];
+    if (!this.rowEdit.ct1s) {
+      this.rowEdit.ct1s = [];
     }
-    this.sortTableId('ct2s');
-    let item = cloneDeep(this.create);
-    item.stt = this.rowEdit.ct2s.length + 1;
-    this.rowEdit.ct2s = [
-      ...this.rowEdit.ct2s,
+    this.sortTableId('ct1s');
+    let item = cloneDeep(this.create1);
+    item.stt = this.rowEdit.ct1s.length + 1;
+    this.rowEdit.ct1s = [
+      ...this.rowEdit.ct1s,
       item,
     ]
-    this.clearItemRow();
-  }
-
-  clearItemRow1() {
-    this.create = {};
+    this.clearItemRow("ct1s");
   }
 
   cancelEdit(item, type) {
@@ -205,12 +216,12 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       }
       this.rowEdit.isView = true;
     }
-    else if (type === 'ct2s') {
-      let index = this.rowEdit.ct2s.findIndex(x => x.stt === item.stt);
+    else if (type === 'ct2List') {
+      let index = this.dataSelect.ct2List.findIndex(x => x.stt === item.stt);
       if (index != -1) {
-        let temp = cloneDeep(this.rowEdit.ct2s);
+        let temp = cloneDeep(this.dataSelect.ct2List);
         temp[index] = cloneDeep(this.oldDataEdit2);
-        this.rowEdit.ct2s = temp;
+        this.dataSelect.ct2List = temp;
       }
     }
     item.edit = false;
@@ -222,7 +233,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       item.maVatTuCha = this.rowEdit.maVatTuCha;
       item.maVatTu = this.rowEdit.maVatTu;
       item.tenHangHoa = this.rowEdit.tenHangHoa;
-      item.ct2s = cloneDeep(this.rowEdit.ct2s);
+      item.ct2List = cloneDeep(this.dataSelect.ct2List);
       this.rowEdit.isView = true;
     }
   }
@@ -238,8 +249,8 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   }
 
   tongChiPhiBang2(data) {
-    if (data && data?.ct2s && data?.ct2s.length > 0) {
-      let sum = data.ct2s.map((item) => item.tongTien).reduce((prev, next) => Number(prev) + Number(next));
+    if (data && data?.ct2List && data?.ct2List.length > 0) {
+      let sum = data.ct2List.map((item) => item.tongTien).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
       return 0
@@ -247,8 +258,8 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   }
 
   tongKinhPhiBang2(data) {
-    if (data && data?.ct2s && data?.ct2s.length > 0) {
-      let sum = data.ct2s.map((item) => item.kinhPhiDaCap).reduce((prev, next) => Number(prev) + Number(next));
+    if (data && data?.ct2List && data?.ct2List.length > 0) {
+      let sum = data.ct2List.map((item) => item.kinhPhiDaCap).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
       return 0
@@ -256,8 +267,8 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   }
 
   tongCapThemBang2(data) {
-    if (data && data?.ct2s && data?.ct2s.length > 0) {
-      let sum = data.ct2s.map((item) => item.yeuCauCapThem).reduce((prev, next) => Number(prev) + Number(next));
+    if (data && data?.ct2List && data?.ct2List.length > 0) {
+      let sum = data.ct2List.map((item) => item.yeuCauCapThem).reduce((prev, next) => Number(prev) + Number(next));
       return sum ?? 0;
     } else {
       return 0
@@ -267,9 +278,15 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
+      this.detail.trangThai = this.globals.prop.NHAP_DU_THAO;
+      this.detail.tenTrangThai = "Dự Thảo";
       this.initForm();
-      Promise.all([this.getListNam(), this.getListBoNganh(), this.loaiVTHHGetAll()]);
+      Promise.all([this.getListNam(), this.getListBoNganh(),  this.loaiVTHHGetAll()]);
+      if (this.idInput >0 ) {
+        this.loadChiTiet(this.idInput)
+      }
       this.spinner.hide();
+
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -278,46 +295,12 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   }
   initForm() {
     this.formData = this.fb.group({
-      nam: [
-        {
-          value: this.deNghiCapPhiBoNganh
-            ? this.deNghiCapPhiBoNganh.nam
-            : null,
-          disabled: this.isView ? true : false
-        },
-        [Validators.required],
-      ],
-      maBoNganh: [
-        {
-          value: this.deNghiCapPhiBoNganh
-            ? this.deNghiCapPhiBoNganh.maBoNganh
-            : null,
-          disabled: this.isView ? true : false
-        },
-        [Validators.required],
-      ],
-      soDeNghi: [
-        {
-          value: this.deNghiCapPhiBoNganh
-            ? this.deNghiCapPhiBoNganh.soDeNghi
-            : null,
-          disabled: this.isView ? true : false
-        },
-        [Validators.required],
-      ],
-      ngayDeNghi: [
-        {
-          value: this.deNghiCapPhiBoNganh
-            ? this.deNghiCapPhiBoNganh.ngayDeNghi
-            : null,
-          disabled: this.isView ? true : false
-        },
-        [Validators.required],
-      ],
+      'nam': [null, [Validators.required]],
+      'maBoNganh': [null, [Validators.required]],
+      'soDeNghi': [null, [Validators.required]],
+      'ngayDeNghi': [null, [Validators.required]],
     });
   }
-
-
   async loaiVTHHGetAll() {
     try {
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
@@ -441,6 +424,35 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async loadChiTiet(id: number) {
+    if (id > 0) {
+      let res = await this.deNghiCapPhiBoNganhService.loadChiTiet(id);
+      if (res.msg == MESSAGE.SUCCESS && res.data) {
+        let data = res.data
+        console.log(data);
+        if (data) {
+          this.formData.patchValue({
+            'nam':data.nam,
+            'maBoNganh':data.maBoNganh,
+            'soDeNghi':data.soDeNghi,
+            'ngayDeNghi':data.ngayDeNghi,
+          });
+
+          this.hanghoa = {
+            "maLoaiHangHoa": "",
+            "maChungLoaiHangHoa": "",
+            "tenHangHoa": "",
+          }
+          this.detail.trangThai = data.trangThai
+          this.detail.tenTrangThai =data.tenTrangThai;
+          this.rowEdit.ct1s = data.ct1List
+        }
+console.log(this.rowEdit);
+
+      }
     }
   }
 }
