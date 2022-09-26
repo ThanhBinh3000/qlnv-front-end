@@ -753,12 +753,10 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
   }
 
   async loadChiTiet(id: number) {
-    alert(id);
     this.qdPheDuyetKhBanDauGiaService
       .chiTiet(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
-          console.log(res.data);
           this.qdPheDuyetKhBanDauGia = res.data;
           this.initForm();
           this.formData.patchValue({
@@ -775,7 +773,6 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           this.setTitle();
         }
       });
-    // console.log(this.qdPheDuyetKhBanDauGia);
   }
 
   taiLieuDinhKem(type?: string) {
