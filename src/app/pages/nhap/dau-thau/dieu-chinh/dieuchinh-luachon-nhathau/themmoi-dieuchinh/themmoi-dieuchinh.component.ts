@@ -75,6 +75,7 @@ export class ThemMoiDieuChinhComponent implements OnInit {
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       tchuanCluong: [''],
+      ldoTuchoi: [''],
     });
   }
   maQd: string = '';
@@ -202,7 +203,8 @@ export class ThemMoiDieuChinhComponent implements OnInit {
           tenTrangThai: data.tenTrangThai,
           trichYeu: data.trichYeu,
           idQdGoc: data.idQdGoc,
-          soQdGoc: data.soQdGoc
+          soQdGoc: data.soQdGoc,
+          ldoTuchoi: data.ldoTuchoi,
         });
         if (this.isVatTu) {
           this.danhsachDx = data.hhQdKhlcntDtlList[0].dsGoiThau
@@ -626,6 +628,11 @@ export class ThemMoiDieuChinhComponent implements OnInit {
     if (this.formData.get('loaiVthh').value.startsWith("02")) {
       switch (this.formData.get('trangThai').value) {
         case STATUS.DU_THAO: {
+          trangThai = STATUS.CHO_DUYET_LDV;
+          mesg = 'Bạn có muốn gửi duyệt ?'
+          break;
+        }
+        case STATUS.TU_CHOI_LDV: {
           trangThai = STATUS.CHO_DUYET_LDV;
           mesg = 'Bạn có muốn gửi duyệt ?'
           break;

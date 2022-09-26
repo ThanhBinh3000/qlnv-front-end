@@ -382,15 +382,21 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   }
 
   taoQdinh() {
-    // let elem = document.getElementById('selectedTab');
-    // let tabActive = elem.getElementsByClassName('ant-tabs-tab-active')[0];
-    // tabActive.classList.remove('ant-tabs-tab-active')
-    // let setActive = elem.getElementsByClassName('ant-tabs-tab')[2];
-    // setActive.classList.add('ant-tabs-tab-active');
+    let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[0];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
+    setActive.classList.add('ant-menu-item-selected');
     this.isQuyetDinh = true;
   }
 
   showTongHop() {
+    this.loadChiTiet()
+    let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[2];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[0];
+    setActive.classList.add('ant-menu-item-selected');
     this.isQuyetDinh = false;
   }
 }

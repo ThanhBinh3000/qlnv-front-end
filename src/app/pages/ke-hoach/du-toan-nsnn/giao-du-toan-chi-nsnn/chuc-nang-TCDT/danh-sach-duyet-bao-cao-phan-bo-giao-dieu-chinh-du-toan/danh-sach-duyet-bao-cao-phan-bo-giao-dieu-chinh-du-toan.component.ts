@@ -10,7 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { GDT, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 // import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
@@ -50,8 +50,8 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
     maPhanGiao: '2',
     maLoai: '2',
     namPa: null,
-    ngayTaoTu: "",
-    ngayTaoDen: "",
+    ngayTaoTu: null,
+    ngayTaoDen: null,
     maPa: "",
     donViTao: "",
     // trangThai: "",
@@ -78,6 +78,8 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
   date: any = new Date()
   trangThai!: string;
   roleUser: string;
+  newDate = new Date();
+
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -92,15 +94,16 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
   }
 
   async ngOnInit() {
-    const userName = this.userService.getUserName();
     this.spinner.show()
-    await this.getUserInfo(userName); //get user info
-    this.maDviTao = this.userInfo?.dvql;
-    this.userRole = this.userInfo?.roles[0].code;
-    this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
+
+    this.userInfo = this.userService.getUserLogin();
+    this.maDviTao = this.userInfo?.MA_DVI;
+
+    this.searchFilter.ngayTaoDen = new Date();
     this.date.setMonth(this.date.getMonth() - 1);
-    this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
+    this.searchFilter.ngayTaoTu = this.newDate;
     this.searchFilter.namPa = new Date().getFullYear()
+
     //lay danh sach danh muc
     await this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -115,13 +118,16 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
       }
     );
 
-    if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+    if (this.userService.isAccessPermisson(GDT.TIEPNHAN_TUCHOI_PA_PBDT)) {
       this.trangThai = '1';
-      this.roleUser = 'canbo';
+      // this.roleUser = 'canbo';
       this.status = false;
-      this.trangThai = Utils.TT_BC_7;
+      this.trangThais.push({
+        id: Utils.TT_BC_7,
+        tenDm: "Mới",
+      });
       this.searchFilter.loaiTimKiem = '1';
-      this.donVis = this.donVis.filter(e => e?.maDviCha == this.maDviTao);
+      // this.donVis = this.donVis.filter(e => e?.maDviCha == this.maDviTao);
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_7));
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_8));
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_9));
@@ -131,22 +137,6 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
     this.spinner.hide();
   }
 
-  //get user info
-  async getUserInfo(username: string) {
-    await this.userService.getUserInfo(username).toPromise().then(
-      (data) => {
-        if (data?.statusCode == 0) {
-          this.userInfo = data?.data
-          return data?.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-  }
 
   redirectThongTinTimKiem() {
     this.router.navigate([
@@ -181,6 +171,9 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
       searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9, Utils.TT_BC_KT]
     }
     searchFilterTemp.trangThaiGiaos = ['0', '1', '2']
+
+
+
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
     await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {

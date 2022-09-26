@@ -1,5 +1,5 @@
 import { MAIN_ROUTES } from 'src/app/layout/main/main-routing.constant';
-import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
+import { GDT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import { DU_TOAN_NSNN } from '../../ke-hoach.constant';
 import { DuToanNSNN } from '../du-toan-nsnn.type';
 
@@ -60,9 +60,8 @@ export const GIAO_DU_TOAN_CHI_NSNN_NSNN_LIST: DuToanNSNN[] = [
     description: 'NHẬP QUYẾT ĐỊNH GIAO DỰ TOÁN CHI NSNN TỪ BTC',
     url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${GIAO_DU_TOAN}/tim-kiem-quyet-dinh-nhap-du-toan-chi-NSNN`,
     Role: [
-      NHAN_VIEN_TC,
-      TRUONG_BP_TC,
-      LANH_DAO_TC,
+      // GDT.VIEW_REPORT_PA_PBDT,
+      GDT.EDIT_REPORT_BTC,
     ],
     isDisabled: false,
   },
@@ -72,12 +71,10 @@ export const GIAO_DU_TOAN_CHI_NSNN_NSNN_LIST: DuToanNSNN[] = [
     description: 'DANH SÁCH PHƯƠNG ÁN PHÂN BỔ GIAO DỰ TOÁN CHI NSNN TẠI ĐƠN VỊ',
     url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${GIAO_DU_TOAN}/tim-kiem-phan-bo-giao-du-toan-chi-NSNN-cho-cac-don-vi`,
     Role: [
-      NHAN_VIEN_TC,
-      TRUONG_BP_TC,
-      LANH_DAO_TC,
-      NHAN_VIEN_CKV,
-      TRUONG_BP_CKV,
-      LANH_DAO_CKV,
+      GDT.VIEW_REPORT_PA_PBDT,
+      GDT.DELETE_REPORT_PA_PBDT,
+      GDT.EDIT_REPORT_PA_PBDT,
+      GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT,
     ],
     isDisabled: false,
   },
@@ -87,12 +84,7 @@ export const GIAO_DU_TOAN_CHI_NSNN_NSNN_LIST: DuToanNSNN[] = [
     description: 'DANH SÁCH GIAO DỰ TOÁN CHI NSNN CHO ĐƠN VỊ CẤP DƯỚI',
     url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${GIAO_DU_TOAN}/tim-kiem-giao-du-toan-chi-NSNN-cua-cac-don-vi`,
     Role: [
-      NHAN_VIEN_TC,
-      TRUONG_BP_TC,
-      LANH_DAO_TC,
-      NHAN_VIEN_CKV,
-      TRUONG_BP_CKV,
-      LANH_DAO_CKV,
+      GDT.GIAO_PA_PBDT
     ],
     isDisabled: false,
   },
@@ -102,8 +94,7 @@ export const GIAO_DU_TOAN_CHI_NSNN_NSNN_LIST: DuToanNSNN[] = [
     description: 'DANH SÁCH NHẬN DỰ TOÁN CHI NSNN CỦA CÁC ĐƠN VỊ',
     url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${GIAO_DU_TOAN}/tim-kiem-nhan-du-toan-chi-NSNN-cua-cac-don-vi`,
     Role: [
-      NHAN_VIEN_CC,
-      NHAN_VIEN_CKV,
+      GDT.NHAN_PA_PBDT
     ],
     isDisabled: false,
   },
@@ -113,7 +104,9 @@ export const GIAO_DU_TOAN_CHI_NSNN_NSNN_LIST: DuToanNSNN[] = [
     description: 'DANH SÁCH DUYỆT BÁO CÁO PHÂN BỔ GIAO, ĐIỀU CHỈNH DỰ TOÁN TỪ CÁC ĐƠN VỊ CẤP DƯỚI',
     url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${GIAO_DU_TOAN}/danh-sach-duyet-bao-cao-phan-bo-giao-dieu-chinh-du-toan`,
     Role: [
-      NHAN_VIEN_TC
+      GDT.DUYET_TUCHOI_PA_TH_PBDT,
+      GDT.PHEDUYET_TUCHOI_PA_TH_PBDT,
+      GDT.XEM_PA_TONGHOP_PBDT
     ],
     isDisabled: false,
   },
@@ -123,10 +116,8 @@ export const GIAO_DU_TOAN_CHI_NSNN_NSNN_LIST: DuToanNSNN[] = [
     description: 'KIỂM TRA TÍNH TRẠNG NHẬN DỰ TOÁN CHI CỦA ĐƠN VỊ CẤP DƯỚI',
     url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${GIAO_DU_TOAN}/kiem-tra-ra-soat-phuong-an-tu-cuc-khu-vuc`,
     Role: [
-
-      NHAN_VIEN_CKV,
-      NHAN_VIEN_TC,
-
+      GDT.XEM_PA_TONGHOP_PBDT,
+      GDT.EDIT_REPORT_CV_QD_GIAO_PA_PBDT,
     ],
     isDisabled: false,
   },
@@ -136,10 +127,8 @@ export const GIAO_DU_TOAN_CHI_NSNN_NSNN_LIST: DuToanNSNN[] = [
     description: 'PHÊ DUYỆT PHƯƠNG ÁN TẠI ĐƠN VỊ',
     url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${GIAO_DU_TOAN}/duyet-phuong-an-tai-don-vi`,
     Role: [
-      TRUONG_BP_TC,
-      LANH_DAO_TC,
-      TRUONG_BP_CKV,
-      LANH_DAO_CKV,
+      GDT.PHE_DUYET_REPORT_PA_PBDT,
+      GDT.DUYET_REPORT_PA_PBDT
     ],
     isDisabled: false,
   },

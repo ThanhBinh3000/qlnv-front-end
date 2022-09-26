@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   AUTHEN_API: 'http://192.168.1.80:8888',
-  SERVICE_API: 'http://192.168.1.80:8888',
+  SERVICE_API : 'http://192.168.1.80:8888',
   LOCAL: 'http://192.168.5.197:189'
 };
 
@@ -17,3 +17,4 @@ export const environment = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+ 

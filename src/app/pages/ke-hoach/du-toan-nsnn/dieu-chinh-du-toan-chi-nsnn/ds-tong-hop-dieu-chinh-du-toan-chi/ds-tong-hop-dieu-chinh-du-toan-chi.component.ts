@@ -9,7 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { LOAI_BAO_CAO, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DIEU_CHINH_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../dieu-chinh-du-toan-chi-nsnn.constant';
 
 
@@ -50,27 +50,6 @@ export class DsTongHopDieuChinhDuToanChiComponent implements OnInit {
   baoCaos: any = [];
 
   validateForm!: FormGroup;           // form
-
-  // submitForm(){
-
-  //   if (this.validateForm.valid) {
-  //     return true;
-  //   } else {
-  //     Object.values(this.validateForm.controls).forEach(control => {
-  //       if (control.invalid) {
-  //         control.markAsDirty();
-  //         control.updateValueAndValidity({ onlySelf: true });
-  //       }
-  //     });
-  //     if(!this.searchFilter.nam || !this.searchFilter.LOAI_BAO_CAO){
-  //       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-  //     }
-  //     if (this.searchFilter.nam >= 3000 || this.searchFilter.nam < 1000){
-  //       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
-  //     }
-  //     return false;
-  //   }
-  // }
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -90,8 +69,6 @@ export class DsTongHopDieuChinhDuToanChiComponent implements OnInit {
       temp: [null],
     });
 
-    //lay danh sach loai bao cao
-    this.baoCaos = LOAI_BAO_CAO;
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -185,9 +162,6 @@ export class DsTongHopDieuChinhDuToanChiComponent implements OnInit {
   }
 
   taoMoi() {
-    // if (!this.submitForm()) {
-    //   return;
-    // }
     this.router.navigate([
       MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + DIEU_CHINH_DU_TOAN + '/tong-hop-dieu-chinh-du-toan-chi-NSNN'
     ]);

@@ -8,7 +8,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { UserAPIService } from 'src/app/services/user/userapi.service';
+import { UserAPIService } from 'src/app/services/user/userApi.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { STORAGE_KEY } from 'src/app/constants/config';
 declare var vgcapluginObject: any;
