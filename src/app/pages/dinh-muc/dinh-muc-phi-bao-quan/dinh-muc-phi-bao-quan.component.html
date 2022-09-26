@@ -112,7 +112,7 @@
           <th>
             <nz-select [(ngModel)]="rowItem.maDinhMuc" [nzDisabled]="isView" (ngModelChange)="changeDm('ma')"
                        nzAllowClear="true">
-              <nz-option *ngFor="let p of listDmDinhMuc" [nzValue]="p.ma" [nzLabel]="p.ma">
+              <nz-option *ngFor="let p of listDmDinhMuc" [nzValue]="p.maDinhMuc" [nzLabel]="p.maDinhMuc">
               </nz-option>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -123,7 +123,7 @@
           <th>
             <nz-select [(ngModel)]="rowItem.tenDinhMuc" [nzDisabled]="isView" (ngModelChange)="changeDm('ten')"
                        (ngModelChange)="updateAllChecked()" nzAllowClear="true">
-              <nz-option *ngFor="let p of listDmDinhMuc" [nzValue]="p.ten" [nzLabel]="p.ten">
+              <nz-option *ngFor="let p of listDmDinhMuc" [nzValue]="p.tenDinhMuc" [nzLabel]="p.tenDinhMuc">
               </nz-option>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}

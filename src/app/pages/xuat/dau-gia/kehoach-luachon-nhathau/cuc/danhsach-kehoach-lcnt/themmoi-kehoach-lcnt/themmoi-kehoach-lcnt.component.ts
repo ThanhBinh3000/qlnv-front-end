@@ -160,7 +160,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           value: this.khBanDauGia ? this.khBanDauGia.moTaHangHoa : null,
           disabled: this.isView ? true : false,
         },
-        [Validators.required],
+        // [Validators.required],
       ],
       ngayLapKeHoach: [
         {
