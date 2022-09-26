@@ -4,11 +4,11 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-sub">
+        <button type="button" class="btn btn-sub" *ngIf="!isView" (click)="guiDuyet()">
             <i class="icon  htvbdh_da-xu-ly"></i>
             <span>Hoàn thành</span>
         </button>
-        <button type="button" class="btn btn-main" [disabled]="!formData.valid">
+        <button type="button" class="btn btn-main" *ngIf="!isView" [disabled]="!formData.valid">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
         </button>
