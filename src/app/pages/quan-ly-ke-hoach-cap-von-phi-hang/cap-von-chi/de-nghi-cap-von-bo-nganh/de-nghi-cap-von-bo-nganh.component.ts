@@ -16,8 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { isEmpty } from 'lodash';
 import { Globals } from 'src/app/shared/globals';
-
-import { DeNghiCapVonBoNganhService } from 'src/app/services/deNghiCapVanBoNganh.service';
+import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
 
 @Component({
   selector: 'app-de-nghi-cap-von-bo-nganh',
@@ -159,6 +158,7 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
     };
 
     let res = await this.deNghiCapVonBoNganhService.timKiem(body);
+    console.log(res);
 
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -290,22 +290,11 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
       try {
 
         let body = {
-          "capDvis": [
-            null
-          ],
-          "maBoNganh": null,
-          "maDvis": [
-            null
-          ],
-          "nam": 0,
-          "ngayDeNghiDenNgay": null,
-          "ngayDeNghiTuNgay": null,
-          "soDeNghi": null,
-          "str": null,
-          "trangThai": null,
-          "trangThais": [
-            null
-          ]
+          soDeNghi: this.searchFilter.soKeHoach,
+          maBoNganh: null,
+          nam: this.searchFilter.namKh,
+          ngayDeNghiTuNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
+          ngayDeNghiDenNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
         }
         this.deNghiCapVonBoNganhService.exportList(body).subscribe((blob) => {
           saveAs(blob, 'danh-sach-de-nghi-cap-von-bo-nganh.xlsx')
