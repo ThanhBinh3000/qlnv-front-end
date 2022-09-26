@@ -1,6 +1,5 @@
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -8,11 +7,11 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { UserService } from 'src/app/services/user.service';
-import { ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
-import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
-import { QuanLyVonPhiService } from '../../../../../../services/quanLyVonPhi.service';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
+import { LTD, Utils } from 'src/app/Utility/utils';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
 
 export class ItemCongVan {
@@ -97,10 +96,8 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         private routerActive: ActivatedRoute,
         private datePipe: DatePipe,
         private notification: NzNotificationService,
-        private fb: FormBuilder,
         private spinner: NgxSpinnerService,
         private userService: UserService,
-        private location: Location,
         private dataSource: DataService,
     ) {
     }
@@ -117,20 +114,17 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
             this.title = "DANH SÁCH PHƯƠNG ÁN/QĐ/CV GIAO SỐ KIỂM TRA NSNN TẠI ĐƠN VỊ"
         }
         this.spinner.show();
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName); //get user info
-        this.searchFilter.donViTao = this.userInfo?.dvql;
+        this.userInfo = this.userService.getUserLogin();
+        this.searchFilter.donViTao = this.userInfo?.MA_DVI;
 
         this.searchFilter.denNgay = new Date();
         this.newDate.setMonth(this.newDate.getMonth() - 1);
         this.searchFilter.tuNgay = this.newDate;
         //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
+        await this.danhMuc.dMDviCon().toPromise().then(
             data => {
                 if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                    this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
-                    this.donViTaos = this.donVis.filter(e => e?.maDviCha === this.userInfo?.dvql);
+                    this.donViTaos = data.data;
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                 }
@@ -141,10 +135,10 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         );
         this.spinner.hide();
 
-        if (ROLE_CAN_BO.includes(this.userInfo?.roles[0]?.code)) {
+        if ((this.loai == '0' && this.userService.isAccessPermisson(LTD.ADD_SKT_BTC)) || (this.loai == '1' && this.userService.isAccessPermisson(LTD.ADD_QDCV_GIAO_SKT))) {
             this.statusTaoMoi = false;
         }
-        if (!this.status && this.capDvi == Utils.TONG_CUC) {
+        if (!this.status && this.userService.isTongCuc()) {
             this.statusBtc = false;
         }
 
@@ -385,20 +379,6 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
     }
 
-    checkDeleteReport(item: any): boolean {
-        let check = false;
-        if (this.userInfo?.username == item.nguoiTao) {
-            if (this.status) {
-                check = true;
-            } else {
-                if (item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) {
-                    check = true;
-                }
-            }
-        }
-        return check;
-    }
-
     xoaPA(id: string) {
         let request = [];
         if (!id) {
@@ -423,6 +403,18 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
         this.spinner.hide();
     }
 
+    checkViewReport() {
+        return this.userService.isAccessPermisson(LTD.VIEW_PA_GIAO_SKT);
+    }
+
+    checkEditReport(trangThai: string) {
+        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(LTD.EDIT_PA_GIAO_SKT);
+    }
+
+    checkDeleteReport(trangThai: string) {
+        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(LTD.DELETE_PA_GIAO_SKT);
+    }
+
     changeListIdDelete(id: string) {
         if (this.listIdDelete.findIndex(e => e == id) == -1) {
             this.listIdDelete.push(id);
@@ -443,8 +435,7 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
 
     updateAllCheck() {
         this.danhSachBaoCao.forEach(item => {
-            if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8)
-                && ROLE_CAN_BO.includes(this.userRole)) {
+            if (this.checkDeleteReport(item.trangThai)) {
                 item.checked = true;
                 this.listIdDelete.push(item.id);
             }

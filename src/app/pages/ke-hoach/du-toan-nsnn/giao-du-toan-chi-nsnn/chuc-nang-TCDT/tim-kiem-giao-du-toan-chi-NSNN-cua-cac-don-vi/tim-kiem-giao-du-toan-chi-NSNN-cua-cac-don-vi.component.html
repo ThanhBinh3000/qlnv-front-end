@@ -110,15 +110,11 @@
                 {{item.dViNhan}}
               </td>
               <td>
-                <!-- <a (click)="xemChiTiet(item.id)" style="color: #1890ff;">
-                  Xem
-                </a> -->
-                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
-                  <!-- <span *ngIf="item.trangThai == '2' || item.trangThai == '4'">Xem</span>
-                  <span *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">Nhập/Sửa dữ liệu</span>
-                  <span *ngIf="item.trangThai == '6' || item.trangThai == '7' || item.trangThai == '9'" >Xem</span> -->
-                  Xem
-                </button>
+                <ng-container *ngIf="checkViewReport()">
+                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                    Xem
+                  </button>
+                </ng-container>
               </td>
             </tr>
           </tbody>

@@ -10,6 +10,7 @@ import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
 import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+import { DialogTongHopGiaoComponent } from 'src/app/components/dialog/dialog-tong-hop-giao/dialog-tong-hop-giao.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -17,7 +18,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { divMoney, DON_VI_TIEN, LA_MA, MONEY_LIMIT, mulMoney, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, GDT, LA_MA, MONEY_LIMIT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 import { NOI_DUNG } from './xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi.constant';
@@ -94,6 +95,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   namDtoan: number; // năm dự toán
   checkTrangThaiGiao: string; // trạng thái giao
   qdGiaoDuToan: ItemSoQd;
+  maDviNhan: string;
 
   //===================================================================================
 
@@ -113,7 +115,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
   soLaMa: any[] = LA_MA; // danh sách ký tự la mã
 
   // khác
-
+  editMoneyUnit = false;
   // phục vụ nút edit
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   newDate = new Date();
@@ -161,15 +163,11 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     // lấy id bản ghi từ router
     this.id = this.routerActive.snapshot.paramMap.get('id');
 
-    // lấy thông tin tài khoản
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName);
-
     // lấy mã đơn vị tạo PA
-    this.maDonViTao = this.userInfo?.dvql;
+    this.maDonViTao = this.userInfo?.MA_DVI;
 
     // lấy role người dùng
-    this.userRole = this.userInfo?.roles[0].code;
+    this.userInfo = this.userService.getUserLogin();
 
     // set năm tạo PA
     this.namPa = this.newDate.getFullYear();
@@ -179,7 +177,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       (data) => {
         if (data.statusCode === 0) {
           this.donVis = data?.data;
-          this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
+          this.capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE)
         }
@@ -206,10 +204,10 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     } else {
       // khi không có id thì thực hiện tạo mới
       this.trangThaiBanGhi = '1';
-      this.maDonViTao = this.userInfo?.dvql;
+      this.maDonViTao = this.userInfo?.MA_DVI;
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
       this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
-
+      this.maDviTien = '1'
       // lấy dữ liệu từ PA cha qua dataSource
       await this.dataSource.currentData.subscribe(obj => {
         if (obj) {
@@ -283,6 +281,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
           this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
           this.soQd = data.data.soQd;
           this.lstFiles = data.data.lstFiles;
+          this.maDviNhan = data.data.maDviNhan;
           this.listFile = [];
           if (!data.data.lstGiaoDtoanTrucThuocs) {
             this.lstDviTrucThuoc = []
@@ -290,7 +289,8 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
             this.lstDviTrucThuoc = data.data?.lstGiaoDtoanTrucThuocs;
           }
           this.checkSumUp = data.data.checkSumUp;
-          if (this.checkSumUp == true) {
+          const dViUser = this.userInfo?.MA_DVI
+          if (this.checkSumUp == true && dViUser == this.maDonViTao) {
             this.statusBtnTongHop = false
           }
           if (this.lstCtietBcao[0].lstCtietDvis) {
@@ -298,15 +298,15 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
               this.lstDvi.push(this.donVis.find(e => e.maDvi == item.maDviNhan))
             })
           }
-          this.lstCtietBcao.forEach(item => {
-            item.tongCong = divMoney(item.tongCong, this.maDviTien);
-            if (item.lstCtietDvis) {
-              item.lstCtietDvis.forEach(e => {
-                // e.soTranChi = divMoney(e.soTranChi, this.maDviTien) == 0 ? null : divMoney(e.soTranChi, this.maDviTien);
-                e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
-              })
-            }
-          })
+          // this.lstCtietBcao.forEach(item => {
+          //   item.tongCong = divMoney(item.tongCong, this.maDviTien);
+          //   if (item.lstCtietDvis) {
+          //     item.lstCtietDvis.forEach(e => {
+          //       // e.soTranChi = divMoney(e.soTranChi, this.maDviTien) == 0 ? null : divMoney(e.soTranChi, this.maDviTien);
+          //       e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
+          //     })
+          //   }
+          // })
           this.sortByIndex();
           this.updateEditCache();
           this.getStatusButton();
@@ -377,7 +377,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     const lstCtietBcaoTemp: any[] = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      if (mulMoney(item.tongCong, this.maDviTien) > MONEY_LIMIT) {
+      if (item.tongCong > MONEY_LIMIT) {
         checkMoneyRange = false;
         return;
       }
@@ -385,13 +385,11 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       item.lstCtietDvis.forEach(e => {
         data.push({
           ...e,
-          soTranChi: mulMoney(e.soTranChi, this.maDviTien),
           id: null,
         })
       })
       lstCtietBcaoTemp.push({
         ...item,
-        tongCong: mulMoney(item.tongCong, this.maDviTien),
         lstCtietDvis: data,
         id: null,
       })
@@ -495,7 +493,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
 
     // gui du lieu trinh duyet len server
     this.lstCtietBcao.forEach(item => {
-      if (mulMoney(item.tongCong, this.maDviTien) > MONEY_LIMIT) {
+      if (item.tongCong > MONEY_LIMIT) {
         checkMoneyRange = false;
         return;
       }
@@ -503,13 +501,11 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       item.lstCtietDvis.forEach(e => {
         data.push({
           ...e,
-          soTranChi: mulMoney(e.soTranChi, this.maDviTien),
         })
         tongTranChi += e.soTranChi
       })
       lstCtietBcaoTemp.push({
         ...item,
-        tongCong: mulMoney(item.tongCong, this.maDviTien),
         lstCtietDvis: data,
       })
     })
@@ -631,6 +627,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
             this.router.navigate([
               MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
             ])
+            this.listFile = [];
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -687,9 +684,8 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
 
   // xem chi tiết bản ghi
   xemChiTiet(id: string) {
-    this.router.navigate([
-      MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id,
-    ])
+    const url = MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id
+    window.open(url, '_blank');
   }
 
   // set lại level
@@ -741,10 +737,17 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     await this.quanLyVonPhiService.tongHopGiaoDuToan(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.TONG_HOP_SUCCESS);
-          this.router.navigate([
-            MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + data.data.id,
-          ])
+          const modalCopy = this.modal.create({
+            nzTitle: MESSAGE.ALERT,
+            nzContent: DialogTongHopGiaoComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+              maBcao: data.data.maPa
+            },
+          });
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -760,33 +763,30 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
 
   //check role cho các nut trinh duyet
   getStatusButton() {
-    const userRole = this.userInfo?.roles[0]?.code;
-    if ((this.trangThaiBanGhi == Utils.TT_BC_1 || this.trangThaiBanGhi == Utils.TT_BC_3 || this.trangThaiBanGhi == Utils.TT_BC_5)
-      && (ROLE_CAN_BO.includes(userRole))) {
+    // if (this.id && this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT)) {
+    //   this.status = false;
+    // } else {
+    //   this.status = true;
+    // }
+    // if (
+    //   this.trangThaiBanGhi == Utils.TT_BC_1 ||
+    //   this.trangThaiBanGhi == Utils.TT_BC_3 ||
+    //   this.trangThaiBanGhi == Utils.TT_BC_5 ||
+    //   this.trangThaiBanGhi == Utils.TT_BC_8
+    // ) {
+    //   if (this.id && this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT)) {
+    //     this.status = true;
+    //   } else {
+    //     this.status = false;
+    //   }
+    // } else {
+    //   this.status = true;
+    // }
+    if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(GDT.EDIT_REPORT_PA_PBDT)) {
       this.status = false;
     } else {
       this.status = true;
     }
-    if (
-      this.trangThaiBanGhi == Utils.TT_BC_1 ||
-      this.trangThaiBanGhi == Utils.TT_BC_3 ||
-      this.trangThaiBanGhi == Utils.TT_BC_5 ||
-      this.trangThaiBanGhi == Utils.TT_BC_8
-    ) {
-      if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code) ||
-        ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
-        this.status = true;
-        this.statusBtnTongHop = true;
-        this.statusGiaoToanBo = true;
-      } else {
-        this.status = false;
-      }
-    } else {
-      this.status = true;
-    }
-    // if (this.soQd && this.trangThaiBanGhi == "6") {
-    //   this.statusBtnTongHop = false;
-    // }
     if (this.checkTrangThaiGiao == "0" || this.checkTrangThaiGiao == "2") {
       this.statusGiaoToanBo = false;
     } else {
@@ -794,32 +794,36 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     }
 
 
-    let checkChirld = false;
+
     const dVi = this.donVis.find(e => e.maDvi == this.maDonViTao);
-    if (dVi && dVi.maDvi == this.userInfo?.dvql) {
-      checkChirld = true;
-    }
+
 
     let checkParent = false;
-    if (dVi && dVi?.maDviCha == this.userInfo.dvql) {
+    if (dVi && dVi?.maDviCha == this.userInfo.MA_DVI) {
       checkParent = true;
     }
     const utils = new Utils();
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBanGhi, checkChirld, userRole);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBanGhi, checkChirld, userRole);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBanGhi, checkChirld, userRole);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBanGhi, checkChirld, userRole);
-    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, userRole);
-    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBanGhi, checkChirld, userRole);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBanGhi, checkParent, userRole);
+    const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
 
-    if (ROLE_CAN_BO.includes(userRole) && this.soQd) {
+    this.statusBtnSave = this.getBtnStatus(Utils.statusSave, GDT.EDIT_REPORT_PA_PBDT, checkChirld);
+    this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, GDT.APPROVE_REPORT_PA_PBDT, checkChirld);
+    this.statusBtnTBP = this.getBtnStatus(Utils.statusDuyet, GDT.DUYET_REPORT_PA_PBDT, checkChirld);
+    this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, GDT.PHE_DUYET_REPORT_PA_PBDT, checkChirld);
+    this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, GDT.COPY_REPORT_PA_PBDT, checkChirld);
+    this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, GDT.PRINT_REPORT_PA_PBDT, checkChirld);
+    this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
+
+    if (this.userService.isAccessPermisson(GDT.GIAO_PA_PBDT) && this.soQd) {
       this.statusBtnGiao = false;
     } else {
       this.statusBtnGiao = true;
       this.statusGiaoToanBo = true;
     }
-    if (userRole == 'C_KH_VP_NV_TVQT' && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
+
+    // if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT || GDT.TRINHDUYET_PA_TONGHOP_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
+    //   this.statusBtnGuiDVCT = false;
+    // }
+    if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
       this.statusBtnGuiDVCT = false;
     }
     if (this.trangThaiBanGhi == "7") {
@@ -827,6 +831,10 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       this.statusGiaoToanBo = true;
     }
 
+  }
+
+  getBtnStatus(status: string[], role: string, check: boolean) {
+    return !(status.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(role) && check);
   }
 
   // submit các nút chức năng check role
@@ -883,24 +891,24 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
 
   // xem chi tiết PA cha
   xemCtietPaBTC() {
+    // debugger
     if (!this.idPaBTC) {
       return;
     }
-    const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
     let url: string;
-    if (capDviUser == Utils.TONG_CUC) {
+    if (this.userService.isTongCuc()) {
+
       url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
-    } else if (this.maPaCha.includes('BTC')) {
-      url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhap-quyet-dinh-giao-du-toan-chi-NSNN-BTC/' + this.idPaBTC;
-    } else {
-      url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
+
+      window.open(url, '_blank')
     }
-    if (capDviUser == Utils.CUC_KHU_VUC) {
+    else {
+
       url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/nhan-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
-    } else {
-      url = '/' + MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + this.idPaBTC;
+      window.open(url, '_blank')
+
     }
-    window.open(url, '_blank');
+
   };
 
   // lấy tên đơn vị
@@ -1517,6 +1525,10 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
 
   // thêm nhiều cột
   addAllCol() {
+    const obj = {
+      danhSachDonVi: this.lstDviChon,
+      multi: true,
+    }
     const modalIn = this.modal.create({
       nzTitle: 'Danh sách đơn vị',
       nzContent: DialogLuaChonThemDonViComponent,
@@ -1525,7 +1537,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       nzWidth: '65%',
       nzFooter: null,
       nzComponentParams: {
-        danhSachDonVi: this.lstDviChon
+        obj: obj
       },
     });
     modalIn.afterClose.subscribe((res) => {
@@ -1617,5 +1629,17 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
       })
     })
   };
+
+  displayValue(num: number): string {
+    num = exchangeMoney(num, '1', this.maDviTien);
+    return displayNumber(num);
+  }
+
+  getMoneyUnit() {
+    return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+  }
+
+
+
 }
 

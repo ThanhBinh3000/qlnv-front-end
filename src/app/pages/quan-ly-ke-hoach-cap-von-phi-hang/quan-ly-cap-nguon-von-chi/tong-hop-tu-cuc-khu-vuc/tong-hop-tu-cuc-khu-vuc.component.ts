@@ -1,6 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -13,11 +12,11 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
+import { CVNC, displayNumber, DON_VI_TIEN, exchangeMoney, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { displayNumber, DON_VI_TIEN, NGUON_BAO_CAO, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
-import { DataService } from 'src/app/services/data.service';
 import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 
 export class ItemData {
@@ -144,13 +143,12 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     statusBtnTBP = true;                       // trang thai an/hien nut truong bo phan
     statusBtnLD = true;                        // trang thai an/hien nut lanh dao
     statusBtnCopy = true;                      // trang thai copy
+    editMoneyUnit = false;
     //file
     listFile: File[] = [];                      // list file chua ten va id de hien tai o input
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
     listIdFilesDelete: string[] = [];
-
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -185,7 +183,6 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private routerActive: ActivatedRoute,
         private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
         private router: Router,
         private userService: UserService,
         private notification: NzNotificationService,
@@ -200,14 +197,12 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
         this.spinner.show();
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName);
+        this.userInfo = this.userService.getUserLogin();
         //lay danh sach danh muc
-        await this.danhMuc.dMDonVi().toPromise().then(
+        await this.danhMuc.dMDviCon().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
-                    this.donVis = res.data;
-                    this.cucKhuVucs = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
+                    this.cucKhuVucs = res.data;
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -256,43 +251,23 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         this.location.back()
     }
 
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
-    }
-
     //check role cho các nut trinh duyet
     getStatusButton() {
-        const userRole = this.userInfo?.roles[0]?.code;
-        if ((this.trangThai == Utils.TT_BC_1 || this.trangThai == Utils.TT_BC_3 || this.trangThai == Utils.TT_BC_5)
-            && (ROLE_CAN_BO.includes(userRole))) {
+        if (Utils.statusSave.includes(this.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_SYNTHETIC_CKV)) {
             this.status = false;
         } else {
             this.status = true;
         }
-        let checkChirld = false;
-        const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-        if (dVi && dVi.maDvi == this.userInfo.dvql) {
-            checkChirld = true;
-        }
-        const utils = new Utils();
-        this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, userRole);
-        this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, userRole);
-        this.statusBtnTBP = utils.getRoleTBP(this.trangThai, checkChirld, userRole);
-        this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, userRole);
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThai, checkChirld, userRole);
+        const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
+        this.statusBtnSave = this.getBtnStatus(Utils.statusSave, CVNC.EDIT_SYNTHETIC_CKV, checkChirld);
+        this.statusBtnApprove = this.getBtnStatus(Utils.statusApprove, CVNC.APPROVE_SYNTHETIC_CKV, checkChirld);;
+        this.statusBtnTBP = this.getBtnStatus(Utils.statusDuyet, CVNC.DUYET_SYNTHETIC_CKV, checkChirld);;
+        this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, CVNC.PHE_DUYET_SYNTHETIC_CKV, checkChirld);;
+        this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, CVNC.COPY_SYNTHETIC_CKV, checkChirld);;
+    }
+
+    getBtnStatus(status: string[], role: string, check: boolean) {
+        return !(status.includes(this.trangThai) && this.userService.isAccessPermisson(role) && check);
     }
 
     //upload file
@@ -622,7 +597,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
 
     //lay ten don vi tạo
     getUnitName(maDvi: string) {
-        return this.donVis.find((item) => item.maDvi == maDvi)?.tenDvi;
+        return this.cucKhuVucs.find((item) => item.maDvi == maDvi)?.tenDvi;
     }
 
     getStatusName() {
@@ -745,8 +720,11 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-
+    getMoneyUnit() {
+        return this.dviTiens.find(e => e.id == this.maDviTien)?.tenDm;
+    }
 }

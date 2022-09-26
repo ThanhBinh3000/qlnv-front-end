@@ -114,16 +114,19 @@
                   {{item.lyDoTuChoi}}</ng-template>
               </td>
               <td>
-                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id, item.maLoaiDan)">
-                  Xem
-                </button>
-                <button type="button" class="btn btn-main" (click)="xoaQuyetDinh(item.id)"
-                  *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
-                  <span>Xóa</span>
-                </button>
-
+                <ng-container *ngIf="checkViewReport()">
+                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id, item.maLoaiDan)">
+                    Xem
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="checkDeleteReport(item.trangThai)">
+                  <button type="button" class="btn btn-main" (click)="xoaQuyetDinh(item.id)"
+                    *ngIf="item.trangThai == '1' || item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+                    <span>Xóa</span>
+                  </button>
+                </ng-container>
               </td>
-              <td [hidden]="!status">
+              <td>
                 <ng-container *ngIf="checkDeleteReport(item)">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
                     (ngModelChange)="changeListIdDelete(item.id)"></label>
@@ -152,7 +155,7 @@
         </div>
       </nz-card>
       <ng-template #tableCard1>
-        <button type="button" class="btn btn-main" [hidden]="!status" (click)="taoMoi()">
+        <button type="button" class="btn btn-main" [hidden]="!status" (click)="taoMoi()" [hidden]="statusTaoMoi">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tạo mới</span>
         </button>

@@ -53,7 +53,6 @@ export class DsBaoCaoTinhHinhSdDtoanThangNamTuCCComponent implements OnInit {
 		private router: Router,
 		private datePipe: DatePipe,
 		private notification: NzNotificationService,
-		private location: Location,
 		private spinner: NgxSpinnerService,
 		private dataSource: DataService,
 	) {

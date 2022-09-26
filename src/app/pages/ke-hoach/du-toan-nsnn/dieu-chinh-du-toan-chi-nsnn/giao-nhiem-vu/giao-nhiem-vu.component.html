@@ -8,12 +8,12 @@
         </a>
       </div>
       <div class="canphai phai">
-        <button class="btn btn-main" (click)="save()" [hidden]="statusBtnSave || userInfo?.username != nguoiNhap">
+        <button class="btn btn-main" (click)="save()" [hidden]="statusBtnSave || userInfo?.sub != nguoiNhap">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
         <button class="btn btn-main" (click)="onSubmit('2',null)"
-          [hidden]="statusBtnApprove || userInfo?.username != nguoiNhap">
+          [hidden]="statusBtnApprove || userInfo?.sub != nguoiNhap">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Trình duyệt</span>
         </button>
@@ -83,34 +83,8 @@
               <td>{{maBaoCao}}</td>
               <td>
                 {{namHienHanh}}
-                <!-- <ng-container *ngIf="dotBcao && id ; else nam">
-									{{namHienHanh}}
-								</ng-container>
-								<ng-template #nam>
-									<nz-input-number [nzSize]="'small'"
-										[class]="namHienHanh >= 1000 &&  namHienHanh <= 2999 || !namHienHanh && namHienHanh !== 0 ?'' : 'input-error-validate'"
-										[(ngModel)]="namHienHanh" (ngModelChange)="changeNam()">
-									</nz-input-number>
-								</ng-template> -->
               </td>
               <td>
-                <!-- {{dotBcao}} -->
-                <!-- <ng-container *ngIf="dotBcao && id ; else chonDot">
-									<div *ngFor="let item of dotBcaos">
-										<div *ngIf="item.id == dotBcao">
-											{{item.id}}
-										</div>
-									</div>
-								</ng-container>
-								<ng-template #chonDot>
-									<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn đợt báo cáo"
-										[class]="dotBcao ? '' : 'input-error-validate'" [(ngModel)]="dotBcao"
-										(ngModelChange)="changeDot()">
-										<nz-option *ngFor="let item of dotBcaos" [nzValue]="item.id"
-											[nzLabel]="item.id">
-										</nz-option>
-									</nz-select>
-								</ng-template> -->
                 {{dotBcao}}
               </td>
               <td>{{ngayNhap}}</td>
@@ -123,7 +97,6 @@
                   </button>
                 </nz-upload>
                 <div class="tep__sqd" (click)="downloadFileCv()">
-                  <!-- <i class="icon htvbdh_tcdt_tep"></i> -->
                   <span>{{congVan?.fileName}}</span>
                 </div>
               </td>
@@ -132,13 +105,7 @@
               <td>{{ngayDuyetLD}}</td>
               <td>{{ngayCapTrenTraKq}}</td>
               <td>
-                <ng-container
-                  *ngIf="trangThaiBaoCao == '3' || trangThaiBaoCao == '5' || trangThaiBaoCao == '8'; else chapnhan">
-                  {{getStatusName(trangThaiBaoCao)}} - {{lyDoTuChoi}}
-                </ng-container>
-                <ng-template #chapnhan>
-                  {{getStatusName(trangThaiBaoCao)}}
-                </ng-template>
+                {{getStatusName(trangThaiBaoCao)}}
               </td>
             </tr>
           </tbody>
@@ -198,17 +165,17 @@
                   </td>
                   <td>
                     <ng-container *ngIf="data.trangThai == '0'; else ok">
-                      {{ getStatusBM(data.trangThai) }}<br>
-                      Lý do: {{data.lyDoTuChoi}}
-                    </ng-container>
-                    <ng-template #ok>
-                      {{ getStatusBM(data.trangThai) }}
-                    </ng-template>
+											{{ getStatusBM(data.trangThai) }}<br>
+											Lý do: {{data.lyDoTuChoi}}
+										</ng-container>
+										<ng-template #ok>
+											{{ getStatusBM(data.trangThai) }}
+										</ng-template>
 
                   </td>
                   <td>
                     <ng-container
-                      *ngIf="userInfo?.username == nguoiNhap && !status && data?.id?.length==38 ;else templategiaoCho ">
+                      *ngIf="userInfo?.sub == nguoiNhap && !status && data?.id?.length==38 ;else templategiaoCho ">
                       <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cán bộ thực hiện"
                         [(ngModel)]="data.giaoCho" [class]="data.giaoCho ?'' : 'input-error-validate'">
                         <nz-option *ngFor="let item of canBos" [nzValue]="item.username" [nzLabel]="item.username">
@@ -226,7 +193,7 @@
 
                   <td>
                     <ng-container *ngIf="data?.id?.length != 38">
-                      <ng-container *ngIf="data.giaoCho == userInfo?.username && !status; else xem">
+                      <ng-container *ngIf="data.giaoCho == userInfo?.sub && !status; else xem">
                         <button type="button" class="btn btn-main" (click)="newTab(data.maLoai)">
                           <span>Nhập dữ liệu</span>
                         </button>

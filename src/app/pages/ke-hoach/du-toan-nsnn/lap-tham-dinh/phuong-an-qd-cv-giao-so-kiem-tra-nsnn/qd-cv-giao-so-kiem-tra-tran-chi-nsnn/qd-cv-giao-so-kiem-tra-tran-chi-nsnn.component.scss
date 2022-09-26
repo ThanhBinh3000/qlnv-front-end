@@ -1,9 +1,8 @@
-
 .action-top {
   padding-right: 50px;
 }
 
-::ng-deep{
+::ng-deep {
   .chi-tieu__body {
     .flex-card.ant-card {
       border: 1px solid #ececec !important;
@@ -13,20 +12,20 @@
       margin-top: 11px !important;
       border-radius: 6px;
     }
-  
-    .tab__container {
-			position: relative;
-      margin-top: 12px;
-		}
 
-    
+    .tab__container {
+      position: relative;
+      margin-top: 12px;
+    }
+
+
     .action {
       position: absolute;
       right: 25px;
       top: 0;
     }
   }
-  
+
 }
 
 .table__body {
@@ -48,6 +47,19 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  span {
+    margin-left: 5px;
+  }
+}
+
+.tep__sqd {
+  cursor: pointer;
+  // position: absolute;
+  top: 4px;
+  height: 15px;
+  left: 695px;
+  color: #2196f3;
 
   span {
     margin-left: 5px;

@@ -1,6 +1,5 @@
-import { DatePipe, Location } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -9,7 +8,6 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DataService } from 'src/app/services/data.service';
 import { UserService } from 'src/app/services/user.service';
 import { TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
-import { DanhMucHDVService } from '../../../../../../services/danhMucHDV.service';
 import { QuanLyVonPhiService } from '../../../../../../services/quanLyVonPhi.service';
 import { LAP_THAM_DINH, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../lap-tham-dinh.constant';
 
@@ -47,14 +45,11 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
 
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private danhMuc: DanhMucHDVService,
         private router: Router,
         private datePipe: DatePipe,
         private notification: NzNotificationService,
-        private fb: FormBuilder,
         private spinner: NgxSpinnerService,
         private userService: UserService,
-        private location: Location,
         private dataSource: DataService,
     ) {
     }
@@ -66,43 +61,11 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
         this.searchFilter.tuNgay = this.newDate;
 
         this.spinner.show();
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName); //get user info
-        this.searchFilter.maDviNhan = this.userInfo?.dvql;
-        //lay danh sach danh muc
-        this.danhMuc.dMDonVi().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                    this.donVis = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
+        this.userInfo = this.userService.getUserLogin();
+        this.searchFilter.maDviNhan = this.userInfo?.MA_DVI;
         this.spinner.hide();
 
         this.onSubmit();
-    }
-
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
     }
 
     //search list bao cao theo tieu chi
@@ -186,9 +149,9 @@ export class NhanSoKiemTraChiNsnnComponent implements OnInit {
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 
-    getUnitName(maDvi: string) {
-        return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
-    }
+    // getUnitName(maDvi: string) {
+    //     return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
+    // }
 
     close() {
         const obj = {

@@ -1,8 +1,4 @@
-import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -11,10 +7,8 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from 'src/app/services/user.service';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney } from "src/app/Utility/utils";
 import { LINH_VUC_CHI } from './tong-hop-muc-tieu-nhiem-vu-chu-yeu-va-nhu-cau-chi-moi-3-nam.constant';
 
 export class ItemData {
@@ -30,12 +24,12 @@ export class ItemData {
     ncauChiTrongDoChiCs: number;
     ncauChiTrongDoChiMoi: number;
     ncauChiChiaRaDtuPtrien: number;
-    ncauChiChiaRaChiCs1!: number;
-    ncauChiChiaRaChiMoi1!: number;
+    ncauChiChiaRaChiCs1: number;
+    ncauChiChiaRaChiMoi1: number;
     ncauChiChiaRaChiTx: number;
-    ncauChiChiaRaChiCs2!: number;
-    ncauChiChiaRaChiMoi2!: number;
-    checked!: boolean;
+    ncauChiChiaRaChiCs2: number;
+    ncauChiChiaRaChiMoi2: number;
+    checked: boolean;
 }
 
 
@@ -55,14 +49,7 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
     donViTiens: any[] = DON_VI_TIEN;
     //thong tin chung
     initItem: ItemData = {
-        id: null,
-        stt: "0",
-        maLvuc: 0,
-        level: 0,
-        mtieuNvu: "",
-        csPhapLyThien: "",
-        hdongChuYeu: "",
-        nguonKphi: "",
+        ...new ItemData(),
         ncauChiTongSo: 0,
         ncauChiTrongDoChiCs: 0,
         ncauChiTrongDoChiMoi: 0,
@@ -74,86 +61,53 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         ncauChiChiaRaChiMoi2: 0,
         checked: false,
     };
-    total: ItemData = {
-        id: null,
-        stt: "0",
-        maLvuc: 0,
-        level: 0,
-        mtieuNvu: "",
-        csPhapLyThien: "",
-        hdongChuYeu: "",
-        nguonKphi: "",
-        ncauChiTongSo: 0,
-        ncauChiTrongDoChiCs: 0,
-        ncauChiTrongDoChiMoi: 0,
-        ncauChiChiaRaDtuPtrien: 0,
-        ncauChiChiaRaChiCs1: 0,
-        ncauChiChiaRaChiMoi1: 0,
-        ncauChiChiaRaChiTx: 0,
-        ncauChiChiaRaChiCs2: 0,
-        ncauChiChiaRaChiMoi2: 0,
-        checked: false,
-    };
+    total: ItemData = new ItemData();
     id: string;
     namHienHanh: number;
     maBieuMau: string;
     thuyetMinh: string;
     lyDoTuChoi: string;
-    maDviTien: string;
-    moneyUnit: string;
+    maDviTien = '1';
     listIdDelete = "";
     trangThaiPhuLuc: string;
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    editMoneyUnit = false;
+    isDataAvailable = false;
 
     allChecked = false;
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
-    constructor(private router: Router,
-        private routerActive: ActivatedRoute,
+    constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
-        private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
-        private userService: UserService,
-        private danhMucService: DanhMucHDVService,
         private notification: NzNotificationService,
-        private location: Location,
-        private fb: FormBuilder,
         private modal: NzModalService,
     ) {
     }
 
 
     async ngOnInit() {
+        this.initialization().then(() => {
+            this.isDataAvailable = true;
+        })
+    }
+
+    async initialization(){
         this.spinner.show();
         this.id = this.data?.id;
         this.maBieuMau = this.data?.maBieuMau;
-        this.maDviTien = this.data?.maDviTien;
+        this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
         this.trangThaiPhuLuc = this.data?.trangThai;
         this.namHienHanh = this.data?.namHienHanh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
-        if (!this.maDviTien) {
-            this.maDviTien = '3';
-        }
-        this.moneyUnit = this.maDviTien;
         this.data?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
-                ncauChiTongSo: divMoney(item.ncauChiTongSo, this.maDviTien),
-                ncauChiTrongDoChiCs: divMoney(item.ncauChiTrongDoChiCs, this.maDviTien),
-                ncauChiTrongDoChiMoi: divMoney(item.ncauChiTrongDoChiMoi, this.maDviTien),
-                ncauChiChiaRaDtuPtrien: divMoney(item.ncauChiChiaRaDtuPtrien, this.maDviTien),
-                ncauChiChiaRaChiCs1: divMoney(item.ncauChiChiaRaChiCs1, this.maDviTien),
-                ncauChiChiaRaChiMoi1: divMoney(item.ncauChiChiaRaChiMoi1, this.maDviTien),
-                ncauChiChiaRaChiTx: divMoney(item.ncauChiChiaRaChiTx, this.maDviTien),
-                ncauChiChiaRaChiCs2: divMoney(item.ncauChiChiaRaChiCs2, this.maDviTien),
-                ncauChiChiaRaChiMoi2: divMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien),
                 checked: false,
             })
         })
@@ -166,19 +120,6 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         }
         this.getTotal();
         this.updateEditCache();
-        // //lay danh sach danh muc don vi
-        // await this.danhMucService.dMDonVi().toPromise().then(
-        //     (data) => {
-        //         if (data.statusCode == 0) {
-        //             this.donVis = data.data;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //     }
-        // );
         this.getStatusButton();
         this.spinner.hide();
     }
@@ -194,10 +135,6 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
     // luu
     async save(trangThai: string) {
         let checkSaveEdit;
-        if (!this.maDviTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
-            return;
-        }
         //check xem tat ca cac dong du lieu da luu chua?
         //chua luu thi bao loi, luu roi thi cho di
         this.lstCtietBcao.forEach(element => {
@@ -213,39 +150,23 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         const lstCtietBcaoTemp: ItemData[] = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            const ncauChiTongSo = mulMoney(item.ncauChiTongSo, this.maDviTien);
-            const ncauChiTrongDoChiCs = mulMoney(item.ncauChiTrongDoChiCs, this.maDviTien);
-            const ncauChiTrongDoChiMoi = mulMoney(item.ncauChiTrongDoChiMoi, this.maDviTien);
-            const ncauChiChiaRaDtuPtrien = mulMoney(item.ncauChiChiaRaDtuPtrien, this.maDviTien);
-            const ncauChiChiaRaChiCs1 = mulMoney(item.ncauChiChiaRaChiCs1, this.maDviTien);
-            const ncauChiChiaRaChiMoi1 = mulMoney(item.ncauChiChiaRaChiMoi1, this.maDviTien);
-            const ncauChiChiaRaChiTx = mulMoney(item.ncauChiChiaRaChiTx, this.maDviTien);
-            const ncauChiChiaRaChiCs2 = mulMoney(item.ncauChiChiaRaChiCs2, this.maDviTien);
-            const ncauChiChiaRaChiMoi2 = mulMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien);
-            if (ncauChiTongSo > MONEY_LIMIT || ncauChiTrongDoChiCs > MONEY_LIMIT || ncauChiTrongDoChiMoi > MONEY_LIMIT ||
-                ncauChiChiaRaDtuPtrien > MONEY_LIMIT || ncauChiChiaRaChiCs1 > MONEY_LIMIT || ncauChiChiaRaChiMoi1 > MONEY_LIMIT ||
-                ncauChiChiaRaChiTx > MONEY_LIMIT || ncauChiChiaRaChiCs2 > MONEY_LIMIT || ncauChiChiaRaChiMoi2 > MONEY_LIMIT) {
+            if (item.ncauChiTongSo > MONEY_LIMIT || item.ncauChiTrongDoChiCs > MONEY_LIMIT || item.ncauChiTrongDoChiMoi > MONEY_LIMIT ||
+                item.ncauChiChiaRaDtuPtrien > MONEY_LIMIT || item.ncauChiChiaRaChiCs1 > MONEY_LIMIT || item.ncauChiChiaRaChiMoi1 > MONEY_LIMIT ||
+                item.ncauChiChiaRaChiTx > MONEY_LIMIT || item.ncauChiChiaRaChiCs2 > MONEY_LIMIT || item.ncauChiChiaRaChiMoi2 > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
             lstCtietBcaoTemp.push({
                 ...item,
-                ncauChiTongSo: ncauChiTongSo,
-                ncauChiTrongDoChiCs: ncauChiTrongDoChiCs,
-                ncauChiTrongDoChiMoi: ncauChiTrongDoChiMoi,
-                ncauChiChiaRaDtuPtrien: ncauChiChiaRaDtuPtrien,
-                ncauChiChiaRaChiCs1: ncauChiChiaRaChiCs1,
-                ncauChiChiaRaChiMoi1: ncauChiChiaRaChiMoi1,
-                ncauChiChiaRaChiTx: ncauChiChiaRaChiTx,
-                ncauChiChiaRaChiCs2: ncauChiChiaRaChiCs2,
-                ncauChiChiaRaChiMoi2: ncauChiChiaRaChiMoi2,
             })
         })
 
-        if (!checkMoneyRange == true) {
+        if (!checkMoneyRange) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
+
+
         // replace nhung ban ghi dc them moi id thanh null
         lstCtietBcaoTemp.forEach(item => {
             if (item.id?.length == 38) {
@@ -749,11 +670,11 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
 
 
     changeModel(id: string): void {
-        this.editCache[id].data.ncauChiChiaRaDtuPtrien = Number(this.editCache[id].data.ncauChiChiaRaChiCs1) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi1);
-        this.editCache[id].data.ncauChiChiaRaChiTx = Number(this.editCache[id].data.ncauChiChiaRaChiCs2) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi2);
-        this.editCache[id].data.ncauChiTrongDoChiCs = Number(this.editCache[id].data.ncauChiChiaRaChiCs1) + Number(this.editCache[id].data.ncauChiChiaRaChiCs2);
-        this.editCache[id].data.ncauChiTrongDoChiMoi = Number(this.editCache[id].data.ncauChiChiaRaChiMoi1) + Number(this.editCache[id].data.ncauChiChiaRaChiMoi2);
-        this.editCache[id].data.ncauChiTongSo = Number(this.editCache[id].data.ncauChiTrongDoChiCs) + Number(this.editCache[id].data.ncauChiTrongDoChiMoi);
+        this.editCache[id].data.ncauChiChiaRaDtuPtrien = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiMoi1]);
+        this.editCache[id].data.ncauChiChiaRaChiTx = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs2, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
+        this.editCache[id].data.ncauChiTrongDoChiCs = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiCs2]);
+        this.editCache[id].data.ncauChiTrongDoChiMoi = sumNumber([this.editCache[id].data.ncauChiChiaRaChiMoi1, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
+        this.editCache[id].data.ncauChiTongSo = sumNumber([this.editCache[id].data.ncauChiTrongDoChiCs, this.editCache[id].data.ncauChiTrongDoChiMoi]);
     }
 
     getLowStatus(str: string) {
@@ -779,15 +700,15 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
-                    this.lstCtietBcao[index].ncauChiTongSo += item.ncauChiTongSo;
-                    this.lstCtietBcao[index].ncauChiTrongDoChiCs += item.ncauChiTrongDoChiCs;
-                    this.lstCtietBcao[index].ncauChiTrongDoChiMoi += item.ncauChiTrongDoChiMoi;
-                    this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien += item.ncauChiChiaRaDtuPtrien;
-                    this.lstCtietBcao[index].ncauChiChiaRaChiCs1 += item.ncauChiChiaRaChiCs1;
-                    this.lstCtietBcao[index].ncauChiChiaRaChiMoi1 += item.ncauChiChiaRaChiMoi1;
-                    this.lstCtietBcao[index].ncauChiChiaRaChiTx += item.ncauChiChiaRaChiTx;
-                    this.lstCtietBcao[index].ncauChiChiaRaChiCs2 += item.ncauChiChiaRaChiCs2;
-                    this.lstCtietBcao[index].ncauChiChiaRaChiMoi2 += item.ncauChiChiaRaChiMoi2;
+                    this.lstCtietBcao[index].ncauChiTongSo = sumNumber([this.lstCtietBcao[index].ncauChiTongSo, item.ncauChiTongSo]);
+                    this.lstCtietBcao[index].ncauChiTrongDoChiCs = sumNumber([this.lstCtietBcao[index].ncauChiTrongDoChiCs, item.ncauChiTrongDoChiCs]);
+                    this.lstCtietBcao[index].ncauChiTrongDoChiMoi = sumNumber([this.lstCtietBcao[index].ncauChiTrongDoChiMoi, item.ncauChiTrongDoChiMoi]);
+                    this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien, item.ncauChiChiaRaDtuPtrien]);
+                    this.lstCtietBcao[index].ncauChiChiaRaChiCs1 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiCs1, item.ncauChiChiaRaChiCs1]);
+                    this.lstCtietBcao[index].ncauChiChiaRaChiMoi1 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiMoi1, item.ncauChiChiaRaChiMoi1]);
+                    this.lstCtietBcao[index].ncauChiChiaRaChiTx = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiTx, item.ncauChiChiaRaChiTx]);
+                    this.lstCtietBcao[index].ncauChiChiaRaChiCs2 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiCs2, item.ncauChiChiaRaChiCs2]);
+                    this.lstCtietBcao[index].ncauChiChiaRaChiMoi2 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiMoi2, item.ncauChiChiaRaChiMoi2]);
                 }
             })
             stt = this.getHead(stt);
@@ -807,15 +728,15 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
         this.total.ncauChiChiaRaChiMoi2 = 0;
         this.lstCtietBcao.forEach(item => {
             if (item.level == 0) {
-                this.total.ncauChiTongSo += item.ncauChiTongSo;
-                this.total.ncauChiTrongDoChiCs += item.ncauChiTrongDoChiCs;
-                this.total.ncauChiTrongDoChiMoi += item.ncauChiTrongDoChiMoi;
-                this.total.ncauChiChiaRaDtuPtrien += item.ncauChiChiaRaDtuPtrien;
-                this.total.ncauChiChiaRaChiCs1 += item.ncauChiChiaRaChiCs1;
-                this.total.ncauChiChiaRaChiMoi1 += item.ncauChiChiaRaChiMoi1;
-                this.total.ncauChiChiaRaChiTx += item.ncauChiChiaRaChiTx;
-                this.total.ncauChiChiaRaChiCs2 += item.ncauChiChiaRaChiCs2;
-                this.total.ncauChiChiaRaChiMoi2 += item.ncauChiChiaRaChiMoi2;
+                this.total.ncauChiTongSo = sumNumber([this.total.ncauChiTongSo, item.ncauChiTongSo]);
+                this.total.ncauChiTrongDoChiCs = sumNumber([this.total.ncauChiTrongDoChiCs, item.ncauChiTrongDoChiCs]);
+                this.total.ncauChiTrongDoChiMoi = sumNumber([this.total.ncauChiTrongDoChiMoi, item.ncauChiTrongDoChiMoi]);
+                this.total.ncauChiChiaRaDtuPtrien = sumNumber([this.total.ncauChiChiaRaDtuPtrien, item.ncauChiChiaRaDtuPtrien]);
+                this.total.ncauChiChiaRaChiCs1 = sumNumber([this.total.ncauChiChiaRaChiCs1, item.ncauChiChiaRaChiCs1]);
+                this.total.ncauChiChiaRaChiMoi1 = sumNumber([this.total.ncauChiChiaRaChiMoi1, item.ncauChiChiaRaChiMoi1]);
+                this.total.ncauChiChiaRaChiTx = sumNumber([this.total.ncauChiChiaRaChiTx, item.ncauChiChiaRaChiTx]);
+                this.total.ncauChiChiaRaChiCs2 = sumNumber([this.total.ncauChiChiaRaChiCs2, item.ncauChiChiaRaChiCs2]);
+                this.total.ncauChiChiaRaChiMoi2 = sumNumber([this.total.ncauChiChiaRaChiMoi2, item.ncauChiChiaRaChiMoi2]);
             }
         })
     }
@@ -839,26 +760,32 @@ export class TongHopMucTieuNhiemVuChuYeuVaNhuCauChiMoi3NamComponent implements O
     }
 
     displayValue(num: number): string {
+        num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
-    changeMoney() {
-        if (!this.moneyUnit) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-            return;
-        }
-        this.lstCtietBcao.forEach(item => {
-            item.ncauChiTongSo = exchangeMoney(item.ncauChiTongSo, this.maDviTien, this.moneyUnit);
-            item.ncauChiTrongDoChiCs = exchangeMoney(item.ncauChiTrongDoChiCs, this.maDviTien, this.moneyUnit);
-            item.ncauChiTrongDoChiMoi = exchangeMoney(item.ncauChiTrongDoChiMoi, this.maDviTien, this.moneyUnit);
-            item.ncauChiChiaRaDtuPtrien = exchangeMoney(item.ncauChiChiaRaDtuPtrien, this.maDviTien, this.moneyUnit);
-            item.ncauChiChiaRaChiCs1 = exchangeMoney(item.ncauChiChiaRaChiCs1, this.maDviTien, this.moneyUnit);
-            item.ncauChiChiaRaChiMoi1 = exchangeMoney(item.ncauChiChiaRaChiMoi1, this.maDviTien, this.moneyUnit);
-            item.ncauChiChiaRaChiTx = exchangeMoney(item.ncauChiChiaRaChiTx, this.maDviTien, this.moneyUnit);
-            item.ncauChiChiaRaChiCs2 = exchangeMoney(item.ncauChiChiaRaChiCs2, this.maDviTien, this.moneyUnit);
-            item.ncauChiChiaRaChiMoi2 = exchangeMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien, this.moneyUnit);
-        })
-        this.maDviTien = this.moneyUnit;
+    getMoneyUnit() {
+        return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
+
+    // changeMoney() {
+    //     if (!this.moneyUnit) {
+    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
+    //         return;
+    //     }
+    //     this.lstCtietBcao.forEach(item => {
+    //         item.ncauChiTongSo = exchangeMoney(item.ncauChiTongSo, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiTrongDoChiCs = exchangeMoney(item.ncauChiTrongDoChiCs, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiTrongDoChiMoi = exchangeMoney(item.ncauChiTrongDoChiMoi, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiChiaRaDtuPtrien = exchangeMoney(item.ncauChiChiaRaDtuPtrien, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiChiaRaChiCs1 = exchangeMoney(item.ncauChiChiaRaChiCs1, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiChiaRaChiMoi1 = exchangeMoney(item.ncauChiChiaRaChiMoi1, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiChiaRaChiTx = exchangeMoney(item.ncauChiChiaRaChiTx, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiChiaRaChiCs2 = exchangeMoney(item.ncauChiChiaRaChiCs2, this.maDviTien, this.moneyUnit);
+    //         item.ncauChiChiaRaChiMoi2 = exchangeMoney(item.ncauChiChiaRaChiMoi2, this.maDviTien, this.moneyUnit);
+    //     })
+    //     this.maDviTien = this.moneyUnit;
+    //     this.updateEditCache();
+    // }
 
 }

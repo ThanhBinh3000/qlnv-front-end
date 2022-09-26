@@ -10,7 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
+import { GDT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 // import { TRANGTHAIBAOCAO } from '../../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 // trang thai ban ghi
@@ -57,8 +57,8 @@ export class DuyetPhuongAnTaiDonViComponent implements OnInit {
     maPhanGiao: '2',
     maLoai: '2',
     namPa: null,
-    ngayTaoTu: "",
-    ngayTaoDen: "",
+    ngayTaoTu: null,
+    ngayTaoDen: null,
     donViTao: "",
     loai: null,
     trangThais: [],
@@ -100,7 +100,7 @@ export class DuyetPhuongAnTaiDonViComponent implements OnInit {
   status: boolean;
   listIdDelete: any[] = [];
   userRole: string;
-
+  statusTaoMoi = true;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -115,31 +115,30 @@ export class DuyetPhuongAnTaiDonViComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const userName = this.userService.getUserName();
+    this.userInfo = this.userService.getUserLogin();
+    this.searchFilter.donViTao = this.userInfo?.MA_DVI;
     this.spinner.show()
-    await this.getUserInfo(userName); //get user info
-    this.searchFilter.donViTao = this.userInfo?.dvql;
-    this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
+    this.searchFilter.ngayTaoDen = new Date();
     this.date.setMonth(this.date.getMonth() - 1);
-    this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
+    this.searchFilter.ngayTaoTu = new Date();
     this.searchFilter.namPa = new Date().getFullYear()
-    this.userRole = this.userInfo?.roles[0].code;
-    if (ROLE_TRUONG_BO_PHAN.includes(this.userInfo?.roles[0]?.code)) {
+    if (this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT)) {
+      this.statusTaoMoi = false;
+    }
+    if (this.userService.isAccessPermisson(GDT.DUYET_REPORT_PA_PBDT)) {
       this.status = false;
       this.trangThai = '2';
       this.trangThais.push({
         id: "2",
         tenDm: 'Trình duyệt'
       });
-      this.roleUser = 'truongBoPhan';
-    } else if (ROLE_LANH_DAO.includes(this.userInfo?.roles[0]?.code)) {
+    } else if (this.userService.isAccessPermisson(GDT.PHE_DUYET_REPORT_PA_PBDT)) {
       this.status = false;
       this.trangThai = '4';
       this.trangThais.push({
         id: "4",
         tenDm: 'Trưởng BP duyệt'
       });
-      this.roleUser = 'lanhDao';
     }
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
@@ -390,15 +389,12 @@ export class DuyetPhuongAnTaiDonViComponent implements OnInit {
     })
   }
 
-  checkDeleteReport(item: any): boolean {
-    let check: boolean;
-    if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-      ROLE_CAN_BO.includes(this.userRole)) {
-      check = true;
-    } else {
-      check = false;
-    }
-    return check;
+  checkDeleteReport(trangThai: string) {
+    return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(GDT.DELETE_REPORT_CV_QD_GIAO_PA_PBDT);
+  }
+
+  checkViewReport() {
+    return this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT);
   }
 
   close() {
