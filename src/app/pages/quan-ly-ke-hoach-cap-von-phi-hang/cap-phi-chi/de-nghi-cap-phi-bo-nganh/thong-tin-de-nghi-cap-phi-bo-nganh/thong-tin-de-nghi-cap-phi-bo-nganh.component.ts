@@ -1,3 +1,4 @@
+import { HelperService } from './../../../../../services/helper.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DeNghiCapPhiBoNganh } from './../../../../../models/DeNghiCapPhiBoNganh';
 // import { Component, OnInit } from '@angular/core';
@@ -100,6 +101,8 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
     private modal: NzModalService,
+    private helperService: HelperService,
+
   ) { }
 
   isDisableField() {
@@ -139,8 +142,8 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
 
   deleteRow(item: any, type) {
     if (type === 'ct1s') {
-      let temp = this.ct1s.filter((x) => x.stt !== item.stt);
-      this.ct1s = temp;
+      let temp = this.rowEdit.ct1s.filter((x) => x.stt !== item.stt);
+      this.rowEdit.ct1s = temp;
       this.sortTableId('ct1s');
     }
     else if (type === 'ct2List') {
@@ -152,7 +155,10 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
 
   editRow(item, type) {
     if (type === 'ct1s') {
-      this.rowEdit = cloneDeep(item);
+      this.rowEdit.ct1s.forEach(element => {
+        element.edit = false;
+      });
+      // this.rowEdit = cloneDeep(item);
       this.rowEdit.isView = false;
       this.oldDataEdit1 = cloneDeep(item);
     }
@@ -160,6 +166,8 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       this.oldDataEdit2 = cloneDeep(item);
     }
     item.edit = true;
+    console.log(this.rowEdit.ct1s);
+
   }
 
   addRow() {
@@ -183,16 +191,18 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
 
   }
 
-  clearItemRow(type) {
-    if (type == "ct1s") {
+  clearItemRow(type: string) {
+    if (type === "ct1s") {
       this.create1 = {};
-    } else if (type == "ct2List") {
+    } else if (type === "ct2List") {
       this.create = {};
     }
-    this.create = {};
   }
 
   addRow1() {
+    if (!this.create1.tenDvCungCap || !this.create1.soTaiKhoan || !this.create1.nganHang || !this.create1.ycCapThemPhi) {
+      return;
+    }
     if (!this.rowEdit.ct1s) {
       this.rowEdit.ct1s = [];
     }
@@ -282,8 +292,9 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       this.detail.trangThai = this.globals.prop.NHAP_DU_THAO;
       this.detail.tenTrangThai = "Dự Thảo";
       this.initForm();
-      Promise.all([this.getListNam(), this.getListBoNganh(),  this.loaiVTHHGetAll()]);
-      if (this.idInput >0 ) {
+      Promise.all([this.getListNam(), this.getListBoNganh(), this.loaiVTHHGetAll()]);
+      this.rowEdit.isView = true;
+      if (this.idInput > 0) {
         this.loadChiTiet(this.idInput)
       }
       this.spinner.hide();
@@ -389,48 +400,28 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       },
     });
   }
-  async save(isOther: boolean) {
+  async save(isOther?: boolean) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+      return;
+    }
+    let body = this.formData.value;
+    body.id = this.idInput;
+    body.ct1List = this.rowEdit.ct1s;
+    body.ngayDeNghi = this.formData.get("ngayDeNghi").value ? dayjs(this.formData.get("ngayDeNghi").value).format("YYYY-MM-DD") : null;
+    console.log("body: ", body);
+
     this.spinner.show();
     try {
-      let body = {
-        capDvi: 'string',
-        ct1List: [
-          {
-            ct2List: [
-              {
-                capPhiBoNghanhCt1Id: 0,
-                id: 0,
-                kinhPhiDaCap: 0,
-                loaiChiPhi: 'string',
-                maVatTu: 'string',
-                maVatTuCha: 'string',
-                namPhatSinh: 0,
-                tenHangHoa: 'string',
-                tongTien: 0,
-                yeuCauCapThem: 0,
-              },
-            ],
-            dnCapPhiId: 0,
-            id: 0,
-            nganHang: 'string',
-            soTaiKhoan: 0,
-            tenDvCungCap: 'string',
-            ycCapThemPhi: 0,
-          },
-        ],
-        id: 0,
-        maBoNganh: 'string',
-        maDvi: 'string',
-        nam: 0,
-        ngayDeNghi: 'string',
-        soDeNghi: 'string',
-      };
-      if (this.id > 0) {
+      if (this.idInput > 0) {
         let res = await this.deNghiCapPhiBoNganhService.sua(body);
         if (res.msg == MESSAGE.SUCCESS) {
           if (!isOther) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.back();
+          } else {
+            return res.data.id;
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -441,6 +432,8 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
           if (!isOther) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.back();
+          } else {
+            return res.data.id;
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -450,7 +443,10 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      this.notification.error(
+        MESSAGE.ERROR,
+        e?.error?.message ?? MESSAGE.SYSTEM_ERROR,
+      );
     }
   }
 
@@ -462,10 +458,10 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         console.log(data);
         if (data) {
           this.formData.patchValue({
-            'nam':data.nam,
-            'maBoNganh':data.maBoNganh,
-            'soDeNghi':data.soDeNghi,
-            'ngayDeNghi':data.ngayDeNghi,
+            'nam': data.nam,
+            'maBoNganh': data.maBoNganh,
+            'soDeNghi': data.soDeNghi,
+            'ngayDeNghi': data.ngayDeNghi,
           });
 
           this.hanghoa = {
@@ -474,10 +470,10 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
             "tenHangHoa": "",
           }
           this.detail.trangThai = data.trangThai
-          this.detail.tenTrangThai =data.tenTrangThai;
+          this.detail.tenTrangThai = data.tenTrangThai;
           this.rowEdit.ct1s = data.ct1List
         }
-console.log(this.rowEdit);
+        console.log(this.rowEdit);
 
       }
     }
