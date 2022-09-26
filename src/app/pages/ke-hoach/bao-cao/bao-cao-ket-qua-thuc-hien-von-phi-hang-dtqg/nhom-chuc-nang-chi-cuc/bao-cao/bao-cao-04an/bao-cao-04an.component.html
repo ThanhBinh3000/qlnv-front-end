@@ -56,7 +56,7 @@
 						Tổng Cộng
 					</th>
 					<th nzWidth="100px" *ngFor="let col of listColTemp">
-						<ng-container *ngIf="statusDeleteCol(col.maVtu); else xoa">
+						<ng-container *ngIf="status || statusDeleteCol(col.maVtu); else xoa">
 							{{col.colName}}
 						</ng-container>
 						<ng-template #xoa>
@@ -69,7 +69,7 @@
 						Tổng Cộng
 					</th>
 					<th nzWidth="100px" *ngFor="let col of listColTemp">
-						<ng-container *ngIf="statusDeleteCol(col.maVtu); else xoa">
+						<ng-container *ngIf="statusDeleteCol(col.maVtu) || status; else xoa">
 							{{col.colName}}
 						</ng-container>
 						<ng-template #xoa>

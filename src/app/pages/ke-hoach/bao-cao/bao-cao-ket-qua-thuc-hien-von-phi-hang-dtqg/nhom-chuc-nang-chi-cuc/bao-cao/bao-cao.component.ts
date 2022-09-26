@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { BAO_CAO_DOT, BAO_CAO_NAM, BCVP, DON_VI_TIEN, NOT_OK, OK, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
+import { BAO_CAO_DOT, BAO_CAO_NAM, BCVP, divNumber, DON_VI_TIEN, NOT_OK, OK, sumNumber, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { BAO_CAO_KET_QUA, MAIN_ROUTE_BAO_CAO, MAIN_ROUTE_KE_HOACH } from '../../bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg.constant';
 import { BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM, SOLAMA, TAB_SELECTED } from './bao-cao.constant';
@@ -199,7 +199,7 @@ export class BaoCaoComponent implements OnInit {
 				}
 			);
 			this.baoCao.nguoiTao = this.userInfo?.sub;
-			this.baoCao.ngayTao = new Date().toDateString();
+			this.baoCao.ngayTao = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
 			this.baoCao.trangThai = "1";
 		} else {
 			this.baoCao.maDvi = this.userInfo?.MA_DVI;
@@ -929,6 +929,24 @@ export class BaoCaoComponent implements OnInit {
 								item.nguoiBcao = this.userInfo.sub;
 							}
 						}
+						if (item.maLoai == '4') {
+							item.lstCtietBcaos.forEach(e => {
+								e.khGiaMuaTd = Math.round(divNumber(e.khTtien, e.khSoLuong));
+								e.thGiaMuaTd = Math.round(divNumber(e.thTtien, e.thSoLuong));
+							})
+						}
+						if (item.maLoai == '5'){
+							item.lstCtietBcaos.forEach(e => {
+								e.ttClechGiaTteVaGiaHtoan = sumNumber([e.ttGiaBanTte, -e.ttGiaHtoan]);
+							})
+						}
+					})
+
+					this.baoCao?.lstBcaoDviTrucThuocs.forEach(item => {
+						item.ngayTrinh = this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR);
+						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
+						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+						item.ngayTraKq = this.datePipe.transform(item.ngayTraKq, Utils.FORMAT_DATE_STR);
 					})
 					this.listFile = [];
 					this.baoCao.trangThai = "1";
