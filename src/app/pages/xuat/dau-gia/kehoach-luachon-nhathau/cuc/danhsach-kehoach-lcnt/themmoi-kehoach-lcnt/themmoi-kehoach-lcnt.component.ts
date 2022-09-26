@@ -111,13 +111,17 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       });
     }
     this.loadDonVi();
-    if (this.idInput > 0) {
-      this.loadDeXuatKHBanDauGia(this.idInput);
-    } else {
-    }
     this.khBanDauGia.namKeHoach = dayjs().year();
-    this.initForm();
-    await Promise.all([this.loaiVTHHGetAll(), this.loaiHopDongGetAll()]);
+    await Promise.all([
+      this.loaiVTHHGetAll(),
+      this.loaiHopDongGetAll(),
+      this.initForm(),
+      this.loadChungLoaiHH()
+    ]);
+    await this.initForm();
+    if (this.idInput > 0) {
+      await this.loadDeXuatKHBanDauGia(this.idInput);
+    }
     this.spinner.hide();
   }
 
@@ -192,11 +196,11 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
           value: this.khBanDauGia ? this.khBanDauGia.qdGiaoChiTieuId : null,
           disabled: this.isView ? true : false,
         },
-        [],
+        [Validators.required],
       ],
       qdGiaoChiTieuNam: [
         {
-          value: this.khBanDauGia ? this.khBanDauGia.qdGiaoChiTieuNam : null,
+          value: this.khBanDauGia ? this.khBanDauGia.soQuyetDinhGiaoChiTieu : null,
           disabled: this.isView ? true : false,
         },
         [Validators.required],
@@ -480,7 +484,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
-      console.log(this.formData);
       return;
     }
     this.spinner.show();
@@ -601,6 +604,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
         this.listLoaiHangHoa = res.data;
       } else {
         this.listLoaiHangHoa = res.data?.filter((x) => x.ma == this.loaiVthhInput);
+        this.loadChungLoaiHH(this.loaiVthhInput);
       }
     }
   }
@@ -838,13 +842,16 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       },
     });
   }
-  async loadChungLoaiHH() {
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": this.formData.get('loaiVthh').value });
-    this.listChungLoaiHangHoa = [];
-    this.formData.get('cloaiVthh').setValue(null);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.listChungLoaiHangHoa = res.data;
+  async loadChungLoaiHH(loaiVthhInput?) {
+    let loaiVthh = loaiVthhInput ? loaiVthhInput :  this.formData.get('loaiVthh').value;
+    if(loaiVthh){
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": loaiVthh });
+      this.listChungLoaiHangHoa = [];
+      this.formData.get('cloaiVthh').setValue(null);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listChungLoaiHangHoa = res.data;
+        }
       }
     }
   }
@@ -864,7 +871,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   }
   changeLoaiHangHoa() {
     this.loadChungLoaiHH();
-
   }
 
   thongTinTrangThai(trangThai: string): string {
