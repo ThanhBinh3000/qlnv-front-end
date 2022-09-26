@@ -141,18 +141,21 @@ import { DialogChiTietGiaoDichHangTrongKhoComponent } from './dialog/dialog-chi-
 import { DialogDdiemDeHangComponent } from './dialog/dialog-ddiem-de-hang/dialog-ddiem-de-hang.component';
 import { DialogToTrinhTongHopComponent } from './dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-tong-hop/dialog-to-trinh-tong-hop.component';
 import { DialogQuyetDinhGiaCuaTcdtnnComponent } from './dialog/dialog-ke-hoach-phuong-an-gia/dialog-quyet-dinh-gia-cua-tcdtnn/dialog-quyet-dinh-gia-cua-tcdtnn.component';
+import { DialogTongHopGiaoComponent } from './dialog/dialog-tong-hop-giao/dialog-tong-hop-giao.component';
 import { DialogSoToTrinhPagComponent } from './dialog/dialog-so-to-trinh-pag/dialog-so-to-trinh-pag.component';
 import { DialogCanCuQdPheDuyetKqdgComponent } from './dialog/dialog-can-cu-qd-phe-duyet-kqdg/dialog-can-cu-qd-phe-duyet-kqdg.component';
 
 import { DialogToTrinhDeXuatComponent } from "./dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-de-xuat/dialog-to-trinh-de-xuat.component";
 import { TemplateErrorComponent } from './template-error/template-error.component';
 import { DialogTableSelectionComponent } from './dialog/dialog-table-selection/dialog-table-selection.component';
+import { FmInputNumberComponent } from './fm-input-number.component';
 import { DialogSoQuyetDinhQlyKhoTangComponent } from './dialog/dialog-so-quyet-dinh-qly-kho-tang/dialog-so-quyet-dinh-qly-kho-tang.component';
 import { DialogDiaDiemNhapKhoComponent } from './dialog/dialog-dia-diem-nhap-kho/dialog-dia-diem-nhap-kho.component';
 @NgModule({
   declarations: [
     //components
     UploadComponent,
+    FmInputNumberComponent,
     DialogThemMoiVatTuComponent,
     DialogThongTinPhuLucKHLCNTComponent,
     DialogQuyetDinhGiaoChiTieuComponent,
@@ -245,6 +248,7 @@ import { DialogDiaDiemNhapKhoComponent } from './dialog/dialog-dia-diem-nhap-kho
     DialogToTrinhTongHopComponent,
     DialogToTrinhDeXuatComponent,
     DialogQuyetDinhGiaCuaTcdtnnComponent,
+    DialogTongHopGiaoComponent,
     DialogCanCuQdPheDuyetKqdgComponent,
     TemplateErrorComponent,
     DialogTableSelectionComponent,
@@ -312,6 +316,7 @@ import { DialogDiaDiemNhapKhoComponent } from './dialog/dialog-dia-diem-nhap-kho
   ],
   exports: [
     FormsModule,
+    FmInputNumberComponent,
     ReactiveFormsModule,
     NgxSpinnerModule,
 

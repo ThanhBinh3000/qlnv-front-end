@@ -12,7 +12,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
+import { GDT, Utils } from 'src/app/Utility/utils';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
 
 
@@ -96,9 +96,8 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
   async ngOnInit() {
     this.spinner.show()
     this.id = this.routerActive.snapshot.paramMap.get('id');
-    let userName = this.userService.getUserName();
-    await this.getUserInfo(userName);
-    this.maDviTao = this.userInfo?.dvql;
+    this.userInfo = this.userService.getUserLogin();
+    this.maDviTao = this.userInfo?.MA_DVI;
 
     this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
     this.namGiao = this.newDate.getFullYear();
@@ -283,6 +282,9 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
       })
     }
+  }
+  checkViewReport() {
+    return this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT);
   }
 
   //xem thong tin PA

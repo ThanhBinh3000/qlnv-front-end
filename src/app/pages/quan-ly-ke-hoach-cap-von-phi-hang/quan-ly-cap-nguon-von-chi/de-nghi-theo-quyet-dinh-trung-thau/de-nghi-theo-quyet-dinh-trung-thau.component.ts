@@ -1,6 +1,5 @@
 import { DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -13,11 +12,11 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, Utils } from 'src/app/Utility/utils';
 import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
-import { DataService } from 'src/app/services/data.service';
 
 export class ItemCongVan {
     fileName: string;
@@ -91,7 +90,6 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
     fileList: NzUploadFile[] = [];
     fileDetail: NzUploadFile;
     listIdFilesDelete: any = [];
-    formatter = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
     // before uploaf file
     beforeUpload = (file: NzUploadFile): boolean => {
@@ -126,7 +124,6 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private routerActive: ActivatedRoute,
         private datePipe: DatePipe,
-        private sanitizer: DomSanitizer,
         private router: Router,
         private userService: UserService,
         private notification: NzNotificationService,
@@ -137,26 +134,11 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
 
     async ngOnInit() {
         //lay id cua ban ghi
-        console.log(Math.floor(12466 / 1000));
         this.loai = this.routerActive.snapshot.paramMap.get('loai');
         this.id = this.routerActive.snapshot.paramMap.get('id');
         //lay thong tin user
         this.spinner.show();
-        const userName = this.userService.getUserName();
-        await this.getUserInfo(userName);
-        //lay danh sach danh muc
-        // await this.danhMuc.dMDonVi().toPromise().then(
-        //     (res) => {
-        //         if (res.statusCode == 0) {
-        //             this.donVis = res.data;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, res?.msg);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        //     },
-        // );
+        this.userInfo = this.userService.getUserLogin();
 
         await this.danhMuc.dMVatTu().toPromise().then(
             (res) => {
@@ -175,7 +157,7 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             await this.getDetailReport();
         } else {
             this.trangThai = '1';
-            this.maDviTao = this.userInfo?.dvql;
+            this.maDviTao = this.userInfo?.MA_DVI;
             await this.dataSource.currentData.subscribe(obj => {
                 this.qdChiTieu = obj?.qdChiTieu;
                 this.loaiDn = obj?.loaiDn;
@@ -231,47 +213,28 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
         this.location.back()
     }
 
-    //get user info
-    async getUserInfo(username: string) {
-        await this.userService.getUserInfo(username).toPromise().then(
-            (data) => {
-                if (data?.statusCode == 0) {
-                    this.userInfo = data?.data
-                    return data?.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
-    }
-
     //check role cho các nut trinh duyet
     getStatusButton() {
-        const userRole = this.userInfo?.roles[0]?.code;
-        if ((this.trangThai == Utils.TT_BC_1 || this.trangThai == Utils.TT_BC_3 || this.trangThai == Utils.TT_BC_5)
-            && (ROLE_CAN_BO.includes(userRole))) {
+        if (Utils.statusSave.includes(this.trangThai) &&
+            (this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT) : this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT))) {
             this.status = false;
         } else {
             this.status = true;
         }
 
-        let checkChirld = false;
-        // const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-        if (this.maDviTao == this.userInfo.dvql) {
-            checkChirld = true;
-        }
-        const utils = new Utils();
-        this.statusBtnSave = utils.getRoleSave(this.trangThai, checkChirld, userRole);
-        this.statusBtnApprove = utils.getRoleApprove(this.trangThai, checkChirld, userRole);
+        const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
+        const checkSave = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT) : this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT);
+        this.statusBtnSave = !(Utils.statusSave.includes(this.trangThai) && checkSave && checkChirld);
+        const checkApprove = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.APPROVE_DN_MVT) : this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT);
+        this.statusBtnApprove = !(Utils.statusApprove.includes(this.trangThai) && checkApprove && checkChirld);
+        const checkPheDuyet = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT) : this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT);
         if (this.trangThai == Utils.TT_BC_2) {
-            this.statusBtnLD = utils.getRoleLD(Utils.TT_BC_4, checkChirld, userRole);
+            this.statusBtnLD = !(checkPheDuyet && checkChirld);
         } else {
-            this.statusBtnLD = utils.getRoleLD(this.trangThai, checkChirld, userRole);
+            this.statusBtnLD = !(Utils.statusPheDuyet.includes(this.trangThai) && checkPheDuyet && checkChirld);
         }
-        this.statusBtnCopy = utils.getRoleCopy(this.trangThai, checkChirld, userRole);
+        const checkCopy = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.COPY_DN_MVT) : this.userService.isAccessPermisson(CVNC.COPY_DN_MLT);
+        this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThai) && checkCopy && checkChirld);
     }
 
     //upload file
@@ -441,13 +404,12 @@ export class DeNghiTheoQuyetDinhTrungThauComponent implements OnInit {
             return;
         }
         if (this.kphiDaCap > this.tongTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            this.notification.warning(MESSAGE.WARNING, 'Kinh phí đã cấp không được vượt quá tổng tiền');
             return;
         }
         //get list file url
         let checkFile = true;
         for (const iterator of this.listFile) {
-            console.log(iterator);
             if (iterator.size > Utils.FILE_SIZE) {
                 checkFile = false;
             }

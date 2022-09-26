@@ -15,11 +15,11 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
+import { DCDT, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
-import { DataService } from 'src/app/services/data.service';
 import { DIEU_CHINH_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH, PHU_LUC } from '../dieu-chinh-du-toan-chi-nsnn.constant';
 
 // export class ItemData {
@@ -79,6 +79,7 @@ export class GiaoNhiemVuComponent implements OnInit {
   loaiTongHop!: string;
   maDviUser!: string;
   dotBcao: number;
+
   //danh muc
   dotBcaos: any[] = [
     {
@@ -205,13 +206,16 @@ export class GiaoNhiemVuComponent implements OnInit {
     this.id = this.routerActive.snapshot.paramMap.get('id');
     this.loai = this.routerActive.snapshot.paramMap.get('loai');
     this.maDviTao = this.routerActive.snapshot.paramMap.get('maDvi');
+    this.userInfo = this.userService.getUserLogin();
+
     const nam: any = this.routerActive.snapshot.paramMap.get('namHienHanh');
-    const userName = this.userService.getUserName();
-    await this.getUserInfo(userName); //get user info
+
     await this.getListUser();
     if (this.id) {
       await this.getDetailReport();
     } else {
+
+
       await this.dataSource.currentData.subscribe(obj => {
         this.dotBcao = obj?.dotBcao;
         this.loaiMH = obj?.loaiMH;
@@ -221,7 +225,7 @@ export class GiaoNhiemVuComponent implements OnInit {
         this.namHienHanh = parseInt(nam, 10);
         await this.tongHop();
         this.trangThaiBaoCao = "1";
-        this.nguoiNhap = this.userInfo?.username;
+        this.nguoiNhap = this.userInfo?.sub;
         this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
           (data) => {
             if (data.statusCode == 0) {
@@ -252,8 +256,8 @@ export class GiaoNhiemVuComponent implements OnInit {
         })
         // this.dotBcao = 1
         this.trangThaiBaoCao = "1";
-        this.nguoiNhap = this.userInfo?.username;
-        this.maDviTao = this.userInfo?.dvql;
+        this.nguoiNhap = this.userInfo?.sub;
+        this.maDviTao = this.userInfo?.MA_DVI;
         this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
           (data) => {
             if (data.statusCode == 0) {
@@ -276,7 +280,7 @@ export class GiaoNhiemVuComponent implements OnInit {
     this.changeNam();
     this.changeDot();
     //lay danh sach danh muc don vi
-    await this.danhMucService.dMDonVi().toPromise().then(
+    await this.danhMucService.dMDviCon().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
@@ -302,6 +306,9 @@ export class GiaoNhiemVuComponent implements OnInit {
     const item1 = this.phuLucs.find(item => item.id == "1")
     item1.tenDm = "Tổng hợp điều chỉnh dự toán chi ngân sách nhà nước đợt " + this.dotBcao + "/năm " + this.namHienHanh
   }
+  getBtnStatus(status: string[], role: string, check: boolean) {
+    return !(status.includes(this.trangThaiBaoCao) && this.userService.isAccessPermisson(role) && check);
+  }
 
   getListUser() {
     this.quanLyVonPhiService.getListUser().toPromise().then(res => {
@@ -315,68 +322,46 @@ export class GiaoNhiemVuComponent implements OnInit {
 
   //nhóm các nút chức năng --báo cáo-----
   getStatusButton() {
-    if (this.trangThaiBaoCao == Utils.TT_BC_1 ||
-      this.trangThaiBaoCao == Utils.TT_BC_3 ||
-      this.trangThaiBaoCao == Utils.TT_BC_5 ||
-      this.trangThaiBaoCao == Utils.TT_BC_8 ||
-      this.trangThaiBaoCao == Utils.TT_BC_10) {
-      this.status = false;
-    } else {
-      this.status = true;
-    }
-    const roleNguoiTao = this.userInfo?.roles[0]?.code;
-    if (ROLE_TRUONG_BO_PHAN.includes(roleNguoiTao) || ROLE_LANH_DAO.includes(roleNguoiTao)) {
-      this.status = true;
-    }
-    let checkParent = false;
-    let checkChirld = false;
-    const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-    if (dVi && dVi.maDvi == this.userInfo.dvql) {
-      checkChirld = true;
-    }
-    if (dVi && dVi.maDviCha == this.userInfo.dvql) {
-      checkParent = true;
-    }
-    const utils = new Utils();
-    this.statusBtnSave = utils.getRoleSave(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnApprove = utils.getRoleApprove(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnTBP = utils.getRoleTBP(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnLD = utils.getRoleLD(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnDVCT = utils.getRoleDVCT(this.trangThaiBaoCao, checkParent, roleNguoiTao);
-    this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    this.statusBtnPrint = utils.getRolePrint(this.trangThaiBaoCao, checkChirld, roleNguoiTao);
-    // this.statusBtnPrint = false
-    if ((this.trangThaiBaoCao == Utils.TT_BC_7 && ROLE_CAN_BO.includes(roleNguoiTao) && checkParent) ||
-      (this.trangThaiBaoCao == Utils.TT_BC_2 && ROLE_TRUONG_BO_PHAN.includes(roleNguoiTao) && checkChirld) ||
-      (this.trangThaiBaoCao == Utils.TT_BC_4 && ROLE_LANH_DAO.includes(roleNguoiTao) && checkChirld)) {
-      this.statusBtnOk = true;
-    } else {
-      this.statusBtnOk = false;
-    }
-    if ((this.trangThaiBaoCao == Utils.TT_BC_1 || this.trangThaiBaoCao == Utils.TT_BC_3 || this.trangThaiBaoCao == Utils.TT_BC_5 || this.trangThaiBaoCao == Utils.TT_BC_8)
-      && ROLE_CAN_BO.includes(roleNguoiTao) && checkChirld) {
-      this.statusBtnFinish = false;
-    } else {
-      this.statusBtnFinish = true;
-    }
-  }
+    const isSynthetic = this.lstDviTrucThuoc.length != 0;
+		const checkSave = isSynthetic ? this.userService.isAccessPermisson(DCDT.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.EDIT_REPORT);
+		const checkAppove = isSynthetic ? this.userService.isAccessPermisson(DCDT.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.APPROVE_REPORT);
+		const checkDuyet = isSynthetic ? this.userService.isAccessPermisson(DCDT.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.DUYET_REPORT);
+		const checkPheDuyet = isSynthetic ? this.userService.isAccessPermisson(DCDT.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.PHE_DUYET_REPORT);
+		const checkTiepNhan = this.userService.isAccessPermisson(DCDT.TIEP_NHAN_REPORT);
+		const checkCopy = isSynthetic ? this.userService.isAccessPermisson(DCDT.COPY_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.COPY_REPORT);
+		const checkPrint = isSynthetic ? this.userService.isAccessPermisson(DCDT.PRINT_SYTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.PRINT_REPORT);
+		if (checkSave && Utils.statusSave.includes(this.trangThaiBaoCao)) {
+			this.status = false;
+		} else {
+			this.status = true;
+		}
+		this.checkParent = false;
+		const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
+		this.checkParent = this.donVis.findIndex(e => e.maDvi == this.maDviTao) != -1;
 
-  //get user info
-  async getUserInfo(username: string) {
-    await this.userService.getUserInfo(username).toPromise().then(
-      (data) => {
-        if (data?.statusCode == 0) {
-          this.userInfo = data?.data
-          this.maDviUser = data?.data.dvql;
-          return data?.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
+		if (this.checkParent) {
+			const index: number = this.trangThaiBaoCaos.findIndex(e => e.id == Utils.TT_BC_7);
+			this.trangThaiBaoCaos[index].tenDm = "Mới";
+		}
+		this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBaoCao) && checkSave && checkChirld);
+		this.statusBtnApprove = !(Utils.statusApprove.includes(this.trangThaiBaoCao) && checkAppove && checkChirld);
+		this.statusBtnTBP = !(Utils.statusDuyet.includes(this.trangThaiBaoCao) && checkDuyet && checkChirld);
+		this.statusBtnLD = !(Utils.statusPheDuyet.includes(this.trangThaiBaoCao) && checkPheDuyet && checkChirld);
+		this.statusBtnDVCT = !(Utils.statusTiepNhan.includes(this.trangThaiBaoCao) && checkTiepNhan && this.checkParent);
+		this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThaiBaoCao) && checkCopy && checkChirld);
+		this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBaoCao) && checkPrint && checkChirld);
+
+		if (!this.statusBtnTBP || !this.statusBtnLD || !this.statusBtnDVCT ) {
+			this.statusBtnOk = true;
+		} else {
+			this.statusBtnOk = false;
+		}
+		if (Utils.statusSave.includes(this.trangThaiBaoCao)
+			&& checkSave && checkChirld) {
+			this.statusBtnFinish = false;
+		} else {
+			this.statusBtnFinish = true;
+		}
   }
 
   //upload file
@@ -449,6 +434,7 @@ export class GiaoNhiemVuComponent implements OnInit {
 
   // luu
   async save() {
+
     // check lưu trong bảng trước khi nhấn lưu
     let checkSave = true;
     this.lstDieuChinhs.forEach(e => {
@@ -469,6 +455,7 @@ export class GiaoNhiemVuComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập file công văn");
       return;
     }
+    this.spinner.show();
     // replace nhung ban ghi dc them moi id thanh null
     this.lstDieuChinhs.forEach(item => {
       if (item.id?.length == 38) {
@@ -534,7 +521,7 @@ export class GiaoNhiemVuComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
     }
     //call service them moi
-    this.spinner.show();
+
     if (this.id == null) {
       this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(
         async data => {
@@ -704,7 +691,7 @@ export class GiaoNhiemVuComponent implements OnInit {
             if (!item.id) {
               item.id = uuid.v4() + 'FE';
             }
-            item.giaoCho = this.userInfo?.username;
+            item.giaoCho = this.userInfo?.sub;
             item.maDviTien = '1';
           })
           this.lstDviTrucThuoc.forEach(item => {
@@ -837,6 +824,7 @@ export class GiaoNhiemVuComponent implements OnInit {
         statusBtnFinish: this.statusBtnFinish,
         status: this.status,
         namBcao: this.namBcao,
+        maBaoCao:this.maBaoCao
       }
       this.tabs = [];
       this.tabs.push(PHU_LUC.find(e => e.id === id));
@@ -858,6 +846,7 @@ export class GiaoNhiemVuComponent implements OnInit {
         statusBtnFinish: this.statusBtnFinish,
         status: this.status,
         namBcao: this.namBcao,
+        maBaoCao:this.maBaoCao
       }
       this.tabs = [];
       this.tabs.push(PHU_LUC.find(e => e.id == this.lstDieuChinhs[index].maLoai));
@@ -938,7 +927,7 @@ export class GiaoNhiemVuComponent implements OnInit {
     const lstDieuChinhTemps: any[] = [];
     this.lstDieuChinhs.forEach(data => {
       const lstCtietTemp: any[] = [];
-      data.lstCtietDchinh?.forEach(item => {
+      data.lstCtietDchinh.forEach(item => {
         lstCtietTemp.push({
           ...item,
           id: null,
@@ -946,8 +935,8 @@ export class GiaoNhiemVuComponent implements OnInit {
       })
       lstDieuChinhTemps.push({
         ...data,
-        giaoCho: this.userInfo?.username,
-        lstCtietDieuChinhs: lstCtietTemp,
+        giaoCho: this.userInfo?.sub,
+        lstCtietDchinh: lstCtietTemp,
         id: null,
       })
     })

@@ -61,13 +61,13 @@
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Số lệnh chi tiền</label>
-						<input class="search__input" nz-input [(ngModel)]="searchFilter.soLenhChiTien" 
-						[class]="statusBtnNew || searchFilter.soLenhChiTien ?'' : 'input-error-validate'"/>
+						<input class="search__input" nz-input [(ngModel)]="searchFilter.soLenhChiTien"
+							[class]="statusBtnNew || searchFilter.soLenhChiTien ?'' : 'input-error-validate'" />
 					</div>
 					<div nz-col nzSpan="6">
 						<label class="search__label">Ngày lập (lệnh chi tiền)</label>
 						<nz-date-picker class="search__input" [(ngModel)]="searchFilter.ngayLap" nzFormat="dd/MM/yyyy"
-						[class]="statusBtnNew || searchFilter.ngayLap ?'' : 'input-error-validate'">
+							[class]="statusBtnNew || searchFilter.ngayLap ?'' : 'input-error-validate'">
 						</nz-date-picker>
 					</div>
 				</div>
@@ -146,25 +146,30 @@
 							</td>
 							<td>
 								{{getStatusName(item.trangThai)}}
-								<ng-container *ngIf="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
+								<ng-container
+									*ngIf="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'">
 									<br>Lý do: {{item.lyDoTuChoi}}
 								</ng-container>
 							</td>
 							<td>
 								<ng-container *ngIf="status; else pheDuyet">
-									<ng-container *ngIf="checkDeleteReport(item); else xem">
+									<ng-container *ngIf="checkEditReport(item.trangThai); else xem">
 										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
 											<span>Nhập/Sửa dữ liệu</span>
 										</button>
+									</ng-container>
+									<ng-template #xem>
+										<ng-container *ngIf="checkViewReport()">
+											<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+												<span>Xem</span>
+											</button>
+										</ng-container>
+									</ng-template>
+									<ng-container *ngIf="checkDeleteReport(item.trangThai)">
 										<button type="button" class="btn btn-main" (click)="xoaBaoCao(item.id)">
 											<span>Xóa</span>
 										</button>
 									</ng-container>
-									<ng-template #xem>
-										<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
-											<span>Xem</span>
-										</button>
-									</ng-template>
 								</ng-container>
 								<ng-template #pheDuyet>
 									<button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
@@ -173,9 +178,9 @@
 								</ng-template>
 							</td>
 							<td [hidden]="!status">
-								<ng-container *ngIf="checkDeleteReport(item)">
+								<ng-container *ngIf="checkDeleteReport(item.trangThai)">
 									<label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
-									(ngModelChange)="changeListIdDelete(item.id)"></label>
+										(ngModelChange)="changeListIdDelete(item.id)"></label>
 								</ng-container>
 							</td>
 						</tr>

@@ -34,9 +34,11 @@
                   <nz-option *ngFor="let item of phuongAns" [nzValue]="item" [nzLabel]="item">
                   </nz-option>
                 </nz-select>
-                <button type="button" class="btn btn-sub" (click)="xemphuongan()">
-                  <span>Xem thông tin phương án</span>
-                </button>
+                <ng-container *ngIf="checkViewReport()">
+                  <button type="button" class="btn btn-sub" (click)="xemphuongan()">
+                    <span>Xem thông tin phương án</span>
+                  </button>
+                </ng-container>
               </td>
             </tr>
           </tbody>

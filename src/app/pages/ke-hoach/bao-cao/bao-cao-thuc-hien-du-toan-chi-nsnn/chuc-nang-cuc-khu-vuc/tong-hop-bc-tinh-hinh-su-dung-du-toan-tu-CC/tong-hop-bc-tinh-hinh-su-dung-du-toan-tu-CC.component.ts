@@ -67,7 +67,7 @@ export class TongHopBCTinhHinhSuDungDuToanTuCCComponent implements OnInit {
 		this.searchFilter.maLoaiBcao = '526';
 		this.onSubmit();
 		//lay danh sach danh muc
-		this.danhMuc.dMDonVi().toPromise().then(
+		this.danhMuc.dMDviCon().toPromise().then(
 			data => {
 				if (data.statusCode == 0) {
 					this.donViTaos = data.data;

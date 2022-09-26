@@ -1,5 +1,5 @@
 import { MAIN_ROUTES } from 'src/app/layout/main/main-routing.constant';
-import { ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
+import { BCDTC, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
 import { DU_TOAN_NSNN } from '../../ke-hoach.constant';
 import { BaoCaoThucHienChiNSNN } from './bao-cao-thuc-hien-du-toan-chi-nsnn.type';
 
@@ -60,15 +60,8 @@ export const BAO_CAO_THUC_HIEN_CHI_NSNN_LIST: BaoCaoThucHienChiNSNN[] = [
         description: 'Danh sách báo cáo tình hình sử dụng dự toán (giải ngân)tháng/năm',
         url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_BAO_CAO}/${BAO_CAO_THUC_HIEN}/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam`,
         Role: [
-            NHAN_VIEN_CC,
-            TRUONG_BP_CC,
-            LANH_DAO_CC,
-            NHAN_VIEN_CKV,
-            TRUONG_BP_CKV,
-            LANH_DAO_CKV,
-            NHAN_VIEN_TC,
-            TRUONG_BP_TC,
-            LANH_DAO_TC,
+            BCDTC.VIEW_REPORT,
+            BCDTC.VIEW_SYNTHETIC_REPORT,
         ],
         isDisabled: false,
     },
@@ -78,8 +71,7 @@ export const BAO_CAO_THUC_HIEN_CHI_NSNN_LIST: BaoCaoThucHienChiNSNN[] = [
         description: 'Danh sách báo cáo tình hình sử dụng dự toán (giải ngân)tháng/năm từ đơn vị dưới',
         url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_BAO_CAO}/${BAO_CAO_THUC_HIEN}/ds-bao-cao-tinh-hinh-sd-dtoan-thang-nam-tu-chi-cuc`,
         Role: [
-            NHAN_VIEN_CKV,
-            NHAN_VIEN_TC,
+            BCDTC.TIEP_NHAN_REPORT,
         ],
         isDisabled: false,
     },
@@ -89,8 +81,7 @@ export const BAO_CAO_THUC_HIEN_CHI_NSNN_LIST: BaoCaoThucHienChiNSNN[] = [
         description: 'Kiểm tra báo cáo thực hiện dự toán (giải ngân) tháng/năm từ các đơn vị dưới',
         url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_BAO_CAO}/${BAO_CAO_THUC_HIEN}/kiem-tra`,
         Role: [
-            NHAN_VIEN_CKV,
-            NHAN_VIEN_TC,
+            BCDTC.TIEP_NHAN_REPORT,
         ],
         isDisabled: false,
     },
@@ -100,8 +91,7 @@ export const BAO_CAO_THUC_HIEN_CHI_NSNN_LIST: BaoCaoThucHienChiNSNN[] = [
         description: 'Tổng hợp báo cáo tình hình sử dụng dự toán (giải ngân) tháng/năm',
         url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_BAO_CAO}/${BAO_CAO_THUC_HIEN}/tong-hop`,
         Role: [
-            NHAN_VIEN_CKV,
-            NHAN_VIEN_TC,
+            BCDTC.SYNTHETIC_REPORT,
         ],
         isDisabled: false,
     },
