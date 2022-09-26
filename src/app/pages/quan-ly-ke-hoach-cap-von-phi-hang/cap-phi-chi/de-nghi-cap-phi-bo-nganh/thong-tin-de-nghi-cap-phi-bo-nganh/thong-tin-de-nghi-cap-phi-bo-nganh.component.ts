@@ -1,3 +1,4 @@
+import { DataService } from 'src/app/services/data.service';
 import { HelperService } from './../../../../../services/helper.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DeNghiCapPhiBoNganh } from './../../../../../models/DeNghiCapPhiBoNganh';
@@ -74,23 +75,17 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     "tenHangHoa": "",
   }
 
+  detail: any = {};
   cts: any[] = [];
   ct1s: any[] = [];
-  detail: any = {};
 
-  // lưu thông tin bảng 2 để add nào item con bảng 1 khi sử lý sự kiện click vào hàng
-  dataSelect: any = {};
-  // data bảng 1
+  rowDisplay: any = {};
   rowEdit: any = {};
 
-  // xử lý  data bảng 1
   oldDataEdit1: any = {};
-  // xử lý data bảng 1
   oldDataEdit2: any = {};
 
-  // dùng add new bảng 1
   create: any = {};
-  // dùng add new bảng 2
   create1: any = {};
 
   constructor(
@@ -114,178 +109,6 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     }
   }
 
-
-  selectRow(row, i) {
-    if (row) {
-      // this.rowEdit.isView = true;
-      this.dataSelect = cloneDeep(row)
-      if (this.rowEdit.ct1s[i].ct2List) {
-        this.dataSelect.ct2List = [...this.rowEdit.ct1s[i].ct2List]
-      } else {
-        this.dataSelect.ct2List = []
-      }
-      this.sortTableId('ct2List');
-    }
-  }
-  sortTableId(type) {
-    if (type === 'ct1s') {
-      this.ct1s.forEach((lt, i) => {
-        lt.stt = i + 1;
-      });
-    }
-    else if (type === 'ct2List' && this.dataSelect.ct2List && this.dataSelect.ct2List.length > 0) {
-      this.dataSelect.ct2List.forEach((lt, i) => {
-        lt.stt = i + 1;
-      });
-    }
-  }
-
-  deleteRow(item: any, type) {
-    if (type === 'ct1s') {
-      let temp = this.rowEdit.ct1s.filter((x) => x.stt !== item.stt);
-      this.rowEdit.ct1s = temp;
-      this.sortTableId('ct1s');
-    }
-    else if (type === 'ct2List') {
-      let temp = this.dataSelect.ct2List.filter(x => x.stt !== item.stt);
-      this.dataSelect.ct2List = temp;
-      this.sortTableId('ct2List');
-    }
-  }
-
-  editRow(item, type) {
-    if (type === 'ct1s') {
-      this.rowEdit.ct1s.forEach(element => {
-        element.edit = false;
-      });
-      // this.rowEdit = cloneDeep(item);
-      this.rowEdit.isView = false;
-      this.oldDataEdit1 = cloneDeep(item);
-    }
-    else if (type === 'ct2List') {
-      this.oldDataEdit2 = cloneDeep(item);
-    }
-    item.edit = true;
-    console.log(this.rowEdit.ct1s);
-
-  }
-
-  addRow() {
-    if (!this.dataSelect.ct2List) {
-      this.dataSelect.ct2List = [];
-    }
-    this.sortTableId('ct2List');
-    let item = cloneDeep(this.create);
-    item.stt = this.dataSelect.ct2List.length + 1;
-    this.dataSelect.ct2List = [
-      ... this.dataSelect.ct2List,
-      item,
-    ]
-    this.clearItemRow("ct2List");
-    this.rowEdit.ct1s.forEach((item, i) => {
-      if (item.stt == this.dataSelect.stt) {
-        this.rowEdit.ct1s[i] = this.dataSelect
-      }
-    })
-    console.log(this.rowEdit);
-
-  }
-
-  clearItemRow(type: string) {
-    if (type === "ct1s") {
-      this.create1 = {};
-    } else if (type === "ct2List") {
-      this.create = {};
-    }
-  }
-
-  addRow1() {
-    if (!this.create1.tenDvCungCap || !this.create1.soTaiKhoan || !this.create1.nganHang || !this.create1.ycCapThemPhi) {
-      return;
-    }
-    if (!this.rowEdit.ct1s) {
-      this.rowEdit.ct1s = [];
-    }
-    this.sortTableId('ct1s');
-    let item = cloneDeep(this.create1);
-    item.stt = this.rowEdit.ct1s.length + 1;
-    this.rowEdit.ct1s = [
-      ...this.rowEdit.ct1s,
-      item,
-    ]
-    this.clearItemRow("ct1s");
-  }
-
-  cancelEdit(item, type) {
-    if (type === 'ct1s') {
-      let index = this.ct1s.findIndex((x) => x.stt === item.stt);
-      if (index != -1) {
-        let temp = cloneDeep(this.ct1s);
-        temp[index] = cloneDeep(this.oldDataEdit1);
-        this.ct1s = temp;
-      }
-      this.rowEdit.isView = true;
-    }
-    else if (type === 'ct2List') {
-      let index = this.dataSelect.ct2List.findIndex(x => x.stt === item.stt);
-      if (index != -1) {
-        let temp = cloneDeep(this.dataSelect.ct2List);
-        temp[index] = cloneDeep(this.oldDataEdit2);
-        this.dataSelect.ct2List = temp;
-      }
-    }
-    item.edit = false;
-  }
-
-  saveEdit(item, type) {
-    item.edit = false;
-    if (type === 'ct1s') {
-      item.maVatTuCha = this.rowEdit.maVatTuCha;
-      item.maVatTu = this.rowEdit.maVatTu;
-      item.tenHangHoa = this.rowEdit.tenHangHoa;
-      item.ct2List = cloneDeep(this.dataSelect.ct2List);
-      this.rowEdit.isView = true;
-    }
-  }
-
-  tongBang1(data) {
-    if (data && data.length > 0) {
-      let sum = data
-        .map((item) => item.ycCapThemPhi)
-        .reduce((prev, next) => Number(prev) + Number(next));
-      return sum ?? 0;
-    } else {
-      return 0;
-    }
-  }
-
-  tongChiPhiBang2(data) {
-    if (data && data?.ct2List && data?.ct2List.length > 0) {
-      let sum = data.ct2List.map((item) => item.tongTien).reduce((prev, next) => Number(prev) + Number(next));
-      return sum ?? 0;
-    } else {
-      return 0;
-    }
-  }
-
-  tongKinhPhiBang2(data) {
-    if (data && data?.ct2List && data?.ct2List.length > 0) {
-      let sum = data.ct2List.map((item) => item.kinhPhiDaCap).reduce((prev, next) => Number(prev) + Number(next));
-      return sum ?? 0;
-    } else {
-      return 0;
-    }
-  }
-
-  tongCapThemBang2(data) {
-    if (data && data?.ct2List && data?.ct2List.length > 0) {
-      let sum = data.ct2List.map((item) => item.yeuCauCapThem).reduce((prev, next) => Number(prev) + Number(next));
-      return sum ?? 0;
-    } else {
-      return 0;
-    }
-  }
-
   async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
@@ -306,6 +129,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       this.spinner.hide();
     }
   }
+
   initForm() {
     this.formData = this.fb.group({
       'nam': [null, [Validators.required]],
@@ -314,6 +138,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       'ngayDeNghi': [null, [Validators.required]],
     });
   }
+
   async loaiVTHHGetAll() {
     try {
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
@@ -324,7 +149,6 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
             } else {
               this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
             }
-            console.log(this.listLoaiHangHoa);
           });
         }
       });
@@ -333,17 +157,17 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   async changeLoaiHangHoa(id: any) {
-    console.log(id);
     if (id && id > 0) {
       let loaiHangHoa = this.listLoaiHangHoa.filter((item) => item.ma === id);
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }
   }
+
   onChangeChungLoaiHH(id: any) {
-    console.log(id);
-    console.log(this.listChungLoaiHangHoa);
   }
+
   getListNam() {
     this.yearNow = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
@@ -353,6 +177,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       });
     }
   }
+
   async getListBoNganh() {
     this.listBoNganh = [];
     let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
@@ -364,6 +189,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   back() {
     this.showListEvent.emit();
   }
+
   async guiDuyet() {
     this.modal.confirm({
       nzClosable: false,
@@ -400,6 +226,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       },
     });
   }
+
   async save(isOther?: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -408,10 +235,8 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     }
     let body = this.formData.value;
     body.id = this.idInput;
-    body.ct1List = this.rowEdit.ct1s;
+    body.ct1List = this.ct1s;
     body.ngayDeNghi = this.formData.get("ngayDeNghi").value ? dayjs(this.formData.get("ngayDeNghi").value).format("YYYY-MM-DD") : null;
-    console.log("body: ", body);
-
     this.spinner.show();
     try {
       if (this.idInput > 0) {
@@ -454,8 +279,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     if (id > 0) {
       let res = await this.deNghiCapPhiBoNganhService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
-        let data = res.data
-        console.log(data);
+        let data = res.DataService
         if (data) {
           this.formData.patchValue({
             'nam': data.nam,
@@ -471,11 +295,178 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
           }
           this.detail.trangThai = data.trangThai
           this.detail.tenTrangThai = data.tenTrangThai;
-          this.rowEdit.ct1s = data.ct1List
+          this.ct1s = data.ct1List;
+          this.sortTableId('ct1s');
         }
-        console.log(this.rowEdit);
-
       }
+    }
+  }
+
+  /*-------------------------------------------------*/
+
+  sortTableId(type) {
+    if (type === 'ct1s') {
+      this.ct1s.forEach((lt, i) => {
+        lt.stt = i + 1;
+      });
+    }
+    else if (type === 'ct2s') {
+      this.rowEdit.ct2s.forEach((lt, i) => {
+        lt.stt = i + 1;
+      });
+    }
+  }
+
+  cancelEdit(item, type) {
+    if (type === 'ct1s') {
+      let index = this.ct1s.findIndex(x => x.stt === item.stt);
+      if (index != -1) {
+        let temp = cloneDeep(this.ct1s);
+        temp[index] = cloneDeep(this.oldDataEdit1);
+        this.ct1s = temp;
+      }
+      this.rowEdit.isView = true;
+    }
+    else if (type === 'ct2s') {
+      let index = this.rowEdit.ct2s.findIndex(x => x.stt === item.stt);
+      if (index != -1) {
+        let temp = cloneDeep(this.rowEdit.ct2s);
+        temp[index] = cloneDeep(this.oldDataEdit2);
+        this.rowEdit.ct2s = temp;
+      }
+    }
+    item.edit = false;
+  }
+
+  saveEdit(item, type) {
+    item.edit = false;
+    if (type === 'ct1s') {
+      item.maVatTuCha = this.rowEdit.maVatTuCha;
+      item.maVatTu = this.rowEdit.maVatTu;
+      item.tenHangHoa = this.rowEdit.tenHangHoa;
+      item.ct2s = cloneDeep(this.rowEdit.ct2s);
+      item.ct2List = cloneDeep(this.rowEdit.ct2s);
+      item.ycCapThemPhi = this.tongCapThemBang2(this.rowEdit);
+      this.rowEdit.isView = true;
+    }
+  }
+
+  deleteRow(item: any, type) {
+    if (type === 'ct1s') {
+      let temp = this.ct1s.filter(x => x.stt !== item.stt);
+      this.ct1s = temp;
+      this.sortTableId('ct1s');
+    }
+    else if (type === 'ct2s') {
+      let temp = this.rowEdit.ct2s.filter(x => x.stt !== item.stt);
+      this.rowEdit.ct2s = temp;
+      this.sortTableId('ct2s');
+    }
+  }
+
+  editRow(item, type) {
+    if (type === 'ct1s') {
+      this.ct1s.forEach(element => {
+        element.edit = false;
+      });
+      this.rowEdit = cloneDeep(item);
+      this.rowEdit.isView = false;
+      this.oldDataEdit1 = cloneDeep(item);
+    }
+    else if (type === 'ct2s') {
+      this.oldDataEdit2 = cloneDeep(item);
+    }
+    item.edit = true;
+  }
+
+  addRow(type) {
+    if (type === 'ct1s') {
+      if (!this.ct1s) {
+        this.ct1s = [];
+      }
+      this.sortTableId('ct1s');
+      let item = cloneDeep(this.create1);
+      item.stt = this.ct1s.length + 1;
+      item.ct2List = [];
+      this.ct1s = [
+        ...this.ct1s,
+        item,
+      ]
+    }
+    else if (type === 'ct2s') {
+      if (!this.rowEdit.ct2s) {
+        this.rowEdit.ct2s = [];
+      }
+      this.sortTableId('ct2s');
+      let item = cloneDeep(this.create);
+      item.stt = this.rowEdit.ct2s.length + 1;
+      this.rowEdit.ct2s = [
+        ...this.rowEdit.ct2s,
+        item,
+      ]
+    }
+    this.clearItemRow(type);
+  }
+
+  clearItemRow(type) {
+    if (type === 'ct1s') {
+      this.create1 = {};
+    }
+    else if (type === 'ct2s') {
+      this.create = {};
+    }
+  }
+
+  selectRow(row, rowSet) {
+    if (row) {
+      if (rowSet === 'rowDisplay') {
+        this.rowDisplay = cloneDeep(row);
+        this.rowDisplay.isView = true;
+      }
+      else if (rowSet === 'rowEdit') {
+        this.rowEdit = cloneDeep(row);
+        this.rowEdit.isView = true;
+        this.ct1s.forEach(element => {
+          element.edit = false;
+        });
+        this.sortTableId('ct2s');
+      }
+    }
+  }
+
+  tongBang1(data) {
+    if (data && data.length > 0) {
+      let sum = data.map((item) => item.ycCapThemPhi).reduce((prev, next) => Number(prev) + Number(next));
+      return sum ?? 0;
+    } else {
+      return 0
+    }
+  }
+
+  tongChiPhiBang2(data) {
+    if (data && data?.ct2s && data?.ct2s.length > 0) {
+      let sum = data.ct2s.map((item) => item.tongTien).reduce((prev, next) => Number(prev) + Number(next));
+      return sum ?? 0;
+    } else {
+      return 0
+    }
+  }
+
+  tongKinhPhiBang2(data) {
+    if (data && data?.ct2s && data?.ct2s.length > 0) {
+      let sum = data.ct2s.map((item) => item.kinhPhiDaCap).reduce((prev, next) => Number(prev) + Number(next));
+      return sum ?? 0;
+    } else {
+      return 0
+    }
+  }
+
+  tongCapThemBang2(data) {
+    if (data && data?.ct2s && data?.ct2s.length > 0) {
+      let sum = data.ct2s.map((item) => item.yeuCauCapThem).reduce((prev, next) => Number(prev) + Number(next));
+      return sum ?? 0;
+    } else {
+      return 0
     }
   }
 }

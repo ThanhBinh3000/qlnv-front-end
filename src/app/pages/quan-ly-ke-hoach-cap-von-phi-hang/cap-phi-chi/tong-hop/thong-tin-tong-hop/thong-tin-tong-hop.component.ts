@@ -470,6 +470,7 @@ export class ThongTinTongHopComponent implements OnInit {
       item.maVatTu = this.rowEdit.maVatTu;
       item.tenHangHoa = this.rowEdit.tenHangHoa;
       item.ct2s = cloneDeep(this.rowEdit.ct2s);
+      item.ycCapThemPhi = this.tongCapThemBang2(this.rowEdit);
       this.rowEdit.isView = true;
     }
   }
