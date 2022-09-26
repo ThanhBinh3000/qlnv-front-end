@@ -1,18 +1,18 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
-  <div class="btn-group">
-      <button type="button" class="btn btn-sub" (click)="back()">
-          <i class="fa fa-arrow-left"></i>
-          <span>Quay lại</span>
-      </button>
-      <button type="button" class="btn btn-sub">
-          <i class="icon  htvbdh_da-xu-ly"></i>
-          <span>Hoàn thành</span>
-      </button>
-      <button type="button" class="btn btn-main" [disabled]="!formData.valid">
-          <i class="icon htvbdh_tcdt_save"></i>
-          <span>Lưu</span>
-      </button>
-  </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-sub" (click)="back()">
+            <i class="fa fa-arrow-left"></i>
+            <span>Quay lại</span>
+        </button>
+        <button type="button" class="btn btn-sub" *ngIf="!isView" (click)="guiDuyet()">
+            <i class="icon  htvbdh_da-xu-ly"></i>
+            <span>Hoàn thành</span>
+        </button>
+        <button type="button" class="btn btn-main" *ngIf="!isView" [disabled]="!formData.valid">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+        </button>
+    </div>
 </nz-affix>
 <div class="bg-trang">
   <div class="mt16 flex-card p-lr16">
