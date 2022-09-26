@@ -145,6 +145,8 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
     };
 
     let res = await this.deNghiCapPhiBoNganhService.timKiem(body);
+    console.log(res);
+
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
