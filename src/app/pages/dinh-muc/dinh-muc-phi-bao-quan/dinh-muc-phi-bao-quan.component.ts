@@ -21,6 +21,7 @@ import {
 import {CanCuXacDinhPag, ThongTinKhaoSatGia} from "../../../models/DeXuatPhuongAnGia";
 import {DinhMucPhiNxBq} from "../../../models/DinhMucPhi";
 import {QlDinhMucPhiService} from "../../../services/qlnv-kho/QlDinhMucPhi.service";
+import {DanhMucDinhMucService} from "../../../services/danh-muc-dinh-muc.service";
 
 @Component({
   selector: 'app-dinh-muc-phi-bao-quan',
@@ -69,47 +70,7 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
   listLoaiDinhMuc: any[] =[];
   listLoaiBaoQuan: any[] = [];
   listTrangThai: any[] = [{"ma": "00", "giaTri": "Không hoạt động"}, {"ma": "01", "giaTri": "Hoạt động"}];
-  listDmDinhMuc: any[] = [{
-    "ma": "001",
-    "ten": "Mức chi phí nhập gạo",
-    "donViTinh": "Đồng/tấn",
-    "loaiDinhMuc": "01",
-    "loaiBaoQuan": "01",
-    "htBaoQuan": "01",
-    "loaiVthh": "0101",
-    "cloaiVthh": "02"
-  }, {
-    "ma": "002",
-    "ten": "Mức chi phí xuất gạo", "donViTinh": "Đồng/tấn", "loaiDinhMuc": "01", "loaiBaoQuan": "01", "htBaoQuan": "01", "loaiVthh": "0101",
-    "cloaiVthh": "02"
-  }, {
-    "ma": "003",
-    "ten": "Mức bảo quản gạo lần đầu - Mới",
-    "donViTinh": "Đồng/tấn",
-    "loaiDinhMuc": "01",
-    "loaiBaoQuan": "01",
-    "htBaoQuan": "01",
-    "loaiVthh": "0101",
-    "cloaiVthh": "02"
-  }, {
-    "ma": "004",
-    "ten": "Mức bảo quản gạo lần đầu - Bổ sung",
-    "donViTinh": "Đồng/tấn",
-    "loaiDinhMuc": "01",
-    "loaiBaoQuan": "01",
-    "htBaoQuan": "01",
-    "loaiVthh": "0101",
-    "cloaiVthh": "02"
-  }, {
-    "ma": "005",
-    "ten": "Mức bảo quản gạo thường xuyên",
-    "donViTinh": "Đồng/tấn",
-    "loaiDinhMuc": "01",
-    "loaiBaoQuan": "01",
-    "htBaoQuan": "01",
-    "loaiVthh": "0101",
-    "cloaiVthh": "02"
-  }];
+  listDmDinhMuc: any[] = [];
 
   rowItem: DinhMucPhiNxBq = new DinhMucPhiNxBq();
   dataEdit: { [key: string]: { edit: boolean; data: DinhMucPhiNxBq } } = {};
@@ -140,6 +101,7 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
+    private danhMucDinhMucService: DanhMucDinhMucService,
     public userService: UserService,
     private qlDinhMucPhiService: QlDinhMucPhiService,
     public globals: Globals,
@@ -156,6 +118,7 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
       }
       await this.getAllLoaiDinhMuc();
       await this.loaiVTHHGetAll();
+      await this.loadDmDinhMuc();
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -163,7 +126,25 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
+  async loadDmDinhMuc() {
+    let body = {
+      paggingReq: {
+        limit: 10000,
+        page: 0,
+      }
+    };
+    let res = await this.danhMucDinhMucService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      if(res.data && res.data.content && res.data.content.length > 0){
+        for (let item of res.data.content) {
+          this.listDmDinhMuc.push(item);
+        }
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    console.log(this.listDmDinhMuc);
+  }
   async loaiVTHHGetAll() {
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
@@ -190,18 +171,28 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
   changeDm(attr): void {
     let item;
     if (attr == 'ma') {
-      item = this.listDmDinhMuc.filter(item => item.ma ==  this.rowItem.maDinhMuc);
+      item = this.listDmDinhMuc.filter(item => item.maDinhMuc ==  this.rowItem.maDinhMuc)[0];
     } else {
-      item = this.listDmDinhMuc.filter(item => item.ten == this.rowItem.tenDinhMuc);
+      item = this.listDmDinhMuc.filter(item => item.tenDinhMuc == this.rowItem.tenDinhMuc)[0];
     }
     if (item) {
-      this.rowItem.tenDinhMuc = item.map(item => item.ten).toString();
-      this.rowItem.donViTinh = item.map(item => item.donViTinh).toString();
-      this.rowItem.loaiDinhMuc = item.map(item => item.loaiDinhMuc).toString();
-      this.rowItem.loaiBaoQuan = item.map(item => item.loaiBaoQuan).toString();
-      this.rowItem.htBaoQuan = item.map(item => item.htBaoQuan).toString();
-      this.rowItem.loaiVthh = item.map(item => item.loaiVthh).toString();
-      this.rowItem.cloaiVthh = item.map(item => item.cloaiVthh).toString();
+      this.rowItem.tenDinhMuc = item.tenDinhMuc ?  item.tenDinhMuc.toString() : null;
+      this.rowItem.maDinhMuc = item.maDinhMuc ?  item.maDinhMuc.toString() : null;
+      this.rowItem.donViTinh = item.dviTinh ?  item.dviTinh.toString() : null;
+      this.rowItem.loaiDinhMuc = item.loaiDinhMuc ? item.loaiDinhMuc.toString() : null;
+      this.rowItem.loaiBaoQuan = item.loaiHinhBq ? item.loaiHinhBq.toString() : null;
+      this.rowItem.htBaoQuan = item.hinhThucBq ?  item.hinhThucBq.toString() : null;
+      this.rowItem.loaiVthh =  item.loaiVthh ? item.loaiVthh.toString() : null;
+      this.rowItem.cloaiVthh = item.cloaiVthh ?  item.cloaiVthh.toString() : null;
+    }else{
+      this.rowItem.tenDinhMuc =   null;
+      this.rowItem.maDinhMuc =  null;
+      this.rowItem.donViTinh =   null;
+      this.rowItem.loaiDinhMuc =  null;
+      this.rowItem.loaiBaoQuan = null;
+      this.rowItem.htBaoQuan =  null;
+      this.rowItem.loaiVthh =  null;
+      this.rowItem.cloaiVthh =   null;
     }
   }
 

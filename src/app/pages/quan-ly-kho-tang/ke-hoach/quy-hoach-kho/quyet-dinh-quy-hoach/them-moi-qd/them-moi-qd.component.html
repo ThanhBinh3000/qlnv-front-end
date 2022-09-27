@@ -238,7 +238,7 @@
               <nz-input-group>
                 <nz-select [(ngModel)]="dataEdit[idx].data.maChiCuc" [nzShowArrow]="false">
                   <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                  <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChiCuc">
+                  <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of danhSachChiCuc">
                   </nz-option>
                 </nz-select>
               </nz-input-group>
@@ -267,7 +267,7 @@
               <nz-input-group>
                 <nz-select [(ngModel)]="dataEdit[idx].data.phuongAnQuyHoach" [nzShowArrow]="false">
                   <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                  <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChiCuc">
+                  <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of danhSachChiCuc">
                   </nz-option>
                 </nz-select>
               </nz-input-group>

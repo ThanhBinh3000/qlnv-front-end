@@ -1,10 +1,10 @@
-import { ResponseData } from '../interfaces/response';
+import { ResponseData } from '../../interfaces/response';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { BaseService } from './base.service';
+import { environment } from '../../../environments/environment';
+import { BaseService } from '../base.service';
 import { Observable } from 'rxjs';
-import { TonKhoDauNamLuongThuc } from '../models/ThongTinChiTieuKHNam';
+import { TonKhoDauNamLuongThuc } from '../../models/ThongTinChiTieuKHNam';
 
 @Injectable({
   providedIn: 'root',

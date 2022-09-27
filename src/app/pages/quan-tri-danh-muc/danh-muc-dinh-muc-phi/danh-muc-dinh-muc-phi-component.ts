@@ -80,6 +80,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       tenVthh: [null],
       maDinhMuc: [null, [Validators.required]],
       tenDinhMuc: [null, [Validators.required]],
+      trangThai: [null, [Validators.required]]
     })
     this.formDataChinhSua = this.fb.group({
       id: [null],
@@ -92,6 +93,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       tenVthh: [null],
       maDinhMuc: [null, [Validators.required]],
       tenDinhMuc: [null, [Validators.required]],
+      trangThai: [null, [Validators.required]],
     })
   }
 

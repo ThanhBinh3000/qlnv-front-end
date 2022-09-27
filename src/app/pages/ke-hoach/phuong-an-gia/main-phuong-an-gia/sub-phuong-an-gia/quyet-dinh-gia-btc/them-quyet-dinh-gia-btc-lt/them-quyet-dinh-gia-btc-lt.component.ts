@@ -15,7 +15,7 @@ import { QuyetDinhGiaCuaBtcService } from "src/app/services/ke-hoach/phuong-an-g
 import { DanhMucService } from "src/app/services/danhmuc.service";
 import { TongHopPhuongAnGiaService } from "src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 import { QuyetDinhGiaBtcThongTinGia } from "src/app/models/QuyetDinhBtcThongTinGia";
-import { DanhMucTieuChuanService } from "src/app/services/danhMucTieuChuan.service";
+import { DanhMucTieuChuanService } from "src/app/services/quantri-danhmuc/danhMucTieuChuan.service";
 import { DialogToTrinhTongHopComponent } from "src/app/components/dialog/dialog-ke-hoach-phuong-an-gia/dialog-to-trinh-tong-hop/dialog-to-trinh-tong-hop.component";
 
 @Component({
