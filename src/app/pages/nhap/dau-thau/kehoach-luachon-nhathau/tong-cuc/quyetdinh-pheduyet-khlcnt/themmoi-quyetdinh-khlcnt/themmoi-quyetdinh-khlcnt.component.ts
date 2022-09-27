@@ -373,7 +373,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   async danhSachTongHopGetAll() {
     this.spinner.show();
     let body = {
-      trangThai: STATUS.DA_BAN_HANH_QD,
+      trangThai: STATUS.CHUA_TAO_QD,
       loaiVthh: this.formData.get('loaiVthh').value,
       cloaiVthh: this.formData.get('cloaiVthh').value,
       namKhoach: this.formData.get('namKhoach').value
@@ -697,6 +697,20 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           }
         ];
       } else {
+        const res = await this.tongHopDeXuatKHLCNTService.getDetail( data.idThHdr);
+        if (res.msg == MESSAGE.SUCCESS) {
+          const data = res.data;
+          this.formThongTinDX.patchValue({
+            loaiHdong: data.loaiHdong,
+            pthucLcnt: data.pthucLcnt,
+            hthucLcnt: data.hthucLcnt,
+            nguonVon: data.nguonVon,
+            tgianBdauTchuc: [data.tgianBdauTchucTu, data.tgianBdauTchucDen],
+            tgianDthau: [data.tgianDthauTu, data.tgianDthauDen],
+            tgianMthau: [data.tgianMthauTu, data.tgianMthauDen],
+            tgianNhang: [data.tgianNhangTu, data.tgianNhangDen],
+          });
+        }
         this.danhsachDx = data.hhQdKhlcntDtlList
         this.listDanhSachTongHop = [
           ...this.listDanhSachTongHop,
