@@ -32,19 +32,28 @@
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Số lượng </nz-form-label>
-        <input nz-input formControlName="soLuong" readonly />
+        <nz-input-number formControlName="soLuong" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
+                         [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+        ></nz-input-number>
+<!--        <input nz-input formControlName="soLuong" readonly />-->
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá gồm thuế (đồng) </nz-form-label>
-        <input nz-input formControlName="donGia" />
+<!--        <input nz-input formControlName="donGia" />-->
+        <nz-input-number formControlName="donGia" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
+                         [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+        ></nz-input-number>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Thành tiền gồm thuế (đồng) </nz-form-label>
-        <input nz-input formControlName="thanhTien" readonly />
+<!--        <input nz-input formControlName="thanhTien" readonly />-->
+        <nz-input-number formControlName="thanhTien" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
+                         [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+        ></nz-input-number>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="16">
@@ -87,7 +96,8 @@
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực hiện hợp đồng (ngày) </nz-form-label>
         <nz-input-number formControlName="tgianThienHd" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-          [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isReadOnly">
+          [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isReadOnly" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+        >
         </nz-input-number>
       </nz-form-item>
     </div>
@@ -117,7 +127,8 @@
           </td>
           <td>
             <nz-input-number [(ngModel)]="thongtinDauThau.soLuong" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
-              [nzSize]="'small'">
+              [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+            >
             </nz-input-number>
           </td>
           <td>
@@ -138,7 +149,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
           <td>{{ data.tenDvi }}</td>
-          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
           <td>189</td>
           <td>189</td>
           <td *ngIf="!isReadOnly">

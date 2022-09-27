@@ -14,6 +14,7 @@ import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quantri
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'quan-ly-phieu-kiem-tra-chat-luong-hang',
@@ -53,6 +54,8 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
+
+  STATUS  = STATUS;
 
   filterTable: any = {
     soPhieu: '',
@@ -130,33 +133,22 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   async search() {
     let body = {
-      "capDvis": ['3'],
-      "kqDanhGia": this.searchFilter.ketLuan,
       "maDonVi": this.userInfo.MA_DVI,
       "maVatTuCha": this.isTatCa ? null : this.typeVthh,
-      "maNganKho": null,
       "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
         ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
         : null,
       "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
         ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
         : null,
-      "ngayLapPhieu": null,
-      "orderBy": null,
-      "orderDirection": null,
       "paggingReq": {
         "limit": this.pageSize,
-        "orderBy": null,
-        "orderType": null,
         "page": this.page - 1
       },
       "soPhieu": this.searchFilter.soPhieu,
       "soQd": this.searchFilter.soQuyetDinh,
-      "str": null,
-      "tenNguoiGiao": null,
-      "trangThai": null
     };
-    let res = await this.quanLyPhieuKiemTraChatLuongHangService.timKiem(body);
+    let res = await this.quanLyPhieuKiemTraChatLuongHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -224,7 +216,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuKiemTraChatLuongHangService.deleteData(item.id).then((res) => {
+          this.quanLyPhieuKiemTraChatLuongHangService.delete({id : item.id}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
