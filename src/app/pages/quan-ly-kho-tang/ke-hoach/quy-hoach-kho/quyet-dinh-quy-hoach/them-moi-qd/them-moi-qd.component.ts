@@ -16,6 +16,7 @@ import {MESSAGE} from "../../../../../../constants/message";
 import {DANH_MUC_LEVEL} from "../../../../../luu-kho/luu-kho.constant";
 import {UserLogin} from "../../../../../../models/userlogin";
 import {STATUS} from "../../../../../../constants/status";
+import { DonviService } from 'src/app/services/donvi.service';
 
 @Component({
   selector: 'app-them-moi-qd',
@@ -37,6 +38,7 @@ export class ThemMoiQdComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: QuyHoachKho } } = {};
   danhSachPhuongAn: any[] = [];
   dsCuc: any[] = [];
+  dsChiCuc:  any[] = [];
   danhSachChiCuc: any[] = [];
   danhSachDiemKho: any[] = [];
 
