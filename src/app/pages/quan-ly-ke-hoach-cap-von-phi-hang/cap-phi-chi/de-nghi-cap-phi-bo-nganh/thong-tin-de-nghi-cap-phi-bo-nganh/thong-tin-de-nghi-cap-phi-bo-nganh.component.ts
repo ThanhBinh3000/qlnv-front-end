@@ -231,12 +231,12 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.id = this.idInput;
     body.ct1List = this.ct1s;
     body.ngayDeNghi = this.formData.get("ngayDeNghi").value ? dayjs(this.formData.get("ngayDeNghi").value).format("YYYY-MM-DD") : null;
     this.spinner.show();
     try {
       if (this.idInput > 0) {
+        body.id = this.idInput;
         let res = await this.deNghiCapPhiBoNganhService.sua(body);
         if (res.msg == MESSAGE.SUCCESS) {
           if (!isOther) {
