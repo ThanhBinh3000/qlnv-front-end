@@ -27,11 +27,7 @@
   <br>
   <nz-card class="mt16 flex-card p-lr16">
     <div nz-row [nzGutter]="20">
-      <div nz-col nzSpan="4">
-        <label class="search__label">Mã tổng hợp</label>
-        <input class="search__input" placeholder="" nz-input />
-      </div>
-      <div nz-col nzSpan="14">
+      <div nz-col nzSpan="18">
         <label class="search__label">Loại dự án</label>
         <nz-form-control>
           <nz-input-group>
@@ -44,7 +40,23 @@
       </div>
       <div nz-col nzSpan="6">
         <label class="search__label">Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)</label>
-        <nz-range-picker nzPlaceHolder="" nzMode="year"></nz-range-picker>
+        <div nz-row>
+          <div nz-col nzSpan="11">
+            <nz-select nzPlaceHolder="Năm bắt đầu" nzSpan="2" nzAllowClear >
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+              </nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="2" class="text-center">
+            <i class="icon htvbdh_tcdt_lien-ket icon-lien-ket ng-tns-c190-48"></i>
+          </div>
+          <div nz-col nzSpan="11">
+            <nz-select nzPlaceHolder="Năm kết thúc"  nzSpan="2" nzAllowClear  >
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+              </nz-option>
+            </nz-select>
+          </div>
+        </div>
       </div>
     </div>
     <div class="cangiua group-button-search">
@@ -62,19 +74,27 @@
       <div nz-row [nzGutter]="20">
         <div nz-col nzSpan="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true">Ngày tổng hợp
+            <nz-form-label [nzNoColon]="true">Mã tổng hợp
             </nz-form-label>
             <nz-form-control>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input size="small" formControlName="ngayTongHop" />
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="calendar"></i>
-                </ng-template>
+              <nz-input-group>
+                <input type="text" nz-input size="small" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="20">
+        <div nz-col nzSpan="4">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true">Ngày tổng hợp
+            </nz-form-label>
+            <nz-form-control>
+              <nz-input-group>
+                <input type="text" nz-input size="small" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="16">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired>Nội dung tổng hợp
             </nz-form-label>
@@ -111,7 +131,7 @@
   <nz-card class="mt16 flex-card p-lr16" *ngIf="isTongHop">
     <div class="header-detail-tab">ĐỀ XUẤT CỦA CÁC CỤC</div>
     <nz-table #editRowTable [nzData]="dataTable" nzBordered class="nowrap" [nzFrontPagination]="false"
-      [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
+      [nzShowPagination]="false">
       <thead>
         <tr>
           <th class="text-center" width="32px" rowSpan="2">STT</th>
@@ -155,22 +175,6 @@
           </ng-container>
         </tr>
       </tbody>
-      <tfoot>
-        <td></td>
-        <td>Tổng</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tfoot>
     </nz-table>
   </nz-card>
   <br>
