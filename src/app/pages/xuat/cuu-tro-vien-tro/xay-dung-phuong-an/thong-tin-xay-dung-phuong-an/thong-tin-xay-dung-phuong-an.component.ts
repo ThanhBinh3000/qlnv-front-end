@@ -296,7 +296,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         }
       }
       console.log(invalid, 'invalid');
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
       return;
     } else {
       try {
@@ -629,7 +629,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         }
       }
       console.log(invalid, 'invalid');
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn chủng loại hàng hóa');
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
       return;
     }
     let data = this.loaiVthhInput;
