@@ -194,6 +194,7 @@ export class DialogPhanQuyenComponent implements OnInit {
     this.spinner.show();
     try {
       this.page = event;
+      await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -206,6 +207,9 @@ export class DialogPhanQuyenComponent implements OnInit {
     this.spinner.show();
     try {
       this.pageSize = event;
+      if (this.page === 1) {
+        await this.search();
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -266,7 +270,9 @@ export class DialogPhanQuyenComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          item.checked = true;
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
         });
       }
     } else {

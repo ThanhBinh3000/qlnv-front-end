@@ -19,7 +19,7 @@ import { CanCuXacDinh, DanhSachGoiThau, FileDinhKem } from 'src/app/models/DeXua
 import { UserLogin } from 'src/app/models/userlogin';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
@@ -155,6 +155,8 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit {
     });
     this.loaiVTHHGetAll();
   }
+
+  
 
   isDetailPermission() {
     if (this.loaiVthhInput === "02") {

@@ -12,10 +12,11 @@ import { ThongTinQuyetDinh } from "../../../../../../models/DeXuatKeHoachuaChonN
 import { QuyHoachKho } from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
 import { QuyHoachKhoService } from "../../../../../../services/quy-hoach-kho.service";
 import dayjs from "dayjs";
-import { MESSAGE } from "../../../../../../constants/message";
-import { DANH_MUC_LEVEL } from "../../../../../luu-kho/luu-kho.constant";
-import { UserLogin } from "../../../../../../models/userlogin";
-import { STATUS } from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
+import {DANH_MUC_LEVEL} from "../../../../../luu-kho/luu-kho.constant";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {STATUS} from "../../../../../../constants/status";
+import {DonviService} from "../../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-them-moi-qd',
@@ -37,9 +38,9 @@ export class ThemMoiQdComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: QuyHoachKho } } = {};
   danhSachPhuongAn: any[] = [];
   dsCuc: any[] = [];
-  dsChiCuc: any[] = [];
   danhSachChiCuc: any[] = [];
   danhSachDiemKho: any[] = [];
+  dsChiCuc : any[] = []
 
   constructor(
     private router: Router,
@@ -48,6 +49,7 @@ export class ThemMoiQdComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
     private danhMucService: DanhMucService,
+    private dmDviService: DonviService,
     private quyHoachKhoService: QuyHoachKhoService,
     private fb: FormBuilder,
     private modal: NzModalService,
@@ -86,7 +88,7 @@ export class ThemMoiQdComponent implements OnInit {
   }
   async loadListPa() {
     this.danhSachPhuongAn = [];
-    let res = await this.quyHoachKhoService.danhMucChungGetAll('PA_QUY_HOACH');
+    let res = await this.danhMucService.danhMucChungGetAll('PA_QUY_HOACH');
     if (res.msg == MESSAGE.SUCCESS) {
       this.danhSachPhuongAn = res.data;
     }
@@ -102,7 +104,7 @@ export class ThemMoiQdComponent implements OnInit {
       trangThai: '01',
     };
 
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
     this.dsCuc = dsTong[DANH_MUC_LEVEL.CUC];
   }
@@ -114,7 +116,7 @@ export class ThemMoiQdComponent implements OnInit {
       maDviCha: event,
       trangThai: '01',
     };
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
     const chiCuc = this.danhSachChiCuc.filter(item => item.maDvi == event);
     if (type) {
@@ -267,7 +269,7 @@ export class ThemMoiQdComponent implements OnInit {
       maDviCha: maChiCuc,
       trangThai: '01',
     };
-    const dsTong = await this.quyHoachKhoService.layDonViTheoCapDo(body);
+    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
   }
 
