@@ -81,5 +81,6 @@ export class XuatComponent implements OnInit, AfterViewInit {
 
   redirect(url: string) {
     this.router.navigate([this.defaultUrl + url]);
+    this.routerUrl = this.defaultUrl + url;
   }
 }
