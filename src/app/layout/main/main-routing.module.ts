@@ -103,6 +103,12 @@ const routes: Routes = [
           ),
         canActivate: [AuthGuard],
       },
+      {
+        path: MAIN_ROUTES.suaChua,
+        loadChildren: () =>
+          import('../../pages/sua-chua/sua-chua.module').then((m) => m.SuaChuaModule),
+        canActivate: [AuthGuard],
+      },
     ],
   },
   {
