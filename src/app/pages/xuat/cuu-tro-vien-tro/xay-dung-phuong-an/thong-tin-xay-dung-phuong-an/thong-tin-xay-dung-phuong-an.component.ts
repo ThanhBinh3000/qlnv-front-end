@@ -15,7 +15,7 @@ import {MESSAGE} from 'src/app/constants/message';
 import {DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan,} from 'src/app/models/KeHoachBanDauGia';
 import {UserLogin} from 'src/app/models/userlogin';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DanhMucTieuChuanService} from 'src/app/services/danhMucTieuChuan.service';
+
 import {DeXuatKeHoachBanDauGiaService} from 'src/app/services/deXuatKeHoachBanDauGia.service';
 import {DonviService} from 'src/app/services/donvi.service';
 import {HelperService} from 'src/app/services/helper.service';
@@ -36,6 +36,7 @@ import {
   DialogDiaDiemNhapKhoComponent
 } from "../../../../../components/dialog/dialog-dia-diem-nhap-kho/dialog-dia-diem-nhap-kho.component";
 import {cloneDeep} from 'lodash';
+import {DanhMucTieuChuanService} from "../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
 
 //obj declare
 export class DiaDiemNhapKho {
@@ -128,7 +129,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
   diaDiemNhapKho: any[] = [];
   thongTinChiTietCreate: any = {};
   thongTinChiTietClone: any = {};
-  phuongAnXuatList: DiaDiemNhapKho[] = [];
+  phuongAnXuatList: DiaDiemNhapKho[] | any = [];
 
 
   constructor(
@@ -150,24 +151,23 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
     this.formData = this.fb.group(
       {
         id: [],
-        loaiNhapXuat: [],
-        soDxuat: [],
+        soDxuat: [null, [Validators.required]],
         maDvi: [''],
         tenDvi: [],
-        ngayDxuat: [],
-        loaiVthh: [],
-        cloaiVthh: [],
-        tenLoaiVthh: [],
-        tenCloaiVthh: [],
+        ngayDxuat: [null, [Validators.required]],
+        loaiVthh: [null, [Validators.required]],
+        cloaiVthh: [null, [Validators.required]],
+        tenLoaiVthh: [null, [Validators.required]],
+        tenCloaiVthh: [null, [Validators.required]],
         tenVthh: [],
         tongSoLuong: [],
-        trichYeu: [],
+        trichYeu: [null, [Validators.required]],
         trangThai: [STATUS.DU_THAO],
         trangThaiTh: [],
         tenTrangThai: ['Dự thảo'],
         tenTrangThaiTh: [],
-        loaiHinhNhapXuat: [],
-        kieuNhapXuat: [],
+        loaiHinhNhapXuat: [null, [Validators.required]],
+        kieuNhapXuat: [null, [Validators.required]],
         thoiGianThucHien: [],
         noiDung: [],
         nam: [dayjs().get("year"), [Validators.required]],
@@ -270,72 +270,6 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
     }
   }
 
-  themMoiBangPhanLoTaiSan(item?: any) {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
-      console.log(this.formData);
-      return;
-    }
-    if (
-      !this.formData.get('loaiHangHoa').value ||
-      !this.formData.get('qdGiaoChiTieuNam').value ||
-      !this.formData.get('khoanTienDatTruoc').value
-    ) {
-      return;
-    }
-    const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm nhập kho',
-      nzContent: DialogThemDiaDiemNhapKhoComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '1162px',
-      nzFooter: null,
-      nzComponentParams: {
-        phanLoTaiSanEdit: item ?? null,
-        loaiHangHoa: this.formData.get('loaiHangHoa').value,
-        idChiTieu: this.formData.get('qdGiaoChiTieuId').value,
-        khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
-      },
-    });
-
-    modalGT.afterClose.subscribe((res) => {
-      if (!res) {
-        return;
-      }
-
-      this.checkExistBangPhanLo(res);
-      this.diaDiemGiaoNhanList = [];
-      this.bangPhanBoList.forEach((phanLo) => {
-        this.donviService.getDonVi(phanLo.maDvi).then((res) => {
-          if (res.msg == MESSAGE.SUCCESS) {
-            const ddGiaoNhan = new DiaDiemGiaoNhan();
-            ddGiaoNhan.id = res.data?.id;
-            ddGiaoNhan.tenChiCuc = res.data?.tenDvi;
-            ddGiaoNhan.diaChi = res.data?.diaChi;
-            ddGiaoNhan.soLuong = phanLo.soLuong;
-            this.diaDiemGiaoNhanList = [
-              ...this.diaDiemGiaoNhanList,
-              ddGiaoNhan,
-            ];
-            const tongSoLuong = this.diaDiemGiaoNhanList.reduce(
-              (previousChiTiet, currentChiTiet) =>
-                previousChiTiet + currentChiTiet.soLuong,
-              0,
-            );
-            this.formData.patchValue({
-              soLuong: tongSoLuong
-                ? Intl.NumberFormat('en-US').format(tongSoLuong)
-                : '0',
-            });
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        });
-      });
-    });
-  }
-
   checkExistBangPhanLo(data: any) {
 
     if (this.bangPhanBoList) {
@@ -354,6 +288,14 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
   async save(isOther?: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
+      let invalid = [];
+      let controls = this.formData.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          invalid.push(name);
+        }
+      }
+      console.log(invalid, 'invalid');
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
       return;
     } else {
@@ -364,6 +306,9 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         body.ngayDxuat = this.datePipe.transform(body.ngayDxuat, 'yyyy-MM-dd');
         body.thoiGianThucHien = this.datePipe.transform(body.thoiGianThucHien, 'yyyy-MM-dd');
         body.soDxuat = body.soDxuat + this.maDeXuat;
+        if(isOther){
+          body.trangThai = STATUS.CHO_DUYET_LDTC;
+        }
         if (this.idInput) {
           let res = await this.deXuatPhuongAnCuuTroService.update(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -373,10 +318,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
         } else {
-          body.loaiVthh = "0101";
-          body.cloaiVthh = "010101";
-          body.loaiHinhNhapXuat = "A";
-          body.kieuNhapXuat = "B";
+          body.tongSoLuong = this.tongSLThongTinChiTiet;
           let res = await this.deXuatPhuongAnCuuTroService.create(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -385,6 +327,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
         }
+
       } catch (e) {
         console.log(e)
       } finally {
@@ -445,12 +388,13 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
                 nhapKhoList.push(kho);
 
                 this.expandSet.add(kho.idVirtual);
-                if (s.donViTinh === 'tấn') {
+              /*  if (s.donViTinh === 'tấn') {
                   this.tongSLCuuTro += s.soLuong * 1000;
                 } else {
                   this.tongSLCuuTro += s.soLuong;
-                }
-                this.tongTien += s.soLuong * s.donGia;
+                }*/
+                this.tongSLCuuTro += s.soLuong;
+                this.tongTien += s.soLuong??0 * s.donGia??0;
               });
               this.phuongAnXuatList = nhapKhoList;
               this.formData.patchValue({tongSoLuong: this.tongSLCuuTro})
@@ -480,6 +424,36 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
     this.showListEvent.emit();
   }
 
+  async duyet() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = this.formData.value;
+          body.trangThai= STATUS.DA_DUYET_LDTC;
+          let res = await this.deXuatPhuongAnCuuTroService.update(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
   async guiDuyet() {
     this.modal.confirm({
       nzClosable: false,
@@ -542,23 +516,11 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
       if (text) {
         this.spinner.show();
         try {
-          let body = {
-            id: this.idInput,
-            lyDo: text,
-            trangThaiId: this.globals.prop.NHAP_TU_CHOI_TP,
-          };
-          switch (this.khBanDauGia.trangThai) {
-            case this.globals.prop.NHAP_CHO_DUYET_TP:
-              body.trangThaiId = this.globals.prop.NHAP_TU_CHOI_TP;
-              break;
-            case this.globals.prop.NHAP_CHO_DUYET_LD_CUC:
-              body.trangThaiId = this.globals.prop.NHAP_TU_CHOI_LD_CUC;
-              break;
-          }
-
-          const res = await this.deXuatKeHoachBanDauGiaService.updateStatus(body);
+          let body = this.formData.value;
+          body.trangThai= STATUS.TU_CHOI_LDTC;
+          let res = await this.deXuatPhuongAnCuuTroService.update(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -657,6 +619,19 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
   }
 
   themPhuongAn() {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      let invalid = [];
+      let controls = this.formData.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          invalid.push(name);
+        }
+      }
+      console.log(invalid, 'invalid');
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn chủng loại hàng hóa');
+      return;
+    }
     let data = this.loaiVthhInput;
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
@@ -669,11 +644,13 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         loaiHangHoa: this.formData.get('loaiVthh').value,
         cLoaiVthh: this.formData.get('cloaiVthh').value,
         // tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
-        nam: this.formData.get('nam').value
+        nam: this.formData.get('nam').value,
+        phuongAnXuatList: this.phuongAnXuatList
       },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
+        console.log(data,'themphuongan')
         this.phuongAnXuatList.push(data);
         data.chiTietDiaDiems.forEach(s => {
           s.maDvi = data.maDvi;

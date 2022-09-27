@@ -9,8 +9,8 @@ import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/confi
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { UserService } from 'src/app/services/user.service';
+import {DanhSachMuaTrucTiepService} from "../../../../../../services/danh-sach-mua-truc-tiep.service";
 
 @Component({
   selector: 'app-danhsach-kehoach-muatructiep',

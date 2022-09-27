@@ -9,16 +9,14 @@ import {OldResponseData} from "../interfaces/response";
 })
 export class QuyHoachKhoService extends BaseService{
 
-  // gateway: string = '/qlnv-kho'
+  gateway: string = '/qlnv-kho'
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'kt-quy-hoach-kho/qd-quy-hoach', '');
+    super(httpClient, 'kt-quy-hoach-kho/qd-quy-hoach', '/qlnv-kho');
   }
 
   danhSachQdGoc() {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/qd-goc`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
-
-
 }

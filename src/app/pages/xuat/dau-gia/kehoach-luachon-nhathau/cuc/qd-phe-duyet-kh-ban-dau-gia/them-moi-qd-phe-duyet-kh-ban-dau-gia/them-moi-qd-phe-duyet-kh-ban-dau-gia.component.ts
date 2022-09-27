@@ -154,7 +154,6 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         this.firstInitUpdate = false;
       }
       this.spinner.hide();
-      console.log(this.formData);
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
@@ -996,6 +995,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
   }
   setTitle() {
     let trangThai = this.qdPheDuyetKhBanDauGia.trangThai;
+
     switch (trangThai) {
       case '00': {
         this.titleStatus = 'Dự thảo';
@@ -1046,6 +1046,11 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
       }
       case '28': {
         this.titleStatus = 'Đã ban hành QĐ';
+        this.styleStatus = 'da-ban-hanh';
+        break;
+      }
+      case '29': {
+        this.titleStatus = 'Ban hành';
         this.styleStatus = 'da-ban-hanh';
         break;
       }
