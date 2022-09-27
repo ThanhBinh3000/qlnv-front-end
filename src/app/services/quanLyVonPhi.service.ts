@@ -1333,6 +1333,13 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
+  getDinhMuc(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + 'qlnv-khoachphi/chung/dinh-muc',
+      request,
+    )
+  }
+
   getDinhMucNhapXuat(request: any): Observable<any> {
     return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/chung/dinh-muc/muc-chi-dvi', request);
   }
