@@ -47,7 +47,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
   searchFilter = {
     soDeNghi: "",
     tenBoNganh: "",
-    nam: dayjs().get('year'),
+    nam: "",
     ngayDeNghi: "",
   };
   filterTable: any = {
@@ -145,8 +145,6 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
     };
 
     let res = await this.deNghiCapPhiBoNganhService.timKiem(body);
-    console.log(res);
-
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -240,7 +238,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter.nam = dayjs().get('year');
+    // this.searchFilter.nam = dayjs().get('year');
     this.searchFilter.soDeNghi = "";
     this.searchFilter.ngayDeNghi = "";
     this.searchFilter.tenBoNganh = "";
@@ -272,7 +270,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.deNghiCapPhiBoNganhService.delete(item.id).then((res) => {
+          this.deNghiCapPhiBoNganhService.deleteData(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -324,15 +322,8 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          soDeNghi: this.searchFilter.soDeNghi ? this.searchFilter.soDeNghi : '',
-          capDvis: [],
-          maBoNganh: this.searchFilter.tenBoNganh ? this.searchFilter.tenBoNganh : '',
-          maDvis: [this.detail.maDvi],
-          nam: this.searchFilter.nam ? this.searchFilter.nam : '',
-          ngayDeNghiTuNgay: this.searchFilter.ngayDeNghi ? dayjs(this.searchFilter.ngayDeNghi[0]).format('YYYY-MM-DD') : '',
-          ngayDeNghiDenNgay: this.searchFilter.ngayDeNghi ? dayjs(this.searchFilter.ngayDeNghi[1]).format('YYYY-MM-DD') : '',
-          trangThai: "",
-          trangThais: []
+          pageNumber: this.page,
+          pageSize: this.pageSize,
         };
         this.deNghiCapPhiBoNganhService
           .exportList(body)
@@ -401,8 +392,6 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
     if (value instanceof Date) {
       value = dayjs(value).format('YYYY-MM-DD');
     }
-    console.log(key, value);
-
     if (value && value != '') {
       this.dataTable = this.dataTableAll.filter((item) =>
         item[key]

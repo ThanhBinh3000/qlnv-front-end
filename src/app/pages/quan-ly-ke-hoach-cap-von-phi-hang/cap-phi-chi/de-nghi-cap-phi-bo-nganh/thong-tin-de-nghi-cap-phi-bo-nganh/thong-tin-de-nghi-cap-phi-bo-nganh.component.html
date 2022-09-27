@@ -32,7 +32,7 @@
                 <div nz-col [nzSpan]="2">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Năm </nz-form-label>
-                        <nz-select formControlName="nam">
+                        <nz-select formControlName="nam" [nzDisabled]="isView">
                             <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text">
                             </nz-option>
                         </nz-select>
@@ -41,7 +41,7 @@
                 <div nz-col [nzSpan]="4">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Bộ Ngành </nz-form-label>
-                        <nz-select formControlName="maBoNganh">
+                        <nz-select formControlName="maBoNganh" [nzDisabled]="isView">
                             <nz-option *ngFor="let item of listBoNganh" [nzValue]="item.ma" [nzLabel]="item.giaTri">
                             </nz-option>
                         </nz-select>
@@ -50,13 +50,13 @@
                 <div nz-col [nzSpan]="4">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Số đề nghị </nz-form-label>
-                        <input nz-input type="text" formControlName="soDeNghi" />
+                        <input nz-input type="text" formControlName="soDeNghi" [readonly]="isView" />
                     </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="4">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Ngày đề nghị </nz-form-label>
-                        <nz-date-picker formControlName="ngayDeNghi">
+                        <nz-date-picker formControlName="ngayDeNghi" [nzDisabled]="isView">
                         </nz-date-picker>
                     </nz-form-item>
                 </div>
@@ -80,7 +80,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr *ngIf="!(isDisableField() || isView)">
                             <td></td>
                             <td>
                                 <input type="text" nz-input class="w-300" [(ngModel)]="create1.tenDvCungCap" />
@@ -151,7 +151,7 @@
                             <th class="text-right"> Tổng</th>
                             <th class="bg-gray  text-money text-specical-money">{{tongBang1(ct1s) | number:
                                 '1.0-1'}}</th>
-                            <th></th>
+                            <th *ngIf="!(isDisableField() || isView)"></th>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -187,7 +187,7 @@
                                 </nz-select>
                             </th>
                             <th colSpan="2">
-                                <input nz-input type="text" (ngModel)="rowEdit.tenHangHoa"
+                                <input nz-input type="text" [(ngModel)]="rowEdit.tenHangHoa"
                                     [readonly]="rowEdit.isView" />
                             </th>
                         </tr>

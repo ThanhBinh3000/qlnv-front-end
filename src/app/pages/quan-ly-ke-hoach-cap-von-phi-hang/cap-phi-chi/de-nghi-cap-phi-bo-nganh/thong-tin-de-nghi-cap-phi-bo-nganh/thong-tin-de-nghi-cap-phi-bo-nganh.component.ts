@@ -124,9 +124,6 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
 
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      await this.loadChiTiet(this.idInput);
-      this.spinner.hide();
     }
   }
 
@@ -279,7 +276,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     if (id > 0) {
       let res = await this.deNghiCapPhiBoNganhService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
-        let data = res.DataService
+        let data = res.data;
         if (data) {
           this.formData.patchValue({
             'nam': data.nam,
@@ -311,7 +308,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       });
     }
     else if (type === 'ct2s') {
-      this.rowEdit.ct2s.forEach((lt, i) => {
+      this.rowEdit.ct2List.forEach((lt, i) => {
         lt.stt = i + 1;
       });
     }
@@ -349,6 +346,8 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       item.ycCapThemPhi = this.tongCapThemBang2(this.rowEdit);
       this.rowEdit.isView = true;
     }
+    console.log("this.rowEdit: ", this.rowEdit);
+    
   }
 
   deleteRow(item: any, type) {
@@ -370,6 +369,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         element.edit = false;
       });
       this.rowEdit = cloneDeep(item);
+      this.rowEdit.ct2s = cloneDeep(this.rowEdit.ct2List);
       this.rowEdit.isView = false;
       this.oldDataEdit1 = cloneDeep(item);
     }
@@ -430,8 +430,10 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
           element.edit = false;
         });
         this.sortTableId('ct2s');
+        this.changeLoaiHangHoa(this.rowEdit.maVatTuCha);
       }
     }
+    this.rowEdit.ct2s = cloneDeep(this.rowEdit.ct2List);
   }
 
   tongBang1(data) {

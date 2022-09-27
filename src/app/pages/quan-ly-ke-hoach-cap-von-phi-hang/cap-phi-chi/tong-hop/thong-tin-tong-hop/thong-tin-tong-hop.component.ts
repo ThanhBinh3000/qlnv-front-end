@@ -181,7 +181,6 @@ export class ThongTinTongHopComponent implements OnInit {
           this.cts = [...data.cts];
           this.ct1s = [...data.ct1s];
           this.sortTableId('ct1s');
-          this.sortTableId('ct2s');
         }
       }
     }
