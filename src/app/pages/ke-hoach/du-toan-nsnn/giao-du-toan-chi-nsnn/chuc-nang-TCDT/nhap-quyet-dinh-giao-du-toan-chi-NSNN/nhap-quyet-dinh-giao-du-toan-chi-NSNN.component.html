@@ -91,7 +91,7 @@
                 Đơn vị:
               </div>
               <div nz-col [nzSpan]="2">
-                <ng-container *ngIf="!editMoneyUnit; else editMoney">
+                <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
                   <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
                 </ng-container>
                 <ng-template #editMoney>
