@@ -486,6 +486,10 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
       return;
     }
+    if (this.formData.value.ngayKy < this.formData.value.ngayLapKeHoach) {
+      this.notification.error(MESSAGE.ERROR, 'Ngày ký không hợp lệ!');
+      return;
+    }
     this.spinner.show();
 
     try {
