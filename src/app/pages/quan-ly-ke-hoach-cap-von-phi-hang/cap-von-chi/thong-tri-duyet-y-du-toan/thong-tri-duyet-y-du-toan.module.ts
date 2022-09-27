@@ -6,17 +6,19 @@ import { ThongTinThongTriDuyetYDuToanComponent } from './thong-tin-thong-tri-duy
 import { ThongTriDuyetYDuToanComponent } from './thong-tri-duyet-y-du-toan.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ComponentsModule,
-    DirectivesModule,
-  ],
-  declarations: [
-    ThongTriDuyetYDuToanComponent,
-    ThongTinThongTriDuyetYDuToanComponent
-  ],
-  exports: [
-    ThongTriDuyetYDuToanComponent
-  ]
+    imports: [
+        CommonModule,
+        ComponentsModule,
+        DirectivesModule,
+    ],
+    declarations: [
+        ThongTriDuyetYDuToanComponent,
+        ThongTinThongTriDuyetYDuToanComponent,
+
+    ],
+    exports: [
+        ThongTriDuyetYDuToanComponent
+    ]
 })
-export class ThongTinTriDuyetYDuToanModule { }
+export class ThongTriDuyetYDuToanModule { }
+

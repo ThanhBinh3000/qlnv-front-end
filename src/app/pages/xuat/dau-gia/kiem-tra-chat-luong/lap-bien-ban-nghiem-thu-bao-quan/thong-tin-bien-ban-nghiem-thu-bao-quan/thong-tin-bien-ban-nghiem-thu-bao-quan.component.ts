@@ -20,7 +20,7 @@ import VNnum2words from 'vn-num2words';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { QuanLyNghiemThuKeLotService } from 'src/app/services/quanLyNghiemThuKeLot.service';
 import * as dayjs from 'dayjs';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',

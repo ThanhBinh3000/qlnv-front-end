@@ -112,7 +112,7 @@ export class ThemMoiQuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
       soQd: ['', [Validators.required]],
       ngayKy: ['', [Validators.required]],
       ngayHluc: ['', [Validators.required]],
-      idThHdr: [''],
+      idThHdr: ['', [Validators.required]],
       idTrHdr: [''],
       trichYeu: [''],
       hthucLcnt: ['', [Validators.required]],
@@ -223,19 +223,19 @@ export class ThemMoiQuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
   }
 
   bindingDataTongHop(dataTongHop?) {
+    console.log(dataTongHop);
     if (dataTongHop) {
       this.formData.patchValue({
         cloaiVthh: dataTongHop.cloaiVthh,
-        tenCloaiVthh: dataTongHop.tenCloaiVthh,
+        tenCloaiVthh: dataTongHop.cloaiVthh,
         loaiVthh: dataTongHop.loaiVthh,
         tenVthh: dataTongHop.tenVthh,
-        namKhoach: dataTongHop.namKhoach,
+        namKhoach: dataTongHop.namKeHoach,
         idThHdr: dataTongHop.id,
         tchuanCluong: dataTongHop.tchuanCluong,
       });
     }
   }
-
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
   }
@@ -352,9 +352,10 @@ export class ThemMoiQuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
   }
 
   async danhSachTongHopGetAll() {
+    console.log('aaaaaaaaaaaaaaaaaaaaaaa');
     this.danhsachDx = [];
     let body = {
-      trangThai: '00',
+      trangThai: null,
       loaiVthh: this.formData.get('loaiVthh').value,
       cloaiVthh: this.formData.get('cloaiVthh').value,
       namKhoach: this.formData.get('namKhoach').value,
@@ -380,6 +381,7 @@ export class ThemMoiQuyetDinhPheDuyetKhBanDauGiaComponent implements OnInit {
           }
         });
       } else {
+        console.log(res.data)
         res.data.forEach((item) => {
           if (!this.maTongHopExis(this.listDanhSachTongHop, item.id)) {
             this.listDanhSachTongHop.push({ id: item.id });

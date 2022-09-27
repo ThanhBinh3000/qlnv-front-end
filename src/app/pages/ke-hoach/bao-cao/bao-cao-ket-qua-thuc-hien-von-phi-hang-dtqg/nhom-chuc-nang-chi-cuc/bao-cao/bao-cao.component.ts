@@ -15,7 +15,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { BAO_CAO_DOT, BAO_CAO_NAM, BCVP, DON_VI_TIEN, NOT_OK, OK, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
+import { BAO_CAO_DOT, BAO_CAO_NAM, BCVP, divNumber, DON_VI_TIEN, NOT_OK, OK, sumNumber, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { BAO_CAO_KET_QUA, MAIN_ROUTE_BAO_CAO, MAIN_ROUTE_KE_HOACH } from '../../bao-cao-ket-qua-thuc-hien-von-phi-hang-dtqg.constant';
 import { BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM, SOLAMA, TAB_SELECTED } from './bao-cao.constant';
@@ -108,6 +108,8 @@ export class BaoCaoComponent implements OnInit {
 	statusBtnFinish = true;                    // trang thai hoan tat nhap lieu
 	statusBtnOk = true;                        // trang thai ok/ not ok
 	statusBtnExport = true;                        // trang thai export
+
+	isDataAvailable = false;
 	lstFiles: any = [];                          // list File de day vao api
 
 	maDviTien = "1";                    // ma don vi tien
@@ -160,6 +162,12 @@ export class BaoCaoComponent implements OnInit {
 	selectedIndex = 1;
 
 	async ngOnInit() {
+		this.initialization().then(() => {
+			this.isDataAvailable = true;
+		})
+	}
+
+	async initialization(){
 		this.id = this.router.snapshot.paramMap.get('id');
 		const lbc = this.router.snapshot.paramMap.get('baoCao');
 
@@ -191,7 +199,7 @@ export class BaoCaoComponent implements OnInit {
 				}
 			);
 			this.baoCao.nguoiTao = this.userInfo?.sub;
-			this.baoCao.ngayTao = new Date().toDateString();
+			this.baoCao.ngayTao = this.datePipe.transform(this.currentday, Utils.FORMAT_DATE_STR);
 			this.baoCao.trangThai = "1";
 		} else {
 			this.baoCao.maDvi = this.userInfo?.MA_DVI;
@@ -301,27 +309,6 @@ export class BaoCaoComponent implements OnInit {
 	}
 
 	getListUser() {
-		// const request = {
-		// 	dvql: this.userInfo?.MA_DVI,
-		// 	fullName: "",
-		// 	paggingReq: {
-		// 		limit: 1000,
-		// 		page: 1
-		// 	},
-		// 	roleId: "",
-		// 	status: "",
-		// 	sysType: "",
-		// 	username: ""
-		// }
-		// this.quanLyVonPhiService.getListUserByManage(request).toPromise().then(res => {
-		// 	if (res.statusCode == 0) {
-		// 		this.allUsers = res.data?.content;
-		// 	} else {
-		// 		this.notification.error(MESSAGE.ERROR, res?.msg);
-		// 	}
-		// }, (err) => {
-		// 	this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-		// })
 		this.quanLyVonPhiService.getListUser().toPromise().then(res => {
 			if (res.statusCode == 0) {
 				this.nguoiBcaos = res.data;
@@ -942,6 +929,24 @@ export class BaoCaoComponent implements OnInit {
 								item.nguoiBcao = this.userInfo.sub;
 							}
 						}
+						if (item.maLoai == '4') {
+							item.lstCtietBcaos.forEach(e => {
+								e.khGiaMuaTd = Math.round(divNumber(e.khTtien, e.khSoLuong));
+								e.thGiaMuaTd = Math.round(divNumber(e.thTtien, e.thSoLuong));
+							})
+						}
+						if (item.maLoai == '5'){
+							item.lstCtietBcaos.forEach(e => {
+								e.ttClechGiaTteVaGiaHtoan = sumNumber([e.ttGiaBanTte, -e.ttGiaHtoan]);
+							})
+						}
+					})
+
+					this.baoCao?.lstBcaoDviTrucThuocs.forEach(item => {
+						item.ngayTrinh = this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR);
+						item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
+						item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+						item.ngayTraKq = this.datePipe.transform(item.ngayTraKq, Utils.FORMAT_DATE_STR);
 					})
 					this.listFile = [];
 					this.baoCao.trangThai = "1";

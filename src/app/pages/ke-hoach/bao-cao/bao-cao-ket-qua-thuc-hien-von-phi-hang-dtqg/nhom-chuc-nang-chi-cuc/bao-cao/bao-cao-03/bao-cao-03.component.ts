@@ -76,6 +76,7 @@ export class BaoCao03Component implements OnInit {
     statusBtnExport: boolean;
     allChecked = false;
     editMoneyUnit = false;
+    isDataAvailable = false;
 
     total: ItemData[] = [new ItemData(), new ItemData(), new ItemData()];
 
@@ -90,6 +91,13 @@ export class BaoCao03Component implements OnInit {
     }
 
     async ngOnInit() {
+        this.initialization().then(() => {
+            this.isDataAvailable = true;
+        })
+    }
+
+    async initialization() {
+        this.spinner.show();
         //lấy danh sách vật tư
         await this.danhMucService.dMVatTu().toPromise().then(res => {
             if (res.statusCode == 0) {
@@ -100,16 +108,15 @@ export class BaoCao03Component implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        await this.addListVatTu(this.listVattu);
-
-        ///////////////////////////////////////////////////////////////
+        this.addListVatTu(this.listVattu);
+        //thong tin chung bao cao
         this.id = this.data?.id;
         this.maDviTien = this.data?.maDviTien ? this.data.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnExport = this.data?.statusBtnExport;
-        if (this.status){
+        if (this.status) {
             this.tuNgay = this.datePipe.transform(this.data?.tuNgay, Utils.FORMAT_DATE_STR);
             this.denNgay = this.datePipe.transform(this.data?.denNgay, Utils.FORMAT_DATE_STR);
         } else {
@@ -357,6 +364,7 @@ export class BaoCao03Component implements OnInit {
         this.lstCtietBcao[idAppendix].data[ind].soLuongTte = slThucTe;
         this.lstCtietBcao[idAppendix].data[ind].ttGiaHtoan = ttHachToan;
         this.lstCtietBcao[idAppendix].data[ind].ttGiaBanTte = ttThucTe;
+        this.lstCtietBcao[idAppendix].data[ind].ttClechGiaTteVaGiaHtoan = sumNumber([ttThucTe, -ttHachToan]);
     }
 
     updateChecked(id: string, idAppendix: number) {

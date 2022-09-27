@@ -16,7 +16,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_DE_NGHI, MONEY_LIMIT, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_DE_NGHI, MONEY_LIMIT, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { CAP_VON_NGUON_CHI, MAIN_ROUTE_CAPVON } from '../../quan-ly-ke-hoach-von-phi-hang.constant';
 
@@ -419,7 +419,7 @@ export class DeNghiTheoQuyetDinhDonGiaMuaComponent implements OnInit {
             return;
         }
         if (this.kphiDaCap > this.tongTien) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            this.notification.warning(MESSAGE.WARNING, 'Kinh phí đã cấp không được vượt quá tổng tiền');
             return;
         }
 
