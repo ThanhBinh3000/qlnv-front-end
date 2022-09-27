@@ -93,7 +93,7 @@
         </td>
         <td>
           <nz-input-number type="text" nz-input [nzSize]="'small'"
-                           [(ngModel)]="chiTietDiemNhapKhoCreate.donGiaChuaVAT" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
+                           [(ngModel)]="chiTietDiemNhapKhoCreate.donGia" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
                            >
           </nz-input-number>
         </td>
@@ -124,7 +124,7 @@
           <td>{{data.maDonViTaiSan}}</td>
           <td>{{data.tonKho}}</td>
           <td>{{data.soLuong}}</td>
-          <td>{{data.donGiaChuaVAT}}</td>
+          <td>{{data.donGia}}</td>
           <td>{{data.thanhTien}}</td>
           <td class="text-center" nzRight>
             <a (click)="startEdit(i)">
@@ -187,7 +187,7 @@
           </td>
           <td>
             <nz-input-number type="text" nz-input [nzSize]="'small'"
-                             [(ngModel)]="data.donGiaChuaVAT" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
+                             [(ngModel)]="data.donGia" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
                              >
             </nz-input-number>
           </td>

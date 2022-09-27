@@ -17,9 +17,12 @@ export class DiaDiemNhapKho {
   idVirtual: number;
   maDvi: string;
   tenDvi: string;
+  maChiCuc: string;
+  tenChiCuc: string;
   soLuong: number;
   soLuongTheoChiTieu: number;
   slDaLenKHBan: number;
+  thanhTien: number;
   tongKhoanTienDatTruoc: string;
   tongGiaKhoiDiem: string;
   donViTinh: string;
@@ -46,6 +49,7 @@ export class ChiTietDiaDiemNhapKho {
   tonKho: number;
   soLuong: number;
   donGiaChuaVAT: number;
+  donGia: number;
   giaKhoiDiem: number;
   soTienDatTruoc: number;
   idVirtual: number;
@@ -102,6 +106,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     loaiHH: ''
   }
   listPhuongAn: DiaDiemNhapKho | any;
+  phuongAnXuatList: DiaDiemNhapKho[] = [];
 
   constructor(
     private _modalRef: NzModalRef,
@@ -147,6 +152,8 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     let res = await this.donViService.layDonViChiCuc();
     if (res.msg == MESSAGE.SUCCESS) {
       this.chiCucList = res.data;
+      let existsChiCuc = this.phuongAnXuatList.map((s) => s.maDvi);
+      this.chiCucList = this.chiCucList.filter((s) => !existsChiCuc.includes(s.maDvi));
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -198,7 +205,6 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
 
   changeNhaKho(maNhaKho: any, index?: number, isEdit?: boolean) {
     let nhaKho;
-    console.log(this.listNhaKhoEdit, 9999);
     if (isEdit) {
       nhaKho = this.listNhaKhoEdit.find(x => x.key == maNhaKho);
       this.dsChiTietDiemNhapKhoClone[index].tenNhaKho = nhaKho.title;
@@ -280,16 +286,16 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     if (nganLo) {
       console.log(nganLo, 'nganLo')
       this.bodyGetTonKho.maLokho = nganLo.key;
-      if (nganLo?.children.length === 0) {
+      /*if (nganLo?.children.length === 0) {
         this.loadTonKho(index, isEdit, this.diaDiemNhapKho.maDvi, this.bodyGetTonKho.maLokho);
-      }
-   /*   if (this.bodyGetTonKho.chungLoaiHH) {
-        this.loadTonKho(index, isEdit, this.diaDiemNhapKho.maDvi,
-          this.bodyGetTonKho.maDiemKho,
-          this.bodyGetTonKho.maNhaKho,
-          this.bodyGetTonKho.maNganKho,
-          this.bodyGetTonKho.maLokho);
       }*/
+      /*   if (this.bodyGetTonKho.chungLoaiHH) {
+           this.loadTonKho(index, isEdit, this.diaDiemNhapKho.maDvi,
+             this.bodyGetTonKho.maDiemKho,
+             this.bodyGetTonKho.maNhaKho,
+             this.bodyGetTonKho.maNganKho,
+             this.bodyGetTonKho.maLokho);
+         }*/
       let res = this.donViService.getTrangThaiHienThoiKho({
         maDvi: nganLo.key,
         maVTHH: this.cLoaiVthh,
@@ -348,8 +354,9 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     const donVi = this.chiCucList.find(dv => dv.maDvi === this.diaDiemNhapKho.maDvi);
     if (donVi) {
       this.diaDiemNhapKho.tenDvi = donVi.tenDvi;
+      this.diaDiemNhapKho.maChiCuc = donVi.maDvi;
+      this.diaDiemNhapKho.tenChiCuc = donVi.tenDvi;
     }
-
   }
 
   async loadDanhMucHang() {
