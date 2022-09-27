@@ -80,7 +80,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
       donGiaSauVat: [''],
       tongTienSauVat: [''],
       tongTienTrcVat: [''],
-      ghiChu: ['', [Validators.required]],
+      ghiChu: ['', ],
       diaDiemNhap: [],
       trangThai: ['']
     });
@@ -153,14 +153,14 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
     const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetailGoiThau(this.idInput);
     if (res.msg == MESSAGE.SUCCESS) {
       const dataDetail = res.data;
-      const isVatTu = dataDetail.cloaiVthh ? dataDetail.cloaiVthh.startsWith('02') : false;
+      const isVatTu = dataDetail.loaiVthh.startsWith('02');
       // Trang thái đã cập nhập thông tin gói thầu hoặc hoàn thành cập nhập tt gt
       if (dataDetail.trangThai == STATUS.CHUA_CAP_NHAT) {
         this.formGoiThau.patchValue({
           idGoiThau: dataDetail.id,
           tenGthau: dataDetail.goiThau,
-          loaiVthh: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.loaiVthh,
-          tenVthh: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tenVthh,
+          loaiVthh: isVatTu ? dataDetail.loaiVthh : dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.loaiVthh,
+          tenVthh: isVatTu ? dataDetail.tenVthh : dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tenVthh,
           cloaiVthh: isVatTu ? dataDetail.cloaiVthh : dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.cloaiVthh,
           tenCloaiVthh: isVatTu ? dataDetail.tenCloaiVthh : dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tenCloaiVthh,
           soQdPdKhlcnt: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.soQd,
@@ -362,12 +362,15 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
   pipe = new DatePipe('en-US');
 
   async save(trangThaiLuu) {
-    // if (trangThaiLuu == STATUS.HOAN_THANH_CAP_NHAT) {
-    //   this.helperService.markFormGroupTouched(this.formGoiThau);
-    //   if (this.formGoiThau.invalid) {
-    //     return;
-    //   }
-    // }
+    this.spinner.show()
+    if (trangThaiLuu == STATUS.HOAN_THANH_CAP_NHAT) {
+      this.helperService.markFormGroupTouched(this.formGoiThau);
+      if (this.formGoiThau.invalid) {
+        this.notification.error(MESSAGE.ERROR,MESSAGE.FORM_REQUIRED_ERROR);
+        this.spinner.hide()
+        return;
+      }
+    }
     let body = this.formGoiThau.value;
     body.tgianDthau = this.pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
     body.tgianMthau = this.pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
@@ -377,9 +380,11 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (this.formGoiThau.get('id').value) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        this.spinner.hide()
         this.quayLai();
       } else {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        this.spinner.hide()
         this.quayLai();
       }
     } else {

@@ -244,6 +244,7 @@ export class TongHopDeXuatKhBanDauGiaComponent implements OnInit {
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
     this.searchFilter.soDx = null;
+    this.searchFilter.loaiVthh = null;
     this.searchFilter.ngayTongHop = null;
     this.searchFilter.noiDungTongHop = null;
     this.search();
