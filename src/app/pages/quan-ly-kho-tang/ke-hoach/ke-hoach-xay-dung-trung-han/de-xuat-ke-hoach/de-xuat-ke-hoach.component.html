@@ -6,8 +6,8 @@
           <label class="search__label">Cục DTNN KV</label>
           <nz-form-control >
             <nz-input-group>
-              <nz-select  nzAllowClear>
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+              <nz-select [nzDisabled]="userService.isCuc()" nzAllowClear [(ngModel)]="searchFilter.maDvi">
+                <nz-option  *ngFor="let p of danhSachCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
                 </nz-option>
               </nz-select>
             </nz-input-group>
@@ -15,21 +15,21 @@
         </div>
         <div nz-col nzSpan="3">
           <label class="search__label">Số công văn</label>
-          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soQd" />
+          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soCongVan" />
         </div>
         <div nz-col nzSpan="4">
           <label class="search__label">Danh mục dự án</label>
-          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soQd" />
+          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.dmucDuAn" />
         </div>
         <div nz-col nzSpan="4">
           <label class="search__label">Địa điểm xây dựng</label>
-          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soQd" />
+          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.diaDiem" />
         </div>
         <div nz-col nzSpan="3">
           <label class="search__label">Loại dự án</label>
           <nz-form-control >
             <nz-input-group>
-              <nz-select formControlName="namKhoach" nzAllowClear>
+              <nz-select [(ngModel)]="searchFilter.loaiDuAn" nzAllowClear>
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
@@ -40,7 +40,7 @@
           <label class="search__label">Thời gian KC - HT</label>
           <nz-form-control >
             <nz-input-group>
-              <nz-select formControlName="namKhoach" nzAllowClear>
+              <nz-select [(ngModel)]="searchFilter.tgKcHt"  nzAllowClear>
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
@@ -49,14 +49,30 @@
         </div>
         <div nz-col nzSpan="4">
           <label class="search__label">Ngày ký</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
       </div>
       <br>
       <div>
         <div nz-col nzSpan="6">
           <label class="search__label">Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)</label>
-          <nz-range-picker nzPlaceHolder="" [(ngModel)]="searchFilter.ngayQd" nzMode="year" ></nz-range-picker>
+          <div nz-row>
+            <div nz-col nzSpan="11">
+              <nz-select nzPlaceHolder="Năm bắt đầu" nzSpan="2" nzAllowClear [(ngModel)]="searchFilter.namBatDau" >
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                </nz-option>
+              </nz-select>
+            </div>
+            <div nz-col nzSpan="2" class="text-center">
+              <i class="icon htvbdh_tcdt_lien-ket icon-lien-ket ng-tns-c190-48"></i>
+            </div>
+            <div nz-col nzSpan="11">
+              <nz-select nzPlaceHolder="Năm kết thúc"  nzSpan="2" nzAllowClear [(ngModel)]="searchFilter.namKetThuc"  >
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                </nz-option>
+              </nz-select>
+            </div>
+          </div>
         </div>
       </div>
       <div nz-col class="cangiua group-button-search">
@@ -75,7 +91,7 @@
     <div class="group-button">
       <h3> DANH SÁCH ĐỀ XUẤT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM)</h3>
       <div class="buttons">
-        <button *ngIf="userService.isCuc"  type="button" class="btn btn-sub btn-xoa">
+        <button *ngIf="userService.isCuc()"  type="button" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
@@ -83,7 +99,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button  *ngIf="userService.isCuc"  type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
+        <button  *ngIf="userService.isCuc()"  type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
           <i class="icon htvbdh_soanthao"></i>
           <span>Thêm</span>
         </button>
@@ -98,15 +114,15 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th class="text-center" style="width: 2%;">STT</th>
-          <th class="text-center" style="width: 10%;">Số công văn</th>
-          <th class="text-center" style="width: 10%;">Cục DTNN KV</th>
-          <th class="text-center" style="width: 10%;">Ngày ký</th>
-          <th class="text-center" style="width: 10%;">Giai đoạn</th>
-          <th class="text-center" style="width: 10%;">Tổng mức đầu tư</th>
-          <th class="text-center" style="width: 35%;">Trích yếu</th>
-          <th class="text-center" style="width: 8%;">Trạng thái</th>
-          <th  class="text-center" style="width: 8%;" >Hành động</th>
+          <th  style="width: 2%;">STT</th>
+          <th  style="width: 10%;">Số công văn</th>
+          <th style="width: 10%;">Cục DTNN KV</th>
+          <th style="width: 10%;">Ngày ký</th>
+          <th  style="width: 10%;">Giai đoạn</th>
+          <th  style="width: 10%;">Tổng mức đầu tư</th>
+          <th  style="width: 35%;">Trích yếu</th>
+          <th  style="width: 8%;">Trạng thái</th>
+          <th   style="width: 8%;" >Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -161,22 +177,22 @@
                    [nzDisabled]="data.trangThai != '00'"></label>
           </td>
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-          <td>{{ data.soQd }}</td>
-          <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.soCongVan }}</td>
+          <td>{{ data.maDvi }}</td>
+          <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.namBatDau +' - '+data.namKetThuc }}</td>
           <td>{{ data.trichYeu }}</td>
-          <td>{{ data.soQdGoc }}</td>
-          <td>{{data.namKhoach}}</td>
-          <td>{{data.tenVthh}}</td>
+          <td>{{data.trichYeu}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left" >
             <a (click)="redirectToChiTiet(data.id,false)">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="userService.isCuc"
+            <a *ngIf="userService.isCuc()"
                (click)="redirectToChiTiet(data.id,true)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="userService.isCuc">
+            <a *ngIf="userService.isCuc()" (click)="xoaItem(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

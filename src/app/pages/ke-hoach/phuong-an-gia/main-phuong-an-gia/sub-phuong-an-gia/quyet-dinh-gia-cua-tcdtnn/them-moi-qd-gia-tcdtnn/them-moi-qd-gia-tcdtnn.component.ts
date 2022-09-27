@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { QuyetDinhGiaBtcThongTinGia } from 'src/app/models/QuyetDinhBtcThongTinGia';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
 import { UserService } from 'src/app/services/user.service';

@@ -43,7 +43,7 @@
       </div>
     </div>
     <form nzLayout="vertical" nz-form [formGroup]="formData">
-      <div nz-row [nzGutter]="[24]">
+      <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
@@ -136,7 +136,7 @@
           </nz-form-item>
         </div>
       </div>
-      <div class="comment-last" nz-row [nzGutter]="[24]">
+      <div class="comment-last" nz-row [nzGutter]="24">
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
@@ -336,7 +336,8 @@
               <nz-form-label nzRequired [nzNoColon]="true"> Khoản tiền đặt trước (%) </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfter="%">
-                  <input nz-input formControlName="khoanTienDatTruoc" nzMax="100" />
+                  <nz-input-number formControlName="khoanTienDatTruoc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"  [nzSize]="'small'">
+                  </nz-input-number>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -492,3 +493,4 @@
     </div>
   </nz-card>
 </div>
+

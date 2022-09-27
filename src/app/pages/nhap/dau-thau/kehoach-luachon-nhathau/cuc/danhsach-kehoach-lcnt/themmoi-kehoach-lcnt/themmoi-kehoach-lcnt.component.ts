@@ -31,7 +31,7 @@ import { environment } from 'src/environments/environment';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
-import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { STATUS } from "../../../../../../../constants/status";
 
 interface ItemData {
@@ -165,7 +165,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       soQd: [, [Validators.required]],
       soDxuat: [null, [Validators.required]],
       trichYeu: [null],
-      ghiChu: [null, [Validators.required]],
+      ghiChu: [null],
       namKhoach: [, [Validators.required]],
       loaiVthh: [, [Validators.required]],
       tenVthh: [, [Validators.required]],
