@@ -111,11 +111,12 @@
         <th class="text-center" style="width: 2%;">STT</th>
         <th class="text-center" style="width: 8%;">Mã định mức</th>
         <th class="text-center" style="width: 15%;">Tên định mức</th>
-        <th class="text-center" style="width: 20%;">Loại hàng hóa</th>
-        <th class="text-center" style="width: 20%;">Chủng loại hàng hóa</th>
+        <th class="text-center" style="width: 17%;">Loại hàng hóa</th>
+        <th class="text-center" style="width: 17%;">Chủng loại hàng hóa</th>
         <th class="text-center" style="width: 10%;">Loại định mức</th>
         <th class="text-center" style="width: 13%;">Loại hình bảo quản</th>
         <th class="text-center" style="width: 8%;">Đơn vị tính</th>
+        <th class="text-center" style="width: 8%;">Trạng thái</th>
         <th  class="text-center" style="width: 8%;" >Hành động</th>
       </tr>
       <tr class="search-table">
@@ -179,6 +180,18 @@
             </nz-input-group>
           </nz-form-control>
         </th>
+        <th>
+          <nz-form-control >
+            <nz-input-group>
+              <nz-select formControlName="trangThai"  nzAllowClear>
+                <nz-option nzValue="01" nzLabel="Hoạt động" >
+                </nz-option>
+                <nz-option nzValue="00" nzLabel="Không hoạt động" >
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
+          </nz-form-control>
+        </th>
         <th class="text-left">
           <a (click)="themmoi()" [ngClass]="{'isDisabled': formData.invalid}">
             <i class="icon htvbdh_dau-cong"></i>
@@ -203,6 +216,7 @@
         <td>{{data.tenLoaiDinhMuc}}</td>
         <td>{{data.tenLoaiHinhBq}}</td>
         <td>{{ data.tenHinhThucBq }}</td>
+        <td>{{ data.trangThai }}</td>
         <td style="text-align: center;">
           <a (click)="startEdit(i)">
             <i class="table-icon fa fa-pencil"></i>
@@ -270,6 +284,18 @@
               <nz-input-group>
                 <nz-select [ngModelOptions]="{standalone: true}"  nzAllowClear [(ngModel)]= dataEdit[i].data.hinhThucBq>
                   <nz-option *ngFor="let p of listHtBq" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control >
+              <nz-input-group>
+                <nz-select [ngModelOptions]="{standalone: true}"  nzAllowClear [(ngModel)]= dataEdit[i].data.trangThai>
+                  <nz-option nzValue="00" nzLabel="Hoạt động" >
+                  </nz-option>
+                  <nz-option nzValue="01" nzLabel="Không hoạt động" >
                   </nz-option>
                 </nz-select>
               </nz-input-group>

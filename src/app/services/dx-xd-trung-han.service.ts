@@ -9,6 +9,6 @@ export class DxXdTrungHanService extends BaseService{
 
   GATEWAY = '/qlnv-kho';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dt-tx-trung-han/de-xuat', '');
+    super(httpClient, 'dt-tx-trung-han/de-xuat','/qlnv-kho');
   }
 }
