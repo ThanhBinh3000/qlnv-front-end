@@ -40,6 +40,7 @@ export class ThemMoiQdComponent implements OnInit {
   dsCuc: any[] = [];
   danhSachChiCuc: any[] = [];
   danhSachDiemKho: any[] = [];
+  dsChiCuc : any[] = []
 
   constructor(
     private router: Router,

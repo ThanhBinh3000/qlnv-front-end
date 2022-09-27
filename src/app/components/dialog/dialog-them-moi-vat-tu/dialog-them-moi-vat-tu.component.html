@@ -28,7 +28,7 @@
         <nz-form-label nzRequired [nzNoColon]="true"> Số lượng </nz-form-label>
         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="soQDError">
           <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-            [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()">
+            [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
           </nz-input-number>
         </nz-form-control>
       </nz-form-item>
@@ -37,14 +37,16 @@
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá gồm thuế (đồng/kg) </nz-form-label>
         <nz-input-number formControlName="donGia" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
-          [nzSize]="'small'" (input)="calculatorThanhTien()">
+          [nzSize]="'small'" (input)="calculatorThanhTien()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
         </nz-input-number>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="5">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Thành tiền gồm thuế (đồng) </nz-form-label>
-        <input nz-input formControlName="thanhTien" readonly />
+        <nz-input-number formControlName="thanhTien" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
+                         [nzSize]="'small'"  nzDisabled [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+        </nz-input-number>
       </nz-form-item>
     </div>
   </div>
@@ -70,7 +72,7 @@
       <td>{{thongtinDauThau.diaDiemNhap}} </td>
       <td>
         <nz-input-number class="text-right" nz-input [(ngModel)]="thongtinDauThau.soLuong" [nzMin]="1" [nzStep]="1"
-          [nzSize]="'small'">
+          [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
         </nz-input-number>
       </td>
       <td class="text-center">
@@ -86,7 +88,7 @@
       <ng-container *ngIf="!editCache[i]?.edit; else editTemplate">
         <td>{{ data.tenDiemKho }}</td>
         <td>{{ data.diaDiemNhap }}</td>
-        <td>{{ data.soLuong}}</td>
+        <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
         <td class="text-center">
           <a (click)="startEdit(i)">
             <i class="fa fa-pencil"></i>
@@ -120,9 +122,7 @@
     </tr>
     <tr *ngIf="listOfData.length > 0">
       <td colspan="2" class="first-last-row-table background-last-row text-left">Cộng</td>
-      <td colspan="2" class="background-last-row text-left">{{ tableExist ? reduceRowData(0, 2,
-        2,',','table-them-thong-tin-goi-thau') : 0 |
-        number: '1.0-1'}}
+      <td colspan="2" class="background-last-row text-left"> {{ calcTong() | number : '1.0-1' : 'vi_VN' }}
       </td>
     </tr>
   </tbody>

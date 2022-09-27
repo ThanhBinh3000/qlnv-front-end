@@ -479,7 +479,7 @@
             <td>{{ item.soLuongTheoChiTieu }}</td>
             <td>{{ item.soLuong }}</td>
             <td>{{item.donGia}}</td>
-            <td>{{ item.soLuong * item.donGia | number: '1.0-1'}}</td>
+            <td>{{ item.soLuong * item.donGia * 1000 | number: '1.0-1'}}</td>
             <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * item.donGia) : '' }}</td>
             <td>{{ item.giaTriDamBao }}</td>
             <td class="text-right" *ngIf="userService.isCuc()">
