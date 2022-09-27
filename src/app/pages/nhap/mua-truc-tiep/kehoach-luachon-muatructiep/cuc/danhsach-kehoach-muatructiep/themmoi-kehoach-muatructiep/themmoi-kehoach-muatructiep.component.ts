@@ -156,6 +156,8 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit {
     this.loaiVTHHGetAll();
   }
 
+  
+
   isDetailPermission() {
     if (this.loaiVthhInput === "02") {
       if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
