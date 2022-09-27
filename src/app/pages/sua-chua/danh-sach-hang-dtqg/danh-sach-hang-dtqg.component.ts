@@ -35,20 +35,12 @@ export class DanhSachHangDtqgComponent implements OnInit {
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   danhSachNam: any[] = [];
-  danhSachPhuongAn: any[] = [];
-  danhSachChiCuc: any[] = [];
-  danhSachCuc: any[] = [];
-  danhSachDiemKho: any[] = [];
-
   searchFilter = {
-    soQuyetDinh: '',
-    ngayKy: '',
-    namBatDau: '',
-    namKetThuc: '',
-    phuongAnQuyHoach: '',
-    maCuc: '',
-    maChiCuc: '',
-    maDiemKho: '',
+    maDanhSach: '',
+    maDvi: '',
+    loaiVthh: '',
+    cloaiVthh: '',
+    ngayTao: ''
   };
 
   filterTable: any = {
@@ -107,15 +99,6 @@ export class DanhSachHangDtqgComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      ngayKyTu: this.searchFilter.ngayKy[0],
-      ngayKyDen: this.searchFilter.ngayKy[1],
-      soQuyetDinh: this.searchFilter.soQuyetDinh,
-      namBatDau: this.searchFilter.namBatDau,
-      namKetThuc: this.searchFilter.namKetThuc,
-      maCuc: this.searchFilter.maCuc,
-      maChiCuc: this.searchFilter.maChiCuc,
-      maDiemKho: this.searchFilter.maDiemKho,
-      type: this.type,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -138,65 +121,6 @@ export class DanhSachHangDtqgComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
-  }
-
-
-  async loadListPa() {
-    this.danhSachPhuongAn = [];
-    let res = await this.dmService.danhMucChungGetAll('PA_QUY_HOACH');
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.danhSachPhuongAn = res.data;
-    }
-  }
-
-  async ongChangMaCuc(event) {
-    const body = {
-      maDviCha: event,
-      trangThai: '01',
-    };
-    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
-    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-  }
-
-  async loadDanhSachChiCuc() {
-    const body = {
-      maDviCha: this.userInfo.MA_DVI,
-      trangThai: '01',
-    };
-
-    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
-    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-  }
-
-
-  async loadDanhSachCuc() {
-    const body = {
-      maDviCha: this.userInfo.MA_DVI,
-      trangThai: '01',
-    };
-
-    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
-    this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
-  }
-  async loadDanhSachDiemKho() {
-    const body = {
-      maDviCha: this.userInfo.MA_DVI,
-      trangThai: '01',
-    };
-
-    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
-    this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
-  }
-
-
-
-  async onChangChiCuc(event) {
-    const body = {
-      maDviCha: event,
-      trangThai: '01',
-    };
-    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
-    this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
   }
 
   async changePageIndex(event) {
@@ -270,15 +194,12 @@ export class DanhSachHangDtqgComponent implements OnInit {
   }
 
   clearFilter() {
-    this.filterTable = {
-      soQd: '',
-      ngayQd: '',
-      trichYeu: '',
-      soQdGoc: '',
-      namKhoach: '',
-      tenVthh: '',
-      soGoiThau: '',
-      trangThai: '',
+    this.searchFilter = {
+      maDanhSach: '',
+      maDvi: '',
+      loaiVthh: '',
+      cloaiVthh: '',
+      ngayTao: ''
     };
     this.search();
   }
@@ -318,20 +239,7 @@ export class DanhSachHangDtqgComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "maChiCuc": this.searchFilter.maChiCuc,
-          "maCuc": this.searchFilter.maCuc,
-          "maDiemKho": this.searchFilter.maDiemKho,
-          "namBatDau": this.searchFilter.namBatDau,
-          "ngayKyDen": this.searchFilter.ngayKy[1],
-          "ngayKyTu": this.searchFilter.ngayKy[0],
-          "namKetThuc": this.searchFilter.namKetThuc,
-          "paggingReq": {
-            "limit": 20,
-            "page": 1
-          },
-          "phuongAnQuyHoach": this.searchFilter.phuongAnQuyHoach,
-          "soQuyetDinh": this.searchFilter.soQuyetDinh,
-          "type": this.type
+
         }
         this.quyHoachKhoService
           .export(body)
