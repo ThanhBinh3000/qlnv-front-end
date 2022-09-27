@@ -76,7 +76,6 @@ export class DeXuatKeHoachComponent implements OnInit {
     private deXuatTrungHanService : DxXdTrungHanService,
     private modal: NzModalService,
     public userService: UserService,
-    private dieuChinhQuyetDinhPdKhlcntService: DieuChinhQuyetDinhPdKhlcntService,
     public globals: Globals,
   ) { }
 
@@ -110,19 +109,31 @@ export class DeXuatKeHoachComponent implements OnInit {
 
     const dsTong = await this.dviService.layDonViTheoCapDo(body);
     this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
+    console.log(this.danhSachCuc)
+    if (this.userService.isCuc()) {
+      this.searchFilter.maDvi = this.userInfo.MA_DVI
+    }
   }
 
   async search() {
     this.spinner.show();
     let body = {
-
+      diaDiem: this.searchFilter.diaDiem,
+      dmucDuAn: this.searchFilter.dmucDuAn,
+      loaiDuAn: this.searchFilter.loaiDuAn,
+      namBatDau: this.searchFilter.namBatDau,
+      namKetThuc: this.searchFilter.namKetThuc,
+      ngayKyTu: this.searchFilter.ngayKy[0],
+      ngayKyDen: this.searchFilter.ngayKy[1],
+      soCongVan: this.searchFilter.soCongVan,
+      tgKcHt: this.searchFilter.tgKcHt,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
       maDvi: this.userInfo.MA_DVI
     };
-    let res = await this.dieuChinhQuyetDinhPdKhlcntService.search(body);
+    let res = await this.deXuatTrungHanService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -138,6 +149,7 @@ export class DeXuatKeHoachComponent implements OnInit {
       this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    console.log(this.dataTable)
     this.spinner.hide();
   }
 
@@ -262,7 +274,7 @@ export class DeXuatKeHoachComponent implements OnInit {
         let body = {
 
         };
-        this.dieuChinhQuyetDinhPdKhlcntService
+        this.deXuatTrungHanService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
