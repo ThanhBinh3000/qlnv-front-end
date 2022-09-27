@@ -6,12 +6,20 @@ import { STORAGE_KEY } from '../constants/config';
 import jwt_decode from "jwt-decode";
 import { UserLogin } from '../models/userlogin';
 import { ResponseData } from '../interfaces/response';
+import { MESSAGE } from '../constants/message';
+import { BaseService } from './base.service';
 @Injectable({
   providedIn: 'root'
 })
 
-export class UserService {
-  constructor(private httpClient: HttpClient, private storageService: StorageService,) { }
+export class UserService extends BaseService {
+
+  constructor(
+    public httpClient: HttpClient,
+    private storageService: StorageService) {
+    super(httpClient, 'giao-chi-tieu-von-dau-nam/quyet-dinh/ttcp', '/qlnv-khoach');
+  }
+
 
   createUser(body) {
     const url = `${environment.SERVICE_API}api/Account/Them`;
@@ -117,6 +125,18 @@ export class UserService {
         "trangThai": ""
       }
     );
+  }
+
+  async getId(sequenceName: string) {
+    if(sequenceName){
+      const url = `${environment.SERVICE_API}/qlnv-system/system/${sequenceName}`;
+      let res = await this.httpClient.get<any>(url).toPromise();
+      if(res.msg == MESSAGE.SUCCESS){
+        return res.data;
+      }
+    }else{
+      console.error('Sequence Name is null')
+    }
   }
 
   //get user name
