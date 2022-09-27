@@ -1,41 +1,53 @@
-import {ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output,} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import {
   DialogQuyetDinhGiaoChiTieuComponent
 } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import {
   DialogThemDiaDiemNhapKhoComponent
 } from 'src/app/components/dialog/dialog-them-dia-diem-nhap-kho/dialog-them-dia-diem-nhap-kho.component';
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan,} from 'src/app/models/KeHoachBanDauGia';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DanhMucTieuChuanService} from 'src/app/services/danhMucTieuChuan.service';
-import {DeXuatKeHoachBanDauGiaService} from 'src/app/services/deXuatKeHoachBanDauGia.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {TinhTrangKhoHienThoiService} from 'src/app/services/tinhTrangKhoHienThoi.service';
-import {UserService} from 'src/app/services/user.service';
-import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
-import {Globals} from 'src/app/shared/globals';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import {
+  DiaDiemGiaoNhan,
+  KeHoachBanDauGia,
+  PhanLoTaiSan,
+} from 'src/app/models/KeHoachBanDauGia';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { UserService } from 'src/app/services/user.service';
+import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
 import VNnum2words from 'vn-num2words';
 import {
   DeXuatPhuongAnCuuTroService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import {STATUS} from "../../../../../constants/status";
+import { STATUS } from "../../../../../constants/status";
 import {
   DialogDanhSachHangHoaComponent
 } from "../../../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
-import {DatePipe} from "@angular/common";
+import { DatePipe } from "@angular/common";
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import {
   DialogDiaDiemNhapKhoComponent
 } from "../../../../../components/dialog/dialog-dia-diem-nhap-kho/dialog-dia-diem-nhap-kho.component";
-import {cloneDeep} from 'lodash';
+import { cloneDeep } from 'lodash';
 
 //obj declare
 export class DiaDiemNhapKho {
@@ -94,6 +106,70 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() id: number;
+  fake = [
+    {
+      "id": 1,
+      "maChiCuc": "01010203",
+      "tenChiCuc": "Chi cục Dự trữ Nhà nước Vĩnh Tường",
+      "chiTiet": [{
+        "ngayTao": "2022-09-20",
+        "nguoiTaoId": 1,
+        "ngaySua": "2022-09-20",
+        "nguoiSuaId": 1,
+        "id": 22,
+        "idDxuat": 101,
+        "maDvi": null,
+        "maChiCuc": "01010203",
+        "maDiemKho": "0101020301",
+        "maNhaKho": "010102030101",
+        "maNganKho": "01010203010101",
+        "maLoKho": "0101020301010102",
+        "soLuong": 150000,
+        "donGia": 1500,
+        "cloaiVthh": "0101",
+        "maDvTaiSan": "a1",
+        "tonKho": 150000,
+        "donViTinh": "kg",
+        "tenChiCuc": "Chi cục Dự trữ Nhà nước Vĩnh Tường",
+        "tenDiemKho": "Điểm kho Thổ Tang",
+        "tenNhaKho": "Nhà kho A1",
+        "tenNganKho": "Ngăn kho A1/1",
+        "tenLoKho": "Lô số 1 Ngăn kho A1/1",
+        "tenCloaiVthh": null
+      }]
+    },
+    {
+      "id": 2,
+      "maChiCuc": "01010201",
+      "tenChiCuc": "Chi cục Dự trữ Nhà nước Việt Trì",
+      "chiTiet": [{
+        "ngayTao": "2022-09-20",
+        "nguoiTaoId": 1,
+        "ngaySua": "2022-09-20",
+        "nguoiSuaId": 1,
+        "id": 23,
+        "idDxuat": 101,
+        "maDvi": null,
+        "maChiCuc": "01010201",
+        "maDiemKho": "0101020101",
+        "maNhaKho": "010102010101",
+        "maNganKho": "01010201010101",
+        "maLoKho": "0101020101010102",
+        "soLuong": 150000,
+        "donGia": 1500,
+        "cloaiVthh": "0101",
+        "maDvTaiSan": "a1",
+        "tonKho": 150000,
+        "donViTinh": "kg",
+        "tenChiCuc": "Chi cục Dự trữ Nhà nước Việt Trì",
+        "tenDiemKho": "Điểm kho Phủ Đức",
+        "tenNhaKho": "Nhà kho A1",
+        "tenNganKho": "Ngăn kho A1/1",
+        "tenLoKho": "Lô số 1 Ngăn kho A1/1",
+        "tenCloaiVthh": null
+      }]
+    }
+  ];
   formData: FormGroup;
   cacheData: any[] = [];
   fileDinhKem: any[] = [];
@@ -122,15 +198,9 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
   listLoaiHinhNhapXuat: any[] = [];
   listKieuNhapXuat: any[] = [];
   datePipe = new DatePipe('en-US');
-  tongSLThongTinChiTiet = 0;
-  tongSLCuuTro = 0;
-  tongTien = 0;
-  diaDiemNhapKho: any[] = [];
-  thongTinChiTietCreate: any = {};
-  thongTinChiTietClone: any = {};
-  phuongAnXuatList: DiaDiemNhapKho[] = [];
-
-
+  tongSLThongTinChiTiet = 100000;
+  tongSLCuuTro = 2000000;
+  tongTien = 30000;
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -453,7 +523,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
                 this.tongTien += s.soLuong * s.donGia;
               });
               this.phuongAnXuatList = nhapKhoList;
-              this.formData.patchValue({tongSoLuong: this.tongSLCuuTro})
+              this.formData.patchValue({ tongSoLuong: this.tongSLCuuTro })
             }
             this.tongSLThongTinChiTiet = 0;
             this.formData.get('thongTinChiTiet').value.forEach(s => this.tongSLThongTinChiTiet += parseInt(s.soLuong));
@@ -695,11 +765,9 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
       nzWidth: '100%',
       nzFooter: null,
       nzComponentParams: {
-        loaiHangHoa: this.formData.get('loaiVthh').value,
-        cLoaiVthh: this.formData.get('cloaiVthh').value,
-        // tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
-        nam: this.formData.get('nam').value,
-        listPhuongAn: item,
+        // cLoaiVthh: this.formData.get('cLoaiVthh').value,
+        cLoaiVthh: '010102',
+        nam: this.formData.get('nam').value
       },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {

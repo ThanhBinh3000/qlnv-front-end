@@ -3,7 +3,7 @@ import { sortBy } from 'lodash';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucTieuChuanService } from 'src/app/services/danhMucTieuChuan.service';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from '../../../services/danhmuc.service';
 import { KeHoachLuongThucComponent } from './ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
