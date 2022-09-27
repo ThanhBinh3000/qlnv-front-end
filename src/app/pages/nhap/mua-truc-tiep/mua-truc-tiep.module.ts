@@ -5,12 +5,13 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
 import { MuaTrucTiepRoutingModule } from './mua-truc-tiep-routing.module';
 import { MuaTrucTiepComponent } from './mua-truc-tiep.component';
 import { KehoachLuachonMuatructiepModule } from './kehoach-luachon-muatructiep/kehoach-luachon-muatructiep.module';
+import { TochucTrienkhaiMuatructiepModule } from './tochuc-trienkhai-muatructiep/tochuc-trienkhai-muatructiep.module';
 
 
 @NgModule({
   declarations: [
     MuaTrucTiepComponent,
-
+   
   ],
   imports: [
     CommonModule,
@@ -18,6 +19,7 @@ import { KehoachLuachonMuatructiepModule } from './kehoach-luachon-muatructiep/k
     ComponentsModule,
     DirectivesModule,
     KehoachLuachonMuatructiepModule,
+    TochucTrienkhaiMuatructiepModule,
   ],
 })
 export class MuaTrucTiepModule { }
