@@ -171,6 +171,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         thoiGianThucHien: [],
         noiDung: [],
         nam: [dayjs().get("year"), [Validators.required]],
+        tongTien: [],
         fileDinhKem: [new Array()],
         thongTinChiTiet: [new Array()],
         phuongAnXuat: [new Array()],
@@ -306,7 +307,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         body.ngayDxuat = this.datePipe.transform(body.ngayDxuat, 'yyyy-MM-dd');
         body.thoiGianThucHien = this.datePipe.transform(body.thoiGianThucHien, 'yyyy-MM-dd');
         body.soDxuat = body.soDxuat + this.maDeXuat;
-        if(isOther){
+        if (isOther) {
           body.trangThai = STATUS.CHO_DUYET_LDTC;
         }
         if (this.idInput) {
@@ -388,19 +389,20 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
                 nhapKhoList.push(kho);
 
                 this.expandSet.add(kho.idVirtual);
-              /*  if (s.donViTinh === 'tấn') {
-                  this.tongSLCuuTro += s.soLuong * 1000;
-                } else {
-                  this.tongSLCuuTro += s.soLuong;
-                }*/
+                /*  if (s.donViTinh === 'tấn') {
+                    this.tongSLCuuTro += s.soLuong * 1000;
+                  } else {
+                    this.tongSLCuuTro += s.soLuong;
+                  }*/
                 this.tongSLCuuTro += s.soLuong;
-                this.tongTien += s.soLuong??0 * s.donGia??0;
+                this.tongTien += (s.soLuong ?? 0) * (s.donGia ?? 0);
               });
               this.phuongAnXuatList = nhapKhoList;
-              this.formData.patchValue({tongSoLuong: this.tongSLCuuTro})
+              this.formData.patchValue({tongSoLuong: this.tongSLCuuTro, tongTien: this.tongTien})
             }
             this.tongSLThongTinChiTiet = 0;
             this.formData.get('thongTinChiTiet').value.forEach(s => this.tongSLThongTinChiTiet += parseInt(s.soLuong));
+            console.log(this.formData.value, 12333)
           }
         })
         .catch((e) => {
@@ -437,7 +439,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         this.spinner.show();
         try {
           let body = this.formData.value;
-          body.trangThai= STATUS.DA_DUYET_LDTC;
+          body.trangThai = STATUS.DA_DUYET_LDTC;
           let res = await this.deXuatPhuongAnCuuTroService.update(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -454,6 +456,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
       },
     });
   }
+
   async guiDuyet() {
     this.modal.confirm({
       nzClosable: false,
@@ -517,7 +520,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         this.spinner.show();
         try {
           let body = this.formData.value;
-          body.trangThai= STATUS.TU_CHOI_LDTC;
+          body.trangThai = STATUS.TU_CHOI_LDTC;
           let res = await this.deXuatPhuongAnCuuTroService.update(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -650,7 +653,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
-        console.log(data,'themphuongan')
+        console.log(data, 'themphuongan')
         this.phuongAnXuatList.push(data);
         data.chiTietDiaDiems.forEach(s => {
           s.maDvi = data.maDvi;
