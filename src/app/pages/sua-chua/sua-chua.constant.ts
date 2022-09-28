@@ -26,7 +26,7 @@ export const SUA_CHUA_ROUTE_LIST: Array<ChiTietMenu> = [
     hasTab: false,
   },
   {
-    icon: 'htvbdh_tcdt_baocao2',
+    icon: 'htvbdh_tcdt_dieu_chuyen',
     title: 'Xuất hàng DTQG',
     url: '/xuat-hang-dtqg',
     dropdown:'xuat-hang-dtqg',
