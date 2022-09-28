@@ -59,7 +59,7 @@ export const QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST: QuanLyCapVonMuaBanT
 			// LANH_DAO_TC,
 			CVMB.VIEW_REPORT_GNV,
 		],
-		isDisabled: '1',
+		isDisabled: ['1'],
 	},
 	{
 		icon: 'htvbdh_tcdt_icon-common',
@@ -70,7 +70,7 @@ export const QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST: QuanLyCapVonMuaBanT
 			CVMB.DUYET_REPORT_GNV,
 			CVMB.PHE_DUYET_REPORT_GNV,
 		],
-		isDisabled: '1',
+		isDisabled: ['1'],
 	},
 	{
 		icon: 'htvbdh_tcdt_icon-common',
@@ -80,7 +80,7 @@ export const QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST: QuanLyCapVonMuaBanT
 		Role: [
 			CVMB.VIEW_REPORT_GNV,
 		],
-		isDisabled: '2',
+		isDisabled: ['2', '3'],
 	},
 	{
 		icon: 'htvbdh_tcdt_icon-common',
@@ -91,7 +91,7 @@ export const QUAN_LY_CAP_VOM_MUA_BAN_TT_TIEN_HANG_DTQG_LIST: QuanLyCapVonMuaBanT
 			CVMB.DUYET_REPORT_GNV,
 			CVMB.PHE_DUYET_REPORT_GNV,
 		],
-		isDisabled: '2',
+		isDisabled: ['2', '3'],
 	},
 	{
 		icon: 'htvbdh_tcdt_icon-common',
