@@ -58,19 +58,21 @@ export class XayDungPhuongAnComponent implements OnInit {
     trichYeu: null,
   };
   filterTable: any = {
-    soKeHoach: '',
+    soDxuat: '',
     tenDonVi: '',
-    ngayLapKeHoach: '',
+    ngayDxuat: '',
     ngayKy: '',
     trichYeu: '',
     tenHangHoa: '',
     soQuyetDinhGiaoChiTieu: '',
     soQuyetDinhPheDuyet: '',
-    namKeHoach: '',
     tenVthh: '',
     tenCloaiVthh: '',
     tenTrangThai: '',
+    tenTrangThaiTh: '',
     nam: '',
+    tenLoaiHinhNhapXuat: '',
+    tongSoLuong: ''
   };
   dataTableAll: any[] = [];
   listVthh: any[] = [];
