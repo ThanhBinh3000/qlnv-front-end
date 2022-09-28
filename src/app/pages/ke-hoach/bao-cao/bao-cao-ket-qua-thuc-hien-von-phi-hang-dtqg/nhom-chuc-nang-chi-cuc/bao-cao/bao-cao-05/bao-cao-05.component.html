@@ -93,37 +93,61 @@
                                 </div>
                             </div>
                         </td>
-                        <td>
-                            <ng-container *ngIf="item.stt != '0.1'">
-                                {{displayValue(item.trongDotTcong)}}
+                        <ng-container *ngIf="checkNumber(item.maNdungChi); else tien">
+                            <td>
+                                {{displayNumber(item.trongDotTcong)}}
+                            </td>
+                            <ng-container *ngFor="let e of item.listCtiet">
+                                <ng-container *ngIf="e.loaiMatHang == 0">
+                                    <td>
+                                        {{displayNumber(e.sl)}}
+                                    </td>
+                                </ng-container>
                             </ng-container>
-                        </td>
-                        <ng-container *ngFor="let e of item.listCtiet">
-                            <ng-container *ngIf="e.loaiMatHang == 0">
-                                <td>
-                                    <ng-container *ngIf="item.stt != '0.1'">
-                                        {{displayValue(e.sl)}}
-                                    </ng-container>
-                                </td>
-                            </ng-container>
-                        </ng-container>
-                        <td>
-                            <ng-container *ngIf="item.stt != '0.1'">
-                                {{displayValue(item.luyKeTcong)}}
-                            </ng-container>
-                        </td>
-                        <ng-container *ngFor="let e of item.listCtiet">
-                            <ng-container *ngIf="e.loaiMatHang == 1">
-                                <td>
-                                    <ng-container *ngIf="item.stt != '0.1'">
-                                        {{displayValue(e.sl)}}
-                                    </ng-container>
-                                </td>
+                            <td>
+                                {{displayNumber(item.luyKeTcong)}}
+                            </td>
+                            <ng-container *ngFor="let e of item.listCtiet">
+                                <ng-container *ngIf="e.loaiMatHang == 1">
+                                    <td>
+                                        {{displayNumber(e.sl)}}
+                                    </td>
+                                </ng-container>
                             </ng-container>
                         </ng-container>
+                        <ng-template #tien>
+                            <td>
+                                <ng-container *ngIf="item.stt != '0.1'">
+                                    {{displayValue(item.trongDotTcong)}}
+                                </ng-container>
+                            </td>
+                            <ng-container *ngFor="let e of item.listCtiet">
+                                <ng-container *ngIf="e.loaiMatHang == 0">
+                                    <td>
+                                        <ng-container *ngIf="item.stt != '0.1'">
+                                            {{displayValue(e.sl)}}
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                            </ng-container>
+                            <td>
+                                <ng-container *ngIf="item.stt != '0.1'">
+                                    {{displayValue(item.luyKeTcong)}}
+                                </ng-container>
+                            </td>
+                            <ng-container *ngFor="let e of item.listCtiet">
+                                <ng-container *ngIf="e.loaiMatHang == 1">
+                                    <td>
+                                        <ng-container *ngIf="item.stt != '0.1'">
+                                            {{displayValue(e.sl)}}
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                            </ng-container>
+                        </ng-template>
                         <td>{{item.ghiChu}}</td>
                         <td nzWidth="2.5%" [hidden]="status">
-                            <ng-container *ngIf="!statusDeleteRow(item)">
+                            <ng-container *ngIf="statusDeleteRow(item)">
                                 <i class="fa fa-trash-o do" (click)="deleteLine(item.id)"></i>
                             </ng-container>
                         </td>
@@ -138,7 +162,7 @@
                             <i class="fa fa-plus" (click)="addLine(item.id)"></i>
                         </td>
                         <td nzWidth="2.5%" [hidden]="status">
-                            <ng-container *ngIf="!statusDeleteRow(item)">
+                            <ng-container *ngIf="statusDeleteRow(item)">
                                 <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
                                     (ngModelChange)="updateChecked(item.id)"></label>
                             </ng-container>
@@ -182,7 +206,7 @@
                                 [(ngModel)]="editCache[item.id].data.ghiChu" />
                         </td>
                         <td nzWidth="2.5%" [hidden]="status">
-                            <ng-container *ngIf="!statusDeleteRow(item)">
+                            <ng-container *ngIf="statusDeleteRow(item)">
                                 <i class="fa fa-trash-o do" (click)="deleteLine(item.id)"></i>
                             </ng-container>
                         </td>
@@ -195,7 +219,7 @@
                             <i class="fa fa-plus" (click)="addLine(item.id)"></i>
                         </td>
                         <td nzWidth="2.5%" [hidden]="status">
-                            <ng-container *ngIf="!statusDeleteRow(item)">
+                            <ng-container *ngIf="statusDeleteRow(item)">
                                 <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
                                     (ngModelChange)="updateChecked(item.id)"></label>
                             </ng-container>
