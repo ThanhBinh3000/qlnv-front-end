@@ -58,6 +58,7 @@ export class BaoCao04anComponent implements OnInit {
     lstCtietBcao: ItemData[] = [];
     noiDungChis: any[] = [];
     noiDungChiFull: any[] = [];
+    dinhMucs: any[] = [];
     //thong tin chung
     id: string;
     thuyetMinh: string;
@@ -65,6 +66,7 @@ export class BaoCao04anComponent implements OnInit {
     tuNgay: any;
     denNgay: any;
     namBcao: number;
+    maDvi: string;
     listIdDelete = "";
     trangThaiPhuLuc = '1';
     idBaoCao: string;        //id bao cao to
@@ -89,7 +91,7 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.initialization().then(() =>{
+        this.initialization().then(() => {
             this.isDataAvailable = true;
         })
     }
@@ -99,6 +101,7 @@ export class BaoCao04anComponent implements OnInit {
         //thong tin chung cua bieu mau
         this.id = this.data?.id;
         this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
+        this.maDvi = this.data.maDvi;
         this.thuyetMinh = this.data?.thuyetMinh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
@@ -107,9 +110,10 @@ export class BaoCao04anComponent implements OnInit {
         this.namBcao = this.data?.namBcao;
         this.trangThaiPhuLuc = this.data?.trangThai;
         this.luyKes = this.data?.luyKes.find(item => item.maLoai == '7')?.lstCtietBcaos;
-        
+
         await this.getListNdung();
         await this.getListVtu();
+        await this.getDinhMuc();
 
         if (this.lstCtietBcao.length > 0) {
             //xap xep lai cac phan tu va lay thong tin cac vat tu da duoc chon
@@ -178,7 +182,7 @@ export class BaoCao04anComponent implements OnInit {
             const lstTemp = [];
             await this.noiDungChiFull.forEach(element => {
                 const temp: ItemData = this.lstCtietBcao.find(item => item.maNdungChi == element.id);
-                if (temp){
+                if (temp) {
                     lstTemp.push(temp);
                 }
             });
@@ -193,6 +197,25 @@ export class BaoCao04anComponent implements OnInit {
         this.spinner.hide();
     }
 
+    getDinhMuc() {
+        const request = {
+            loaiDinhMuc: null,
+            maDvi: this.maDvi,
+        }
+        this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+            res => {
+                if (res.statusCode == 0) {
+                    this.dinhMucs = res.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        )
+    }
+
     getStatusButton() {
         if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {
             this.statusBtnOk = false;
@@ -201,7 +224,7 @@ export class BaoCao04anComponent implements OnInit {
         }
     }
 
-    async getListNdung(){
+    async getListNdung() {
         //lay danh muc noi dung chi
         await this.danhMucService.dMNoiDungChi04a().toPromise().then(res => {
             if (res.statusCode == 0) {
@@ -263,7 +286,7 @@ export class BaoCao04anComponent implements OnInit {
         }
     }
 
-    async getListVtu(){
+    async getListVtu() {
         //lay danh sach vat tu
         await this.danhMucService.dMVatTu().toPromise().then(res => {
             if (res.statusCode == 0) {
