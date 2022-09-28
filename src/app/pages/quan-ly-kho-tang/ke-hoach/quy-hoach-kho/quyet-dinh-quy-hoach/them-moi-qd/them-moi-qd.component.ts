@@ -12,11 +12,13 @@ import { ThongTinQuyetDinh } from "../../../../../../models/DeXuatKeHoachuaChonN
 import { QuyHoachKho } from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
 import { QuyHoachKhoService } from "../../../../../../services/quy-hoach-kho.service";
 import dayjs from "dayjs";
-import {MESSAGE} from "../../../../../../constants/message";
-import {DANH_MUC_LEVEL} from "../../../../../luu-kho/luu-kho.constant";
-import {UserLogin} from "../../../../../../models/userlogin";
-import {STATUS} from "../../../../../../constants/status";
-import {DonviService} from "../../../../../../services/donvi.service";
+import { MESSAGE } from "../../../../../../constants/message";
+import { DANH_MUC_LEVEL } from "../../../../../luu-kho/luu-kho.constant";
+import { UserLogin } from "../../../../../../models/userlogin";
+import { STATUS } from "../../../../../../constants/status";
+
+import { DonviService } from "../../../../../../services/donvi.service";
+
 
 @Component({
   selector: 'app-them-moi-qd',
@@ -38,10 +40,9 @@ export class ThemMoiQdComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: QuyHoachKho } } = {};
   danhSachPhuongAn: any[] = [];
   dsCuc: any[] = [];
+  dsChiCuc: any[] = [];
   danhSachChiCuc: any[] = [];
   danhSachDiemKho: any[] = [];
-  dsChiCuc : any[] = []
-
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
