@@ -153,14 +153,14 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
     const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetailGoiThau(this.idInput);
     if (res.msg == MESSAGE.SUCCESS) {
       const dataDetail = res.data;
-      const isVatTu = dataDetail.loaiVthh.startsWith('02');
+      const isVatTu = !!dataDetail.loaiVthh;
       // Trang thái đã cập nhập thông tin gói thầu hoặc hoàn thành cập nhập tt gt
       if (dataDetail.trangThai == STATUS.CHUA_CAP_NHAT) {
         this.formGoiThau.patchValue({
           idGoiThau: dataDetail.id,
           tenGthau: dataDetail.goiThau,
           loaiVthh: isVatTu ? dataDetail.loaiVthh : dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.loaiVthh,
-          tenVthh: isVatTu ? dataDetail.tenVthh : dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tenVthh,
+          tenVthh: isVatTu ? dataDetail.tenLoaiVthh : dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tenLoaiVthh,
           cloaiVthh: isVatTu ? dataDetail.cloaiVthh : dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.cloaiVthh,
           tenCloaiVthh: isVatTu ? dataDetail.tenCloaiVthh : dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.tenCloaiVthh,
           soQdPdKhlcnt: dataDetail.hhQdKhlcntDtl.hhQdKhlcntHdr.soQd,
