@@ -16,9 +16,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quantri-danhmuc/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
-import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../../constants/status";
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
@@ -83,6 +81,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         id: [],
         nam: [dayjs().get('year')],
         maDvi: ['', [Validators.required]],
+        maQhns : ['',],
         tenDvi: ['', [Validators.required]],
         idQdGiaoNvNh: ['', [Validators.required]],
         soQdGiaoNvNh: [, [Validators.required]],
@@ -342,12 +341,52 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   async loadChiTiet(id: number) {
     if (id > 0) {
-      let res = await this.quanLyPhieuKiemTraChatLuongHangService.chiTiet(id);
+      let res = await this.quanLyPhieuKiemTraChatLuongHangService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          this.detail = res.data;
-          this.changeDiemKho(true);
-          // await this.changeSoQuyetDinh(true);
+          const data = res.data;
+          this.dataTableChiTieu = data.ketQuaKiemTra;
+          this.formData.patchValue({
+            id : data.id,
+            nam : data.nam,
+            maDvi : data.maDvi,
+            maQhns : data.maQhns,
+            tenDvi : data.tenDvi,
+            soPhieu : data.soPhieu,
+            ngayTao : data.ngayTao,
+            idQdGiaoNvNh : data.idQdGiaoNvNh,
+            soQdGiaoNvNh : data.soQdGiaoNvNh,
+            loaiVthh : data.loaiVthh,
+            tenLoaiVthh : data.tenLoaiVthh,
+            cloaiVthh : data.cloaiVthh,
+            moTaHangHoa : data.moTaHangHoa,
+            tenCloaiVthh : data.tenCloaiVthh,
+            soHd : data.soHd,
+            ngayQdGiaoNvNh : data.ngayQdGiaoNvNh,
+            maDiemKho: data.maDiemKho,
+            tenDiemKho: data.tenDiemKho,
+            maNhaKho: data.maNhaKho,
+            tenNhaKho: data.tenNhaKho,
+            maNganKho: data.maNganKho,
+            tenNganKho: data.tenNganKho,
+            maLoKho: data.maLoKho,
+            tenLoKho: data.tenLoKho,
+            nguoiGiaoHang : data.nguoiGiaoHang,
+            cmtNguoiGiaoHang : data.cmtNguoiGiaoHang,
+            donViGiaoHang : data.donViGiaoHang,
+            diaChi : data.donViGiaoHang,
+            bienSoXe : data.bienSoXe,
+            soLuongDeNghiKt : data.soLuongDeNghiKt,
+            soLuongNhapKho : data.soLuongNhapKho,
+            soChungThuGiamDinh : data.soChungThuGiamDinh,
+            ngayGdinh : data.ngayGdinh,
+            tchucGdinh : data.tchucGdinh,
+            kqDanhGia : data.kqDanhGia,
+            ketLuan : data.ketLuan,
+            trangThai : data.trangThai,
+            tenTrangThai : data.tenTrangThai,
+            lyDoTuChoi : data.lyDoTuChoi,
+          })
         }
       }
     }
@@ -358,6 +397,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
+      console.log(this.formData);
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       this.spinner.hide();
       return;
@@ -507,16 +547,13 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   pheDuyet() {
     let trangThai = ''
-    switch (this.detail.trangThai) {
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.TU_CHOI_LDCC:
       case STATUS.DU_THAO: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {
-        trangThai = STATUS.DA_DUYET_LDCC;
-        break;
-      }
-      case STATUS.TU_CHOI_LDCC: {
         trangThai = STATUS.DA_DUYET_LDCC;
         break;
       }
@@ -538,7 +575,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
             trangThai: trangThai
           };
           let res =
-            await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
+            await this.quanLyPhieuKiemTraChatLuongHangService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -577,7 +614,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
             trangThai: STATUS.TU_CHOI_LDCC,
           };
           let res =
-            await this.quanLyPhieuKiemTraChatLuongHangService.updateStatus(
+            await this.quanLyPhieuKiemTraChatLuongHangService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -738,7 +775,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
           tenDiemKho: data.tenDiemKho,
           maNhaKho: data.maNhaKho,
           tenNhaKho: data.tenNhaKho,
-          maNganKho: data.tenNganKho,
+          maNganKho: data.maNganKho,
           tenNganKho: data.tenNganKho,
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
