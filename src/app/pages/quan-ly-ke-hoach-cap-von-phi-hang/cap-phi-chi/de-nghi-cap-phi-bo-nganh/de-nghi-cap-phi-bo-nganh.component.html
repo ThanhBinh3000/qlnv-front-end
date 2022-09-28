@@ -86,11 +86,8 @@
                         </th>
                         <!-- Bộ Ngành -->
                         <th>
-                            <nz-select [(ngModel)]="filterTable.tenBoNganh"
-                                (ngModelChange)="filterInTable('tenBoNganh',filterTable.tenBoNganh)">
-                                <nz-option *ngFor="let item of listBoNganh " [nzValue]="item.ma"
-                                    [nzLabel]="item.giaTri"></nz-option>
-                            </nz-select>
+                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenBoNganh"
+                                    (input)="filterInTable('tenBoNganh',filterTable.tenBoNganh)" size="small" />
                         </th>
                         <!-- Ngày đề nghị -->
                         <th>
