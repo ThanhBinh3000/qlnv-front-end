@@ -16,19 +16,25 @@ import { NhapHangDtqgComponent } from './nhap-hang-dtqg/nhap-hang-dtqg.component
 import { BaoCaoKqComponent } from './bao-cao-kq/bao-cao-kq.component';
 import {ComponentsModule} from "../../components/components.module";
 import {NzTreeViewModule} from "ng-zorro-antd/tree-view";
+import {ThemMoiTongHopComponent} from "./tong-hop-danh-sach/them-moi-tong-hop/them-moi-tong-hop.component";
+import {ThemMoiQdSuaChuaComponent} from "./quyet-dinh-sua-chua/them-moi-qd-sua-chua/them-moi-qd-sua-chua.component";
+import { ThemMoiBaoCaoKqComponent } from './bao-cao-kq/them-moi-bao-cao-kq/them-moi-bao-cao-kq.component';
 
 
 @NgModule({
-  declarations: [
-    SuaChuaComponent,
-    DanhSachHangDtqgComponent,
-    TongHopDanhSachComponent,
-    QuyetDinhSuaChuaComponent,
-    XuatHangDtqgComponent,
-    PhieuKiemDinhClComponent,
-    NhapHangDtqgComponent,
-    BaoCaoKqComponent
-  ],
+    declarations: [
+        SuaChuaComponent,
+        DanhSachHangDtqgComponent,
+        TongHopDanhSachComponent,
+        QuyetDinhSuaChuaComponent,
+        XuatHangDtqgComponent,
+        PhieuKiemDinhClComponent,
+        NhapHangDtqgComponent,
+        BaoCaoKqComponent,
+        ThemMoiTongHopComponent,
+        ThemMoiQdSuaChuaComponent,
+        ThemMoiBaoCaoKqComponent
+    ],
   imports: [
     CommonModule,
     SuaChuaRoutingModule,
