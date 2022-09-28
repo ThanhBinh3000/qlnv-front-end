@@ -943,4 +943,8 @@ export class PhuLuc4Component implements OnInit {
   getMoneyUnit() {
     return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }
+
+  displayNumber1(num: number): string {
+    return displayNumber(num);
+  }
 }
