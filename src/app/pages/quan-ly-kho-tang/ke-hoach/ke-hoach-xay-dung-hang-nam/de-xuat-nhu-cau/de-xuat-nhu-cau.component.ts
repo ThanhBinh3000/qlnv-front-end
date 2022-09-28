@@ -18,6 +18,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
+import {KtKhXdHangNamService} from "../../../../../services/kt-kh-xd-hang-nam.service";
 
 @Component({
   selector: 'app-de-xuat-nhu-cau',
@@ -34,12 +35,15 @@ export class DeXuatNhuCauComponent implements OnInit {
   listNam: any[] = [];
 
   searchFilter = {
-    soQd: '',
-    namKh: dayjs().get('year'),
-    ngayQd: '',
-    loaiVthh: '',
-    trichYeu: '',
-    soGoiThau: '',
+    maDvi: '',
+    soCongVan: '',
+    dmucDuAn: '',
+    loaiDuAn: '',
+    diaDiem: '',
+    tgKcHt:'',
+    ngayKy: '',
+    namBatDau: '',
+    namKetThuc: ''
   };
 
   filterTable: any = {
@@ -65,11 +69,9 @@ export class DeXuatNhuCauComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhSachDauThauService: DanhSachDauThauService,
+    private dxService: KtKhXdHangNamService,
     private modal: NzModalService,
     public userService: UserService,
-    private dieuChinhQuyetDinhPdKhlcntService: DieuChinhQuyetDinhPdKhlcntService,
     public globals: Globals,
   ) { }
 
@@ -98,24 +100,22 @@ export class DeXuatNhuCauComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-        : null,
-      denNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-        : null,
-      soQdinh: this.searchFilter.soQd,
-      loaiVthh: this.searchFilter.loaiVthh,
-      namKhoach: this.searchFilter.namKh,
-      soGoiThau: this.searchFilter.soGoiThau,
-      trichYeu: this.searchFilter.trichYeu,
+      soCongVan: this.searchFilter.soCongVan,
+      dmucDuAn: this.searchFilter.dmucDuAn,
+      loaiDuAn: this.searchFilter.loaiDuAn,
+      diaDiem: this.searchFilter.diaDiem,
+      tgKcHt:this.searchFilter.tgKcHt,
+      ngayKyTu: this.searchFilter.ngayKy[0],
+      ngayKyDen: this.searchFilter.ngayKy[1],
+      namBatDau: this.searchFilter.namBatDau,
+      namKetThuc: this.searchFilter.namKetThuc,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
       maDvi: this.userInfo.MA_DVI
     };
-    let res = await this.dieuChinhQuyetDinhPdKhlcntService.search(body);
+    let res = await this.dxService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -133,12 +133,6 @@ export class DeXuatNhuCauComponent implements OnInit {
     }
     this.spinner.hide();
   }
-
-  searchDanhSachDauThau(body, trangThai) {
-    body.trangThai = trangThai;
-    return this.danhSachDauThauService.search(body);
-  }
-
   async changePageIndex(event) {
     this.spinner.show();
     try {
@@ -211,17 +205,16 @@ export class DeXuatNhuCauComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soQd: '',
-      namKh: dayjs().get('year'),
-      ngayQd: '',
-      loaiVthh: '',
-      trichYeu: '',
-      soGoiThau: '',
-    };
-    // this.namKeHoach = null;
-    // this.loaiVthh = null;
-    // this.startValue = null;
-    // this.endValue = null;
+      maDvi: '',
+      soCongVan: '',
+      dmucDuAn: '',
+      loaiDuAn: '',
+      diaDiem: '',
+      tgKcHt: '',
+      ngayKy: '',
+      namBatDau: '',
+      namKetThuc: ''
+    }
     this.search();
   }
 
@@ -241,7 +234,7 @@ export class DeXuatNhuCauComponent implements OnInit {
             id: item.id,
             maDvi: '',
           };
-          this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
+          this.dxService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
@@ -259,18 +252,17 @@ export class DeXuatNhuCauComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          tuNgayTao: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-            : null,
-          denNgayTao: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-            : null,
-          soQd: this.searchFilter.soQd,
-          loaiVthh: this.searchFilter.loaiVthh,
-          namKhoach: this.searchFilter.namKh,
-          soGoiThau: this.searchFilter.soGoiThau,
+          maDvi: '',
+          soCongVan: '',
+          dmucDuAn: '',
+          loaiDuAn: '',
+          diaDiem: '',
+          tgKcHt:'',
+          ngayKy: '',
+          namBatDau: '',
+          namKetThuc: ''
         };
-        this.dieuChinhQuyetDinhPdKhlcntService
+        this.dxService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),

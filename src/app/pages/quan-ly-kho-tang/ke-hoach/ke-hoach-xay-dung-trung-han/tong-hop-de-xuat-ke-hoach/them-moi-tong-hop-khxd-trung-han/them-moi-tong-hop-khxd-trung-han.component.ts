@@ -32,7 +32,6 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   isTongHop: boolean = false;
   listNam: any[] = [];
-  timeNow: any;
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -48,14 +47,19 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       id: [null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
-      ngayTongHop: [this.timeNow],
+      ngayTongHop: [null, [Validators.required]],
     });
   }
 
   async ngOnInit() {
     this.isTongHop = false;
     this.maQd = '/QĐ-BTC'
-    this.timeNow = dayjs().get('day') + '/' + dayjs().get('month') + '/' + dayjs().get('year')
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: dayjs().get('year') - i,
+        text: dayjs().get('year') - i,
+      });
+    }
   }
 
   quayLai() {

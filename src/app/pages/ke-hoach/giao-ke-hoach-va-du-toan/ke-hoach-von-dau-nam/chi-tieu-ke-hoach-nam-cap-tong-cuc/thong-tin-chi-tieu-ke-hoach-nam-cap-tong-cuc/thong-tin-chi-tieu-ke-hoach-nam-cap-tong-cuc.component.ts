@@ -1512,7 +1512,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                 })
             }
             else  {
-              this.notification.error(MESSAGE.SUCCESS,MESSAGE.ADD_SUCCESS);
+              this.notification.success(MESSAGE.SUCCESS,MESSAGE.ADD_SUCCESS);
               this.redirectChiTieuKeHoachNam()
             }
           } else {
