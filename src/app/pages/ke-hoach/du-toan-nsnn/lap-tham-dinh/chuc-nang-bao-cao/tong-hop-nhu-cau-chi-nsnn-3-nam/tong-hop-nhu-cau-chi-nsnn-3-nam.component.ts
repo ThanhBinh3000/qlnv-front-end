@@ -97,7 +97,7 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
         })
     }
 
-    async initialization(){
+    async initialization() {
         this.spinner.show();
         this.id = this.data?.id;
         this.maBieuMau = this.data?.maBieuMau;
@@ -136,31 +136,31 @@ export class TongHopNhuCauChiNsnn3NamComponent implements OnInit {
 
     // luu
     async save(trangThai: string) {
-        const data1: ItemData = this.lstCtietBcao.find(e => e.maNdung == 1000);
-        const data2: ItemData = this.lstCtietBcao.find(e => e.maNdung == 2000);
-        const data3: ItemData = this.lstCtietBcao.find(e => e.maNdung == 3000);
-        if ((data2 || data3) && !data1) {
-            this.notification.warning(MESSAGE.WARNING, "Yêu cầu có trường TỔNG NHU CẦU CHI");
-            return;
-        }
-        if (data2 && !data3) {
-            this.notification.warning(MESSAGE.WARNING, "Yêu cầu có trường NHU CẦU CÒN LẠI");
-            return;
-        }
-        if (data1 && data2 && data3) {
-            if (data1.namHienHanhDtoan - data2.namHienHanhDtoan != data3.namHienHanhDtoan ||
-                data1.namHienHanhUocThien - data2.namHienHanhUocThien != data3.namHienHanhUocThien ||
-                // data1.tranChiN - data2.tranChiN != data3.tranChiN ||
-                data1.ncauChiN - data2.ncauChiN != data3.ncauChiN ||
-                // data1.tranChiN1 - data2.tranChiN1 != data3.tranChiN1 ||
-                data1.ncauChiN1 - data2.ncauChiN1 != data3.ncauChiN1 ||
-                // data1.tranChiN2 - data2.tranChiN2 != data3.tranChiN2 ||
-                data1.ncauChiN2 - data2.ncauChiN2 != data3.ncauChiN2) {
-                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.ERROR_DATA +
-                    this.getChiMuc(data3.stt) + ' = ' + this.getChiMuc(data1.stt) + ' - ' + this.getChiMuc(data2.stt));
+        if (trangThai == '5') {
+            const data1: ItemData = this.lstCtietBcao.find(e => e.maNdung == 1000);
+            const data2: ItemData = this.lstCtietBcao.find(e => e.maNdung == 2000);
+            const data3: ItemData = this.lstCtietBcao.find(e => e.maNdung == 3000);
+            if ((data2 || data3) && !data1) {
+                this.notification.warning(MESSAGE.WARNING, "Yêu cầu có trường TỔNG NHU CẦU CHI");
                 return;
             }
+            if (data2 && !data3) {
+                this.notification.warning(MESSAGE.WARNING, "Yêu cầu có trường NHU CẦU CÒN LẠI");
+                return;
+            }
+            if (data1 && data2 && data3) {
+                if (data1.namHienHanhDtoan - data2.namHienHanhDtoan != data3.namHienHanhDtoan ||
+                    data1.namHienHanhUocThien - data2.namHienHanhUocThien != data3.namHienHanhUocThien ||
+                    data1.ncauChiN - data2.ncauChiN != data3.ncauChiN ||
+                    data1.ncauChiN1 - data2.ncauChiN1 != data3.ncauChiN1 ||
+                    data1.ncauChiN2 - data2.ncauChiN2 != data3.ncauChiN2) {
+                    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.ERROR_DATA +
+                        this.getChiMuc(data3.stt) + ' = ' + this.getChiMuc(data1.stt) + ' - ' + this.getChiMuc(data2.stt));
+                    return;
+                }
+            }
         }
+
         let checkSaveEdit;
         //check xem tat ca cac dong du lieu da luu chua?
         //chua luu thi bao loi, luu roi thi cho di

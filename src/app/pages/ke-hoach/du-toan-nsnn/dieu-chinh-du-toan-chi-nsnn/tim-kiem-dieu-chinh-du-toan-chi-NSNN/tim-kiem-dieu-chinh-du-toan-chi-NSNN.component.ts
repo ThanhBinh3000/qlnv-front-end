@@ -31,6 +31,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
   };
   newDate = new Date();
   listIdDelete: string[] = [];
+  dviGuiKq : boolean;
 
   //danh muc
   danhSachDieuChinh: any[] = [];
@@ -97,7 +98,10 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     this.searchFilter.tuNgay = newDate;
     this.searchFilter.nam = new Date().getFullYear();
     this.userInfo = this.userService.getUserLogin();
-
+    if(this.userInfo.CAP_DVI == '1'){
+      return this.dviGuiKq = true;
+    }
+    
 
     if (this.userService.isAccessPermisson(DCDT.ADD_REPORT)) {
       this.statusTaoMoi = false;

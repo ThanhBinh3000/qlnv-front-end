@@ -167,7 +167,7 @@ export class BaoCaoComponent implements OnInit {
 		})
 	}
 
-	async initialization(){
+	async initialization() {
 		this.id = this.router.snapshot.paramMap.get('id');
 		const lbc = this.router.snapshot.paramMap.get('baoCao');
 
@@ -478,6 +478,7 @@ export class BaoCaoComponent implements OnInit {
 				idBaoCao: this.baoCao.id,
 				luyKes: this.luyKes,
 				namBcao: this.baoCao.namBcao,
+				maDvi: this.baoCao.maDvi,
 			}
 			this.tabs = [];
 			this.tabs.push(this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc));
@@ -935,7 +936,7 @@ export class BaoCaoComponent implements OnInit {
 								e.thGiaMuaTd = Math.round(divNumber(e.thTtien, e.thSoLuong));
 							})
 						}
-						if (item.maLoai == '5'){
+						if (item.maLoai == '5') {
 							item.lstCtietBcaos.forEach(e => {
 								e.ttClechGiaTteVaGiaHtoan = sumNumber([e.ttGiaBanTte, -e.ttGiaHtoan]);
 							})
