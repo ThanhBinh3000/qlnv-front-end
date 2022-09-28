@@ -5,10 +5,10 @@ import {BaseService} from "./base.service";
 @Injectable({
   providedIn: 'root'
 })
-export class TongHopKhTrungHanService extends BaseService{
+export class KtKhXdHangNamService extends BaseService{
 
   GATEWAY = '/qlnv-kho';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dt-tx-trung-han/tong-hop','/qlnv-kho');
+    super(httpClient, 'dt-tx-theo-nam/de-xuat','/qlnv-kho');
   }
 }

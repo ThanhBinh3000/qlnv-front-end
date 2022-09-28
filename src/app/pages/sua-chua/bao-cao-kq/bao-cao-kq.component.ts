@@ -1,3 +1,4 @@
+
 import {
   Component,
   Input,
@@ -11,39 +12,33 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DieuChinhQuyetDinhPdKhlcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
-import {KtKhXdHangNamService} from "../../../../../services/kt-kh-xd-hang-nam.service";
-
+import {QuyHoachKhoService} from "../../../services/quy-hoach-kho.service";
+import {DanhMucService} from "../../../services/danhmuc.service";
+import {DonviService} from "../../../services/donvi.service";
 @Component({
-  selector: 'app-de-xuat-nhu-cau',
-  templateUrl: './de-xuat-nhu-cau.component.html',
-  styleUrls: ['./de-xuat-nhu-cau.component.scss']
+  selector: 'app-bao-cao-kq',
+  templateUrl: './bao-cao-kq.component.html',
+  styleUrls: ['./bao-cao-kq.component.scss']
 })
-export class DeXuatNhuCauComponent implements OnInit {
+export class BaoCaoKqComponent implements OnInit {
+
   @Input() typeVthh: string;
+  @Input() type: string;
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
-  listNam: any[] = [];
-
+  danhSachNam: any[] = [];
   searchFilter = {
+    maTongHop: '',
+    ngayTongHop: '',
     maDvi: '',
-    soCongVan: '',
-    dmucDuAn: '',
-    loaiDuAn: '',
-    diaDiem: '',
-    tgKcHt:'',
-    ngayKy: '',
-    namBatDau: '',
-    namKetThuc: ''
+    noiDung: ''
   };
 
   filterTable: any = {
@@ -69,7 +64,9 @@ export class DeXuatNhuCauComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private dxService: KtKhXdHangNamService,
+    private quyHoachKhoService: QuyHoachKhoService,
+    private dmService: DanhMucService,
+    private dmDviService: DonviService,
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
@@ -80,7 +77,7 @@ export class DeXuatNhuCauComponent implements OnInit {
     try {
       this.userInfo = this.userService.getUserLogin();
       for (let i = -3; i < 23; i++) {
-        this.listNam.push({
+        this.danhSachNam.push({
           value: dayjs().get('year') - i,
           text: dayjs().get('year') - i,
         });
@@ -100,22 +97,12 @@ export class DeXuatNhuCauComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      soCongVan: this.searchFilter.soCongVan,
-      dmucDuAn: this.searchFilter.dmucDuAn,
-      loaiDuAn: this.searchFilter.loaiDuAn,
-      diaDiem: this.searchFilter.diaDiem,
-      tgKcHt:this.searchFilter.tgKcHt,
-      ngayKyTu: this.searchFilter.ngayKy[0],
-      ngayKyDen: this.searchFilter.ngayKy[1],
-      namBatDau: this.searchFilter.namBatDau,
-      namKetThuc: this.searchFilter.namKetThuc,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi: this.userInfo.MA_DVI
     };
-    let res = await this.dxService.search(body);
+    let res = await this.quyHoachKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -133,6 +120,7 @@ export class DeXuatNhuCauComponent implements OnInit {
     }
     this.spinner.hide();
   }
+
   async changePageIndex(event) {
     this.spinner.show();
     try {
@@ -205,16 +193,11 @@ export class DeXuatNhuCauComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
+      maTongHop: '',
+      ngayTongHop: '',
       maDvi: '',
-      soCongVan: '',
-      dmucDuAn: '',
-      loaiDuAn: '',
-      diaDiem: '',
-      tgKcHt: '',
-      ngayKy: '',
-      namBatDau: '',
-      namKetThuc: ''
-    }
+      noiDung: ''
+    };
     this.search();
   }
 
@@ -234,7 +217,8 @@ export class DeXuatNhuCauComponent implements OnInit {
             id: item.id,
             maDvi: '',
           };
-          this.dxService.delete(body).then(async () => {
+          this.quyHoachKhoService.delete(body).then(async () => {
+            this.notification.success(MESSAGE.ERROR, MESSAGE.DELETE_SUCCESS);
             await this.search();
             this.spinner.hide();
           });
@@ -252,20 +236,12 @@ export class DeXuatNhuCauComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          maDvi: '',
-          soCongVan: '',
-          dmucDuAn: '',
-          loaiDuAn: '',
-          diaDiem: '',
-          tgKcHt:'',
-          ngayKy: '',
-          namBatDau: '',
-          namKetThuc: ''
-        };
-        this.dxService
+
+        }
+        this.quyHoachKhoService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
+            saveAs(blob, 'quyet-dinh-dieu-chinh-quy-hoach-kho.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -277,6 +253,7 @@ export class DeXuatNhuCauComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
+
 
   filterInTable(key: string, value: string) {
     if (value && value != '') {
@@ -296,17 +273,5 @@ export class DeXuatNhuCauComponent implements OnInit {
     }
   }
 
-  clearFilterTable() {
-    this.filterTable = {
-      soQd: '',
-      ngayQd: '',
-      trichYeu: '',
-      soQdGoc: '',
-      namKhoach: '',
-      tenVthh: '',
-      soGoiThau: '',
-      trangThai: '',
-    };
-  }
 }
 
