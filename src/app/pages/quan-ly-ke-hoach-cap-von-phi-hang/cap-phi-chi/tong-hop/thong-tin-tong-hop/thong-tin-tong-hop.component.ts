@@ -181,7 +181,6 @@ export class ThongTinTongHopComponent implements OnInit {
           this.cts = [...data.cts];
           this.ct1s = [...data.ct1s];
           this.sortTableId('ct1s');
-          this.sortTableId('ct2s');
         }
       }
     }
@@ -470,6 +469,7 @@ export class ThongTinTongHopComponent implements OnInit {
       item.maVatTu = this.rowEdit.maVatTu;
       item.tenHangHoa = this.rowEdit.tenHangHoa;
       item.ct2s = cloneDeep(this.rowEdit.ct2s);
+      item.ycCapThemPhi = this.tongCapThemBang2(this.rowEdit);
       this.rowEdit.isView = true;
     }
   }

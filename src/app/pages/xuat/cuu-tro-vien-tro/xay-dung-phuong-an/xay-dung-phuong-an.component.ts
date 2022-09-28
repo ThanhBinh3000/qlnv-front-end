@@ -58,19 +58,21 @@ export class XayDungPhuongAnComponent implements OnInit {
     trichYeu: null,
   };
   filterTable: any = {
-    soKeHoach: '',
+    soDxuat: '',
     tenDonVi: '',
-    ngayLapKeHoach: '',
+    ngayDxuat: '',
     ngayKy: '',
     trichYeu: '',
     tenHangHoa: '',
     soQuyetDinhGiaoChiTieu: '',
     soQuyetDinhPheDuyet: '',
-    namKeHoach: '',
     tenVthh: '',
     tenCloaiVthh: '',
     tenTrangThai: '',
+    tenTrangThaiTh: '',
     nam: '',
+    tenLoaiHinhNhapXuat: '',
+    tongSoLuong: ''
   };
   dataTableAll: any[] = [];
   listVthh: any[] = [];
@@ -169,8 +171,8 @@ export class XayDungPhuongAnComponent implements OnInit {
       let body = {
         tuNgayDxuat: this.searchFilter.ngayDxuat ? dayjs(this.searchFilter.ngayDxuat[0]).format('YYYY-MM-DD') : null,
         denNgayDxuat: this.searchFilter.ngayDxuat ? dayjs(this.searchFilter.ngayDxuat[1]).format('YYYY-MM-DD') : null,
-        tuThoiGianThucHien: this.searchFilter.ngayDxuat ? dayjs(this.searchFilter.thoiGianThucHien[0]).format('YYYY-MM-DD') : null,
-        denThoiGianThucHien: this.searchFilter.ngayDxuat ? dayjs(this.searchFilter.thoiGianThucHien[1]).format('YYYY-MM-DD') : null,
+        tuThoiGianThucHien: this.searchFilter.thoiGianThucHien ? dayjs(this.searchFilter.thoiGianThucHien[0]).format('YYYY-MM-DD') : null,
+        denThoiGianThucHien: this.searchFilter.thoiGianThucHien ? dayjs(this.searchFilter.thoiGianThucHien[1]).format('YYYY-MM-DD') : null,
         soDxuat: this.searchFilter.soDxuat,
         maDvi: this.searchFilter.maDvi,
         loaiVatTuHangHoa: this.searchFilter.loaiVthh,
@@ -179,6 +181,7 @@ export class XayDungPhuongAnComponent implements OnInit {
         pageNumber: this.page,
         pageSize: this.pageSize,
       };
+      console.log(body, 'body')
       let res = await this.deXuatPhuongAnCuuTroService.search(body);
 
       if (res.msg == MESSAGE.SUCCESS) {
@@ -198,6 +201,7 @@ export class XayDungPhuongAnComponent implements OnInit {
       }
       this.spinner.hide();
     } catch (e) {
+      console.log(e)
       this.spinner.hide();
     }
 
@@ -262,8 +266,10 @@ export class XayDungPhuongAnComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter.nam = dayjs().get('year');
+    this.searchFilter.maDvi = null;
     this.searchFilter.soDxuat = null;
     this.searchFilter.thoiGianThucHien = null;
+    this.searchFilter.ngayDxuat = null;
     this.searchFilter.trichYeu = null;
     this.search();
   }
@@ -334,10 +340,10 @@ export class XayDungPhuongAnComponent implements OnInit {
         let body = {
           tuNgayDxuat: this.searchFilter.ngayDxuat ? dayjs(this.searchFilter.ngayDxuat[0]).format('YYYY-MM-DD') : null,
           denNgayDxuat: this.searchFilter.ngayDxuat ? dayjs(this.searchFilter.ngayDxuat[1]).format('YYYY-MM-DD') : null,
-          tuThoiGianThucHien: this.searchFilter.ngayDxuat ? dayjs(this.searchFilter.thoiGianThucHien[0]).format('YYYY-MM-DD') : null,
-          denThoiGianThucHien: this.searchFilter.ngayDxuat ? dayjs(this.searchFilter.thoiGianThucHien[1]).format('YYYY-MM-DD') : null,
+          tuThoiGianThucHien: this.searchFilter.thoiGianThucHien ? dayjs(this.searchFilter.thoiGianThucHien[0]).format('YYYY-MM-DD') : null,
+          denThoiGianThucHien: this.searchFilter.thoiGianThucHien ? dayjs(this.searchFilter.thoiGianThucHien[1]).format('YYYY-MM-DD') : null,
           soKeHoach: this.searchFilter.soDxuat ?? null,
-          namKeHoach: this.searchFilter.nam,
+          nam: this.searchFilter.nam,
           trichYeu: this.searchFilter.trichYeu ?? null,
           maDvis: [this.userInfo.MA_DVI],
           pageable: null,
@@ -431,6 +437,7 @@ export class XayDungPhuongAnComponent implements OnInit {
   clearFilterTable() {
     this.filterTable = {
       soKeHoach: '',
+      tenDonVi: '',
       ngayLapKeHoach: '',
       ngayKy: '',
       trichYeu: '',
@@ -441,6 +448,7 @@ export class XayDungPhuongAnComponent implements OnInit {
       tenVthh: '',
       tenCloaiVthh: '',
       tenTrangThai: '',
+      nam: '',
     };
   }
 
