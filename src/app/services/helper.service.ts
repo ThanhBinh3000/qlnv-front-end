@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import {FormControl, FormGroup} from '@angular/forms';
 import * as moment from 'moment';
 import Cleave from 'cleave.js';
 import * as XLSX from 'xlsx';
 import { environment } from 'src/environments/environment';
 import { ResponseData } from '../interfaces/response';
+import {MESSAGE} from "../constants/message";
+import {NzNotificationService} from "ng-zorro-antd/notification";
 declare var vgcapluginObject: any;
 
 @Injectable({
@@ -14,7 +16,8 @@ declare var vgcapluginObject: any;
 
 export class HelperService {
   constructor(
-    private httpClient: HttpClient
+    private httpClient: HttpClient,
+    private notification: NzNotificationService,
   ) { }
 
   markFormGroupTouched(formGroup) {
@@ -24,6 +27,7 @@ export class HelperService {
         formGroup.controls[i].updateValueAndValidity();
       }
     }
+    this.findInvalidControls(formGroup);
   }
 
   EnumToSelectList(key): Promise<ResponseData<any>> {
@@ -61,5 +65,27 @@ export class HelperService {
 
   replaceAll(string, search, replace) {
     return string.split(search).join(replace);
+  }
+
+  findInvalidControls(formData) {
+    const invalid = [];
+    const controls = formData.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    if(invalid.length > 0){
+      this.notification.error(MESSAGE.ERROR,MESSAGE.FORM_REQUIRED_ERROR);
+      console.log(invalid);
+    }
+  }
+
+  bidingDataInFormGroup(formGroup : FormGroup ,dataBinding : any){
+    for (const name in dataBinding) {
+      if (formGroup.controls.hasOwnProperty(name)) {
+        formGroup.controls[name].setValue(dataBinding[name]);
+      }
+    }
   }
 }
