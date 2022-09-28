@@ -166,11 +166,15 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         idGoiThau: dataDetail ? dataDetail.idGoiThau : null,
         trungThau: dataDetail ? dataDetail.trungThau : null,
         trangThai: dataDetail ? dataDetail.trangThai : null,
+        tenTrangThai : dataDetail.tenTrangThai ,
         lyDoHuy: dataDetail ? dataDetail.lyDoHuy : null,
         ghiChu: dataDetail ? dataDetail.ghiChu : null,
       })
       this.taiLieuDinhKemList = dataDetail.fileDinhKems;
       this.dataTableGoiThau = dataDetail.hhQdPduyetKqlcntDtlList;
+      this.dataTableGoiThau.forEach( x => {
+        x.idGt = x.idGoiThau;
+      })
     }
   }
 

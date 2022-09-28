@@ -167,6 +167,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.disableChiCuc();
       // this.filterData();
       this.checkDisabledSave();
+
     }
   }
 
@@ -174,40 +175,40 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   }
 
-  reduceRowData(
-    indexTable: number,
-    indexCell: number,
-    indexRow: number,
-    stringReplace: string,
-    idTable: string,
-  ): number {
-    let sumVal = 0;
-    const listTable = document
-      .getElementById(idTable)
-      ?.getElementsByTagName('table');
-    if (listTable && listTable.length >= indexTable) {
-      const table = listTable[indexTable];
-      for (let i = indexRow; i < table.rows.length - 1; i++) {
-        if (
-          table.rows[i]?.cells[indexCell]?.innerHTML &&
-          table.rows[i]?.cells[indexCell]?.innerHTML != ''
-        ) {
-          sumVal =
-            sumVal +
-            parseFloat(this.helperService.replaceAll(table.rows[i].cells[indexCell].innerHTML, stringReplace, ''));
-          this.formData.get('soLuong').setValue(sumVal);
-          this.calculatorThanhTien();
-        }
-      }
-    }
-    return sumVal;
-  }
+  // reduceRowData(
+  //   indexTable: number,
+  //   indexCell: number,
+  //   indexRow: number,
+  //   stringReplace: string,
+  //   idTable: string,
+  // ): number {
+  //   let sumVal = 0;
+  //   const listTable = document
+  //     .getElementById(idTable)
+  //     ?.getElementsByTagName('table');
+  //   if (listTable && listTable.length >= indexTable) {
+  //     const table = listTable[indexTable];
+  //     for (let i = indexRow; i < table.rows.length - 1; i++) {
+  //       if (
+  //         table.rows[i]?.cells[indexCell]?.innerHTML &&
+  //         table.rows[i]?.cells[indexCell]?.innerHTML != ''
+  //       ) {
+  //         sumVal =
+  //           sumVal +
+  //           parseFloat(this.helperService.replaceAll(table.rows[i].cells[indexCell].innerHTML, stringReplace, ''));
+  //         this.formData.get('soLuong').setValue(sumVal);
+  //         this.calculatorThanhTien();
+  //       }
+  //     }
+  //   }
+  //   return sumVal;
+  // }
 
   calculatorThanhTien() {
     this.formData.patchValue({
       thanhTien:
         +this.formData.get('soLuong').value *
-        +this.formData.get('donGia').value,
+        +this.formData.get('donGia').value * 1000,
     });
     this.formData.patchValue({
       bangChu: VNnum2words(+this.formData.get('thanhTien').value),
@@ -257,6 +258,18 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       this.selectedChiCuc = true;
     } else {
       this.selectedChiCuc = false;
+    }
+  }
+
+  calcTong(){
+    if (this.listOfData) {
+      const sum = this.listOfData.reduce((prev, cur) => {
+        prev += cur.soLuong;
+        return prev;
+      }, 0);
+      this.formData.get('soLuong').setValue(sum);
+      this.calculatorThanhTien();
+      return sum;
     }
   }
 }

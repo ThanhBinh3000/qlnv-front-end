@@ -1,32 +1,32 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {UserLogin} from "../../../../../../../models/userlogin";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {NgxSpinnerService} from "ngx-spinner";
-import {UserService} from "../../../../../../../services/user.service";
-import {Globals} from "../../../../../../../shared/globals";
-import {HelperService} from "../../../../../../../services/helper.service";
-import {DeXuatPAGService} from "../../../../../../../services/ke-hoach/phuong-an-gia/deXuatPAG.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { UserLogin } from "../../../../../../../models/userlogin";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { NgxSpinnerService } from "ngx-spinner";
+import { UserService } from "../../../../../../../services/user.service";
+import { Globals } from "../../../../../../../shared/globals";
+import { HelperService } from "../../../../../../../services/helper.service";
+import { DeXuatPAGService } from "../../../../../../../services/ke-hoach/phuong-an-gia/deXuatPAG.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import dayjs from "dayjs";
-import {API_STATUS_CODE, LIST_VAT_TU_HANG_HOA, TYPE_PAG} from "../../../../../../../constants/config";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {DanhMucTieuChuanService} from "../../../../../../../services/danhMucTieuChuan.service";
-import {UploadFileService} from "../../../../../../../services/uploaFile.service";
-import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
-import {QuyetDinhPheDuyetKeHoachLCNTService} from "../../../../../../../services/quyetDinhPheDuyetKeHoachLCNT.service";
-import {saveAs} from 'file-saver';
+import { API_STATUS_CODE, LIST_VAT_TU_HANG_HOA, TYPE_PAG } from "../../../../../../../constants/config";
+import { MESSAGE } from "../../../../../../../constants/message";
+import { DanhMucTieuChuanService } from "../../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
+import { UploadFileService } from "../../../../../../../services/uploaFile.service";
+import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import { QuyetDinhPheDuyetKeHoachLCNTService } from "../../../../../../../services/quyetDinhPheDuyetKeHoachLCNT.service";
+import { saveAs } from 'file-saver';
 import {
   CanCuXacDinhPag,
   PhuongPhapXacDinhGia,
   ThongTinChungPag,
   ThongTinKhaoSatGia
 } from "../../../../../../../models/DeXuatPhuongAnGia";
-import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
-import {STATUS} from "../../../../../../../constants/status";
-import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import {ThongTinQuyetDinh} from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import { FileDinhKem } from "../../../../../../../models/FileDinhKem";
+import { STATUS } from "../../../../../../../constants/status";
+import { DialogTuChoiComponent } from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { ThongTinQuyetDinh } from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 
 @Component({
   selector: 'app-them-moi-de-xuat-pag',
@@ -246,7 +246,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         this.pagTtChungs.forEach((item, index) => {
           this.dataEdit[index] = {
             edit: false,
-            data: {...item},
+            data: { ...item },
           };
         });
       }
@@ -256,7 +256,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         this.dataTableCanCuXdg.forEach((item, index) => {
           this.dataEditCc[index] = {
             edit: false,
-            data: {...item},
+            data: { ...item },
           };
         });
       }
@@ -266,7 +266,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         this.pagPpXacDinhGias.forEach((item, index) => {
           this.dataEditPp[index] = {
             edit: false,
-            data: {...item},
+            data: { ...item },
           };
         });
       }
@@ -546,7 +546,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   cancelEdit(index: number) {
     this.dataEdit[index] = {
-      data: {...this.pagPpXacDinhGias[index]},
+      data: { ...this.pagPpXacDinhGias[index] },
       edit: false,
     };
   }

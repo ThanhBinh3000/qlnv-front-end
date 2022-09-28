@@ -6,7 +6,7 @@
         </button>
         <button
             *ngIf="formGoiThau.value.trangThai == STATUS.CHUA_CAP_NHAT || formGoiThau.value.trangThai == STATUS.DANG_CAP_NHAT"
-            type="button" class="btn btn-sub" (click)="save(STATUS.HOAN_THANH_CAP_NHAT)">
+            type="button" class="btn btn-sub xanh-nhat" (click)="save(STATUS.HOAN_THANH_CAP_NHAT)">
             <i class="icon htvbdh_checkfile2"></i>
             <span>Hoàn thành cập nhật</span>
         </button>
@@ -490,16 +490,14 @@
             </form>
         </nz-tab>
         <nz-tab [nzTitle]="'Danh sách địa điểm nhập hàng'" class="tt-chung__container">
-            <nz-card class="mt16 flex-card p-lr16">
+            <nz-card class="mt16 flex-card p-lr16 table-card">
                 <nz-table #basicTable nzBordered class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
                     [nzData]="listDiaDiemNhapHang">
                     <thead>
                         <tr>
                             <th width="60px" class="text-center">STT</th>
-                            <th class="text-left">{{ userService.isTongCuc() ? 'Tên đơn vị' : 'Chi
-                                cục'}}</th>
-                            <th class="text-left">{{ userService.isTongCuc() ? 'Số lượng nhập' : 'Địa
-                                điểm nhập kho'}}</th>
+                            <th class="text-left">{{ userService.isTongCuc() ? 'Tên đơn vị' : 'Chi cục'}}</th>
+                            <th class="text-left">{{ userService.isTongCuc() ? 'Số lượng nhập' : 'Địa điểm nhập kho'}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -515,7 +513,7 @@
     </nz-tabset>
     <form [nzLayout]="'vertical'" [formGroup]="formGoiThau" nz-form class="mt-16">
         <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">
+            <nz-form-label [nzNoColon]="true">
                 Ghi chú
             </nz-form-label>
             <nz-form-control>

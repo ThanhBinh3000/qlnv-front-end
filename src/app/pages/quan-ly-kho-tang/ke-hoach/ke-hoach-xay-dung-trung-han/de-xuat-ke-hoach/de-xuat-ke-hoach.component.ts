@@ -18,6 +18,9 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
+import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
+import {DonviService} from "../../../../../services/donvi.service";
+import {DxXdTrungHanService} from "../../../../../services/dx-xd-trung-han.service";
 
 @Component({
   selector: 'app-de-xuat-ke-hoach',
@@ -32,14 +35,18 @@ export class DeXuatKeHoachComponent implements OnInit {
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   listNam: any[] = [];
+  danhSachCuc: any[] = [];
 
   searchFilter = {
-    soQd: '',
-    namKh: dayjs().get('year'),
-    ngayQd: '',
-    loaiVthh: '',
-    trichYeu: '',
-    soGoiThau: '',
+    soCongVan: '',
+    maDvi: '',
+    dmucDuAn: '',
+    diaDiem: '',
+    loaiDuAn: '',
+    tgKcHt: '',
+    ngayKy: '',
+    namBatDau: '',
+    namKetThuc: ''
   };
 
   filterTable: any = {
@@ -65,11 +72,10 @@ export class DeXuatKeHoachComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhSachDauThauService: DanhSachDauThauService,
+    private dviService : DonviService,
+    private deXuatTrungHanService : DxXdTrungHanService,
     private modal: NzModalService,
     public userService: UserService,
-    private dieuChinhQuyetDinhPdKhlcntService: DieuChinhQuyetDinhPdKhlcntService,
     public globals: Globals,
   ) { }
 
@@ -77,6 +83,9 @@ export class DeXuatKeHoachComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
+      if (this.userService.isCuc()) {
+        this.searchFilter.maDvi = this.userInfo.MA_DVI
+      }
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
           value: dayjs().get('year') - i,
@@ -84,38 +93,47 @@ export class DeXuatKeHoachComponent implements OnInit {
         });
       }
       await this.search();
+      await this.loadDanhSachCuc();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    console.log(
-      this.dataTable
-    )
+  }
+  async loadDanhSachCuc() {
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.dviService.layDonViTheoCapDo(body);
+    this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
+    console.log(this.danhSachCuc)
+    if (this.userService.isCuc()) {
+      this.searchFilter.maDvi = this.userInfo.MA_DVI
+    }
   }
 
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-        : null,
-      denNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-        : null,
-      soQdinh: this.searchFilter.soQd,
-      loaiVthh: this.searchFilter.loaiVthh,
-      namKhoach: this.searchFilter.namKh,
-      soGoiThau: this.searchFilter.soGoiThau,
-      trichYeu: this.searchFilter.trichYeu,
+      diaDiem: this.searchFilter.diaDiem,
+      dmucDuAn: this.searchFilter.dmucDuAn,
+      loaiDuAn: this.searchFilter.loaiDuAn,
+      namBatDau: this.searchFilter.namBatDau,
+      namKetThuc: this.searchFilter.namKetThuc,
+      ngayKyTu: this.searchFilter.ngayKy[0],
+      ngayKyDen: this.searchFilter.ngayKy[1],
+      soCongVan: this.searchFilter.soCongVan,
+      tgKcHt: this.searchFilter.tgKcHt,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
       maDvi: this.userInfo.MA_DVI
     };
-    let res = await this.dieuChinhQuyetDinhPdKhlcntService.search(body);
+    let res = await this.deXuatTrungHanService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -131,12 +149,8 @@ export class DeXuatKeHoachComponent implements OnInit {
       this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    console.log(this.dataTable)
     this.spinner.hide();
-  }
-
-  searchDanhSachDauThau(body, trangThai) {
-    body.trangThai = trangThai;
-    return this.danhSachDauThauService.search(body);
   }
 
   async changePageIndex(event) {
@@ -211,17 +225,16 @@ export class DeXuatKeHoachComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soQd: '',
-      namKh: dayjs().get('year'),
-      ngayQd: '',
-      loaiVthh: '',
-      trichYeu: '',
-      soGoiThau: '',
+      soCongVan: '',
+      maDvi: '',
+      dmucDuAn: '',
+      diaDiem: '',
+      loaiDuAn: '',
+      tgKcHt: '',
+      ngayKy: '',
+      namBatDau: '',
+      namKetThuc: ''
     };
-    // this.namKeHoach = null;
-    // this.loaiVthh = null;
-    // this.startValue = null;
-    // this.endValue = null;
     this.search();
   }
 
@@ -241,7 +254,7 @@ export class DeXuatKeHoachComponent implements OnInit {
             id: item.id,
             maDvi: '',
           };
-          this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
+          this.deXuatTrungHanService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
@@ -259,18 +272,9 @@ export class DeXuatKeHoachComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          tuNgayTao: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-            : null,
-          denNgayTao: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-            : null,
-          soQd: this.searchFilter.soQd,
-          loaiVthh: this.searchFilter.loaiVthh,
-          namKhoach: this.searchFilter.namKh,
-          soGoiThau: this.searchFilter.soGoiThau,
+
         };
-        this.dieuChinhQuyetDinhPdKhlcntService
+        this.deXuatTrungHanService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),

@@ -161,6 +161,7 @@ export class DanhMucMucPhi {
   tenLoaiVthh: string
   maDinhMuc: string
   tenDinhMuc: string
+  trangThai: string
 }
 
 

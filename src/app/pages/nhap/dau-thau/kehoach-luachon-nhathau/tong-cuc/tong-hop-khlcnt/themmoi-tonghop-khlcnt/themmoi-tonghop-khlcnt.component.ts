@@ -288,6 +288,8 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       let body = this.formData.value;
       let res = await this.tongHopDeXuatKHLCNTService.create(body);
       if (res.msg == MESSAGE.SUCCESS) {
+        this.id = res.data.id;
+        this.loadChiTiet();
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
       }
       else {
