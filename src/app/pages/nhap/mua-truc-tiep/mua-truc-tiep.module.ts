@@ -6,12 +6,18 @@ import { MuaTrucTiepRoutingModule } from './mua-truc-tiep-routing.module';
 import { MuaTrucTiepComponent } from './mua-truc-tiep.component';
 import { KehoachLuachonMuatructiepModule } from './kehoach-luachon-muatructiep/kehoach-luachon-muatructiep.module';
 import { TochucTrienkhaiMuatructiepModule } from './tochuc-trienkhai-muatructiep/tochuc-trienkhai-muatructiep.module';
+import { DieuchinhKehoachMuattComponent } from './dieuchinh-kehoach-muatt/dieuchinh-kehoach-muatt.component';
+import { DieuchinhKehoachMuattModule } from './dieuchinh-kehoach-muatt/dieuchinh-kehoach-muatt.module';
+import { HopdongBangkePhieumuahangComponent } from './hopdong-bangke-phieumuahang/hopdong-bangke-phieumuahang.component';
+import { HopdongBangkePhieumuahangModule } from './hopdong-bangke-phieumuahang/hopdong-bangke-phieumuahang.module';
 
 
 @NgModule({
   declarations: [
     MuaTrucTiepComponent,
-   
+
+
+
   ],
   imports: [
     CommonModule,
@@ -20,6 +26,8 @@ import { TochucTrienkhaiMuatructiepModule } from './tochuc-trienkhai-muatructiep
     DirectivesModule,
     KehoachLuachonMuatructiepModule,
     TochucTrienkhaiMuatructiepModule,
+    DieuchinhKehoachMuattModule,
+    HopdongBangkePhieumuahangModule,
   ],
 })
 export class MuaTrucTiepModule { }
