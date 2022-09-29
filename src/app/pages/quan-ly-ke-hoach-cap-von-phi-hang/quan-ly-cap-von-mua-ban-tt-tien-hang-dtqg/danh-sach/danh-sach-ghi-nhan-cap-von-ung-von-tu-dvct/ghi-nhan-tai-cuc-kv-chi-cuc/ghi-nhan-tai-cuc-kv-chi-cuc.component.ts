@@ -132,7 +132,7 @@ export class GhiNhanTaiCucKvChiCucComponent implements OnInit {
 		this.statusNew = true;
 		const requestReport = {
 			maCapUngVonTuCapTren: this.searchFilter.maCvUv,
-			maDvi: this.userInfo?.dvql,
+			maDvi: this.userInfo?.MA_DVI,
 			maLoai: "1",
 			ngayLap: this.datePipe.transform(this.searchFilter.ngayLap, Utils.FORMAT_DATE_STR),
 			ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
