@@ -900,4 +900,9 @@ export class PhuLuc2Component implements OnInit {
     num = exchangeMoney(num, '1', this.maDviTien);
     return displayNumber(num);
   }
+
+  displayNumber1(num: number): string {
+    return displayNumber(num);
+  }
+  
 }

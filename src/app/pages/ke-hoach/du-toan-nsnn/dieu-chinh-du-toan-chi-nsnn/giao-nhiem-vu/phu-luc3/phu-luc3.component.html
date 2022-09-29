@@ -83,14 +83,14 @@
             {{data.maDvi}}
           </td>
           <td>{{data.khoachQdGiaoNvu}}</td>
-          <td>{{data.khoachLuong}}</td>
-          <td>{{data.tdiemBcaoLuong}}</td>
+          <td>{{displayNumber1(data.khoachLuong)}}</td>
+          <td>{{displayNumber1(data.tdiemBcaoLuong)}}</td>
           <td>{{displayValue(data.tdiemBcaoDtoan)}}</td>
           <td>{{data.tdiemBcaoCcu}}</td>
-          <td>{{data.dkienThienLuong}}</td>
+          <td>{{displayNumber1(data.dkienThienLuong)}}</td>
           <td>{{displayValue(data.dkienThienDtoan)}}</td>
           <td>{{displayValue(data.dtoanThieuNtruoc)}}</td>
-          <td>{{data.tongNcauDtoanN}}</td>
+          <td>{{displayValue(data.tongNcauDtoanN)}}</td>
           <td>{{displayValue(data.dtoanLke)}}</td>
           <td>{{displayValue(data.dtoanDchinh)}}</td>
           <td>{{data.ghiChu}}</td>
@@ -158,7 +158,7 @@
             </fm-input-number>
           </td>
           <td>
-            {{displayValue(data.tongNcauDtoanN)}}
+            {{displayValue(editCache[data.id].data.tongNcauDtoanN)}}
           </td>
           <td>
             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.dtoanLke"
@@ -167,7 +167,7 @@
             </fm-input-number>
           </td>
           <td>
-            {{displayValue(data.dtoanDchinh)}}
+            {{displayValue(editCache[data.id].data.dtoanDchinh)}}
           </td>
           <td>
             <input nz-input class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.ghiChu" />

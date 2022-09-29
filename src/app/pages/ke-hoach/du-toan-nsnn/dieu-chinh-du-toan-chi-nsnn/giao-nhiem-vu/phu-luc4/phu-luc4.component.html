@@ -100,10 +100,10 @@
               </div>
             </div>
           </td>
-          <td>{{displayValue(data.slBquanKh)}}</td>
-          <td>{{displayValue(data.slBquanTte)}}</td>
-          <td>{{displayValue(data.slBquanUocThien)}}</td>
-          <td>{{displayValue(data.slBquanTcong)}}</td>
+          <td>{{displayNumber1(data.slBquanKh)}}</td>
+          <td>{{displayNumber1(data.slBquanTte)}}</td>
+          <td>{{displayNumber1(data.slBquanUocThien)}}</td>
+          <td>{{displayNumber1(data.slBquanTcong)}}</td>
           <td>{{displayValue(data.dinhMuc)}}</td>
           <td>{{displayValue(data.thanhTien)}}</td>
           <td>{{displayValue(data.dtoanThieuNTruoc)}}</td>
@@ -166,13 +166,13 @@
             </fm-input-number>
           </td>
           <td>
-            {{displayValue(data.slBquanTcong)}}
+            {{displayNumber1(editCache[data.id].data.slBquanTcong)}}
           </td>
           <td>
-            {{displayValue(data.dinhMuc)}}
+            {{displayValue(editCache[data.id].data.dinhMuc)}}
           </td>
           <td>
-            {{displayValue(data.thanhTien)}}
+            {{displayValue(editCache[data.id].data.thanhTien)}}
           </td>
           <td>
             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.dtoanThieuNTruoc"
@@ -181,10 +181,10 @@
             </fm-input-number>
           </td>
           <td>
-            {{displayValue(data.tongNcauKphi)}}
+            {{displayValue(editCache[data.id].data.tongNcauKphi)}}
           </td>
           <td>
-            {{displayValue(data.kphiTcong)}}
+            {{displayValue(editCache[data.id].data.kphiTcong)}}
           </td>
           <td>
             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kphiQtoanNtruoc"
@@ -205,7 +205,7 @@
             </fm-input-number>
           </td>
           <td>
-            {{displayValue(data.dtoanDchinh)}}
+            {{displayValue(editCache[data.id].data.dtoanDchinh)}}
           </td>
           <td [hidden]="status">
             <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
