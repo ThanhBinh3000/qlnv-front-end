@@ -14,7 +14,7 @@ export class TongHopPhuongAnCuuTroService extends BaseService {
     super(httpClient, 'xuat-hang/cuu-tro/tong-hop', '');
   }
   syntheic(body) {
-    const url = `${environment.SERVICE_API_LOCAL}${this.GATEWAY}/${this.table}/dieu-chinh`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/dieu-chinh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 }
