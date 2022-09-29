@@ -363,7 +363,6 @@ export class DieuChinhSoLieuQuyetToanComponent implements OnInit {
           this.thuyetMinh = data.data.thuyetMinh;
           this.congVan = data.data.congVan;
           this.lstFiles = data.data.fileDinhKems;
-
           this.listFile = [];
           this.getTotal()
           this.updateEditCache();

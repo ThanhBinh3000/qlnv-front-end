@@ -81,7 +81,8 @@
               <th nzWidth="150px">Ngày duyệt (Ngày lãnh đạo duyệt)</th>
               <th nzWidth="150px" [hidden]="dviGuiKq">Ngày cấp trên trả kết quả</th>
               <th nzWidth="200px" class="text-center">Trạng thái</th>
-              <th nzWidth="200px" colspan="2">Hành động</th>
+              <th></th>
+              <!-- <th nzWidth="200px" colspan="2">Hành động</th> -->
               <th>
                 <ng-container *ngIf="checkAll(); else xoa">
                   <button type="button" class="btn btn-main" (click)="updateAllCheck()">
@@ -127,19 +128,19 @@
                     </button>
                   </ng-container>
                 </ng-template>
-                <ng-container *ngIf="checkEditReport(item.trangThai); else xem">
+                <ng-container *ngIf="checkEditReport(item); else xem">
                   <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
                     <span>Nhập/Sửa dữ liệu</span>
                   </button>
                 </ng-container>
-                <ng-container *ngIf="checkDeleteReport(item.trangThai)">
+                <ng-container *ngIf="checkDeleteReport(item)">
                   <button type="button" class="btn btn-main" (click)="xoaDuToanDieuChinh(item.id)">
                     <span>Xóa</span>
                   </button>
                 </ng-container>
               </td>
               <td>
-                <ng-container *ngIf="checkDeleteReport(item.trangThai)">
+                <ng-container *ngIf="checkDeleteReport(item)">
                   <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
                     (ngModelChange)="changeListIdDelete(item.id)"></label>
                 </ng-container>

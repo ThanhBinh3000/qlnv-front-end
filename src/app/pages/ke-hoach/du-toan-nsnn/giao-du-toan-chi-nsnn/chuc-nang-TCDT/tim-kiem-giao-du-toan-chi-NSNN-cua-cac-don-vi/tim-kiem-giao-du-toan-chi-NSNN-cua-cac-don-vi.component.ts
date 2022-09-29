@@ -56,6 +56,7 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
   //danh muc
   danhSachBaoCao: any = [];
   donVis: any[] = [];
+  listDviNhan: any[] = [];
   trangThais: any[] = TRANG_THAI_GIAO_DU_TOAN;
   trangThai!: string;
   loaiDuAns: any[] = [
@@ -103,11 +104,13 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
       this.trangThai = '1';
     }
     //lay danh sach danh muc
-    this.danhMuc.dMDonVi().toPromise().then(
+    await this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
+          this.listDviNhan = data.data;
           this.donVis = this.donVis.filter(e => e?.maDviCha == this.userInfo?.dvql);
+
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -219,7 +222,9 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
   }
 
   getUnitName(maDvi: string) {
-    return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
+    // console.log(this.donVis.find(e => e.maDvi == maDvi)?.tenDvi);
+
+    return this.listDviNhan.find(e => e.maDvi == maDvi)?.tenDvi;
   }
   xoaDieuKien() {
     this.searchFilter.namDtoan = null;
