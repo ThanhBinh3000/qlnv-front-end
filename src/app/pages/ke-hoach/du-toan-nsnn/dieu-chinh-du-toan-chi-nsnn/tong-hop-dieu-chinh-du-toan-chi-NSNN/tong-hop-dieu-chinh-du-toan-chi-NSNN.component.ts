@@ -124,6 +124,8 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
     let trangThais = [];
     if (this.trangThai) {
       trangThais = [this.trangThai];
+    } else {
+      trangThais = ["-1", "7", "9"]
     }
     const requestReport = {
       dotBcao: null,
@@ -211,11 +213,13 @@ export class TongHopDieuChinhDuToanChiNSNNComponent implements OnInit {
   //doi so trang
   onPageIndexChange(page) {
     this.pages.page = page;
+    this.onSubmit();
   }
 
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
     this.pages.size = size;
+    this.onSubmit();
   }
   redirectChiTieuKeHoachNam() {
     this.location.back()
