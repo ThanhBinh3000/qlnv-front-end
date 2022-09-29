@@ -1381,9 +1381,9 @@ export function displayNumber(num: number): string {
     const str = num.toFixed(4);
     real = str.split('.')[0];
     imaginary = str.split('.')[1];
-    // while (imaginary[imaginary.length - 1] == '0') {
-    //   imaginary = imaginary.slice(0, -1);
-    // }
+    while (imaginary[imaginary.length - 1] == '0') {
+      imaginary = imaginary.slice(0, -1);
+    }
   }
   if (!imaginary) {
     displayValue = dau + separateNumber(real);

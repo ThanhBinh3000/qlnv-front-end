@@ -748,4 +748,5 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
     } catch (e) {
     }
   }
+
 }

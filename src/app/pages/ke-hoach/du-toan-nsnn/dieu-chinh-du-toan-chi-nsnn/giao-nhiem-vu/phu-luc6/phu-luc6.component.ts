@@ -976,6 +976,10 @@ export class PhuLuc6Component implements OnInit {
     return displayNumber(num);
   }
 
+  displayNumber1(num: number): string {
+    return displayNumber(num);
+  }
+
   getMoneyUnit() {
     return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }
