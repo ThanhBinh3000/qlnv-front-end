@@ -45,57 +45,60 @@
   </div>
   <nz-card class="mt16 flex-card p-lr16">
     <form nzLayout="vertical" nz-form [formGroup]="formData">
-      <div nz-row [nzGutter]="[24]">
+      <ng-template #error let-control>
+        <app-template-error #error [control]="control"></app-template-error>
+      </ng-template>
+      <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Mã tổng hợp </nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <input nz-input formControlName="trichYeu" />
-            </nz-form-control>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm kế hoạch
+            </nz-form-label>
+            <nz-select formControlName="nam" nzDisabled>
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <input nz-input formControlName="trichYeu" />
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="9">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="loaiVthh" (ngModelChange)="changeLoaiHangHoa()">
-                <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+            <nz-form-label [nzNoColon]="true"> Loại hình nhập xuất</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24">
+              <nz-select formControlName="loaiHinhNhapXuat" [nzDisabled]="isView">
+                <nz-option *ngFor="let p of listLoaiHinhNhapXuat" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="9">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="loaiVthh" (ngModelChange)="changeLoaiHangHoa()">
-                <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-              </nz-select>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogHangHoa()">
+                <input class="search__input" [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true"/>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="9">
+          <nz-form-item class="form-item">
+            <nz-form-label nzRequired [nzNoColon]="true"> Chủng Loại hàng hóa</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogHangHoa()">
+                <input class="search__input" [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true"/>
+              </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
       </div>
-      <div nz-row [nzGutter]="[24]">
+      <div nz-row nzGutter="24">
         <div nz-col [nzSpan]="24">
           <div class="tong-hop-button group-button-search text-right mg-t-16">
-            <button class="btn btn-main btn-sm waves-effect waves-light">
+            <button class="btn btn-main btn-sm waves-effect waves-light" (click)="synthetic()">
               <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
               <span>Tổng hợp PA xuất viện trợ, cứu trợ</span>
             </button>
           </div>
         </div>
       </div>
-      <ng-template #error let-control>
-        <app-template-error #error [control]="control"></app-template-error>
-      </ng-template>
     </form>
   </nz-card>
   <div class="mt16 flex-card p-lr16">
@@ -110,7 +113,7 @@
   </div>
   <nz-card class="mt16 flex-card p-lr16">
     <form nzLayout="vertical" nz-form [formGroup]="formData">
-      <div nz-row [nzGutter]="[24]">
+      <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày tổng hợp </nz-form-label>
@@ -131,9 +134,6 @@
           </nz-form-item>
         </div>
       </div>
-      <ng-template #error let-control>
-        <app-template-error #error [control]="control"></app-template-error>
-      </ng-template>
     </form>
   </nz-card>
   <div class="mt16 flex-card p-lr16">
@@ -228,10 +228,10 @@
               <td></td>
               <td>{{item.giaKhoiDiem}}</td>
               <td>
-                <a (click)="themMoiBangPhanLoTaiSan(item)">
+                <a (click)="editThongTinTongHop(item)">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a (click)="deletePhanLo(item.idVirtual)">
+                <a (click)="deleteThongTinTongHop(item.idVirtual)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>
