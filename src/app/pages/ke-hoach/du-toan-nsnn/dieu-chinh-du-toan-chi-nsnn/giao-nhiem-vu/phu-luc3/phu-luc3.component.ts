@@ -292,18 +292,18 @@ export class PhuLuc3Component implements OnInit {
 
   //update khi sửa
   saveEdit(id: string): void {
-    let count = 0;
-    for (let itm of this.lstDchinh) {
-      if (this.lstDchinh.length > 1 && this.lstDchinh.find(i => !i.maDvi)) {
-        if (itm.maDvi == this.editCache[id].data.maDvi) {
-          count++;
-        }
-      }
-    }
-    if (count >= 1) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.LOCAL_EXIST);
-      return;
-    }
+    // let count = 0;
+    // for (let itm of this.lstDchinh) {
+    //   if (this.lstDchinh.length > 1 && this.lstDchinh.find(i => !i.maDvi)) {
+    //     if (itm.maDvi == this.editCache[id].data.maDvi) {
+    //       count++;
+    //     }
+    //   }
+    // }
+    // if (count >= 1) {
+    //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.LOCAL_EXIST);
+    //   return;
+    // }
     if (
       (!this.editCache[id].data.dkienThienDtoan && this.editCache[id].data.dkienThienDtoan !== 0) ||
       (!this.editCache[id].data.dkienThienLuong && this.editCache[id].data.dkienThienLuong !== 0) ||

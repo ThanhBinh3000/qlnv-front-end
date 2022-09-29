@@ -89,6 +89,7 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
   }
   //trang thai
   status: boolean;
+  statusCaptren: boolean;
   userRole: string;
   maDviTao: string;
   roleCanBo: string;
@@ -110,6 +111,9 @@ export class PheDuyetBaoCaoDieuChinhComponent implements OnInit {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maDviTao = this.userInfo.MA_DVI;
+    if (this.userInfo.CAP_DVI == '1') {
+      this.statusCaptren = true
+    }
 
     this.searchFilter.denNgay = new Date();
     this.searchFilter.tuNgay = this.date;

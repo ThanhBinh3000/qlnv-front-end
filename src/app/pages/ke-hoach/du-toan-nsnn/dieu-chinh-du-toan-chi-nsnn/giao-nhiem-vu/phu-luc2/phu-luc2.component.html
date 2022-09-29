@@ -159,8 +159,8 @@
             {{displayValue(data.thienDinhMuc)}}
           </td>
           <td>
-            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.thienThanhTien"
-              disabled (ngModelChange)="changeModel(data.id)"></fm-input-number>
+            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.thienThanhTien" disabled
+              (ngModelChange)="changeModel(data.id)"></fm-input-number>
           </td>
           <td>
             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kphiThieuNtruoc"
@@ -201,10 +201,10 @@
   </div>
 </div>
 <div class="action">
-  <button type="button" class="btn btn-main" [hidden]="status" (click)="doPrint()">
+  <!-- <button type="button" class="btn btn-main" [hidden]="status" (click)="doPrint()">
     <i nz-icon nzType="printer" nzTheme="outline"></i>
     <span>In</span>
-  </button>
+  </button> -->
   <button type="button" class="btn btn-main" (click)="save('5')" [hidden]="statusBtnFinish">
     <i nz-icon nzType="check" nzTheme="outline"></i>
     <span>Hoàn tất nhập liệu</span>
