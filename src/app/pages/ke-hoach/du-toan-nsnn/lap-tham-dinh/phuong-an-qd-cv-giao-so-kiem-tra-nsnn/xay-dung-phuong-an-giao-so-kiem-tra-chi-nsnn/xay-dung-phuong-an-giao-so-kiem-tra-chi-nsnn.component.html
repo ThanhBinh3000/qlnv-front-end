@@ -122,7 +122,9 @@
 										<th rowspan="2" nzWidth="100px">STT</th>
 										<th rowspan="2">Nội dung</th>
 										<th rowspan="2">Tổng số</th>
-										<th colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
+										<ng-container *ngIf="lstDvi.length > 0">
+											<th colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
+										</ng-container>
 										<th rowspan="2" colspan="3" [hidden]="status"></th>
 										<th rowspan="2" [hidden]="status">
 											<label nz-checkbox [(ngModel)]="allChecked"
@@ -130,9 +132,11 @@
 										</th>
 									</tr>
 									<tr>
-										<th *ngFor="let item of lstDvi">
-											{{getUnitName(item.maDvi)}}
-										</th>
+										<ng-container *ngIf="lstDvi.length > 0">
+											<th *ngFor="let item of lstDvi">
+												{{getUnitName(item.maDvi)}}
+											</th>
+										</ng-container>
 									</tr>
 								</thead>
 								<tbody>

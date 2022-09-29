@@ -57,7 +57,7 @@
 						<nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nguồn báo cáo"
 							[(ngModel)]="searchFilter.loaiDn"
 							[class]="statusBtnNew || searchFilter.loaiDn ? '' : 'input-error-validate'">
-							<nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
+							<nz-option *ngFor="let item of nguonBcaos" [nzValue]="item.id" [nzLabel]="item.tenDm">
 							</nz-option>
 						</nz-select>
 					</div>

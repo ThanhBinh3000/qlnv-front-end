@@ -35,7 +35,7 @@ export class QuanLyCapVonMuaBanTtTienHangDtqgComponent implements OnInit {
 					return;
 				}
 			})
-			const temp = data?.isDisabled ? data?.isDisabled == '1' : true;
+			const temp = data?.isDisabled ? data?.isDisabled.includes(this.userInfo.CAP_DVI) : true;
 			if (check && temp) {
 				this.danhSach.push(data);
 			}
