@@ -1335,7 +1335,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   getDinhMuc(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + 'qlnv-khoachphi/chung/dinh-muc',
+      // this.urlDefault + 'qlnv-khoachphi/chung/dinh-muc',
+      'http://192.168.1.103:30101/chung/dinh-muc',
       request,
     )
   }

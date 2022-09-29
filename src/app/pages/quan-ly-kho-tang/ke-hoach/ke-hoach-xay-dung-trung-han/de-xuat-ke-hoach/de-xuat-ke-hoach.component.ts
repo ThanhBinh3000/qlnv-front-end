@@ -21,6 +21,7 @@ import { saveAs } from 'file-saver';
 import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
 import {DonviService} from "../../../../../services/donvi.service";
 import {DxXdTrungHanService} from "../../../../../services/dx-xd-trung-han.service";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-de-xuat-ke-hoach',
@@ -170,7 +171,7 @@ export class DeXuatKeHoachComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == STATUS.DU_THAO) {
             item.checked = true;
           }
         });

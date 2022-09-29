@@ -4,9 +4,16 @@
             *ngIf="loaiVthh == '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT')">
             Đề xuất kế hoạch mua trực tiếp
         </li>
+        <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT')">
+            Quyết định phê duyệt Kế hoạch mua trực tiếp
+        </li>
     </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
     <app-danhsach-kehoach-muatructiep [loaiVthh]="loaiVthh" [loaiVthhCache]="loaiVthh">
     </app-danhsach-kehoach-muatructiep>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+    <app-quyetdinh-pheduyet-khmtt [loaiVthh]="loaiVthh">
+    </app-quyetdinh-pheduyet-khmtt>
 </ng-container>

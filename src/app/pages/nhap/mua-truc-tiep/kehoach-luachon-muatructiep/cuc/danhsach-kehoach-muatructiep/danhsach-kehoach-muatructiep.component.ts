@@ -10,7 +10,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
-import {DanhSachMuaTrucTiepService} from "../../../../../../services/danh-sach-mua-truc-tiep.service";
+import { DanhSachMuaTrucTiepService } from "../../../../../../services/danh-sach-mua-truc-tiep.service";
 
 @Component({
   selector: 'app-danhsach-kehoach-muatructiep',
@@ -39,10 +39,11 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     soDx: '',
     namKh: dayjs().get('year'),
     ngayTao: '',
-    ngayPduyet:'',
-    maDvi:'',
+    ngayPduyet: '',
+    maDvi: '',
     loaiVthh: '',
     trichYeu: '',
+    soDxuat: '',
   };
 
   STATUS = STATUS
@@ -56,8 +57,8 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     tenloaiVthh: '',
     tenCloaiVthh: '',
     tongSoLuong: '',
-    tenTrangThai:'',
-    trangThaiTh:'',
+    tenTrangThai: '',
+    trangThaiTh: '',
   };
 
   dataTableAll: any[] = [];
@@ -143,17 +144,17 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       ngayTaoDen: this.searchFilter.ngayTao
         ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
         : null,
-        ngayDuyetTu: this.searchFilter.ngayPduyet
+      ngayDuyetTu: this.searchFilter.ngayPduyet
         ? dayjs(this.searchFilter.ngayTao[0]).format('YYYY-MM-DD')
         : null,
-        ngayDuyetDen: this.searchFilter.ngayTao
+      ngayDuyetDen: this.searchFilter.ngayTao
         ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
         : null,
-       soDxuat: this.searchFilter.soDx,
-       loaiVthh: this.searchFilter.loaiVthh,
-       namKh: this.searchFilter.namKh,
-       trichYeu: this.searchFilter.trichYeu,
-       maDvi: null,
+      soDxuat: this.searchFilter.soDx,
+      loaiVthh: this.searchFilter.loaiVthh,
+      namKh: this.searchFilter.namKh,
+      trichYeu: this.searchFilter.trichYeu,
+      maDvi: null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -360,22 +361,22 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       try {
         let body = {
           ngayTaoTu: this.searchFilter.ngayTao
-          ? dayjs(this.searchFilter.ngayTao[0]).format('YYYY-MM-DD')
-          : null,
-        ngayTaoDen: this.searchFilter.ngayTao
-          ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
-          : null,
+            ? dayjs(this.searchFilter.ngayTao[0]).format('YYYY-MM-DD')
+            : null,
+          ngayTaoDen: this.searchFilter.ngayTao
+            ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
+            : null,
           ngayDuyetTu: this.searchFilter.ngayPduyet
-          ? dayjs(this.searchFilter.ngayTao[0]).format('YYYY-MM-DD')
-          : null,
+            ? dayjs(this.searchFilter.ngayTao[0]).format('YYYY-MM-DD')
+            : null,
           ngayDuyetDen: this.searchFilter.ngayTao
-          ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
-          : null,
-         soDxuat: this.searchFilter.soDx,
-         loaiVthh: this.searchFilter.loaiVthh,
-         namKh: this.searchFilter.namKh,
-         trichYeu: this.searchFilter.trichYeu,
-         maDvi: null,
+            ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
+            : null,
+          soDxuat: this.searchFilter.soDx,
+          loaiVthh: this.searchFilter.loaiVthh,
+          namKh: this.searchFilter.namKh,
+          trichYeu: this.searchFilter.trichYeu,
+          maDvi: null,
         };
         this.danhSachMuaTrucTiepService
           .export(body)
@@ -477,8 +478,8 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       tenloaiVthh: '',
       tenCloaiVthh: '',
       tongSoLuong: '',
-      tenTrangThai:'',
-      trangThaiTh:'',
+      tenTrangThai: '',
+      trangThaiTh: '',
     }
   }
 }

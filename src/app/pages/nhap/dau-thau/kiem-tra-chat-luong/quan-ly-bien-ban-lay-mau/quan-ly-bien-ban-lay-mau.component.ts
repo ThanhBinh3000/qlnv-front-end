@@ -136,18 +136,17 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "capDvis": '3',
-      "maDvis": this.userInfo.MA_DVI,
-      "maVatTuCha": this.isTatCa ? null : this.typeVthh,
       soQuyetDinhNhap: this.searchFilter.soQuyetDinhNhap ?? null,
       soBienBan: this.searchFilter.soBienBan ?? null,
       ngayLayMauTu: this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[0]).format('YYYY/MM/DD') : null,
       ngayLayMauDen: this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[1]).format('YYYY/MM/DD') : null,
-      pageNumber: this.page,
-      pageSize: this.pageSize,
+      "paggingReq": {
+        "limit": this.pageSize,
+        "page": this.page -1
+      },
     };
     try {
-      let res = await this.bienBanLayMauService.timKiem(body);
+      let res = await this.bienBanLayMauService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.dataTable = data.content;
@@ -222,7 +221,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.bienBanLayMauService.xoa(item.id).then((res) => {
+          this.bienBanLayMauService.delete({id : item.id}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,

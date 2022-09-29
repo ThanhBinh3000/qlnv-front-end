@@ -71,6 +71,11 @@ export class BaoCao04anComponent implements OnInit {
     trangThaiPhuLuc = '1';
     idBaoCao: string;        //id bao cao to
 
+    //id cua danh muc B
+    idB: number;
+    idB1: number;
+    idB2: number;
+
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
@@ -199,7 +204,7 @@ export class BaoCao04anComponent implements OnInit {
 
     getDinhMuc() {
         const request = {
-            loaiDinhMuc: null,
+            loaiDinhMuc: '01',
             maDvi: this.maDvi,
         }
         this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
@@ -262,6 +267,9 @@ export class BaoCao04anComponent implements OnInit {
             }
             return 0;
         });
+        this.idB = this.noiDungChiFull.find(e => e.ma == '0.2')?.id;
+        this.idB1 = this.noiDungChiFull.find(e => e.ma == '0.2.1')?.id;
+        this.idB2 = this.noiDungChiFull.find(e => e.ma == '0.2.2')?.id;
     }
 
     addListNoiDungChi(noiDungChiTemp) {
@@ -730,14 +738,14 @@ export class BaoCao04anComponent implements OnInit {
         }
         //tinh toan hieu cua muc B
         let index1: number;
-        if (this.lstCtietBcao[index].maNdungChi == 13964) {
-            index1 = this.lstCtietBcao.findIndex(e => e.maNdungChi == 13965);
+        if (this.lstCtietBcao[index].maNdungChi == this.idB1) {
+            index1 = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.idB2);
         }
-        if (this.lstCtietBcao[index].maNdungChi == 13965) {
-            index1 = this.lstCtietBcao.findIndex(e => e.maNdungChi == 13964);
+        if (this.lstCtietBcao[index].maNdungChi == this.idB2) {
+            index1 = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.idB1);
         }
         if ((index1 || index1 === 0) && index1 != -1) {
-            const indexTong = this.lstCtietBcao.findIndex(e => e.maNdungChi == 13963);
+            const indexTong = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.idB);
             this.lstCtietBcao[index1].trongDotTcong = this.lstCtietBcao[indexTong].trongDotTcong - this.lstCtietBcao[index].trongDotTcong;
             this.lstCtietBcao[index1].luyKeTcong = this.lstCtietBcao[indexTong].luyKeTcong - this.lstCtietBcao[index].luyKeTcong;
             this.lstCtietBcao[index1].listCtiet.forEach(item => {
@@ -1233,24 +1241,19 @@ export class BaoCao04anComponent implements OnInit {
         return displayNumber(num);
     }
 
+    displayNumber(num: number): string {
+        return displayNumber(num);
+    }
+    //check xem co phai so luong ko
+    checkNumber(id: number) {
+        const ma = this.noiDungChiFull.find(e => e.id == id)?.ma;
+        if (ma == '0.1.1' || ma == '0.1.2' || ma == '0.1.3' || ma == '0.1.4') {
+            return true;
+        }
+        return false;
+    }
+
     getMoneyUnit() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
-
-    // changeMoney() {
-    //     if (!this.moneyUnit) {
-    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_MONEY);
-    //         return;
-    //     }
-    //     this.lstCtietBcao.forEach(item => {
-    //         item.trongDotTcong = exchangeMoney(item.trongDotTcong, this.maDviTien, this.moneyUnit);
-    //         item.luyKeTcong = exchangeMoney(item.luyKeTcong, this.maDviTien, this.moneyUnit);
-    //         item.listCtiet.forEach(e => {
-    //             e.sl = exchangeMoney(e.sl, this.maDviTien, this.moneyUnit);
-    //         })
-    //     })
-    //     this.maDviTien = this.moneyUnit;
-    //     this.updateEditCache();
-    // }
-
 }

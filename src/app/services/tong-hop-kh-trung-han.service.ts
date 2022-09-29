@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {BaseService} from "./base.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class TongHopKhTrungHanService {
+export class TongHopKhTrungHanService extends BaseService{
 
-  constructor() { }
+  GATEWAY = '/qlnv-kho';
+  constructor(public httpClient: HttpClient) {
+    super(httpClient, 'dt-tx-trung-han/tong-hop','/qlnv-kho');
+  }
 }
