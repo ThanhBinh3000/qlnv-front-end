@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isDetail">
+<ng-container *ngIf="!isDetail; else template">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div nz-row [nzGutter]="20">
@@ -62,17 +62,9 @@
     <div class="group-button">
       <h3> KẾT QUẢ TRA CỨU </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa">
-          <i class="fa fa-trash-o do"></i>
-          <span>Xoá</span>
-        </button>
         <button type="button" class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
-        </button>
-        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
-          <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm</span>
         </button>
       </div>
     </div>
@@ -140,12 +132,6 @@
             <a (click)="redirectToChiTiet(data.id,true)">
               <i class="fa fa-eye"></i>
             </a>
-            <a >
-              <i class="fa fa-pencil"></i>
-            </a>
-            <a (click)="xoaItem(data)">
-              <i class="fa fa-trash-o do"></i>
-            </a>
           </td>
         </tr>
         </tbody>
@@ -170,3 +156,6 @@
     </nz-card>
   </div>
 </ng-container>
+<ng-template #template>
+  <app-thong-tin-hang-sua-chua [idInput]="selectedId" (showListEvent)="showList()"></app-thong-tin-hang-sua-chua>
+</ng-template>

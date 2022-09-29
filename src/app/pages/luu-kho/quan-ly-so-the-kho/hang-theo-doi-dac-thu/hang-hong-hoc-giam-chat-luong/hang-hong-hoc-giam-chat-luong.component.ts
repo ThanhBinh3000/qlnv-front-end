@@ -126,6 +126,7 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
       this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg)
     }
+    console.log(this.dataTable)
   }
 
 
