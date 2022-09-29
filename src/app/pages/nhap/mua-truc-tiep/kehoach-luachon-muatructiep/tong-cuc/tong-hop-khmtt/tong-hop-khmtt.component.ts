@@ -318,36 +318,36 @@ export class TongHopKhmttComponent implements OnInit {
   }
 
   xoaItem(item: any) {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XOA")) {
-      return;
-    }
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.spinner.show();
-        try {
-          let body = {
-            "id": item.id,
-            "maDvi": ""
-          }
-          this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
-            await this.search();
-            this.spinner.hide();
-          });
-        }
-        catch (e) {
-          console.log('error: ', e)
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
+    // if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XOA")) {
+    //   return;
+    // }
+    // this.modal.confirm({
+    //   nzClosable: false,
+    //   nzTitle: 'Xác nhận',
+    //   nzContent: 'Bạn có chắc chắn muốn xóa?',
+    //   nzOkText: 'Đồng ý',
+    //   nzCancelText: 'Không',
+    //   nzOkDanger: true,
+    //   nzWidth: 310,
+    //   nzOnOk: () => {
+    //     this.spinner.show();
+    //     try {
+    //       let body = {
+    //         "id": item.id,
+    //         "maDvi": ""
+    //       }
+    //       this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
+    //         await this.search();
+    //         this.spinner.hide();
+    //       });
+    //     }
+    //     catch (e) {
+    //       console.log('error: ', e)
+    //       this.spinner.hide();
+    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //     }
+    //   },
+    // });
   }
 
   convertDay(day: string) {

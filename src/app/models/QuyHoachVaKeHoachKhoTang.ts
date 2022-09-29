@@ -17,18 +17,18 @@ export class QuyHoachKho {
 
 export class KeHoachXayDungTrungHan {
   id: number;
-  dmDuAn: string;
-  diaDiemXayDung: string;
+  dmucDuAn: string;
+  diaDiem: string;
   loaiDuAn : string;
-  thoiGianKcHt: string;
+  tgKcHt: string;
   khoi: string;
   soQdPdDc: string;
-  tongSoTmdt: number;
-  vonTmdt : number;
-  tongSoLuyKeVon: number;
-  vonNstwLuyKeVon : number;
-  tongSoNhuCau: number;
-  vonNstwNhuCau: number;
+  tmdtTongSo: number;
+  tmdtNstw : number;
+  luyKeTongSo: number;
+  luyKeNstw : number;
+  ncKhTongSo: number;
+  ncKhNstw: number;
 }
 
 

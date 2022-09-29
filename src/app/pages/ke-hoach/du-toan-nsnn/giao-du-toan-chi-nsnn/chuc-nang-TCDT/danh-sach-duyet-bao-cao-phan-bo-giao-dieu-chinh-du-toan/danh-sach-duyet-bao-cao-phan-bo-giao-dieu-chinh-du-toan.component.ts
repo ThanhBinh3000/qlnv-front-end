@@ -100,7 +100,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
     this.maDviTao = this.userInfo?.MA_DVI;
 
     this.searchFilter.ngayTaoDen = new Date();
-    this.date.setMonth(this.date.getMonth() - 1);
+    this.newDate.setMonth(this.newDate.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.newDate;
     this.searchFilter.namPa = new Date().getFullYear()
 
@@ -119,7 +119,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
     );
 
     if (this.userService.isAccessPermisson(GDT.TIEPNHAN_TUCHOI_PA_PBDT)) {
-      this.trangThai = '1';
+      this.trangThai = '7';
       // this.roleUser = 'canbo';
       this.status = false;
       this.trangThais.push({

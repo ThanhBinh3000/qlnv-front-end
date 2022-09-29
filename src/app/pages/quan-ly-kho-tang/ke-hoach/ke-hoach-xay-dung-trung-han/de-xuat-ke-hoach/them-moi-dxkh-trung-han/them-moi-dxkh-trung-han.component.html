@@ -1,14 +1,22 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" xmlns:style="http://www.w3.org/1999/xhtml">
   <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="quayLai()">
+    <button type="button" class="btn btn-sub"  (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="save()">
+    <button *ngIf=" !isViewDetail && (formData.value.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || formData.value.trangThai == globals.prop.NHAP_TU_CHOI_TP || formData.value.trangThai == globals.prop.NHAP_DU_THAO) "  class="btn btn-sub" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
-      <span>Ban hành</span>
+      <span>Lưu và gửi duyệt</span>
     </button>
-    <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
+    <button *ngIf="  !isViewDetail && (formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC  || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_TP)" class="btn btn-sub" (click)="tuChoi()">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      <span>Từ chối</span>
+    </button>
+    <button *ngIf=" !isViewDetail && (formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC  || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_TP)"  class="btn btn-sub" (click)="duyet()">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Duyệt</span>
+    </button>
+    <button *ngIf="  !isViewDetail && (formData.value.trangThai == globals.prop.NHAP_DU_THAO  ||formData.value.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || formData.value.trangThai == globals.prop.NHAP_TU_CHOI_TP )"  class="btn btn-sub" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -18,7 +26,7 @@
   <div class="header-detail-tab">
     <div class="title-chi-tieu">
       <span
-        [ngClass]="formData.value.trangThai == globals.prop.NHAP_BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        [ngClass]="formData.value.trangThai == globals.prop.NHAP_DA_DUYET_LD_CUC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
       <span>THÔNG TIN ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM)</span>
@@ -35,7 +43,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input class="search__input" readonly="true" nz-input />
+                <input formControlName="maDvi" class="search__input" readonly="true" nz-input />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -46,7 +54,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{maQd}}">
-                <nz-input-number [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
+                <nz-input-number formControlName="soCongVan" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -56,20 +64,36 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired>Trích yếu
             </nz-form-label>
-            <input class="search__input" nz-input />
+            <input formControlName="trichYeu" class="search__input" nz-input />
           </nz-form-item>
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký </nz-form-label>
-            <nz-range-picker nzFormat="dd/MM/yyyy"></nz-range-picker>
+            <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-date-picker>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="8">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired>Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)
             </nz-form-label>
-            <nz-range-picker nzMode="year"></nz-range-picker>
+            <div nz-row>
+              <div nz-col nzSpan="11">
+                <nz-select nzPlaceHolder="Năm bắt đầu" nzSpan="2" nzAllowClear formControlName="namBatDau" >
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                  </nz-option>
+                </nz-select>
+              </div>
+              <div nz-col nzSpan="2" class="text-center">
+                <i class="icon htvbdh_tcdt_lien-ket icon-lien-ket ng-tns-c190-48"></i>
+              </div>
+              <div nz-col nzSpan="11">
+                <nz-select nzPlaceHolder="Năm kết thúc"  nzSpan="2" nzAllowClear formControlName="namKetThuc"  >
+                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                  </nz-option>
+                </nz-select>
+              </div>
+            </div>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="16">
@@ -91,28 +115,28 @@
   <nz-card class="mt16 flex-card p-lr16">
     <div class="header-detail-tab">Chi tiết quy hoạch</div>
     <nz-table #editRowTable [nzData]="dataTable" nzBordered class="nowrap" [nzFrontPagination]="false"
-      [nzShowPagination]="false" [nzScroll]="{ x: '1500px' }">
+      [nzShowPagination]="false" [nzScroll]="{ x: '2500px' }">
       <thead>
         <tr>
-          <th class="text-center" width="32px" rowSpan="2" style="width: 32px;">STT</th>
-          <th class="text-center" width="211px" rowSpan="2">Danh mục dự án</th>
-          <th class="text-center" width="211px" rowSpan="2">Địa điểm xây dựng</th>
-          <th class="text-center" width="128px" rowSpan="2">Loại dự án</th>
-          <th class="text-center" width="130px" rowSpan="2">Thời gian KC-HT</th>
-          <th class="text-center" width="140px" rowSpan="2">Khối</th>
-          <th class="text-center" width="148px" rowSpan="2">Số QĐ phê duyệt/điều chỉnh TMĐT</th>
-          <th class="text-center" width="280px" colSpan="2">TMĐT</th>
-          <th class="text-center" width="296px" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
-          <th class="text-center" width="310px" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
-          <th class="text-center" width="140px" rowSpan="2" nzRight>Hành động</th>
+          <th class="text-center" style="width: 3%;" rowSpan="2" style="width: 32px;">STT</th>
+          <th class="text-center" style="width: 15%;" rowSpan="2">Danh mục dự án</th>
+          <th class="text-center" style="width: 15%;" rowSpan="2">Địa điểm xây dựng</th>
+          <th class="text-center"style="width: 15%;" rowSpan="2">Loại dự án</th>
+          <th class="text-center"style="width: 15%;" rowSpan="2">Thời gian KC-HT</th>
+          <th class="text-center" style="width: 15%;" rowSpan="2">Khối</th>
+          <th class="text-center" style="width: 15%;" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
+          <th class="text-center" style="width: 35%;" colSpan="2">TMĐT</th>
+          <th class="text-center" style="width: 35%;" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
+          <th class="text-center" style="width: 35%;" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
+          <th class="text-center" *ngIf="!isViewDetail" style="width: 12%;" rowSpan="2" nzRight>Hành động</th>
         </tr>
         <tr>
-          <th class="text-center" style="width: 10%;">Tổng số</th>
-          <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
-          <th class="text-center" style="width: 10%;">Tổng số</th>
-          <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
-          <th class="text-center" style="width: 10%;">Tổng số</th>
-          <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+          <th class="text-center" >Tổng số</th>
+          <th class="text-center" >Trong đó vốn NSTW</th>
+          <th class="text-center" >Tổng số</th>
+          <th class="text-center" >Trong đó vốn NSTW</th>
+          <th class="text-center" >Tổng số</th>
+          <th class="text-center" >Trong đó vốn NSTW</th>
         </tr>
       </thead>
       <tbody>
@@ -120,70 +144,70 @@
           <td class="text-center" style="width: 2%;"></td>
           <td class="text-center" style="width: 15%;">
             <nz-input-group>
-              <nz-select [(ngModel)]="rowItem.dmDuAn" [nzShowArrow]="false">
+              <nz-select [(ngModel)]="rowItem.dmucDuAn" [nzShowArrow]="false">
                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChiCuc">
+                <nz-option nzValue="{{item.value}}" nzLabel="{{item.text}}" *ngFor="let item of listNam">
                 </nz-option>
               </nz-select>
             </nz-input-group>
           </td>
           <td class="text-center" style="width: 15%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="rowItem.diaDiemXayDung" [readonly]="true" />
+              <input nz-input [(ngModel)]="rowItem.diaDiem"  />
             </nz-input-group>
           </td>
 
           <td class="text-center" style="width: 10%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="rowItem.loaiDuAn" [readonly]="true" />
+              <input nz-input [(ngModel)]="rowItem.loaiDuAn"  />
             </nz-input-group>
           </td>
           <td class="text-center" style="width: 10%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="rowItem.thoiGianKcHt" [readonly]="true" />
+              <input nz-input [(ngModel)]="rowItem.tgKcHt"  />
             </nz-input-group>
           </td>
           <td class="text-center" style="width: 8%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="rowItem.khoi" [readonly]="true" />
+              <input nz-input [(ngModel)]="rowItem.khoi"  />
             </nz-input-group>
           </td>
           <td class="text-center" style="width: 10%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="rowItem.soQdPdDc" [readonly]="true" />
+              <input nz-input [(ngModel)]="rowItem.soQdPdDc"  />
             </nz-input-group>
           </td>
           <td class="text-center" style="width: 10%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="rowItem.tongSoTmdt" [readonly]="true" />
+              <input nz-input [(ngModel)]="rowItem.tmdtTongSo"  />
             </nz-input-group>
           </td>
           <td class="text-center" style="width: 10%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="rowItem.vonTmdt" [readonly]="true" />
+              <input nz-input [(ngModel)]="rowItem.tmdtNstw"  />
             </nz-input-group>
           </td>
           <td class="text-center" style="width: 10%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="rowItem.tongSoLuyKeVon" [readonly]="true" />
+              <input nz-input [(ngModel)]="rowItem.luyKeTongSo"  />
             </nz-input-group>
           </td>
           <td class="text-center" style="width: 10%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="rowItem.vonNstwLuyKeVon" [readonly]="true" />
+              <input nz-input [(ngModel)]="rowItem.luyKeNstw"  />
             </nz-input-group>
           </td>
           <td class="text-center" style="width: 10%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="rowItem.tongSoNhuCau" />
+              <input nz-input [(ngModel)]="rowItem.ncKhTongSo" />
             </nz-input-group>
           </td>
           <td class="text-center" style="width: 10%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="rowItem.vonNstwNhuCau" />
+              <input nz-input [(ngModel)]="rowItem.ncKhNstw" />
             </nz-input-group>
           </td>
-          <td class="text-center" nzRight>
+          <td class="text-center" nzRight *ngIf="!isViewDetail">
             <a (click)="themMoiItem()">
               <i class="fa fa-plus"></i>
             </a>
@@ -196,19 +220,19 @@
         <tr *ngFor="let data of dataTable; let idx = index">
           <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
             <td>{{ idx + 1 }}</td>
-            <td>{{ data.tenVthh }}</td>
-            <td>{{ data.tenCloaiVthh }}</td>
-            <td>{{ data.dviTinh }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td style="text-align: center;" nzRight>
+            <td>{{ data.dmucDuAn }}</td>
+            <td>{{ data.diaDiem }}</td>
+            <td>{{ data.loaiDuAn }}</td>
+            <td>{{ data.tgKcHt }}</td>
+            <td>{{ data.khoi }}</td>
+            <td>{{ data.soQdPdDc }}</td>
+            <td>{{ data.tmdtTongSo }}</td>
+            <td>{{ data.tmdtNstw }}</td>
+            <td>{{ data.luyKeTongSo }}</td>
+            <td>{{ data.luyKeNstw }}</td>
+            <td>{{ data.ncKhTongSo }}</td>
+            <td>{{ data.ncKhNstw }}</td>
+            <td style="text-align: center;" nzRight  *ngIf="!isViewDetail">
               <a (click)="editItem(idx)">
                 <i class=" fa fa-pencil"></i>
               </a>
@@ -221,7 +245,7 @@
             <td></td>
             <td style="width: 5%;">
               <nz-input-group>
-                <nz-select [(ngModel)]="dataEdit[idx].data.dmDuAn" [nzShowArrow]="false">
+                <nz-select [(ngModel)]="dataEdit[idx].data.dmucDuAn" [nzShowArrow]="false">
                   <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                   <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChiCuc">
                   </nz-option>
@@ -230,7 +254,7 @@
             </td>
             <td style="width: 10%;">
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.diaDiemXayDung" [readonly]="true" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.diaDiem" [readonly]="true" />
               </nz-input-group>
             </td>
             <td style="width: 10%;">
@@ -240,7 +264,7 @@
             </td>
             <td style="width: 10%;">
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.thoiGianKcHt" [readonly]="true" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.tgKcHt" [readonly]="true" />
               </nz-input-group>
             </td>
             <td style="width: 10%;">
@@ -255,35 +279,35 @@
             </td>
             <td style="width: 10%;">
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.tongSoTmdt" [readonly]="true" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.tmdtTongSo" [readonly]="true" />
               </nz-input-group>
             </td>
             <td style="width: 10%;">
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.vonTmdt" [readonly]="true" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.tmdtNstw" [readonly]="true" />
               </nz-input-group>
             </td>
             <td style="width: 10%;">
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.tongSoLuyKeVon" [readonly]="true" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.luyKeTongSo" [readonly]="true" />
               </nz-input-group>
             </td>
             <td style="width: 10%;">
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.vonNstwLuyKeVon" [readonly]="true" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.luyKeNstw" [readonly]="true" />
               </nz-input-group>
             </td>
             <td style="width: 10%;">
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.tongSoNhuCau" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.ncKhTongSo" />
               </nz-input-group>
             </td>
             <td style="width: 10%;">
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.vonNstwNhuCau" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.ncKhNstw" />
               </nz-input-group>
             </td>
-            <td class="text-center" nzRight>
+            <td class="text-center" nzRight  *ngIf="!isViewDetail">
               <a (click)="luuEdit(idx)" class="save">
                 <i class="fa fa-save"></i>
               </a>
