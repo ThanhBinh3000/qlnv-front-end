@@ -65,6 +65,8 @@ export class DanhSachHangDtqgComponent implements OnInit {
   totalRecord: number = 0;
   userInfo: UserLogin;
   danhSachChiCuc: any[]= [];
+  listLoaiHangHoa: any[] = [];
+  listChungLoaiHangHoa:any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -82,9 +84,18 @@ export class DanhSachHangDtqgComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin(),
     await Promise.all([
     await this.search(),
+    await this.loaiVTHHGetAll(),
     await this.loadDanhSachChiCuc(this.userInfo.MA_DVI)
     ])
     this.spinner.hide();
+  }
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
   }
 
   async search() {
@@ -118,6 +129,33 @@ export class DanhSachHangDtqgComponent implements OnInit {
     this.spinner.hide();
   }
 
+  async changeLoaiHangHoa(id: any) {
+    if (id && id > 0) {
+      let loaiHangHoa = this.listLoaiHangHoa.filter(item => item.ma === id);
+      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
+    }
+  }
+
+  async loaiVTHHGetAll() {
+    try {
+      await this.dmService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          hangHoa.data.forEach((item) => {
+            if (item.cap === "1" && item.ma != '01') {
+              this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
+            } else {
+              this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
+            }
+          })
+        }
+      })
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+
 
   async loadDanhSachChiCuc(maCuc) {
     const body = {
@@ -127,32 +165,6 @@ export class DanhSachHangDtqgComponent implements OnInit {
 
     const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-  }
-
-  selectHangHoa() {
-    const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
-      nzContent: DialogDanhSachHangHoaComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {},
-    });
-    modalTuChoi.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.bindingDataHangHoa(data);
-      }
-    });
-  }
-  async bindingDataHangHoa(data) {
-    if (data.loaiHang == "M" || data.loaiHang == "LT") {
-
-      this.searchFilter.maVTHH = data.ma
-      this.searchFilter.tenVTHH = data.ten
-      this.searchFilter.maCLHH = data.parent.ma
-      this.searchFilter.tenCLHH = data.parent.ten
-    }
   }
 
 

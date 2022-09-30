@@ -3,7 +3,7 @@
     <nz-card class="mt16 flex-card p-lr16">
       <div nz-row [nzGutter]="20">
         <div nz-col nzSpan="4">
-          <label class="search__label">Tên đơn vị</label>
+          <label class="search__label">Chi cục DTNN KV</label>
           <nz-form-control >
             <nz-input-group>
               <nz-select  nzAllowClear [(ngModel)]="searchFilter.maDonVi
@@ -16,23 +16,30 @@
         </div>
         <div nz-col nzSpan="4">
           <label class="search__label">Loại hàng hóa</label>
-          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVTHH"
-                   readonly="true" />
-          </nz-input-group>
+          <nz-form-control>
+            <nz-select [(ngModel)]="searchFilter.maVTHH" (ngModelChange)="changeLoaiHangHoa($event)">
+              <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
           <label class="search__label">Chủng loại hàng hóa</label>
-          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenCLHH"
-                   readonly="true" />
-          </nz-input-group>
+          <nz-form-control>
+            <nz-select [(ngModel)]="searchFilter.maCLHH">
+              <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+              </nz-option>
+            </nz-select>
+          </nz-form-control>
         </div>
-        <div nz-col nzSpan="5">
-          <label class="search__label">Ngày tạo danh sách</label>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Ngày đề xuất</label>
           <nz-range-picker [(ngModel)]="searchFilter.ngayBaoCao" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
-
+        <div nz-col nzSpan="4">
+          <label class="search__label">Ngày tổng hợp (chốt DS)</label>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayBaoCao" nzFormat="dd/MM/yyyy"></nz-range-picker>
+        </div>
       </div>
       <div nz-col class="cangiua group-button-search">
         <div>
@@ -48,11 +55,15 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> KẾT QUẢ TRA CỨU </h3>
+      <h3> DANH SÁCH HÀNG DTQG CẦN SỬA CHỮA </h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
+        </button>
+        <button type="button" class="btn btn-sub" (click)="exportData()">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
+          <span>Tổng hợp DS hàng cần sửa chữa</span>
         </button>
       </div>
     </div>
@@ -61,58 +72,68 @@
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
-          <th class="text-center" style="width: 2%;">STT</th>
-          <th class="text-center" style="width: 15%;">Mã danh sách</th>
-          <th class="text-center" style="width: 43%;">Tên đơn vị</th>
-          <th class="text-center" style="width: 15%;">Ngày tạo</th>
-          <th class="text-center" style="width: 15%;">Trạng thái</th>
-          <th  class="text-center" style="width: 10%;" >Hành động</th>
-        </tr>
-        <tr class="search-table">
           <th></th>
-          <th>
-            <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                     (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group  [nzSuffix]="suffixTemplateInfo" >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
-                     (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
-            </nz-input-group>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="calendar"></i>
-            </ng-template>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
-                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
-            </nz-input-group>
-          </th>
-          <th>
-            <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdGoc"
-                     (input)="filterInTable('soQdGoc',filterTable.soQdGoc)" size="small" />
-            </nz-input-group>
-          </th>
-          <th></th>
+          <th  style="width: 10%;">Chi cục DTNN KV</th>
+          <th  style="width: 10%;">Loại hàng hóa</th>
+          <th  style="width: 10%;">Chủng loại hàng hóa</th>
+          <th  style="width: 10%;">Tên hàng hóa</th>
+          <th  style="width: 10%;" >Điểm kho</th>
+          <th  style="width: 10%;" >Nhà kho</th>
+          <th  style="width: 10%;" >Ngăn kho</th>
+          <th  style="width: 10%;" >Lô kho</th>
+          <th  style="width: 10%;" >SL tồn</th>
+          <th  style="width: 10%;" >SL hỏng</th>
+          <th  style="width: 10%;" >ĐVT</th>
+          <th  style="width: 10%;" >Ngày đề xuất</th>
+          <th  style="width: 10%;" >Ngày tổng hợp (chốt DS)</th>
+          <th  style="width: 10%;" >Trạng thái</th>
+          <th  style="width: 10%;" >Mã danh sách</th>
+          <th  style="width: 10%;" >Lý do cần sửa chữa</th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let data of basicTable.data; let i = index">
-          <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-          <td>{{ data.maDanhSach }}</td>
-          <td>{{ data.tenDonvi }}</td>
-          <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.tenTrangThaiXuLy }}</td>
-          <td class="text-center" >
-            <a (click)="redirectToChiTiet(data.id,true)">
-              <i class="fa fa-eye"></i>
-            </a>
-          </td>
+        <ng-container *ngFor="let item of dataTable , let i = index">
+        <tr>
+          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+         <td>{{item.tenDonvi}}</td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
         </tr>
+        <ng-container *ngIf="expandSet.has(i)">
+          <tr>
+            <td></td>
+            <td></td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+            <td>{{item.maDanhSach}}</td>
+          </tr>
+        </ng-container>
+        </ng-container>
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu" id="myTabContent">
