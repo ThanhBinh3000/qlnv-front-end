@@ -83,9 +83,9 @@
               <th nzWidth="150px">Ngày trình duyệt</th>
               <th nzWidth="150px">Ngày duyệt (Ngày trưởng bộ phận duyệt)</th>
               <th nzWidth="150px">Ngày duyệt (Ngày lãnh đạo duyệt)</th>
-              <th nzWidth="150px">Ngày cấp trên trả kết quả</th>
-              <th nzWidth="150px" [hidden]="status">Đơn vị lập</th>
-              <th nzWidth="150px" [hidden]="status">Trạng thái</th>
+              <th nzWidth="150px" [hidden]="statusCaptren">Ngày cấp trên trả kết quả</th>
+              <th nzWidth="150px">Đơn vị lập</th>
+              <th nzWidth="150px">Trạng thái</th>
               <th nzWidth="50px" class="text-center"></th>
             </tr>
           </thead>
@@ -100,38 +100,37 @@
               <td>{{item.ngayTao}}</td>
               <td>{{item.namHienHanh}}</td>
               <td>{{item.dotBcao}}</td>
-              <ng-container *ngIf="status">
-                <td>
-                  {{item.ngayTrinh}}
-                </td>
-                <td>
-                  {{item.ngayDuyet}}
-                </td>
-              </ng-container>
+              <td>
+                {{item.ngayTrinh}}
+              </td>
+              <td>
+                {{item.ngayDuyet}}
+              </td>
+
               <td>
                 {{item.ngayPheDuyet}}
               </td>
-              <td>
+              <td [hidden]="statusCaptren">
                 {{item.ngayTraKq}}
               </td>
-              <td [hidden]="status">
+              <td>
                 {{getUnitName(item.maDvi)}}
               </td>
-              <td [hidden]="status">
+              <td>
                 {{getStatusName(item.trangThai)}}
               </td>
               <td>
-                <!-- <ng-container *ngIf="item.trangThai == '7' || item.trangThai == '2'|| item.trangThai == '4'"> -->
-                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
-                  <span>Phê duyệt</span>
-                </button>
-                <!-- </ng-container> -->
+                <ng-container *ngIf="item.trangThai == '7' || item.trangThai == '2'|| item.trangThai == '4'">
+                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                    <span>Phê duyệt</span>
+                  </button>
+                </ng-container>
+                <ng-container *ngIf="item.trangThai == '8' || item.trangThai == '9'">
+                  <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
+                    <span>Xem</span>
+                  </button>
+                </ng-container>
               </td>
-              <!-- <ng-container *ngIf="item.trangThai == '8' || item.trangThai == '9'">
-                <button type="button" class="btn btn-main" (click)="xemChiTiet(item.id)">
-                  <span>Xem</span>
-                </button>
-              </ng-container> -->
             </tr>
           </tbody>
         </nz-table>
