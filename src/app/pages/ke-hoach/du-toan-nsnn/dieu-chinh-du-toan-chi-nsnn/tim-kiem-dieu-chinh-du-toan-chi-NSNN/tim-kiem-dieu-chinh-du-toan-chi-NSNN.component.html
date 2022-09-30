@@ -79,7 +79,7 @@
               <th nzWidth="150px">Ngày trình duyệt</th>
               <th nzWidth="150px">Ngày duyệt (Ngày trưởng bộ phận duyệt)</th>
               <th nzWidth="150px">Ngày duyệt (Ngày lãnh đạo duyệt)</th>
-              <th nzWidth="150px">Ngày cấp trên trả kết quả</th>
+              <th nzWidth="150px" [hidden]="dviGuiKq">Ngày cấp trên trả kết quả</th>
               <th nzWidth="200px" class="text-center">Trạng thái</th>
               <th nzWidth="200px" colspan="2">Hành động</th>
               <th>
@@ -112,7 +112,7 @@
               <td>
                 {{item.ngayPheDuyet}}
               </td>
-              <td>
+              <td [hidden]="dviGuiKq">
                 {{item.ngayTraKq}}
               </td>
               <td class="text-center">{{getStatusName(item.trangThai)}}

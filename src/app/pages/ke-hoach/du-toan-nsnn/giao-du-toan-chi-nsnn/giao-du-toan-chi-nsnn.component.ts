@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { UserService } from 'src/app/services/user.service';
 import { GIAO_DU_TOAN_CHI_NSNN_NSNN_LIST } from './giao-du-toan-chi-nsnn.constant';
 

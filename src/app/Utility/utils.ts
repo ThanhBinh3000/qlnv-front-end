@@ -651,7 +651,7 @@ export const CVNC = {
   VIEW_DN_MVT: 'VONPHIHANG_VONCHIDTQG_XEM_DN_MVT',
   PRINT_DN_MVT: 'VONPHIHANG_VONCHIDTQG_IN_DN_MVT',
   EXPORT_DN_MVT: 'VONPHIHANG_VONCHIDTQG_XUAT_DN_MVT',
-  ADD_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_TONGHOP_DN_MLT',
+  ADD_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_TONGHOP_DN_MLT_VT',
   APPROVE_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_TRINHDUYET_DN_MLT_VT',
   EDIT_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_SUA_DN_MLT_VT',
   DELETE_SYNTHETIC_TC: 'VONPHIHANG_VONCHIDTQG_XOA_DN_MLT_VT',
@@ -1381,9 +1381,9 @@ export function displayNumber(num: number): string {
     const str = num.toFixed(4);
     real = str.split('.')[0];
     imaginary = str.split('.')[1];
-    // while (imaginary[imaginary.length - 1] == '0') {
-    //   imaginary = imaginary.slice(0, -1);
-    // }
+    while (imaginary[imaginary.length - 1] == '0') {
+      imaginary = imaginary.slice(0, -1);
+    }
   }
   if (!imaginary) {
     displayValue = dau + separateNumber(real);

@@ -65,6 +65,7 @@ export class TongHopComponent implements OnInit {
 	listIdDelete: string[] = [];
 	donVis: any[] = [];
 	loaiDns: any[] = NGUON_BAO_CAO;
+	nguonBcaos: any[] = NGUON_BAO_CAO;
 	//phan trang
 	totalElements = 0;
 	totalPages = 0;
@@ -105,13 +106,13 @@ export class TongHopComponent implements OnInit {
 		if (!this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV) &&
 			!this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_CKV) &&
 			!this.userService.isAccessPermisson(CVNC.PHE_DUYET_SYNTHETIC_CKV)) {
-			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.THOP_TU_CUC_KV);
+			this.nguonBcaos = this.nguonBcaos.filter(e => e.id != Utils.THOP_TU_CUC_KV);
 		}
 
 		if (!this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_TC) &&
 			!this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_TC) &&
 			!this.userService.isAccessPermisson(CVNC.PHE_DUYET_SYNTHETIC_TC)) {
-			this.loaiDns = this.loaiDns.filter(e => e.id != Utils.THOP_TAI_TC);
+			this.nguonBcaos = this.nguonBcaos.filter(e => e.id != Utils.THOP_TAI_TC);
 		}
 
 		if (this.loai == "0") {
