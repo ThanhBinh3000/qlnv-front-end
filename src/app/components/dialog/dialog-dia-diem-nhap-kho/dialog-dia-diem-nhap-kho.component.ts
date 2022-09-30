@@ -12,6 +12,7 @@ import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
 import {UserService} from 'src/app/services/user.service';
+import {QuanLyHangTrongKhoService} from "../../../services/quanLyHangTrongKho.service";
 
 export class DiaDiemNhapKho {
   idVirtual: number;
@@ -120,6 +121,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
     public userService: UserService,
+    private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
   ) {
     this.diaDiemNhapKho.chiTietDiaDiems = [];
   }
@@ -240,7 +242,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     }*/
 
     if (nganKho?.children.length === 0) {
-      let res = this.donViService.getTrangThaiHienThoiKho({
+      let res = this.quanLyHangTrongKhoService.getTrangThaiHienThoiKho({
         maDvi: nganKho.key,
         maVTHH: this.cLoaiVthh,
         nam: this.nam
@@ -296,7 +298,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
              this.bodyGetTonKho.maNganKho,
              this.bodyGetTonKho.maLokho);
          }*/
-      let res = this.donViService.getTrangThaiHienThoiKho({
+      let res = this.quanLyHangTrongKhoService.getTrangThaiHienThoiKho({
         maDvi: nganLo.key,
         maVTHH: this.cLoaiVthh,
         nam: this.nam
