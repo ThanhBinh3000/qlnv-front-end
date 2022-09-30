@@ -386,8 +386,8 @@
                         <td>{{ data.diaDiemNhap }}</td>
                         <td>{{ data.soLuong | number: '1.0-3' }}</td>
                         <td>{{ donGiaCore | number: '1.0-3' }}</td>
-                        <td>{{ data.tenTrangthai }}</td>
                         <td>{{ calculateGiaSauThue(data.soLuong, donGiaCore) | number: '1.0-3' }}</td>
+                        <td>{{ data.tenTrangThai }}</td>
                       </tr>
                     </tbody>
                     <tfoot>
@@ -447,7 +447,7 @@
             </ng-container>
           </nz-tabset>
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true">
+            <nz-form-label [nzNoColon]="true">
               Ghi chú
             </nz-form-label>
             <textarea nz-input [rows]="3" [readonly]="isView" formControlName="ghiChu"
