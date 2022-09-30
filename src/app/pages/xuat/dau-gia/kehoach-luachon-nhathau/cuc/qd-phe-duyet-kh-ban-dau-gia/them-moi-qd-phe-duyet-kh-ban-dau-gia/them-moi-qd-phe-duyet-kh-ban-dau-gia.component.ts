@@ -1,37 +1,43 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
 import * as dayjs from 'dayjs';
-import { saveAs } from 'file-saver';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
-import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import { DialogTTPhuLucQDDCBanDauGiaComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-qddc-ban-dau-gia/dialog-thong-tin-phu-luc-qddc-ban-dau-gia.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { QuyetDinhPheDuyetKeHoachBanDauGia } from 'src/app/models/QdPheDuyetKHBanDauGia';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
-import { DxuatKhLcntVatTuService } from 'src/app/services/dxuatKhLcntVatTuService.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhPheDuyetKHBDGService } from 'src/app/services/quyetDinhPheDuyetKHBDG.service';
-import { TongHopDeXuatKHBanDauGiaService } from 'src/app/services/tongHopDeXuatKHBanDauGia.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { UserService } from 'src/app/services/user.service';
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import { environment } from 'src/environments/environment';
-import { STATUS } from "../../../../../../../constants/status";
+import {saveAs} from 'file-saver';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NzUploadChangeParam} from 'ng-zorro-antd/upload';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {
+  DialogDanhSachHangHoaComponent
+} from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import {
+  DialogThemMoiGoiThauComponent
+} from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
+import {VatTu} from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
+import {
+  DialogTTPhuLucQDDCBanDauGiaComponent
+} from 'src/app/components/dialog/dialog-thong-tin-phu-luc-qddc-ban-dau-gia/dialog-thong-tin-phu-luc-qddc-ban-dau-gia.component';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {DanhSachGoiThau} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {QuyetDinhPheDuyetKeHoachBanDauGia} from 'src/app/models/QdPheDuyetKHBanDauGia';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DanhSachDauThauService} from 'src/app/services/danhSachDauThau.service';
+import {DeXuatKeHoachBanDauGiaService} from 'src/app/services/deXuatKeHoachBanDauGia.service';
+import {DxuatKhLcntVatTuService} from 'src/app/services/dxuatKhLcntVatTuService.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {QuyetDinhPheDuyetKHBDGService} from 'src/app/services/quyetDinhPheDuyetKHBDG.service';
+import {TongHopDeXuatKHBanDauGiaService} from 'src/app/services/tongHopDeXuatKHBanDauGia.service';
+import {TongHopDeXuatKHLCNTService} from 'src/app/services/tongHopDeXuatKHLCNT.service';
+import {UploadFileService} from 'src/app/services/uploaFile.service';
+import {UserService} from 'src/app/services/user.service';
+import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
+import {environment} from 'src/environments/environment';
+import {STATUS} from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-qd-phe-duyet-kh-ban-dau-gia',
@@ -58,7 +64,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
   listOfMapData: VatTu[];
   listOfMapDataClone: VatTu[];
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
-  selectHang: any = { ten: '' };
+  selectHang: any = {ten: ''};
   errorInputRequired: string = null;
   errorGhiChu: boolean = false;
   maQd: string = null;
@@ -101,6 +107,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
   qdPheDuyetKhBanDauGia: QuyetDinhPheDuyetKeHoachBanDauGia = new QuyetDinhPheDuyetKeHoachBanDauGia();
   dataPopup: any;
   listFileDinhKem: any[] = [];
+
   constructor(
     private router: Router,
     private modal: NzModalService,
@@ -118,9 +125,11 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
     public globals: Globals,
     private tongHopDeXuatKHBanDauGiaService: TongHopDeXuatKHBanDauGiaService,
     public qdPheDuyetKhBanDauGiaService: QuyetDinhPheDuyetKHBDGService,
-  ) { }
+  ) {
+  }
 
-  deleteSelect() { }
+  deleteSelect() {
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -278,7 +287,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         tongHopDeXuatKhbdgId: dataTongHop.id + "",
         tchuanCluong: dataTongHop.tchuanCluong,
       });
-      this.getPhuLuc(dataTongHop.id+ "");
+      this.getPhuLuc(dataTongHop.id + "");
     }
   }
 
@@ -428,7 +437,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
       } else {
         res.data.forEach((item) => {
           if (!this.maTongHopExis(this.listDanhSachTongHop, item.id)) {
-            this.listDanhSachTongHop.push({ id: item.id });
+            this.listDanhSachTongHop.push({id: item.id});
           }
         });
       }
@@ -464,32 +473,32 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         let arr = [];
         this.dataPopup.diaDiemNhapKho?.chiTietDiaDiems.forEach(dd => {
           let temp =
-          {
-            "bhDgKehoachId": this.dataPopup.data.bhDgKeHoachId,
-            "chungLoaiHh": dd.chungLoaiHh,
-            "donGia": dd.donGiaChuaVAT,
-            "donViTinh": dd.donViTinh,
-            "ghiChu": null,
-            "giaKhoiDiem": dd.giaKhoiDiem,
-            "id": null,
-            "maChiCuc": this.dataPopup.diaDiemNhapKho.maDvi,
-            "maDiemKho": dd.maDiemKho,
-            "maDvTaiSan": dd.maDonViTaiSan,
-            "maLoKho": dd.maNganLo,
-            "maNganKho": dd.maNganKho,
-            "maNhaKho": dd.maNhaKho,
-            "qdPheDuyetKhbdgChiTietId": null,
-            "soLuong": dd.soLuong,
-            "soTienDatTruoc": dd.soTienDatTruoc,
-            "stt": null,
-            "tenChiCuc": this.dataPopup.diaDiemNhapKho.tenDonVi,
-            "tenDiemKho": dd.tenDiemKho,
-            "tenLoKho": dd.tenLoKho,
-            "tenNganKho": dd.tenNganKho,
-            "tenNhaKho": dd.tenNhaKho,
-            "tonKho": dd.tonKho,
-            "tenChungLoaiHh": dd.tenChungLoaiHh,
-          }
+            {
+              "bhDgKehoachId": this.dataPopup.data.bhDgKeHoachId,
+              "chungLoaiHh": dd.chungLoaiHh,
+              "donGia": dd.donGiaChuaVAT,
+              "donViTinh": dd.donViTinh,
+              "ghiChu": null,
+              "giaKhoiDiem": dd.giaKhoiDiem,
+              "id": null,
+              "maChiCuc": this.dataPopup.diaDiemNhapKho.maDvi,
+              "maDiemKho": dd.maDiemKho,
+              "maDvTaiSan": dd.maDonViTaiSan,
+              "maLoKho": dd.maNganLo,
+              "maNganKho": dd.maNganKho,
+              "maNhaKho": dd.maNhaKho,
+              "qdPheDuyetKhbdgChiTietId": null,
+              "soLuong": dd.soLuong,
+              "soTienDatTruoc": dd.soTienDatTruoc,
+              "stt": null,
+              "tenChiCuc": this.dataPopup.diaDiemNhapKho.tenDonVi,
+              "tenDiemKho": dd.tenDiemKho,
+              "tenLoKho": dd.tenLoKho,
+              "tenNganKho": dd.tenNganKho,
+              "tenNhaKho": dd.tenNhaKho,
+              "tonKho": dd.tonKho,
+              "tenChungLoaiHh": dd.tenChungLoaiHh,
+            }
           arr.push(temp);
         })
 
@@ -508,6 +517,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
   }
 
   firstInitUpdate: boolean = true;
+
   async selectMaTongHop(event) {
     const res = await this.tongHopDeXuatKHLCNTService.getDetail(event);
     // this.bindingData(res.data);
@@ -577,19 +587,19 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
       const arr = [];
       this.thongTinPhuLucs.forEach(tt => {
         let tempTT =
-        {
-          "bhDgKeHoachId": tt.bhDgKeHoachId,
-          "quyetDinhPheDuyetId": null,
-          "bhTongHopDeXuatId": tt.bhTongHopDeXuatId,
-          "giaKhoiDiem": tt.giaKhoiDiem,
-          "khoanTienDatTruoc": tt.khoanTienDatTruoc,
-          "maDonVi": tt.maDonVi,
-          "ngayKy": tt.ngayKy,
-          "soKeHoach": tt.soKeHoach,
-          "soLuongDvTaiSan": tt.soLuongDvTaiSan,
-          "tenDonVi": tt.tenDonVi,
-          "thongTinTaiSans": tt.thongTinTaiSans ?? [],
-        }
+          {
+            "bhDgKeHoachId": tt.bhDgKeHoachId,
+            "quyetDinhPheDuyetId": null,
+            "bhTongHopDeXuatId": tt.bhTongHopDeXuatId,
+            "giaKhoiDiem": tt.giaKhoiDiem,
+            "khoanTienDatTruoc": tt.khoanTienDatTruoc,
+            "maDonVi": tt.maDonVi,
+            "ngayKy": tt.ngayKy,
+            "soKeHoach": tt.soKeHoach,
+            "soLuongDvTaiSan": tt.soLuongDvTaiSan,
+            "tenDonVi": tt.tenDonVi,
+            "thongTinTaiSans": tt.thongTinTaiSans ?? [],
+          }
         arr.push(tempTT);
       });
       const body = {
@@ -632,9 +642,9 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
-          if(isBanHanh){
+          if (isBanHanh) {
             this.guiDuyet(res.data.id);
-          } else{
+          } else {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.back();
           }
@@ -649,9 +659,11 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, (e?.error?.message ?? MESSAGE.SYSTEM_ERROR));
     }
   }
+
   back() {
     this.showListEvent.emit();
   }
+
   tuChoi() {
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
@@ -707,7 +719,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: id ? id :  this.idInput,
+            id: id ? id : this.idInput,
             trangThai: STATUS.BAN_HANH,
           };
           let res = await this.qdPheDuyetKhBanDauGiaService.updateStatus(
@@ -887,18 +899,22 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
       }
     });
   }
+
   async loadMaTongHop() {
     this.spinner.show();
     let body = {
       ngayTongHopTuNgay: null,
       ngayTongHopDenNgay: null,
-      maVatTuCha: null,
+      loaiVthh: null,
       namKeHoach: null,
+      flagQd: "YES",
       noiDungTongHop: null,
-      pageSize: 1000,
-      pageNumber: 1,
+      paggingReq: {
+        limit: 1000,
+        page: 0,
+      },
     };
-    let res = await this.tongHopDeXuatKHBanDauGiaService.timKiem(body);
+    let res = await this.tongHopDeXuatKHBanDauGiaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.maTongHopList = res.data.content;
     } else {
@@ -906,16 +922,25 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
     }
     this.spinner.hide();
   }
-  async getMaTongHop(id: number) {
+
+  getMaTongHop(id: number) {
     if (!id) {
       return;
     }
-    this.spinner.show();
+    this.tongHopDeXuatKHBanDauGiaService.chiTiet(id).then((res)=>{
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.formData.patchValue({
+            cloaiVthh: res.data.cloaiVthh,
+            tenCloaiVthh: res.data.tenCloaiVthh,
+            loaiVthh: res.data.loaiVthh,
+          });
+        }
+      }
+    });
     this.getPhuLuc(+id);
     this.spinner.hide();
   }
-
-
   async tongHopDeXuatTuCuc(loaiVthh: string, namKeHoach: number) {
     this.spinner.show();
     let body = {
@@ -933,12 +958,12 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
     }
     this.spinner.hide();
   }
+
   async getPhuLuc(id) {
     this.spinner.show();
     let res = await this.qdPheDuyetKhBanDauGiaService.getPhuLuc(id);
     if (res.msg == MESSAGE.SUCCESS) {
       this.thongTinPhuLucs = res.data;
-      console.log("this.thongTinPhuLucs: ", this.thongTinPhuLucs);
     } else {
       this.listOfData = [];
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -957,8 +982,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
                 ...this.listLoaiHangHoa,
                 item
               ];
-            }
-            else {
+            } else {
               this.listLoaiHangHoa = [
                 ...this.listLoaiHangHoa,
                 ...item.child
@@ -993,6 +1017,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
     // const loaihanghoaDVT = this.listChungLoaiHangHoa.filter(chungloaihanghoa => chungloaihanghoa.ma === this.formData.value.idChungLoaiHangHoa);
     // this.formData.patchValue({ donViTinh: loaihanghoaDVT[0]?.maDviTinh })
   }
+
   setTitle() {
     let trangThai = this.qdPheDuyetKhBanDauGia.trangThai;
 

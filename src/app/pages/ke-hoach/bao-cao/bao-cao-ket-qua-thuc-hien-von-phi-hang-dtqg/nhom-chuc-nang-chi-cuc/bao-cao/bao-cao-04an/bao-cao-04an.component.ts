@@ -10,7 +10,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, NOT_OK, OK, sumNumber } from "src/app/Utility/utils";
+import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber, NOT_OK, OK, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
 export class ItemData {
@@ -211,6 +211,16 @@ export class BaoCao04anComponent implements OnInit {
             res => {
                 if (res.statusCode == 0) {
                     this.dinhMucs = res.data;
+                    this.dinhMucs.forEach(item => {
+                        if (!item.loaiVthh.startsWith('04')) {
+                            item.nvChuyenMonKv = divNumber(item.nvChuyenMonKv, 1000);
+                            item.nvChuyenMonTc = divNumber(item.nvChuyenMonTc, 1000);
+                            item.tcDieuHanhKv = divNumber(item.tcDieuHanhKv, 1000);
+                            item.tcDieuHanhTc = divNumber(item.tcDieuHanhTc, 1000);
+                            item.ttCaNhanKv = divNumber(item.ttCaNhanKv, 1000);
+                            item.ttCaNhanTc = divNumber(item.ttCaNhanTc, 1000);
+                        }
+                    })
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -753,6 +763,93 @@ export class BaoCao04anComponent implements OnInit {
                 -this.lstCtietBcao[index].listCtiet.find(e => e.loaiMatHang == item.loaiMatHang && e.maVtu == item.maVtu).sl])
             })
         }
+        //tinh dinh muc
+        const maId = this.noiDungChiFull.find(e => e.id == this.lstCtietBcao[index].maNdungChi)?.ma;
+        if (maId == '0.1.1') {
+            this.tinhDinhMuc(this.lstCtietBcao[index]);
+        }
+    }
+
+    findId(ma: string) {
+        return this.noiDungChiFull.find(e => e.ma == ma)?.id;
+    }
+
+    tinhDinhMuc(data: ItemData) {
+        const soLuong = [];
+        data.listCtiet.forEach(item => {
+            if (item.loaiMatHang == 0) {
+                soLuong.push({
+                    maVtu: item.maVtu,
+                    sl: item.sl,
+                })
+            }
+        })
+        const nvChuyenMon = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.1.1'));
+        const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.1.2'));
+        const cucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.2'));
+        const tongCucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.3'));
+
+        this.lstCtietBcao[nvChuyenMon].listCtiet.forEach(item => {
+            if (item.loaiMatHang == 0) {
+                const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
+                const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
+                const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
+                item.sl = mulNumber(sl, dm.nvChuyenMonKv + dm.nvChuyenMonTc);
+            }
+        })
+        this.tinhTongDm(nvChuyenMon);
+
+        this.lstCtietBcao[ttCaNhan].listCtiet.forEach(item => {
+            if (item.loaiMatHang == 0) {
+                const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
+                const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
+                const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
+                item.sl = mulNumber(sl, dm.ttCaNhanKv + dm.ttCaNhanTc);
+            }
+        })
+        this.tinhTongDm(ttCaNhan);
+
+        this.lstCtietBcao[cucDh].listCtiet.forEach(item => {
+            if (item.loaiMatHang == 0) {
+                const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
+                const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
+                const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
+                item.sl = mulNumber(sl, dm.tcDieuHanhKv);
+            }
+        })
+        this.tinhTongDm(cucDh);
+
+        this.lstCtietBcao[tongCucDh].listCtiet.forEach(item => {
+            if (item.loaiMatHang == 0) {
+                const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
+                const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
+                const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
+                item.sl = mulNumber(sl, dm.tcDieuHanhTc);
+            }
+        })
+        this.tinhTongDm(tongCucDh);
+
+        this.sum(this.lstCtietBcao[nvChuyenMon].stt);
+    }
+
+    tinhTongDm(index: number) {
+        const itemLine = this.luyKes?.find(item => item.maNdungChi == this.lstCtietBcao[index].maNdungChi)?.listCtiet;
+        this.lstCtietBcao[index].trongDotTcong = 0;
+        this.lstCtietBcao[index].luyKeTcong = 0;
+        this.lstCtietBcao[index].listCtiet.forEach(item => {
+            if (item.loaiMatHang == 0) {
+                this.lstCtietBcao[index].trongDotTcong += item.sl;
+            } else {
+                const slTrongDot = this.lstCtietBcao[index].listCtiet.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 0)?.sl;
+                let slLuyKe = 0;
+                if (itemLine) {
+                    slLuyKe = itemLine.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 1)?.sl ? itemLine.find(e => e.maVtu == item.maVtu && e.loaiMatHang == 1)?.sl : 0;
+                }
+
+                item.sl = sumNumber([slTrongDot, slLuyKe]);
+                this.lstCtietBcao[index].luyKeTcong += item.sl;
+            }
+        })
     }
 
 
