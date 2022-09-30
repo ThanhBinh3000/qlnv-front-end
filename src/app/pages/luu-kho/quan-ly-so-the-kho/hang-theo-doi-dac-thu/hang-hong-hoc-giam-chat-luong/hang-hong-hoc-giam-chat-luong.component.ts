@@ -1,18 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { UserService } from 'src/app/services/user.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
-import { isEmpty } from 'lodash';
-import { QuanLyDanhSachHangHongHocService } from 'src/app/services/quanLyDanhSachHangHongHoc.service';
-import { cloneDeep } from 'lodash';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {UserService} from 'src/app/services/user.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {DANH_MUC_LEVEL} from 'src/app/pages/luu-kho/luu-kho.constant';
+import {isEmpty} from 'lodash';
+import {QuanLyDanhSachHangHongHocService} from 'src/app/services/quanLyDanhSachHangHongHoc.service';
+import {cloneDeep} from 'lodash';
 import * as dayjs from 'dayjs';
+import {
+  DialogDanhSachHangHoaComponent
+} from "../../../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
+import {NzModalService} from "ng-zorro-antd/modal";
 
 
 @Component({
@@ -59,23 +63,31 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
   dataTableAll: any[] = [];
+  danhSachChiCuc: any[] = [];
+  listLoaiHangHoa: any[] = [];
+  listChungLoaiHangHoa: any[] = [];
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly userService: UserService,
     private readonly donviService: DonviService,
     private readonly danhMucService: DanhMucService,
     private readonly spinner: NgxSpinnerService,
+    private modal: NzModalService,
+    private donViService: DonviService,
     private readonly notification: NzNotificationService,
     private quanLyDanhSachHangHongHocService: QuanLyDanhSachHangHongHocService,
-  ) { }
+  ) {
+  }
+
 
   async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
       this.initForm();
       await this.initData();
-
       await this.search()
+      await this.loadDanhSachChiCuc()
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -85,10 +97,30 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
 
   initForm(): void {
     this.formData = this.fb.group({
-      "maDonVi": [null],
-      "maVTHH": [null],
-      "ngayTao": [null]
+      maDonVi: [null],
+      maVTHH: [null],
+      maCLHH: [null],
+      ngayTao: [null],
+      tenVTHH: [null],
+      tenCLHH: [null],
     });
+  }
+
+  async changeLoaiHangHoa(id: any) {
+    if (id && id > 0) {
+      let loaiHangHoa = this.listLoaiHangHoa.filter(item => item.ma === id);
+      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
+    }
+  }
+
+  async loadDanhSachChiCuc() {
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
+    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
   }
 
   async initData() {
@@ -130,8 +162,6 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   }
 
 
-
-
   async loadDsTong() {
     const body = {
       maDviCha: this.detail.maDvi,
@@ -149,57 +179,41 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   }
 
   async loaiVTHHGetAll() {
-    let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsLoaiHangHoa = res.data;
-      this.dsLoaiHangHoaDataSource = res.data?.map((item) => item.giaTri);
+    try {
+      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          hangHoa.data.forEach((item) => {
+            if (item.cap === "1" && item.ma != '01') {
+              this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
+            } else {
+              this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
+            }
+          })
+        }
+      })
+    } catch (error) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
-  onChangeAutoComplete(e) {
-    const value = (e.target as HTMLInputElement).value;
-    if (value) {
-      this.dsDonViDataSource = this.dsDonVi
-        .filter((item) =>
-          item?.tenDvi?.toLowerCase()?.includes(value.toLowerCase()),
-        )
-        .map((item) => item.tenDvi);
-    } else {
-      this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
-    }
-  }
-
-  onChangeLoaiHHAutoComplete(e) {
-    const value = (e.target as HTMLInputElement).value;
-    if (value) {
-      this.dsLoaiHangHoaDataSource = this.dsLoaiHangHoa
-        .filter((item) =>
-          item?.giaTri?.toLowerCase()?.includes(value.toLowerCase()),
-        )
-        .map((item) => item.giaTri);
-    } else {
-      this.dsLoaiHangHoaDataSource = this.dsLoaiHangHoa.map(
-        (item) => item.giaTri,
-      );
-    }
-  }
-
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
+    await this.search()
   }
 
-  exportData() { }
+  exportData() {
+  }
 
-  xoa() { }
-
-  inDanhSach() { }
+  xoa() {
+  }
 
   themMoi() {
     this.isAddNew = true;
   }
 
   onAllChecked(checked) {
-    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
+    this.dataTable.forEach(({id}) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
   }
 
@@ -212,23 +226,51 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) =>
+    this.allChecked = this.dataTable.every(({id}) =>
       this.setOfCheckedId.has(id),
     );
     this.indeterminate =
-      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
   }
 
-  onChangeFilterDate(event) { }
+  changePageIndex(event) {
+  }
 
-  changePageIndex(event) { }
+  changePageSize(event) {
+  }
 
-  changePageSize(event) { }
+  viewDetail(id: number, isUpdate: boolean) {
+  }
 
-  viewDetail(id: number, isUpdate: boolean) { }
+  xoaItem(id) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          const res = await this.quanLyDanhSachHangHongHocService.deteleData(id);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            this.search();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        } catch (e) {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
+        }
+      },
+    });
+  }
 
-  xoaItem(id: number) { }
 
   onItemChecked(id: number, checked) {
     this.updateCheckedSet(id, checked);
@@ -238,18 +280,4 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   onClose() {
     this.isAddNew = false;
   }
-}
-
-interface ITrangThai {
-  id: number;
-  giaTri: string;
-}
-
-interface IHangHongHocGiamChatLuong {
-  id: number;
-  maDanhSach: string;
-  idDonVi: number;
-  tenDonVi: string;
-  ngayTao: Date;
-  trangThai: string;
 }

@@ -3,39 +3,40 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu">
         <div class="search__body" nz-row [nzGutter]="24">
-          <nz-form-item nz-col nzSpan="6" class="form-item">
-            <nz-form-label nzFor="ma-don-vi">Đơn vị</nz-form-label>
-            <nz-form-control>
-              <nz-input-group id="ma-don-vi">
-                <input type="text" nz-input formControlName="maDonVi" />
+          <div nz-col nzSpan="6">
+            <nz-form-label nzFor="loai-hang-hoa">Đơn vị</nz-form-label>
+            <nz-form-control >
+              <nz-input-group>
+                <nz-select  nzAllowClear formControlName="maDonVi" >
+                  <nz-option *ngFor="let p of danhSachChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
+                  </nz-option>
+                </nz-select>
               </nz-input-group>
             </nz-form-control>
-          </nz-form-item>
-
-          <nz-form-item nz-col nzSpan="6" class="form-item">
+          </div>
+          <div nz-col nzSpan="6">
             <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
             <nz-form-control>
-              <nz-input-group id="loai-hang-hoa">
-                <input type="text" nz-input formControlName="maVTHH" />
-              </nz-input-group>
+              <nz-select formControlName="maVTHH" (ngModelChange)="changeLoaiHangHoa($event)">
+                <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
-          </nz-form-item>
-
-          <nz-form-item nz-col nzSpan="6" class="form-item">
+          </div>
+          <div nz-col nzSpan="6">
             <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
             <nz-form-control>
-              <nz-input-group id="chung-loai-hang-hoa">
-                <input type="text" nz-input formControlName="chungLoaiHangHoa" />
-              </nz-input-group>
+              <nz-select formControlName="maCLHH">
+                <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
-          </nz-form-item>
-          <nz-form-item nz-col nzSpan="6" class="form-item">
-            <nz-form-label nzFor="ngay-tao">Ngày tạo danh sách</nz-form-label>
-            <nz-form-control>
-              <nz-range-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy" id="ngay-tao" class="search__input">
-              </nz-range-picker>
-            </nz-form-control>
-          </nz-form-item>
+          </div>
+          <div nz-col nzSpan="6">
+            <nz-form-label nzFor="loai-hang-hoa">Ngày tạo danh sách</nz-form-label>
+            <nz-range-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy"  class="search__input">
+            </nz-range-picker>
+          </div>
         </div>
       </form>
       <div class="cangiua group-button-search">
@@ -43,7 +44,7 @@
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
-        <button nz-button class="search__button--search">
+        <button nz-button class="search__button--search" (click)="search()">
           <i nz-icon nzType="search"></i>
           Tìm kiếm
         </button>
@@ -91,8 +92,7 @@
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.donVi"
-                  [nzAutocomplete]="donViSearchAuto" (input)="onChangeAutoComplete($event)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.donVi"/>
                 <nz-autocomplete #donViSearchAuto [nzDataSource]="dsDonViDataSource"></nz-autocomplete>
               </nz-input-group>
             </th>

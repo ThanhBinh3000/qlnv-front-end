@@ -10,8 +10,8 @@
   <div class="header-detail-tab">
     <div class="title-chi-tieu">
       <span
-        [ngClass]="formData.value.trangThai == globals.prop.NHAP_BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-        {{ formData.value.tenTrangThai }}
+        [ngClass]="formData.value.trangThai == globals.prop.NHAP_DA_TONG_HOP ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        {{ formData.value.tenTrangThaiXuLy }}
       </span>
       <span>THÔNG TIN HÀNG DTQG BỊ HỎNG CẦN SỬA CHỮA</span>
     </div>
@@ -24,24 +24,20 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Mã danh sách
             </nz-form-label>
-            <nz-form-control [nzErrorTip]="error" >
+            <nz-form-control >
               <nz-input-group  nzAddOnAfter="{{maQd}}" >
-                <nz-input-number formControlName="soQuyetDinh" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                <nz-input-number formControlName="maDanhSach" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                                  [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
-              <ng-template #error let-control>
-                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                </ng-container>
-              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="4">
           <nz-form-item class="form-item">
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-control>
               <nz-form-label [nzNoColon]="true" nzRequired> Ngày tạo danh sách </nz-form-label>
-              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-date-picker>
+              <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy"></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -49,44 +45,41 @@
     </form>
   </nz-card>
   <br>
-  <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
-    <thead>
-    <tr>
-      <th class="text-center" rowSpan="2" style="width: 2%;">STT</th>
-      <th style="width: 9%;" rowSpan="2">Loại hàng hóa</th>
-      <th style="width: 9%;" rowSpan="2">Chủng loại hàng hóa</th>
-      <th style="width: 40%;" colSpan="5">Địa điểm</th>
-      <th style="width: 9%;" rowSpan="2">Số lượng tồn</th>
-      <th style="width: 9%;" rowSpan="2">Số lượng hỏng</th>
-      <th style="width: 9%;" rowSpan="2">ĐVT</th>
-      <th style="width: 20%;" rowSpan="2">Lý do</th>
-    </tr>
-    <tr>
-      <th>Tên đơn vị</th>
-      <th>Điểm kho</th>
-      <th>Nhà kho</th>
-      <th>Ngăn kho</th>
-      <th>Lô kho</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let data of dataTable; let idx = index">
-      <ng-container>
-        <td>{{ idx + 1 }}</td>
-        <td>{{ data.tenVthh }}</td>
-        <td>{{ data.tenCloaiVthh }}</td>
-        <td>{{ data.dviTinh }}</td>
-        <td>{{ data.soLuong }}</td>
-        <td>{{ data.soLuong }}</td>
-        <td>{{ data.soLuong }}</td>
-        <td>{{ data.soLuong }}</td>
-        <td>{{ data.soLuong }}</td>
-        <td>{{ data.soLuong }}</td>
-        <td>{{ data.soLuong }}</td>
-        <td>{{ data.soLuong }}</td>
-      </ng-container>
-    </tr>
-    </tbody>
-  </nz-table>
+  <nz-card class="mt-16 flex-card data-table card-border-content">
+    <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th class="text-center" style="width: 5%;">STT</th>
+        <th style="width: 10%;">Loại hàng hoá</th>
+        <th style="width: 10%;">Tên hàng hoá</th>
+        <th style="width: 10%;">Địa điểm</th>
+        <th style="width: 10%;">Nhà kho</th>
+        <th style="width: 10%;">Ngăn kho</th>
+        <th style="width: 10%;">Lô kho</th>
+        <th style="width: 10%;">Số lượng tồn</th>
+        <th style="width: 10%;">Số lượng thanh lý</th>
+        <th style="width: 5%;">Đơn vị tính</th>
+        <th style="width: 10%;">Lý do</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of editRowTable.data; let idx = index">
+        <ng-container>
+          <td>{{ idx + 1 }}</td>
+          <td>{{ data.loaiHang }}</td>
+          <td>{{ data.chungLoaiHang }}</td>
+          <td>{{ data.diemKho }}</td>
+          <td>{{ data.nhaKho }}</td>
+          <td>{{ data.nganKho }}</td>
+          <td>{{ data.loKho }}</td>
+          <td>{{ data.slTon }}</td>
+          <td>{{ data.slYeuCau }}</td>
+          <td>{{ data.donVi }}</td>
+          <td>{{ data.lyDo }}</td>
+        </ng-container>
+      </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
 
 </div>
