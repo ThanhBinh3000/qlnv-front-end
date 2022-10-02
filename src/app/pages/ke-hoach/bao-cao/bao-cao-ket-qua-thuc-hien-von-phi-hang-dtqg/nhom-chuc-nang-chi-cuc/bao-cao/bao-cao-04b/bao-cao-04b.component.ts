@@ -971,15 +971,15 @@ export class BaoCao04bComponent implements OnInit {
         //luy ke default
         const itemLine = this.luyKes?.find(item => item.maNdungChi == this.editCache[id].data.maNdungChi)?.listCtiet;
 
-        let tonglstChitietVtuTrongDot = 0;
-        let tonglstChitietVtuLuyke = 0;
+        let tongTrongDot = 0;
+        let tongLuyke = 0;
         if (this.editCache[id].data.listCtiet.length != 0) {
             this.editCache[id].data.listCtiet.forEach(e => {
                 if (e.loaiMatHang == 0) {
-                    tonglstChitietVtuTrongDot += e.sl;
+                    tongTrongDot = sumNumber([tongTrongDot, e.sl]);
                     //set luy ke tuong ung = luy ke default + chi tiet theo dot
                     const sl = itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == 1)?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == 1)?.sl : 0;
-                    this.editCache[id].data.listCtiet.find(a => a.maVtu == e.maVtu && a.loaiMatHang == 1).sl = sl + e.sl;
+                    this.editCache[id].data.listCtiet.find(a => a.maVtu == e.maVtu && a.loaiMatHang == 1).sl = sumNumber([sl, e.sl]);
                 }
             })
         }
@@ -987,12 +987,12 @@ export class BaoCao04bComponent implements OnInit {
         if (this.editCache[id].data.listCtiet.length != 0) {
             this.editCache[id].data.listCtiet.forEach(e => {
                 if (e.loaiMatHang == 1) {
-                    tonglstChitietVtuLuyke += e.sl;
+                    tongLuyke = sumNumber([tongLuyke, e.sl]);
                 }
             })
         }
-        this.editCache[id].data.trongDotTcong = tonglstChitietVtuTrongDot;
-        this.editCache[id].data.luyKeTcong = tonglstChitietVtuLuyke;
+        this.editCache[id].data.trongDotTcong = tongTrongDot;
+        this.editCache[id].data.luyKeTcong = tongLuyke;
     }
 
     addAllCol() {
