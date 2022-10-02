@@ -205,7 +205,7 @@ export class QuanLyVonPhiService extends BaseService {
   CtietBcaoQuyetToanNam1(request: any): Observable<any> {
     return this.httpClient.post(
       // this.urlDefault + '/qlnv-khoachphi/quyet-toan/tra-cuu',
-      'http://192.168.1.101:8094/quyet-toan/tra-cuu',
+      'http://192.168.1.100:30101/quyet-toan/tra-cuu',
       request,
     );
   }
@@ -422,7 +422,7 @@ export class QuanLyVonPhiService extends BaseService {
   tongHopDieuChinhDuToan1(request: any): Observable<any> {
     return this.httpClient.post(
       // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/tong-hop',
-      'http://192.168.1.109:30101/dieu-chinh-du-toan-chi/tong-hop',
+      'http://192.168.1.103:30101/dieu-chinh-du-toan-chi/tong-hop',
       request,
     );
   }
@@ -1266,6 +1266,7 @@ export class QuanLyVonPhiService extends BaseService {
   updateBaoCaoThucHienDTC(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat',
+      // 'http://192.168.1.103:30101/bao-cao/cap-nhat',
       request,
     );
   }
@@ -1335,8 +1336,8 @@ export class QuanLyVonPhiService extends BaseService {
 
   getDinhMuc(request: any): Observable<any> {
     return this.httpClient.post(
-      // this.urlDefault + 'qlnv-khoachphi/chung/dinh-muc',
-      'http://192.168.1.103:30101/chung/dinh-muc',
+      this.urlDefault + '/qlnv-khoachphi/chung/dinh-muc',
+      // 'http://192.168.1.103:30101/chung/dinh-muc',
       request,
     )
   }

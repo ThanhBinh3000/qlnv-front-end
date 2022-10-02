@@ -358,7 +358,7 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
         const requestReport = {
             loaiTimKiem: "0",
             maBcao: this.maBaoCao,
-            maDvi: this.userInfo?.dvql,
+            maDvi: this.userInfo?.MA_DVI,
             paggingReq: {
                 limit: 10,
                 page: 1,

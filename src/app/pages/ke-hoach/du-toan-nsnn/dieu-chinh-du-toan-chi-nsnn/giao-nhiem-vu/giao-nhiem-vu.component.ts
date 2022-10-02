@@ -323,45 +323,45 @@ export class GiaoNhiemVuComponent implements OnInit {
   //nhóm các nút chức năng --báo cáo-----
   getStatusButton() {
     const isSynthetic = this.lstDviTrucThuoc.length != 0;
-		const checkSave = isSynthetic ? this.userService.isAccessPermisson(DCDT.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.EDIT_REPORT);
-		const checkAppove = isSynthetic ? this.userService.isAccessPermisson(DCDT.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.APPROVE_REPORT);
-		const checkDuyet = isSynthetic ? this.userService.isAccessPermisson(DCDT.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.DUYET_REPORT);
-		const checkPheDuyet = isSynthetic ? this.userService.isAccessPermisson(DCDT.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.PHE_DUYET_REPORT);
-		const checkTiepNhan = this.userService.isAccessPermisson(DCDT.TIEP_NHAN_REPORT);
-		const checkCopy = isSynthetic ? this.userService.isAccessPermisson(DCDT.COPY_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.COPY_REPORT);
-		const checkPrint = isSynthetic ? this.userService.isAccessPermisson(DCDT.PRINT_SYTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.PRINT_REPORT);
-		if (checkSave && Utils.statusSave.includes(this.trangThaiBaoCao)) {
-			this.status = false;
-		} else {
-			this.status = true;
-		}
-		this.checkParent = false;
-		const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-		this.checkParent = this.donVis.findIndex(e => e.maDvi == this.maDviTao) != -1;
+    const checkSave = isSynthetic ? this.userService.isAccessPermisson(DCDT.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.EDIT_REPORT);
+    const checkAppove = isSynthetic ? this.userService.isAccessPermisson(DCDT.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.APPROVE_REPORT);
+    const checkDuyet = isSynthetic ? this.userService.isAccessPermisson(DCDT.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.DUYET_REPORT);
+    const checkPheDuyet = isSynthetic ? this.userService.isAccessPermisson(DCDT.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.PHE_DUYET_REPORT);
+    const checkTiepNhan = this.userService.isAccessPermisson(DCDT.TIEP_NHAN_REPORT);
+    const checkCopy = isSynthetic ? this.userService.isAccessPermisson(DCDT.COPY_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.COPY_REPORT);
+    const checkPrint = isSynthetic ? this.userService.isAccessPermisson(DCDT.PRINT_SYTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.PRINT_REPORT);
+    if (checkSave && Utils.statusSave.includes(this.trangThaiBaoCao)) {
+      this.status = false;
+    } else {
+      this.status = true;
+    }
+    this.checkParent = false;
+    const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
+    this.checkParent = this.donVis.findIndex(e => e.maDvi == this.maDviTao) != -1;
 
-		if (this.checkParent) {
-			const index: number = this.trangThaiBaoCaos.findIndex(e => e.id == Utils.TT_BC_7);
-			this.trangThaiBaoCaos[index].tenDm = "Mới";
-		}
-		this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBaoCao) && checkSave && checkChirld);
-		this.statusBtnApprove = !(Utils.statusApprove.includes(this.trangThaiBaoCao) && checkAppove && checkChirld);
-		this.statusBtnTBP = !(Utils.statusDuyet.includes(this.trangThaiBaoCao) && checkDuyet && checkChirld);
-		this.statusBtnLD = !(Utils.statusPheDuyet.includes(this.trangThaiBaoCao) && checkPheDuyet && checkChirld);
-		this.statusBtnDVCT = !(Utils.statusTiepNhan.includes(this.trangThaiBaoCao) && checkTiepNhan && this.checkParent);
-		this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThaiBaoCao) && checkCopy && checkChirld);
-		this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBaoCao) && checkPrint && checkChirld);
+    if (this.checkParent) {
+      const index: number = this.trangThaiBaoCaos.findIndex(e => e.id == Utils.TT_BC_7);
+      this.trangThaiBaoCaos[index].tenDm = "Mới";
+    }
+    this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBaoCao) && checkSave && checkChirld);
+    this.statusBtnApprove = !(Utils.statusApprove.includes(this.trangThaiBaoCao) && checkAppove && checkChirld);
+    this.statusBtnTBP = !(Utils.statusDuyet.includes(this.trangThaiBaoCao) && checkDuyet && checkChirld);
+    this.statusBtnLD = !(Utils.statusPheDuyet.includes(this.trangThaiBaoCao) && checkPheDuyet && checkChirld);
+    this.statusBtnDVCT = !(Utils.statusTiepNhan.includes(this.trangThaiBaoCao) && checkTiepNhan && this.checkParent);
+    this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThaiBaoCao) && checkCopy && checkChirld);
+    this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBaoCao) && checkPrint && checkChirld);
 
-		if (!this.statusBtnTBP || !this.statusBtnLD || !this.statusBtnDVCT ) {
-			this.statusBtnOk = true;
-		} else {
-			this.statusBtnOk = false;
-		}
-		if (Utils.statusSave.includes(this.trangThaiBaoCao)
-			&& checkSave && checkChirld) {
-			this.statusBtnFinish = false;
-		} else {
-			this.statusBtnFinish = true;
-		}
+    if (!this.statusBtnTBP || !this.statusBtnLD || !this.statusBtnDVCT) {
+      this.statusBtnOk = true;
+    } else {
+      this.statusBtnOk = false;
+    }
+    if (Utils.statusSave.includes(this.trangThaiBaoCao)
+      && checkSave && checkChirld) {
+      this.statusBtnFinish = false;
+    } else {
+      this.statusBtnFinish = true;
+    }
   }
 
   //upload file
@@ -824,7 +824,7 @@ export class GiaoNhiemVuComponent implements OnInit {
         statusBtnFinish: this.statusBtnFinish,
         status: this.status,
         namBcao: this.namBcao,
-        maBaoCao:this.maBaoCao
+        maBaoCao: this.maBaoCao
       }
       this.tabs = [];
       this.tabs.push(PHU_LUC.find(e => e.id === id));
@@ -846,7 +846,7 @@ export class GiaoNhiemVuComponent implements OnInit {
         statusBtnFinish: this.statusBtnFinish,
         status: this.status,
         namBcao: this.namBcao,
-        maBaoCao:this.maBaoCao
+        maBaoCao: this.maBaoCao
       }
       this.tabs = [];
       this.tabs.push(PHU_LUC.find(e => e.id == this.lstDieuChinhs[index].maLoai));

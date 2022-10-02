@@ -255,14 +255,8 @@
         </nz-table>
         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
           <div nz-col nzSpan="24">
-            <ng-container *ngIf="this.trangThaiBaoCao === '2' ||  this.trangThaiBaoCao === '4'; else thuyetMinhTp">
-              <label class="search__label">Thuyết minh</label>
-              <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" disabled></textarea>
-            </ng-container>
-            <ng-template #thuyetMinhTp>
-              <label class="search__label">Thuyết minh</label>
-              <textarea rows="2" nz-input [(ngModel)]="thuyetMinh"></textarea>
-            </ng-template>
+            <label class="search__label">Thuyết minh</label>
+            <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status" s></textarea>
           </div>
         </div>
         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">

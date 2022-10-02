@@ -1168,7 +1168,7 @@ export class ThemMoiBaoCaoQuyetToanComponent implements OnInit {
       maPhanBcao: this.maPhanBcao,
     };
 
-    this.quanLyVonPhiService.trinhDuyetServiceQuyetToan1(request).toPromise().then(
+    this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);

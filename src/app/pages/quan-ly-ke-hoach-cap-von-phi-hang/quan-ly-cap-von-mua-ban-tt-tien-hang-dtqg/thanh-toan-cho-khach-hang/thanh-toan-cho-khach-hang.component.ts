@@ -444,7 +444,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
         const requestReport = {
             loaiTimKiem: "0",
             maCapUngVonTuCapTren: "",
-            maDvi: this.userInfo?.dvql,
+            maDvi: this.userInfo?.MA_DVI,
             maLoai: "1",
             ngayLap: "",
             ngayTaoDen: "",
