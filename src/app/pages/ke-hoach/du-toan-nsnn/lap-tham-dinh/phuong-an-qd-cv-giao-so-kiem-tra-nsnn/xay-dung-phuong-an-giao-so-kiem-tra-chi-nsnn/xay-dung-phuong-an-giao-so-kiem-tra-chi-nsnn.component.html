@@ -58,7 +58,16 @@
 					<thead>
 						<tr>
 							<th>Mã báo cáo</th>
-							<th>Số QĐ/CV</th>
+							<th>
+								<ng-container *ngIf="statusDeleteCv(); else view">
+									<a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa quyết định công văn?"
+										style="color:black" (nzOnConfirm)="deleteQdCv()">Số QĐ/CV
+									</a>
+								</ng-container>
+								<ng-template #view>
+									Số QĐ/CV
+								</ng-template>
+							</th>
 							<th>
 								<ng-container *ngIf="statusBtnBtc; else btc">
 									Mã phương án cấp trên giao
