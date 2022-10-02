@@ -51,7 +51,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isCuc()">
+        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="!userService.isChiCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>

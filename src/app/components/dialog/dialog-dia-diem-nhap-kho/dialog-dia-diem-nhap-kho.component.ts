@@ -15,6 +15,7 @@ import {UserService} from 'src/app/services/user.service';
 import {QuanLyHangTrongKhoService} from "../../../services/quanLyHangTrongKho.service";
 
 export class DiaDiemNhapKho {
+  id:number;
   idVirtual: number;
   maDvi: string;
   tenDvi: string;
@@ -35,6 +36,7 @@ export class DiaDiemNhapKho {
 }
 
 export class ChiTietDiaDiemNhapKho {
+  idDxuatDtl: number;
   maDiemKho: string;
   maNhaKho: string;
   maNganKho: string;
@@ -73,6 +75,9 @@ export class ChiTietDiaDiemNhapKho {
 })
 
 export class DialogDiaDiemNhapKhoComponent implements OnInit {
+  tableName:any;
+  idDxuat: any;
+  idDxuatDtl: any;
   nam: number;
   cLoaiVthh: string;
   chiCucList: any[] = [];
@@ -109,6 +114,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
   listPhuongAn: DiaDiemNhapKho | any;
   phuongAnXuatList: DiaDiemNhapKho[] = [];
 
+
   constructor(
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
@@ -136,6 +142,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
 
     this.loadChiCuc();
     this.loadDanhMucHang();
+    this.loadDetail();
     // this.loadKeHoachBanDauGia();
   }
 
@@ -381,6 +388,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
       return;
     }
     this.chiTietDiemNhapKhoCreate.idVirtual = new Date().getTime();
+    this.chiTietDiemNhapKhoCreate.idDxuatDtl = this.idDxuatDtl;
     this.diaDiemNhapKho.idVirtual = new Date().getTime();
     this.diaDiemNhapKho.chiTietDiaDiems = [...this.diaDiemNhapKho.chiTietDiaDiems, this.chiTietDiemNhapKhoCreate];
     this.newObjectDiaDiem();
@@ -405,7 +413,6 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
 
   startEdit(index: number) {
     this.chiTietDiemNhapKhoEdit = cloneDeep(this.dsChiTietDiemNhapKhoClone[index]);
-    console.log(this.chiTietDiemNhapKhoEdit, 8989)
     this.changeDiemKho(this.chiTietDiemNhapKhoEdit.maDiemKho, index, true)
     this.changeNhaKho(this.chiTietDiemNhapKhoEdit.maNhaKho, index, true)
     this.changeNganKho(this.chiTietDiemNhapKhoEdit.maNganKho, index, true)
@@ -547,5 +554,11 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       });
+  }
+
+  loadDetail() {
+    if (this.idDxuatDtl) {
+
+    }
   }
 }
