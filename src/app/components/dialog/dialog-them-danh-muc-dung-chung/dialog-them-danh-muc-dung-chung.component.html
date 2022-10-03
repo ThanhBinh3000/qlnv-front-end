@@ -3,51 +3,60 @@
     <div nz-col [nzSpan]="24">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true" nzRequired> Vùng dữ liệu </nz-form-label>
-        <nz-select formControlName="loai" [nzDisabled]="isView" [(ngModel)]="selectedValue" nzShowSearch nzAllowClear>
-          <nz-option *ngFor="let p of danhMucList" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
-        </nz-select>
-        <span style="color: red" role="alert" *ngIf=" formData.controls.loai?.errors?.required && submited">Vui lòng
-          không để trống</span>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-select formControlName="loai" [nzDisabled]="isView" [(ngModel)]="selectedValue" nzShowSearch nzAllowClear>
+            <nz-option *ngFor="let p of danhMucList" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+          </nz-select>
+        </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="8">
+    <div nz-col [nzSpan]="6">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true" nzRequired> Mã </nz-form-label>
-        <input nz-input formControlName="ma" placeholder="Nhập mã" [readOnly]="isView">
-        <span style="color: red" role="alert" *ngIf=" formData.controls.ma?.errors?.required && submited">Vui lòng không
-          để trống</span>
+        <nz-form-control [nzErrorTip]="error">
+          <input nz-input formControlName="ma" placeholder="Nhập mã" [readOnly]="isView">
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" nzRequired> Giá trị </nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <input nz-input formControlName="giaTri" placeholder="Nhập giá trị" [disabled]="isView" [readOnly]="isView">
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" > Phân loại </nz-form-label>
+        <input nz-input formControlName="phanLoai" [disabled]="isView" [readOnly]="isView">
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="6">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true" > Thứ tự hiển thị </nz-form-label>
+        <nz-input-number formControlName="thuTuHienThi" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                         [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isView"></nz-input-number>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true" nzRequired> Trạng thái </nz-form-label>
-        <nz-select formControlName="trangThai" [nzDisabled]="isView">
-          <nz-option nzValue="01" nzLabel="Hoạt động"></nz-option>
-          <nz-option nzValue="00" nzLabel="Không hoạt động"></nz-option>
-        </nz-select>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-select formControlName="trangThai" [nzDisabled]="isView">
+            <nz-option nzValue="01" nzLabel="Hoạt động"></nz-option>
+            <nz-option nzValue="00" nzLabel="Không hoạt động"></nz-option>
+          </nz-select>
+        </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="8">
-      <nz-form-item>
-        <nz-form-label [nzNoColon]="true" nzRequired> Giá trị </nz-form-label>
-        <input nz-input formControlName="giaTri" placeholder="Nhập giá trị" [disabled]="isView" [readOnly]="isView">
-        <span style="color: red" role="alert" *ngIf=" formData.controls.giaTri?.errors?.required && submited">Vui lòng
-          không để trống</span>
-      </nz-form-item>
-    </div>
-
     <div nz-col [nzSpan]="24">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Mô tả </nz-form-label>
         <textarea rows="3" class="search__input" nz-input formControlName="ghiChu" [readOnly]="isView"></textarea>
       </nz-form-item>
-      <ng-template #error let-control>
-        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
-      </ng-template>
     </div>
-
   </div>
-
 </form>
 <div class="modal-footer">
   <div class="nut">
@@ -71,3 +80,7 @@
     </div>
   </div>
 </div>
+
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>
