@@ -135,6 +135,7 @@ export class DonviService extends BaseService {
 
   getTonKho(body: any): Promise<any> {
     let url_ = `${environment.SERVICE_API}/qlnv-luukho/lk-hang-trong-kho?`;
+    // let url_ = `http://192.168.5.184:3333/hang-trong-kho/search?`;
     if (body.maChiCuc)
       url_ += 'maChiCuc=' + encodeURIComponent('' + body.maChiCuc) + '&';
     if (body.maDiemKho)

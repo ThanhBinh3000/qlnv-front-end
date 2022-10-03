@@ -14,7 +14,7 @@ export class BienBanBanDauGia {
     soBienBan: string;
     thongBaoBdgId: number;
     trichYeu: string;
-    trangThai: string;
+    trangThai: string = "00";
     maThongBao: string;
     tenTrangThai: string;
     constructor(cts: Array<Cts> = [], ct1s: Array<Ct1s> = []) {

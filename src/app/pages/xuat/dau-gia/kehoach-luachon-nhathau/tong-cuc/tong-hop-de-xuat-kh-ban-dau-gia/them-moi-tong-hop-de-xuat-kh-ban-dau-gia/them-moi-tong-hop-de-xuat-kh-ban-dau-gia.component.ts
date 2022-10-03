@@ -184,7 +184,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.loadDonVi();
     if (this.idInput > 0) {
       this.isTongHop = true;
-      console.log(this.isTongHop);
       this.loadThongTinDeXuatKeHoachLuaChonNhaThau(this.idInput);
     } else {
       this.initForm();
@@ -205,7 +204,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
-      console.log(this.formData);
       return;
     }
     this.spinner.show();
@@ -222,7 +220,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
     };
     try {
       let res = await this.deXuatKeHoachBanDauGiaService.search(body);
-      console.log(res);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data.content && data.content.length > 0) {
@@ -253,7 +250,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu để tổng hợp");
-      console.log(e);
     } finally {
       this.spinner.hide();
     }
@@ -555,7 +551,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       }
     }
     catch (e) {
-      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -621,7 +616,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
           }
           this.spinner.hide();
         } catch (e) {
-          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -656,7 +650,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
           }
           this.spinner.hide();
         } catch (e) {
-          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -692,7 +685,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
           }
           this.spinner.hide();
         } catch (e) {
-          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
@@ -824,7 +816,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
                   fileDinhKem,
                 ];
                 this.canCuKhacList = [...this.canCuKhacList, taiLieuCanCuKhac];
-                console.log(this.canCuKhacList);
                 break;
               default:
                 break;
@@ -1086,7 +1077,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
 
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -1100,7 +1090,6 @@ export class ThemMoiTongHopDeXuatKhBanDauGiaComponent implements OnInit {
       }
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
