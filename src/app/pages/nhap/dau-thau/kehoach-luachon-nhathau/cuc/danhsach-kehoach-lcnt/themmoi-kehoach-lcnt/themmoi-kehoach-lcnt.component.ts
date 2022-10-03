@@ -247,63 +247,65 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   }
 
   async getDetail(id: number) {
-    await this.dauThauService
-      .getDetail(id)
-      .then((res) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-          const dataDetail = res.data;
-          this.helperService.bidingDataInFormGroup(this.formData,dataDetail);
-          this.formData.patchValue({
+    if(id){
+      await this.dauThauService
+        .getDetail(id)
+        .then((res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            const dataDetail = res.data;
+            this.helperService.bidingDataInFormGroup(this.formData,dataDetail);
+            this.formData.patchValue({
               soDxuat: dataDetail.soDxuat.split('/')[0]
-          })
-          // this.formData.patchValue({
-          //   id: dataDetail ? dataDetail.id : null,
-          //   soQd: dataDetail ? dataDetail.soQd : null,
-          //   soDxuat: dataDetail ? dataDetail.soDxuat.split('/')[0] : null,
-          //   trichYeu: dataDetail ? dataDetail.trichYeu : null,
-          //   ghiChu: dataDetail ? dataDetail.ghiChu : null,
-          //   namKhoach: dataDetail ? dataDetail.namKhoach : dayjs().get('year'),
-          //   loaiVthh: dataDetail ? dataDetail.loaiVthh : this.loaiVthhInput,
-          //   tenLoaiVthh: dataDetail ? dataDetail.tenLoaiVthh : null,
-          //   ngayKy: dataDetail ? dataDetail.ngayKy : null,
-          //   trangThai: dataDetail ? dataDetail.trangThai : '00',
-          //   maDvi: dataDetail ? dataDetail.maDvi : this.userInfo.MA_DVI,
-          //   cloaiVthh: dataDetail ? dataDetail.cloaiVthh : null,
-          //   tenCloaiVthh: dataDetail ? dataDetail.tenCloaiVthh : null,
-          //   moTaHangHoa: dataDetail ? dataDetail.moTaHangHoa : null,
-          //   maVtu: dataDetail ? dataDetail.maVtu : null,
-          //   tenVtu: dataDetail ? dataDetail.tenVtu : null,
-          //   tenDuAn: dataDetail ? dataDetail.tenDuAn : null,
-          //   tenDvi: dataDetail ? dataDetail.tenDvi : this.userInfo.TEN_DVI,
-          //   tongMucDt: dataDetail ? dataDetail.tongMucDt : null,
-          //   nguonVon: dataDetail ? dataDetail.nguonVon : null,
-          //   tchuanCluong: dataDetail ? dataDetail.tchuanCluong : null,
-          //   loaiHdong: dataDetail ? dataDetail.loaiHdong : null,
-          //   hthucLcnt: dataDetail ? dataDetail.hthucLcnt : null,
-          //   pthucLcnt: dataDetail ? dataDetail.pthucLcnt : null,
-          //   tgianBdauTchuc: dataDetail ? dataDetail.tgianBdauTchuc : null,
-          //   tgianMthau: dataDetail ? dataDetail.tgianMthau : null,
-          //   tgianDthau: dataDetail ? dataDetail.tgianDthau : null,
-          //   gtriDthau: dataDetail ? dataDetail.gtriDthau : null,
-          //   gtriHdong: dataDetail ? dataDetail.gtriHdong : null,
-          //   tgianThienHd: dataDetail ? dataDetail.tgianThienHd : null,
-          //   tgianNhang: dataDetail ? dataDetail.tgianNhang : null,
-          //   tenTrangThai: dataDetail ? dataDetail.tenTrangThai : 'Dự Thảo',
-          //   lyDoTuChoi: dataDetail ? dataDetail.ldoTuchoi : null
-          // });
-          if (dataDetail) {
-            this.fileDinhKem = dataDetail.fileDinhKems;
-            this.listOfData = dataDetail.dsGtDtlList;
-            this.convertListData();
-            this.bindingCanCu(dataDetail.ccXdgDtlList);
+            })
+            // this.formData.patchValue({
+            //   id: dataDetail ? dataDetail.id : null,
+            //   soQd: dataDetail ? dataDetail.soQd : null,
+            //   soDxuat: dataDetail ? dataDetail.soDxuat.split('/')[0] : null,
+            //   trichYeu: dataDetail ? dataDetail.trichYeu : null,
+            //   ghiChu: dataDetail ? dataDetail.ghiChu : null,
+            //   namKhoach: dataDetail ? dataDetail.namKhoach : dayjs().get('year'),
+            //   loaiVthh: dataDetail ? dataDetail.loaiVthh : this.loaiVthhInput,
+            //   tenLoaiVthh: dataDetail ? dataDetail.tenLoaiVthh : null,
+            //   ngayKy: dataDetail ? dataDetail.ngayKy : null,
+            //   trangThai: dataDetail ? dataDetail.trangThai : '00',
+            //   maDvi: dataDetail ? dataDetail.maDvi : this.userInfo.MA_DVI,
+            //   cloaiVthh: dataDetail ? dataDetail.cloaiVthh : null,
+            //   tenCloaiVthh: dataDetail ? dataDetail.tenCloaiVthh : null,
+            //   moTaHangHoa: dataDetail ? dataDetail.moTaHangHoa : null,
+            //   maVtu: dataDetail ? dataDetail.maVtu : null,
+            //   tenVtu: dataDetail ? dataDetail.tenVtu : null,
+            //   tenDuAn: dataDetail ? dataDetail.tenDuAn : null,
+            //   tenDvi: dataDetail ? dataDetail.tenDvi : this.userInfo.TEN_DVI,
+            //   tongMucDt: dataDetail ? dataDetail.tongMucDt : null,
+            //   nguonVon: dataDetail ? dataDetail.nguonVon : null,
+            //   tchuanCluong: dataDetail ? dataDetail.tchuanCluong : null,
+            //   loaiHdong: dataDetail ? dataDetail.loaiHdong : null,
+            //   hthucLcnt: dataDetail ? dataDetail.hthucLcnt : null,
+            //   pthucLcnt: dataDetail ? dataDetail.pthucLcnt : null,
+            //   tgianBdauTchuc: dataDetail ? dataDetail.tgianBdauTchuc : null,
+            //   tgianMthau: dataDetail ? dataDetail.tgianMthau : null,
+            //   tgianDthau: dataDetail ? dataDetail.tgianDthau : null,
+            //   gtriDthau: dataDetail ? dataDetail.gtriDthau : null,
+            //   gtriHdong: dataDetail ? dataDetail.gtriHdong : null,
+            //   tgianThienHd: dataDetail ? dataDetail.tgianThienHd : null,
+            //   tgianNhang: dataDetail ? dataDetail.tgianNhang : null,
+            //   tenTrangThai: dataDetail ? dataDetail.tenTrangThai : 'Dự Thảo',
+            //   lyDoTuChoi: dataDetail ? dataDetail.ldoTuchoi : null
+            // });
+            if (dataDetail) {
+              this.fileDinhKem = dataDetail.fileDinhKems;
+              this.listOfData = dataDetail.dsGtDtlList;
+              this.convertListData();
+              this.bindingCanCu(dataDetail.ccXdgDtlList);
+            }
           }
-        }
-      })
-      .catch((e) => {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      });
+        })
+        .catch((e) => {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
+    }
   }
 
   isDetailPermission() {
