@@ -4,12 +4,12 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </a>
-        <button class="btn btn-sub" *ngIf="!isView && bienBanBanDauGia.trangThai == globals.prop.NHAP_BAN_HANH"
+        <button class="btn btn-sub" *ngIf="!isView && bienBanBanDauGia.trangThai == globals.prop.NHAP_DU_THAO"
             (click)="guiDuyet()">
             <i class="icon htvbdh_checkfile2"></i>
             <span>Hoàn thành cập nhật</span>
         </button>
-        <button class="btn btn-main" *ngIf="!isView && bienBanBanDauGia.trangThai == globals.prop.NHAP_BAN_HANH"
+        <button class="btn btn-main" *ngIf="!isView && bienBanBanDauGia.trangThai == globals.prop.NHAP_DU_THAO"
             (click)="save(false)">
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>

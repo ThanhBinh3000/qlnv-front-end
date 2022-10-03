@@ -367,52 +367,19 @@ export class DanhMucDungChungComponent implements OnInit {
   }
 
   them(data?: any, isView?: boolean) {
-    let modalTuChoi;
-    if (data == null && isView == false) {
-      modalTuChoi = this.modal.create({
-        nzTitle: 'Thêm danh mục dùng chung',
+    let modalTuChoi = this.modal.create({
+        nzTitle: "Thông tin danh mục dùng chung",
         nzContent: DialogThemDanhMucDungChungComponent,
         nzMaskClosable: false,
         nzClosable: false,
-        nzWidth: '700px',
+        nzWidth: '1000px',
         nzFooter: null,
         nzClassName: 'themdmdungchung',
         nzComponentParams: {
           dataEdit: data,
           isView: isView,
         },
-      });
-    }
-    if (data != null && isView == true) {
-      modalTuChoi = this.modal.create({
-        nzTitle: 'Chi tiết danh mục dùng chung',
-        nzContent: DialogThemDanhMucDungChungComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '600px',
-        nzFooter: null,
-        nzComponentParams: {
-          dataEdit: data,
-          isView: isView,
-        },
-      });
-    }
-
-    if (data != null && isView == false) {
-      modalTuChoi = this.modal.create({
-        nzTitle: 'Chỉnh sửa danh mục dùng chung',
-        nzContent: DialogThemDanhMucDungChungComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '600px',
-        nzFooter: null,
-        nzComponentParams: {
-          dataEdit: data,
-          isView: isView,
-        },
-      });
-    }
-
+    });
     modalTuChoi.afterClose.subscribe((data) => {
       this.search();
     })
