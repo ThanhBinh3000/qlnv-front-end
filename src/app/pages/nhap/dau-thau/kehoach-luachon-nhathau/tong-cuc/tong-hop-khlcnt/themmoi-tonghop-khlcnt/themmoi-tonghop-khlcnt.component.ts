@@ -267,7 +267,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
-        this.formData.patchValue({
+        this.formTraCuu.patchValue({
           cloaiVthh: data.ma,
           tenCloaiVthh: data.ten,
           loaiVthh: data.parent.ma,
