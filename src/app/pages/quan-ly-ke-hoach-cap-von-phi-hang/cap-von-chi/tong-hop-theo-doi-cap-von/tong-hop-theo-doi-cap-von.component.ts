@@ -1,15 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { saveAs } from 'file-saver';
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
 import { TongHopTheoDoiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
@@ -24,7 +22,6 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
 
   isDetail: boolean = false;
   listNam: any[] = [];
@@ -66,19 +63,16 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
   dsBoNganh: any[] = [];
 
   selectedId: number = 0;
-
   isVatTu: boolean = false;
-
   allChecked = false;
   indeterminate = false;
-
   isView = false;
+
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
-    private donviService: DonviService,
     public globals: Globals,
     private tongHopTheoDoiCapVonService: TongHopTheoDoiCapVonService,
     private danhMucService: DanhMucService,
@@ -296,7 +290,6 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
         this.tongHopTheoDoiCapVonService.exportList(body).subscribe((blob) => {
           saveAs(blob, 'danh-sach-tong-hop-theo-doi-cap-von.xlsx')
         });
-
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);

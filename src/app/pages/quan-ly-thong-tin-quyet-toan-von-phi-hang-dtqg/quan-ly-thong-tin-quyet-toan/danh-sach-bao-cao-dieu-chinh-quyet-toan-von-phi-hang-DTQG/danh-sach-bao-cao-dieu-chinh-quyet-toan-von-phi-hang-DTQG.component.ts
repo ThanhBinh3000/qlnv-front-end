@@ -36,14 +36,14 @@ export const TRANG_THAI_TIM_KIEM = [
     id: "6",
     tenDm: 'Lãnh đạo phê duyệt'
   },
-  {
-    id: "8",
-    tenDm: 'Đơn vị cấp trên từ chối'
-  },
-  {
-    id: "9",
-    tenDm: 'Đơn vị cấp trên tiếp nhận'
-  },
+  // {
+  //   id: "8",
+  //   tenDm: 'Đơn vị cấp trên từ chối'
+  // },
+  // {
+  //   id: "9",
+  //   tenDm: 'Đơn vị cấp trên tiếp nhận'
+  // },
   // {
   //     id: "10",
   //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
@@ -113,7 +113,7 @@ export class DanhSachBaoCaoDieuChinhQuyetToanVonPhiHangDTQGComponent implements 
     this.searchFilter.ngayTaoTu = this.newDate;
     this.donViTao = this.userInfo?.MA_DVI;
     //  check va lay gia tri role trong list role
-    if(this.userService.isAccessPermisson(QTVP.DIEU_CHINH_REPORT)){
+    if (this.userService.isAccessPermisson(QTVP.DIEU_CHINH_REPORT)) {
       this.statusTaoMoi = false;
     }
     if (this.userService.isAccessPermisson(QTVP.EDIT_DIEU_CHINH_REPORT)) {

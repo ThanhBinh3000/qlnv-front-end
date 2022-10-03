@@ -116,10 +116,10 @@
       <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày tổng hợp </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngày tổng hợp</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker class="search__input" formControlName="ngayLapKeHoach">
+                <nz-date-picker class="search__input" formControlName="ngayTongHop">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -127,9 +127,9 @@
         </div>
         <div nz-col [nzSpan]="21">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Nội dung tổng hợp </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Nội dung tổng hợp</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <textarea nz-input formControlName="trichYeu" rows="3"></textarea>
+              <textarea nz-input formControlName="noiDung" rows="3"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -146,50 +146,51 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #phanBo class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="bangPhanBoList">
+      <nz-table #cucTable class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="thongTinChiTiet">
         <thead>
-          <tr>
-            <th style="width: 35px">STT</th>
-            <th>Đơn vị đề xuất</th>
-            <th>Nội dung xuất viện trợ, cứu trợ</th>
-            <th>Số lượng (kg)</th>
-            <th>Thành tiền (đồng)</th>
-            <th>Ngày đề xuất</th>
-            <th>Thời hạn thực hiện xuất viện trợ, cứu trợ</th>
-          </tr>
+        <tr>
+          <th style="width: 35px">STT</th>
+          <th>Đơn vị đề xuất</th>
+          <th>Nội dung xuất viện trợ, cứu trợ</th>
+          <th>Số lượng (kg)</th>
+          <th>Thành tiền (đồng)</th>
+          <th>Ngày đề xuất</th>
+          <th>Thời hạn thực hiện xuất viện trợ, cứu trợ</th>
+        </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let item of bangPhanBoList, let i = index">
-            <tr>
-              <td [nzExpand]="expandSet.has(item.idVirtual)" (nzExpandChange)="onExpandChange(item.idVirtual, $event)"
-                style="width: 35px"></td>
-              <td colspan="2">{{ item.tenDonVi }}</td>
-              <td>{{item.soLuong}}</td>
-              <td></td>
-              <td></td>
-              <td>{{item.giaKhoiDiem}}</td>
-            </tr>
-            <ng-container *ngIf="expandSet.has(item.idVirtual)">
-              <tr *ngFor="let chiTiet of item.chiTietDiaDiems">
-                <td nzWidtd="35px"></td>
-                <td></td>
-                <td>{{chiTiet.tenDiemKho}}</td>
-                <td>{{chiTiet.tenNganKho}}</td>
-                <td>{{chiTiet.tenNganLo}}</td>
-                <td>{{chiTiet.tenChungLoaiHh}}</td>
-                <td>{{chiTiet.maDonViTaiSan}}</td>
-              </tr>
-            </ng-container>
-          </ng-container>
+        <ng-container *ngFor="let item of cucTable.data, let i = index">
           <tr>
-            <th></th>
-            <th></th>
-            <th class="text-blue">Tổng</th>
-            <th class="text-blue">650.000</th>
-            <th class="text-blue">2.990.000.000</th>
-            <th></th>
-            <th></th>
+            <td [nzExpand]="expandSetView.has(item.idVirtual)"
+                (nzExpandChange)="onExpandChange(item.idVirtual, $event,1)"
+                style="width: 35px"></td>
+            <td colspan="2">{{ item.tenDvi }}</td>
+            <td>{{item.tongSoLuong}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
           </tr>
+          <ng-container *ngIf="expandSetView.has(item.idVirtual)">
+            <tr *ngFor="let chiTiet of item.thongTinChiTiet">
+              <td nzWidtd="35px"></td>
+              <td></td>
+              <td>{{chiTiet.noiDung}}</td>
+              <td>{{chiTiet.soLuong}}</td>
+              <td></td>
+              <td>{{chiTiet.ngayDxuat}}</td>
+              <td>{{chiTiet.thoiGianThucHien}}</td>
+            </tr>
+          </ng-container>
+        </ng-container>
+        <tr>
+          <th></th>
+          <th></th>
+          <th class="text-blue">Tổng</th>
+          <th class="text-blue">650.000</th>
+          <th class="text-blue">2.990.000.000</th>
+          <th></th>
+          <th></th>
+        </tr>
         </tbody>
       </nz-table>
     </nz-card>
@@ -204,61 +205,62 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #phanBo class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="bangPhanBoList">
+      <nz-table #dataTable class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="thongTinChiTiet">
         <thead>
-          <tr>
-            <th style="width: 35px">STT</th>
-            <th>Đơn vị đề xuất</th>
-            <th>Nội dung xuất viện trợ, cứu trợ</th>
-            <th>Số lượng (kg)</th>
-            <th>Thành tiền (đồng)</th>
-            <th>Ngày đề xuất</th>
-            <th>Thời hạn thực hiện xuất viện trợ, cứu trợ</th>
-            <th style="width: 10%">Hành động</th>
-          </tr>
+        <tr>
+          <th style="width: 35px">STT</th>
+          <th>Đơn vị đề xuất</th>
+          <th>Nội dung xuất viện trợ, cứu trợ</th>
+          <th>Số lượng (kg)</th>
+          <th>Thành tiền (đồng)</th>
+          <th>Ngày đề xuất</th>
+          <th>Thời hạn thực hiện xuất viện trợ, cứu trợ</th>
+          <th style="width: 10%">Hành động</th>
+        </tr>
         </thead>
         <tbody>
-          <ng-container *ngFor="let item of bangPhanBoList, let i = index">
-            <tr>
-              <td [nzExpand]="expandSet.has(item.idVirtual)" (nzExpandChange)="onExpandChange(item.idVirtual, $event)"
-                style="width: 35px"></td>
-              <td colspan="2">{{ item.tenDonVi }}</td>
-              <td>{{item.soLuong}}</td>
-              <td></td>
-              <td></td>
-              <td>{{item.giaKhoiDiem}}</td>
-              <td>
-                <a (click)="editThongTinTongHop(item)">
-                  <i class="fa fa-pencil"></i>
-                </a>
-                <a (click)="deleteThongTinTongHop(item.idVirtual)">
-                  <i class="fa fa-trash-o do"></i>
-                </a>
-              </td>
-            </tr>
-            <ng-container *ngIf="expandSet.has(item.idVirtual)">
-              <tr *ngFor="let chiTiet of item.chiTietDiaDiems">
-                <td nzWidtd="35px"></td>
-                <td></td>
-                <td>{{chiTiet.tenDiemKho}}</td>
-                <td>{{chiTiet.tenNganKho}}</td>
-                <td>{{chiTiet.tenNganLo}}</td>
-                <td>{{chiTiet.tenChungLoaiHh}}</td>
-                <td>{{chiTiet.maDonViTaiSan}}</td>
-                <td></td>
-              </tr>
-            </ng-container>
-          </ng-container>
+        <ng-container *ngFor="let item of dataTable.data, let i = index">
           <tr>
-            <th></th>
-            <th></th>
-            <th class="text-blue">Tổng</th>
-            <th class="text-blue">650.000</th>
-            <th class="text-blue">2.990.000.000</th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <td [nzExpand]="expandSetEdit.has(item.idVirtual)"
+                (nzExpandChange)="onExpandChange(item.idVirtual, $event,2)"
+                style="width: 35px"></td>
+            <td colspan="2">{{ item.tenDvi }}</td>
+            <td>{{item.tongSoLuong}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <a (click)="editThongTinTongHop(item)">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a (click)="deleteThongTinTongHop(item.idVirtual)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
           </tr>
+          <ng-container *ngIf="expandSetEdit.has(item.idVirtual)">
+            <tr *ngFor="let chiTiet of item.thongTinChiTiet">
+              <td nzWidtd="35px"></td>
+              <td></td>
+              <td>{{chiTiet.noiDung}}</td>
+              <td>{{chiTiet.tenNganKho}}</td>
+              <td>{{chiTiet.tenNganLo}}</td>
+              <td>{{chiTiet.tenChungLoaiHh}}</td>
+              <td>{{chiTiet.maDonViTaiSan}}</td>
+              <td></td>
+            </tr>
+          </ng-container>
+        </ng-container>
+        <tr>
+          <th></th>
+          <th></th>
+          <th class="text-blue">Tổng</th>
+          <th class="text-blue">650.000</th>
+          <th class="text-blue">2.990.000.000</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
         </tbody>
       </nz-table>
     </nz-card>

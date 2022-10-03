@@ -157,8 +157,4 @@ export class DonviService extends BaseService {
     url_ = url_.replace(/[?&]$/, '');
     return this.httpClient.get<any>(url_).toPromise();
   }
-  getTrangThaiHienThoiKho(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}/hang-trong-kho/tim-kiem`;
-    return this.httpClient.post<any>(url_, body).toPromise();
-  }
 }

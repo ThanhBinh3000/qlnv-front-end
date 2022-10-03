@@ -84,7 +84,7 @@
               <th width="200px">Ngày lãnh đạo phê duyệt</th>
               <th width="200px" class="text-center">Trạng thái</th>
               <th width="60px"></th>
-              <th [hidden]="!status">
+              <th [hidden]="status">
                 <ng-container *ngIf="checkAll(); else xoa">
                   <button type="button" class="btn btn-main" (click)="updateAllCheck()">
                     <span>Tất cả</span>

@@ -31,7 +31,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
   };
   newDate = new Date();
   listIdDelete: string[] = [];
-  dviGuiKq : boolean;
+  dviGuiKq: boolean;
 
   //danh muc
   danhSachDieuChinh: any[] = [];
@@ -98,10 +98,10 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     this.searchFilter.tuNgay = newDate;
     this.searchFilter.nam = new Date().getFullYear();
     this.userInfo = this.userService.getUserLogin();
-    if(this.userInfo.CAP_DVI == '1'){
+    if (this.userInfo.CAP_DVI == '1') {
       return this.dviGuiKq = true;
     }
-    
+
 
     if (this.userService.isAccessPermisson(DCDT.ADD_REPORT)) {
       this.statusTaoMoi = false;
@@ -216,18 +216,18 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
         return;
       }
     }
-    if(!this.searchFilter.dotBcao && !this.searchFilter.nam ){
+    if (!this.searchFilter.dotBcao && !this.searchFilter.nam) {
       this.notification.warning(MESSAGE.WARNING, "vui lòng nhập năm và đợt báo cáo");
       this.statusBtnValidateNam = false
       this.statusBtnValidateDot = false
       return;
     }
-    if(!this.searchFilter.nam){
+    if (!this.searchFilter.nam) {
       this.notification.warning(MESSAGE.WARNING, "vui lòng nhập năm báo cáo");
       this.statusBtnValidateNam = false
       return;
     }
-    if(!this.searchFilter.dotBcao){
+    if (!this.searchFilter.dotBcao) {
       this.notification.warning(MESSAGE.WARNING, "vui lòng nhập đợt báo cáo");
       this.statusBtnValidateDot = false
       return;
@@ -288,8 +288,14 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
     return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(DCDT.EDIT_REPORT);
   }
 
-  checkDeleteReport(trangThai: string) {
-    return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(DCDT.DELETE_REPORT);
+  // checkDeleteReport(trangThai: string) {
+  //   debugger
+  //   return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(DCDT.DELETE_REPORT);
+  // }
+  checkDeleteReport(item: any) {
+    const isSynthetic = item.tongHopTu != "[]";
+    return Utils.statusDelete.includes(item.trangThai) &&
+      (isSynthetic ? this.userService.isAccessPermisson(DCDT.DELETE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.DELETE_REPORT));
   }
 
   changeListIdDelete(id: string) {
@@ -329,6 +335,7 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
   }
 
   updateAllCheck() {
+
     this.danhSachDieuChinh.forEach(item => {
       if (this.checkDeleteReport(item)) {
         item.checked = true;

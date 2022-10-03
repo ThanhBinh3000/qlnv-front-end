@@ -41,7 +41,7 @@
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Tiếp nhận</span>
         </a>
-        <a class="btn btn-main" (click)="showDialogCopy()">
+        <a class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
           <i nz-icon nzType="copy" nzTheme="outline"></i>
           <span>Copy</span>
         </a>
@@ -165,12 +165,12 @@
                   </td>
                   <td>
                     <ng-container *ngIf="data.trangThai == '0'; else ok">
-											{{ getStatusBM(data.trangThai) }}<br>
-											Lý do: {{data.lyDoTuChoi}}
-										</ng-container>
-										<ng-template #ok>
-											{{ getStatusBM(data.trangThai) }}
-										</ng-template>
+                      {{ getStatusBM(data.trangThai) }}<br>
+                      Lý do: {{data.lyDoTuChoi}}
+                    </ng-container>
+                    <ng-template #ok>
+                      {{ getStatusBM(data.trangThai) }}
+                    </ng-template>
 
                   </td>
                   <td>
