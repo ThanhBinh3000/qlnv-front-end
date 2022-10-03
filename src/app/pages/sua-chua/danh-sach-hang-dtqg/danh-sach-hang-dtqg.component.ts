@@ -22,6 +22,12 @@ import {DANH_MUC_LEVEL} from "../../luu-kho/luu-kho.constant";
 import {
   DialogDanhSachHangHoaComponent
 } from "../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
+import {
+  DialogQuyetDinhGiaoChiTieuComponent
+} from "../../../components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component";
+import {
+  DialogTongHopHangSuaChuaDtqgComponent
+} from "../../../components/dialog/dialog-tong-hop-hang-sua-chua-dtqg/dialog-tong-hop-hang-sua-chua-dtqg.component";
 
 @Component({
   selector: 'app-danh-sach-hang-dtqg',
@@ -322,4 +328,19 @@ export class DanhSachHangDtqgComponent implements OnInit {
     }
   }
 
+  openDialog() {
+    const modalQD = this.modal.create({
+      nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
+      nzContent: DialogTongHopHangSuaChuaDtqgComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+      },
+    });
+    modalQD.afterClose.subscribe((data) => {
+
+    });
+  }
 }

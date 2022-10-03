@@ -7,7 +7,7 @@
             <nz-form-label nzFor="loai-hang-hoa">Đơn vị</nz-form-label>
             <nz-form-control >
               <nz-input-group>
-                <nz-select  nzAllowClear formControlName="maDonVi" >
+                <nz-select  nzAllowClear formControlName="maDvi" >
                   <nz-option *ngFor="let p of danhSachChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
                   </nz-option>
                 </nz-select>
@@ -17,7 +17,7 @@
           <div nz-col nzSpan="6">
             <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="maVTHH" (ngModelChange)="changeLoaiHangHoa($event)">
+              <nz-select formControlName="loaiVthh" (ngModelChange)="changeLoaiHangHoa($event)">
                 <nz-option *ngFor="let item of listLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
                 </nz-option>
               </nz-select>
@@ -26,7 +26,7 @@
           <div nz-col nzSpan="6">
             <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
             <nz-form-control>
-              <nz-select formControlName="maCLHH">
+              <nz-select formControlName="cloaiVthh">
                 <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
                 </nz-option>
               </nz-select>
@@ -34,7 +34,7 @@
           </div>
           <div nz-col nzSpan="6">
             <nz-form-label nzFor="loai-hang-hoa">Ngày tạo danh sách</nz-form-label>
-            <nz-range-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy"  class="search__input">
+            <nz-range-picker formControlName="ngayDeXuat" nzFormat="dd/MM/yyyy"  class="search__input">
             </nz-range-picker>
           </div>
         </div>
@@ -69,83 +69,89 @@
       </div>
     </div>
 
-    <nz-card class="mt-16 flex-card data-table card-border-content">
-      <nz-table #rowSelectionTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false" nzBordered>
         <thead>
-          <tr>
-            <th class="text-center" width="2%" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate"
-              (nzCheckedChange)="onAllChecked($event)"></th>
-            <th class="text-center" width="2%">STT</th>
-            <th width="10%">Mã danh sách</th>
-            <th>Tên đơn vị</th>
-            <th width="10%">Ngày tạo</th>
-            <th width="10%">Trạng thái xử lý của Cục</th>
-            <th class="text-center" width="10%">Hành động</th>
-          </tr>
-          <tr>
-            <th></th>
-            <th></th>
-            <th class="text-center" width="350px">
-              <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDanhSach" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.donVi"/>
-                <nz-autocomplete #donViSearchAuto [nzDataSource]="dsDonViDataSource"></nz-autocomplete>
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-date-picker class="filter-in-table" [(ngModel)]="searchInTable.ngayTao"></nz-date-picker>
-            </th>
-            <th>
-
-            </th>
-            <th></th>
-            <ng-template #suffixIconSearch>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
-          </tr>
+        <tr>
+          <th></th>
+          <th  style="width: 10%;">Chi cục DTNN KV</th>
+          <th  style="width: 10%;">Loại hàng hóa</th>
+          <th  style="width: 10%;">Chủng loại hàng hóa</th>
+          <th  style="width: 10%;">Tên hàng hóa</th>
+          <th  style="width: 10%;" >Điểm kho</th>
+          <th  style="width: 10%;" >Nhà kho</th>
+          <th  style="width: 10%;" >Ngăn kho</th>
+          <th  style="width: 10%;" >Lô kho</th>
+          <th  style="width: 10%;" >SL tồn</th>
+          <th  style="width: 10%;" >SL hỏng</th>
+          <th  style="width: 10%;" >ĐVT</th>
+          <th  style="width: 10%;" >Ngày đề xuất</th>
+          <th  style="width: 10%;" >Ngày tổng hợp (chốt DS)</th>
+          <th  style="width: 10%;" >Trạng thái</th>
+          <th  style="width: 10%;" >Mã danh sách</th>
+          <th  style="width: 10%;" >Lý do cần sửa chữa</th>
+        </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
-            <td style="text-align: center;" [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled"
-              (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
-            <td style="text-align: center;">{{ idx + 1 }}</td>
-            <td>{{ data.maDanhSach }}</td>
-            <td>{{ data.tenDonvi }}</td>
-            <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.trangThaiXuLy }}</td>
-            <td style="text-align: center;">
-              <a (click)="viewDetail(data.id, false)">
-                <i class="fa fa-eye"></i>
-              </a>
-              <a (click)="viewDetail(data.id, true)">
-                <i class="fa fa-pencil"></i>
-              </a>
-              <a (click)="xoaItem(data.id)">
-                <i class="fa fa-trash-o do"></i>
-              </a>
-            </td>
+        <ng-container *ngFor="let item of dataTable , let i = index">
+          <tr>
+            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td>{{item.tenDonvi}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
           </tr>
-
-
+          <ng-container *ngIf="expandSet.has(i)">
+            <tr>
+              <td></td>
+              <td></td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+              <td>{{item.maDanhSach}}</td>
+            </tr>
+          </ng-container>
+        </ng-container>
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu" id="myTabContent">
         <div class="tab-pane fade show active justify-content-between">
           <div class="trai">
-
           </div>
           <div class="canphai">
+            <!-- begin phân trang  -->
             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-              (nzPageSizeChange)="changePageSize($event)">
+                           [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+                           (nzPageSizeChange)="changePageSize($event)">
               <ng-template #rangeTemplate let-range="range" let-total>
                 {{ range[0] }}-{{ range[1] }} of {{ total }} items
               </ng-template>
             </nz-pagination>
+            <!-- end phân trang  -->
           </div>
         </div>
       </div>

@@ -97,12 +97,12 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
 
   initForm(): void {
     this.formData = this.fb.group({
-      maDonVi: [null],
-      maVTHH: [null],
-      maCLHH: [null],
-      ngayTao: [null],
-      tenVTHH: [null],
-      tenCLHH: [null],
+      maDvi: [null],
+      loaiVthh: [null],
+      cloaiVthh: [null],
+      ngayDeXuat: [null],
+      tenLoaiVthh: [null],
+      tenCloaiVthh: [null],
     });
   }
 
@@ -133,21 +133,12 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "denNgay": '',
-      "maDonVi": this.formData.value.maDonVi,
-      "maVTHH": this.formData.value.maVTHH,
-      "paggingReq": {
-        "limit": this.pageSize,
-        "orderBy": "",
-        "orderType": "",
-        "page": this.page - 1
-      },
-      "tuNgay": ""
-    }
-    if (this.formData.value.ngayTao != null) {
-      body.tuNgay = this.formData.value.ngayTao[0]
-      body.denNgay = this.formData.value.ngayTao[1]
-    }
+      ngayDeXuatTu: this.formData.value.ngayDeXuat[0],
+      ngayDeXuatDen: this.formData.value.ngayDeXuat[1],
+      loaiVthh: this.formData.value.loaiVthh,
+      cloaiVthh: this.formData.value.cloaiVthh,
+      maDvi : this.userInfo.MA_DVI
+    };
     let res = await this.quanLyDanhSachHangHongHocService.search(body)
     if (res.msg == MESSAGE.SUCCESS) {
       this.dataTable = [...res.data.content]
@@ -158,7 +149,6 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
       this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg)
     }
-    console.log(this.dataTable)
   }
 
 
@@ -175,6 +165,15 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
       this.dsDonViDataSource = dsTong[DANH_MUC_LEVEL.CHI_CUC].map(
         (item) => item.tenDvi,
       );
+    }
+  }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
     }
   }
 
