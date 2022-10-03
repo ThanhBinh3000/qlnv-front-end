@@ -118,7 +118,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       this.initForm(),
       this.loadChungLoaiHH()
     ]);
-    await this.initForm();
     if (this.idInput > 0) {
       await this.loadDeXuatKHBanDauGia(this.idInput);
     }
@@ -434,7 +433,6 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
       if (!res) {
         return;
       }
-
       this.checkExistBangPhanLo(res);
       this.diaDiemGiaoNhanList = [];
       this.bangPhanBoList.forEach((phanLo) => {
@@ -483,6 +481,7 @@ export class ThemmoiKehoachLcntComponent implements OnInit {
   async save(isOther?: boolean) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
+      console.log(this.formData);
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
       return;
     }

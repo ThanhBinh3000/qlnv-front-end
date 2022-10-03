@@ -62,11 +62,17 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/']);
           let jsonData = '';
           let permission = await this.userAPIService.getPermission();
+          let dvql = await  this.userAPIService.getDvql();
           if (permission.msg == MESSAGE.SUCCESS) {
             let data = permission.data;
             if (data && data.length > 0) {
               jsonData = JSON.stringify(data);
             }
+          } else {
+            this.notification.error(MESSAGE.ERROR, permission.msg);
+          }
+          if (dvql.msg == MESSAGE.SUCCESS) {
+            this.storageService.set(STORAGE_KEY.DVQL,dvql.data);
           } else {
             this.notification.error(MESSAGE.ERROR, permission.msg);
           }

@@ -47,20 +47,26 @@
         <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="loaiVthhError">
               <nz-select formControlName="loaiVthh" (ngModelChange)="changeLoaiHangHoa()">
                 <nz-option *ngFor="let p of listLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
+              <ng-template #loaiVthhError let-control>
+                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
-            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="cloaiVthhError">
               <nz-select formControlName="cloaiVthh">
                 <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
               </nz-select>
+              <ng-template #cloaiVthhError let-control>
+                <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
+              </ng-template>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -126,7 +132,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Ngày ký </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
                 <nz-date-picker class="search__input" formControlName="ngayKy" nzFormat="dd/MM/yyyy">

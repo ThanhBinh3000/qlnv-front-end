@@ -9,11 +9,13 @@ export class UserLogin {
   MA_KTBQ: string;
   MA_TCKT: string;
   MA_TR: string;
-  constructor(initObj: any) {
+  DON_VI : any;
+  constructor(initObj: any,dvql:any) {
     if (initObj) {
       for (var key in initObj) {
         this[key] = initObj[key];
       }
     }
+    this.DON_VI = dvql;
   }
 }
