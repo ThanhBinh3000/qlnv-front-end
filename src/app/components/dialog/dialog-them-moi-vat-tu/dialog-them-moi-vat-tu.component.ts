@@ -84,7 +84,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.thongtinDauThau = new DanhSachGoiThau();
     this.loadDonVi();
     if (this.dataEdit) {
-      console.log(this.dataEdit);
       this.formData.patchValue({
         maDvi: this.dataEdit.maDvi,
         tenDvi: this.dataEdit.tenDvi,

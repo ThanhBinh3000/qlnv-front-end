@@ -216,6 +216,13 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                 },
                 [],
             ],
+          trangThai: [
+            {
+              value: this.bienBanBanDauGia ? this.bienBanBanDauGia.trangThai :  this.globals.prop.NHAP_BAN_HANH,
+              disabled: true,
+            },
+            [],
+          ],
             diaDiem: [
                 {
                     value: this.bienBanBanDauGia ? this.bienBanBanDauGia.diaDiem : null,

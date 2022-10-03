@@ -213,7 +213,6 @@
           <div class="trai">
           </div>
           <div class="canphai">
-            <!-- begin phân trang  -->
             <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
               [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
               (nzPageSizeChange)="changePageSize($event)">
@@ -221,7 +220,6 @@
                 {{ range[0] }}-{{ range[1] }} of {{ total }} items
               </ng-template>
             </nz-pagination>
-            <!-- end phân trang  -->
           </div>
         </div>
       </div>

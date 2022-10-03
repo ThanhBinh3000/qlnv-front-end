@@ -82,9 +82,11 @@ export class HelperService {
   }
 
   bidingDataInFormGroup(formGroup : FormGroup ,dataBinding : any){
-    for (const name in dataBinding) {
-      if (formGroup.controls.hasOwnProperty(name)) {
-        formGroup.controls[name].setValue(dataBinding[name]);
+    if(dataBinding){
+      for (const name in dataBinding) {
+        if (formGroup.controls.hasOwnProperty(name)) {
+          formGroup.controls[name].setValue(dataBinding[name]);
+        }
       }
     }
   }

@@ -112,7 +112,6 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
       nganHang: [this.khBanDauGia ? this.khBanDauGia.nganHang : null, [Validators.required]],
       canCu: [this.khBanDauGia ? this.khBanDauGia.canCu : null],
       dotTToan: [this.khBanDauGia ? this.khBanDauGia.dotTToan : null],
-
     });
   }
 

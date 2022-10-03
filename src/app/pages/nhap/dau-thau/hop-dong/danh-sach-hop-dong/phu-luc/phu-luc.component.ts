@@ -224,25 +224,6 @@ export class PhuLucComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
         }
-        /////////////////////////////////////
-        if (this.idPhuLuc > 0) {
-          body.id = this.idPhuLuc;
-          let res = await this.thongTinPhuLucHopDongService.update(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        } else {
-          let res = await this.thongTinPhuLucHopDongService.create(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        }
       }
       this.spinner.hide();
     } catch (e) {

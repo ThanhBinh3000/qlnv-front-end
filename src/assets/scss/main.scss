@@ -6776,4 +6776,10 @@ td.action.ant-table-cell {
   text-decoration: underline !important;
 }
 
+.selectedRow {
+  td {
+    background: #d8dcfe !important;
+  }
+}
+
 // end lấy từ default qua....................................................
