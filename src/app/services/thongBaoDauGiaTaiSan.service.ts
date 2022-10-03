@@ -29,9 +29,9 @@ export class ThongBaoDauGiaTaiSanService extends BaseService {
     if (body.trichYeu)
       url_ += 'trichYeu=' + encodeURIComponent('' + body.trichYeu) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
-      url_ += 'pageable.pageNumber=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
+      url_ += 'paggingReq.page=' + encodeURIComponent('' + (body.pageNumber - 1)) + '&';
     if (body.pageSize)
-      url_ += 'pageable.pageSize=' + encodeURIComponent('' + body.pageSize) + '&';
+      url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
     if (body.ngayToChucBDGTuNgay)
       url_ += 'ngayToChucBDGTuNgay=' + encodeURIComponent('' + body.ngayToChucBDGTuNgay) + '&';
     if (body.ngayToChucBDGDenNgay)

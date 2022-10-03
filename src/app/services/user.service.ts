@@ -58,6 +58,7 @@ export class UserService extends BaseService {
 
   getUserLogin(): UserLogin {
     var token = this.storageService.get(STORAGE_KEY.ACCESS_TOKEN);
+    let dvql = this.storageService.get(STORAGE_KEY.DVQL);
     var decoded = jwt_decode(token);
     // if (decoded && decoded["userinfo"]) {
     //   var userInfo = decodeURIComponent(escape(window.atob(token)));
@@ -65,7 +66,7 @@ export class UserService extends BaseService {
     // }
     // return new UserLogin({})
     // var userInfo = decodeURIComponent(escape(window.atob(decoded.toString())));
-    return new UserLogin(decoded);
+    return new UserLogin(decoded,dvql);
   }
 
   isTongCuc() {

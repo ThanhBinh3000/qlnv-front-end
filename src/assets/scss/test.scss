@@ -2181,6 +2181,9 @@ a.disabled {
 .header-green-background {
   padding: 6px;
   background: #EAF3F3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .text-blue {

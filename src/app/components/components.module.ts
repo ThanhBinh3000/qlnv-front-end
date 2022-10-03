@@ -151,6 +151,7 @@ import { DialogTableSelectionComponent } from './dialog/dialog-table-selection/d
 import { FmInputNumberComponent } from './fm-input-number.component';
 import { DialogSoQuyetDinhQlyKhoTangComponent } from './dialog/dialog-so-quyet-dinh-qly-kho-tang/dialog-so-quyet-dinh-qly-kho-tang.component';
 import { DialogDiaDiemNhapKhoComponent } from './dialog/dialog-dia-diem-nhap-kho/dialog-dia-diem-nhap-kho.component';
+import { BaseComponent } from './base/base.component';
 @NgModule({
   declarations: [
     //components
@@ -251,10 +252,10 @@ import { DialogDiaDiemNhapKhoComponent } from './dialog/dialog-dia-diem-nhap-kho
     DialogTongHopGiaoComponent,
     DialogCanCuQdPheDuyetKqdgComponent,
     TemplateErrorComponent,
-    DialogTableSelectionComponent,
     DialogSoQuyetDinhQlyKhoTangComponent,
     DialogTableSelectionComponent,
-    DialogDiaDiemNhapKhoComponent
+    DialogDiaDiemNhapKhoComponent,
+    BaseComponent
   ],
   imports: [
     CommonModule,
@@ -375,7 +376,8 @@ import { DialogDiaDiemNhapKhoComponent } from './dialog/dialog-dia-diem-nhap-kho
     NzResultModule,
     TemplateErrorComponent,
     DialogTableSelectionComponent,
-    DialogDiaDiemNhapKhoComponent
+    DialogDiaDiemNhapKhoComponent,
+    BaseComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

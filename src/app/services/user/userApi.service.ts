@@ -19,4 +19,9 @@ export class UserAPIService extends BaseService {
         const url_ = `${environment.SERVICE_API}${this.GATEWAY}/${this.ROUTER}/permission`;
         return this.httpClient.get<any>(url_).toPromise();
     }
+
+    getDvql(): Promise<any> {
+      const url_ = `${environment.SERVICE_API}/qlnv-category/dmuc-donvi/dvql`;
+      return this.httpClient.get<any>(url_).toPromise();
+    }
 }
