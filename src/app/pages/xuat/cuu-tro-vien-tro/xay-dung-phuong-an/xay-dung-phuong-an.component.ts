@@ -178,8 +178,10 @@ export class XayDungPhuongAnComponent implements OnInit {
         loaiVatTuHangHoa: this.searchFilter.loaiVthh,
         nam: this.searchFilter.nam,
         trichYeu: this.searchFilter.trichYeu,
-        pageNumber: this.page,
-        pageSize: this.pageSize,
+        paggingReq:{
+          limit: this.pageSize,
+          page: this.page - 1,
+        }
       };
       console.log(body, 'body')
       let res = await this.deXuatPhuongAnCuuTroService.search(body);

@@ -177,8 +177,10 @@ export class TongHopPhuongAnComponent implements OnInit {
         loaiVatTuHangHoa: this.searchFilter.loaiVthh,
         trichYeu: this.searchFilter.trichYeu,*/
         nam: this.searchFilter.nam,
-        pageNumber: this.page,
-        pageSize: this.pageSize,
+        paggingReq:{
+          limit: this.pageSize,
+          page: this.page - 1,
+        }
       };
       console.log(body, 'body')
       let res = await this.tongHopPhuongAnCuuTroService.search(body);
