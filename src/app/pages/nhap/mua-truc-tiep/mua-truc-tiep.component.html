@@ -13,6 +13,9 @@
         <li nz-menu-item nzSelected (click)="selectTab('hdbkpmh')" *ngIf="!userService.isChiCuc()">
             Hợp đồng/Bảng kê,phiếu mua hàng
         </li>
+        <li nz-menu-item nzSelected (click)="selectTab('gnvnn')" *ngIf="!userService.isChiCuc()">
+            Quyết định giao nhiệm vụ nhập hàng
+        </li>
     </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
@@ -28,6 +31,9 @@
         </ng-container>
         <ng-container *ngIf="tabSelected == 'hdbkpmh'">
             <app-hopdong-bangke-phieumuahang></app-hopdong-bangke-phieumuahang>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'gnvnn'">
+            <app-giao-nhap-hang-muatt></app-giao-nhap-hang-muatt>
         </ng-container>
     </div>
 </div>

@@ -48,7 +48,7 @@ export class ChiTietDiaDiemNhapKho {
   chungLoaiHh: string;
   tenChungLoaiHh: string;
   donViTinh: string;
-  maDonViTaiSan: string;
+  maDviTaiSan: string;
   tonKho: number;
   soLuong: number;
   donGiaChuaVAT: number;
@@ -263,6 +263,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
               let chungLoaiHang = this.listChungLoaiHangHoa.find(x => x.ma == res.data.maVTHH);
               if (chungLoaiHang) {
                 this.dsChiTietDiemNhapKhoClone[index].donViTinh = chungLoaiHang.maDviTinh;
+                this.dsChiTietDiemNhapKhoClone[index].tenChungLoaiHh = chungLoaiHang.ten;
               }
             } else {
               this.chiTietDiemNhapKhoCreate.tonKho = res.data.duDau + res.data.tongNhap - res.data.tongXuat;
@@ -271,6 +272,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
               let chungLoaiHang = this.listChungLoaiHangHoa.find(x => x.ma == res.data.maVTHH);
               if (chungLoaiHang) {
                 this.chiTietDiemNhapKhoCreate.donViTinh = chungLoaiHang.maDviTinh;
+                this.chiTietDiemNhapKhoCreate.chungLoaiHh = chungLoaiHang.ten;
               }
             }
           }
@@ -284,7 +286,6 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
 
   changeNganLo(maNganLo: any, index?: number, isEdit?: boolean) {
     let nganLo;
-    console.log(this.listLoKhoEdit, 9999);
     if (isEdit) {
       nganLo = this.listLoKhoEdit.find(x => x.key == maNganLo);
       this.dsChiTietDiemNhapKhoClone[index].tenLoKho = nganLo.title;
@@ -319,6 +320,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
               let chungLoaiHang = this.listChungLoaiHangHoa.find(x => x.ma == res.data.maVTHH);
               if (chungLoaiHang) {
                 this.dsChiTietDiemNhapKhoClone[index].donViTinh = chungLoaiHang.maDviTinh;
+                this.dsChiTietDiemNhapKhoClone[index].tenChungLoaiHh = chungLoaiHang.ten;
               }
             } else {
               this.chiTietDiemNhapKhoCreate.tonKho = res.data.duDau + res.data.tongNhap - res.data.tongXuat;
@@ -327,6 +329,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
               let chungLoaiHang = this.listChungLoaiHangHoa.find(x => x.ma == res.data.maVTHH);
               if (chungLoaiHang) {
                 this.chiTietDiemNhapKhoCreate.donViTinh = chungLoaiHang.maDviTinh;
+                this.chiTietDiemNhapKhoCreate.tenChungLoaiHh = chungLoaiHang.ten;
               }
             }
           }
