@@ -404,10 +404,16 @@ export class TimKiemPhuongAnQdCvGiaoSoKiemTraNsnnComponent implements OnInit {
     }
 
     checkViewReport() {
+        if (this.loai == '0') {
+            return true;
+        }
         return this.userService.isAccessPermisson(LTD.VIEW_PA_GIAO_SKT);
     }
 
     checkEditReport(trangThai: string) {
+        if (this.loai == '0') {
+            return false;
+        }
         return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(LTD.EDIT_PA_GIAO_SKT);
     }
 

@@ -8,20 +8,19 @@
                         <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
                 </div>
-                <div nz-col nzSpan="3" *ngIf="userService.isCuc()">
+                <div nz-col nzSpan="3" *ngIf="userService.isTongCuc()">
+                    <label class="search__label">Đơn vị đề xuất</label>
+                    <nz-select>
+                        <nz-option class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.maDvi">
+                        </nz-option>
+                    </nz-select>
+                </div>
+                <div nz-col nzSpan="3">
                     <label class="search__label">Số kế hoạch đề xuất</label>
                     <nz-select>
                         <nz-option class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soDxuat">
                         </nz-option>
                     </nz-select>
-                </div>
-                <div nz-col nzSpan="3" *ngIf="userService.isTongCuc()">
-                    <label class="search__label">Đơn vị đề xuất</label>
-                    <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.maDvi" />
-                </div>
-                <div nz-col nzSpan="3" *ngIf="userService.isTongCuc()">
-                    <label class="search__label">Số kế hoạch đề xuất</label>
-                    <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.maDvi" />
                 </div>
                 <div nz-col nzSpan="4">
                     <label class="search__label">Ngày lập kế hoạch</label>

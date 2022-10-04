@@ -30,12 +30,13 @@ import { STATUS } from 'src/app/constants/status';
   styleUrls: ['./themmoi-tonghop-khmtt.component.scss']
 })
 export class ThemmoiTonghopKhmttComponent implements OnInit {
- 
+
   @Input() loaiVthh: string
   @Input() id: number;
   @Output()
   showListEvent = new EventEmitter<any>();
-
+  listLoaiHinhNx: any[] = [];
+  listKieuNx: any[] = [];
   formTraCuu: FormGroup;
   formData: FormGroup;
   isDetailDxCuc: boolean = false;
@@ -51,10 +52,6 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
   listNam: any[] = [];
   yearNow: number = 0;
   idDeXuat: number = 0;
-  listPhuongThucDauThau: any[] = [];
-  listNguonVon: any[] = [];
-  listHinhThucDauThau: any[] = [];
-  listLoaiHopDong: any[] = [];
   listVthh: any[] = [];
   idPA: number = 0;
   selectedId: number = 0;
@@ -78,37 +75,39 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
   ) {
     this.formTraCuu = this.fb.group(
       {
+        id: [],
         loaiVthh: [null, [Validators.required]],
         tenLoaiVthh: [null, [Validators.required]],
         cloaiVthh: [null, [Validators.required]],
         tenCloaiVthh: [null, [Validators.required]],
         namKhoach: [dayjs().get('year'), [Validators.required]],
-        hthucLcnt: ['', [Validators.required]],
-        pthucLcnt: ['', [Validators.required]],
-        loaiHdong: ['', [Validators.required]],
-        nguonVon: ['', [Validators.required]],
       }
     );
     this.formData = this.fb.group({
       id: [],
+      soDxuat: [''],
+      ngayThop: [, [Validators.required]],
       loaiVthh: [, [Validators.required]],
       cloaiVthh: [, [Validators.required]],
+      moTaHangHoa: [, [Validators.required]],
       namKhoach: [, [Validators.required]],
-      ngayThop: [, [Validators.required]],
       noiDung: ['', [Validators.required]],
-      hthucLcnt: ['', [Validators.required]],
-      pthucLcnt: ['', [Validators.required]],
-      loaiHdong: ['', [Validators.required]],
-      nguonVon: ['', [Validators.required]],
-      tgianBdauTchuc: ['', [Validators.required]],
-      tgianMthau: ['', [Validators.required]],
-      tgianDthau: ['', [Validators.required]],
-      tgianNhang: ['', [Validators.required]],
       ghiChu: ['',],
       trangThai: [''],
+      SoQdPduyet: [''],
+      tongMucDt: ['', [Validators.required]],
+      tongSoLuong: [''],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
-      tchuanCluong: ['']
+      tenTrangThai: [''],
+      maDvi: [''],
+      loaiHinhNx: [''],
+      kieuNx: [''],
+      trichYeu: [''],
+      ngayTao: [''],
+      ngayPduyet: [''],
+      tenDuAn: [''],
+
     })
   }
 
@@ -124,11 +123,9 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
       }
       this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
       await Promise.all([
-        this.phuongThucDauThauGetAll(),
-        this.nguonVonGetAll(),
-        this.hinhThucDauThauGetAll(),
-        this.loaiHopDongGetAll(),
         this.loadChiTiet(),
+        this.KieuNxGetAll(),
+        this.LoaiHinhNxGetAll(),
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -150,61 +147,57 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
     }
   }
 
-  async phuongThucDauThauGetAll() {
-    this.listPhuongThucDauThau = [];
-    let res = await this.danhMucService.phuongThucDauThauGetAll();
+  async LoaiHinhNxGetAll() {
+    this.listLoaiHinhNx = [];
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_HINH_NHAP_XUAT");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listPhuongThucDauThau = res.data;
+      this.listLoaiHinhNx = res.data;
     }
   }
 
-  async nguonVonGetAll() {
-    this.listNguonVon = [];
-    let res = await this.danhMucService.nguonVonGetAll();
+  async KieuNxGetAll() {
+    this.listKieuNx = [];
+    let res = await this.danhMucService.danhMucChungGetAll("KIEU_NHAP_XUAT");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listNguonVon = res.data;
+      this.listKieuNx = res.data;
     }
   }
 
-  async hinhThucDauThauGetAll() {
-    this.listHinhThucDauThau = [];
-    let res = await this.danhMucService.hinhThucDauThauGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listHinhThucDauThau = res.data;
-    }
-  }
-
-  async loaiHopDongGetAll() {
-    this.listLoaiHopDong = [];
-    let res = await this.danhMucService.loaiHopDongGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHopDong = res.data;
-    }
-  }
 
   bindingDataTh(dataDetail?) {
     if (dataDetail) {
       this.formData.patchValue({
-        namKhoach: +dataDetail.namKhoach,
+        id: dataDetail.id,
+        soDxuat: dataDetail.soDxuat,
+        ngayThop: dayjs().format("YYYY-MM-DD"),
         loaiVthh: dataDetail.loaiVthh,
         cloaiVthh: dataDetail.cloaiVthh,
-        loaiHdong: dataDetail.loaiHdong,
-        pthucLcnt: dataDetail.pthucLcnt,
-        hthucLcnt: dataDetail.hthucLcnt,
-        nguonVon: dataDetail.nguonVon,
-        ngayThop: dayjs().format("YYYY-MM-DD"),
-        tgianBdauTchuc: [dataDetail.tgianBdauTchucTu, dataDetail.tgianBdauTchucDen],
-        tgianDthau: [dataDetail.tgianDthauTu, dataDetail.tgianDthauDen],
-        tgianMthau: [dataDetail.tgianMthauTu, dataDetail.tgianMthauDen],
-        tgianNhang: [dataDetail.tgianNhangTu, dataDetail.tgianNhangDen],
+        moTaHangHoa: dataDetail.moTahangHoa,
+        namKhoach: +dataDetail.namKhoach,
+        noiDung: dataDetail.moTahangHoa,
+        ghiChu: dataDetail.moTahangHoa,
+        trangThai: dataDetail.moTahangHoa,
+        SoQdPduyet: dataDetail.moTahangHoa,
+        tongMucDt: dataDetail.moTahangHoa,
+        tongSoLuong: dataDetail.moTahangHoa,
+        tenLoaiVthh: dataDetail.moTahangHoa,
+        tenCloaiVthh: dataDetail.moTahangHoa,
+        tenTrangThai: dataDetail.moTahangHoa,
+        maDvi: dataDetail.userInfo.MA_DVI,
+        loaiHinhNx: dataDetail.loaiHinhNx,
+        kieuNx: dataDetail.kieuNx,
+        trichYeu: dataDetail.trichYeu,
+        ngayTao: dataDetail.ngayTao,
+        ngayPduyet: dataDetail.ngayPduyet,
+        tenDuAn: dataDetail.tenDuAn,
       })
-      this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
+      this.dataTableDanhSachDX = dataDetail.hhDxKhMttThopDtls;
     }
   }
 
   bindingDataDetail(dataDetail?) {
     if (dataDetail) {
-      this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
+      this.dataTableDanhSachDX = dataDetail.hhDxKhMttThopDtls;
       this.formData.patchValue({
         id: dataDetail.id,
         namKhoach: dataDetail.namKhoach,
@@ -212,14 +205,6 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
         noiDung: dataDetail.noiDung,
         loaiVthh: dataDetail.loaiVthh,
         cloaiVthh: dataDetail.cloaiVthh,
-        loaiHdong: dataDetail.loaiHdong,
-        pthucLcnt: dataDetail.pthucLcnt,
-        hthucLcnt: dataDetail.hthucLcnt,
-        nguonVon: dataDetail.nguonVon,
-        tgianBdauTchuc: [dataDetail.tgianBdauTchucTu, dataDetail.tgianBdauTchucDen],
-        tgianDthau: [dataDetail.tgianDthauTu, dataDetail.tgianDthauDen],
-        tgianMthau: [dataDetail.tgianMthauTu, dataDetail.tgianMthauDen],
-        tgianNhang: [dataDetail.tgianNhangTu, dataDetail.tgianNhangDen],
         ghiChu: dataDetail.ghiChu,
         trangThai: dataDetail.trangThai == null ? '' : dataDetail.trangThai,
         tenLoaiVthh: dataDetail.tenLoaiVthh,
@@ -232,10 +217,6 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
         tenLoaiVthh: dataDetail.tenLoaiVthh,
         cloaiVthh: dataDetail.cloaiVthh,
         tenCloaiVthh: dataDetail.tenCloaiVthh,
-        loaiHdong: dataDetail.loaiHdong,
-        pthucLcnt: dataDetail.pthucLcnt,
-        hthucLcnt: dataDetail.hthucLcnt,
-        nguonVon: dataDetail.nguonVon,
       })
       this.isTongHop = true;
     }

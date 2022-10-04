@@ -10,11 +10,14 @@ import { DieuchinhKehoachMuattComponent } from './dieuchinh-kehoach-muatt/dieuch
 import { DieuchinhKehoachMuattModule } from './dieuchinh-kehoach-muatt/dieuchinh-kehoach-muatt.module';
 import { HopdongBangkePhieumuahangComponent } from './hopdong-bangke-phieumuahang/hopdong-bangke-phieumuahang.component';
 import { HopdongBangkePhieumuahangModule } from './hopdong-bangke-phieumuahang/hopdong-bangke-phieumuahang.module';
+import { GiaoNhapHangMuattComponent } from './giao-nhap-hang-muatt/giao-nhap-hang-muatt.component';
+import { GiaoNhapHangMuattModule } from './giao-nhap-hang-muatt/giao-nhap-hang-muatt.module';
 
 
 @NgModule({
   declarations: [
     MuaTrucTiepComponent,
+
 
 
 
@@ -28,6 +31,7 @@ import { HopdongBangkePhieumuahangModule } from './hopdong-bangke-phieumuahang/h
     TochucTrienkhaiMuatructiepModule,
     DieuchinhKehoachMuattModule,
     HopdongBangkePhieumuahangModule,
+    GiaoNhapHangMuattModule
   ],
 })
 export class MuaTrucTiepModule { }

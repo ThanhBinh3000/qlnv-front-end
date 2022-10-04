@@ -558,6 +558,10 @@ export class BaoCao02Component implements OnInit {
         );
     }
 
+    displayNumber(num: number): string {
+        return displayNumber(num);
+    }
+
     displayValue(num: number): string {
         num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
