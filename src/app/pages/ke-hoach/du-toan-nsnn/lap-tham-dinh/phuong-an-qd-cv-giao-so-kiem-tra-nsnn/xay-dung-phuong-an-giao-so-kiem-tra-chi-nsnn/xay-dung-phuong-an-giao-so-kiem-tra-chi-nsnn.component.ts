@@ -345,6 +345,50 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         );
     }
 
+    deleteQdCv() {
+        this.soQdCv.fileName = null;
+        this.soQdCv.fileSize = null;
+        this.soQdCv.fileUrl = null;
+        const request = JSON.parse(JSON.stringify(
+            {
+                id: null,
+                //fileDinhKems: this.lstFiles,
+                //listIdDeleteFiles: this.listIdFilesDelete,
+                namGiao: this.namGiao,
+                maPa: this.maPa,
+                soQdCv: this.soQdCv,
+                maGiao: this.maGiao,
+            }
+        ))
+
+        this.quanLyVonPhiService.themMoiQdCv(request).toPromise().then(async data => {
+            if (data.statusCode == 0) {
+                this.notification.success(MESSAGE.SUCCESS, 'Xóa thành công');
+            } else {
+                this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
+        })
+    }
+
+    statusDeleteCv() {
+        if (!this.userService.isAccessPermisson(LTD.EDIT_QDCV_GIAO_SKT)) {
+            return false;
+        }
+        if (!this.soQdCv?.fileName) {
+            return false;
+        }
+        let check = true;
+        this.lstTtCtiet.forEach(item => {
+            if (item.trangThai == '1') {
+                check = false;
+                return;
+            }
+        })
+        return check;
+    }
+
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
         if (this.id) {
