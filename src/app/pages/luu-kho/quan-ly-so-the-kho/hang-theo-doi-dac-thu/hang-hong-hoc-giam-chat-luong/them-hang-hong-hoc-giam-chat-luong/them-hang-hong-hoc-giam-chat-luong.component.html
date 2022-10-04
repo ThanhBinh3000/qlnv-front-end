@@ -37,18 +37,9 @@
           </nz-form-control>
         </nz-form-item>
         <nz-form-item nz-col nzSpan="4" class="form-item">
-          <nz-form-label nzFor="ma-danh-sach">Mã danh sách</nz-form-label>
-          <nz-form-control>
-            <nz-input-group>
-              <input type="text" nz-input formControlName="maDanhSach" />
-            </nz-input-group>
-          </nz-form-control>
-        </nz-form-item>
-
-        <nz-form-item nz-col nzSpan="4" class="form-item">
           <nz-form-label nzFor="ngay-tao">Ngày tạo danh sách</nz-form-label>
-          <nz-form-control>
-            <nz-date-picker formControlName="ngayTao" nzFormat="dd/MM/yyyy" id="ngay-tao" class="search__input">
+          <nz-form-control >
+            <nz-date-picker [nzDisabled]="true" formControlName="ngayTao" nzFormat="dd/MM/yyyy" id="ngay-tao" class="search__input">
             </nz-date-picker>
           </nz-form-control>
         </nz-form-item>
@@ -61,7 +52,8 @@
   </nz-card>
 
   <nz-card class="mt-16 flex-card data-table card-border-content">
-    <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered [nzScroll]=
+      "{ x: '2200px' }">
       <thead>
         <tr>
           <th class="text-center" style="width: 5%;">STT</th>
@@ -74,15 +66,15 @@
           <th style="width: 10%;">Lô kho</th>
           <th style="width: 10%;">Số lượng tồn</th>
           <th style="width: 10%;">Số lượng thanh lý</th>
-          <th style="width: 5%;">Đơn vị tính</th>
-          <th style="width: 10%;">Lý do</th>
-          <th style="width: 10%;">Hành động</th>
+          <th style="width: 8%;">Đơn vị tính</th>
+          <th style="width: 30%;">Lý do</th>
+          <th style="width: 10%;" nzRight>Hành động</th>
         </tr>
         <tr>
           <th></th>
           <th>
             <nz-form-control>
-              <nz-select  [(ngModel)]="rowItem.maLoaiHang" (ngModelChange)="changeLoaiHangHoa($event)">
+              <nz-select  [(ngModel)]="rowItem.loaiVthh" (ngModelChange)="changeLoaiHangHoa($event)">
                 <nz-option *ngFor="let item of dsLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
                 </nz-option>
               </nz-select>
@@ -90,7 +82,7 @@
           </th>
           <th>
             <nz-form-control>
-              <nz-select [(ngModel)]="rowItem.maChungLoaiHang">
+              <nz-select [(ngModel)]="rowItem.cloaiVthh">
                 <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
                 </nz-option>
               </nz-select>
@@ -98,7 +90,7 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" [(ngModel)]="rowItem.tenHangHoa" nz-input placeholder="Nhập tên hàng hoá" />
+              <input type="text" [(ngModel)]="rowItem.tenLoaiVthh" nz-input placeholder="Nhập tên hàng hoá" />
             </nz-input-group>
           </th>
           <th>
@@ -157,7 +149,7 @@
               <input type="text" [(ngModel)]="rowItem.lyDo" nz-input placeholder="Nhập lý do" />
             </nz-input-group>
           </th>
-          <th style="text-align: center;">
+          <th style="text-align: center;" nzRight>
             <a (click)="themMoiItem()">
               <i class="table-icon icon htvbdh_dau-cong"></i>
             </a>
@@ -171,17 +163,17 @@
         <tr *ngFor="let data of editRowTable.data; let idx = index">
           <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
             <td>{{ idx + 1 }}</td>
-            <td>{{ data.tenLoaiHang }}</td>
-            <td>{{ data.tenHangHoa }}</td>
-            <td>{{ data.tenHangHoa }}</td>
-            <td>{{ data.tenHangHoa }}</td>
-            <td>{{ data.tenHangHoa }}</td>
-            <td>{{ data.tenHangHoa }}</td>
+            <td>{{ data.tenLoaiVthh}}</td>
+            <td>{{ data.tenLoaiVthh}}</td>
+            <td>{{ data.tenLoaiVthh}}</td>
+            <td>{{ data.tenLoaiVthh}}</td>
+            <td>{{ data.tenLoaiVthh}}</td>
+            <td>{{ data.tenLoaiVthh}}</td>
             <td>{{ data.soLuongTon }}</td>
             <td>{{ data.soLuongThanhLy }}</td>
             <td>{{ data.donVi }}</td>
             <td>{{ data.lyDo }}</td>
-            <td style="text-align: center;">
+            <td style="text-align: center;" nzRight>
               <a (click)="editItem(data.id)">
                 <i class="table-icon fa fa-pencil"></i>
               </a>

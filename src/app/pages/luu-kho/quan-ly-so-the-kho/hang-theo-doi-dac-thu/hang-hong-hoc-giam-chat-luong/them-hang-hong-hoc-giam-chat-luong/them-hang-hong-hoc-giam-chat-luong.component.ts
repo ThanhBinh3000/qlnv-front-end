@@ -10,6 +10,9 @@ import {UserService} from "../../../../../../services/user.service";
 import {STATUS} from "../../../../../../constants/status";
 import {MESSAGE} from "../../../../../../constants/message";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-them-hang-hong-hoc-giam-chat-luong',
@@ -44,13 +47,22 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     public  donViService: DonviService,
     public  danhMucService: DanhMucService,
     public  userService: UserService,
+    public  notification: NzNotificationService,
+    public  spinner: NgxSpinnerService,
   ) {}
 
   ngOnInit(): void {
-    this.userInfo = this.userService.getUserLogin()
-    this.loadDanhSachChiCuc();
-    this.initForm();
-    this.loaiVTHHGetAll();
+
+    try {
+      this.userInfo = this.userService.getUserLogin()
+      this.loadDanhSachChiCuc();
+      this.initForm();
+      this.loaiVTHHGetAll();
+    } catch (error) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   initForm(): void {
@@ -107,7 +119,15 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
 
   xoaItem(id: number) {}
 
-  themMoiItem() {}
+  themMoiItem() {
+    if (!this.dataTable) {
+      this.dataTable = [];
+    }
+    this.dataTable = [...this.dataTable, this.rowItem]
+    this.rowItem = new IHangHongHocGiamChatLuong();
+    this.updateEditCache()
+  }
+
 
   clearData() {}
 
@@ -134,8 +154,8 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
   }
 
   updateEditCache(): void {
-    this.dataTable.forEach((item) => {
-      this.dataEdit[item.id] = {
+    this.dataTable.forEach((item, index) => {
+      this.dataEdit[index] = {
         edit: false,
         data: { ...item },
       };
@@ -184,10 +204,10 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
 
 export class IHangHongHocGiamChatLuong {
   id: number;
-  maLoaiHang: number;
-  tenLoaiHang: string;
-  maChungLoaiHang: number;
-  tenHangHoa: string;
+  loaiVthh: number;
+  tenLoaiVthh: string;
+  cloaiVthh: number;
+  tenCloaivthh: string;
   maNhaKho : string;
   maDiemKho : string;
   maNganKho : string;

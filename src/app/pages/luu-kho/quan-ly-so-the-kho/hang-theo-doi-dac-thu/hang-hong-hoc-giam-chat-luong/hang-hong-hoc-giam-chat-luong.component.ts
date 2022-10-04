@@ -34,7 +34,6 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
 
-  filterDate = new Date();
 
   dsTong;
   dsDonVi = [];
@@ -78,24 +77,6 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
     private readonly notification: NzNotificationService,
     private quanLyDanhSachHangHongHocService: QuanLyDanhSachHangHongHocService,
   ) {
-  }
-
-
-  async ngOnInit(): Promise<void> {
-    try {
-      this.spinner.show();
-      this.initForm();
-      await this.initData();
-      await this.search()
-      await this.loadDanhSachChiCuc()
-    } catch (error) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
-    }
-  }
-
-  initForm(): void {
     this.formData = this.fb.group({
       maDvi: [null],
       loaiVthh: [null],
@@ -104,6 +85,21 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
       tenLoaiVthh: [null],
       tenCloaiVthh: [null],
     });
+  }
+
+
+  async ngOnInit(): Promise<void> {
+    try {
+      this.spinner.show();
+      this.userInfo = this.userService.getUserLogin()
+      await this.loaiVTHHGetAll()
+      await this.loadDanhSachChiCuc()
+      await this.loadDsTong()
+    } catch (error) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   async changeLoaiHangHoa(id: any) {
@@ -123,18 +119,11 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
     this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
   }
 
-  async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.detail.maDvi = this.userInfo.MA_DVI;
-    this.detail.tenDvi = this.userInfo.TEN_DVI;
-    await Promise.all([this.loadDsTong(), this.loaiVTHHGetAll()]);
-  }
-
   async search() {
     this.spinner.show();
     let body = {
-      ngayDeXuatTu: this.formData.value.ngayDeXuat[0],
-      ngayDeXuatDen: this.formData.value.ngayDeXuat[1],
+      ngayDeXuatTu: this.formData.value.ngayDeXuat ? this.formData.value.ngayDeXuat[0] : null,
+      ngayDeXuatDen: this.formData.value.ngayDeXuat ?  this.formData.value.ngayDeXuat[1] : null,
       loaiVthh: this.formData.value.loaiVthh,
       cloaiVthh: this.formData.value.cloaiVthh,
       maDvi : this.userInfo.MA_DVI
