@@ -63,7 +63,7 @@ export class ChiTietDiaDiemNhapKho {
   cloaiVthh: string;
   tenCloaiVthh: string;
   donViTinh: string;
-  maDvTaiSan: string;
+  maDviTaiSan: string;
   tonKho: number;
   soLuong: number;
   donGia: number;
@@ -682,12 +682,11 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
           s.maDvi = data.maDvi;
           s.maChiCuc = data.maDvi;
           s.tenChiCuc = data.tenDvi;
+          s.cloaiVthh = s.chungLoaiHh;
+          s.tenCloaiVthh = s.tenChungLoaiHh;
           this.formData.get('thongTinChiTiet')
-          console.log(this.formData.value, 'aaaaaa');
           let curThongTinChiTiet = this.formData.get('thongTinChiTiet').value.find(s1 => s1.idVirtual == this.idDxuatDtlSelect);
-          console.log(curThongTinChiTiet, 'be');
           curThongTinChiTiet.phuongAnXuat.push(s);
-          console.log(curThongTinChiTiet, 'af');
         });
       }
 
@@ -764,10 +763,8 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
   }
 
   saveEditThongTin(index: number) {
-    console.log('vao day')
     try {
       if (this.thongTinChiTietCreate.noiDung && this.thongTinChiTietCreate.soLuong > 0) {
-        console.log(this.formData, 123123);
         this.tongSLThongTinChiTiet = 0;
         this.formData.get('thongTinChiTiet').value.forEach(s => this.tongSLThongTinChiTiet += parseInt(s.soLuong));
         this.formData.get('thongTinChiTiet').value[index].isEdit = false;
@@ -792,6 +789,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
   }
 
   onClickChiTiet(item: any) {
+
     if (!item.idVirtual) {
       item.idVirtual = item.id;
     }
@@ -801,6 +799,8 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
     console.log(thongTinChiTiet, 'thong tin chi tiet')
     if (thongTinChiTiet) {
       let nhapKhoList: DiaDiemNhapKho[] = [];
+      this.tongSLCuuTro = 0;
+      this.tongTien = 0;
       thongTinChiTiet.phuongAnXuat.forEach(s => {
         let kho = nhapKhoList.find(r => r.maDvi == s.maDvi);
         if (!kho) {
