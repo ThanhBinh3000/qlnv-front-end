@@ -253,13 +253,14 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(GDT.COPY_REPORT_PA_PBDT) && checkChirld);
     this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(GDT.PRINT_REPORT_PA_PBDT) && checkChirld);
 
-    // if (this.userService.isAccessPermisson(GDT.VIEW_REPORT_PA_PBDT)) {
-    //   this.statusBtnSave = true;
-    //   this.statusBtnNew = true;
-    //   this.statusBtnCopy = true;
-    //   this.statusBtnPrint = true;
-    //   this.status = true;
-    // }
+    if (this.userInfo.sub == "lanhdaotc" || this.userInfo.sub == "truongbophantc") {
+      this.statusBtnSave = true;
+      this.statusBtnNew = true;
+      this.statusBtnCopy = true;
+      this.statusBtnPrint = true;
+      this.status = true;
+    }
+
 
     if (!this.userService.isAccessPermisson(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
       this.statusBtnNew = true;
