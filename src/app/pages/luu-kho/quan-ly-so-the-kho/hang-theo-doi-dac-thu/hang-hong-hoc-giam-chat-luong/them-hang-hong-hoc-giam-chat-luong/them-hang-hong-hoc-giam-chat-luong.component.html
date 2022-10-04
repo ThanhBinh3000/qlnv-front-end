@@ -29,7 +29,7 @@
           <nz-form-label nzFor="loai-hang-hoa">Đơn vị</nz-form-label>
           <nz-form-control >
             <nz-input-group>
-              <nz-select  nzAllowClear formControlName="maDonVi" (ngModelChange)="onChangChiCuc($event)" >
+              <nz-select  nzAllowClear formControlName="maDvi" (ngModelChange)="onChangChiCuc($event)" >
                 <nz-option *ngFor="let p of danhSachChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
                 </nz-option>
               </nz-select>
@@ -39,7 +39,7 @@
         <nz-form-item nz-col nzSpan="4" class="form-item">
           <nz-form-label nzFor="ngay-tao">Ngày tạo danh sách</nz-form-label>
           <nz-form-control >
-            <nz-date-picker [nzDisabled]="true" formControlName="ngayTao" nzFormat="dd/MM/yyyy" id="ngay-tao" class="search__input">
+            <nz-date-picker [nzDisabled]="true" formControlName="ngayDeXuat" nzFormat="dd/MM/yyyy" id="ngay-tao" class="search__input">
             </nz-date-picker>
           </nz-form-control>
         </nz-form-item>
@@ -90,7 +90,7 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" [(ngModel)]="rowItem.tenLoaiVthh" nz-input placeholder="Nhập tên hàng hoá" />
+              <input type="text" [(ngModel)]="rowItem.moTaHangHoa" nz-input placeholder="Nhập tên hàng hoá" />
             </nz-input-group>
           </th>
           <th>

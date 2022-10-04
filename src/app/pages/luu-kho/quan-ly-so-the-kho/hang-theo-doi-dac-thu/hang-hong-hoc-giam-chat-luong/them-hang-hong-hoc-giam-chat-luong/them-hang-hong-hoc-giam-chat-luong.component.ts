@@ -49,32 +49,29 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     public  userService: UserService,
     public  notification: NzNotificationService,
     public  spinner: NgxSpinnerService,
-  ) {}
+  ) {
+    this.formData = this.fb.group({
+      id: [null],
+      maDvi: [null],
+      maDanhSach: [null],
+      ngayDeXuat: [new Date()],
+      ngayTongHop: [null],
+      trangThai: [STATUS.CHUA_TONG_HOP],
+      tenTrangThai: ['Chưa tổng hợp'],
+    });
+  }
 
   ngOnInit(): void {
 
     try {
       this.userInfo = this.userService.getUserLogin()
       this.loadDanhSachChiCuc();
-      this.initForm();
       this.loaiVTHHGetAll();
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
     }
-  }
-
-  initForm(): void {
-    this.formData = this.fb.group({
-      maDonVi: [null],
-      maDanhSach: [null],
-      ngayTao: [new Date()],
-      loaiHang: [null],
-      maChungLoaiHang: [null],
-      trangThai: [STATUS.CHUA_TONG_HOP],
-      tenTrangThai: ['Chưa tổng hợp'],
-    });
   }
 
   async loadDanhSachChiCuc() {
@@ -207,7 +204,7 @@ export class IHangHongHocGiamChatLuong {
   loaiVthh: number;
   tenLoaiVthh: string;
   cloaiVthh: number;
-  tenCloaivthh: string;
+  moTaHangHoa: string;
   maNhaKho : string;
   maDiemKho : string;
   maNganKho : string;
@@ -216,4 +213,6 @@ export class IHangHongHocGiamChatLuong {
   soLuongThanhLy: number;
   donVi: string;
   lyDo: string;
+  thHhhId: string
+  qlhhhId: string;
 }
