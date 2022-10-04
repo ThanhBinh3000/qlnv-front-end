@@ -180,10 +180,10 @@
               <a (click)="viewDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, false)">
+              <a *ngIf="data.trangThai == '00' && userService.isTongCuc()" (click)="viewDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai == '00' && userService.isTongCuc()" (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

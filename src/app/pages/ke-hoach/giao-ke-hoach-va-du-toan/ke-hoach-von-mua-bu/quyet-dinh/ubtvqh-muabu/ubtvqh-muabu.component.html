@@ -179,10 +179,10 @@
               <a (click)="viewDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO" (click)="viewDetail(data.id, false)">
+              <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isTongCuc()" (click)="viewDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO" (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isTongCuc()" (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
