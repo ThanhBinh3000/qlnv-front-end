@@ -50,6 +50,8 @@ export class BtcMuaBuComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
   dataTableAll: any[] = [];
+  namDataSelect: number;
+  listBoNganh: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -112,6 +114,7 @@ export class BtcMuaBuComponent implements OnInit {
         this.dataTable.forEach((item) => {
           item.checked = false;
         });
+        this.getDetailRow(this.dataTable[0].id)
       }
       this.dataTableAll = cloneDeep(this.dataTable);
 
@@ -325,6 +328,24 @@ export class BtcMuaBuComponent implements OnInit {
       trichYeu: '',
       taiLieuDinhKem: '',
       trangThai: '',
+    }
+  }
+
+  async getDetailRow(id) {
+    if (id) {
+      let res = await this.qdBtcService.getDetail(id);
+      this.listBoNganh = res.data.listBoNganh;
+      this.namDataSelect = res.data.namQd
+    }
+  }
+
+  calcTong() {
+    if (this.listBoNganh) {
+      const sum = this.listBoNganh.reduce((prev, cur) => {
+        prev += cur.tongTien;
+        return prev;
+      }, 0);
+      return sum;
     }
   }
 };

@@ -95,29 +95,17 @@
               <div class="container">
                 <div class="header">
                   <h3 class="first">Bộ</h3>
-                  <h3 class="second">Kế hoạch năm 2016</h3>
+                  <h3 class="second">Kế hoạch năm {{ namDataSelect }} (tỷ đồng)</h3>
                 </div>
-                <div class="content">
+                <div class="content" *ngFor="let data of listBoNganh">
                   <div class="content-item">
-                    <div class="first">Bộ tài chính</div>
-                    <div class="second">80.000</div>
-                  </div>
-                  <div class="content-item">
-                    <div class="first">Bộ quốc phòng</div>
-                    <div class="second">80.000</div>
-                  </div>
-                  <div class="content-item">
-                    <div class="first">Bộ công an</div>
-                    <div class="second">80.000</div>
-                  </div>
-                  <div class="content-item">
-                    <div class="first">Bộ Nông nghiệp và phát triển nông thôn </div>
-                    <div class="second">80.000</div>
+                    <div class="first">{{data.tenBoNganh}}</div>
+                    <div class="second">{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</div>
                   </div>
                 </div>
-                <div class="footer">
+                <div class="footer" *ngIf="listBoNganh.length > 0">
                   <div class="first">Tổng</div>
-                  <div class="second">320.000</div>
+                  <div class="second">{{ calcTong() | number : '1.0-1' : 'vi_VN'}}</div>
                 </div>
               </div>
             </td>
@@ -177,7 +165,7 @@
               <i nz-icon nzType="search"></i>
             </ng-template>
           </tr>
-          <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
+          <tr *ngFor="let data of rowSelectionTable.data; let idx = index" (click)="getDetailRow(data.id)">
             <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.trangThai != '00'"
               (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
             <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>

@@ -11,6 +11,7 @@ import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { QuyetDinhUbtvqhMuaBuBoSungService } from "../../../../../../services/quyet-dinh-ubtvqh-mua-bu-bo-sung.service";
+import {Globals} from "../../../../../../shared/globals";
 
 
 @Component({
@@ -51,6 +52,8 @@ export class UbtvqhMuabuComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
   dataTableAll: any[] = [];
+   listBoNganh: any[] = [];
+   namDataSelect: number;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -59,6 +62,7 @@ export class UbtvqhMuabuComponent implements OnInit {
     private notification: NzNotificationService,
     public userService: UserService,
     private modal: NzModalService,
+    public globals: Globals,
   ) {
     this.formData = this.fb.group({
       namQd: [null],
@@ -73,12 +77,22 @@ export class UbtvqhMuabuComponent implements OnInit {
     this.search();
   }
 
-  initForm(): void {
-
+  async getDetailRow(id) {
+    if (id) {
+      let res = await this.quyetDinhUbtvqhMuBuBoSung.getDetail(id);
+      this.listBoNganh = res.data.listBoNganh;
+      this.namDataSelect = res.data.namQd
+    }
   }
 
-  initData() {
-
+  calcTong() {
+    if (this.listBoNganh) {
+      const sum = this.listBoNganh.reduce((prev, cur) => {
+        prev += cur.tongTien;
+        return prev;
+      }, 0);
+      return sum;
+    }
   }
 
   loadDsNam() {
@@ -112,9 +126,8 @@ export class UbtvqhMuabuComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
-          // item.statusConvert = this.convertTrangThai(item.trangThai);
         });
-      }
+        this.getDetailRow(this.dataTable[0].id)      }
       this.dataTableAll = cloneDeep(this.dataTable);
 
     } else {
