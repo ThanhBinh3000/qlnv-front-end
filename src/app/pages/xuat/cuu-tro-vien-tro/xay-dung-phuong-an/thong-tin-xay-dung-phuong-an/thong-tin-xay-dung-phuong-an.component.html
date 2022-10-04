@@ -13,6 +13,7 @@
     </button>
 
     <button *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_LDTC  && userService.isTongCuc()) ||
+      (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc())||
       (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc())) && isDetailPermission"
             type="button" class="btn btn-sub" (click)="duyet()">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -25,13 +26,13 @@
       <span>Lưu và gửi duyệt</span>
     </button>
     <button
-      *ngIf="formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isCuc() && isDetailPermission()"
+      *ngIf="formData.value.trangThai == STATUS.DU_THAO || ((formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC)&& userService.isCuc())  && isDetailPermission()"
       type="button" class="btn btn-sub" (click)="guiDuyet()">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Gửi duyệt</span>
     </button>
     <button
-      *ngIf="formData.value.trangThai == STATUS.DU_THAO || ((formData.value.trangThai == STATUS.TU_CHOI_LDTC || formData.value.trangThai == STATUS.TU_CHOI_LDC)&& userService.isCuc())  && isDetailPermission()"
+      *ngIf="formData.value.trangThai == STATUS.DU_THAO || ((formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC)&& userService.isCuc())  && isDetailPermission()"
       type="
         button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
@@ -246,7 +247,7 @@
         <tr *ngFor="let item of formData.value.thongTinChiTiet, let i = index">
           <ng-container *ngIf="!formData.value.thongTinChiTiet[i]?.isEdit; else editTemplate">
             <td>{{i + 1}}</td>
-            <td><a (click)="onClickChiTiet(item)">{{item.noiDung}}</a></td>
+            <td class="text-blue"><a (click)="onClickChiTiet(item)">{{item.noiDung}}</a></td>
             <td>{{item.soLuong ?? 0|number: '1.0-1'}}</td>
             <td>
               <a (click)="editThongTin(i)" *ngIf="!isView">
@@ -315,7 +316,7 @@
     <div class="action d-flex align-items-center flex-row-reverse">
       <span></span>
       <span>
-        <button type="button" class="btn btn-main" (click)="themPhuongAn()" *ngIf="!isView">
+        <button type="button" class="btn btn-main" (click)="themPhuongAn()" *ngIf="!isView && idDxuatDtlSelect>0">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -373,7 +374,7 @@
               <td>{{r.tenNganKho}}</td>
               <td>{{r.tenLoKho}}</td>
               <td>{{r.tenCloaiVthh}}</td>
-              <td>{{r.maDvTaiSan}}</td>
+              <td>{{r.maDviTaiSan}}</td>
               <td>{{r.soLuong|number:'1.0-1'}}</td>
               <td>{{r.donViTinh ?? 'kg'}}</td>
               <td>{{r.donGia|number:'1.0-1'}}</td>
