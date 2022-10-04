@@ -456,7 +456,7 @@ export class QuanLyVonPhiService extends BaseService {
   //tong hop giao du toan
   tongHopGiaoDuToan1(request: any): Observable<any> {
     return this.httpClient.post(
-      'http://192.168.1.101:30101/giao_du_toan/tong-hop',
+      'http://192.168.1.103:30101/giao_du_toan/tong-hop',
       request,
     );
   }
