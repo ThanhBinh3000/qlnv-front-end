@@ -51,7 +51,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isCuc()">
+        <button type="button" class="btn btn-main" (click)="themMoi()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -199,11 +199,11 @@
               <i class="fa fa-eye"></i>
             </a>
             <a
-              *ngIf="(data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_TP || data.trangThai==STATUS.TU_CHOI_LDC) && userService.isCuc()"
+              *ngIf="(data.trangThai==STATUS.DU_THAO || ((data.trangThai==STATUS.TU_CHOI_LDC || data.trangThai==STATUS.TU_CHOI_LDTC) && userService.isCuc()))"
               (click)="detail(data, false)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="data.trangThai==STATUS.DU_THAO && userService.isCuc()" (click)="xoaItem(data)">
+            <a *ngIf="data.trangThai==STATUS.DU_THAO" (click)="xoaItem(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
@@ -224,7 +224,7 @@
                 {{ range[0] }}-{{ range[1] }} of {{ total }} items
               </ng-template>
             </nz-pagination>
-            <!-- end phân trang  -->
+            <!-- end phân trang -->
           </div>
         </div>
       </div>

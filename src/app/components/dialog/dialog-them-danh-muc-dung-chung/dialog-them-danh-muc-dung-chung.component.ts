@@ -22,8 +22,6 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
   danhMucList: any[] = [];
   selectedValue = null;
 
-  submited: boolean = false;
-
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -39,8 +37,10 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
       loai: [null, [Validators.required]],
       ma: [null, [Validators.required]],
       maCha: [null],
-      trangThai: ['01'],
+      trangThai: ['01',[Validators.required]],
       giaTri: [null, [Validators.required]],
+      thuTuHienThi : [null],
+      phanLoai : [],
       ghiChu: [null]
     });
   }
@@ -49,38 +49,48 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
     await Promise.all([
       this.getDmList()
     ])
-    this.bindingData(this.dataEdit)
+    // this.bindingData(this.dataEdit);
+    this.helperService.bidingDataInFormGroup(this.formData,this.dataEdit);
   }
 
+  // bindingData(dataEdit) {
+  //   if (dataEdit) {
+  //     this.formData.get('id').setValue(dataEdit.id);
+  //     this.formData.get('loai').setValue(dataEdit.loai);
+  //     this.formData.get('ma').setValue(dataEdit.ma);
+  //     this.formData.get('maCha').setValue(dataEdit.maCha);
+  //     this.formData.get('ghiChu').setValue(dataEdit.ghiChu);
+  //     this.formData.get('trangThai').setValue(dataEdit.trangThai);
+  //     this.formData.get('giaTri').setValue(dataEdit.giaTri);
+  //   }
+  // }
+
   async save() {
-    this.submited = true;
-    if (this.formData.valid) {
-      this.spinner.show();
-      this.helperService.markFormGroupTouched(this.formData);
-      if (this.formData.invalid) {
-        this.spinner.hide();
-        return;
-      }
-      let body = this.formData.value;
-      console.log(this.formData.value)
-      let res
-      if (this.dataEdit != null) {
-        res = await this.dmService.update(body);
-      } else {
-        res = await this.dmService.create(body);
-      }
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (this.dataEdit != null) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        }
-        this._modalRef.close(this.formData);
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+    this.spinner.show();
+
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
       this.spinner.hide();
+      return;
     }
+    let body = this.formData.value;
+    let res
+    if (this.dataEdit != null) {
+      res = await this.dmService.update(body);
+    } else {
+      res = await this.dmService.create(body);
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (this.dataEdit != null) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      } else {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        // this.formData.reset();
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
   }
 
   async getDmList() {
@@ -92,15 +102,5 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
     this._modalRef.destroy();
   }
 
-  bindingData(dataEdit) {
-    if (dataEdit) {
-      this.formData.get('id').setValue(dataEdit.id);
-      this.formData.get('loai').setValue(dataEdit.loai);
-      this.formData.get('ma').setValue(dataEdit.ma);
-      this.formData.get('maCha').setValue(dataEdit.maCha);
-      this.formData.get('ghiChu').setValue(dataEdit.ghiChu);
-      this.formData.get('trangThai').setValue(dataEdit.trangThai);
-      this.formData.get('giaTri').setValue(dataEdit.giaTri);
-    }
-  }
+
 }

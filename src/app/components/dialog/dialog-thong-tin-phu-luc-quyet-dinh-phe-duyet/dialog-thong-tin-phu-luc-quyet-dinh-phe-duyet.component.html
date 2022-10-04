@@ -1,7 +1,4 @@
-<nz-card class="pd-10 mb-16 mt-16">
-  <div class="specical-title">
-    Thông tin phụ lục phê duyệt kế hoạch lựa chọn nhà thầu
-  </div>
+<nz-card class="mt16 flex-card p-lr16 table-card">
   <nz-table #expandTable [nzData]="listOfData" nzTableLayout="fixed">
     <thead>
       <tr>
@@ -17,24 +14,26 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let data of expandTable.data">
-        <ng-container *ngFor="let item of mapOfExpandedData2[data.idVirtual]">
-          <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
-            <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
-              (nzExpandChange)="collapse2(mapOfExpandedData2[data.idVirtual], item, $event)">
-              {{ item.tenDvi }}
-            </td>
-            <td (click)="editRow(item.id)">{{ item.goiThau }}</td>
-            <td>{{ item.tenDiemKho }}</td>
-            <td>{{ item.soLuongTheoChiTieu }}</td>
-            <td>{{ item.soLuongTheoChiTieu }}</td>
-            <td>{{ item.soLuong }}</td>
-            <td>{{ item.donGia }}</td>
-            <td>{{ item.soLuong * item.donGia | number: '1.0-1'}}</td>
-            <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * item.donGia) : '' }}</td>
-          </tr>
-        </ng-container>
-      </ng-container>
+    <ng-container *ngFor="let item of listOfData , let i = index">
+    </ng-container>
+<!--    <ng-container *ngFor="let data of expandTable.data">-->
+<!--        <ng-container *ngFor="let item of mapOfExpandedData2[data.idVirtual]">-->
+<!--          <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">-->
+<!--            <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"-->
+<!--              (nzExpandChange)="collapse2(mapOfExpandedData2[data.idVirtual], item, $event)">-->
+<!--              {{ item.tenDvi }}-->
+<!--            </td>-->
+<!--            <td (click)="editRow(item.id)">{{ item.goiThau }}</td>-->
+<!--            <td>{{ item.tenDiemKho }}</td>-->
+<!--            <td>{{ item.soLuongTheoChiTieu }}</td>-->
+<!--            <td>{{ item.soLuongTheoChiTieu }}</td>-->
+<!--            <td>{{ item.soLuong }}</td>-->
+<!--            <td>{{ item.donGia }}</td>-->
+<!--            <td>{{ item.soLuong * item.donGia | number: '1.0-1'}}</td>-->
+<!--            <td>{{ item.soLuong ? convertTienTobangChu(item.soLuong * item.donGia) : '' }}</td>-->
+<!--          </tr>-->
+<!--        </ng-container>-->
+<!--      </ng-container>-->
     </tbody>
   </nz-table>
 </nz-card>

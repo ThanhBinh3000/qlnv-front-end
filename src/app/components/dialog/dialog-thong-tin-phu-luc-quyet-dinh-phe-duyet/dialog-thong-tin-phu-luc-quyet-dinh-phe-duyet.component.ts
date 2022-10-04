@@ -40,10 +40,8 @@ export class DialogThongTinPhuLucQuyetDinhPheDuyetComponent implements OnInit {
 
   async ngOnInit() {
     if (this.data) {
-      this.listOfData = this.data.dsGoiThau;
-      this.listOfData.forEach(item => {
-        this.mapOfExpandedData2[item.idVirtual] = this.convertTreeToList2(item);
-      });
+      let res = await this.dauThauService.getDetail(this.data.idDxHdr);
+      this.listOfData = res.data.dsGtDtlList;
     }
   }
 
