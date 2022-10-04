@@ -62,7 +62,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
   };
 
   dataTableAll: any[] = [];
-  listVthh: any[] = [];
   dataTable: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -86,7 +85,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
         }
       }
       this.userInfo = this.userService.getUserLogin();
-      this.listVthh = LIST_VAT_TU_HANG_HOA;
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -318,32 +316,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       },
     });
   }
-
-  // convertTrangThai(status: string) {
-  //   switch (status) {
-  //     case '00': {
-  //       return 'Dự thảo'
-  //     }
-  //     case '03': {
-  //       return 'Từ chối - TP'
-  //     }
-  //     case '12': {
-  //       return 'Từ chối - LĐ Cục'
-  //     }
-  //     case '01': {
-  //       return 'Chờ duyệt - TP'
-  //     }
-  //     case '09': {
-  //       return 'Chờ duyệt - LĐ Cục'
-  //     }
-  //     case '02': {
-  //       return 'Đã duyệt'
-  //     }
-  //     case '05': {
-  //       return 'Tổng hợp'
-  //     }
-  //   }
-  // }
 
   exportData() {
     if (this.loaiVthh === "02") {
