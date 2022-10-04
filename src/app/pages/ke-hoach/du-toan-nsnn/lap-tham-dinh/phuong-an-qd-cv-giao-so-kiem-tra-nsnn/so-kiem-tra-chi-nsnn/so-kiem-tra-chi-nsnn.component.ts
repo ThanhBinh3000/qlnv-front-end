@@ -120,8 +120,8 @@ export class SoKiemTraChiNsnnComponent implements OnInit {
     getStatusButtom() {
         if (this.maDviNhan == this.userInfo?.MA_DVI) {
             this.statusBtnEx = !this.userService.isAccessPermisson(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT);
-            this.statusBtnNew = !this.userService.isAccessPermisson(LTD.ADD_PA_GIAO_SKT);
-            this.statusBtnEdit = !this.userService.isAccessPermisson(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT);
+            this.statusBtnNew = !(this.userService.isAccessPermisson(LTD.ADD_PA_GIAO_SKT) && this.lstBcao.length != 0);
+            this.statusBtnEdit = !(this.userService.isAccessPermisson(LTD.EDIT_REPORT_AFTER_RECEIVE_SKT) && this.lstBcao.length == 0);
             // if (this.lstBcao.length == 0) {
             //     this.statusBtnEdit = false;
             //     this.statusBtnNew = true;
