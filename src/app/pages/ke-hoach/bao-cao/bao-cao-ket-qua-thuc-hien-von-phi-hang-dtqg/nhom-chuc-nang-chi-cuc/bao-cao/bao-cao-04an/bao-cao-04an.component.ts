@@ -10,6 +10,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
 import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber, NOT_OK, OK, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
@@ -89,6 +90,7 @@ export class BaoCao04anComponent implements OnInit {
     constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
+        private userService: UserService,
         private danhMucService: DanhMucHDVService,
         private notification: NzNotificationService,
         private modal: NzModalService,
@@ -106,7 +108,7 @@ export class BaoCao04anComponent implements OnInit {
         //thong tin chung cua bieu mau
         this.id = this.data?.id;
         this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
-        this.maDvi = this.data.maDvi;
+        this.maDvi = this.data?.maDvi;
         this.thuyetMinh = this.data?.thuyetMinh;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
@@ -794,7 +796,11 @@ export class BaoCao04anComponent implements OnInit {
                 const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                 const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
                 const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
-                item.sl = mulNumber(sl, dm.nvChuyenMonKv + dm.nvChuyenMonTc);
+                if (this.userService.isChiCuc()) {
+                    item.sl = mulNumber(sl, dm.nvChuyenMonDviTt);
+                } else {
+                    item.sl = mulNumber(sl, sumNumber([dm.nvChuyenMonDviTt, dm.nvChuyenMonVp]));
+                }
             }
         })
         this.tinhTongDm(nvChuyenMon);
@@ -804,7 +810,11 @@ export class BaoCao04anComponent implements OnInit {
                 const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                 const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
                 const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
-                item.sl = mulNumber(sl, dm.ttCaNhanKv + dm.ttCaNhanTc);
+                if (this.userService.isChiCuc()) {
+                    item.sl = mulNumber(sl, dm.ttCaNhanDviTt);
+                } else {
+                    item.sl = mulNumber(sl, sumNumber([dm.ttCaNhanDviTt, dm.ttCaNhanVp]));
+                }
             }
         })
         this.tinhTongDm(ttCaNhan);
@@ -814,7 +824,11 @@ export class BaoCao04anComponent implements OnInit {
                 const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                 const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
                 const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
-                item.sl = mulNumber(sl, dm.tcDieuHanhKv);
+                if (this.userService.isChiCuc()) {
+                    item.sl = mulNumber(sl, dm.dieuHanhDviTt);
+                } else {
+                    item.sl = mulNumber(sl, sumNumber([dm.dieuHanhDviTt, dm.dieuHanhVp]));
+                }
             }
         })
         this.tinhTongDm(cucDh);
@@ -824,7 +838,7 @@ export class BaoCao04anComponent implements OnInit {
                 const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                 const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
                 const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
-                item.sl = mulNumber(sl, dm.tcDieuHanhTc);
+                item.sl = mulNumber(sl, dm.tcDhNvCm);
             }
         })
         this.tinhTongDm(tongCucDh);
@@ -1081,6 +1095,9 @@ export class BaoCao04anComponent implements OnInit {
         }
         //kiem tra xem hang dang xet cos phai la hieu cua 2 hang khac ko
         const maNdung = this.lstCtietBcao.find(e => e.stt == str)?.maNdungChi;
+        if (this.noiDungChiFull.find(e => e.id == maNdung)?.ma.startsWith('0.1.5')) {
+            return true;
+        }
         if (this.getRoleCalculate(maNdung) == '7') {
             return true;
         }
@@ -1096,12 +1113,12 @@ export class BaoCao04anComponent implements OnInit {
         //luy ke default
         const itemLine = this.luyKes?.find(item => item.maNdungChi == this.editCache[id].data.maNdungChi)?.listCtiet;
 
-        let tonglstChitietVtuTrongDot = 0;
-        let tonglstChitietVtuLuyke = 0;
+        let tongTrongDot = 0;
+        let tongLuyke = 0;
         if (this.editCache[id].data.listCtiet.length != 0) {
             this.editCache[id].data.listCtiet.forEach(e => {
                 if (e.loaiMatHang == 0) {
-                    tonglstChitietVtuTrongDot += e.sl;
+                    tongTrongDot = sumNumber([tongTrongDot, e.sl]);
                     //set luy ke tuong ung = luy ke default + chi tiet theo dot
                     const sl = itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == 1)?.sl ? itemLine?.find(item => item.maVtu == e.maVtu && item.loaiMatHang == 1)?.sl : 0;
                     this.editCache[id].data.listCtiet.find(a => a.maVtu == e.maVtu && a.loaiMatHang == 1).sl = sumNumber([sl, e.sl]);
@@ -1112,12 +1129,12 @@ export class BaoCao04anComponent implements OnInit {
         if (this.editCache[id].data.listCtiet.length != 0) {
             this.editCache[id].data.listCtiet.forEach(e => {
                 if (e.loaiMatHang == 1) {
-                    tonglstChitietVtuLuyke = sumNumber([tonglstChitietVtuLuyke, e.sl]);
+                    tongLuyke = sumNumber([tongLuyke, e.sl]);
                 }
             })
         }
-        this.editCache[id].data.trongDotTcong = tonglstChitietVtuTrongDot;
-        this.editCache[id].data.luyKeTcong = tonglstChitietVtuLuyke;
+        this.editCache[id].data.trongDotTcong = tongTrongDot;
+        this.editCache[id].data.luyKeTcong = tongLuyke;
     }
 
     addAllCol() {
@@ -1316,12 +1333,12 @@ export class BaoCao04anComponent implements OnInit {
 
     statusDeleteRow(item: ItemData) {
         if (this.luyKes.findIndex(e => e.maNdungChi == item.maNdungChi) != -1) {
-            return true;
+            return false;
         }
         if (item.level > 2) {
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     statusDeleteCol(maVtu: number) {

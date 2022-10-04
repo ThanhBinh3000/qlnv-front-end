@@ -191,7 +191,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (!this.userService.isAccessPermisson(LTD.EDIT_SKT_BTC)) {
+        if (!this.userService.isAccessPermisson(LTD.EDIT_SKT_BTC) || this.id) {
             this.status = true;
         } else {
             this.status = false;
