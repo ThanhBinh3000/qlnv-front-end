@@ -9,7 +9,6 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./dieuchinh-kehoach-muatt.component.scss']
 })
 export class DieuchinhKehoachMuattComponent implements OnInit {
-  loaiVthhSelected: string;
   tabs: any[] = [];
   constructor(
     private danhMucService: DanhMucService,
@@ -20,23 +19,21 @@ export class DieuchinhKehoachMuattComponent implements OnInit {
   }
 
   async loaiVTHHGetAll() {
-    this.tabs = [
-      {
-        giaTri: 'Tất cả',
-        ma: null,
-      },
-    ];
+    // this.tabs = [
+    //   {
+    //     giaTri: 'Tất cả',
+    //     ma: null,
+    //   },
+    // ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        res.data.forEach((element) => {
-          element.count = 0;
-          this.tabs.push(element);
-        });
-      }
+      this.tabs = [
+        ...this.tabs,
+        ...res.data.filter((item) => item.ma == '0101'),
+      ];
     }
   }
-
+  loaiVthhSelected: string = '0101';
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
   }
