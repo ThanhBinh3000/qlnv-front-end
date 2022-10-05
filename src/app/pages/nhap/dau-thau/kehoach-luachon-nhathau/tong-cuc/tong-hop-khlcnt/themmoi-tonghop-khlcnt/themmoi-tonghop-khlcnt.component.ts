@@ -107,7 +107,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
       tchuanCluong: [''],
-      soQd : [''],
+      soQdCc : [''],
     })
 
   }
@@ -221,7 +221,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     if (res2.msg == MESSAGE.SUCCESS) {
      const data = res2.data;
       this.formData.patchValue({
-        soQd: data.soQuyetDinh,
+        soQdCc: data.soQuyetDinh,
       });
     }
   }

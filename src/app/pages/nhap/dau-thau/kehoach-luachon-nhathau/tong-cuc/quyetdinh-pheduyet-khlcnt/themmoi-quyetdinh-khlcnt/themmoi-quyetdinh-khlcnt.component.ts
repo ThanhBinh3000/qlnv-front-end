@@ -131,7 +131,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       tgianMthau: [''],
       tgianNhang: [''],
       ghiChu: [''],
-      soQdGiaoCtieu : [''],
+      soQdCc : [''],
       loaiVthh: ['', [Validators.required]],
       tenLoaiVthh: ['', [Validators.required]],
       cloaiVthh: [''],
@@ -251,19 +251,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     return convertTienTobangChu(tien);
   }
 
-  collapse2(array: DanhSachGoiThau[], data: DanhSachGoiThau, $event: boolean): void {
-    if (!$event) {
-      if (data.children) {
-        data.children.forEach(d => {
-          const target = array.find(a => a.idVirtual === d.idVirtual)!;
-          target.expand = false;
-          this.collapse2(array, target, false);
-        });
-      } else {
-        return;
-      }
-    }
-  }
 
   async listDsTongHopToTrinh() {
     await this.spinner.show();
@@ -296,7 +283,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
     await this.spinner.hide();
   }
-
 
 
   async save(isGuiDuyet?) {
@@ -523,7 +509,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           pthucLcnt: data.pthucLcnt,
           hthucLcnt: data.hthucLcnt,
           nguonVon: data.nguonVon,
-          soQd: data.soQd,
+          soQdCc: data.soQdCc,
           idThHdr: event,
           idTrHdr: null,
           maTrHdr: null,
