@@ -70,6 +70,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         namKeHoach: [dayjs().get('year'), [Validators.required]],
         soQd: [, [Validators.required]],
         soDeXuat: [null],
+        soToTrinh:[null],
         ngayKy: [null, [Validators.required]],
         ngayHieuLuc: [null, [Validators.required]],
         loaiGia: [null],
@@ -361,7 +362,8 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         if (data) {
           this.formData.patchValue({
             soDeXuat: data.soDeXuat,
-            thongTinGia: data.pagTtChungs
+            thongTinGia: data.pagTtChungs,
+            soToTrinh: data.soDeXuat,
           });
           this.onChangeSoToTrinh(data.soDeXuat);
           this.arrThongTinGia = data.pagTtChungs;
