@@ -258,8 +258,7 @@ import { DialogThemMoiKeHoachMuaTrucTiepComponent } from './dialog/dialog-them-m
     DialogTableSelectionComponent,
     DialogDiaDiemNhapKhoComponent,
     BaseComponent,
-    DialogTongHopHangSuaChuaDtqgComponent
-    BaseComponent,
+    DialogTongHopHangSuaChuaDtqgComponent,
     DialogThemMoiKeHoachMuaTrucTiepComponent
   ],
   imports: [
