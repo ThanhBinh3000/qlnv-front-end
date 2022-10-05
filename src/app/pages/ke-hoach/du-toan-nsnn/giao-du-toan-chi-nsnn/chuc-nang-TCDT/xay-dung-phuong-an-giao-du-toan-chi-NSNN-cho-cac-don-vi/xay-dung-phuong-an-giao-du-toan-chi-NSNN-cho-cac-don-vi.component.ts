@@ -168,6 +168,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
 
     // lấy role người dùng
     this.userInfo = this.userService.getUserLogin();
+    console.log(this.userInfo);
 
     // set năm tạo PA
     this.namPa = this.newDate.getFullYear();
@@ -287,10 +288,14 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
             this.lstDviTrucThuoc = []
           } else {
             this.lstDviTrucThuoc = data.data?.lstGiaoDtoanTrucThuocs;
+            this.lstDviTrucThuoc.forEach(item => {
+              item.ngayTrinh = this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR)
+              item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR)
+            }
+            )
           }
           this.checkSumUp = data.data.checkSumUp;
-          const dViUser = this.userInfo?.MA_DVI
-          if (this.checkSumUp == true && dViUser == this.maDonViTao) {
+          if (this.checkSumUp == true && this.userInfo.CAP_DVI == "1") {
             this.statusBtnTongHop = false
           }
           if (this.lstCtietBcao[0].lstCtietDvis) {
@@ -298,15 +303,6 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
               this.lstDvi.push(this.donVis.find(e => e.maDvi == item.maDviNhan))
             })
           }
-          // this.lstCtietBcao.forEach(item => {
-          //   item.tongCong = divMoney(item.tongCong, this.maDviTien);
-          //   if (item.lstCtietDvis) {
-          //     item.lstCtietDvis.forEach(e => {
-          //       // e.soTranChi = divMoney(e.soTranChi, this.maDviTien) == 0 ? null : divMoney(e.soTranChi, this.maDviTien);
-          //       e.soTranChi = divMoney(e.soTranChi, this.maDviTien);
-          //     })
-          //   }
-          // })
           this.sortByIndex();
           this.updateEditCache();
           this.getStatusButton();
@@ -813,7 +809,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, GDT.PRINT_REPORT_PA_PBDT, checkChirld);
     this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, GDT.TIEPNHAN_TUCHOI_PA_PBDT, checkParent);
 
-    if (this.userService.isAccessPermisson(GDT.GIAO_PA_PBDT) && this.soQd) {
+    if (this.userService.isAccessPermisson(GDT.GIAO_PA_PBDT) && this.soQd && this.trangThaiBanGhi == '6') {
       this.statusBtnGiao = false;
     } else {
       this.statusBtnGiao = true;
@@ -823,7 +819,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     // if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT || GDT.TRINHDUYET_PA_TONGHOP_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
     //   this.statusBtnGuiDVCT = false;
     // }
-    if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
+    if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.userInfo.CAP_DVI == "2") {
       this.statusBtnGuiDVCT = false;
     }
     if (this.trangThaiBanGhi == "7") {

@@ -13,4 +13,14 @@ export class TongHopDeXuatKHMTTService extends BaseService {
     super(httpClient, 'mua-truc-tiep/thop-kh-mtt', '/qlnv-hang');
   }
 
+  loadChiTiet(id: number): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/mua-truc-tiep/thop-kh-mtt/chi-tiet/${id}`;
+    return this.httpClient.get<any>(url_).toPromise();
+  }
+
+  tonghop(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/mua-truc-tiep/thop-kh-mtt`
+    return this.httpClient.post(url, body).toPromise();
+  }
+
 }

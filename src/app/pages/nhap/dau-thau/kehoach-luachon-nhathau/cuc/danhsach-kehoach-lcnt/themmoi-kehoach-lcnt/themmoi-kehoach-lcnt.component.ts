@@ -188,6 +188,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   async ngOnInit() {
     await this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
+    console.log(this.userInfo)
     this.maTrinh = '/' + this.userInfo.MA_TR;
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
@@ -243,7 +244,6 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
     }
-
   }
 
   async getDetail(id: number) {

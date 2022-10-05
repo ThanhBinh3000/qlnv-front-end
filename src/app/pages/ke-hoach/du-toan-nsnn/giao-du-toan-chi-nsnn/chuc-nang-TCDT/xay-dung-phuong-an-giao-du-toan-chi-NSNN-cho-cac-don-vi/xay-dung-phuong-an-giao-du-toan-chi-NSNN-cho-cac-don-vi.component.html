@@ -306,16 +306,10 @@
               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                 <div nz-col nzSpan="24">
                   <label class="search__label">Thuyết minh</label>
-                  <textarea rows="2" nz-input [(ngModel)]="thuyetMinh"></textarea>
+                  <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
                 </div>
               </div>
             </ng-container>
-            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-              <div nz-col nzSpan="24">
-                <label class="search__label">Thuyết minh</label>
-                <textarea rows="2" nz-input [(ngModel)]="thuyetMinh"></textarea>
-              </div>
-            </div>
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
               <div nz-col class="gutter-row" [nzSpan]="3">
                 Danh sách văn bản đính kèm
