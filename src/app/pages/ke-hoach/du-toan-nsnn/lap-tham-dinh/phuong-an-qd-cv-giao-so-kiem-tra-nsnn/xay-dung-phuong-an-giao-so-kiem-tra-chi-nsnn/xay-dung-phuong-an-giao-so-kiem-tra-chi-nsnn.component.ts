@@ -218,7 +218,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         this.statusBtnLD = this.getBtnStatus(Utils.statusPheDuyet, LTD.PHE_DUYET_PA_GIAO_SKT, checkChirld);
         this.statusBtnCopy = this.getBtnStatus(Utils.statusCopy, LTD.COPY_PA_GIAO_SKT, checkChirld);
         this.statusBtnPrint = this.getBtnStatus(Utils.statusPrint, LTD.PRINT_PA_GIAO_SKT, checkChirld);
-        if (this.userService.isAccessPermisson(LTD.GIAO_SKT) && this.soQdCv) {
+        if (this.userService.isAccessPermisson(LTD.GIAO_SKT) && this.soQdCv?.fileName) {
             this.statusBtnGiao = false;
         } else {
             this.statusBtnGiao = true;
@@ -364,6 +364,7 @@ export class XayDungPhuongAnGiaoSoKiemTraChiNsnnComponent implements OnInit {
         this.quanLyVonPhiService.themMoiQdCv(request).toPromise().then(async data => {
             if (data.statusCode == 0) {
                 this.notification.success(MESSAGE.SUCCESS, 'Xóa thành công');
+                this.getStatusButton();
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
