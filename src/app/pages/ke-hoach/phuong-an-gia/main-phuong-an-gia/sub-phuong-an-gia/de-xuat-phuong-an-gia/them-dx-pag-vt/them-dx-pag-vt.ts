@@ -276,7 +276,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   themDataTable(page: string) {
     if (page == 'ttc') {
       this.formData.get('cloaiVthh').setValue(this.rowItemTtc.cloaiVthh);
-      this.rowItemPpxdg.tenCloaiVthh = this.listVthh.find(s => s.ma = this.rowItemPpxdg.cloaiVthh).ten;
       this.pagTtChungs = [...this.pagTtChungs, this.rowItemTtc];
       this.rowItemTtc = new ThongTinChungPag();
       this.updateEditCache(page);
