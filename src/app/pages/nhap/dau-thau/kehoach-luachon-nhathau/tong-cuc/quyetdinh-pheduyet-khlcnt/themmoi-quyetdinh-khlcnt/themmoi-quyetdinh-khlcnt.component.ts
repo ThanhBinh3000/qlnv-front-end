@@ -47,9 +47,12 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
 
   formData: FormGroup;
+  formThongTinDX: FormGroup;
   formThongTinChung: FormGroup;
 
   selectedCanCu: any = {};
+  selectedPhuongAn: any = {};
+  idTongHop: number
   listOfMapData: VatTu[];
   listOfMapDataClone: VatTu[];
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
@@ -58,6 +61,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   errorGhiChu: boolean = false;
   maQd: string = null;
   fileDinhKem: Array<FileDinhKem> = [];
+
+  styleStatus: string = 'du-thao-va-lanh-dao-duyet';
+  titleStatus: string = 'Dự thảo';
 
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
@@ -103,6 +109,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     private fb: FormBuilder,
     private helperService: HelperService,
     private dauThauService: DanhSachDauThauService,
+    private uploadFileService: UploadFileService,
     public globals: Globals,
   ) {
     this.formData = this.fb.group({
@@ -234,7 +241,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         namKhoach: +dataTongHop.namKhoach,
         idThHdr: dataTongHop.id,
         tchuanCluong: dataTongHop.tchuanCluong,
-        phanLoai : 'TH',
       })
       await this.listDsTongHopToTrinh();
       await this.selectMaTongHop(dataTongHop.id);
@@ -293,6 +299,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     body.dsDeXuat = this.danhsachDx;
     body.dsGoiThau = this.danhsachDx;
     body.fileDinhKems = this.fileDinhKem;
+    console.log(body)
     let dataTr = this.listToTrinh.filter(item => item.id === body.idTrHdr)
     if (dataTr.length > 0) {
       body.maTrHdr = dataTr[0].maTrHdr;
@@ -333,7 +340,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     });
     modalTuChoi.afterClose.subscribe(async (text) => {
       if (text) {
-        await this.spinner.show();
+        this.spinner.show();
         try {
           let body = {
             id: this.idInput,
@@ -347,10 +354,10 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
-          await this.spinner.hide();
+          this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
-          await this.spinner.hide();
+          this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       }
@@ -401,7 +408,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 350,
       nzOnOk: async () => {
-        await this.spinner.show();
+        this.spinner.show();
         try {
           let body = {
             "id": this.idInput,
@@ -414,10 +421,10 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
-          await this.spinner.hide();
+          this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
-          await this.spinner.hide();
+          this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
       },
@@ -431,22 +438,34 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.listDanhSachTongHop = [];
       const data = res.data;
       this.isVatTu = data.loaiVthh.startsWith("02");
-      this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
-          soQd: data.soQd.split("/")[0],
-      });
+        id: data.id,
+        soQd: data.soQd.split("/")[0],
+        ngayQd: data.ngayQd,
+        ngayHluc: data.ngayHluc,
+        loaiVthh: data.loaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
+        cloaiVthh: data.cloaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
+        idThHdr: data.idThHdr,
+        idTrHdr: data.idTrHdr,
+        loaiHdong: data.loaiHdong,
+        pthucLcnt: data.pthucLcnt,
+        hthucLcnt: data.hthucLcnt,
+        nguonVon: data.nguonVon,
+        tgianBdauTchuc: data.tgianBdauTchuc,
+        tgianDthau: data.tgianDthau,
+        tgianMthau: data.tgianMthau,
+        tgianNhang: data.tgianNhang,
+        namKhoach: data.namKhoach,
+        ghiChu: data.ghiChu,
+        trangThai: data.trangThai,
+        trichYeu: data.trichYeu,
+        tenTrangThai: data.tenTrangThai,
+        lyDoTuChoi: data.ldoTuchoi
+      })
       if (this.isVatTu) {
         this.danhsachDx = data.hhQdKhlcntDtlList[0].dsGoiThau
-      }else{
-        this.danhsachDx = data.hhQdKhlcntDtlList;
-        this.danhsachDxCache = cloneDeep(this.danhsachDx);
-        for (const item of this.danhsachDxCache) {
-          await this.dauThauService.getDetail(item.idDxHdr).then((res) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              item.dsGoiThau = res.data.dsGtDtlList;
-            }
-          })
-        };
       }
     };
   }
@@ -535,7 +554,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   async onChangeIdTrHdr(data) {
-    await this.spinner.show();
+    this.spinner.show();
     this.danhsachDx = [];
     if (data) {
       const res = await this.dxuatKhLcntVatTuService.getDetail(data.id)
@@ -552,7 +571,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
-    await this.spinner.hide();
+    this.spinner.hide();
   }
 
   dataInput: any;
@@ -561,6 +580,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     await this.spinner.show();
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     $event.target.parentElement.classList.add('selectedRow')
+    console.log(this.danhsachDx[index], this.danhsachDxCache[index]);
     this.dataInput = this.danhsachDx[index];
     this.dataInputCache = this.danhsachDxCache[index];
     await this.spinner.hide();

@@ -58,10 +58,14 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   listNam: any[] = [];
   startValue: Date | null = null;
   endValue: Date | null = null;
+  //phê duyệt
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
+  //chưa phê quyệt
+  totalRecordNo: number = 0;
+  dataTableNo: any[] = [];
 
   tabSelected: string = 'quyet-dinh';
   isVisibleChangeTab$ = new Subject();
@@ -74,6 +78,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   lastBreadcrumb: string;
   userInfo: UserLogin;
 
+  // selectedTab: string = 'phe-duyet';
 
   constructor(
     private router: Router,
@@ -88,11 +93,12 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.spinner.show();
+    this.spinner.show();
     try {
       if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XEM")) {
         window.location.href = '/error/401'
       }
+      this.listVthh = LIST_VAT_TU_HANG_HOA;
       this.userInfo = this.userService.getUserLogin();
       this.isVisibleChangeTab$.subscribe((value: boolean) => {
         this.visibleTab = value;
@@ -103,8 +109,9 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
+      this.loadDanhMucHang();
       await this.search();
-      await this.spinner.hide();
+      this.spinner.hide();
     }
     catch (e) {
       console.log('error: ', e)
@@ -113,6 +120,17 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     }
   }
 
+  loadDanhMucHang() {
+    this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
+        this.listOfMapData = hangHoa.data;
+        this.listOfMapDataClone = [...this.listOfMapData];
+        this.listOfMapData.forEach((item) => {
+          this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
+        });
+      }
+    });
+  }
 
   insert() {
     if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
@@ -169,6 +187,68 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     });
   }
 
+  convertTreeToList(root: VatTu): VatTu[] {
+    const stack: VatTu[] = [];
+    const array: VatTu[] = [];
+    const hashMap = {};
+    stack.push({ ...root, level: 0, expand: false });
+    while (stack.length !== 0) {
+      const node = stack.pop()!;
+      this.visitNode(node, hashMap, array);
+      if (node.child) {
+        for (let i = node.child.length - 1; i >= 0; i--) {
+          stack.push({
+            ...node.child[i],
+            level: node.level! + 1,
+            expand: false,
+            parent: node,
+          });
+        }
+      }
+    }
+    return array;
+  }
+
+  visitNode(
+    node: VatTu,
+    hashMap: { [id: string]: boolean },
+    array: VatTu[],
+  ): void {
+    if (!hashMap[node.id]) {
+      hashMap[node.id] = true;
+      array.push(node);
+    }
+  }
+
+  collapse(array: VatTu[], data: VatTu, $event: boolean): void {
+    if (!$event) {
+      if (data.child) {
+        data.child.forEach((d) => {
+          const target = array.find((a) => a.id === d.id)!;
+          target.expand = false;
+          this.collapse(array, target, false);
+        });
+      } else {
+        return;
+      }
+    }
+  }
+
+  searchHangHoa(e: Event) {
+    const value = (e.target as HTMLInputElement).value;
+    if (!value || value.indexOf('@') >= 0) {
+      this.listOfMapData = this.listOfMapDataClone;
+    } else {
+      this.listOfMapData = this.listOfMapDataClone.filter(
+        (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
+      );
+    }
+  }
+
+  selectHangHoa(vatTu: any) {
+    this.selectHang = vatTu;
+  }
+
   clearFilter() {
     this.searchFilter.namKhoach = dayjs().get('year');
     this.searchFilter.soQd = null;
@@ -178,6 +258,20 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
     this.searchFilter.tongTien = null;
     this.search();
 
+  }
+
+  async selectTabData(tab: string) {
+    this.spinner.show();
+    try {
+      this.tabSelected = tab;
+      await this.search();
+      this.spinner.hide();
+    }
+    catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   async search() {

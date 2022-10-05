@@ -1,4 +1,4 @@
-import {Validators} from "@angular/forms";
+import { Validators } from "@angular/forms";
 
 export class ThongTinDeXuatKeHoachLuaChonNhaThau {
   id: number;
@@ -151,12 +151,12 @@ export class KeHoachMuaXuat {
 }
 
 export class DanhMucMucPhi {
-  id:number
+  id: number
   cloaiVthh: string
-  tencLoaiVthh:string
+  tencLoaiVthh: string
   hinhThucBq: string
-  loaiDinhMuc:string
-  loaiHinhBq:string
+  loaiDinhMuc: string
+  loaiHinhBq: string
   loaiVthh: string
   tenLoaiVthh: string
   maDinhMuc: string
@@ -164,4 +164,25 @@ export class DanhMucMucPhi {
   trangThai: string
 }
 
+
+export class DanhSachMuaTrucTiep {
+  id: number;
+  maDvi: string;
+  tenDvi: string;
+  maDiemKho: string;
+  tenDiemKho: string;
+  diaDiemNhap: string;
+  soLuongCtieu: number;
+  soLuongKhDd: number;
+  soLuongDxmtt: number;
+  donGiaVat: number;
+  thanhTien: number;
+  bangChu: string;
+  idVirtual?: number;
+  isEdit: boolean;
+  children?: DanhSachMuaTrucTiep[];
+  level?: number;
+  expand?: boolean;
+  parent?: DanhSachMuaTrucTiep
+}
 

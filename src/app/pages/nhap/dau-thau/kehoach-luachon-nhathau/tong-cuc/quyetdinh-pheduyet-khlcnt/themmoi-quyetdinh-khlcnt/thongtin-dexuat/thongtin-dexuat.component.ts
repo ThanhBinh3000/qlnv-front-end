@@ -77,7 +77,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    await this.spinner.show()
+    this.spinner.show()
     if (changes) {
       if (this.dataInput) {
         console.log(this.dataInput);
@@ -89,7 +89,8 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
         this.convertListData();
       }
     }
-    await this.spinner.hide()
+    this.spinner.hide()
+
   }
 
   convertListData() {
@@ -97,10 +98,8 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       .value()
   }
 
-  async ngOnInit(){
-    await this.spinner.show()
-    await this.loadDataComboBox();
-    await this.spinner.hide()
+  ngOnInit(): void {
+    this.loadDataComboBox();
   }
 
   async loadDataComboBox() {
