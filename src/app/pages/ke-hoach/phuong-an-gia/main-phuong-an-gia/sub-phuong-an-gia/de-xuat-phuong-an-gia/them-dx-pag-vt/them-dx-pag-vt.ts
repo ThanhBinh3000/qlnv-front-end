@@ -156,6 +156,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.formData.get('tchuanCluong').setValue(res.data.tenQchuan)
     }
   }
+
   async tuChoi() {
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
@@ -197,7 +198,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       }
     });
   }
-
 
   async loadDsHangHoaPag() {
     this.dsLoaiHangXdg = [];
@@ -299,6 +299,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   async getDataDetail(id) {
     if (id > 0) {
       let res = await this.giaDeXuatGiaService.getDetail(id);
+      console.log(res, 11111);
       const data = res.data;
       this.formData.patchValue({
         id: data.id,
@@ -324,6 +325,10 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.dataTableKqGia = data.dataTableKqGia;
       this.dataTableKsGia = data.dataTableKsGia;
       this.dataTableCanCuXdg = data.canCuPhapLy;
+      this.updateEditCache('ttc');
+      this.updateEditCache('ppxdg');
+      this.updateEditCache('ccxdg');
+
     }
   }
 
@@ -501,7 +506,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     this.onClose.emit();
   }
 
-  banHanh(id) {
+  async pheDuyet() {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -514,8 +519,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: id ? id : this.formData.get('id').value,
-            trangThai: null,
+            id: this.formData.get('id').value,
+            trangThai: '',
           };
           switch (this.formData.get('trangThai').value) {
             case STATUS.TU_CHOI_LDV:
@@ -590,7 +595,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.soDeXuat = body.soDeXuat + this.maDx;
+    body.soDeXuat = this.formData.get('soDeXuat').value + this.maDx;
     body.pagTtChungs = this.pagTtChungs;
     body.pagPpXacDinhGias = this.pagPpXacDinhGias;
     body.canCuPhapLy = this.dataTableCanCuXdg;
@@ -605,14 +610,25 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
-        this.banHanh(res.data.id)
+        this.formData.patchValue({
+          id: res.data.id,
+          trangThai: res.data.trangThai
+        })
+        this.pheDuyet();
+      } else {
+        if (this.idInput > 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+        this.quayLai();
       }
-      this.quayLai();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
   }
+
 
 
   // huyEdit(index: number) {
