@@ -14,19 +14,14 @@
         </tr>
         <tr>
             <th class="text-center"> </th>
-            <th>
-                <input type="text" [(ngModel)]="rowItem.tenDviBaoGia" nz-input />
+            <th *ngIf="isTableKetQua">
+                <input type="text" [(ngModel)]="rowItem.tenDviThamDinh" nz-input />
             </th>
+          <th>
+            <input type="text" [(ngModel)]="rowItem.tenDviBaoGia" nz-input />
+          </th>
             <th *ngIf="isTableKetQua">
                 <input type="text" [(ngModel)]="rowItem.cloaiVthh" nz-input />
-                <!-- <nz-select [(ngModel)]="rowItem.cloaiVthh" [nzDisabled]="isView" nzAllowClear="true">
-                    <nz-option *ngFor="let p of listCloaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
-                    </nz-option>
-                    <ng-template #error let-control>
-                        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                        </ng-container>
-                    </ng-template>
-                </nz-select> -->
             </th>
             <th>
                 <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.donGia" [nzFormatter]="globals.formatter"

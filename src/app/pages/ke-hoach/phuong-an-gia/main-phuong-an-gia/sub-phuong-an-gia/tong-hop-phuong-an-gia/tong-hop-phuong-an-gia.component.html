@@ -236,7 +236,7 @@
                             <a *ngIf="data.trangThaiTh == STATUS.CHUA_TAO_TT" (click)="viewDetail(data.id, true,false)">
                                 <i class="icon htvbdh_tcdt_tao-ttrinh"></i>
                             </a>
-                            <a *ngIf="data.trangThai != '11'" (click)="xoaItem(data)">
+                            <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>

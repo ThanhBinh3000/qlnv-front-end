@@ -11,7 +11,7 @@ export const SUA_CHUA_ROUTE_LIST: Array<ChiTietMenu> = [
   },
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
-    title: 'Tổng hợp danh sách DTQG bị hỏng cần sửa chữa',
+    title: 'Thẩm định và ban hành QĐ sửa chữa hàng DTQG',
     url: `/tong-hop-danh-sach-hang`,
     dropdown: 'tong-hop-danh-sach-hang',
     idHover: 'tong-hop-danh-sach-hang',

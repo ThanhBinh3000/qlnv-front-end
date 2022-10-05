@@ -52,7 +52,9 @@
           <nz-form-item class="form-item">
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label [nzNoColon]="true" nzRequired> Ngày tổng hợp </nz-form-label>
-              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-date-picker>
+              <nz-input-group >
+                <input type="text" nz-input formControlName="ngayTongHop">
+              </nz-input-group>
             </nz-form-control>
 
           </nz-form-item>
