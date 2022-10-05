@@ -6,6 +6,7 @@
     </button>
     <button
       *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_LDTC  && userService.isTongCuc()) ||
+      (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc())||
       (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc())) && isDetailPermission"
       type="button" class="btn btn-sub" (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>

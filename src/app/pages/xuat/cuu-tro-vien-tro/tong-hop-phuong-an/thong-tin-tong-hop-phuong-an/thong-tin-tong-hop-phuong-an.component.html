@@ -5,20 +5,26 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="(khBanDauGia.trangThai == globals.prop.NHAP_CHO_DUYET_TP || khBanDauGia.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC)"
-      type="button" class="btn btn-sub" (click)="tuChoi()">
+      *ngIf="checkAvailableByStatus(STATUS.TU_CHOI_LDV)"
+      type="button" class="btn btn-sub" (click)="showModalDialogTuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
     <button
-      *ngIf="khBanDauGia.trangThai == globals.prop.NHAP_CHO_DUYET_TP || khBanDauGia.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC"
-      type="button" class="btn btn-sub" (click)="guiDuyet()">
-      <i class="icon {{iconButtonDuyet}}"></i>
-      <span>{{titleButtonDuyet}}</span>
+      *ngIf="checkAvailableByStatus(STATUS.DA_DUYET_LDV)"
+      type="button" class="btn btn-sub" (click)="updateStatus(STATUS.DA_DUYET_LDV,'Bạn có chắc muốn duyệt ?')">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Duyệt</span>
     </button>
     <button
-      *ngIf="(!khBanDauGia.trangThai || khBanDauGia.trangThai == globals.prop.NHAP_DU_THAO || khBanDauGia.trangThai ==  globals.prop.NHAP_TU_CHOI_TP|| khBanDauGia.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC) && !isView"
-      type="button" class="btn btn-sub" (click)="idInput==0 ? save(false) :guiDuyet()">
+      *ngIf="checkAvailableByStatus(STATUS.CHO_DUYET_LDV)"
+      type="button" class="btn btn-sub" (click)="updateStatus(STATUS.CHO_DUYET_LDV,'Bạn có chắc muốn gửi duyệt ?')">
+      <i class="icon {{iconButtonDuyet}}"></i>
+      <span>Gửi duyệt</span>
+    </button>
+    <button
+      *ngIf="checkAvailableByStatus(STATUS.CHO_DUYET_LDV)"
+      type="button" class="btn btn-sub" (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
@@ -34,10 +40,10 @@
     <div class="header header-green-background mg-t-16">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span *ngIf="!khBanDauGia.id" class="du-thao-va-lanh-dao-duyet">
-            Dự Thảo
+            <span
+              [ngClass]="!(formData.value.trangThai == STATUS.DA_DUYET_LDV) ? 'du-thao-va-lanh-dao-duyet' : 'da-ban-hanh'">
+            {{ formData.value.tenTrangThai}}
           </span>
-          <span *ngIf="khBanDauGia.id" [ngClass]="thongTinTrangThai(khBanDauGia.trangThai)">{{titleStatus}}</span>
           <span>tổng hợp phương án xuất viện trợ, cứu trợ</span>
         </div>
       </div>
@@ -92,7 +98,8 @@
       <div nz-row nzGutter="24">
         <div nz-col [nzSpan]="24">
           <div class="tong-hop-button group-button-search text-right mg-t-16">
-            <button class="btn btn-main btn-sm waves-effect waves-light" (click)="synthetic()">
+            <button class="btn btn-main btn-sm waves-effect waves-light" (click)="synthetic()"
+                    *ngIf="formData.value.trangThai == STATUS.DU_THAO &&!isView">
               <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
               <span>Tổng hợp PA xuất viện trợ, cứu trợ</span>
             </button>
@@ -119,7 +126,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày tổng hợp</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker class="search__input" formControlName="ngayTongHop">
+                <nz-date-picker class="search__input" formControlName="ngayTongHop" [nzDisabled]="isView">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -129,7 +136,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Nội dung tổng hợp</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <textarea nz-input formControlName="noiDung" rows="3"></textarea>
+              <textarea nz-input formControlName="noiDung" rows="3" [readOnly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -164,34 +171,36 @@
             <td [nzExpand]="expandSetView.has(item.idVirtual)"
                 (nzExpandChange)="onExpandChange(item.idVirtual, $event,1)"
                 style="width: 35px"></td>
-            <td colspan="2">{{ item.tenDvi }}</td>
-            <td>{{item.tongSoLuong}}</td>
+            <td colspan="2"><strong>{{ item.tenDvi }}</strong></td>
+            <td><strong>{{item.tongSoLuong|number: '1.0-1'}}</strong></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td>{{item.ngayDxuat|date:'dd/MM/YYYY'}}</td>
+            <td>{{item.thoiGianThucHien|date:'dd/MM/YYYY'}}</td>
           </tr>
           <ng-container *ngIf="expandSetView.has(item.idVirtual)">
             <tr *ngFor="let chiTiet of item.thongTinChiTiet">
               <td nzWidtd="35px"></td>
               <td></td>
               <td>{{chiTiet.noiDung}}</td>
-              <td>{{chiTiet.soLuong}}</td>
+              <td>{{chiTiet.soLuong|number: '1.0-1'}}</td>
               <td></td>
-              <td>{{chiTiet.ngayDxuat}}</td>
-              <td>{{chiTiet.thoiGianThucHien}}</td>
+              <td>{{chiTiet.ngayDxuat|date:'dd/MM/YYYY'}}</td>
+              <td>{{chiTiet.thoiGianThucHien|date:'dd/MM/YYYY'}}</td>
             </tr>
           </ng-container>
         </ng-container>
+        </tbody>
+        <tfoot>
         <tr>
           <th></th>
           <th></th>
           <th class="text-blue">Tổng</th>
-          <th class="text-blue">650.000</th>
+          <th class="text-blue">{{tongSoLuongDxuat|number: '1.0-1'}}</th>
           <th class="text-blue">2.990.000.000</th>
           <th></th>
           <th></th>
         </tr>
-        </tbody>
+        </tfoot>
       </nz-table>
     </nz-card>
   </div>
@@ -205,7 +214,7 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #dataTable class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="thongTinChiTiet">
+      <nz-table #dataTable class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="thongTinChiTietTh">
         <thead>
         <tr>
           <th style="width: 35px">STT</th>
@@ -224,16 +233,17 @@
             <td [nzExpand]="expandSetEdit.has(item.idVirtual)"
                 (nzExpandChange)="onExpandChange(item.idVirtual, $event,2)"
                 style="width: 35px"></td>
-            <td colspan="2">{{ item.tenDvi }}</td>
-            <td>{{item.tongSoLuong}}</td>
+            <td colspan="2"><strong>{{ item.tenDvi }}</strong></td>
+            <td><strong>{{item.tongSoLuong|number: '1.0-1'}}</strong></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td>{{item.ngayDxuat|date:'dd/MM/YYYY'}}</td>
+            <td>{{item.thoiGianThucHien|date:'dd/MM/YYYY'}}</td>
             <td>
-              <a (click)="editThongTinTongHop(item)">
+              <a (click)="showModal(item)" *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isView">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="deleteThongTinTongHop(item.idVirtual)">
+              <a (click)="deleteThongTinTongHop(item.idVirtual)"
+                 *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isView">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
@@ -243,26 +253,101 @@
               <td nzWidtd="35px"></td>
               <td></td>
               <td>{{chiTiet.noiDung}}</td>
-              <td>{{chiTiet.tenNganKho}}</td>
-              <td>{{chiTiet.tenNganLo}}</td>
-              <td>{{chiTiet.tenChungLoaiHh}}</td>
-              <td>{{chiTiet.maDonViTaiSan}}</td>
+              <td>{{chiTiet.soLuong|number: '1.0-1'}}</td>
+              <td></td>
+              <td>{{chiTiet.ngayDxuat|date:'dd/MM/YYYY'}}</td>
+              <td>{{chiTiet.thoiGianThucHien|date:'dd/MM/YYYY'}}</td>
               <td></td>
             </tr>
           </ng-container>
         </ng-container>
+        </tbody>
+        <tfoot>
         <tr>
           <th></th>
           <th></th>
           <th class="text-blue">Tổng</th>
-          <th class="text-blue">650.000</th>
+          <th class="text-blue">{{tongSoLuongTongHop|number: '1.0-1'}}</th>
           <th class="text-blue">2.990.000.000</th>
           <th></th>
           <th></th>
           <th></th>
         </tr>
-        </tbody>
+        </tfoot>
       </nz-table>
     </nz-card>
   </div>
 </div>
+
+<!--dialog tu choi-->
+<nz-modal [(nzVisible)]="isVisibleTuChoiDialog" nzTitle="Lý do từ chối">
+  <div *nzModalContent class="modal__content">
+    <form nzLayout="vertical" nz-form [formGroup]="formData">
+      <nz-form-item class="form-item">
+        <nz-form-label></nz-form-label>
+        <nz-form-control>
+          <textarea rows="5" class="search__input" nz-input
+                    formControlName="lyDoTuChoi">
+          </textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </div>
+  <div *nzModalFooter>
+    <button nz-button (click)="updateStatus(STATUS.TU_CHOI_LDV,'Bạn có chắc muốn từ chối ?')"
+            class="modal__button--save">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      Từ chối
+    </button>
+    <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
+
+<!--dialog dieu chinh so luong cua tong cuc-->
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Phương án của tổng cục">
+  <ng-container *nzModalContent>
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #tableTongCuc class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="tongHopEdit.thongTinChiTiet">
+        <thead>
+        <tr>
+          <th style="width: 35px">STT</th>
+          <th>Nội dung xuất viện trợ, cứu trợ</th>
+          <th>Số lượng (kg)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of tableTongCuc.data, let i = index">
+          <ng-container>
+            <td>{{i + 1}}</td>
+            <td>{{item.noiDung}}</td>
+            <td>
+              <nz-input-number [(ngModel)]="item.soLuong"></nz-input-number>
+            </td>
+          </ng-container>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td></td>
+          <td>Tổng số lượng xuất viện trợ, cứu trợ</td>
+          <!--          <td>{{tongSLThongTinChiTiet|number: '1.0-1'}}</td>-->
+          <td></td>
+        </tr>
+        </tfoot>
+      </nz-table>
+    </nz-card>
+  </ng-container>
+  <div *nzModalFooter>
+    <button nz-button (click)="handleOk()" class="modal__button--save">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      Lưu
+    </button>
+    <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+      <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+      Đóng
+    </button>
+  </div>
+</nz-modal>
