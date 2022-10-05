@@ -51,6 +51,8 @@ export class TtcpMuabuComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
   dataTableAll: any[] = [];
+  namDataSelect: number;
+  listBoNganh: any[]= [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -72,13 +74,22 @@ export class TtcpMuabuComponent implements OnInit {
     this.loadDsNam();
     this.search();
   }
-
-  initForm(): void {
-
+  async getDetailRow(id) {
+    if (id) {
+      let res = await this.qdTtcp.getDetail(id);
+      this.listBoNganh = res.data.listBoNganh;
+      this.namDataSelect = res.data.namQd
+    }
   }
 
-  initData() {
-
+  calcTong() {
+    if (this.listBoNganh) {
+      const sum = this.listBoNganh.reduce((prev, cur) => {
+        prev += cur.tongTien;
+        return prev;
+      }, 0);
+      return sum;
+    }
   }
 
   loadDsNam() {
@@ -113,6 +124,7 @@ export class TtcpMuabuComponent implements OnInit {
         this.dataTable.forEach((item) => {
           item.checked = false;
         });
+        this.getDetailRow(this.dataTable[0].id)
       }
       this.dataTableAll = cloneDeep(this.dataTable);
 

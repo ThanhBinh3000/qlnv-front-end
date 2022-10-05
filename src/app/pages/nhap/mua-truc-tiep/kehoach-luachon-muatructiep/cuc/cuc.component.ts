@@ -14,24 +14,25 @@ export class CucComponent implements OnInit {
   }
 
   ngOnInit() { }
-  tabs: any;
+  tabs: any = [];
   async loaiVTHHGetAll() {
-    this.tabs = [
-      {
-        giaTri: 'Tất cả',
-        ma: null,
-      },
-    ];
+
+    // this.tabs = [
+    //   {
+    //     giaTri: 'Tất cả',
+    //     ma: null,
+    //   },
+    // ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       this.tabs = [
         ...this.tabs,
-        ...res.data.filter((item) => item.ma !== '02'),
+        ...res.data.filter((item) => item.ma == '0101'),
       ];
     }
   }
 
-  loaiVthhSelected: string;
+  loaiVthhSelected: string = '0101';
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
   }

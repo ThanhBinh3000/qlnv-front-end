@@ -122,6 +122,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         soQd: data.soQd.split("/")[0],
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
+
         ngayKy: data.ngayKy,
         ngayHieuLuc: data.ngayHieuLuc,
         loaiGia: data.loaiGia,
@@ -131,8 +132,8 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh
       });
-      this.onChangeSoToTrinh(data.soToTrinh)
-      //this.onChangeLoaiVthh(data.loaiVthh);
+      this.arrThongTinGia = data.thongTinGia
+
     }
   }
 
@@ -295,7 +296,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
 
   async onChangeSoToTrinh(event) {
     let curToTrinh = this.dsToTrinhDeXuat.find(item => item.soToTrinh == event);
-    console.log(curToTrinh + "-----")
+    console.log(curToTrinh, 1123)
     if (curToTrinh) {
       //loai hh
       this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
@@ -324,7 +325,9 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
           this.dsTieuChuanCl = tmp;
         }
       }
-      this.formData.controls["tchuanCluong"].setValue(this.dsTieuChuanCl[0].id);
+      if (this.dsTieuChuanCl.length > 0) {
+        this.formData.controls["tchuanCluong"].setValue(this.dsTieuChuanCl[0].id);
+      }
 
       //thong tin gia
       this.arrThongTinGia = [];

@@ -1,15 +1,16 @@
 import { FileDinhKem } from "./FileDinhKem";
 
 export class CanCuXacDinhPag {
-    id: number;
-    moTa: string;
-    fileDinhKem: FileDinhKem = new FileDinhKem();
+  id: number;
+  moTa: string;
+  fileDinhKem: FileDinhKem = new FileDinhKem();
 
 }
 
 export class ThongTinKhaoSatGia {
   id: number;
   tenDviBaoGia: string;
+  tenDviThamDinh: string;
   cloaiVthh: string;
   tenCloaiVthh: string;
   donGia: string;
@@ -37,11 +38,12 @@ export class PhuongPhapXacDinhGia {
   chiPhiChung?: number = 0;
   chiPhiPhanBo?: number = 0;
   tongChiPhi?: number = 0;
+  tenCloaiVthh?: string = '';
 }
 
 export class ThongTinGia {
   donGia: number;
-  donGiaVat:  number;
+  donGiaVat: number;
   id: number;
   maDvi: string;
   qdDcTcdtnnId: number;

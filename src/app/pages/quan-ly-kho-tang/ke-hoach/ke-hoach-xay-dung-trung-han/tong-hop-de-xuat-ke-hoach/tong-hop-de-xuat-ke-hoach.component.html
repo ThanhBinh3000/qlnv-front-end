@@ -90,7 +90,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button  type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
+        <button *ngIf="userService.isTongCuc()" type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
           <i nz-icon nzType="area-chart" nzTheme="outline"></i>
           <span>Tổng hợp</span>
         </button>

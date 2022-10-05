@@ -15,6 +15,7 @@ import { ThemmoiKehoachLcntTongCucComponent } from './tong-cuc/themmoi-kehoach-l
 import { TongCucComponent } from './tong-cuc/tong-cuc.component';
 import { ThemmoiTonghopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/themmoi-tonghop-khlcnt/themmoi-tonghop-khlcnt.component';
 import { TongHopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/tong-hop-khlcnt.component';
+import { ThongtinDexuatComponent } from './tong-cuc/quyetdinh-pheduyet-khlcnt/themmoi-quyetdinh-khlcnt/thongtin-dexuat/thongtin-dexuat.component';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { TongHopKhlcntComponent } from './tong-cuc/tong-hop-khlcnt/tong-hop-khlc
     ThemmoiKehoachLcntTongCucComponent,
     TongHopKhlcntComponent,
     ThemmoiTonghopKhlcntComponent,
+    ThongtinDexuatComponent,
   ],
   imports: [
     CommonModule,

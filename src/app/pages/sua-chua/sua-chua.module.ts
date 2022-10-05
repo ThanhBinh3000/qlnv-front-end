@@ -19,6 +19,9 @@ import {NzTreeViewModule} from "ng-zorro-antd/tree-view";
 import {ThemMoiTongHopComponent} from "./tong-hop-danh-sach/them-moi-tong-hop/them-moi-tong-hop.component";
 import {ThemMoiQdSuaChuaComponent} from "./quyet-dinh-sua-chua/them-moi-qd-sua-chua/them-moi-qd-sua-chua.component";
 import { ThemMoiBaoCaoKqComponent } from './bao-cao-kq/them-moi-bao-cao-kq/them-moi-bao-cao-kq.component';
+import {
+    ThongTinHangSuaChuaComponent
+} from "./danh-sach-hang-dtqg/thong-tin-hang-sua-chua/thong-tin-hang-sua-chua.component";
 
 
 @NgModule({
@@ -33,7 +36,8 @@ import { ThemMoiBaoCaoKqComponent } from './bao-cao-kq/them-moi-bao-cao-kq/them-
         BaoCaoKqComponent,
         ThemMoiTongHopComponent,
         ThemMoiQdSuaChuaComponent,
-        ThemMoiBaoCaoKqComponent
+        ThemMoiBaoCaoKqComponent,
+        ThongTinHangSuaChuaComponent
     ],
   imports: [
     CommonModule,

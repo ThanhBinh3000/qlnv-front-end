@@ -62,7 +62,7 @@
     <div class="group-button">
       <h3>Danh sách nghị quyết của Bộ tài chính</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
+        <button  *ngIf=" userService.isTongCuc()" type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
@@ -70,7 +70,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" (click)="themMoi()">
+        <button  *ngIf=" userService.isTongCuc()" type="button" class="btn btn-sub xanh" (click)="themMoi()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -95,29 +95,17 @@
               <div class="container">
                 <div class="header">
                   <h3 class="first">Bộ</h3>
-                  <h3 class="second">Kế hoạch năm 2016</h3>
+                  <h3 class="second">Kế hoạch năm {{ namDataSelect }} (tỷ đồng)</h3>
                 </div>
-                <div class="content">
+                <div class="content" *ngFor="let data of listBoNganh">
                   <div class="content-item">
-                    <div class="first">Bộ tài chính</div>
-                    <div class="second">80.000</div>
-                  </div>
-                  <div class="content-item">
-                    <div class="first">Bộ quốc phòng</div>
-                    <div class="second">80.000</div>
-                  </div>
-                  <div class="content-item">
-                    <div class="first">Bộ công an</div>
-                    <div class="second">80.000</div>
-                  </div>
-                  <div class="content-item">
-                    <div class="first">Bộ Nông nghiệp và phát triển nông thôn </div>
-                    <div class="second">80.000</div>
+                    <div class="first">{{data.tenBoNganh}}</div>
+                    <div class="second">{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</div>
                   </div>
                 </div>
-                <div class="footer">
+                <div class="footer" *ngIf="listBoNganh.length > 0">
                   <div class="first">Tổng</div>
-                  <div class="second">320.000</div>
+                  <div class="second">{{ calcTong() | number : '1.0-1' : 'vi_VN'}}</div>
                 </div>
               </div>
             </td>
@@ -126,23 +114,17 @@
             <th></th>
             <th></th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group >
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
                   (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
 
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group >
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namQd"
                   (input)="filterInTable('namQd',filterTable.namQd)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
 
             <th>
@@ -151,35 +133,24 @@
                   (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
+                <i nz-icon nzType="calendar"></i>
               </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
                   (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group >
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
                   (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th></th>
-            <ng-template #suffixIconSearch>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
           </tr>
-          <!-- </tbody>
-        <tbody> -->
-          <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
+          <tr *ngFor="let data of rowSelectionTable.data; let idx = index" (click)="getDetailRow(data.id)">
             <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.trangThai != '00'"
               (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
             <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
@@ -192,10 +163,10 @@
               <a (click)="viewDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, false)">
+              <a *ngIf="data.trangThai == '00' && userService.isTongCuc()" (click)="viewDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai != '11'" (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai == '00' && userService.isTongCuc()" (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
