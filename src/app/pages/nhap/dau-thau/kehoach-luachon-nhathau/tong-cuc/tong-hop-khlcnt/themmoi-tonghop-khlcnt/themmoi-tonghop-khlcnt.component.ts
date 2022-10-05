@@ -23,6 +23,7 @@ import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog
 import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from 'src/app/constants/status';
+import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
@@ -74,7 +75,8 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     private userService: UserService,
     private fb: FormBuilder,
     private helperService: HelperService,
-    public globals: Globals
+    public globals: Globals,
+    private chiTieuKeHoachNamCapTongCucService : ChiTieuKeHoachNamCapTongCucService
   ) {
     this.formTraCuu = this.fb.group(
       {
@@ -196,6 +198,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
           ngayTao: dayjs().format("YYYY-MM-DD"),
         })
         this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
+        await this.getDataChiTieu();
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -207,6 +210,19 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       this.isTongHop = false;
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async getDataChiTieu() {
+    let res2 =
+      await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
+        +this.formTraCuu.get('namKhoach').value,
+      );
+    if (res2.msg == MESSAGE.SUCCESS) {
+     const data = res2.data;
+      this.formData.patchValue({
+        soQd: data.soQuyetDinh,
+      });
     }
   }
 
