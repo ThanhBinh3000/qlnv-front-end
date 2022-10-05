@@ -275,7 +275,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   themDataTable(page: string) {
     if (page == 'ttc') {
-      this.formData.get('cloaiVthh').setValue(this.rowItemTtc.cloaiVthh)
+      this.formData.get('cloaiVthh').setValue(this.rowItemTtc.cloaiVthh);
       this.pagTtChungs = [...this.pagTtChungs, this.rowItemTtc];
       this.rowItemTtc = new ThongTinChungPag();
       this.updateEditCache(page);
@@ -287,10 +287,13 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
     if (page == 'ppxdg') {
       this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.chiPhiPhanBo
+      this.rowItemPpxdg.tenCloaiVthh = this.listVthh.find(s => s.ma = this.rowItemPpxdg.cloaiVthh).ten;
+      console.log(this.rowItemPpxdg);
       this.pagPpXacDinhGias = [...this.pagPpXacDinhGias, this.rowItemPpxdg];
       this.rowItemPpxdg = new PhuongPhapXacDinhGia();
       this.updateEditCache(page)
     }
+
   }
 
   async getDataDetail(id) {
@@ -416,8 +419,21 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
   }
 
+  // huyEdit(index: number, page: string) {
+  //   if (page == 'ttc') {
+  //     this.dataEdit[index].edit = false;
+  //   }
+  //   if (page == 'ccXdg') {
+  //     this.dataEditCc[index].edit = false;
+  //   }
+  //   if (page == 'ppxdg') {
+  //     this.dataEditPp[index].edit = false;
+  //   }
+  // }
+
   async onChangecloaiVthh(event) {
     this.rowItemTtc.donViTinh = null;
+    console.log(this.rowItemTtc)
     const cloaiVthh = this.listCloaiVthh.filter(item => item.ma == event);
     if (cloaiVthh.length > 0) {
       this.rowItemTtc.tenCloaiVthh = cloaiVthh[0].ten
@@ -425,7 +441,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.rowItemTtc.tchuanCluong = cloaiVthh[0].tchuanCluong
     }
   }
-  async onChangecloaiVthh123(event, idx) {
+
+  async onChangecloaiVTHH(event, idx) {
     this.dataEdit[idx].data.donViTinh = null;
     const cloaiVthh = this.listCloaiVthh.filter(item => item.ma == event);
     if (cloaiVthh.length > 0) {
@@ -434,7 +451,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.dataEdit[idx].data.tchuanCluong = cloaiVthh[0].tchuanCluong
     }
   }
-
 
   loadDsNam() {
     for (let i = -3; i < 23; i++) {
@@ -499,22 +515,19 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         try {
           let body = {
             id: id ? id : this.formData.get('id').value,
-            trangThai: '01'
+            trangThai: null,
           };
-          // switch (this.formData.get('trangThai').value) {
-          //   case STATUS.DU_THAO: {
-          //     body.trangThai = STATUS.CHO_DUYET_LDV;
-          //     break;
-          //   }
-          //   case STATUS.CHO_DUYET_LDV: {
-          //     body.trangThai = STATUS.DA_DUYET_LDV;
-          //     break;
-          //   }
-          //   case STATUS.TU_CHOI_LDV: {
-          //     body.trangThai = STATUS.TU_CHOI_LDV;
-          //     break;
-          //   }
-          // }
+          switch (this.formData.get('trangThai').value) {
+            case STATUS.TU_CHOI_LDV:
+            case STATUS.DU_THAO: {
+              body.trangThai = STATUS.CHO_DUYET_LDV;
+              break;
+            }
+            case STATUS.CHO_DUYET_LDV: {
+              body.trangThai = STATUS.DA_DUYET_LDV;
+              break;
+            }
+          }
           let res = await this.giaDeXuatGiaService.approve(body)
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
@@ -602,9 +615,21 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
 
-  huyEdit(id) {
-    this.dataEdit[id].edit = false
-    this.dataEditCc[id].edit = false
-    this.dataEditPp[id].edit = false
+  // huyEdit(index: number) {
+  //   this.dataEdit[index].edit = false
+  //   this.dataEditCc[index].edit = false
+  //   this.dataEditPp[index].edit = false
+  // }
+  huyEdit(index: number, page: string) {
+    if (page == 'ttc') {
+      this.dataEdit[index].edit = false;
+    }
+    if (page == 'ccXdg') {
+      this.dataEditCc[index].edit = false;
+    }
+    if (page == 'ppxdg') {
+      this.dataEditPp[index].edit = false;
+    }
   }
+
 }
