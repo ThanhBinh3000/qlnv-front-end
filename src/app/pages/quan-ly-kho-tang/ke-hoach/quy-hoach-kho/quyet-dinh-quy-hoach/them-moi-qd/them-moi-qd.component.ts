@@ -352,8 +352,10 @@ export class ThemMoiQdComponent implements OnInit {
     if (diemKho) {
       if (type) {
         type.tenDiemKho = diemKho[0].tenDvi
+        type.diaDiem = diemKho[0].diaChi
       } else {
         this.rowItem.tenDiemKho = diemKho[0].tenDvi
+        this.rowItem.diaDiem = diemKho[0].diaChi
       }
     }
   }

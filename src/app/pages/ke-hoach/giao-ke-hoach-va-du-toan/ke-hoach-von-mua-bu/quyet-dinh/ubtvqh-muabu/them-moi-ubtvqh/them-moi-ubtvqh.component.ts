@@ -193,7 +193,7 @@ export class ThemMoiUbtvqhComponent implements OnInit {
       if (isGuiDuyet) {
         this.formData.patchValue({
           id: res.data.id,
-          trangThai: res.data.trangThai
+          trangThai: STATUS.BAN_HANH
         })
         this.pheDuyet();
       } else {

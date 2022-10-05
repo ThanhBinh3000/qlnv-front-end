@@ -258,7 +258,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
         if (res.data) {
           let resQuyetDinh = await this.qdPheDuyetKhBanDauGia.chiTiet(res.data.qdPheDuyetKhBdgId);
           if (resQuyetDinh.msg == MESSAGE.SUCCESS) {
-            this.detail.maVatTuCha = resQuyetDinh.data.maVatTuCha;
+            this.detail.maVatTuCha = res.data.maVatTuCha;
             let phanLoTaiSans = resQuyetDinh.data.thongTinTaiSanCucs;
             this.getPhanLoTaiSan(phanLoTaiSans);
           } else {

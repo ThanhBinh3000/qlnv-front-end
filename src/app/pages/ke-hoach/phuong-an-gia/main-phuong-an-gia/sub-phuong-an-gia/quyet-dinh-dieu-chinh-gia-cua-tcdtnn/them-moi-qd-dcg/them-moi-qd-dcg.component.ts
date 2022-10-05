@@ -1,24 +1,25 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import dayjs from 'dayjs';
-import {UserLogin} from 'src/app/models/userlogin';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 import {
   DialogDanhSachHangHoaComponent
 } from "../../../../../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { NzModalService } from "ng-zorro-antd/modal";
 import {
   DialogSoToTrinhPagComponent
 } from "../../../../../../../components/dialog/dialog-so-to-trinh-pag/dialog-so-to-trinh-pag.component";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {ThongTinChungPag, ThongTinGia} from "../../../../../../../models/DeXuatPhuongAnGia";
-import {NgxSpinnerService} from "ngx-spinner";
-import {HelperService} from "../../../../../../../services/helper.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
+import { MESSAGE } from "../../../../../../../constants/message";
+import { ThongTinChungPag, ThongTinGia } from "../../../../../../../models/DeXuatPhuongAnGia";
+import { NgxSpinnerService } from "ngx-spinner";
+import { HelperService } from "../../../../../../../services/helper.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
 import {
   QuyetDinhDieuChinhGiaTCDTNNService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhDieuChinhGiaTCDTNN.service";
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-them-moi-qd-dcg',
@@ -241,7 +242,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
       this.listThongTinGia.forEach((item) => {
         this.dataEditDcg[item.id] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -253,7 +254,39 @@ export class ThemMoiQdDcgComponent implements OnInit {
   }
 
   banHanh() {
-
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: "Xác nhận",
+      nzContent: "Bạn có chắc chắn muốn ban hành?",
+      nzOkText: "Đồng ý",
+      nzCancelText: "Không",
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            lyDoTuChoi: null,
+            trangThai: STATUS.BAN_HANH
+          };
+          let res =
+            await this.quyetDinhDieuChinhGiaTCDTNNService.approve(
+              body
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.BAN_HANH_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
+    });
   }
 
   async save() {
@@ -281,7 +314,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
     body.thongTinGias = this.listThongTinGia;
     body.soQd = body.soQd + this.maQd
     let res
-    console.log("---------" +JSON.stringify( body));
+    console.log("---------" + JSON.stringify(body));
     if (this.idInput > 0) {
       /* body.loaiVthh = this.detail.loaiVthh
        body.cloaiVthh = this.detail.cloaiVthh

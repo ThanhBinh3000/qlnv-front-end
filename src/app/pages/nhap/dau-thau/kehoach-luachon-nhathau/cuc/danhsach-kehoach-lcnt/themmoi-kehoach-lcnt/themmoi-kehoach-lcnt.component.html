@@ -367,6 +367,32 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá VAT(đ/kg)
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfter="đ">
+                <nz-input-number nz-input [nzSize]="'small'"
+                                 nzDisabled>
+                </nz-input-number>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Thuế VAT
+            </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfter="%">
+                <nz-input-number nz-input [nzSize]="'small'"
+                                 nzDisabled >
+                </nz-input-number>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
         <div nz-col [nzSpan]="12">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Tên cơ quan đơn vị </nz-form-label>

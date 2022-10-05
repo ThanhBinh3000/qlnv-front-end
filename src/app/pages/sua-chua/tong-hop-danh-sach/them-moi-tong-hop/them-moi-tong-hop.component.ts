@@ -32,7 +32,6 @@ export class ThemMoiTongHopComponent implements OnInit {
   userInfo: UserLogin;
   formData: FormGroup
   dataTable: any[] = []
-  danhSachNam: any[] = [];
   rowItem: QuyHoachKho = new QuyHoachKho();
   dataEdit: { [key: string]: { edit: boolean; data: QuyHoachKho } } = {}
   constructor(
@@ -67,12 +66,6 @@ export class ThemMoiTongHopComponent implements OnInit {
     await Promise.all([
       this.getDataDetail(this.idInput)
     ])
-    for (let i = -3; i < 23; i++) {
-      this.danhSachNam.push({
-        value: dayjs().get('year') - i,
-        text: dayjs().get('year') - i,
-      });
-    }
     this.spinner.hide();
   }
 
