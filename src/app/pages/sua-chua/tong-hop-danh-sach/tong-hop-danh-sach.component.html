@@ -14,9 +14,8 @@
           <label class="search__label">Đơn vị đề xuất</label>
           <nz-form-control >
             <nz-input-group>
-              <nz-select  nzAllowClear [(ngModel)]="searchFilter.maDvi
-">
-                <nz-option *ngFor="let p of danhSachNam" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+              <nz-select  nzAllowClear [(ngModel)]="searchFilter.maDvi">
+                <nz-option *ngFor="let p of danhSachChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
                 </nz-option>
               </nz-select>
             </nz-input-group>
@@ -44,7 +43,7 @@
     <div class="group-button">
       <h3> KẾT QUẢ TRA CỨU </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa">
+        <button type="button" class="btn btn-sub btn-xoa" *ngIf="userService.isTongCuc()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
@@ -52,7 +51,11 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
+        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)" *ngIf="userService.isCuc()">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Tổng hợp</span>
+        </button>
+        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)" *ngIf="userService.isTongCuc()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>

@@ -4,6 +4,15 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { DonviService } from 'src/app/services/donvi.service';
 import { isEmpty } from 'lodash';
+import {Globals} from "../../../../../../shared/globals";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {UserService} from "../../../../../../services/user.service";
+import {STATUS} from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-them-hang-hong-hoc-giam-chat-luong',
@@ -15,23 +24,8 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
   @Input('dsLoaiHangHoa') dsLoaiHangHoa: any[];
   formData: FormGroup;
   dataTable: IHangHongHocGiamChatLuong[];
-  rowItem: IHangHongHocGiamChatLuong = {
-    id: null,
-    idLoaiHangHoa: null,
-    loaiHangHoa: null,
-    idHangHoa: null,
-    tenHangHoa: null,
-    idDiemKho: null,
-    tenDiemKho: null,
-    idNhaKho: null,
-    tenNhaKho: null,
-    idNganLo: null,
-    tenNganLo: null,
-    soLuongTon: null,
-    soLuongThanhLy: null,
-    donVi: null,
-    lyDo: null,
-  };
+  rowItem: IHangHongHocGiamChatLuong = new IHangHongHocGiamChatLuong();
+  userInfo: UserLogin
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
@@ -39,85 +33,77 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     [key: string]: { edit: boolean; data: IHangHongHocGiamChatLuong };
   } = {};
   dsDonVi = [];
-  dsDonViDataSource = [];
   dsDiemKho = [];
-  dsDiemKhoDataSource = [];
   dsNhaKho = [];
-  dsNhaKhoDataSource = [];
   dsNganLo = [];
-  dsNganLoDataSource = [];
   @Output('close') onClose = new EventEmitter<any>();
+   danhSachChiCuc: any[] = [];
+  listChungLoaiHangHoa: any[] = [];
+   dsLoKho: any[] = [];
 
   constructor(
-    private readonly fb: FormBuilder,
-    private readonly donviService: DonviService,
-  ) {}
-
-  ngOnInit(): void {
-    this.initForm();
-    this.initData();
-  }
-
-  initForm(): void {
+    private  fb: FormBuilder,
+    public  globals: Globals,
+    public  donViService: DonviService,
+    public  danhMucService: DanhMucService,
+    public  userService: UserService,
+    public  notification: NzNotificationService,
+    public  spinner: NgxSpinnerService,
+  ) {
     this.formData = this.fb.group({
-      idDonVi: [null],
-      tenDonVi: [null],
-      idDanhSach: [null],
-      ngayTao: [new Date()],
+      id: [null],
+      maDvi: [null],
+      maDanhSach: [null],
+      ngayDeXuat: [new Date()],
+      ngayTongHop: [null],
+      trangThai: [STATUS.CHUA_TONG_HOP],
+      tenTrangThai: ['Chưa tổng hợp'],
     });
   }
 
-  initData() {
-    this.loadDsTong();
-  }
+  ngOnInit(): void {
 
-  loadDsTong() {
-    if (!isEmpty(this.dsTong)) {
-      this.dsDonVi = this.dsTong[DANH_MUC_LEVEL.CHI_CUC];
-      this.dsDonViDataSource = this.dsDonVi.map((item) => item.tenDvi);
-      // this.dsDiemKho = this.dsTong[DANH_MUC_LEVEL.DIEM_KHO];
-      // this.dsDiemKhoDataSource = this.dsDiemKho.map((item) => item.tenDvi);
-      // this.dsNhaKho = this.dsTong[DANH_MUC_LEVEL.NHA_KHO];
-      // this.dsNhaKhoDataSource = this.dsNhaKho.map((item) => item.tenDvi);
-      // this.dsNganLo = this.dsTong[DANH_MUC_LEVEL.NGAN_LO];
-      // this.dsNganLoDataSource = this.dsNganLo.map((item) => item.tenDvi);
+    try {
+      this.userInfo = this.userService.getUserLogin()
+      this.loadDanhSachChiCuc();
+      this.loaiVTHHGetAll();
+    } catch (error) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
     }
   }
 
-  onChangeDonVi(id) {
-    const chiCuc = this.dsDonVi.find((item) => item.id === Number(id));
-    if (chiCuc) {
-      const result = {
-        ...this.donviService.layDsPhanTuCon(this.dsTong, chiCuc),
-      };
-      this.dsDiemKho = result[DANH_MUC_LEVEL.DIEM_KHO];
-    } else {
-      this.dsDiemKho = [];
-    }
+  async loadDanhSachChiCuc() {
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
+    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
   }
 
-  onChangeDiemKho(id) {
-    const diemKho = this.dsDiemKho.find((item) => item.id === Number(id));
-    if (diemKho) {
-      const result = {
-        ...this.donviService.layDsPhanTuCon(this.dsTong, diemKho),
-      };
-      this.dsNhaKho = result[DANH_MUC_LEVEL.NHA_KHO];
-    } else {
-      this.dsNhaKho = [];
+  async changeLoaiHangHoa(id: any) {
+    if (id && id > 0) {
+      let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id);
+      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
+      console.log(this.listChungLoaiHangHoa)
+      console.log(this.dsLoaiHangHoa)
     }
   }
-
-  onChangeNhaKho(id) {
-    const nhaKho = this.dsNhaKho.find((item) => item.id === Number(id));
-    if (nhaKho) {
-      const result = {
-        ...this.donviService.layDsPhanTuCon(this.dsTong, nhaKho),
-      };
-      this.dsNganLo = result[DANH_MUC_LEVEL.NGAN_LO];
-    } else {
-      this.dsNganLo = [];
-    }
+  async loaiVTHHGetAll() {
+      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          hangHoa.data.forEach((item) => {
+            if (item.cap === "1" && item.ma != '01') {
+              this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, item];
+            } else {
+              this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, ...item.child];
+            }
+          })
+        }
+      })
   }
 
   huy() {
@@ -126,13 +112,19 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
 
   exportData() {}
 
-  inDanhSach() {}
-
   luu() {}
 
   xoaItem(id: number) {}
 
-  themMoiItem() {}
+  themMoiItem() {
+    if (!this.dataTable) {
+      this.dataTable = [];
+    }
+    this.dataTable = [...this.dataTable, this.rowItem]
+    this.rowItem = new IHangHongHocGiamChatLuong();
+    this.updateEditCache()
+  }
+
 
   clearData() {}
 
@@ -159,39 +151,68 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
   }
 
   updateEditCache(): void {
-    this.dataTable.forEach((item) => {
-      this.dataEdit[item.id] = {
+    this.dataTable.forEach((item, index) => {
+      this.dataEdit[index] = {
         edit: false,
         data: { ...item },
       };
     });
   }
+
+  async onChangChiCuc(event) {
+    const body = {
+      maDviCha: event,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
+    this.dsDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+  }
+
+  async onChangeDiemKho(event) {
+    const body = {
+      maDviCha: event,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
+    this.dsNhaKho = dsTong[DANH_MUC_LEVEL.NHA_KHO];
+  }
+
+  async onChangeNhaKho(event) {
+    const body = {
+      maDviCha: event,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
+    this.dsNganLo = dsTong[DANH_MUC_LEVEL.NGAN_KHO];
+  }
+
+ async onChangeNganKho(event) {
+    const body = {
+      maDviCha: event,
+      trangThai: '01',
+    };
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
+    this.dsLoKho = dsTong[DANH_MUC_LEVEL.LO_KHO];
+  }
 }
 
-interface IDanhSachHangHongHocGiamChatLuong {
+export class IHangHongHocGiamChatLuong {
   id: number;
-  maDanhSach: string;
-  idDonVi: number;
-  tenDonVi: string;
-  ngayTao: Date;
-  trangThai: string;
-  danhSachHang: IHangHongHocGiamChatLuong[];
-}
-
-interface IHangHongHocGiamChatLuong {
-  id: number;
-  idLoaiHangHoa: number;
-  loaiHangHoa: string;
-  idHangHoa: number;
-  tenHangHoa: string;
-  idDiemKho: number;
-  tenDiemKho: string;
-  idNhaKho: number;
-  tenNhaKho: string;
-  idNganLo: number;
-  tenNganLo: string;
+  loaiVthh: number;
+  tenLoaiVthh: string;
+  cloaiVthh: number;
+  moTaHangHoa: string;
+  maNhaKho : string;
+  maDiemKho : string;
+  maNganKho : string;
+  maLoKho : string;
   soLuongTon: number;
   soLuongThanhLy: number;
   donVi: string;
   lyDo: string;
+  thHhhId: string
+  qlhhhId: string;
 }

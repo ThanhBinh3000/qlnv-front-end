@@ -229,7 +229,7 @@ export class ThemMoiTtcpComponent implements OnInit {
       if (isGuiDuyet) {
         this.formData.patchValue({
           id: res.data.id,
-          trangThai: res.data.trangThai
+          trangThai: STATUS.BAN_HANH
         })
         this.pheDuyet();
       } else {
@@ -275,7 +275,7 @@ export class ThemMoiTtcpComponent implements OnInit {
     this.formData.get('soQdUbtvqh').setValue(null);
     let body = {
       namQd: namQd,
-      trangThai: "11"
+      trangThai: STATUS.BAN_HANH
     }
     let res = await this.quyetDinhUbtvqhMuBuBoSung.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
