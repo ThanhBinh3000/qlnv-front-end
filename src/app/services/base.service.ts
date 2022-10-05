@@ -26,22 +26,22 @@ export abstract class BaseService {
   }
 
   create(body): Promise<OldResponseData> {
-    const url = `${environment.LOCAL}/${this.table}/them-moi`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/them-moi`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   update(body): Promise<OldResponseData> {
-    const url = `${environment.LOCAL}/${this.table}/cap-nhat`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/cap-nhat`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   approve(body): Promise<OldResponseData> {
-    const url = `${environment.LOCAL}/${this.table}/phe-duyet`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/phe-duyet`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
   getDetail(id): Promise<OldResponseData> {
-    const url = `${environment.LOCAL}/${this.table}/chi-tiet/${id}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
@@ -51,7 +51,7 @@ export abstract class BaseService {
   }
 
   search(body) {
-    const url = `${environment.LOCAL}/${this.table}/tra-cuu`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
