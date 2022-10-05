@@ -236,7 +236,7 @@ export class ThemMoiBtcComponent implements OnInit {
       if (isGuiDuyet) {
         this.formData.patchValue({
           id: res.data.id,
-          trangThai: res.data.trangThai
+          trangThai: STATUS.BAN_HANH
         })
         this.pheDuyet();
       } else {
@@ -285,7 +285,7 @@ export class ThemMoiBtcComponent implements OnInit {
     this.formData.get('soQdTtcp').setValue(null);
     let body = {
       namQd: namQd,
-      trangThai: "11"
+      trangThai: STATUS.BAN_HANH
     }
     let res = await this.quyetDinhTtcpMuBuBoSung.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

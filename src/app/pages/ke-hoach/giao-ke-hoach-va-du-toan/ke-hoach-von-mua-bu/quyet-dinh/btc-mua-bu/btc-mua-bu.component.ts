@@ -175,6 +175,7 @@ export class BtcMuaBuComponent implements OnInit {
         let body = this.formData.value;
         body.tuNgay = body.ngayQd[0];
         body.denNgay = body.ngayQd[1];
+        body.ngayQd = body.ngayQd
         this.qdBtcService
           .export(body)
           .subscribe((blob) =>
