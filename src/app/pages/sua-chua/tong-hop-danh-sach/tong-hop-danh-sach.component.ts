@@ -34,7 +34,6 @@ export class TongHopDanhSachComponent implements OnInit {
   isViewDetail: boolean;
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
-  danhSachNam: any[] = [];
   searchFilter = {
    maTongHop: '',
     ngayTongHop: '',
@@ -61,6 +60,7 @@ export class TongHopDanhSachComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   userInfo: UserLogin;
+  danhSachChiCuc: any[]= [];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -75,24 +75,22 @@ export class TongHopDanhSachComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    try {
-      this.userInfo = this.userService.getUserLogin();
-      for (let i = -3; i < 23; i++) {
-        this.danhSachNam.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
-      await this.search();
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-    console.log(
-      this.dataTable
-    )
+    this.userInfo = this.userService.getUserLogin();
+    await Promise.all([
+    await this.search(),
+    await this.loadDanhSachChiCuc(this.userInfo.MA_DVI)
+    ])
+    this.spinner.hide();
+  }
+
+  async loadDanhSachChiCuc(maCuc) {
+    const body = {
+      maDviCha: maCuc,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
+    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
   }
 
   async search() {
