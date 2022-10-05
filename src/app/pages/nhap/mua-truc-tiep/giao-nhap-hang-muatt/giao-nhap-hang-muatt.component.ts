@@ -12,7 +12,6 @@ import { Globals } from 'src/app/shared/globals';
 })
 export class GiaoNhapHangMuattComponent implements OnInit {
 
-  loaiVthhSelected: string;
   tabs: any[] = [];
   count: Array<number> = [];
   listVthh: any[] = []
@@ -29,24 +28,23 @@ export class GiaoNhapHangMuattComponent implements OnInit {
     this.loaiVTHHGetAll();
   }
   async loaiVTHHGetAll() {
-    this.tabs = [
-      {
-        giaTri: 'Tất cả',
-        ma: null,
-      },
-    ];
+
+    // this.tabs = [
+    //   {
+    //     giaTri: 'Tất cả',
+    //     ma: null,
+    //   },
+    // ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        this.listVthh = res.data;
-        res.data.forEach((element) => {
-          element.count = 0;
-          this.tabs.push(element);
-        });
-      }
+      this.tabs = [
+        ...this.tabs,
+        ...res.data.filter((item) => item.ma == '0101'),
+      ];
     }
   }
 
+  loaiVthhSelected: string = '0101';
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
   }
