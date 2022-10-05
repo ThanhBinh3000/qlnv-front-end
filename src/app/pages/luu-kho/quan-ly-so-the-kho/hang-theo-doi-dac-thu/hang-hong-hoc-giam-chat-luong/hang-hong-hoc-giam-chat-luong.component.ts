@@ -92,6 +92,7 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
     try {
       this.spinner.show();
       this.userInfo = this.userService.getUserLogin()
+      await this.search()
       await this.loaiVTHHGetAll()
       await this.loadDanhSachChiCuc()
       await this.loadDsTong()
