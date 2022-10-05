@@ -248,9 +248,9 @@
     </div>
 </ng-container>
 <ng-template #templateThemmoi>
-    <app-them-dx-pag-lt *ngIf="(userService.isCuc() && pagType=='LT')" [type]="type"
-        [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
+    <app-them-dx-pag-lt *ngIf="pagType=='LT'" [type]="type" [isView]="isViewDetail" [idInput]="idSelected"
+        (onClose)="onClose()">
     </app-them-dx-pag-lt>
-    <app-them-moi-de-xuat-pag *ngIf="userService.isTongCuc() && pagType=='VT'" [loaiVthh]="pagType" [type]="type"
-        [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()"></app-them-moi-de-xuat-pag>
+    <app-them-moi-de-xuat-pag *ngIf="pagType=='VT'" [loaiVthh]="pagType" [type]="type" [isView]="isViewDetail"
+        [idInput]="idSelected" (onClose)="onClose()"></app-them-moi-de-xuat-pag>
 </ng-template>
