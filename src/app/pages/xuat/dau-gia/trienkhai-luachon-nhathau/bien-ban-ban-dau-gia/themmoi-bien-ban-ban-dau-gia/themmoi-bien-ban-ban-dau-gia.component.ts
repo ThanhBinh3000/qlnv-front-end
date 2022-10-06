@@ -321,6 +321,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             if (res.msg == MESSAGE.SUCCESS) {
                 if (res.data) {
                     this.bienBanBanDauGia = res.data;
+                    this.bienBanBanDauGia.ngayToChuc = [res.data.ngayToChucTu,res.data.ngayToChucDen];
                     this.dsChiTietCtsClone = this.bienBanBanDauGia.cts;
                     this.dsChiTietCtsClone.forEach(cts => {
                         if (cts.loaiTptg === '02') {
