@@ -681,8 +681,9 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         this.phuongAnXuatList.push(data);
         data.chiTietDiaDiems.forEach(s => {
           s.maDvi = data.maDvi;
-          s.maChiCuc = data.maDvi;
-          s.tenChiCuc = data.tenDvi;
+          s.tenDvi = data.tenDvi;
+          s.maChiCuc = data.maChiCuc;
+          s.tenChiCuc = data.tenChiCuc;
           s.cloaiVthh = s.chungLoaiHh;
           s.tenCloaiVthh = s.tenChungLoaiHh;
           this.formData.get('thongTinChiTiet')
