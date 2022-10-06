@@ -17,9 +17,9 @@
             <th *ngIf="isTableKetQua">
                 <input type="text" [(ngModel)]="rowItem.tenDviThamDinh" nz-input />
             </th>
-          <th>
-            <input type="text" [(ngModel)]="rowItem.tenDviBaoGia" nz-input />
-          </th>
+            <th>
+                <input type="text" [(ngModel)]="rowItem.tenDviBaoGia" nz-input />
+            </th>
             <th *ngIf="isTableKetQua">
                 <input type="text" [(ngModel)]="rowItem.cloaiVthh" nz-input />
             </th>
@@ -47,6 +47,7 @@
                     </ng-template>
                 </nz-form-control>
             </th>
+
             <th *ngIf="isTableKetQua">
                 <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input />
             </th>
@@ -63,6 +64,7 @@
     <tbody>
         <tr *ngFor="let data of dataTable; let idx = index">
             <td class="text-center">{{ idx + 1 }}</td>
+            <td>{{ data.tenDviThamDinh }}</td>
             <td>{{ data.tenDviBaoGia }}</td>
             <td *ngIf="isTableKetQua">{{ data.cloaiVthh }}</td>
             <td>{{data.donGia }}</td>
