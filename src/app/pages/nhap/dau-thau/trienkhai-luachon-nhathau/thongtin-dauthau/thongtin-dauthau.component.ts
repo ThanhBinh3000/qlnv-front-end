@@ -9,7 +9,6 @@ import { DATEPICKER_CONFIG, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFA
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DauThauService } from 'src/app/services/dauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
@@ -17,6 +16,9 @@ import { convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFuncti
 import { saveAs } from 'file-saver';
 import { STATUS } from 'src/app/constants/status';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from "../../../../../services/quyetDinhPheDuyetKeHoachLCNT.service";
+import {
+  ThongTinDauThauService
+} from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 
 @Component({
   selector: 'app-thongtin-dauthau',
@@ -31,7 +33,7 @@ export class ThongtinDauthauComponent implements OnInit {
     private notification: NzNotificationService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private danhSachDauThauService: DanhSachDauThauService,
-    private dauThauService: DauThauService,
+    private dauThauService: ThongTinDauThauService,
     private modal: NzModalService,
     public userService: UserService,
     private helperService: HelperService,

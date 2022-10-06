@@ -138,6 +138,7 @@
             </th>
             <th *ngIf="userService.isTongCuc()"></th>
             <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -162,12 +163,12 @@
               <a (click)="detail(data)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == '03') 
+              <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == '03')
                 && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_SUA')) && userService.isTongCuc()"
                 (click)="detail(data)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO 
+              <a *ngIf="data.trangThai == STATUS.DU_THAO
                 && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XOA')) && userService.isTongCuc()"
                 (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>

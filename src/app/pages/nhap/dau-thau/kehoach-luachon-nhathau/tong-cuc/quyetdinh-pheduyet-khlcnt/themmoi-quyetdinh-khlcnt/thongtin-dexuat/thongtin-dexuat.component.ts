@@ -4,7 +4,6 @@ import { Globals } from "../../../../../../../../shared/globals";
 import { MESSAGE } from "../../../../../../../../constants/message";
 import { DanhMucService } from "../../../../../../../../services/danhmuc.service";
 import { cloneDeep, chain } from 'lodash';
-import { DauThauService } from 'src/app/services/dauThau.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -91,6 +90,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data)
         }
+        this.helperService.setIndexArray(this.listOfData);
         this.convertListData();
       }
     }
@@ -129,7 +129,6 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
 
 
   themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
-
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm nhập kho',
       nzContent: DialogThemMoiVatTuComponent,

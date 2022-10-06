@@ -12,7 +12,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhSachGoiThau, FileDinhKem, ThongTinChung, ThongTinDeXuatKeHoachLuaChonNhaThau, ThongTinDeXuatKeHoachLuaChonNhaThauInput } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { dauThauGoiThauService } from 'src/app/services/dauThauGoiThau.service';
+import { dauThauGoiThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/dauThauGoiThau.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
@@ -21,9 +21,11 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { DauThauService } from 'src/app/services/dauThau.service';
 import { STATUS } from "../../../../../../constants/status";
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {
+  ThongTinDauThauService
+} from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 
 @Component({
   selector: 'app-themmoi-hopdong-phuluc',
@@ -94,7 +96,7 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
     private dauThauGoiThauService: dauThauGoiThauService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
-    private ttinDauThauService: DauThauService,
+    private ttinDauThauService: ThongTinDauThauService,
 
   ) {
     this.formData = this.fb.group(
