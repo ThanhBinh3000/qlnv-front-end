@@ -7,10 +7,19 @@
     </div>
   </div>
   <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24" class="mt-16">
-    <div nz-col [nzSpan]="24">
+    <div nz-col [nzSpan]="8">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Chi cục </nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true"> Danh sách Cục </nz-form-label>
         <nz-select [(ngModel)]="diaDiemNhapKho.maDvi" [ngModelOptions]="{standalone: true}"
+                   (ngModelChange)="changeCuc($event)" [nzDisabled]="!userService.isTongCuc()">
+          <nz-option *ngFor="let cuc of cucList" [nzValue]="cuc.maDvi" [nzLabel]="cuc.tenDvi"></nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Danh Sách Chi cục </nz-form-label>
+        <nz-select [(ngModel)]="diaDiemNhapKho.maChiCuc" [ngModelOptions]="{standalone: true}"
           (ngModelChange)="changeChiCuc()">
           <nz-option *ngFor="let chiCuc of chiCucList" [nzValue]="chiCuc.maDvi" [nzLabel]="chiCuc.tenDvi"></nz-option>
         </nz-select>
@@ -239,7 +248,7 @@
         Hủy
       </button>
       <button nz-button (click)="handleOk()" class="modal__button--save"
-              [disabled]="slLonHonChiTieu || !diaDiemNhapKho.maDvi">
+              [disabled]="slLonHonChiTieu || !diaDiemNhapKho.maChiCuc">
         <i nz-icon nzType="save"></i>
         Lưu
       </button>
