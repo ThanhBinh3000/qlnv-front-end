@@ -117,21 +117,21 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
       {
         id: [],
         maDvi: [],
-        tenDvi: [],
+        tenDvi: [,[Validators.required]],
         maTongHop: [],
         nam: [dayjs().get("year"), [Validators.required]],
-        ngayTongHop: [],
-        loaiVthh: [],
-        cloaiVthh: [],
+        ngayTongHop: [,[Validators.required]],
+        loaiVthh: [,[Validators.required]],
+        cloaiVthh: [,[Validators.required]],
         tongSoLuong: [],
         trangThai: [],
-        loaiHinhNhapXuat: [],
-        noiDung: [],
+        loaiHinhNhapXuat: [,[Validators.required]],
+        noiDung: [,[Validators.required]],
         lyDoTuChoi: [],
-        tenLoaiVthh: [],
-        tenCloaiVthh: [],
+        tenLoaiVthh: [,[Validators.required]],
+        tenCloaiVthh: [,[Validators.required]],
         tenTrangThai: [],
-        thongTinDeXuat: [new Array()],
+        thongTinDeXuat: [new Array(),],
         thongTinTongHop: [new Array()],
 
       }
@@ -427,6 +427,8 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
         });
     } else {
       this.formData.patchValue({
+        trangThai: STATUS.DU_THAO,
+        tenTrangThai: 'Dự thảo',
         maDvi: this.userInfo.MA_DVI,
         tenDvi: this.userInfo.TEN_DVI
       })
@@ -434,7 +436,6 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   }
 
   async synthetic() {
-    this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       let invalid = [];
@@ -449,12 +450,15 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
       return;
     } else {
       try {
+        this.spinner.show();
         let body = this.formData.value;
         await this.tongHopPhuongAnCuuTroService.syntheic(body).then(res => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.thongTinChiTiet = this.buildChiTietPhuongAn(res.data.thongTinDeXuat);
             this.thongTinChiTietTh = this.thongTinChiTiet;
             this.formData.patchValue({thongTinDeXuat: res.data.thongTinDeXuat});
+            this.summaryData();
+            this.expandAll();
           } else {
             this.formData.patchValue({thongTinTongHop: []})
             this.thongTinChiTiet = [];
