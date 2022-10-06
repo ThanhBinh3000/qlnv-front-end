@@ -174,11 +174,13 @@
                 </div>
             </div>
             <div nz-row [nzGutter]="24">
-                <div nz-col [nzSpan]="24">
-                    <nz-form-item nz-col nzSpan="24" class="form-item">
-                        <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
+                <div nz-col nzSpan="24">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">
+                            Căn cứ pháp lý
+                        </nz-form-label>
                         <div class="list-file">
-                            <file-list [data]="taiLieuDinhKemList"></file-list>
+                            <file-list [data]="fileDinhKem"></file-list>
                         </div>
                     </nz-form-item>
                 </div>
@@ -338,7 +340,7 @@
                 </div>
             </div>
         </div>
-        <!-- <nz-table #canCuKhac class="pd-10" nzBordered [nzData]="canCuKhacList" id="table-can-cu-khac"
+        <nz-table #canCuKhac class="pd-10" nzBordered [nzData]="canCuKhacList" id="table-can-cu-khac"
             [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
                 <tr>
@@ -374,10 +376,10 @@
                 <tr *ngFor="let data of canCuKhac.data, let i = index" class="editable-row">
                     <ng-container *ngIf="!editCoSoCache[data.id]?.edit; else editCoSoTemplate">
                         <td>{{i + 1}}</td>
-                        <td>{{data.moTa}}</td>
-                        <td></td>
+                        <td>{{data.tenTlieu}}</td>
+                        <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
                         <td class="action text-right">
-                            <a>
+                            <a (click)="downloadFile(data.children[0])">
                                 <i class="icon htvbdh_tcdt_import"></i>
                             </a>
                             <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
@@ -399,7 +401,9 @@
                             <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
                                 [data]="editCoSoCache[data.id]?.data?.taiLieu" type="file"
                                 (selectDataEvent)="openFile($event, data.id, 'co-so')"
-                                [trangThai]="formData.value.trangThai" [showDowloadFile]="false">
+                                [trangThai]="formData.value.trangThai"
+                                (removeDataEvent)="deleteTaiLieuDinhKemTag($event, data.id, 'co-so')"
+                                [showDowloadFile]="false">
                             </multiple-tag>
                         </td>
                         <td>
@@ -413,7 +417,7 @@
                     </ng-template>
                 </tr>
             </tbody>
-        </nz-table> -->
+        </nz-table>
         <form nzLayout="vertical" nz-form [formGroup]="formData">
             <div nz-row [nzGutter]="[24]">
                 <div nz-col [nzSpan]="6">
@@ -510,11 +514,11 @@
                             <td></td>
                             <td></td>
                             <td>{{dtGoiThau.diaDiemNhap}}</td>
+                            <td></td>
+                            <td></td>
                             <td>{{dtGoiThau.soLuongDxmtt | number : '1.0-1' : 'vi_VN'}}</td>
                             <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>{{dtGoiThau.donGiaVat * dtGoiThau.soLuongDxmtt}}</td>
+                            <td>{{dtGoiThau.donGiaVat * dtGoiThau.soLuongDxmtt | number : '1.0-1' : 'vi_VN'}} </td>
                             <td></td>
                             <td></td>
                             <td *ngIf="userService.isCuc()"></td>
