@@ -107,6 +107,7 @@ export class BaoCao04anComponent implements OnInit {
         this.spinner.show();
         //thong tin chung cua bieu mau
         this.id = this.data?.id;
+        this.idBaoCao = this.data?.idBaoCao;
         this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.maDvi = this.data?.maDvi;
         this.thuyetMinh = this.data?.thuyetMinh;
@@ -734,7 +735,7 @@ export class BaoCao04anComponent implements OnInit {
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua danhSachChiTietbaoCao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.calcuDeviant(this.lstCtietBcao[index].maNdungChi);
-        if (this.lstCtietBcao[index].maNdungChi != 13964 && this.lstCtietBcao[index].maNdungChi != 13965) {
+        if (this.lstCtietBcao[index].maNdungChi != this.idB1 && this.lstCtietBcao[index].maNdungChi != this.idB2) {
             this.sum(this.lstCtietBcao[index].stt);
         }
         const soLuongThucHienGop = this.lstCtietBcao.find(item => item.stt == '0.1.2');
@@ -790,60 +791,79 @@ export class BaoCao04anComponent implements OnInit {
         const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.1.2'));
         const cucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.2'));
         const tongCucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.3'));
-
-        this.lstCtietBcao[nvChuyenMon].listCtiet.forEach(item => {
-            if (item.loaiMatHang == 0) {
-                const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
-                const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
-                const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
-                if (this.userService.isChiCuc()) {
-                    item.sl = mulNumber(sl, dm.nvChuyenMonDviTt);
-                } else {
-                    item.sl = mulNumber(sl, sumNumber([dm.nvChuyenMonDviTt, dm.nvChuyenMonVp]));
+        //tinh dinh muc cho nghiep vu chuyen mon
+        if (nvChuyenMon) {
+            this.lstCtietBcao[nvChuyenMon].listCtiet.forEach(item => {
+                if (item.loaiMatHang == 0) {
+                    const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
+                    const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
+                    const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
+                    if (dm) {
+                        if (this.userService.isChiCuc()) {
+                            item.sl = mulNumber(sl, dm.nvChuyenMonDviTt);
+                        } else {
+                            item.sl = mulNumber(sl, sumNumber([dm.nvChuyenMonDviTt, dm.nvChuyenMonVp]));
+                        }
+                    }
                 }
-            }
-        })
-        this.tinhTongDm(nvChuyenMon);
+            })
+            this.tinhTongDm(nvChuyenMon);
+            this.sum(this.lstCtietBcao[nvChuyenMon].stt);
+        }
 
-        this.lstCtietBcao[ttCaNhan].listCtiet.forEach(item => {
-            if (item.loaiMatHang == 0) {
-                const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
-                const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
-                const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
-                if (this.userService.isChiCuc()) {
-                    item.sl = mulNumber(sl, dm.ttCaNhanDviTt);
-                } else {
-                    item.sl = mulNumber(sl, sumNumber([dm.ttCaNhanDviTt, dm.ttCaNhanVp]));
+        //tinh dinh muc cho thanh toan ca nhan        
+        if (ttCaNhan) {
+            this.lstCtietBcao[ttCaNhan].listCtiet.forEach(item => {
+                if (item.loaiMatHang == 0) {
+                    const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
+                    const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
+                    const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
+                    if (dm) {
+                        if (this.userService.isChiCuc()) {
+                            item.sl = mulNumber(sl, dm.ttCaNhanDviTt);
+                        } else {
+                            item.sl = mulNumber(sl, sumNumber([dm.ttCaNhanDviTt, dm.ttCaNhanVp]));
+                        }
+                    }
                 }
-            }
-        })
-        this.tinhTongDm(ttCaNhan);
-
-        this.lstCtietBcao[cucDh].listCtiet.forEach(item => {
-            if (item.loaiMatHang == 0) {
-                const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
-                const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
-                const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
-                if (this.userService.isChiCuc()) {
-                    item.sl = mulNumber(sl, dm.dieuHanhDviTt);
-                } else {
-                    item.sl = mulNumber(sl, sumNumber([dm.dieuHanhDviTt, dm.dieuHanhVp]));
+            })
+            this.tinhTongDm(ttCaNhan);
+            this.sum(this.lstCtietBcao[ttCaNhan].stt);
+        }
+        //tinh dinh muc cho cuc dieu hanh
+        if (cucDh) {
+            this.lstCtietBcao[cucDh].listCtiet.forEach(item => {
+                if (item.loaiMatHang == 0) {
+                    const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
+                    const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
+                    const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
+                    if (dm) {
+                        if (this.userService.isChiCuc()) {
+                            item.sl = mulNumber(sl, dm.dieuHanhDviTt);
+                        } else {
+                            item.sl = mulNumber(sl, sumNumber([dm.dieuHanhDviTt, dm.dieuHanhVp]));
+                        }
+                    }
                 }
-            }
-        })
-        this.tinhTongDm(cucDh);
-
-        this.lstCtietBcao[tongCucDh].listCtiet.forEach(item => {
-            if (item.loaiMatHang == 0) {
-                const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
-                const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
-                const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
-                item.sl = mulNumber(sl, dm.tcDhNvCm);
-            }
-        })
-        this.tinhTongDm(tongCucDh);
-
-        this.sum(this.lstCtietBcao[nvChuyenMon].stt);
+            })
+            this.tinhTongDm(cucDh);
+            this.sum(this.lstCtietBcao[cucDh].stt);
+        }
+        //tinh dinh muc cho tong cuc dieu hanh
+        if (tongCucDh) {
+            this.lstCtietBcao[tongCucDh].listCtiet.forEach(item => {
+                if (item.loaiMatHang == 0) {
+                    const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
+                    const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
+                    const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
+                    if (dm) {
+                        item.sl = mulNumber(sl, dm.tcDhNvCm);
+                    }
+                }
+            })
+            this.tinhTongDm(tongCucDh);
+            this.sum(this.lstCtietBcao[tongCucDh].stt);
+        }
     }
 
     tinhTongDm(index: number) {
@@ -1245,10 +1265,10 @@ export class BaoCao04anComponent implements OnInit {
                 }
             })
             this.calcuDeviant(data.maNdungChi);
-            if (data.maNdungChi == 13936) {
-                const ind1 = this.lstCtietBcao.findIndex(e => e.maNdungChi == 13963);
-                const ind2 = this.lstCtietBcao.findIndex(e => e.maNdungChi == 13964);
-                const ind3 = this.lstCtietBcao.findIndex(e => e.maNdungChi == 13965);
+            if (data.maNdungChi == this.noiDungChiFull.find(e => e.ma == '0.1.5')?.id) {
+                const ind1 = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.idB);
+                const ind2 = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.idB1);
+                const ind3 = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.idB2);
                 if (ind1 != -1) {
                     this.lstCtietBcao[ind1].trongDotTcong = this.lstCtietBcao[index].trongDotTcong;
                     this.lstCtietBcao[ind1].luyKeTcong = this.lstCtietBcao[index].luyKeTcong;
@@ -1335,7 +1355,7 @@ export class BaoCao04anComponent implements OnInit {
         if (this.luyKes.findIndex(e => e.maNdungChi == item.maNdungChi) != -1) {
             return false;
         }
-        if (item.level > 2) {
+        if (item.level <= 2) {
             return false;
         }
         return true;

@@ -1,4 +1,4 @@
-import { DanhSachGoiThau, DanhSachMuaTrucTiep } from './../../../models/DeXuatKeHoachuaChonNhaThau';
+import { DanhSachMuaTrucTiep } from './../../../models/DeXuatKeHoachMuaTrucTiep';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -43,13 +43,13 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       id: [null],
       maDvi: [null, [Validators.required]],
       tenDvi: [null],
-      tenCcuc: [null],
       donGiaVat: [0, [Validators.required]],
       soLuongDxmtt: [null, [Validators.required]],
-      thanhTien: [null],
-      bangChu: [null],
-      children: [null],
-      diaDiemNhap: [null]
+      diaDiemNhap: [null],
+      maDiemKho: [null],
+      soLuongCtieu: [null],
+      soLuongKhDd: [null],
+
     });
   }
 
@@ -68,7 +68,6 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       dataDiemNhap += item.tenDiemKho + "(" + item.soLuongDxmtt + "), "
     })
     this.formData.patchValue({
-      children: this.listOfData,
       diaDiemNhap: dataDiemNhap.substring(0, dataDiemNhap.length - 2)
     })
     this._modalRef.close(this.formData);
@@ -86,10 +85,12 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       this.formData.patchValue({
         maDvi: this.dataEdit.maDvi,
         tenDvi: this.dataEdit.tenDvi,
-        tenCcuc: this.dataEdit.tenCcuc,
-        soLuongDxmtt: this.dataEdit.soLuongDxmtt,
         donGiaVat: this.dataEdit.donGiaVat,
-        thanhTien: this.dataEdit.thanhTien
+        soLuongDxmtt: this.dataEdit.soLuongDxmtt,
+        diaDiemNhap: this.dataEdit.diaDiemNhap,
+        maDiemKho: this.dataEdit.maDiemKho,
+        soLuongCtieu: this.dataEdit.soLuongCtieu,
+        soLuongKhDd: this.dataEdit.soLuongKhDd,
       })
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
@@ -107,13 +108,6 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     if (res.msg === MESSAGE.SUCCESS) {
       this.listChiCuc = res.data;
     }
-    // if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
-    //   this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
-    // }
-    // if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
-    //   this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
-    // }
-
   }
 
   checkDisabledSave() {
@@ -155,7 +149,6 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   addDiemKho() {
     if (this.thongtinDauThau.maDiemKho && this.thongtinDauThau.soLuongDxmtt) {
       this.thongtinDauThau.donGiaVat = this.formData.get('donGiaVat').value;
-      this.thongtinDauThau.idVirtual = new Date().getTime();
       this.thongtinDauThau.maDvi = this.formData.get('maDvi').value;
       this.listOfData = [...this.listOfData, this.thongtinDauThau];
       this.updateEditCache;

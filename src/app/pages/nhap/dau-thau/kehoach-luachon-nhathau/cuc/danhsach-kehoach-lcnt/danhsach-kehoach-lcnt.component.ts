@@ -173,7 +173,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
-    console.log(this.dataTable)
   }
 
   async changePageIndex(event) {
@@ -433,7 +432,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          console.log(item[key])
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
             temp.push(item)
           }

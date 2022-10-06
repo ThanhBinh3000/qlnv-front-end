@@ -994,8 +994,14 @@ export function sumNumber(num: any): number {
 }
 
 export function mulNumber(num1: number, num2: number) {
-  if ((!num1 && num1 !== 0) || (!num2 && num2 !== 0)) {
+  if ((!num1 && num1 !== 0) && (!num2 && num2 !== 0)) {
     return null;
+  }
+  if (!num1) {
+    num1 = 0;
+  }
+  if (!num2) {
+    num2 = 0;
   }
   return num1 * num2;
 }

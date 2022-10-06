@@ -16,6 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
 import { STATUS } from 'src/app/constants/status';
+import { QuyetDinhPheDuyetKeHoachLCNTService } from "../../../../../services/quyetDinhPheDuyetKeHoachLCNT.service";
 
 @Component({
   selector: 'app-thongtin-dauthau',
@@ -34,6 +35,7 @@ export class ThongtinDauthauComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     private helperService: HelperService,
+    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
   ) {
 
   }
@@ -82,7 +84,7 @@ export class ThongtinDauthauComponent implements OnInit {
   isViewDetail: boolean;
 
   async ngOnInit() {
-    this.spinner.show();
+    await this.spinner.show();
     this.listVthh = LIST_VAT_TU_HANG_HOA;
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -95,11 +97,11 @@ export class ThongtinDauthauComponent implements OnInit {
         });
       }
       await this.search();
-      this.spinner.hide();
+      await this.spinner.hide();
     }
     catch (e) {
       console.log('error: ', e)
-      this.spinner.hide();
+      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
@@ -121,16 +123,14 @@ export class ThongtinDauthauComponent implements OnInit {
       loaiVthh: this.searchFilter.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
+      soQd: this.searchFilter.soQd,
+      lastest: 1,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi: this.userInfo.MA_DVI,
-      soQd: this.searchFilter.soQd,
-    }
-    // if (this.userService.isCuc()) {
-    // }
-    let res = await this.dauThauService.search(body);
+    };
+    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -138,7 +138,6 @@ export class ThongtinDauthauComponent implements OnInit {
       if (data && data.content && data.content.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
-          // item.statusConvert = this.statusGoiThau(item.trangThai);
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable)
