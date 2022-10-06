@@ -25,6 +25,7 @@ import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-themmoi-quyet-dinh-phe-duyet-kq-ban-dau-gia',
@@ -202,8 +203,8 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC
-      || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CUC)) {
+    if (this.detail && (this.detail.trangThai == STATUS.TU_CHOI_TP ||this.detail.trangThai == STATUS.TU_CHOI_LDC
+      || this.detail.trangThai == STATUS.DU_THAO )) {
       return true;
     }
   }
@@ -344,20 +345,31 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
         this.spinner.show();
         try {
           await this.save(true);
+          let trangThai;
+          switch (this.detail.trangThai) {
+            case STATUS.DU_THAO : {
+              trangThai = STATUS.CHO_DUYET_TP
+              break;
+            }
+            case STATUS.TU_CHOI_TP : {
+              trangThai = STATUS.CHO_DUYET_TP
+              break;
+            }
+            case STATUS.TU_CHOI_LDC : {
+              trangThai = STATUS.CHO_DUYET_LDC
+              break;
+            }
+          }
           let body = {
             id: this.id,
-            lyDoTuChoi: null,
-            trangThai: this.globals.prop.NHAP_CHO_DUYET_TP,
+            trangThai: trangThai
           };
-          if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP) {
-            body.trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CUC;
-          }
           let res =
             await this.quyetDinhPheDuyetKQBanDauGiaService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.PHE_DUYET_SUCCESS);
             this.back();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -384,14 +396,26 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
+          let trangThai;
+          switch (this.detail.trangThai) {
+            case STATUS.CHO_DUYET_TP : {
+              trangThai = STATUS.CHO_DUYET_LDC
+              break;
+            }
+            case STATUS.CHO_DUYET_LDC : {
+              trangThai = STATUS.DA_DUYET_LDC
+              break;
+            }
+            case STATUS.DA_DUYET_LDC : {
+              trangThai = STATUS.BAN_HANH
+              break;
+            }
+          }
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CUC,
+            trangThai: trangThai
           };
-          if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CUC) {
-            body.trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CUC;
-          }
           let res =
             await this.quyetDinhPheDuyetKQBanDauGiaService.updateStatus(
               body,
@@ -426,20 +450,28 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       if (text) {
         this.spinner.show();
         try {
+          let trangThai;
+          switch (this.detail.trangThai) {
+            case STATUS.CHO_DUYET_TP : {
+              trangThai = STATUS.TU_CHOI_TP
+              break
+            }
+            case STATUS.CHO_DUYET_LDC : {
+              trangThai = STATUS.TU_CHOI_LDC
+              break
+            }
+          }
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: this.globals.prop.NHAP_TU_CHOI_TP,
-          };
-          if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CUC) {
-            body.trangThai = this.globals.prop.NHAP_TU_CHOI_LD_CUC;
+            trangThai: trangThai
           }
           let res =
             await this.quyetDinhPheDuyetKQBanDauGiaService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.back();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
