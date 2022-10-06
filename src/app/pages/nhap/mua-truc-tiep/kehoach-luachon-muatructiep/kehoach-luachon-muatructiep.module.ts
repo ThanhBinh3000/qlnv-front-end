@@ -15,6 +15,7 @@ import { ThemMoiKhmttComponent } from './tong-cuc/them-moi-khmtt/them-moi-khmtt.
 import { ThemmoiTonghopKhmttComponent } from './tong-cuc/tong-hop-khmtt/themmoi-tonghop-khmtt/themmoi-tonghop-khmtt.component';
 import { QuyetdinhPheduyetKhmttComponent } from './tong-cuc/quyetdinh-pheduyet-khmtt/quyetdinh-pheduyet-khmtt.component';
 import { ThemmoiQuyetdinhKhmttComponent } from './tong-cuc/quyetdinh-pheduyet-khmtt/themmoi-quyetdinh-khmtt/themmoi-quyetdinh-khmtt.component';
+import { ThongtinDexuatMuattComponent } from './tong-cuc/quyetdinh-pheduyet-khmtt/themmoi-quyetdinh-khmtt/thongtin-dexuat-muatt/thongtin-dexuat-muatt.component';
 @NgModule({
   declarations: [
     KehoachLuachonMuatructiepComponent,
@@ -29,6 +30,7 @@ import { ThemmoiQuyetdinhKhmttComponent } from './tong-cuc/quyetdinh-pheduyet-kh
     ThemmoiTonghopKhmttComponent,
     QuyetdinhPheduyetKhmttComponent,
     ThemmoiQuyetdinhKhmttComponent,
+    ThongtinDexuatMuattComponent,
   ],
   imports: [
     CommonModule,
