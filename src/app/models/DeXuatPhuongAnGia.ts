@@ -13,10 +13,10 @@ export class ThongTinKhaoSatGia {
   tenDviThamDinh: string;
   cloaiVthh: string;
   tenCloaiVthh: string;
-  donGia: string;
+  donGia: number;
   donGiaVat: number;
-  thoiHanBaoGia: number;
-  ghiChu: number;
+  thoiHanBaoGia: string;
+  ghiChu: string;
   fileDinhKem: FileDinhKem = new FileDinhKem();
 }
 
