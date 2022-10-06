@@ -165,24 +165,5 @@ export class DanhMucMucPhi {
 }
 
 
-export class DanhSachMuaTrucTiep {
-  id: number;
-  maDvi: string;
-  tenDvi: string;
-  maDiemKho: string;
-  tenDiemKho: string;
-  diaDiemNhap: string;
-  soLuongCtieu: number;
-  soLuongKhDd: number;
-  soLuongDxmtt: number;
-  donGiaVat: number;
-  thanhTien: number;
-  bangChu: string;
-  idVirtual?: number;
-  isEdit: boolean;
-  children?: DanhSachMuaTrucTiep[];
-  level?: number;
-  expand?: boolean;
-  parent?: DanhSachMuaTrucTiep
-}
+
 

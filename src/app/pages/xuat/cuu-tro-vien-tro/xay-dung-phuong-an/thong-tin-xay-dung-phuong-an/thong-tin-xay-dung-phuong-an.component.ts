@@ -150,6 +150,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
       {
         id: [],
         soDxuat: [null, [Validators.required]],
+        idDxuat: [null,],
         maDvi: [''],
         tenDvi: [],
         ngayDxuat: [null, [Validators.required]],
