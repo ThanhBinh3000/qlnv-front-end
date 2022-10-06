@@ -106,8 +106,7 @@
                         <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="trichYeu">Trích yếu
                         </nz-form-label>
                         <nz-form-control>
-                            <textarea id="trichYeu" formControlName="trichYeu" rows="3" class="search__input" nz-input
-                                [readonly]="noEdit"></textarea>
+                            <textarea id="trichYeu" formControlName="trichYeu" rows="3" class="search__input" nz-input></textarea>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -203,7 +202,7 @@
                         <tbody>
                             <tr *ngFor="let data of arrThongTinGia; let idx = index">
                                 <td class="text-center">{{idx + 1}}</td>
-                                <td>{{ data.tenDvi }}</td>
+                                <td>{{ data.maDvi }}</td>
                                 <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{ data.giaDn | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{ data.giaDnVat | number : '1.0-1' : 'vi_VN' }}</td>

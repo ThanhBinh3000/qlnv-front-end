@@ -138,7 +138,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.dataEdit[id].edit = false;
     }
 
-    if (page == 'ccXdg') {
+    if (page == 'ccxdg') {
       Object.assign(this.dataTableCanCuXdg[id], this.dataEditCc[id].data);
       this.dataEditCc[id].edit = false;
     }
@@ -299,7 +299,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
-        soDeXuat: data.soDeXuat,
+        soDeXuat: data.soDeXuat.split("/")[0],
         loaiVthh: data.loaiVthh,
         ngayKy: data.ngayKy,
         nguoiKy: data.nguoiKy,
@@ -320,6 +320,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.dataTableKqGia = data.dataTableKqGia;
       this.dataTableKsGia = data.dataTableKsGia;
       this.dataTableCanCuXdg = data.canCuPhapLy;
+      this.updateEditCache('ttc')
+      this.updateEditCache('ccXdg')
+      this.updateEditCache('ppxdg')
     }
   }
 
@@ -584,13 +587,13 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.soDeXuat = this.formData.get('soDeXuat').value + this.maDx;
     body.pagTtChungs = this.pagTtChungs;
     body.pagPpXacDinhGias = this.pagPpXacDinhGias;
     body.canCuPhapLy = this.dataTableCanCuXdg;
     body.ketQuaKhaoSatGiaThiTruong = this.dataTableKsGia;
     body.ketQuaThamDinhGia = this.dataTableKqGia;
     body.type = this.type;
+    body.soDeXuat = body.soDeXuat + this.maDx;
     let res
     if (this.idInput > 0) {
       res = await this.giaDeXuatGiaService.update(body);
@@ -619,11 +622,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
 
-  // huyEdit(index: number) {
-  //   this.dataEdit[index].edit = false
-  //   this.dataEditCc[index].edit = false
-  //   this.dataEditPp[index].edit = false
-  // }
   huyEdit(index: number, page: string) {
     if (page == 'ttc') {
       this.dataEdit[index].edit = false;
