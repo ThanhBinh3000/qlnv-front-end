@@ -13,9 +13,10 @@ import {NzNotificationService} from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
 import {UserService} from 'src/app/services/user.service';
 import {QuanLyHangTrongKhoService} from "../../../services/quanLyHangTrongKho.service";
+import {LEVEL_USER} from "../../../constants/config";
 
 export class DiaDiemNhapKho {
-  id:number;
+  id: number;
   idVirtual: number;
   maDvi: string;
   tenDvi: string;
@@ -75,11 +76,12 @@ export class ChiTietDiaDiemNhapKho {
 })
 
 export class DialogDiaDiemNhapKhoComponent implements OnInit {
-  tableName:any;
+  tableName: any;
   idDxuat: any;
   idDxuatDtl: any;
   nam: number;
   cLoaiVthh: string;
+  cucList: any[] = [];
   chiCucList: any[] = [];
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
@@ -113,6 +115,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
   }
   listPhuongAn: DiaDiemNhapKho | any;
   phuongAnXuatList: DiaDiemNhapKho[] = [];
+  listDvi: any[] = [];
 
 
   constructor(
@@ -132,16 +135,16 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     this.diaDiemNhapKho.chiTietDiaDiems = [];
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
+    await this.loadDvi();
+    await this.loadCuc(LEVEL_USER.CUC, this.userInfo.MA_DVI);
+    await this.loadDanhMucHang();
     if (this.listPhuongAn) {
       this.diaDiemNhapKho = this.listPhuongAn;
       this.dsChiTietDiemNhapKhoClone = this.listPhuongAn.chiTietDiaDiems;
       this.changeChiCuc();
     }
-
-    this.loadChiCuc();
-    this.loadDanhMucHang();
     this.loadDetail();
     // this.loadKeHoachBanDauGia();
   }
@@ -157,20 +160,50 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     this._modalRef.destroy();
   }
 
-  async loadChiCuc() {
-    let res = await this.donViService.layDonViChiCuc();
+  async loadDvi() {
+    let res = await this.donViService.layTatCaDonVi();
     if (res.msg == MESSAGE.SUCCESS) {
-      this.chiCucList = res.data;
-      let existsChiCuc = this.phuongAnXuatList.map((s) => s.maDvi);
-      this.chiCucList = this.chiCucList.filter((s) => !existsChiCuc.includes(s.maDvi));
+      this.listDvi = res.data;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
+  async loadCuc(capDvi: string, maDvi: string) {
+    this.cucList = this.listDvi;
+    this.cucList = this.cucList.filter(s => {
+      if (this.userInfo.CAP_DVI != LEVEL_USER.CAN_BO_TONG_CUC) {
+        return s.capDvi == capDvi && s.maDvi == maDvi
+      } else {
+        return s.capDvi == capDvi;
+      }
+    });
+  }
+
+  async onChangeCuc(maDvi: string) {
+    console.log(maDvi, 12312323);
+    this.chiCucList = this.listDvi;
+    this.chiCucList = this.chiCucList.filter(s => s.maDviCha == maDvi);
+    console.log(this.chiCucList);
+  }
+
+  async loadChiCuc(capDvi: string, maCuc: string) {
+    this.chiCucList = this.listDvi;
+    this.chiCucList = this.chiCucList.filter(s => s.capDvi == capDvi && s.maDvi);
+    // console.log(this.cucList,'list cuc')
+    /*   let res = await this.donViService.layDonViChiCuc();
+       if (res.msg == MESSAGE.SUCCESS) {
+         this.chiCucList = res.data;
+         let existsChiCuc = this.phuongAnXuatList.map((s) => s.maDvi);
+         this.chiCucList = this.chiCucList.filter((s) => !existsChiCuc.includes(s.maDvi));
+       } else {
+         this.notification.error(MESSAGE.ERROR, res.msg);
+       }*/
+  }
+
   async loadDiemKho() {
     let body = {
-      maDviCha: this.diaDiemNhapKho.maDvi,
+      maDviCha: this.diaDiemNhapKho.maChiCuc,
       trangThai: '01',
     }
     const res = await this.donViService.getTreeAll(body);
@@ -363,7 +396,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
   changeChiCuc() {
     this.listDiemKho = [];
     this.loadDiemKho();
-    const donVi = this.chiCucList.find(dv => dv.maDvi === this.diaDiemNhapKho.maDvi);
+    const donVi = this.chiCucList.find(dv => dv.maDvi === this.diaDiemNhapKho.maChiCuc);
     if (donVi) {
       this.diaDiemNhapKho.tenDvi = donVi.tenDvi;
       this.diaDiemNhapKho.maChiCuc = donVi.maDvi;

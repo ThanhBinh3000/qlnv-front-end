@@ -9,6 +9,11 @@ import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
+import {DanhSachGoiThau} from "../../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import {
+  DialogThemMoiVatTuComponent
+} from "../../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
+import {NzModalService} from "ng-zorro-antd/modal";
 
 
 @Component({
@@ -35,8 +40,8 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     private danhMucService: DanhMucService,
     private dxKhLcntService: DanhSachDauThauService,
     private spinner: NgxSpinnerService,
-    private helperService: HelperService
-
+    private helperService: HelperService,
+    private modal: NzModalService,
   ) {
     this.formData = this.fb.group({
       id: [],
@@ -121,5 +126,41 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       this.expandSet.delete(id);
     }
   }
+
+
+  themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
+
+    const modalGT = this.modal.create({
+      nzTitle: 'Thêm địa điểm nhập kho',
+      nzContent: DialogThemMoiVatTuComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1200px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataEdit: data,
+        loaiVthh: this.formData.get('loaiVthh').value,
+      },
+    });
+    modalGT.afterClose.subscribe((res) => {
+      if (!res) {
+        return;
+      }
+      if (index >= 0) {
+        this.listOfData[index] = res.value;
+      } else {
+        this.listOfData = [...this.listOfData, res.value];
+      }
+      let tongMucDt: number = 0;
+      this.listOfData.forEach((item) => {
+        tongMucDt = tongMucDt + item.soLuong * item.donGia;
+      });
+      this.formData.patchValue({
+        tongMucDt: tongMucDt,
+      });
+      this.helperService.setIndexArray(this.listOfData);
+      this.convertListData();
+    });
+  };
 
 }

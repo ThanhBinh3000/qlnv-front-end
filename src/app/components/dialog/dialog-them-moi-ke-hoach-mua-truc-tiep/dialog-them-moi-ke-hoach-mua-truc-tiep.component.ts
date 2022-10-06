@@ -49,6 +49,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       maDiemKho: [null],
       soLuongCtieu: [null],
       soLuongKhDd: [null],
+      bangChu: [null],
 
     });
   }
