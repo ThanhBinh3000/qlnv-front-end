@@ -14,7 +14,6 @@ import { MESSAGE } from 'src/app/constants/message';
 import { ThongTinTongHopDeXuatLCNT } from 'src/app/models/ThongTinTongHopDeXuatLCNT';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as dayjs from 'dayjs';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
@@ -26,6 +25,7 @@ import { STATUS } from 'src/app/constants/status';
 import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';
 import { API_STATUS_CODE } from 'src/app/constants/config';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 
 @Component({
   selector: 'app-themmoi-tonghop-khmtt',
@@ -43,7 +43,7 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
   formTraCuu: FormGroup;
   formData: FormGroup;
   isDetailDxCuc: boolean = false;
-  dataTableDanhSachDX: any[] = [];
+  dataTableDanhSachMTT: any[] = [];
   danhMucDonVi: any;
   isTongHop: boolean = false;
   isVisibleChangeTab$ = new Subject();
@@ -55,8 +55,7 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
   listNam: any[] = [];
   yearNow: number = 0;
   idDeXuat: number = 0;
-  listHinhThucDauThau: any[] = [];
-  listLoaiHopDong: any[] = [];
+  listNguonVon: any[] = [];
   listVthh: any[] = [];
   idPA: number = 0;
   selectedId: number = 0;
@@ -78,6 +77,7 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
     private helperService: HelperService,
     public globals: Globals,
     private dmTieuChuanService: DanhMucTieuChuanService,
+    private danhSachMuaTrucTiepService: DanhSachMuaTrucTiepService,
   ) {
     this.formTraCuu = this.fb.group(
       {
@@ -96,7 +96,7 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
       namKhoach: [, [Validators.required]],
       soDxuat: [''],
       trichYeu: [''],
-      ngayTao: [, [Validators.required]],
+      ngayTao: [,],
       ngayPduyet: [''],
       tenDuAn: [''],
       soQd: [''],
@@ -114,10 +114,11 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
       tenChuDt: [''],
       tongMucDt: [''],
       nguonVon: [''],
-      // noiDung: ['', [Validators.required]],
       trangThai: [''],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
+      noiDung: [''],
+      thueGtgt: [''],
 
     })
 
@@ -151,7 +152,9 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
       let res = await this.tongHopDeXuatKHMTTService.loadChiTiet(this.id);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
-        this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
+        dataDetail.hhDxKhMttThopDtls.forEach(element => {
+          this.dataTableDanhSachMTT.push(element.listDxuatHdr);
+        });
         this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail)
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
         this.isTongHop = true;
@@ -164,6 +167,14 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
   }
 
   async loadDataComboBox() {
+
+    // List nguồn vốn
+    this.listNguonVon = [];
+    let resNv = await this.danhMucService.danhMucChungGetAll('NGUON_VON');
+    if (resNv.msg == MESSAGE.SUCCESS) {
+      this.listNguonVon = resNv.data;
+    }
+
     // List loại hình nhập xuất
     this.listLoaiHinhNx = [];
     let resLoaiHinhNX = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
@@ -176,18 +187,7 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
     if (resKieuNx.msg == MESSAGE.SUCCESS) {
       this.listKieuNx = resKieuNx.data;
     }
-    // hình thức đấu thầu
-    this.listHinhThucDauThau = [];
-    let resPtdt = await this.danhMucService.danhMucChungGetAll('HT_LCNT');
-    if (resPtdt.msg == MESSAGE.SUCCESS) {
-      this.listHinhThucDauThau = resPtdt.data;
-    }
-    // hợp đồng
-    this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
-    if (resHd.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHopDong = resHd.data;
-    }
+
   }
 
   async tongHopDeXuat() {
@@ -202,13 +202,15 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
       let res = await this.tongHopDeXuatKHMTTService.tonghop(body);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data
-        let idTh = await this.userService.getId("HH_DX_KHLCNT_THOP_HDR_SEQ");
+        let idTh = await this.userService.getId("HH_DX_KHMTT_THOP_HDR_SEQ");
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail)
         this.formData.patchValue({
           id: idTh,
           ngayTao: dayjs().format("YYYY-MM-DD"),
         })
-        this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
+        dataDetail.hhDxKhMttThopDtls.forEach(element => {
+          this.dataTableDanhSachMTT.push(element.listDxuatHdr);
+        });
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -237,10 +239,10 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
     this.helperService.markFormGroupTouched(this.formData);
     await this.spinner.show();
     try {
-      if (this.formData.invalid) {
-        await this.spinner.hide();
-        return;
-      }
+      // if (this.formData.invalid) {
+      //   await this.spinner.hide();
+      //   return;
+      // }
       let body = this.formData.value;
       let res = await this.tongHopDeXuatKHMTTService.create(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -268,7 +270,7 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
   }
 
   selectHangHoa() {
-    // let data = this.loaiVthh;
+    let data = this.loaiVthh;
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,
@@ -276,7 +278,10 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        data,
+        onlyLuongThuc: true,
+      },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
@@ -323,6 +328,7 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     $event.target.parentElement.classList.add('selectedRow')
     this.idRowSelect = id;
+    console.log(this.idRowSelect, 111111)
     await this.spinner.hide();
   }
 }
