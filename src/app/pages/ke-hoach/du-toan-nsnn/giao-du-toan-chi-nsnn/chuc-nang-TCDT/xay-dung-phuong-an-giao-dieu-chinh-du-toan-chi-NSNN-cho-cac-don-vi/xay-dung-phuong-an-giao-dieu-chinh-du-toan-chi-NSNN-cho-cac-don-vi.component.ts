@@ -292,8 +292,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
             )
           }
           this.checkSumUp = data.data.checkSumUp;
-          const dViUser = this.userInfo?.MA_DVI
-          if (this.checkSumUp == true && dViUser == this.maDonViTao) {
+          if (this.checkSumUp == true && this.userInfo.CAP_DVI == "1") {
             this.statusBtnTongHop = false
           }
           if (this.lstCtietBcao[0].lstCtietDvis) {
@@ -826,7 +825,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     // if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT || GDT.TRINHDUYET_PA_TONGHOP_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
     //   this.statusBtnGuiDVCT = false;
     // }
-    if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
+    if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.userInfo.CAP_DVI == "2") {
       this.statusBtnGuiDVCT = false;
     }
     if (this.trangThaiBanGhi == "7") {
