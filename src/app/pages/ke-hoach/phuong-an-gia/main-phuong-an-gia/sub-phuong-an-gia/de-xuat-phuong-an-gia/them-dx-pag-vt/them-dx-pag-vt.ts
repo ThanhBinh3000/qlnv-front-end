@@ -156,7 +156,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.formData.get('tchuanCluong').setValue(res.data.tenQchuan)
     }
   }
-
   async tuChoi() {
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
@@ -199,6 +198,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     });
   }
 
+
   async loadDsHangHoaPag() {
     this.dsLoaiHangXdg = [];
     let res = await this.danhMucService.danhMucChungGetAll('PP_XDG_LOAI_HANG');
@@ -230,9 +230,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
             this.pagPpXacDinhGias.splice(index, 1);
             this.updateEditCache('ppxdg');
           }
-          console.log(
-            this.dataTableCanCuXdg
-          )
         } catch (e) {
           console.log('error', e);
         }
@@ -288,7 +285,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (page == 'ppxdg') {
       this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.chiPhiPhanBo
       this.rowItemPpxdg.tenCloaiVthh = this.listVthh.find(s => s.ma = this.rowItemPpxdg.cloaiVthh).ten;
-      console.log(this.rowItemPpxdg);
       this.pagPpXacDinhGias = [...this.pagPpXacDinhGias, this.rowItemPpxdg];
       this.rowItemPpxdg = new PhuongPhapXacDinhGia();
       this.updateEditCache(page)
@@ -299,7 +295,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   async getDataDetail(id) {
     if (id > 0) {
       let res = await this.giaDeXuatGiaService.getDetail(id);
-      console.log(res, 11111);
       const data = res.data;
       this.formData.patchValue({
         id: data.id,
@@ -325,10 +320,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.dataTableKqGia = data.dataTableKqGia;
       this.dataTableKsGia = data.dataTableKsGia;
       this.dataTableCanCuXdg = data.canCuPhapLy;
-      this.updateEditCache('ttc');
-      this.updateEditCache('ppxdg');
-      this.updateEditCache('ccxdg');
-
     }
   }
 
@@ -438,7 +429,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   async onChangecloaiVthh(event) {
     this.rowItemTtc.donViTinh = null;
-    console.log(this.rowItemTtc)
     const cloaiVthh = this.listCloaiVthh.filter(item => item.ma == event);
     if (cloaiVthh.length > 0) {
       this.rowItemTtc.tenCloaiVthh = cloaiVthh[0].ten
@@ -583,7 +573,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsQdPdKhlcnt = res.data.content;
     }
-    console.log(this.dsQdPdKhlcnt)
   }
 
   async save(isGuiDuyet?) {
@@ -628,7 +617,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
     this.spinner.hide();
   }
-
 
 
   // huyEdit(index: number) {

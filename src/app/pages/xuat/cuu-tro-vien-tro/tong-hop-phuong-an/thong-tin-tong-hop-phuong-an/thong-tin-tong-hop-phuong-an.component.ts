@@ -45,6 +45,7 @@ import {
 import {
   DialogDanhSachHangHoaComponent
 } from "../../../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-thong-tin-tong-hop-phuong-an',
@@ -88,6 +89,13 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   listLoaiHopDong: any[] = [];
   listLoaiHinhNhapXuat: any[] = [];
   thongTinChiTiet: any[];
+  thongTinChiTietTh: any[];
+  tongSoLuongDxuat = 0;
+  tongSoLuongTongHop = 0;
+  tongHopEdit: any = [];
+  datePipe = new DatePipe('en-US');
+  isVisible = false;
+  isVisibleTuChoiDialog = false;
 
   constructor(
     private modal: NzModalService,
@@ -119,11 +127,13 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
         trangThai: [],
         loaiHinhNhapXuat: [],
         noiDung: [],
+        lyDoTuChoi: [],
         tenLoaiVthh: [],
         tenCloaiVthh: [],
         tenTrangThai: [],
         thongTinDeXuat: [new Array()],
         thongTinTongHop: [new Array()],
+
       }
     );
     this.userInfo = this.userService.getUserLogin();
@@ -143,7 +153,6 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
       await Promise.all([
         this.dsLoaiHinhNhapXuat(),
         this.loadDetail(this.idInput),
-
       ])
       console.log(this.formData.value);
       this.spinner.hide();
@@ -167,117 +176,65 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
     }
   }
 
-
   async save(isOther?: boolean) {
-    console.log(JSON.stringify(this.formData.value), 'save data object')
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
-      console.log(this.formData);
+      let invalid = [];
+      let controls = this.formData.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          invalid.push(name);
+        }
+      }
+      console.log(invalid, 'invalid');
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
       return;
-    }
-    this.spinner.show();
-    try {
-      this.bangPhanBoList.forEach((phanBo) => {
-        const phanLoTaiSan = new PhanLoTaiSan();
-        phanLoTaiSan.maChiCuc = phanBo.maDvi;
-        phanBo.chiTietDiaDiems.forEach((chiTiet) => {
-          phanLoTaiSan.chungLoaiHh = chiTiet.tenChungLoaiHh;
-          phanLoTaiSan.maDiemKho = chiTiet.maDiemKho;
-          phanLoTaiSan.donGia = chiTiet.donGiaChuaVAT;
-          phanLoTaiSan.donViTinh = chiTiet.donViTinh;
-          phanLoTaiSan.giaKhoiDiem = chiTiet.giaKhoiDiem;
-          phanLoTaiSan.maLoKho = chiTiet.maNganLo;
-          phanLoTaiSan.maDvTaiSan = chiTiet.maDonViTaiSan;
-          phanLoTaiSan.maNganKho = chiTiet.maNganKho;
-          phanLoTaiSan.maNhaKho = chiTiet.maNhaKho;
-          phanLoTaiSan.soLuong = chiTiet.soLuong;
-          phanLoTaiSan.soTienDatTruoc = chiTiet.soTienDatTruoc;
-          phanLoTaiSan.tonKho = null;
-          this.phanLoTaiSanList = [...this.phanLoTaiSanList, phanLoTaiSan];
-        });
-      });
-      let body = {
-        capDv: null,
-        diaDiemGiaoNhanList: this.diaDiemGiaoNhanList,
-        fileDinhKems: this.listFileDinhKem,
-        id: this.formData.get('id').value,
-        khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
-        loaiHangHoa: this.formData.get('loaiHangHoa').value,
-        loaiHopDong: this.formData.get('loaiHopDong').value,
-        loaiVatTuHangHoa: null,
-        maDv: null,
-        namKeHoach: this.formData.get('namKeHoach').value,
-        ngayKy: this.formData.get('ngayKy').value
-          ? dayjs(this.formData.get('ngayKy').value).format('YYYY-MM-DD')
-          : null,
-        ngayLapKeHoach: this.formData.get('ngayLapKeHoach').value
-          ? dayjs(this.formData.get('ngayLapKeHoach').value).format(
-            'YYYY-MM-DD',
-          )
-          : null,
-        phanLoTaiSanList: this.phanLoTaiSanList,
-        phuongThucGiaoNhan: this.formData.get('phuongThucGiaoNhan').value,
-        phuongThucThanhToan: this.formData.get('phuongThucThanhToan').value,
-        qdGiaoChiTieuId: this.formData.get('qdGiaoChiTieuId').value,
-        soKeHoach: this.formData.get('soKeHoach').value,
-        soLuong: this.formData.get('soLuong').value,
-        tgDkTcDenNgay: this.formData.get('thoiGianDuKien').value
-          ? dayjs(this.formData.get('thoiGianDuKien').value[0]).format(
-            'YYYY-MM-DD',
-          )
-          : null,
-        tgDkTcTuNgay: this.formData.get('thoiGianDuKien').value
-          ? dayjs(this.formData.get('thoiGianDuKien').value[1]).format(
-            'YYYY-MM-DD',
-          )
-          : null,
-        thoiGianKyHd: this.formData.get('thoiGianKyHd').value,
-        thoiGianKyHopDongGhiChu: this.formData.get('thoiGianKyHdGhiChu').value,
-        thoiHanGiaoNhan: this.formData.get('thoiHanGiaoNhan').value,
-        thoiHanGiaoNhanGhiChu: this.formData.get('thoiHanGiaoNhanGhiChu').value,
-        thoiHanThanhToan: this.formData.get('thoiHanThanhToan').value,
-        thoiHanThanhToanGhiChu: this.formData.get('thoiHanThanhToanGhiChu')
-          .value,
-        thongBaoKhBdg: this.formData.get('thongBaoKhBdg').value,
-        tieuChuanChatLuong: this.formData.get('tieuChuanChatLuong').value,
-        trangThai: '00',
-        trichYeu: this.formData.get('trichYeu').value,
-        ghiChu: this.formData.get('ghiChu').value,
-      }
-      if (this.idInput > 0) {
-        let res = await this.deXuatKeHoachBanDauGiaService.sua(body);
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
+    } else {
+      try {
+        this.spinner.show();
+        let body = this.formData.value;
+        body.tongSoLuong = this.tongSoLuongTongHop;
+        // body.fileDinhKem = this.fileDinhKem;
+        body.ngayTongHop = this.datePipe.transform(body.ngayTongHop, 'yyyy-MM-dd');
+        body.thoiGianThucHien = this.datePipe.transform(body.thoiGianThucHien, 'yyyy-MM-dd');
+        //body.soDxuat = body.soDxuat + this.maDeXuat;
+        console.log(body, 'body');
+        if (this.idInput) {
+          let res = await this.tongHopPhuongAnCuuTroService.update(body);
+          if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
           } else {
-            return res.data.id;
+            this.notification.error(MESSAGE.ERROR, res.msg);
           }
         } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-      } else {
-        let res = await this.deXuatKeHoachBanDauGiaService.them(body);
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
+          // body.tongSoLuong = this.tongSLThongTinChiTiet;
+          let res = await this.tongHopPhuongAnCuuTroService.create(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.idInput = res.data.id;
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
           } else {
-            return res.data.id;
+            this.notification.error(MESSAGE.ERROR, res.msg);
           }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
         }
+        //gui duyet
+        if (isOther) {
+          let body = {
+            id: this.idInput,
+            trangThai: STATUS.CHO_DUYET_LDV
+          };
+          let res = await this.tongHopPhuongAnCuuTroService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        }
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.spinner.hide();
+        this.quayLai();
       }
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(
-        MESSAGE.ERROR,
-        e?.error?.message ?? MESSAGE.SYSTEM_ERROR,
-      );
     }
   }
 
@@ -435,7 +392,15 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
         this.expandSetEdit.delete(id);
       }
     }
+  }
 
+  expandAll() {
+    this.thongTinChiTietTh.forEach(s => {
+      this.expandSetEdit.add(s.idVirtual);
+    })
+    this.thongTinChiTiet.forEach(s => {
+      this.expandSetView.add(s.idVirtual);
+    })
   }
 
   async loadDetail(id: number) {
@@ -443,8 +408,14 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
       await this.tongHopPhuongAnCuuTroService.getDetail(id)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            res.data.maTongHop = res.data.maTongHop.split('/')[0];
+            //res.data.maTongHop = res.data.maTongHop.split('/')[0];
             this.formData.patchValue(res.data);
+            this.thongTinChiTiet = this.buildChiTietPhuongAn(res.data.thongTinDeXuat);
+            this.thongTinChiTietTh = this.buildChiTietPhuongAn(res.data.thongTinTongHop);
+            this.summaryData();
+            this.expandAll();
+            console.log(this.thongTinChiTiet, 'thongTinChiTiet')
+            console.log(this.thongTinChiTietTh, 'thongTinChiTietTh')
             if (res.data.thongTinTongHop) {
             }
           }
@@ -482,9 +453,12 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
         await this.tongHopPhuongAnCuuTroService.syntheic(body).then(res => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.thongTinChiTiet = this.buildChiTietPhuongAn(res.data.thongTinDeXuat);
+            this.thongTinChiTietTh = this.thongTinChiTiet;
+            this.formData.patchValue({thongTinDeXuat: res.data.thongTinDeXuat});
           } else {
             this.formData.patchValue({thongTinTongHop: []})
             this.thongTinChiTiet = [];
+            this.thongTinChiTietTh = [];
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
           console.log(this.thongTinChiTiet, 'chitiet');
@@ -542,14 +516,15 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   }
 
   editThongTinTongHop(item: any) {
-
+    console.log(item, 123)
   }
 
   deleteThongTinTongHop(idVirtual: any) {
-
+    console.log(idVirtual, 234)
   }
 
   buildChiTietPhuongAn(data: any) {
+    console.log(data, 'base')
     let dataResult = [];
     let dataGroup = data.reduce(function (acc, obj) {
       var key = obj['maDvi'];
@@ -561,35 +536,147 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
     }, {});
     let thongTinChiTiet = []
     data.forEach(s => {
-      //
-      s.thongTinChiTiet.forEach(x => {
-        x.maDvi = s.maDvi;
-        thongTinChiTiet.push(x);
-      })
-      this.formData.patchValue({thongTinTongHop: thongTinChiTiet, thongTinDeXuat: thongTinChiTiet,})
+        //
+        /*s.thongTinChiTiet.forEach(x => {
+          x.maDvi = s.maDvi;
+          thongTinChiTiet.push(x);
+        })
+        this.formData.patchValue({thongTinTongHop: thongTinChiTiet, thongTinDeXuat: thongTinChiTiet,})*/
 
-      //
-      if (!dataResult.some(r => r.maDvi == s.maDvi)) {
-        let thongTinChiTietArr = [];
-        dataGroup[s.maDvi].forEach(x => {
-          x.thongTinChiTiet?.forEach(y => {
-            y.idVirtual = new Date().getTime() + y.id;
-            thongTinChiTietArr = [...thongTinChiTietArr, y];
+        //
+        if (!dataResult.some(r => r.maDvi == s.maDvi)) {
+          let thongTinChiTietArr = [];
+          dataGroup[s.maDvi].forEach(x => {
+              if (x.thongTinChiTiet) {
+                x.thongTinChiTiet?.forEach(y => {
+                  y.idVirtual = new Date().getTime() + y.id;
+                  thongTinChiTietArr = [...thongTinChiTietArr, y];
+                })
+              } else {
+                //truong hop obj tong hop
+                x.idVirtual = new Date().getTime() + x.id;
+                thongTinChiTietArr = [...thongTinChiTietArr, x];
+              }
+            }
+          )
+          dataResult.push({
+            idVirtual: new Date().getTime() + s.id,
+            maDvi: s.maDvi,
+            tenDvi: s.tenDvi,
+            tongSoLuong: 0,
+            soLuong: s.soLuong,
+            ngayDxuat: s.ngayDxuat,
+            thoiGianThucHien: s.thoiGianThucHien,
+            thongTinChiTiet: thongTinChiTietArr
           })
-        })
-        dataResult.push({
-          idVirtual: new Date().getTime() + s.id,
-          maDvi: s.maDvi,
-          tenDvi: s.tenDvi,
-          tongSoLuong: s.tongSoLuong,
-          ngayDxuat: s.ngayDxuat,
-          thoiGianThucHien: s.thoiGianThucHien,
-          thongTinChiTiet: thongTinChiTietArr
-        })
+        }
       }
-    })
+    )
     return dataResult;
   };
 
+  showModal(item: any): void {
+    this.tongHopEdit = item;
+    this.isVisible = true;
+  }
 
+  handleOk(): void {
+    this.thongTinChiTietTh.forEach(s => {
+      if (s.idVirtual == this.tongHopEdit.idVirtual) {
+        s.thongTinChiTiet = this.tongHopEdit.thongTinChiTiet;
+      }
+    });
+    console.log(this.thongTinChiTietTh, 11111111111);
+    this.summaryData();
+    this.isVisible = false;
+  }
+
+  handleCancel()
+    :
+    void {
+    console.log('Button cancel clicked!');
+    this.isVisible = false;
+    this.isVisibleTuChoiDialog = false;
+  }
+
+  summaryData() {
+    this.tongSoLuongDxuat = 0;
+    this.tongSoLuongTongHop = 0;
+
+    this.thongTinChiTietTh.forEach(s => {
+      let tongSoLuong = 0;
+      s.thongTinChiTiet.forEach(s1 => {
+        tongSoLuong += s1.soLuong
+      })
+      s.tongSoLuong = tongSoLuong;
+      this.tongSoLuongTongHop += s.tongSoLuong;
+    })
+
+    this.thongTinChiTiet.forEach(s => {
+      let tongSoLuong = 0;
+      s.thongTinChiTiet.forEach(s1 => {
+        tongSoLuong += s1.soLuong
+      })
+      s.tongSoLuong = tongSoLuong;
+      this.tongSoLuongDxuat += s.tongSoLuong;
+    })
+  }
+
+  checkAvailableByStatus(nextStatus: String) {
+    let currentStatus = this.formData.get('trangThai').value;
+    //gui duyet
+    if (currentStatus == STATUS.DU_THAO && nextStatus == STATUS.CHO_DUYET_LDV) {
+      return true;
+    } else if (currentStatus == STATUS.TU_CHOI_LDV && nextStatus == STATUS.CHO_DUYET_LDV) {
+      return true;
+    }
+
+    //duyet
+    else if (currentStatus == STATUS.CHO_DUYET_LDV && nextStatus == STATUS.DA_DUYET_LDV) {
+      return true;
+    }
+    //tu choi
+    else if (currentStatus == STATUS.CHO_DUYET_LDV && nextStatus == STATUS.TU_CHOI_LDV) {
+      return true;
+    }
+    return false;
+  }
+
+  async updateStatus(status: string, title: string) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: title,
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            trangThai: status,
+            lyDo: this.formData.get('lyDoTuChoi').value
+          };
+          let res = await this.tongHopPhuongAnCuuTroService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  showModalDialogTuChoi(): void {
+    this.isVisibleTuChoiDialog = true;
+  }
 }

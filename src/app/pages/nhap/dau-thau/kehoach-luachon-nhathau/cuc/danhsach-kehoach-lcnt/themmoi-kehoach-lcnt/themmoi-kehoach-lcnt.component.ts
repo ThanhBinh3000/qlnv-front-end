@@ -188,7 +188,6 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   async ngOnInit() {
     await this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    console.log(this.userInfo)
     this.maTrinh = '/' + this.userInfo.MA_TR;
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
@@ -399,24 +398,10 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       if (!res) {
         return;
       }
-      const dsGoiThauDialog = new DanhSachGoiThau();
-      dsGoiThauDialog.bangChu = res.value.bangChu;
-      dsGoiThauDialog.giaTriDamBao = res.value.giaTriDamBao;
-      dsGoiThauDialog.diaDiemNhap = res.value.diaDiemNhap;
-      dsGoiThauDialog.maDvi = res.value.maDvi;
-      dsGoiThauDialog.tenDvi = res.value.tenDvi;
-      dsGoiThauDialog.maDiemKho = res.value.maDiemKho;
-      dsGoiThauDialog.tenDiemKho = res.value.tenDiemKho;
-      dsGoiThauDialog.donGia = +res.value.donGia;
-      dsGoiThauDialog.goiThau = res.value.goiThau;
-      dsGoiThauDialog.soLuong = +res.value.soLuong;
-      dsGoiThauDialog.thanhTien = res.value.thanhTien;
-      dsGoiThauDialog.idVirtual = new Date().getTime();
-      dsGoiThauDialog.children = res.value.children;
       if (index >= 0) {
-        this.listOfData[index] = dsGoiThauDialog;
+        this.listOfData[index] =  res.value;
       } else {
-        this.listOfData = [...this.listOfData, dsGoiThauDialog];
+        this.listOfData = [...this.listOfData,  res.value];
       }
       let tongMucDt: number = 0;
       this.listOfData.forEach((item) => {
@@ -425,12 +410,15 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       this.formData.patchValue({
         tongMucDt: tongMucDt,
       });
+      this.helperService.setIndexArray(this.listOfData);
       this.convertListData();
     });
   }
 
   deleteRow(i: number): void {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
+    this.helperService.setIndexArray(this.listOfData);
+    this.convertListData();
   }
 
 
@@ -442,7 +430,6 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
-      console.log(this.formData);
       return;
     }
     if (this.listOfData.length == 0) {
@@ -694,7 +681,6 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
                   fileDinhKem,
                 ];
                 this.canCuKhacList = [...this.canCuKhacList, taiLieuCanCuKhac];
-                console.log(this.canCuKhacList);
                 break;
               default:
                 break;
@@ -932,7 +918,6 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   convertListData(){
     this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi : key, dataChild : value }))
       .value()
-    console.log(this.listDataGroup);
   }
 
   expandSet = new Set<number>();

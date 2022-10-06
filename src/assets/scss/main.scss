@@ -335,11 +335,18 @@ input.form-control {
   align-items: center;
 }
 
-.ant-form-item-label.ant-col {
+
+
+.ant-form-vertical .ant-form-item-label.ant-col {
   margin-bottom: 0;
   padding-bottom: 0;
   padding-top: 10px;
 }
+
+.ant-form-horizontal .ant-form-item-label.ant-col {
+  font-weight: 500;
+}
+
 
 .ant-form-vertical .ant-form-item {
   margin-bottom: 8px;
