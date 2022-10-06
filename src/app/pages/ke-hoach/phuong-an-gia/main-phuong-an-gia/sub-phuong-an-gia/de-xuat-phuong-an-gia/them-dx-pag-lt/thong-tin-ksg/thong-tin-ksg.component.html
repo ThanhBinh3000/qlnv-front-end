@@ -85,30 +85,30 @@
             </td>
           </ng-container>
           <ng-template #editTemplate>
-          <th class="text-center"> </th>
-          <th *ngIf="!isTableKetQua">
+          <td class="text-center"> </td>
+          <td *ngIf="!isTableKetQua">
             <input type="text" [(ngModel)]="dataEdit[idx].data.tenDviThamDinh" nz-input />
-          </th>
-          <th *ngIf="isTableKetQua">
+          </td>
+          <td *ngIf="isTableKetQua">
             <input type="text" [(ngModel)]="dataEdit[idx].data.tenDviBaoGia" nz-input />
-          </th>
-          <th *ngIf="isTableKetQua">
+          </td>
+          <td *ngIf="isTableKetQua">
             <input type="text" [(ngModel)]="dataEdit[idx].data.cloaiVthh" nz-input />
-          </th>
-          <th>
+          </td>
+          <td>
             <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia" [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser">
             </nz-input-number>
-          </th>
-          <th>
+          </td>
+          <td>
             <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGiaVat" [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser">
             </nz-input-number>
-          </th>
-          <th *ngIf="isTableKetQua">
+          </td>
+          <td *ngIf="isTableKetQua">
             <input type="text" [(ngModel)]="dataEdit[idx].data.thoiHanBaoGia" nz-input />
-          </th>
-          <th>
+          </td>
+          <td>
             <nz-form-control>
               <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
                 <input placeholder="Chọn file" [(ngModel)]="dataEdit[idx].data.fileDinhKem.fileName" nz-input disabled />
@@ -118,10 +118,10 @@
                 <input class="input-file" (change)="getNameFile($event)" type="file" />
               </ng-template>
             </nz-form-control>
-          </th>
-          <th *ngIf="isTableKetQua">
+          </td>
+          <td *ngIf="isTableKetQua">
             <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input />
-          </th>
+          </td>
             <td>
               <a (click)="downloadFile(dataEdit[idx].data.fileDinhKem)">
                 <i class="icon htvbdh_tcdt_import "></i>

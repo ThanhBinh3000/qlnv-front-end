@@ -98,7 +98,7 @@ export class DialogQuyetDinhGiaCuaTcdtnnComponent implements OnInit {
       let body = {
         "type": this.type,
         "pagType": this.pagtype,
-        "dsTrangThai": [STATUS.DA_DUYET_LDC]
+        "dsTrangThai": [STATUS.DA_DUYET_LDV]
       }
       let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
       if (res.msg == MESSAGE.SUCCESS) {
