@@ -60,17 +60,13 @@ export class TongHopPhuongAnComponent implements OnInit {
     ngayTongHop: null,
   };
   filterTable: any = {
-    soKeHoach: '',
-    tenDonVi: '',
-    ngayLapKeHoach: '',
-    ngayKy: '',
-    trichYeu: '',
-    tenHangHoa: '',
-    soQuyetDinhGiaoChiTieu: '',
-    soQuyetDinhPheDuyet: '',
-    namKeHoach: '',
+    loaiHinhNhapXuat:'',
+    maTongHop:'',
+    ngayTongHop:'',
     tenVthh: '',
     tenCloaiVthh: '',
+    tongSoLuong:'',
+    noiDung:'',
     tenTrangThai: '',
   };
   dataTableAll: any[] = [];
