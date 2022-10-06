@@ -121,6 +121,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         soDeXuat: data.soDeXuat
 
       });
+      this.arrThongTinGia = data.thongTinGia
       this.onChangeSoToTrinh(data.soDeXuat)
     }
   }
