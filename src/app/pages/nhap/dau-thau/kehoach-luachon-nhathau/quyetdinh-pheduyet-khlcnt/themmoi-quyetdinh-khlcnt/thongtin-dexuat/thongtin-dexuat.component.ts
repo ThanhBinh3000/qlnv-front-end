@@ -1,17 +1,17 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Globals } from "../../../../../../../../shared/globals";
-import { MESSAGE } from "../../../../../../../../constants/message";
-import { DanhMucService } from "../../../../../../../../services/danhmuc.service";
+import { Globals } from "../../../../../../../shared/globals";
+import { MESSAGE } from "../../../../../../../constants/message";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { cloneDeep, chain } from 'lodash';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
-import {DanhSachGoiThau} from "../../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import {DanhSachGoiThau} from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {
   DialogThemMoiVatTuComponent
-} from "../../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
+} from "../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
 import {NzModalService} from "ng-zorro-antd/modal";
 
 

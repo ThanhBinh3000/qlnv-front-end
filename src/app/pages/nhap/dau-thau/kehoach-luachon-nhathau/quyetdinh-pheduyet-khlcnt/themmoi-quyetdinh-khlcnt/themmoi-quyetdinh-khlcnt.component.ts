@@ -28,7 +28,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
-import { STATUS } from "../../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
 import { cloneDeep } from "lodash";
 
 

@@ -23,7 +23,7 @@ import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog
 import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from 'src/app/constants/status';
-import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',

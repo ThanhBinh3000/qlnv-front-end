@@ -31,8 +31,8 @@ import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import { STATUS } from "../../../../../../../constants/status";
-import {BaseComponent} from "../../../../../../../components/base/base.component";
+import { STATUS } from "../../../../../../constants/status";
+import {BaseComponent} from "../../../../../../components/base/base.component";
 import {DatePipe} from "@angular/common";
 
 
