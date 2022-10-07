@@ -345,6 +345,7 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
       });
       modalQD.afterClose.subscribe((data) => {
         if (data) {
+          console.log(data)
           this.formData.patchValue({
             soToTrinh: data,
             // thongTinToTrinh: data.soToTrinh ? data.soToTrinh : null

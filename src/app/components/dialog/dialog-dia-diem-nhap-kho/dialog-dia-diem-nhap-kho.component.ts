@@ -139,6 +139,10 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     await this.loadDvi();
     await this.loadCuc(LEVEL_USER.CUC, this.userInfo.MA_DVI);
+    if (this.userInfo.CAP_DVI == this.globals.prop.CUC) {
+      this.diaDiemNhapKho.maDvi = this.userInfo.MA_DVI;
+      await this.loadChiCuc(this.userInfo.MA_DVI);
+    }
     await this.loadDanhMucHang();
     if (this.listPhuongAn) {
       this.diaDiemNhapKho = this.listPhuongAn;
@@ -181,15 +185,20 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
   }
 
   async onChangeCuc(maDvi: string) {
-    console.log(maDvi, 12312323);
     this.chiCucList = this.listDvi;
     this.chiCucList = this.chiCucList.filter(s => s.maDviCha == maDvi);
     console.log(this.chiCucList);
   }
 
-  async loadChiCuc(capDvi: string, maCuc: string) {
+  async loadChiCuc(maCuc: string) {
+    console.log(this.phuongAnXuatList,'this.phuongAnXuatList');
     this.chiCucList = this.listDvi;
-    this.chiCucList = this.chiCucList.filter(s => s.capDvi == capDvi && s.maDvi);
+    this.chiCucList = this.chiCucList.filter(s => s.capDvi == LEVEL_USER.CHI_CUC && s.maDviCha == maCuc);
+    let existsChiCuc = this.phuongAnXuatList.map((s) => s.maDvi);
+    console.log(existsChiCuc,'existsChiCuc');
+    console.log(this.chiCucList,'this.chiCucList');
+    this.chiCucList = this.chiCucList.filter((s) => !existsChiCuc.includes(s.maDvi));
+
     // console.log(this.cucList,'list cuc')
     /*   let res = await this.donViService.layDonViChiCuc();
        if (res.msg == MESSAGE.SUCCESS) {
@@ -596,5 +605,9 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     if (this.idDxuatDtl) {
 
     }
+  }
+
+  changeCuc(maDvi: string) {
+    this.loadChiCuc(maDvi);
   }
 }

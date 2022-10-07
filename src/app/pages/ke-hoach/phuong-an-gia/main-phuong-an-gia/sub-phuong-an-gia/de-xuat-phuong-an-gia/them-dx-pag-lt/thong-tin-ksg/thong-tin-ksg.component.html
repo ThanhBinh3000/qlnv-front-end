@@ -10,7 +10,7 @@
             <th *ngIf="isTableKetQua">Thời hạn báo giá</th>
             <th>File đính kèm</th>
             <th *ngIf="isTableKetQua">Ghi chú</th>
-            <th style="width: 5%;">Hành động</th>
+            <th style="width: 8%;">Hành động</th>
         </tr>
         <tr>
             <th class="text-center"> </th>
@@ -51,7 +51,7 @@
             <th *ngIf="isTableKetQua">
                 <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input />
             </th>
-            <th class="text-left">
+            <th style="text-align: center">
                 <a>
                     <i class="icon htvbdh_dau-cong" (click)="themDataTable()"></i>
                 </a>
@@ -73,7 +73,7 @@
             <td *ngIf="isTableKetQua">{{data.thoiHanBaoGia }}</td>
             <td>{{data.fileDinhKem?.fileName }}</td>
             <td *ngIf="isTableKetQua">{{data.ghiChu }}</td>
-            <td style="text-align: left; white-space: nowrap;">
+            <td style="text-align: center">
                 <a (click)="downloadFile(data.fileDinhKem)">
                     <i class="icon htvbdh_tcdt_import "></i>
                 </a>
@@ -120,10 +120,10 @@
               </ng-template>
             </nz-form-control>
           </td>
-          <td *ngIf="isTableKetQua">
-            <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input />
+          <td *ngIf="isTableKetQua" >
+            <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input />
           </td>
-            <td>
+            <td style="text-align: center">
               <a (click)="downloadFile(dataEdit[idx].data.fileDinhKem)">
                 <i class="icon htvbdh_tcdt_import "></i>
               </a>

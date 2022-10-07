@@ -66,7 +66,7 @@ export interface TreeNodeInterface {
   level?: number;
   expand?: boolean;
   address?: string;
-  children?: TreeNodeInterface[];
+  ccFileDinhkems?: TreeNodeInterface[];
   parent?: TreeNodeInterface;
 }
 @Component({
@@ -74,14 +74,15 @@ export interface TreeNodeInterface {
   templateUrl: './themmoi-kehoach-muatructiep.component.html',
   styleUrls: ['./themmoi-kehoach-muatructiep.component.scss']
 })
-export class ThemmoiKehoachMuatructiepComponent implements OnInit {
+export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   @Input()
   loaiVthhInput: string;
   @Input()
   idInput: number;
+  @Input()
+  showFromTH: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-
   editCache: { [key: string]: { edit: boolean; data: DanhSachMuaTrucTiep } } = {};
 
   formData: FormGroup;

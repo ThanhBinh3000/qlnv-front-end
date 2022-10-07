@@ -45,7 +45,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    console.log(this.isVat, this.isTableKetQua);
+
   }
 
 
@@ -135,10 +135,9 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
     }
   }
 
-  saveEdit(stt: number): void {
-    const index = this.dataTable.findIndex(item => item.stt === stt);
-    Object.assign(this.dataTable[index], this.dataEdit[stt].data);
-    this.dataTable[stt].edit = false;
+  saveEdit(idx: number): void {
+    Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
+    this.dataEdit[idx].edit = false;
   }
   editRow(stt: number) {
     this.dataEdit[stt].edit = true;
