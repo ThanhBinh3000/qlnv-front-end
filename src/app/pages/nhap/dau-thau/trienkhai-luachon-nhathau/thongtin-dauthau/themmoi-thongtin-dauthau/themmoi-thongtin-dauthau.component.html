@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix" *ngIf="!isShowFromKq">
     <div class="btn-group">
         <button type="button" class="btn btn-sub" (click)="quayLai()">
             <i class="fa fa-arrow-left"></i>
@@ -12,7 +12,7 @@
     </div>
 </nz-affix>
 <div class="bg-trang">
-    <div class="header header-green-background">
+    <div class="header header-green-background" *ngIf="!isShowFromKq">
         <div class="header-text">
             <div class="title-chi-tieu">
                 <span [ngClass]="formData.value.trangThai == STATUS.HOAN_THANH_CAP_NHAT ? 'status-xanh' : 'status-do'">
@@ -290,7 +290,7 @@
               </div>
           </div>
           <div class="buttons">
-            <button *ngIf="idGoiThau > 0"
+            <button *ngIf="idGoiThau > 0 && !isShowFromKq"
               class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
               <i class="icon htvbdh_tcdt_save"></i>
               <span>Lưu</span>
@@ -351,7 +351,7 @@
                                 <td>{{dtGoiThau.tenTrangThai}}</td>
                                 <td>
                                   <a (click)="showDetail($event,dtGoiThau)">
-                                    <i class=" fa fa-pencil"></i>
+                                    <i class=" fa fa-eye"></i>
                                   </a>
                                 </td>
                             </tr>
@@ -360,7 +360,7 @@
                 </tbody>
             </nz-table>
         </nz-card>
-        <nz-card class="mg-t-16 flex-card p-lr16 ">
+        <nz-card *ngIf="idGoiThau > 0" class="mg-t-16 flex-card p-lr16" >
             <div class="header header-green-background mg-t-16">
                 <div class="header-text">
                     <div class="title-chi-tieu">
@@ -384,9 +384,9 @@
                             <th>Thành tiền</th>
                             <th>Trạng thái</th>
                             <th>Diễn giải/Lý do</th>
-                          <th width="30px">Thao tác</th>
+                            <th *ngIf="!isShowFromKq" width="30px">Thao tác</th>
                         </tr>
-                        <tr>
+                        <tr *ngIf="!isShowFromKq">
                             <th></th>
                             <th><input nz-input [(ngModel)]="itemRow.tenNhaThau" /></th>
                             <th><input nz-input [(ngModel)]="itemRow.mst" /></th>
@@ -405,7 +405,7 @@
                               </nz-select>
                             </th>
                             <th><input nz-input [(ngModel)]="itemRow.lyDo" /></th>
-                            <th>
+                            <th *ngIf="!isShowFromKq">
                                 <a (click)="addRow()" [class.disabled]="!itemRow">
                                     <i class="fa fa-plus"></i>
                                 </a>
@@ -428,7 +428,7 @@
                               <td>{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                               <td>{{ data.tenTrangThai }}</td>
                               <td>{{ data.lyDo }}</td>
-                              <td class="text-center">
+                              <td *ngIf="!isShowFromKq" class="text-center">
                                   <a (click)="startEdit(i)">
                                       <i class=" fa fa-pencil"></i>
                                   </a>

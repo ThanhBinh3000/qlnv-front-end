@@ -37,12 +37,13 @@ import { ThemmoiThongtinDauthauComponent } from './thongtin-dauthau/themmoi-thon
     ComponentsModule,
     MainModule,
   ],
-  exports: [
-    TrienkhaiLuachonNhathauComponent,
-    TheoPhuongThucDauThauComponent,
-    ThongtinDauthauComponent,
-    ThongBaoDauGiaTaiSanComponent,
-    ThongBaoDauGiaKhongThanhComponent,
-  ]
+    exports: [
+        TrienkhaiLuachonNhathauComponent,
+        TheoPhuongThucDauThauComponent,
+        ThongtinDauthauComponent,
+        ThongBaoDauGiaTaiSanComponent,
+        ThongBaoDauGiaKhongThanhComponent,
+        ThemmoiThongtinDauthauComponent,
+    ]
 })
 export class TrienkhaiLuachonNhathauModule { }
