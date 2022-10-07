@@ -13,7 +13,7 @@ import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { STATUS } from "../../../../../../constants/status";
+import { STATUS } from "../../../../../constants/status";
 import { Globals } from 'src/app/shared/globals';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';

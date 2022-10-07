@@ -42,7 +42,7 @@
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Phương thức mua </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                    <textarea nz-input formControlName="tchuanCluong" [readonly]="true"></textarea>
+                    <textarea nz-input formControlName="ptMua" [readonly]="true"></textarea>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -58,7 +58,7 @@
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Giá mua </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                    <textarea nz-input formControlName="tchuanCluong" [readonly]="true"></textarea>
+                    <textarea nz-input formControlName="giaMua" [readonly]="true"></textarea>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -67,7 +67,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> Giá chưa có thuế
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfter="đ/kg">
+                    <nz-input-group nzAddOnAfter="đ/kg" formControlName="giaChuaThue">
                         <nz-input-number nz-input [nzSize]="'small'" nzDisabled>
                         </nz-input-number>
                     </nz-input-group>
@@ -87,7 +87,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> %Thuế GTGT
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfter="%">
+                    <nz-input-group nzAddOnAfter="%" formControlName="thueGtgt">
                         <nz-input-number nz-input [nzSize]="'small'" nzDisabled>
                         </nz-input-number>
                     </nz-input-group>
@@ -96,10 +96,10 @@
         </div>
         <div nz-col [nzSpan]="4">
             <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Giá chưa có thuế
+                <nz-form-label nzRequired [nzNoColon]="true"> Giá đã có thuế
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfter="đ/kg">
+                    <nz-input-group nzAddOnAfter="đ/kg" formControlName="giaCoThue">
                         <nz-input-number nz-input [nzSize]="'small'" nzDisabled>
                         </nz-input-number>
                     </nz-input-group>
@@ -118,7 +118,7 @@
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Thời điểm mở cửa kho mua từ ngày </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                    <nz-date-picker formControlName="tgianBdauTchuc" nzFormat="dd/MM/yyyy"
+                    <nz-date-picker formControlName="tgianMkho" nzFormat="dd/MM/yyyy"
                         [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
                     </nz-date-picker>
                 </nz-form-control>
@@ -128,7 +128,7 @@
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn mua thóc đến hết ngày </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                    <nz-date-picker formControlName="tgianBdauTchuc" nzFormat="dd/MM/yyyy"
+                    <nz-date-picker formControlName="tgianKthuc" nzFormat="dd/MM/yyyy"
                         [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
                     </nz-date-picker>
                 </nz-form-control>
@@ -138,7 +138,7 @@
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> ghi chú </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                    <textarea nz-input formControlName="tchuanCluong" [readonly]="true"></textarea>
+                    <textarea nz-input formControlName="ghiChu" [readonly]="true"></textarea>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -147,7 +147,7 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> Tên chủ đầu tư </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
-                        <input nz-input readonly formControlName="tenDvi" />
+                        <input nz-input readonly formControlName="tenChuDt" />
                     </nz-input-group>
                 </nz-form-control>
             </nz-form-item>

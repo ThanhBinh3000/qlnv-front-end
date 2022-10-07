@@ -1,18 +1,19 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Globals } from "../../../../../../../../shared/globals";
-import { MESSAGE } from "../../../../../../../../constants/message";
-import { DanhMucService } from "../../../../../../../../services/danhmuc.service";
+import { Globals } from "../../../../../../../shared/globals";
+import { MESSAGE } from "../../../../../../../constants/message";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { cloneDeep, chain } from 'lodash';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
-import { DanhSachGoiThau } from "../../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import { DanhSachGoiThau } from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {
   DialogThemMoiVatTuComponent
-} from "../../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
+} from "../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
 import { NzModalService } from "ng-zorro-antd/modal";
+import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 
 
 @Component({
@@ -37,7 +38,7 @@ export class ThongtinDexuatMuattComponent implements OnInit {
     private fb: FormBuilder,
     public globals: Globals,
     private danhMucService: DanhMucService,
-    private dxKhLcntService: DanhSachDauThauService,
+    private dxKhLcntService: DanhSachMuaTrucTiepService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
     private modal: NzModalService,
@@ -79,7 +80,6 @@ export class ThongtinDexuatMuattComponent implements OnInit {
       soLuongCtieu: [],
       soLuongKhDd: [],
       soLuongDxmtt: [],
-
       trangThaiTh: [],
       donGiaVat: [],
       thanhTien: [],
@@ -120,6 +120,8 @@ export class ThongtinDexuatMuattComponent implements OnInit {
     if (resNv.msg == MESSAGE.SUCCESS) {
       this.listNguonVon = resNv.data;
     }
+
+
 
   }
 
