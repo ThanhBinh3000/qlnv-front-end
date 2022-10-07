@@ -22,6 +22,8 @@ export class ThongBaoDauGiaTaiSanService extends BaseService {
       url_ += 'maVatTuCha=' + encodeURIComponent('' + body.maVatTuCha) + '&';
     if (body.maDvis)
       url_ += 'maDvis=' + encodeURIComponent('' + body.maDvis) + '&';
+    if (body.trangThai)
+      url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     if (body.soQuyetDinhPheDuyetKHBDG)
       url_ += 'soQuyetDinhPheDuyetKHBDG=' + encodeURIComponent('' + body.soQuyetDinhPheDuyetKHBDG) + '&';
     if (body.maThongBaoBDG)

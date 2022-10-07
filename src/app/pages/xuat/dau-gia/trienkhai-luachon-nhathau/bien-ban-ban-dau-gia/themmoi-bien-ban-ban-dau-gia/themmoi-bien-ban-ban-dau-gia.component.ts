@@ -296,10 +296,18 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
 
     async loadThongBaoDauGiaTaiSan() {
         let body = {
+          trangThai:this.globals.prop.NHAP_BAN_HANH
         };
         let res = await this.thongBanDauGiaTaiSanService.timKiem(body);
         if (res.msg == MESSAGE.SUCCESS) {
-            this.listThongBaoDauGiaTaiSan = res.data.content;
+          console.log(res.data);
+
+            this.listThongBaoDauGiaTaiSan =
+              Array.from(new Set(res.data.content.map(a => a.id)))
+                .map(id => {
+                  return res.data.content.find(a => a.id === id)
+                })
+              // res.data.content;
         } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
         }

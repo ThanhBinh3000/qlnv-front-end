@@ -429,7 +429,13 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
     if (idSoQuyetDinh) {
       let res = await this.qdPheDuyetKhBanDauGia.chiTiet(+idSoQuyetDinh);
       if (res.msg == MESSAGE.SUCCESS) {
-        let phanLoTaiSans = res.data?.thongTinTaiSanCucs;
+        let phanLoTaiSans =  res.data?.thongTinTaiSanCucs;
+        // if(this.userService.isTongCuc()){
+        //    phanLoTaiSans = res.data?.chiTietList;
+        // }else{
+        //    phanLoTaiSans = res.data?.thongTinTaiSanCucs;
+        // }
+        // console.log(phanLoTaiSans)
         this.getPhanLoTaiSan(phanLoTaiSans);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -444,6 +450,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       for (let i = 0; i <= phanLoTaiSans.length - 1; i++) {
         this.taiSanIdList.push(phanLoTaiSans[i].id);
         for (let j = i + 1; j <= phanLoTaiSans.length; j++) {
+          // console.log("hahaaaaaaaaaaaaaaa:"+phanLoTaiSans.length)
           if (phanLoTaiSans.length == 1 || phanLoTaiSans[i].maChiCuc === phanLoTaiSans[j].maChiCuc) {
             const diaDiemNhapKho = new DiaDiemNhapKho();
             diaDiemNhapKho.maDvi = phanLoTaiSans[i].maChiCuc;
