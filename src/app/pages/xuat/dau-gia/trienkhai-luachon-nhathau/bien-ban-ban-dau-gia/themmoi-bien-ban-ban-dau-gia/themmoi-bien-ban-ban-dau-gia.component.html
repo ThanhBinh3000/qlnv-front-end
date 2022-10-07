@@ -70,7 +70,7 @@
                         <div nz-col nzSpan="4">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true">
-                                    Loại hàng
+                                    Loại hàng hóa
                                 </nz-form-label>
                                 <nz-select nzAllowClear formControlName="loaiVthh">
                                     <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
@@ -104,7 +104,7 @@
                                 <nz-form-label [nzNoColon]="true">
                                     Ngày tổ chức bán đấu giá
                                 </nz-form-label>
-                                <nz-range-picker class="search__input" formControlName="ngayToChuc">
+                                <nz-range-picker class="search__input"  nzFormat="dd/MM/yyyy" formControlName="ngayToChuc">
                                 </nz-range-picker>
                             </nz-form-item>
                         </div>
