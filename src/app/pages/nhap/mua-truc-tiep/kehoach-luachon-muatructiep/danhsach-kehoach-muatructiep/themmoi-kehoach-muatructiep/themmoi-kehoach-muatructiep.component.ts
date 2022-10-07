@@ -31,11 +31,10 @@ import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import { STATUS } from "../../../../../../../constants/status";
-import { BaseComponent } from "../../../../../../../components/base/base.component";
 import { DatePipe } from "@angular/common";
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { DialogThemMoiKeHoachMuaTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
+import { STATUS } from 'src/app/constants/status';
 
 interface ItemData {
   id: string;
@@ -118,9 +117,11 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
 
   addModelBaoGia: any = {
     moTa: '',
+    taiLieu: [],
   };
   addModelCoSo: any = {
     moTa: '',
+    taiLieu: [],
   };
 
   taiLieuDinhKemList: any[] = [];
@@ -359,22 +360,10 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       if (!res) {
         return;
       }
-      const dsMuaTrucTiepDialog = new DanhSachMuaTrucTiep();
-      dsMuaTrucTiepDialog.bangChu = res.value.bangChu;
-      dsMuaTrucTiepDialog.maDvi = res.value.maDvi;
-      dsMuaTrucTiepDialog.tenDvi = res.value.tenDvi;
-      dsMuaTrucTiepDialog.maDiemKho = res.value.maDiemKho;
-      dsMuaTrucTiepDialog.tenDiemKho = res.value.tenDiemKho;
-      dsMuaTrucTiepDialog.diaDiemNhap = res.value.diaDiemNhap;
-      dsMuaTrucTiepDialog.soLuongCtieu = res.value.soLuongCtieu;
-      dsMuaTrucTiepDialog.soLuongKhDd = res.value.soLuongKhDd;
-      dsMuaTrucTiepDialog.soLuongDxmtt = +res.value.soLuongDxmtt;
-      dsMuaTrucTiepDialog.donGiaVat = res.value.donGiaVat;
-
       if (index >= 0) {
-        this.listOfData[index] = dsMuaTrucTiepDialog;
+        this.listOfData[index] = res.value;
       } else {
-        this.listOfData = [...this.listOfData, dsMuaTrucTiepDialog];
+        this.listOfData = [...this.listOfData, res.value];
       }
       let tongMucDt: number = 0;
       this.listOfData.forEach((item) => {
@@ -383,12 +372,15 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       this.formData.patchValue({
         tongMucDt: tongMucDt,
       });
+      this.helperService.setIndexArray(this.listOfData);
       this.convertListData();
     });
   }
 
   deleteRow(i: number): void {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
+    this.helperService.setIndexArray(this.listOfData);
+    this.convertListData();
   }
 
 
@@ -620,7 +612,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
               case 'bao-gia-thi-truong':
                 const taiLieuBaoGiaThiTruong = new CanCuXacDinh();
                 taiLieuBaoGiaThiTruong.loaiCanCu = '00';
-                taiLieuBaoGiaThiTruong.tenTlieu = res.tenTaiLieu;
+                taiLieuBaoGiaThiTruong.moTa = res.tenTaiLieu;
                 taiLieuBaoGiaThiTruong.idVirtual = new Date().getTime();
                 taiLieuBaoGiaThiTruong.children = [];
                 taiLieuBaoGiaThiTruong.children = [
@@ -635,7 +627,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
               case 'can-cu-khac':
                 const taiLieuCanCuKhac = new CanCuXacDinh();
                 taiLieuCanCuKhac.loaiCanCu = '01';
-                taiLieuCanCuKhac.tenTlieu = res.tenTaiLieu;
+                taiLieuCanCuKhac.moTa = res.tenTaiLieu;
                 taiLieuCanCuKhac.idVirtual = new Date().getTime();
                 taiLieuCanCuKhac.children = [];
                 taiLieuCanCuKhac.children = [
@@ -643,7 +635,6 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
                   fileDinhKem,
                 ];
                 this.canCuKhacList = [...this.canCuKhacList, taiLieuCanCuKhac];
-                console.log(this.canCuKhacList);
                 break;
               default:
                 break;
@@ -717,7 +708,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   addBaoGia() {
     const taiLieuBaoGiaThiTruong = new CanCuXacDinh();
     taiLieuBaoGiaThiTruong.loaiCanCu = '00';
-    taiLieuBaoGiaThiTruong.tenTlieu = this.addModelBaoGia.tenTlieu;
+    taiLieuBaoGiaThiTruong.moTa = this.addModelBaoGia.moTa;
     taiLieuBaoGiaThiTruong.id = new Date().getTime() + 1;
     taiLieuBaoGiaThiTruong.children = this.addModelBaoGia.children;
     taiLieuBaoGiaThiTruong.taiLieu = this.addModelBaoGia.taiLieu;
@@ -727,7 +718,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
 
   clearBaoGia() {
     this.addModelBaoGia = {
-      tenTlieu: '',
+      moTa: '',
       taiLieu: [],
       children: [],
     };
@@ -783,7 +774,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   addCoSo() {
     const taiLieuCanCuKhac = new CanCuXacDinh();
     taiLieuCanCuKhac.loaiCanCu = '01';
-    taiLieuCanCuKhac.tenTlieu = this.addModelCoSo.tenTlieu;
+    taiLieuCanCuKhac.moTa = this.addModelCoSo.moTa;
     taiLieuCanCuKhac.id = new Date().getTime() + 1;
     taiLieuCanCuKhac.children = this.addModelCoSo.children;
     taiLieuCanCuKhac.taiLieu = this.addModelCoSo.taiLieu;
@@ -793,7 +784,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
 
   clearCoSo() {
     this.addModelCoSo = {
-      tenTlieu: '',
+      moTa: '',
       taiLieu: [],
       children: [],
     };

@@ -10,22 +10,26 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class KehoachLuachonMuatructiepComponent implements OnInit {
   tabs: any[] = [];
-  constructor(public userService: UserService,
-    private danhMucService: DanhMucService,) { }
 
-  ngOnInit(): void {
+
+  constructor(
+    private danhMucService: DanhMucService
+  ) {
     this.loaiVTHHGetAll();
   }
+  ngOnInit() {
+
+  }
   async loaiVTHHGetAll() {
-    this.tabs = [];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        res.data.forEach(element => {
-          element.count = 0;
-          this.tabs.push(element);
-        });
-      }
+      this.tabs = [...this.tabs,
+      ...res.data.filter((item) => item.ma == '0101'),
+      ];
     }
+  }
+  loaiVthhSelected: string = '0101';
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
   }
 }

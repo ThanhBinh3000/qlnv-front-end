@@ -1,13 +1,12 @@
+import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
-import { Component, Input, OnInit } from '@angular/core';
-;
 
 @Component({
-  selector: 'app-main-tong-cuc',
-  templateUrl: './main-tong-cuc.component.html',
-  styleUrls: ['./main-tong-cuc.component.scss']
+  selector: 'app-main-kehoach-luachon-muatructiep',
+  templateUrl: './main-kehoach-luachon-muatructiep.component.html',
 })
-export class MainTongCucComponent implements OnInit {
+export class MainKehoachLuachonMuatructiepComponent implements OnInit {
+
   @Input() loaiVthh: string;
 
   constructor(public userService: UserService) { }

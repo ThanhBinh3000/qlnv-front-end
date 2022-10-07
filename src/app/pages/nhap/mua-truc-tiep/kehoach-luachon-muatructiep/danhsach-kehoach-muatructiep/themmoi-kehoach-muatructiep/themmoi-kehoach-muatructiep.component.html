@@ -361,7 +361,7 @@
                     *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''">
                     <td></td>
                     <td>
-                        <input nz-input [(ngModel)]="addModelCoSo.tenTlieu" />
+                        <input nz-input [(ngModel)]="addModelCoSo.moTa" />
                     </td>
                     <td>
                         <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
@@ -382,7 +382,7 @@
                 <tr *ngFor="let data of canCuKhac.data, let i = index" class="editable-row">
                     <ng-container *ngIf="!editCoSoCache[data.id]?.edit; else editCoSoTemplate">
                         <td>{{i + 1}}</td>
-                        <td>{{data.tenTlieu}}</td>
+                        <td>{{data.moTa}}</td>
                         <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
                         <td class="action text-right">
                             <a (click)="downloadFile(data.children[0])">
@@ -401,7 +401,7 @@
                     <ng-template #editCoSoTemplate>
                         <td></td>
                         <td>
-                            <input nz-input [(ngModel)]="editCoSoCache[data.id].data.tenTlieu" />
+                            <input nz-input [(ngModel)]="editCoSoCache[data.id].data.moTa" />
                         </td>
                         <td>
                             <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"

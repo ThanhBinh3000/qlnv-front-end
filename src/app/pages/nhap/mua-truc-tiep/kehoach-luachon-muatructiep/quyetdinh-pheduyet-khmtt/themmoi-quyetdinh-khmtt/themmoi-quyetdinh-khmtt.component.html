@@ -58,7 +58,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="namKh" nzAllowClear (ngModelChange)="listDsTongHopToTrinh()"
+              <nz-select formControlName="namKh" nzAllowClear
                 [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
@@ -104,7 +104,7 @@
               <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
-                  <input [readonly]="true" nz-input formControlName="idThHdr" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="idThop" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -112,7 +112,7 @@
               <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
-                  <input [readonly]="true" nz-input formControlName="maTrHdr" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="idDxuat" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -157,7 +157,8 @@
       </div>
     </div>
     <nz-card class="mg-t-10 flex-card p-lr16 card-table">
-      <nz-table class="pd-10" nzBordered [nzData]="danhsachDx" [nzFrontPagination]="false" [nzShowPagination]="false">
+      <nz-table class="pd-10" nzBordered [nzData]="danhsachDXMTT" [nzFrontPagination]="false"
+        [nzShowPagination]="false">
         <thead>
           <tr>
             <th [width]="30">STT</th>
@@ -172,7 +173,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of danhsachDx ;let i = index" (click)="showDetail($event,i)">
+          <tr *ngFor="let data of danhsachDXMTT ;let i = index" (click)="showDetail($event,i)">
             <td class="text-center">{{i + 1}} </td>
             <td>{{ data.tenDvi }}</td>
             <td></td>
@@ -180,8 +181,8 @@
             <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenDuAn }}</td>
-            <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
-            <td>{{ data.tongMucDt | number: '1.0-1' }}</td>
+            <td>{{ data.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ data.tongMucDt | number: '1.0-1' : 'vi_VN' }}</td>
           </tr>
         </tbody>
       </nz-table>
