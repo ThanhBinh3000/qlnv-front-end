@@ -116,6 +116,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhGiaTCDTNNService.getDetail(id);
       const data = res.data;
+      console.log(data)
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -129,11 +130,11 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         tchuanCluong: data.tchuanCluong,
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
-        ghiChu: data.ghiChu,
+        ghiChu: data.noiDung,
         soToTrinh: data.soToTrinh
       });
       this.arrThongTinGia = data.thongTinGia
-
+      this.onChangeSoToTrinh(data.soToTrinh)
     }
   }
 
@@ -237,6 +238,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       let body = this.formData.value;
       body.soQd = body.soQd + this.maQd;
       body.pagType = this.pagType;
+      body.thongTinGia = this.arrThongTinGia;
       let res;
       if (this.idInput > 0) {
         res = await this.quyetDinhGiaTCDTNNService.update(body);
@@ -307,7 +309,6 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
-          console.log(this.dsCloaiVthh);
         }
       }
       this.formData.controls["cloaiVthh"].setValue(curToTrinh.cloaiVthh);

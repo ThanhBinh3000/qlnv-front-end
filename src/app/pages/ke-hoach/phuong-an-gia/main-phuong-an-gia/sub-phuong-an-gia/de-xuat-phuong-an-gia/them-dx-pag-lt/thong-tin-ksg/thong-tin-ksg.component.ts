@@ -1,9 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ThongTinKhaoSatGia } from 'src/app/models/DeXuatPhuongAnGia';
+import { ThongTinKhaoSatGia} from 'src/app/models/DeXuatPhuongAnGia';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
+import {NzModalService} from "ng-zorro-antd/modal";
 
 @Component({
   selector: 'app-thong-tin-ksg',
@@ -30,9 +31,11 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   isView: boolean;
 
   rowItem: ThongTinKhaoSatGia = new ThongTinKhaoSatGia();
+  dataEdit: { [key: string]: { edit: boolean; data: ThongTinKhaoSatGia } } = {};
   constructor(
     private uploadFileService: UploadFileService,
-    public globals: Globals
+    public globals: Globals,
+    public modal: NzModalService,
   ) {
 
   }
@@ -42,7 +45,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    console.log(this.isVat, this.isTableKetQua);
+
   }
 
 
@@ -59,6 +62,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new ThongTinKhaoSatGia();
     this.emitDataTable();
+    this.updateEditCache()
   }
 
   getNameFile(event?: any, tableName?: string, item?: FileDinhKem) {
@@ -98,4 +102,51 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
     });
   }
 
+  deleteItem(index: any) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 400,
+        nzOnOk: async () => {
+          try {
+            this.dataTable.splice(index, 1);
+            this.updateEditCache();
+          } catch (e) {
+            console.log('error', e);
+          }
+        },
+      });
+  }
+
+  updateEditCache(): void {
+    if (this.dataTable) {
+      let i = 0;
+      this.dataTable.forEach((item, index) => {
+        this.dataEdit[index] = {
+          edit: false,
+          data: { ...item },
+        };
+        i++
+      });
+    }
+  }
+
+  saveEdit(idx: number): void {
+    Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
+    this.dataEdit[idx].edit = false;
+  }
+  editRow(stt: number) {
+    this.dataEdit[stt].edit = true;
+  }
+  cancelEdit(stt: number): void {
+    const index = this.dataTable.findIndex(item => item.stt === stt);
+    this.dataEdit[stt] = {
+      data: { ...this.dataTable[index] },
+      edit: false
+    };
+  }
 }

@@ -92,10 +92,10 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
     try {
       this.spinner.show();
       this.userInfo = this.userService.getUserLogin()
-      await this.search()
-      await this.loaiVTHHGetAll()
-      await this.loadDanhSachChiCuc()
-      await this.loadDsTong()
+      // await this.search()
+      // await this.loaiVTHHGetAll()
+      // await this.loadDanhSachChiCuc()
+      // await this.loadDsTong()
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -269,4 +269,23 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   onClose() {
     this.isAddNew = false;
   }
+
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
+    }
+    else {
+      this.dataTable = cloneDeep(this.dataTableAll);
+    }
+  }
 }
+

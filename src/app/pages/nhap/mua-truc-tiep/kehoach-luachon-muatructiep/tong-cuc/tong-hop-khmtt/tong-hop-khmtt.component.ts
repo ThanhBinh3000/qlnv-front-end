@@ -191,7 +191,7 @@ export class TongHopKhmttComponent implements OnInit {
   }
 
   selectHangHoa() {
-    // let data = this.loaiVthh;
+    let data = this.loaiVthh;
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,
@@ -199,7 +199,10 @@ export class TongHopKhmttComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        data,
+        onlyLuongThuc: true,
+      },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {

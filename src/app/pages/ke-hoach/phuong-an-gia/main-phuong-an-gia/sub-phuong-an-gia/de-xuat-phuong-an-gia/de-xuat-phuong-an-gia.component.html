@@ -219,7 +219,7 @@
                             <a (click)="viewDetail(data.id, true)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, false)">
+                            <a *ngIf="data.trangThai == '00' || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP"  (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">

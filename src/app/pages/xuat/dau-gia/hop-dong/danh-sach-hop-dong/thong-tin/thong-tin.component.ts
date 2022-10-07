@@ -13,7 +13,7 @@ import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.co
 import {MESSAGE} from 'src/app/constants/message';
 import {FileDinhKem} from 'src/app/models/FileDinhKem';
 import {UserLogin} from 'src/app/models/userlogin';
-import {dauThauGoiThauService} from 'src/app/services/dauThauGoiThau.service';
+import {dauThauGoiThauService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/dauThauGoiThau.service';
 import {UploadFileService} from 'src/app/services/uploaFile.service';
 import {UserService} from 'src/app/services/user.service';
 import {Globals} from 'src/app/shared/globals';

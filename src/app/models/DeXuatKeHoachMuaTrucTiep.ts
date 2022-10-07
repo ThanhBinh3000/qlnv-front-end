@@ -13,6 +13,7 @@ export class DanhSachMuaTrucTiep {
   soLuongDxmtt: number;
   donGiaVat: number;
   bangChu: String;
+  thanhTien: number;
 }
 
 export class FileDinhKem {

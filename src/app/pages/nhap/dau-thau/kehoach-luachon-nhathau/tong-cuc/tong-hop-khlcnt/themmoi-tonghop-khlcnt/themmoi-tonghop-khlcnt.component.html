@@ -279,6 +279,7 @@
         <th>Số lượng (Tấn)</th>
         <th>Tổng tiền đã bao gồm thuế (đồng)</th>
         <th>Giá trị đảm bảo dự thầu (%)</th>
+        <th></th>
       </tr>
       </thead>
       <tbody>
@@ -293,6 +294,11 @@
         <td>{{ data.soLuong | number: '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.tongTien | number: '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.gtriDthau }}</td>
+        <td>
+          <a (click)="showDetail($event,data.idDxHdr)" >
+            <i class="fa fa-eye"></i>
+          </a>
+        </td>
       </tr>
       </tbody>
     </nz-table>

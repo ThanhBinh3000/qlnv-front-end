@@ -2,24 +2,24 @@
     <thead>
         <tr>
             <th style="width: 2%;">STT</th>
-            <th *ngIf="isTableKetQua">Tên đơn vị thẩm định</th>
-            <th>Tên đơn vị báo giá</th>
+            <th *ngIf="!isTableKetQua">Tên đơn vị thẩm định</th>
+            <th *ngIf="isTableKetQua">Tên đơn vị báo giá</th>
             <th *ngIf="isTableKetQua">Chủng loại hàng hóa, tiêu chuẩn chất lượng</th>
             <th>Đơn giá chưa VAT (đồng/kg)</th>
-            <th *ngIf="isVat">Đơn giá có VAT (đồng/kg)</th>
+            <th >Đơn giá có VAT (đồng/kg)</th>
             <th *ngIf="isTableKetQua">Thời hạn báo giá</th>
             <th>File đính kèm</th>
             <th *ngIf="isTableKetQua">Ghi chú</th>
-            <th style="width: 5%;">Hành động</th>
+            <th style="width: 8%;">Hành động</th>
         </tr>
         <tr>
             <th class="text-center"> </th>
-            <th *ngIf="isTableKetQua">
+            <th *ngIf="!isTableKetQua">
                 <input type="text" [(ngModel)]="rowItem.tenDviThamDinh" nz-input />
             </th>
-            <th>
-                <input type="text" [(ngModel)]="rowItem.tenDviBaoGia" nz-input />
-            </th>
+          <th *ngIf="isTableKetQua">
+            <input type="text" [(ngModel)]="rowItem.tenDviBaoGia" nz-input />
+          </th>
             <th *ngIf="isTableKetQua">
                 <input type="text" [(ngModel)]="rowItem.cloaiVthh" nz-input />
             </th>
@@ -28,7 +28,7 @@
                     [nzParser]="globals.parser">
                 </nz-input-number>
             </th>
-            <th *ngIf="isVat">
+            <th>
                 <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.donGiaVat" [nzFormatter]="globals.formatter"
                     [nzParser]="globals.parser">
                 </nz-input-number>
@@ -51,7 +51,7 @@
             <th *ngIf="isTableKetQua">
                 <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input />
             </th>
-            <th class="text-left">
+            <th style="text-align: center">
                 <a>
                     <i class="icon htvbdh_dau-cong" (click)="themDataTable()"></i>
                 </a>
@@ -63,26 +63,77 @@
     </thead>
     <tbody>
         <tr *ngFor="let data of dataTable; let idx = index">
+          <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
             <td class="text-center">{{ idx + 1 }}</td>
-            <td>{{ data.tenDviThamDinh }}</td>
-            <td>{{ data.tenDviBaoGia }}</td>
+            <td *ngIf="isTableKetQua">{{ data.tenDviBaoGia }}</td>
+            <td *ngIf="!isTableKetQua">{{ data.tenDviThamDinh }}</td>
             <td *ngIf="isTableKetQua">{{ data.cloaiVthh }}</td>
             <td>{{data.donGia }}</td>
-            <td *ngIf="isVat">{{data.donGiaVat }}</td>
+            <td >{{data.donGiaVat }}</td>
             <td *ngIf="isTableKetQua">{{data.thoiHanBaoGia }}</td>
             <td>{{data.fileDinhKem?.fileName }}</td>
             <td *ngIf="isTableKetQua">{{data.ghiChu }}</td>
-            <td style="text-align: left; white-space: nowrap;">
+            <td style="text-align: center">
                 <a (click)="downloadFile(data.fileDinhKem)">
                     <i class="icon htvbdh_tcdt_import "></i>
                 </a>
-                <a>
+                <a (click)="editRow(idx)">
                     <i class="fa fa-pencil"></i>
                 </a>
-                <a>
+                <a (click)="deleteItem(idx)">
                     <i class="fa fa-trash-o do"></i>
                 </a>
             </td>
+          </ng-container>
+          <ng-template #editTemplate>
+          <td class="text-center"> </td>
+          <td *ngIf="!isTableKetQua">
+            <input type="text" [(ngModel)]="dataEdit[idx].data.tenDviThamDinh" nz-input />
+          </td>
+          <td *ngIf="isTableKetQua">
+            <input type="text" [(ngModel)]="dataEdit[idx].data.tenDviBaoGia" nz-input />
+          </td>
+          <td *ngIf="isTableKetQua">
+            <input type="text" [(ngModel)]="dataEdit[idx].data.cloaiVthh" nz-input />
+          </td>
+          <td>
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia" [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td>
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGiaVat" [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </td>
+          <td *ngIf="isTableKetQua">
+            <input type="text" [(ngModel)]="dataEdit[idx].data.thoiHanBaoGia" nz-input />
+          </td>
+          <td>
+            <nz-form-control>
+              <nz-input-group nzSize="large" [nzAddOnAfter]="suffixIcon">
+                <input placeholder="Chọn file" [(ngModel)]="dataEdit[idx].data.fileDinhKem.fileName" nz-input disabled />
+              </nz-input-group>
+              <ng-template #suffixIcon>
+                <i class="icon htvbdh_tcdt_tep"></i>
+                <input class="input-file" (change)="getNameFile($event)" type="file" />
+              </ng-template>
+            </nz-form-control>
+          </td>
+          <td *ngIf="isTableKetQua" >
+            <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input />
+          </td>
+            <td style="text-align: center">
+              <a (click)="downloadFile(dataEdit[idx].data.fileDinhKem)">
+                <i class="icon htvbdh_tcdt_import "></i>
+              </a>
+              <a (click)="saveEdit(idx)" class="save">
+                <i class="fa fa-save"></i>
+              </a>
+              <a (click)="cancelEdit(idx)">
+                <i class="fa fa-ban do"></i> </a>
+            </td>
+          </ng-template>
         </tr>
     </tbody>
 </nz-table>

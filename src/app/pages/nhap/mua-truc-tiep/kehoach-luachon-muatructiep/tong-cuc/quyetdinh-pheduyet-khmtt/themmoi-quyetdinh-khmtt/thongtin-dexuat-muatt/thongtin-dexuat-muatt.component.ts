@@ -8,19 +8,19 @@ import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
-import {DanhSachGoiThau} from "../../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import { DanhSachGoiThau } from "../../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {
   DialogThemMoiVatTuComponent
 } from "../../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { NzModalService } from "ng-zorro-antd/modal";
 
 
 @Component({
-  selector: 'app-thongtin-dexuat',
-  templateUrl: './thongtin-dexuat.component.html',
-  styleUrls: ['./thongtin-dexuat.component.scss']
+  selector: 'app-thongtin-dexuat-muatt',
+  templateUrl: './thongtin-dexuat-muatt.component.html',
+  styleUrls: ['./thongtin-dexuat-muatt.component.scss']
 })
-export class ThongtinDexuatComponent implements OnInit, OnChanges {
+export class ThongtinDexuatMuattComponent implements OnInit {
   @Input() title;
   @Input() dataInput;
   @Input() isView;
@@ -43,40 +43,46 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     private modal: NzModalService,
   ) {
     this.formData = this.fb.group({
-      id: [],
+      id: [''],
       maDvi: [''],
       tenDvi: [''],
       loaiHinhNx: [''],
       kieuNx: [''],
-      diaChiDvi: [],
-      namKhoach: [,],
-      soDxuat: [null,],
+      namKh: [,],
+      soDxuat: [null],
       trichYeu: [null],
+      ngayTao: [],
       ngayPduyet: [],
+      tenDuAn: [null,],
       soQd: [,],
       loaiVthh: [,],
       tenLoaiVthh: [,],
       cloaiVthh: [,],
       tenCloaiVthh: [,],
       moTaHangHoa: [,],
+      ptMua: [null],
       tchuanCluong: [null],
-      tenDuAn: [null,],
-      loaiHdong: [null,],
-      hthucLcnt: [null,],
-      pthucLcnt: [null,],
-      tgianBdauTchuc: [null,],
-
-      tgianDthau: [null,],
-      tgianMthau: [null,],
-
-      gtriDthau: [null,],
-      gtriHdong: [null,],
-      donGiaVat: [''],
-      tongMucDt: [null,],
-      nguonVon: [null,],
-      tgianNhang: [null,],
+      giaMua: [],
+      giaChuaThue: [],
+      giaCoThue: [],
+      thueGtgt: [],
+      tgianMkho: [],
+      tgianKthuc: [],
       ghiChu: [null],
-      ldoTuchoi: [],
+      tongMucDt: [],
+      tongSoLuong: [],
+      nguonVon: [],
+      tenChuDt: [],
+      moTa: [],
+      maDiemKho: [],
+      diaDiemKho: [],
+      soLuongCtieu: [],
+      soLuongKhDd: [],
+      soLuongDxmtt: [],
+
+      trangThaiTh: [],
+      donGiaVat: [],
+      thanhTien: [],
     });
   }
 
@@ -90,7 +96,6 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data)
         }
-        this.helperService.setIndexArray(this.listOfData);
         this.convertListData();
       }
     }
@@ -102,7 +107,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       .value()
   }
 
-  async ngOnInit(){
+  async ngOnInit() {
     await this.spinner.show()
     await this.loadDataComboBox();
     await this.spinner.hide()
@@ -129,6 +134,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
 
 
   themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
+
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm nhập kho',
       nzContent: DialogThemMoiVatTuComponent,

@@ -19,6 +19,7 @@ import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { ItemDetail } from 'src/app/models/itemDetail';
 import { STATUS } from 'src/app/constants/status';
+import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 
 @Component({
   selector: 'app-quyetdinh-pheduyet-khmtt',
@@ -30,25 +31,25 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
   @Input() loaiVthh: string;
   yearNow = dayjs().get('year');
   searchFilter = {
-    soQd: null,
-    loaiVthh: null,
-    ngayQd: null,
-    namKhoach: dayjs().get('year'),
+    namKh: dayjs().get('year'),
+    soQdPduyet: null,
     trichYeu: null,
-    tuNgayQd: null,
-    denNgayQd: null,
+    ngayKy: null,
+    loaiVthh: null,
+    ngayKyQdTu: null,
+    ngayKyQdDen: null,
     soGthau: null,
     tongTien: null,
   };
   filterTable: any = {
-    soQd: '',
-    ngayQd: '',
+    soQdPduyet: '',
+    ngayKy: '',
     trichYeu: '',
-    idThHdr: '',
-    namKhoach: '',
-    tenVthh: '',
-    soGthau: '',
-    tongTien: '',
+    soDxuat: '',
+    idThopHdr: '',
+    namKh: '',
+    pthucMuatt: '',
+    tenTrangThai: '',
   };
   STATUS = STATUS
   dataTableAll: any[] = [];
@@ -86,51 +87,38 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     private danhMucService: DanhMucService,
-    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
+    private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     public userService: UserService,
   ) {
   }
 
   async ngOnInit() {
-    // this.spinner.show();
-    // try {
-    //   if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XEM")) {
-    //     window.location.href = '/error/401'
-    //   }
-    //   this.listVthh = LIST_VAT_TU_HANG_HOA;
-    //   this.userInfo = this.userService.getUserLogin();
-    //   this.isVisibleChangeTab$.subscribe((value: boolean) => {
-    //     this.visibleTab = value;
-    //   });
-    //   for (let i = -3; i < 23; i++) {
-    //     this.listNam.push({
-    //       value: this.yearNow - i,
-    //       text: this.yearNow - i,
-    //     });
-    //   }
-    //   this.loadDanhMucHang();
-    //   await this.search();
-    //   this.spinner.hide();
-    // }
-    // catch (e) {
-    //   console.log('error: ', e)
-    //   this.spinner.hide();
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    // }
+    await this.spinner.show();
+    try {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XEM")) {
+        window.location.href = '/error/401'
+      }
+      this.userInfo = this.userService.getUserLogin();
+      this.isVisibleChangeTab$.subscribe((value: boolean) => {
+        this.visibleTab = value;
+      });
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: this.yearNow - i,
+          text: this.yearNow - i,
+        });
+      }
+      await this.search();
+      await this.spinner.hide();
+    }
+    catch (e) {
+      console.log('error: ', e)
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
-  loadDanhMucHang() {
-    // this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-    //   if (hangHoa.msg == MESSAGE.SUCCESS) {
-    //     this.listOfMapData = hangHoa.data;
-    //     this.listOfMapDataClone = [...this.listOfMapData];
-    //     this.listOfMapData.forEach((item) => {
-    //       this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
-    //     });
-    //   }
-    // });
-  }
 
   insert() {
     if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
@@ -141,174 +129,97 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
   }
 
   detail(data?) {
-    // if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_SUA")) {
-    //   return;
-    // }
-    // this.isDetail = true;
-    // this.selectedId = data.id;
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_SUA")) {
+      return;
+    }
+    this.isDetail = true;
+    this.selectedId = data.id;
   }
 
   delete(data?) {
-    // if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
-    //   return;
-    // }
-    // this.modal.confirm({
-    //   nzClosable: false,
-    //   nzTitle: 'Xác nhận',
-    //   nzContent: MESSAGE.DELETE_CONFIRM,
-    //   nzOkText: 'Đồng ý',
-    //   nzCancelText: 'Không',
-    //   nzOkDanger: true,
-    //   nzWidth: 310,
-    //   nzOnOk: () => {
-    //     this.spinner.show();
-    //     try {
-    //       let body = {
-    //         "id": data.id,
-    //         "maDvi": null
-    //       }
-    //       this.quyetDinhPheDuyetKeHoachLCNTService.delete(body).then(async (res) => {
-    //         if (res.msg == MESSAGE.SUCCESS) {
-    //           await this.search();
-    //           this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-    //         }
-    //         else {
-    //           this.notification.error(MESSAGE.ERROR, res.msg);
-    //         }
-    //         this.spinner.hide();
-    //       });
-    //     }
-    //     catch (e) {
-    //       console.log('error: ', e)
-    //       this.spinner.hide();
-    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //     }
-    //   },
-    // });
-  }
-
-  convertTreeToList(root: VatTu): VatTu[] {
-    const stack: VatTu[] = [];
-    const array: VatTu[] = [];
-    const hashMap = {};
-    stack.push({ ...root, level: 0, expand: false });
-    while (stack.length !== 0) {
-      const node = stack.pop()!;
-      this.visitNode(node, hashMap, array);
-      if (node.child) {
-        for (let i = node.child.length - 1; i >= 0; i--) {
-          stack.push({
-            ...node.child[i],
-            level: node.level! + 1,
-            expand: false,
-            parent: node,
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
+      return;
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: MESSAGE.DELETE_CONFIRM,
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            "id": data.id,
+            "maDvi": null
+          }
+          this.quyetDinhPheDuyetKeHoachMTTService.delete(body).then(async (res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              await this.search();
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            }
+            else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
           });
         }
-      }
-    }
-    return array;
-  }
-
-  visitNode(
-    node: VatTu,
-    hashMap: { [id: string]: boolean },
-    array: VatTu[],
-  ): void {
-    if (!hashMap[node.id]) {
-      hashMap[node.id] = true;
-      array.push(node);
-    }
-  }
-
-  collapse(array: VatTu[], data: VatTu, $event: boolean): void {
-    if (!$event) {
-      if (data.child) {
-        data.child.forEach((d) => {
-          const target = array.find((a) => a.id === d.id)!;
-          target.expand = false;
-          this.collapse(array, target, false);
-        });
-      } else {
-        return;
-      }
-    }
-  }
-
-  searchHangHoa(e: Event) {
-    const value = (e.target as HTMLInputElement).value;
-    if (!value || value.indexOf('@') >= 0) {
-      this.listOfMapData = this.listOfMapDataClone;
-    } else {
-      this.listOfMapData = this.listOfMapDataClone.filter(
-        (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
-      );
-    }
-  }
-
-  selectHangHoa(vatTu: any) {
-    this.selectHang = vatTu;
+        catch (e) {
+          console.log('error: ', e)
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   clearFilter() {
-    this.searchFilter.namKhoach = dayjs().get('year');
-    this.searchFilter.soQd = null;
+    this.searchFilter.namKh = dayjs().get('year');
+    this.searchFilter.soQdPduyet = null;
     this.searchFilter.trichYeu = null;
-    this.searchFilter.ngayQd = null;
+    this.searchFilter.ngayKy = null;
     this.searchFilter.soGthau = null;
     this.searchFilter.tongTien = null;
     this.search();
 
   }
 
-  async selectTabData(tab: string) {
-    this.spinner.show();
-    try {
-      this.tabSelected = tab;
-      await this.search();
-      this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
   async search() {
-    // this.dataTable = [];
-    // let body = {
-    //   tuNgayQd: this.searchFilter.ngayQd
-    //     ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-    //     : null,
-    //   denNgayQd: this.searchFilter.ngayQd
-    //     ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-    //     : null,
-    //   loaiVthh: this.searchFilter.loaiVthh,
-    //   namKhoach: this.searchFilter.namKhoach,
-    //   trichYeu: this.searchFilter.trichYeu,
-    //   soQd: this.searchFilter.soQd,
-    //   tongTien: this.searchFilter.tongTien,
-    //   soGthau: this.searchFilter.soGthau,
-    //   lastest: 0,
-    //   paggingReq: {
-    //     limit: this.pageSize,
-    //     page: this.page - 1,
-    //   },
-    // };
-    // let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
-    // if (res.msg == MESSAGE.SUCCESS) {
-    //   let data = res.data;
-    //   this.dataTable = data.content;
-    //   if (data && data.content && data.content.length > 0) {
-    //     this.dataTable = data.content;
+    this.dataTable = [];
+    let body = {
+      ngayKyQdTu: this.searchFilter.ngayKy
+        ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
+        : null,
+      ngayKyQdDen: this.searchFilter.ngayKy
+        ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
+        : null,
+      loaiVthh: this.searchFilter.loaiVthh,
+      namKh: this.searchFilter.namKh,
+      trichYeu: this.searchFilter.trichYeu,
+      soQdPduyet: this.searchFilter.soQdPduyet,
+      lastest: 0,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
+      },
+      // maDvi : this.userInfo.MA_DVI
+    };
+    let res = await this.quyetDinhPheDuyetKeHoachMTTService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = data.content;
+      if (data && data.content && data.content.length > 0) {
+        this.dataTable = data.content;
 
-    //   }
-    //   this.dataTableAll = cloneDeep(this.dataTable)
-    //   this.totalRecord = data.totalElements;
-    // } else {
-    //   this.dataTable = [];
-    //   this.notification.error(MESSAGE.ERROR, res.msg);
-    // }
+      }
+      this.dataTableAll = cloneDeep(this.dataTable)
+      this.totalRecord = data.totalElements;
+    } else {
+      this.dataTable = [];
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   async changePageIndex(event) {
@@ -350,86 +261,84 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
   }
 
   exportData() {
-    // if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_EXP")) {
-    //   return;
-    // }
-    // if (this.totalRecord > 0) {
-    //   this.spinner.show();
-    //   try {
-    //     let body = {
-    //       tuNgayQd: this.searchFilter.ngayQd
-    //         ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-    //         : null,
-    //       denNgayQd: this.searchFilter.ngayQd
-    //         ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-    //         : null,
-    //       loaiVthh: this.searchFilter.loaiVthh,
-    //       namKhoach: this.searchFilter.namKhoach,
-    //       trichYeu: this.searchFilter.trichYeu,
-    //       soQd: this.searchFilter.soQd,
-    //       tongTien: this.searchFilter.tongTien,
-    //       soGthau: this.searchFilter.soGthau,
-    //       lastest: 0,
-    //     };
-    //     this.quyetDinhPheDuyetKeHoachLCNTService
-    //       .exportList(body)
-    //       .subscribe((blob) =>
-    //         saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.xlsx')
-    //       );
-    //     this.spinner.hide();
-    //   } catch (e) {
-    //     console.log('error: ', e);
-    //     this.spinner.hide();
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   }
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    // }
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_EXP")) {
+      return;
+    }
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          ngayKyQdTu: this.searchFilter.ngayKy
+            ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
+            : null,
+          ngayKyQdDen: this.searchFilter.ngayKy
+            ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
+            : null,
+          loaiVthh: this.searchFilter.loaiVthh,
+          namKh: this.searchFilter.namKh,
+          trichYeu: this.searchFilter.trichYeu,
+          soQdPduyet: this.searchFilter.soQdPduyet,
+          lastest: 0,
+        };
+        this.quyetDinhPheDuyetKeHoachMTTService
+          .exportList(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.xlsx')
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   deleteSelect() {
-    // if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
-    //   return;
-    // }
-    // let dataDelete = [];
-    // if (this.dataTable && this.dataTable.length > 0) {
-    //   this.dataTable.forEach((item) => {
-    //     if (item.checked) {
-    //       dataDelete.push(item.id);
-    //     }
-    //   });
-    // }
-    // if (dataDelete && dataDelete.length > 0) {
-    //   this.modal.confirm({
-    //     nzClosable: false,
-    //     nzTitle: 'Xác nhận',
-    //     nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
-    //     nzOkText: 'Đồng ý',
-    //     nzCancelText: 'Không',
-    //     nzOkDanger: true,
-    //     nzWidth: 310,
-    //     nzOnOk: async () => {
-    //       this.spinner.show();
-    //       try {
-    //         let res = await this.quyetDinhPheDuyetKeHoachLCNTService.deleteMuti({ idList: dataDelete });
-    //         if (res.msg == MESSAGE.SUCCESS) {
-    //           this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-    //           await this.search();
-    //         } else {
-    //           this.notification.error(MESSAGE.ERROR, res.msg);
-    //         }
-    //         this.spinner.hide();
-    //       } catch (e) {
-    //         console.log('error: ', e);
-    //         this.spinner.hide();
-    //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //       }
-    //     },
-    //   });
-    // }
-    // else {
-    //   this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
-    // }
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
+      return;
+    }
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quyetDinhPheDuyetKeHoachMTTService.deleteMuti({ idList: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          } catch (e) {
+            console.log('error: ', e);
+            this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
   }
 
   filterInTable(key: string, value: string) {
@@ -452,14 +361,14 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQd: '',
-      ngayQd: '',
+      soQdPduyet: '',
+      ngayKy: '',
       trichYeu: '',
-      idThHdr: '',
-      namKhoach: '',
-      tenVthh: '',
-      tongTien: '',
-      soGthau: '',
+      soDxuat: '',
+      idThopHdr: '',
+      namKh: '',
+      pthucMuatt: '',
+      tenTrangThai: '',
     }
   }
 
