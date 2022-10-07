@@ -300,14 +300,14 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
         };
         let res = await this.thongBanDauGiaTaiSanService.timKiem(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          console.log(res.data);
-
             this.listThongBaoDauGiaTaiSan =
               Array.from(new Set(res.data.content.map(a => a.id)))
                 .map(id => {
                   return res.data.content.find(a => a.id === id)
                 })
-              // res.data.content;
+          this.listThongBaoDauGiaTaiSan =   this.listThongBaoDauGiaTaiSan.filter(obj => {
+            return !obj.hasOwnProperty('bienBanBDG') || obj.bienBanBDG == null ;
+          })
         } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
         }

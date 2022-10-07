@@ -15,7 +15,7 @@ export class ThongBaoDauGiaTaiSanService extends BaseService {
   }
 
   timKiem(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/thong-bao-ban-dau-gia/search?`;
+    let url_ = `http://192.168.5.184:3333/thong-bao-ban-dau-gia/search?`;
     if (body.namKeHoach)
       url_ += 'namKeHoach=' + encodeURIComponent('' + body.namKeHoach) + '&';
     if (body.maVatTuCha)
