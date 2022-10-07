@@ -296,10 +296,18 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
 
     async loadThongBaoDauGiaTaiSan() {
         let body = {
+          trangThai:this.globals.prop.NHAP_BAN_HANH
         };
         let res = await this.thongBanDauGiaTaiSanService.timKiem(body);
         if (res.msg == MESSAGE.SUCCESS) {
-            this.listThongBaoDauGiaTaiSan = res.data.content;
+            this.listThongBaoDauGiaTaiSan =
+              Array.from(new Set(res.data.content.map(a => a.id)))
+                .map(id => {
+                  return res.data.content.find(a => a.id === id)
+                })
+          this.listThongBaoDauGiaTaiSan =   this.listThongBaoDauGiaTaiSan.filter(obj => {
+            return !obj.hasOwnProperty('bienBanBDG') || obj.bienBanBDG == null ;
+          })
         } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -321,6 +329,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
             if (res.msg == MESSAGE.SUCCESS) {
                 if (res.data) {
                     this.bienBanBanDauGia = res.data;
+                    this.bienBanBanDauGia.ngayToChuc = [res.data.ngayToChucTu,res.data.ngayToChucDen];
                     this.dsChiTietCtsClone = this.bienBanBanDauGia.cts;
                     this.dsChiTietCtsClone.forEach(cts => {
                         if (cts.loaiTptg === '02') {

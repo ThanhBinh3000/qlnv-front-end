@@ -70,6 +70,10 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
+        <button type="button" class="btn btn-sub" (click)="exportReportDemo()">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
+          <span>Xuất report demo</span>
+        </button>
         <button *ngIf="userService.isTongCuc()" type="button" class="btn btn-sub xanh" (click)="themMoi()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>

@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit, Output, EventEmitter, } from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges,} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import dayjs from 'dayjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -26,10 +26,12 @@ import {NzModalService} from "ng-zorro-antd/modal";
   templateUrl: './themmoi-thongtin-dauthau.component.html',
   styleUrls: ['./themmoi-thongtin-dauthau.component.scss']
 })
-export class ThemmoiThongtinDauthauComponent implements OnInit {
+export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
   @Input() idInput: number;
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Input() isShowFromKq: boolean;
+
 
   constructor(
     private modal : NzModalService,
@@ -514,6 +516,14 @@ export class ThemmoiThongtinDauthauComponent implements OnInit {
         return true;
     }
     return true;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(changes){
+      if(this.idInput){
+        this.getDetail()
+      }
+    }
   }
 
 }
