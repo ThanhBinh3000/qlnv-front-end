@@ -14,6 +14,12 @@ export class DanhSachMuaTrucTiep {
   donGiaVat: number;
   bangChu: String;
   thanhTien: number;
+  idVirtual?: number;
+  isEdit: boolean;
+  children?: DanhSachMuaTrucTiep[];
+  level?: number;
+  expand?: boolean;
+  parent?: DanhSachMuaTrucTiep
 }
 
 export class FileDinhKem {

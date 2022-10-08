@@ -10,6 +10,7 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class KeHoachLuachonNhathauComponent implements OnInit {
   tabs: any[] = [];
+  loaiVthhSelected: string
   constructor(
     public userService: UserService,
     private danhMucService: DanhMucService,
@@ -19,7 +20,12 @@ export class KeHoachLuachonNhathauComponent implements OnInit {
   }
 
   async loaiVTHHGetAll() {
-    this.tabs = [];
+    this.tabs = [
+      {
+        giaTri: 'Tất cả',
+        ma: null,
+      }
+    ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
@@ -30,4 +36,9 @@ export class KeHoachLuachonNhathauComponent implements OnInit {
       }
     }
   }
+
+  selectTab(loaiVthh) {
+    this.loaiVthhSelected = loaiVthh;
+  }
+
 }
