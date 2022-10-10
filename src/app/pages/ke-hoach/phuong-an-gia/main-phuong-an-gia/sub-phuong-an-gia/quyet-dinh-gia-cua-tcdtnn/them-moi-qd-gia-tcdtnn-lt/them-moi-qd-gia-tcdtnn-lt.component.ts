@@ -298,7 +298,6 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
 
   async onChangeSoToTrinh(event) {
     let curToTrinh = this.dsToTrinhDeXuat.find(item => item.soToTrinh == event);
-    console.log(curToTrinh, 1123)
     if (curToTrinh) {
       //loai hh
       this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
