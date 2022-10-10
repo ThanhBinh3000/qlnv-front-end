@@ -4,8 +4,6 @@ import { Globals } from "../../../../../../../shared/globals";
 import { MESSAGE } from "../../../../../../../constants/message";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { cloneDeep, chain } from 'lodash';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachGoiThau } from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
@@ -14,6 +12,7 @@ import {
 } from "../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
+import { DialogThemMoiKeHoachMuaTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
 
 
 @Component({
@@ -91,7 +90,7 @@ export class ThongtinDexuatMuattComponent implements OnInit {
     if (changes) {
       if (this.dataInput) {
         console.log(this.dataInput);
-        this.listOfData = this.dataInput.dsGoiThau;
+        this.listOfData = this.dataInput.dsGtReq;
         let res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data)
@@ -139,7 +138,7 @@ export class ThongtinDexuatMuattComponent implements OnInit {
 
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm nhập kho',
-      nzContent: DialogThemMoiVatTuComponent,
+      nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '1200px',

@@ -126,18 +126,35 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
       tenCloaiVthh: [''],
       tchuanCluong: [''],
       moTaHangHoa: [''],
+      ptMua: [''],
+      giaMua: [''],
+      giaChuaThue: [''],
+      thueGtgt: [''],
+      giaCoThue: [''],
+      tgianMkho: [''],
+      tgianKthuc: [''],
+      ghiChu: [''],
+      tongMucDt: [''],
+      tongSoLuong: [''],
+      nguonVon: [''],
+      tenChuDt: [''],
+      tenDuAn: [''],
       lyDoTuChoi: [''],
       phanLoai: [''],
+      namKhoach: [''],
+
     })
   }
 
   setValidator() {
     if (this.formData.get('phanLoai').value == 'TH') {
       this.formData.controls["idThop"].setValidators([Validators.required]);
+      this.formData.controls["idTrHdr"].clearValidators();
       this.formData.controls["idDxuat"].clearValidators();
     }
     if (this.formData.get('phanLoai').value == 'TTrDx') {
       this.formData.controls["idThop"].clearValidators();
+      this.formData.controls["idTrHdr"].setValidators([Validators.required]);
       this.formData.controls["idDxuat"].setValidators([Validators.required]);
     }
   }
@@ -200,9 +217,13 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
     }
     let body = this.formData.value;
     body.soQdPduyet = body.soQdPduyet + "/" + this.maQd;
-    body.dsDeXuat = this.danhsachDXMTT;
-    body.dsGoiThau = this.danhsachDXMTT;
+    body.ccXdgReq = this.danhsachDXMTT;
+    body.dsGtReq = this.danhsachDXMTT;
     body.fileDinhKems = this.fileDinhKem;
+    let dataTr = this.listToTrinh.filter(item => item.id === body.idTrHdr)
+    if (dataTr.length > 0) {
+      body.idDxuat = dataTr[0].idDxuat;
+    }
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.quyetDinhPheDuyetKeHoachMTTService.update(body);
@@ -342,14 +363,14 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
         soQd: data.soQd.split("/")[0],
       });
       if (this.isVatTu) {
-        this.danhsachDXMTT = data.hhQdPheduyetKhMttDxList[0].dsGoiThau
+        this.danhsachDXMTT = data.hhQdPheduyetKhMttDxList[0].dsGtReq
       } else {
         this.danhsachDXMTT = data.hhQdPheduyetKhMttDxList;
         this.danhsachDXMTTCache = cloneDeep(this.danhsachDXMTT);
         for (const item of this.danhsachDXMTTCache) {
           await this.danhSachMuaTrucTiepService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
-              item.dsGoiThau = res.data.soLuongDiaDiemList;
+              item.dsGtReq = res.data.soLuongDiaDiemList;
             }
           })
         };
@@ -398,7 +419,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
     let bodyToTrinh = {
       listTrangThai: [STATUS.DA_DUYET_LDC, STATUS.DA_DUYET_LDV],
       listTrangThaiTh: [STATUS.CHUA_TONG_HOP, STATUS.CHUA_TAO_QD],
-      namKh: this.formData.get('namKh').value,
+      namKh: this.formData.get('namKhoach').value,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
@@ -407,6 +428,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
     let resToTrinh = await this.danhSachMuaTrucTiepService.search(bodyToTrinh);
     if (resToTrinh.msg == MESSAGE.SUCCESS) {
       this.listToTrinh = resToTrinh.data.content;
+      console.log(this.listToTrinh, 11111);
     }
     await this.spinner.hide();
   }
@@ -451,13 +473,14 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
           loaiHdong: data.loaiHdong,
           nguonVon: data.nguonVon,
           idThop: event,
+          idTrHdr: null,
           idDxuat: null,
         })
         this.danhsachDXMTT = data.hhDxKhMttThopDtls;
         for (const item of this.danhsachDXMTT) {
           await this.danhSachMuaTrucTiepService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
-              item.dsGoiThau = res.data.soLuongDiaDiemList;
+              item.dsGtReq = res.data.soLuongDiaDiemList;
             }
           })
         };
@@ -504,6 +527,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
           trichYeu: dataRes.trichYeu,
           idThop: null,
           idDxuat: dataRes.soDxuat,
+          idTrHdt: dataRes.id
         })
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
