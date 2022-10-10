@@ -13,7 +13,7 @@ import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.co
 import {MESSAGE} from 'src/app/constants/message';
 import {FileDinhKem} from 'src/app/models/FileDinhKem';
 import {UserLogin} from 'src/app/models/userlogin';
-import {dauThauGoiThauService} from 'src/app/services/dauThauGoiThau.service';
+import {dauThauGoiThauService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/dauThauGoiThau.service';
 import {UploadFileService} from 'src/app/services/uploaFile.service';
 import {UserService} from 'src/app/services/user.service';
 import {Globals} from 'src/app/shared/globals';
@@ -112,7 +112,7 @@ export class ThongTinComponent implements OnInit {
   ) {
     this.formData = this.fb.group(
       {
-        canCu: [null],
+        canCu: [null, [Validators.required]],
         idGoiThau: [null],
         maHdong: [null, [Validators.required]],
         tenHd: [null],
@@ -171,8 +171,7 @@ export class ThongTinComponent implements OnInit {
 
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI ?? null,
-      tenDvi: this.userInfo.TEN_DVI ?? null,
-
+      tenDvi: this.userInfo.TEN_DVI ?? null
     })
     await Promise.all([
       this.loaiDonviLienquanAll()
@@ -266,6 +265,7 @@ export class ThongTinComponent implements OnInit {
       } else {
         let body = this.formData.value;
         body.soHd = `${this.formData.value.maHdong}${this.maHopDongSuffix}`;
+        body.namKh = this.formData.value.namKh ?  this.formData.value.namKh : new Date().getUTCFullYear();
         body.fileDinhKems = this.fileDinhKem,
           body.tuNgayHluc = this.formData.value.ngayHieuLuc && this.formData.value.ngayHieuLuc.length > 0 ? dayjs(this.formData.value.ngayHieuLuc[0]).format('YYYY-MM-DD') : null,
           body.denNgayHluc = this.formData.value.ngayHieuLuc && this.formData.value.ngayHieuLuc.length > 0 ? dayjs(this.formData.value.ngayHieuLuc[1]).format('YYYY-MM-DD') : null,

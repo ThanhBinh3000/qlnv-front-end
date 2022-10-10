@@ -4,16 +4,16 @@
         <li nz-menu-item nzSelected (click)="selectTab('khlcmtt')" *ngIf="!userService.isChiCuc()">
             Kế hoạch mua trực tiếp
         </li>
-        <li nz-menu-item nzSelected (click)="selectTab('tccmtt')" *ngIf="!userService.isChiCuc()">
+        <li nz-menu-item (click)="selectTab('tccmtt')" *ngIf="!userService.isChiCuc()">
             Tổ chức triển khai KH mua trực tiếp
         </li>
-        <li nz-menu-item nzSelected (click)="selectTab('dckhmtt')" *ngIf="!userService.isChiCuc()">
+        <li nz-menu-item (click)="selectTab('dckhmtt')" *ngIf="!userService.isChiCuc()">
             Điều chỉnh KH mua trực tiếp
         </li>
-        <li nz-menu-item nzSelected (click)="selectTab('hdbkpmh')" *ngIf="!userService.isChiCuc()">
+        <li nz-menu-item (click)="selectTab('hdbkpmh')" *ngIf="!userService.isChiCuc()">
             Hợp đồng/Bảng kê,phiếu mua hàng
         </li>
-        <li nz-menu-item nzSelected (click)="selectTab('gnvnn')" *ngIf="!userService.isChiCuc()">
+        <li nz-menu-item (click)="selectTab('gnvnn')" *ngIf="!userService.isChiCuc()">
             Quyết định giao nhiệm vụ nhập hàng
         </li>
     </ul>

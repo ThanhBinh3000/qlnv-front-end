@@ -15,7 +15,6 @@ import {
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DauThauService } from 'src/app/services/dauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
@@ -26,6 +25,9 @@ import {
   convertVthhToId,
 } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {
+  ThongTinDauThauService
+} from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 @Component({
   selector: 'app-thongtin-dauthau',
   templateUrl: './thongtin-dauthau.component.html',
@@ -38,7 +40,7 @@ export class ThongtinDauthauComponent implements OnInit {
     private notification: NzNotificationService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private danhSachDauThauService: DanhSachDauThauService,
-    private dauThauService: DauThauService,
+    private dauThauService: ThongTinDauThauService,
     private modal: NzModalService,
     public userService: UserService,
     private route: ActivatedRoute,

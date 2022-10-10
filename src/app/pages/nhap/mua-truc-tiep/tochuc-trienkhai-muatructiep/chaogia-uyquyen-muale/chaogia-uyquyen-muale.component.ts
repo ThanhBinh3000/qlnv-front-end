@@ -9,7 +9,6 @@ import { DATEPICKER_CONFIG, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFA
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DauThauService } from 'src/app/services/dauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
@@ -22,14 +21,13 @@ import { STATUS } from 'src/app/constants/status';
   styleUrls: ['./chaogia-uyquyen-muale.component.scss']
 })
 export class ChaogiaUyquyenMualeComponent implements OnInit {
- 
+
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private danhSachDauThauService: DanhSachDauThauService,
-    private dauThauService: DauThauService,
     private modal: NzModalService,
     public userService: UserService,
     private helperService: HelperService,

@@ -136,7 +136,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
     })
     this.formData.controls['chiPhiPbo'].valueChanges.subscribe(value => {
-      const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value + this.formData.controls.chiPhiPbo.value
+      const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value - this.formData.controls.chiPhiPbo.value
       this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
     })
     this.STATUS = STATUS
