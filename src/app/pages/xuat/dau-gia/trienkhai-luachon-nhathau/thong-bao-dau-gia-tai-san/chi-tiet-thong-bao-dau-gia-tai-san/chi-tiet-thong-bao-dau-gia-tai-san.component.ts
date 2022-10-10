@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -109,7 +109,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],,
       ],
       maThongBao: [
         {
@@ -118,7 +118,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       trichYeu: [
         {
@@ -127,7 +127,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       tenToChucDauGia: [
         {
@@ -136,7 +136,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       diaChi: [
         {
@@ -145,7 +145,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       dienThoai: [
         {
@@ -163,7 +163,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       luuYVeThoiGianDangKy: [
         {
@@ -181,7 +181,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       dieuKienDangKyThamGiaDauGia: [
         {
@@ -190,7 +190,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       tienMuaHoSo: [
         {
@@ -199,7 +199,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       buocGiaCuaTungDonViTaiSan: [
         {
@@ -208,7 +208,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       thoiHanToChucXemTaiSan: [
         {
@@ -217,7 +217,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       luuYVeThoiGianXemTaiSan: [
         {
@@ -235,7 +235,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       thoiHanNopTienDatTruoc: [
         {
@@ -244,7 +244,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       luuYVeThoiGianNopTienDatTruoc: [
         {
@@ -429,7 +429,13 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
     if (idSoQuyetDinh) {
       let res = await this.qdPheDuyetKhBanDauGia.chiTiet(+idSoQuyetDinh);
       if (res.msg == MESSAGE.SUCCESS) {
-        let phanLoTaiSans = res.data?.thongTinTaiSanCucs;
+        let phanLoTaiSans =  res.data?.thongTinTaiSanCucs;
+        // if(this.userService.isTongCuc()){
+        //    phanLoTaiSans = res.data?.chiTietList;
+        // }else{
+        //    phanLoTaiSans = res.data?.thongTinTaiSanCucs;
+        // }
+        // console.log(phanLoTaiSans)
         this.getPhanLoTaiSan(phanLoTaiSans);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -582,8 +588,8 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
         "id": this.formData.get("id") ? this.formData.get("id").value : null,
         // "maDonVi": this.formData.get("maDonVi").value,
         "taiSanIdList": this.taiSanIdList,
-        "thoiGianToChucDauGiaDenNgay": this.formData.get("thoiGianToChucDauGia") && this.formData.get("thoiGianToChucDauGia").value ? dayjs(this.formData.get("thoiGianToChucDauGia").value[0]).format("YYYY-MM-DD") : null,
-        "thoiGianToChucDauGiaTuNgay": this.formData.get("thoiGianToChucDauGia") && this.formData.get("thoiGianToChucDauGia").value ? dayjs(this.formData.get("thoiGianToChucDauGia").value[1]).format("YYYY-MM-DD") : null,
+        "thoiGianToChucDauGiaDenNgay": this.formData.get("thoiGianToChucDauGia") && this.formData.get("thoiGianToChucDauGia").value ? dayjs(this.formData.get("thoiGianToChucDauGia").value[1]).format("YYYY-MM-DD") : null,
+        "thoiGianToChucDauGiaTuNgay": this.formData.get("thoiGianToChucDauGia") && this.formData.get("thoiGianToChucDauGia").value ? dayjs(this.formData.get("thoiGianToChucDauGia").value[0]).format("YYYY-MM-DD") : null,
         "thoiHanDangKyThamGiaDauGiaDenNgay": this.formData.get("thoiHanDangKyThamGiaDauGia") && this.formData.get("thoiHanDangKyThamGiaDauGia").value[0] ? dayjs(this.formData.get("thoiHanDangKyThamGiaDauGia").value[1]).format("YYYY-MM-DD") : null,
         "thoiHanDangKyThamGiaDauGiaTuNgay": this.formData.get("thoiHanDangKyThamGiaDauGia") && this.formData.get("thoiHanDangKyThamGiaDauGia").value ? dayjs(this.formData.get("thoiHanDangKyThamGiaDauGia").value[0]).format("YYYY-MM-DD") : null,
         "thoiHanNopTienDatTruocDenNgay": this.formData.get("thoiHanNopTienDatTruoc") && this.formData.get("thoiHanNopTienDatTruoc").value ? dayjs(this.formData.get("thoiHanNopTienDatTruoc").value[1]).format("YYYY-MM-DD") : null,

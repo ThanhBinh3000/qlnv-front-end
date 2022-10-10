@@ -1,13 +1,13 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab(0)">
+    <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
       Xây dựng phương án
     </li>
-    <li nz-menu-item (click)="selectTab(1)">
+    <li nz-menu-item (click)="selectTab(1)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_THPA') && userService.isTongCuc()">
       Tổng hợp phương án
     </li>
-    <li nz-menu-item (click)="selectTab(2)">
+    <li nz-menu-item (click)="selectTab(2)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA') && userService.isTongCuc()">
       Quyết định phê duyệt phương án
     </li>
     <li nz-menu-item (click)="selectTab(4)">

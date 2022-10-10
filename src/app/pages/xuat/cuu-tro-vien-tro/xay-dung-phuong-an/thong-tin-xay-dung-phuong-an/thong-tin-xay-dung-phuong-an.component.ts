@@ -681,8 +681,9 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         this.phuongAnXuatList.push(data);
         data.chiTietDiaDiems.forEach(s => {
           s.maDvi = data.maDvi;
-          s.maChiCuc = data.maDvi;
-          s.tenChiCuc = data.tenDvi;
+          s.tenDvi = data.tenDvi;
+          s.maChiCuc = data.maChiCuc;
+          s.tenChiCuc = data.tenChiCuc;
           s.cloaiVthh = s.chungLoaiHh;
           s.tenCloaiVthh = s.tenChungLoaiHh;
           this.formData.get('thongTinChiTiet')
@@ -765,7 +766,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
 
   saveEditThongTin(index: number) {
     try {
-      if (this.thongTinChiTietCreate.noiDung && this.thongTinChiTietCreate.soLuong > 0) {
+      if (this.thongTinChiTietClone.noiDung && this.thongTinChiTietClone.soLuong > 0) {
         this.tongSLThongTinChiTiet = 0;
         this.formData.get('thongTinChiTiet').value.forEach(s => this.tongSLThongTinChiTiet += parseInt(s.soLuong));
         this.formData.get('thongTinChiTiet').value[index].isEdit = false;

@@ -11,6 +11,7 @@ import { cloneDeep } from 'lodash';
 import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {Globals} from "../../../../../../shared/globals";
 @Component({
   selector: 'app-de-xuat-phuong-an-gia',
   templateUrl: './de-xuat-phuong-an-gia.component.html',
@@ -48,7 +49,8 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     private notification: NzNotificationService,
     public userService: UserService,
     private modal: NzModalService,
-    private danhMucService: DanhMucService
+    private danhMucService: DanhMucService,
+    public globals: Globals
   ) {
     this.formData = this.fb.group({
       soDeXuat: [null],

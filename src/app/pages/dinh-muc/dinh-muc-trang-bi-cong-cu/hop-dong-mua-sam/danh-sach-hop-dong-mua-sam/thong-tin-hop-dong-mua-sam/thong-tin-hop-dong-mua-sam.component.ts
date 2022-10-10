@@ -14,7 +14,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { dauThauGoiThauService } from 'src/app/services/dauThauGoiThau.service';
+import { dauThauGoiThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/dauThauGoiThau.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
