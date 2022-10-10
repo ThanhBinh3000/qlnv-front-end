@@ -170,6 +170,7 @@ export class BienBanBanDauGiaComponent implements OnInit {
     let res = await this.quanLyBienBanBanDauGiaService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
+      console.log(res.data.content)
       this.dataTable = data.content;
       this.totalRecord = data.totalElements;
       if (this.dataTable && this.dataTable.length > 0) {
