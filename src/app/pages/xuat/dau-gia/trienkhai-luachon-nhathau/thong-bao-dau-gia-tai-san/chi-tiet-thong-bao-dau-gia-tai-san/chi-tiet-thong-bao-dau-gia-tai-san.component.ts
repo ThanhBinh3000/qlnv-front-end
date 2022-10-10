@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -109,7 +109,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],,
       ],
       maThongBao: [
         {
@@ -118,7 +118,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       trichYeu: [
         {
@@ -127,7 +127,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       tenToChucDauGia: [
         {
@@ -136,7 +136,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       diaChi: [
         {
@@ -145,7 +145,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       dienThoai: [
         {
@@ -163,7 +163,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       luuYVeThoiGianDangKy: [
         {
@@ -181,7 +181,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       dieuKienDangKyThamGiaDauGia: [
         {
@@ -190,7 +190,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       tienMuaHoSo: [
         {
@@ -199,7 +199,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       buocGiaCuaTungDonViTaiSan: [
         {
@@ -208,7 +208,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       thoiHanToChucXemTaiSan: [
         {
@@ -217,7 +217,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       luuYVeThoiGianXemTaiSan: [
         {
@@ -235,7 +235,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       thoiHanNopTienDatTruoc: [
         {
@@ -244,7 +244,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [],
+        [Validators.required],
       ],
       luuYVeThoiGianNopTienDatTruoc: [
         {
@@ -450,7 +450,6 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       for (let i = 0; i <= phanLoTaiSans.length - 1; i++) {
         this.taiSanIdList.push(phanLoTaiSans[i].id);
         for (let j = i + 1; j <= phanLoTaiSans.length; j++) {
-          // console.log("hahaaaaaaaaaaaaaaa:"+phanLoTaiSans.length)
           if (phanLoTaiSans.length == 1 || phanLoTaiSans[i].maChiCuc === phanLoTaiSans[j].maChiCuc) {
             const diaDiemNhapKho = new DiaDiemNhapKho();
             diaDiemNhapKho.maDvi = phanLoTaiSans[i].maChiCuc;

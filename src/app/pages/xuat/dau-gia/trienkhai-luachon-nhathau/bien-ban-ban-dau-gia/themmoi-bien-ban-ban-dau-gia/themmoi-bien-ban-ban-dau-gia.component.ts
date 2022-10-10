@@ -2,7 +2,7 @@ import { DiaDiemNhapKho, ChiTietDiaDiemNhapKho } from './../../../../../../compo
 import { ThongBaoDauGiaTaiSanService } from './../../../../../../services/thongBaoDauGiaTaiSan.service';
 import { BienBanBanDauGia, Cts, Ct1s } from './../../../../../../models/BienBanBanDauGia';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
@@ -23,6 +23,7 @@ import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {HelperService} from "../../../../../../services/helper.service";
 
 @Component({
     selector: 'app-themmoi-bien-ban-ban-dau-gia',
@@ -114,6 +115,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
         private uploadFileService: UploadFileService,
         private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
         private fb: FormBuilder,
+        private helperService: HelperService,
         private thongBanDauGiaTaiSanService: ThongBaoDauGiaTaiSanService,
     ) { }
 
@@ -165,14 +167,14 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                     value: this.bienBanBanDauGia ? this.bienBanBanDauGia.nam : null,
                     disabled: true,
                 },
-                [],
+              [Validators.required],
             ],
             soBienBan: [
                 {
                     value: this.bienBanBanDauGia ? this.bienBanBanDauGia.soBienBan : null,
                     disabled: this.isView ? true : false,
                 },
-                [],
+              [Validators.required],
             ],
             trichYeu: [
                 {
@@ -186,14 +188,14 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
                     value: this.bienBanBanDauGia ? this.bienBanBanDauGia.ngayKy : null,
                     disabled: this.isView ? true : false,
                 },
-                [],
+              [Validators.required],
             ],
             loaiVthh: [
                 {
                     value: this.bienBanBanDauGia ? this.bienBanBanDauGia.loaiVthh : null,
                     disabled: this.isView ? true : false,
                 },
-                [],
+              [Validators.required],
             ],
             thongBaoBdgId: [
                 {
@@ -221,7 +223,7 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
               value: this.bienBanBanDauGia ? this.bienBanBanDauGia.trangThai :  this.globals.prop.NHAP_BAN_HANH,
               disabled: true,
             },
-            [],
+            [Validators.required],
           ],
             diaDiem: [
                 {
@@ -581,11 +583,16 @@ export class ThemmoiBienBanBanDauGiaComponent implements OnInit {
     }
 
     async save(isOther: boolean) {
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        console.log('VOAOOOOO DAYYYYYYY')
+        this.spinner.hide();
+        return;
+      }
         this.spinner.show();
         this.bienBanBanDauGia.cts.forEach(bb => {
             delete bb.idVirtual;
         })
-
         this.bangPhanBoList?.forEach(phanLo => {
             phanLo.chiTietDiaDiems?.forEach(chiTiet => {
                 const ct1sTemp = new Ct1s();
