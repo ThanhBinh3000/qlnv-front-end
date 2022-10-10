@@ -450,7 +450,6 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
       for (let i = 0; i <= phanLoTaiSans.length - 1; i++) {
         this.taiSanIdList.push(phanLoTaiSans[i].id);
         for (let j = i + 1; j <= phanLoTaiSans.length; j++) {
-          // console.log("hahaaaaaaaaaaaaaaa:"+phanLoTaiSans.length)
           if (phanLoTaiSans.length == 1 || phanLoTaiSans[i].maChiCuc === phanLoTaiSans[j].maChiCuc) {
             const diaDiemNhapKho = new DiaDiemNhapKho();
             diaDiemNhapKho.maDvi = phanLoTaiSans[i].maChiCuc;
