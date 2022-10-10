@@ -4,29 +4,57 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) && userService.isCuc()"
-      type="button" class="btn btn-sub do" (click)="tuChoi()">
-      <i class="icon htvbdh_tcdt_tuchoi"></i>
-      <span>Từ chối</span>
-    </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) && userService.isCuc() "
-      type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
-      <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span>Duyệt</span>
-    </button>
-    <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && userService.isCuc() && isDetailPermission()"
-      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Lưu và gửi duyệt</span>
-    </button>
-    <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP ) && userService.isCuc() && isDetailPermission()"
-      type="
+    <ng-container *ngIf="userService.isCuc()">
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) "
+              type="button" class="btn btn-sub do" (click)="tuChoi()">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Từ chối</span>
+      </button>
+      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) "
+              type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span>Duyệt</span>
+      </button>
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && isDetailPermission()"
+        type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
+        <span>Lưu và gửi duyệt</span>
+      </button>
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP ) && isDetailPermission()"
+        type="
         button" class="btn btn-main" (click)="save()">
-      <i class="icon htvbdh_tcdt_save"></i>
-      <span>Lưu</span>
-    </button>
+        <i class="icon htvbdh_tcdt_save"></i>
+        <span>Lưu</span>
+      </button>
+    </ng-container>
+    <ng-container *ngIf="userService.isTongCuc()">
+      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV" type="button" class="btn btn-sub do"
+              (click)="tuChoi()">
+        <i class="icon htvbdh_tcdt_tuchoi "></i>
+        <span>Từ chối</span>
+      </button>
+      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV" type="button" class="btn btn-sub xanh-nhat"
+              (click)="guiDuyet()">
+        <i class="icon htvbdh_tcdt_pheduyet"></i>
+        <span>Duyệt</span>
+      </button>
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && isDetailPermission()"
+        type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
+        <span>Lưu và gửi duyệt</span>
+      </button>
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && isDetailPermission()"
+        type="
+          button" class="btn btn-main" (click)="save()">
+        <i class="icon htvbdh_tcdt_save"></i>
+        <span>Lưu</span>
+      </button>
+    </ng-container>
+
   </div>
 </nz-affix>
 <div class="bg-trang">
@@ -41,7 +69,7 @@
     </div>
   </div>
 
-  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP "
+  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV "
             nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.ldoTuchoi}}">
   </nz-alert>
 
@@ -151,6 +179,16 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Căn cứ pháp lý
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [data]="fileDinhKem"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ </nz-form-label>
@@ -161,7 +199,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div nz-col [nzSpan]="6" >
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -171,7 +209,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div nz-col [nzSpan]="6" *ngIf="userService.isCuc()">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -182,7 +220,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div nz-col [nzSpan]="6" *ngIf="userService.isCuc()">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired > Tên hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -207,19 +245,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-      </div>
-      <div nz-row [nzGutter]="24">
-        <div nz-col nzSpan="24">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
-              Căn cứ pháp lý
-            </nz-form-label>
-            <div class="list-file">
-              <file-list [data]="fileDinhKem"></file-list>
-            </div>
-          </nz-form-item>
         </div>
-      </div>
     </form>
   </nz-card>
   <!-- END THÔNG TIN CHUNG-->
@@ -318,6 +344,15 @@
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực dự án (ngày) </nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24">
+              <nz-input-number formControlName="tgianThien" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                               [nzStep]="1" [nzSize]="'small'"
+                               [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+              </nz-input-number>
+            </nz-form-control>
+          </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
@@ -428,6 +463,12 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" > Địa điểm quy mô dự án </nz-form-label>
+            <textarea rows="3" nz-input formControlName="dienGiai" ></textarea>
+          </nz-form-item>
+        </div>
       </div>
     </form>
   </nz-card>
@@ -439,19 +480,19 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span></span>
-          <span>Phụ lục đề xuất kế hoạch lựa chọn nhà thầu</span>
+          <span>{{ this.userService.isCuc() ? 'Phụ lục đề xuất kế hoạch lựa chọn nhà thầu' : 'Địa điểm nhập hàng' }}</span>
         </div>
       </div>
       <div class="buttons">
         <button type="button" class="btn btn-main"
-                *ngIf="(formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == '') && userService.isCuc()"
+                *ngIf="(formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == '') "
                 (click)="themMoiGoiThau()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
       </div>
     </div>
-    <nz-table [nzData]="listDataGroup" class="nowrap pd-10" nzBordered >
+    <nz-table *ngIf="!formData.value.loaiVthh?.startsWith('02')" [nzData]="listDataGroup" class="nowrap pd-10" nzBordered >
       <thead>
       <tr>
         <th style="width: 2%;">STT</th>
@@ -507,6 +548,63 @@
       </ng-container>
       </tbody>
     </nz-table>
+    <nz-table *ngIf="formData.value.loaiVthh?.startsWith('02')" [nzData]="listDataGroup" class="nowrap pd-10" nzBordered >
+      <thead>
+      <tr>
+        <th style="width: 2%;">STT</th>
+        <th >Tên gói thầu</th>
+        <th >Chủng loại hàng hóa</th>
+        <th >Cục DTNN KV</th>
+        <th >Số lượng theo chỉ tiêu theo kế hoạch</th>
+        <th >Đã lên kế hoạch mua</th>
+        <th >Số lượng</th>
+        <th >Đơn giá VAT (đ)</th>
+        <th >Thành tiền</th>
+        <th style="width: 5%;">Hành động</th>
+      </tr>
+      </thead>
+      <tbody>
+      <ng-container *ngFor="let item of listOfData , let i = index">
+        <tr>
+          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+          <td>{{item.goiThau}}</td>
+          <td>{{item.tenCloaiVthh}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>{{item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>{{item.soLuong * item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+          <td>
+            <a
+               (click)="themMoiGoiThau(item,i)">
+              <i class="fa fa-pencil"></i>
+            </a>
+            <a
+               (click)="deleteRow(i)">
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </tr>
+        <ng-container *ngIf="expandSet.has(i)">
+          <tr *ngFor="let dtGoiThau of item.children, let y = index">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{dtGoiThau.tenDvi}}</td>
+            <td></td>
+            <td></td>
+            <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>{{dtGoiThau.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>{{dtGoiThau.soLuong * dtGoiThau.donGia | number: '1.0-1' : 'vi_VN'}}</td>
+            <td class="text-right" >
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+      </tbody>
+    </nz-table>
+
   </nz-card>
   <!-- END PHỤ LỤC   -->
 
