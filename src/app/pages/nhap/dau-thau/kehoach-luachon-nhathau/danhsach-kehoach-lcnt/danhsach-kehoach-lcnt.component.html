@@ -211,12 +211,13 @@
   </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-  <ng-container *ngIf="!isVatTu">
-    <app-themmoi-kehoach-lcnt [idInput]="selectedId" [loaiVthhInput]="loaiVthh" (showListEvent)="showList()">
-    </app-themmoi-kehoach-lcnt>
-  </ng-container>
-  <ng-container *ngIf="isVatTu">
-    <app-themmoi-kehoach-lcnt-tong-cuc [idInput]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
-    </app-themmoi-kehoach-lcnt-tong-cuc>
-  </ng-container>
+  <app-themmoi-kehoach-lcnt [idInput]="selectedId" [loaiVthhInput]="loaiVthh" (showListEvent)="showList()">
+  </app-themmoi-kehoach-lcnt>
+<!--  <ng-container *ngIf="!isVatTu">-->
+
+<!--  </ng-container>-->
+<!--  <ng-container *ngIf="isVatTu">-->
+<!--    <app-themmoi-kehoach-lcnt-tong-cuc [idInput]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()">-->
+<!--    </app-themmoi-kehoach-lcnt-tong-cuc>-->
+<!--  </ng-container>-->
 </div>
