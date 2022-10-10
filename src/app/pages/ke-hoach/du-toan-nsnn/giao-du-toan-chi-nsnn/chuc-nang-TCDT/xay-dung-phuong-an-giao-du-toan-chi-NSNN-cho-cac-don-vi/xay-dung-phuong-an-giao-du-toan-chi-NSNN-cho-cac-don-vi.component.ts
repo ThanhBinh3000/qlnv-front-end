@@ -442,7 +442,7 @@ export class XayDungPhuongAnGiaoDuToanChiNSNNChoCacDonViComponent implements OnI
     // const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
     // if (capDviUser == Utils.TONG_CUC) {
     this.router.navigate([
-      MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/tim-kiem-phan-bo-giao-du-toan-chi-NSNN-cho-cac-don-vi/'
+      MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN
     ]);
     // }
   };
