@@ -985,7 +985,7 @@ export function sumNumber(num: any): number {
     if (item || item === 0) {
       check = false;
     }
-    tong += (+item);
+    tong += (+item) ? (+item) : 0;
   })
   if (check) {
     return null;

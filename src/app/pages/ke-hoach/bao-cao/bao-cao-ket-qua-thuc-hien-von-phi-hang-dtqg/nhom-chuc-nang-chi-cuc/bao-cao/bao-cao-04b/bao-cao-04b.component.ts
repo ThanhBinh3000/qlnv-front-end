@@ -323,7 +323,7 @@ export class BaoCao04bComponent implements OnInit {
                 if (res.statusCode == 0) {
                     this.dinhMucs = res.data;
                     this.dinhMucs.forEach(item => {
-                        if (!item.loaiVthh.startsWith('04')) {
+                        if (!item.cloaiVthh.startsWith('04')) {
                             item.nvChuyenMonKv = divNumber(item.nvChuyenMonKv, 1000);
                             item.nvChuyenMonTc = divNumber(item.nvChuyenMonTc, 1000);
                             item.tcDieuHanhKv = divNumber(item.tcDieuHanhKv, 1000);
@@ -795,7 +795,7 @@ export class BaoCao04bComponent implements OnInit {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                     const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
-                    const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
+                    const dm = this.dinhMucs.find(e => e.cloaiVthh == maVtu);
                     if (dm) {
                         if (this.userService.isChiCuc()) {
                             item.sl = mulNumber(sl, dm.nvChuyenMonDviTt);
@@ -814,7 +814,7 @@ export class BaoCao04bComponent implements OnInit {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                     const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
-                    const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
+                    const dm = this.dinhMucs.find(e => e.cloaiVthh == maVtu);
                     if (dm) {
                         if (this.userService.isChiCuc()) {
                             item.sl = mulNumber(sl, dm.ttCaNhanDviTt);
@@ -833,7 +833,7 @@ export class BaoCao04bComponent implements OnInit {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                     const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
-                    const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
+                    const dm = this.dinhMucs.find(e => e.cloaiVthh == maVtu);
                     if (dm) {
                         if (this.userService.isChiCuc()) {
                             item.sl = mulNumber(sl, dm.dieuHanhDviTt);
@@ -852,7 +852,7 @@ export class BaoCao04bComponent implements OnInit {
                 if (item.loaiMatHang == 0) {
                     const sl = soLuong.find(e => e.maVtu == item.maVtu)?.sl;
                     const maVtu = this.lstVatTuFull.find(e => e.id == item.maVtu)?.ma;
-                    const dm = this.dinhMucs.find(e => e.loaiVthh == maVtu);
+                    const dm = this.dinhMucs.find(e => e.cloaiVthh == maVtu);
                     if (dm) {
                         item.sl = mulNumber(sl, dm.tcDhNvCm);
                     }

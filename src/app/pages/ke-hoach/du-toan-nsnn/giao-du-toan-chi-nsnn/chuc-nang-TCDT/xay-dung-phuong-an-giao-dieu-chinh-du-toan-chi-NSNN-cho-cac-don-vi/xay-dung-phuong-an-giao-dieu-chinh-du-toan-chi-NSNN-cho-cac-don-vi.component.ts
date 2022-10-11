@@ -292,7 +292,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
             )
           }
           this.checkSumUp = data.data.checkSumUp;
-          if (this.checkSumUp == true && this.userInfo.CAP_DVI == "1") {
+          if (this.checkSumUp == true && this.userInfo.CAP_DVI == "1" && this.trangThaiBanGhi == "6") {
             this.statusBtnTongHop = false
           }
           if (this.lstCtietBcao[0].lstCtietDvis) {
@@ -448,7 +448,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     // const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
     // if (capDviUser == Utils.TONG_CUC) {
     this.router.navigate([
-      MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/tim-kiem-phan-bo-giao-du-toan-chi-NSNN-cho-cac-don-vi/'
+      MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN
     ]);
     // }
   };
