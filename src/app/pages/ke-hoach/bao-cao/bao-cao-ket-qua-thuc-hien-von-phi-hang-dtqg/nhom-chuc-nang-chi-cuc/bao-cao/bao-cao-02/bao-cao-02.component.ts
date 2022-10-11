@@ -538,6 +538,7 @@ export class BaoCao02Component implements OnInit {
 
     // tinh len tren nhung hang fix cung I,II
     async changeModel(idAppendix: number) {
+        debugger
         this.total[idAppendix] = new ItemData();
         this.lstCtietBcao[idAppendix].data.forEach(item => {
             if (item.maVtuCha == 0) {

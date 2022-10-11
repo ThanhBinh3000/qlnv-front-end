@@ -25,9 +25,8 @@ import {FileDinhKem} from 'src/app/models/FileDinhKem';
 import {QuyetDinhPheDuyetKeHoachBanDauGia} from 'src/app/models/QdPheDuyetKHBanDauGia';
 import {UserLogin} from 'src/app/models/userlogin';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DanhSachDauThauService} from 'src/app/services/danhSachDauThau.service';
+import {DanhSachDauThauService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import {DeXuatKeHoachBanDauGiaService} from 'src/app/services/deXuatKeHoachBanDauGia.service';
-import {DxuatKhLcntVatTuService} from 'src/app/services/dxuatKhLcntVatTuService.service';
 import {HelperService} from 'src/app/services/helper.service';
 import {QuyetDinhPheDuyetKHBDGService} from 'src/app/services/quyetDinhPheDuyetKHBDG.service';
 import {TongHopDeXuatKHBanDauGiaService} from 'src/app/services/tongHopDeXuatKHBanDauGia.service';
@@ -38,6 +37,9 @@ import {convertTienTobangChu} from 'src/app/shared/commonFunction';
 import {Globals} from 'src/app/shared/globals';
 import {environment} from 'src/environments/environment';
 import {STATUS} from "../../../../../../../constants/status";
+import {
+  DxuatKhLcntService
+} from "../../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service";
 
 @Component({
   selector: 'app-them-moi-qd-phe-duyet-kh-ban-dau-gia',
@@ -114,7 +116,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
-    private dxuatKhLcntVatTuService: DxuatKhLcntVatTuService,
+    private dxuatKhLcntVatTuService: DxuatKhLcntService,
     private deXuatKeHoachBanDauGiaService: DeXuatKeHoachBanDauGiaService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     public userService: UserService,

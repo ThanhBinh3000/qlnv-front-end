@@ -381,7 +381,7 @@ export class TimKiemPhanBoGiaoDuToanChiNSNNChoCacDonViComponent implements OnIni
   }
 
   checkDeleteReport(trangThai: string) {
-    return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(GDT.DELETE_REPORT_BTC);
+    return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(GDT.DELETE_REPORT_PA_PBDT);
   }
 
 
