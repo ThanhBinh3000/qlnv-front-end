@@ -38,7 +38,7 @@ export const LINH_VUC = [
     level: 1,
   },
   {
-    id: 2002,
+    id: "01",
     tenDm: "Bảo quản lần đầu - mới",
     idCha: 2000,
     level: 1,
@@ -200,7 +200,7 @@ export const LINH_VUC = [
     level: 0,
   },
   {
-    id: 6007,
+    id: "0205",
     tenDm: "Bảo quản lần đầu loại DT1",
     idCha: 6000,
     level: 1,

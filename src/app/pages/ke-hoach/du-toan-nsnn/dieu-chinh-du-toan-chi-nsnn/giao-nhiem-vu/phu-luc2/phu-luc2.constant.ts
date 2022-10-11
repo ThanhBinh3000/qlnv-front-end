@@ -24,7 +24,7 @@ export const LINH_VUC = [
     level: 2,
   },
   {
-    id: 1300,
+    id: "01",
     tenDm: "Phí nhập kho gạo đóng bao",
     idCha: 1001,
     level: 2,
@@ -72,7 +72,7 @@ export const LINH_VUC = [
     level: 3,
   },
   {
-    id: 2240,
+    id: "0205",
     tenDm: "Loại DT1",
     idCha: 2300,
     level: 3,

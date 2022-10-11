@@ -165,11 +165,12 @@ export class PhuLuc2Component implements OnInit {
       }
     );
     this.getStatusButton();
-    this.getDsDinhMuc();
+    // this.getDsDinhMuc();
+    this.getDinhMucPL2();
     this.spinner.hide();
   }
 
-  getDinhMuc() {
+  getDinhMucPL2() {
     const request = {
       loaiDinhMuc: '01',
       maDvi: this.maDviTao,
@@ -177,7 +178,7 @@ export class PhuLuc2Component implements OnInit {
     this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
       res => {
         if (res.statusCode == 0) {
-          this.dinhMucs = res.data;
+          // this.dinhMucs = res.data;
           // this.dinhMucs.forEach(item => {
           //     if (!item.loaiVthh.startsWith('04')) {
           //         item.nvChuyenMonKv = divNumber(item.nvChuyenMonKv, 1000);
@@ -188,6 +189,7 @@ export class PhuLuc2Component implements OnInit {
           //         item.ttCaNhanTc = divNumber(item.ttCaNhanTc, 1000);
           //     }
           // })
+          this.dsDinhMuc = res.data;
           console.log(this.dinhMucs);
 
         } else {
@@ -420,8 +422,9 @@ export class PhuLuc2Component implements OnInit {
     this.replaceIndex(lstIndex, 1);
     let dm: number;
     this.dsDinhMuc.forEach(itm => {
-      if (itm.idDmChi == initItem.maNdung) {
-        return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+      if (itm.loaiVthh == initItem.maNdung) {
+        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        return dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -479,8 +482,9 @@ export class PhuLuc2Component implements OnInit {
 
     let dm: number;
     this.dsDinhMuc.forEach(itm => {
-      if (itm.idDmChi == initItem.maNdung) {
-        return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+      if (itm.loaiVthh == initItem.maNdung) {
+        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        return dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -642,8 +646,9 @@ export class PhuLuc2Component implements OnInit {
   addFirst(initItem: ItemData) {
     let dm: number;
     this.dsDinhMuc.forEach(itm => {
-      if (itm.idDmChi == initItem.maNdung) {
-        return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+      if (itm.loaiVthh == initItem.maNdung) {
+        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        return dm = itm.tongDmuc;
       }
     })
     if (initItem?.id) {
@@ -897,31 +902,31 @@ export class PhuLuc2Component implements OnInit {
     this.editCache[id].data.ncauKphi = this.editCache[id].data.thienThanhTien + this.editCache[id].data.kphiThieuNtruoc;
   }
 
-  getDsDinhMuc() {
-    const requestDinhMuc = {
-      idDmChi: null,
-      maDvi: this.maDviTao,
-      paggingReq: {
-        limit: 20,
-        page: 1
-      },
-      parentId: null,
-      str: null,
-      trangThai: null,
-      typeChi: null
-    };
-    this.quanLyVonPhiService.getDinhMucNhapXuat(requestDinhMuc).toPromise().then(
-      async (data) => {
-        const contentData = await data?.data?.content;
-        if (contentData.length != 0) {
-          this.dsDinhMuc = contentData;
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
-  }
+  // getDsDinhMuc() {
+  //   const requestDinhMuc = {
+  //     idDmChi: null,
+  //     maDvi: this.maDviTao,
+  //     paggingReq: {
+  //       limit: 20,
+  //       page: 1
+  //     },
+  //     parentId: null,
+  //     str: null,
+  //     trangThai: null,
+  //     typeChi: null
+  //   };
+  //   this.quanLyVonPhiService.getDinhMucNhapXuat(requestDinhMuc).toPromise().then(
+  //     async (data) => {
+  //       const contentData = await data?.data?.content;
+  //       if (contentData.length != 0) {
+  //         this.dsDinhMuc = contentData;
+  //       }
+  //     },
+  //     err => {
+  //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //     },
+  //   );
+  // }
 
   getMoneyUnit() {
     return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;

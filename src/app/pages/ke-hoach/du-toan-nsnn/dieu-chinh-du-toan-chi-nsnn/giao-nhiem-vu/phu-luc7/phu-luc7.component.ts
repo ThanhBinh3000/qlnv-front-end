@@ -225,8 +225,39 @@ export class PhuLuc7Component implements OnInit {
     ]
     this.changeNam()
     this.getStatusButton();
-    this.getDsDinhMuc();
+    this.getDinhMucPL7();
     this.spinner.hide();
+  }
+
+  getDinhMucPL7() {
+    const request = {
+      loaiDinhMuc: '03',
+      maDvi: this.maDviTao,
+    }
+    this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+      res => {
+        if (res.statusCode == 0) {
+          // this.dinhMucs = res.data;
+          // this.dinhMucs.forEach(item => {
+          //     if (!item.loaiVthh.startsWith('04')) {
+          //         item.nvChuyenMonKv = divNumber(item.nvChuyenMonKv, 1000);
+          //         item.nvChuyenMonTc = divNumber(item.nvChuyenMonTc, 1000);
+          //         item.tcDieuHanhKv = divNumber(item.tcDieuHanhKv, 1000);
+          //         item.tcDieuHanhTc = divNumber(item.tcDieuHanhTc, 1000);
+          //         item.ttCaNhanKv = divNumber(item.ttCaNhanKv, 1000);
+          //         item.ttCaNhanTc = divNumber(item.ttCaNhanTc, 1000);
+          //     }
+          // })
+          this.dsDinhMuc = res.data;
+
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    )
   }
 
   changeNam() {
@@ -459,8 +490,8 @@ export class PhuLuc7Component implements OnInit {
     // them moi phan tu
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
-      if (itm.nhomBquan == initItem.loaiMatHang) {
-        return dm += (parseInt(itm.mucPhi, 10) * parseInt(itm.maDviTinh, 10))
+      if (itm.loaiVthh == initItem.loaiMatHang) {
+        return dm = itm.tongDmuc;
       }
     })
     if (initItem?.id) {
@@ -517,8 +548,8 @@ export class PhuLuc7Component implements OnInit {
 
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
-      if (itm.nhomBquan == initItem.loaiMatHang) {
-        return dm += (parseInt(itm.mucPhi, 10) * parseInt(itm.maDviTinh, 10))
+      if (itm.loaiVthh == initItem.loaiMatHang) {
+        return dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -687,8 +718,8 @@ export class PhuLuc7Component implements OnInit {
   addFirst(initItem: ItemData) {
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
-      if (itm.nhomBquan == initItem.loaiMatHang) {
-        return dm += (parseInt(itm.mucPhi, 10) * parseInt(itm.maDviTinh, 10))
+      if (itm.loaiVthh == initItem.loaiMatHang) {
+        return dm = itm.tongDmuc;
       }
     })
     if (initItem?.id) {
@@ -967,29 +998,29 @@ export class PhuLuc7Component implements OnInit {
     this.editCache[id].data.soChuaQtoan = this.editCache[id].data.soQtoanChuyenNsauKpTk + this.editCache[id].data.soQtoanChuyenNsauKpTchi + this.editCache[id].data.dtoan2021ThanhQtoan2020;
   }
 
-  getDsDinhMuc() {
-    const requestDinhMuc = {
-      nhomBquan: null,
-      paggingReq: {
-        limit: 20,
-        page: 1
-      },
-      str: null,
-      tenDmuc: null,
-      trangThai: null
-    };
-    this.quanLyVonPhiService.getDinhMucBaoQuan(requestDinhMuc).toPromise().then(
-      async (data) => {
-        const contentData = await data?.data?.content;
-        if (contentData.length != 0) {
-          this.dsDinhMuc = contentData;
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
-  }
+  // getDsDinhMuc() {
+  //   const requestDinhMuc = {
+  //     nhomBquan: null,
+  //     paggingReq: {
+  //       limit: 20,
+  //       page: 1
+  //     },
+  //     str: null,
+  //     tenDmuc: null,
+  //     trangThai: null
+  //   };
+  //   this.quanLyVonPhiService.getDinhMucBaoQuan(requestDinhMuc).toPromise().then(
+  //     async (data) => {
+  //       const contentData = await data?.data?.content;
+  //       if (contentData.length != 0) {
+  //         this.dsDinhMuc = contentData;
+  //       }
+  //     },
+  //     err => {
+  //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //     },
+  //   );
+  // }
   displayValue(num: number): string {
     num = exchangeMoney(num, '1', this.maDviTien);
     return displayNumber(num);
