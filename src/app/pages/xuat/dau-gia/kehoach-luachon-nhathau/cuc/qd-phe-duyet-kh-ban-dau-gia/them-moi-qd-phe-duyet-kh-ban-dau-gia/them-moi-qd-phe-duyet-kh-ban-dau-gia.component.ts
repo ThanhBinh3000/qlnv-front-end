@@ -916,6 +916,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
     };
     let res = await this.tongHopDeXuatKHBanDauGiaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
+      console.log(res.data.content)
       this.maTongHopList = res.data.content;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
