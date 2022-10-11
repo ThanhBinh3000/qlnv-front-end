@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { UserService } from 'src/app/services/user.service';
 import { saveAs } from 'file-saver';
 import { STATUS } from 'src/app/constants/status';

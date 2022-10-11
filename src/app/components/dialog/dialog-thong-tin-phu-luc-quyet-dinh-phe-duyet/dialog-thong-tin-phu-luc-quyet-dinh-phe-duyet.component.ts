@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';

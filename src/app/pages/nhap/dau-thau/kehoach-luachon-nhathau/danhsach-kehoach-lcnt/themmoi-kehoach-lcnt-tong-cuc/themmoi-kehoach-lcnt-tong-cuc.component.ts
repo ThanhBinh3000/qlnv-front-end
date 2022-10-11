@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 import { MESSAGE } from 'src/app/constants/message';
 import { CanCuXacDinh, DanhSachGoiThau, FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import VNnum2words from 'vn-num2words';
 import * as dayjs from 'dayjs';
@@ -25,9 +25,11 @@ import { HelperService } from 'src/app/services/helper.service';
 import { environment } from 'src/environments/environment';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
-import { DxuatKhLcntVatTuService } from 'src/app/services/dxuatKhLcntVatTuService.service';
 import { STATUS } from "../../../../../../constants/status";
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import {
+  DxuatKhLcntService
+} from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service";
 
 
 interface ItemData {
@@ -171,7 +173,7 @@ export class ThemmoiKehoachLcntTongCucComponent implements OnInit {
     private modal: NzModalService,
     private danhMucService: DanhMucService,
     private dauThauService: DanhSachDauThauService,
-    private dxuatKhLcntVatTuService: DxuatKhLcntVatTuService,
+    private dxuatKhLcntVatTuService: DxuatKhLcntService,
     private spinner: NgxSpinnerService,
     private uploadFileService: UploadFileService,
     private notification: NzNotificationService,

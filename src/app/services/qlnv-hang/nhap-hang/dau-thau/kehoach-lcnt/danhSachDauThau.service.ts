@@ -1,13 +1,13 @@
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
-import { OldResponseData, ResponseData } from '../interfaces/response';
+import { environment } from '../../../../../../environments/environment';
+import { OldResponseData, ResponseData } from '../../../../../interfaces/response';
 import {
   ThongTinDeXuatKeHoachLuaChonNhaThau,
   ThongTinDeXuatKeHoachLuaChonNhaThauInput,
-} from '../models/DeXuatKeHoachuaChonNhaThau';
-import { BaseService } from './base.service';
+} from '../../../../../models/DeXuatKeHoachuaChonNhaThau';
+import { BaseService } from '../../../../base.service';
 
 @Injectable({
   providedIn: 'root',
