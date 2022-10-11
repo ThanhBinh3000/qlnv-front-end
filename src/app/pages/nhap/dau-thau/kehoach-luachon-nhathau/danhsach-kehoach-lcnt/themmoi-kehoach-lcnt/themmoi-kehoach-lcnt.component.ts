@@ -13,7 +13,7 @@ import {
   FileDinhKem,
 } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import VNnum2words from 'vn-num2words';
 import * as dayjs from 'dayjs';
