@@ -93,19 +93,16 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    //this.listVthh = LIST_VAT_TU_HANG_HOA;
+    await   this.loadToTrinhDeXuat();
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
       this.loadDsLoaiGia(),
       this.loadDsVthh(),
-      this.loadToTrinhDeXuat(),
-      this.maQd = "/QD-BTC",
-      this.getDataDetail(this.idInput),
-      //this.onChangeNamQd(this.formData.get("namKeHoach").value),
-      //this.onChangeSoToTrinh(this.thongTinToTrinh.id),
+      this.maQd = "/QĐ-BTC",
       this.loadTiLeThue()
     ]);
+    await this.getDataDetail(this.idInput)
     this.spinner.hide();
   }
 
@@ -113,6 +110,14 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhGiaCuaBtcService.getDetail(id);
       const data = res.data;
+      let resp = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": data.loaiVthh });
+      this.dsCloaiVthh = [];
+      if (resp.msg == MESSAGE.SUCCESS) {
+        if (resp.data) {
+          this.dsCloaiVthh = resp.data;
+        }
+      }
+      this.arrThongTinGia = data.thongTinGia
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -128,8 +133,6 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh
       });
-      this.onChangeSoToTrinh(data.soToTrinh)
-      //this.onChangeLoaiVthh(data.loaiVthh);
     }
   }
 
@@ -322,6 +325,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
 
   async onChangeSoToTrinh(event) {
     let curToTrinh = this.dsToTrinhDeXuat.find(item => item.soToTrinh == event);
+    console.log(curToTrinh)
     if (curToTrinh) {
       //loai hh
       this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
@@ -332,7 +336,6 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
-          console.log(this.dsCloaiVthh);
         }
       }
       this.formData.controls["cloaiVthh"].setValue(curToTrinh.cloaiVthh);

@@ -105,7 +105,6 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhGiaTCDTNNService.getDetail(id);
       const data = res.data;
-      console.log(data)
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -120,10 +119,8 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         trangThai: data.trangThai,
         ghiChu: data.ghiChu,
         soDeXuat: data.soToTrinh
-
       });
       this.arrThongTinGia = data.thongTinGia
-      this.onChangeSoToTrinh(data.soToTrinh)
     }
   }
 

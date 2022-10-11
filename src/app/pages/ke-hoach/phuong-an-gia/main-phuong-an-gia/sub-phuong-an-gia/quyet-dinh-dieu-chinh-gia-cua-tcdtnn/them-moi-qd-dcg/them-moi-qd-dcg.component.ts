@@ -331,7 +331,6 @@ export class ThemMoiQdDcgComponent implements OnInit {
     body.thongTinGias = this.listThongTinGia;
     body.soQd = body.soQd + this.maQd
     let res
-    console.log("---------" + JSON.stringify(body));
     if (this.idInput > 0) {
       /* body.loaiVthh = this.detail.loaiVthh
        body.cloaiVthh = this.detail.cloaiVthh

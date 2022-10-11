@@ -294,6 +294,12 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (id > 0) {
       let res = await this.giaDeXuatGiaService.getDetail(id);
       const data = res.data;
+      this.onChangeLoaiVthh(data.loaiVthh)
+      this.pagTtChungs = data.pagTtChungs;
+      this.pagPpXacDinhGias = data.pagPpXacDinhGias;
+      this.dataTableKqGia = data.dataTableKqGia;
+      this.dataTableKsGia = data.dataTableKsGia;
+      this.dataTableCanCuXdg = data.canCuPhapLy;
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -312,18 +318,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         qdCtKhNam: data.qdCtKhNam,
         maPphapXdg: data.maPphapXdg
       })
-      this.pagTtChungs = data.pagTtChungs;
-      if (this.type == 'GMTDBTT') {
-        await this.onChangeLoaiVthh(data.loaiVthh)
-        this.pagTtChungs.forEach(item => {
-          let res = this.listCloaiVthh.find(cloai => cloai.ma = item.cloaiVthh)
-          item.tenCloaiVthh = res.ten
-        })
-      }
-      this.pagPpXacDinhGias = data.pagPpXacDinhGias;
-      this.dataTableKqGia = data.dataTableKqGia;
-      this.dataTableKsGia = data.dataTableKsGia;
-      this.dataTableCanCuXdg = data.canCuPhapLy;
       this.updateEditCache('ttc')
       this.updateEditCache('ccXdg')
       this.updateEditCache('ppxdg')
