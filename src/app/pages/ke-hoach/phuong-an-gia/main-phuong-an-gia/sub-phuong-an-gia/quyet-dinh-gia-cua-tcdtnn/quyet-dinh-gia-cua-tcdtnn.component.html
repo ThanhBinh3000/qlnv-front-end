@@ -59,7 +59,7 @@
             </div>
         </nz-card>
         <div class="group-button">
-            <h3>Thông tin tổng hợp phương án giá</h3>
+            <h3>Danh sách quyết định giá của TCDTNN </h3>
             <div class="buttons">
                 <button *ngIf="userService.isTongCuc()" type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
                     <i class="fa fa-trash-o do"></i>
@@ -182,10 +182,10 @@
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td>
-                            <a (click)="viewDetail(data.id, false,data.trangThai)">
+                            <a (click)="viewDetail(data.id, true)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, true,data.trangThai)">
+                            <a *ngIf="data.trangThai == '00'" (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
@@ -220,11 +220,11 @@
 </ng-template>-->
 <ng-template #LtView>
   <app-them-moi-qd-gia-tcdtnn-lt *ngIf="pagType === 'LT';else VtView" [isView]="isViewDetail" [pagType]="pagType" [type]="type"
-                                  [noEdit]="noEdit" [idInput]="idSelected" (onClose)="onClose()">
+                                  [idInput]="idSelected" (onClose)="onClose()">
   </app-them-moi-qd-gia-tcdtnn-lt>
 </ng-template>
 <ng-template #VtView>
-  <app-them-moi-qd-gia-tcdtnn-vt [isView]="isViewDetail" [pagType]="pagType" [noEdit]="noEdit" [idInput]="idSelected" [type]="type"
+  <app-them-moi-qd-gia-tcdtnn-vt [isView]="isViewDetail" [pagType]="pagType" [idInput]="idSelected" [type]="type"
                                   (onClose)="onClose()">
   </app-them-moi-qd-gia-tcdtnn-vt>
 </ng-template>

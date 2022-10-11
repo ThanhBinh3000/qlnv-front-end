@@ -9,18 +9,18 @@
   <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24" class="mt-16">
     <div nz-col [nzSpan]="8">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Danh sách Cục </nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true"> Danh sách Cục</nz-form-label>
         <nz-select [(ngModel)]="diaDiemNhapKho.maDvi" [ngModelOptions]="{standalone: true}"
-                   (ngModelChange)="changeCuc($event)" [nzDisabled]="!userService.isTongCuc()">
+                   (ngModelChange)="changeCuc($event)" [nzDisabled]="!userService.isTongCuc() || noEdit">
           <nz-option *ngFor="let cuc of cucList" [nzValue]="cuc.maDvi" [nzLabel]="cuc.tenDvi"></nz-option>
         </nz-select>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="8">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Danh Sách Chi cục </nz-form-label>
-        <nz-select [(ngModel)]="diaDiemNhapKho.maChiCuc" [ngModelOptions]="{standalone: true}"
-          (ngModelChange)="changeChiCuc()">
+        <nz-form-label nzRequired [nzNoColon]="true"> Danh Sách Chi cục</nz-form-label>
+        <nz-select [(ngModel)]="diaDiemNhapKho.maChiCuc" [ngModelOptions]="{standalone: true}" [nzDisabled]="noEdit"
+                   (ngModelChange)="changeChiCuc()">
           <nz-option *ngFor="let chiCuc of chiCucList" [nzValue]="chiCuc.maDvi" [nzLabel]="chiCuc.tenDvi"></nz-option>
         </nz-select>
       </nz-form-item>
@@ -28,11 +28,11 @@
   </div>
 </form>
 <div nz-col [nzSpan]="24" class="mt-16">
-<!--  <p style="color: red" class="cangiua group-button-search">Đơn vị: kg</p>-->
+  <!--  <p style="color: red" class="cangiua group-button-search">Đơn vị: kg</p>-->
   <nz-card class="mt16 flex-card p-lr16 dialog-thong-tin-phu-luc">
     <nz-table #basicTable nzBordered class="nowrap"
               [nzFrontPagination]="false" [nzShowPagination]="false"
-              [nzData]="dsChiTietDiemNhapKhoClone" >
+              [nzData]="dsChiTietDiemNhapKhoClone">
       <thead>
       <tr>
         <th>STT</th>
@@ -55,35 +55,35 @@
         <td></td>
         <td>
           <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.maDiemKho"
-                     (ngModelChange)="changeDiemKho(chiTietDiemNhapKhoCreate.maDiemKho)" >
+                     (ngModelChange)="changeDiemKho(chiTietDiemNhapKhoCreate.maDiemKho)">
             <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.key" [nzLabel]="item.title">
             </nz-option>
           </nz-select>
         </td>
         <td>
           <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.maNhaKho"
-                     (ngModelChange)="changeNhaKho(chiTietDiemNhapKhoCreate.maNhaKho)" >
+                     (ngModelChange)="changeNhaKho(chiTietDiemNhapKhoCreate.maNhaKho)">
             <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
             </nz-option>
           </nz-select>
         </td>
         <td>
           <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.maNganKho"
-                     (ngModelChange)="changeNganKho(chiTietDiemNhapKhoCreate.maNganKho)" >
+                     (ngModelChange)="changeNganKho(chiTietDiemNhapKhoCreate.maNganKho)">
             <nz-option *ngFor="let item of listNganKho" [nzValue]="item.key" [nzLabel]="item.title">
             </nz-option>
           </nz-select>
         </td>
         <td>
           <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.maLoKho"
-                     (ngModelChange)="changeNganLo(chiTietDiemNhapKhoCreate.maLoKho)" >
+                     (ngModelChange)="changeNganLo(chiTietDiemNhapKhoCreate.maLoKho)">
             <nz-option *ngFor="let item of listLoKho" [nzValue]="item.key" [nzLabel]="item.title">
             </nz-option>
           </nz-select>
         </td>
         <td>
           <nz-select [(ngModel)]="chiTietDiemNhapKhoCreate.chungLoaiHh"
-                     (ngModelChange)="changeChungLoaiHang(chiTietDiemNhapKhoCreate.chungLoaiHh)"  [disabled]="true">
+                     (ngModelChange)="changeChungLoaiHang(chiTietDiemNhapKhoCreate.chungLoaiHh)" [disabled]="true">
             <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
             </nz-option>
           </nz-select>
@@ -92,24 +92,24 @@
           {{chiTietDiemNhapKhoCreate.donViTinh}}
         </td>
         <td>
-          <input nz-input [(ngModel)]="chiTietDiemNhapKhoCreate.maDviTaiSan"  />
+          <input nz-input [(ngModel)]="chiTietDiemNhapKhoCreate.maDviTaiSan"/>
         </td>
         <td>{{chiTietDiemNhapKhoCreate.tonKho}}</td>
         <td>
           <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="chiTietDiemNhapKhoCreate.soLuong"
-                           [nzMin]="0" [nzMax]="chiTietDiemNhapKhoCreate.tonKho" >
+                           [nzMin]="0" [nzMax]="chiTietDiemNhapKhoCreate.tonKho">
           </nz-input-number>
         </td>
         <td>
           <nz-input-number type="text" nz-input [nzSize]="'small'"
                            [(ngModel)]="chiTietDiemNhapKhoCreate.donGia" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
-                           >
+          >
           </nz-input-number>
         </td>
         <td>
           <nz-input-number type="text" nz-input [nzSize]="'small'"
                            [(ngModel)]="chiTietDiemNhapKhoCreate.thanhTien" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
-                           >
+          >
           </nz-input-number>
         </td>
         <td class="text-center" nzRight>
@@ -123,7 +123,7 @@
       </tr>
       <tr *ngFor="let data of basicTable.data; let i = index">
         <ng-container *ngIf="!dsChiTietDiemNhapKhoClone[i]?.isEdit; else editTemplate">
-          <td>{{i+1}}</td>
+          <td>{{i + 1}}</td>
           <td>{{data.tenDiemKho}}</td>
           <td>{{data.tenNhaKho}} </td>
           <td>{{data.tenNganKho}}</td>
@@ -145,38 +145,38 @@
           </td>
         </ng-container>
         <ng-template #editTemplate>
-          <td>{{i+1}}</td>
+          <td>{{i + 1}}</td>
           <td>
             <nz-select [(ngModel)]="data.maDiemKho"
-                       (ngModelChange)="changeDiemKho(data.maDiemKho,i,true)" >
+                       (ngModelChange)="changeDiemKho(data.maDiemKho,i,true)">
               <nz-option *ngFor="let item of listDiemKhoEdit" [nzValue]="item.key" [nzLabel]="item.title">
               </nz-option>
             </nz-select>
           </td>
           <td>
             <nz-select [(ngModel)]="data.maNhaKho"
-                       (ngModelChange)="changeNhaKho(data.maNhaKho,i,true)" >
+                       (ngModelChange)="changeNhaKho(data.maNhaKho,i,true)">
               <nz-option *ngFor="let item of listNhaKhoEdit" [nzValue]="item.key" [nzLabel]="item.title">
               </nz-option>
             </nz-select>
           </td>
           <td>
             <nz-select [(ngModel)]="data.maNganKho"
-                       (ngModelChange)="changeNganKho(data.maNganKho,i,true)" >
+                       (ngModelChange)="changeNganKho(data.maNganKho,i,true)">
               <nz-option *ngFor="let item of listNganKhoEdit" [nzValue]="item.key" [nzLabel]="item.title">
               </nz-option>
             </nz-select>
           </td>
           <td>
             <nz-select [(ngModel)]="data.maLoKho"
-                       (ngModelChange)="changeNganKho(data.maLoKho,i,true)" >
+                       (ngModelChange)="changeNganKho(data.maLoKho,i,true)">
               <nz-option *ngFor="let item of listLoKhoEdit" [nzValue]="item.key" [nzLabel]="item.title">
               </nz-option>
             </nz-select>
           </td>
           <td>
             <nz-select [(ngModel)]="data.chungLoaiHh"
-                       (ngModelChange)="changeChungLoaiHang(data.chungLoaiHh,i,true)" >
+                       (ngModelChange)="changeChungLoaiHang(data.chungLoaiHh,i,true)">
               <nz-option *ngFor="let item of listChungLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
               </nz-option>
             </nz-select>
@@ -185,25 +185,25 @@
             {{data.donViTinh}}
           </td>
           <td>
-            <input nz-input [(ngModel)]="data.maDviTaiSan"  />
+            <input nz-input [(ngModel)]="data.maDviTaiSan"/>
           </td>
           <td>{{data.tonKho}}</td>
           <td>
             <nz-input-number type="text" nz-input [nzSize]="'small'"
                              [(ngModel)]="data.soLuong" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
-                             >
+            >
             </nz-input-number>
           </td>
           <td>
             <nz-input-number type="text" nz-input [nzSize]="'small'"
                              [(ngModel)]="data.donGia" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
-                             >
+            >
             </nz-input-number>
           </td>
           <td>
             <nz-input-number type="text" nz-input [nzSize]="'small'"
                              [(ngModel)]="data.thanhTien" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
-                             >
+            >
             </nz-input-number>
           </td>
           <td class="text-center" nzRight>
@@ -215,24 +215,6 @@
             </a>
           </td>
         </ng-template>
-      </tr>
-      <tr *ngIf="dsChiTietDiemNhapKhoClone.length > 0">
-        <td></td>
-        <td>Cộng</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>
-          {{calcSoLuong()}}
-        </td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
       </tr>
       </tbody>
     </nz-table>

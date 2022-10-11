@@ -210,7 +210,8 @@
                         <td>{{ data.soDeXuat }}</td>
                         <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trichYeu }}</td>
-                        <td>{{ data.qdCtKhNam }}</td>
+                        <td *ngIf="pagType == 'VT'">{{ data.qdCtKhNam }}</td>
+                        <td *ngIf="pagType == 'LT'">{{ data.soCanCu }}</td>
                         <td>{{ data.namKeHoach }}</td>
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenLoaiGia }}</td>
