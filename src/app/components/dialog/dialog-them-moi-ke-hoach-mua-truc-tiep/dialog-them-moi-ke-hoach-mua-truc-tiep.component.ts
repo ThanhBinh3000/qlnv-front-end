@@ -20,6 +20,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   formData: FormGroup;
   thongtinDauThau: DanhSachMuaTrucTiep
+  data?: any;
   loaiVthh: any;
   dataChiTieu: any;
   dataEdit: any;

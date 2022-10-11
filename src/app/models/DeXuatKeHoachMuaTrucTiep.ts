@@ -16,7 +16,7 @@ export class DanhSachMuaTrucTiep {
   thanhTien: number;
   idVirtual?: number;
   isEdit: boolean;
-  children?: DanhSachMuaTrucTiep[];
+  ccFileDinhkems?: DanhSachMuaTrucTiep[];
   level?: number;
   expand?: boolean;
   parent?: DanhSachMuaTrucTiep
@@ -42,6 +42,6 @@ export class CanCuXacDinh {
   taiLieu: any;
   moTa: string;
   fileDinhKems: Array<FileDinhKem>;
-  children: Array<FileDinhKem>;
+  ccFileDinhkems: Array<FileDinhKem>;
 }
 

@@ -58,7 +58,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="namKh" nzAllowClear
+              <nz-select formControlName="namKhoach" nzAllowClear (ngModelChange)="listDsTongHopToTrinh()"
                 [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
@@ -112,7 +112,7 @@
               <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
-                  <input [readonly]="true" nz-input formControlName="idDxuat" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="maTrHdr" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
