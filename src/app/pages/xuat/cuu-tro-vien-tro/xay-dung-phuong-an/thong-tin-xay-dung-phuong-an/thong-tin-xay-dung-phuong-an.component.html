@@ -21,7 +21,7 @@
       <span>Duyệt</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || ((formData.value.trangThai == STATUS.TU_CHOI_LDTC || formData.value.trangThai == STATUS.TU_CHOI_LDC) && userService.isCuc())) && isDetailPermission()"
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || ((formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && userService.isCuc())) && isDetailPermission()"
       type="button" class="btn btn-sub" (click)="luuGuiDuyet()">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
@@ -46,7 +46,8 @@
     <div class="header header-green-background mg-t-16">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do'">
+          <span
+            [ngClass]="(formData.value.trangThai == STATUS.DA_DUYET_LDC||formData.value.trangThai == STATUS.DA_DUYET_LDTC) ? 'status-xanh' : 'status-do'">
             {{ formData.value.tenTrangThai }}
           </span>
           <span>Đề xuất phương án xuất viện trợ, cứu trợ</span>
@@ -351,10 +352,10 @@
                 style="width: 35px"></td>
             <td>{{i + 1}}</td>
             <td colspan="7">{{ item.tenChiCuc }}</td>
-            <td><strong>{{ item.soLuong |number:'1.0-1'}}</strong></td>
+            <td><strong>{{ item.soLuong }}</strong></td>
             <td></td>
             <td></td>
-            <td><strong>{{ item.thanhTien |number:'1.0-1'}}</strong></td>
+            <td><strong>{{ item.thanhTien ?? 0 |number:'1.0-1'}}</strong></td>
             <td>
               <a (click)="suaPhuongAn(item)" *ngIf="!isView">
                 <i class="fa fa-pencil"></i>

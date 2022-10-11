@@ -1,9 +1,11 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ComponentsModule } from 'src/app/components/components.module';
-import { DirectivesModule } from 'src/app/directives/directives.module';
-import { QuyetDinhPheDuyetPhuongAnComponent } from './quyet-dinh-phe-duyet-phuong-an.component';
-import { ThongTinQuyetDinhPheDuyetPhuongAnComponent } from './thong-tin-quyet-dinh-phe-duyet-phuong-an/thong-tin-quyet-dinh-phe-duyet-phuong-an.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ComponentsModule} from 'src/app/components/components.module';
+import {DirectivesModule} from 'src/app/directives/directives.module';
+import {QuyetDinhPheDuyetPhuongAnComponent} from "./quyet-dinh-phe-duyet-phuong-an.component";
+import {
+  ThongTinQuyetDinhPheDuyetPhuongAnComponent
+} from "./thong-tin-quyet-dinh-phe-duyet-phuong-an/thong-tin-quyet-dinh-phe-duyet-phuong-an.component";
 
 @NgModule({
   imports: [
@@ -19,4 +21,5 @@ import { ThongTinQuyetDinhPheDuyetPhuongAnComponent } from './thong-tin-quyet-di
     QuyetDinhPheDuyetPhuongAnComponent,
   ]
 })
-export class QuyetDinhPheDuyetPhuongAnModule { }
+export class QuyetDinhPheDuyetPhuongAnModule {
+}
