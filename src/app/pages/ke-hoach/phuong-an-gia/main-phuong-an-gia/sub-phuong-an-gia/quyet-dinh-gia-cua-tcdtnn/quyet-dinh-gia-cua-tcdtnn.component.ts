@@ -97,7 +97,6 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   clearFilter() {
     this.formData.reset();
     this.search();
-    console.log(this.searchInTable);
   }
 
   async search() {
@@ -215,7 +214,6 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
   async onClose() {
     this.isAddNew = false;
     await this.search()
-
   }
 
   onAllChecked(checked) {
@@ -273,17 +271,10 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     }
   }
 
-  viewDetail(id: number, isViewDetail: boolean,trangThai: string) {
+  viewDetail(id: number, isViewDetail: boolean) {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;
     this.isAddNew = true;
-    if (trangThai == STATUS.BAN_HANH) {
-      this.noEdit = true;
-    } else if (trangThai == STATUS.DU_THAO && isViewDetail) {
-      this.noEdit = true;
-    } else if (trangThai == STATUS.DU_THAO && !isViewDetail) {
-      this.noEdit = false;
-    }
   }
 
   xoaItem(item: any) {
