@@ -57,3 +57,14 @@ export class ChiTietDiaDiemNhapKho {
     this.tonKho = tonKho;
   }
 }
+
+export class FileDinhKem {
+  createDate: string;
+  dataType: string;
+  fileName: string;
+  fileSize: string;
+  fileType: string;
+  fileUrl: string;
+  id: number;
+  idVirtual: number;
+}
