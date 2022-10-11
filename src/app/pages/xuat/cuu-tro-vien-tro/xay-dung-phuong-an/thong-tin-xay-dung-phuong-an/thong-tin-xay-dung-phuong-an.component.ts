@@ -155,7 +155,6 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         this.dsLoaiHinhNhapXuat(),
         this.dsKieuNhapXuat(),
         this.loadDetail(this.idInput),
-
       ])
       // await Promise.all([this.loaiVTHHGetAll(), this.loaiHopDongGetAll()]);
       this.spinner.hide();
@@ -247,53 +246,64 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
   }
 
   async save(isOther?: boolean) {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      let invalid = [];
-      let controls = this.formData.controls;
-      for (const name in controls) {
-        if (controls[name].invalid) {
-          invalid.push(name);
-        }
-      }
-      console.log(invalid, 'invalid');
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
-      return;
-    } else {
-      try {
-        this.spinner.show();
-        let body = this.formData.value;
-        // body.fileDinhKem = this.fileDinhKem;
-        body.ngayDxuat = this.datePipe.transform(body.ngayDxuat, 'yyyy-MM-dd');
-        body.thoiGianThucHien = this.datePipe.transform(body.thoiGianThucHien, 'yyyy-MM-dd');
-        body.soDxuat = body.soDxuat + this.maDeXuat;
-        if (this.idInput) {
-          let res = await this.deXuatPhuongAnCuuTroService.update(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.summaryData();
-            //this.quayLai();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Lưu thông tin',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        this.helperService.markFormGroupTouched(this.formData);
+        if (this.formData.invalid) {
+          let invalid = [];
+          let controls = this.formData.controls;
+          for (const name in controls) {
+            if (controls[name].invalid) {
+              invalid.push(name);
+            }
           }
+          console.log(invalid, 'invalid');
+          this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
+          return;
         } else {
-          body.tongSoLuong = this.tongSLThongTinChiTiet;
-          let res = await this.deXuatPhuongAnCuuTroService.create(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.idInput = res.data.id;
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.quayLai();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
+          try {
+            this.spinner.show();
+            let body = this.formData.value;
+            // body.fileDinhKem = this.fileDinhKem;
+            body.ngayDxuat = this.datePipe.transform(body.ngayDxuat, 'yyyy-MM-dd');
+            body.thoiGianThucHien = this.datePipe.transform(body.thoiGianThucHien, 'yyyy-MM-dd');
+            body.soDxuat = body.soDxuat + this.maDeXuat;
+            if (this.idInput) {
+              let res = await this.deXuatPhuongAnCuuTroService.update(body);
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                this.summaryData();
+                //this.quayLai();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+            } else {
+              body.tongSoLuong = this.tongSLThongTinChiTiet;
+              let res = await this.deXuatPhuongAnCuuTroService.create(body);
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.idInput = res.data.id;
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                this.quayLai();
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+            }
+
+          } catch (e) {
+            console.log(e)
+          } finally {
+            this.spinner.hide();
           }
         }
-
-      } catch (e) {
-        console.log(e)
-      } finally {
-        this.spinner.hide();
       }
-    }
+    });
   }
 
   async dsLoaiHinhNhapXuat() {
@@ -330,6 +340,12 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
             this.formData.patchValue(res.data);
             this.fileDinhKem = this.formData.get('fileDinhKem').value;
             this.summaryData();
+            console.log(res.data.thongTinChiTiet, 123123123)
+            if (res.data.thongTinChiTiet.length > 0) {
+              this.idDxuatDtlSelect = res.data.thongTinChiTiet[0].id
+              console.log(this.idDxuatDtlSelect, 123812398);
+              this.showDataKhoView()
+            }
           }
         })
         .catch((e) => {
@@ -459,66 +475,77 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
   }
 
   async luuGuiDuyet() {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      let invalid = [];
-      let controls = this.formData.controls;
-      for (const name in controls) {
-        if (controls[name].invalid) {
-          invalid.push(name);
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Lưu và gửi duyệt',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        this.helperService.markFormGroupTouched(this.formData);
+        if (this.formData.invalid) {
+          let invalid = [];
+          let controls = this.formData.controls;
+          for (const name in controls) {
+            if (controls[name].invalid) {
+              invalid.push(name);
+            }
+          }
+          console.log(invalid, 'invalid');
+          this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
+          return;
+        } else {
+          try {
+            this.spinner.show();
+            let body = this.formData.value;
+            // body.fileDinhKem = this.fileDinhKem;
+            body.ngayDxuat = this.datePipe.transform(body.ngayDxuat, 'yyyy-MM-dd');
+            body.thoiGianThucHien = this.datePipe.transform(body.thoiGianThucHien, 'yyyy-MM-dd');
+            body.soDxuat = body.soDxuat + this.maDeXuat;
+            if (this.idInput) {
+              let res = await this.deXuatPhuongAnCuuTroService.update(body);
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+            } else {
+              body.tongSoLuong = this.tongSLThongTinChiTiet;
+              let res = await this.deXuatPhuongAnCuuTroService.create(body);
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.idInput = res.data.id;
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+            }
+
+            //gui duyet
+            body = {
+              id: this.idInput,
+              trangThai: STATUS.CHO_DUYET_LDTC,
+            };
+            let res = await this.deXuatPhuongAnCuuTroService.approve(body);
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.GUI_DUYET_SUCCESS,
+              );
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log(e)
+          } finally {
+            this.quayLai();
+            this.spinner.hide();
+
+          }
         }
       }
-      console.log(invalid, 'invalid');
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
-      return;
-    } else {
-      try {
-        this.spinner.show();
-        let body = this.formData.value;
-        // body.fileDinhKem = this.fileDinhKem;
-        body.ngayDxuat = this.datePipe.transform(body.ngayDxuat, 'yyyy-MM-dd');
-        body.thoiGianThucHien = this.datePipe.transform(body.thoiGianThucHien, 'yyyy-MM-dd');
-        body.soDxuat = body.soDxuat + this.maDeXuat;
-        if (this.idInput) {
-          let res = await this.deXuatPhuongAnCuuTroService.update(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        } else {
-          body.tongSoLuong = this.tongSLThongTinChiTiet;
-          let res = await this.deXuatPhuongAnCuuTroService.create(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.idInput = res.data.id;
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        }
-
-        //gui duyet
-        body = {
-          id: this.idInput,
-          trangThai: STATUS.CHO_DUYET_LDTC,
-        };
-        let res = await this.deXuatPhuongAnCuuTroService.approve(body);
-        if (res.msg == MESSAGE.SUCCESS) {
-          this.notification.success(
-            MESSAGE.SUCCESS,
-            MESSAGE.GUI_DUYET_SUCCESS,
-          );
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-      } catch (e) {
-        console.log(e)
-      } finally {
-        this.quayLai();
-        this.spinner.hide();
-
-      }
-    }
+    });
   }
 
   setTitle() {
@@ -758,7 +785,10 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
 
   showDataKhoView() {
     let thongTinChiTiet = this.formData.get('thongTinChiTiet').value;
-    thongTinChiTiet = thongTinChiTiet.find(s => s.idVirtual == this.idDxuatDtlSelect);
+    console.log(thongTinChiTiet, 'thong tin chi tiet')
+    thongTinChiTiet = thongTinChiTiet.find(s => {
+      return (s.idVirtual == this.idDxuatDtlSelect || s.id == this.idDxuatDtlSelect)
+    });
     console.log(thongTinChiTiet, 'thong tin chi tiet')
     if (thongTinChiTiet) {
       let nhapKhoList: DiaDiemNhapKho[] = [];
