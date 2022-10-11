@@ -10,7 +10,7 @@ export const ROUTE_LIST_KE_HOACH = [
     url: `/${MAIN_ROUTES.quyetToan}/${QUAN_LY_QUYET_TOAN}`,
   },
   {
-    icon: 'htvbdh_tcdt_icon-common',
+    icon: 'htvbdh_tcdt_nhapkhac2',
     title: 'Vốn, phí hàng của Bộ, ngành',
     url: `/${MAIN_ROUTES.quyetToan}/${VON_PHI_HANG_CUA_BO_NGANH}`,
   },
