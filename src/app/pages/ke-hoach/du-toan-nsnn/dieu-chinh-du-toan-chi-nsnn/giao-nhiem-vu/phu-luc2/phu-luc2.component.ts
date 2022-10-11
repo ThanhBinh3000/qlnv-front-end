@@ -50,7 +50,7 @@ export class PhuLuc2Component implements OnInit {
   lstCtietBcao: ItemData[] = [];
   donViTiens: any[] = DON_VI_TIEN;
   soLaMa: any[] = LA_MA;
-
+  dinhMucs: any[] = [];
   //thong tin chung
   id: any;
   namBcao: number;
@@ -167,6 +167,37 @@ export class PhuLuc2Component implements OnInit {
     this.getStatusButton();
     this.getDsDinhMuc();
     this.spinner.hide();
+  }
+
+  getDinhMuc() {
+    const request = {
+      loaiDinhMuc: '01',
+      maDvi: this.maDviTao,
+    }
+    this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+      res => {
+        if (res.statusCode == 0) {
+          this.dinhMucs = res.data;
+          // this.dinhMucs.forEach(item => {
+          //     if (!item.loaiVthh.startsWith('04')) {
+          //         item.nvChuyenMonKv = divNumber(item.nvChuyenMonKv, 1000);
+          //         item.nvChuyenMonTc = divNumber(item.nvChuyenMonTc, 1000);
+          //         item.tcDieuHanhKv = divNumber(item.tcDieuHanhKv, 1000);
+          //         item.tcDieuHanhTc = divNumber(item.tcDieuHanhTc, 1000);
+          //         item.ttCaNhanKv = divNumber(item.ttCaNhanKv, 1000);
+          //         item.ttCaNhanTc = divNumber(item.ttCaNhanTc, 1000);
+          //     }
+          // })
+          console.log(this.dinhMucs);
+
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    )
   }
 
   getStatusButton() {
@@ -904,5 +935,5 @@ export class PhuLuc2Component implements OnInit {
   displayNumber1(num: number): string {
     return displayNumber(num);
   }
-  
+
 }
