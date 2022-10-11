@@ -383,9 +383,10 @@
                     <ng-container *ngIf="!editCoSoCache[data.id]?.edit; else editCoSoTemplate">
                         <td>{{i + 1}}</td>
                         <td>{{data.moTa}}</td>
-                        <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
+                        <td>{{data.ccFileDinhkems && data.ccFileDinhkems.length > 0 ? data.ccFileDinhkems[0].fileName :
+                            ''}}</td>
                         <td class="action text-right">
-                            <a (click)="downloadFile(data.children[0])">
+                            <a (click)="downloadFile(data.ccFileDinhkems[0])">
                                 <i class="icon htvbdh_tcdt_import"></i>
                             </a>
                             <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
@@ -523,10 +524,9 @@
                             <td></td>
                             <td></td>
                             <td>{{dtGoiThau.soLuongDxmtt | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td></td>
+                            <td>{{dtGoiThau.giaCoThue | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{dtGoiThau.donGiaVat * dtGoiThau.soLuongDxmtt | number : '1.0-1' : 'vi_VN'}} </td>
-                            <td></td>
-                            <td></td>
+                            <td>{{dtGoiThau.bangChu}}</td>
                             <td *ngIf="userService.isCuc()"></td>
                         </tr>
                     </ng-container>

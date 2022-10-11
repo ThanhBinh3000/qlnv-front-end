@@ -399,10 +399,9 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     let pipe = new DatePipe('en-US');
     let body = this.formData.value;
     body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
-    body.fileDinhKemReq = this.fileDinhKem;
+    body.fileDinhkems = this.fileDinhKem;
     body.soLuongDiaDiemList = this.listOfData;
     body.ccXdgList = [...this.canCuXacDinhList, ...this.canCuKhacList];
-    console.log(this.fileDinhKem, 222222)
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.danhSachMuaTrucTiepService.update(body);
@@ -569,19 +568,19 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     if (type == 'bao-gia') {
       if (id == 0) {
         this.addModelBaoGia.taiLieu = [];
-        this.addModelBaoGia.children = [];
+        this.addModelBaoGia.ccFileDinhkems = [];
       } else if (id > 0) {
         this.editBaoGiaCache[id].data.taiLieu = [];
-        this.editBaoGiaCache[id].data.children = [];
+        this.editBaoGiaCache[id].data.ccFileDinhkems = [];
         this.checkDataExistBaoGia(this.editBaoGiaCache[id].data);
       }
     } else if (type == 'co-so') {
       if (id == 0) {
         this.addModelCoSo.taiLieu = [];
-        this.addModelCoSo.children = [];
+        this.addModelCoSo.ccFileDinhkems = [];
       } else if (id > 0) {
         this.editCoSoCache[id].data.taiLieu = [];
-        this.editCoSoCache[id].data.children = [];
+        this.editCoSoCache[id].data.ccFileDinhkems = [];
         this.checkDataExistCoSo(this.editCoSoCache[id].data);
       }
     }
@@ -615,9 +614,9 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
                 taiLieuBaoGiaThiTruong.loaiCanCu = '00';
                 taiLieuBaoGiaThiTruong.moTa = res.tenTaiLieu;
                 taiLieuBaoGiaThiTruong.idVirtual = new Date().getTime();
-                taiLieuBaoGiaThiTruong.children = [];
-                taiLieuBaoGiaThiTruong.children = [
-                  ...taiLieuBaoGiaThiTruong.children,
+                taiLieuBaoGiaThiTruong.ccFileDinhkems = [];
+                taiLieuBaoGiaThiTruong.ccFileDinhkems = [
+                  ...taiLieuBaoGiaThiTruong.ccFileDinhkems,
                   fileDinhKem,
                 ];
                 this.canCuXacDinhList = [
@@ -630,9 +629,9 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
                 taiLieuCanCuKhac.loaiCanCu = '01';
                 taiLieuCanCuKhac.moTa = res.tenTaiLieu;
                 taiLieuCanCuKhac.idVirtual = new Date().getTime();
-                taiLieuCanCuKhac.children = [];
-                taiLieuCanCuKhac.children = [
-                  ...taiLieuCanCuKhac.children,
+                taiLieuCanCuKhac.ccFileDinhkems = [];
+                taiLieuCanCuKhac.ccFileDinhkems = [
+                  ...taiLieuCanCuKhac.ccFileDinhkems,
                   fileDinhKem,
                 ];
                 this.canCuKhacList = [...this.canCuKhacList, taiLieuCanCuKhac];
@@ -664,9 +663,9 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
               ...this.addModelBaoGia.taiLieu,
               item,
             ];
-            this.addModelBaoGia.children = [];
-            this.addModelBaoGia.children = [
-              ...this.addModelBaoGia.children,
+            this.addModelBaoGia.ccFileDinhkems = [];
+            this.addModelBaoGia.ccFileDinhkems = [
+              ...this.addModelBaoGia.ccFileDinhkems,
               fileDinhKem,
             ];
           } else if (id > 0) {
@@ -675,9 +674,9 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
               ...this.editBaoGiaCache[id]?.data?.taiLieu,
               item,
             ];
-            this.editBaoGiaCache[id].data.children = [];
-            this.editBaoGiaCache[id].data.children = [
-              ...this.editBaoGiaCache[id].data.children,
+            this.editBaoGiaCache[id].data.ccFileDinhkems = [];
+            this.editBaoGiaCache[id].data.ccFileDinhkems = [
+              ...this.editBaoGiaCache[id].data.ccFileDinhkems,
               fileDinhKem,
             ];
           }
@@ -685,9 +684,9 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
           if (id == 0) {
             this.addModelCoSo.taiLieu = [];
             this.addModelCoSo.taiLieu = [...this.addModelCoSo.taiLieu, item];
-            this.addModelCoSo.children = [];
-            this.addModelCoSo.children = [
-              ...this.addModelCoSo.children,
+            this.addModelCoSo.ccFileDinhkems = [];
+            this.addModelCoSo.ccFileDinhkems = [
+              ...this.addModelCoSo.ccFileDinhkems,
               fileDinhKem,
             ];
           } else if (id > 0) {
@@ -696,9 +695,9 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
               ...this.editCoSoCache[id]?.data?.taiLieu,
               item,
             ];
-            this.editCoSoCache[id].data.children = [];
-            this.editCoSoCache[id].data.children = [
-              ...this.editCoSoCache[id].data.children,
+            this.editCoSoCache[id].data.ccFileDinhkems = [];
+            this.editCoSoCache[id].data.ccFileDinhkems = [
+              ...this.editCoSoCache[id].data.ccFileDinhkems,
               fileDinhKem,
             ];
           }
@@ -711,7 +710,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     taiLieuBaoGiaThiTruong.loaiCanCu = '00';
     taiLieuBaoGiaThiTruong.moTa = this.addModelBaoGia.moTa;
     taiLieuBaoGiaThiTruong.id = new Date().getTime() + 1;
-    taiLieuBaoGiaThiTruong.children = this.addModelBaoGia.children;
+    taiLieuBaoGiaThiTruong.ccFileDinhkems = this.addModelBaoGia.ccFileDinhkems;
     taiLieuBaoGiaThiTruong.taiLieu = this.addModelBaoGia.taiLieu;
     this.checkDataExistBaoGia(taiLieuBaoGiaThiTruong);
     this.clearBaoGia();
@@ -721,7 +720,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     this.addModelBaoGia = {
       moTa: '',
       taiLieu: [],
-      children: [],
+      ccFileDinhkems: [],
     };
   }
 
@@ -777,7 +776,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     taiLieuCanCuKhac.loaiCanCu = '01';
     taiLieuCanCuKhac.moTa = this.addModelCoSo.moTa;
     taiLieuCanCuKhac.id = new Date().getTime() + 1;
-    taiLieuCanCuKhac.children = this.addModelCoSo.children;
+    taiLieuCanCuKhac.ccFileDinhkems = this.addModelCoSo.ccFileDinhkems;
     taiLieuCanCuKhac.taiLieu = this.addModelCoSo.taiLieu;
     this.checkDataExistCoSo(taiLieuCanCuKhac);
     this.clearCoSo();
@@ -787,7 +786,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     this.addModelCoSo = {
       moTa: '',
       taiLieu: [],
-      children: [],
+      ccFileDinhkems: [],
     };
   }
 
