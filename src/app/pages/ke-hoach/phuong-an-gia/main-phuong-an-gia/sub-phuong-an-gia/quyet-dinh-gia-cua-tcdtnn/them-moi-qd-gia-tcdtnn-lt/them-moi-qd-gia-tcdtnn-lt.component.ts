@@ -20,6 +20,8 @@ import {
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
+import {DANH_MUC_LEVEL} from "../../../../../../luu-kho/luu-kho.constant";
+import {DonviService} from "../../../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-them-moi-qd-gia-tcdtnn-lt',
@@ -30,7 +32,6 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
   @Input("type") type: string;
   @Input("pagType") pagType: string;
   @Input("isView") isView: boolean;
-  @Input("noEdit") noEdit: boolean;
   @Input() idInput: number;
   @Output("onClose") onClose = new EventEmitter<any>();
   formData: FormGroup;
@@ -60,12 +61,14 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
   isErrorUnique = false;
   thueVat: number;
   radioValue: string;
+   dsDonVi: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
     private spinner: NgxSpinnerService,
     public userService: UserService,
+    public donViService: DonviService,
     public globals: Globals,
     private helperService: HelperService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
@@ -96,17 +99,15 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    //this.listVthh = LIST_VAT_TU_HANG_HOA;
-    await Promise.all([
-      this.userInfo = this.userService.getUserLogin(),
+    this.userInfo = this.userService.getUserLogin()
+    await this.loadDsDonVi()
+      await Promise.all([
       this.loadDsNam(),
       this.loadDsLoaiGia(),
       this.loadDsVthh(),
       this.loadToTrinhDeXuat(),
-      this.maQd = "/QD-TCDT",
+      this.maQd = "/QĐ-TCDT",
       this.getDataDetail(this.idInput),
-      //this.onChangeNamQd(this.formData.get("namKeHoach").value),
-      //this.onChangeSoToTrinh(this.thongTinToTrinh.id),
       this.loadTiLeThue()
     ]);
     this.spinner.hide();
@@ -116,14 +117,13 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhGiaTCDTNNService.getDetail(id);
       const data = res.data;
-      console.log(data)
+      await this.onChangeLoaiVthh(data.loaiVthh)
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
         soQd: data.soQd.split("/")[0],
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
-
         ngayKy: data.ngayKy,
         ngayHieuLuc: data.ngayHieuLuc,
         loaiGia: data.loaiGia,
@@ -134,8 +134,21 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         soToTrinh: data.soToTrinh
       });
       this.arrThongTinGia = data.thongTinGia
-      this.onChangeSoToTrinh(data.soToTrinh)
+      this.arrThongTinGia.forEach(item => {
+       let dataFind =  this.dsDonVi.find(data => data.maDvi == item.maDvi)
+        item.tenDvi = dataFind.tenDvi
+      })
     }
+  }
+
+  async loadDsDonVi() {
+      const body = {
+        maDviCha: this.userInfo.MA_DVI,
+        trangThai: '01',
+      };
+
+      const dsTong = await this.donViService.layDonViTheoCapDo(body);
+      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CUC];
   }
 
   loadDsNam() {
@@ -298,7 +311,6 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
 
   async onChangeSoToTrinh(event) {
     let curToTrinh = this.dsToTrinhDeXuat.find(item => item.soToTrinh == event);
-    console.log(curToTrinh, 1123)
     if (curToTrinh) {
       //loai hh
       this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
@@ -382,7 +394,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
 
   openDialogToTrinh() {
     let radioValue = this.radioValue;
-    if (!this.noEdit) {
+    if (!this.isView) {
       let modalQD = this.modal.create({
         nzTitle: 'TỜ TRÌNH PHƯƠNG ÁN GIÁ CỦA VỤ KẾ HOẠCH',
         nzContent: DialogQuyetDinhGiaCuaTcdtnnComponent,

@@ -95,7 +95,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         trichYeu: [null, [Validators.required]],
         trangThai: ['00'],
         tenTrangThai: ['Dự Thảo'],
-        cloaiVthh: [null],
         ghiChu: [],
         noiDung: [null],
         lyDoTuChoi: [],
@@ -272,7 +271,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   themDataTable(page: string) {
     if (page == 'ttc') {
-      this.formData.get('cloaiVthh').setValue(this.rowItemTtc.cloaiVthh);
       this.pagTtChungs = [...this.pagTtChungs, this.rowItemTtc];
       this.rowItemTtc = new ThongTinChungPag();
       this.updateEditCache(page);
@@ -307,7 +305,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai,
-        cloaiVthh: data.cloaiVthh,
         ghiChu: data.ghiChu,
         loaiHangXdg: data.loaiHangXdg,
         noiDung: data.noiDung,
@@ -316,6 +313,13 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         maPphapXdg: data.maPphapXdg
       })
       this.pagTtChungs = data.pagTtChungs;
+      if (this.type == 'GMTDBTT') {
+        await this.onChangeLoaiVthh(data.loaiVthh)
+        this.pagTtChungs.forEach(item => {
+          let res = this.listCloaiVthh.find(cloai => cloai.ma = item.cloaiVthh)
+          item.tenCloaiVthh = res.ten
+        })
+      }
       this.pagPpXacDinhGias = data.pagPpXacDinhGias;
       this.dataTableKqGia = data.dataTableKqGia;
       this.dataTableKsGia = data.dataTableKsGia;
@@ -377,17 +381,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
   }
 
-  async onChangeSoQd($event) {
-    // let dataQd = this.dsQdPdKhlcnt.filter(item => item.soQd == $event);
-    // if (dataQd.length > 0) {
-    //   let dataDetail = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(dataQd[0].id);
-    //   const data = dataDetail.data;
-    //   this.formData.patchValue({
-    //     loaiVthh: data.loaiVthh,
-    //   })
-    // }
-  }
-
   async loadDsVthh() {
     let body = {
       "str": "02"
@@ -417,18 +410,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
-
-  // huyEdit(index: number, page: string) {
-  //   if (page == 'ttc') {
-  //     this.dataEdit[index].edit = false;
-  //   }
-  //   if (page == 'ccXdg') {
-  //     this.dataEditCc[index].edit = false;
-  //   }
-  //   if (page == 'ppxdg') {
-  //     this.dataEditPp[index].edit = false;
-  //   }
-  // }
 
   async onChangecloaiVthh(event) {
     this.rowItemTtc.donViTinh = null;

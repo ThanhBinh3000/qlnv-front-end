@@ -4,7 +4,7 @@ import { Globals } from "../../../../../../../shared/globals";
 import { MESSAGE } from "../../../../../../../constants/message";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { cloneDeep, chain } from 'lodash';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
@@ -24,13 +24,12 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   @Input() title;
   @Input() dataInput;
   @Input() isView;
+  @Input() isLuongThuc;
 
   formData: FormGroup
   listNguonVon: any[] = [];
   listDataGroup: any[] = [];
-  listDataGroupCache: any[] = [];
   listOfData: any[] = [];
-  listOfDataCache: any[] = [];
 
 
   constructor(
@@ -84,14 +83,21 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        console.log(this.dataInput);
-        this.listOfData = this.dataInput.dsGoiThau;
-        let res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
+        let res;
+        if(this.isLuongThuc){
+          res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
+          this.listOfData = this.dataInput.dsGoiThau;
+        }else{
+          res = await this.dxKhLcntService.getDetail(this.dataInput.id);
+          this.listOfData = this.dataInput.dsGtDtlList;
+        }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data)
         }
         this.helperService.setIndexArray(this.listOfData);
         this.convertListData();
+      }else{
+        this.formData.reset();
       }
     }
     await this.spinner.hide()
@@ -126,7 +132,6 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       this.expandSet.delete(id);
     }
   }
-
 
   themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
     const modalGT = this.modal.create({

@@ -111,7 +111,7 @@
               <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
-                  <input [readonly]="true" nz-input formControlName="maTrHdr" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="soTrHdr" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -177,8 +177,8 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
-          <nz-form-item>
+        <div nz-col [nzSpan]="6" >
+          <nz-form-item *ngIf="!formData.value.loaiVthh.startsWith('02')">
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open">
@@ -234,9 +234,10 @@
         </div>
       </div>
     </form>
-    <nz-card class="mg-t-10 flex-card p-lr16 card-table">
-      <nz-table class="pd-10" nzBordered [nzData]="danhsachDx" [nzFrontPagination]="false" [nzShowPagination]="false">
-        <thead>
+    <ng-container *ngIf="!formData.value.loaiVthh.startsWith('02')">
+      <nz-card class="mg-t-10 flex-card p-lr16 card-table" >
+        <nz-table class="pd-10" nzBordered [nzData]="danhsachDx" [nzFrontPagination]="false" [nzShowPagination]="false">
+          <thead>
           <tr>
             <th [width]="30">STT</th>
             <th>Cục DTNN KV</th>
@@ -246,8 +247,8 @@
             <th>Số lượng (Tấn)</th>
             <th>Tổng tiền gồm thuế (đồng)</th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           <tr *ngFor="let data of danhsachDx ;let i = index" (click)="showDetail($event,i)">
             <td class="text-center">{{i + 1}} </td>
             <td>{{ data.tenDvi }}</td>
@@ -257,24 +258,134 @@
             <td>{{ data.soLuong | number: '1.0-1' }}</td>
             <td>{{ data.tongTien | number: '1.0-1' }}</td>
           </tr>
-        </tbody>
-      </nz-table>
-    </nz-card>
-    <div nz-row [nzGutter]="[20]">
-      <div nz-col [nzSpan]="12">
-        <nz-card class="mg-t-10 flex-card p-lr16 ">
-          <app-thongtin-dexuat [title]="'Nội dung đề xuất của Cục DTNN KV'" [dataInput]="dataInputCache"
-            [isView]="true">
-          </app-thongtin-dexuat>
-        </nz-card>
+          </tbody>
+        </nz-table>
+      </nz-card>
+      <div nz-row [nzGutter]="[20]" >
+        <div nz-col [nzSpan]="12">
+          <nz-card class="mg-t-10 flex-card p-lr16 ">
+            <app-thongtin-dexuat [title]="'Nội dung đề xuất của Cục DTNN KV'" [dataInput]="dataInputCache"
+                                 [isView]="true" [isLuongThuc]="isLuongThuc">
+            </app-thongtin-dexuat>
+          </nz-card>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-card class="mg-t-10 flex-card p-lr16 ">
+            <app-thongtin-dexuat [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput" [isView]="false" [isLuongThuc]="isLuongThuc">
+            </app-thongtin-dexuat>
+          </nz-card>
+        </div>
       </div>
-      <div nz-col [nzSpan]="12">
-        <nz-card class="mg-t-10 flex-card p-lr16 ">
-          <app-thongtin-dexuat [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput" [isView]="false">
-          </app-thongtin-dexuat>
-        </nz-card>
+    </ng-container>
+    <ng-container *ngIf="formData.value.loaiVthh.startsWith('02')">
+      <div class="header header-green-background mg-t-10">
+        <div class="header-text">
+          <div class="title-chi-tieu">
+          <span>
+          </span>
+            <span> THÔNG TIN QUYẾT ĐỊNH PHÊ DUYỆT KHLCNT </span>
+          </div>
+        </div>
       </div>
-    </div>
+      <nz-card class="flex-card p-lr16 card-table">
+<!--        <nz-table class="pd-10" nzBordered [nzData]="danhsachDx" [nzFrontPagination]="false" [nzShowPagination]="false">-->
+<!--          <thead>-->
+<!--            <tr>-->
+<!--              <th [width]="30">STT</th>-->
+<!--              <th>Tên gói thầu</th>-->
+<!--              <th>Giá bao gồm thuế (đồng)</th>-->
+<!--              <th>Nguồn vốn</th>-->
+<!--              <th>Hình thức LCNT</th>-->
+<!--              <th>Phương thức LCNT</th>-->
+<!--              <th>Thời gian bắt đầu TCLCNT</th>-->
+<!--              <th>Loại hợp đồng</th>-->
+<!--              <th>Thời gian THHĐ(Ngày)</th>-->
+<!--              <th>Địa điểm nhập</th>-->
+<!--              <th [width]="30">Hành động</th>-->
+<!--            </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--            <tr *ngFor="let data of danhsachDx; let i = index" class="editable-row">-->
+<!--              <td class="text-center">{{i + 1}} </td>-->
+<!--              <td>{{ data.goiThau }}</td>-->
+<!--              <td>{{ data.thanhTien }}</td>-->
+<!--              <td>{{ data.tenNguonVon }}</td>-->
+<!--              <td>{{ data.tenHthucLcnt }}</td>-->
+<!--              <td>{{ data.tenPthucLcnt}}</td>-->
+<!--              <td>{{ data.tgianBdauThien }}</td>-->
+<!--              <td>{{ data.tenLoaiHdong }}</td>-->
+<!--              <td>{{ data.tgianThienHd }}</td>-->
+<!--              <td>{{ data.diaDiemNhap }}</td>-->
+<!--              <td class="text-center">-->
+<!--&lt;!&ndash;                <a (click)="openDialogGoiThau(data,i)">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <i class="fa fa-pencil"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                      <a (click)="deleteItem(i)">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <i class="fa fa-trash-o do"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                      </a>&ndash;&gt;-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--          </tbody>-->
+<!--        </nz-table>-->
+        <nz-table [nzData]="danhsachDx" class="nowrap pd-10" nzBordered >
+          <thead>
+          <tr>
+            <th style="width: 2%;">STT</th>
+            <th >Tên gói thầu</th>
+            <th >Chủng loại hàng hóa</th>
+            <th >Cục DTNN KV</th>
+            <th >Số lượng theo chỉ tiêu theo kế hoạch</th>
+            <th >Đã lên kế hoạch mua</th>
+            <th >Số lượng</th>
+            <th >Đơn giá VAT (đ)</th>
+            <th >Thành tiền</th>
+            <th style="width: 5%;">Hành động</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let item of listOfData , let i = index">
+            <tr>
+              <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+              <td>{{item.goiThau}}</td>
+              <td>{{item.tenCloaiVthh}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{item.soLuong * item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>
+<!--                <a-->
+<!--                  (click)="themMoiGoiThau(item,i)">-->
+<!--                  <i class="fa fa-pencil"></i>-->
+<!--                </a>-->
+<!--                <a-->
+<!--                  (click)="deleteRow(i)">-->
+<!--                  <i class="fa fa-trash-o do"></i>-->
+<!--                </a>-->
+              </td>
+            </tr>
+            <ng-container *ngIf="expandSet.has(i)">
+              <tr *ngFor="let dtGoiThau of item.children, let y = index">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{dtGoiThau.tenDvi}}</td>
+                <td></td>
+                <td></td>
+                <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{dtGoiThau.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{dtGoiThau.soLuong * dtGoiThau.donGia | number: '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right" >
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+          </tbody>
+        </nz-table>
+      </nz-card>
+
+    </ng-container>
   </nz-card>
   <!--  END THÔNG TIN QUYẾT ĐỊNH PHÊ DUYỆT KHLCNT-->
 

@@ -358,7 +358,6 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       }
     }
 
-    this.radioValue = curToTrinh.soDeXuat;
   }
 
   async onChangeLoaiVthh(event) {

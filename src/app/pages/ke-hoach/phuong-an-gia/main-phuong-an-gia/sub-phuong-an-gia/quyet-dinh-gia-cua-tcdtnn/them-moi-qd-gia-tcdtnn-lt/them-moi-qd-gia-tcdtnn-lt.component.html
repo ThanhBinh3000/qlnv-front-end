@@ -67,7 +67,7 @@
                         <nz-form-label nzRequired [nzNoColon]="true"> Số tờ trình đề xuất </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogToTrinh()">
-                                <input class="search__input" [readonly]="true" nz-input readonly="true"
+                                <input class="search__input" [readonly]="isView" nz-input
                                     formControlName="soToTrinh" />
                             </nz-input-group>
                         </nz-form-control>
@@ -202,7 +202,7 @@
                         <tbody>
                             <tr *ngFor="let data of arrThongTinGia; let idx = index">
                                 <td class="text-center">{{idx + 1}}</td>
-                                <td>{{ data.maDvi }}</td>
+                                <td>{{ data.tenDvi }}</td>
                                 <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{ data.giaDn | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{ data.giaDnVat | number : '1.0-1' : 'vi_VN' }}</td>
@@ -211,7 +211,7 @@
                                         <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
                                             [(ngModel)]="arrThongTinGia[idx].giaQd" [nzMin]="0"
                                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                            [nzDisabled]="noEdit" (nzBlur)="calculateVAT(idx,0)">
+                                            [nzDisabled]="isView" (nzBlur)="calculateVAT(idx,0)">
                                         </nz-input-number>
                                     </nz-input-group>
                                 </td>
@@ -220,7 +220,7 @@
                                         <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
                                             [(ngModel)]="arrThongTinGia[idx].giaQdVat" [nzMin]="0"
                                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                            [nzDisabled]="noEdit" (nzBlur)="calculateVAT(idx,1)">
+                                            [nzDisabled]="isView" (nzBlur)="calculateVAT(idx,1)">
                                         </nz-input-number>
                                     </nz-input-group>
                                 </td>

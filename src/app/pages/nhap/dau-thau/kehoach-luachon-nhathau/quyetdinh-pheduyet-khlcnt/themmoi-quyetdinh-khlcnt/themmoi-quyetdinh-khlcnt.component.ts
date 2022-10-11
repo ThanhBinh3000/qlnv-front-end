@@ -18,18 +18,19 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhSachGoiThau, FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
-import { DxuatKhLcntVatTuService } from 'src/app/services/dxuatKhLcntVatTuService.service';
+import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
 import { STATUS } from "../../../../../../constants/status";
 import { cloneDeep } from "lodash";
+import {
+  DxuatKhLcntService
+} from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service";
 
 
 @Component({
@@ -82,13 +83,15 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   listNam: any[] = [];
   yearNow: number = 0;
 
-  listOfData: DanhSachGoiThau[] = [];
-  mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
+  listOfData: any[] = [];
 
   isVatTu: boolean = false;
-  dataNguonVon: any = {};
 
   STATUS = STATUS
+
+  dataInput: any;
+  dataInputCache: any;
+  isLuongThuc : boolean
 
   constructor(
     private router: Router,
@@ -96,7 +99,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
-    private dxuatKhLcntVatTuService: DxuatKhLcntVatTuService,
+    private dxuatKhlcntService: DxuatKhLcntService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
     private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     public userService: UserService,
@@ -113,7 +116,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       ngayHluc: ['', [Validators.required]],
       idThHdr: [''],
       idTrHdr: [''],
-      maTrHdr: [''],
+      soTrHdr: [''],
       trichYeu: [''],
       hthucLcnt: [''],
       pthucLcnt: [''],
@@ -141,16 +144,14 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     if (this.formData.get('phanLoai').value == 'TH') {
       this.formData.controls["idThHdr"].setValidators([Validators.required]);
       this.formData.controls["idTrHdr"].clearValidators();
-      this.formData.controls["maTrHdr"].clearValidators();
+      this.formData.controls["soTrHdr"].clearValidators();
     }
     if (this.formData.get('phanLoai').value == 'TTr') {
       this.formData.controls["idThHdr"].clearValidators();
       this.formData.controls["idTrHdr"].setValidators([Validators.required]);
-      this.formData.controls["maTrHdr"].setValidators([Validators.required]);
+      this.formData.controls["soTrHdr"].setValidators([Validators.required]);
     }
   }
-
-
 
   isDetailPermission() {
     if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
@@ -280,12 +281,14 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
 
   async save(isGuiDuyet?) {
+    await this.spinner.show();
     if (!this.isDetailPermission()) {
       return;
     }
     this.setValidator()
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
+      await this.spinner.hide();
       return;
     }
     let body = this.formData.value;
@@ -293,10 +296,6 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     body.dsDeXuat = this.danhsachDx;
     body.dsGoiThau = this.danhsachDx;
     body.fileDinhKems = this.fileDinhKem;
-    let dataTr = this.listToTrinh.filter(item => item.id === body.idTrHdr)
-    if (dataTr.length > 0) {
-      body.maTrHdr = dataTr[0].maTrHdr;
-    }
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.quyetDinhPheDuyetKeHoachLCNTService.update(body);
@@ -319,6 +318,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    await this.spinner.hide();
   }
 
   tuChoi() {
@@ -446,7 +446,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
               item.dsGoiThau = res.data.dsGtDtlList;
             }
           })
-        };
+        }
       }
     };
   }
@@ -468,14 +468,15 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         dataColumn: ['id', 'noiDung']
       },
     });
-    modalQD.afterClose.subscribe((data) => {
+    modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.selectMaTongHop(data.id);
+        await this.selectMaTongHop(data.id);
       }
     });
   }
 
   async selectMaTongHop(event) {
+    await this.spinner.show()
     if (event) {
       const res = await this.tongHopDeXuatKHLCNTService.getDetail(event)
       if (res.msg == MESSAGE.SUCCESS) {
@@ -493,7 +494,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           soQdCc: data.soQdCc,
           idThHdr: event,
           idTrHdr: null,
-          maTrHdr: null,
+          soTrHdr: null,
         })
         this.danhsachDx = data.hhDxKhLcntThopDtlList;
         for (const item of this.danhsachDx) {
@@ -504,10 +505,13 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           })
         };
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
+        this.dataInput = null;
+        this.dataInputCache = null;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
+    await this.spinner.hide()
   }
 
   openDialogTr() {
@@ -527,9 +531,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         dataColumn: ['soDxuat', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
-    modalQD.afterClose.subscribe((data) => {
+    modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.onChangeIdTrHdr(data);
+        await this.onChangeIdTrHdr(data);
       }
     });
   }
@@ -538,16 +542,34 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     await this.spinner.show();
     this.danhsachDx = [];
     if (data) {
-      const res = await this.dxuatKhLcntVatTuService.getDetail(data.id)
+      const res = await this.dxuatKhlcntService.getDetail(data.id)
       if (res.msg == MESSAGE.SUCCESS) {
         const dataRes = res.data;
-        this.danhsachDx = dataRes.dsGtDtlList;
+        if(dataRes.loaiVthh.startsWith("02")){
+          this.danhsachDx = dataRes.dsGtDtlList;
+        }else{
+          dataRes.idDxHdr = data.id;
+          this.danhsachDx.push(dataRes);
+        }
         this.formData.patchValue({
+          cloaiVthh: data.cloaiVthh,
+          tenCloaiVthh: data.tenCloaiVthh,
+          loaiVthh: data.loaiVthh,
+          tenLoaiVthh: data.tenLoaiVthh,
+          tchuanCluong: data.tchuanCluong,
+          loaiHdong: data.loaiHdong,
+          pthucLcnt: data.pthucLcnt,
+          hthucLcnt: data.hthucLcnt,
+          nguonVon: data.nguonVon,
+          soQdCc: data.soQd,
           trichYeu: dataRes.trichYeu,
           idThHdr: null,
-          maTrHdr: dataRes.soDxuat,
-          idTrHdt: dataRes.id
+          soTrHdr: dataRes.soDxuat,
+          idTrHdr: dataRes.id
         })
+        this.danhsachDxCache = cloneDeep(this.danhsachDx);
+        this.dataInput = null;
+        this.dataInputCache = null;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -555,16 +577,27 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     await this.spinner.hide();
   }
 
-  dataInput: any;
-  dataInputCache: any;
   async showDetail($event, index) {
     await this.spinner.show();
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow')
+    $event.target.parentElement.classList.add('selectedRow');
+    if(this.formData.get('loaiVthh').value.startsWith("02")){
+      this.isLuongThuc = false;
+    }else{
+      this.isLuongThuc = true
+    }
     this.dataInput = this.danhsachDx[index];
     this.dataInputCache = this.danhsachDxCache[index];
     await this.spinner.hide();
   }
 
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
 
 }
