@@ -179,65 +179,76 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   }
 
   async save(isOther?: boolean) {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      let invalid = [];
-      let controls = this.formData.controls;
-      for (const name in controls) {
-        if (controls[name].invalid) {
-          invalid.push(name);
-        }
-      }
-      console.log(invalid, 'invalid');
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
-      return;
-    } else {
-      try {
-        this.spinner.show();
-        let body = this.formData.value;
-        body.tongSoLuong = this.tongSoLuongTongHop;
-        // body.fileDinhKem = this.fileDinhKem;
-        body.ngayTongHop = this.datePipe.transform(body.ngayTongHop, 'yyyy-MM-dd');
-        body.thoiGianThucHien = this.datePipe.transform(body.thoiGianThucHien, 'yyyy-MM-dd');
-        //body.soDxuat = body.soDxuat + this.maDeXuat;
-        console.log(body, 'body');
-        if (this.idInput) {
-          let res = await this.tongHopPhuongAnCuuTroService.update(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Lưu thông tin',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        this.helperService.markFormGroupTouched(this.formData);
+        if (this.formData.invalid) {
+          let invalid = [];
+          let controls = this.formData.controls;
+          for (const name in controls) {
+            if (controls[name].invalid) {
+              invalid.push(name);
+            }
           }
+          console.log(invalid, 'invalid');
+          this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
+          return;
         } else {
-          // body.tongSoLuong = this.tongSLThongTinChiTiet;
-          let res = await this.tongHopPhuongAnCuuTroService.create(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.idInput = res.data.id;
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
+          try {
+            this.spinner.show();
+            let body = this.formData.value;
+            body.tongSoLuong = this.tongSoLuongTongHop;
+            // body.fileDinhKem = this.fileDinhKem;
+            body.ngayTongHop = this.datePipe.transform(body.ngayTongHop, 'yyyy-MM-dd');
+            body.thoiGianThucHien = this.datePipe.transform(body.thoiGianThucHien, 'yyyy-MM-dd');
+            //body.soDxuat = body.soDxuat + this.maDeXuat;
+            console.log(body, 'body');
+            if (this.idInput) {
+              let res = await this.tongHopPhuongAnCuuTroService.update(body);
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+            } else {
+              // body.tongSoLuong = this.tongSLThongTinChiTiet;
+              let res = await this.tongHopPhuongAnCuuTroService.create(body);
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.idInput = res.data.id;
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+            }
+            //gui duyet
+            if (isOther) {
+              let body = {
+                id: this.idInput,
+                trangThai: STATUS.CHO_DUYET_LDV
+              };
+              let res = await this.tongHopPhuongAnCuuTroService.approve(body);
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+            }
+          } catch (e) {
+            console.log(e)
+          } finally {
+            this.spinner.hide();
+            this.quayLai();
           }
         }
-        //gui duyet
-        if (isOther) {
-          let body = {
-            id: this.idInput,
-            trangThai: STATUS.CHO_DUYET_LDV
-          };
-          let res = await this.tongHopPhuongAnCuuTroService.approve(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        }
-      } catch (e) {
-        console.log(e)
-      } finally {
-        this.spinner.hide();
-        this.quayLai();
       }
-    }
+    });
   }
 
   quayLai() {
@@ -434,6 +445,9 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   }
 
   async synthetic() {
+    this.formData.controls['tenDvi'].setValidators([]);
+    this.formData.controls['ngayTongHop'].setValidators([]);
+    this.formData.controls['noiDung'].setValidators([]);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       let invalid = [];
@@ -472,6 +486,9 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
         (e) {
         console.log(e)
       } finally {
+        this.formData.controls['tenDvi'].setValidators([Validators.required]);
+        this.formData.controls['ngayTongHop'].setValidators([Validators.required]);
+        this.formData.controls['noiDung'].setValidators([Validators.required]);
         this.spinner.hide();
       }
     }

@@ -139,7 +139,7 @@ export class XayDungPhuongAnComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO && this.isOwner(item.maDvi)) {
             item.checked = true;
           }
         });
@@ -456,5 +456,9 @@ export class XayDungPhuongAnComponent implements OnInit {
 
   async showListEvent() {
     await this.search();
+  }
+
+  isOwner(maDvi: any) {
+    return this.userInfo.MA_DVI == maDvi;
   }
 }
