@@ -367,7 +367,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       }
       let tongMucDt: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + item.soLuongDxmtt * item.donGiaVat;
+        tongMucDt = tongMucDt + item.thanhTien;
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,
@@ -375,6 +375,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       this.helperService.setIndexArray(this.listOfData);
       this.convertListData();
     });
+
   }
 
   deleteRow(i: number): void {
@@ -858,7 +859,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   openDialogGoiThau(data?: any) {
     this.modal.create({
       nzTitle: 'Thông tin gói thầu',
-      nzContent: DialogThemMoiGoiThauComponent,
+      nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '800px',
@@ -872,7 +873,6 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   convertListData() {
     this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()
-    console.log(this.listDataGroup);
   }
 
   expandSet = new Set<number>();

@@ -86,12 +86,16 @@ export class ThongtinDexuatMuattComponent implements OnInit {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
+
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        console.log(this.dataInput);
         this.listOfData = this.dataInput.dsGtReq;
-        let res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
+        let res;
+        if (this.dataInput.idDxHdr) {
+          res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
+        }
+        else { res = await this.dxKhLcntService.getDetail(this.dataInput.idDxKhmtt); }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data)
         }
@@ -159,7 +163,7 @@ export class ThongtinDexuatMuattComponent implements OnInit {
       }
       let tongMucDt: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + item.soLuong * item.donGia;
+        tongMucDt = tongMucDt + item.thanhTien;
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,

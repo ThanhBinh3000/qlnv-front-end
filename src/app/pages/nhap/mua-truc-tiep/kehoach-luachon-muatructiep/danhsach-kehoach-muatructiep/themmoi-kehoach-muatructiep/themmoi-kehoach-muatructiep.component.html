@@ -437,7 +437,7 @@
                 <div nz-col [nzSpan]="6">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
-                        <nz-form-control>
+                        <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfter="đ">
                                 <nz-input-number class="text-right" nz-input formControlName="tongMucDt" [nzMin]="1"
                                     [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
