@@ -39,7 +39,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   dsHangHoa: any[] = [];
   dsLoaiGia: any[] = [];
   dsToTrinhDeXuat: any[] = [];
-  arrThongTinGia: Array<QuyetDinhGiaBtcThongTinGia>;
+  arrThongTinGia: any[] = [];
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
@@ -94,7 +94,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       this.loadDsLoaiGia(),
       this.loadDsVthh(),
       this.loadToTrinhDeXuat(),
-      this.maQd = "/QD-TCDT",
+      this.maQd = "/QĐ-TCDT",
       this.getDataDetail(this.idInput),
       this.loadTiLeThue()
     ]);
@@ -105,6 +105,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhGiaTCDTNNService.getDetail(id);
       const data = res.data;
+      console.log(data)
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -118,11 +119,11 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
         ghiChu: data.ghiChu,
-        soDeXuat: data.soDeXuat
+        soDeXuat: data.soToTrinh
 
       });
       this.arrThongTinGia = data.thongTinGia
-      this.onChangeSoToTrinh(data.soDeXuat)
+      this.onChangeSoToTrinh(data.soToTrinh)
     }
   }
 
@@ -215,6 +216,8 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     if (!err) {
       let body = this.formData.value;
       body.pagType = this.pagType;
+      body.soQd = body.soQd + this.maQd
+      body.thongTinGia = this.arrThongTinGia;
       let res;
       if (this.idInput > 0) {
         res = await this.quyetDinhGiaTCDTNNService.update(body);
@@ -285,10 +288,13 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
           this.dsCloaiVthh = resp.data;
         }
       }
-      this.arrThongTinGia.forEach(item => {
-        let tenClhh = this.dsCloaiVthh.find(cloai => cloai.ma == item.cloaiVthh )
-        item.tenCloaiVthh  = tenClhh.ten
-      })
+      if (this.arrThongTinGia) {
+        this.arrThongTinGia.forEach(item => {
+          let tenClhh = this.dsCloaiVthh.find(cloai => cloai.ma == item.cloaiVthh )
+          item.tenCloaiVthh  = tenClhh.ten
+        })
+      }
+
       this.formData.controls["loaiGia"].setValue(curToTrinh.loaiGia);
       this.radioValue = curToTrinh.soDeXuat;
     }

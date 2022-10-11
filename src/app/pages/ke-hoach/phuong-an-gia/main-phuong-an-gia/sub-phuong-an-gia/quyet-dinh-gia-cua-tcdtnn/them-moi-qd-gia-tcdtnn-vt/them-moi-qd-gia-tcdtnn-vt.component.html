@@ -52,7 +52,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
-                <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1" [nzDisabled]="noEdit"
+                <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1" [nzDisabled]="isView"
                   [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
@@ -68,7 +68,7 @@
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-ky">Ngày ký
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-ky" [nzDisabled]="noEdit"
+              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-ky" [nzDisabled]="isView"
                 class="search__input">
               </nz-date-picker>
               <ng-template #error let-control>
@@ -84,7 +84,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker formControlName="ngayHieuLuc" nzFormat="dd/MM/yyyy" id="ngay-hieu-luc"
-                [nzDisabled]="noEdit" class="search__input">
+                [nzDisabled]="isView" class="search__input">
               </nz-date-picker>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -98,7 +98,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Số tờ trình đề xuất </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogToTrinh()">
-                <input class="search__input" [readonly]="true" nz-input readonly="true" formControlName="soDeXuat" />
+                <input class="search__input" [readonly]="isView" nz-input readonly="true" formControlName="soDeXuat" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -137,11 +137,11 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="trichYeu">Trích yếu
+            <nz-form-label nzRequired [nzNoColon]="true" nzFor="trichYeu">Trích yếu
             </nz-form-label>
             <nz-form-control>
               <textarea id="trichYeu" formControlName="trichYeu" rows="3" class="search__input" nz-input
-                [readonly]="noEdit"></textarea>
+                [readonly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
