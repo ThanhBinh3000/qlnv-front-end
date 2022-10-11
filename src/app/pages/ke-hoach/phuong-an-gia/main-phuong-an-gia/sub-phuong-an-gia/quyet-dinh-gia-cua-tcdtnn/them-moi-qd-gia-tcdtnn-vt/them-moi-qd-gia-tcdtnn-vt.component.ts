@@ -121,6 +121,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         soDeXuat: data.soDeXuat
 
       });
+      this.arrThongTinGia = data.thongTinGia
       this.onChangeSoToTrinh(data.soDeXuat)
     }
   }
@@ -255,7 +256,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     let body = {
       "type": this.type,
       "pagType": this.pagType,
-      "dsTrangThai": [STATUS.DA_DUYET_LDC]
+      "dsTrangThai": [STATUS.DA_DUYET_LDV]
     }
     let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -277,50 +278,21 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         }
       }
       this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
-
-      this.formData.controls["loaiGia"].setValue(curToTrinh.loaiGia);
-      /*res = await this.danhMucTieuChuanService.getDetailByMaHh(curToTrinh.loaiVthh);
-      this.dsTieuChuanCl = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          let tmp = [];
-          tmp.push({ "id": res.data.id, "tenQchuan": res.data.tenQchuan });
-          this.dsTieuChuanCl = tmp;
+      let resp = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": curToTrinh.loaiVthh });
+      this.dsCloaiVthh = [];
+      if (resp.msg == MESSAGE.SUCCESS) {
+        if (resp.data) {
+          this.dsCloaiVthh = resp.data;
         }
-      }*/
-      /*this.arrThongTinGia = [];
-      res = await this.quyetDinhGiaTCDTNNService.loadToTrinhTongHopThongTinGia(curToTrinh.id);
-      if (res.msg == MESSAGE.SUCCESS && res.data) {
-        this.arrThongTinGia = res.data.pagChiTiets;
-        this.formData.controls["thongTinGia"].setValue(this.arrThongTinGia);
-      } else {
-        this.arrThongTinGia = [];
-      }*/
+      }
+      this.arrThongTinGia.forEach(item => {
+        let tenClhh = this.dsCloaiVthh.find(cloai => cloai.ma == item.cloaiVthh )
+        item.tenCloaiVthh  = tenClhh.ten
+      })
+      this.formData.controls["loaiGia"].setValue(curToTrinh.loaiGia);
       this.radioValue = curToTrinh.soDeXuat;
     }
 
-  }
-
-  async onChangeLoaiVthh(event) {
-    let body = {
-      "str": event
-    };
-    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
-    this.dsCloaiVthh = [];
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data) {
-        this.dsCloaiVthh = res.data;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  private UniqueValue(c: AbstractControl): { [key: string]: boolean } {
-    if (this.isErrorUnique) {
-      return { "uniqueError": true };
-    }
-    return null;
   }
 
   async calculateVAT(index: number, type: number) {
@@ -341,7 +313,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     }
   }
 
-  openDialogToTrinh() {
+  async openDialogToTrinh() {
     let radioValue = this.radioValue;
     if (!this.noEdit) {
       let modalQD = this.modal.create({
@@ -358,7 +330,6 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         },
       });
       modalQD.afterClose.subscribe((data) => {
-        console.log(JSON.stringify(data) + "---------")
         if (data) {
           this.formData.patchValue({
             soDeXuat: data.soDeXuat,

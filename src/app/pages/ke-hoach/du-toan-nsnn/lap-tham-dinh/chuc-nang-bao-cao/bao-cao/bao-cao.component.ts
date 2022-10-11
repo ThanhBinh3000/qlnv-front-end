@@ -185,7 +185,7 @@ export class BaoCaoComponent implements OnInit {
 		})
 	}
 
-	async initialization(){
+	async initialization() {
 		this.loai = this.routerActive.snapshot.paramMap.get('loai');
 		this.id = this.routerActive.snapshot.paramMap.get('id');
 		this.userInfo = this.userService.getUserLogin();
@@ -860,7 +860,7 @@ export class BaoCaoComponent implements OnInit {
 			})
 			lstLapThamDinhTemps.push({
 				...data,
-				nguoiBcao: this.userInfo?.username,
+				nguoiBcao: this.userInfo?.sub,
 				lstCtietLapThamDinhs: lstCtietTemp,
 				id: null,
 			})

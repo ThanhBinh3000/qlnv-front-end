@@ -66,7 +66,7 @@
                         Ngày ký
                     </nz-form-label>
                     <nz-date-picker [nzDisabled]="isView" class="search__input" [nzDisabledDate]=""
-                        nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày nhập kho" [(ngModel)]="detail.ngayKy"
+                        nzFormat="dd/MM/yyyy" nzPlaceHolder="Ngày nhập kho" [(ngModel)]="detail.ngayKy"
                         [disabled]="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_TP || detail.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || isView">
                     </nz-date-picker>
                 </nz-form-item>

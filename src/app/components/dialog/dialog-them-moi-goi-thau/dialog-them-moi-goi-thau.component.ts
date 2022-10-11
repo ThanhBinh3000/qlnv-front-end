@@ -45,25 +45,14 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   ) {
     this.formGoiThau = this.fb.group({
       goiThau: [null, [Validators.required]],
-      tenVthh: [null],
       loaiVthh: [null],
+      tenLoaiVthh : [null],
       cloaiVthh: [null],
       tenCloaiVthh: [null],
       dviTinh: [this.dviTinh],
       soLuong: [null],
       donGia: [null, [Validators.required]],
       thanhTien: [null],
-      hthucLcnt: [null, [Validators.required]],
-      tenHthucLcnt: [null],
-      pthucLcnt: [null, [Validators.required]],
-      tenPthucLcnt: [null],
-      tgianBdauThien: [null, [Validators.required]],
-      loaiHdong: [null, [Validators.required]],
-      tenLoaiHdong: [null],
-      tgianThienHd: [null, [Validators.required]],
-      diaDiemNhap: [null],
-      nguonVon: [null],
-      tenNguonVon: [null]
     });
     this.formGoiThau.controls['soLuong'].valueChanges.subscribe(value => {
       this.calendarThanhTien();
@@ -71,32 +60,11 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     this.formGoiThau.controls['donGia'].valueChanges.subscribe(value => {
       this.calendarThanhTien();
     });
-    this.formGoiThau.controls['hthucLcnt'].valueChanges.subscribe(value => {
-      let data = this.listHinhThucDauThau.filter(item => item.ma === value)
-      if ( data && data[0] && data[0].giaTri) {
-        this.formGoiThau.get('tenHthucLcnt').setValue(data[0].giaTri);
-      }
-    });
-    this.formGoiThau.controls['pthucLcnt'].valueChanges.subscribe(value => {
-      let data = this.listPhuongThucDauThau.filter(item => item.ma === value)
-      if (data && data[0] && data[0].giaTri ) {
-        this.formGoiThau.get('tenPthucLcnt').setValue(data[0].giaTri);
-      }
-    });
-    this.formGoiThau.controls['loaiHdong'].valueChanges.subscribe(value => {
-      let data = this.listLoaiHopDong.filter(item => item.ma === value)
-      if (data && data[0] && data[0].giaTri) {
-        this.formGoiThau.get('tenLoaiHdong').setValue(data[0].giaTri);
-      }
-    });
   }
 
 
   async ngOnInit() {
     await Promise.all([
-      this.phuongThucDauThauGetAll(),
-      this.hinhThucDauThauGetAll(),
-      this.loaiHopDongGetAll(),
       this.loadListDonVi(),
     ]);
     let res = await this.danhMucService.getDetail(this.loaiVthh);
@@ -110,8 +78,14 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-
     this.initForm(this.data)
+  }
+
+  onChangeCloaiVthh($event){
+    let cloaiSelected = this.listChungLoai.filter(item => item.ma == $event);
+    this.formGoiThau.patchValue({
+      tenCloaiVthh : cloaiSelected[0].ten
+    })
   }
 
   async loadListDonVi() {
@@ -149,31 +123,6 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     }
   }
 
-  async phuongThucDauThauGetAll() {
-    this.listPhuongThucDauThau = [];
-    let res = await this.danhMucService.phuongThucDauThauGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listPhuongThucDauThau = res.data;
-    }
-  }
-
-
-  async hinhThucDauThauGetAll() {
-    this.listHinhThucDauThau = [];
-    let res = await this.danhMucService.hinhThucDauThauGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listHinhThucDauThau = res.data;
-    }
-  }
-
-  async loaiHopDongGetAll() {
-    this.listLoaiHopDong = [];
-    let res = await this.danhMucService.loaiHopDongGetAll();
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHopDong = res.data;
-    }
-  }
-
   handleOk() {
     this.helperService.markFormGroupTouched(this.formGoiThau);
     if (this.formGoiThau.invalid) {
@@ -186,6 +135,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     }
     const body = this.formGoiThau.value;
     body.children = this.dataTable
+    body.children.forEach( item => item.donGia = body.donGia);
     this._modalRef.close(body);
   }
 

@@ -1,120 +1,64 @@
 <form nz-form [formGroup]="formGoiThau">
   <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
-    <div nz-col [nzSpan]="24">
+    <div nz-col [nzSpan]="16">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Tên gói thầu </nz-form-label>
         <input nz-input formControlName="goiThau" [readonly]="isReadOnly" />
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="24">
-      <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
-        <input nz-input formControlName="tenVthh" readonly />
-      </nz-form-item>
-    </div>
-  </div>
-  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
-    <div nz-col [nzSpan]="16">
+    <div nz-col [nzSpan]="5">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
         <nz-select  formControlName="cloaiVthh"
-          [nzDisabled]="dataTable.length > 0 && isReadOnly">
+                    [nzDisabled]="dataTable.length > 0 && isReadOnly" (ngModelChange)="onChangeCloaiVthh($event)">
           <nz-option *ngFor="let p of listChungLoai" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
         </nz-select>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="8">
+    <div nz-col [nzSpan]="3">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị tính </nz-form-label>
         <input nz-input formControlName="dviTinh" readonly />
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="8">
+    <div nz-col [nzSpan]="4">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Số lượng </nz-form-label>
         <nz-input-number formControlName="soLuong" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
                          [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
         ></nz-input-number>
-<!--        <input nz-input formControlName="soLuong" readonly />-->
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="8">
+    <div nz-col [nzSpan]="4">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá gồm thuế (đồng) </nz-form-label>
-<!--        <input nz-input formControlName="donGia" />-->
-        <nz-input-number formControlName="donGia" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
+        <nz-input-number formControlName="donGia" class="text-right" nz-input
                          [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
         ></nz-input-number>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="8">
+    <div nz-col [nzSpan]="4">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Thành tiền gồm thuế (đồng) </nz-form-label>
-<!--        <input nz-input formControlName="thanhTien" readonly />-->
-        <nz-input-number formControlName="thanhTien" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
-                         [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+        <nz-form-label nzRequired [nzNoColon]="true"> Tổng thành tiền </nz-form-label>
+        <nz-input-number class="text-right" nz-input formControlName="thanhTien" nzDisabled
+                         [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
         ></nz-input-number>
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="16">
-      <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Hình thức LCNT </nz-form-label>
-        <nz-select formControlName="hthucLcnt" [nzDisabled]="isReadOnly">
-          <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-          </nz-option>
-        </nz-select>
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="8">
-      <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Phương thức LCNT </nz-form-label>
-        <nz-select formControlName="pthucLcnt" [nzDisabled]="isReadOnly">
-          <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-          </nz-option>
-        </nz-select>
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="8">
-      <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Thời gian bắt đầu thực hiện LCNT </nz-form-label>
-        <nz-input-group>
-          <nz-date-picker class="search__input" formControlName="tgianBdauThien" nzFormat="dd/MM/yyyy">
-          </nz-date-picker>
-        </nz-input-group>
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="8">
-      <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Loại hợp đồng </nz-form-label>
-        <nz-select formControlName="loaiHdong" [nzDisabled]="isReadOnly">
-          <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-          </nz-option>
-        </nz-select>
-      </nz-form-item>
-    </div>
-    <div nz-col [nzSpan]="8">
-      <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực hiện hợp đồng (ngày) </nz-form-label>
-        <nz-input-number formControlName="tgianThienHd" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-          [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isReadOnly" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-        >
-        </nz-input-number>
       </nz-form-item>
     </div>
   </div>
 </form>
 <div nz-col [nzSpan]="24" class="mt-16">
-  <nz-card nzTitle="Danh sách địa điểm nhập" class="mt16 flex-card p-lr16 dialog-thong-tin-phu-luc">
-    <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzFrontPagination]="false" [nzShowPagination]="false"
+  <nz-card class="mt16 flex-card p-lr16 card-table">
+    <nz-table nzBordered [nzFrontPagination]="false" [nzShowPagination]="false"
       [nzData]="dataTable">
       <thead>
         <tr>
           <th width="60px">STT</th>
-          <th width="300px">Tên đơn vị </th>
+          <th width="600px">Tên đơn vị </th>
+          <th width="120px">SL chỉ tiêu KH</th>
+          <th width="120px">SL đã lên KH mua</th>
           <th width="120px">Số lượng nhập</th>
-          <th>SL chỉ tiêu KH</th>
-          <th>SL đã lên KH mua</th>
-          <th *ngIf="!isReadOnly">Thao tác</th>
+          <th width="80px" *ngIf="!isReadOnly">Thao tác</th>
         </tr>
       </thead>
       <tbody>
@@ -125,17 +69,13 @@
               <nz-option *ngFor="let p of listDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
             </nz-select>
           </td>
+          <td></td>
+          <td></td>
           <td>
             <nz-input-number [(ngModel)]="thongtinDauThau.soLuong" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
               [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
             >
             </nz-input-number>
-          </td>
-          <td>
-            189
-          </td>
-          <td>
-            189
           </td>
           <td class="text-center">
             <a (click)="addDiemKho()">
@@ -146,12 +86,12 @@
             </a>
           </td>
         </tr>
-        <tr *ngFor="let data of basicTable.data; let i = index">
+        <tr *ngFor="let data of dataTable; let i = index">
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
           <td>{{ data.tenDvi }}</td>
+          <td></td>
+          <td></td>
           <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>189</td>
-          <td>189</td>
           <td *ngIf="!isReadOnly">
             <a (click)="startEdit(i)">
               <i class="fa fa-pencil"></i>
