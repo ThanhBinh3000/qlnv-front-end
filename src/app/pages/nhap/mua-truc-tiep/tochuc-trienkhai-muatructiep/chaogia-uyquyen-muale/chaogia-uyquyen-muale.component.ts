@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -38,6 +38,8 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
   ) {
 
   }
+  @Input()
+  loaiVthh: string;
   searchValue = '';
   visibleTab: boolean = false;
   listNam: any[] = [];
