@@ -57,7 +57,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="namKhoach" nzAllowClear (ngModelChange)="listDsTongHopToTrinh()"
+              <nz-select formControlName="namKh" nzAllowClear (ngModelChange)="listDsTongHopToTrinh()"
                 [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>

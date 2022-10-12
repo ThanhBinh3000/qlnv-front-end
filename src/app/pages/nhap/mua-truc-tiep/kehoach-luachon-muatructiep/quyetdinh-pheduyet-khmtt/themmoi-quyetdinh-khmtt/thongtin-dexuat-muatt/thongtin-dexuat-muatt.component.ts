@@ -98,7 +98,7 @@ export class ThongtinDexuatMuattComponent implements OnInit {
         if (this.dataInput.idDxHdr) {
           res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
         }
-        else { res = await this.dxKhLcntService.getDetail(this.dataInput.idDxKhmtt); }
+        else { res = await this.dxKhLcntService.getDetail(this.dataInput.id); }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data)
         }

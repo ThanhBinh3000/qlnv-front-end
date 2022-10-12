@@ -199,8 +199,8 @@
                         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                         <td>{{data.soDxuat}}</td>
                         <td>{{data.namKh}}</td>
-                        <td>{{data.ngayTao }}</td>
-                        <td>{{data.ngayPduyet}}</td>
+                        <td>{{data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+                        <td>{{data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
                         <td>{{data.trichYeu}}</td>
                         <td>{{data.soQd}}</td>
                         <td *ngIf="userService.isTongCuc()">{{data.tenloaiVthh}}</td>
