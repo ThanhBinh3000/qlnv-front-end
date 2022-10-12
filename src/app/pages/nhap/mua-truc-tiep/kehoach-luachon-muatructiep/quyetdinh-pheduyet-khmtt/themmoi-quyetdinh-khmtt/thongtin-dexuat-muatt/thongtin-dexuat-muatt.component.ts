@@ -4,6 +4,7 @@ import { Globals } from "../../../../../../../shared/globals";
 import { MESSAGE } from "../../../../../../../constants/message";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { cloneDeep, chain } from 'lodash';
+
 import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -14,6 +15,7 @@ import {
 } from "../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
+import { DialogThemMoiKeHoachMuaTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
 
 
 @Component({
@@ -87,12 +89,16 @@ export class ThongtinDexuatMuattComponent implements OnInit {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
+
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        console.log(this.dataInput);
-        this.listOfData = this.dataInput.dsGoiThau;
-        let res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
+        this.listOfData = this.dataInput.dsGtReq;
+        let res;
+        if (this.dataInput.idDxHdr) {
+          res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
+        }
+        else { res = await this.dxKhLcntService.getDetail(this.dataInput.idDxKhmtt); }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data)
         }
@@ -139,7 +145,7 @@ export class ThongtinDexuatMuattComponent implements OnInit {
 
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm nhập kho',
-      nzContent: DialogThemMoiVatTuComponent,
+      nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '1200px',
@@ -160,7 +166,7 @@ export class ThongtinDexuatMuattComponent implements OnInit {
       }
       let tongMucDt: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + item.soLuong * item.donGia;
+        tongMucDt = tongMucDt + item.thanhTien;
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,

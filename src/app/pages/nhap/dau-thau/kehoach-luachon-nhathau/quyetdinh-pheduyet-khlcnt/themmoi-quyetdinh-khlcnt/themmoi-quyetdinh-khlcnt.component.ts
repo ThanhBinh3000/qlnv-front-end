@@ -31,6 +31,7 @@ import { cloneDeep } from "lodash";
 import {
   DxuatKhLcntService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service";
+import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 
 
 @Component({
@@ -91,7 +92,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   dataInput: any;
   dataInputCache: any;
-  isLuongThuc : boolean
+  isLuongThuc: boolean
 
   constructor(
     private router: Router,
@@ -127,7 +128,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       tgianMthau: [''],
       tgianNhang: [''],
       ghiChu: [''],
-      soQdCc : [''],
+      soQdCc: [''],
       loaiVthh: ['', [Validators.required]],
       tenLoaiVthh: ['', [Validators.required]],
       cloaiVthh: [''],
@@ -137,6 +138,14 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [''],
       phanLoai: ['', [Validators.required]],
+
+      gtriDthau: [null,],
+      gtriHdong: [null,],
+      donGiaVat: [''],
+      tongMucDt: [null,],
+      dienGiai: [''],
+      tenDvi: [''],
+      tgianThien: [null],
     })
   }
 
@@ -184,12 +193,12 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         this.loadDataComboBox(),
         this.bindingDataTongHop(this.dataTongHop),
       ]);
-      await this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+    await this.spinner.hide();
   }
 
   initForm() {
@@ -235,7 +244,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         namKhoach: +dataTongHop.namKhoach,
         idThHdr: dataTongHop.id,
         tchuanCluong: dataTongHop.tchuanCluong,
-        phanLoai : 'TH',
+        phanLoai: 'TH',
       })
       await this.listDsTongHopToTrinh();
       await this.selectMaTongHop(dataTongHop.id);
@@ -433,11 +442,11 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.isVatTu = data.loaiVthh.startsWith("02");
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
-          soQd: data.soQd.split("/")[0],
+        soQd: data.soQd.split("/")[0],
       });
       if (this.isVatTu) {
         this.danhsachDx = data.hhQdKhlcntDtlList[0].dsGoiThau
-      }else{
+      } else {
         this.danhsachDx = data.hhQdKhlcntDtlList;
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
         for (const item of this.danhsachDxCache) {
@@ -545,9 +554,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       const res = await this.dxuatKhlcntService.getDetail(data.id)
       if (res.msg == MESSAGE.SUCCESS) {
         const dataRes = res.data;
-        if(dataRes.loaiVthh.startsWith("02")){
+        if (dataRes.loaiVthh.startsWith("02")) {
           this.danhsachDx = dataRes.dsGtDtlList;
-        }else{
+        } else {
           dataRes.idDxHdr = data.id;
           this.danhsachDx.push(dataRes);
         }
@@ -581,9 +590,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     await this.spinner.show();
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     $event.target.parentElement.classList.add('selectedRow');
-    if(this.formData.get('loaiVthh').value.startsWith("02")){
+    if (this.formData.get('loaiVthh').value.startsWith("02")) {
       this.isLuongThuc = false;
-    }else{
+    } else {
       this.isLuongThuc = true
     }
     this.dataInput = this.danhsachDx[index];
@@ -598,6 +607,46 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     } else {
       this.expandSet.delete(id);
     }
+  }
+
+  themMoiTongCuc(data?: any, index?: number) {
+    if (!this.formData.get('loaiVthh').value) {
+      this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
+      return;
+    }
+    const modal = this.modal.create({
+      nzTitle: 'Địa điểm nhập hàng',
+      nzContent: DialogThemMoiGoiThauComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1200px',
+      nzFooter: null,
+      nzComponentParams: {
+        data: data,
+        loaiVthh: this.formData.get('loaiVthh').value,
+        dviTinh: this.formData.get('loaiVthh').value.maDviTinh,
+      },
+    });
+    modal.afterClose.subscribe((res) => {
+      if (res) {
+        if (index >= 0) {
+          this.danhsachDx[index] = res;
+        } else {
+          this.danhsachDx.push(res);
+        }
+        let tongMucDt: number = 0;
+        this.danhsachDx.forEach((item) => {
+          tongMucDt = tongMucDt + item.soLuong * item.donGia;
+        });
+        this.formData.patchValue({
+          tongMucDt: tongMucDt,
+        });
+      }
+    });
+  }
+
+  deleteRow(index) {
+
   }
 
 }

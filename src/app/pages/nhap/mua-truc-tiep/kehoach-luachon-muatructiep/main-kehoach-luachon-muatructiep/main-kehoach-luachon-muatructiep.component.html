@@ -5,7 +5,7 @@
             Đề xuất kế hoạch mua trực tiếp
         </li>
         <li nz-menu-item nzSelected (click)="selectTab(1)"
-            *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP')">
+            *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP') && this.userService.isTongCuc()">
             Tổng hợp đề xuất mua trực tiếp
         </li>
         <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT')">

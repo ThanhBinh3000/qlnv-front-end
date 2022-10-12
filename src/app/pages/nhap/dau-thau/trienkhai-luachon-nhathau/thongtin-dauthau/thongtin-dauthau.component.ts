@@ -38,6 +38,8 @@ export class ThongtinDauthauComponent implements OnInit {
     public userService: UserService,
     private helperService: HelperService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
+    private thongTinDauThauService: ThongTinDauThauService,
+
   ) {
 
   }
@@ -131,9 +133,9 @@ export class ThongtinDauthauComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi : this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI
     };
-    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
+    let res = await this.thongTinDauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
