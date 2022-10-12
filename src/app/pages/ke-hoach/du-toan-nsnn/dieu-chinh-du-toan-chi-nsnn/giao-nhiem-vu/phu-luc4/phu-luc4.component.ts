@@ -13,7 +13,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
+import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC } from './phu-luc4.constant';
 
@@ -180,8 +180,32 @@ export class PhuLuc4Component implements OnInit {
       }
     );
     this.getStatusButton();
-    this.getDsDinhMuc();
+    this.getDinhMucPL4();
     this.spinner.hide();
+  }
+
+  getDinhMucPL4() {
+    const request = {
+      loaiDinhMuc: '03',
+      maDvi: this.maDviTao,
+    }
+    this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+      res => {
+        if (res.statusCode == 0) {
+          this.dsDinhMuc = res.data;
+          this.dsDinhMuc.forEach(item => {
+            if (!item.loaiVthh.startsWith('04')) {
+              item.tongDmuc = divNumber(item.tongDmuc, 1000);
+            }
+          })
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    )
   }
 
   getStatusButton() {
@@ -385,8 +409,8 @@ export class PhuLuc4Component implements OnInit {
     this.replaceIndex(lstIndex, 1);
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
-      if (itm.nhomBquan == initItem.loaiMatHang) {
-        return dm += (parseInt(itm.mucPhi, 10) * parseInt(itm.maDviTinh))
+      if (itm.loaiVthh == initItem.loaiMatHang) {
+        return dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -444,8 +468,8 @@ export class PhuLuc4Component implements OnInit {
 
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
-      if (itm.nhomBquan == initItem.loaiMatHang) {
-        return dm += (parseInt(itm.mucPhi, 10) * parseInt(itm.maDviTinh))
+      if (itm.loaiVthh == initItem.loaiMatHang) {
+        return dm = itm.tongDmuc;
       }
     })
 
@@ -623,8 +647,8 @@ export class PhuLuc4Component implements OnInit {
   addFirst(initItem: ItemData) {
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
-      if (itm.nhomBquan == initItem.loaiMatHang) {
-        return dm += (parseInt(itm.mucPhi, 10) * parseInt(itm.maDviTinh, 10))
+      if (itm.loaiVthh == initItem.loaiMatHang) {
+        return dm = itm.tongDmuc;
       }
     })
     if (initItem?.id) {
@@ -911,29 +935,29 @@ export class PhuLuc4Component implements OnInit {
 
   }
 
-  getDsDinhMuc() {
-    const requestDinhMuc = {
-      nhomBquan: null,
-      paggingReq: {
-        limit: 20,
-        page: 1
-      },
-      str: null,
-      tenDmuc: null,
-      trangThai: null
-    };
-    this.quanLyVonPhiService.getDinhMucBaoQuan(requestDinhMuc).toPromise().then(
-      async (data) => {
-        const contentData = await data?.data?.content;
-        if (contentData.length != 0) {
-          this.dsDinhMuc = contentData;
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
-  };
+  // getDsDinhMuc() {
+  //   const requestDinhMuc = {
+  //     nhomBquan: null,
+  //     paggingReq: {
+  //       limit: 20,
+  //       page: 1
+  //     },
+  //     str: null,
+  //     tenDmuc: null,
+  //     trangThai: null
+  //   };
+  //   this.quanLyVonPhiService.getDinhMucBaoQuan(requestDinhMuc).toPromise().then(
+  //     async (data) => {
+  //       const contentData = await data?.data?.content;
+  //       if (contentData.length != 0) {
+  //         this.dsDinhMuc = contentData;
+  //       }
+  //     },
+  //     err => {
+  //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //     },
+  //   );
+  // };
 
   displayValue(num: number): string {
     num = exchangeMoney(num, '1', this.maDviTien);

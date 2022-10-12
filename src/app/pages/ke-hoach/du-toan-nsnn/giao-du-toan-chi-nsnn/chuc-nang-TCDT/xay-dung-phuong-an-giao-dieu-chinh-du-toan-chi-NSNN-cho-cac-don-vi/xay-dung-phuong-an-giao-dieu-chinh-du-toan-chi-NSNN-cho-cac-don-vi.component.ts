@@ -825,7 +825,7 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
     // if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT || GDT.TRINHDUYET_PA_TONGHOP_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.maDonViTao !== "0101") {
     //   this.statusBtnGuiDVCT = false;
     // }
-    if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.userInfo.CAP_DVI == "2") {
+    if (this.userService.isAccessPermisson(GDT.GIAODT_TRINHTONGCUC_PA_PBDT) && this.soQd.fileName != null && this.trangThaiBanGhi == '6' && this.checkSumUp == false && this.userInfo.CAP_DVI == "2") {
       this.statusBtnGuiDVCT = false;
     }
     if (this.trangThaiBanGhi == "7") {
@@ -1659,6 +1659,49 @@ export class XayDungPhuongAnGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent imple
 
   getMoneyUnit() {
     return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+  }
+
+  deleteQdCv() {
+    this.soQd.fileName = null;
+    this.soQd.fileSize = null;
+    this.soQd.fileUrl = null;
+    const request = JSON.parse(JSON.stringify(
+      {
+        id: null,
+        namDtoan: this.namPa,
+        maPa: this.maPa,
+        soQd: this.soQd,
+        maGiao: this.maGiao,
+      }
+    ))
+
+    this.quanLyVonPhiService.themMoiQdCvGiaoNSNN(request).toPromise().then(async data => {
+      if (data.statusCode == 0) {
+        this.notification.success(MESSAGE.SUCCESS, 'Xóa thành công');
+        this.getStatusButton();
+      } else {
+        this.notification.error(MESSAGE.ERROR, data?.msg);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
+    })
+  }
+
+  statusDeleteCv() {
+    if (!this.userService.isAccessPermisson(GDT.EDIT_REPORT_CV_QD_GIAO_PA_PBDT)) {
+      return false;
+    }
+    if (!this.soQd?.fileName) {
+      return false;
+    }
+    let check = true;
+    this.lstDviTrucThuoc.forEach(item => {
+      if (item.trangThai == '1') {
+        check = false;
+        return;
+      }
+    })
+    return check;
   }
 }
 
