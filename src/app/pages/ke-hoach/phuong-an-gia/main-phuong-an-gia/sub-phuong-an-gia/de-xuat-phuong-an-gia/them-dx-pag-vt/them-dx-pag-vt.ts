@@ -294,12 +294,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (id > 0) {
       let res = await this.giaDeXuatGiaService.getDetail(id);
       const data = res.data;
-      this.onChangeLoaiVthh(data.loaiVthh)
-      this.pagTtChungs = data.pagTtChungs;
-      this.pagPpXacDinhGias = data.pagPpXacDinhGias;
-      this.dataTableKqGia = data.dataTableKqGia;
-      this.dataTableKsGia = data.dataTableKsGia;
-      this.dataTableCanCuXdg = data.canCuPhapLy;
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -318,9 +312,27 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         qdCtKhNam: data.qdCtKhNam,
         maPphapXdg: data.maPphapXdg
       })
+      this.pagTtChungs = data.pagTtChungs;
+      this.pagPpXacDinhGias = data.pagPpXacDinhGias;
+      this.dataTableKqGia = data.dataTableKqGia;
+      this.dataTableKsGia = data.dataTableKsGia;
+      this.dataTableCanCuXdg = data.canCuPhapLy;
       this.updateEditCache('ttc')
       this.updateEditCache('ccXdg')
       this.updateEditCache('ppxdg')
+      await this.loadTenCloaiVthh(data.loaiVthh, this.pagTtChungs)
+    }
+  }
+
+  async loadTenCloaiVthh(vthh, ttc) {
+    await this.onChangeLoaiVthh(vthh)
+    if (ttc) {
+      ttc.forEach(item => {
+        let res = this.listCloaiVthh.find(cl => cl.ma == item.cloaiVthh)
+        if (res) {
+          item.tenCloaiVthh = res.ten
+        }
+      })
     }
   }
 

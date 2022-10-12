@@ -81,8 +81,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         cloaiVthh: [],
         tchuanCluong: [null],
         gia: [null],
-        giaVat: [null],
-        thongTinGia: [null]
+        giaVat: [null]
       }
     );
   }
@@ -95,9 +94,9 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       this.loadDsVthh(),
       this.loadToTrinhDeXuat(),
       this.maQd = "/QĐ-TCDT",
-      this.getDataDetail(this.idInput),
       this.loadTiLeThue()
     ]);
+    await  this.getDataDetail(this.idInput)
     this.spinner.hide();
   }
 
@@ -120,7 +119,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soDeXuat: data.soToTrinh
       });
-      this.arrThongTinGia = data.thongTinGia
+      this.arrThongTinGia = data.thongTinGiaVt
     }
   }
 
@@ -195,7 +194,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       return;
     }
     let currentRow = this.formData.value;
-    let currentLine = currentRow.thongTinGia;
+    let currentLine = currentRow.thongTinGiaVt;
     if (currentLine) {
       currentLine.forEach(item => {
         if (currentRow.loaiGia == 'LG01' && (item.giaQd > item.giaDn || item.giaQdVat > item.giaDnVat)) {
@@ -214,7 +213,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       let body = this.formData.value;
       body.pagType = this.pagType;
       body.soQd = body.soQd + this.maQd
-      body.thongTinGia = this.arrThongTinGia;
+      body.thongTinGiaVt = this.arrThongTinGia;
       let res;
       if (this.idInput > 0) {
         res = await this.quyetDinhGiaTCDTNNService.update(body);
@@ -244,10 +243,17 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   }
 
   async loadDsVthh() {
+    let body = {
+      "str": "02"
+    };
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
     this.dsVthh = [];
-    let res = await this.danhMucService.danhMucChungGetAll("LOAI_HHOA");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsVthh = res.data;
+      if (res.data) {
+        this.dsVthh = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 

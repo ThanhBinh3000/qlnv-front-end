@@ -133,11 +133,14 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         ghiChu: data.noiDung,
         soToTrinh: data.soToTrinh
       });
-      this.arrThongTinGia = data.thongTinGia
-      this.arrThongTinGia.forEach(item => {
-       let dataFind =  this.dsDonVi.find(data => data.maDvi == item.maDvi)
-        item.tenDvi = dataFind.tenDvi
-      })
+      this.arrThongTinGia = data.thongTinGiaLt
+      if (this.arrThongTinGia) {
+        this.arrThongTinGia.forEach(item => {
+          let dataFind =  this.dsDonVi.find(data => data.maDvi == item.maDvi)
+          item.tenDvi = dataFind.tenDvi
+        })
+      }
+
     }
   }
 
@@ -251,7 +254,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       let body = this.formData.value;
       body.soQd = body.soQd + this.maQd;
       body.pagType = this.pagType;
-      body.thongTinGia = this.arrThongTinGia;
+      body.thongTinGiaLt = this.arrThongTinGia;
       let res;
       if (this.idInput > 0) {
         res = await this.quyetDinhGiaTCDTNNService.update(body);
@@ -340,16 +343,6 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       }
       if (this.dsTieuChuanCl.length > 0) {
         this.formData.controls["tchuanCluong"].setValue(this.dsTieuChuanCl[0].id);
-      }
-
-      //thong tin gia
-      this.arrThongTinGia = [];
-      res = await this.quyetDinhGiaTCDTNNService.loadToTrinhTongHopThongTinGia(curToTrinh.id);
-      if (res.msg == MESSAGE.SUCCESS && res.data) {
-        this.arrThongTinGia = res.data.pagChiTiets;
-        this.formData.controls["thongTinGia"].setValue(this.arrThongTinGia);
-      } else {
-        this.arrThongTinGia = [];
       }
       this.radioValue = curToTrinh.soToTrinh;
     }

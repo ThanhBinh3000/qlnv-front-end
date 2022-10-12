@@ -354,19 +354,33 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true">Loại giá
+            <nz-form-label [nzNoColon]="true" nzFor="loai-gia">Loại giá
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="tenLoaiGia" [readonly]="true" />
+              <nz-select formControlName="loaiGia" [nzDisabled]="true" nzAllowClear="true">
+                <nz-option *ngFor="let p of dsLoaiGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+                <ng-template #error let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                  </ng-container>
+                </ng-template>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true">Loại hàng hóa
+            <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Loại hàng hóa
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="tenLoaiVthh" [readonly]="true" />
+              <nz-select formControlName="loaiVthh" [nzDisabled]="true" nzAllowClear="true">
+                <nz-option *ngFor="let p of dsVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
+                </nz-option>
+                <ng-template #error let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                  </ng-container>
+                </ng-template>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -409,10 +423,10 @@
             <td class="text-center">{{ idx + 1 }}</td>
             <td>{{ data.cloaiVthh }}</td>
             <td>{{ data.tieuChuanCl }}</td>
-            <td>{{ data.giaQd }}</td>
-            <td>{{ data.giaQdVat }}</td>
-            <td>{{ data.giaQdVat }}</td>
-            <td>{{ data.giaQdVat }}</td>
+            <td>{{ data.soLuong }}</td>
+            <td>{{ data.donViTinh }}</td>
+            <td>{{ data.GiaDn }}</td>
+            <td>{{ data.giaDnVat }}</td>
             <td>
               <nz-input-group>
                 <nz-input-number nz-input [ngModelOptions]="{standalone: true}"

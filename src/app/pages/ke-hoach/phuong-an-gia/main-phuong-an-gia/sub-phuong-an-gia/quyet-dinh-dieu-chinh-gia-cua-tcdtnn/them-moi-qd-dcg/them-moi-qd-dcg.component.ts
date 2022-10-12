@@ -23,6 +23,7 @@ import { STATUS } from 'src/app/constants/status';
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-them-moi-qd-dcg',
@@ -50,10 +51,13 @@ export class ThemMoiQdDcgComponent implements OnInit {
   detail: any;
   radioValue: string;
    dsToTrinhDeXuat: any[] = [];
+  dsLoaiGia: any = [];
+   dsVthh: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
     public globals: Globals,
+    public danhMucService: DanhMucService,
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
@@ -104,6 +108,14 @@ export class ThemMoiQdDcgComponent implements OnInit {
     }
   }
 
+  async loadDsLoaiGia() {
+    this.dsLoaiGia = [];
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_GIA");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsLoaiGia = res.data;
+    }
+  }
+
   async loadDsToTrinh() {
     let body = {
       "type": this.type,
@@ -121,11 +133,27 @@ export class ThemMoiQdDcgComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
+      this.loadDsLoaiGia(),
+      this.loadDsVthh(),
       this.loadDsToTrinh(),
       this.getDataDetail(this.idInput),
       this.maQd = "/QĐ-TCDTNN"
     ])
-    console.log(this.isView)
+  }
+
+  async loadDsVthh() {
+    let body = {
+      "str": "02"
+    };
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+    this.dsVthh = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.dsVthh = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
 
@@ -166,8 +194,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
         },
       });
       modalDanhSachTT.afterClose.subscribe(async (data) => {
-        console.log(JSON.stringify(data) + "1111111");
-        if (data != null) {
+        if (data) {
           this.soToTrinh = data.soToTrinh;
           this.dataTable = data.thongTinGia;
           this.listThongTinGia = []
@@ -209,9 +236,11 @@ export class ThemMoiQdDcgComponent implements OnInit {
             soQdgTcdtnn: data.soQd,
             soToTrinhDx: data.soToTrinh,
           })
-          let thongTinGia = this.dsToTrinhDeXuat.find(item => item.soDeXuat == data.soToTrinh)
-          console.log(thongTinGia)
-          this.listThongTinGia = thongTinGia.pagTtChungs
+          if (data.loaiVthh.startsWith("02")) {
+            this.listThongTinGia = data.thongTinGiaVt
+          } else {
+            this.listThongTinGia = data.pagTtChungs
+          }
           if (!this.soToTrinh) {
             this.themDataTable();
             this.updateEditCache();
