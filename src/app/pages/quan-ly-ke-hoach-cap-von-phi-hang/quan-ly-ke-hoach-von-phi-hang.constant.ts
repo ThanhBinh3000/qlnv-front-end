@@ -2,7 +2,7 @@ import { MAIN_ROUTES } from 'src/app/layout/main/main-routing.constant';
 import { ChiTietMenu } from 'src/app/models/ChiTietMenu';
 
 export const MAIN_ROUTE_CAPVON = MAIN_ROUTES.capVon;
-export const CAP_VON_NGUON_CHI = 'quan-ly-cap-nguon-von-chi';
+export const CAP_VON_NGUON_CHI = 'cap-nguon-von-chi';
 export const CAP_VON_CHI = 'cap-von-chi';
 export const CAP_PHI_CHI = 'cap-phi-chi';
 export const CAP_VON_MUA_BAN = 'quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg';

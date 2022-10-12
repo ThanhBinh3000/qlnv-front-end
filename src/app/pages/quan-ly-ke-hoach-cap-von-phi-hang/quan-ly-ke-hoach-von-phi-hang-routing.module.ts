@@ -17,8 +17,8 @@ const routes: Routes = [
       {
         path: CAP_VON_NGUON_CHI,
         loadChildren: () =>
-          import('./quan-ly-cap-nguon-von-chi/quan-ly-cap-nguon-von-chi.module').then(
-            (m) => m.QuanLyCapNguonVonChiNSNNModule,
+          import('./cap-von-nguon-chi/cap-von-nguon-chi.module').then(
+            (m) => m.CapVonChiModule,
           )
       },
       {

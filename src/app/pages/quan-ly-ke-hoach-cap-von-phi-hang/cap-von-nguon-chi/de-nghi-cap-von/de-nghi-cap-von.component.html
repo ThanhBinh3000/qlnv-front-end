@@ -1,0 +1,6 @@
+<div *ngIf="tabSelected == 'danhsach'" class="luong-thuc__danh-sach">
+    <app-danh-sach-de-nghi-cap-von (dataChange)="changeTab($event)"></app-danh-sach-de-nghi-cap-von>
+</div>
+<div *ngIf="tabSelected == 'dongia'" class="chi-tiet">
+    <app-de-nghi-theo-don-gia-mua [data]="data" (dataChange)="changeTab($event)"></app-de-nghi-theo-don-gia-mua>
+</div>
