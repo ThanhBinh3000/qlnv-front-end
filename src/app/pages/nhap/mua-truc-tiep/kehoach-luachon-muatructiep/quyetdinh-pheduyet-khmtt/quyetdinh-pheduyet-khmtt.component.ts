@@ -40,6 +40,7 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
     ngayKyQdDen: null,
     soGthau: null,
     tongTien: null,
+    ngayHluc: null,
   };
   filterTable: any = {
     soQdPduyet: '',
@@ -194,6 +195,12 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
         : null,
       ngayKyQdDen: this.searchFilter.ngayKy
         ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
+        : null,
+      ngayCgiaTu: this.searchFilter.ngayHluc
+        ? dayjs(this.searchFilter.ngayHluc[0]).format('YYYY-MM-DD')
+        : null,
+      ngayCgiadDen: this.searchFilter.ngayHluc
+        ? dayjs(this.searchFilter.ngayHluc[1]).format('YYYY-MM-DD')
         : null,
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
