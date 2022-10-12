@@ -13,7 +13,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
+import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC } from './phu-luc6.constant';
 
@@ -110,7 +110,8 @@ export class PhuLuc6Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
-  dsDinhMuc: any[] = [];
+  dsDinhMucN: any[] = [];
+  dsDinhMucX: any[] = [];
   maDviTao!: string;
 
   allChecked = false;
@@ -185,11 +186,12 @@ export class PhuLuc6Component implements OnInit {
     );
     this.changeNam();
     this.getStatusButton();
-    this.getDinhMucPL6();
+    this.getDinhMucPL6N();
+    this.getDinhMucPL6X();
     this.spinner.hide();
   }
 
-  getDinhMucPL6() {
+  getDinhMucPL6N() {
     const request = {
       loaiDinhMuc: '01',
       maDvi: this.maDviTao,
@@ -208,9 +210,36 @@ export class PhuLuc6Component implements OnInit {
           //         item.ttCaNhanTc = divNumber(item.ttCaNhanTc, 1000);
           //     }
           // })
-          this.dsDinhMuc = res.data;
+          this.dsDinhMucN = res.data;
           // console.log(this.dinhMucs);
-
+          this.dsDinhMucN.forEach(item => {
+            if (!item.loaiVthh.startsWith('04')) {
+              item.tongDmuc = divNumber(item.tongDmuc, 1000);
+            }
+          })
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    )
+  }
+  getDinhMucPL6X() {
+    const request = {
+      loaiDinhMuc: '02',
+      maDvi: this.maDviTao,
+    }
+    this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+      res => {
+        if (res.statusCode == 0) {
+          this.dsDinhMucX = res.data;
+          this.dsDinhMucX.forEach(item => {
+            if (!item.loaiVthh.startsWith('04')) {
+              item.tongDmuc = divNumber(item.tongDmuc, 1000);
+            }
+          })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -222,7 +251,7 @@ export class PhuLuc6Component implements OnInit {
   }
 
   changeNam() {
-    const a = LINH_VUC.find(el => el.id == 1)
+    const a = LINH_VUC.find(el => el.tenDm.includes("Tổng cộng năm"))
     a.tenDm = "Tổng cộng năm " + this.namBcao
     const b = LINH_VUC.find(el => el.id == 2)
     b.tenDm = "Thiếu năm " + (this.namBcao - 1) + " chuyển sang " + this.namBcao
@@ -399,14 +428,17 @@ export class PhuLuc6Component implements OnInit {
     if (n == 1) {
       xau = chiSo[n];
     }
-    // if (n == 2) {
-    //   xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-    // };
+    if (n == 2) {
+      xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+    };
     // if (n == 3) {
     //   xau = String.fromCharCode(k + 96);
     // }
-    if (n == 2) {
+    if (n == 3) {
       xau = "-";
+    }
+    if (n == 4) {
+      xau = "+";
     }
     return xau;
   }
@@ -458,8 +490,14 @@ export class PhuLuc6Component implements OnInit {
     }
     this.replaceIndex(lstIndex, 1);
     let dm: number;
-    this.dsDinhMuc.forEach(itm => {
-      if (itm.loaiVthh == initItem.loaiMatHang) {
+    this.dsDinhMucN.forEach(itm => {
+      if (itm.id == initItem.loaiMatHang) {
+        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        return dm = itm.tongDmuc;
+      }
+    })
+    this.dsDinhMucX.forEach(itm => {
+      if (itm.id == initItem.loaiMatHang) {
         // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         return dm = itm.tongDmuc;
       }
@@ -518,8 +556,14 @@ export class PhuLuc6Component implements OnInit {
     }
 
     let dm: number;
-    this.dsDinhMuc.forEach(itm => {
-      if (itm.loaiVthh == initItem.loaiMatHang) {
+    this.dsDinhMucN.forEach(itm => {
+      if (itm.id == initItem.loaiMatHang) {
+        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        return dm = itm.tongDmuc;
+      }
+    })
+    this.dsDinhMucX.forEach(itm => {
+      if (itm.id == initItem.loaiMatHang) {
         // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         return dm = itm.tongDmuc;
       }
@@ -693,8 +737,14 @@ export class PhuLuc6Component implements OnInit {
   //thêm phần tử đầu tiên khi bảng rỗng
   addFirst(initItem: ItemData) {
     let dm: number;
-    this.dsDinhMuc.forEach(itm => {
-      if (itm.loaiVthh == initItem.loaiMatHang) {
+    this.dsDinhMucN.forEach(itm => {
+      if (itm.id == initItem.loaiMatHang) {
+        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        return dm = itm.tongDmuc;
+      }
+    })
+    this.dsDinhMucX.forEach(itm => {
+      if (itm.id == initItem.loaiMatHang) {
         // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         return dm = itm.tongDmuc;
       }
@@ -981,7 +1031,7 @@ export class PhuLuc6Component implements OnInit {
     this.editCache[id].data.kphiTtien = Number(this.editCache[id].data.slHangTte) * Number(this.editCache[id].data.kphiDmuc);
   }
 
-  // getDsDinhMuc() {
+  // getDsDinhMucN() {
   //   const requestDinhMuc = {
   //     idDmChi: null,
   //     maDvi: this.maDviTao,
@@ -998,7 +1048,7 @@ export class PhuLuc6Component implements OnInit {
   //     async (data) => {
   //       const contentData = await data?.data?.content;
   //       if (contentData.length != 0) {
-  //         this.dsDinhMuc = contentData;
+  //         this.dsDinhMucN = contentData;
   //       }
   //     },
   //     err => {

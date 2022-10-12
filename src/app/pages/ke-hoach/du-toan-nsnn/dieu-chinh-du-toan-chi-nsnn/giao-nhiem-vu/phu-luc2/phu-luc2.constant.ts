@@ -24,7 +24,7 @@ export const LINH_VUC = [
     level: 2,
   },
   {
-    id: "01",
+    id: 92,
     tenDm: "Phí nhập kho gạo đóng bao",
     idCha: 1001,
     level: 2,
@@ -72,7 +72,7 @@ export const LINH_VUC = [
     level: 3,
   },
   {
-    id: "0205",
+    id: 91,
     tenDm: "Loại DT1",
     idCha: 2300,
     level: 3,
@@ -131,7 +131,7 @@ export const LINH_VUC = [
     idCha: 1002,
     level: 2,
   },
-  // xuat ban
+  // =================================== xuat ban
   {
     id: 5000,
     tenDm: "Xuất bán",
@@ -146,25 +146,25 @@ export const LINH_VUC = [
   },
   {
     id: 5110,
-    tenDm: "Phí nhập kho thóc đóng bao",
+    tenDm: "Phí xuất kho thóc đóng bao",
     idCha: 5100,
     level: 2,
   },
   {
     id: 5120,
-    tenDm: "Phí nhập kho thóc đổ rời",
+    tenDm: "Phí xuất kho thóc đổ rời",
     idCha: 5100,
     level: 2,
   },
   {
-    id: 5130,
-    tenDm: "Phí nhập kho gạo đóng bao",
+    id: 93,
+    tenDm: "Phí xuất kho gạo đóng bao",
     idCha: 5100,
     level: 2,
   },
   {
     id: 5200,
-    tenDm: "Nhập VTTB",
+    tenDm: "xuất VTTB",
     idCha: 5000,
     level: 1,
   },
@@ -205,7 +205,7 @@ export const LINH_VUC = [
     level: 3,
   },
   {
-    id: 5234,
+    id: 90,
     tenDm: "Loại DT1",
     idCha: 5230,
     level: 3,

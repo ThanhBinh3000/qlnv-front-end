@@ -13,7 +13,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
+import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC } from './phu-luc4.constant';
 
@@ -192,19 +192,12 @@ export class PhuLuc4Component implements OnInit {
     this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
       res => {
         if (res.statusCode == 0) {
-          // this.dinhMucs = res.data;
-          // this.dinhMucs.forEach(item => {
-          //     if (!item.loaiVthh.startsWith('04')) {
-          //         item.nvChuyenMonKv = divNumber(item.nvChuyenMonKv, 1000);
-          //         item.nvChuyenMonTc = divNumber(item.nvChuyenMonTc, 1000);
-          //         item.tcDieuHanhKv = divNumber(item.tcDieuHanhKv, 1000);
-          //         item.tcDieuHanhTc = divNumber(item.tcDieuHanhTc, 1000);
-          //         item.ttCaNhanKv = divNumber(item.ttCaNhanKv, 1000);
-          //         item.ttCaNhanTc = divNumber(item.ttCaNhanTc, 1000);
-          //     }
-          // })
           this.dsDinhMuc = res.data;
-
+          this.dsDinhMuc.forEach(item => {
+            if (!item.loaiVthh.startsWith('04')) {
+              item.tongDmuc = divNumber(item.tongDmuc, 1000);
+            }
+          })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
