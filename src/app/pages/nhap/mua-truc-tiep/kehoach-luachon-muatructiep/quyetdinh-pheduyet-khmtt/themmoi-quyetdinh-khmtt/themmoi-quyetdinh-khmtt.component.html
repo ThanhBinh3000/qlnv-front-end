@@ -5,14 +5,13 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && formData.value.loaiVthh.startsWith('02') && isDetailPermission()"
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )  && isDetailPermission()"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO && !formData.value.loaiVthh.startsWith('02'))  && userService.isTongCuc()"
-      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+    <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && userService.isTongCuc()" type="button"
+      class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
@@ -43,7 +42,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH LỰA CHỌN NHÀ THẦU </span>
+        <span> QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH MUA TRỰC TIẾP </span>
       </div>
     </div>
   </div>
@@ -82,8 +81,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký quyết định </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"
-                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+              <nz-date-picker formControlName="ngayKy">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -92,8 +90,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy"
-                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+              <nz-date-picker formControlName="ngayHluc">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -112,7 +109,7 @@
               <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
-                  <input [readonly]="true" nz-input formControlName="maTrHdr" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="soDxuat" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -157,7 +154,7 @@
       </div>
     </div>
     <nz-card class="mg-t-10 flex-card p-lr16 card-table">
-      <nz-table class="pd-10" nzBordered [nzData]="danhsachDXMTT" [nzFrontPagination]="false"
+      <nz-table class="pd-10" nzBordered [nzData]="danhsachDxMtt" [nzFrontPagination]="false"
         [nzShowPagination]="false">
         <thead>
           <tr>
@@ -173,7 +170,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of danhsachDXMTT ;let i = index" (click)="showDetail($event,i)">
+          <tr *ngFor="let data of danhsachDxMtt ;let i = index" (click)="showDetail($event,i)">
             <td class="text-center">{{i + 1}} </td>
             <td>{{ data.tenDvi }}</td>
             <td></td>

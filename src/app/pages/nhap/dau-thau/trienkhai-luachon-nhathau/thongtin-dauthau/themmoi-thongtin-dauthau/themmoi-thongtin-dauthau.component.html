@@ -4,7 +4,7 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button type="button" class="btn btn-sub xanh-nhat" (click)="save()">
+        <button *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT" type="button" class="btn btn-sub xanh-nhat" (click)="save()">
             <i class="icon htvbdh_checkfile2"></i>
             <span>Hoàn thành cập nhật</span>
         </button>
