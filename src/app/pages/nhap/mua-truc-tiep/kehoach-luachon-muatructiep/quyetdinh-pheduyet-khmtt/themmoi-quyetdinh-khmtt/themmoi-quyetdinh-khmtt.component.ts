@@ -442,7 +442,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
           this.danhsachDxMtt.push(item.listDxuatHdr)
         })
         for (const item of this.danhsachDxMtt) {
-          await this.danhSachMuaTrucTiepService.getDetail(item.idDxKhmtt).then((res) => {
+          await this.danhSachMuaTrucTiepService.getDetail(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               item.soLuongDiaDiemList = res.data.soLuongDiaDiemList;
             }
