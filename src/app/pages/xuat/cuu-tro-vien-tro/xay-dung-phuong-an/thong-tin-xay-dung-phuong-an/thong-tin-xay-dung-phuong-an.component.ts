@@ -340,11 +340,10 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
             this.formData.patchValue(res.data);
             this.fileDinhKem = this.formData.get('fileDinhKem').value;
             this.summaryData();
-            console.log(res.data.thongTinChiTiet, 123123123)
             if (res.data.thongTinChiTiet.length > 0) {
-              this.idDxuatDtlSelect = res.data.thongTinChiTiet[0].id
-              console.log(this.idDxuatDtlSelect, 123812398);
-              this.showDataKhoView()
+              res.data.thongTinChiTiet.forEach(s => s.idVirtual = new Date());
+              this.idDxuatDtlSelect = res.data.thongTinChiTiet[0].idVirtual;
+              this.showDataKhoView();
             }
           }
         })
@@ -785,11 +784,9 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
 
   showDataKhoView() {
     let thongTinChiTiet = this.formData.get('thongTinChiTiet').value;
-    console.log(thongTinChiTiet, 'thong tin chi tiet')
     thongTinChiTiet = thongTinChiTiet.find(s => {
       return (s.idVirtual == this.idDxuatDtlSelect || s.id == this.idDxuatDtlSelect)
     });
-    console.log(thongTinChiTiet, 'thong tin chi tiet')
     if (thongTinChiTiet) {
       let nhapKhoList: DiaDiemNhapKho[] = [];
       this.tongSLCuuTro = 0;
@@ -852,5 +849,11 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         s.thanhTien = tongTien;
       }
     })
+  }
+
+  onClickRowChiTiet(i: number) {
+    let thongTinChiTiet = this.formData.get('thongTinChiTiet').value;
+    let value = thongTinChiTiet[i];
+    this.onClickChiTiet(value);
   }
 }
