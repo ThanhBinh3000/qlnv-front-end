@@ -420,8 +420,8 @@
             <div nz-col [nzSpan]="10" *ngIf="formData.value.maPphapXdg == 'XDG01'">
               <nz-form-item class="form-item">
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-radio-group formControlName="loaiHangXdg">
-                    <label nz-radio (select)="item[0]" *ngFor="let item of dsLoaiHangXdg, let idx = index"
+                  <nz-radio-group formControlName="loaiHangXdg" (ngModelChange)="onChangePp()">
+                    <label nz-radio *ngFor="let item of dsLoaiHangXdg, let idx = index"
                       [nzValue]="item.ma">{{item.giaTri}}</label>
                   </nz-radio-group>
                 </nz-form-control>
@@ -479,7 +479,7 @@
                 <td>
                   <nz-input-group>
                     <nz-input-number disabled name="giaDn"
-                      [(ngModel)]="rowItemPpxdg.giaVonNk + rowItemPpxdg.chiPhiChung + rowItemPpxdg.chiPhiPhanBo"
+                      [(ngModel)]=" formData.value.loaiHangXdg == 'XDG_LH02' ? rowItemPpxdg.giaVonNk + rowItemPpxdg.chiPhiChung - rowItemPpxdg.chiPhiPhanBo :  rowItemPpxdg.giaVonNk + rowItemPpxdg.chiPhiChung "
                       [nzSize]="'small'" nz-input [nzMin]="0">
                     </nz-input-number>
                   </nz-input-group>

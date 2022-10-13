@@ -281,7 +281,11 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.updateEditCache(page)
     }
     if (page == 'ppxdg') {
-      this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.chiPhiPhanBo
+      if (this.formData.value.loaiHangXdg == "'XDG_LH02'") {
+        this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung - this.rowItemPpxdg.chiPhiPhanBo
+      } else {
+        this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung
+      }
       this.rowItemPpxdg.tenCloaiVthh = this.listVthh.find(s => s.ma = this.rowItemPpxdg.cloaiVthh).ten;
       this.pagPpXacDinhGias = [...this.pagPpXacDinhGias, this.rowItemPpxdg];
       this.rowItemPpxdg = new PhuongPhapXacDinhGia();
@@ -619,6 +623,15 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (page == 'ppxdg') {
       this.dataEditPp[index].edit = false;
     }
+  }
+
+  onChangePp() {
+    if (this.formData.value.loaiHangXdg == 'XDG_LH02') {
+     this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.giaVonNk - this.rowItemPpxdg.chiPhiPhanBo
+    } else {
+      this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.giaVonNk
+    }
+    this.pagPpXacDinhGias = []
   }
 
 }

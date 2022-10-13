@@ -626,10 +626,13 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   onChangePp() {
-    this.formData.get('chiPhiPbo').setValue(0)
-    this.formData.get('giaVonNk').setValue(0)
-    this.formData.get('chiPhiChung').setValue(0)
-    this.formData.get('tongChiPhi').setValue(0)
+    if (this.formData.value.loaiHangXdg == 'XDG_LH02') {
+      let tong =+  this.formData.get('giaVonNk').value +  this.formData.get('chiPhiChung').value -  this.formData.get('chiPhiPbo').value
+      this.formData.get('tongChiPhi').setValue(tong)
+    } else {
+      let tong = this.formData.get('chiPhiChung').value +    this.formData.get('giaVonNk').value
+      this.formData.get('tongChiPhi').setValue(tong)
+    }
   }
 }
 

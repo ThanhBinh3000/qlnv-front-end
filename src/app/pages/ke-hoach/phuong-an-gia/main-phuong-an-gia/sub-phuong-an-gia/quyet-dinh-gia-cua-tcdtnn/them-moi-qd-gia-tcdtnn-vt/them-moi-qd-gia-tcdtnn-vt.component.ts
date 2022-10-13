@@ -117,7 +117,9 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
         ghiChu: data.ghiChu,
-        soDeXuat: data.soToTrinh
+        soDeXuat: data.soToTrinh,
+        soToTrinh : data.soToTrinh
+
       });
       this.arrThongTinGia = data.thongTinGiaVt
     }

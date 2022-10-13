@@ -90,23 +90,23 @@ export class ThemMoiQdDcgComponent implements OnInit {
       }
     );
   }
-
-  themDataTable() {
-    if (this.dataTable) {
-      this.dataTable.forEach(item => {
-        this.rowItemL.donGia = item.donGia;
-        this.rowItemL.id = item.id;
-        this.rowItemL.donGiaVat = item.donGiaVat;
-        this.rowItemL.maDvi = item.maDvi;
-        this.rowItemL.soLuong = item.soLuong;
-        this.rowItemL.tenDvi = item.tenDvi;
-        this.rowItemL.giaQd = item.giaQd;
-        this.rowItemL.giaQdVat = item.giaQdVat;
-        this.listThongTinGia = [...this.listThongTinGia, this.rowItemL];
-        this.rowItemL = new ThongTinGia();
-      })
-    }
-  }
+  //
+  // themDataTable() {
+  //   if (this.listThongTinGia) {
+  //     this.listThongTinGia.forEach(item => {
+  //       this.rowItemL.donGia = item.donGia;
+  //       this.rowItemL.id = item.id;
+  //       this.rowItemL.donGiaVat = item.donGiaVat;
+  //       this.rowItemL.maDvi = item.maDvi;
+  //       this.rowItemL.soLuong = item.soLuong;
+  //       this.rowItemL.tenDvi = item.tenDvi;
+  //       this.rowItemL.giaQd = item.giaQd;
+  //       this.rowItemL.giaQdVat = item.giaQdVat;
+  //       this.listThongTinGia = [...this.listThongTinGia, this.rowItemL];
+  //       this.rowItemL = new ThongTinGia();
+  //     })
+  //   }
+  // }
 
   async loadDsLoaiGia() {
     this.dsLoaiGia = [];
@@ -170,10 +170,9 @@ export class ThemMoiQdDcgComponent implements OnInit {
     this.dataEditDcg[index].edit = true;
   }
 
-  luuEdit(id: number): void {
-    const index = this.listThongTinGia.findIndex((item) => item.id === id);
-    Object.assign(this.listThongTinGia[index], this.dataEditDcg[id].data);
-    this.dataEditDcg[id].edit = false;
+  luuEdit(idx: number): void {
+    Object.assign(this.listThongTinGia[idx], this.dataEditDcg[idx].data);
+    this.dataEditDcg[idx].edit = false;
   }
 
   chonSoToTrinh(page: string) {
@@ -196,9 +195,12 @@ export class ThemMoiQdDcgComponent implements OnInit {
       modalDanhSachTT.afterClose.subscribe(async (data) => {
         if (data) {
           this.soToTrinh = data.soToTrinh;
-          this.dataTable = data.thongTinGia;
           this.listThongTinGia = []
-          this.themDataTable();
+          if (data.loaiVthh.startsWith("02")) {
+            this.listThongTinGia = data.pagTtChungs
+          } else {
+            this.listThongTinGia = data.thongTinGia
+          }
           this.updateEditCache();
           this.formData.patchValue({
             soToTrinhDx: data.soToTrinh,
@@ -236,13 +238,13 @@ export class ThemMoiQdDcgComponent implements OnInit {
             soQdgTcdtnn: data.soQd,
             soToTrinhDx: data.soToTrinh,
           })
-          if (data.loaiVthh.startsWith("02")) {
-            this.listThongTinGia = data.thongTinGiaVt
-          } else {
-            this.listThongTinGia = data.pagTtChungs
-          }
           if (!this.soToTrinh) {
-            this.themDataTable();
+            this.listThongTinGia = []
+            if (data.loaiVthh.startsWith("02")) {
+              this.listThongTinGia = data.thongTinGiaVt
+            } else {
+              this.listThongTinGia = data.thongTinGiaLt
+            }
             this.updateEditCache();
             this.formData.patchValue({
               loaiVthh: data.loaiVthh,
@@ -259,8 +261,8 @@ export class ThemMoiQdDcgComponent implements OnInit {
     }
   }
 
-  huyEdit(id) {
-    this.dataEditDcg[id].edit = false
+  huyEdit(idx) {
+    this.dataEditDcg[idx].edit = false
   }
 
   deleteItem(index: number) {
@@ -285,8 +287,8 @@ export class ThemMoiQdDcgComponent implements OnInit {
 
   updateEditCache(): void {
     if (this.listThongTinGia) {
-      this.listThongTinGia.forEach((item) => {
-        this.dataEditDcg[item.id] = {
+      this.listThongTinGia.forEach((item, index) => {
+        this.dataEditDcg[index] = {
           edit: false,
           data: { ...item },
         };
@@ -357,13 +359,16 @@ export class ThemMoiQdDcgComponent implements OnInit {
         })
       }
     }
+    this.listThongTinGia.forEach(item => {
+        item.donGia = item.giaDn,
+        item.donGiaVat = item.giaDnVat,
+        item.donGiaBtc = item.giaQd,
+        item.donGiaVatBtc = item.giaQdVat
+    })
     body.thongTinGias = this.listThongTinGia;
     body.soQd = body.soQd + this.maQd
     let res
     if (this.idInput > 0) {
-      /* body.loaiVthh = this.detail.loaiVthh
-       body.cloaiVthh = this.detail.cloaiVthh
-       body.loaiGia = this.detail.loaiGia*/
       res = await this.quyetDinhDieuChinhGiaTCDTNNService.update(body);
     } else {
       res = await this.quyetDinhDieuChinhGiaTCDTNNService.create(body);
@@ -385,8 +390,13 @@ export class ThemMoiQdDcgComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhDieuChinhGiaTCDTNNService.getDetail(id);
       const data = res.data;
-      this.dataTable = data.khPagQdDcTcdtnnCTiets;
-      this.themDataTable();
+      this.listThongTinGia = data.khPagQdDcTcdtnnCTiets;
+      this.listThongTinGia.forEach(item => {
+        item.giaDn = item.donGia,
+          item.giaDnVat = item.donGiaVat,
+          item.giaQd = item.donGiaBtc,
+          item.giaQdVat = item.donGiaVatBtc
+      })
       this.updateEditCache();
       this.formData.patchValue({
         id: data.id,

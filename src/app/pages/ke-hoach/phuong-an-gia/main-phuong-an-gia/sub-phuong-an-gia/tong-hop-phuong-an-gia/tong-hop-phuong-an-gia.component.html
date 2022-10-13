@@ -233,7 +233,7 @@
                             <a (click)="viewDetail(data.id, false,true)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="data.trangThaiTh == STATUS.CHUA_TAO_TT" (click)="viewDetail(data.id, true,false)">
+                            <a *ngIf="data.trangThaiTh == STATUS.CHUA_TAO_TT || data.trangThaiTt == STATUS.TU_CHOI_LDV" (click)="viewDetail(data.id, true,false)">
                                 <i class="icon htvbdh_tcdt_tao-ttrinh"></i>
                             </a>
                             <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
