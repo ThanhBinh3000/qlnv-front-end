@@ -93,12 +93,12 @@ export class ThongtinDexuatMuattComponent implements OnInit {
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        this.listOfData = this.dataInput.dsGtReq;
+        this.listOfData = this.dataInput.soLuongDiaDiemList;
         let res;
         if (this.dataInput.idDxHdr) {
           res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
         }
-        else { res = await this.dxKhLcntService.getDetail(this.dataInput.idDxKhmtt); }
+        else { res = await this.dxKhLcntService.getDetail(this.dataInput.id); }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data)
         }
