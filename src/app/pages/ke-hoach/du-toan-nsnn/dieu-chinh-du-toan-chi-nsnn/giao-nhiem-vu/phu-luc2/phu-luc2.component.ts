@@ -181,11 +181,11 @@ export class PhuLuc2Component implements OnInit {
       res => {
         if (res.statusCode == 0) {
           this.dsDinhMucN = res.data;
-          this.dsDinhMucN.forEach(item => {
-            if (!item.loaiVthh.startsWith('02')) {
-              item.tongDmuc = divNumber(item.tongDmuc, 1000);
-            }
-          })
+          // this.dsDinhMucN.forEach(item => {
+          //   if (!item.loaiVthh.startsWith('02')) {
+          //     item.tongDmuc = divNumber(item.tongDmuc, 1000);
+          //   }
+          // })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -204,13 +204,11 @@ export class PhuLuc2Component implements OnInit {
       res => {
         if (res.statusCode == 0) {
           this.dsDinhMucX = res.data;
-          this.dsDinhMucX.forEach(item => {
-            if (!item.loaiVthh.startsWith('04')) {
-              item.tongDmuc = divNumber(item.tongDmuc, 1000);
-            }
-          })
-          console.log(this.dinhMucs);
-
+          // this.dsDinhMucX.forEach(item => {
+          //   if (!item.loaiVthh.startsWith('04')) {
+          //     item.tongDmuc = divNumber(item.tongDmuc, 1000);
+          //   }
+          // })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -820,6 +818,7 @@ export class PhuLuc2Component implements OnInit {
               ...this.initItem,
               maNdung: item.id,
               level: item.level,
+              maDviTinh: item.maDviTinh,
             };
             this.addLow(id, data);
           }
@@ -935,35 +934,9 @@ export class PhuLuc2Component implements OnInit {
       this.editCache[id].data.thienDinhMuc = 0
     }
     this.editCache[id].data.thienCong = this.editCache[id].data.thienSluongTteThien + this.editCache[id].data.thienSluongUocThien;
-    this.editCache[id].data.thienThanhTien = this.editCache[id].data.thienCong * this.editCache[id].data.thienDinhMuc;
+    this.editCache[id].data.thienThanhTien = (this.editCache[id].data.thienCong * this.editCache[id].data.thienDinhMuc) / 1000;
     this.editCache[id].data.ncauKphi = this.editCache[id].data.thienThanhTien + this.editCache[id].data.kphiThieuNtruoc;
   }
-
-  // getdsDinhMucN() {
-  //   const requestDinhMuc = {
-  //     idDmChi: null,
-  //     maDvi: this.maDviTao,
-  //     paggingReq: {
-  //       limit: 20,
-  //       page: 1
-  //     },
-  //     parentId: null,
-  //     str: null,
-  //     trangThai: null,
-  //     typeChi: null
-  //   };
-  //   this.quanLyVonPhiService.getDinhMucNhapXuat(requestDinhMuc).toPromise().then(
-  //     async (data) => {
-  //       const contentData = await data?.data?.content;
-  //       if (contentData.length != 0) {
-  //         this.dsDinhMucN = contentData;
-  //       }
-  //     },
-  //     err => {
-  //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-  //     },
-  //   );
-  // }
 
   getMoneyUnit() {
     return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;

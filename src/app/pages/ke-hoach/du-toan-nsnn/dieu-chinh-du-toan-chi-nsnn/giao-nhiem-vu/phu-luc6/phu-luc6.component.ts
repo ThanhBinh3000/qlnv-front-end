@@ -38,6 +38,7 @@ export class ItemData {
   dtoan2021ThanhQtoan2020: number;
   soChuaQtoan: number;
   checked!: boolean;
+  idDm: number;
 }
 
 @Component({
@@ -65,6 +66,7 @@ export class PhuLuc6Component implements OnInit {
   listIdDelete = "";
   trangThaiPhuLuc = '1';
   initItem: ItemData = {
+    idDm: null,
     id: null,
     stt: "0",
     level: 0,
@@ -89,6 +91,7 @@ export class PhuLuc6Component implements OnInit {
     id: null,
     stt: "0",
     level: 0,
+    idDm: null,
     loaiMatHang: 0,
     maDviTinh: null,
     slHangTte: null,
@@ -199,24 +202,12 @@ export class PhuLuc6Component implements OnInit {
     this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
       res => {
         if (res.statusCode == 0) {
-          // this.dinhMucs = res.data;
-          // this.dinhMucs.forEach(item => {
-          //     if (!item.loaiVthh.startsWith('04')) {
-          //         item.nvChuyenMonKv = divNumber(item.nvChuyenMonKv, 1000);
-          //         item.nvChuyenMonTc = divNumber(item.nvChuyenMonTc, 1000);
-          //         item.tcDieuHanhKv = divNumber(item.tcDieuHanhKv, 1000);
-          //         item.tcDieuHanhTc = divNumber(item.tcDieuHanhTc, 1000);
-          //         item.ttCaNhanKv = divNumber(item.ttCaNhanKv, 1000);
-          //         item.ttCaNhanTc = divNumber(item.ttCaNhanTc, 1000);
-          //     }
-          // })
           this.dsDinhMucN = res.data;
-          // console.log(this.dinhMucs);
-          this.dsDinhMucN.forEach(item => {
-            if (!item.loaiVthh.startsWith('04')) {
-              item.tongDmuc = divNumber(item.tongDmuc, 1000);
-            }
-          })
+          // this.dsDinhMucN.forEach(item => {
+          //   if (!item.loaiVthh.startsWith('04')) {
+          //     item.tongDmuc = divNumber(item.tongDmuc, 1000);
+          //   }
+          // })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -235,11 +226,11 @@ export class PhuLuc6Component implements OnInit {
       res => {
         if (res.statusCode == 0) {
           this.dsDinhMucX = res.data;
-          this.dsDinhMucX.forEach(item => {
-            if (!item.loaiVthh.startsWith('04')) {
-              item.tongDmuc = divNumber(item.tongDmuc, 1000);
-            }
-          })
+          // this.dsDinhMucX.forEach(item => {
+          //   if (!item.loaiVthh.startsWith('04')) {
+          //     item.tongDmuc = divNumber(item.tongDmuc, 1000);
+          //   }
+          // })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -491,13 +482,13 @@ export class PhuLuc6Component implements OnInit {
     this.replaceIndex(lstIndex, 1);
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
-      if (itm.id == initItem.loaiMatHang) {
+      if (itm.id == initItem.idDm) {
         // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         return dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
-      if (itm.id == initItem.loaiMatHang) {
+      if (itm.id == initItem.idDm) {
         // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         return dm = itm.tongDmuc;
       }
@@ -557,13 +548,13 @@ export class PhuLuc6Component implements OnInit {
 
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
-      if (itm.id == initItem.loaiMatHang) {
+      if (itm.id == initItem.idDm) {
         // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         return dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
-      if (itm.id == initItem.loaiMatHang) {
+      if (itm.id == initItem.idDm) {
         // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         return dm = itm.tongDmuc;
       }
@@ -738,13 +729,13 @@ export class PhuLuc6Component implements OnInit {
   addFirst(initItem: ItemData) {
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
-      if (itm.id == initItem.loaiMatHang) {
+      if (itm.id == initItem.idDm) {
         // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         return dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
-      if (itm.id == initItem.loaiMatHang) {
+      if (itm.id == initItem.idDm) {
         // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         return dm = itm.tongDmuc;
       }
@@ -882,6 +873,8 @@ export class PhuLuc6Component implements OnInit {
               ...this.initItem,
               loaiMatHang: item.id,
               level: item.level,
+              maDviTinh: item.maDviTinh,
+              idDm: item.idDm
             };
             this.addLow(id, data);
           }
@@ -1028,7 +1021,7 @@ export class PhuLuc6Component implements OnInit {
     this.editCache[id].data.kphiChuaQtoanCong = Number(this.editCache[id].data.kphiChuaQtoanKpTkiem) + Number(this.editCache[id].data.kphiChuaQtoanKpTchi);
     this.editCache[id].data.chenhLech = Number(this.editCache[id].data.kphiTtien) - Number(this.editCache[id].data.cphiTcong);
     this.editCache[id].data.cphiTcong = Number(this.editCache[id].data.cphiNtruoc) + Number(this.editCache[id].data.cphiNnay);
-    this.editCache[id].data.kphiTtien = Number(this.editCache[id].data.slHangTte) * Number(this.editCache[id].data.kphiDmuc);
+    this.editCache[id].data.kphiTtien = (Number(this.editCache[id].data.slHangTte) * Number(this.editCache[id].data.kphiDmuc)) / 1000;
   }
 
   // getDsDinhMucN() {
