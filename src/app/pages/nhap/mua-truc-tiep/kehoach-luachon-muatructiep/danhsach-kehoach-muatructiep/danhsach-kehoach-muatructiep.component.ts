@@ -10,6 +10,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
+import { DonviService } from 'src/app/services/donvi.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -24,6 +25,7 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     private danhSachMuaTrucTiepService: DanhSachMuaTrucTiepService,
     private modal: NzModalService,
     public userService: UserService,
+    private donviService: DonviService,
   ) {
 
   }
@@ -60,7 +62,7 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     tenTrangThai: '',
     trangThaiTh: '',
   };
-
+  listDonVi = [];
   dataTableAll: any[] = [];
   dataTable: any[] = [];
   page: number = 1;
@@ -73,6 +75,9 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
   indeterminate = false;
 
   async ngOnInit() {
+    await Promise.all([
+      this.loadListDonVi(),
+    ]);
     try {
       if (this.loaiVthh === "02") {
         if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM")) {
@@ -101,6 +106,17 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
 
+  }
+
+  async loadListDonVi() {
+    let body = {
+      "trangThai": "01",
+      "capDvi": "2"
+    };
+    let res = await this.donviService.getAll(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDonVi = res.data;
+    }
   }
   updateAllChecked(): void {
     this.indeterminate = false;
@@ -148,11 +164,11 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       ngayDuyetDen: this.searchFilter.ngayTao
         ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
         : null,
-      soDxuat: this.searchFilter.soDx,
+      soDxuat: this.searchFilter.soDxuat,
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
-      maDvi: null,
+      maDvi: this.searchFilter.maDvi,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -261,7 +277,7 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
-    this.searchFilter.soDx = null;
+    this.searchFilter.soDxuat = null;
     this.searchFilter.ngayTao = null;
     this.searchFilter.ngayPduyet
     this.searchFilter.trichYeu = null;
