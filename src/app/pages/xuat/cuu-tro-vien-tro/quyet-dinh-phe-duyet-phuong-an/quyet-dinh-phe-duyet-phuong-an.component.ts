@@ -278,7 +278,7 @@ export class QuyetDinhPheDuyetPhuongAnComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.deXuatKeHoachBanDauGiaService.xoa(item.id).then((res) => {
+          this.quyetDinhPheDuyetPhuongAnCuuTroService.delete({id: item.id}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
