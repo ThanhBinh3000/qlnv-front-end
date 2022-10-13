@@ -22,6 +22,7 @@ import {
 import { NzModalService } from "ng-zorro-antd/modal";
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 
 @Component({
   selector: 'app-themmoi-chaogia-uyquyen-muale',
@@ -41,7 +42,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
     private notification: NzNotificationService,
     public userService: UserService,
     private helperService: HelperService,
-    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
+    private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
     public globals: Globals,
     private danhMucService: DanhMucService,
     private fb: FormBuilder,
@@ -195,7 +196,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
   }
 
   async getDetail() {
-    const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(this.idInput);
+    const res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail(this.idInput);
     if (res.msg == MESSAGE.SUCCESS) {
       const dataDetail = res.data;
       const dataFilterUser = dataDetail.hhQdKhlcntDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
