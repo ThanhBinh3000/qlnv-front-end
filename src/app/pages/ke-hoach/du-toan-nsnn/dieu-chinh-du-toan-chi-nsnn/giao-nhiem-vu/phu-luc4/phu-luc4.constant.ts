@@ -10,18 +10,21 @@ export const LINH_VUC = [
     tenDm: "Bảo quản thường xuyên",
     idCha: 1000,
     level: 1,
+    maDviTinh: "kg",
   },
   {
     id: 1002,
     tenDm: "Bảo quản lần đầu - mới",
     idCha: 1000,
     level: 1,
+    maDviTinh: "kg",
   },
   {
     id: 1003,
     tenDm: "Bảo quản lần đầu - bổ sung",
     idCha: 1000,
     level: 1,
+    maDviTinh: "kg",
   },
 
   // ==============================
@@ -36,18 +39,21 @@ export const LINH_VUC = [
     tenDm: "Bảo quản thường xuyên",
     idCha: 2000,
     level: 1,
+    maDviTinh: "kg",
   },
   {
     id: "01",
     tenDm: "Bảo quản lần đầu - mới",
     idCha: 2000,
     level: 1,
+    maDviTinh: "kg",
   },
   {
     id: 2003,
     tenDm: "Bảo quản lần đầu - bổ sung",
     idCha: 2000,
     level: 1,
+    maDviTinh: "kg",
   },
   // ========================
   {
@@ -61,12 +67,14 @@ export const LINH_VUC = [
     tenDm: "Bảo quản thường xuyên",
     idCha: 3000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 3004,
     tenDm: "Bảo quản lần đầu",
     idCha: 3000,
     level: 1,
+    maDviTinh: "cái",
   },
 
   // =========================
@@ -81,36 +89,42 @@ export const LINH_VUC = [
     tenDm: "Bảo quản thường xuyên",
     idCha: 4000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 40027,
     tenDm: "Bảo quản dầu mỡ(Lần đầu+định kỳ)",
     idCha: 4000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 40028,
     tenDm: "Thép góc đều loại cạnh L>100mm",
     idCha: 4000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 40029,
     tenDm: "Thép tấm loại 10*1500*1000mm",
     idCha: 4000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 40030,
     tenDm: "Thép dầm cầu loại U,1500*220mm",
     idCha: 4000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 40031,
     tenDm: "Thép dầm cầu loại U,1550*250mm",
     idCha: 4000,
     level: 1,
+    maDviTinh: "cái",
   },
   // ======================
   {
@@ -124,90 +138,105 @@ export const LINH_VUC = [
     tenDm: "Bảo quản lần đầu nhà bạt 16,5 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50016,
     tenDm: "Bảo quản lần đầu nhà bạt  24.75 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50017,
     tenDm: "Bảo quản lần đầu nhà bạt  60 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50018,
     tenDm: "Bảo quản thường xuyên nhà bạt 16,5 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50019,
     tenDm: "Bảo quản thường xuyên nhà bạt  24.75 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50020,
     tenDm: "Bảo quản thường xuyên nhà bạt  60 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50021,
     tenDm: "Bảo quản lần đầu nhà bạt nhẹ 16,5 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50022,
     tenDm: "Bảo quản lần đầu nhà bạt  nhẹ 24.75 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50023,
     tenDm: "Bảo quản lần đầu nhà bạt nhẹ  60 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50024,
     tenDm: "Bảo quản thường xuyên nhà bạt nhẹ 16,5 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50025,
     tenDm: "Bảo quản thường xuyên nhà bạt  nhẹ 24.75 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50026,
     tenDm: "Bảo quản thường xuyên nhà bạt nhẹ  60 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50027,
     tenDm: "Bảo quản định kỳ nhà bạt 16,5 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50028,
     tenDm: "Bảo quản định kỳ nhà bạt  24.75 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 50029,
     tenDm: "Bảo quản định kỳ nhà bạt  60 m2",
     idCha: 5000,
     level: 1,
+    maDviTinh: "cái",
   },
 
   // =================
@@ -222,48 +251,56 @@ export const LINH_VUC = [
     tenDm: "Bảo quản lần đầu loại DT1",
     idCha: 6000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 6008,
     tenDm: "Bảo quản lần đầu loại DT2",
     idCha: 6000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 6009,
     tenDm: "Bảo quản lần đầu loại DT3",
     idCha: 6000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 60010,
     tenDm: "Bảo quản lần đầu loại DT4",
     idCha: 6000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 60011,
     tenDm: "Bảo quản thường xuyên loại DT1",
     idCha: 6000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 60012,
     tenDm: "Bảo quản thường xuyên loại DT2",
     idCha: 6000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 60013,
     tenDm: "Bảo quản thường xuyên loại DT3",
     idCha: 6000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 60014,
     tenDm: "Bảo quản thường xuyên loại DT4",
     idCha: 6000,
     level: 1,
+    maDviTinh: "cái",
   },
   // ===============
   {
@@ -277,12 +314,14 @@ export const LINH_VUC = [
     tenDm: "Bảo quản thường xuyên",
     idCha: 7000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 7004,
     tenDm: "Bảo quản lần đầu",
     idCha: 7000,
     level: 1,
+    maDviTinh: "cái",
   },
 
   // =====================
@@ -297,12 +336,14 @@ export const LINH_VUC = [
     tenDm: "Bảo quản thường xuyên",
     idCha: 8000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 8004,
     tenDm: "Bảo quản lần đầu",
     idCha: 8000,
     level: 1,
+    maDviTinh: "cái",
   },
   // ==========================
   {
@@ -316,6 +357,7 @@ export const LINH_VUC = [
     tenDm: "Bảo quản thường xuyên",
     idCha: 9000,
     level: 1,
+    maDviTinh: "cái",
   },
 
   {
@@ -323,6 +365,7 @@ export const LINH_VUC = [
     tenDm: "Bảo quản lần đầu",
     idCha: 9000,
     level: 1,
+    maDviTinh: "cái",
   },
   // ===================
   {
@@ -336,12 +379,14 @@ export const LINH_VUC = [
     tenDm: "Bảo quản thường xuyên",
     idCha: 10000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 10004,
     tenDm: "Bảo quản lần đầu",
     idCha: 10000,
     level: 1,
+    maDviTinh: "cái",
   },
   // =================
   {
@@ -355,12 +400,14 @@ export const LINH_VUC = [
     tenDm: "Bảo quản thường xuyên",
     idCha: 11000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 11004,
     tenDm: "Bảo quản lần đầu",
     idCha: 11000,
     level: 1,
+    maDviTinh: "cái",
   },
   // ==================
   {
@@ -374,24 +421,28 @@ export const LINH_VUC = [
     tenDm: "Bảo quản thường xuyên",
     idCha: 12000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 12004,
     tenDm: "Bảo quản lần đầu",
     idCha: 12000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 12005,
     tenDm: "Bảo quản nổ máy và tái niêm cất định kỳ",
     idCha: 12000,
     level: 1,
+    maDviTinh: "cái",
   },
   {
     id: 12006,
     tenDm: "Bảo quản tái niêm cất",
     idCha: 12000,
     level: 1,
+    maDviTinh: "cái",
   },
   // ================
   {
@@ -405,12 +456,14 @@ export const LINH_VUC = [
     tenDm: "Bảo quản thường xuyên",
     idCha: 13000,
     level: 1,
+    maDviTinh: "kg",
   },
   {
     id: 13004,
     tenDm: "Bảo quản lần đầu",
     idCha: 13000,
     level: 1,
+    maDviTinh: "kg",
   },
   // ======================
   {
@@ -424,18 +477,21 @@ export const LINH_VUC = [
     tenDm: "Bảo quản thường xuyên",
     idCha: 14000,
     level: 1,
+    maDviTinh: "kg",
   },
   {
     id: 14002,
     tenDm: "Bảo quản lần đầu - mới",
     idCha: 14000,
     level: 1,
+    maDviTinh: "kg",
   },
   {
     id: 14003,
     tenDm: "Bảo quản lần đầu - bổ sung",
     idCha: 14000,
     level: 1,
+    maDviTinh: "kg",
   },
 
 ]
