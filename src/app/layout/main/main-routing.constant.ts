@@ -20,6 +20,7 @@ export const MAIN_ROUTES = {
   suaChua: 'sua-chua',
   quanTriDanhMuc: 'quan-tri-danh-muc',
   quanTriHeThong: 'quan-tri-he-thong',
+  khaiThacBaoCao: 'khai-thac-bao-cao',
   // qlkhVonPhi: 'qlkh-von-phi',
 };
 
@@ -75,6 +76,10 @@ export const LIST_PAGES: RouteInfo[] = [
   {
     title: 'Quản lý kho tàng',
     route: MAIN_ROUTES.quanLyKhoTang,
+  },
+  {
+    title: 'Khai thác báo cáo',
+    route: MAIN_ROUTES.khaiThacBaoCao,
   },
   // {
   //   title: 'Quản lý kế hoạch vốn phí',

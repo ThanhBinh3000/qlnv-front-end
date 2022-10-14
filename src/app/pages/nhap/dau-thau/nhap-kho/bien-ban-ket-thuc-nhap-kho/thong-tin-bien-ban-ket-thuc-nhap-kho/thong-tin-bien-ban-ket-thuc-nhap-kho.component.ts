@@ -18,7 +18,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { BienBanKetThucNhapKho } from './../../../../../../models/BienBanKetThucNhapKho';
-import { ThongTinHopDongService } from './../../../../../../services/thongTinHopDong.service';
+import { ThongTinHopDongService } from '../../../../../../services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-ket-thuc-nhap-kho',

@@ -1,0 +1,61 @@
+<div class="left-menu">
+  <!-- (nzChange)="onChange($event)" -->
+  <div nz-row nzGutter="24">
+    <div nz-col nzspan="4">
+      <ul nz-menu nzMode="inline">
+        <!--<li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+          Thông tư 145/2013/TT-BTC
+        </li>-->
+        <li nz-submenu nzOpen="true" nzTitle="Thông tư 145/2013/TT-BTC" nzIcon="tmp">
+          <ul>
+            <li nz-menu-item (click)="selectTab(0)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>KH Tổng hợp nhập, xuất hàng DTQG</span>
+            </li>
+            <li nz-menu-item nzSelected (click)="selectTab(5)"
+                *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="project"></span>
+              <span>Nhập, xuất, tồn kho hàng DTQG</span>
+
+            </li>
+          </ul>
+        </li>
+        <!--        tab 2-->
+        <li nz-submenu nzTitle="Thông tư số 108/2018/TT-BTC" nzIcon="tmp">
+          <ul>
+            <li nz-menu-item (click)="selectTab(0)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>KH Tổng hợp nhập, xuất hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(5)"
+                *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Nhập, xuất, tồn kho hàng DTQG</span>
+            </li>
+          </ul>
+        </li>
+        <!--        tab 3-->
+        <li nz-submenu nzTitle="Quyết định số 1457/TCDT-TVQT" nzIcon="tmp">
+          <ul>
+            <li nz-menu-item (click)="selectTab(0)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>KH Tổng hợp nhập, xuất hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(5)"
+                *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Nhập, xuất, tồn kho hàng DTQG</span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div nz-col nzSpan="19">
+      <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 5">
+          <app-thong-tu1452013></app-thong-tu1452013>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

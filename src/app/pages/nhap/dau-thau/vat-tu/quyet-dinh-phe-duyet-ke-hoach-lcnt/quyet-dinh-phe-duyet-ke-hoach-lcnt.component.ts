@@ -11,7 +11,7 @@ import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-tr
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/quyetDinhPheDuyetKeHoachLCNT.service';
+import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
 
 @Component({
   selector: 'quyet-dinh-phe-duyet-ke-hoach-lcnt',
@@ -244,7 +244,7 @@ export class QuyetDinhPheDuyetKeHoachLCNTComponent implements OnInit {
   async searchNo() {
     this.dataTableNo = [];
     this.totalRecordNo = 0;
-    //chưa Duyệt 
+    //chưa Duyệt
     let paramNo = {
       "denNgayQd": this.endValue
         ? dayjs(this.endValue).format('DD/MM/YYYY')
