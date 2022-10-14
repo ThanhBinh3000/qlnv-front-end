@@ -42,7 +42,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   yearNow: number = 0;
   searchFilter = {
     soKeHoach: null,
-    tenDvi: null,
+    maDvi: null,
     namKh: dayjs().get('year'),
     ngayKy: null,
     loaiVthh: null,
@@ -162,7 +162,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       trichYeu: this.searchFilter.trichYeu,
       soQuyetDinhPheDuyet: this.searchFilter.soQuyetDinhPheDuyet,
       soQuyetDinhGiaoChiTieu: this.searchFilter.soQuyetDinhGiaoChiTieu,
-      maDv: this.userInfo.MA_DVI,
+      maDvi:  this.searchFilter.maDvi,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
