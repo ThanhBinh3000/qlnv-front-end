@@ -20,8 +20,8 @@ export class ThongBaoDauGiaTaiSanService extends BaseService {
       url_ += 'namKeHoach=' + encodeURIComponent('' + body.namKeHoach) + '&';
     if (body.maVatTuCha)
       url_ += 'maVatTuCha=' + encodeURIComponent('' + body.maVatTuCha) + '&';
-    if (body.maDvis)
-      url_ += 'maDvis=' + encodeURIComponent('' + body.maDvis) + '&';
+    if (body.maDvi)
+      url_ += 'maDvi=' + encodeURIComponent('' + body.maDvi) + '&';
     if (body.trangThai)
       url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     if (body.soQuyetDinhPheDuyetKHBDG)
