@@ -245,8 +245,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     };
     let res = await this.thongBanDauGiaTaiSanService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listThongBaoBDG = data.content;
+      this.listThongBaoBDG = res.data.content.filter(item => item.qdPheDuyetKQBdg == null);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
