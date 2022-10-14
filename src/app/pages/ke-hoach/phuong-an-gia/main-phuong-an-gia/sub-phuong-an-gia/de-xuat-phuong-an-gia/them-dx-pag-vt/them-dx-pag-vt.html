@@ -435,9 +435,10 @@
               <tr>
                 <th class="text-center" style="width: 4%;">STT</th>
                 <th style="width: 35%;">Chủng loại hàng hóa</th>
-                <th style="width: 15%;">Giá vốn nhập khẩu (đồng/đơn vị)</th>
+                <th style="width: 15%;">{{formData.value.loaiHangXdg == 'XDG_LH02' ? 'Giá vốn trực tiếp (đồng/kg)' : ' Giá vốn nhập khẩu (đồng/kg) '}}
+                </th>
                 <th style="width: 15%;">Chi phí chung (đồng/đơn vị)</th>
-                <th style="width: 15%;" *ngIf="formData.value.loaiHangXdg == 'XDG_LH02'">Chi phân bổ (đồng/đơn vị)</th>
+                <th style="width: 15%;" *ngIf="formData.value.loaiHangXdg == 'XDG_LH02'">Chi phân bổ cho sản phẩm phụ (đồng/đơn vị)</th>
                 <th style="width: 15%;">Tổng chi phí (đồng/đơn vị)</th>
                 <th style="width: 5%;">Hành động</th>
               </tr>

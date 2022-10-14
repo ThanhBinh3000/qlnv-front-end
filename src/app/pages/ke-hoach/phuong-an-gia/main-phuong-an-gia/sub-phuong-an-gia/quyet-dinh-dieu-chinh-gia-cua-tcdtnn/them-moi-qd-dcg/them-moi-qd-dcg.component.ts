@@ -53,6 +53,8 @@ export class ThemMoiQdDcgComponent implements OnInit {
    dsToTrinhDeXuat: any[] = [];
   dsLoaiGia: any = [];
    dsVthh: any[] = [];
+   dsClVthh: any[] = [];
+   thueVat: any;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -133,6 +135,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
+      this.loadTiLeThue(),
       this.loadDsLoaiGia(),
       this.loadDsVthh(),
       this.loadDsToTrinh(),
@@ -175,7 +178,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
     this.dataEditDcg[idx].edit = false;
   }
 
-  chonSoToTrinh(page: string) {
+  async chonSoToTrinh(page: string) {
     if (page == 'STT') {
       let radioValue = this.soToTrinh;
       let modalDanhSachTT = this.modal.create({
@@ -244,6 +247,19 @@ export class ThemMoiQdDcgComponent implements OnInit {
               this.listThongTinGia = data.thongTinGiaVt
             } else {
               this.listThongTinGia = data.thongTinGiaLt
+            }
+            let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": data.loaiVthh });
+            this.dsClVthh = [];
+            if (res.msg == MESSAGE.SUCCESS) {
+              if (res.data) {
+                this.dsClVthh = res.data;
+              }
+            }
+            if(this.dsClVthh) {
+              this.listThongTinGia.forEach(item => {
+                let resCl = this.dsClVthh.find(cl => cl.ma == item.cloaiVthh)
+                item.tenCloaiVthh = resCl.ten
+              })
             }
             this.updateEditCache();
             this.formData.patchValue({
@@ -427,6 +443,31 @@ export class ThemMoiQdDcgComponent implements OnInit {
 
   }
 
+  async loadTiLeThue() {
+    let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.thueVat = res.data[0].giaTri;
+    } else {
+      this.thueVat = 10;
+    }
+  }
+
   async calculateVAT(index: number, type: number) {
+    let currentRow = this.formData.value;
+    let currentLine = this.listThongTinGia[index];
+    //gia mua toi da
+    if (currentRow.loaiGia == 'LG01' && (currentLine.giaQd > currentLine.giaDn || currentLine.giaQdVat > currentLine.giaDnVat)) {
+      this.listThongTinGia[index].giaQd = 0;
+      this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
+    }
+    //gia ban toi thieu
+    if (currentRow.loaiGia == 'LG02' && (currentLine.giaQd < currentLine.giaDn || currentLine.giaQdVat < currentLine.giaDnVat)) {
+      this.listThongTinGia[index].giaQd = 0;
+      this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
+    }
+    //0:gia>vat 1:vat>gia
+    if (type === 0) {
+      this.listThongTinGia[index].giaQdVat = this.listThongTinGia[index].giaQd + this.listThongTinGia[index].giaQd * this.thueVat;
+    }
   }
 }

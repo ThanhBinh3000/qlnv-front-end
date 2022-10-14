@@ -428,9 +428,6 @@
         <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
         <textarea rows="3" class="search__input" nz-input formControlName="ghiChu" [readOnly]="isView"></textarea>
       </nz-form-item>
-      <ng-template #error let-control>
-        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
-      </ng-template>
     </div>
   </form>
 </div>

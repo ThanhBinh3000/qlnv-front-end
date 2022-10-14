@@ -66,7 +66,6 @@ export class DialogSoToTrinhPagComponent implements OnInit {
       let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.dsToTrinhDeXuat = res.data;
-        console.log(this.dsToTrinhDeXuat)
       }
     } else if (this.pagtype == 'LT' && this.loai == 'SQD') {
       let body = {
