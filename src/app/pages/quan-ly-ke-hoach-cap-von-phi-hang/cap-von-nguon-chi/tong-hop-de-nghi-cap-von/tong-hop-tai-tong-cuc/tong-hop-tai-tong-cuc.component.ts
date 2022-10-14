@@ -308,7 +308,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
 
     back() {
         const obj = {
-            tabSelected: 'danhsach',
+            tabSelected: 'tonghop',
         }
         this.dataChange.emit(obj);
     }
@@ -383,7 +383,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
 
     // call chi tiet bao cao
     async getDetailReport() {
-        await this.quanLyVonPhiService.ctietDeNghiThop(this.id).toPromise().then(
+        await this.capVonNguonChiService.ctietDeNghiThop(this.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
                     this.id = data.data.id;

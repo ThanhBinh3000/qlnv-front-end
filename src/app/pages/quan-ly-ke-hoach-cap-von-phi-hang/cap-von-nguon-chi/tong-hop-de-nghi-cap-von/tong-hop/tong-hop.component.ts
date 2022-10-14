@@ -8,6 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { CVNC, NGUON_BAO_CAO, Utils } from 'src/app/Utility/utils';
+import { DialogTaoMoiTongHopComponent } from '../dialog-tao-moi-tong-hop/dialog-tao-moi-tong-hop.component';
 
 @Component({
     selector: 'app-tong-hop',
@@ -192,6 +193,27 @@ export class TongHopComponent implements OnInit {
 
     //tao bao cao tong hop moi
     addNewReport() {
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Thông tin tổng hợp đề nghị',
+            nzContent: DialogTaoMoiTongHopComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                nguonBcaos: this.nguonBcaos
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                const obj = {
+                    id: null,
+                    qdChiTieu: res.qdChiTieu,
+                    tabSelected: res.nguonBcao == Utils.THOP_TAI_TC ? 'tc' : 'danhsach',
+                }
+                this.dataChange.emit(obj);
+            }
+        });
     }
 
     //xem chi tiet

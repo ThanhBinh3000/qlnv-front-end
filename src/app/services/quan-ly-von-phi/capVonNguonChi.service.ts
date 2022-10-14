@@ -102,4 +102,18 @@ export class CapVonNguonChiService extends BaseService {
             request);
     }
 
+    //tong hop de nghi tu cuc khu vuc
+    tongHopCapVonNguonChi(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/thop-cap-von/tong-hop',
+            request,
+        );
+    }
+
+    ctietDeNghiThop(id: any): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/qlnv-khoachphi/thop-cap-von/chi-tiet/' + id
+        );
+    }
+
 }

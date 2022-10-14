@@ -278,6 +278,7 @@ export class DeNghiTheoDonGiaMuaComponent implements OnInit {
 
     back() {
         const obj = {
+            qdChiTieu: this.qdChiTieu,
             tabSelected: 'danhsach',
         }
         this.dataChange.emit(obj);

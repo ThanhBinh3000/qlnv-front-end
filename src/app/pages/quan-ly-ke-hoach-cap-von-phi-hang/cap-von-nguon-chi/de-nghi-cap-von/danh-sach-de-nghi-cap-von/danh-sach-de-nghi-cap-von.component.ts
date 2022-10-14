@@ -105,6 +105,7 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
             this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
             this.disable = false;
         }
+        this.search();
         this.spinner.hide();
     }
 

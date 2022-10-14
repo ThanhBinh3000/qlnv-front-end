@@ -1,10 +1,21 @@
-<div *ngIf="tabSelected == 'danhsach'" class="luong-thuc__danh-sach">
+<div *ngIf="tabSelected == 'tonghop'" class="luong-thuc__danh-sach">
     <app-tong-hop (dataChange)="changeTab($event)"></app-tong-hop>
+</div>
+<div *ngIf="tabSelected == 'danhsach'" class="luong-thuc__danh-sach">
+    <app-danh-sach-de-nghi-tu-cuc-khu-vuc [data]="data" (dataChange)="changeTab($event)">
+    </app-danh-sach-de-nghi-tu-cuc-khu-vuc>
 </div>
 <div *ngIf="tabSelected == 'tc'" class="chi-tiet">
     <app-tong-hop-tai-tong-cuc [data]="data" (dataChange)="changeTab($event)"></app-tong-hop-tai-tong-cuc>
 </div>
-<!-- <div *ngIf="tabSelected == 'hopdong'" class="chi-tiet">
+<div *ngIf="tabSelected == 'ckv'" class="chi-tiet">
+    <app-tong-hop-tu-cuc-khu-vuc [data]="data" (dataChange)="changeTab($event)">
+    </app-tong-hop-tu-cuc-khu-vuc>
+</div>
+<div *ngIf="tabSelected == 'dongia'" class="chi-tiet">
+    <app-de-nghi-theo-don-gia-mua [data]="data" (dataChange)="changeTab($event)"></app-de-nghi-theo-don-gia-mua>
+</div>
+<div *ngIf="tabSelected == 'hopdong'" class="chi-tiet">
     <app-de-nghi-theo-hop-dong-trung-thau [data]="data" (dataChange)="changeTab($event)">
     </app-de-nghi-theo-hop-dong-trung-thau>
-</div> -->
+</div>

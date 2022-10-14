@@ -9,7 +9,7 @@ import { Globals } from 'src/app/shared/globals';
 })
 export class TongHopDeNghiCapVonComponent implements OnInit {
 
-    tabSelected = 'danhsach';            //chọn tab để hiển thị
+    tabSelected = 'tonghop';            //chọn tab để hiển thị
     id: string;                          //id cua ban ghi duoc chon
     data: any;
 

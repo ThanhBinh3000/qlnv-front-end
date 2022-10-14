@@ -1,15 +1,16 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
     <!-- (nzChange)="onChange($event)" -->
     <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="selectTab(0)">
-            Đề nghị cấp vốn các đơn vị
-        </li>
-        <li nz-menu-item (click)="selectTab(1)">
-            Tổng hợp cấp vốn các đơn vị
-        </li>
-        <li nz-menu-item (click)="selectTab(2)">
-            Đề nghị cấp vốn từ cục khu vực
-        </li>
+        <ng-container *ngIf="viewDeNghi">
+            <li nz-menu-item nzSelected (click)="selectTab(0)">
+                Đề nghị cấp vốn các đơn vị
+            </li>
+        </ng-container>
+        <ng-container *ngIf="viewTongHop">
+            <li nz-menu-item (click)="selectTab(1)">
+                Tổng hợp cấp vốn các đơn vị
+            </li>
+        </ng-container>
     </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
@@ -20,11 +21,5 @@
         <ng-container *ngIf="tabSelected == 1">
             <app-tong-hop-de-nghi-cap-von></app-tong-hop-de-nghi-cap-von>
         </ng-container>
-        <!-- <ng-container *ngIf="tabSelected == 2">
-            <app-thong-tri-duyet-y-du-toan></app-thong-tri-duyet-y-du-toan>
-        </ng-container>
-        <ng-container *ngIf="tabSelected == 3">
-            <app-tong-hop-theo-doi-cap-von></app-tong-hop-theo-doi-cap-von>
-        </ng-container> -->
     </div>
 </div>
