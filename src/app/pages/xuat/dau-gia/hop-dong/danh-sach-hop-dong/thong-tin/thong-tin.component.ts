@@ -19,7 +19,7 @@ import {UserService} from 'src/app/services/user.service';
 import {Globals} from 'src/app/shared/globals';
 import {saveAs} from 'file-saver';
 import {DonviLienQuanService} from 'src/app/services/donviLienquan.service';
-import {QuyetDinhPheDuyetKetQuaLCNTService} from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
+import {QuyetDinhPheDuyetKetQuaLCNTService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service';
 import {HopDongXuatHangService} from 'src/app/services/qlnv-hang/xuat-hang/hop-dong/hopDongXuatHang.service';
 import dayjs from 'dayjs';
 import {
