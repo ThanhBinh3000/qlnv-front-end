@@ -1,6 +1,6 @@
 import { L, M } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -17,7 +17,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuanLyBienBanLayMauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanLayMau.service';
 import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
+import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
@@ -101,27 +101,27 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [''],
       loaiBienBan: [''],
-      nam: [dayjs().get('year'),[Validators.required]],
-      soBienBan: ['',[Validators.required]],
-      tenDvi: ['',[Validators.required]],
-      maDvi: ['',[Validators.required]],
-      maQhns : [''],
+      nam: [dayjs().get('year'), [Validators.required]],
+      soBienBan: ['', [Validators.required]],
+      tenDvi: ['', [Validators.required]],
+      maDvi: ['', [Validators.required]],
+      maQhns: [''],
       loaiVthh: [''],
       tenLoaiVthh: [''],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
-      moTaHangHoa : [''],
-      maDiemKho: ['',[Validators.required]],
-      tenDiemKho: ['',[Validators.required]],
-      maNhaKho: ['',[Validators.required]],
-      tenNhaKho: ['',[Validators.required]],
-      maNganKho: ['',[Validators.required]],
-      tenNganKho: ['',[Validators.required]],
+      moTaHangHoa: [''],
+      maDiemKho: ['', [Validators.required]],
+      tenDiemKho: ['', [Validators.required]],
+      maNhaKho: ['', [Validators.required]],
+      tenNhaKho: ['', [Validators.required]],
+      maNganKho: ['', [Validators.required]],
+      tenNganKho: ['', [Validators.required]],
       maLoKho: [''],
       tenLoKho: [''],
-      soQdGiaoNvNh: ['',[Validators.required]],
-      ngayQdGiaoNvNh: ['',[Validators.required]],
-      idQdGiaoNvNh: ['',[Validators.required]],
+      soQdGiaoNvNh: ['', [Validators.required]],
+      ngayQdGiaoNvNh: ['', [Validators.required]],
+      idQdGiaoNvNh: ['', [Validators.required]],
       soHd: [''],
       ngayLayMau: [''],
       dviKiemNghiem: [''],
@@ -170,7 +170,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       tenDvi: this.userInfo.TEN_DVI,
       maDvi: this.userInfo.MA_DVI,
       loaiBienBan: this.listBienBan[0].ma,
-      soBienBan : `${id}/${this.formData.get('nam').value}/BBLM-CCDTVP`
+      soBienBan: `${id}/${this.formData.get('nam').value}/BBLM-CCDTVP`
     });
   }
 
@@ -425,7 +425,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
         try {
           let body = {
             id: this.id,
-            lyDoTuChoi : text,
+            lyDoTuChoi: text,
             trangThai: STATUS.TU_CHOI_LDCC,
           };
           const res = await this.bienBanLayMauService.approve(body);
@@ -516,9 +516,9 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     let res = await this.bienBanLayMauService.getDetail(+this.id);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
-      this.helperService.bidingDataInFormGroup(this.formData,data);
-      this.listDaiDienChiCuc = data.chiTiets.filter( x => x.loaiDaiDien == 'CHI_CUC')
-      this.listDaiDienCuc = data.chiTiets.filter( x => x.loaiDaiDien == 'CUC')
+      this.helperService.bidingDataInFormGroup(this.formData, data);
+      this.listDaiDienChiCuc = data.chiTiets.filter(x => x.loaiDaiDien == 'CHI_CUC')
+      this.listDaiDienCuc = data.chiTiets.filter(x => x.loaiDaiDien == 'CUC')
       console.log(this.formData.value)
     }
     else {
@@ -537,9 +537,9 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
-        dataTable: this.listSoQuyetDinh.filter( x => !x.loaiVthh.startsWith("02")),
-        dataHeader: ['Số quyết định','Loại hàng hóa','Chủng loại hàng hóa'],
-        dataColumn: ['soQd','tenLoaiVthh','tenCloaiVthh']
+        dataTable: this.listSoQuyetDinh.filter(x => !x.loaiVthh.startsWith("02")),
+        dataHeader: ['Số quyết định', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {

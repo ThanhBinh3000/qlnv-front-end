@@ -5,13 +5,15 @@
       <span>Quay lại</span>
     </button>
     <ng-container *ngIf="userService.isCuc()">
-      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) "
-              type="button" class="btn btn-sub do" (click)="tuChoi()">
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) "
+        type="button" class="btn btn-sub do" (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
-      <button *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) "
-              type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) "
+        type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -31,12 +33,12 @@
     </ng-container>
     <ng-container *ngIf="userService.isTongCuc()">
       <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV" type="button" class="btn btn-sub do"
-              (click)="tuChoi()">
+        (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi "></i>
         <span>Từ chối</span>
       </button>
       <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV" type="button" class="btn btn-sub xanh-nhat"
-              (click)="guiDuyet()">
+        (click)="guiDuyet()">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -61,16 +63,17 @@
   <div class="header header-green-background" *ngIf="!showFromTH">
     <div class="header-text">
       <div class="title-chi-tieu">
-          <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do'">
-            {{ formData.value.tenTrangThai }}
-          </span>
+        <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do'">
+          {{ formData.value.tenTrangThai }}
+        </span>
         <span>Thông tin đề xuất kế hoạch lựa chọn nhà thầu</span>
       </div>
     </div>
   </div>
 
-  <nz-alert class="mg-t-10" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV "
-            nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.ldoTuchoi}}">
+  <nz-alert class="mg-t-10"
+    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV "
+    nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.ldoTuchoi}}">
   </nz-alert>
 
   <!--    START THÔNG TIN CHUNG-->
@@ -101,7 +104,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hình nhập xuất </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="loaiHinhNx"
-                         [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
+                [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
                 <nz-option *ngFor="let p of listLoaiHinhNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -113,7 +116,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Kiểu nhập xuất </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="kieuNx"
-                         [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
+                [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
                 <nz-option *ngFor="let p of listKieuNx" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -124,7 +127,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Địa chỉ </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-                <input nz-input readonly formControlName="diaChiDvi" />
+              <input nz-input readonly formControlName="diaChiDvi" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -163,8 +166,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày lập kế hoạch </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <nz-date-picker nzDisabled formControlName="ngayTao" nzFormat="dd/MM/yyyy">
-                </nz-date-picker>
+              <nz-date-picker nzDisabled formControlName="ngayTao" nzFormat="dd/MM/yyyy">
+              </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -173,7 +176,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày duyệt kế hoạch </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker nzDisabled formControlName="ngayPduyet" nzFormat="dd/MM/yyyy" >
+                <nz-date-picker nzDisabled formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -199,7 +202,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6" >
+        <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -214,17 +217,16 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-                <input [readonly]="true" nz-input formControlName="tenCloaiVthh"
-                  readonly="true" />
+                <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6" *ngIf="userService.isCuc()">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired > Tên hàng hóa </nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired> Tên hàng hóa </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-                <input nz-input formControlName="moTaHangHoa" />
+              <input nz-input formControlName="moTaHangHoa" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -232,20 +234,20 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Tiêu chuẩn chất lượng </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-                <input nz-input formControlName="tchuanCluong" [readonly]="true" />
+              <input nz-input formControlName="tchuanCluong" [readonly]="true" />
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" nzRequired > Tên dự án </nz-form-label>
+            <nz-form-label [nzNoColon]="true" nzRequired> Tên dự án </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-                <input nz-input formControlName="tenDuAn"
-                       [readonly]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''" />
+              <input nz-input formControlName="tenDuAn"
+                [readonly]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''" />
             </nz-form-control>
           </nz-form-item>
         </div>
-        </div>
+      </div>
     </form>
   </nz-card>
   <!-- END THÔNG TIN CHUNG-->
@@ -266,11 +268,11 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hợp đồng </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="loaiHdong"
-                           [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
-                  <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                  </nz-option>
-                </nz-select>
+              <nz-select formControlName="loaiHdong"
+                [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
+                <nz-option *ngFor="let p of listLoaiHopDong" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -278,34 +280,34 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Hình thức lựa chọn nhà thầu </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="hthucLcnt"
-                           [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
-                  <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                  </nz-option>
-                </nz-select>
+              <nz-select formControlName="hthucLcnt"
+                [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
+                <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
-          <nz-form-item >
+          <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Phương thức lựa chọn nhà thầu </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="pthucLcnt"
-                           [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
-                  <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                  </nz-option>
-                </nz-select>
+              <nz-select formControlName="pthucLcnt"
+                [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
+                <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
-          <nz-form-item >
+          <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Thời gian bắt đầu tổ chức LCNT (Thời gian phát hành
               HSMT) </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker formControlName="tgianBdauTchuc" nzFormat="dd/MM/yyyy"
-                                [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
-                </nz-date-picker>
+              <nz-date-picker formControlName="tgianBdauTchuc" nzFormat="dd/MM/yyyy"
+                [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
+              </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -314,8 +316,9 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Thời gian mở thầu</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }" formControlName="tgianMthau" nzFormat="HH:mm dd/MM/yyyy"
-                                [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
+                <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }" formControlName="tgianMthau"
+                  nzFormat="HH:mm dd/MM/yyyy"
+                  [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -325,19 +328,20 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Thời gian đóng thầu </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }" formControlName="tgianDthau" nzFormat="HH:mm dd/MM/yyyy"
-                                [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
-                </nz-date-picker>
+              <nz-date-picker [nzShowTime]="{ nzFormat: 'HH:mm' }" formControlName="tgianDthau"
+                nzFormat="HH:mm dd/MM/yyyy"
+                [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
+              </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
-          <nz-form-item >
+          <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Thời gian nhập hàng trước ngày </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <nz-date-picker formControlName="tgianNhang" nzFormat="dd/MM/yyyy"
-                                [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
+                  [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -348,8 +352,8 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực dự án (ngày) </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
               <nz-input-number formControlName="tgianThien" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                               [nzStep]="1" [nzSize]="'small'"
-                               [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                [nzStep]="1" [nzSize]="'small'"
+                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
               </nz-input-number>
             </nz-form-control>
           </nz-form-item>
@@ -360,8 +364,8 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="%">
                 <nz-input-number formControlName="gtriDthau" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                                 [nzStep]="1" [nzSize]="'small'"
-                                 [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
+                  [nzStep]="1" [nzSize]="'small'"
+                  [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -374,8 +378,8 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="%">
                 <nz-input-number formControlName="gtriHdong" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                                 [nzStep]="1" [nzSize]="'small'"
-                                 [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
+                  [nzStep]="1" [nzSize]="'small'"
+                  [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -394,9 +398,11 @@
             <nz-form-label [nzNoColon]="true"></nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number [ngModel]="formData.value.tongMucDt + ( formData.value.tongMucDt * formData.value.gtriHdong / 100 )" [ngModelOptions]="{standalone: true}" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                                 [nzStep]="1" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                >
+                <nz-input-number
+                  [ngModel]="formData.value.tongMucDt + ( formData.value.tongMucDt * formData.value.gtriHdong / 100 )"
+                  [ngModelOptions]="{standalone: true}" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                  [nzStep]="1" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
+                  [nzParser]="globals.parser">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -408,8 +414,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number nz-input [nzSize]="'small'"
-                                 nzDisabled>
+                <nz-input-number nz-input [nzSize]="'small'" nzDisabled>
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -421,8 +426,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="%">
-                <nz-input-number nz-input [nzSize]="'small'"
-                                 nzDisabled >
+                <nz-input-number nz-input [nzSize]="'small'" nzDisabled>
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -444,8 +448,8 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
                 <nz-input-number class="text-right" nz-input formControlName="tongMucDt" [nzMin]="1"
-                                 [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                                 [nzParser]="globals.parser" nzDisabled>
+                  [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  [nzParser]="globals.parser" nzDisabled>
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -456,7 +460,7 @@
             <nz-form-label nzRequired [nzNoColon]="true">Nguồn vốn</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="nguonVon"
-                         [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
+                [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
                 <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -465,8 +469,8 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true" > Địa điểm quy mô dự án </nz-form-label>
-            <textarea rows="3" nz-input formControlName="dienGiai" ></textarea>
+            <nz-form-label [nzNoColon]="true"> Địa điểm quy mô dự án </nz-form-label>
+            <textarea rows="3" nz-input formControlName="dienGiai"></textarea>
           </nz-form-item>
         </div>
       </div>
@@ -480,128 +484,130 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span></span>
-          <span>{{ this.userService.isCuc() ? 'Phụ lục đề xuất kế hoạch lựa chọn nhà thầu' : 'Địa điểm nhập hàng' }}</span>
+          <span>{{ this.userService.isCuc() ? 'Phụ lục đề xuất kế hoạch lựa chọn nhà thầu' : 'Địa điểm nhập hàng'
+            }}</span>
         </div>
       </div>
       <div class="buttons">
         <button type="button" class="btn btn-main"
-                *ngIf="(formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == '') "
-                (click)="themMoiGoiThau()">
+          *ngIf="(formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == '') "
+          (click)="themMoiGoiThau()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
       </div>
     </div>
-    <nz-table *ngIf="!formData.value.loaiVthh?.startsWith('02')" [nzData]="listDataGroup" class="nowrap pd-10" nzBordered >
+    <nz-table *ngIf="!formData.value.loaiVthh?.startsWith('02')" [nzData]="listDataGroup" class="nowrap pd-10"
+      nzBordered>
       <thead>
-      <tr>
-        <th style="width: 2%;">STT</th>
-        <th >Chi cục</th>
-        <th >Tên gói thầu</th>
-        <th >Địa điểm nhập kho</th>
-        <th >Số lượng theo chỉ tiêu theo kế hoạch</th>
-        <th >Đã lên kế hoạch mua</th>
-        <th >Số lượng (Tấn)</th>
-        <th >Đơn giá đã bao gồm VAT (đồng/kg)</th>
-        <th >Thành tiền (giá gói thầu) (đ)</th>
-        <th >Tiền bảo lãnh dự thầu</th>
-        <th style="width: 5%;" *ngIf="userService.isCuc()">Hành động</th>
-      </tr>
+        <tr>
+          <th style="width: 2%;">STT</th>
+          <th>Chi cục</th>
+          <th>Tên gói thầu</th>
+          <th>Địa điểm nhập kho</th>
+          <th>Số lượng theo chỉ tiêu theo kế hoạch</th>
+          <th>Đã lên kế hoạch mua</th>
+          <th>Số lượng (Tấn)</th>
+          <th>Đơn giá đã bao gồm VAT (đồng/kg)</th>
+          <th>Thành tiền (giá gói thầu) (đ)</th>
+          <th>Tiền bảo lãnh dự thầu</th>
+          <th style="width: 5%;" *ngIf="userService.isCuc()">Hành động</th>
+        </tr>
       </thead>
       <tbody>
-      <ng-container *ngFor="let item of listDataGroup , let i = index">
+        <ng-container *ngFor="let item of listDataGroup , let i = index">
+          <tr>
+            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td colspan="3">{{item.tenDvi}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <ng-container *ngIf="expandSet.has(i)">
+            <tr *ngFor="let dtGoiThau of item.dataChild, let y = index">
+              <td></td>
+              <td></td>
+              <td>{{dtGoiThau.goiThau}}</td>
+              <td>{{dtGoiThau.diaDiemNhap}}</td>
+              <td></td>
+              <td></td>
+              <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{dtGoiThau.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{dtGoiThau.soLuong * dtGoiThau.donGia * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
+              <td>{{(dtGoiThau.soLuong * dtGoiThau.donGia * 1000) + (dtGoiThau.soLuong * dtGoiThau.donGia * 1000 *
+                formData.value.gtriDthau / 100 ) | number: '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right" *ngIf="userService.isCuc()">
+                <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
+                  (click)="themMoiGoiThau(dtGoiThau,dtGoiThau.idx)">
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
+                  (click)="deleteRow(dtGoiThau.idx)">
+                  <i class="fa fa-trash-o do"></i>
+                </a>
+              </td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </tbody>
+    </nz-table>
+    <nz-table *ngIf="formData.value.loaiVthh?.startsWith('02')" [nzData]="listDataGroup" class="nowrap pd-10"
+      nzBordered>
+      <thead>
         <tr>
-          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-          <td colspan="3">{{item.tenDvi}}</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <th style="width: 2%;">STT</th>
+          <th>Tên gói thầu</th>
+          <th>Chủng loại hàng hóa</th>
+          <th>Cục DTNN KV</th>
+          <th>Số lượng theo chỉ tiêu theo kế hoạch</th>
+          <th>Đã lên kế hoạch mua</th>
+          <th>Số lượng</th>
+          <th>Đơn giá VAT (đ)</th>
+          <th>Thành tiền</th>
+          <th style="width: 5%;">Hành động</th>
         </tr>
-        <ng-container *ngIf="expandSet.has(i)">
-          <tr *ngFor="let dtGoiThau of item.dataChild, let y = index">
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of listOfData , let i = index">
+          <tr>
+            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td>{{item.goiThau}}</td>
+            <td>{{item.tenCloaiVthh}}</td>
             <td></td>
             <td></td>
-            <td>{{dtGoiThau.goiThau}}</td>
-            <td>{{dtGoiThau.diaDiemNhap}}</td>
             <td></td>
-            <td></td>
-            <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{dtGoiThau.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{dtGoiThau.soLuong * dtGoiThau.donGia * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
-            <td>{{(dtGoiThau.soLuong * dtGoiThau.donGia * 1000) + (dtGoiThau.soLuong * dtGoiThau.donGia * 1000 * formData.value.gtriDthau / 100 )  | number: '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right" *ngIf="userService.isCuc()">
-              <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
-                 (click)="themMoiGoiThau(dtGoiThau,dtGoiThau.idx)">
+            <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>{{item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>{{item.soLuong * item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>
+              <a (click)="themMoiGoiThau(item,i)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
-                 (click)="deleteRow(dtGoiThau.idx)">
+              <a (click)="deleteRow(i)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
           </tr>
+          <ng-container *ngIf="expandSet.has(i)">
+            <tr *ngFor="let dtGoiThau of item.children, let y = index">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>{{dtGoiThau.tenDvi}}</td>
+              <td></td>
+              <td></td>
+              <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{dtGoiThau.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{dtGoiThau.soLuong * dtGoiThau.donGia | number: '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">
+              </td>
+            </tr>
+          </ng-container>
         </ng-container>
-      </ng-container>
-      </tbody>
-    </nz-table>
-    <nz-table *ngIf="formData.value.loaiVthh?.startsWith('02')" [nzData]="listDataGroup" class="nowrap pd-10" nzBordered >
-      <thead>
-      <tr>
-        <th style="width: 2%;">STT</th>
-        <th >Tên gói thầu</th>
-        <th >Chủng loại hàng hóa</th>
-        <th >Cục DTNN KV</th>
-        <th >Số lượng theo chỉ tiêu theo kế hoạch</th>
-        <th >Đã lên kế hoạch mua</th>
-        <th >Số lượng</th>
-        <th >Đơn giá VAT (đ)</th>
-        <th >Thành tiền</th>
-        <th style="width: 5%;">Hành động</th>
-      </tr>
-      </thead>
-      <tbody>
-      <ng-container *ngFor="let item of listOfData , let i = index">
-        <tr>
-          <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-          <td>{{item.goiThau}}</td>
-          <td>{{item.tenCloaiVthh}}</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>{{item.soLuong * item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-          <td>
-            <a
-               (click)="themMoiGoiThau(item,i)">
-              <i class="fa fa-pencil"></i>
-            </a>
-            <a
-               (click)="deleteRow(i)">
-              <i class="fa fa-trash-o do"></i>
-            </a>
-          </td>
-        </tr>
-        <ng-container *ngIf="expandSet.has(i)">
-          <tr *ngFor="let dtGoiThau of item.children, let y = index">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{dtGoiThau.tenDvi}}</td>
-            <td></td>
-            <td></td>
-            <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{dtGoiThau.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{dtGoiThau.soLuong * dtGoiThau.donGia | number: '1.0-1' : 'vi_VN'}}</td>
-            <td class="text-right" >
-            </td>
-          </tr>
-        </ng-container>
-      </ng-container>
       </tbody>
     </nz-table>
 
@@ -619,79 +625,79 @@
       </div>
     </div>
     <nz-table class="pd-10" nzBordered [nzData]="baoGiaThiTruongList" id="table-bao-gia-thi-truong"
-              [nzFrontPagination]="false" [nzShowPagination]="false">
+      [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
-      <tr>
-        <th [width]="35">STT</th>
-        <th>Mô tả chi tiết</th>
-        <th>File đính kèm</th>
-        <th [width]="90"></th>
-      </tr>
+        <tr>
+          <th [width]="35">STT</th>
+          <th>Mô tả chi tiết</th>
+          <th>File đính kèm</th>
+          <th [width]="90"></th>
+        </tr>
       </thead>
       <tbody>
-      <tr
-        *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''">
-        <td></td>
-        <td>
-          <input nz-input [(ngModel)]="addModelBaoGia.tenTlieu" />
-        </td>
-        <td>
-          <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
-                        [data]="addModelBaoGia.taiLieu" type="file" (selectDataEvent)="openFile($event, 0, 'bao-gia')"
-                        [trangThai]="formData.value.trangThai"
-                        (removeDataEvent)="deleteTaiLieuDinhKemTag($event, 0, 'bao-gia')" [showDowloadFile]="false">
-          </multiple-tag>
-        </td>
-        <td>
-          <a (click)="addBaoGia()">
-            <i class="icon htvbdh_dau-cong xanhla"></i>
-          </a>
-          <a (click)="clearBaoGia()">
-            <i class="fa fa-refresh"></i>
-          </a>
-        </td>
-      </tr>
-      <tr *ngFor="let data of baoGiaThiTruongList, let i = index" class="editable-row">
-        <ng-container *ngIf="!editBaoGiaCache[data.id]?.edit; else editBaoGiaTemplate">
-          <td>{{i + 1}}</td>
-          <td>{{data.tenTlieu}}</td>
-          <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
-          <td class="action text-right">
-            <a (click)="downloadFile(data.children[0])">
-              <i class="icon htvbdh_tcdt_import"></i>
-            </a>
-            <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
-               (click)="editRowBaoGia(data.id)">
-              <i class="fa fa-pencil"></i>
-            </a>
-            <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
-               (click)="deleteRowBaoGia(data)">
-              <i class="fa fa-trash-o do"></i>
-            </a>
-          </td>
-        </ng-container>
-        <ng-template #editBaoGiaTemplate>
+        <tr
+          *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''">
           <td></td>
           <td>
-            <input nz-input [(ngModel)]="editBaoGiaCache[data.id].data.tenTlieu" />
+            <input nz-input [(ngModel)]="addModelBaoGia.tenTlieu" />
           </td>
           <td>
             <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
-                          [data]="editBaoGiaCache[data.id]?.data?.taiLieu" type="file"
-                          (selectDataEvent)="openFile($event, data.id, 'bao-gia')" [trangThai]="formData.value.trangThai"
-                          (removeDataEvent)="deleteTaiLieuDinhKemTag($event, data.id, 'bao-gia')" [showDowloadFile]="false">
+              [data]="addModelBaoGia.taiLieu" type="file" (selectDataEvent)="openFile($event, 0, 'bao-gia')"
+              [trangThai]="formData.value.trangThai" (removeDataEvent)="deleteTaiLieuDinhKemTag($event, 0, 'bao-gia')"
+              [showDowloadFile]="false">
             </multiple-tag>
           </td>
           <td>
-            <a (click)="saveEditBaoGia(data.id)">
-              <i class="fa fa-save"></i>
+            <a (click)="addBaoGia()">
+              <i class="icon htvbdh_dau-cong xanhla"></i>
             </a>
-            <a (click)="cancelEditBaoGia(data.id)">
-              <i class="fa fa-times do"></i>
+            <a (click)="clearBaoGia()">
+              <i class="fa fa-refresh"></i>
             </a>
           </td>
-        </ng-template>
-      </tr>
+        </tr>
+        <tr *ngFor="let data of baoGiaThiTruongList, let i = index" class="editable-row">
+          <ng-container *ngIf="!editBaoGiaCache[data.id]?.edit; else editBaoGiaTemplate">
+            <td>{{i + 1}}</td>
+            <td>{{data.tenTlieu}}</td>
+            <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
+            <td class="action text-right">
+              <a (click)="downloadFile(data.children[0])">
+                <i class="icon htvbdh_tcdt_import"></i>
+              </a>
+              <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
+                (click)="editRowBaoGia(data.id)">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
+                (click)="deleteRowBaoGia(data)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editBaoGiaTemplate>
+            <td></td>
+            <td>
+              <input nz-input [(ngModel)]="editBaoGiaCache[data.id].data.tenTlieu" />
+            </td>
+            <td>
+              <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
+                [data]="editBaoGiaCache[data.id]?.data?.taiLieu" type="file"
+                (selectDataEvent)="openFile($event, data.id, 'bao-gia')" [trangThai]="formData.value.trangThai"
+                (removeDataEvent)="deleteTaiLieuDinhKemTag($event, data.id, 'bao-gia')" [showDowloadFile]="false">
+              </multiple-tag>
+            </td>
+            <td>
+              <a (click)="saveEditBaoGia(data.id)">
+                <i class="fa fa-save"></i>
+              </a>
+              <a (click)="cancelEditBaoGia(data.id)">
+                <i class="fa fa-times do"></i>
+              </a>
+            </td>
+          </ng-template>
+        </tr>
       </tbody>
     </nz-table>
     <div class="header header-green-background mg-t-16">
@@ -702,80 +708,80 @@
         </div>
       </div>
     </div>
-    <nz-table #canCuKhac class="pd-10" nzBordered [nzData]="canCuKhacList" id="table-can-cu-khac" [nzFrontPagination]="false"
-              [nzShowPagination]="false">
+    <nz-table #canCuKhac class="pd-10" nzBordered [nzData]="canCuKhacList" id="table-can-cu-khac"
+      [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
-      <tr>
-        <th [width]="35">STT</th>
-        <th>Mô tả chi tiết</th>
-        <th>File đính kèm</th>
-        <th [width]="90"></th>
-      </tr>
+        <tr>
+          <th [width]="35">STT</th>
+          <th>Mô tả chi tiết</th>
+          <th>File đính kèm</th>
+          <th [width]="90"></th>
+        </tr>
       </thead>
       <tbody>
-      <tr
-        *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''">
-        <td></td>
-        <td>
-          <input nz-input [(ngModel)]="addModelCoSo.tenTlieu" />
-        </td>
-        <td>
-          <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
-                        [data]="addModelCoSo.taiLieu" type="file" (selectDataEvent)="openFile($event, 0, 'co-so')"
-                        [trangThai]="formData.value.trangThai"
-                        (removeDataEvent)="deleteTaiLieuDinhKemTag($event, 0, 'co-so')" [showDowloadFile]="false">
-          </multiple-tag>
-        </td>
-        <td>
-          <a (click)="addCoSo()">
-            <i class="icon htvbdh_dau-cong xanhla"></i>
-          </a>
-          <a (click)="clearCoSo()">
-            <i class="fa fa-refresh"></i>
-          </a>
-        </td>
-      </tr>
-      <tr *ngFor="let data of canCuKhac.data, let i = index" class="editable-row">
-        <ng-container *ngIf="!editCoSoCache[data.id]?.edit; else editCoSoTemplate">
-          <td>{{i + 1}}</td>
-          <td>{{data.tenTlieu}}</td>
-          <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
-          <td class="action text-right">
-            <a (click)="downloadFile(data.children[0])">
-              <i class="icon htvbdh_tcdt_import"></i>
-            </a>
-            <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
-               (click)="editRowCoSo(data.id)">
-              <i class="fa fa-pencil"></i>
-            </a>
-            <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
-               (click)="deleteRowCoSo(data)">
-              <i class="fa fa-trash-o do"></i>
-            </a>
-          </td>
-        </ng-container>
-        <ng-template #editCoSoTemplate>
+        <tr
+          *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''">
           <td></td>
           <td>
-            <input nz-input [(ngModel)]="editCoSoCache[data.id].data.tenTlieu" />
+            <input nz-input [(ngModel)]="addModelCoSo.tenTlieu" />
           </td>
           <td>
             <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
-                          [data]="editCoSoCache[data.id]?.data?.taiLieu" type="file"
-                          (selectDataEvent)="openFile($event, data.id, 'co-so')" [trangThai]="formData.value.trangThai"
-                          (removeDataEvent)="deleteTaiLieuDinhKemTag($event, data.id, 'co-so')" [showDowloadFile]="false">
+              [data]="addModelCoSo.taiLieu" type="file" (selectDataEvent)="openFile($event, 0, 'co-so')"
+              [trangThai]="formData.value.trangThai" (removeDataEvent)="deleteTaiLieuDinhKemTag($event, 0, 'co-so')"
+              [showDowloadFile]="false">
             </multiple-tag>
           </td>
           <td>
-            <a (click)="saveEditCoSo(data.id)">
-              <i class="fa fa-save"></i>
+            <a (click)="addCoSo()">
+              <i class="icon htvbdh_dau-cong xanhla"></i>
             </a>
-            <a (click)="cancelEditCoSo(data.id)">
-              <i class="fa fa-times do"></i>
+            <a (click)="clearCoSo()">
+              <i class="fa fa-refresh"></i>
             </a>
           </td>
-        </ng-template>
-      </tr>
+        </tr>
+        <tr *ngFor="let data of canCuKhac.data, let i = index" class="editable-row">
+          <ng-container *ngIf="!editCoSoCache[data.id]?.edit; else editCoSoTemplate">
+            <td>{{i + 1}}</td>
+            <td>{{data.tenTlieu}}</td>
+            <td>{{data.children && data.children.length > 0 ? data.children[0].fileName : ''}}</td>
+            <td class="action text-right">
+              <a (click)="downloadFile(data.children[0])">
+                <i class="icon htvbdh_tcdt_import"></i>
+              </a>
+              <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
+                (click)="editRowCoSo(data.id)">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
+                (click)="deleteRowCoSo(data)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editCoSoTemplate>
+            <td></td>
+            <td>
+              <input nz-input [(ngModel)]="editCoSoCache[data.id].data.tenTlieu" />
+            </td>
+            <td>
+              <multiple-tag buttonName="" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
+                [data]="editCoSoCache[data.id]?.data?.taiLieu" type="file"
+                (selectDataEvent)="openFile($event, data.id, 'co-so')" [trangThai]="formData.value.trangThai"
+                (removeDataEvent)="deleteTaiLieuDinhKemTag($event, data.id, 'co-so')" [showDowloadFile]="false">
+              </multiple-tag>
+            </td>
+            <td>
+              <a (click)="saveEditCoSo(data.id)">
+                <i class="fa fa-save"></i>
+              </a>
+              <a (click)="cancelEditCoSo(data.id)">
+                <i class="fa fa-times do"></i>
+              </a>
+            </td>
+          </ng-template>
+        </tr>
       </tbody>
     </nz-table>
   </nz-card>

@@ -40,7 +40,6 @@ export class DialogSoToTrinhPagComponent implements OnInit {
   async ngOnInit() {
     await Promise.all([
       this.loadToTrinhDeXuat(),
-      //this.findSoQd()
     ]);
   }
 
@@ -62,7 +61,7 @@ export class DialogSoToTrinhPagComponent implements OnInit {
       let body = {
         "type": this.type,
         "pagType": this.pagtype,
-        "dsTrangThai": [STATUS.DA_DUYET_LDC]
+        "dsTrangThai": [STATUS.DA_DUYET_LDV]
       }
       let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -93,7 +92,11 @@ export class DialogSoToTrinhPagComponent implements OnInit {
   handleOk() {
     let result;
     if (this.loai == 'STT') {
-      result = this.dsToTrinhDeXuat.find(element => element.soToTrinh == this.radioValue);
+      if (!this.loai.startsWith("02")) {
+        result = this.dsToTrinhDeXuat.find(element => element.soToTrinh == this.radioValue);
+      } else {
+        result = this.dsToTrinhDeXuat.find(element => element.soDeXuat == this.radioValue);
+      }
     }
     if (this.loai == 'SQD') {
       result = this.dsToTrinhDeXuat.find(element => element.soQd == this.radioValue);

@@ -1,13 +1,11 @@
-import { KeHoachModule } from './../../pages/ke-hoach/ke-hoach.module';
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { IndexComponent } from 'src/app/pages/index/index.component';
-import { MAIN_ROUTES } from './main-routing.constant';
-import { MainComponent } from './main.component';
-import { ErrorComponent } from './error/error.component';
-import { NotAuthenComponent } from './error/not-authen/not-authen.component';
-import { AuthGuard } from 'src/app/guard/auth.guard';
-import { NotFoundComponent } from './error/not-found/not-found.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {MAIN_ROUTES} from './main-routing.constant';
+import {MainComponent} from './main.component';
+import {ErrorComponent} from './error/error.component';
+import {NotAuthenComponent} from './error/not-authen/not-authen.component';
+import {AuthGuard} from 'src/app/guard/auth.guard';
+import {NotFoundComponent} from './error/not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -53,6 +51,12 @@ const routes: Routes = [
         path: MAIN_ROUTES.quanLyKhoTang,
         loadChildren: () =>
           import('../../pages/quan-ly-kho-tang/quan-ly-kho-tang.module').then((m) => m.QuanLyKhoTangModule),
+        canActivate: [AuthGuard],
+      },
+      {
+        path: MAIN_ROUTES.khaiThacBaoCao,
+        loadChildren: () =>
+          import('../../pages/khai-thac-bao-cao/khai-thac-bao-cao.module').then((m) => m.KhaiThacBaoCaoModule),
         canActivate: [AuthGuard],
       },
       {
@@ -125,7 +129,7 @@ const routes: Routes = [
       }
     ]
   },
-  { path: '**', redirectTo: '/error/404' },
+  {path: '**', redirectTo: '/error/404'},
 ];
 
 @NgModule({

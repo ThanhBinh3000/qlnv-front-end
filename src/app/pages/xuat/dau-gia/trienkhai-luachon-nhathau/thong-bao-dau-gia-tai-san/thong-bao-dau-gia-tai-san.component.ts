@@ -3,6 +3,7 @@ import { saveAs } from 'file-saver';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
+import { isEmpty } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -15,6 +16,7 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { ThongBaoDauGiaTaiSanService } from 'src/app/services/thongBaoDauGiaTaiSan.service';
 import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
 
 @Component({
   selector: 'app-thong-bao-dau-gia-tai-san',
@@ -28,7 +30,7 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
   searchFilter = {
     namKeHoach: '',
     maVatTuCha: '',
-    maDvis: '',
+    maDvi: '',
     soQuyetDinhPheDuyetKHBDG: '',
     maThongBaoBDG: '',
     trichYeu: '',
@@ -43,7 +45,7 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
   endValue: Date | null = null;
   listNam: any[] = [];
   yearNow: number = 0;
-
+  dsDonVi: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -93,6 +95,7 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
       }
+      await this.loadDsTong();
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -121,6 +124,18 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
       };
     }
   }
+
+  async loadDsTong() {
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
+    if (!isEmpty(dsTong)) {
+      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CUC];
+    }
+  }
+
 
   updateAllChecked(): void {
     this.indeterminate = false;
@@ -158,6 +173,7 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
       "maThongBaoBDG": this.searchFilter.maThongBaoBDG,
       "maVatTuCha": this.searchFilter.maVatTuCha,
       "namKeHoach": this.searchFilter.namKeHoach,
+      "maDvi": this.searchFilter.maDvi,
       "ngayToChucBDGDenNgay": this.searchFilter.ngayToChuc && this.searchFilter.ngayToChuc.length > 0
         ? dayjs(this.searchFilter.ngayToChuc[1]).format('YYYY-MM-DD')
         : null,
@@ -215,7 +231,7 @@ export class ThongBaoDauGiaTaiSanComponent implements OnInit {
     this.searchFilter = {
       namKeHoach: '',
       maVatTuCha: '',
-      maDvis: '',
+      maDvi: '',
       soQuyetDinhPheDuyetKHBDG: '',
       maThongBaoBDG: '',
       trichYeu: '',
