@@ -343,7 +343,6 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          await this.save(true);
           let trangThai;
           switch (this.detail.trangThai) {
             case STATUS.DU_THAO : {
