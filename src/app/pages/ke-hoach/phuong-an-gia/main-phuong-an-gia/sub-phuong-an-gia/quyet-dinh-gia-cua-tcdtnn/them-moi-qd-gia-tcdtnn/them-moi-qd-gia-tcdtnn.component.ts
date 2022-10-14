@@ -261,7 +261,6 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.dsCloaiVthh = res.data;
-          console.log(this.dsCloaiVthh);
         }
       }
       this.formData.controls["cloaiVthh"].setValue(curToTrinh.cloaiVthh);
@@ -314,19 +313,26 @@ export class ThemMoiQdGiaTcdtnnComponent implements OnInit {
   async calculateVAT(index: number, type: number) {
     let currentRow = this.formData.value;
     let currentLine = this.arrThongTinGia[index];
-    if (currentRow.loaiGia == 'LG01' && (currentLine.giaQd > currentLine.giaDn || currentLine.giaQdVat > currentLine.giaDnVat)) {
-      this.arrThongTinGia[index].giaQd = 0;
-      this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
-    }
-    if (currentRow.loaiGia == 'LG02' && (currentLine.giaQd < currentLine.giaDn || currentLine.giaQdVat < currentLine.giaDnVat)) {
-      this.arrThongTinGia[index].giaQd = 0;
-      this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
-    }
+    //gia mua toi da
     if (type === 0) {
       this.arrThongTinGia[index].giaQdVat = this.arrThongTinGia[index].giaQd + this.arrThongTinGia[index].giaQd * this.thueVat;
-    } else if (type === 1) {
-      this.arrThongTinGia[index].giaQd = this.arrThongTinGia[index].giaQdVat - this.arrThongTinGia[index].giaQdVat * this.thueVat;
     }
+    if (currentRow.loaiGia == 'LG01' && (currentLine.giaQd > currentLine.giaDn || currentLine.giaQdVat > currentLine.giaDnVat)) {
+      currentLine.giaQd = 0
+      currentLine.giaQdVat = 0
+      this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
+      return;
+    }
+    //gia ban toi thieu
+    if (currentRow.loaiGia == 'LG02' && (currentLine.giaQd < currentLine.giaDn || currentLine.giaQdVat < currentLine.giaDnVat)) {
+      currentLine.giaQd = 0
+      currentLine.giaQdVat = 0
+      this.arrThongTinGia[index].giaQd = 0;
+      this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
+      return;
+    }
+    //0:gia>vat 1:vat>gia
+
   }
 
   openDialogToTrinh() {

@@ -45,7 +45,7 @@ export class ThongTinKsgComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-
+    this.updateEditCache()
   }
 
 

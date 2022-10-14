@@ -231,7 +231,7 @@
                     <nz-input-group>
                       <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
                         [(ngModel)]="arrThongTinGia[idx].giaQd" [nzMin]="0" [nzFormatter]="globals.formatter"
-                        [nzParser]="globals.parser" [nzDisabled]="noEdit" (nzBlur)="calculateVAT(idx,0)">
+                        [nzParser]="globals.parser" [nzDisabled]="isView" (nzBlur)="calculateVAT(idx,0)">
                       </nz-input-number>
                     </nz-input-group>
                   </td>
@@ -239,7 +239,7 @@
                     <nz-input-group>
                       <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
                         [(ngModel)]="arrThongTinGia[idx].giaQdVat" [nzMin]="0" [nzFormatter]="globals.formatter"
-                        [nzParser]="globals.parser" [nzDisabled]="noEdit" (nzBlur)="calculateVAT(idx,1)">
+                        [nzParser]="globals.parser" [nzDisabled]="isView">
                       </nz-input-number>
                     </nz-input-group>
                   </td>
