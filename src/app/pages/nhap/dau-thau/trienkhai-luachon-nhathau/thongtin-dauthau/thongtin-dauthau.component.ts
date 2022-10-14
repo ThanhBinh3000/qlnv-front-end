@@ -8,7 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DATEPICKER_CONFIG, LIST_VAT_TU_HANG_HOA, LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
@@ -38,6 +38,8 @@ export class ThongtinDauthauComponent implements OnInit {
     public userService: UserService,
     private helperService: HelperService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
+    private thongTinDauThauService: ThongTinDauThauService,
+
   ) {
 
   }
@@ -131,9 +133,9 @@ export class ThongtinDauthauComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi : this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI
     };
-    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
+    let res = await this.thongTinDauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;

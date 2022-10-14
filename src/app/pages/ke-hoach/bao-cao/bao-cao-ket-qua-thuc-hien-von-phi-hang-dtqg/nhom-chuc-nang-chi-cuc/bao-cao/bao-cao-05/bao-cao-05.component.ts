@@ -326,12 +326,12 @@ export class BaoCao05Component implements OnInit {
                     this.dinhMucs = res.data;
                     this.dinhMucs.forEach(item => {
                         if (!item.cloaiVthh.startsWith('04')) {
-                            item.nvChuyenMonKv = divNumber(item.nvChuyenMonKv, 1000);
-                            item.nvChuyenMonTc = divNumber(item.nvChuyenMonTc, 1000);
-                            item.tcDieuHanhKv = divNumber(item.tcDieuHanhKv, 1000);
-                            item.tcDieuHanhTc = divNumber(item.tcDieuHanhTc, 1000);
-                            item.ttCaNhanKv = divNumber(item.ttCaNhanKv, 1000);
-                            item.ttCaNhanTc = divNumber(item.ttCaNhanTc, 1000);
+                            item.nvChuyenMonDviTt = (item.nvChuyenMonDviTt ? item.nvChuyenMonDviTt : 0) / 1000;
+                            item.nvChuyenMonVp = (item.nvChuyenMonVp ? item.nvChuyenMonVp : 0) / 1000;
+                            item.dieuHanhDviTt = (item.dieuHanhDviTt ? item.dieuHanhDviTt : 0) / 1000;
+                            item.dieuHanhVp = (item.dieuHanhVp ? item.dieuHanhVp : 0) / 1000;
+                            item.ttCaNhanDviTt = (item.ttCaNhanDviTt ? item.ttCaNhanDviTt : 0) / 1000;
+                            item.ttCaNhanVp = (item.ttCaNhanVp ? item.ttCaNhanVp : 0) / 1000;
                         }
                     })
                 } else {

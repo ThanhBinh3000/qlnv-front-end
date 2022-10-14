@@ -92,7 +92,7 @@ export class HelperService {
   }
 
   setIndexArray( array : any[]){
-    if(array.length > 0){
+    if(array && array.length > 0){
       array.forEach( (item , index) => {
         item.idx = index;
       })

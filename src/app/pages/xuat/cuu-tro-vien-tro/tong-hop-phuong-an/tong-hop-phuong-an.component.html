@@ -43,17 +43,17 @@
     <div class="group-button">
       <h3 class="text-uppercase">Danh sách phương án xuất viện trợ cứu trợ</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
+        <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_THPA_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_THPA_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="!userService.isChiCuc()">
+        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_THPA_THEM')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
-          <span>Thêm</span>
+          <span>Tổng hợp</span>
         </button>
       </div>
     </div>

@@ -41,10 +41,10 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   formData: FormGroup;
   taiLieuDinhKemList: any[] = [];
 
-  listQdPdKhlcnt : any[] = []
-  idQdPdKhlcnt : number;
-  maQd : string;
-  listNam :any[] = [];
+  listQdPdKhlcnt: any[] = []
+  idQdPdKhlcnt: number;
+  maQd: string;
+  listNam: any[] = [];
 
   userInfo: UserLogin;
   STATUS = STATUS
@@ -72,7 +72,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         namKhoach: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null,],
         soQdPdKhlcnt: ['', [Validators.required]],
-        idQdPdKhlcnt : ['',[Validators.required]],
+        idQdPdKhlcnt: ['', [Validators.required]],
         ghiChu: [null,],
         trangThai: ['00'],
         tenTrangThai: ['Dự thảo'],
@@ -97,8 +97,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     await this.spinner.hide();
   }
 
-  disableForm():boolean{
-    if(this.formData.get('trangThai').value == STATUS.BAN_HANH){
+  disableForm(): boolean {
+    if (this.formData.get('trangThai').value == STATUS.BAN_HANH) {
       return true
     }
     return false;
@@ -108,7 +108,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     let res = await this.quyetDinhPheDuyetKetQuaLCNTService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
       const dataDetail = res.data;
-      this.helperService.bidingDataInFormGroup(this.formData,dataDetail);
+      this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
       this.formData.patchValue({
         soQd: dataDetail.soQd.split('/')[0],
       })
@@ -202,7 +202,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       trangThai: STATUS.BAN_HANH,
       trangThaiDtl: STATUS.HOAN_THANH_CAP_NHAT,
       lastest: 1,
-      maDvi : this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI,
+      maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
@@ -230,7 +230,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       this.idQdPdKhlcnt = data.id;
       this.formData.patchValue({
         soQdPdKhlcnt: data.soQd,
-        idQdPdKhlcnt : data.id,
+        idQdPdKhlcnt: data.id,
       })
     });
   }

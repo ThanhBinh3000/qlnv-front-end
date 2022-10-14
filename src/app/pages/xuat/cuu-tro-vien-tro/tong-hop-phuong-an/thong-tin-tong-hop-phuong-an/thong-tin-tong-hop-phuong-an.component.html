@@ -16,12 +16,12 @@
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
-<!--    <button-->
-<!--      *ngIf="checkAvailableByStatus(STATUS.CHO_DUYET_LDV)"-->
-<!--      type="button" class="btn btn-sub" (click)="updateStatus(STATUS.CHO_DUYET_LDV,'Bạn có chắc muốn gửi duyệt ?')">-->
-<!--      <i class="icon {{iconButtonDuyet}}"></i>-->
-<!--      <span>Gửi duyệt</span>-->
-<!--    </button>-->
+    <!--    <button-->
+    <!--      *ngIf="checkAvailableByStatus(STATUS.CHO_DUYET_LDV)"-->
+    <!--      type="button" class="btn btn-sub" (click)="updateStatus(STATUS.CHO_DUYET_LDV,'Bạn có chắc muốn gửi duyệt ?')">-->
+    <!--      <i class="icon {{iconButtonDuyet}}"></i>-->
+    <!--      <span>Gửi duyệt</span>-->
+    <!--    </button>-->
     <button
       *ngIf="checkAvailableByStatus(STATUS.CHO_DUYET_LDV)"
       type="button" class="btn btn-sub" (click)="save(true)">
@@ -123,6 +123,16 @@
       <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="3">
           <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Mã tổng hợp</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-input-group>
+                <input readonly nz-input formControlName="maTongHop" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày tổng hợp</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
@@ -132,7 +142,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="21">
+        <div nz-col [nzSpan]="18">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Nội dung tổng hợp</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -160,7 +170,7 @@
           <th>Đơn vị đề xuất</th>
           <th>Nội dung xuất viện trợ, cứu trợ</th>
           <th>Số lượng (kg)</th>
-<!--          <th>Thành tiền (đồng)</th>-->
+          <th>Thành tiền (đồng)</th>
           <th>Ngày đề xuất</th>
           <th>Thời hạn thực hiện xuất viện trợ, cứu trợ</th>
         </tr>
@@ -173,9 +183,11 @@
                 style="width: 35px"></td>
             <td colspan="2"><strong>{{ item.tenDvi }}</strong></td>
             <td><strong>{{item.tongSoLuong|number: '1.0-1'}}</strong></td>
-<!--            <td></td>-->
-            <td>{{item.ngayDxuat|date:'dd/MM/YYYY'}}</td>
-            <td>{{item.thoiGianThucHien|date:'dd/MM/YYYY'}}</td>
+            <td><strong>{{item.thanhTien|number: '1.0-1'}}</strong></td>
+            <!--            <td>{{item.ngayDxuat|date:'dd/MM/YYYY'}}</td>-->
+            <!--            <td>{{item.thoiGianThucHien|date:'dd/MM/YYYY'}}</td>-->
+            <td></td>
+            <td></td>
           </tr>
           <ng-container *ngIf="expandSetView.has(item.idVirtual)">
             <tr *ngFor="let chiTiet of item.thongTinChiTiet">
@@ -183,7 +195,7 @@
               <td></td>
               <td>{{chiTiet.noiDung}}</td>
               <td>{{chiTiet.soLuong|number: '1.0-1'}}</td>
-<!--              <td></td>-->
+              <td>{{chiTiet.thanhTien|number: '1.0-1'}}</td>
               <td>{{chiTiet.ngayDxuat|date:'dd/MM/YYYY'}}</td>
               <td>{{chiTiet.thoiGianThucHien|date:'dd/MM/YYYY'}}</td>
             </tr>
@@ -196,7 +208,7 @@
           <th></th>
           <th class="text-blue">Tổng</th>
           <th class="text-blue">{{tongSoLuongDxuat|number: '1.0-1'}}</th>
-<!--          <th class="text-blue">2.990.000.000</th>-->
+          <th class="text-blue">{{tongThanhTienDxuat|number: '1.0-1'}}</th>
           <th></th>
           <th></th>
         </tr>
@@ -221,10 +233,10 @@
           <th>Đơn vị đề xuất</th>
           <th>Nội dung xuất viện trợ, cứu trợ</th>
           <th>Số lượng (kg)</th>
-<!--          <th>Thành tiền (đồng)</th>-->
+          <th>Thành tiền (đồng)</th>
           <th>Ngày đề xuất</th>
           <th>Thời hạn thực hiện xuất viện trợ, cứu trợ</th>
-          <th style="width: 10%">Hành động</th>
+          <th style="width: 100px">Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -235,9 +247,11 @@
                 style="width: 35px"></td>
             <td colspan="2"><strong>{{ item.tenDvi }}</strong></td>
             <td><strong>{{item.tongSoLuong|number: '1.0-1'}}</strong></td>
-<!--            <td></td>-->
-            <td>{{item.ngayDxuat|date:'dd/MM/YYYY'}}</td>
-            <td>{{item.thoiGianThucHien|date:'dd/MM/YYYY'}}</td>
+            <td><strong>{{item.thanhTien|number: '1.0-1'}}</strong></td>
+            <!--            <td>{{item.ngayDxuat|date:'dd/MM/YYYY'}}</td>-->
+            <!--            <td>{{item.thoiGianThucHien|date:'dd/MM/YYYY'}}</td>-->
+            <td></td>
+            <td></td>
             <td>
               <a (click)="showModal(item)" *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isView">
                 <i class="fa fa-pencil"></i>
@@ -254,7 +268,7 @@
               <td></td>
               <td>{{chiTiet.noiDung}}</td>
               <td>{{chiTiet.soLuong|number: '1.0-1'}}</td>
-<!--              <td></td>-->
+              <td>{{chiTiet.thanhTien|number: '1.0-1'}}</td>
               <td>{{chiTiet.ngayDxuat|date:'dd/MM/YYYY'}}</td>
               <td>{{chiTiet.thoiGianThucHien|date:'dd/MM/YYYY'}}</td>
               <td></td>
@@ -268,7 +282,7 @@
           <th></th>
           <th class="text-blue">Tổng</th>
           <th class="text-blue">{{tongSoLuongTongHop|number: '1.0-1'}}</th>
-<!--          <th class="text-blue">2.990.000.000</th>-->
+          <th class="text-blue">{{tongThanhTienTongHop|number: '1.0-1'}}</th>
           <th></th>
           <th></th>
           <th></th>

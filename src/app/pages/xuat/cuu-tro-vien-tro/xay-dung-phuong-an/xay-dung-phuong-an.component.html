@@ -43,15 +43,15 @@
     <div class="group-button">
       <h3 class="text-uppercase">Danh sách phương án xuất viện trợ cứu trợ</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
+        <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()">
+        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_THEM')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -181,7 +181,7 @@
         <tr *ngFor="let data of basicTable.data; let i = index">
           <th width="45px">
             <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                   [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
+                   [nzDisabled]="data.trangThai != STATUS.DU_THAO || !isOwner(data.maDvi)"></label>
           </th>
           <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
           <td>{{ data.tenLoaiHinhNhapXuat }}</td>
@@ -199,11 +199,12 @@
               <i class="fa fa-eye"></i>
             </a>
             <a
-              *ngIf="(data.trangThai==STATUS.DU_THAO || ((data.trangThai==STATUS.TU_CHOI_LDC || data.trangThai==STATUS.TU_CHOI_LDTC) && userService.isCuc()))"
+              *ngIf="(data.trangThai==STATUS.DU_THAO || ((data.trangThai==STATUS.TU_CHOI_LDC || data.trangThai==STATUS.TU_CHOI_TP) && userService.isCuc())||
+              (data.trangThai == STATUS.TU_CHOI_LDTC && userService.isTongCuc())) && isOwner(data.maDvi)"
               (click)="detail(data, false)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="data.trangThai==STATUS.DU_THAO" (click)="xoaItem(data)">
+            <a *ngIf="data.trangThai==STATUS.DU_THAO && isOwner(data.maDvi)" (click)="xoaItem(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
