@@ -5,7 +5,7 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_LDTC  && userService.isTongCuc()) ||
+      *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_LDV  && userService.isTongCuc()) ||
       (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc())||
       (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc())) && isDetailPermission"
       type="button" class="btn btn-sub" (click)="tuChoi()">
@@ -13,7 +13,7 @@
       <span>Từ chối</span>
     </button>
 
-    <button *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_LDTC  && userService.isTongCuc()) ||
+    <button *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_LDV  && userService.isTongCuc()) ||
       (formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc())||
       (formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc())) && isDetailPermission"
             type="button" class="btn btn-sub" (click)="duyet()">
@@ -22,7 +22,7 @@
     </button>
     <button
       *ngIf="(formData.value.trangThai == STATUS.DU_THAO || ((formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && userService.isCuc())
-      || (formData.value.trangThai == STATUS.TU_CHOI_LDTC && userService.isTongCuc())) && isDetailPermission()"
+      || (formData.value.trangThai == STATUS.TU_CHOI_LDV && userService.isTongCuc())) && isDetailPermission()"
       type="button" class="btn btn-sub" (click)="luuGuiDuyet()">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
@@ -35,7 +35,7 @@
     </button>-->
     <button
       *ngIf="(formData.value.trangThai == STATUS.DU_THAO || ((formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC)&& userService.isCuc())
-      || (formData.value.trangThai == STATUS.TU_CHOI_LDTC && userService.isTongCuc()))  && isDetailPermission()"
+      || (formData.value.trangThai == STATUS.TU_CHOI_LDV && userService.isTongCuc()))  && isDetailPermission()"
       type="
         button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
@@ -49,7 +49,7 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span
-            [ngClass]="(formData.value.trangThai == STATUS.DA_DUYET_LDC||formData.value.trangThai == STATUS.DA_DUYET_LDTC) ? 'status-xanh' : 'status-do'">
+            [ngClass]="(formData.value.trangThai == STATUS.DA_DUYET_LDC||formData.value.trangThai == STATUS.DA_DUYET_LDV) ? 'status-xanh' : 'status-do'">
             {{ formData.value.tenTrangThai }}
           </span>
           <span>Đề xuất phương án xuất viện trợ, cứu trợ</span>
@@ -202,7 +202,7 @@
         </nz-form-item>
         <nz-form-item>
           <div class="list-file" nz-col nzSpan="24">
-            <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="isView">
+            <file-list [data]="formData.value.fileDinhKem" [isViewDetail]="false">
             </file-list>
           </div>
         </nz-form-item>
@@ -361,11 +361,11 @@
             <td></td>
             <td><strong>{{ item.thanhTien ?? 0 |number:'1.0-1'}}</strong></td>
             <td>
-              <a (click)="suaPhuongAn(item)" *ngIf="!isView">
+              <a (click)="suaPhuongAn(i)" *ngIf="!isView">
                 <i class="fa fa-pencil"></i>
               </a>
               <!--              <a (click)="deletePhanLo(item.idVirtual)">-->
-              <a *ngIf="!isView">
+              <a (click)="xoaPhuongAn(i)" *ngIf="!isView">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
