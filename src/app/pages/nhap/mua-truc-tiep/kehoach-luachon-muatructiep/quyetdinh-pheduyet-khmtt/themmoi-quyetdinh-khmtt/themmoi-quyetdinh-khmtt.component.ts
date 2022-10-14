@@ -125,10 +125,14 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
       tenTrangThaiTkhai: ['Chưa cập nhập'],
       loaiVthh: [''],
       tenLoaiVthh: [''],
+      cloaiVthh: [''],
       tenCloaiVthh: [''],
       tchuanCluong: [''],
       phanLoai: [''],
       namKhoach: [''],
+      moTaHangHoa: [''],
+      tgianMkho: [''],
+      tgianKthuc: [''],
     })
   }
 
@@ -198,6 +202,9 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
         loaiVthh: dataTongHop.loaiVthh,
         tenLoaiVthh: dataTongHop.tenLoaiVthh,
         namKh: +dataTongHop.namKhoach,
+        moTaHangHoa: dataTongHop.moTaHangHoa,
+        tgianMkho: dataTongHop.tgianMkho,
+        tgianKthuc: dataTongHop.tgianKthuc,
         idThop: dataTongHop.id,
         tchuanCluong: dataTongHop.tchuanCluong,
         phanLoai: 'TH',
@@ -258,7 +265,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.soQd = body.soQd + "/" + this.maQd;
+    body.soQdPduyet = body.soQdPduyet + "/" + this.maQd;
     body.hhQdPheduyetKhMttDxList = this.danhsachDxMtt;
     body.fileDinhKems = this.fileDinhKem;
     let res = null;
@@ -377,7 +384,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
 
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
-        soQd: data.soQd.split("/")[0],
+        soQdPduyet: data.soQdPduyet.split("/")[0],
       });
       this.danhsachDxMtt = data.hhQdPheduyetKhMttDxList[0].soLuongDiaDiemList
       this.danhsachDxMtt = data.hhQdPheduyetKhMttDxList;
@@ -431,13 +438,15 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           tchuanCluong: data.tchuanCluong,
-          loaiHdong: data.loaiHdong,
           nguonVon: data.nguonVon,
+          moTaHangHoa: data.moTaHangHoa,
+          trichYeu: data.trichYeu,
+          tgianMkho: data.tgianMkho,
+          tgianKthuc: data.tgianKthuc,
           idThop: event,
           idTrHdr: null,
           maTrHdr: null,
         })
-        // this.danhsachDx = data.hhDxKhMttThopDtls;
         data.hhDxKhMttThopDtls.forEach(item => {
           this.danhsachDxMtt.push(item.listDxuatHdr)
         })
