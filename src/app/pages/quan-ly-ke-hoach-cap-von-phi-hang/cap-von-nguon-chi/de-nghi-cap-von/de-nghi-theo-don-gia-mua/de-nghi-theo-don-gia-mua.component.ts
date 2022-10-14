@@ -537,6 +537,7 @@ export class DeNghiTheoDonGiaMuaComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.id = data.data.id;
+                        await this.getDetailReport();
                         this.getStatusButton();
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -551,6 +552,7 @@ export class DeNghiTheoDonGiaMuaComponent implements OnInit {
                 async data => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                        await this.getDetailReport();
                         this.getStatusButton();
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);

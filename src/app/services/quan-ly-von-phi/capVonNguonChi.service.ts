@@ -59,5 +59,47 @@ export class CapVonNguonChiService extends BaseService {
             request,
         );
     }
+    //danh sach op dong
+    dsachHopDong(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/hop-dong/danh-sach',
+            request,
+        );
+    }
+
+    //tim kiem tong op de nghi cap von
+    timKiemDeNghiThop(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/thop-cap-von/danh-sach',
+            request,
+        );
+    }
+
+    //xoa de nghi tong hop
+    xoaDeNghiThop(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/thop-cap-von/xoa',
+            request,
+        );
+    }
+
+    trinhDuyetDeNghiTongHop(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/qlnv-khoachphi/thop-cap-von/trang-thai',
+            request);
+    }
+
+    themMoiDnghiThop(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/thop-cap-von/them-moi',
+            request);
+    }
+
+
+    capNhatDnghiThop(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/qlnv-khoachphi/thop-cap-von/cap-nhat',
+            request);
+    }
 
 }

@@ -18,7 +18,7 @@ const routes: Routes = [
         path: CAP_VON_NGUON_CHI,
         loadChildren: () =>
           import('./cap-von-nguon-chi/cap-von-nguon-chi.module').then(
-            (m) => m.CapVonChiModule,
+            (m) => m.CapVonNguonChiModule,
           )
       },
       {

@@ -4,3 +4,7 @@
 <div *ngIf="tabSelected == 'dongia'" class="chi-tiet">
     <app-de-nghi-theo-don-gia-mua [data]="data" (dataChange)="changeTab($event)"></app-de-nghi-theo-don-gia-mua>
 </div>
+<div *ngIf="tabSelected == 'hopdong'" class="chi-tiet">
+    <app-de-nghi-theo-hop-dong-trung-thau [data]="data" (dataChange)="changeTab($event)">
+    </app-de-nghi-theo-hop-dong-trung-thau>
+</div>

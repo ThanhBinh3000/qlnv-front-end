@@ -6,6 +6,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, CVNC, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
@@ -105,7 +106,6 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
             this.disable = false;
         }
         this.spinner.hide();
-
     }
 
     async search() {
@@ -217,8 +217,51 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
                     qdChiTieu: res.qdChiTieu,
                     loaiDn: res.loaiDn,
                     tabSelected: res.canCuGia == Utils.HD_TRUNG_THAU ? 'hopdong' : 'dongia',
+                    hopDong: [],
                 }
-                this.dataChange.emit(obj);
+                let check = true; //kiem tra hop dong da ton tai chua
+                if (res.canCuGia == Utils.HD_TRUNG_THAU) {
+                    const request = {
+                        soQD: res.qdChiTieu,
+                        maDvi: this.userInfo.MA_DVI,
+                        loaiVthh: "",
+                    }
+                    switch (res.loaiDn) {
+                        case Utils.MUA_THOC:
+                            request.loaiVthh = "0101"
+                            break;
+                        case Utils.MUA_GAO:
+                            request.loaiVthh = "0102"
+                            break;
+                        case Utils.MUA_MUOI:
+                            request.loaiVthh = "04"
+                            break;
+                        case Utils.MUA_VTU:
+                            request.loaiVthh = "02"
+                            break;
+                    }
+                    await this.capVonNguonChiService.dsachHopDong(request).toPromise().then(
+                        (data) => {
+                            if (data.statusCode == 0) {
+                                if (data.data.length == 0) {
+                                    check = false;
+                                } else {
+                                    obj.hopDong = data.data;
+                                }
+                            } else {
+                                check = false;
+                            }
+                        },
+                        (err) => {
+                            check = false
+                        },
+                    );
+                }
+                if (!check) {
+                    this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.EXIST_CONTRACT);
+                } else {
+                    this.dataChange.emit(obj);
+                }
             }
         });
     }
