@@ -405,7 +405,7 @@ export class QuanLyVonPhiService extends BaseService {
   updatePLDieuChinh1(request: any): Observable<any> {
     return this.httpClient.put(
       // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chi-tiet',
-      'http://192.168.1.100:30101/dieu-chinh-du-toan-chi/chi-tiet',
+      'http://192.168.1.103:30101/dieu-chinh-du-toan-chi/chi-tiet',
       request,
     );
   }
