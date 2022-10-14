@@ -203,9 +203,8 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.detail && (this.detail.trangThai == STATUS.TU_CHOI_TP || this.detail.trangThai == STATUS.TU_CHOI_LDC
-    )) {
-      return true;
+    if (this.detail) {
+      return false;
     }
   }
 
