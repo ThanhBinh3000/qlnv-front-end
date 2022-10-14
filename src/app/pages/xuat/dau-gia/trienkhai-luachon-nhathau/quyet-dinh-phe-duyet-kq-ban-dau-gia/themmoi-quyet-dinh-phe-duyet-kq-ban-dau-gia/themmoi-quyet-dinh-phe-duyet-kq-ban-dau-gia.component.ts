@@ -355,7 +355,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
               break;
             }
             case STATUS.TU_CHOI_LDC : {
-              trangThai = STATUS.CHO_DUYET_LDC
+              trangThai = STATUS.CHO_DUYET_TP
               break;
             }
           }
