@@ -82,13 +82,6 @@
               </div>
             </div>
           </td>
-          <!-- <td>
-            <div *ngFor="let item of donViTinhs">
-              <div *ngIf="item.id == data.maDviTinh">
-                {{item.tenDviTinh}}
-              </div>
-            </div>
-          </td> -->
           <td>
             {{data.maDviTinh}}
           </td>
@@ -131,26 +124,32 @@
           <td>
             {{data.maDviTinh}}
           </td>
-          <td>
-            <fm-input-number class="search__input" nzSize="small"
-              [(ngModel)]="editCache[data.id].data.thienSluongKhoachDgiao"
+          <!-- <td>
+            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.thienSluongKhoachDgiao"
               [class]="(editCache[data.id].data.thienSluongKhoachDgiao || editCache[data.id].data.thienSluongKhoachDgiao ===0) &&  editCache[data.id].data.thienSluongKhoachDgiao >= 0?'' : 'input-error-validate'">
             </fm-input-number>
+          </td> -->
+          <td>
+            <nz-input-number class="search__input" [nzFormatter]="formatterPercent" [nzParser]="parserPercent"
+              [(ngModel)]="editCache[data.id].data.thienSluongKhoachDgiao"
+              [class]="(editCache[data.id].data.thienSluongKhoachDgiao || editCache[data.id].data.thienSluongKhoachDgiao ===0) &&  editCache[data.id].data.thienSluongKhoachDgiao >= 0?'' : 'input-error-validate'"
+              (ngModelChange)="viewDetail(editCache[data.id].data.thienSluongKhoachDgiao)">
+            </nz-input-number>
           </td>
           <td>
-            <fm-input-number class="search__input" nzSize="small"
-              [(ngModel)]="editCache[data.id].data.thienSluongTteThien" (ngModelChange)="changeModel(data.id)"
+            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.thienSluongTteThien"
+              (ngModelChange)="changeModel(data.id)"
               [class]="(editCache[data.id].data.thienSluongTteThien || editCache[data.id].data.thienSluongTteThien ===0) &&  editCache[data.id].data.thienSluongTteThien >= 0?'' : 'input-error-validate'">
             </fm-input-number>
           </td>
           <td>
-            <fm-input-number class="search__input" nzSize="small"
-              [(ngModel)]="editCache[data.id].data.thienSluongUocThien" (ngModelChange)="changeModel(data.id)"
+            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.thienSluongUocThien"
+              (ngModelChange)="changeModel(data.id)"
               [class]="(editCache[data.id].data.thienSluongUocThien || editCache[data.id].data.thienSluongUocThien ===0) &&  editCache[data.id].data.thienSluongUocThien >= 0?'' : 'input-error-validate'">
             </fm-input-number>
           </td>
           <td>
-            <fm-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.thienCong"
+            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.thienCong"
               (ngModelChange)="changeModel(data.id)" disabled></fm-input-number>
           </td>
           <td>
@@ -167,8 +166,7 @@
             </fm-input-number>
           </td>
           <td>
-            <fm-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.ncauKphi"
-              disabled>
+            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.ncauKphi" disabled>
             </fm-input-number>
           </td>
           <td [hidden]="status">
