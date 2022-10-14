@@ -951,4 +951,12 @@ export class PhuLuc2Component implements OnInit {
     return displayNumber(num);
   }
 
+  formatterPercent = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
+
+  parserPercent = value => value.replace(/\$\s?|(,*)/g, '')
+
+
+  viewDetail(data) {
+    console.log(data);
+  }
 }
