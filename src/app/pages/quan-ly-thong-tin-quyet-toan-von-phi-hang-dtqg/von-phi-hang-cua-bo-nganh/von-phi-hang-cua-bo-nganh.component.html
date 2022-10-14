@@ -84,55 +84,37 @@
         <th></th>
         <th></th>
         <th>
-          <nz-input-group [nzSuffix]="suffixTemplateInfo">
+          <nz-input-group>
             <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namQuyetToan"
                    (input)="filterInTable('namQuyetToan',filterTable.namQuyetToan)" size="small" />
           </nz-input-group>
-          <ng-template #suffixTemplateInfo>
-            <i nz-icon nzType="search"></i>
-          </ng-template>
         </th>
         <th>
-          <nz-input-group [nzSuffix]="suffixTemplateInfo">
+          <nz-input-group>
             <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayNhap"
                    (input)="filterInTable('ngayNhap',filterTable.ngayNhap)" size="small" />
           </nz-input-group>
-          <ng-template #suffixTemplateInfo>
-            <i nz-icon nzType="search"></i>
-          </ng-template>
         </th>
         <th>
-          <nz-input-group [nzSuffix]="suffixTemplateInfo">
+          <nz-input-group>
             <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayCapNhap"
                    (input)="filterInTable('ngayCapNhap',filterTable.ngayCapNhap)" size="small" />
           </nz-input-group>
-          <ng-template #suffixTemplateInfo>
-            <i nz-icon nzType="search"></i>
-          </ng-template>
         </th>
         <th>
-          <nz-input-group [nzSuffix]="suffixTemplateInfo">
+          <nz-input-group>
             <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
                    (input)="filterInTable('trangThai',filterTable.trangThai)" size="small" />
           </nz-input-group>
-          <ng-template #suffixTemplateInfo>
-            <i nz-icon nzType="search"></i>
-          </ng-template>
         </th>
         <th>
-          <nz-input-group [nzSuffix]="suffixTemplateInfo">
+          <nz-input-group >
             <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThaiPdBtc"
                    (input)="filterInTable('trangThaiPdBtc',filterTable.trangThaiPdBtc)" size="small" />
           </nz-input-group>
-          <ng-template #suffixTemplateInfo>
-            <i nz-icon nzType="search"></i>
-          </ng-template>
         </th>
         <th>
         </th>
-        <ng-template #suffixIconSearch>
-          <i nz-icon nzType="search"></i>
-        </ng-template>
       </tr>
       </thead>
       <tbody>

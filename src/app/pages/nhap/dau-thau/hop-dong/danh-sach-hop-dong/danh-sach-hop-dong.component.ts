@@ -1,19 +1,24 @@
-import {cloneDeep} from 'lodash';
-import {convertTenVthh} from 'src/app/shared/commonFunction';
-import {Component, Input, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {UserService} from 'src/app/services/user.service';
-import {UserLogin} from 'src/app/models/userlogin';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {MESSAGE} from 'src/app/constants/message';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {DonviService} from 'src/app/services/donvi.service';
-import {ThongTinHopDongService} from 'src/app/services/thongTinHopDong.service';
+import { cloneDeep } from 'lodash';
+import { convertTenVthh } from 'src/app/shared/commonFunction';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
+import { UserLogin } from 'src/app/models/userlogin';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DonviService } from 'src/app/services/donvi.service';
+import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import * as dayjs from 'dayjs';
-import {saveAs} from 'file-saver';
-import {Globals} from 'src/app/shared/globals';
+import { saveAs } from 'file-saver';
+import { Globals } from 'src/app/shared/globals';
+import {
+  ThongTinDauThauService
+} from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
+import { QuyetDinhPheDuyetKetQuaLCNTService } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
+import { STATUS } from "../../../../../constants/status";
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -39,12 +44,16 @@ export class DanhSachHopDongComponent implements OnInit {
   optionsDonViShow: any[] = [];
   selectedDonVi: any = {};
   isDetail: boolean = false;
+  isAddNew: boolean = false;
+  isQuanLy: boolean = false;
+
   selectedId: number = 0;
   isView: boolean = false;
   allChecked = false;
   indeterminate = false;
   idGoiThau: number = 0;
 
+  STATUS = STATUS;
   filterTable: any = {
     soHd: '',
     tenHd: '',
@@ -66,6 +75,8 @@ export class DanhSachHopDongComponent implements OnInit {
     private donViService: DonviService,
     private thongTinHopDong: ThongTinHopDongService,
     public globals: Globals,
+    private thongTinDauThauService: ThongTinDauThauService,
+    private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService
   ) {
   }
 
@@ -148,54 +159,40 @@ export class DanhSachHopDongComponent implements OnInit {
   }
 
   async search() {
-    this.spinner.show();
-    let maDonVi = null;
-    let tenDvi = null;
-    let donviId = null;
-    if (this.inputDonVi && this.inputDonVi.length > 0) {
-      let getDonVi = this.optionsDonVi.filter(
-        (x) => x.labelDonVi == this.inputDonVi,
-      );
-      if (getDonVi && getDonVi.length > 0) {
-        maDonVi = getDonVi[0].maDvi;
-        tenDvi = getDonVi[0].tenDvi;
-        donviId = getDonVi[0].id;
-      }
-    }
     let body = {
-      loaiVthh: this.typeVthh ?? '',
-      maDvi: maDonVi,
-      nhaCcap: this.nhaCungCap ?? '',
-      tenHd: this.tenHd ?? '',
+      // tuNgayTao: this.searchFilter.ngayTongHop
+      //   ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
+      //   : null,
+      // denNgayTao: this.searchFilter.ngayTongHop
+      //   ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
+      //   : null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      soHd: this.soHd,
-      denNgayKy:
-        this.ngayKy && this.ngayKy.length > 1
-          ? dayjs(this.ngayKy[1]).format('YYYY-MM-DD')
-          : null,
-      tuNgayKy:
-        this.ngayKy && this.ngayKy.length > 0
-          ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
-          : null,
+      // soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
+      // soQdinh: this.searchFilter.soQdinh,
+      // loaiVthh: this.searchFilter.loaiVthh,
+      // namKhoach: this.searchFilter.namKhoach,
+      // trichYeu: this.searchFilter.trichYeu,
+      maDvi: this.userInfo.MA_DVI,
+      trangThai: STATUS.BAN_HANH
     };
-    let res = await this.thongTinHopDong.timKiem(body);
+    let res = await this.quyetDinhPheDuyetKetQuaLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      this.totalRecord = data.totalElements;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          item.checked = false;
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);
-      this.totalRecord = data.totalElements;
     } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    this.spinner.hide();
   }
 
   xoaItem(item: any) {
@@ -256,9 +253,19 @@ export class DanhSachHopDongComponent implements OnInit {
     }
   }
 
+  themMoi(isView: boolean, data: any){
+    this.selectedId = data.id;
+    this.isDetail = true;
+    this.isAddNew = true;
+    this.isQuanLy = false;
+    this.isView = isView;
+  }
+
   redirectToChiTiet(isView: boolean, data: any) {
     this.selectedId = data.id;
     this.isDetail = true;
+    this.isAddNew = false;
+    this.isQuanLy = true;
     this.isView = isView;
     this.idGoiThau = data.idGoiThau;
   }
@@ -335,7 +342,7 @@ export class DanhSachHopDongComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.thongTinHopDong.deleteMuti({ids: dataDelete});
+            let res = await this.thongTinHopDong.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.search();
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);

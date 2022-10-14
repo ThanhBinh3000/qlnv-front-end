@@ -15,7 +15,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quantri-danhmuc/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
+import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../../constants/status";
@@ -81,7 +81,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         id: [],
         nam: [dayjs().get('year')],
         maDvi: ['', [Validators.required]],
-        maQhns : ['',],
+        maQhns: ['',],
         tenDvi: ['', [Validators.required]],
         idQdGiaoNvNh: ['', [Validators.required]],
         soQdGiaoNvNh: [, [Validators.required]],
@@ -181,7 +181,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      this.listSoQuyetDinh = data.content.filter( x => !x.loaiVthh.startsWith("02"));
+      this.listSoQuyetDinh = data.content.filter(x => !x.loaiVthh.startsWith("02"));
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -291,22 +291,22 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
           const data = res.data;
           this.dataTableChiTieu = data.ketQuaKiemTra;
           this.formData.patchValue({
-            id : data.id,
-            nam : data.nam,
-            maDvi : data.maDvi,
-            maQhns : data.maQhns,
-            tenDvi : data.tenDvi,
-            soPhieu : data.soPhieu,
-            ngayTao : data.ngayTao,
-            idQdGiaoNvNh : data.idQdGiaoNvNh,
-            soQdGiaoNvNh : data.soQdGiaoNvNh,
-            loaiVthh : data.loaiVthh,
-            tenLoaiVthh : data.tenLoaiVthh,
-            cloaiVthh : data.cloaiVthh,
-            moTaHangHoa : data.moTaHangHoa,
-            tenCloaiVthh : data.tenCloaiVthh,
-            soHd : data.soHd,
-            ngayQdGiaoNvNh : data.ngayQdGiaoNvNh,
+            id: data.id,
+            nam: data.nam,
+            maDvi: data.maDvi,
+            maQhns: data.maQhns,
+            tenDvi: data.tenDvi,
+            soPhieu: data.soPhieu,
+            ngayTao: data.ngayTao,
+            idQdGiaoNvNh: data.idQdGiaoNvNh,
+            soQdGiaoNvNh: data.soQdGiaoNvNh,
+            loaiVthh: data.loaiVthh,
+            tenLoaiVthh: data.tenLoaiVthh,
+            cloaiVthh: data.cloaiVthh,
+            moTaHangHoa: data.moTaHangHoa,
+            tenCloaiVthh: data.tenCloaiVthh,
+            soHd: data.soHd,
+            ngayQdGiaoNvNh: data.ngayQdGiaoNvNh,
             maDiemKho: data.maDiemKho,
             tenDiemKho: data.tenDiemKho,
             maNhaKho: data.maNhaKho,
@@ -315,21 +315,21 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
             tenNganKho: data.tenNganKho,
             maLoKho: data.maLoKho,
             tenLoKho: data.tenLoKho,
-            nguoiGiaoHang : data.nguoiGiaoHang,
-            cmtNguoiGiaoHang : data.cmtNguoiGiaoHang,
-            donViGiaoHang : data.donViGiaoHang,
-            diaChi : data.donViGiaoHang,
-            bienSoXe : data.bienSoXe,
-            soLuongDeNghiKt : data.soLuongDeNghiKt,
-            soLuongNhapKho : data.soLuongNhapKho,
-            soChungThuGiamDinh : data.soChungThuGiamDinh,
-            ngayGdinh : data.ngayGdinh,
-            tchucGdinh : data.tchucGdinh,
-            kqDanhGia : data.kqDanhGia,
-            ketLuan : data.ketLuan,
-            trangThai : data.trangThai,
-            tenTrangThai : data.tenTrangThai,
-            lyDoTuChoi : data.lyDoTuChoi,
+            nguoiGiaoHang: data.nguoiGiaoHang,
+            cmtNguoiGiaoHang: data.cmtNguoiGiaoHang,
+            donViGiaoHang: data.donViGiaoHang,
+            diaChi: data.donViGiaoHang,
+            bienSoXe: data.bienSoXe,
+            soLuongDeNghiKt: data.soLuongDeNghiKt,
+            soLuongNhapKho: data.soLuongNhapKho,
+            soChungThuGiamDinh: data.soChungThuGiamDinh,
+            ngayGdinh: data.ngayGdinh,
+            tchucGdinh: data.tchucGdinh,
+            kqDanhGia: data.kqDanhGia,
+            ketLuan: data.ketLuan,
+            trangThai: data.trangThai,
+            tenTrangThai: data.tenTrangThai,
+            lyDoTuChoi: data.lyDoTuChoi,
           })
         }
       }

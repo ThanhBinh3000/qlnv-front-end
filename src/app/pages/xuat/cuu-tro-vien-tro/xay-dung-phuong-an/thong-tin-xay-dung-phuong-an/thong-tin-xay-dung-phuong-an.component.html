@@ -226,7 +226,7 @@
           <th style="width: 35px">STT</th>
           <th>Nội dung xuất viện trợ, cứu trợ</th>
           <th>Số lượng (kg)</th>
-          <th>Hành động</th>
+          <th style="width: 100px">Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -248,12 +248,14 @@
             </a>
           </td>
         </tr>
-        <tr *ngFor="let item of formData.value.thongTinChiTiet, let i = index">
+        <tr *ngFor="let item of formData.value.thongTinChiTiet, let i = index" (click)="onClickRowChiTiet(i)">
           <ng-container *ngIf="!formData.value.thongTinChiTiet[i]?.isEdit; else editTemplate">
-            <td>{{i + 1}}</td>
-            <td class="text-blue"><a (click)="onClickChiTiet(item)">{{item.noiDung}}</a></td>
-            <td>{{item.soLuong ?? 0|number: '1.0-1'}}</td>
-            <td>
+            <td [ngClass]="(idDxuatDtlSelect==item.idVirtual)?'bg-selected':''">{{i + 1}}</td>
+            <td [ngClass]="(idDxuatDtlSelect==item.idVirtual)?'text-blue':''">
+              {{item.noiDung}}</td>
+            <td [ngClass]="(idDxuatDtlSelect==item.idVirtual)?'bg-selected':''">
+              {{item.soLuong ?? 0|number: '1.0-1'}}</td>
+            <td [ngClass]="(idDxuatDtlSelect==item.idVirtual)?'bg-selected':''">
               <a (click)="editThongTin(i)" *ngIf="!isView">
                 <i class="fa fa-pencil"></i>
               </a>

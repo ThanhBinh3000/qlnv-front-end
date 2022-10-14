@@ -94,16 +94,14 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    //this.listVthh = LIST_VAT_TU_HANG_HOA;
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
       this.loadDsLoaiGia(),
       this.loadDsVthh(),
       this.loadToTrinhDeXuat(),
-      this.maQd = "/QD-BTC",
+      this.maQd = "/QĐ-BTC",
       this.getDataDetail(this.idInput),
-      // this.onChangeNamQd(this.formData.get("namKeHoach").value),
       this.loadTiLeThue()
     ]);
     this.spinner.hide();
@@ -113,6 +111,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhGiaCuaBtcService.getDetail(id);
       const data = res.data;
+      this.arrThongTinGia = data.thongTinGiaVt
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -255,26 +254,11 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     }
     let currentRow = this.formData.value;
     let currentLine = currentRow.thongTinGia;
-    if (currentLine) {
-      currentLine.forEach(item => {
-        //gia mua toi da
-        if (currentRow.loaiGia == 'LG01' && (item.giaQd > item.giaDn || item.giaQdVat > item.giaDnVat)) {
-          err = true;
-          item.giaQd = 0;
-          return this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
-        }
-        //gia ban toi thieu
-        if (currentRow.loaiGia == 'LG02' && (item.giaQd < item.giaDn || item.giaQdVat < item.giaDnVat)) {
-          err = true;
-          item.giaQd = 0;
-          return this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
-        }
-      })
-    }
     if (!err) {
       let body = this.formData.value;
       body.soQd = body.soQd + this.maQd;
       body.pagType = this.pagType;
+      body.thongTinGiaVt = this.arrThongTinGia
       let res;
       if (this.idInput > 0) {
         res = await this.quyetDinhGiaCuaBtcService.update(body);
@@ -379,21 +363,23 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     let currentRow = this.formData.value;
     let currentLine = this.arrThongTinGia[index];
     //gia mua toi da
+    if (type === 0) {
+      this.arrThongTinGia[index].giaQdVat = this.arrThongTinGia[index].giaQd + this.arrThongTinGia[index].giaQd * this.thueVat;
+    }
     if (currentRow.loaiGia == 'LG01' && (currentLine.giaQd > currentLine.giaDn || currentLine.giaQdVat > currentLine.giaDnVat)) {
-      this.arrThongTinGia[index].giaQd = 0;
+      currentLine.giaQd = 0
+      currentLine.giaQdVat = 0
       this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
     }
     //gia ban toi thieu
     if (currentRow.loaiGia == 'LG02' && (currentLine.giaQd < currentLine.giaDn || currentLine.giaQdVat < currentLine.giaDnVat)) {
+      currentLine.giaQd = 0
+      currentLine.giaQdVat = 0
       this.arrThongTinGia[index].giaQd = 0;
       this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
     }
     //0:gia>vat 1:vat>gia
-    if (type === 0) {
-      this.arrThongTinGia[index].giaQdVat = this.arrThongTinGia[index].giaQd + this.arrThongTinGia[index].giaQd * this.thueVat;
-    } else if (type === 1) {
-      this.arrThongTinGia[index].giaQd = this.arrThongTinGia[index].giaQdVat - this.arrThongTinGia[index].giaQdVat * this.thueVat;
-    }
+
   }
 
   openDialogToTrinh() {

@@ -22,7 +22,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { HoSoKyThuatService } from 'src/app/services/hoSoKyThuat.service';
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
+import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 
 @Component({
   selector: 'them-moi-phieu-nhap-kho',
