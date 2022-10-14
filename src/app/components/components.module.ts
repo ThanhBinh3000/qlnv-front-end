@@ -154,6 +154,7 @@ import { DialogDiaDiemNhapKhoComponent } from './dialog/dialog-dia-diem-nhap-kho
 import { BaseComponent } from './base/base.component';
 import { DialogTongHopHangSuaChuaDtqgComponent } from './dialog/dialog-tong-hop-hang-sua-chua-dtqg/dialog-tong-hop-hang-sua-chua-dtqg.component';
 import { DialogThemMoiKeHoachMuaTrucTiepComponent } from './dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
+import { DialogCanCuThongTinChaoGiaComponent } from './dialog/dialog-can-cu-thong-tin-chao-gia/dialog-can-cu-thong-tin-chao-gia.component';
 @NgModule({
   declarations: [
     //components
@@ -259,7 +260,8 @@ import { DialogThemMoiKeHoachMuaTrucTiepComponent } from './dialog/dialog-them-m
     DialogDiaDiemNhapKhoComponent,
     BaseComponent,
     DialogTongHopHangSuaChuaDtqgComponent,
-    DialogThemMoiKeHoachMuaTrucTiepComponent
+    DialogThemMoiKeHoachMuaTrucTiepComponent,
+    DialogCanCuThongTinChaoGiaComponent
   ],
   imports: [
     CommonModule,
@@ -381,6 +383,7 @@ import { DialogThemMoiKeHoachMuaTrucTiepComponent } from './dialog/dialog-them-m
     TemplateErrorComponent,
     DialogTableSelectionComponent,
     DialogDiaDiemNhapKhoComponent,
+    DialogCanCuThongTinChaoGiaComponent,
     BaseComponent
   ],
   schemas: [NO_ERRORS_SCHEMA],

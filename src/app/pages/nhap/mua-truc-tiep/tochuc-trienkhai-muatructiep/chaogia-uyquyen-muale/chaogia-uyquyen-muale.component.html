@@ -128,27 +128,27 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of basicTable.data; let i = index">
+          <tr *ngFor="let item of basicTable.data; let i = index">
             <td width="45px">
-              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                [nzDisabled]="data.trangThai != '00'"></label>
+              <label nz-checkbox [(ngModel)]="item.checked" (ngModelChange)="updateSingleChecked()"
+                [nzDisabled]="item.trangThai != '00'"></label>
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-            <td>{{ data.soQdPduyet }}</td>
-            <td>{{ data.tenDvi }}</td>
-            <td>{{ data.namKh }}</td>
-            <td>{{ data.pthucMuatt }}</td>
-            <td>{{ data.ngayHluc | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ item.soQdPduyet }}</td>
+            <td>{{ item.tenDvi }}</td>
+            <td>{{ item.namKh }}</td>
+            <td>{{ item.pthucMuatt }}</td>
+            <td>{{ item.ngayHluc | date: 'dd/MM/YYYY' }}</td>
             <td></td>
-            <td>{{ data.tenLoaiVthh }}</td>
-            <td>{{ data.tenCloaiVthh }}</td>
-            <td>{{ data.tenTrangThaiTkhai}}</td>
+            <td>{{ item.tenLoaiVthh }}</td>
+            <td>{{ item.tenCloaiVthh }}</td>
+            <td>{{ item.tenTrangThaiTkhai}}</td>
             <td class="text-left">
-              <a (click)="redirectToChiTiet(data.id)">
+              <a (click)="redirectToChiTiet(item)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT"
-                (click)="redirectToChiTiet(data.id)">
+              <a *ngIf="item.trangThai == STATUS.CHUA_CAP_NHAT || item.trangThai == STATUS.DANG_CAP_NHAT"
+                (click)="redirectToChiTiet(item)">
                 <i class="icon htvbdh_soanthao"></i>
               </a>
             </td>
@@ -176,6 +176,7 @@
   </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-  <app-themmoi-chaogia-uyquyen-muale [idInput]="selectedId" [loaiVthhInput]="loaiVthh" (showListEvent)="showList()">
+  <app-themmoi-chaogia-uyquyen-muale [idInput]="selectedId" [selectedData]="selectedData" [loaiVthhInput]="loaiVthh"
+    (showListEvent)="showList()">
   </app-themmoi-chaogia-uyquyen-muale>
 </ng-container>
