@@ -203,9 +203,8 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.detail && (this.detail.trangThai == STATUS.TU_CHOI_TP || this.detail.trangThai == STATUS.TU_CHOI_LDC
-    )) {
-      return true;
+    if (this.detail) {
+      return false;
     }
   }
 
@@ -245,8 +244,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     };
     let res = await this.thongBanDauGiaTaiSanService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listThongBaoBDG = data.content;
+      this.listThongBaoBDG = res.data.content.filter(item => item.qdPheDuyetKQBdg == null);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -344,7 +342,6 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          await this.save(true);
           let trangThai;
           switch (this.detail.trangThai) {
             case STATUS.DU_THAO : {
@@ -356,7 +353,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
               break;
             }
             case STATUS.TU_CHOI_LDC : {
-              trangThai = STATUS.CHO_DUYET_LDC
+              trangThai = STATUS.CHO_DUYET_TP
               break;
             }
           }

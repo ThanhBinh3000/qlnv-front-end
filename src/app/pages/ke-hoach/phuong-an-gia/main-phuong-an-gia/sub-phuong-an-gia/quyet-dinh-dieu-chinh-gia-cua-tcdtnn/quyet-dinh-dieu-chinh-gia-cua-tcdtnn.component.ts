@@ -10,6 +10,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserService } from 'src/app/services/user.service';
 import {QuyetDinhDieuChinhGiaTCDTNNService} from "../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhDieuChinhGiaTCDTNN.service";
 import { saveAs } from 'file-saver';
+import {Globals} from "../../../../../../shared/globals";
 
 @Component({
   selector: 'app-quyet-dinh-dieu-chinh-gia-cua-tcdtnn',
@@ -44,7 +45,8 @@ export class QuyetDinhDieuChinhGiaCuaTcdtnnComponent implements OnInit {
     private notification: NzNotificationService,
     public userService: UserService,
     private modal: NzModalService,
-    private quyetDinhDieuChinhGiaTCDTNNService: QuyetDinhDieuChinhGiaTCDTNNService
+    private quyetDinhDieuChinhGiaTCDTNNService: QuyetDinhDieuChinhGiaTCDTNNService,
+              public globals : Globals
   ) {
     this.formData = this.fb.group({
       namKeHoach: [null],
