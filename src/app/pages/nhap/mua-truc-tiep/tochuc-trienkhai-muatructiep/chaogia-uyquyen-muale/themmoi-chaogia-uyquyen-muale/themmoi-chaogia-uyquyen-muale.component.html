@@ -5,12 +5,12 @@
             <span>Quay lại</span>
         </button>
         <button type="button" class="btn btn-sub xanh-nhat" (click)="save()"
-            *ngIf="formData.value.trangThaiTkhai == STATUS.HOAN_THANH_CAP_NHAT">
+            *ngIf="formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT">
             <i class="icon htvbdh_checkfile2"></i>
             <span>Hoàn thành cập nhật</span>
         </button>
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()"
-            *ngIf="formData.value.trangThaiTkhai == STATUS.HOAN_THANH_CAP_NHAT">
+            *ngIf="formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
         </button>
@@ -20,7 +20,8 @@
     <div class="header header-green-background" *ngIf="!isShowFromKq">
         <div class="header-text">
             <div class="title-chi-tieu">
-                <span [ngClass]="formData.value.trangThai == STATUS.HOAN_THANH_CAP_NHAT ? 'status-xanh' : 'status-do'">
+                <span
+                    [ngClass]="formData.value.trangThaiTkhai == STATUS.HOAN_THANH_CAP_NHAT ? 'status-xanh' : 'status-do'">
                     {{formData.value.tenTrangThaiTkhai}}
                 </span>
                 <span>THÔNG TIN CHÀO GIÁ/ỦY QUYỀN/MUA LẺ</span>
@@ -163,7 +164,7 @@
 
         </div>
         <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-            <nz-table [nzData]="listDataGroup" class="nowrap" nzBordered *ngIf="userService.isCuc() ">
+            <nz-table [nzData]="listOfData" class="nowrap" nzBordered *ngIf="userService.isCuc() ">
                 <thead>
                     <tr>
                         <th class="text-center" style="width: 5%;">STT</th>
@@ -251,7 +252,7 @@
                     </tr>
                 </tbody>
                 <tbody>
-                    <tr *ngFor="let data of listDataGroup , let idx = index">
+                    <tr *ngFor="let data of listOfData , let idx = index">
                         <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
                             <td class="text-center">{{ idx + 1 }}</td>
                             <td>{{data.canhanTochuc}}</td>

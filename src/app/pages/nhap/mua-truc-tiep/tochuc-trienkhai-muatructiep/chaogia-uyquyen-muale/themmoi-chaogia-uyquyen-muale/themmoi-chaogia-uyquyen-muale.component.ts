@@ -129,7 +129,6 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
           trangThaiTkhai: dataCurrent.trangThaiTkhai,
           tenTrangThaiTkhai: dataCurrent.tenTrangThaiTkhai
         })
-        this.listDataGroup = dataCurrent.hhQdPheduyetKhMttDxList;
         this.convertListData()
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -141,7 +140,6 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
         this.idDtl = dataDetail.id;
         this.listOfData = dataDetail.hhChiTietTTinChaoGiaList;
-        console.log(this.listOfData, 2222)
         this.formData.patchValue({
           trangThaiTkhai: dataDetail.trangThaiTkhai,
           tenTrangThaiTkhai: dataDetail.tenTrangThaiTkhai
@@ -186,7 +184,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
   pipe = new DatePipe('en-US');
   async save() {
     await this.spinner.show();
-    let filter = this.listDataGroup.filter(item => item.trangThaiTkhai == STATUS.CHUA_CAP_NHAT);
+    let filter = this.listOfData.filter(item => item.trangThaiTkhai == STATUS.CHUA_CAP_NHAT);
     if (filter.length > 0) {
       this.notification.error(MESSAGE.ERROR, "Vui lòng cập nhật thông tin các gói thầu");
       await this.spinner.hide();
@@ -194,7 +192,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
     }
     let body = this.formData.value;
     body.trangThaiTkhai = STATUS.HOAN_THANH_CAP_NHAT
-    body.hhChiTietTTinChaoGiaReqList = this.listDataGroup
+    body.hhChiTietTTinChaoGiaReqList = this.listOfData
     body.pthucMuatt = this.radioValue
     let res = await this.chaogiaUyquyenMualeService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -216,9 +214,8 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
   async saveGoiThau() {
     await this.spinner.show()
     let body = this.formData.value;
-    body.hhChiTietTTinChaoGiaReqList = this.listDataGroup
+    body.hhChiTietTTinChaoGiaReqList = this.listOfData
     body.pthucMuatt = this.radioValue
-    console.log(body);
     let res = await this.chaogiaUyquyenMualeService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -236,14 +233,15 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
   }
 
   cancelEdit(stt: number): void {
-    const index = this.listDataGroup.findIndex(item => item.stt === stt);
+    const index = this.listOfData.findIndex(item => item.stt === stt);
     this.dataEdit[stt] = {
-      data: { ...this.listDataGroup[index] },
+      data: { ...this.listOfData[index] },
       edit: false
     };
   }
 
   editRow(stt: number) {
+    this.dataEdit[stt].data = this.listOfData[stt];
     this.dataEdit[stt].edit = true;
   }
 
@@ -256,11 +254,11 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
   }
 
   emitDataTable() {
-    this.dataTableChange.emit(this.listDataGroup);
+    this.dataTableChange.emit(this.listOfData);
   }
 
   themDataTable() {
-    this.listDataGroup = [...this.listDataGroup, this.rowItem];
+    this.listOfData = [...this.listOfData, this.rowItem];
     this.rowItem = new ChiTietThongTinChaoGia();
     this.emitDataTable();
     this.updateEditCache()
@@ -277,7 +275,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.listDataGroup.splice(index, 1);
+          this.listOfData.splice(index, 1);
           this.updateEditCache();
         } catch (e) {
           console.log('error', e);
@@ -287,9 +285,9 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
   }
 
   updateEditCache(): void {
-    if (this.listDataGroup) {
+    if (this.listOfData) {
       let i = 0;
-      this.listDataGroup.forEach((item, index) => {
+      this.listOfData.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
           data: { ...item },
@@ -323,14 +321,13 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
             this.rowItem.fileDinhKems.fileSize = resUpload.size;
             this.rowItem.fileDinhKems.fileUrl = resUpload.url;
             this.rowItem.fileDinhKems.idVirtual = new Date().getTime();
-            console.log(this.rowItem.fileDinhKems);
           }
         });
     }
   }
 
   saveEdit(idx: number): void {
-    Object.assign(this.listDataGroup[idx], this.dataEdit[idx].data);
+    Object.assign(this.listOfData[idx], this.dataEdit[idx].data);
     this.dataEdit[idx].edit = false;
   }
 
