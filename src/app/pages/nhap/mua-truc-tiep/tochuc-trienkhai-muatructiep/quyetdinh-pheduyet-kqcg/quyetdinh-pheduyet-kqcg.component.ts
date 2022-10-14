@@ -8,7 +8,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
@@ -22,7 +21,6 @@ import { QuyetDinhPheDuyetKetQuaChaoGiaMTTService } from 'src/app/services/quyet
   styleUrls: ['./quyetdinh-pheduyet-kqcg.component.scss']
 })
 export class QuyetdinhPheduyetKqcgComponent implements OnInit {
-
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
