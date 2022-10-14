@@ -15,7 +15,7 @@ import { MESSAGE } from "../../../../../../../constants/message";
 import { DanhMucTieuChuanService } from "../../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
 import { UploadFileService } from "../../../../../../../services/uploaFile.service";
 import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
-import { QuyetDinhPheDuyetKeHoachLCNTService } from "../../../../../../../services/quyetDinhPheDuyetKeHoachLCNT.service";
+import { QuyetDinhPheDuyetKeHoachLCNTService } from "../../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service";
 import { saveAs } from 'file-saver';
 import {
   CanCuXacDinhPag,

@@ -1,4 +1,4 @@
-import { QuyetDinhPheDuyetKeHoachLCNTService } from './../../../services/quyetDinhPheDuyetKeHoachLCNT.service';
+import { QuyetDinhPheDuyetKeHoachLCNTService } from '../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';

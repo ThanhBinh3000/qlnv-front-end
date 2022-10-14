@@ -1,0 +1,14 @@
+.left-menu {
+  ul {
+    //min-height: 600px;
+  }
+
+  ul:has(li):has(ul) {
+    //background-color: #4E5484;
+  }
+
+  ul > span {
+    color: white;
+  }
+
+}
