@@ -99,8 +99,8 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null, []],
-      nam: [null, []],
-      soQuyetDinh: [null, []],
+      nam: [null, [Validators.required]],
+      soQuyetDinh: [null, [Validators.required]],
       trichYeu: [null, [Validators.required]],
       ngayHieuLuc: [null, []],
       ngayKy: [null, []],
@@ -332,7 +332,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     }
   }
 
-  guiDuyet() {
+  guiDuyet(id?) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -361,7 +361,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
             }
           }
           let body = {
-            id: this.id,
+            id: id ? id : this.id,
             trangThai: trangThai
           };
           let res =
@@ -505,7 +505,7 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  async save(isOther: boolean) {
+  async save(isGuiDuyet: boolean) {
     this.spinner.show();
     try {
       let body = this.formData.value;
@@ -526,7 +526,9 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
+          if(isGuiDuyet){
+            this.guiDuyet();
+          }else{
             this.notification.success(
               MESSAGE.SUCCESS,
               MESSAGE.UPDATE_SUCCESS,
@@ -541,7 +543,9 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
+          if(isGuiDuyet){
+            this.guiDuyet(res.data.id);
+          }else{
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.back();
           }

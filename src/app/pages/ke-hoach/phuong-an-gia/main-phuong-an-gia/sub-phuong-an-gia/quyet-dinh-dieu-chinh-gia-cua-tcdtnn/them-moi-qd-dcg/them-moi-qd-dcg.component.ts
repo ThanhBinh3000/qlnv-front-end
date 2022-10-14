@@ -20,6 +20,9 @@ import {
   QuyetDinhDieuChinhGiaTCDTNNService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/quyetDinhDieuChinhGiaTCDTNN.service";
 import { STATUS } from 'src/app/constants/status';
+import {
+  TongHopPhuongAnGiaService
+} from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
 
 @Component({
   selector: 'app-them-moi-qd-dcg',
@@ -46,6 +49,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
   listThongTinGia: any[] = [];
   detail: any;
   radioValue: string;
+   dsToTrinhDeXuat: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -55,7 +59,8 @@ export class ThemMoiQdDcgComponent implements OnInit {
     private helperService: HelperService,
     private notification: NzNotificationService,
     private userService: UserService,
-    private quyetDinhDieuChinhGiaTCDTNNService: QuyetDinhDieuChinhGiaTCDTNNService
+    private quyetDinhDieuChinhGiaTCDTNNService: QuyetDinhDieuChinhGiaTCDTNNService,
+    private tongHopPhuongAnGiaService: TongHopPhuongAnGiaService
   ) {
     this.formData = this.fb.group(
       {
@@ -99,11 +104,24 @@ export class ThemMoiQdDcgComponent implements OnInit {
     }
   }
 
+  async loadDsToTrinh() {
+    let body = {
+      "type": this.type,
+      "pagType": 'VT',
+      "dsTrangThai": [STATUS.DA_DUYET_LDV]
+    }
+    let res = await this.tongHopPhuongAnGiaService.loadToTrinhDeXuat(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsToTrinhDeXuat = res.data;
+    }
+  }
+
   async ngOnInit() {
     this.namNay = dayjs().get('year');
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
+      this.loadDsToTrinh(),
       this.getDataDetail(this.idInput),
       this.maQd = "/QĐ-TCDTNN"
     ])
@@ -166,7 +184,6 @@ export class ThemMoiQdDcgComponent implements OnInit {
             tchuanCluong: data.tchuanCluong
           })
         }
-        console.log(this.listThongTinGia)
       });
     } else if (page == 'SQD') {
       let radioValue = this.soQdGia;
@@ -185,16 +202,17 @@ export class ThemMoiQdDcgComponent implements OnInit {
         },
       });
       modalQD.afterClose.subscribe(async (data) => {
-        console.log(JSON.stringify(data) + "2222222222");
-        if (data != null) {
+        if (data) {
           this.soQdGia = data.soQd
           this.soQdDc = data;
           this.formData.patchValue({
             soQdgTcdtnn: data.soQd,
+            soToTrinhDx: data.soToTrinh,
           })
+          let thongTinGia = this.dsToTrinhDeXuat.find(item => item.soDeXuat == data.soToTrinh)
+          console.log(thongTinGia)
+          this.listThongTinGia = thongTinGia.pagTtChungs
           if (!this.soToTrinh) {
-            this.dataTable = data.thongTinGia;
-            this.listThongTinGia = []
             this.themDataTable();
             this.updateEditCache();
             this.formData.patchValue({
@@ -207,7 +225,6 @@ export class ThemMoiQdDcgComponent implements OnInit {
               tchuanCluong: data.tchuanCluong
             })
           }
-          console.log(this.listThongTinGia)
         }
       });
     }

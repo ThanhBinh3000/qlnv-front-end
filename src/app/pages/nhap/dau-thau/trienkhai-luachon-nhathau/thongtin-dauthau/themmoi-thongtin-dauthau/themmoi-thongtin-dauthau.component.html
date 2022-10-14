@@ -4,8 +4,7 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button
-            type="button" class="btn btn-sub xanh-nhat" (click)="save()">
+        <button *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT" type="button" class="btn btn-sub xanh-nhat" (click)="save()">
             <i class="icon htvbdh_checkfile2"></i>
             <span>Hoàn thành cập nhật</span>
         </button>
@@ -283,22 +282,23 @@
     <!-- START DANH SÁCH CÁC GÓI THẦU -->
     <nz-card class="mg-t-16 flex-card p-lr16 ">
         <div class="header header-green-background mg-t-16">
-          <div class="header-text">
-              <div class="title-chi-tieu">
-                  <span></span>
-                  <span>Danh sách các gói thầu</span>
-              </div>
-          </div>
-          <div class="buttons">
-            <button *ngIf="idGoiThau > 0 && !isShowFromKq"
-              class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
-              <i class="icon htvbdh_tcdt_save"></i>
-              <span>Lưu</span>
-            </button>
-          </div>
+            <div class="header-text">
+                <div class="title-chi-tieu">
+                    <span></span>
+                    <span>Danh sách các gói thầu</span>
+                </div>
+            </div>
+            <div class="buttons">
+                <button *ngIf="idGoiThau > 0 && !isShowFromKq" class="btn btn-main btn-sm waves-effect waves-light"
+                    (click)="saveGoiThau()">
+                    <i class="icon htvbdh_tcdt_save"></i>
+                    <span>Lưu</span>
+                </button>
+            </div>
         </div>
         <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-            <nz-table [nzData]="listDataGroup" class="nowrap" nzBordered>
+            <nz-table [nzData]="listDataGroup" class="nowrap" nzBordered
+                *ngIf="userService.isCuc() ;else templateTableVt">
                 <thead>
                     <tr>
                         <th rowspan="2" style="width: 2%;">STT</th>
@@ -311,13 +311,13 @@
                         <th rowspan="2">Hành động</th>
                     </tr>
                     <tr>
-                      <th>Số lượng</th>
-                      <th>Đơn giá VAT(đ/kg)</th>
-                      <th>Thành tiền</th>
-                      <th>Nhà thầu trúng thầu</th>
-                      <th>Đơn giá VAT(đ/kg)</th>
-                      <th>Thành tiền</th>
-                      <th>Chênh lệch với giá gốc</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá VAT(đ/kg)</th>
+                        <th>Thành tiền</th>
+                        <th>Nhà thầu trúng thầu</th>
+                        <th>Đơn giá VAT(đ/kg)</th>
+                        <th>Thành tiền</th>
+                        <th>Chênh lệch với giá gốc</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -336,7 +336,8 @@
                             <td></td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(i)">
-                            <tr *ngFor="let dtGoiThau of item.dataChild, let y = index" (click)="showDetail($event,dtGoiThau)">
+                            <tr *ngFor="let dtGoiThau of item.dataChild, let y = index"
+                                (click)="showDetail($event,dtGoiThau)">
                                 <td></td>
                                 <td></td>
                                 <td>{{dtGoiThau.goiThau}}</td>
@@ -346,21 +347,90 @@
                                 <td>{{dtGoiThau.soLuong * dtGoiThau.donGia * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
                                 <td>{{dtGoiThau.tenNhaThau}}</td>
                                 <td>{{dtGoiThau.donGiaNhaThau | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaNhaThau * 1000 | number: '1.0-1' : 'vi_VN' }}</td>
-                                <td>{{(dtGoiThau.donGiaNhaThau - dtGoiThau.donGia) * dtGoiThau.soLuong * 1000 | number: '1.0-1' : 'vi_VN'  }} </td>
+                                <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaNhaThau * 1000 | number: '1.0-1' : 'vi_VN' }}
+                                </td>
+                                <td>{{(dtGoiThau.donGiaNhaThau - dtGoiThau.donGia) * dtGoiThau.soLuong * 1000 | number:
+                                    '1.0-1' : 'vi_VN' }} </td>
                                 <td>{{dtGoiThau.tenTrangThai}}</td>
                                 <td>
-                                  <a (click)="showDetail($event,dtGoiThau)">
-                                    <i class=" fa fa-eye"></i>
-                                  </a>
+                                    <a (click)="showDetail($event,dtGoiThau)">
+                                        <i class=" fa fa-eye"></i>
+                                    </a>
                                 </td>
                             </tr>
                         </ng-container>
                     </ng-container>
                 </tbody>
             </nz-table>
+            <ng-template #templateTableVt>
+                <nz-table [nzData]="danhsachDx" class="nowrap" nzBordered>
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="width: 2%;">STT</th>
+                            <th rowspan="2">Tên gói thầu</th>
+                            <th rowspan="2">Chủng loại hàng hóa</th>
+                            <th rowspan="2">Cục DTNN KV</th>
+                            <th colspan="3">Kế hoạch đấu thầu</th>
+                            <th colspan="4">Kết quả đấu thầu</th>
+                            <th rowspan="2" style="width: 5%;">Trạng thái đấu thầu</th>
+                            <th rowspan="2" style="width: 5%;">Hành động</th>
+                        </tr>
+                        <tr>
+                            <th>Số lượng</th>
+                            <th>Đơn giá VAT(đ/kg)</th>
+                            <th>Thành tiền</th>
+                            <th>Nhà thầu trúng thầu</th>
+                            <th>Đơn giá VAT(đ/kg)</th>
+                            <th>Thành tiền</th>
+                            <th>Chênh lệch với giá gốc</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let item of danhsachDx , let i = index">
+                            <tr>
+                                <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                                <td>{{item.goiThau}}</td>
+                                <td>{{item.tenCloaiVthh}}</td>
+                                <td></td>
+                                <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td>{{item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td>{{item.soLuong * item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td>{{item.tenNhaThau}}</td>
+                                <td>{{item.donGiaNhaThau | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td>{{item.soLuong * item.donGiaNhaThau * 1000 | number: '1.0-1' : 'vi_VN' }}
+                                </td>
+                                <td>{{(item.donGiaNhaThau - item.donGia) * item.soLuong * 1000 | number:
+                                    '1.0-1' : 'vi_VN' }} </td>
+                                <td>{{item.tenTrangThai}}</td>
+                                <td>
+                                    <a (click)="showDetail($event,item)">
+                                        <i class=" fa fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <ng-container *ngIf="expandSet.has(i)">
+                                <tr *ngFor="let dtGoiThau of item.children, let y = index">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>{{dtGoiThau.tenDvi}}</td>
+                                    <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                                    <td>{{dtGoiThau.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                                    <td>{{dtGoiThau.soLuong * dtGoiThau.donGia | number: '1.0-1' : 'vi_VN'}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-right"> </td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                    </tbody>
+                </nz-table>
+            </ng-template>
         </nz-card>
-        <nz-card *ngIf="idGoiThau > 0" class="mg-t-16 flex-card p-lr16" >
+        <nz-card *ngIf="idGoiThau > 0" class="mg-t-16 flex-card p-lr16">
             <div class="header header-green-background mg-t-16">
                 <div class="header-text">
                     <div class="title-chi-tieu">
@@ -394,15 +464,16 @@
                             <th><input nz-input [(ngModel)]="itemRow.sdt" /></th>
                             <th>{{ itemRow.soLuong | number : '1.0-1' : 'vi_VN' }}</th>
                             <th>
-                              <nz-input-number  nz-input [nzSize]="'small'" [(ngModel)]="itemRow.donGia"
-                                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                                <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="itemRow.donGia"
+                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
                             </th>
                             <th>{{ itemRow.soLuong * itemRow.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</th>
                             <th>
-                              <nz-select [(ngModel)]="itemRow.trangThai" (ngModelChange)="changeTrangThai($event)">
-                                <nz-option *ngFor="let p of listStatusNhaThau" [nzValue]="p.value" [nzLabel]="p.text">
-                                </nz-option>
-                              </nz-select>
+                                <nz-select [(ngModel)]="itemRow.trangThai" (ngModelChange)="changeTrangThai($event)">
+                                    <nz-option *ngFor="let p of listStatusNhaThau" [nzValue]="p.value"
+                                        [nzLabel]="p.text">
+                                    </nz-option>
+                                </nz-select>
                             </th>
                             <th><input nz-input [(ngModel)]="itemRow.lyDo" /></th>
                             <th *ngIf="!isShowFromKq">
@@ -418,24 +489,24 @@
                     <tbody>
                         <tr *ngFor="let data of listNthauNopHs, let i = index">
                             <ng-container *ngIf="!data.edit; else editTemplate">
-                              <td class="text-center">{{i+1}}</td>
-                              <td>{{ data.tenNhaThau }}</td>
-                              <td>{{ data.mst }}</td>
-                              <td>{{ data.diaChi }}</td>
-                              <td>{{ data.sdt }}</td>
-                              <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-                              <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
-                              <td>{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
-                              <td>{{ data.tenTrangThai }}</td>
-                              <td>{{ data.lyDo }}</td>
-                              <td *ngIf="!isShowFromKq" class="text-center">
-                                  <a (click)="startEdit(i)">
-                                      <i class=" fa fa-pencil"></i>
-                                  </a>
-                                  <a (click)="deleteRow(i)">
-                                      <i class="fa fa-trash-o do"></i>
-                                  </a>
-                              </td>
+                                <td class="text-center">{{i+1}}</td>
+                                <td>{{ data.tenNhaThau }}</td>
+                                <td>{{ data.mst }}</td>
+                                <td>{{ data.diaChi }}</td>
+                                <td>{{ data.sdt }}</td>
+                                <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+                                <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
+                                <td>{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+                                <td>{{ data.tenTrangThai }}</td>
+                                <td>{{ data.lyDo }}</td>
+                                <td *ngIf="!isShowFromKq" class="text-center">
+                                    <a (click)="startEdit(i)">
+                                        <i class=" fa fa-pencil"></i>
+                                    </a>
+                                    <a (click)="deleteRow(i)">
+                                        <i class="fa fa-trash-o do"></i>
+                                    </a>
+                                </td>
                             </ng-container>
                             <ng-template #editTemplate>
                                 <td class="text-center">{{i+1}}</td>
@@ -445,15 +516,18 @@
                                 <td><input nz-input [(ngModel)]="itemRowUpdate.sdt" /></td>
                                 <td>{{ itemRowUpdate.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>
-                                  <nz-input-number  nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.donGia"
-                                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                                    <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.donGia"
+                                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
                                 </td>
-                              <td>{{ itemRowUpdate.soLuong * itemRowUpdate.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
-                              <td>
-                                  <nz-select [(ngModel)]="itemRowUpdate.trangThai" (ngModelChange)="changeTrangThai($event)">
-                                    <nz-option *ngFor="let p of listStatusNhaThau" [nzValue]="p.value" [nzLabel]="p.text">
-                                    </nz-option>
-                                  </nz-select>
+                                <td>{{ itemRowUpdate.soLuong * itemRowUpdate.donGia * 1000 | number : '1.0-1' : 'vi_VN'
+                                    }}</td>
+                                <td>
+                                    <nz-select [(ngModel)]="itemRowUpdate.trangThai"
+                                        (ngModelChange)="changeTrangThai($event)">
+                                        <nz-option *ngFor="let p of listStatusNhaThau" [nzValue]="p.value"
+                                            [nzLabel]="p.text">
+                                        </nz-option>
+                                    </nz-select>
                                 </td>
                                 <th><input nz-input [(ngModel)]="itemRowUpdate.lyDo" /></th>
                                 <td class="text-center">
@@ -473,14 +547,14 @@
             </nz-card>
         </nz-card>
         <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form class="mt-16">
-          <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
-              Ghi chú
-            </nz-form-label>
-            <nz-form-control>
-              <textarea nz-input [rows]="3" formControlName="ghiChu"></textarea>
-            </nz-form-control>
-          </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzNoColon]="true">
+                    Ghi chú
+                </nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input [rows]="3" formControlName="ghiChu"></textarea>
+                </nz-form-control>
+            </nz-form-item>
         </form>
     </nz-card>
     <!-- END DANH SÁCH CÁC GÓI THẦU -->

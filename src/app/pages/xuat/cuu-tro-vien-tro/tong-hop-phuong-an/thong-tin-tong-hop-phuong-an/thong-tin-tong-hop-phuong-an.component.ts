@@ -92,6 +92,8 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   thongTinChiTietTh: any[];
   tongSoLuongDxuat = 0;
   tongSoLuongTongHop = 0;
+  tongThanhTienDxuat = 0;
+  tongThanhTienTongHop = 0;
   tongHopEdit: any = [];
   datePipe = new DatePipe('en-US');
   isVisible = false;
@@ -117,19 +119,19 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
       {
         id: [],
         maDvi: [],
-        tenDvi: [,[Validators.required]],
+        tenDvi: [, [Validators.required]],
         maTongHop: [],
         nam: [dayjs().get("year"), [Validators.required]],
-        ngayTongHop: [,[Validators.required]],
-        loaiVthh: [,[Validators.required]],
-        cloaiVthh: [,[Validators.required]],
+        ngayTongHop: [, [Validators.required]],
+        loaiVthh: [, [Validators.required]],
+        cloaiVthh: [, [Validators.required]],
         tongSoLuong: [],
         trangThai: [],
-        loaiHinhNhapXuat: [,[Validators.required]],
-        noiDung: [,[Validators.required]],
+        loaiHinhNhapXuat: [, [Validators.required]],
+        noiDung: [, [Validators.required]],
         lyDoTuChoi: [],
-        tenLoaiVthh: [,[Validators.required]],
-        tenCloaiVthh: [,[Validators.required]],
+        tenLoaiVthh: [, [Validators.required]],
+        tenCloaiVthh: [, [Validators.required]],
         tenTrangThai: [],
         thongTinDeXuat: [new Array(),],
         thongTinTongHop: [new Array()],
@@ -137,7 +139,7 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
       }
     );
     this.userInfo = this.userService.getUserLogin();
-    this.maTongHop = '/' + this.userInfo.MA_TCKT;
+    //this.maTongHop = '/' + this.userInfo.MA_TCKT;
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
@@ -177,69 +179,76 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   }
 
   async save(isOther?: boolean) {
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      let invalid = [];
-      let controls = this.formData.controls;
-      for (const name in controls) {
-        if (controls[name].invalid) {
-          invalid.push(name);
-        }
-      }
-      console.log(invalid, 'invalid');
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
-      return;
-    } else {
-      try {
-        this.spinner.show();
-        let body = this.formData.value;
-        body.tongSoLuong = this.tongSoLuongTongHop;
-        // body.fileDinhKem = this.fileDinhKem;
-        body.ngayTongHop = this.datePipe.transform(body.ngayTongHop, 'yyyy-MM-dd');
-        body.thoiGianThucHien = this.datePipe.transform(body.thoiGianThucHien, 'yyyy-MM-dd');
-        //body.soDxuat = body.soDxuat + this.maDeXuat;
-        console.log(body, 'body');
-        if (this.idInput) {
-          let res = await this.tongHopPhuongAnCuuTroService.update(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Lưu thông tin',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        this.helperService.markFormGroupTouched(this.formData);
+        if (this.formData.invalid) {
+          let invalid = [];
+          let controls = this.formData.controls;
+          for (const name in controls) {
+            if (controls[name].invalid) {
+              invalid.push(name);
+            }
           }
+          console.log(invalid, 'invalid');
+          this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
+          return;
         } else {
-          // body.tongSoLuong = this.tongSLThongTinChiTiet;
-          let res = await this.tongHopPhuongAnCuuTroService.create(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.idInput = res.data.id;
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
+          try {
+            this.spinner.show();
+            let body = this.formData.value;
+            body.tongSoLuong = this.tongSoLuongTongHop;
+            // body.fileDinhKem = this.fileDinhKem;
+            body.ngayTongHop = this.datePipe.transform(body.ngayTongHop, 'yyyy-MM-dd');
+            body.thoiGianThucHien = this.datePipe.transform(body.thoiGianThucHien, 'yyyy-MM-dd');
+            //body.soDxuat = body.soDxuat + this.maDeXuat;
+            console.log(body, 'body');
+            if (this.idInput) {
+              let res = await this.tongHopPhuongAnCuuTroService.update(body);
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+            } else {
+              // body.tongSoLuong = this.tongSLThongTinChiTiet;
+              let res = await this.tongHopPhuongAnCuuTroService.create(body);
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.idInput = res.data.id;
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+            }
+            //gui duyet
+            if (isOther) {
+              let body = {
+                id: this.idInput,
+                trangThai: STATUS.CHO_DUYET_LDV
+              };
+              let res = await this.tongHopPhuongAnCuuTroService.approve(body);
+              if (res.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+            }
+          } catch (e) {
+            console.log(e)
+          } finally {
+            this.spinner.hide();
+            this.quayLai();
           }
         }
-        //gui duyet
-        if (isOther) {
-          let body = {
-            id: this.idInput,
-            trangThai: STATUS.CHO_DUYET_LDV
-          };
-          let res = await this.tongHopPhuongAnCuuTroService.approve(body);
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-        }
-      } catch (e) {
-        console.log(e)
-      } finally {
-        this.spinner.hide();
-        this.quayLai();
       }
-    }
-  }
-
-  back() {
-    this.showListEvent.emit();
+    });
   }
 
   quayLai() {
@@ -436,6 +445,9 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   }
 
   async synthetic() {
+    this.formData.controls['tenDvi'].setValidators([]);
+    this.formData.controls['ngayTongHop'].setValidators([]);
+    this.formData.controls['noiDung'].setValidators([]);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       let invalid = [];
@@ -452,11 +464,14 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
       try {
         this.spinner.show();
         let body = this.formData.value;
-        await this.tongHopPhuongAnCuuTroService.syntheic(body).then(res => {
+        await this.tongHopPhuongAnCuuTroService.syntheic(body).then(async res => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.thongTinChiTiet = this.buildChiTietPhuongAn(res.data.thongTinDeXuat);
             this.thongTinChiTietTh = this.thongTinChiTiet;
-            this.formData.patchValue({thongTinDeXuat: res.data.thongTinDeXuat});
+            if (!this.maTongHop) {
+              this.maTongHop = await this.userService.getId("XH_TH_CUU_TRO_HDR_SEQ")+1;
+            }
+            this.formData.patchValue({thongTinDeXuat: res.data.thongTinDeXuat, maTongHop: this.maTongHop});
             this.summaryData();
             this.expandAll();
           } else {
@@ -471,6 +486,9 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
         (e) {
         console.log(e)
       } finally {
+        this.formData.controls['tenDvi'].setValidators([Validators.required]);
+        this.formData.controls['ngayTongHop'].setValidators([Validators.required]);
+        this.formData.controls['noiDung'].setValidators([Validators.required]);
         this.spinner.hide();
       }
     }
@@ -528,7 +546,6 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   }
 
   buildChiTietPhuongAn(data: any) {
-    console.log(data, 'base')
     let dataResult = [];
     let dataGroup = data.reduce(function (acc, obj) {
       var key = obj['maDvi'];
@@ -554,6 +571,8 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
               if (x.thongTinChiTiet) {
                 x.thongTinChiTiet?.forEach(y => {
                   y.idVirtual = new Date().getTime() + y.id;
+                  y.ngayDxuat = x.ngayDxuat;
+                  y.thoiGianThucHien = x.thoiGianThucHien;
                   thongTinChiTietArr = [...thongTinChiTietArr, y];
                 })
               } else {
@@ -567,7 +586,7 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
             idVirtual: new Date().getTime() + s.id,
             maDvi: s.maDvi,
             tenDvi: s.tenDvi,
-            tongSoLuong: 0,
+            tongSoLuong: s.tongSoLuong,
             soLuong: s.soLuong,
             ngayDxuat: s.ngayDxuat,
             thoiGianThucHien: s.thoiGianThucHien,
@@ -590,7 +609,6 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
         s.thongTinChiTiet = this.tongHopEdit.thongTinChiTiet;
       }
     });
-    console.log(this.thongTinChiTietTh, 11111111111);
     this.summaryData();
     this.isVisible = false;
   }
@@ -609,20 +627,28 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
 
     this.thongTinChiTietTh.forEach(s => {
       let tongSoLuong = 0;
+      let thanhTien = 0;
       s.thongTinChiTiet.forEach(s1 => {
-        tongSoLuong += s1.soLuong
+        tongSoLuong += s1.soLuong;
+        thanhTien += s1.thanhTien;
       })
       s.tongSoLuong = tongSoLuong;
+      s.thanhTien = thanhTien;
       this.tongSoLuongTongHop += s.tongSoLuong;
+      this.tongThanhTienTongHop += s.thanhTien;
     })
 
     this.thongTinChiTiet.forEach(s => {
       let tongSoLuong = 0;
+      let thanhTien = 0;
       s.thongTinChiTiet.forEach(s1 => {
         tongSoLuong += s1.soLuong
+        thanhTien += s1.thanhTien;
       })
       s.tongSoLuong = tongSoLuong;
+      s.thanhTien = thanhTien;
       this.tongSoLuongDxuat += s.tongSoLuong;
+      this.tongThanhTienDxuat += s.thanhTien;
     })
   }
 

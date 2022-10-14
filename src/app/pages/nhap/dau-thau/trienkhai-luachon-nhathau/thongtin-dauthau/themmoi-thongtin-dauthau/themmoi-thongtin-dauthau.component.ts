@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import {Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges,} from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, OnChanges, SimpleChanges, } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import dayjs from 'dayjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -19,14 +19,14 @@ import { cloneDeep, chain } from 'lodash';
 import {
   ThongTinDauThauService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { NzModalService } from "ng-zorro-antd/modal";
 
 @Component({
   selector: 'app-themmoi-thongtin-dauthau',
   templateUrl: './themmoi-thongtin-dauthau.component.html',
   styleUrls: ['./themmoi-thongtin-dauthau.component.scss']
 })
-export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
+export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   @Input() idInput: number;
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -34,7 +34,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
 
 
   constructor(
-    private modal : NzModalService,
+    private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     public userService: UserService,
@@ -44,7 +44,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
     private danhMucService: DanhMucService,
     private fb: FormBuilder,
     // private dauThauGoiThauService: dauThauGoiThauService,
-    private thongTinDauThauService : ThongTinDauThauService,
+    private thongTinDauThauService: ThongTinDauThauService,
     private donviLienQuanService: DonviLienQuanService,
   ) {
     this.formData = this.fb.group({
@@ -96,20 +96,15 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
       ghiChu: ['',],
       diaDiemNhap: [],
       trangThai: [''],
-      tenTrangThai : ['']
+      tenTrangThai: ['']
     });
   }
-  idGoiThau : number = 0;
-  idDtl : number = 0;
+  idGoiThau: number = 0;
+  idDtl: number = 0;
   STATUS = STATUS
   itemRow: any = {};
   itemRowUpdate: any = {};
-  // timeDefaultValue = setHours(new Date(), 0);
-  tabSelected: string = 'phuong-an-tong-hop';
-  searchValue = '';
-  visibleTab: boolean = false;
-  listNam: any[] = [];
-  yearNow: number = 0;
+
   id: number;
   listNthauNopHs: any[] = [];
   i = 0;
@@ -118,16 +113,13 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
   listHinhThucDauThau: any[] = []
   listLoaiHopDong: any[] = []
   listNhaThau: any[] = []
-  listStatusNhaThau : any [] = []
+  listStatusNhaThau: any[] = []
   listVthh: any[] = [];
   formData: FormGroup
-  isDetail = false;
   dataTable: any[] = [];
   dataDetail: any;
-  page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
-  totalRecord: number = 0;
 
+  danhsachDx: any[] = [];
   listOfData: any[] = [];
   listDataGroup: any[] = [];
 
@@ -140,13 +132,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
     this.listVthh = LIST_VAT_TU_HANG_HOA;
     try {
       this.userInfo = this.userService.getUserLogin();
-      this.yearNow = dayjs().get('year');
-      for (let i = -3; i < 23; i++) {
-        this.listNam.push({
-          value: this.yearNow - i,
-          text: this.yearNow - i,
-        });
-      }
       await Promise.all([
         this.loadDataComboBox(),
         this.getDetail(),
@@ -160,7 +145,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
     }
   }
 
-  async loadDataComboBox(){
+  async loadDataComboBox() {
     // List nguồn vốn
     this.listNguonVon = [];
     let resNv = await this.danhMucService.danhMucChungGetAll('NGUON_VON');
@@ -186,20 +171,20 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
       this.listLoaiHopDong = resHd.data;
     }
     this.listNhaThau = [];
-    let resNt = await this.donviLienQuanService.getAll({"typeDvi": "NT"});
+    let resNt = await this.donviLienQuanService.getAll({ "typeDvi": "NT" });
     if (resNt.msg == MESSAGE.SUCCESS) {
       this.listNhaThau = resNt.data;
     }
     this.listStatusNhaThau = [
       {
-        value : STATUS.TRUNG_THAU,
-        text : 'Trúng thầu'
-      },{
-        value : STATUS.HUY_THAU,
-        text : 'Hủy thầu'
-      },{
-        value : STATUS.TRUOT_THAU,
-        text : 'Trượt thầu'
+        value: STATUS.TRUNG_THAU,
+        text: 'Trúng thầu'
+      }, {
+        value: STATUS.HUY_THAU,
+        text: 'Hủy thầu'
+      }, {
+        value: STATUS.TRUOT_THAU,
+        text: 'Trượt thầu'
       }
     ];
   }
@@ -213,10 +198,11 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
       this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
       this.idDtl = dataCurrent.id;
       this.formData.patchValue({
-        trangThai : dataCurrent.trangThai,
-        tenTrangThai : dataCurrent.tenTrangThai
+        trangThai: dataCurrent.trangThai,
+        tenTrangThai: dataCurrent.tenTrangThai
       })
       this.listOfData = dataCurrent.dsGoiThau;
+      this.danhsachDx = dataCurrent.dsGoiThau;
       this.convertListData()
       // const isVatTu = !!dataDetail.loaiVthh;
       // // Trang thái đã cập nhập thông tin gói thầu hoặc hoàn thành cập nhập tt gt
@@ -378,14 +364,14 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
   async save() {
     await this.spinner.show();
     let filter = this.listOfData.filter(item => item.trangThai == STATUS.CHUA_CAP_NHAT);
-    if(filter.length > 0){
-      this.notification.error(MESSAGE.ERROR,"Vui lòng cập nhật thông tin các gói thầu");
+    if (filter.length > 0) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng cập nhật thông tin các gói thầu");
       await this.spinner.hide();
       return
     }
     let body = {
-      id : this.idDtl,
-      trangThai : STATUS.HOAN_THANH_CAP_NHAT
+      id: this.idDtl,
+      trangThai: STATUS.HOAN_THANH_CAP_NHAT
     }
     let res = await this.thongTinDauThauService.approve(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -407,8 +393,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
   async saveGoiThau() {
     await this.spinner.show()
     let body = {
-      idGoiThau : this.idGoiThau,
-      nthauDuThauList : this.listNthauNopHs
+      idGoiThau: this.idGoiThau,
+      nthauDuThauList: this.listNthauNopHs
     }
     console.log(body);
     let res = await this.thongTinDauThauService.create(body);
@@ -421,7 +407,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
     await this.spinner.hide()
   }
 
-  async showDetail($event, dataGoiThau : any) {
+  async showDetail($event, dataGoiThau: any) {
     await this.spinner.show();
     this.listNthauNopHs = [];
     this.idGoiThau = dataGoiThau.id;
@@ -429,26 +415,26 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
     $event.target.parentElement.classList.add('selectedRow')
 
     let res = await this.thongTinDauThauService.getDetail(this.idGoiThau);
-    if(res.msg == MESSAGE.SUCCESS){
+    if (res.msg == MESSAGE.SUCCESS) {
       this.itemRow.soLuong = dataGoiThau.soLuong;
       this.listNthauNopHs = res.data;
-      this.listNthauNopHs.forEach( item => {
+      this.listNthauNopHs.forEach(item => {
         item.edit = false;
       })
-    }else{
-      this.notification.error(MESSAGE.ERROR,res.msg);
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide();
   }
 
-  changeTrangThai($event){
-    let trangThai = this.listStatusNhaThau.filter( item => item.value == $event);
+  changeTrangThai($event) {
+    let trangThai = this.listStatusNhaThau.filter(item => item.value == $event);
     this.itemRow.tenTrangThai = trangThai[0].text;
     this.itemRowUpdate.tenTrangThai = trangThai[0].text;
   }
 
   addRow(): void {
-    if(this.validateItemSave(this.itemRow)){
+    if (this.validateItemSave(this.itemRow)) {
       this.listNthauNopHs = [
         ...this.listNthauNopHs,
         this.itemRow
@@ -474,7 +460,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.listNthauNopHs.splice(i,1)
+        this.listNthauNopHs.splice(i, 1)
       },
     });
   }
@@ -488,39 +474,39 @@ export class ThemmoiThongtinDauthauComponent implements OnInit , OnChanges {
     this.listNthauNopHs[index].edit = false;
   }
 
-  saveEdit(dataUpdate,index: any): void {
-    if(this.validateItemSave(this.itemRowUpdate,index)){
+  saveEdit(dataUpdate, index: any): void {
+    if (this.validateItemSave(this.itemRowUpdate, index)) {
       this.listNthauNopHs[index] = this.itemRowUpdate;
       this.listNthauNopHs[index].edit = false;
     };
 
   }
 
-  validateItemSave(dataSave,index?):boolean{
-    if(dataSave.trangThai == STATUS.TRUNG_THAU){
-        let filter = this.listNthauNopHs.filter(item => item.trangThai == STATUS.TRUNG_THAU);
-        if(filter.length > 0){
-          if(index){
-            let indexFilter = this.listNthauNopHs.indexOf(filter[0]);
-            if(index != indexFilter){
-              this.notification.error(MESSAGE.ERROR,"Trạng thái trúng thầu đã tồn tại, xin vui lòng thay đổi trạng thái bản ghi")
-              return false
-            }
-            return true
-          }else{
-            this.notification.error(MESSAGE.ERROR,"Trạng thái trúng thầu đã tồn tại, xin vui lòng thay đổi trạng thái bản ghi")
+  validateItemSave(dataSave, index?): boolean {
+    if (dataSave.trangThai == STATUS.TRUNG_THAU) {
+      let filter = this.listNthauNopHs.filter(item => item.trangThai == STATUS.TRUNG_THAU);
+      if (filter.length > 0) {
+        if (index) {
+          let indexFilter = this.listNthauNopHs.indexOf(filter[0]);
+          if (index != indexFilter) {
+            this.notification.error(MESSAGE.ERROR, "Trạng thái trúng thầu đã tồn tại, xin vui lòng thay đổi trạng thái bản ghi")
             return false
           }
-
+          return true
+        } else {
+          this.notification.error(MESSAGE.ERROR, "Trạng thái trúng thầu đã tồn tại, xin vui lòng thay đổi trạng thái bản ghi")
+          return false
         }
-        return true;
+
+      }
+      return true;
     }
     return true;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes){
-      if(this.idInput){
+    if (changes) {
+      if (this.idInput) {
         this.getDetail()
       }
     }

@@ -14,60 +14,7 @@ import dayjs from 'dayjs';
 import {UserService} from 'src/app/services/user.service';
 import {QuanLyHangTrongKhoService} from "../../../services/quanLyHangTrongKho.service";
 import {LEVEL_USER} from "../../../constants/config";
-
-export class DiaDiemNhapKho {
-  id: number;
-  idVirtual: number;
-  maDvi: string;
-  tenDvi: string;
-  maChiCuc: string;
-  tenChiCuc: string;
-  soLuong: number;
-  soLuongTheoChiTieu: number;
-  slDaLenKHBan: number;
-  thanhTien: number;
-  tongKhoanTienDatTruoc: string;
-  tongGiaKhoiDiem: string;
-  donViTinh: string;
-  chiTietDiaDiems: Array<ChiTietDiaDiemNhapKho>;
-
-  constructor(chiTietDiaDiems: Array<ChiTietDiaDiemNhapKho> = []) {
-    this.chiTietDiaDiems = chiTietDiaDiems;
-  }
-}
-
-export class ChiTietDiaDiemNhapKho {
-  idDxuatDtl: number;
-  maDiemKho: string;
-  maNhaKho: string;
-  maNganKho: string;
-  maLoKho: string;
-  tenDiemKho: string;
-  tenNhaKho: string;
-  tenNganKho: string;
-  tenLoKho: string;
-  chungLoaiHh: string;
-  tenChungLoaiHh: string;
-  donViTinh: string;
-  maDviTaiSan: string;
-  tonKho: number;
-  soLuong: number;
-  donGiaChuaVAT: number;
-  donGia: number;
-  giaKhoiDiem: number;
-  soTienDatTruoc: number;
-  idVirtual: number;
-  soLanTraGia: number;
-  donGiaCaoNhat: number;
-  traGiaCaoNhat: string;
-  hoTen: string;
-  thanhTien: number;
-  isEdit: boolean;
-
-  constructor(tonKho: number = 0) {
-    this.tonKho = tonKho;
-  }
-}
+import {ChiTietDiaDiemNhapKho, DiaDiemNhapKho} from 'src/app/models/CuuTro';
 
 @Component({
   selector: 'dialog-them-dia-diem-nhap-kho',
@@ -80,6 +27,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
   idDxuat: any;
   idDxuatDtl: any;
   nam: number;
+  noEdit: boolean = false;
   cLoaiVthh: string;
   cucList: any[] = [];
   chiCucList: any[] = [];
@@ -141,12 +89,14 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     await this.loadCuc(LEVEL_USER.CUC, this.userInfo.MA_DVI);
     if (this.userInfo.CAP_DVI == this.globals.prop.CUC) {
       this.diaDiemNhapKho.maDvi = this.userInfo.MA_DVI;
+      this.chiTietDiemNhapKhoCreate.maDvi = this.userInfo.MA_DVI;
       await this.loadChiCuc(this.userInfo.MA_DVI);
     }
     await this.loadDanhMucHang();
     if (this.listPhuongAn) {
       this.diaDiemNhapKho = this.listPhuongAn;
       this.dsChiTietDiemNhapKhoClone = this.listPhuongAn.chiTietDiaDiems;
+      this.changeCuc(this.listPhuongAn.maDvi)
       this.changeChiCuc();
     }
     this.loadDetail();
@@ -187,16 +137,13 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
   async onChangeCuc(maDvi: string) {
     this.chiCucList = this.listDvi;
     this.chiCucList = this.chiCucList.filter(s => s.maDviCha == maDvi);
-    console.log(this.chiCucList);
+
   }
 
   async loadChiCuc(maCuc: string) {
-    console.log(this.phuongAnXuatList,'this.phuongAnXuatList');
     this.chiCucList = this.listDvi;
     this.chiCucList = this.chiCucList.filter(s => s.capDvi == LEVEL_USER.CHI_CUC && s.maDviCha == maCuc);
-    let existsChiCuc = this.phuongAnXuatList.map((s) => s.maDvi);
-    console.log(existsChiCuc,'existsChiCuc');
-    console.log(this.chiCucList,'this.chiCucList');
+    let existsChiCuc = this.phuongAnXuatList.map((s) => s.maChiCuc);
     this.chiCucList = this.chiCucList.filter((s) => !existsChiCuc.includes(s.maDvi));
 
     // console.log(this.cucList,'list cuc')
@@ -300,7 +247,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
           if (res.data) {
             if (isEdit) {
               this.dsChiTietDiemNhapKhoClone[index].tonKho = res.data.duDau + res.data.tongNhap - res.data.tongXuat;
-              this.dsChiTietDiemNhapKhoClone[index].chungLoaiHh = res.data.maVTHH;
+              this.dsChiTietDiemNhapKhoClone[index].chungLoaiHh = res.data.maVTHH + "";
 
               let chungLoaiHang = this.listChungLoaiHangHoa.find(x => x.ma == res.data.maVTHH);
               if (chungLoaiHang) {
@@ -314,7 +261,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
               let chungLoaiHang = this.listChungLoaiHangHoa.find(x => x.ma == res.data.maVTHH);
               if (chungLoaiHang) {
                 this.chiTietDiemNhapKhoCreate.donViTinh = chungLoaiHang.maDviTinh;
-                this.chiTietDiemNhapKhoCreate.chungLoaiHh = chungLoaiHang.ten;
+                this.chiTietDiemNhapKhoCreate.tenChungLoaiHh = chungLoaiHang.ten;
               }
             }
           }
@@ -330,10 +277,14 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     let nganLo;
     if (isEdit) {
       nganLo = this.listLoKhoEdit.find(x => x.key == maNganLo);
-      this.dsChiTietDiemNhapKhoClone[index].tenLoKho = nganLo.title;
+      if (nganLo) {
+        this.dsChiTietDiemNhapKhoClone[index].tenLoKho = nganLo.title;
+      }
     } else {
       nganLo = this.listLoKho.find(x => x.key == maNganLo);
-      this.chiTietDiemNhapKhoCreate.tenLoKho = nganLo.title;
+      if (nganLo) {
+        this.chiTietDiemNhapKhoCreate.tenLoKho = nganLo.title;
+      }
     }
     if (nganLo) {
       console.log(nganLo, 'nganLo')
@@ -357,7 +308,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
           if (res.data) {
             if (isEdit) {
               this.dsChiTietDiemNhapKhoClone[index].tonKho = res.data.duDau + res.data.tongNhap - res.data.tongXuat;
-              this.dsChiTietDiemNhapKhoClone[index].chungLoaiHh = res.data.maVTHH;
+              this.dsChiTietDiemNhapKhoClone[index].chungLoaiHh = res.data.maVTHH + "";
 
               let chungLoaiHang = this.listChungLoaiHangHoa.find(x => x.ma == res.data.maVTHH);
               if (chungLoaiHang) {
@@ -407,9 +358,10 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     this.loadDiemKho();
     const donVi = this.chiCucList.find(dv => dv.maDvi === this.diaDiemNhapKho.maChiCuc);
     if (donVi) {
-      this.diaDiemNhapKho.tenDvi = donVi.tenDvi;
       this.diaDiemNhapKho.maChiCuc = donVi.maDvi;
       this.diaDiemNhapKho.tenChiCuc = donVi.tenDvi;
+      this.chiTietDiemNhapKhoCreate.maChiCuc = donVi.maDvi;
+      this.chiTietDiemNhapKhoCreate.tenChiCuc = donVi.tenDvi;
     }
   }
 
@@ -438,6 +390,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     this.diaDiemNhapKho.chiTietDiaDiems = [...this.diaDiemNhapKho.chiTietDiaDiems, this.chiTietDiemNhapKhoCreate];
     this.newObjectDiaDiem();
     this.dsChiTietDiemNhapKhoClone = cloneDeep(this.diaDiemNhapKho.chiTietDiaDiems);
+
   }
 
   checkSoLuong() {
@@ -471,7 +424,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
       this.diaDiemNhapKho.chiTietDiaDiems[i],
       this.dsChiTietDiemNhapKhoClone[i],
     );
-    this.checkSoLuong();
+    //this.checkSoLuong();
   }
 
   cancelEdit(index: number) {
@@ -609,5 +562,6 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
 
   changeCuc(maDvi: string) {
     this.loadChiCuc(maDvi);
+    this.chiTietDiemNhapKhoCreate.maDvi= this.diaDiemNhapKho.maDvi;
   }
 }

@@ -13,7 +13,7 @@ import { PAGE_SIZE_DEFAULT, API_STATUS_CODE } from 'src/app/constants/config';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Globals } from 'src/app/shared/globals';
