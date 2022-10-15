@@ -118,6 +118,10 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         }
       }
       this.arrThongTinGia = data.thongTinGia
+      this.arrThongTinGia.forEach(item => {
+        item.giaQd = item.giaQdBtc,
+          item.giaQdVat = item.giaQdVatBtc
+      })
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -133,7 +137,6 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh
       });
-      this.onChangeSoToTrinh(data.soToTrinh)
     }
   }
 
@@ -251,17 +254,16 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
 
   async save() {
     this.spinner.show();
-    let err = false;
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
       return;
     }
-
-    let currentRow = this.formData.value;
-    let currentLine = currentRow.thongTinGia;
-    if (!err) {
       let body = this.formData.value;
+    this.arrThongTinGia.forEach(item => {
+        item.giaQdBtc = item.giaQd,
+        item.giaQdVatBtc = item.giaQdVat
+    })
       body.soQd = body.soQd + this.maQd;
       body.pagType = this.pagType;
       body.thongTinGia =this.arrThongTinGia
@@ -281,7 +283,6 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    }
     this.spinner.hide();
   }
 
@@ -381,6 +382,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       currentLine.giaQd = 0
       currentLine.giaQdVat = 0
       this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
+      return;
     }
     //gia ban toi thieu
     if (currentRow.loaiGia == 'LG02' && (currentLine.giaQd < currentLine.giaDn || currentLine.giaQdVat < currentLine.giaDnVat)) {
@@ -388,6 +390,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
       currentLine.giaQdVat = 0
       this.arrThongTinGia[index].giaQd = 0;
       this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
+      return;
     }
     //0:gia>vat 1:vat>gia
 

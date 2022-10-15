@@ -224,32 +224,11 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
 
   async save() {
     this.spinner.show();
-    let err = false;
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
       return;
     }
-
-    let currentRow = this.formData.value;
-    let currentLine = currentRow.thongTinGia;
-    if (currentLine) {
-      currentLine.forEach(item => {
-        //gia mua toi da
-        if (currentRow.loaiGia == 'LG01' && (item.giaQd > item.giaDn || item.giaQdVat > item.giaDnVat)) {
-          err = true;
-          item.giaQd = 0;
-          return this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
-        }
-        //gia ban toi thieu
-        if (currentRow.loaiGia == 'LG02' && (item.giaQd < item.giaDn || item.giaQdVat < item.giaDnVat)) {
-          err = true;
-          item.giaQd = 0;
-          return this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
-        }
-      })
-    }
-    if (!err) {
       let body = this.formData.value;
       body.soQd = body.soQd + this.maQd;
       body.pagType = this.pagType;
@@ -270,7 +249,6 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    }
     this.spinner.hide();
   }
 
