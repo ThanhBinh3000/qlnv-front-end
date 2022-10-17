@@ -183,24 +183,23 @@
       </thead>
       <tbody>
         <tr *ngFor="let data of listThongTinGia; let idx = index">
-          <ng-container *ngIf="!dataEditDcg[data.id].edit; else template1">
             <td class="text-center">{{ idx + 1 }}</td>
             <td>{{ data.tenDvi }}</td>
             <td>{{ data.soLuong }}</td>
-            <td>{{ data.giaQd }}</td>
-            <td>{{ data.giaQdVat }}</td>
+            <td>{{ data.giaDn }}</td>
+            <td>{{ data.giaDnVat }}</td>
             <td>
               <nz-input-group>
-                <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
-                  [(ngModel)]="listThongTinGia[idx].donGia" [nzMin]="0" [nzFormatter]="globals.formatter"
+                <nz-input-number nz-input [ngModelOptions]="{standalone: true}" [disabled]="isView"
+                  [(ngModel)]="listThongTinGia[idx].giaQd" [nzMin]="0" [nzFormatter]="globals.formatter"
                   [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,0)">
                 </nz-input-number>
               </nz-input-group>
             </td>
             <td>
               <nz-input-group>
-                <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
-                  [(ngModel)]="listThongTinGia[idx].donGiaVat" [nzMin]="0" [nzFormatter]="globals.formatter"
+                <nz-input-number nz-input [ngModelOptions]="{standalone: true}" [disabled]="isView"
+                  [(ngModel)]="listThongTinGia[idx].giaQdVat" [nzMin]="0" [nzFormatter]="globals.formatter"
                   [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,1)">
                 </nz-input-number>
               </nz-input-group>
@@ -213,36 +212,6 @@
                 <i class="fa fa-trash-o do" (click)="deleteItem(idx)"></i>
               </a>
             </td>
-          </ng-container>
-          <ng-template #template1>
-            <td></td>
-            <td>{{ data.tenDvi }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td></td>
-            <td></td>
-            <td>
-              <nz-input-group>
-                <nz-input-number name="giaDnVat" [(ngModel)]="dataEditDcg[data.id].data.donGia" [nzSize]="'small'"
-                  nz-input [nzMin]="0">
-                </nz-input-number>
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <nz-input-number name="giaDnVat" [(ngModel)]="dataEditDcg[data.id].data.donGiaVat" [nzSize]="'small'"
-                  nz-input [nzMin]="0">
-                </nz-input-number>
-              </nz-input-group>
-            </td>
-            <td style="text-align: center;">
-              <a *ngIf="!isView">
-                <i class="fa fa-save" (click)="luuEdit(data.id)"></i>
-              </a>
-              <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
-                <i class="fa fa-times do" (click)="huyEdit(data.id)"></i>
-              </a>
-            </td>
-          </ng-template>
         </tr>
       </tbody>
     </nz-table>
@@ -341,7 +310,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="5">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" [nzNoColon]="true">Số đề xuất
             </nz-form-label>
@@ -354,19 +323,33 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true">Loại giá
+            <nz-form-label [nzNoColon]="true" nzFor="loai-gia">Loại giá
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="tenLoaiGia" [readonly]="true" />
+              <nz-select formControlName="loaiGia" [nzDisabled]="true" nzAllowClear="true">
+                <nz-option *ngFor="let p of dsLoaiGia" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+                <ng-template #error let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                  </ng-container>
+                </ng-template>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true">Loại hàng hóa
+            <nz-form-label [nzNoColon]="true" nzFor="nam-qd">Loại hàng hóa
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="tenLoaiVthh" [readonly]="true" />
+              <nz-select formControlName="loaiVthh" [nzDisabled]="true" nzAllowClear="true">
+                <nz-option *ngFor="let p of dsVthh" [nzValue]="p.ma" [nzLabel]="p.ten">
+                </nz-option>
+                <ng-template #error let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                  </ng-container>
+                </ng-template>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -405,18 +388,17 @@
       </thead>
       <tbody>
         <tr *ngFor="let data of listThongTinGia; let idx = index">
-          <ng-container *ngIf="!dataEditDcg[data.id].edit; else template1">
             <td class="text-center">{{ idx + 1 }}</td>
             <td>{{ data.cloaiVthh }}</td>
             <td>{{ data.tieuChuanCl }}</td>
-            <td>{{ data.giaQd }}</td>
-            <td>{{ data.giaQdVat }}</td>
-            <td>{{ data.giaQdVat }}</td>
-            <td>{{ data.giaQdVat }}</td>
+            <td>{{ data.soLuong }}</td>
+            <td>{{ data.donViTinh }}</td>
+            <td>{{ data.giaDn }}</td>
+            <td>{{ data.giaDnVat }}</td>
             <td>
               <nz-input-group>
                 <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
-                  [(ngModel)]="listThongTinGia[idx].donGia" [nzMin]="0" [nzFormatter]="globals.formatter"
+                  [(ngModel)]="listThongTinGia[idx].giaQd" [nzMin]="0" [nzFormatter]="globals.formatter"
                   [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,0)">
                 </nz-input-number>
               </nz-input-group>
@@ -424,49 +406,16 @@
             <td>
               <nz-input-group>
                 <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
-                  [(ngModel)]="listThongTinGia[idx].donGiaVat" [nzMin]="0" [nzFormatter]="globals.formatter"
+                  [(ngModel)]="listThongTinGia[idx].giaQdVat" [nzMin]="0" [nzFormatter]="globals.formatter"
                   [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,1)">
                 </nz-input-number>
               </nz-input-group>
             </td>
             <td *ngIf="!isView" style="text-align: left; white-space: nowrap;">
-              <!--  <a>
-                <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-              </a>-->
               <a>
                 <i class="fa fa-trash-o do" (click)="deleteItem(idx)"></i>
               </a>
             </td>
-          </ng-container>
-          <ng-template #template1>
-            <td></td>
-            <td>{{ data.tenDvi }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td></td>
-            <td></td>
-            <td>
-              <nz-input-group>
-                <nz-input-number name="giaDnVat" [(ngModel)]="dataEditDcg[data.id].data.donGia" [nzSize]="'small'"
-                  nz-input [nzMin]="0">
-                </nz-input-number>
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <nz-input-number name="giaDnVat" [(ngModel)]="dataEditDcg[data.id].data.donGiaVat" [nzSize]="'small'"
-                  nz-input [nzMin]="0">
-                </nz-input-number>
-              </nz-input-group>
-            </td>
-            <td style="text-align: center;">
-              <a *ngIf="!isView">
-                <i class="fa fa-save" (click)="luuEdit(data.id)"></i>
-              </a>
-              <a *ngIf="(formData.value.trangThai == '00' || formData.value.trangThai == '03') && (!isView)">
-                <i class="fa fa-times do" (click)="huyEdit(data.id)"></i>
-              </a>
-            </td>
-          </ng-template>
         </tr>
       </tbody>
     </nz-table>
@@ -479,9 +428,6 @@
         <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
         <textarea rows="3" class="search__input" nz-input formControlName="ghiChu" [readOnly]="isView"></textarea>
       </nz-form-item>
-      <ng-template #error let-control>
-        <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
-      </ng-template>
     </div>
   </form>
 </div>

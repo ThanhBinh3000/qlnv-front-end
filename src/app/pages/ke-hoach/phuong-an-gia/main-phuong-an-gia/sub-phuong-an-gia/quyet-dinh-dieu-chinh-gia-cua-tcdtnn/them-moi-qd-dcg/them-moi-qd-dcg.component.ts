@@ -23,6 +23,7 @@ import { STATUS } from 'src/app/constants/status';
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-them-moi-qd-dcg',
@@ -50,10 +51,15 @@ export class ThemMoiQdDcgComponent implements OnInit {
   detail: any;
   radioValue: string;
    dsToTrinhDeXuat: any[] = [];
+  dsLoaiGia: any = [];
+   dsVthh: any[] = [];
+   dsClVthh: any[] = [];
+   thueVat: any;
 
   constructor(
     private readonly fb: FormBuilder,
     public globals: Globals,
+    public danhMucService: DanhMucService,
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
@@ -86,21 +92,29 @@ export class ThemMoiQdDcgComponent implements OnInit {
       }
     );
   }
+  //
+  // themDataTable() {
+  //   if (this.listThongTinGia) {
+  //     this.listThongTinGia.forEach(item => {
+  //       this.rowItemL.donGia = item.donGia;
+  //       this.rowItemL.id = item.id;
+  //       this.rowItemL.donGiaVat = item.donGiaVat;
+  //       this.rowItemL.maDvi = item.maDvi;
+  //       this.rowItemL.soLuong = item.soLuong;
+  //       this.rowItemL.tenDvi = item.tenDvi;
+  //       this.rowItemL.giaQd = item.giaQd;
+  //       this.rowItemL.giaQdVat = item.giaQdVat;
+  //       this.listThongTinGia = [...this.listThongTinGia, this.rowItemL];
+  //       this.rowItemL = new ThongTinGia();
+  //     })
+  //   }
+  // }
 
-  themDataTable() {
-    if (this.dataTable) {
-      this.dataTable.forEach(item => {
-        this.rowItemL.donGia = item.donGia;
-        this.rowItemL.id = item.id;
-        this.rowItemL.donGiaVat = item.donGiaVat;
-        this.rowItemL.maDvi = item.maDvi;
-        this.rowItemL.soLuong = item.soLuong;
-        this.rowItemL.tenDvi = item.tenDvi;
-        this.rowItemL.giaQd = item.giaQd;
-        this.rowItemL.giaQdVat = item.giaQdVat;
-        this.listThongTinGia = [...this.listThongTinGia, this.rowItemL];
-        this.rowItemL = new ThongTinGia();
-      })
+  async loadDsLoaiGia() {
+    this.dsLoaiGia = [];
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_GIA");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsLoaiGia = res.data;
     }
   }
 
@@ -121,11 +135,28 @@ export class ThemMoiQdDcgComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
+      this.loadTiLeThue(),
+      this.loadDsLoaiGia(),
+      this.loadDsVthh(),
       this.loadDsToTrinh(),
       this.getDataDetail(this.idInput),
       this.maQd = "/QĐ-TCDTNN"
     ])
-    console.log(this.isView)
+  }
+
+  async loadDsVthh() {
+    let body = {
+      "str": "02"
+    };
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+    this.dsVthh = [];
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.dsVthh = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
 
@@ -142,13 +173,12 @@ export class ThemMoiQdDcgComponent implements OnInit {
     this.dataEditDcg[index].edit = true;
   }
 
-  luuEdit(id: number): void {
-    const index = this.listThongTinGia.findIndex((item) => item.id === id);
-    Object.assign(this.listThongTinGia[index], this.dataEditDcg[id].data);
-    this.dataEditDcg[id].edit = false;
+  luuEdit(idx: number): void {
+    Object.assign(this.listThongTinGia[idx], this.dataEditDcg[idx].data);
+    this.dataEditDcg[idx].edit = false;
   }
 
-  chonSoToTrinh(page: string) {
+  async chonSoToTrinh(page: string) {
     if (page == 'STT') {
       let radioValue = this.soToTrinh;
       let modalDanhSachTT = this.modal.create({
@@ -166,12 +196,14 @@ export class ThemMoiQdDcgComponent implements OnInit {
         },
       });
       modalDanhSachTT.afterClose.subscribe(async (data) => {
-        console.log(JSON.stringify(data) + "1111111");
-        if (data != null) {
+        if (data) {
           this.soToTrinh = data.soToTrinh;
-          this.dataTable = data.thongTinGia;
           this.listThongTinGia = []
-          this.themDataTable();
+          if (data.loaiVthh.startsWith("02")) {
+            this.listThongTinGia = data.pagTtChungs
+          } else {
+            this.listThongTinGia = data.thongTinGia
+          }
           this.updateEditCache();
           this.formData.patchValue({
             soToTrinhDx: data.soToTrinh,
@@ -209,11 +241,26 @@ export class ThemMoiQdDcgComponent implements OnInit {
             soQdgTcdtnn: data.soQd,
             soToTrinhDx: data.soToTrinh,
           })
-          let thongTinGia = this.dsToTrinhDeXuat.find(item => item.soDeXuat == data.soToTrinh)
-          console.log(thongTinGia)
-          this.listThongTinGia = thongTinGia.pagTtChungs
           if (!this.soToTrinh) {
-            this.themDataTable();
+            this.listThongTinGia = []
+            if (data.loaiVthh.startsWith("02")) {
+              this.listThongTinGia = data.thongTinGiaVt
+            } else {
+              this.listThongTinGia = data.thongTinGiaLt
+            }
+            let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({ "str": data.loaiVthh });
+            this.dsClVthh = [];
+            if (res.msg == MESSAGE.SUCCESS) {
+              if (res.data) {
+                this.dsClVthh = res.data;
+              }
+            }
+            if(this.dsClVthh) {
+              this.listThongTinGia.forEach(item => {
+                let resCl = this.dsClVthh.find(cl => cl.ma == item.cloaiVthh)
+                item.tenCloaiVthh = resCl.ten
+              })
+            }
             this.updateEditCache();
             this.formData.patchValue({
               loaiVthh: data.loaiVthh,
@@ -230,8 +277,8 @@ export class ThemMoiQdDcgComponent implements OnInit {
     }
   }
 
-  huyEdit(id) {
-    this.dataEditDcg[id].edit = false
+  huyEdit(idx) {
+    this.dataEditDcg[idx].edit = false
   }
 
   deleteItem(index: number) {
@@ -256,8 +303,8 @@ export class ThemMoiQdDcgComponent implements OnInit {
 
   updateEditCache(): void {
     if (this.listThongTinGia) {
-      this.listThongTinGia.forEach((item) => {
-        this.dataEditDcg[item.id] = {
+      this.listThongTinGia.forEach((item, index) => {
+        this.dataEditDcg[index] = {
           edit: false,
           data: { ...item },
         };
@@ -328,14 +375,16 @@ export class ThemMoiQdDcgComponent implements OnInit {
         })
       }
     }
+    this.listThongTinGia.forEach(item => {
+        item.donGia = item.giaDn,
+        item.donGiaVat = item.giaDnVat,
+        item.donGiaBtc = item.giaQd,
+        item.donGiaVatBtc = item.giaQdVat
+    })
     body.thongTinGias = this.listThongTinGia;
     body.soQd = body.soQd + this.maQd
     let res
-    console.log("---------" + JSON.stringify(body));
     if (this.idInput > 0) {
-      /* body.loaiVthh = this.detail.loaiVthh
-       body.cloaiVthh = this.detail.cloaiVthh
-       body.loaiGia = this.detail.loaiGia*/
       res = await this.quyetDinhDieuChinhGiaTCDTNNService.update(body);
     } else {
       res = await this.quyetDinhDieuChinhGiaTCDTNNService.create(body);
@@ -357,8 +406,13 @@ export class ThemMoiQdDcgComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhDieuChinhGiaTCDTNNService.getDetail(id);
       const data = res.data;
-      this.dataTable = data.khPagQdDcTcdtnnCTiets;
-      this.themDataTable();
+      this.listThongTinGia = data.khPagQdDcTcdtnnCTiets;
+      this.listThongTinGia.forEach(item => {
+        item.giaDn = item.donGia,
+          item.giaDnVat = item.donGiaVat,
+          item.giaQd = item.donGiaBtc,
+          item.giaQdVat = item.donGiaVatBtc
+      })
       this.updateEditCache();
       this.formData.patchValue({
         id: data.id,
@@ -389,6 +443,31 @@ export class ThemMoiQdDcgComponent implements OnInit {
 
   }
 
+  async loadTiLeThue() {
+    let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.thueVat = res.data[0].giaTri;
+    } else {
+      this.thueVat = 10;
+    }
+  }
+
   async calculateVAT(index: number, type: number) {
+    let currentRow = this.formData.value;
+    let currentLine = this.listThongTinGia[index];
+    //gia mua toi da
+    if (currentRow.loaiGia == 'LG01' && (currentLine.giaQd > currentLine.giaDn || currentLine.giaQdVat > currentLine.giaDnVat)) {
+      this.listThongTinGia[index].giaQd = 0;
+      this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
+    }
+    //gia ban toi thieu
+    if (currentRow.loaiGia == 'LG02' && (currentLine.giaQd < currentLine.giaDn || currentLine.giaQdVat < currentLine.giaDnVat)) {
+      this.listThongTinGia[index].giaQd = 0;
+      this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
+    }
+    //0:gia>vat 1:vat>gia
+    if (type === 0) {
+      this.listThongTinGia[index].giaQdVat = this.listThongTinGia[index].giaQd + this.listThongTinGia[index].giaQd * this.thueVat;
+    }
   }
 }

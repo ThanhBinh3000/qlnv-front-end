@@ -73,6 +73,7 @@ export class FileDinhKem {
   fileType: string;
   fileUrl: string;
   id: number;
+  noiDung: string;
   idVirtual: number;
 }
 

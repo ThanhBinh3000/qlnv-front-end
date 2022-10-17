@@ -16,14 +16,14 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { dauThauGoiThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/dauThauGoiThau.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { ThongTinHopDongService } from 'src/app/services/thongTinHopDong.service';
+import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
 import { DonviLienQuanService } from 'src/app/services/donviLienquan.service';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/quyetDinhPheDuyetKetQuaLCNT.service';
+import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service';
 import { TreeTableService } from 'src/app/services/tree-table.service';
 
 interface DonviLienQuanModel {

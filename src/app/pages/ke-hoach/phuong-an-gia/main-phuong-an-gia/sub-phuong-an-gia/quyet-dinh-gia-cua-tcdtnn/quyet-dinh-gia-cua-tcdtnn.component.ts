@@ -12,6 +12,7 @@ import { saveAs } from 'file-saver';
 import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
 import {ThongTinChungPag} from "../../../../../../models/DeXuatPhuongAnGia";
 import {STATUS} from "../../../../../../constants/status";
+import {Globals} from "../../../../../../shared/globals";
 @Component({
   selector: 'app-quyet-dinh-gia-cua-tcdtnn',
   templateUrl: './quyet-dinh-gia-cua-tcdtnn.component.html',
@@ -47,7 +48,8 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     private notification: NzNotificationService,
     public userService: UserService,
     private modal: NzModalService,
-    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+              public globals: Globals
   ) {
     this.formData = this.fb.group({
       soQd: [null],

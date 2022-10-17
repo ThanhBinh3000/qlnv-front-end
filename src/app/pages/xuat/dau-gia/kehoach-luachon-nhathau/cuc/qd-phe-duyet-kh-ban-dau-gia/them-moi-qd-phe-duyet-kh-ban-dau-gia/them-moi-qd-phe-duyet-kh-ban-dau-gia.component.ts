@@ -30,7 +30,7 @@ import {DeXuatKeHoachBanDauGiaService} from 'src/app/services/deXuatKeHoachBanDa
 import {HelperService} from 'src/app/services/helper.service';
 import {QuyetDinhPheDuyetKHBDGService} from 'src/app/services/quyetDinhPheDuyetKHBDG.service';
 import {TongHopDeXuatKHBanDauGiaService} from 'src/app/services/tongHopDeXuatKHBanDauGia.service';
-import {TongHopDeXuatKHLCNTService} from 'src/app/services/tongHopDeXuatKHLCNT.service';
+import {TongHopDeXuatKHLCNTService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import {UploadFileService} from 'src/app/services/uploaFile.service';
 import {UserService} from 'src/app/services/user.service';
 import {convertTienTobangChu} from 'src/app/shared/commonFunction';
@@ -918,8 +918,7 @@ export class ThemMoiQdPheDuyetKhBanDauGiaComponent implements OnInit {
     };
     let res = await this.tongHopDeXuatKHBanDauGiaService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      console.log(res.data.content)
-      this.maTongHopList = res.data.content;
+      this.maTongHopList = res.data.content.filter(item => item.soQdPheDuyetKhbdg == null);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

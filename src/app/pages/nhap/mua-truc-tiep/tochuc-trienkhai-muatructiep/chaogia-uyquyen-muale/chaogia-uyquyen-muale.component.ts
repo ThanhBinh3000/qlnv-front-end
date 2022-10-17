@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -10,11 +10,12 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
 import { STATUS } from 'src/app/constants/status';
+import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';
+import { ChaogiaUyquyenMualeService } from 'src/app/services/chaogia-uyquyen-muale.service';
 @Component({
   selector: 'app-chaogia-uyquyen-muale',
   templateUrl: './chaogia-uyquyen-muale.component.html',
@@ -26,38 +27,39 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
     private router: Router,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhSachDauThauService: DanhSachDauThauService,
+    private tongHopDeXuatKHMTTService: TongHopDeXuatKHMTTService,
+    private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
+    private danhSachMuaTrucTiep: DanhSachDauThauService,
     private modal: NzModalService,
     public userService: UserService,
     private helperService: HelperService,
   ) {
 
   }
+  @Input()
+  loaiVthh: string;
   searchValue = '';
   visibleTab: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
   STATUS = STATUS
   searchFilter = {
-    namKhoach: dayjs().get('year'),
-    soQd: '',
-    ngayQd: '',
+    namKh: dayjs().get('year'),
+    ngayHluc: '',
+    canhanTochuc: '',
     loaiVthh: '',
     maDvi: '',
-    trichYeu: ''
   };
 
   filterTable: any = {
-    tenGthau: '',
+    soQdPduyet: '',
     tenDvi: '',
-    soQdPdKhlcnt: '',
-    ngayQd: '',
-    trichYeu: '',
-    tenVthh: '',
+    namKh: '',
+    pthucMuatt: '',
+    ngayHluc: '',
+    tenLoaiVthh: '',
     tenCloaiVthh: '',
-    thanhGiaGoiThau: '',
-    tenTrangThai: '',
+    tenTrangThaiTkhai: '',
   };
 
   dataTableAll: any[] = [];
@@ -69,17 +71,15 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   thocIdDefault: string = LOAI_HANG_DTQG.THOC;
-  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
-  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
   lastBreadcrumb: string;
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
-
+  selectedData: any;
   async ngOnInit() {
-    this.spinner.show();
+    await this.spinner.show();
     this.listVthh = LIST_VAT_TU_HANG_HOA;
     try {
       this.userInfo = this.userService.getUserLogin();
@@ -92,11 +92,11 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
         });
       }
       await this.search();
-      this.spinner.hide();
+      await this.spinner.hide();
     }
     catch (e) {
       console.log('error: ', e)
-      this.spinner.hide();
+      await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
@@ -107,48 +107,44 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
   }
 
   async search() {
-    // this.dataTable = [];
-    // let body = {
-    //   tuNgayQd: this.searchFilter.ngayQd
-    //     ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-    //     : null,
-    //   denNgayQd: this.searchFilter.ngayQd
-    //     ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-    //     : null,
-    //   loaiVthh: this.searchFilter.loaiVthh,
-    //   namKhoach: this.searchFilter.namKhoach,
-    //   trichYeu: this.searchFilter.trichYeu,
-    //   paggingReq: {
-    //     limit: this.pageSize,
-    //     page: this.page - 1,
-    //   },
-    //   maDvi: this.userInfo.MA_DVI,
-    //   soQd: this.searchFilter.soQd,
-    // }
-    // // if (this.userService.isCuc()) {
-    // // }
-    // let res = await this.dauThauService.search(body);
-    // if (res.msg == MESSAGE.SUCCESS) {
-    //   let data = res.data;
-    //   this.dataTable = data.content;
-    //   this.totalRecord = data.totalElements;
-    //   if (data && data.content && data.content.length > 0) {
-    //     this.dataTable.forEach((item) => {
-    //       item.checked = false;
-    //       // item.statusConvert = this.statusGoiThau(item.trangThai);
-    //     });
-    //   }
-    //   this.dataTableAll = cloneDeep(this.dataTable)
-    // } else {
-    //   this.dataTable = [];
-    //   this.totalRecord = 0;
-    //   this.notification.error(MESSAGE.ERROR, res.msg);
-    // }
+    this.dataTable = [];
+    let body = {
+      ngayCgiaTu: this.searchFilter.ngayHluc
+        ? dayjs(this.searchFilter.ngayHluc[0]).format('YYYY-MM-DD')
+        : null,
+      ngayCgiadDen: this.searchFilter.ngayHluc
+        ? dayjs(this.searchFilter.ngayHluc[1]).format('YYYY-MM-DD')
+        : null,
+      loaiVthh: this.searchFilter.loaiVthh,
+      namKh: this.searchFilter.namKh,
+      canhanTochuc: this.searchFilter.canhanTochuc,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
+      },
+      maDvi: this.userInfo.MA_DVI
+    };
+    let res = await this.chaogiaUyquyenMualeService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = data.content;
+      this.totalRecord = data.totalElements;
+      if (data && data.content && data.content.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable)
+    } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   searchDanhSachDauThau(body, trangThai) {
     body.trangThai = trangThai
-    return this.danhSachDauThauService.search(body);
+    return this.danhSachMuaTrucTiep.search(body);
   }
 
   async changePageIndex(event) {
@@ -176,9 +172,10 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(id: number) {
-    this.selectedId = id;
+  redirectToChiTiet(selectedData: any) {
+    this.selectedId = selectedData.id;
     this.isDetail = true;
+    this.selectedData = selectedData;
   }
 
   async showList() {
@@ -187,11 +184,10 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter.namKhoach = dayjs().get('year');
-    this.searchFilter.soQd = null;
-    this.searchFilter.ngayQd = null;
+    this.searchFilter.namKh = dayjs().get('year');
+    this.searchFilter.canhanTochuc = null;
+    this.searchFilter.ngayHluc = null;
     this.searchFilter.maDvi = null;
-    this.searchFilter.trichYeu = null;
     this.searchFilter.loaiVthh = null;
     this.search();
   }
@@ -212,7 +208,7 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
             "id": item.id,
             "maDvi": ""
           }
-          this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
+          this.tongHopDeXuatKHMTTService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
@@ -238,36 +234,35 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
   }
 
   exportData() {
-    // if (this.totalRecord > 0) {
-    //   this.spinner.show();
-    //   try {
-    //     let body = {
-    //       tuNgayQd: this.searchFilter.ngayQd
-    //         ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-    //         : null,
-    //       denNgayQd: this.searchFilter.ngayQd
-    //         ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-    //         : null,
-    //       loaiVthh: this.searchFilter.loaiVthh,
-    //       namKhoach: this.searchFilter.namKhoach,
-    //       trichYeu: this.searchFilter.trichYeu,
-    //       maDvi: this.userInfo.MA_DVI,
-    //       soQd: this.searchFilter.soQd,
-    //     }
-    //     this.dauThauService
-    //       .export(body)
-    //       .subscribe((blob) =>
-    //         saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
-    //       );
-    //     this.spinner.hide();
-    //   } catch (e) {
-    //     console.log('error: ', e);
-    //     this.spinner.hide();
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   }
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    // }
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          ngayCgiaTu: this.searchFilter.ngayHluc
+            ? dayjs(this.searchFilter.ngayHluc[0]).format('YYYY-MM-DD')
+            : null,
+          ngayCgiadDen: this.searchFilter.ngayHluc
+            ? dayjs(this.searchFilter.ngayHluc[1]).format('YYYY-MM-DD')
+            : null,
+          loaiVthh: this.searchFilter.loaiVthh,
+          namKh: this.searchFilter.namKh,
+          canhanTochuc: this.searchFilter.canhanTochuc,
+          maDvi: this.userInfo.MA_DVI,
+        }
+        this.chaogiaUyquyenMualeService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   dateChange() {
@@ -325,15 +320,14 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      tenGthau: '',
+      soQdPduyet: '',
       tenDvi: '',
-      soQdPdKhlcnt: '',
-      ngayQd: '',
-      trichYeu: '',
-      tenVthh: '',
+      namKh: '',
+      pthucMuatt: '',
+      ngayHluc: '',
+      tenLoaiVthh: '',
       tenCloaiVthh: '',
-      thanhGiaGoiThau: '',
-      tenTrangThai: '',
+      tenTrangThaiTkhai: '',
     }
   }
 }

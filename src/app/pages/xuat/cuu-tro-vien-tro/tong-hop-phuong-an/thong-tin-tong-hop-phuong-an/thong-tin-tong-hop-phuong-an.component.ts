@@ -624,6 +624,8 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   summaryData() {
     this.tongSoLuongDxuat = 0;
     this.tongSoLuongTongHop = 0;
+    this.tongThanhTienDxuat = 0;
+    this.tongThanhTienTongHop = 0;
 
     this.thongTinChiTietTh.forEach(s => {
       let tongSoLuong = 0;

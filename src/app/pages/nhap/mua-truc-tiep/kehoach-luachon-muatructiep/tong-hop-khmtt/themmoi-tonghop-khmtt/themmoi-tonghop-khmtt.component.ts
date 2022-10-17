@@ -9,17 +9,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
 import { MESSAGE } from 'src/app/constants/message';
-import { ThongTinTongHopDeXuatLCNT } from 'src/app/models/ThongTinTongHopDeXuatLCNT';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as dayjs from 'dayjs';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from 'src/app/constants/status';
 import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';
@@ -33,7 +29,6 @@ import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-
   styleUrls: ['./themmoi-tonghop-khmtt.component.scss']
 })
 export class ThemmoiTonghopKhmttComponent implements OnInit {
-
   @Input() loaiVthh: string
   @Input() id: number;
   @Output()
@@ -44,28 +39,15 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
   formData: FormGroup;
   isDetailDxCuc: boolean = false;
   dataTableDanhSachMTT: any[] = [];
-  danhMucDonVi: any;
   isTongHop: boolean = false;
-  isVisibleChangeTab$ = new Subject();
-  visibleTab: boolean = false;
   i = 0;
-  editId: string | null = null;
-  // loaiVTHH: number = 0;
-  chiTiet: ThongTinTongHopDeXuatLCNT = new ThongTinTongHopDeXuatLCNT();
   listNam: any[] = [];
-  yearNow: number = 0;
-  idDeXuat: number = 0;
   listNguonVon: any[] = [];
-  listVthh: any[] = [];
-  idPA: number = 0;
   selectedId: number = 0;
   errorInputRequired: string = null;
   isQuyetDinh: boolean = false;
   STATUS = STATUS;
   userInfo: UserLogin;
-  dataDeXuat: any[] = [];
-  mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
-
   constructor(
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
@@ -85,7 +67,7 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
         tenLoaiVthh: [null, [Validators.required]],
         cloaiVthh: [null, [Validators.required]],
         tenCloaiVthh: [null, [Validators.required]],
-        namKhoach: [dayjs().get('year'), [Validators.required]],
+        namKh: [dayjs().get('year'), [Validators.required]],
       }
     );
     this.formData = this.fb.group({
@@ -93,15 +75,13 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
       maDvi: [''],
       loaiHinhNx: [''],
       kieuNx: [''],
-      namKhoach: [, [Validators.required]],
+      namKh: [dayjs().get('year'), [Validators.required]],
       soDxuat: [''],
       trichYeu: [''],
       ngayTao: [,],
       ngayPduyet: [''],
       tenDuAn: [''],
       soQd: [''],
-      loaiVthh: [, [Validators.required]],
-      cloaiVthh: [, [Validators.required]],
       moTaHangHoa: [''],
       ptMua: [''],
       tchuanCluong: [''],
@@ -115,13 +95,13 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
       tongMucDt: [''],
       nguonVon: [''],
       trangThai: [''],
+      loaiVthh: [, [Validators.required]],
+      cloaiVthh: [, [Validators.required]],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
-      noiDung: [''],
+      noiDung: [, [Validators.required]],
       thueGtgt: [''],
-
     })
-
   }
 
   async ngOnInit() {
@@ -167,14 +147,12 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
   }
 
   async loadDataComboBox() {
-
     // List nguồn vốn
     this.listNguonVon = [];
     let resNv = await this.danhMucService.danhMucChungGetAll('NGUON_VON');
     if (resNv.msg == MESSAGE.SUCCESS) {
       this.listNguonVon = resNv.data;
     }
-
     // List loại hình nhập xuất
     this.listLoaiHinhNx = [];
     let resLoaiHinhNX = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
@@ -187,7 +165,6 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
     if (resKieuNx.msg == MESSAGE.SUCCESS) {
       this.listKieuNx = resKieuNx.data;
     }
-
   }
 
   async tongHopDeXuat() {
@@ -239,10 +216,10 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
     this.helperService.markFormGroupTouched(this.formData);
     await this.spinner.show();
     try {
-      // if (this.formData.invalid) {
-      //   await this.spinner.hide();
-      //   return;
-      // }
+      if (this.formData.invalid) {
+        await this.spinner.hide();
+        return;
+      }
       let body = this.formData.value;
       let res = await this.tongHopDeXuatKHMTTService.create(body);
       if (res.msg == MESSAGE.SUCCESS) {

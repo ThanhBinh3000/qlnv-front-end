@@ -5,11 +5,12 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
+import { DonviService } from 'src/app/services/donvi.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -24,6 +25,7 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     private danhSachMuaTrucTiepService: DanhSachMuaTrucTiepService,
     private modal: NzModalService,
     public userService: UserService,
+    private donviService: DonviService,
   ) {
 
   }
@@ -45,8 +47,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     trichYeu: '',
     soDxuat: '',
   };
-
-  STATUS = STATUS
   filterTable: any = {
     soDxuat: '',
     namKh: '',
@@ -61,6 +61,8 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     trangThaiTh: '',
   };
 
+  STATUS = STATUS
+  listDonVi = [];
   dataTableAll: any[] = [];
   dataTable: any[] = [];
   page: number = 1;
@@ -68,22 +70,14 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
   totalRecord: number = 0;
   userInfo: UserLogin;
   selectedId: number = 0;
-  isVatTu: boolean = false;
   allChecked = false;
   indeterminate = false;
 
   async ngOnInit() {
+    await Promise.all([
+      this.loadListDonVi(),
+    ]);
     try {
-      if (this.loaiVthh === "02") {
-        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM")) {
-          window.location.href = '/error/401'
-        }
-      }
-      else {
-        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XEM")) {
-          window.location.href = '/error/401'
-        }
-      }
       this.userInfo = this.userService.getUserLogin();
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
@@ -102,6 +96,18 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     }
 
   }
+
+  async loadListDonVi() {
+    let body = {
+      "trangThai": "01",
+      "capDvi": "2"
+    };
+    let res = await this.donviService.getAll(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDonVi = res.data;
+    }
+  }
+
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
@@ -148,11 +154,11 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       ngayDuyetDen: this.searchFilter.ngayTao
         ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
         : null,
-      soDxuat: this.searchFilter.soDx,
+      soDxuat: this.searchFilter.soDxuat,
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
-      maDvi: null,
+      maDvi: this.searchFilter.maDvi,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -222,16 +228,9 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       }
     }
     this.isDetail = true;
-    if (this.userService.isTongCuc()) {
-      this.isVatTu = true;
-    } else {
-      this.isVatTu = false;
-    }
     this.selectedId = null;
     this.loaiVthh = this.loaiVthhCache;
   }
-
-
 
   showList() {
     this.isDetail = false;
@@ -241,27 +240,11 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
   detail(data?) {
     this.selectedId = data.id;
     this.isDetail = true;
-    this.loaiVthh = data.loaiVthh;
-    if (data.loaiVthh.startsWith('02')) {
-      this.isVatTu = true;
-    } else {
-      this.isVatTu = false;
-    }
-    if (this.loaiVthh === "02") {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA")) {
-        return;
-      }
-    }
-    else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_SUA")) {
-        return;
-      }
-    }
   }
 
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
-    this.searchFilter.soDx = null;
+    this.searchFilter.soDxuat = null;
     this.searchFilter.ngayTao = null;
     this.searchFilter.ngayPduyet
     this.searchFilter.trichYeu = null;
@@ -271,16 +254,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
   }
 
   xoaItem(item: any) {
-    if (this.loaiVthh === "02") {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA")) {
-        return;
-      }
-    }
-    else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA")) {
-        return;
-      }
-    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -318,16 +291,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
   }
 
   exportData() {
-    if (this.loaiVthh === "02") {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_EXP")) {
-        return;
-      }
-    }
-    else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_EXP")) {
-        return;
-      }
-    }
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
@@ -366,18 +329,7 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     }
   }
 
-
   deleteSelect() {
-    if (this.loaiVthh === "02") {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA")) {
-        return;
-      }
-    }
-    else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA")) {
-        return;
-      }
-    }
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
@@ -418,7 +370,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
-
 
   filterInTable(key: string, value: string) {
     if (value != '') {
