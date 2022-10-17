@@ -282,15 +282,15 @@ export class PhuLuc8Component implements OnInit {
 
   //update khi sửa
   saveEdit(id: string): void {
-    if (!this.editCache[id].data.maCongTrinh
-      || (!this.editCache[id].data.dxuatDchinhGiam && this.editCache[id].data.dxuatDchinhGiam !== 0)
-      || (!this.editCache[id].data.dxuatDchinhTang && this.editCache[id].data.dxuatDchinhTang !== 0)
-      || (!this.editCache[id].data.gtriCtrinh && this.editCache[id].data.gtriCtrinh !== 0)
-      || (!this.editCache[id].data.kh2021SauDchinh && this.editCache[id].data.kh2021SauDchinh !== 0)
-    ) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-      return;
-    }
+    // if (!this.editCache[id].data.maCongTrinh
+    //   || (!this.editCache[id].data.dxuatDchinhGiam && this.editCache[id].data.dxuatDchinhGiam !== 0)
+    //   || (!this.editCache[id].data.dxuatDchinhTang && this.editCache[id].data.dxuatDchinhTang !== 0)
+    //   || (!this.editCache[id].data.gtriCtrinh && this.editCache[id].data.gtriCtrinh !== 0)
+    //   || (!this.editCache[id].data.kh2021SauDchinh && this.editCache[id].data.kh2021SauDchinh !== 0)
+    // ) {
+    //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+    //   return;
+    // }
     if (
       this.editCache[id].data.dxuatDchinhGiam < 0 ||
       this.editCache[id].data.dxuatDchinhTang < 0 ||
