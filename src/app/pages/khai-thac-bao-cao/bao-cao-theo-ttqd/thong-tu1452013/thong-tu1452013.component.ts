@@ -94,6 +94,7 @@ export class ThongTu1452013Component implements OnInit {
       });
       this.showDlgPreview = true;
     } catch (e) {
+      console.log(e);
     } finally {
       this.spinner.hide();
     }
