@@ -68,6 +68,7 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
     allChecked = false;
     //trang thai
     statusNewReport = true;
+    statusDelete = false;
     disable: boolean;
 
     constructor(
@@ -90,14 +91,16 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
 
         this.searchFilter.maDviTao = this.userInfo?.MA_DVI;
         // trang thai cua nut tao moi
-        if (this.userService.isAccessPermisson(CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(CVNC.ADD_DN_MVT)) {
-            this.statusNewReport = false;
-        }
+        this.statusNewReport = this.userService.isAccessPermisson(CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(CVNC.ADD_DN_MVT);
+        this.statusDelete = this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT);
+
         //neu cos quyen phe duyet thi trang thai mac dinh la trinh duyet
         if (this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) || this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT)) {
             this.searchFilter.trangThai = Utils.TT_BC_2;
         }
-        if (this.userService.isTongCuc() && this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT)) {
+        if (this.userService.isTongCuc()) {
+            this.canCuGias = this.canCuGias.filter(e => e.id == Utils.HD_TRUNG_THAU);
+            this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_VTU);
             this.searchFilter.canCuGia = Utils.HD_TRUNG_THAU;
             this.searchFilter.loaiDn = Utils.MUA_VTU;
             this.disable = true;
@@ -105,6 +108,7 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
             this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
             this.disable = false;
         }
+
         this.search();
         this.spinner.hide();
     }

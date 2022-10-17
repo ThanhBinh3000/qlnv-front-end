@@ -538,7 +538,6 @@ export class BaoCao02Component implements OnInit {
 
     // tinh len tren nhung hang fix cung I,II
     async changeModel(idAppendix: number) {
-        debugger
         this.total[idAppendix] = new ItemData();
         this.lstCtietBcao[idAppendix].data.forEach(item => {
             if (item.maVtuCha == 0) {
@@ -549,7 +548,12 @@ export class BaoCao02Component implements OnInit {
     }
 
     export() {
-        this.quanLyVonPhiService.exportBaoCao(this.id, this.idBaoCao).toPromise().then(
+        const request = {
+            bcaoCtietId: this.id,
+            bcaoId: this.idBaoCao,
+            dviTien: this.maDviTien,
+        }
+        this.quanLyVonPhiService.exportBaoCao(request).toPromise().then(
             (data) => {
                 fileSaver.saveAs(data, '02/BCN.xlsx');
             },

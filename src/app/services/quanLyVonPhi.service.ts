@@ -1195,8 +1195,12 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   // exprot excel
-  exportBaoCao(bcaoCtietId: string, bcaoId: string): Observable<any> {
-    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/export?bcaoCtietId=' + bcaoCtietId + '&&bcaoId=' + bcaoId, { responseType: 'blob' });
+  exportBaoCao(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/export',
+      // 'http://192.168.1.109:30101/bao-cao/chi-tiet/export',
+      request,
+      { responseType: 'blob' });
   }
 
   //get user theo dvql
