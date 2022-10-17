@@ -65,6 +65,8 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   danhSachChiCuc: any[] = [];
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
+  idSelected: number;
+   isViewDetail: boolean;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -200,7 +202,10 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   changePageSize(event) {
   }
 
-  viewDetail(id: number, isUpdate: boolean) {
+  viewDetail(id: number, isView: boolean) {
+    this.idSelected = id;
+    this.isAddNew = true;
+    this.isViewDetail = isView ?? false;
   }
 
   xoaItem(id) {
@@ -239,6 +244,7 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
 
   onClose() {
     this.isAddNew = false;
+    this.search()
   }
 
   filterInTable(key: string, value: string) {

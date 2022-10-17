@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs';
+import {OldResponseData} from "../interfaces/response";
 
 @Injectable({
   providedIn: 'root',
@@ -11,12 +12,16 @@ export class QuanLyDanhSachHangHongHocService extends BaseService {
   GATEWAY = '/qlnv-luukho';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuanLyDanhSachHangHongHoc', '');
+    super(httpClient, '', '');
   }
 
   search(body: any): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/hang-hong-hoc/tra-cuu`;
     return this.httpClient.post<any>(url, body).toPromise();
+  }
+  create(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/hang-hong-hoc/them-moi`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
   searchDetail(id: number): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/hang-hong-hoc/${id}`

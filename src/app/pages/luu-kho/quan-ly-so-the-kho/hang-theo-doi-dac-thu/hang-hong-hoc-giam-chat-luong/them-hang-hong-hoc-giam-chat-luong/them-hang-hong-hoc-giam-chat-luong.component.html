@@ -1,14 +1,20 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
-  <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="quayLai()">
-      <i class="fa fa-arrow-left"></i>
-      <span>Quay lại</span>
-    </button>
-    <button  type="button" class="btn btn-sub xanh"
-             (click)="luu()">
-      <i class="icon htvbdh_luu"></i>
-      <span>Lưu</span>
-    </button>
+<nz-affix class="menu-lv2 dieu-chinh-button" [nzOffsetTop]="globals.prop.MENU_LV2">
+  <div class="tab-content tab-menu" >
+    <div class="d-flex justify-content-between header-tab" id="banhanh">
+      <div class="trai">
+      </div>
+      <div class="canphai phai">
+        <button type="button" class="btn btn-sub" (click)="quayLai()">
+          <i class="fa fa-arrow-left"></i>
+          <span>Quay lại</span>
+        </button>
+        <button  type="button" class="btn btn-sub xanh"
+                 (click)="luu()">
+          <i class="icon htvbdh_luu"></i>
+          <span>Lưu</span>
+        </button>
+      </div>
+    </div>
   </div>
 </nz-affix>
 
@@ -25,6 +31,31 @@
         </div>
       </div>
     </div>
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu">
+      <div nz-row [nzGutter]="[16, 12]">
+        <div nz-col nzSpan="4">
+        <nz-form-item nz-col  class="form-item">
+          <nz-form-label nzFor="loai-hang-hoa">Chi cục DTNN KV</nz-form-label>
+          <nz-form-control >
+            <nz-input-group>
+              <input type="text " nz-input formControlName="tenDvi" [readonly]="true">
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4" >
+          <nz-form-item nz-col class="form-item">
+            <nz-form-label nzFor="ngay-tao">Ngày tạo danh sách</nz-form-label>
+            <nz-form-control >
+              <nz-date-picker [nzDisabled]="true" formControlName="ngayDeXuat" nzFormat="dd/MM/yyyy" id="ngay-tao" class="search__input">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+      </div>
+    </form>
+
   </nz-card>
   <nz-card class="mt-16 flex-card data-table card-border-content">
     <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered [nzScroll]=

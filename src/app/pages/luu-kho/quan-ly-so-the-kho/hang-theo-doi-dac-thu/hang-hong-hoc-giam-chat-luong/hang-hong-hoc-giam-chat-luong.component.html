@@ -127,7 +127,7 @@
           <td>{{(page-1)*pageSize+i+1}}</td>
           <td>{{ data.tenDvi }}</td>
           <td>{{ data.maDanhSach }}</td>
-          <td>{{ data.ngayDeXuat }}</td>
+          <td>{{ data.ngayDeXuat  | date: 'dd/MM/YYYY' }}</td>
           <td >{{ data.ctList.length }}</td>
           <td >{{ data.tenTrangThai }}</td>
           <td>
@@ -166,6 +166,6 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-  <app-them-hang-hong-hoc-giam-chat-luong (close)="onClose()" [dsTong]="dsTong" [dsLoaiHangHoa]="dsLoaiHangHoa">
+  <app-them-hang-hong-hoc-giam-chat-luong (close)="onClose()" [idInput]="idSelected" [dsLoaiHangHoa]="dsLoaiHangHoa">
   </app-them-hang-hong-hoc-giam-chat-luong>
 </ng-template>
