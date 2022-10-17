@@ -13,7 +13,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
+import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC } from './phu-luc2.constant';
 
@@ -95,7 +95,8 @@ export class PhuLuc2Component implements OnInit {
   status: false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
-  dsDinhMuc: any[] = [];
+  dsDinhMucN: any[] = [];
+  dsDinhMucX: any[] = [];
   maDviTao!: string;
 
   allChecked = false;
@@ -165,11 +166,13 @@ export class PhuLuc2Component implements OnInit {
       }
     );
     this.getStatusButton();
-    this.getDsDinhMuc();
+    // this.getdsDinhMucN();
+    this.getDinhMucPL2N();
+    this.getDinhMucPL2X();
     this.spinner.hide();
   }
 
-  getDinhMuc() {
+  getDinhMucPL2N() {
     const request = {
       loaiDinhMuc: '01',
       maDvi: this.maDviTao,
@@ -177,19 +180,35 @@ export class PhuLuc2Component implements OnInit {
     this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
       res => {
         if (res.statusCode == 0) {
-          this.dinhMucs = res.data;
-          // this.dinhMucs.forEach(item => {
-          //     if (!item.loaiVthh.startsWith('04')) {
-          //         item.nvChuyenMonKv = divNumber(item.nvChuyenMonKv, 1000);
-          //         item.nvChuyenMonTc = divNumber(item.nvChuyenMonTc, 1000);
-          //         item.tcDieuHanhKv = divNumber(item.tcDieuHanhKv, 1000);
-          //         item.tcDieuHanhTc = divNumber(item.tcDieuHanhTc, 1000);
-          //         item.ttCaNhanKv = divNumber(item.ttCaNhanKv, 1000);
-          //         item.ttCaNhanTc = divNumber(item.ttCaNhanTc, 1000);
-          //     }
+          this.dsDinhMucN = res.data;
+          // this.dsDinhMucN.forEach(item => {
+          //   if (!item.loaiVthh.startsWith('02')) {
+          //     item.tongDmuc = divNumber(item.tongDmuc, 1000);
+          //   }
           // })
-          console.log(this.dinhMucs);
-
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    )
+  }
+  getDinhMucPL2X() {
+    const request = {
+      loaiDinhMuc: '02',
+      maDvi: this.maDviTao,
+    }
+    this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+      res => {
+        if (res.statusCode == 0) {
+          this.dsDinhMucX = res.data;
+          // this.dsDinhMucX.forEach(item => {
+          //   if (!item.loaiVthh.startsWith('04')) {
+          //     item.tongDmuc = divNumber(item.tongDmuc, 1000);
+          //   }
+          // })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -419,9 +438,16 @@ export class PhuLuc2Component implements OnInit {
     }
     this.replaceIndex(lstIndex, 1);
     let dm: number;
-    this.dsDinhMuc.forEach(itm => {
-      if (itm.idDmChi == initItem.maNdung) {
-        return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+    this.dsDinhMucN.forEach(itm => {
+      if (itm.id == initItem.maNdung) {
+        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        return dm = itm.tongDmuc;
+      }
+    })
+    this.dsDinhMucX.forEach(itm => {
+      if (itm.id == initItem.maNdung) {
+        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        return dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -478,9 +504,16 @@ export class PhuLuc2Component implements OnInit {
     }
 
     let dm: number;
-    this.dsDinhMuc.forEach(itm => {
-      if (itm.idDmChi == initItem.maNdung) {
-        return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+    this.dsDinhMucN.forEach(itm => {
+      if (itm.id == initItem.maNdung) {
+        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        return dm = itm.tongDmuc;
+      }
+    })
+    this.dsDinhMucX.forEach(itm => {
+      if (itm.id == initItem.maNdung) {
+        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        return dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -641,9 +674,16 @@ export class PhuLuc2Component implements OnInit {
   //thêm phần tử đầu tiên khi bảng rỗng
   addFirst(initItem: ItemData) {
     let dm: number;
-    this.dsDinhMuc.forEach(itm => {
-      if (itm.idDmChi == initItem.maNdung) {
-        return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+    this.dsDinhMucN.forEach(itm => {
+      if (itm.id == initItem.maNdung) {
+        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        return dm = itm.tongDmuc;
+      }
+    })
+    this.dsDinhMucX.forEach(itm => {
+      if (itm.id == initItem.maNdung) {
+        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        return dm = itm.tongDmuc;
       }
     })
     if (initItem?.id) {
@@ -778,6 +818,7 @@ export class PhuLuc2Component implements OnInit {
               ...this.initItem,
               maNdung: item.id,
               level: item.level,
+              maDviTinh: item.maDviTinh,
             };
             this.addLow(id, data);
           }
@@ -893,34 +934,8 @@ export class PhuLuc2Component implements OnInit {
       this.editCache[id].data.thienDinhMuc = 0
     }
     this.editCache[id].data.thienCong = this.editCache[id].data.thienSluongTteThien + this.editCache[id].data.thienSluongUocThien;
-    this.editCache[id].data.thienThanhTien = this.editCache[id].data.thienCong * this.editCache[id].data.thienDinhMuc;
+    this.editCache[id].data.thienThanhTien = (this.editCache[id].data.thienCong * this.editCache[id].data.thienDinhMuc) / 1000;
     this.editCache[id].data.ncauKphi = this.editCache[id].data.thienThanhTien + this.editCache[id].data.kphiThieuNtruoc;
-  }
-
-  getDsDinhMuc() {
-    const requestDinhMuc = {
-      idDmChi: null,
-      maDvi: this.maDviTao,
-      paggingReq: {
-        limit: 20,
-        page: 1
-      },
-      parentId: null,
-      str: null,
-      trangThai: null,
-      typeChi: null
-    };
-    this.quanLyVonPhiService.getDinhMucNhapXuat(requestDinhMuc).toPromise().then(
-      async (data) => {
-        const contentData = await data?.data?.content;
-        if (contentData.length != 0) {
-          this.dsDinhMuc = contentData;
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
   }
 
   getMoneyUnit() {
@@ -936,4 +951,12 @@ export class PhuLuc2Component implements OnInit {
     return displayNumber(num);
   }
 
+  formatterPercent = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
+
+  parserPercent = value => value.replace(/\$\s?|(,*)/g, '')
+
+
+  viewDetail(data) {
+    console.log(data);
+  }
 }

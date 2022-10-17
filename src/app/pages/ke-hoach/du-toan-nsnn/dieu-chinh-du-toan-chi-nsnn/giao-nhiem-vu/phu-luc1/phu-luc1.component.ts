@@ -1,8 +1,4 @@
-import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -12,7 +8,6 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from 'src/app/services/user.service';
 import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC } from './phu-luc1.constant';
@@ -100,17 +95,11 @@ export class PhuLuc1Component implements OnInit {
   allChecked = false;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 
-  constructor(private router: Router,
-    private routerActive: ActivatedRoute,
+  constructor(
     private spinner: NgxSpinnerService,
     private quanLyVonPhiService: QuanLyVonPhiService,
-    private datePipe: DatePipe,
-    private sanitizer: DomSanitizer,
-    private userService: UserService,
     private danhMucService: DanhMucHDVService,
     private notification: NzNotificationService,
-    private location: Location,
-    private fb: FormBuilder,
     private modal: NzModalService,
   ) {
   }
@@ -141,20 +130,6 @@ export class PhuLuc1Component implements OnInit {
     this.getTotal();
     this.updateEditCache();
 
-    // //lay danh sach danh muc don vi
-    // await this.danhMucService.dMDonVi().toPromise().then(
-    //   (data) => {
-    //     if (data.statusCode == 0) {
-    //       this.donVis = data.data;
-    //     } else {
-    //       this.notification.error(MESSAGE.ERROR, data?.msg);
-    //     }
-    //   },
-    //   (err) => {
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   }
-    // );
-
     //lấy danh sách nội dung chi
     await this.danhMucService.dMNoiDungKinhPhiPL1DieuChinh().toPromise().then(res => {
       if (res.statusCode == 0) {
@@ -165,19 +140,6 @@ export class PhuLuc1Component implements OnInit {
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
-
-    // await this.listNoiDung.forEach(item => {
-    //     if (item.maCha == "string") {
-    //         this.noiDungFull.push({
-    //             ...item,
-    //             tenDm: item.giaTri,
-    //             ten: item.giaTri,
-    //             level: 0,
-    //             idCha: 0,
-    //         })
-    //     }
-    // })
-    // await this.addListNoiDungChi(this.noiDungFull);
 
     await this.danhMucService.dMLoaiKhoanPL1DieuChinh().toPromise().then(
       (data) => {
@@ -194,28 +156,6 @@ export class PhuLuc1Component implements OnInit {
     this.getStatusButton();
     this.spinner.hide();
   }
-
-  // addListNoiDungChi(noiDungChiTemp) {
-  //   const a = [];
-  //   noiDungChiTemp.forEach(item => {
-  //       this.listNoiDung.forEach(el => {
-  //           if (item.ma == el.maCha) {
-  //               el = {
-  //                   ...el,
-  //                   tenDm: el.giaTri,
-  //                   ten: el.giaTri,
-  //                   level: item.level + 1,
-  //                   idCha: item.id,
-  //               }
-  //               this.noiDungFull.push(el);
-  //               a.push(el);
-  //           }
-  //       });
-  //   })
-  //   if (a.length > 0) {
-  //       this.addListNoiDungChi(a);
-  //   }
-  // }
 
   getStatusButton() {
     if (this.data?.statusBtnOk && (this.trangThaiPhuLuc == "2" || this.trangThaiPhuLuc == "5")) {

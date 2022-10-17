@@ -2,49 +2,138 @@
   <!-- (nzChange)="onChange($event)" -->
   <div nz-row nzGutter="24">
     <div nz-col nzspan="4">
-      <ul nz-menu nzMode="inline">
+      <ul nz-menu nzMode="inline" style="max-width: 300px">
         <!--<li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
           Thông tư 145/2013/TT-BTC
         </li>-->
-        <li nz-submenu nzOpen="true" nzTitle="Thông tư 145/2013/TT-BTC" nzIcon="tmp">
+        <li nz-submenu nzOpen="true" nzTitle="&nbsp;&nbsp;&nbsp;Thông tư 145/2013/TT-BTC">
           <ul>
             <li nz-menu-item (click)="selectTab(0)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
               <span nz-icon nzType="fund"></span>
               <span>KH Tổng hợp nhập, xuất hàng DTQG</span>
             </li>
+            <li nz-menu-item (click)="selectTab(1)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>KH tăng hang DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(2)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>KH giảm hang DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(3)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>KH luân phiên đổi hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(4)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Thực hiện KH nhập, xuất, cứu trợ, viện trợ, bảo quản hàng DTQG</span>
+            </li>
             <li nz-menu-item nzSelected (click)="selectTab(5)"
                 *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
-              <span nz-icon nzType="project"></span>
+              <span nz-icon nzType="fund"></span>
               <span>Nhập, xuất, tồn kho hàng DTQG</span>
-
+            </li>
+            <li nz-menu-item (click)="selectTab(6)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Chi tiết nhập, xuất, tồn kho hàng DTQG</span>
             </li>
           </ul>
         </li>
         <!--        tab 2-->
-        <li nz-submenu nzTitle="Thông tư số 108/2018/TT-BTC" nzIcon="tmp">
+        <li nz-submenu nzTitle="&nbsp;&nbsp;&nbsp;Thông tư số 108/2018/TT-BTC">
           <ul>
-            <li nz-menu-item (click)="selectTab(0)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+            <li nz-menu-item (click)="selectTab(7)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
               <span nz-icon nzType="fund"></span>
-              <span>KH Tổng hợp nhập, xuất hàng DTQG</span>
+              <span>Chi tiết nhập, xuất, tồn kho hàng DTQG</span>
             </li>
-            <li nz-menu-item (click)="selectTab(5)"
-                *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+            <li nz-menu-item (click)="selectTab(8)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
               <span nz-icon nzType="fund"></span>
-              <span>Nhập, xuất, tồn kho hàng DTQG</span>
+              <span>Tình hình thực hiện phí bảo quản hàng DTQG theo định mức</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(9)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Thực hiện phí nhập, xuất, phí xuất viện trợ, cứu trợ, hỗ trợ hàng DTQG</span>
             </li>
           </ul>
         </li>
         <!--        tab 3-->
-        <li nz-submenu nzTitle="Quyết định số 1457/TCDT-TVQT" nzIcon="tmp">
+        <li nz-submenu nzTitle="&nbsp;&nbsp;&nbsp;Quyết định số 1457/TCDT-TVQT">
           <ul>
-            <li nz-menu-item (click)="selectTab(0)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+            <li nz-menu-item (click)="selectTab(10)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
               <span nz-icon nzType="fund"></span>
-              <span>KH Tổng hợp nhập, xuất hàng DTQG</span>
+              <span>Nhập mua hàng DTQG</span>
             </li>
-            <li nz-menu-item (click)="selectTab(5)"
+            <li nz-menu-item (click)="selectTab(11)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Xuất hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(12)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Chi tiết thực hiện phí bảo quản lần đầu hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(13)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>KH luân phiên đổi hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(14)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Chi tiết thực hiện phí nhập mua (hoặc xuất bán) hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(15)"
                 *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
               <span nz-icon nzType="fund"></span>
-              <span>Nhập, xuất, tồn kho hàng DTQG</span>
+              <span>Chi tiết thực hiện phí xuất hàng DTQG cứu trợ, viện trợ, hỗ trợ</span>
+            </li>
+          </ul>
+        </li>
+        <!--        tab 4-->
+        <li nz-submenu nzTitle="&nbsp;&nbsp;&nbsp;Thông tư 130/2018/TT-BTC">
+          <ul>
+            <li nz-menu-item (click)="selectTab(16)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Nguồn hình thành DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(17)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Tổng chi cho mua hàng DTQG trong kỳ</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(18)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>KH mua hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(19)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Số lượng và giá trị hàng DTQG</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(20)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Số lượng và giá trị hàng DTQG nhập trong kỳ</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(21)"
+                *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Số lượng và giá trị hàng DTQG xuất trong kỳ</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(22)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Số lượng và giá trị hàng DTQG xuất cấp không thu tiền trong kỳ</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(23)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Số lượng và giá trị hàng xuất cứu trợ, hỗ trợ, phục vụ quốc phòng, an ninh và nv khác trong kỳ</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(24)"
+                *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Số lượng và giá trị hàng DTQG xuất trong kỳ</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(25)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Số lượng và giá trị hàng DTQG xuất viện trợ trong kỳ</span>
+            </li>
+            <li nz-menu-item (click)="selectTab(26)" *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
+              <span nz-icon nzType="fund"></span>
+              <span>Tiếp nhận, sử dụng hàng DTQG xuất cứu trợ, quốc phòng, an ninh và nhiệm vụ khác được giao trong kỳ</span>
             </li>
           </ul>
         </li>

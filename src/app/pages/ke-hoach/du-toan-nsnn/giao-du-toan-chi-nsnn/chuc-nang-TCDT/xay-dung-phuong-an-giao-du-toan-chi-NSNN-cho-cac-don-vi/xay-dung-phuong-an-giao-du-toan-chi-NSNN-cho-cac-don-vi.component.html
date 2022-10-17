@@ -73,7 +73,16 @@
         <nz-table #basicTable class="nowrap">
           <thead>
             <tr>
-              <th width="175px">Số QĐ</th>
+              <th>
+                <ng-container *ngIf="statusDeleteCv(); else view">
+                  <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa quyết định công văn?" style="color:black"
+                    (nzOnConfirm)="deleteQdCv()">Số QĐ/CV
+                  </a>
+                </ng-container>
+                <ng-template #view>
+                  Số QĐ/CV
+                </ng-template>
+              </th>
               <th width="175px">Mã phương án(Mã phương án tổng cục nhập từ quyết định BTC giao)</th>
               <th width="175px">Mã phương án</th>
               <th width="175px">Năm phương án</th>

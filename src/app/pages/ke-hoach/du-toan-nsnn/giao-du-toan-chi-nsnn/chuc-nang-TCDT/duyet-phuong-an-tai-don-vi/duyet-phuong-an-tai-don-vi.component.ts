@@ -154,7 +154,7 @@ export class DuyetPhuongAnTaiDonViComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
-    // this.onSubmit()@
+    this.onSubmit()
     this.spinner.hide()
   }
 
