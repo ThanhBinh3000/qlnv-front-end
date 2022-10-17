@@ -102,7 +102,7 @@
                   {{item.lyDoTuChoi}}</ng-template>
               </td>
               <td>
-                <ng-container *ngIf="item.trangThai == '7'; else xem">
+                <ng-container *ngIf="item.trangThai == '7' && isCanbotc ; else xem">
                   <button nz-button class="search__button--search" (click)="xemChiTiet(item.id, item.maLoaiDan)">
                     Phê duyệt
                   </button>
