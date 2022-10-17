@@ -106,7 +106,7 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
       })
   }
 
-  huy() {
+  quayLai() {
     this.onClose.emit();
   }
 

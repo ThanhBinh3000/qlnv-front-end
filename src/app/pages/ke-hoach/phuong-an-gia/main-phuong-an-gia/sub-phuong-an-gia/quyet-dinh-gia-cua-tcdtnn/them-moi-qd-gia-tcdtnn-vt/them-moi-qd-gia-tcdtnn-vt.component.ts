@@ -308,19 +308,6 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   }
 
   async calculateVAT(index: number, type: number) {
-    let currentRow = this.formData.value;
-    let currentLine = this.arrThongTinGia[index];
-    //gia mua toi da
-    if (currentRow.loaiGia == 'LG01' && (currentLine.giaQd)) {
-      this.arrThongTinGia[index].giaQd = 0;
-      this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
-    }
-    //gia ban toi thieu
-    if (currentRow.loaiGia == 'LG02' && (currentLine.giaQd < currentLine.giaDn)) {
-      this.arrThongTinGia[index].giaQd = 0;
-      this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
-    }
-    //0:gia>vat 1:vat>gia
     if (type === 0) {
       this.arrThongTinGia[index].giaQdVat = this.arrThongTinGia[index].giaQd + this.arrThongTinGia[index].giaQd * this.thueVat;
     }

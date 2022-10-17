@@ -64,9 +64,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   rowItemCcXdg: CanCuXacDinhPag = new CanCuXacDinhPag();
   dataEdit: { [key: string]: { edit: boolean; data: CanCuXacDinhPag } } = {};
 
-  dataTableKsGia: any[] = [];
+  dataTableKsGia: any[] ;
 
-  dataTableKqGia: any[] = [];
+  dataTableKqGia: any[] ;
 
 
 
