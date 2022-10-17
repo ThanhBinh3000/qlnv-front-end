@@ -543,25 +543,25 @@ export class PhuLuc4Component implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (
-      // (!this.editCache[id].data.loaiMatHang && this.editCache[id].data.loaiMatHang !== 0) ||
-      (!this.editCache[id].data.maDviTinh) ||
-      (!this.editCache[id].data.slBquanKh && this.editCache[id].data.slBquanKh !== 0) ||
-      (!this.editCache[id].data.slBquanTte && this.editCache[id].data.slBquanTte !== 0) ||
-      (!this.editCache[id].data.slBquanUocThien && this.editCache[id].data.slBquanUocThien !== 0) ||
-      (!this.editCache[id].data.slBquanTcong && this.editCache[id].data.slBquanTcong !== 0) ||
-      (!this.editCache[id].data.thanhTien && this.editCache[id].data.thanhTien !== 0) ||
-      (!this.editCache[id].data.dtoanThieuNTruoc && this.editCache[id].data.dtoanThieuNTruoc !== 0) ||
-      (!this.editCache[id].data.tongNcauKphi && this.editCache[id].data.tongNcauKphi !== 0) ||
-      (!this.editCache[id].data.kphiTcong && this.editCache[id].data.kphiTcong !== 0) ||
-      (!this.editCache[id].data.kphiQtoanNtruoc && this.editCache[id].data.kphiQtoanNtruoc !== 0) ||
-      (!this.editCache[id].data.kphiDtoanGiaoTnam && this.editCache[id].data.kphiDtoanGiaoTnam !== 0) ||
-      (!this.editCache[id].data.kphiPvcTcDchuyen && this.editCache[id].data.kphiPvcTcDchuyen !== 0) ||
-      (!this.editCache[id].data.dtoanDchinh && this.editCache[id].data.dtoanDchinh !== 0)
-    ) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
-      return;
-    }
+    // if (
+    //   // (!this.editCache[id].data.loaiMatHang && this.editCache[id].data.loaiMatHang !== 0) ||
+    //   (!this.editCache[id].data.maDviTinh) ||
+    //   (!this.editCache[id].data.slBquanKh && this.editCache[id].data.slBquanKh !== 0) ||
+    //   (!this.editCache[id].data.slBquanTte && this.editCache[id].data.slBquanTte !== 0) ||
+    //   (!this.editCache[id].data.slBquanUocThien && this.editCache[id].data.slBquanUocThien !== 0) ||
+    //   (!this.editCache[id].data.slBquanTcong && this.editCache[id].data.slBquanTcong !== 0) ||
+    //   (!this.editCache[id].data.thanhTien && this.editCache[id].data.thanhTien !== 0) ||
+    //   (!this.editCache[id].data.dtoanThieuNTruoc && this.editCache[id].data.dtoanThieuNTruoc !== 0) ||
+    //   (!this.editCache[id].data.tongNcauKphi && this.editCache[id].data.tongNcauKphi !== 0) ||
+    //   (!this.editCache[id].data.kphiTcong && this.editCache[id].data.kphiTcong !== 0) ||
+    //   (!this.editCache[id].data.kphiQtoanNtruoc && this.editCache[id].data.kphiQtoanNtruoc !== 0) ||
+    //   (!this.editCache[id].data.kphiDtoanGiaoTnam && this.editCache[id].data.kphiDtoanGiaoTnam !== 0) ||
+    //   (!this.editCache[id].data.kphiPvcTcDchuyen && this.editCache[id].data.kphiPvcTcDchuyen !== 0) ||
+    //   (!this.editCache[id].data.dtoanDchinh && this.editCache[id].data.dtoanDchinh !== 0)
+    // ) {
+    //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+    //   return;
+    // }
     if (
       this.editCache[id].data.slBquanKh < 0 ||
       this.editCache[id].data.slBquanTte < 0 ||

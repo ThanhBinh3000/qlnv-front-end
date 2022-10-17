@@ -491,20 +491,20 @@ export class PhuLuc1Component implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (
-      // (!this.editCache[id].data.maNdung && this.editCache[id].data.maNdung !== 0) ||
-      // (!this.editCache[id].data.maLoaiKhoan) ||
-      (!this.editCache[id].data.tongNcauDtoanKphi && this.editCache[id].data.tongNcauDtoanKphi !== 0) ||
-      (!this.editCache[id].data.dtoanKphiNtruoc && this.editCache[id].data.dtoanKphiNtruoc !== 0) ||
-      (!this.editCache[id].data.dtoanKphiDaGiao && this.editCache[id].data.dtoanKphiDaGiao !== 0) ||
-      (!this.editCache[id].data.dtoanKphiCong && this.editCache[id].data.dtoanKphiCong !== 0) ||
-      (!this.editCache[id].data.kphiUocThien && this.editCache[id].data.kphiUocThien !== 0) ||
-      (!this.editCache[id].data.kphiDchinhTang && this.editCache[id].data.kphiDchinhTang !== 0) ||
-      (!this.editCache[id].data.kphiDchinhGiam && this.editCache[id].data.kphiDchinhGiam !== 0)
-    ) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
-      return;
-    }
+    // if (
+    //   // (!this.editCache[id].data.maNdung && this.editCache[id].data.maNdung !== 0) ||
+    //   // (!this.editCache[id].data.maLoaiKhoan) ||
+    //   (!this.editCache[id].data.tongNcauDtoanKphi && this.editCache[id].data.tongNcauDtoanKphi !== 0) ||
+    //   (!this.editCache[id].data.dtoanKphiNtruoc && this.editCache[id].data.dtoanKphiNtruoc !== 0) ||
+    //   (!this.editCache[id].data.dtoanKphiDaGiao && this.editCache[id].data.dtoanKphiDaGiao !== 0) ||
+    //   (!this.editCache[id].data.dtoanKphiCong && this.editCache[id].data.dtoanKphiCong !== 0) ||
+    //   (!this.editCache[id].data.kphiUocThien && this.editCache[id].data.kphiUocThien !== 0) ||
+    //   (!this.editCache[id].data.kphiDchinhTang && this.editCache[id].data.kphiDchinhTang !== 0) ||
+    //   (!this.editCache[id].data.kphiDchinhGiam && this.editCache[id].data.kphiDchinhGiam !== 0)
+    // ) {
+    //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+    //   return;
+    // }
     if (this.editCache[id].data.tongNcauDtoanKphi < 0 ||
       this.editCache[id].data.dtoanKphiNtruoc < 0 ||
       this.editCache[id].data.dtoanKphiDaGiao < 0 ||
