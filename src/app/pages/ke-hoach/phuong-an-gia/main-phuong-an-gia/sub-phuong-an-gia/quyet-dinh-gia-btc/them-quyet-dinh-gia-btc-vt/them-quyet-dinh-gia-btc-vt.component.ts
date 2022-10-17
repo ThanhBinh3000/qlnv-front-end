@@ -112,6 +112,10 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       let res = await this.quyetDinhGiaCuaBtcService.getDetail(id);
       const data = res.data;
       this.arrThongTinGia = data.thongTinGiaVt
+      this.arrThongTinGia.forEach(item => {
+        item.giaQd = item.giaQdBtc,
+          item.giaQdVat = item.giaQdVatBtc
+      })
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -127,7 +131,6 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh
       });
-      this.onChangeSoToTrinh(data.soToTrinh)
     }
   }
 
@@ -246,18 +249,19 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
 
   async save() {
     this.spinner.show();
-    let err = false;
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
       return;
     }
-    let currentRow = this.formData.value;
-    let currentLine = currentRow.thongTinGia;
-    if (!err) {
+    this.arrThongTinGia.forEach(item => {
+      item.giaQdBtc = item.giaQd,
+        item.giaQdVatBtc = item.giaQdVat
+    })
       let body = this.formData.value;
       body.soQd = body.soQd + this.maQd;
       body.pagType = this.pagType;
+
       body.thongTinGiaVt = this.arrThongTinGia
       let res;
       if (this.idInput > 0) {
@@ -275,7 +279,6 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    }
     this.spinner.hide();
   }
 
