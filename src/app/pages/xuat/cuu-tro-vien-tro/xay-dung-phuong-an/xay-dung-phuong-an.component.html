@@ -200,7 +200,7 @@
             </a>
             <a
               *ngIf="(data.trangThai==STATUS.DU_THAO || ((data.trangThai==STATUS.TU_CHOI_LDC || data.trangThai==STATUS.TU_CHOI_TP) && userService.isCuc())||
-              (data.trangThai == STATUS.TU_CHOI_LDTC && userService.isTongCuc())) && isOwner(data.maDvi)"
+              (data.trangThai == STATUS.TU_CHOI_LDV && userService.isTongCuc())) && isOwner(data.maDvi)"
               (click)="detail(data, false)">
               <i class="fa fa-pencil"></i>
             </a>

@@ -6,7 +6,7 @@ import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {MESSAGE} from 'src/app/constants/message';
 import {DonviService} from 'src/app/services/donvi.service';
 import {Globals} from 'src/app/shared/globals';
-import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
@@ -385,7 +385,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
       return;
     }
     this.chiTietDiemNhapKhoCreate.idVirtual = new Date().getTime();
-    this.chiTietDiemNhapKhoCreate.idDxuatDtl = this.idDxuatDtl;
+    //this.chiTietDiemNhapKhoCreate.idDxuatDtl = this.idDxuatDtl;
     this.diaDiemNhapKho.idVirtual = new Date().getTime();
     this.diaDiemNhapKho.chiTietDiaDiems = [...this.diaDiemNhapKho.chiTietDiaDiems, this.chiTietDiemNhapKhoCreate];
     this.newObjectDiaDiem();
@@ -562,6 +562,13 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
 
   changeCuc(maDvi: string) {
     this.loadChiCuc(maDvi);
-    this.chiTietDiemNhapKhoCreate.maDvi= this.diaDiemNhapKho.maDvi;
+    this.chiTietDiemNhapKhoCreate.maDvi = this.diaDiemNhapKho.maDvi;
+  }
+
+  tinhTien(item: any) {
+    item.thanhTien = 0;
+    if (item.donGia > 0 && item.soLuong > 0) {
+      item.thanhTien = item.donGia * item.soLuong;
+    }
   }
 }

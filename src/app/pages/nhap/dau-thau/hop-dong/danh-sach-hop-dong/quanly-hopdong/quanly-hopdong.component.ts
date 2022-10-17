@@ -92,7 +92,9 @@ export class QuanlyHopdongComponent implements OnInit {
       ghiChu: ['',],
       diaDiemNhap: [],
       trangThai: [''],
-      tenTrangThai: ['']
+      tenTrangThai: [''],
+      trangThaiHd : [],
+      tenTrangThaiHd : []
     });
   }
 
@@ -110,12 +112,17 @@ export class QuanlyHopdongComponent implements OnInit {
   async getDetail(id){
     if(id){
       let res = await this.kqLcnt.getDetail(id);
-      console.log(res);
       if(res.msg == MESSAGE.SUCCESS){
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData,data);
         let dataCurrent = data.qdKhlcnt.hhQdKhlcntDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)
-        this.dataTable = dataCurrent[0].dsGoiThau;
+        this.dataTable = dataCurrent[0].dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG);
+        if(data.listHopDong){
+          this.dataTable.forEach(item => {
+            let hopDong = data.listHopDong.filter( x  => x.idGoiThau == item.id)[0];
+            item.hopDong = hopDong
+          })
+        };
       }else{
         this.notification.error(MESSAGE.ERROR,res.msg);
       }
@@ -130,13 +137,32 @@ export class QuanlyHopdongComponent implements OnInit {
     this.spinner.hide();
   }
 
-  redirectHopDong(isShowHd:boolean,id : number){
+  async redirectHopDong(isShowHd:boolean,id : number){
     this.isEditHopDong = isShowHd;
     this.idHopDong = id;
+    if(!isShowHd){
+      await this.ngOnInit()
+    }
   }
 
   back() {
     this.showListEvent.emit();
+  }
+
+  async approve(){
+    await this.spinner.show()
+    let body = {
+      id : this.id,
+      trangThai : STATUS.HOAN_THANH_CAP_NHAT
+    }
+    let res = await this.kqLcnt.approve(body);
+    if(res.msg == MESSAGE.SUCCESS){
+      this.notification.success(MESSAGE.SUCCESS,MESSAGE.THAO_TAC_SUCCESS);
+      this.back();
+    }else{
+      this.notification.error(MESSAGE.ERROR,res.msg);
+    }
+    await this.spinner.hide()
   }
 
 }
