@@ -14,7 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import * as uuid from "uuid";
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney } from "src/app/Utility/utils";
+import { displayNumber, divMoney, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney } from "src/app/Utility/utils";
 import { LINH_VUC } from './phu-luc7.constant';
 
 export class ItemData {
@@ -225,13 +225,37 @@ export class PhuLuc7Component implements OnInit {
     ]
     this.changeNam()
     this.getStatusButton();
-    this.getDsDinhMuc();
+    this.getDinhMucPL7();
     this.spinner.hide();
   }
 
+  getDinhMucPL7() {
+    const request = {
+      loaiDinhMuc: '03',
+      maDvi: this.maDviTao,
+    }
+    this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+      res => {
+        if (res.statusCode == 0) {
+          this.dsDinhMuc = res.data;
+          // this.dsDinhMuc.forEach(item => {
+          //   if (!item.loaiVthh.startsWith('04')) {
+          //     item.tongDmuc = divNumber(item.tongDmuc, 1000);
+          //   }
+          // })
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    )
+  }
+
   changeNam() {
-    const a = LINH_VUC.find(el => el.id == 1)
-    a.tenDm = "Tổng cộng năm " + this.namBcao
+    // const a = LINH_VUC.find(el => el.tenDm.includes("Tổng cộng năm"))
+    // a.tenDm = "Tổng cộng năm " + this.namBcao
     const b = LINH_VUC.find(el => el.id == 2)
     b.tenDm = "Thiếu năm " + (this.namBcao - 1) + " chuyển sang " + this.namBcao
     const b1 = LINH_VUC.find(el => el.id == 21)
@@ -459,8 +483,8 @@ export class PhuLuc7Component implements OnInit {
     // them moi phan tu
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
-      if (itm.nhomBquan == initItem.loaiMatHang) {
-        return dm += (parseInt(itm.mucPhi, 10) * parseInt(itm.maDviTinh, 10))
+      if (itm.id == initItem.loaiMatHang) {
+        return dm = itm.tongDmuc;
       }
     })
     if (initItem?.id) {
@@ -517,8 +541,8 @@ export class PhuLuc7Component implements OnInit {
 
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
-      if (itm.nhomBquan == initItem.loaiMatHang) {
-        return dm += (parseInt(itm.mucPhi, 10) * parseInt(itm.maDviTinh, 10))
+      if (itm.id == initItem.loaiMatHang) {
+        return dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -687,8 +711,8 @@ export class PhuLuc7Component implements OnInit {
   addFirst(initItem: ItemData) {
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
-      if (itm.nhomBquan == initItem.loaiMatHang) {
-        return dm += (parseInt(itm.mucPhi, 10) * parseInt(itm.maDviTinh, 10))
+      if (itm.id == initItem.loaiMatHang) {
+        return dm = itm.tongDmuc;
       }
     })
     if (initItem?.id) {
@@ -961,35 +985,35 @@ export class PhuLuc7Component implements OnInit {
     if (this.editCache[id].data.kphiBqDmuc == null) {
       this.editCache[id].data.kphiBqDmuc = 0
     }
-    this.editCache[id].data.kphiBqTtien = this.editCache[id].data.slHangTte * this.editCache[id].data.kphiBqDmuc;
+    this.editCache[id].data.kphiBqTtien = (this.editCache[id].data.slHangTte * this.editCache[id].data.kphiBqDmuc) / 1000;
     this.editCache[id].data.cphiBqTcong = this.editCache[id].data.cphiBqNtruoc + this.editCache[id].data.cphiBqNnay;
     this.editCache[id].data.chenhLech = this.editCache[id].data.kphiBqTtien - this.editCache[id].data.cphiBqTcong;
     this.editCache[id].data.soChuaQtoan = this.editCache[id].data.soQtoanChuyenNsauKpTk + this.editCache[id].data.soQtoanChuyenNsauKpTchi + this.editCache[id].data.dtoan2021ThanhQtoan2020;
   }
 
-  getDsDinhMuc() {
-    const requestDinhMuc = {
-      nhomBquan: null,
-      paggingReq: {
-        limit: 20,
-        page: 1
-      },
-      str: null,
-      tenDmuc: null,
-      trangThai: null
-    };
-    this.quanLyVonPhiService.getDinhMucBaoQuan(requestDinhMuc).toPromise().then(
-      async (data) => {
-        const contentData = await data?.data?.content;
-        if (contentData.length != 0) {
-          this.dsDinhMuc = contentData;
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
-  }
+  // getDsDinhMuc() {
+  //   const requestDinhMuc = {
+  //     nhomBquan: null,
+  //     paggingReq: {
+  //       limit: 20,
+  //       page: 1
+  //     },
+  //     str: null,
+  //     tenDmuc: null,
+  //     trangThai: null
+  //   };
+  //   this.quanLyVonPhiService.getDinhMucBaoQuan(requestDinhMuc).toPromise().then(
+  //     async (data) => {
+  //       const contentData = await data?.data?.content;
+  //       if (contentData.length != 0) {
+  //         this.dsDinhMuc = contentData;
+  //       }
+  //     },
+  //     err => {
+  //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //     },
+  //   );
+  // }
   displayValue(num: number): string {
     num = exchangeMoney(num, '1', this.maDviTien);
     return displayNumber(num);

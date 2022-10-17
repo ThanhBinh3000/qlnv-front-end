@@ -420,8 +420,8 @@
             <div nz-col [nzSpan]="10" *ngIf="formData.value.maPphapXdg == 'XDG01'">
               <nz-form-item class="form-item">
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-radio-group formControlName="loaiHangXdg">
-                    <label nz-radio (select)="item[0]" *ngFor="let item of dsLoaiHangXdg, let idx = index"
+                  <nz-radio-group formControlName="loaiHangXdg" (ngModelChange)="onChangePp()">
+                    <label nz-radio *ngFor="let item of dsLoaiHangXdg, let idx = index"
                       [nzValue]="item.ma">{{item.giaTri}}</label>
                   </nz-radio-group>
                 </nz-form-control>
@@ -435,9 +435,10 @@
               <tr>
                 <th class="text-center" style="width: 4%;">STT</th>
                 <th style="width: 35%;">Chủng loại hàng hóa</th>
-                <th style="width: 15%;">Giá vốn nhập khẩu (đồng/đơn vị)</th>
+                <th style="width: 15%;">{{formData.value.loaiHangXdg == 'XDG_LH02' ? 'Giá vốn trực tiếp (đồng/kg)' : ' Giá vốn nhập khẩu (đồng/kg) '}}
+                </th>
                 <th style="width: 15%;">Chi phí chung (đồng/đơn vị)</th>
-                <th style="width: 15%;" *ngIf="formData.value.loaiHangXdg == 'XDG_LH02'">Chi phân bổ (đồng/đơn vị)</th>
+                <th style="width: 15%;" *ngIf="formData.value.loaiHangXdg == 'XDG_LH02'">Chi phân bổ cho sản phẩm phụ (đồng/đơn vị)</th>
                 <th style="width: 15%;">Tổng chi phí (đồng/đơn vị)</th>
                 <th style="width: 5%;">Hành động</th>
               </tr>
@@ -479,7 +480,7 @@
                 <td>
                   <nz-input-group>
                     <nz-input-number disabled name="giaDn"
-                      [(ngModel)]="rowItemPpxdg.giaVonNk + rowItemPpxdg.chiPhiChung + rowItemPpxdg.chiPhiPhanBo"
+                      [(ngModel)]=" formData.value.loaiHangXdg == 'XDG_LH02' ? rowItemPpxdg.giaVonNk + rowItemPpxdg.chiPhiChung - rowItemPpxdg.chiPhiPhanBo :  rowItemPpxdg.giaVonNk + rowItemPpxdg.chiPhiChung "
                       [nzSize]="'small'" nz-input [nzMin]="0">
                     </nz-input-number>
                   </nz-input-group>

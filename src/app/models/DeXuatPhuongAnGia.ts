@@ -42,15 +42,18 @@ export class PhuongPhapXacDinhGia {
 }
 
 export class ThongTinGia {
+  tieuChuanCl : string
+  cloaiVthh: string
   donGia: number;
   donGiaVat: number;
+  donViTinh: string
   id: number;
   maDvi: string;
   qdDcTcdtnnId: number;
   soLuong: 0;
   tenDvi: string;
-  donGiaBtc: number;
-  donGiaBtcVat: number;
+  giaDn: number
+  giaDnVat: number
   giaQd: number;
   giaQdVat: number;
 }

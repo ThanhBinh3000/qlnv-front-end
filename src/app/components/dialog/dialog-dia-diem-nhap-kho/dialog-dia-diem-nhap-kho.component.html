@@ -97,11 +97,13 @@
         <td>{{chiTietDiemNhapKhoCreate.tonKho}}</td>
         <td>
           <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="chiTietDiemNhapKhoCreate.soLuong"
+                           (nzBlur)="tinhTien(chiTietDiemNhapKhoCreate)"
                            [nzMin]="0" [nzMax]="chiTietDiemNhapKhoCreate.tonKho">
           </nz-input-number>
         </td>
         <td>
           <nz-input-number type="text" nz-input [nzSize]="'small'"
+                           (nzBlur)="tinhTien(chiTietDiemNhapKhoCreate)"
                            [(ngModel)]="chiTietDiemNhapKhoCreate.donGia" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
           >
           </nz-input-number>
@@ -189,13 +191,13 @@
           </td>
           <td>{{data.tonKho}}</td>
           <td>
-            <nz-input-number type="text" nz-input [nzSize]="'small'"
+            <nz-input-number type="text" nz-input [nzSize]="'small'" (nzBlur)="tinhTien(data)"
                              [(ngModel)]="data.soLuong" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
             >
             </nz-input-number>
           </td>
           <td>
-            <nz-input-number type="text" nz-input [nzSize]="'small'"
+            <nz-input-number type="text" nz-input [nzSize]="'small'" (nzBlur)="tinhTien(data)"
                              [(ngModel)]="data.donGia" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
             >
             </nz-input-number>
