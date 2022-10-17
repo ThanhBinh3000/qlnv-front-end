@@ -891,27 +891,27 @@ export class BaoCaoComponent implements OnInit {
 		this.spinner.hide();
 	}
 
-	export() {
-		const idBaoCao = this.baoCao.lstBcaos?.find(item => item.maLoai == this.tabSelected).id;
-		let baoCao;
-		if (this.tabSelected == TAB_SELECTED.phuLuc1) {
-			baoCao = "phuLuc1.xlsx";
-		} else if (this.tabSelected == TAB_SELECTED.phuLuc2) {
-			baoCao = "phuLuc2.xlsx";
-		} else if (this.tabSelected == TAB_SELECTED.phuLuc3) {
-			baoCao = "phuLuc3.xlsx";
-		}
-		if (idBaoCao) {
-			this.quanLyVonPhiService.exportBaoCao(this.baoCao.id, idBaoCao).toPromise().then(
-				(data) => {
-					fileSaver.saveAs(data, baoCao);
-				},
-				(err) => {
-					this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-				},
-			);
-		}
-	}
+	// export() {
+	// 	const idBaoCao = this.baoCao.lstBcaos?.find(item => item.maLoai == this.tabSelected).id;
+	// 	let baoCao;
+	// 	if (this.tabSelected == TAB_SELECTED.phuLuc1) {
+	// 		baoCao = "phuLuc1.xlsx";
+	// 	} else if (this.tabSelected == TAB_SELECTED.phuLuc2) {
+	// 		baoCao = "phuLuc2.xlsx";
+	// 	} else if (this.tabSelected == TAB_SELECTED.phuLuc3) {
+	// 		baoCao = "phuLuc3.xlsx";
+	// 	}
+	// 	if (idBaoCao) {
+	// 		this.quanLyVonPhiService.exportBaoCao(this.baoCao.id, idBaoCao).toPromise().then(
+	// 			(data) => {
+	// 				fileSaver.saveAs(data, baoCao);
+	// 			},
+	// 			(err) => {
+	// 				this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+	// 			},
+	// 		);
+	// 	}
+	// }
 
 	// lay ten trang thai ban ghi
 	getStatusName(Status: any) {

@@ -827,8 +827,8 @@ export class PhuLucIIIComponent implements OnInit {
         return true;
     }
 
-    getDeleteStatus(maDan: number){
-        if (this.luyKeDetail.findIndex(e => e.maDan == maDan) != -1){
+    getDeleteStatus(maDan: number) {
+        if (this.luyKeDetail.findIndex(e => e.maDan == maDan) != -1) {
             return true;
         }
         return false;
@@ -980,8 +980,13 @@ export class PhuLucIIIComponent implements OnInit {
     }
 
     export() {
+        const request = {
+            bcaoCtietId: this.id,
+            bcaoId: this.idBcao,
+            dviTien: this.maDviTien,
+        }
         const baoCao = "phuLuc3.xlsx";
-        this.quanLyVonPhiService.exportBaoCao(this.idBcao, this.id).toPromise().then(
+        this.quanLyVonPhiService.exportBaoCao(request).toPromise().then(
             (data) => {
                 fileSaver.saveAs(data, baoCao);
             },
