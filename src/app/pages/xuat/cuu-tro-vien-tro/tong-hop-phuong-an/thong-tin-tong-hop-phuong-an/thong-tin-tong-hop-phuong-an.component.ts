@@ -185,6 +185,7 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
           let res = await this.tongHopPhuongAnCuuTroService.update(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -194,6 +195,7 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.idInput = res.data.id;
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }

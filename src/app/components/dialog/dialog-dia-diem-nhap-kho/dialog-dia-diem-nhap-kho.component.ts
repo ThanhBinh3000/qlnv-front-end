@@ -418,6 +418,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
   }
 
   startEdit(index: number) {
+    this.tinhTien(this.dsChiTietDiemNhapKhoClone[index]);
     this.chiTietDiemNhapKhoEdit = cloneDeep(this.dsChiTietDiemNhapKhoClone[index]);
     this.changeDiemKho(this.chiTietDiemNhapKhoEdit.maDiemKho, index, true)
     this.changeNhaKho(this.chiTietDiemNhapKhoEdit.maNhaKho, index, true)

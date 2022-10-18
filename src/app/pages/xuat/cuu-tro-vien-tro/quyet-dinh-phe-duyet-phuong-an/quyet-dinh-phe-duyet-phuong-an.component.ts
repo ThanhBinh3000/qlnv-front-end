@@ -333,7 +333,7 @@ export class QuyetDinhPheDuyetPhuongAnComponent implements OnInit {
           ngayKyTuNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
           ngayKyDenNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
           soKeHoach: this.searchFilter.soKeHoach ?? null,
-          namKeHoach: this.searchFilter.nam,
+          nam: this.searchFilter.nam,
           trichYeu: this.searchFilter.trichYeu ?? null,
           maDvis: [this.userInfo.MA_DVI],
           pageable: null,
@@ -378,7 +378,7 @@ export class QuyetDinhPheDuyetPhuongAnComponent implements OnInit {
             const body = {
               ids: dataDelete
             }
-            let res = await this.deXuatKeHoachBanDauGiaService.deleteMultiple(body);
+            let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.deleteMuti(body);
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

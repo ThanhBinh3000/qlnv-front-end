@@ -205,6 +205,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.idInput = res.data.id;
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
