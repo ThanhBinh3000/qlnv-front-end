@@ -272,7 +272,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.summaryData();
-            //this.quayLai();
+            this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -292,7 +292,6 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         console.log(e)
       } finally {
         this.spinner.hide();
-        this.quayLai();
       }
     }
 
@@ -715,6 +714,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         newRow.idVirtual = new Date().getTime();
         newRow.phuongAnXuat = [];
         this.idDxuatDtlSelect = newRow.idVirtual;
+        this.rowDxuatDtlSelect = newRow;
         this.formData.get('thongTinChiTiet').value.push(newRow);
         this.tongSLThongTinChiTiet = 0;
         this.formData.get('thongTinChiTiet').value.forEach(s => this.tongSLThongTinChiTiet += parseInt(s.soLuong));

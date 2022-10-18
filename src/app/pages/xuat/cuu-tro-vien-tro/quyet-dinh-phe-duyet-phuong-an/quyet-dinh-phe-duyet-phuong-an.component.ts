@@ -338,8 +338,8 @@ export class QuyetDinhPheDuyetPhuongAnComponent implements OnInit {
           maDvis: [this.userInfo.MA_DVI],
           pageable: null,
         };
-        this.deXuatKeHoachBanDauGiaService
-          .exportList(body)
+        this.quyetDinhPheDuyetPhuongAnCuuTroService
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-phuong-an-xuat-cuu-tro-vien-tro.xlsx'),
           );
