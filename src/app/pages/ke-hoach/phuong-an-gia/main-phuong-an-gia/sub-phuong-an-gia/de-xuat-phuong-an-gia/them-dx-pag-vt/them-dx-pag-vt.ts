@@ -48,9 +48,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   pagPpXacDinhGias: any[] = [];
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
-  dataTableKsGia: any[] = [];
+  dataTableKsGia: any[];
   dataTableCanCuXdg: any[] = [];
-  dataTableKqGia: any[] = [];
+  dataTableKqGia: any[];
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
@@ -318,8 +318,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       })
       this.pagTtChungs = data.pagTtChungs;
       this.pagPpXacDinhGias = data.pagPpXacDinhGias;
-      this.dataTableKqGia = data.dataTableKqGia;
-      this.dataTableKsGia = data.dataTableKsGia;
+      this.dataTableKqGia = data.ketQuaThamDinhGia;
+      this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableCanCuXdg = data.canCuPhapLy;
       this.updateEditCache('ttc')
       this.updateEditCache('ccXdg')
@@ -633,5 +633,4 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
     this.pagPpXacDinhGias = []
   }
-
 }

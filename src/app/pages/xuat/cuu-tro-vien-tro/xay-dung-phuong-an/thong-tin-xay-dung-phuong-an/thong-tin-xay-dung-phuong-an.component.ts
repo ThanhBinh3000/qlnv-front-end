@@ -87,6 +87,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
   thongTinChiTietClone: any = {};
   phuongAnXuatList: DiaDiemNhapKho[];
   idDxuatDtlSelect = 0;
+  rowDxuatDtlSelect: any;
   tongSoLuongDtl: number;
 
 
@@ -334,6 +335,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
             if (res.data.thongTinChiTiet.length > 0) {
               res.data.thongTinChiTiet.forEach(s => s.idVirtual = new Date());
               this.idDxuatDtlSelect = res.data.thongTinChiTiet[0].idVirtual;
+              this.rowDxuatDtlSelect = res.data.thongTinChiTiet[0];
               this.showDataKhoView();
             }
           }
@@ -637,7 +639,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
     }
     let data = this.loaiVthhInput;
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      // nzTitle: 'Địa điểm kho',
       nzContent: DialogDiaDiemNhapKhoComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -649,7 +651,8 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         // tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
         nam: this.formData.get('nam').value,
         phuongAnXuatList: this.phuongAnXuatList,
-        idDxuatDtl: this.idDxuatDtlSelect
+        idDxuatDtl: this.idDxuatDtlSelect,
+        rowDxuatDtlSelect: this.rowDxuatDtlSelect
       },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
@@ -673,7 +676,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
       noEdit = false;
     }
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      // nzTitle: 'Địa điểm kho',
       nzContent: DialogDiaDiemNhapKhoComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -686,6 +689,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         noEdit: noEdit,
         nam: this.formData.get('nam').value,
         listPhuongAn: this.phuongAnXuatList[index],
+        rowDxuatDtlSelect: this.rowDxuatDtlSelect
       },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
@@ -840,8 +844,8 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
 
   onClickRowChiTiet(i: number) {
     let thongTinChiTiet = this.formData.get('thongTinChiTiet').value;
-    let value = thongTinChiTiet[i];
-    this.onClickChiTiet(value);
+    this.rowDxuatDtlSelect = thongTinChiTiet[i];
+    this.onClickChiTiet(this.rowDxuatDtlSelect);
   }
 
   xoaPhuongAn(index: number) {

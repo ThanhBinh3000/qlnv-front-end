@@ -254,6 +254,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    let err =false;
     this.arrThongTinGia.forEach(item => {
       item.giaQdBtc = item.giaQd,
         item.giaQdVatBtc = item.giaQdVat
@@ -261,8 +262,23 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       let body = this.formData.value;
       body.soQd = body.soQd + this.maQd;
       body.pagType = this.pagType;
-
       body.thongTinGiaVt = this.arrThongTinGia
+    this.arrThongTinGia.forEach(item => {
+      if (body.loaiGia == 'LG01' && (item.giaQd >item.giaDn || item.giaQdVat > item.giaDnVat)) {
+        this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
+        item.giaQd = 0;
+        item.giaQdVat = 0;
+        err = true;
+      }
+      //gia ban toi thieu
+      if (body.loaiGia == 'LG02' && (item.giaQd <item.giaDn || item.giaQdVat < item.giaDnVat)) {
+        this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
+        item.giaQd = 0;
+        item.giaQdVat = 0;
+        err = true;
+      }
+    })
+    if (!err) {
       let res;
       if (this.idInput > 0) {
         res = await this.quyetDinhGiaCuaBtcService.update(body);
@@ -279,6 +295,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
+    }
     this.spinner.hide();
   }
 
@@ -363,26 +380,10 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
   }
 
   async calculateVAT(index: number, type: number) {
-    let currentRow = this.formData.value;
-    let currentLine = this.arrThongTinGia[index];
     //gia mua toi da
     if (type === 0) {
       this.arrThongTinGia[index].giaQdVat = this.arrThongTinGia[index].giaQd + this.arrThongTinGia[index].giaQd * this.thueVat;
     }
-    if (currentRow.loaiGia == 'LG01' && (currentLine.giaQd > currentLine.giaDn || currentLine.giaQdVat > currentLine.giaDnVat)) {
-      currentLine.giaQd = 0
-      currentLine.giaQdVat = 0
-      this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
-    }
-    //gia ban toi thieu
-    if (currentRow.loaiGia == 'LG02' && (currentLine.giaQd < currentLine.giaDn || currentLine.giaQdVat < currentLine.giaDnVat)) {
-      currentLine.giaQd = 0
-      currentLine.giaQdVat = 0
-      this.arrThongTinGia[index].giaQd = 0;
-      this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
-    }
-    //0:gia>vat 1:vat>gia
-
   }
 
   openDialogToTrinh() {
