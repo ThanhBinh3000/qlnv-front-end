@@ -182,7 +182,7 @@ export class DanhSachHopDongMuaSamComponent implements OnInit {
           ? dayjs(this.ngayKy[0]).format('YYYY-MM-DD')
           : null,
     };
-    let res = await this.thongTinHopDong.timKiem(body);
+    let res = await this.thongTinHopDong.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
