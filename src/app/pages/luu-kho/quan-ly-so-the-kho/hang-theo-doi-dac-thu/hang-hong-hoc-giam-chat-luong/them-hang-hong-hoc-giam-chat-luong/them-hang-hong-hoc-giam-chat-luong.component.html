@@ -25,13 +25,10 @@
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu">
       <div class="search__body" nz-row [nzGutter]="24">
         <nz-form-item nz-col nzSpan="4" class="form-item">
-          <nz-form-label nzFor="loai-hang-hoa">Đơn vị</nz-form-label>
+          <nz-form-label nzFor="loai-hang-hoa">Chi cục DTNN KV</nz-form-label>
           <nz-form-control >
             <nz-input-group>
-              <nz-select  nzAllowClear formControlName="maDvi" (ngModelChange)="onChangChiCuc($event)" >
-                <nz-option *ngFor="let p of danhSachChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
-                </nz-option>
-              </nz-select>
+              <input type="text " nz-input formControlName="tenDvi" [readonly]="true">
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -56,18 +53,20 @@
       <thead>
         <tr>
           <th class="text-center" style="width: 5%;">STT</th>
-          <th style="width: 10%;">Loại hàng hoá</th>
-          <th style="width: 10%;">Chủng loại hàng hoá</th>
+          <th style="width: 16%;">Loại hàng hoá</th>
+          <th style="width: 15%;">Chủng loại hàng hoá</th>
           <th style="width: 10%;">Tên hàng hoá</th>
-          <th style="width: 10%;">Điểm kho</th>
+          <th style="width: 15%;">Điểm kho</th>
           <th style="width: 10%;">Nhà kho</th>
           <th style="width: 10%;">Ngăn kho</th>
           <th style="width: 10%;">Lô kho</th>
-          <th style="width: 10%;">Số lượng tồn</th>
-          <th style="width: 10%;">Số lượng thanh lý</th>
+          <th style="width: 10%;">SL tồn</th>
+          <th style="width: 10%;">SL hỏng cần SC</th>
+          <th style="width: 10%;">SL SC đã duyệt</th>
+          <th style="width: 10%;">SL còn lại cần SC </th>
           <th style="width: 8%;">Đơn vị tính</th>
           <th style="width: 30%;">Lý do</th>
-          <th style="width: 10%;" nzRight>Hành động</th>
+          <th style="width: 10%; text-align: center"  nzRight>Hành động</th>
         </tr>
         <tr>
           <th></th>
@@ -81,7 +80,7 @@
           </th>
           <th>
             <nz-form-control>
-              <nz-select [(ngModel)]="rowItem.cloaiVthh">
+              <nz-select [(ngModel)]="rowItem.cloaiVthh" (ngModelChange)="changeCloaiHangHoa($event)">
                 <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
                 </nz-option>
               </nz-select>
@@ -121,7 +120,7 @@
           </th>
           <th>
             <nz-input-group>
-              <nz-select [(ngModel)]="rowItem.maLoKho" placeholder="Nhập ngăn lô">
+              <nz-select [(ngModel)]="rowItem.maLoKho" placeholder="Nhập ngăn lô" (ngModelChange)="onChangLoKho($event)">
                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                 <nz-option *ngFor="let p of dsLoKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
                 </nz-option>
@@ -130,17 +129,27 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="number" [(ngModel)]="rowItem.soLuongTon" nz-input placeholder="Nhập số lượng" />
+              <input type="number" [(ngModel)]="rowItem.slTon" nz-input placeholder="Nhập số lượng" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="number" [(ngModel)]="rowItem.soLuongThanhLy" nz-input placeholder="Nhập số lượng" />
+              <input type="number" [(ngModel)]="rowItem.slYeuCau" nz-input placeholder="Nhập số lượng" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" [(ngModel)]="rowItem.donVi" nz-input [readonly]="true"/>
+              <input type="number" [(ngModel)]="rowItem.slDaDuyet" nz-input placeholder="Nhập số lượng" />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="number" [readonly]="true" [(ngModel)]="rowItem.slYeuCau - rowItem.slDaDuyet" nz-input placeholder="Nhập số lượng" />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" [(ngModel)]="rowItem.dviTinh" nz-input [readonly]="true"/>
             </nz-input-group>
           </th>
           <th>
@@ -163,14 +172,17 @@
           <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
             <td>{{ idx + 1 }}</td>
             <td>{{ data.tenLoaiVthh}}</td>
-            <td>{{ data.tenLoaiVthh}}</td>
-            <td>{{ data.tenLoaiVthh}}</td>
-            <td>{{ data.tenLoaiVthh}}</td>
-            <td>{{ data.tenLoaiVthh}}</td>
-            <td>{{ data.tenLoaiVthh}}</td>
-            <td>{{ data.soLuongTon }}</td>
-            <td>{{ data.soLuongThanhLy }}</td>
-            <td>{{ data.donVi }}</td>
+            <td>{{ data.tenCloaiVthh}}</td>
+            <td>{{ data.moTaHangHoa}}</td>
+            <td>{{ data.tenDiemKho}}</td>
+            <td>{{ data.tenNhaKho}}</td>
+            <td>{{ data.tenNganKho}}</td>
+            <td>{{ data.tenLoKho }}</td>
+            <td>{{ data.slTon }}</td>
+            <td>{{ data.slYeuCau }}</td>
+            <td>{{ data.slDaDuyet }}</td>
+            <td>{{ data.slYeuCau - data.slDaDuyet }}</td>
+            <td>{{ data.dviTinh }}</td>
             <td>{{ data.lyDo }}</td>
             <td style="text-align: center;" nzRight>
               <a (click)="editItem(idx)">
@@ -182,40 +194,101 @@
             </td>
           </ng-container>
           <ng-template #editTemplate>
-            <td></td>
-            <td>
-              <input type="text" nz-input [(ngModel)]="dataEdit[idx].data.tenLoaiVthh" />
-            </td>
-            <td>
-              <input type="text" nz-input [(ngModel)]="dataEdit[idx].data.tenLoaiVthh" />
-            </td>
-            <td>
-              <input type="text" nz-input [(ngModel)]="dataEdit[idx].data.tenLoaiVthh" />
-            </td>
-            <td>
-              <input type="text" nz-input [(ngModel)]="dataEdit[idx].data.tenLoaiVthh" />
-            </td>
-            <td>
-              <input type="text" nz-input [(ngModel)]="dataEdit[idx].data.tenLoaiVthh" />
-            </td>
-            <td>
-              <input type="text" nz-input [(ngModel)]="dataEdit[idx].data.tenLoaiVthh" />
-            </td>
-            <td>
-              <input type="text" nz-input [(ngModel)]="dataEdit[idx].data.tenLoaiVthh" />
-            </td>
-            <td>
-              <input type="text" nz-input [(ngModel)]="dataEdit[idx].data.tenLoaiVthh" />
-            </td>
-            <td>
-              <input type="text" nz-input [(ngModel)]="dataEdit[idx].data.tenLoaiVthh" />
-            </td>
-            <td>
-              <input type="text" nz-input [(ngModel)]="dataEdit[idx].data.tenLoaiVthh" />
-            </td>
-            <td>
-              <a (click)="luuEdit(idx)" class="save">Lưu</a>
-              <a (click)="huyEdit(idx)">Huỷ bỏ</a>
+          <th></th>
+          <th>
+            <nz-form-control>
+              <nz-select  [(ngModel)]="dataEdit[idx].data.loaiVthh" (ngModelChange)="changeLoaiHangHoa($event)">
+                <nz-option *ngFor="let item of dsLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control>
+              <nz-select [(ngModel)]="dataEdit[idx].data.cloaiVthh">
+                <nz-option *ngFor="let item of listChungLoaiHangHoa" nzValue="{{item.ma}}" nzLabel="{{item.ten}}">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" [(ngModel)]="dataEdit[idx].data.moTaHangHoa" nz-input placeholder="Nhập tên hàng hoá" />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <nz-select [(ngModel)]="dataEdit[idx].data.maDiemKho" placeholder="Nhập điểm kho" (ngModelChange)="onChangeDiemKho($event)">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsDiemKho">
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <nz-select [(ngModel)]="dataEdit[idx].data.maNhaKho" placeholder="Nhập nhà kho" (ngModelChange)="onChangeNhaKho($event)">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option *ngFor="let p of dsNhaKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <nz-select [(ngModel)]="dataEdit[idx].data.maNganKho" placeholder="Nhập nhà kho" (ngModelChange)="onChangeNganKho($event)">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option *ngFor="let p of dsNganLo" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <nz-select [(ngModel)]="dataEdit[idx].data.maLoKho" placeholder="Nhập ngăn lô">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option *ngFor="let p of dsLoKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="number" [(ngModel)]="dataEdit[idx].data.slTon" nz-input placeholder="Nhập số lượng" />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="number" [(ngModel)]="dataEdit[idx].data.slYeuCau" nz-input placeholder="Nhập số lượng" />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="number" [(ngModel)]="dataEdit[idx].data.slDaDuyet" nz-input placeholder="Nhập số lượng" />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="number" [(ngModel)]="dataEdit[idx].data.slConLai" nz-input placeholder="Nhập số lượng" />
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" [(ngModel)]="dataEdit[idx].data.dviTinh" nz-input [readonly]="true"/>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" [(ngModel)]="dataEdit[idx].data.lyDo" nz-input placeholder="Nhập lý do" />
+            </nz-input-group>
+          </th>
+            <td nzRight>
+              <a (click)="luuEdit(idx)" class="save">
+                <i class="fa fa-save"></i>
+              </a>
+              <a (click)="huyEdit(idx)">
+                <i class="fa fa-times do"></i>
+              </a>
             </td>
           </ng-template>
         </tr>

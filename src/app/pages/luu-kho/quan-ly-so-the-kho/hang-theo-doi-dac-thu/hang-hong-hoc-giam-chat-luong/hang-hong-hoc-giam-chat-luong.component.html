@@ -3,8 +3,8 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData" class="hang-theo-doi-dac-thu">
         <div class="search__body" nz-row [nzGutter]="24">
-          <div nz-col nzSpan="6">
-            <nz-form-label nzFor="loai-hang-hoa">Đơn vị</nz-form-label>
+          <div nz-col nzSpan="4" *ngIf="!userService.isChiCuc()">
+            <nz-form-label nzFor="loai-hang-hoa">Chi cục DTNN KV</nz-form-label>
             <nz-form-control >
               <nz-input-group>
                 <nz-select  nzAllowClear formControlName="maDvi" >
@@ -14,7 +14,7 @@
               </nz-input-group>
             </nz-form-control>
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="4">
             <nz-form-label nzFor="loai-hang-hoa">Loại hàng hoá</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="loaiVthh" (ngModelChange)="changeLoaiHangHoa($event)">
@@ -23,7 +23,7 @@
               </nz-select>
             </nz-form-control>
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="4">
             <nz-form-label nzFor="chung-loai-hang-hoa">Chủng loại hàng hoá</nz-form-label>
             <nz-form-control>
               <nz-select formControlName="cloaiVthh">
@@ -32,7 +32,7 @@
               </nz-select>
             </nz-form-control>
           </div>
-          <div nz-col nzSpan="6">
+          <div nz-col nzSpan="4">
             <nz-form-label nzFor="loai-hang-hoa">Ngày tạo danh sách</nz-form-label>
             <nz-range-picker formControlName="ngayDeXuat" nzFormat="dd/MM/yyyy"  class="search__input">
             </nz-range-picker>
@@ -74,48 +74,48 @@
                 [nzShowPagination]="false" >
         <thead>
         <tr>
-          <th style="width: 45px;" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
-          <th></th>
-          <th  style="width: 10%;">Chi cục DTNN KV</th>
-          <th  style="width: 10%;">Mã danh sách</th>
-          <th  style="width: 10%;">Ngày đề xuất</th>
-          <th  style="width: 10%;">Tổng số lượng hàng</th>
-          <th  style="width: 10%;">Trạng thái xử lý của Cục</th>
-          <th  style="width: 12%;">Hành động</th>
+          <th style="width: 3%;" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
+          <th style="width: 5%"> STT</th>
+          <th  style="width: 20%;" >Chi cục DTNN KV</th>
+          <th  style="width: 15%;" > Mã danh sách</th>
+          <th  style="width: 15%;">Ngày đề xuất</th>
+          <th  style="width: 15%;">Tổng số lượng hàng</th>
+          <th  style="width: 15%;">Trạng thái xử lý của Cục</th>
+          <th  style="width: 10%;">Hành động</th>
         </tr>
         <tr>
           <th></th>
           <th></th>
-          <th class="text-center" >
+          <th >
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDvi" (input)="filterInTable('maDvi',searchInTable.maDvi)" />
             </nz-input-group>
           </th>
-          <th class="text-center" >
+          <th>
             <nz-input-group >
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDanhSach" (input)="filterInTable('maDanhSach',searchInTable.maDanhSach)" />
             </nz-input-group>
           </th>
-          <th class="text-center" >
+          <th>
             <nz-input-group [nzSuffix]="suffixIconSearch">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.ngayDeXuat" (input)="filterInTable('ngayDeXuat',searchInTable.ngayDeXuat)" />
             </nz-input-group>
+            <ng-template #suffixIconSearch>
+              <i nz-icon nzType="calendar"></i>
+            </ng-template>
           </th>
-          <th class="text-center" >
+          <th>
             <nz-input-group >
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tongSoHang" (input)="filterInTable('tongSoHang',searchInTable.tongSoHang)" />
             </nz-input-group>
           </th>
-          <th class="text-center" >
+          <th  >
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.trangThai" (input)="filterInTable('trangThai',searchInTable.trangThai)" />
             </nz-input-group>
           </th>
           <th></th>
 
-          <ng-template #suffixIconSearch>
-            <i nz-icon nzType="calendar"></i>
-          </ng-template>
         </tr>
         </thead>
         <tbody>
@@ -125,12 +125,11 @@
                    [nzDisabled]="data.trangThai != '00'"></label>
           </td>
           <td>{{(page-1)*pageSize+i+1}}</td>
-          <td>{{ data.soQuyetDinh }}</td>
-          <td>{{ data.ngayKy }}</td>
-          <td class="text-right">{{ data.namKeHoach }}</td>
-          <td>{{ data.trichYeu }}</td>
-          <td class="text-center">{{ data.trangThaiDuyet }}</td>
-          <td class="text-center">{{ data.trangThaiDuyet }}</td>
+          <td>{{ data.tenDvi }}</td>
+          <td>{{ data.maDanhSach }}</td>
+          <td>{{ data.ngayDeXuat }}</td>
+          <td >{{ data.ctList.length }}</td>
+          <td >{{ data.tenTrangThai }}</td>
           <td>
             <a (click)="viewDetail(data.id, true)">
               <i class=" icon htvbdh_eye"></i>

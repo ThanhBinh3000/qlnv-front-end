@@ -258,7 +258,9 @@ export class ThemMoiQdDcgComponent implements OnInit {
             if(this.dsClVthh) {
               this.listThongTinGia.forEach(item => {
                 let resCl = this.dsClVthh.find(cl => cl.ma == item.cloaiVthh)
-                item.tenCloaiVthh = resCl.ten
+                if (resCl) {
+                  item.tenCloaiVthh = resCl.ten
+                }
               })
             }
             this.updateEditCache();
