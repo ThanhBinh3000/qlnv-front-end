@@ -300,7 +300,4 @@ export class IHangHongHocGiamChatLuong {
   ngayTongHop: any;
   trangThai: any;
   lyDo: string;
-  thamDinhScId: any;
-  thHhhId: string
-  qlhhhId: string;
 }
