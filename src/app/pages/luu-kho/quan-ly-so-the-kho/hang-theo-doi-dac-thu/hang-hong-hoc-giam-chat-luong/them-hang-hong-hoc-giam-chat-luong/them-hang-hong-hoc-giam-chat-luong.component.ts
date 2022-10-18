@@ -80,18 +80,29 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     }
   }
 
-  async changeLoaiHangHoa(id: any) {
+  async changeLoaiHangHoa(id: any, type?: any) {
     if (id && id > 0) {
       let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id);
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
-      this.rowItem.tenLoaiVthh = loaiHangHoa[0].ten
-      this.rowItem.dviTinh = loaiHangHoa[0].maDviTinh
+      if (!type) {
+        this.rowItem.tenLoaiVthh = loaiHangHoa[0].ten
+        this.rowItem.dviTinh = loaiHangHoa[0].maDviTinh
+        this.rowItem.cloaiVthh = null;
+      } else {
+        type.tenLoaiVthh = loaiHangHoa[0].ten
+        type.dviTinh = loaiHangHoa[0].maDviTinh
+        type.cloaiVthh = null;
+      }
     }
   }
-  changeCloaiHangHoa(event: any) {
+  changeCloaiHangHoa(event: any, type?: any) {
     const cloaiVthh = this.listChungLoaiHangHoa.filter(item => item.ma == event);
     if (cloaiVthh.length > 0) {
-      this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
+      if (type) {
+        type.tenCloaiVthh = cloaiVthh[0].ten;
+      } else {
+        this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
+      }
     }
   }
   async loaiVTHHGetAll() {
@@ -112,12 +123,25 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
   }
 
   async getDetail(id: number) {
-    let res = await this.quanLyDanhSachHangHongHocService.getDetail(id);
-    if (res.msg == MESSAGE.SUCCESS) {
-      const dataDetail = res.data;
-      this.dataTable = dataDetail.ctList
+    if (this.idInput > 0) {
+      let res = await this.quanLyDanhSachHangHongHocService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        const dataDetail = res.data;
+        this.formData.patchValue({
+          id: dataDetail.id,
+          maDvi: dataDetail.maDvi,
+          tenDvi: dataDetail.tenDvi,
+          maDanhSach: dataDetail.maDanhSach,
+          ngayDeXuat: dataDetail.ngayDeXuat,
+          ngayTongHop: dataDetail.ngayTongHop,
+          trangThai: dataDetail.trangThai,
+          tenTrangThai:dataDetail.tenTrangThai,
+        })
+        this.dataTable = dataDetail.ctList
+      }
+      this.updateEditCache()
     }
-    this.updateEditCache()
+
   }
 
 
@@ -125,7 +149,14 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     this.onClose.emit();
   }
 
-  exportData() {}
+ async exportData(id) {
+    let res = await this.quanLyDanhSachHangHongHocService.exportList(id);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
+    } else {
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.ERROR);
+    }
+  }
 
   async luu() {
       this.spinner.show();
@@ -189,8 +220,14 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
 
   changePageSize(event) {}
 
-  editItem(id: number): void {
-    this.dataEdit[id].edit = true;
+  editItem(idx: number): void {
+    this.changeLoaiHangHoa( this.dataEdit[idx].data.loaiVthh)
+    this.changeCloaiHangHoa( this.dataEdit[idx].data.cloaiVthh)
+    this.onChangeDiemKho( this.dataEdit[idx].data.maDiemKho)
+    this.onChangeNhaKho( this.dataEdit[idx].data.maNhaKho)
+    this.onChangeNganKho( this.dataEdit[idx].data.maNganKho)
+    this.onChangLoKho( this.dataEdit[idx].data.maLoKho)
+    this.dataEdit[idx].edit = true;
   }
 
   huyEdit(idx: number): void {
@@ -211,6 +248,7 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
         edit: false,
         data: { ...item },
       };
+      this.dataEdit[index].data.slConLai =  this.dataEdit[index].data.slYeuCau -  this.dataEdit[index].data.slDaDuyet
     });
   }
 
@@ -224,7 +262,7 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     this.dsDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
   }
 
-  async onChangeDiemKho(event) {
+  async onChangeDiemKho(event, type?: any) {
     const body = {
       maDviCha: event,
       trangThai: '01',
@@ -233,11 +271,21 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     this.dsNhaKho = dsTong[DANH_MUC_LEVEL.NHA_KHO];
     const diemKho = this.dsDiemKho.find(item => item.maDvi == event);
     if (diemKho) {
-      this.rowItem.tenDiemKho = diemKho.tenDvi;
+      if (type) {
+        type.tenDiemKho = diemKho.tenDvi;
+        type.maNhaKho = null;
+        type.maNganKho = null;
+        type.maLoKho = null;
+      } else {
+        this.rowItem.tenDiemKho = diemKho.tenDvi;
+        this.rowItem.maNhaKho = null;
+        this.rowItem.maNganKho = null;
+        this.rowItem.maLoKho = null;
+      }
     }
   }
 
-  async onChangeNhaKho(event) {
+  async onChangeNhaKho(event, type?: any) {
     const body = {
       maDviCha: event,
       trangThai: '01',
@@ -247,11 +295,20 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     this.dsNganLo = dsTong[DANH_MUC_LEVEL.NGAN_KHO];
     const nganLo = this.dsNhaKho.filter(item => item.maDvi == event);
     if (nganLo.length > 0) {
-      this.rowItem.tenNhaKho = nganLo[0].tenDvi;
+      if (type) {
+        type.tenNhaKho = nganLo[0].tenDvi;
+        type.maNganKho = null;
+        type.maLoKho = null;
+      } else {
+        this.rowItem.tenNhaKho = nganLo[0].tenDvi;
+        this.rowItem.maNganKho = null;
+        this.rowItem.maLoKho = null;
+      }
+
     }
   }
 
- async onChangeNganKho(event) {
+ async onChangeNganKho(event, type?: any) {
     const body = {
       maDviCha: event,
       trangThai: '01',
@@ -260,14 +317,26 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     this.dsLoKho = dsTong[DANH_MUC_LEVEL.LO_KHO];
    const nganLo = this.dsNganLo.filter(item => item.maDvi == event);
    if (nganLo.length > 0) {
-     this.rowItem.tenNganKho = nganLo[0].tenDvi;
+     if (type) {
+       type.tenNganKho = nganLo[0].tenDvi;
+       type.maLoKho = null
+     } else {
+       this.rowItem.tenNganKho = nganLo[0].tenDvi;
+       this.rowItem.maLoKho = null
+     }
+
    }
   }
 
-  async onChangLoKho(evevt) {
+  async onChangLoKho(evevt, type?: any) {
     const nganLo = this.dsLoKho.filter(item => item.maDvi == evevt);
     if (nganLo.length > 0) {
-      this.rowItem.tenLoKho = nganLo[0].tenDvi;
+      if (type) {
+        type.tenLoKho = nganLo[0].tenDvi;
+      } else {
+        this.rowItem.tenLoKho = nganLo[0].tenDvi;
+      }
+
     }
   }
 
