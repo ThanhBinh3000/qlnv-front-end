@@ -116,7 +116,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
         tongSoLuong: [],
         trangThai: [],
         fileDinhKem: [FileDinhKem],
-        fileName: [, [Validators.required]],
+        fileName: [],
         canCu: [new Array<FileDinhKem>()],
         trichYeu: [, [Validators.required]],
         lyDoTuChoi: [],
@@ -125,7 +125,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
         tenTrangThai: [],
         thongTinDeXuat: [new Array(),],
         thongTinTongHop: [new Array()],
-
       }
     );
     this.userInfo = this.userService.getUserLogin();
