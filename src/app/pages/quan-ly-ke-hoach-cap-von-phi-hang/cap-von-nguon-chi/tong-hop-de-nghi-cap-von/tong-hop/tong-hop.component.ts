@@ -69,7 +69,8 @@ export class TongHopComponent implements OnInit {
     }
     //trang thai
     allChecked = false;
-    statusNewReport = true;
+    statusNewReport = false;
+    statusDelete = false;
 
     constructor(
         private capVonNguonChiService: CapVonNguonChiService,
@@ -103,9 +104,8 @@ export class TongHopComponent implements OnInit {
             this.nguonBcaos = this.nguonBcaos.filter(e => e.id != Utils.THOP_TAI_TC);
         }
 
-        if (this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV) || this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_TC)) {
-            this.statusNewReport = false;
-        }
+        this.statusNewReport = this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV) || this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_TC);
+        this.statusDelete = this.userService.isAccessPermisson(CVNC.DELETE_SYNTHETIC_CKV) || this.userService.isAccessPermisson(CVNC.DELETE_SYNTHETIC_TC)
 
         if (this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_CKV) || this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_TC)) {
             this.searchFilter.trangThai = Utils.TT_BC_2;

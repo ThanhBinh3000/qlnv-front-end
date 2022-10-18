@@ -59,7 +59,7 @@ export const LINH_VUC = [
     tenDm: "Phao bè",
     idCha: 4000,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Chiếc",
     idDm: 807,
   },
   {
@@ -67,7 +67,7 @@ export const LINH_VUC = [
     tenDm: "Máy bơm nước chữa cháy(Đồng bộ thiết bị chữa cháy rừng)",
     idCha: 4000,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 808,
   },
   {
@@ -75,7 +75,7 @@ export const LINH_VUC = [
     tenDm: "Máy phát điện 136-150 KVA",
     idCha: 4000,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 809,
   },
   {
@@ -83,7 +83,7 @@ export const LINH_VUC = [
     tenDm: "Máy phát điện 30KVA",
     idCha: 4000,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 900,
   },
   {
@@ -98,7 +98,7 @@ export const LINH_VUC = [
     tenDm: "Loại DT4",
     idCha: 4008,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 902,
   },
   {
@@ -106,7 +106,7 @@ export const LINH_VUC = [
     tenDm: "Loại DT3",
     idCha: 4008,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 903,
   },
   {
@@ -114,7 +114,7 @@ export const LINH_VUC = [
     tenDm: "Loại DT2",
     idCha: 4008,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 904,
   },
   {
@@ -122,7 +122,7 @@ export const LINH_VUC = [
     tenDm: "Loại DT1",
     idCha: 4008,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 91,
   },
   {
@@ -130,7 +130,7 @@ export const LINH_VUC = [
     tenDm: "Thiết bị khoan cắt",
     idCha: 4000,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 906,
   },
   // ===================
@@ -146,7 +146,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 16,5 m2",
     idCha: 40010,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 908,
   },
   {
@@ -154,7 +154,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 24.75 m2",
     idCha: 40010,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 909,
   },
   {
@@ -162,7 +162,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 24,5 m2",
     idCha: 40010,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 700,
   },
   {
@@ -170,7 +170,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 60 m2",
     idCha: 40010,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 701,
   },
 
@@ -179,7 +179,7 @@ export const LINH_VUC = [
     tenDm: "Phao áo cứu sinh",
     idCha: 4000,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Chiếc",
     idDm: 702,
   },
   {
@@ -187,7 +187,7 @@ export const LINH_VUC = [
     tenDm: "Phao tròn cứu sinh",
     idCha: 4000,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Chiếc",
     idDm: 703,
   },
   {
@@ -195,7 +195,7 @@ export const LINH_VUC = [
     tenDm: "Bè nhẹ cứu sinh",
     idCha: 4000,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Chiếc",
     idDm: 704,
   },
   // =============
@@ -211,7 +211,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt nhẹ 16,5 m2",
     idCha: 40050,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 706,
   },
   {
@@ -219,7 +219,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt nhẹ 24.75 m2",
     idCha: 40050,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 707,
   },
   {
@@ -227,7 +227,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt nhẹ 24,5 m2",
     idCha: 40050,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 708,
   },
   {
@@ -235,7 +235,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt nhẹ 60 m2",
     idCha: 40050,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 709,
   },
 
@@ -285,7 +285,7 @@ export const LINH_VUC = [
     tenDm: "Phao bè",
     idCha: 2000,
     level: 2,
-    maDviTinh: "cái",
+    maDviTinh: "Chiếc",
     idDm: 605,
   },
   {
@@ -293,7 +293,7 @@ export const LINH_VUC = [
     tenDm: "Máy bơm nước chữa cháy(Đồng bộ thiết bị chữa cháy rừng)",
     idCha: 2000,
     level: 2,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 606,
   },
   {
@@ -301,7 +301,7 @@ export const LINH_VUC = [
     tenDm: "Máy phát điện 136-150 KVA",
     idCha: 2000,
     level: 2,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 607,
   },
   {
@@ -309,7 +309,7 @@ export const LINH_VUC = [
     tenDm: "Máy phát điện 30KVA",
     idCha: 2000,
     level: 2,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 608,
   },
   {
@@ -324,7 +324,7 @@ export const LINH_VUC = [
     tenDm: "Loại DT4",
     idCha: 2008,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 500,
   },
   {
@@ -332,7 +332,7 @@ export const LINH_VUC = [
     tenDm: "Loại DT3",
     idCha: 2008,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 501,
   },
   {
@@ -340,7 +340,7 @@ export const LINH_VUC = [
     tenDm: "Loại DT2",
     idCha: 2008,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 502,
   },
   {
@@ -348,7 +348,7 @@ export const LINH_VUC = [
     tenDm: "Loại DT1",
     idCha: 2008,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 90,
   },
   {
@@ -356,7 +356,7 @@ export const LINH_VUC = [
     tenDm: "Thiết bị khoan cắt",
     idCha: 2000,
     level: 2,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 504,
   },
   // ===================
@@ -372,7 +372,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 16,5 m2",
     idCha: 20010,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 506,
   },
   {
@@ -380,7 +380,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 24.75 m2",
     idCha: 20010,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 507,
   },
   {
@@ -388,7 +388,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 24,5 m2",
     idCha: 20010,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 508,
   },
   {
@@ -396,7 +396,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 60 m2",
     idCha: 20010,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 509,
   },
 
@@ -405,7 +405,7 @@ export const LINH_VUC = [
     tenDm: "Phao áo cứu sinh",
     idCha: 2000,
     level: 2,
-    maDviTinh: "cái",
+    maDviTinh: "Chiếc",
     idDm: 400,
   },
   {
@@ -413,7 +413,7 @@ export const LINH_VUC = [
     tenDm: "Phao tròn cứu sinh",
     idCha: 2000,
     level: 2,
-    maDviTinh: "cái",
+    maDviTinh: "Chiếc",
     idDm: 401,
   },
   {
@@ -421,7 +421,7 @@ export const LINH_VUC = [
     tenDm: "Bè nhẹ cứu sinh",
     idCha: 2000,
     level: 2,
-    maDviTinh: "cái",
+    maDviTinh: "Chiếc",
     idDm: 402,
   },
   // =============
@@ -437,7 +437,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt nhẹ 16,5 m2",
     idCha: 20050,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 404,
   },
   {
@@ -445,7 +445,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt nhẹ 24.75 m2",
     idCha: 20050,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 405,
   },
   {
@@ -453,7 +453,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt nhẹ 24,5 m2",
     idCha: 20050,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 406,
   },
   {
@@ -461,7 +461,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt nhẹ 60 m2",
     idCha: 20050,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 407,
   },
   // ==========================
@@ -517,7 +517,7 @@ export const LINH_VUC = [
     tenDm: "Phao bè",
     idCha: 400099,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Chiếc",
     idDm: 304,
   },
   {
@@ -525,7 +525,7 @@ export const LINH_VUC = [
     tenDm: "Máy bơm nước chữa cháy(Đồng bộ thiết bị chữa cháy rừng)",
     idCha: 400099,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 305,
   },
   {
@@ -533,7 +533,7 @@ export const LINH_VUC = [
     tenDm: "Máy phát điện 136-150 KVA",
     idCha: 400099,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 306,
   },
   {
@@ -541,7 +541,7 @@ export const LINH_VUC = [
     tenDm: "Máy phát điện 30KVA",
     idCha: 400099,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 307,
   },
   {
@@ -556,7 +556,7 @@ export const LINH_VUC = [
     tenDm: "Loại DT4",
     idCha: 3008,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 309,
   },
   {
@@ -564,7 +564,7 @@ export const LINH_VUC = [
     tenDm: "Loại DT3",
     idCha: 3008,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 200,
   },
   {
@@ -572,7 +572,7 @@ export const LINH_VUC = [
     tenDm: "Loại DT2",
     idCha: 3008,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 201,
   },
   {
@@ -580,7 +580,7 @@ export const LINH_VUC = [
     tenDm: "Loại DT1",
     idCha: 3008,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 90,
   },
   {
@@ -588,7 +588,7 @@ export const LINH_VUC = [
     tenDm: "Thiết bị khoan cắt",
     idCha: 400099,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 203,
   },
   // ===================
@@ -604,7 +604,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 16,5 m2",
     idCha: 30010,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 205,
   },
   {
@@ -612,7 +612,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 24.75 m2",
     idCha: 30010,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 206,
   },
   {
@@ -620,7 +620,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 24,5 m2",
     idCha: 30010,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 207,
   },
   {
@@ -628,7 +628,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 60 m2",
     idCha: 30010,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 208,
   },
 
@@ -637,7 +637,7 @@ export const LINH_VUC = [
     tenDm: "Phao áo cứu sinh",
     idCha: 400099,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Chiếc",
     idDm: 209,
   },
   {
@@ -645,7 +645,7 @@ export const LINH_VUC = [
     tenDm: "Phao tròn cứu sinh",
     idCha: 400099,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Chiếc",
     idDm: 100,
   },
   {
@@ -653,7 +653,7 @@ export const LINH_VUC = [
     tenDm: "Bè nhẹ cứu sinh",
     idCha: 400099,
     level: 3,
-    maDviTinh: "cái",
+    maDviTinh: "Chiếc",
     idDm: 101,
   },
   // =============
@@ -669,7 +669,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt nhẹ 16,5 m2",
     idCha: 30050,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 103,
   },
   {
@@ -677,7 +677,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt nhẹ 24.75 m2",
     idCha: 30050,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 104,
   },
   {
@@ -685,7 +685,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt nhẹ 24,5 m2",
     idCha: 30050,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 105,
   },
   {
@@ -693,7 +693,7 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt nhẹ 60 m2",
     idCha: 30050,
     level: 4,
-    maDviTinh: "cái",
+    maDviTinh: "Bộ",
     idDm: 106,
   },
 

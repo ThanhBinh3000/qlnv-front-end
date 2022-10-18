@@ -7,7 +7,7 @@ import {environment} from "../../../environments/environment";
   providedIn: 'root',
 })
 export class ThongTu1452013Service extends BaseService {
-  GATEWAY = 'qlnv-report';
+  GATEWAY = '/qlnv-report';
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, '145-2013-ttbtc', '');

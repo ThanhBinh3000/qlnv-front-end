@@ -46,14 +46,14 @@ export const LINH_VUC = [
     tenDm: "Máy phát điện loại 10-30KW",
     idCha: 1002,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 2200,
     tenDm: "Máy bơm nước chữa cháy(Đồng bộ thiết bị chữa cháy rừng)",
     idCha: 1002,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 2300,
@@ -67,35 +67,35 @@ export const LINH_VUC = [
     tenDm: "Loại DT4",
     idCha: 2300,
     level: 3,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 2220,
     tenDm: "Loại DT3",
     idCha: 2300,
     level: 3,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 2230,
     tenDm: "Loại DT2",
     idCha: 2300,
     level: 3,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 91,
     tenDm: "Loại DT1",
     idCha: 2300,
     level: 3,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 2700,
     tenDm: "Thiết bị khoan cắt",
     idCha: 1002,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 2800,
@@ -109,49 +109,49 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 16,5 m2",
     idCha: 2800,
     level: 3,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 29002,
     tenDm: "Nhà bạt thường loại 24.75 m2",
     idCha: 2800,
     level: 3,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 29003,
     tenDm: "Nhà bạt thường loại 24,5 m2",
     idCha: 2800,
     level: 3,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 29004,
     tenDm: "Nhà bạt thường loại 60 m2",
     idCha: 2800,
     level: 3,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 2940,
     tenDm: "Phao áo cứu sinh",
     idCha: 1002,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "chiếc"
   },
   {
     id: 2950,
     tenDm: "Phao tròn cứu sinh",
     idCha: 1002,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "chiếc"
   },
   {
     id: 2960,
     tenDm: "Bè nhẹ cứu sinh",
     idCha: 1002,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "chiếc"
   },
   // =================================== xuat ban
   {
@@ -201,14 +201,14 @@ export const LINH_VUC = [
     tenDm: "Máy phát điện loại 10-30KW",
     idCha: 5200,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 5220,
     tenDm: "Máy bơm nước chữa cháy(Đồng bộ thiết bị chữa cháy rừng)",
     idCha: 5200,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 5230,
@@ -222,35 +222,35 @@ export const LINH_VUC = [
     tenDm: "Loại DT4",
     idCha: 5230,
     level: 3,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 5232,
     tenDm: "Loại DT3",
     idCha: 5230,
     level: 3,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 5233,
     tenDm: "Loại DT2",
     idCha: 5230,
     level: 3,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 90,
     tenDm: "Loại DT1",
     idCha: 5230,
     level: 3,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 5280,
     tenDm: "Thiết bị khoan cắt",
     idCha: 5200,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 5290,
@@ -264,48 +264,48 @@ export const LINH_VUC = [
     tenDm: "Nhà bạt thường loại 16,5 m2",
     idCha: 5200,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 52200,
     tenDm: "Nhà bạt thường loại 24.75 m2",
     idCha: 5200,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 52300,
     tenDm: "Nhà bạt thường loại 24,5 m2",
     idCha: 5200,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 52400,
     tenDm: "Nhà bạt thường loại 60 m2",
     idCha: 5200,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "Bộ"
   },
   {
     id: 52500,
     tenDm: "Phao áo cứu sinh",
     idCha: 5200,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "chiếc"
   },
   {
     id: 52600,
     tenDm: "Phao tròn cứu sinh",
     idCha: 5200,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "chiếc"
   },
   {
     id: 52700,
     tenDm: "Bè nhẹ cứu sinh",
     idCha: 5200,
     level: 2,
-    maDviTinh: "cái"
+    maDviTinh: "chiếc"
   },
 ]
