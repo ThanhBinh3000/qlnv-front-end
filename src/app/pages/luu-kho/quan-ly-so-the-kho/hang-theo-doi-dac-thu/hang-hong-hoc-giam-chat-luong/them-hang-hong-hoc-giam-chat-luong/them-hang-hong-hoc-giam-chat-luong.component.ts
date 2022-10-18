@@ -10,9 +10,9 @@ import {UserService} from "../../../../../../services/user.service";
 import {STATUS} from "../../../../../../constants/status";
 import {MESSAGE} from "../../../../../../constants/message";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
-import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
 
 @Component({
   selector: 'app-them-hang-hong-hoc-giam-chat-luong',
@@ -23,7 +23,7 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
   @Input('dsTong') dsTong;
   @Input('dsLoaiHangHoa') dsLoaiHangHoa: any[];
   formData: FormGroup;
-  dataTable: IHangHongHocGiamChatLuong[];
+  dataTable: any[] = [];
   rowItem: IHangHongHocGiamChatLuong = new IHangHongHocGiamChatLuong();
   userInfo: UserLogin
   page: number = 1;
@@ -49,10 +49,12 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     public  userService: UserService,
     public  notification: NzNotificationService,
     public  spinner: NgxSpinnerService,
+    public  modal: NzModalService,
   ) {
     this.formData = this.fb.group({
       id: [null],
-      maDvi: [null],
+      maDvi: [],
+      tenDvi: [],
       maDanhSach: [null],
       ngayDeXuat: [new Date()],
       ngayTongHop: [null],
@@ -62,11 +64,10 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     try {
       this.userInfo = this.userService.getUserLogin()
-      this.loadDanhSachChiCuc();
       this.loaiVTHHGetAll();
+      this.onChangChiCuc(this.userInfo.MA_DVI)
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -74,25 +75,24 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     }
   }
 
-  async loadDanhSachChiCuc() {
-    const body = {
-      maDviCha: this.userInfo.MA_DVI,
-      trangThai: '01',
-    };
-
-    const dsTong = await this.donViService.layDonViTheoCapDo(body);
-    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-  }
-
   async changeLoaiHangHoa(id: any) {
     if (id && id > 0) {
       let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id);
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
-      console.log(this.listChungLoaiHangHoa)
-      console.log(this.dsLoaiHangHoa)
+      this.rowItem.tenLoaiVthh = loaiHangHoa[0].ten
+      this.rowItem.dviTinh = loaiHangHoa[0].maDviTinh
+    }
+  }
+  changeCloaiHangHoa(event: any) {
+    const cloaiVthh = this.listChungLoaiHangHoa.filter(item => item.ma == event);
+    if (cloaiVthh.length > 0) {
+      this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
     }
   }
   async loaiVTHHGetAll() {
+    this.formData.patchValue({
+      tenDvi: this.userInfo.TEN_DVI
+    })
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
           hangHoa.data.forEach((item) => {
@@ -114,11 +114,32 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
 
   luu() {}
 
-  xoaItem(id: number) {}
+  xoaItem(index: number) {
+    console.log(this.dataTable)
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: () => {
+        this.dataTable.splice(index,1);
+        this.updateEditCache();
+        console.log(this.dataTable)
+      },
+    });
+  }
 
   themMoiItem() {
     if (!this.dataTable) {
       this.dataTable = [];
+    }
+    this.rowItem.slConLai = this.rowItem.slYeuCau - this.rowItem.slDaDuyet;
+    if(this.rowItem.slConLai < 0 || this.rowItem.slYeuCau > this.rowItem.slTon) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng kiểm tra lại số lượng hàng cần sửa chữa");
+      return;
     }
     this.dataTable = [...this.dataTable, this.rowItem]
     this.rowItem = new IHangHongHocGiamChatLuong();
@@ -136,18 +157,16 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     this.dataEdit[id].edit = true;
   }
 
-  huyEdit(id: number): void {
-    const index = this.dataTable.findIndex((item) => item.id === id);
-    this.dataEdit[id] = {
-      data: { ...this.dataTable[index] },
+  huyEdit(idx: number): void {
+    this.dataEdit[idx] = {
+      data: { ...this.dataTable[idx] },
       edit: false,
     };
   }
 
-  luuEdit(id: number): void {
-    const index = this.dataTable.findIndex((item) => item.id === id);
-    Object.assign(this.dataTable[index], this.dataEdit[id].data);
-    this.dataEdit[id].edit = false;
+  luuEdit(idx: number): void {
+    Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
+    this.dataEdit[idx].edit = false;
   }
 
   updateEditCache(): void {
@@ -174,9 +193,12 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
       maDviCha: event,
       trangThai: '01',
     };
-
     const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.dsNhaKho = dsTong[DANH_MUC_LEVEL.NHA_KHO];
+    const diemKho = this.dsDiemKho.find(item => item.maDvi == event);
+    if (diemKho) {
+      this.rowItem.tenDiemKho = diemKho.tenDvi;
+    }
   }
 
   async onChangeNhaKho(event) {
@@ -187,6 +209,10 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
 
     const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.dsNganLo = dsTong[DANH_MUC_LEVEL.NGAN_KHO];
+    const nganLo = this.dsNhaKho.filter(item => item.maDvi == event);
+    if (nganLo.length > 0) {
+      this.rowItem.tenNhaKho = nganLo[0].tenDvi;
+    }
   }
 
  async onChangeNganKho(event) {
@@ -196,23 +222,49 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     };
     const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.dsLoKho = dsTong[DANH_MUC_LEVEL.LO_KHO];
+   const nganLo = this.dsNganLo.filter(item => item.maDvi == event);
+   if (nganLo.length > 0) {
+     this.rowItem.tenNganKho = nganLo[0].tenDvi;
+   }
   }
+
+  async onChangLoKho(evevt) {
+    const nganLo = this.dsLoKho.filter(item => item.maDvi == evevt);
+    if (nganLo.length > 0) {
+      this.rowItem.tenLoKho = nganLo[0].tenDvi;
+    }
+  }
+
+
 }
 
 export class IHangHongHocGiamChatLuong {
   id: number;
-  loaiVthh: number;
+  loaiVthh: string;
+  cloaiVthh: string;
   tenLoaiVthh: string;
-  cloaiVthh: number;
+  tenCloaiVthh: string;
   moTaHangHoa: string;
   maNhaKho : string;
   maDiemKho : string;
   maNganKho : string;
   maLoKho : string;
-  soLuongTon: number;
-  soLuongThanhLy: number;
-  donVi: string;
+  tenDiemKho: string
+  tenNhaKho : string
+  tenNganKho : string
+  tenLoKho : string
+  maDanhSach : string;
+  slTon: number;
+  slYeuCau: number;
+  slDaDuyet : number;
+  slConLai : number;
+  dviTinh: string;
+  maDvi: string;
+  ngayDeXuat: any;
+  ngayTongHop: any;
+  trangThai: any;
   lyDo: string;
+  thamDinhScId: any;
   thHhhId: string
   qlhhhId: string;
 }

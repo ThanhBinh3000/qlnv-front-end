@@ -1288,7 +1288,12 @@ export class BaoCao05Component implements OnInit {
     }
 
     export() {
-        this.quanLyVonPhiService.exportBaoCao(this.id, this.idBaoCao).toPromise().then(
+        const request = {
+            bcaoCtietId: this.id,
+            bcaoId: this.idBaoCao,
+            dviTien: this.maDviTien,
+        }
+        this.quanLyVonPhiService.exportBaoCao(request).toPromise().then(
             (data) => {
                 fileSaver.saveAs(data, '05BCBPQ.xlsx');
             },

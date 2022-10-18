@@ -115,7 +115,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
         cloaiVthh: [, [Validators.required]],
         tongSoLuong: [],
         trangThai: [],
-        fileDinhKem: [FileDinhKem, [Validators.required]],
+        fileDinhKem: [FileDinhKem],
         fileName: [, [Validators.required]],
         canCu: [new Array<FileDinhKem>()],
         trichYeu: [, [Validators.required]],
@@ -168,7 +168,56 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
     }
   }
 
-  async save(isOther?: boolean) {
+  async save() {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      let invalid = [];
+      let controls = this.formData.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          invalid.push(name);
+        }
+      }
+      console.log(invalid, 'invalid');
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
+      return;
+    } else {
+      try {
+        this.spinner.show();
+        let body = this.formData.value;
+        body.tongSoLuong = this.tongSoLuongTongHop;
+        // body.fileDinhKem = this.fileDinhKem;
+        body.ngayKy = this.datePipe.transform(body.ngayKy, 'yyyy-MM-dd');
+        body.soQd = body.soQd + this.maQuyetDinh;
+        console.log(body, 'body');
+        if (this.idInput) {
+          let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.update(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        } else {
+          // body.tongSoLuong = this.tongSLThongTinChiTiet;
+          let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.create(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.idInput = res.data.id;
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        }
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.spinner.hide();
+
+      }
+    }
+  }
+
+  async luuVaGuiDuyet() {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -193,41 +242,17 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
         } else {
           try {
             this.spinner.show();
-            let body = this.formData.value;
-            body.tongSoLuong = this.tongSoLuongTongHop;
-            // body.fileDinhKem = this.fileDinhKem;
-            body.ngayKy = this.datePipe.transform(body.ngayKy, 'yyyy-MM-dd');
-            body.soQd = body.soQd + this.maQuyetDinh;
-            console.log(body, 'body');
-            if (this.idInput) {
-              let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.update(body);
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
-            } else {
-              // body.tongSoLuong = this.tongSLThongTinChiTiet;
-              let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.create(body);
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.idInput = res.data.id;
-                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
-            }
+            await this.save();
             //gui duyet
-            if (isOther) {
-              let body = {
-                id: this.idInput,
-                trangThai: STATUS.CHO_DUYET_LDTC
-              };
-              let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.approve(body);
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
+            let body = {
+              id: this.idInput,
+              trangThai: STATUS.CHO_DUYET_LDTC
+            };
+            let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.approve(body);
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
             }
           } catch (e) {
             console.log(e)
@@ -492,7 +517,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
 
   async dsPhuongAnTongHop() {
     let body = {
-      trangThai: STATUS.DU_THAO,
+      listTrangThai: [STATUS.DA_DUYET_LDV],
       nam: this.formData.value.nam,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,

@@ -91,7 +91,7 @@ export class PhuLucIIComponent implements OnInit {
         })
     }
 
-    async initialization(){
+    async initialization() {
         this.spinner.show();
         this.id = this.data?.id;
         this.idBcao = this.data.idBcao;
@@ -753,8 +753,13 @@ export class PhuLucIIComponent implements OnInit {
     }
 
     export() {
+        const request = {
+            bcaoCtietId: this.id,
+            bcaoId: this.idBcao,
+            dviTien: this.maDviTien,
+        }
         const baoCao = "phuLuc2.xlsx";
-        this.quanLyVonPhiService.exportBaoCao(this.idBcao, this.id).toPromise().then(
+        this.quanLyVonPhiService.exportBaoCao(request).toPromise().then(
             (data) => {
                 fileSaver.saveAs(data, baoCao);
             },

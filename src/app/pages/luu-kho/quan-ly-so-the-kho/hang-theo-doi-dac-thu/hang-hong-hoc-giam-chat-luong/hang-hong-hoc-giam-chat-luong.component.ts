@@ -68,7 +68,7 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly userService: UserService,
+    public userService: UserService,
     private readonly donviService: DonviService,
     private readonly danhMucService: DanhMucService,
     private readonly spinner: NgxSpinnerService,
@@ -88,19 +88,15 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   }
 
 
-  async ngOnInit(): Promise<void> {
-    try {
+  async ngOnInit() {
       this.spinner.show();
-      this.userInfo = this.userService.getUserLogin()
-      // await this.search()
-      // await this.loaiVTHHGetAll()
-      // await this.loadDanhSachChiCuc()
-      // await this.loadDsTong()
-    } catch (error) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
-    }
+    await Promise.all([
+      this.userInfo = this.userService.getUserLogin(),
+      await this.search(),
+      await this.loaiVTHHGetAll(),
+      await this.loadDanhSachChiCuc(),
+    ])
+   this.spinner.hide()
   }
 
   async changeLoaiHangHoa(id: any) {
@@ -111,13 +107,14 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   }
 
   async loadDanhSachChiCuc() {
-    const body = {
-      maDviCha: this.userInfo.MA_DVI,
-      trangThai: '01',
-    };
-
-    const dsTong = await this.donViService.layDonViTheoCapDo(body);
-    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    if (!this.userService.isChiCuc()) {
+      const body = {
+        maDviCha: this.userInfo.MA_DVI,
+        trangThai: '01',
+      };
+      const dsTong = await this.donViService.layDonViTheoCapDo(body);
+      this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    }
   }
 
   async search() {
@@ -138,32 +135,6 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
       this.dataTable = [];
       this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg)
-    }
-  }
-
-
-  async loadDsTong() {
-    const body = {
-      maDviCha: this.detail.maDvi,
-      trangThai: '01',
-    };
-
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
-    if (!isEmpty(dsTong)) {
-      this.dsTong = dsTong;
-      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-      this.dsDonViDataSource = dsTong[DANH_MUC_LEVEL.CHI_CUC].map(
-        (item) => item.tenDvi,
-      );
-    }
-  }
-
-  expandSet = new Set<number>();
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
     }
   }
 
