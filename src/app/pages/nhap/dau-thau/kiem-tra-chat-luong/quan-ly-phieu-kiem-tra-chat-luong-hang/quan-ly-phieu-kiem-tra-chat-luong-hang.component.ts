@@ -15,6 +15,9 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import {STATUS} from "../../../../../constants/status";
+import {
+  QuyetDinhGiaoNhapHangService
+} from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
 
 @Component({
   selector: 'quan-ly-phieu-kiem-tra-chat-luong-hang',
@@ -74,6 +77,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
+    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
@@ -147,8 +151,9 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       },
       "soPhieu": this.searchFilter.soPhieu,
       "soQd": this.searchFilter.soQuyetDinh,
+      trangThai : STATUS.BAN_HANH
     };
-    let res = await this.quanLyPhieuKiemTraChatLuongHangService.search(body);
+    let res = await this.quyetDinhNhapXuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -157,6 +162,10 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
           item.checked = false;
         });
       }
+      this.dataTable.forEach( item =>
+        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      );
+      console.log(this.dataTable);
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
@@ -365,5 +374,14 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   print() {
 
+  }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
   }
 }

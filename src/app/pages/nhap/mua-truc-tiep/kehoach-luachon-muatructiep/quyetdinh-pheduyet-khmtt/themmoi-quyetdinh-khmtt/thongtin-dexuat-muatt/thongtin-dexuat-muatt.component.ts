@@ -102,12 +102,14 @@ export class ThongtinDexuatMuattComponent implements OnInit {
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data)
         }
+        this.helperService.setIndexArray(this.listOfData);
         this.convertListData();
+      } else {
+        this.formData.reset();
       }
     }
     await this.spinner.hide()
   }
-
   convertListData() {
     this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()

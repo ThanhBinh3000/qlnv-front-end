@@ -13,6 +13,8 @@ import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
+import {QuanLyDanhSachHangHongHocService} from "../../../../../../services/quanLyDanhSachHangHongHoc.service";
+import {HelperService} from "../../../../../../services/helper.service";
 
 @Component({
   selector: 'app-them-hang-hong-hoc-giam-chat-luong',
@@ -20,7 +22,7 @@ import {NzModalService} from "ng-zorro-antd/modal";
   styleUrls: ['./them-hang-hong-hoc-giam-chat-luong.component.scss'],
 })
 export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
-  @Input('dsTong') dsTong;
+  @Input() idInput : number;
   @Input('dsLoaiHangHoa') dsLoaiHangHoa: any[];
   formData: FormGroup;
   dataTable: any[] = [];
@@ -50,6 +52,8 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
     public  notification: NzNotificationService,
     public  spinner: NgxSpinnerService,
     public  modal: NzModalService,
+    private quanLyDanhSachHangHongHocService: QuanLyDanhSachHangHongHocService,
+    private helperService: HelperService,
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -68,6 +72,7 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin()
       this.loaiVTHHGetAll();
       this.onChangChiCuc(this.userInfo.MA_DVI)
+      this.getDetail(this.idInput)
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -106,16 +111,48 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
       })
   }
 
-  huy() {
+  async getDetail(id: number) {
+    let res = await this.quanLyDanhSachHangHongHocService.getDetail(id);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const dataDetail = res.data;
+      this.dataTable = dataDetail.ctList
+    }
+    this.updateEditCache()
+  }
+
+
+  quayLai() {
     this.onClose.emit();
   }
 
   exportData() {}
 
-  luu() {}
+  async luu() {
+      this.spinner.show();
+      let body = this.formData.value;
+      body.ctReqs = this.dataTable;
+      body.maDvi = this.userInfo.MA_DVI;
+      let res
+      if (this.idInput > 0) {
+        res = await this.quanLyDanhSachHangHongHocService.update(body);
+      } else {
+        res = await this.quanLyDanhSachHangHongHocService.create(body);
+      }
+      if (res.msg == MESSAGE.SUCCESS) {{
+          if (this.idInput > 0) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          } else {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }
+          this.quayLai();
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      this.spinner.hide();
+  }
 
   xoaItem(index: number) {
-    console.log(this.dataTable)
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -127,7 +164,6 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
       nzOnOk: () => {
         this.dataTable.splice(index,1);
         this.updateEditCache();
-        console.log(this.dataTable)
       },
     });
   }

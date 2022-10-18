@@ -353,7 +353,7 @@ export class XayDungPhuongAnComponent implements OnInit {
         this.deXuatPhuongAnCuuTroService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-de-xuat-ke-hoach-ban-dau-gia.xlsx'),
+            saveAs(blob, 'danh-sach-de-xuat-phuong-an-xuat-cuu-tro-vien-tro.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

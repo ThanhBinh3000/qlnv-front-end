@@ -121,12 +121,10 @@
       </div>
     </form>
   </nz-card>
-  <app-themmoi-chaogia-uyquyen-muale *ngIf="formData.value.soQdPdCg" [isShowFromKq]="true"
-    [idInput]="formData.value.idPdKq">
+  <app-themmoi-chaogia-uyquyen-muale *ngIf="formData.value.soQdPdCg " [isShowFromKq]="true"
+    [idInput]="formData.value.idPdKq" [selectedData]="formData.value.trangThaiTkhai">
   </app-themmoi-chaogia-uyquyen-muale>
-
 </div>
-
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
