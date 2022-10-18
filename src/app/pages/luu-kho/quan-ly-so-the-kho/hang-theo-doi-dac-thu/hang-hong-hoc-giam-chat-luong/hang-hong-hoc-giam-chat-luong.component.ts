@@ -65,6 +65,8 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   danhSachChiCuc: any[] = [];
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
+  idSelected: number;
+   isViewDetail: boolean;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -136,6 +138,7 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
       this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg)
     }
+    this.spinner.hide()
   }
 
   async loaiVTHHGetAll() {
@@ -200,7 +203,10 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   changePageSize(event) {
   }
 
-  viewDetail(id: number, isUpdate: boolean) {
+  viewDetail(id: number, isView: boolean) {
+    this.idSelected = id;
+    this.isAddNew = true;
+    this.isViewDetail = isView ?? false;
   }
 
   xoaItem(id) {
@@ -215,7 +221,13 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          const res = await this.quanLyDanhSachHangHongHocService.deteleData(id);
+          let body = {
+            "id": id,
+            "ids": [
+              0
+            ]
+          }
+          const res = await this.quanLyDanhSachHangHongHocService.delete(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             this.search();
@@ -239,6 +251,7 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
 
   onClose() {
     this.isAddNew = false;
+    this.search()
   }
 
   filterInTable(key: string, value: string) {

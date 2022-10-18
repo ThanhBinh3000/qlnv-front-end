@@ -56,7 +56,7 @@ export class ChiTietThongTinChaoGia {
   dgiaChuaThue: number;
   thueGtgt: number;
   thanhTien: number;
-  luaChon: boolean;
+  luaChon: boolean = false;
   luaChonPduyet: number;
   idSoQdPduyetCgia: number;
   fileDinhKems: FileDinhKem = new FileDinhKem();

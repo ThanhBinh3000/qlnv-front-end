@@ -122,10 +122,11 @@
           </nz-form-item>
         </div>-->
         <div nz-col [nzSpan]="24">
-          <nz-form-item class="form-item">
+
+          <nz-form-item class="form-item" >
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="trichYeu">Trích yếu
             </nz-form-label>
-            <nz-form-control>
+            <nz-form-control  [nzErrorTip]="error">
               <textarea id="trichYeu" formControlName="trichYeu" rows="3" class="search__input" nz-input
                 [readonly]="noEdit"></textarea>
             </nz-form-control>

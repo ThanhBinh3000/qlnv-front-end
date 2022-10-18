@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -19,6 +19,8 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { QuyetDinhPheDuyetKetQuaChaoGiaMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ket-qua-chao-gia-mtt.service';
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { DialogCanCuThongTinChaoGiaComponent } from 'src/app/components/dialog/dialog-can-cu-thong-tin-chao-gia/dialog-can-cu-thong-tin-chao-gia.component';
+import { ChaogiaUyquyenMualeService } from 'src/app/services/chaogia-uyquyen-muale.service';
+import { Chain } from '@angular/compiler';
 
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-chaogia',
@@ -30,12 +32,14 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   @Input() isViewDetail: boolean;
   @Input() idInput: number;
+  @Input() selectedData: any;
 
   formData: FormGroup;
   taiLieuDinhKemList: any[] = [];
-
-  listQdPdKhMtt: any[] = []
+  listMtt: any[] = [];
+  listQdPdKhMtt: any[] = [];
   idPdKq: number;
+  trangThaiTkhai: string;
   maQd: string;
   listNam: any[] = [];
 
@@ -51,7 +55,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
     private helperService: HelperService,
     private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
-
+    private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
   ) {
     this.formData = this.fb.group(
       {
@@ -62,16 +66,15 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
         ngayHluc: [null, [Validators.required]],
         namKh: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null,],
-        soQdPdKhlcnt: ['', [Validators.required]],
         idPdKq: ['', [Validators.required]],
         ghiChu: [null,],
-        trangThai: ['00'],
+        trangThai: [STATUS.DU_THAO],
         tenTrangThai: ['Dự thảo'],
         cloaiVthh: [null,],
         loaiVthh: [null,],
         tenLoaiVthh: [null,],
         tenCloaiVthh: [null,],
-
+        trangThaiTkhai: [STATUS.CHUA_CAP_NHAT],
       }
     );
   }
@@ -89,7 +92,9 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
     }
     if (this.idInput > 0) {
       await this.getDetail(this.idInput);
+
     }
+    // await this.getListChaoGia(1541);
     await this.spinner.hide();
   }
 
@@ -120,6 +125,8 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
     let body = this.formData.value;
     body.soQdPdKq = body.soQdPdKq + this.maQd;
     body.fileDinhKems = this.taiLieuDinhKemList;
+    // body.hhChiTietTTinChaoGiaList = this.listMtt
+    // console.log(this.listMtt, 369);
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.update(body);
@@ -196,14 +203,14 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
     let body = {
       namKh: this.formData.get('namKh').value,
       trangThai: STATUS.BAN_HANH,
-      tenTrangThaiTkhai: STATUS.HOAN_THANH_CAP_NHAT,
+      trangThaiTkhai: STATUS.HOAN_THANH_CAP_NHAT,
       maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
       },
     };
-    let res = await this.quyetDinhPheDuyetKeHoachMTTService.search(body);
+    let res = await this.chaogiaUyquyenMualeService.search(body);
     this.listQdPdKhMtt = res.data.content;
   }
 
@@ -217,16 +224,36 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.listQdPdKhMtt,
-        dataHeader: ['Số quyết định', 'Ngày quyết định'],
+        dataHeader: ['Số quyết định', 'Ngày quyết định', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
         code: 'dsQdKhMtt'
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
       this.idPdKq = data.id;
+      // console.log(this.idPdKq, 555);
+      this.trangThaiTkhai = data.trangThaiTkhai
       this.formData.patchValue({
         soQdPdCg: data.soQdPduyet,
         idPdKq: data.id,
+        trangThaiTkhai: data.trangThaiTkhai
       })
     });
   }
+
+  // async getListChaoGia(id: number) {
+  //   const res = await this.chaogiaUyquyenMualeService.getDetail(id);
+  //   console.log(res, 4444)
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     const dataDetail = res.data;
+  //     this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+  //     this.listMtt = dataDetail.hhChiTietTTinChaoGiaList;
+  //     this.formData.patchValue({
+  //       trangThaiTkhai: dataDetail.trangThaiTkhai,
+  //       tenTrangThaiTkhai: dataDetail.tenTrangThaiTkhai
+  //     })
+  //   } else {
+  //     this.notification.error(MESSAGE.ERROR, res.msg);
+  //   }
+  // }
+
 }

@@ -15,7 +15,7 @@ export class QuyetDinhGiaoNhapHangService extends BaseService {
   }
 
   updateDdiemNhap(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/nhap-xuat/cap-nhat-ddiem-nhap`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/cap-nhat-ddiem-nhap`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
 

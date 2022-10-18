@@ -791,8 +791,13 @@ export class DeNghiTheoDonGiaMuaComponent implements OnInit {
         );
         this.spinner.hide();
     }
+
     displayMoney(num: number): string {
         num = exchangeMoney(num, '1', this.maDviTien);
+        return displayNumber(num);
+    }
+
+    displayValue(num: number): string {
         return displayNumber(num);
     }
 

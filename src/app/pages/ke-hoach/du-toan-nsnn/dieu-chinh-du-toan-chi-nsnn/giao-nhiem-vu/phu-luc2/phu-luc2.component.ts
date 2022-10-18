@@ -585,17 +585,17 @@ export class PhuLuc2Component implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (
-      (!this.editCache[id].data.thienSluongKhoachDgiao && this.editCache[id].data.thienSluongKhoachDgiao !== 0) ||
-      (!this.editCache[id].data.thienSluongTteThien && this.editCache[id].data.thienSluongTteThien !== 0) ||
-      (!this.editCache[id].data.thienSluongUocThien && this.editCache[id].data.thienSluongUocThien !== 0) ||
-      (!this.editCache[id].data.thienCong && this.editCache[id].data.thienCong !== 0) ||
-      (!this.editCache[id].data.kphiThieuNtruoc && this.editCache[id].data.kphiThieuNtruoc !== 0) ||
-      (!this.editCache[id].data.maDviTinh)
-    ) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
-      return;
-    }
+    // if (
+    //   (!this.editCache[id].data.thienSluongKhoachDgiao && this.editCache[id].data.thienSluongKhoachDgiao !== 0) ||
+    //   (!this.editCache[id].data.thienSluongTteThien && this.editCache[id].data.thienSluongTteThien !== 0) ||
+    //   (!this.editCache[id].data.thienSluongUocThien && this.editCache[id].data.thienSluongUocThien !== 0) ||
+    //   (!this.editCache[id].data.thienCong && this.editCache[id].data.thienCong !== 0) ||
+    //   (!this.editCache[id].data.kphiThieuNtruoc && this.editCache[id].data.kphiThieuNtruoc !== 0) ||
+    //   (!this.editCache[id].data.maDviTinh)
+    // ) {
+    //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+    //   return;
+    // }
     if (
       this.editCache[id].data.thienSluongKhoachDgiao < 0 ||
       this.editCache[id].data.thienSluongTteThien < 0 ||

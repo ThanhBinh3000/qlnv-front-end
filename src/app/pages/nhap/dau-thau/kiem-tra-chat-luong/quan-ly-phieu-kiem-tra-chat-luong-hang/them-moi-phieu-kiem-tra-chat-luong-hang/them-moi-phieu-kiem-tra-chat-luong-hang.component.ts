@@ -95,6 +95,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         moTaHangHoa: [''],
         soHd: [''],
         ngayHd: [null,],
+        idDdiemGiaoNvNh : [,[Validators.required]],
         maDiemKho: ['', [Validators.required]],
         tenDiemKho: ['', [Validators.required]],
         maNhaKho: ['', [Validators.required]],
@@ -156,6 +157,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
       soPhieu: `${res}/${this.formData.get('nam').value}/KTCL-CCDTKVVP`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
+      maQhmaQhnsns : this.userInfo.DON_VI.maQhns,
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
     })
@@ -684,14 +686,15 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
         });
         let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
         if (dataChiCuc.length > 0) {
-          this.listDiaDiemNhap = dataChiCuc[0].diaDiemNhapList
+          this.listDiaDiemNhap = dataChiCuc[0].children
         }
         let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
-        this.dataTableChiTieu = dmTieuChuan.data.children;
-        this.dataTableChiTieu.forEach(element => {
-          element.edit = false
-        });
-        console.log(this.dataTableChiTieu);
+        if(dmTieuChuan.data){
+          this.dataTableChiTieu = dmTieuChuan.data.children;
+          this.dataTableChiTieu.forEach(element => {
+            element.edit = false
+          });
+        }
       }
       this.spinner.hide();
     });
@@ -715,6 +718,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent implements OnInit {
       if (data) {
         console.log(data);
         this.formData.patchValue({
+          idDdiemGiaoNvNh : data.id,
           maDiemKho: data.maDiemKho,
           tenDiemKho: data.tenDiemKho,
           maNhaKho: data.maNhaKho,

@@ -164,7 +164,7 @@
 
         </div>
         <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-            <nz-table [nzData]="listOfData" class="nowrap" nzBordered *ngIf="userService.isCuc() ">
+            <nz-table [nzData]="listOfData" class="nowrap" nzBordered>
                 <thead>
                     <tr>
                         <th class="text-center" style="width: 5%;">STT</th>
@@ -240,6 +240,7 @@
                             </nz-form-control>
                         </td>
                         <td>
+                            <label nz-checkbox [(ngModel)]="rowItem.luaChon"></label>
                         </td>
                         <td style="text-align: center;">
                             <a>
@@ -265,7 +266,7 @@
                             <td>{{data.thueGtgt}}</td>
                             <td>{{data.thanhTien}}</td>
                             <td>{{data.fileDinhkems?.fileName }}</td>
-                            <td>{{data.luaChon}}</td>
+                            <td><label nz-checkbox [(ngModel)]="data.luaChon"></label></td>
                             <td style="text-align: center;">
                                 <a (click)="downloadFile(data.fileDinhKem)">
                                     <i class="icon htvbdh_tcdt_import "></i>
@@ -326,7 +327,8 @@
                                 </nz-form-control>
                             </td>
                             <td>
-                                <input type="text" [(ngModel)]="dataEdit[idx].data.luaChon" nz-input />
+
+                                <label nz-checkbox [(ngModel)]="dataEdit[idx].data.luaChon"></label>
                             </td>
                             <td style="text-align: center">
                                 <a (click)="downloadFile(dataEdit[idx].data.fileDinhKems)">

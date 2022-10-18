@@ -56,8 +56,8 @@ export const LANH_DAO_TC = {
 export const DIEU_CHINH_DU_TOAN_NSNN_LIST: DuToanNSNN[] = [
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Tìm kiếm',
-    description: 'Tìm kiếm điều chỉnh dự toán chi NSNN',
+    title: 'DANH SÁCH BÁO CÁO ĐIỀU CHỈNH DỰ TOÁN',
+    description: 'DANH SÁCH BÁO CÁO ĐIỀU CHỈNH DỰ TOÁN',
     url: `/${MAIN_ROUTE_KE_HOACH}/${MAIN_ROUTE_DU_TOAN}/${DIEU_CHINH_DU_TOAN}/tim-kiem-dieu-chinh-du-toan-chi-NSNN`,
     Role: [
       DCDT.VIEW_REPORT,

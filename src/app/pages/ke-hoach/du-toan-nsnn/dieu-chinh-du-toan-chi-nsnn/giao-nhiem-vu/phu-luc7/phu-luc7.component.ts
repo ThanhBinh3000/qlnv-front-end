@@ -615,20 +615,20 @@ export class PhuLuc7Component implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (
-      (!this.editCache[id].data.maDviTinh) ||
-      (!this.editCache[id].data.loaiMatHang && this.editCache[id].data.loaiMatHang !== 0) ||
-      (!this.editCache[id].data.slHangTte && this.editCache[id].data.slHangTte !== 0) ||
-      (!this.editCache[id].data.cphiBqNtruoc && this.editCache[id].data.cphiBqNtruoc !== 0) ||
-      (!this.editCache[id].data.cphiBqNnay && this.editCache[id].data.cphiBqNnay !== 0) ||
-      (!this.editCache[id].data.chenhLech && this.editCache[id].data.chenhLech !== 0) ||
-      (!this.editCache[id].data.soQtoanChuyenNsauKpTk && this.editCache[id].data.soQtoanChuyenNsauKpTk !== 0) ||
-      (!this.editCache[id].data.soQtoanChuyenNsauKpTchi && this.editCache[id].data.soQtoanChuyenNsauKpTchi !== 0) ||
-      (!this.editCache[id].data.dtoan2021ThanhQtoan2020 && this.editCache[id].data.dtoan2021ThanhQtoan2020 !== 0)
-    ) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
-      return;
-    }
+    // if (
+    //   (!this.editCache[id].data.maDviTinh) ||
+    //   (!this.editCache[id].data.loaiMatHang && this.editCache[id].data.loaiMatHang !== 0) ||
+    //   (!this.editCache[id].data.slHangTte && this.editCache[id].data.slHangTte !== 0) ||
+    //   (!this.editCache[id].data.cphiBqNtruoc && this.editCache[id].data.cphiBqNtruoc !== 0) ||
+    //   (!this.editCache[id].data.cphiBqNnay && this.editCache[id].data.cphiBqNnay !== 0) ||
+    //   (!this.editCache[id].data.chenhLech && this.editCache[id].data.chenhLech !== 0) ||
+    //   (!this.editCache[id].data.soQtoanChuyenNsauKpTk && this.editCache[id].data.soQtoanChuyenNsauKpTk !== 0) ||
+    //   (!this.editCache[id].data.soQtoanChuyenNsauKpTchi && this.editCache[id].data.soQtoanChuyenNsauKpTchi !== 0) ||
+    //   (!this.editCache[id].data.dtoan2021ThanhQtoan2020 && this.editCache[id].data.dtoan2021ThanhQtoan2020 !== 0)
+    // ) {
+    //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+    //   return;
+    // }
     if (
       this.editCache[id].data.loaiMatHang < 0 ||
       this.editCache[id].data.slHangTte < 0 ||
