@@ -81,7 +81,7 @@ export class ThongTinHangSuaChuaComponent implements OnInit {
 
   async getDataDetail(id) {
     if (id > 0) {
-      let res = await this.hongHocService.searchDetail(id);
+      let res = await this.hongHocService.getDetail(id);
       const data = res.data;
       this.formData.patchValue({
         id: data.id,
