@@ -12,7 +12,7 @@ import { CVNC } from 'src/app/Utility/utils';
 export class CapVonNguonChiComponent implements OnInit {
     isVisibleChangeTab$ = new Subject();
     visibleTab: boolean = true;
-    tabSelected: number = 0;
+    tabSelected: number = 2;
     viewDeNghi = true;
     viewTongHop = true;
 
@@ -26,6 +26,9 @@ export class CapVonNguonChiComponent implements OnInit {
             this.visibleTab = value;
         });
         this.viewDeNghi = this.userService.isAccessPermisson(CVNC.VIEW_DN_MLT) || this.userService.isAccessPermisson(CVNC.VIEW_DN_MVT);
+        if (this.viewDeNghi) {
+            this.tabSelected = 0;
+        }
         this.viewTongHop = this.userService.isAccessPermisson(CVNC.VIEW_SYNTHETIC_CKV) || this.userService.isAccessPermisson(CVNC.VIEW_SYNTHETIC_TC);
     }
 
