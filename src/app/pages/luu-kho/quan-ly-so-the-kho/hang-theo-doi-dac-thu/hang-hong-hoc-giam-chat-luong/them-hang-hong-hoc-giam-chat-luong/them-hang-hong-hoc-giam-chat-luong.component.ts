@@ -72,6 +72,7 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin()
       this.loaiVTHHGetAll();
       this.onChangChiCuc(this.userInfo.MA_DVI)
+      this.getDetail(this.idInput)
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
@@ -110,6 +111,16 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
       })
   }
 
+  async getDetail(id: number) {
+    let res = await this.quanLyDanhSachHangHongHocService.getDetail(id);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const dataDetail = res.data;
+      this.dataTable = dataDetail.ctList
+    }
+    this.updateEditCache()
+  }
+
+
   quayLai() {
     this.onClose.emit();
   }
@@ -120,7 +131,7 @@ export class ThemHangHongHocGiamChatLuongComponent implements OnInit {
       this.spinner.show();
       let body = this.formData.value;
       body.ctReqs = this.dataTable;
-      body.MA_DVI = this.userInfo.MA_DVI;
+      body.maDvi = this.userInfo.MA_DVI;
       let res
       if (this.idInput > 0) {
         res = await this.quanLyDanhSachHangHongHocService.update(body);
