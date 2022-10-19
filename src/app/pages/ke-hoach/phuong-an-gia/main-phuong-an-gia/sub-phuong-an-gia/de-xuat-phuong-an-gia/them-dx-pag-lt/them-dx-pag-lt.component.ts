@@ -153,16 +153,18 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     await Promise.all([
       this.isGiaMuaToiDa = this.type == TYPE_PAG.GIA_MUA_TOI_DA,
       this.userInfo = this.userService.getUserLogin(),
-      this.getDataChiTieu(),
+      this.maDx = '/CDTVP-KH&QLHDT',
       this.loadDsNam(),
       this.loadDsLoaiGia(),
       this.loadDsPhuongAnGia(),
       this.loadDsHangHoaPag(),
       this.loadDsQdPduyetKhlcnt(),
       this.loadDsVthh(),
-      this.maDx = '/CDTVP-KH&QLHDT',
-      this.getDataDetail(this.idInput),
+      this.getDataDetail(this.idInput)
     ])
+    if (this.isGiaMuaToiDa) {
+      await this.getDataChiTieu()
+    }
     this.spinner.hide();
   }
 
@@ -201,10 +203,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         lyDoTuChoi: data.lyDoTuChoi
       })
       this.dataTableCanCuXdg = data.canCuPhapLy;
+      this.dsDiaDiemDeHang = data.diaDiemDeHangs;
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableKqGia = data.ketQuaThamDinhGia;
-      this.dsDiaDiemDeHang = data.diaDiemDeHangs;
-      this.updateEditCache();
+      this.updateEditCache()
     }
   }
 

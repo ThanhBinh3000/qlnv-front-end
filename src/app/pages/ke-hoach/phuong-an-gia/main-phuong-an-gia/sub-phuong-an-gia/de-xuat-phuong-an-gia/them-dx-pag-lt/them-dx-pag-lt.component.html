@@ -695,12 +695,12 @@
           </div>
         </form>
         <span class="sub-title mb-10">GIÁ THỊ TRUỜNG</span>
-        <app-thong-tin-ksg [isTableKetQua]="true"
+        <app-thong-tin-ksg *ngIf="!idInput || dataTableKsGia" [isTableKetQua]="true"
                            [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"
                            [listCloaiVthh]="listCloaiVthh" [(dataTable)]="dataTableKsGia">
         </app-thong-tin-ksg>
         <span class="sub-title mb-10">GIÁ CỦA SỞ TÀI CHÍNH</span>
-        <app-thong-tin-ksg [isTableKetQua]="false"
+        <app-thong-tin-ksg  *ngIf="!idInput || dataTableKqGia" [isTableKetQua]="false"
                            [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"
                            [(dataTable)]="dataTableKqGia">
         </app-thong-tin-ksg>
