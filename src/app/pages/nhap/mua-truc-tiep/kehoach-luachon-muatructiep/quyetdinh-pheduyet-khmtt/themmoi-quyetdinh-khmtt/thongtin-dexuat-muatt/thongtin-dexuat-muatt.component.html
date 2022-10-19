@@ -212,8 +212,8 @@
                 <th>SL chỉ tiêu kế hoạch năm</th>
                 <th>SL theo kế hoạch năm đã được duyệt</th>
                 <th>SL đề xuất mua trực tiếp (kg)</th>
-                <!--      <th >Đơn giá đã bao gồm VAT (đồng/kg)</th>-->
-                <th>Thành tiền (giá gói thầu) (đ)</th>
+                <th>Thành tiền (đồng)</th>
+                <th *ngIf="!isView"></th>
             </tr>
         </thead>
         <tbody>
@@ -229,18 +229,12 @@
                     <tr *ngFor="let dtGoiThau of item.dataChild, let y = index">
                         <td></td>
                         <td></td>
-                        <td>{{dtGoiThau.goiThau}}</td>
-                        <td>{{dtGoiThau.diaDiemNhap}}</td>
-                        <td *ngIf="isView">{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td>{{dtGoiThau.soLuongCtieu}}</td>
+                        <td>{{dtGoiThau.soLuongKhDd}}</td>
+                        <td>{{dtGoiThau.soLuongDxmtt}}</td>
+                        <td>{{dtGoiThau.thanhTien | number : '1.0-1' : 'vi_VN'}}</td>
                         <td *ngIf="!isView">
-                            <nz-input-number class="text-right" nz-input [(ngModel)]="dtGoiThau.soLuong"
-                                [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                            </nz-input-number>
-                        </td>
-                        <!--          <td>{{dtGoiThau.donGia | number : '1.0-1' : 'vi_VN'}}</td>-->
-                        <td>{{dtGoiThau.soLuong * dtGoiThau.donGia * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
-                        <td *ngIf="!isView">
-                            <a (click)="themMoiGoiThau(dtGoiThau,dtGoiThau.idx)">
+                            <a (click)="themMoiSoLuongDiaDiem(dtGoiThau,dtGoiThau.idx)">
                                 <i class="fa fa-pencil"></i>
                             </a>
                         </td>

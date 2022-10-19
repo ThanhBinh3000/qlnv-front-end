@@ -40,9 +40,9 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
   listQdPdKhMtt: any[] = [];
   idPdKq: number;
   trangThaiTkhai: string;
+  trangthaish = STATUS.BAN_HANH;;
   maQd: string;
   listNam: any[] = [];
-
   userInfo: UserLogin;
   STATUS = STATUS
   constructor(
@@ -92,13 +92,12 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
     }
     if (this.idInput > 0) {
       await this.getDetail(this.idInput);
-
     }
-    // await this.getListChaoGia(1541);
+
     await this.spinner.hide();
   }
 
-  disableForm(): boolean {
+  disableForm() {
     if (this.formData.get('trangThai').value == STATUS.BAN_HANH) {
       return true
     }
@@ -125,8 +124,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
     let body = this.formData.value;
     body.soQdPdKq = body.soQdPdKq + this.maQd;
     body.fileDinhKems = this.taiLieuDinhKemList;
-    // body.hhChiTietTTinChaoGiaList = this.listMtt
-    // console.log(this.listMtt, 369);
+    body.hhChiTietTTinChaoGiaList = this.listMtt
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.update(body);
@@ -230,30 +228,33 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
     });
     modalQD.afterClose.subscribe(async (data) => {
       this.idPdKq = data.id;
-      // console.log(this.idPdKq, 555);
+      console.log(this.idPdKq, 555);
+      const res = await this.chaogiaUyquyenMualeService.getDetail(this.idPdKq);
+      console.log(res, 4444)
+      if (res.msg == MESSAGE.SUCCESS) {
+        const dataDetail = res.data;
+        dataDetail.trangThai = STATUS.DU_THAO;
+        dataDetail.tenTrangThai = 'Dự Thảo'
+        this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+        this.listMtt = dataDetail.hhChiTietTTinChaoGiaList;
+        this.formData.patchValue({
+          trangThaiTkhai: dataDetail.trangThaiTkhai,
+          tenTrangThaiTkhai: dataDetail.tenTrangThaiTkhai
+        })
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
       this.trangThaiTkhai = data.trangThaiTkhai
       this.formData.patchValue({
         soQdPdCg: data.soQdPduyet,
         idPdKq: data.id,
         trangThaiTkhai: data.trangThaiTkhai
       })
+      console.log(this.formData);
     });
   }
 
-  // async getListChaoGia(id: number) {
-  //   const res = await this.chaogiaUyquyenMualeService.getDetail(id);
-  //   console.log(res, 4444)
-  //   if (res.msg == MESSAGE.SUCCESS) {
-  //     const dataDetail = res.data;
-  //     this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
-  //     this.listMtt = dataDetail.hhChiTietTTinChaoGiaList;
-  //     this.formData.patchValue({
-  //       trangThaiTkhai: dataDetail.trangThaiTkhai,
-  //       tenTrangThaiTkhai: dataDetail.tenTrangThaiTkhai
-  //     })
-  //   } else {
-  //     this.notification.error(MESSAGE.ERROR, res.msg);
-  //   }
-  // }
+
+
 
 }
