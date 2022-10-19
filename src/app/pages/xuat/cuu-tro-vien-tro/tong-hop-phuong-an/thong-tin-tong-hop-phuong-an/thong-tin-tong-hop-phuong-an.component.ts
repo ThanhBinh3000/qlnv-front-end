@@ -100,7 +100,7 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
         id: [],
         maDvi: [],
         tenDvi: [, [Validators.required]],
-        maTongHop: [,[Validators.required]],
+        maTongHop: [],
         nam: [dayjs().get("year"), [Validators.required]],
         ngayTongHop: [, [Validators.required]],
         loaiVthh: [, [Validators.required]],
