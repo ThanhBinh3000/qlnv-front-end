@@ -47,7 +47,7 @@
                     [readonly]="trangThai === globals.prop.BAN_HANH || trangThai === globals.prop.LANH_DAO_DUYET || trangThai === globals.prop.DU_THAO_TRINH_DUYET || trangThai === 'view-detail'"
                     type="file" />
             </ng-template>
-            <div class="icon-plus" (click)="updateFile(item)">
+            <div class="icon-plus" (click)="updateFile(i)">
                 <i class="icon htvbdh_tcdt_save "></i>
             </div>
             <div class="icon-empty" (click)="item.isEdit = false">

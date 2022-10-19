@@ -53,6 +53,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
+  idQdGiaoNvNh : number = 0;
   isTatCa: boolean = false;
 
   allChecked = false;
@@ -137,31 +138,16 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   async search() {
     let body = {
-      "maDonVi": this.userInfo.MA_DVI,
-      "maVatTuCha": this.isTatCa ? null : this.typeVthh,
-      "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
-        ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-        : null,
-      "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-        ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-        : null,
       "paggingReq": {
         "limit": this.pageSize,
         "page": this.page - 1
       },
-      "soPhieu": this.searchFilter.soPhieu,
-      "soQd": this.searchFilter.soQuyetDinh,
       trangThai : STATUS.BAN_HANH
     };
     let res = await this.quyetDinhNhapXuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
       this.dataTable.forEach( item =>
         item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
       );
@@ -246,10 +232,11 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     });
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
+  redirectToChiTiet(isView: boolean, id: number,idQdGiaoNvNh? : number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
   }
 
   async showList() {

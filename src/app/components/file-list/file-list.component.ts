@@ -1,11 +1,12 @@
-import { saveAs } from 'file-saver';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
+import {saveAs} from 'file-saver';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {Component, Input, OnInit} from '@angular/core';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {UploadFileService} from 'src/app/services/uploaFile.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+
 @Component({
   selector: 'file-list',
   templateUrl: './file-list.component.html',
@@ -24,8 +25,8 @@ export class FileListComponent implements OnInit {
     public userService: UserService,
     private uploadFileService: UploadFileService,
     private notification: NzNotificationService,
-
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     if (this.data && this.data.length > 0) {
@@ -57,8 +58,7 @@ export class FileListComponent implements OnInit {
             item.fileName = resUpload.filename;
             item.fileSize = resUpload.size;
             item.fileUrl = resUpload.url;
-          }
-          else {
+          } else {
             if (!this.fileAdd) {
               this.fileAdd = new FileDinhKem();
             }
@@ -100,23 +100,12 @@ export class FileListComponent implements OnInit {
     }
   }
 
-  updateFile(item: FileDinhKem) {
-    if (!item || !item.noiDung || item.noiDung == '' || !item.fileName || item.fileName == '') {
+  updateFile(index) {
+    let curRow = this.data[index];
+    if (!curRow || !curRow.noiDung || curRow.noiDung == '' || !curRow.fileName || curRow.fileName == '') {
       return;
     }
-    if (this.data && this.data.length > 0) {
-      let index = this.data.findIndex(x => x.idVirtual == item.idVirtual);
-      if (index != -1) {
-        this.data.splice(index, 1);
-      }
-    }
-    else {
-      this.data = [];
-    }
-    item.isEdit = false;
-    this.data = [
-      ...this.data,
-      item,
-    ];
+    this.data.splice(index, 1, curRow);
+    curRow.isEdit = false;
   }
 }
