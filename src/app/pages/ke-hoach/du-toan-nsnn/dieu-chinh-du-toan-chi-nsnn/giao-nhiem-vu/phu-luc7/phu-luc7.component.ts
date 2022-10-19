@@ -167,18 +167,6 @@ export class PhuLuc7Component implements OnInit {
       }
     );
 
-    // await this.danhMucService.dMDviTinh().toPromise().then(
-    //   (data) => {
-    //     if (data.statusCode == 0) {
-    //       this.donViTinhs = data?.data;
-    //     } else {
-    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //     }
-    //   },
-    //   (err) => {
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   }
-    // );
     this.donViTinhs = [
       {
         dviDo: "DTN",
