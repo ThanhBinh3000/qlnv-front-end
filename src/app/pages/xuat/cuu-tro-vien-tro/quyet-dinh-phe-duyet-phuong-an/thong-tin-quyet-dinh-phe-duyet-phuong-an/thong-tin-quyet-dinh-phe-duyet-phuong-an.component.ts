@@ -40,6 +40,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
   @Input() loaiVthhInput: string;
   @Input() idInput: number;
   @Input() isView: boolean;
+  @Input() idTongHop: number;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() id: number;
@@ -116,7 +117,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
         tongSoLuong: [],
         trangThai: [],
         fileDinhKem: [FileDinhKem],
-        fileName: [, [Validators.required]],
+        fileName: [],
         canCu: [new Array<FileDinhKem>()],
         trichYeu: [, [Validators.required]],
         lyDoTuChoi: [],
@@ -125,7 +126,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
         tenTrangThai: [],
         thongTinDeXuat: [new Array(),],
         thongTinTongHop: [new Array()],
-
       }
     );
     this.userInfo = this.userService.getUserLogin();
@@ -143,9 +143,10 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
       this.spinner.show();
       //this.loadDonVi();
       await Promise.all([
-        this.dsPhuongAnTongHop(),
         this.loadDetail(this.idInput),
-      ])
+
+      ]);
+      await this.dsPhuongAnTongHop();
       console.log(this.formData.value);
       this.spinner.hide();
     } catch (e) {
@@ -204,6 +205,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.idInput = res.data.id;
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -212,7 +214,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
         console.log(e)
       } finally {
         this.spinner.hide();
-
       }
     }
   }
@@ -437,7 +438,11 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             res.data.soQd = res.data.soQd.split('/')[0];
             this.formData.patchValue(res.data);
-            this.formData.patchValue({fileName: this.formData.get("fileDinhKem").value.fileName})
+            if (res.data.fileDinhKem) {
+              this.formData.patchValue({
+                fileName: this.formData.get("fileDinhKem").value.fileName
+              })
+            }
             this.thongTinChiTiet = this.buildChiTietPhuongAn(res.data.thongTinDeXuat);
             this.thongTinChiTietTh = this.buildChiTietPhuongAn(res.data.thongTinQuyetDinh);
             this.summaryData();
@@ -450,12 +455,19 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
+      console.log(typeof this.idTongHop)
+      let idTongHop = this.idTongHop;
       this.formData.patchValue({
         trangThai: STATUS.DU_THAO,
         tenTrangThai: 'Dự thảo',
         maDvi: this.userInfo.MA_DVI,
-        tenDvi: this.userInfo.TEN_DVI
-      })
+        tenDvi: this.userInfo.TEN_DVI,
+        idTongHop: idTongHop
+      });
+      if (this.idTongHop) {
+        this.onChangePhuongAn(this.idTongHop);
+      }
+      console.log(this.formData.value,999999999999);
     }
   }
 
@@ -519,6 +531,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
     let body = {
       listTrangThai: [STATUS.DA_DUYET_LDV],
       nam: this.formData.value.nam,
+      idTongHop: this.formData.value.idTongHop,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
@@ -696,10 +709,69 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
       return true;
     }
     //ban hanh
-    else if (currentStatus == STATUS.DA_DUYET_LDTC && nextStatus == STATUS.BAN_HANH) {
+    else if (currentStatus == STATUS.DU_THAO && nextStatus == STATUS.BAN_HANH) {
       return true;
     }
     return false;
+  }
+
+  async banHanhQd() {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      let invalid = [];
+      let controls = this.formData.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          invalid.push(name);
+        }
+      }
+      console.log(invalid, 'invalid');
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
+      return;
+    } else {
+      try {
+        this.modal.confirm({
+          nzClosable: false,
+          nzTitle: 'Xác nhận',
+          nzContent: 'Bạn có chắc muốn ban hành quyết định này ?',
+          nzOkText: 'Đồng ý',
+          nzCancelText: 'Không',
+          nzOkDanger: true,
+          nzWidth: 350,
+          nzOnOk: async () => {
+            this.spinner.show();
+            let body = this.formData.value;
+            body.tongSoLuong = this.tongSoLuongTongHop;
+            // body.fileDinhKem = this.fileDinhKem;
+            body.ngayKy = this.datePipe.transform(body.ngayKy, 'yyyy-MM-dd');
+            body.soQd = body.soQd + this.maQuyetDinh;
+            console.log(body, 'body');
+            let res;
+            if (this.idInput) {
+              res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.update(body);
+            } else {
+              res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.create(body);
+            }
+
+            if (res.msg == MESSAGE.SUCCESS) {
+              let resBanHanh = await this.quyetDinhPheDuyetPhuongAnCuuTroService.approve(body);
+              if (resBanHanh.msg == MESSAGE.SUCCESS) {
+                this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                this.quayLai();
+              } else {
+                this.notification.error(MESSAGE.ERROR, resBanHanh.msg);
+              }
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          }
+        });
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.spinner.hide();
+      }
+    }
   }
 
   async updateStatus(status: string, title: string) {

@@ -19,6 +19,7 @@ import {
   ],
   exports: [
     QuyetDinhPheDuyetPhuongAnComponent,
+    ThongTinQuyetDinhPheDuyetPhuongAnComponent,
   ]
 })
 export class QuyetDinhPheDuyetPhuongAnModule {
