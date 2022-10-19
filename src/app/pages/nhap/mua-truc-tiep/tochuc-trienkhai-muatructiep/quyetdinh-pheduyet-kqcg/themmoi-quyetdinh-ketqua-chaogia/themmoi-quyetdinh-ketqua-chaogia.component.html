@@ -23,7 +23,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do' ">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>Quyết định phê duyệt kết quả lựa chọn nhà thầu</span>
+        <span>Quyết định phê duyệt kết quả chào giá</span>
       </div>
     </div>
   </div>
@@ -56,7 +56,7 @@
         <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
-              Số QĐ duyệt KQLCNT
+              Số quyết định
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
