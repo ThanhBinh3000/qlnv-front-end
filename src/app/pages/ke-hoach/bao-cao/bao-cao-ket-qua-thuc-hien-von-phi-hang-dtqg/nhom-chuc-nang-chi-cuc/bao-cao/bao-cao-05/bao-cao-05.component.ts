@@ -317,7 +317,7 @@ export class BaoCao05Component implements OnInit {
     getDinhMuc() {
         const request = {
             loaiDinhMuc: '03',
-            loaiBaoQuan: 'LDM',
+            loaiBaoQuan: 'LD',
             maDvi: this.maDvi,
         }
         this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
@@ -332,6 +332,7 @@ export class BaoCao05Component implements OnInit {
                             item.dieuHanhVp = (item.dieuHanhVp ? item.dieuHanhVp : 0) / 1000;
                             item.ttCaNhanDviTt = (item.ttCaNhanDviTt ? item.ttCaNhanDviTt : 0) / 1000;
                             item.ttCaNhanVp = (item.ttCaNhanVp ? item.ttCaNhanVp : 0) / 1000;
+                            item.tcDhNvCm = (item.tcDhNvCm ? item.tcDhNvCm : 0) / 1000;
                         }
                     })
                 } else {
