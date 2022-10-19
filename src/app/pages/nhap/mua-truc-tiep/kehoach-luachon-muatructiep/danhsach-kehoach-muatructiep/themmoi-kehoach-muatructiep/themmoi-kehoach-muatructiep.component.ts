@@ -108,7 +108,6 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   canCuKhacList: CanCuXacDinh[] = [];
   userInfo: UserLogin;
   maTrinh: string = '';
-
   addModelBaoGia: any = {
     moTa: '',
     taiLieu: [],
@@ -117,7 +116,6 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     moTa: '',
     taiLieu: [],
   };
-
   taiLieuDinhKemList: any[] = [];
   listDataGroup: any[] = [];
   page: number = 1;
@@ -148,6 +146,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       id: [],
       maDvi: [],
       tenDvi: ['', [Validators.required]],
+      diaChiDvi: [],
       loaiHinhNx: ['', [Validators.required]],
       kieuNx: ['', [Validators.required]],
       namKh: ['', [Validators.required]],

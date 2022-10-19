@@ -5,8 +5,7 @@ import { MESSAGE } from "../../../../../../../constants/message";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { cloneDeep, chain } from 'lodash';
 
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
-import { NzSpinComponent } from 'ng-zorro-antd/spin';
+
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachGoiThau } from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
@@ -16,6 +15,7 @@ import {
 import { NzModalService } from "ng-zorro-antd/modal";
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { DialogThemMoiKeHoachMuaTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
+import { DanhSachMuaTrucTiep } from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
 
 
 @Component({
@@ -40,7 +40,7 @@ export class ThongtinDexuatMuattComponent implements OnInit {
     private fb: FormBuilder,
     public globals: Globals,
     private danhMucService: DanhMucService,
-    private dxKhLcntService: DanhSachMuaTrucTiepService,
+    private danhSachMuaTrucTiepService: DanhSachMuaTrucTiepService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
     private modal: NzModalService,
@@ -89,16 +89,18 @@ export class ThongtinDexuatMuattComponent implements OnInit {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        this.listOfData = this.dataInput.soLuongDiaDiemList;
         let res;
-        if (this.dataInput.idDxHdr) {
-          res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
+        if (this.dataInput.idDxuat) {
+          res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.idDxuat);
+          this.listOfData = this.dataInput.soLuongDiaDiemList;
         }
-        else { res = await this.dxKhLcntService.getDetail(this.dataInput.id); }
+        else {
+          res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.id);
+          this.listOfData = this.dataInput.soLuongDiaDiemList;
+        }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data)
         }
@@ -107,9 +109,11 @@ export class ThongtinDexuatMuattComponent implements OnInit {
       } else {
         this.formData.reset();
       }
+
     }
     await this.spinner.hide()
   }
+
   convertListData() {
     this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()
@@ -128,9 +132,6 @@ export class ThongtinDexuatMuattComponent implements OnInit {
     if (resNv.msg == MESSAGE.SUCCESS) {
       this.listNguonVon = resNv.data;
     }
-
-
-
   }
 
   expandSet = new Set<number>();
@@ -142,9 +143,7 @@ export class ThongtinDexuatMuattComponent implements OnInit {
     }
   }
 
-
-  themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
-
+  themMoiSoLuongDiaDiem(data?: DanhSachMuaTrucTiep, index?: number) {
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm nhập kho',
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,

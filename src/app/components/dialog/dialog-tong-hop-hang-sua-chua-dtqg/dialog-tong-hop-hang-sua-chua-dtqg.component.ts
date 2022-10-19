@@ -6,10 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dialog-tong-hop-hang-sua-chua-dtqg.component.scss']
 })
 export class DialogTongHopHangSuaChuaDtqgComponent implements OnInit {
+  maTt: any;
 
   constructor() { }
 
   ngOnInit(): void {
+    this.maTt = "/CCDTNT-KT"
   }
 
 }
