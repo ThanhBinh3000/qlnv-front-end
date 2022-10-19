@@ -14,7 +14,7 @@
         </div>
         <div nz-col nzSpan="8">
           <label class="search__label"> Tên đơn vị </label>
-          <nz-select [(ngModel)]="searchFilter.maDvi">
+          <nz-select [(ngModel)]="searchFilter.tenDvi">
             <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
         </div>

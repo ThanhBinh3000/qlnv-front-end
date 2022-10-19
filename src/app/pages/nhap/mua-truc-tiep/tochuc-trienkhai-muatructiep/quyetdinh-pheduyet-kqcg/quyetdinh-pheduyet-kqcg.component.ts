@@ -39,20 +39,17 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
     namKh: dayjs().get('year'),
     ngayKy: '',
     maDvi: '',
+    tenDvi: '',
   };
 
   filterTable: any = {
-    soQd: '',
+    soQdPdCg: '',
     ngayKy: '',
-    trichYeu: '',
-    tenGthau: '',
-    statusGT: '',
-    tenNhaThau: '',
-    lyDoHuy: '',
-    donGiaTrcVat: '',
-    tenHdong: '',
-    tgianThienHd: '',
-    statusConvert: '',
+    tenDvi: '',
+    soQdPdKq: '',
+    tenLoaiVthh: '',
+    tenCloaiVthh: '',
+    tenTrangThai: '',
   };
 
   dataTableAll: any[] = [];
@@ -117,10 +114,9 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
         page: this.page - 1,
 
       },
-
-
       namKh: this.searchFilter.namKh,
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI,
+      tenDvi: this.searchFilter.tenDvi,
     };
     let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -155,8 +151,9 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
-    this.searchFilter.maDvi = null;
+    this.searchFilter.tenDvi = null;
     this.searchFilter.ngayKy = null;
+    this.searchFilter.maDvi = null;
     this.search();
   }
 
@@ -359,17 +356,13 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQd: '',
-      ngayTongHop: '',
-      trichYeu: '',
-      tenGthau: '',
-      statusGT: '',
-      tenNhaThau: '',
-      lyDoHuy: '',
-      donGiaTrcVat: '',
-      tenHdong: '',
-      tgianThienHd: '',
-      statusConvert: '',
+      soQdPdCg: '',
+      ngayKy: '',
+      tenDvi: '',
+      soQdPdKq: '',
+      tenLoaiVthh: '',
+      tenCloaiVthh: '',
+      tenTrangThai: '',
     }
   }
 }

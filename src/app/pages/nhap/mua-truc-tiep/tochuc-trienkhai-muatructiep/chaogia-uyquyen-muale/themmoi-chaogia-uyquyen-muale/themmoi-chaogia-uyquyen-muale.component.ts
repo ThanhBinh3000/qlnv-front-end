@@ -81,7 +81,6 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
   }
 
   taiLieuDinhKemList: any[] = [];
-  idDtl: number = 0;
   STATUS = STATUS
   itemRow: any = {};
   itemRowUpdate: any = {};
@@ -124,7 +123,6 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
         const dataFilterUser = dataDetail.hhQdPheduyetKhMttDxList.filter(item => item.maDvi == this.userInfo.MA_DVI);
         const dataCurrent = dataFilterUser[0];
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
-        this.idDtl = dataCurrent.id;
         this.formData.patchValue({
           trangThaiTkhai: dataCurrent.trangThaiTkhai,
           tenTrangThaiTkhai: dataCurrent.tenTrangThaiTkhai
@@ -138,7 +136,6 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
-        this.idDtl = dataDetail.id;
         this.listOfData = dataDetail.hhChiTietTTinChaoGiaList;
         this.formData.patchValue({
           trangThaiTkhai: dataDetail.trangThaiTkhai,
