@@ -86,13 +86,55 @@
                 <tr class="search-table">
                     <th></th>
                     <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="tableFilter.maDn"
+                                (input)="filterInTable('maDnghi',tableFilter.maDn, false)" size="small" />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </th>
+                    <th>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="tableFilter.qdChiTieu"
+                                (input)="filterInTable('soQdChiTieu',tableFilter.qdChiTieu, false)" size="small" />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </th>
+                    <th>
+                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm"
+                            [(ngModel)]="tableFilter.nguonBcao"
+                            (ngModelChange)="filterInTable('loaiDnghi',tableFilter.nguonBcao, false)">
+                            <nz-option *ngFor="let item of nguonBcaos" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                            </nz-option>
+                        </nz-select>
+                    </th>
+                    <th>
+                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayTao"
+                            (ngModelChange)="filterInTable('ngayTao',tableFilter.ngayTao, true)">
+                        </nz-date-picker>
+                    </th>
+                    <th>
+                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayTrinh"
+                            (ngModelChange)="filterInTable('ngayTrinh',tableFilter.ngayTrinh, true)">
+                        </nz-date-picker>
+                    </th>
+                    <th>
+                        <nz-date-picker nzFormat="dd/MM/yyyy" [(ngModel)]="tableFilter.ngayPheDuyet"
+                            (ngModelChange)="filterInTable('ngayPheDuyet',tableFilter.ngayPheDuyet, true)">
+                        </nz-date-picker>
+                    </th>
+                    <th>
+                        <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm"
+                            [(ngModel)]="tableFilter.trangThai"
+                            (ngModelChange)="filterInTable('trangThai',tableFilter.trangThai, false)">
+                            <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                            </nz-option>
+                        </nz-select>
+                    </th>
                     <th></th>
                 </tr>
             </thead>
