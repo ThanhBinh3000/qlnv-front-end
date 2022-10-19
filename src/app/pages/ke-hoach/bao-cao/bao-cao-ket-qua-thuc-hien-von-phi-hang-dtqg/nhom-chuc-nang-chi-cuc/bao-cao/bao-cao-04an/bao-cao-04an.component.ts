@@ -222,6 +222,7 @@ export class BaoCao04anComponent implements OnInit {
                             item.dieuHanhVp = (item.dieuHanhVp ? item.dieuHanhVp : 0) / 1000;
                             item.ttCaNhanDviTt = (item.ttCaNhanDviTt ? item.ttCaNhanDviTt : 0) / 1000;
                             item.ttCaNhanVp = (item.ttCaNhanVp ? item.ttCaNhanVp : 0) / 1000;
+                            item.tcDhNvCm = (item.tcDhNvCm ? item.tcDhNvCm : 0) / 1000;
                         }
                     })
                     console.log(this.dinhMucs);

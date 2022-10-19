@@ -181,11 +181,11 @@ export class PhuLuc2Component implements OnInit {
       res => {
         if (res.statusCode == 0) {
           this.dsDinhMucN = res.data;
-          // this.dsDinhMucN.forEach(item => {
-          //   if (!item.loaiVthh.startsWith('02')) {
-          //     item.tongDmuc = divNumber(item.tongDmuc, 1000);
-          //   }
-          // })
+          this.dsDinhMucN.forEach(item => {
+            if (!item.loaiVthh.startsWith('02')) {
+              item.tongDmuc = divNumber(item.tongDmuc, 1000);
+            }
+          })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -204,11 +204,11 @@ export class PhuLuc2Component implements OnInit {
       res => {
         if (res.statusCode == 0) {
           this.dsDinhMucX = res.data;
-          // this.dsDinhMucX.forEach(item => {
-          //   if (!item.loaiVthh.startsWith('04')) {
-          //     item.tongDmuc = divNumber(item.tongDmuc, 1000);
-          //   }
-          // })
+          this.dsDinhMucX.forEach(item => {
+            if (!item.loaiVthh.startsWith('04')) {
+              item.tongDmuc = divNumber(item.tongDmuc, 1000);
+            }
+          })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -933,8 +933,8 @@ export class PhuLuc2Component implements OnInit {
     if (this.editCache[id].data.thienDinhMuc == null) {
       this.editCache[id].data.thienDinhMuc = 0
     }
+    this.editCache[id].data.thienThanhTien = this.editCache[id].data.thienCong * this.editCache[id].data.thienDinhMuc;
     this.editCache[id].data.thienCong = this.editCache[id].data.thienSluongTteThien + this.editCache[id].data.thienSluongUocThien;
-    this.editCache[id].data.thienThanhTien = (this.editCache[id].data.thienCong * this.editCache[id].data.thienDinhMuc) / 1000;
     this.editCache[id].data.ncauKphi = this.editCache[id].data.thienThanhTien + this.editCache[id].data.kphiThieuNtruoc;
   }
 
@@ -951,10 +951,9 @@ export class PhuLuc2Component implements OnInit {
     return displayNumber(num);
   }
 
-  formatterPercent = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : null;
+  formatterPercent = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
   parserPercent = value => value.replace(/\$\s?|(,*)/g, '')
-
 
   viewDetail(data) {
     console.log(data);

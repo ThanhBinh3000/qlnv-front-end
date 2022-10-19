@@ -203,11 +203,11 @@ export class PhuLuc6Component implements OnInit {
       res => {
         if (res.statusCode == 0) {
           this.dsDinhMucN = res.data;
-          // this.dsDinhMucN.forEach(item => {
-          //   if (!item.loaiVthh.startsWith('04')) {
-          //     item.tongDmuc = divNumber(item.tongDmuc, 1000);
-          //   }
-          // })
+          this.dsDinhMucN.forEach(item => {
+            if (!item.loaiVthh.startsWith('04')) {
+              item.tongDmuc = divNumber(item.tongDmuc, 1000);
+            }
+          })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -226,11 +226,11 @@ export class PhuLuc6Component implements OnInit {
       res => {
         if (res.statusCode == 0) {
           this.dsDinhMucX = res.data;
-          // this.dsDinhMucX.forEach(item => {
-          //   if (!item.loaiVthh.startsWith('04')) {
-          //     item.tongDmuc = divNumber(item.tongDmuc, 1000);
-          //   }
-          // })
+          this.dsDinhMucX.forEach(item => {
+            if (!item.loaiVthh.startsWith('04')) {
+              item.tongDmuc = divNumber(item.tongDmuc, 1000);
+            }
+          })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -1021,7 +1021,7 @@ export class PhuLuc6Component implements OnInit {
     this.editCache[id].data.kphiChuaQtoanCong = Number(this.editCache[id].data.kphiChuaQtoanKpTkiem) + Number(this.editCache[id].data.kphiChuaQtoanKpTchi);
     this.editCache[id].data.chenhLech = Number(this.editCache[id].data.kphiTtien) - Number(this.editCache[id].data.cphiTcong);
     this.editCache[id].data.cphiTcong = Number(this.editCache[id].data.cphiNtruoc) + Number(this.editCache[id].data.cphiNnay);
-    this.editCache[id].data.kphiTtien = (Number(this.editCache[id].data.slHangTte) * Number(this.editCache[id].data.kphiDmuc)) / 1000;
+    this.editCache[id].data.kphiTtien = Number(this.editCache[id].data.slHangTte) * Number(this.editCache[id].data.kphiDmuc);
   }
 
   // getDsDinhMucN() {

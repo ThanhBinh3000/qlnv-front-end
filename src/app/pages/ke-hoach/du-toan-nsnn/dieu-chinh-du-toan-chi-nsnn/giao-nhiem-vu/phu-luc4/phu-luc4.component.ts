@@ -193,11 +193,11 @@ export class PhuLuc4Component implements OnInit {
       res => {
         if (res.statusCode == 0) {
           this.dsDinhMuc = res.data;
-          // this.dsDinhMuc.forEach(item => {
-          //   if (!item.loaiVthh.startsWith('04')) {
-          //     item.tongDmuc = divNumber(item.tongDmuc, 1000);
-          //   }
-          // })
+          this.dsDinhMuc.forEach(item => {
+            if (!item.loaiVthh.startsWith('04')) {
+              item.tongDmuc = divNumber(item.tongDmuc, 1000);
+            }
+          })
         } else {
           this.notification.error(MESSAGE.ERROR, res?.msg);
         }
@@ -389,7 +389,7 @@ export class PhuLuc4Component implements OnInit {
       const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
       const nho = this.lstCtietBcao[item].stt;
       this.lstCtietBcao.forEach(item => {
-        item.stt.replace(nho, str);
+        item.stt = item.stt.replace(nho, str);
       })
     })
   }
@@ -929,7 +929,7 @@ export class PhuLuc4Component implements OnInit {
       this.editCache[id].data.dinhMuc = 0
     }
     this.editCache[id].data.slBquanTcong = this.editCache[id].data.slBquanTte + this.editCache[id].data.slBquanUocThien;
-    this.editCache[id].data.thanhTien = (this.editCache[id].data.slBquanTcong * this.editCache[id].data.dinhMuc) / 1000;
+    this.editCache[id].data.thanhTien = this.editCache[id].data.slBquanTcong * this.editCache[id].data.dinhMuc;
     this.editCache[id].data.tongNcauKphi = this.editCache[id].data.thanhTien + this.editCache[id].data.dtoanThieuNTruoc;
     this.editCache[id].data.kphiTcong = this.editCache[id].data.kphiQtoanNtruoc + this.editCache[id].data.kphiDtoanGiaoTnam + this.editCache[id].data.kphiPvcTcDchuyen;
     this.editCache[id].data.dtoanDchinh = this.editCache[id].data.tongNcauKphi - this.editCache[id].data.kphiTcong;
