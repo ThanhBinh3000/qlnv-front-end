@@ -1,17 +1,10 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import { cloneDeep, g } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import {
-  DialogCanCuKQLCNTComponent
-} from 'src/app/components/dialog/dialog-can-cu-kqlcnt/dialog-can-cu-kqlcnt.component';
-import {
-  DialogDanhSachHangHoaComponent
-} from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import {
   DialogThongTinPhuLucBangGiaHopDongComponent
 } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-bang-gia-hop-dong/dialog-thong-tin-phu-luc-bang-gia-hop-dong.component';
@@ -23,17 +16,12 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import {
   dauThauGoiThauService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/dauThauGoiThau.service';
-import { DonviService } from 'src/app/services/donvi.service';
 import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
 import { DonviLienQuanService } from 'src/app/services/donviLienquan.service';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import {
-  QuyetDinhPheDuyetKetQuaLCNTService
-} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service';
 import { STATUS } from "../../../../../../constants/status";
 import { HelperService } from "../../../../../../services/helper.service";
 import { ThongTinPhuLucHopDongService } from "../../../../../../services/thongTinPhuLucHopDong.service";
@@ -44,8 +32,7 @@ import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import {
   DialogThemChiCucComponent
 } from "../../../../../../components/dialog/dialog-them-chi-cuc/dialog-them-chi-cuc.component";
-import { HopdongPhulucHopdongService } from 'src/app/services/hopdong-phuluc-hopdong.service';
-
+import { QuyetDinhPheDuyetKetQuaChaoGiaMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ket-qua-chao-gia-mtt.service';
 interface DonviLienQuanModel {
   id: number;
   tenDvi: string;
@@ -63,36 +50,32 @@ interface DonviLienQuanModel {
   templateUrl: './themmoi-hopdong-phuluc.component.html',
   styleUrls: ['./themmoi-hopdong-phuluc.component.scss']
 })
+
 export class ThemmoiHopdongPhulucComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean = false;
   @Input() isQuanLy: boolean = false;
   @Input() typeVthh: string;
-  @Input() idMuaTt: number;
+  @Input() idGoiThau: number;
   @Input() dataBinding: any;
   @Output()
   showListEvent = new EventEmitter<any>();
-
   loaiVthh: string;
   loaiStr: string;
   maVthh: string;
   routerVthh: string;
   userInfo: UserLogin;
-
   detail: any = {};
   detailChuDauTu: any = {};
   fileDinhKem: Array<FileDinhKem> = [];
-
   optionsDonVi: any[] = [];
   optionsDonViShow: any[] = [];
-
   listLoaiHopDong: any[] = [];
   listGoiThau: any[] = [];
   dataTable: any[] = [];
   listDviLquan: any[] = [];
   isViewPhuLuc: boolean = false;
   idPhuLuc: number = 0;
-
   isVatTu: boolean = false;
   STATUS = STATUS;
   formData: FormGroup;
@@ -113,7 +96,6 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
   diaDiemNhapListCuc = [];
   donGiaCore: number = 0;
   tongSlHang: number = 0;
-  //namKhoach: number = 0;
   listNam: any[] = [];
 
   constructor(
@@ -122,14 +104,14 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
     private modal: NzModalService,
-    private hopdongPhulucHopdongService: HopdongPhulucHopdongService,
+    private hopDongService: ThongTinHopDongService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
     private spinner: NgxSpinnerService,
     private dauThauGoiThauService: dauThauGoiThauService,
     private uploadFileService: UploadFileService,
     private donviLienQuanService: DonviLienQuanService,
-    private ketQuaLcntService: QuyetDinhPheDuyetKetQuaLCNTService,
+    private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
     private thongTinPhuLucHopDongService: ThongTinPhuLucHopDongService,
     private helperService: HelperService,
     private _modalService: NzModalService
@@ -138,11 +120,11 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
       {
         id: [null],
         maHdong: [null, [Validators.required]],
-        soQdKqLcnt: [null, [Validators.required]],
+        soQdPdCg: [null, [Validators.required]],
         idQdKqLcnt: [null, [Validators.required]],
         ngayQdKqLcnt: [null],
         soQdPdKhlcnt: [null],
-        idMuaTt: [null, [Validators.required]],
+        idGoiThau: [null, [Validators.required]],
         tenGoiThau: [null, [Validators.required]],
         tenHd: [null, [Validators.required]],
         ngayKy: [null],
@@ -257,7 +239,7 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
         "page": 0
       },
     }
-    let res = await this.ketQuaLcntService.search(body);
+    let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listKqLcnt = res.data.content.filter(item => item.trangThaiHd != STATUS.HOAN_THANH_CAP_NHAT);
     } else {
@@ -268,7 +250,7 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
 
   async loadChiTiet(id) {
     if (id > 0) {
-      let res = await this.hopdongPhulucHopdongService.getDetail(id);
+      let res = await this.hopDongService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           const detail = res.data;
@@ -304,9 +286,9 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
     body.detail = this.dataTable;
     let res = null;
     if (this.formData.get('id').value) {
-      res = await this.hopdongPhulucHopdongService.update(body);
+      res = await this.hopDongService.update(body);
     } else {
-      res = await this.hopdongPhulucHopdongService.create(body);
+      res = await this.hopDongService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isKy) {
@@ -326,7 +308,6 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
     }
     this.spinner.hide();
   }
-
 
   redirectPhuLuc(id) {
     this.isViewPhuLuc = true;
@@ -379,12 +360,12 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
 
   async bindingDataKqLcnt(idKqLcnt) {
     await this.spinner.show();
-    let res = await this.ketQuaLcntService.getDetail(idKqLcnt);
+    let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.getDetail(idKqLcnt);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       let dataCurrentLogin = data.qdKhlcnt.hhQdKhlcntDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
       console.log(data)
-      this.listGoiThau = dataCurrentLogin[0].dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idMuaTt).indexOf(item.id) < 0));
+      this.listGoiThau = dataCurrentLogin[0].dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
       this.formData.patchValue({
         soQdKqLcnt: data.soQd,
         idQdKqLcnt: data.id,
@@ -427,7 +408,7 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
           this.dataTable.push(data);
         }
         this.formData.patchValue({
-          idMuaTt: data.id,
+          idGoiThau: data.id,
           tenGoiThau: data.goiThau,
           tenNhaThau: data.tenNhaThau,
           diaChiNhaThau: data.diaChiNhaThau,
@@ -444,7 +425,6 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
   }
 
   expandSet = new Set<number>();
-
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id);
@@ -454,7 +434,7 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
   }
 
   async onChangeGoiThau(event) {
-    if (event && this.idMuaTt !== event) {
+    if (event && this.idGoiThau !== event) {
       let res = await this.dauThauGoiThauService.chiTietByGoiThauId(event);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
@@ -541,7 +521,7 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
           id: this.id,
           trangThai: STATUS.DA_KY,
         }
-        let res = await this.hopdongPhulucHopdongService.approve(
+        let res = await this.hopDongService.approve(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {

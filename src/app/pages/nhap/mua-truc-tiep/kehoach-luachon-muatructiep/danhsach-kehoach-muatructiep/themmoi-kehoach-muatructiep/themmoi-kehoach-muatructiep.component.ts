@@ -1,5 +1,5 @@
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, Pipe, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { chain } from 'lodash';
@@ -125,6 +125,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   indeterminate = false;
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
+  datePipe = new DatePipe('en-US');
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -365,10 +366,13 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       console.log(this.formData);
       return;
     }
-    let pipe = new DatePipe('en-US');
+
     let body = this.formData.value;
     body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
     body.fileDinhkems = this.fileDinhKem;
+    body.ngayTao = this.datePipe.transform(body.ngayTao, 'yyyy-MM-dd');
+    body.tgianKthuc = this.datePipe.transform(body.tgianKthuc, 'yyyy-MM-dd ');
+    body.tgianMkho = this.datePipe.transform(body.tgianMkho, 'yyyy-MM-dd ')
     body.soLuongDiaDiemList = this.listOfData;
     body.ccXdgList = [...this.canCuXacDinhList, ...this.canCuKhacList];
     let res = null;
