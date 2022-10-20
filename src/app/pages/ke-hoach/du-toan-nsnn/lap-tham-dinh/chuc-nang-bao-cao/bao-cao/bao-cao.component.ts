@@ -316,6 +316,7 @@ export class BaoCaoComponent implements OnInit {
 
 	//upload file
 	async uploadFile(file: File) {
+		debugger
 		// day file len server
 		const upfile: FormData = new FormData();
 		upfile.append('file', file);
