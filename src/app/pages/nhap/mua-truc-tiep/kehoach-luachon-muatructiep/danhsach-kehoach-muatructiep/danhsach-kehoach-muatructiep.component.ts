@@ -246,7 +246,7 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     this.searchFilter.namKh = dayjs().get('year');
     this.searchFilter.soDxuat = null;
     this.searchFilter.ngayTao = null;
-    this.searchFilter.ngayPduyet
+    this.searchFilter.ngayPduyet = null;
     this.searchFilter.trichYeu = null;
     this.searchFilter.loaiVthh = null;
     this.searchFilter.maDvi = null;

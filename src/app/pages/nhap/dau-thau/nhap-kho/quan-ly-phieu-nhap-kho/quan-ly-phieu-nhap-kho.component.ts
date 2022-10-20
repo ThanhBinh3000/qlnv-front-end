@@ -54,6 +54,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   selectedId: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
+  idQdGiaoNvNh : number = 0;
 
   allChecked = false;
   indeterminate = false;
@@ -89,8 +90,6 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
         this.isTatCa = true;
       }
       await Promise.all([
-        // this.loadDiemKho(),
-        // this.loadNganLo(),
         this.search(),
       ]);
       this.spinner.hide();
@@ -112,87 +111,12 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     }
   }
 
-  updateAllChecked(): void {
-    this.indeterminate = false;
-    if (this.allChecked) {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
-            item.checked = true;
-          }
-        });
-      }
-    } else {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-    }
-  }
-
-  updateSingleChecked(): void {
-    if (this.dataTable.every(item => !item.checked)) {
-      this.allChecked = false;
-      this.indeterminate = false;
-    } else if (this.dataTable.every(item => item.checked)) {
-      this.allChecked = true;
-      this.indeterminate = false;
-    } else {
-      this.indeterminate = true;
-    }
-  }
-
-  async loadNhaKho(diemKhoId: any) {
-    if (diemKhoId && diemKhoId > 0) {
-      let body = {
-        "diemKhoId": diemKhoId,
-        "maNhaKho": null,
-        "paggingReq": {
-          "limit": 1000,
-          "page": 1
-        },
-        "str": null,
-        "tenNhaKho": null,
-        "trangThai": null
-      };
-      let res = await this.tinhTrangKhoHienThoiService.nhaKhoGetList(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data && res.data.content) {
-          this.listNhaKho = res.data.content;
-        }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }
-  }
-
-  async loadNganLo() {
-    let body = {
-      "maNganLo": null,
-      "nganKhoId": null,
-      "paggingReq": {
-        "limit": 1000,
-        "page": 1
-      },
-      "str": null,
-      "tenNganLo": null,
-      "trangThai": null
-    };
-    let res = await this.tinhTrangKhoHienThoiService.nganLoGetList(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content) {
-        this.listNganLo = res.data.content;
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  redirectToChiTiet(isView: boolean, id: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh? : number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
+
   }
 
   async showList() {
@@ -251,7 +175,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuNhapKhoService.deleteData(item.id).then((res) => {
+          this.quanLyPhieuNhapKhoService.delete({id : item.id}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -273,6 +197,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   }
 
   async search() {
+    await this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
       paggingReq: {
@@ -292,6 +217,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    await this.spinner.hide();
   }
 
   export() {
@@ -324,78 +250,6 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
       }
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    }
-  }
-
-  deleteSelect() {
-    let dataDelete = [];
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.forEach((item) => {
-        if (item.checked) {
-          dataDelete.push(item.id);
-        }
-      });
-    }
-    if (dataDelete && dataDelete.length > 0) {
-      this.modal.confirm({
-        nzClosable: false,
-        nzTitle: 'Xác nhận',
-        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
-        nzOkText: 'Đồng ý',
-        nzCancelText: 'Không',
-        nzOkDanger: true,
-        nzWidth: 310,
-        nzOnOk: async () => {
-          this.spinner.show();
-          try {
-            let res = await this.quanLyPhieuNhapKhoService.deleteMultiple({ ids: dataDelete });
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-              await this.search();
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-            this.spinner.hide();
-          } catch (e) {
-            console.log('error: ', e);
-            this.spinner.hide();
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          }
-        },
-      });
-    }
-    else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
-    }
-  }
-
-  filterInTable(key: string, value: string) {
-    if (value && value != '') {
-      this.dataTable = [];
-      let temp = [];
-      if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
-      }
-      this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
-      this.dataTable = cloneDeep(this.dataTableAll);
-    }
-  }
-
-  clearFilterTable() {
-    this.filterTable = {
-      soQuyetDinhNhap: '',
-      soPhieu: '',
-      ngayNhapKho: '',
-      tenDiemKho: '',
-      tenNhaKho: '',
-      tenNganLo: '',
-      tenTrangThai: '',
     }
   }
 
