@@ -26,7 +26,7 @@ export const ROUTE_LIST_CAP_VON: Array<ChiTietMenu> = [
 	},
 	{
 		icon: 'htvbdh_tcdt_chitieukehoachnam',
-		title: 'Cấp phi chi nghiệp vụ DTQG',
+		title: 'Cấp phí chi nghiệp vụ DTQG',
 		url: `/${MAIN_ROUTE_CAPVON}/${CAP_PHI_CHI}`,
 		dropdown: 'giao-chi-tieu',
 		idHover: 'giao-chi-tieu',
