@@ -2,19 +2,19 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
-import {UserLogin} from "../../../../models/userlogin";
-import {QuyHoachKho} from "../../../../models/QuyHoachVaKeHoachKhoTang";
+import {UserLogin} from "../../../../../models/userlogin";
+import {QuyHoachKho} from "../../../../../models/QuyHoachVaKeHoachKhoTang";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {UserService} from "../../../../services/user.service";
-import {Globals} from "../../../../shared/globals";
-import {DanhMucService} from "../../../../services/danhmuc.service";
-import {DonviService} from "../../../../services/donvi.service";
-import {QuyHoachKhoService} from "../../../../services/quy-hoach-kho.service";
+import {UserService} from "../../../../../services/user.service";
+import {Globals} from "../../../../../shared/globals";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {DonviService} from "../../../../../services/donvi.service";
+import {QuyHoachKhoService} from "../../../../../services/quy-hoach-kho.service";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {HelperService} from "../../../../services/helper.service";
+import {HelperService} from "../../../../../services/helper.service";
 import dayjs from "dayjs";
-import {MESSAGE} from "../../../../constants/message";
-import {STATUS} from "../../../../constants/status";
+import {MESSAGE} from "../../../../../constants/message";
+import {STATUS} from "../../../../../constants/status";
 
 
 @Component({

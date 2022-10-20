@@ -15,40 +15,30 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
-import {DanhMucService} from "../../../services/danhmuc.service";
-import {DonviService} from "../../../services/donvi.service";
-import {QuanLyDanhSachHangHongHocService} from "../../../services/quanLyDanhSachHangHongHoc.service";
-import {DANH_MUC_LEVEL} from "../../luu-kho/luu-kho.constant";
-import {
-  DialogDanhSachHangHoaComponent
-} from "../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
-import {
-  DialogQuyetDinhGiaoChiTieuComponent
-} from "../../../components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component";
-import {
-  DialogTongHopHangSuaChuaDtqgComponent
-} from "../../../components/dialog/dialog-tong-hop-hang-sua-chua-dtqg/dialog-tong-hop-hang-sua-chua-dtqg.component";
-
+import {DanhMucService} from "../../../../services/danhmuc.service";
+import {DonviService} from "../../../../services/donvi.service";
+import {QuyHoachKhoService} from "../../../../services/quy-hoach-kho.service";
 @Component({
-  selector: 'app-danh-sach-hang-dtqg',
-  templateUrl: './danh-sach-hang-dtqg.component.html',
-  styleUrls: ['./danh-sach-hang-dtqg.component.scss']
+  selector: 'app-qd-sua-chua-dtqg',
+  templateUrl: './qd-sua-chua-dtqg.component.html',
+  styleUrls: ['./qd-sua-chua-dtqg.component.scss']
 })
-export class DanhSachHangDtqgComponent implements OnInit {
+export class QdSuaChuaDtqgComponent implements OnInit {
 
   @Input() typeVthh: string;
   @Input() type: string;
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
+  tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
+  danhSachNam: any[] = [];
   searchFilter = {
-    maDonVi: '',
-    maVTHH: '',
-    tenVTHH: '',
-    tenCLHH: '',
-    ngayBaoCao: '',
-    maCLHH: ''
+    maDanhSach: '',
+    maDvi: '',
+    loaiVthh: '',
+    cloaiVthh: '',
+    ngayTao: ''
   };
 
   filterTable: any = {
@@ -70,14 +60,11 @@ export class DanhSachHangDtqgComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   userInfo: UserLogin;
-  danhSachChiCuc: any[]= [];
-  listLoaiHangHoa: any[] = [];
-  listChungLoaiHangHoa:any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private hongHocService :QuanLyDanhSachHangHongHocService,
+    private quyHoachKhoService: QuyHoachKhoService,
     private dmService: DanhMucService,
     private dmDviService: DonviService,
     private modal: NzModalService,
@@ -87,36 +74,25 @@ export class DanhSachHangDtqgComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    this.userInfo = this.userService.getUserLogin(),
-    await Promise.all([
-    await this.search(),
-    await this.loaiVTHHGetAll(),
-    await this.loadDanhSachChiCuc(this.userInfo.MA_DVI)
-    ])
-    this.spinner.hide();
-  }
-  expandSet = new Set<number>();
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
-    }
+      this.userInfo = this.userService.getUserLogin();
+      for (let i = -3; i < 23; i++) {
+        this.danhSachNam.push({
+          value: dayjs().get('year') - i,
+          text: dayjs().get('year') - i,
+        });
+      }
+      this.spinner.hide();
   }
 
   async search() {
     this.spinner.show();
     let body = {
-      denNgay: this.searchFilter.ngayBaoCao[1],
-      maVTHH:  this.searchFilter.maVTHH,
-      maCLHH:  this.searchFilter.maCLHH,
-      tuNgay: this.searchFilter.ngayBaoCao[0],
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
     };
-    let res = await this.hongHocService.search(body);
+    let res = await this.quyHoachKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -134,45 +110,6 @@ export class DanhSachHangDtqgComponent implements OnInit {
     }
     this.spinner.hide();
   }
-
-  async changeLoaiHangHoa(id: any) {
-    if (id && id > 0) {
-      let loaiHangHoa = this.listLoaiHangHoa.filter(item => item.ma === id);
-      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
-    }
-  }
-
-  async loaiVTHHGetAll() {
-    try {
-      await this.dmService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-        if (hangHoa.msg == MESSAGE.SUCCESS) {
-          hangHoa.data.forEach((item) => {
-            if (item.cap === "1" && item.ma != '01') {
-              this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
-            } else {
-              this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
-            }
-          })
-        }
-      })
-    } catch (error) {
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-
-
-  async loadDanhSachChiCuc(maCuc) {
-    const body = {
-      maDviCha: maCuc,
-      trangThai: '01',
-    };
-
-    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
-    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-  }
-
 
   async changePageIndex(event) {
     this.spinner.show();
@@ -246,12 +183,11 @@ export class DanhSachHangDtqgComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      maDonVi: '',
-      maVTHH: '',
-      tenVTHH: '',
-      tenCLHH: '',
-      ngayBaoCao: '',
-      maCLHH:''
+      maDanhSach: '',
+      maDvi: '',
+      loaiVthh: '',
+      cloaiVthh: '',
+      ngayTao: ''
     };
     this.search();
   }
@@ -272,7 +208,7 @@ export class DanhSachHangDtqgComponent implements OnInit {
             id: item.id,
             maDvi: '',
           };
-          this.hongHocService.delete(body).then(async () => {
+          this.quyHoachKhoService.delete(body).then(async () => {
             this.notification.success(MESSAGE.ERROR, MESSAGE.DELETE_SUCCESS);
             await this.search();
             this.spinner.hide();
@@ -293,7 +229,7 @@ export class DanhSachHangDtqgComponent implements OnInit {
         let body = {
 
         }
-        this.hongHocService
+        this.quyHoachKhoService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'quyet-dinh-dieu-chinh-quy-hoach-kho.xlsx'),
@@ -328,20 +264,4 @@ export class DanhSachHangDtqgComponent implements OnInit {
     }
   }
 
-  openDialog() {
-    const modalQD = this.modal.create({
-      nzTitle: 'CHỐT DANH SÁCH HÀNG DTQG CẦN SỬA CHỮA',
-      nzContent: DialogTongHopHangSuaChuaDtqgComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-
-      },
-    });
-    modalQD.afterClose.subscribe((data) => {
-
-    });
-  }
 }

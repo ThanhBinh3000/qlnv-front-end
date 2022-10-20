@@ -155,6 +155,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin(),
       this.maDx = '/CDTVP-KH&QLHDT',
       this.loadDsNam(),
+      await this.getDataChiTieu(),
       this.loadDsLoaiGia(),
       this.loadDsPhuongAnGia(),
       this.loadDsHangHoaPag(),
@@ -162,9 +163,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.loadDsVthh(),
       this.getDataDetail(this.idInput)
     ])
-    if (this.isGiaMuaToiDa) {
-      await this.getDataChiTieu()
-    }
     this.spinner.hide();
   }
 
@@ -532,12 +530,14 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async getDataChiTieu() {
-    let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(+this.formData.get('namKeHoach').value)
-    if (res2.msg == MESSAGE.SUCCESS) {
-      const dataChiTieu = res2.data;
-      this.formData.patchValue({
-        soCanCu: dataChiTieu.soQuyetDinh,
-      });
+    if (this.isGiaMuaToiDa) {
+      let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(+this.formData.get('namKeHoach').value)
+      if (res2.msg == MESSAGE.SUCCESS) {
+        const dataChiTieu = res2.data;
+        this.formData.patchValue({
+          soCanCu: dataChiTieu.soQuyetDinh,
+        });
+      }
     }
   }
 

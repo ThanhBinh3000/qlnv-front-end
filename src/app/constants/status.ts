@@ -42,6 +42,9 @@ export enum STATUS {
   THANH_CONG = '40',
   THAT_BAI = '41',
   TRUOT_THAU = '42',
+  CHUA_CHOT = '43',
+  DA_CHOT = '44',
+  DA_DUYET = '45'
 }
 
 export enum LoaiTaiLieu {
