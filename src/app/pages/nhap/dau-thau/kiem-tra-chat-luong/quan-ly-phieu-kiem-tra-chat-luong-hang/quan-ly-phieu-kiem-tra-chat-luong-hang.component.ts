@@ -137,6 +137,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   }
 
   async search() {
+    await this.spinner.show();
     let body = {
       "paggingReq": {
         "limit": this.pageSize,
@@ -157,6 +158,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    await this.spinner.hide();
   }
 
   async changePageIndex(event) {
@@ -369,6 +371,15 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       this.expandSet.add(id);
     } else {
       this.expandSet.delete(id);
+    }
+  }
+
+  expandSet2 = new Set<number>();
+  onExpandChange2(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet2.add(id);
+    } else {
+      this.expandSet2.delete(id);
     }
   }
 }

@@ -4,10 +4,22 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <button
+      *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) && userService.isCuc()"
+      type="button" class="btn btn-sub do" (click)="tuChoi()">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      <span>Từ chối</span>
+    </button>
+    <button
+      *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) && userService.isCuc() "
+      type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Duyệt</span>
+    </button>
     <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isViewDetail" type="button"
       class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
-      <span>Ban hành</span>
+      <span>Lưu và gửi duyệt</span>
     </button>
     <button *ngIf="formData.value.trangThai == STATUS.DU_THAO " type="
           button" class="btn btn-main" (click)="save()">
@@ -20,13 +32,17 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do' ">
+        <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do' ">
           {{ formData.value.tenTrangThai }}
         </span>
         <span>Quyết định phê duyệt kết quả chào giá</span>
       </div>
     </div>
   </div>
+  <nz-alert class="mg-t-10"
+    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP " nzShowIcon
+    nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.ldoTuchoi}}">
+  </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16 ">
     <div class="header header-green-background mg-t-16">
       <div class="header-text">
@@ -60,7 +76,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
-                <nz-input-number formControlName="soQdPdKq" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                <nz-input-number formControlName="soQdPdCg" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                   [nzSize]="'small'"
                   [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                 </nz-input-number>
@@ -95,7 +111,7 @@
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdKhMtt()">
-                <input nz-input [readonly]="true" formControlName="soQdPdCg" />
+                <input nz-input [readonly]="true" formControlName="soQdPdKh" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>

@@ -21,6 +21,7 @@ import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-
 import { DialogCanCuThongTinChaoGiaComponent } from 'src/app/components/dialog/dialog-can-cu-thong-tin-chao-gia/dialog-can-cu-thong-tin-chao-gia.component';
 import { ChaogiaUyquyenMualeService } from 'src/app/services/chaogia-uyquyen-muale.service';
 import { Chain } from '@angular/compiler';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-chaogia',
@@ -60,8 +61,8 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
     this.formData = this.fb.group(
       {
         id: [],
-        soQdPdKq: [, [Validators.required]],
         soQdPdCg: [, [Validators.required]],
+        soQdPdKh: [, [Validators.required]],
         ngayKy: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
         ngayHluc: [null, [Validators.required]],
         namKh: [dayjs().get('year'), [Validators.required]],
@@ -110,19 +111,19 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
       const dataDetail = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
       this.formData.patchValue({
-        soQdPdKq: dataDetail.soQdPdKq.split('/')[0],
+        soQdPdCg: dataDetail.soQdPdCg.split('/')[0],
       })
       this.taiLieuDinhKemList = dataDetail.fileDinhKems;
     }
   }
 
-  async save(isBanHanh?) {
+  async save(isGuiDuyet?) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       return;
     }
     let body = this.formData.value;
-    body.soQdPdKq = body.soQdPdKq + this.maQd;
+    body.soQdPdCg = body.soQdPdCg + this.maQd;
     body.fileDinhKems = this.taiLieuDinhKemList;
     body.hhChiTietTTinChaoGiaList = this.listMtt
     let res;
@@ -132,9 +133,9 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
       res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      if (isBanHanh) {
+      if (isGuiDuyet) {
         this.idInput = res.data.id;
-        this.pheDuyet();
+        this.guiDuyet();
       } else {
         if (this.formData.get('id').value) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -153,36 +154,90 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  pheDuyet() {
-    let trangThai = '';
-    let msg = '';
-    switch (this.formData.get('trangThai').value) {
-      case STATUS.DU_THAO: {
-        trangThai = STATUS.BAN_HANH;
-        msg = 'Bạn có muốn ban hành ?'
-        break;
-      }
-    }
+  guiDuyet() {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: msg,
+      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
-      nzWidth: 400,
+      nzWidth: 350,
       nzOnOk: async () => {
+        await this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            trangThai: '',
+          };
+          switch (this.formData.get('trangThai').value) {
+            case STATUS.TU_CHOI_LDC:
+            case STATUS.TU_CHOI_TP:
+            case STATUS.DU_THAO: {
+              body.trangThai = STATUS.CHO_DUYET_TP;
+              break;
+            }
+            case STATUS.CHO_DUYET_TP: {
+              body.trangThai = STATUS.CHO_DUYET_LDC;
+              break;
+            }
+            case STATUS.CHO_DUYET_LDC: {
+              body.trangThai = STATUS.DA_DUYET_LDC;
+              break;
+            }
+          }
+          let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.THAO_TAC_SUCCESS,
+            );
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          await this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          await this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  tuChoi() {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
         this.spinner.show();
         try {
           let body = {
             id: this.idInput,
-            lyDoTuChoi: null,
-            trangThai: trangThai,
+            lyDo: text,
+            trangThai: '',
           };
-
+          switch (this.formData.get('trangThai').value) {
+            case STATUS.CHO_DUYET_TP: {
+              body.trangThai = STATUS.TU_CHOI_TP;
+              break;
+            }
+            case STATUS.CHO_DUYET_LDC: {
+              body.trangThai = STATUS.TU_CHOI_LDC;
+              break;
+            }
+          }
           const res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -193,9 +248,10 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
-      },
+      }
     });
   }
+
 
   async getListQdPdKhMtt() {
     let body = {
@@ -246,7 +302,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
       }
       this.trangThaiTkhai = data.trangThaiTkhai
       this.formData.patchValue({
-        soQdPdCg: data.soQdPduyet,
+        soQdPdKh: data.soQdPduyet,
         idPdKq: data.id,
         trangThaiTkhai: data.trangThaiTkhai
       })
