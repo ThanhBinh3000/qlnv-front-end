@@ -33,7 +33,7 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
+        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()" *ngIf="userService.isCuc()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
@@ -41,7 +41,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
+        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)" *ngIf="userService.isCuc()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tạo quyết định</span>
         </button>
@@ -92,8 +92,8 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPdKq"
-                  (input)="filterInTable('soQdPdKq',filterTable.soQdPdKq)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPdKh"
+                  (input)="filterInTable('soQdPdKh',filterTable.soQdPdKh)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -128,7 +128,7 @@
             <td>{{ data.soQdPdCg}}</td>
             <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.tenDvi}}</td>
-            <td>{{ data.soQdPdKq}}</td>
+            <td>{{ data.soQdPdKh}}</td>
             <td>{{ data.tenLoaiVthh}}</td>
             <td>{{ data.tenCloaiVthh }}</td>
             <td>{{ data.tenTrangThai }}</td>
