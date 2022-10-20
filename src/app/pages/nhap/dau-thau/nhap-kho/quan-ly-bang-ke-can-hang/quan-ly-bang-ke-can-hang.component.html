@@ -84,7 +84,7 @@
           <ng-container *ngIf="expandSet.has(i)">
             <tr *ngFor="let soPhieu of item.detail.children">
               <td colspan="5"></td>
-              <td>{{soPhieu.bangKeCanHang?.soPhieu}}</td>
+              <td>{{soPhieu.bangKeCanHang?.soBangKe}}</td>
               <td>{{soPhieu.phieuNhapKho?.soPhieuNhapKho}}</td>
               <td>{{soPhieu.phieuNhapKho?.ngayTao | date: 'dd/MM/YYYY' }}</td>
               <td>{{soPhieu.tenDiemKho}}</td>

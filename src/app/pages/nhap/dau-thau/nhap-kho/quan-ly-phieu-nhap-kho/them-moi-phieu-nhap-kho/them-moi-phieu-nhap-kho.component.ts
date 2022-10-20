@@ -47,8 +47,9 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
   @Output()
   showListEvent = new EventEmitter<any>();
 
-  listDiaDiemNhap : any[] = [];
   listSoQuyetDinh : any[] = []
+  listDiaDiemNhap : any[] = [];
+  listPhieuKtraCl : any[] = [];
 
   taiLieuDinhKemList: any[] = [];
   dataTable : any[] = [];
@@ -253,7 +254,8 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.dataTable = []
+        this.dataTable = [];
+        this.listPhieuKtraCl = [];
         this.formData.patchValue({
           idDdiemGiaoNvNh : data.id,
           maDiemKho: data.maDiemKho,
@@ -264,10 +266,11 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
           tenNganKho: data.tenNganKho,
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
-          soPhieuKtraCl : data.phieuKtraCl?.soPhieu,
-          idPhieuKtraCl : data.phieuKtraCl?.id,
-          nguoiTaoPhieuKtraCl : data.phieuKtraCl?.nguoiTaoId,
+          soPhieuKtraCl : '',
+          idPhieuKtrnaCl : '',
+          nguoiTaoPhieuKtraCl : '',
         });
+        this.listPhieuKtraCl = data.listPhieuKtraCl.filter(item => (item.trangThai == STATUS.DA_DUYET_LDCC && isEmpty(item.phieuNhapKho)));
         let dataObj = {
           moTaHangHoa : this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh,
           maSo : '',
@@ -277,6 +280,31 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
           donGia : this.formData.value.donGiaHd
         }
         this.dataTable.push(dataObj)
+      }
+    });
+  }
+
+  openDialogPhieuKtraCl(){
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách phiếu kiểm tra chất lượng',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listPhieuKtraCl,
+        dataHeader: ['Số phiếu', 'Ngày giám định'],
+        dataColumn: ['soPhieu', 'ngayGdinh']
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.formData.patchValue({
+          soPhieuKtraCl : data.soPhieu,
+          idPhieuKtraCl : data.id,
+          nguoiTaoPhieuKtraCl : data.tenNguoiTao,
+        });
       }
     });
   }
@@ -319,7 +347,7 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
-      nzWidth: 310,
+      nzWidth: 500,
       nzOnOk: async () => {
         this.spinner.show();
         try {
@@ -434,6 +462,10 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
 
   print() {
 
+  }
+
+  clearItemRow(i){
+    this.dataTable[i] = {};
   }
 
 }

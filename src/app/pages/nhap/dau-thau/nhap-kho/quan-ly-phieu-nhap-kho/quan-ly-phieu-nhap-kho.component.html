@@ -81,25 +81,25 @@
               </td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
-              <tr *ngFor="let soPhieu of item.detail.children">
+              <tr *ngFor="let dataPhieu of item.detail.listPhieuNhapKho">
                 <td colspan="5"></td>
-                <td>{{soPhieu.phieuNhapKho?.soPhieuNhapKho}}</td>
-                <td>{{soPhieu.phieuNhapKho?.ngayTao | date: 'dd/MM/YYYY' }}</td>
-                <td>{{soPhieu.tenDiemKho}}</td>
-                <td>{{soPhieu.tenNhaKho}}</td>
-                <td>{{soPhieu.tenNganKho}}</td>
-                <td>{{soPhieu.tenLoKho}}</td>
-                <td>{{soPhieu.phieuKtraCl?.soPhieu}}</td>
-                <td>{{soPhieu.phieuKtraCl?.ngayGdinh | date: 'dd/MM/YYYY' }}</td>
-                <td>{{soPhieu.phieuNhapKho?.tenTrangThai}}</td>
+                <td>{{dataPhieu.soPhieuNhapKho}}</td>
+                <td>{{dataPhieu.ngayTao | date: 'dd/MM/YYYY' }}</td>
+                <td>{{dataPhieu.tenDiemKho}}</td>
+                <td>{{dataPhieu.tenNhaKho}}</td>
+                <td>{{dataPhieu.tenNganKho}}</td>
+                <td>{{dataPhieu.tenLoKho}}</td>
+                <td>{{dataPhieu.soPhieuKtraCl}}</td>
+                <td>{{dataPhieu.ngayGuiDuyet | date: 'dd/MM/YYYY'}}</td>  <!-- //Data fake -->
+                <td>{{dataPhieu.tenTrangThai}}</td>
                 <td>
-                  <a *ngIf="soPhieu.phieuNhapKho && soPhieu.phieuNhapKho.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(true, soPhieu.phieuNhapKho.id)">
+                  <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(true, dataPhieu.id)">
                     <i class="fa fa-eye"></i>
                   </a>
-                  <a *ngIf="soPhieu.phieuNhapKho && soPhieu.phieuNhapKho.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, soPhieu.phieuNhapKho.id)">
+                  <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, dataPhieu.id)">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <a *ngIf="soPhieu.phieuNhapKho && soPhieu.phieuNhapKho.trangThai == STATUS.DU_THAO" (click)="xoaItem(soPhieu.phieuNhapKho)">
+                  <a *ngIf="dataPhieu.trangThai == STATUS.DU_THAO" (click)="xoaItem(dataPhieu)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
