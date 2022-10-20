@@ -34,6 +34,18 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
         maDviTao: "",
         loaiTimKiem: "0",
     }
+
+    tableFilter = {
+        maDn: null,
+        qdChiTieu: null,
+        canCuGia: null,
+        loaiDn: null,
+        ngayTao: null,
+        ngayTrinh: null,
+        ngayPheDuyet: null,
+        trangThai: null,
+    }
+
     listIdDelete: string[] = [];
     // danh sach
     dataTable: any[] = [];
@@ -349,24 +361,19 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
     }
 
     // Tìm kiếm trong bảng
-    filterInTable(key: string, value: string, date: boolean) {
+    filterInTable(key: string, value: string, isDate: boolean) {
         if (value && value != '') {
             this.dataTable = [];
             let temp = [];
             if (this.dataTableAll && this.dataTableAll.length > 0) {
-                if (date) {
-                    this.dataTableAll.forEach((item) => {
-                        if (item[key] && item[key].toString().toLowerCase() === dayjs(value).format('YYYY-MM-DD')) {
-                            temp.push(item)
-                        }
-                    });
-                } else {
-                    this.dataTableAll.forEach((item) => {
-                        if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-                            temp.push(item)
-                        }
-                    });
+                if (isDate) {
+                    value = this.datePipe.transform(value, Utils.FORMAT_DATE_STR);
                 }
+                this.dataTableAll.forEach((item) => {
+                    if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                        temp.push(item)
+                    }
+                });
             }
             this.dataTable = [...this.dataTable, ...temp];
         } else {

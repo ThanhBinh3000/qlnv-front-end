@@ -124,18 +124,17 @@
           <td>
             {{data.maDviTinh}}
           </td>
-          <!-- <td>
+          <td>
             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.thienSluongKhoachDgiao"
               [class]="editCache[data.id].data.thienSluongKhoachDgiao >= 0?'' : 'input-error-validate'">
             </fm-input-number>
-          </td> -->
-          <td>
+          </td>
+          <!-- <td>
             <nz-input-number class="search__input" [nzFormatter]="formatterPercent" [nzParser]="parserPercent"
               [(ngModel)]="editCache[data.id].data.thienSluongKhoachDgiao"
-              [class]="editCache[data.id].data.thienSluongKhoachDgiao >= 0?'' : 'input-error-validate'"
-              (ngModelChange)="viewDetail(editCache[data.id].data.thienSluongKhoachDgiao)">
+              [class]="editCache[data.id].data.thienSluongKhoachDgiao >= 0?'' : 'input-error-validate'">
             </nz-input-number>
-          </td>
+          </td> -->
           <td>
             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.thienSluongTteThien"
               (ngModelChange)="changeModel(data.id)"
