@@ -94,8 +94,8 @@
                 <td>{{soPhieu.tenNhaKho}}</td>
                 <td>{{soPhieu.tenNganKho}}</td>
                 <td>{{soPhieu.tenLoKho}}</td>
-                <td></td>
-                <td></td>
+                <td>{{soPhieu.phieuNhapKho?.soPhieuNhapKho}}</td>
+                <td>{{soPhieu.phieuNhapKho?.ngayTao | date: 'dd/MM/YYYY' }}</td>
                 <td>{{soPhieu.phieuKtraCl?.tenTrangThai}}</td>
                 <td>
                   <a *ngIf="soPhieu.phieuKtraCl && soPhieu.phieuKtraCl.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(true, soPhieu.phieuKtraCl.id)">

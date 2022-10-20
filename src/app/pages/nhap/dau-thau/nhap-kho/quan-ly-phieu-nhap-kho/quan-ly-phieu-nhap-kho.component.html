@@ -75,7 +75,7 @@
               <td>{{ item.tgianNkho }}</td>
               <td colspan="9"></td>
               <td>
-                <a >
+                <a (click)="redirectToChiTiet(false, 0,item.id)">
                   <i class="fa fa-plus"></i>
                 </a>
               </td>
@@ -83,23 +83,23 @@
             <ng-container *ngIf="expandSet.has(i)">
               <tr *ngFor="let soPhieu of item.detail.children">
                 <td colspan="5"></td>
-                <td></td>
-                <td></td>
+                <td>{{soPhieu.phieuNhapKho?.soPhieuNhapKho}}</td>
+                <td>{{soPhieu.phieuNhapKho?.ngayTao | date: 'dd/MM/YYYY' }}</td>
                 <td>{{soPhieu.tenDiemKho}}</td>
                 <td>{{soPhieu.tenNhaKho}}</td>
                 <td>{{soPhieu.tenNganKho}}</td>
                 <td>{{soPhieu.tenLoKho}}</td>
                 <td>{{soPhieu.phieuKtraCl?.soPhieu}}</td>
-                <td>{{soPhieu.phieuKtraCl?.ngayGdinh}}</td>
-                <td></td>
+                <td>{{soPhieu.phieuKtraCl?.ngayGdinh | date: 'dd/MM/YYYY' }}</td>
+                <td>{{soPhieu.phieuNhapKho?.tenTrangThai}}</td>
                 <td>
-                  <a *ngIf="soPhieu.phieuKtraCl && soPhieu.phieuKtraCl.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(true, soPhieu.phieuKtraCl.id)">
+                  <a *ngIf="soPhieu.phieuNhapKho && soPhieu.phieuNhapKho.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(true, soPhieu.phieuNhapKho.id)">
                     <i class="fa fa-eye"></i>
                   </a>
-                  <a *ngIf="soPhieu.phieuKtraCl && soPhieu.phieuKtraCl.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, soPhieu.phieuKtraCl.id)">
+                  <a *ngIf="soPhieu.phieuNhapKho && soPhieu.phieuNhapKho.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, soPhieu.phieuNhapKho.id)">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <a *ngIf="soPhieu.phieuKtraCl && soPhieu.phieuKtraCl.trangThai == STATUS.DU_THAO">
+                  <a *ngIf="soPhieu.phieuNhapKho && soPhieu.phieuNhapKho.trangThai == STATUS.DU_THAO" (click)="xoaItem(soPhieu.phieuNhapKho)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
@@ -129,6 +129,6 @@
 </ng-container>
 <ng-container class="chi-tiet" *ngIf="isDetail">
   <them-moi-phieu-nhap-kho [id]="selectedId" (showListEvent)="showList()" [isView]="isView" [typeVthh]="typeVthh"
-    [isTatCa]="isTatCa">
+    [isTatCa]="isTatCa" [idQdGiaoNvNh]="idQdGiaoNvNh">
   </them-moi-phieu-nhap-kho>
 </ng-container>

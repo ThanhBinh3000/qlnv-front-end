@@ -431,13 +431,12 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends BaseComponent imp
         try {
           let body = {
             id: this.id,
-            lyDoTuChoi: null,
             trangThai: trangThai
           };
           let res =
             await this.quanLyPhieuKiemTraChatLuongHangService.approve(
               body,
-            );
+          );
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             this.back();
