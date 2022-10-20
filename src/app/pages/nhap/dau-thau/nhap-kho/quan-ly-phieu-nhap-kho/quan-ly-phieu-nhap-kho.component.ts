@@ -16,8 +16,12 @@ import { UserService } from 'src/app/services/user.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
+import { QuanLyPhieuNhapKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapKho.service';
 import { Globals } from 'src/app/shared/globals';
+import {
+  QuyetDinhGiaoNhapHangService
+} from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'quan-ly-phieu-nhap-kho',
@@ -41,6 +45,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
 
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
+  STATUS = STATUS
   totalRecord: number = 0;
   dataTable: any[] = [];
   dataTableAll: any[] = [];
@@ -71,6 +76,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     private router: Router,
     public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
+    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
     private modal: NzModalService,
     public globals: Globals,
   ) { }
@@ -268,29 +274,19 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
 
   async search() {
     let body = {
-      "capDvis": '3',
-      "denNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1 ? dayjs(this.searchFilter.ngayNhapKho[1]).format('YYYY-MM-DD') : null,
-      "maDvi": this.userInfo.MA_DVI,
-      "loaiVthh": this.typeVthh,
-      "orderBy": null,
-      "orderDirection": null,
-      "pageNumber": this.page,
-      "pageSize": this.pageSize,
-      "soPhieu": this.searchFilter.soPhieu,
-      "soQdNhap": this.searchFilter.soQuyetDinh,
-      "str": null,
-      "trangThai": null,
-      "tuNgayNhapKho": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 0 ? dayjs(this.searchFilter.ngayNhapKho[0]).format('YYYY-MM-DD') : null,
+      trangThai: STATUS.BAN_HANH,
+      paggingReq: {
+        "limit": this.pageSize,
+        "page": this.page - 1
+      },
     };
-    let res = await this.quanLyPhieuNhapKhoService.timKiem(body);
+    let res = await this.quyetDinhNhapXuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
+      this.dataTable.forEach( item =>
+          item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      );
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
@@ -405,5 +401,14 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
 
   print() {
 
+  }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
   }
 }

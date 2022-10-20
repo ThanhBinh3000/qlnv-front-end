@@ -166,7 +166,7 @@
           <td>{{data.tonKho}}</td>
           <td>{{data.soLuong}}</td>
           <td>{{data.donGia}}</td>
-          <td>{{data.thanhTien}}</td>
+          <td>{{data.soLuong * data.donGia|number:'1.0-1'}}</td>
           <td class="text-center" nzRight>
             <a (click)="startEdit(i)">
               <i class="fa fa-pencil"></i>

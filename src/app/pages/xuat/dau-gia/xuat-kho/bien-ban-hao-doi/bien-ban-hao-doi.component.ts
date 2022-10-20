@@ -16,7 +16,7 @@ import { UserService } from 'src/app/services/user.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { QuanLyPhieuNhapKhoService } from 'src/app/services/quanLyPhieuNhapKho.service';
+import { QuanLyPhieuNhapKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapKho.service';
 import { Globals } from 'src/app/shared/globals';
 import { QuanLyBienBanHaoDoiService } from 'src/app/services/quanLyBienBanHaoDoi.service';
 import { FormBuilder, FormGroup } from '@angular/forms';

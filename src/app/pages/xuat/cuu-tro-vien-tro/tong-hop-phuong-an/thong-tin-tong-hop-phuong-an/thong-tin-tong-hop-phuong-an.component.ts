@@ -78,7 +78,7 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   datePipe = new DatePipe('en-US');
   isVisible = false;
   isVisibleTuChoiDialog = false;
-
+  isQuyetDinh: boolean=false;
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -185,6 +185,7 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
           let res = await this.tongHopPhuongAnCuuTroService.update(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -194,6 +195,7 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.idInput = res.data.id;
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -673,6 +675,11 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
     else if (currentStatus == STATUS.CHO_DUYET_LDV && nextStatus == STATUS.TU_CHOI_LDV) {
       return true;
     }
+
+    //tao qd
+    else if (currentStatus == STATUS.DA_DUYET_LDV && nextStatus == STATUS.CHUA_TAO_QD) {
+      return true;
+    }
     return false;
   }
 
@@ -713,4 +720,13 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   showModalDialogTuChoi(): void {
     this.isVisibleTuChoiDialog = true;
   }
+  taoQuyetDinh() {
+    /*let elem = document.getElementById('mainTongCuc');
+    let tabActive = elem.getElementsByClassName('ant-menu-item')[1];
+    tabActive.classList.remove('ant-menu-item-selected')
+    let setActive = elem.getElementsByClassName('ant-menu-item')[2];
+    setActive.classList.add('ant-menu-item-selected');*/
+    this.isQuyetDinh = true;
+  }
+
 }
