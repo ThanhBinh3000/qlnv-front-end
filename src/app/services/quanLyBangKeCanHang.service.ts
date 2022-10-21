@@ -8,10 +8,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class QuanLyBangKeCanHangService extends BaseService {
-  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuanLyBangKeCanHang', '');
+      super(httpClient, 'ql-bang-ke-can-hang-lt', '/qlnv-hang');
   }
 
   timKiem(body: any): Promise<any> {

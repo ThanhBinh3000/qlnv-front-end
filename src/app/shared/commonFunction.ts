@@ -111,7 +111,11 @@ export function convertVthhToId(ten: string) {
 
 
 export function convertTienTobangChu(tien: number): string {
-  return VNnum2words(tien);
+  if(tien > 0){
+    return VNnum2words(tien);
+  }else{
+    return ''
+  }
 }
 
 export function thongTinTrangThaiNhap(trangThai: string, statusDaDuyet?: string): string {
