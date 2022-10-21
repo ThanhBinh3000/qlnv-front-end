@@ -483,14 +483,14 @@ export class PhuLuc6Component implements OnInit {
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
       if (itm.id == initItem.idDm) {
-        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
-        return dm = itm.tongDmuc;
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
       if (itm.id == initItem.idDm) {
-        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
-        return dm = itm.tongDmuc;
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -549,14 +549,14 @@ export class PhuLuc6Component implements OnInit {
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
       if (itm.id == initItem.idDm) {
-        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
-        return dm = itm.tongDmuc;
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
       if (itm.id == initItem.idDm) {
-        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
-        return dm = itm.tongDmuc;
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -730,14 +730,14 @@ export class PhuLuc6Component implements OnInit {
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
       if (itm.id == initItem.idDm) {
-        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
-        return dm = itm.tongDmuc;
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
       if (itm.id == initItem.idDm) {
-        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
-        return dm = itm.tongDmuc;
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     if (initItem?.id) {
