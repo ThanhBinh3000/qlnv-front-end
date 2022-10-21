@@ -78,7 +78,7 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   datePipe = new DatePipe('en-US');
   isVisible = false;
   isVisibleTuChoiDialog = false;
-  isQuyetDinh: boolean=false;
+  isQuyetDinh: boolean = false;
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -157,7 +157,11 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
       }
     }
   }
-
+  async luu(){
+    if(this.save()){
+      this.quayLai();
+    }
+  }
   async save() {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -185,7 +189,7 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
           let res = await this.tongHopPhuongAnCuuTroService.update(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.quayLai();
+            return true;
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -195,7 +199,7 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.idInput = res.data.id;
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.quayLai();
+            return true;
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -617,10 +621,7 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
     this.isVisible = false;
   }
 
-  handleCancel()
-    :
-    void {
-    console.log('Button cancel clicked!');
+  handleCancel(): void {
     this.isVisible = false;
     this.isVisibleTuChoiDialog = false;
   }
@@ -720,6 +721,7 @@ export class ThongTinTongHopPhuongAnComponent implements OnInit {
   showModalDialogTuChoi(): void {
     this.isVisibleTuChoiDialog = true;
   }
+
   taoQuyetDinh() {
     /*let elem = document.getElementById('mainTongCuc');
     let tabActive = elem.getElementsByClassName('ant-menu-item')[1];
