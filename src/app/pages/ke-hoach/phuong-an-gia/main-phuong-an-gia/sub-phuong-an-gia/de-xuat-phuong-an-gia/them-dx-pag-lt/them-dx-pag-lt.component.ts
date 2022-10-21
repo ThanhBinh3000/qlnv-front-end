@@ -253,7 +253,14 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       };
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.dsQdPdKhlcnt = res.data.content;
+        let arr  = res.data.content;
+        if (arr) {
+          arr.forEach(item => {
+            if (!item.loaiVthh.startsWith("02")) {
+              this.dsQdPdKhlcnt.push(item)
+            }
+          })
+        }
       }
     }
   }

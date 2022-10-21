@@ -76,10 +76,11 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     ngayKy: '',
     trichYeu: '',
     qdCtKhNam: '',
+    soCanCu: '',
     namKeHoach: '',
-    loaiHangHoa: '',
-    loaiGia: '',
-    trangThai: '',
+    tenLoaiVthh: '',
+    tenLoaiGia: '',
+    tenTrangThai: '',
   };
 
   async ngOnInit() {
@@ -360,8 +361,8 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
       trichYeu: '',
       quyetDinhChiTieu: '',
       namKeHoach: '',
-      loaiHangHoa: '',
-      loaiGia: '',
+      tenLoaiVthh: '',
+      tenLoaiGia: '',
       trangThai: '',
     }
   }
