@@ -228,7 +228,7 @@ export class PhuLuc7Component implements OnInit {
         if (res.statusCode == 0) {
           this.dsDinhMuc = res.data;
           this.dsDinhMuc.forEach(item => {
-            if (!item.loaiVthh.startsWith('04')) {
+            if (!item.loaiVthh.startsWith('02')) {
               item.tongDmuc = divNumber(item.tongDmuc, 1000);
             }
           })
@@ -527,7 +527,6 @@ export class PhuLuc7Component implements OnInit {
         }
       }
     }
-
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
       if (itm.id == initItem.loaiMatHang) {
