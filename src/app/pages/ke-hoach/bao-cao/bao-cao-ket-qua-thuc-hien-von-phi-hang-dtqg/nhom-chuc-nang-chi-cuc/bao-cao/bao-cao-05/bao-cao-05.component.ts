@@ -862,6 +862,7 @@ export class BaoCao05Component implements OnInit {
                     }
                 }
             })
+
             this.tinhTongDm(tongCucDh);
             this.sum(this.lstCtietBcao[tongCucDh].stt);
         }
@@ -1262,7 +1263,7 @@ export class BaoCao05Component implements OnInit {
                 }
             })
             this.calcuDeviant(data.maNdungChi);
-            if (data.maNdungChi == this.noiDungChiFull.find(e => e.ma = '0.1.5')?.id) {
+            if (data.maNdungChi == this.noiDungChiFull.find(e => e.ma == '0.1.5')?.id) {
                 const ind1 = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.idB);
                 const ind2 = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.idB1);
                 const ind3 = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.idB2);
