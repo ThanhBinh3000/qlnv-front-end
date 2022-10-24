@@ -194,7 +194,7 @@ export class PhuLuc4Component implements OnInit {
         if (res.statusCode == 0) {
           this.dsDinhMuc = res.data;
           this.dsDinhMuc.forEach(item => {
-            if (!item.loaiVthh.startsWith('04')) {
+            if (!item.loaiVthh.startsWith('02')) {
               item.tongDmuc = divNumber(item.tongDmuc, 1000);
             }
           })
@@ -410,7 +410,7 @@ export class PhuLuc4Component implements OnInit {
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
       if (itm.loaiVthh == initItem.loaiMatHang) {
-        return dm = itm.tongDmuc;
+        dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -469,7 +469,7 @@ export class PhuLuc4Component implements OnInit {
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
       if (itm.loaiVthh == initItem.loaiMatHang) {
-        return dm = itm.tongDmuc;
+        dm = itm.tongDmuc;
       }
     })
 
@@ -648,7 +648,7 @@ export class PhuLuc4Component implements OnInit {
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
       if (itm.loaiVthh == initItem.loaiMatHang) {
-        return dm = itm.tongDmuc;
+        dm = itm.tongDmuc;
       }
     })
     if (initItem?.id) {

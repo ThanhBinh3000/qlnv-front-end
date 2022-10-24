@@ -325,7 +325,7 @@ export class BaoCao05Component implements OnInit {
                 if (res.statusCode == 0) {
                     this.dinhMucs = res.data;
                     this.dinhMucs.forEach(item => {
-                        if (!item.cloaiVthh.startsWith('04')) {
+                        if (!item.cloaiVthh.startsWith('02')) {
                             item.nvChuyenMonDviTt = (item.nvChuyenMonDviTt ? item.nvChuyenMonDviTt : 0) / 1000;
                             item.nvChuyenMonVp = (item.nvChuyenMonVp ? item.nvChuyenMonVp : 0) / 1000;
                             item.dieuHanhDviTt = (item.dieuHanhDviTt ? item.dieuHanhDviTt : 0) / 1000;
@@ -789,8 +789,8 @@ export class BaoCao05Component implements OnInit {
                 })
             }
         })
-        const nvChuyenMon = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.1.1'));
-        const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.1.2'));
+        const nvChuyenMon = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.1.2'));
+        const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.1.1'));
         const cucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.2'));
         const tongCucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.3'));
 
@@ -862,6 +862,7 @@ export class BaoCao05Component implements OnInit {
                     }
                 }
             })
+
             this.tinhTongDm(tongCucDh);
             this.sum(this.lstCtietBcao[tongCucDh].stt);
         }
@@ -1262,7 +1263,7 @@ export class BaoCao05Component implements OnInit {
                 }
             })
             this.calcuDeviant(data.maNdungChi);
-            if (data.maNdungChi == this.noiDungChiFull.find(e => e.ma = '0.1.5')?.id) {
+            if (data.maNdungChi == this.noiDungChiFull.find(e => e.ma == '0.1.5')?.id) {
                 const ind1 = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.idB);
                 const ind2 = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.idB1);
                 const ind3 = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.idB2);

@@ -92,23 +92,20 @@ export class TimKiemDieuChinhDuToanChiNSNNComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if (this.userService.isAccessPermisson(DCDT.ADD_REPORT)) {
+      this.statusTaoMoi = false;
+    }
     this.searchFilter.denNgay = new Date();
     const newDate = new Date();
     newDate.setMonth(newDate.getMonth() - 1);
     this.searchFilter.tuNgay = newDate;
     this.searchFilter.nam = new Date().getFullYear();
     this.userInfo = this.userService.getUserLogin();
+    this.onSubmit();
     if (this.userInfo.CAP_DVI == '1') {
       return this.dviGuiKq = true;
     }
-
-
-    if (this.userService.isAccessPermisson(DCDT.ADD_REPORT)) {
-      this.statusTaoMoi = false;
-    }
-
     this.searchFilter.donViTao = this.userInfo?.MA_DVI;
-    this.onSubmit();
   }
 
   redirectThongTinTimKiem() {

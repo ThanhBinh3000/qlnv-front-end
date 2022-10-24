@@ -107,6 +107,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
       {
         id: [],
         maDvi: [],
+        maDviDxuat: [],
         tenDvi: [, [Validators.required]],
         soQd: [, [Validators.required]],
         nam: [dayjs().get("year"), [Validators.required]],
@@ -455,7 +456,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      console.log(typeof this.idTongHop)
       let idTongHop = this.idTongHop;
       this.formData.patchValue({
         trangThai: STATUS.DU_THAO,
@@ -467,7 +467,6 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
       if (this.idTongHop) {
         this.onChangePhuongAn(this.idTongHop);
       }
-      console.log(this.formData.value,999999999999);
     }
   }
 
@@ -848,6 +847,7 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
             loaiHinhNhapXuat: res.data.loaiHinhNhapXuat,
             tenLoaiVthh: res.data.tenLoaiVthh,
             tenCloaiVthh: res.data.tenCloaiVthh,
+            maDviDxuat: res.data.maDviDxuat,
           })
           this.formData.patchValue({thongTinTongHop: res.data.thongTinTongHop});
           this.summaryData();
