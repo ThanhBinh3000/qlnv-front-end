@@ -116,4 +116,11 @@ export class CapVonNguonChiService extends BaseService {
         );
     }
 
+    danhSachHopDong(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + 'qlnv-khoachphi/hop-dong/danh-sach/so-qd',
+            request,
+        )
+    }
+
 }

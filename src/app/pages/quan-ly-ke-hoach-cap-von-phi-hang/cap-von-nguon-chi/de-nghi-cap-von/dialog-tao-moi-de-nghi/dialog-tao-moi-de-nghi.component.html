@@ -1,10 +1,15 @@
 <div class="modal__content">
     <div class="search__body" nz-row [nzGutter]="[18, 12]">
         <div nz-col nzSpan="6">
+            <label class="search__label">Năm</label>
+            <nz-input-number [(ngModel)]="nam" [class]="nam && (nam > 999 && nam < 3000) ? '' : 'input-error-validate'">
+            </nz-input-number>
+        </div>
+        <!-- <div nz-col nzSpan="6">
             <label class="search__label">Quyết định chỉ tiêu</label>
             <input class="search__input" nz-input [class]="response.qdChiTieu ?'' : 'input-error-validate'"
                 [(ngModel)]="response.qdChiTieu" />
-        </div>
+        </div> -->
         <div nz-col nzSpan="6">
             <label class="search__label">Căn cứ về giá</label>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá" [(ngModel)]="response.canCuGia"
@@ -18,6 +23,14 @@
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại đề nghị" [(ngModel)]="response.loaiDn"
                 [class]="response.loaiDn ?'' : 'input-error-validate'">
                 <nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                </nz-option>
+            </nz-select>
+        </div>
+        <div nz-col nzSpan="6" *ngIf="isContract">
+            <label class="search__label">Số hợp đồng</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn số hợp đồng" [(ngModel)]="maHopDong"
+                [class]="maHopDong ?'' : 'input-error-validate'">
+                <nz-option *ngFor="let item of lstHdongs" [nzValue]="item" [nzLabel]="item">
                 </nz-option>
             </nz-select>
         </div>
