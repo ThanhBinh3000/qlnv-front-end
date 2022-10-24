@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'htvbdh';
-  src:  url('fonts/htvbdh.eot?ax96x9');
-  src:  url('fonts/htvbdh.eot?ax96x9#iefix') format('embedded-opentype'),
-    url('fonts/htvbdh.ttf?ax96x9') format('truetype'),
-    url('fonts/htvbdh.woff?ax96x9') format('woff'),
-    url('fonts/htvbdh.svg?ax96x9#htvbdh') format('svg');
+  src:  url('fonts/htvbdh.eot?ld5tju');
+  src:  url('fonts/htvbdh.eot?ld5tju#iefix') format('embedded-opentype'),
+    url('fonts/htvbdh.ttf?ld5tju') format('truetype'),
+    url('fonts/htvbdh.woff?ld5tju') format('woff'),
+    url('fonts/htvbdh.svg?ld5tju#htvbdh') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,54 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.htvbdh_tcdt_tao-ttrinh:before {
+  content: "\eb26";
+}
+.htvbdh_tcdt_phan-quyen:before {
+  content: "\eb25";
+}
+.htvbdh_tcdt_canh-bao:before {
+  content: "\eb24";
+}
+.htvbdh_tcdt_lien-ket:before {
+  content: "\eb23";
+}
+.htvbdh_tcdt_viewdetail2:before {
+  content: "\eb21";
+}
+.htvbdh_tcdt_tao-qd:before {
+  content: "\eb22";
+}
+.htvbdh_tcdt_vien_tro:before {
+  content: "\eb20";
+}
+.htvbdh_tcdt_het_han:before {
+  content: "\eb1f";
+}
+.htvbdh_tcdt_kiem_tra_chat_luong:before {
+  content: "\eb1e";
+}
+.htvbdh_tcdt_dieu_chuyen:before {
+  content: "\eb1c";
+}
+.htvbdh_tcdt_tat_ca:before {
+  content: "\eb1d";
+}
+.htvbdh_tcdt_kehoachvonphi:before {
+  content: "\eb1a";
+}
+.htvbdh_tcdt_quanlychitieu:before {
+  content: "\eb1b";
+}
+.htvbdh_tcdt_bienbangiaonhan:before {
+  content: "\eb18";
+}
+.htvbdh_tcdt_phuluc:before {
+  content: "\eb19";
+}
+.htvbdh_tcdt_de_xuat_dieu_chinh:before {
+  content: "\eb17";
+}
 .htvbdh_tcdt_ngan-kho-2:before {
   content: "\eb0f";
 }

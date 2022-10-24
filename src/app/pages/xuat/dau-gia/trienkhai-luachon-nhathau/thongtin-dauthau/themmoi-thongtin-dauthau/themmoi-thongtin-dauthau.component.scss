@@ -1,0 +1,28 @@
+::ng-deep {
+    .thong-tin-dau-thau-tab {
+        padding-right: 10px;
+
+        .ant-tabs-tabpane {
+            padding: 0px !important;
+        }
+
+        .ant-card-bordered {
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+        }
+
+        .ant-card-body:before {
+            border-top: solid 0px transparent !important;
+        }
+    }
+
+    .them-moi-thong-tin-dau-thau {
+        .btn-action {
+            padding-right: 10px;
+        }
+
+        // .main-content {
+        //     height: calc(100vh - 268px) !important;
+        // }
+    }
+}

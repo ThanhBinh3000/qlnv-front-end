@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DanhSachComponent } from './danhsach/danhsach.component';
+import { QlCMTSOComponent } from './ql-cmt-so/ql-cmt-so.component';
+import { QlKhoaMokhoaComponent } from './ql-khoa-mokhoa/ql-khoa-mokhoa.component';
 import { QlLsTruyCapComponent } from './ql-ls-truycap/ql-ls-truycap.component';
 import { QlNhomQuyenComponent } from './ql-nhomquyen/ql-nhomquyen.component';
 import { QlQuyenComponent } from './ql-quyen/ql-quyen.component';
@@ -37,13 +39,14 @@ const routes: Routes = [
         path: 'thamso-hethong',
         component: QlThamSoHeThongComponent,
       },
-      // {
-      //   path: 'danh-sach',
-      //   loadChildren: () =>
-      //     import('./danhsach/danhsach.module').then(
-      //       (m) => m.DanhSachModule,
-      //     ),
-      // },
+      {
+        path: 'chungthu-so',
+        component: QlCMTSOComponent,
+      },
+      {
+        path: 'khoa-mokhoa',
+        component: QlKhoaMokhoaComponent,
+      },
     ],
   },
 ];

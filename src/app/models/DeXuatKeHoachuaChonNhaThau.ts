@@ -1,3 +1,5 @@
+import { Validators } from "@angular/forms";
+
 export class ThongTinDeXuatKeHoachLuaChonNhaThau {
   id: number;
   ldoTuchoi: string;
@@ -24,6 +26,14 @@ export class ThongTinDeXuatKeHoachLuaChonNhaThau {
   children2?: Array<DanhSachGoiThau> = [];
   children3?: Array<CanCuXacDinh> = [];
   ghiChu: string;
+  tgianNhapHang: string;
+  tenDuAn: string = '';
+  tgianDongThau: string;
+  tgianMoThau: string;
+  tgianTbao: string;
+  tgianThHienHd: string;
+  tongMucDt: number;
+  tuNgayThHien: string;
 }
 export class ThongTinDeXuatKeHoachLuaChonNhaThauInput {
   id: number;
@@ -63,6 +73,7 @@ export class FileDinhKem {
   fileType: string;
   fileUrl: string;
   id: number;
+  noiDung: string;
   idVirtual: number;
 }
 
@@ -87,21 +98,73 @@ export class ThongTinChung {
 }
 
 export class DanhSachGoiThau {
+  maDvi: string;
+  tenDvi: string;
+  maDiemKho: string;
+  tenDiemKho: string;
   diaDiemNhap: string;
   donGia: number;
   goiThau: string;
   id: number;
   soLuong: number;
+  soLuongTheoChiTieu: number;
   thanhTien: string;
   bangChu: string;
+  giaTriDamBao: string
   idVirtual?: number;
   isEdit: boolean;
+  children?: DanhSachGoiThau[];
+  level?: number;
+  expand?: boolean;
+  parent?: DanhSachGoiThau
 }
 export class CanCuXacDinh {
   id: number;
   idVirtual: number;
   loaiCanCu: string;
   tenTlieu: string;
+  taiLieu: any;
+  moTa: string;
   fileDinhKems: Array<FileDinhKem>;
   children: Array<FileDinhKem>;
 }
+
+export class ThongTinQuyetDinh {
+  id: number;
+  loaiVthh: string;
+  tenVthh: string;
+  cloaiVthh: string;
+  tenCloaiVthh: string;
+  dviTinh: string;
+  soLuong: number;
+  donGia: number;
+  tongTien: number;
+}
+
+export class KeHoachMuaXuat {
+  id: number;
+  idDanhMuc: number;
+  idNoiDung: number;
+  noiDung: string;
+  sluongDtoan: number;
+  loaiChi: string;
+  tenLoaiChi: string;
+}
+
+export class DanhMucMucPhi {
+  id: number
+  cloaiVthh: string
+  tencLoaiVthh: string
+  hinhThucBq: string
+  loaiDinhMuc: string
+  loaiHinhBq: string
+  loaiVthh: string
+  tenLoaiVthh: string
+  maDinhMuc: string
+  tenDinhMuc: string
+  trangThai: string
+}
+
+
+
+

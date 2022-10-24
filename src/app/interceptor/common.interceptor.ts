@@ -20,7 +20,7 @@ export class CommonInterceptor implements HttpInterceptor {
   constructor(
     private authService: AuthService,
     private notification: NzNotificationService,
-  ) {}
+  ) { }
   intercept(
     request: HttpRequest<unknown>,
     next: HttpHandler,
@@ -34,7 +34,7 @@ export class CommonInterceptor implements HttpInterceptor {
       if (
         !request.url.includes('UploadFile') &&
         !request.url.includes('import') &&
-        !request.url.includes('upload-attachment')&&
+        !request.url.includes('upload-attachment') &&
         !request.url.includes('upload')
       ) {
         headers = headers.append('content-type', 'application/json');

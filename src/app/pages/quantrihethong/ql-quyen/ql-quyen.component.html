@@ -1,128 +1,93 @@
-<div class="luong-thuc__danh-sach">
-  <div class="contentBor chi-tieu__body">
-    <div class="contentDetail">
-      <div class="main-content">
-        <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
-          <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="12">
-              <label class="search__label">Phạm vi báo cáo</label>
-              <input class="search__input" placeholder="Số đề xuất" nz-input [(ngModel)]="searchFilter.soDxuat" />
-            </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Ngày ký từ ngày</label>
-              <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-                [(ngModel)]="startValue" nzPlaceHolder="Ngày ký từ ngày" (nzOnOpenChange)="handleEndOpenChange($event)">
-              </nz-date-picker>
-            </div>
-            <div nz-col nzSpan="6">
-              <label class="search__label">Đến ngày</label>
-              <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
-                [(ngModel)]="endValue" nzPlaceHolder="Đến ngày" (nzOnOpenChange)="handleEndOpenChange($event)">
-              </nz-date-picker>
-            </div>
-            <div nz-col nzSpan="12">
-              <label class="search__label">Trích yếu</label>
-              <input class="search__input" placeholder="Trích yếu" nz-input [(ngModel)]="searchFilter.trichYeu" />
-            </div>
-            <div nz-col nzSpan="12">
-              <label class="search__label">Đơn vị</label>
-              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
-                <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
-                  [nzAutocomplete]="auto" />
-              </nz-input-group>
-              <ng-template #suffixIcon>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
-              <nz-autocomplete #auto>
-                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
-                </nz-auto-option>
-              </nz-autocomplete>
-            </div>
-          </div>
-          <div class="cangiua group-button-search">
-            <button nz-button class="search__button--search" (click)="search()">
+<div class="contentDetail">
+  <div class="contentBlog">
+    <div class="main-content">
+      <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+          <nz-card nzTitle="Quyền">
+            <nz-input-group [nzSuffix]="suffixIcon">
+              <input type="text" nz-input placeholder="Search" />
+            </nz-input-group>
+            <ng-template #suffixIcon>
               <i nz-icon nzType="search"></i>
-              Tìm kiếm
-            </button>
-            <button nz-button class="search__button--clear" (click)="clearFilter()">
-              <i nz-icon nzType="close"></i>
-              Xóa điều kiện
-            </button>
-          </div>
-          <div class="cangiua" *ngIf="errorMessage && errorMessage != ''">
-            <span class="error">{{errorMessage}}</span>
-          </div>
-        </nz-card>
-        <nz-card nzTitle="DANH SÁCH đề xuất kế hoạch lựa chọn nhà thầu" [nzExtra]="tableCard1"
-          class="mt-16 flex-card p-lr16">
-          <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-            [nzShowPagination]="false">
-            <thead>
-              <tr>
-                <th class="text-center" width="60px">STT</th>
-                <th width="45px">
-                  <label nz-checkbox></label>
-                </th>
-                <th width="130px">Số đề xuất</th>
-                <th width="175px">Ngày ký</th>
-                <th width="175px">Đơn vị đề xuất</th>
-                <th width="">Trích yếu</th>
-                <th width="175px">Trạng thái</th>
-                <th width="130px"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let data of basicTable.data; let i = index">
-                <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                <th width="45px">
-                  <label nz-checkbox></label>
-                </th>
-                <td>{{ data.soDxuat }}</td>
-                <td>{{ data.ngayKy }}</td>
-                <td>{{ data.tenDvi }}</td>
-                <td>{{ data.trichYeu }}</td>
-                <td>{{ convertTrangThai(data.trangThai) }}</td>
-                <td class="text-center">
-                  <a (click)="redirectToChiTiet(data.id)">
-                    <i class="fa fa-pencil"></i>
-                  </a>
-                  <a (click)="xoaItem(data)">
-                    <i class="fa fa-trash-o do"></i>
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </nz-table>
-          <div class="tab-content tab-menu" id="myTabContent">
-            <div class="tab-pane fade show active justify-content-between">
-              <div class="trai">
+            </ng-template>
+            <!--có Search: https://ng.ant.design/components/tree-view/en -->
+            <nz-tree [nzExpandAll]="true" #nzTreeComponent [nzData]="nodes" (nzClick)="nzClickNodeTree($event)"
+              (nzContextMenu)="nzClickNodeTree($event)" (nzCheckBoxChange)="nzCheck($event)"
+              (nzExpandChange)="nzCheck($event)">
+            </nz-tree>
+          </nz-card>
+        </div>
+        <!-- Thông tin đơn vị  -->
+        <!-- Thông tin đơn vị  -->
+        <div nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18">
+          <nz-card class="mt16 flex-card p-lr16" [nzExtra]="tableCard1">
+            <form nz-form [formGroup]="detailQuyen" [nzLayout]="'vertical'">
+              <div nz-row [nzGutter]="24">
+                <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Quyền cha</nz-form-label>
+                    <nz-form-control nzErrorTip="Tên đơn vị là bắt buộc!">
+                      <nz-tree-select [nzNodes]="nodes" [nzDefaultExpandAll]="true" [nzDropdownMatchSelectWidth]="true"
+                        nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn" formControlName="parentId">
+                      </nz-tree-select>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Tên quyền</nz-form-label>
+                    <nz-form-control nzErrorTip="Tên quyền là bắt buộc!">
+                      <input nz-input formControlName="name" type="text" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                  <nz-form-item>
+                    <nz-form-label nzRequired>Đường dẫn URL</nz-form-label>
+                    <nz-form-control nzErrorTip="Đường dẫn URL là bắt buộc!">
+                      <input nz-input formControlName="url" type="text" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                  <nz-form-item>
+                    <nz-form-label>Số thứ tự</nz-form-label>
+                    <nz-form-control>
+                      <input nz-input formControlName="thuTu" />
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+                  <nz-form-item>
+                    <nz-form-label>Trạng thái</nz-form-label>
+                    <label nz-checkbox formControlName="trangThai">Mở khóa/Khóa</label>
+                  </nz-form-item>
+                </div>
 
               </div>
-              <div class="canphai">
-                <!-- begin phân trang  -->
-                <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-                  [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-                  (nzPageSizeChange)="changePageSize($event)">
-                  <ng-template #rangeTemplate let-range="range" let-total>
-                    {{ range[0] }}-{{ range[1] }} of {{ total }} items
-                  </ng-template>
-                </nz-pagination>
-                <!-- end phân trang  -->
-              </div>
+            </form>
+            <div class="cangiua group-button-search">
+              <button nz-button class="search__button--search" (click)="sua($event)">
+                <i nz-icon nzType="save"></i>
+                Sửa
+              </button>
+              <button nz-button class="search__button--delete" (click)="xoa($event)">
+                <i nz-icon nzType="delete"></i>
+                Xóa
+              </button>
+
             </div>
-          </div>
-        </nz-card>
-        <ng-template #tableCard1>
-          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
-          </button>
-          <button type="button" class="btn btn-sub">
-            <i class="icon htvbdh_chuyen-xu-ly"></i>
-            <span>Export</span>
-          </button>
-        </ng-template>
+          </nz-card>
+        </div>
       </div>
+      <ng-template #tableCard1>
+        <button type="button" class="btn btn-main" (click)="themoi($event)">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm</span>
+        </button>
+      </ng-template>
+
+
     </div>
   </div>
 </div>

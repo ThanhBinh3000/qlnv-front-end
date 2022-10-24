@@ -1,0 +1,232 @@
+<div>
+    <nz-table [nzFrontPagination]="false" [nzShowPagination]="false">
+        <thead>
+            <tr>
+                <th style="width: 70%;">Chỉ tiêu</th>
+                <th style="width: 10%;">Số lượng(Tấn)</th>
+                <th style="width: 10%;">Đơn giá(Đồng/Kg)</th>
+                <th style="width: 10%;">Trị giá (Triệu đồng)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Vốn chi mua lương thực</td>
+                <td>
+                    {{ (keHoachNhapXuat.soLuongMuaGaoLpdh + keHoachNhapXuat.soLuongMuaGaoXcht ) * 2 +
+                    keHoachNhapXuat.soLuongMuaThoc | number : '1.0-1' : 'vi_VN'}}
+                </td>
+                <td></td>
+                <td>{{ (( keHoachNhapXuat.soLuongMuaThoc * keHoachNhapXuat.donGiaMuaThoc ) +
+                    (keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLqdh) +
+                    (keHoachNhapXuat.soLuongMuaGaoXcht * keHoachNhapXuat.donGiaMuaGaoXcht)) / 1000 | number : '1.0-1' :
+                    'vi_VN'}}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp; 1.1 Mua Thóc</td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaThoc" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaThoc" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>{{ (keHoachNhapXuat.soLuongMuaThoc * keHoachNhapXuat.donGiaMuaThoc)/1000 | number : '0.0-1' :
+                    'vi_VN'}}</td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;1.2 Mua Gạo</td>
+                <td>
+                    {{ keHoachNhapXuat.soLuongMuaGaoLpdh + keHoachNhapXuat.soLuongMuaGaoXcht | number : '1.0-1' :
+                    'vi_VN'}}
+                </td>
+                <td>
+                </td>
+                <td>
+                    {{ ((keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLqdh) +
+                    (keHoachNhapXuat.soLuongMuaGaoXcht * keHoachNhapXuat.donGiaMuaGaoXcht))/1000 | number : '1.0-1' :
+                    'vi_VN'}}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Luân phiên đổi hàng</td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoLpdh" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoLqdh" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>
+                    {{( keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLqdh) / 1000 | number : '1.0-1'
+                    :
+                    'vi_VN' }}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Mua gạo xuất cấp hỗ trợ học sinh, dự án trồng rừng</td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoXcht" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoXcht" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>
+                    {{ (keHoachNhapXuat.soLuongMuaGaoXcht * keHoachNhapXuat.donGiaMuaGaoXcht)/1000 | number : '1.0-1' :
+                    'vi_VN' }}
+                </td>
+            </tr>
+            <tr>
+                <td>Nguồn vốn có</td>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;2.1 Tiền thu được từ xuất bán</td>
+                <td>
+                    {{ keHoachNhapXuat.soLuongBanThoc +
+                    (keHoachNhapXuat.soLuongBanGao + keHoachNhapXuat.soLuongGaoCtro) * 2 | number : '1.0-1' :
+                    'vi_VN' }}
+                </td>
+                <td>
+                </td>
+                <td>
+                    {{ ((keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc) +
+                    (keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao))/1000 | number : '1.0-1' :
+                    'vi_VN' }}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Bán thóc</td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanThoc" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanThoc" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>
+                    {{ (keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc)/1000 | number : '1.0-1' :
+                    'vi_VN' }}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Bán gạo</td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanGao" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanGao" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>
+                    {{ (keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao)/1000 | number : '1.0-1' :
+                    'vi_VN' }}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;2.2 Vốn trình bổ sung mua bù gạo xuất cứu trợ</td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongGaoCtro" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaGaoCtro" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+                <td>
+                    {{ (keHoachNhapXuat.soLuongGaoCtro * keHoachNhapXuat.donGiaGaoCtro)/1000 | number : '1.0-1' :
+                    'vi_VN' }}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;2.3 Vốn NSNN bố trí từ nguồn chi DTQG</td>
+                <td></td>
+                <td></td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonNsnn" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;&nbsp;2.4 Vốn bố trí từ nguồn thường xuyên để mua gạo xuất cấp hỗ trợ học sinh, dự án
+                    trồng rừng</td>
+                <td></td>
+                <td></td>
+                <td>
+                    <div>
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonTx" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView">
+                        </nz-input-number>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </nz-table>
+</div>

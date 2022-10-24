@@ -8,6 +8,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DonviService } from 'src/app/services/donvi.service';
+import { Globals } from 'src/app/shared/globals';
 
 @Component({
   selector: 'dialog-them-thong-tin-muoi',
@@ -30,6 +31,7 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
+    private globals: Globals,
   ) {}
 
   async ngOnInit() {
@@ -136,11 +138,14 @@ export class DialogThemThongTinMuoiComponent implements OnInit {
       donViId: donVi.id,
     });
     this.chiTieuKeHoachNamService
-      .tonKhoDauNam({ maDvi: donVi.maDvi, maVthhList: ['04'] })
+      .tonKhoDauNam({
+        maDvi: donVi.maDvi,
+        maVthhList: [this.globals.prop.MA_VTHH],
+      })
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           res?.data.forEach((tonKho) => {
-            if (tonKho.maVthh == '04') {
+            if (tonKho.maVthh == this.globals.prop.MA_VTHH) {
               switch (tonKho.nam) {
                 case (this.yearNow - 1).toString():
                   this.formData.patchValue({

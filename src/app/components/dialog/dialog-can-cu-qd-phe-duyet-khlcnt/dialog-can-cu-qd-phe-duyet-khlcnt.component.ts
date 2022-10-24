@@ -1,4 +1,4 @@
-import { QuyetDinhPheDuyetKeHoachLCNTService } from './../../../services/quyetDinhPheDuyetKeHoachLCNT.service';
+import { QuyetDinhPheDuyetKeHoachLCNTService } from '../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -19,13 +19,13 @@ export class DialogCanCuQDPheDuyetKHLCNTComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
   text: string = '';
-
+  status: string = '11';
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
-  ) {}
+  ) { }
 
   async ngOnInit() {
     this.spinner.show();
@@ -49,27 +49,26 @@ export class DialogCanCuQDPheDuyetKHLCNTComponent implements OnInit {
 
   async search() {
     this.dataTable = [];
-    this.totalRecord = 0;
+    const yearNow = new Date().getUTCFullYear();
     let body = {
       denNgayQd: null,
-      loaiVthh: '00',
-      namKhoach: '',
+      // loaiVthh: '00',
+      namKhoach: yearNow,
       paggingReq: {
         limit: this.pageSize,
-        page: this.page,
+        page: this.page - 1,
       },
       soQd: '',
       str: null,
-      trangThai: '01',
+      trangThai: this.status,
       tuNgayQd: null,
     };
-    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.timKiem(body);
+    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      if (data && data.content && data.content.length > 0) {
-        this.dataTable = data.content;
+      if (data && data.length > 0) {
+        this.dataTable = data;
       }
-      this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

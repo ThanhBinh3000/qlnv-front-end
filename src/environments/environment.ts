@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
-  SERVICE_API: 'http://192.168.1.117:8762/qlnv-gateway',
-  AUTHEN_API: 'http://192.168.1.62:8762',
+  AUTHEN_API: 'http://192.168.1.118:8888',
+  SERVICE_API: 'http://192.168.1.118:8888',
+  LOCAL: 'http://192.168.5.212:189'
 };
 
 /*

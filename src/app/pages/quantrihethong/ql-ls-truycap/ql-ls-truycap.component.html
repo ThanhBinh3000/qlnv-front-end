@@ -1,17 +1,21 @@
 <div class="luong-thuc__danh-sach">
   <div class="contentBor chi-tieu__body">
     <div class="contentDetail">
-      <div class="main-content">
-        <nz-card nzTitle="Tìm kiếm" class="mt16 flex-card p-lr16">
+      <div class="main-content bg-trang">
+        <nz-card class="mt16 flex-card p-lr16">
           <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="12">
-              <label class="search__label">Phạm vi báo cáo</label>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Người sử dụng</label>
               <input class="search__input" placeholder="Số đề xuất" nz-input [(ngModel)]="searchFilter.soDxuat" />
             </div>
             <div nz-col nzSpan="6">
-              <label class="search__label">Ngày ký từ ngày</label>
-              <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
-                [(ngModel)]="startValue" nzPlaceHolder="Ngày ký từ ngày" (nzOnOpenChange)="handleEndOpenChange($event)">
+              <label class="search__label">Danh sách chức năng</label>
+              <input class="search__input" placeholder="Số đề xuất" nz-input />
+            </div>
+            <div nz-col nzSpan="6">
+              <label class="search__label">Từ ngày</label>
+              <nz-date-picker #endDatePicker [nzDisabledDate]="disabledEndDate" nzFormat="yyyy-MM-dd"
+                [(ngModel)]="endValue" nzPlaceHolder="Đến ngày" (nzOnOpenChange)="handleEndOpenChange($event)">
               </nz-date-picker>
             </div>
             <div nz-col nzSpan="6">
@@ -20,24 +24,6 @@
                 [(ngModel)]="endValue" nzPlaceHolder="Đến ngày" (nzOnOpenChange)="handleEndOpenChange($event)">
               </nz-date-picker>
             </div>
-            <div nz-col nzSpan="12">
-              <label class="search__label">Trích yếu</label>
-              <input class="search__input" placeholder="Trích yếu" nz-input [(ngModel)]="searchFilter.trichYeu" />
-            </div>
-            <div nz-col nzSpan="12">
-              <label class="search__label">Đơn vị</label>
-              <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
-                <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInput($event)"
-                  [nzAutocomplete]="auto" />
-              </nz-input-group>
-              <ng-template #suffixIcon>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
-              <nz-autocomplete #auto>
-                <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
-                </nz-auto-option>
-              </nz-autocomplete>
-            </div>
           </div>
           <div class="cangiua group-button-search">
             <button nz-button class="search__button--search" (click)="search()">
@@ -45,7 +31,7 @@
               Tìm kiếm
             </button>
             <button nz-button class="search__button--clear" (click)="clearFilter()">
-              <i nz-icon nzType="close"></i>
+              <i class="icon  htvbdh_nhap-lai1"></i>
               Xóa điều kiện
             </button>
           </div>
@@ -53,8 +39,7 @@
             <span class="error">{{errorMessage}}</span>
           </div>
         </nz-card>
-        <nz-card nzTitle="DANH SÁCH đề xuất kế hoạch lựa chọn nhà thầu" [nzExtra]="tableCard1"
-          class="mt-16 flex-card p-lr16">
+        <nz-card nzTitle="DANH SÁCH Lịch sử truy câp" [nzExtra]="tableCard1" class="mt-16 flex-card p-lr16">
           <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
             [nzShowPagination]="false">
             <thead>
@@ -63,12 +48,11 @@
                 <th width="45px">
                   <label nz-checkbox></label>
                 </th>
-                <th width="130px">Số đề xuất</th>
-                <th width="175px">Ngày ký</th>
-                <th width="175px">Đơn vị đề xuất</th>
-                <th width="">Trích yếu</th>
-                <th width="175px">Trạng thái</th>
-                <th width="130px"></th>
+                <th width="130px">Người sử dụng</th>
+                <th width="175px">Chức năng thao tác</th>
+                <th width="175px">Địa chỉ IP</th>
+                <th width="">Thao tác</th>
+                <th width="175px">Ngày giờ sử dụng</th>
               </tr>
             </thead>
             <tbody>
@@ -82,14 +66,6 @@
                 <td>{{ data.tenDvi }}</td>
                 <td>{{ data.trichYeu }}</td>
                 <td>{{ convertTrangThai(data.trangThai) }}</td>
-                <td class="text-center">
-                  <a (click)="redirectToChiTiet(data.id)">
-                    <i class="fa fa-pencil"></i>
-                  </a>
-                  <a (click)="xoaItem(data)">
-                    <i class="fa fa-trash-o do"></i>
-                  </a>
-                </td>
               </tr>
             </tbody>
           </nz-table>
@@ -113,10 +89,7 @@
           </div>
         </nz-card>
         <ng-template #tableCard1>
-          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0)">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
-          </button>
+
           <button type="button" class="btn btn-sub">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Export</span>

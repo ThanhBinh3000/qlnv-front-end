@@ -16,6 +16,7 @@ export class XuatComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
   routes = NHAP_ROUTE_LIST;
   routerUrl: string = "";
+  defaultUrl: string = '/xuat'
 
   constructor(
     private router: Router,
@@ -76,5 +77,10 @@ export class XuatComponent implements OnInit, AfterViewInit {
       this.myTab.nativeElement.className =
         'nav nav-tabs expand-sidebar next-an';
     }
+  }
+
+  redirect(url: string) {
+    this.router.navigate([this.defaultUrl + url]);
+    this.routerUrl = this.defaultUrl + url;
   }
 }

@@ -1,53 +1,28 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DAU_GIA_LIST } from './dau-gia.constant';
-
+import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 @Component({
   selector: 'app-dau-gia',
   templateUrl: './dau-gia.component.html',
   styleUrls: ['./dau-gia.component.scss'],
 })
 export class DauGiaComponent implements OnInit {
-  searchValue = '';
-  dauThauList = DAU_GIA_LIST;
-
-  // search
-  searchFilter = {
-    soQD: '',
-  };
-  // modal
-  isVisible = false;
-  isVisible2 = false;
-
+  isVisibleChangeTab$ = new Subject();
+  visibleTab: boolean = true;
   constructor(
+    public userService: UserService,
+    public globals: Globals
   ) { }
 
-  ngOnInit(): void { }
-
-  // modal func
-  showModal(): void {
-    this.isVisible = true;
+  ngOnInit(): void {
+    this.isVisibleChangeTab$.subscribe((value: boolean) => {
+      this.visibleTab = value;
+    });
   }
-
-  handleOk(): void {
-    this.isVisible = false;
-  }
-
-  handleCancel(): void {
-    this.isVisible = false;
-  }
-  //
-  // modal func
-  showModal2(): void {
-    this.isVisible2 = true;
-  }
-
-  handleOk2(): void {
-    this.isVisible2 = false;
-  }
-
-  handleCancel2(isVisible): void {
-    this.isVisible2 = isVisible;
+  tabSelected: number = 0;
+  selectTab(tab: number) {
+    this.tabSelected = tab;
+    // this.loaiVthhSelected = '';
   }
 }

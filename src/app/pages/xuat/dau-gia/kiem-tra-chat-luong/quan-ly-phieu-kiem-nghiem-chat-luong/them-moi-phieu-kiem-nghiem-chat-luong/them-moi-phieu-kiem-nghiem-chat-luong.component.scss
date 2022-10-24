@@ -1,0 +1,36 @@
+::ng-deep {
+  .hh__container {
+    .ant-card-body {
+      padding-right: 0px !important;
+      padding-left: 0px !important;
+    }
+  }
+
+  .header-table-phieuknclh {
+    height: 163px;
+  }
+
+  .phieu-kiem-nghiem {
+    .ant-card-body {
+      margin-bottom: 36px;
+    }
+
+    .tab-content.tab-menu {
+      margin: 0px !important;
+    }
+  }
+
+  .select-hh {
+    display: flex;
+    align-items: center;
+
+    .radio-ctrl {
+      margin-bottom: 8px;
+    }
+  }
+}
+.them-phieu-kiem-nghiem {
+  .form-item {
+    padding: 6px 10px;
+  }
+}

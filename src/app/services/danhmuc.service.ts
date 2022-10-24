@@ -7,14 +7,34 @@ import { BaseService } from './base.service';
   providedIn: 'root',
 })
 export class DanhMucService extends BaseService {
-  gateway: string = '/qlnv-gateway/qlnv-category'
+  gateway: string = '/qlnv-category'
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'DanhMuc');
+    super(httpClient, 'dm-hang', '/qlnv-category');
   }
 
   loadDanhMucHangHoa() {
     const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/danh-sach`;
     return this.httpClient.post<any>(url, null);
+  }
+
+  loadDanhMucHangHoaAsync(): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/danh-sach`;
+    return this.httpClient.post<any>(url, null).toPromise();
+  }
+
+  loadDanhMucHangHoaTheoMaCha(body): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/danh-sach/ma-cha`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  loadDanhMucHangGiaoChiTieu(): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/gct-vat-tu`;
+    return this.httpClient.post<any>(url, null).toPromise();
+  }
+
+  loaiVatTuHangHoaGetAll(): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/danh-sach/LOAI_HHOA`;
+    return this.httpClient.get<any>(url).toPromise();
   }
 
   phuongThucDauThauGetAll(): Promise<any> {
@@ -44,6 +64,40 @@ export class DanhMucService extends BaseService {
 
   danhMucChungGetAll(loai: string): Promise<any> {
     const url = `${environment.SERVICE_API}${this.gateway}/dmuc-chung/danh-sach/${loai}`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
+  danhMucThuKhoGetList(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-thukho/danh-sach`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  danhMucLoaiKhoGetList(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-lh-kho/danh-sach`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  danhMucPhuongThucBaoQuanGetList(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-pthuc-bquan/danh-sach`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+  loadDanhMucHinhThucBaoQuan(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dmuc-hthuc-bquan/findList`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  traCuuTieuChuanKyThuat(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-tieu-chuan/tra-cuu`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
+  danhSachTieuChuan(): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-tieu-chuan/danh-sach`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
+  loadDanhMucHangChiTiet(id: string): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/chi-tiet/${id}`;
     return this.httpClient.get<any>(url).toPromise();
   }
 }

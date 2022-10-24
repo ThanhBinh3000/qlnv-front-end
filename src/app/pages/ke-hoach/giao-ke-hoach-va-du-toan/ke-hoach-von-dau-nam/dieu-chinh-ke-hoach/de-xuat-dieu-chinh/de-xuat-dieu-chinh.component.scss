@@ -1,0 +1,41 @@
+.action-top {
+  padding-right: 50px;
+}
+
+.chi-tieu__body {
+  .flex-card.ant-card {
+    background: transparent;
+    box-shadow: unset;
+    margin-bottom: 0px !important;
+    margin-top: 11px !important;
+    border-radius: 0px;
+  }
+}
+
+.trai {
+  display: flex;
+  align-items: center;
+}
+
+.last-breadcrumb {
+  color: #4e5484 !important;
+  font-weight: 400;
+  font-size: 12px;
+}
+
+::ng-deep {
+  .tab-giao-chi-tieu {
+    position: relative;
+
+    // .tab-menu.tab-content {
+    //   margin: 0px 16px;
+    // }
+  }
+
+  .action-giao-chi-tieu {
+    position: absolute;
+    top: 0px;
+    right: 22px;
+    margin-top: 10px;
+  }
+}

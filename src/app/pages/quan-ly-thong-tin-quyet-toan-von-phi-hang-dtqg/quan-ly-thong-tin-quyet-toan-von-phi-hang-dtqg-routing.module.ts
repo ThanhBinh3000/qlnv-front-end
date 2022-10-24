@@ -19,6 +19,13 @@ const routes: Routes = [
             (m) => m.QuanLyThongTinQuyetToanModule,
         )
       },
+      {
+        path: 'von-phi-hang-cua-bo-nganh',
+        loadChildren: () =>
+          import('./von-phi-hang-cua-bo-nganh/von-phi-hang-cua-bo-nganh.module').then(
+            (m) => m.VonPhiHangCuaBoNganhModule,
+          )
+      },
     ],
   },
 ];

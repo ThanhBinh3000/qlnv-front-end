@@ -10,16 +10,20 @@ import { TonKhoDauNamLuongThuc } from '../models/ThongTinChiTieuKHNam';
   providedIn: 'root',
 })
 export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
-  GATEWAY = '/qlnv-gateway/qlnv-khoachphi';
+  GATEWAY = '/qlnv-khoach';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'ChiTieuKeHoachNamCapTongCuc');
+    super(httpClient, 'ChiTieuKeHoachNamCapTongCuc', '');
   }
 
   timKiem(body: any): Promise<any> {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam?`;
-    if (body.donViId)
+    if (body.maDvi)
       url_ += 'donViId=' + encodeURIComponent('' + body.donViId) + '&';
+    if (body.donViId)
+      url_ += 'maDvi=' + encodeURIComponent('' + body.maDvi) + '&';
+    if (body.capDvi)
+      url_ += 'capDvi=' + encodeURIComponent('' + body.capDvi) + '&';
     if (body.ngayKyTuNgay)
       url_ +=
         'ngayKyTuNgay=' + encodeURIComponent('' + body.ngayKyTuNgay) + '&';
@@ -27,10 +31,12 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
       url_ +=
         'ngayKyDenNgay=' + encodeURIComponent('' + body.ngayKyDenNgay) + '&';
     if (body.soQD) url_ += 'soQD=' + encodeURIComponent('' + body.soQD) + '&';
-    if (body.tenDonVi)
-      url_ += 'tenDonVi=' + encodeURIComponent('' + body.tenDonVi) + '&';
+    if (body.tenDvi)
+      url_ += 'tenDonVi=' + encodeURIComponent('' + body.tenDvi) + '&';
     if (body.trichYeu)
       url_ += 'trichYeu=' + encodeURIComponent('' + body.trichYeu) + '&';
+    if (body.namKeHoach)
+      url_ += 'namKeHoach=' + encodeURIComponent('' + body.namKeHoach) + '&';
     if (body.pageNumber != null || body.pageNumber != undefined)
       url_ +=
         'paggingReq.page=' +
@@ -81,12 +87,40 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam`;
     return this.httpClient.put(url, body).toPromise();
   }
+
   tonKhoDauNam(body: any): Promise<ResponseData<Array<TonKhoDauNamLuongThuc>>> {
-    const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-kho/kt-tinhtrang-hienthoi/thong-tin`;
+    const url = `${environment.SERVICE_API}/qlnv-kho/kt-tinhtrang-hienthoi/thong-tin`;
     return this.httpClient.post(url, body).toPromise();
   }
   downloadFile(): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/download/import-template`;
     return this.httpClient.post(url, null, { responseType: 'blob' });
+  }
+  downloadFileKeHoach(body: any): Observable<Blob> {
+    const url = `${environment.SERVICE_API}/qlnv-core/file/download`;
+    return this.httpClient.post(url, body, { responseType: 'blob' });
+  }
+  deleteMultiple(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/delete/multiple`;
+    return this.httpClient.post(url, body).toPromise();
+  }
+  getCountChiTieu(): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/count`;
+    return this.httpClient.get(url).toPromise();
+  }
+
+  loadThongTinChiTieuKeHoachCucNam(namKh: number): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/dxkh-lcnt/${namKh}`;
+    return this.httpClient.get<any>(url_).toPromise();
+  }
+
+  canCuTongCuc(namKh: number): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/qd-btc-giao-tcdt/${namKh}`;
+    return this.httpClient.get<any>(url_).toPromise();
+  }
+
+  canCuCuc(namKh: number): Promise<any> {
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/ct-kh-tc/${namKh}`;
+    return this.httpClient.get<any>(url_).toPromise();
   }
 }

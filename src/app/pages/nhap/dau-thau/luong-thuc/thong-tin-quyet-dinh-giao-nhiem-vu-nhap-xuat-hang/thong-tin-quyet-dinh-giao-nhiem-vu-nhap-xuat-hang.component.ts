@@ -1,23 +1,22 @@
 import {
-  ChangeDetectionStrategy, Component,
+  Component,
   OnInit,
   ViewChild
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
+import { DialogThongTinDonViThucHienQuyetDinhComponent } from 'src/app/components/dialog/dialog-thong-tin-danh-sach-don-vi-thuc-hien-quyet-dinh/dialog-thong-tin-danh-sach-don-vi-thuc-hien-quyet-dinh.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { LOAI_HANG_DTQG, LOAI_QUYET_DINH } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { ChiTietGiaoNhiemVuNhapXuat } from 'src/app/models/ChiTietGiaoNhiemVuNhapXuat';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/quyetDinhGiaoNhapHang.service';
-import { TAB_SELECTED } from './../../../../ke-hoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam.constant';
-import * as dayjs from 'dayjs';
-import { DialogThongTinDonViThucHienQuyetDinhComponent } from 'src/app/components/dialog/dialog-thong-tin-danh-sach-don-vi-thuc-hien-quyet-dinh/dialog-thong-tin-danh-sach-don-vi-thuc-hien-quyet-dinh.component';
-import { DialogCanCuHopDongComponent } from 'src/app/components/dialog/dialog-can-cu-hop-dong/dialog-can-cu-hop-dong.component';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 
 @Component({
   selector: 'thong-tin-quyet-dinh-giao-nhiem-vu-nhap-xuat-hang',
@@ -43,9 +42,11 @@ export class ThongTinGiaoNhiemVuNhapXuatHangComponent implements OnInit {
   optionsDonVi: any[] = [];
   selectedDonVi: any = null;
 
-  optionsDVT: any[] = [];
   optionsDonViTinh: any[] = [];
   donViTinhModel: any = null;
+
+  optionsLoaiNX: any[] = [];
+  loaiNXModel: any = null;
 
   nhapIdDefault: string = LOAI_QUYET_DINH.NHAP;
   xuatIdDefault: string = LOAI_QUYET_DINH.XUAT;
@@ -82,6 +83,7 @@ export class ThongTinGiaoNhiemVuNhapXuatHangComponent implements OnInit {
       await Promise.all([
         this.loadDonVi(),
         this.loadDonViTinh(),
+        this.loadLoaiNhapXuat(),
 
       ]);
       await this.loadChiTiet(this.id);
@@ -109,12 +111,16 @@ export class ThongTinGiaoNhiemVuNhapXuatHangComponent implements OnInit {
             this.startValue = res.data.children[0].tuNgayThien ? dayjs(res.data.children[0].tuNgayThien).toDate() : null;
             this.endValue = res.data.children[0].denNgayThien ? dayjs(res.data.children[0].denNgayThien).toDate() : null;
             this.soLuong = res.data.children[0].soLuong;
-            this.donViTinh = res.data.children[0].dvt;
+            this.donViTinh = res.data.children[0].donViTinh;
+            this.donViTinhModel = res.data.children[0].donViTinh;
             this.loaiVTHH = res.data.children[0].maVthh;
           }
         }
         if (res.data.children1) {
           this.chiTiet.detail1 = res.data.children1;
+          for (let i = 0; i < this.chiTiet.detail1.length; i++) {
+            this.chiTiet.detail1[i].detail = res.data.children1[i].children;
+          }
         }
         if (res.data.children2) {
           this.chiTiet.fileDinhKems = res.data.children2;
@@ -196,6 +202,25 @@ export class ThongTinGiaoNhiemVuNhapXuatHangComponent implements OnInit {
 
   selectDonViTinh(donViTinh) {
     this.donViTinhModel = donViTinh;
+  }
+
+  async loadLoaiNhapXuat() {
+    try {
+      const res = await this.quyetDinhGiaoNhapHangService.getLoaiNhapXuat();
+      this.optionsLoaiNX = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.optionsLoaiNX = res.data;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    } catch (e) {
+      console.log('error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  selectLoaiNX(nxModel) {
+    this.loaiNXModel = nxModel;
   }
 
   reactToDonViThuchienQuyetDinh(data?: any) {
@@ -367,7 +392,7 @@ export class ThongTinGiaoNhiemVuNhapXuatHangComponent implements OnInit {
           "detail": [
             {
               "denNgayThien": this.endValue ? dayjs(this.endValue).format("YYYY-MM-DD") : null,
-              "dvt": this.donViTinhModel.maDviTinh,
+              "dvt": this.donViTinhModel,
               "id": this.id,
               "idHdr": 0,
               "loaiNx": this.loaiNx,

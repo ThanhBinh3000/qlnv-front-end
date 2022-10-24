@@ -1,0 +1,134 @@
+<ng-container *ngIf="!isDetail">
+  <div class="bg-trang">
+    <nz-card class="mt16 flex-card p-lr16">
+      <div class="search__body" nz-row [nzGutter]="20">
+        <div nz-col nzSpan="4">
+          <label class="search__label">Số Quyết định nhập</label>
+          <input class="search__input" placeholder="Nhập Số Quyết định nhập" nz-input
+            [(ngModel)]="searchFilter.soQuyetDinh" />
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Số phiếu</label>
+          <input class="search__input" placeholder="Số phiếu" nz-input [(ngModel)]="searchFilter.soPhieu" />
+        </div>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Ngày nhập kho</label>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayNhapKho" nzFormat="dd/MM/yyyy"></nz-range-picker>
+        </div>
+      </div>
+      <div class="cangiua group-button-search">
+        <button nz-button class="search__button--clear" (click)="clearFilter()">
+          <i class="icon  htvbdh_nhap-lai1"></i>
+          Xóa điều kiện
+        </button>
+        <button nz-button class="search__button--search" (click)="search()">
+          <i nz-icon nzType="search"></i>
+          Tìm kiếm
+        </button>
+      </div>
+    </nz-card>
+    <div class="group-button">
+      <h3>Danh sách phiếu nhập kho </h3>
+      <div class="buttons">
+        <button type="button" class="btn btn-sub" (click)="export()">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
+          <span>Xuất file</span>
+        </button>
+        <button type="button" class="btn btn-sub" (click)="print()">
+          <i class="icon htvbdh_tcdt_print"></i>
+          <span>In</span>
+        </button>
+        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)" *ngIf="userService.isChiCuc()">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm</span>
+        </button>
+      </div>
+    </div>
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table nzBordered #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable">
+        <thead>
+          <tr>
+            <th width="60px">STT</th>
+            <th></th>
+            <th>Số QĐ giao nhiệm vụ</th>
+            <th>Năm kế hoạch</th>
+            <th>Thời gian NH trước ngày</th>
+            <th>Số phiếu nhập kho</th>
+            <th>Ngày nhập kho</th>
+            <th>Điểm kho</th>
+            <th>Nhà kho</th>
+            <th>Ngăn kho</th>
+            <th>Lô kho</th>
+            <th>Số phiếu KTCL</th>
+            <th>Ngày giám định</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of dataTable , let i = index">
+            <tr>
+              <td>{{(page - 1) * pageSize + i + 1}}</td>
+              <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+              <td>{{ item.soQd }}</td>
+              <td>{{ item.namNhap }}</td>
+              <td>{{ item.tgianNkho }}</td>
+              <td colspan="9"></td>
+              <td>
+                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                  <i class="fa fa-plus"></i>
+                </a>
+              </td>
+            </tr>
+            <ng-container *ngIf="expandSet.has(i)">
+              <tr *ngFor="let dataPhieu of item.detail.listPhieuNhapKho">
+                <td colspan="5"></td>
+                <td>{{dataPhieu.soPhieuNhapKho}}</td>
+                <td>{{dataPhieu.ngayTao | date: 'dd/MM/YYYY' }}</td>
+                <td>{{dataPhieu.tenDiemKho}}</td>
+                <td>{{dataPhieu.tenNhaKho}}</td>
+                <td>{{dataPhieu.tenNganKho}}</td>
+                <td>{{dataPhieu.tenLoKho}}</td>
+                <td>{{dataPhieu.soPhieuKtraCl}}</td>
+                <td>{{dataPhieu.ngayGuiDuyet | date: 'dd/MM/YYYY'}}</td>  <!-- //Data fake -->
+                <td>{{dataPhieu.tenTrangThai}}</td>
+                <td>
+                  <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(true, dataPhieu.id)">
+                    <i class="fa fa-eye"></i>
+                  </a>
+                  <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, dataPhieu.id)">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a *ngIf="dataPhieu.trangThai == STATUS.DU_THAO" (click)="xoaItem(dataPhieu)">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </nz-table>
+      <div class="tab-content tab-menu">
+        <div class="tab-pane fade show active justify-content-between">
+          <div class="trai"></div>
+          <div class="canphai">
+            <!-- begin phân trang  -->
+            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
+              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
+              (nzPageSizeChange)="changePageSize($event)">
+              <ng-template #rangeTemplate let-range="range" let-total>
+                {{ range[0] }}-{{ range[1] }} of {{ total }} items
+              </ng-template>
+            </nz-pagination>
+            <!-- end phân trang  -->
+          </div>
+        </div>
+      </div>
+    </nz-card>
+  </div>
+</ng-container>
+<ng-container class="chi-tiet" *ngIf="isDetail">
+  <them-moi-phieu-nhap-kho [id]="selectedId" (showListEvent)="showList()" [isView]="isView" [typeVthh]="typeVthh"
+    [isTatCa]="isTatCa" [idQdGiaoNvNh]="idQdGiaoNvNh">
+  </them-moi-phieu-nhap-kho>
+</ng-container>

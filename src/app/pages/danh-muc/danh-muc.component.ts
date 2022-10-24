@@ -7,6 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { UserLogin } from 'src/app/models/userlogin';
+import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { ROUTE_LIST_DANH_MUC } from './danh-muc.constant';
 @Component({
@@ -16,14 +17,33 @@ import { ROUTE_LIST_DANH_MUC } from './danh-muc.constant';
 })
 export class DanhMucComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
-  isSuperAdmin: boolean = false;
   userLogin: UserLogin;
   routes = ROUTE_LIST_DANH_MUC;
-  constructor(private userService: UserService) {}
+  routerUrl: string = "";
+  constructor(
+    private userService: UserService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.userLogin = this.userService.getUserLogin();
-    this.isSuperAdmin = this.userLogin.userName == 'adminteca';
+    if (this.router.url) {
+      this.routerUrl = this.router.url;
+    }
+  }
+
+  routerNavigate(url) {
+    this.routerUrl = url;
+    this.router.navigateByUrl(url);
+  }
+
+  updateCssOverlay() {
+    setTimeout(() => {
+      let child = document.getElementsByClassName('dau-thau-tab');
+      if (child && child.length > 0) {
+        child[0].parentElement.classList.add('left-0');
+      }
+    }, 200);
   }
 
   ngAfterViewInit() {

@@ -1,0 +1,96 @@
+<div>
+  <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+    <thead>
+      <tr>
+        <th class="text-center" style="width: 2%;">STT</th>
+        <th style="width: 73%;">Nội dung</th>
+        <th style="width: 20%;">Dự toán</th>
+        <th style="width: 5%;">Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td>
+          <nz-input-group>
+            <nz-select [nzDisabled]="isView" [(ngModel)]="rowItem.loaiChi" (ngModelChange)="onChangeNoiDung($event)"
+              nzAllowClear>
+              <nz-option [nzValue]="item.ma" [nzLabel]="item.giaTri" *ngFor="let item of dsNoiDung">
+              </nz-option>
+            </nz-select>
+          </nz-input-group>
+        </td>
+        <td>
+          <nz-input-group>
+            <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" nz-input [(ngModel)]="rowItem.sluongDtoan"
+              [nzMin]="0">
+            </nz-input-number>
+          </nz-input-group>
+        </td>
+        <td style="text-align: center;">
+          <a (click)="themMoiItem()" *ngIf="!isView">
+            <i class="fa fa-plus"></i>
+          </a>
+          <a (click)="clearData()" *ngIf="!isView">
+            <i class="fa fa-trash-o do"></i>
+          </a>
+        </td>
+      </tr>
+    </tbody>
+    <tbody>
+      <tr *ngFor="let data of dataTable; let idx = index">
+        <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
+          <td>{{ idx + 1 }}</td>
+          <td>{{ data.tenLoaiChi }}</td>
+          <td>{{ data.sluongDtoan | number : '1.0-1' : 'vi_VN' }}</td>
+          <td style="text-align: center;">
+            <a (click)="editItem(idx)" *ngIf="!isView">
+              <i class=" fa fa-pencil"></i>
+            </a>
+            <a (click)="xoaItem(idx)" *ngIf="!isView">
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </ng-container>
+        <ng-template #editTemplate>
+          <td></td>
+          <td>
+            <nz-input-group>
+              <nz-select [nzDisabled]="isView" [(ngModel)]="dataEdit[idx].data.loaiChi" (ngModelChange)="onChangeNoiDung($event, dataEdit[idx].data )"
+                         nzAllowClear>
+                <nz-option [nzValue]="item.ma" [nzLabel]="item.giaTri" *ngFor="let item of dsNoiDung">
+                </nz-option>
+              </nz-select>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.sluongDtoan" [nzMin]="0">
+              </nz-input-number>
+            </nz-input-group>
+          </td>
+
+          <td class="text-center">
+            <a (click)="luuEdit(idx)" class="save">
+              <i class="fa fa-save"></i>
+            </a>
+            <a (click)="huyEdit(idx)">
+              <i class="fa fa-ban do"></i> </a>
+          </td>
+        </ng-template>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td style="text-align: right; font-weight: 700" colspan="2">Cộng</td>
+        <td>{{ calcTong() | number : '1.0-1' : 'vi_VN' }}</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td style="text-align: right; font-weight: 700" colspan="2">Tổng giá trị theo QĐ của TTCP</td>
+        <td class="xanh">{{tongGiaTri | number : '1.0-1' : 'vi_VN' }}</td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </nz-table>
+</div>

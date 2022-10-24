@@ -1,0 +1,86 @@
+.file-list {
+  width: 50%;
+  overflow: unset;
+}
+
+::ng-deep {
+  .header-file {
+    display: flex;
+    gap: 10px;
+  }
+
+  .header-file,
+  .body-file {
+    .ant-input-group-addon {
+      position: relative;
+
+      .input-file {
+        left: 0;
+        position: absolute;
+        width: 100%;
+        opacity: 0;
+        top: -2px;
+      }
+    }
+  }
+}
+
+.icon-plus,
+.icon-download,
+.icon-edit,
+.icon-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F8F9FA;
+  border: 1px solid #C4C9CC;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0px 7px;
+}
+
+.icon-download {
+  padding: 4px 7px;
+}
+
+.icon-xoa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFF3F3;
+  border: 1px solid #FF4D4F;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0px 8px;
+}
+
+.body-file {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+
+  .ten-file {
+    font-size: 13px;
+    color: #2196F3;
+  }
+
+  .stt-file {
+    width: 10%;
+  }
+
+  .content-text {
+    width: 51%;
+  }
+
+  .name-file {
+    width: 50%;
+  }
+}
+
+::ng-deep {
+  .list-file {
+    .ant-input-group-addon:last-child {
+      padding: 0px 8px !important;
+    }
+  }
+}

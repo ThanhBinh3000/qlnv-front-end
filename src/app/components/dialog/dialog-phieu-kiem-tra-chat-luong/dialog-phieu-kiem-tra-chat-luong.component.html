@@ -1,0 +1,83 @@
+<form nz-form class="form__thong-tin-muoi">
+  <div nz-row [nzGutter]="[16, 24]">
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Đơn vị tính </nz-form-label>
+        <input nz-input />
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="16"></div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Số lượng kê lót trong năm </nz-form-label>
+        <nz-form-control>
+          <input nz-input />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Đơn giá </nz-form-label>
+        <nz-form-control>
+          <input nz-input />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Thành tiền </nz-form-label>
+        <nz-form-control>
+          <input nz-input readonly />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Số lượng kê lót đã quyết toán năm trước </nz-form-label>
+        <nz-form-control>
+          <input nz-input />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Thành tiền </nz-form-label>
+        <nz-form-control>
+          <input nz-input readonly />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label [nzNoColon]="true"> Tổng giá trị </nz-form-label>
+        <nz-form-control>
+          <input nz-input readonly />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Nội dung </nz-form-label>
+        <textarea rows="3" class="search__input" nz-input></textarea>
+      </nz-form-item>
+    </div>
+  </div>
+</form>
+
+<div class="modal-footer">
+  <div class="nut">
+    <div class="cantrai">
+    </div>
+    <div class="canphai">
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="handleOk()"
+        [disabled]="!formData.valid">
+        <i aria-hidden="true" class="fa fa-save"></i>
+        Lưu
+      </button>
+      <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="handleCancel()">
+        <i aria-hidden="true" class="fa fa-sign-out"></i>
+        Hủy
+      </button>
+    </div>
+  </div>
+</div>

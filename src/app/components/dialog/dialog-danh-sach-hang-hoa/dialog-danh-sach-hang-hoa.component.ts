@@ -1,5 +1,5 @@
 import { MESSAGE } from './../../../constants/message';
-import { DanhMucService } from './../../../services/danhmuc.service';
+import { DanhMucService } from '../../../services/danhmuc.service';
 import { VatTu } from './../dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -15,6 +15,9 @@ export class DialogDanhSachHangHoaComponent implements OnInit {
   listOfMapData: VatTu[];
   listOfMapDataClone: VatTu[];
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
+  isCaseSpecial: boolean = false;
+  onlyLuongThuc: boolean = false;
+  onlyVatTu: boolean = false;
   options = {
     luongThuc: false,
     muoi: false,
@@ -24,7 +27,7 @@ export class DialogDanhSachHangHoaComponent implements OnInit {
   constructor(
     private _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadDanhMucHang();
@@ -41,9 +44,30 @@ export class DialogDanhSachHangHoaComponent implements OnInit {
   loadDanhMucHang() {
     this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
       if (hangHoa.msg == MESSAGE.SUCCESS) {
-        this.listOfMapData = hangHoa.data;
+        if (this.data) {
+          this.listOfMapData = hangHoa.data.filter(item => item.ma == this.data.slice(0, 2));
+        } else {
+          if (this.onlyLuongThuc) {
+            this.listOfMapData = hangHoa.data.filter(item => item.ma != "02");
+          } else if (this.onlyVatTu) {
+            this.listOfMapData = hangHoa.data.filter(item => item.ma == "02");
+          } else {
+            this.listOfMapData = hangHoa.data;
+          }
+        }
         this.listOfMapDataClone = [...this.listOfMapData];
         this.listOfMapData.forEach((item) => {
+          // Với TH là thóc và gạo
+          if (this.data && this.data.length > 2) {
+            item.child = item.child.filter(item => item.ma == this.data);
+          }
+          if (this.isCaseSpecial) {
+            item.child.forEach(item => {
+              if (item.ma.startsWith("02")) {
+                item.child = [];
+              }
+            })
+          }
           this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
         });
       }
@@ -106,5 +130,9 @@ export class DialogDanhSachHangHoaComponent implements OnInit {
         (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );
     }
+  }
+
+  selectHangHoa(vatTu: any) {
+    this._modalRef.close(vatTu);
   }
 }

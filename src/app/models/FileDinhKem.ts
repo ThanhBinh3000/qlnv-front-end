@@ -51,10 +51,14 @@ export class ThongTinDeXuatKeHoachLuaChonNhaThauInput {
 }
 export class FileDinhKem {
   dataId: number;
+  dataType: string;
   fileName: string;
   fileSize: string;
   fileUrl: string;
   id: number;
+  idVirtual: number;
+  noiDung: string;
+  isEdit: boolean = false;
 }
 
 export class ThongTinChung {

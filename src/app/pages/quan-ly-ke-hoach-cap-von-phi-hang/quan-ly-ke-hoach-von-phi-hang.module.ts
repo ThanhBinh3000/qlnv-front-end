@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import { QuanLyKeHoachVonPhiHangRoutingModule } from './quan-ly-ke-hoach-von-phi-hang-routing.module';
-import { QuanLyKeHoachVonPhiHangComponent } from './quan-ly-ke-hoach-von-phi-hang.component';
+import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { MainModule } from 'src/app/layout/main/main.module';
-import { NzAffixModule } from 'ng-zorro-antd/affix';
+import { QuanLyKeHoachVonPhiHangRoutingModule } from './quan-ly-ke-hoach-von-phi-hang-routing.module';
+import { QuanLyKeHoachVonPhiHangComponent } from './quan-ly-ke-hoach-von-phi-hang.component';
 
 @NgModule({
   declarations: [QuanLyKeHoachVonPhiHangComponent],
@@ -17,4 +17,4 @@ import { NzAffixModule } from 'ng-zorro-antd/affix';
     NzAffixModule,
   ],
 })
-export class QuanLyKeHoachVonPhiHangModule {}
+export class QuanLyKeHoachVonPhiHangModule { }

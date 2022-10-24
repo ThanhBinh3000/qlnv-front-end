@@ -11,12 +11,13 @@ import { LBC_KET_QUA_THUC_HIEN_HANG_DTQG, LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI } 
   styleUrls: ['./dialog-bao-cao-copy.component.scss'],
 })
 export class DialogBaoCaoCopyComponent implements OnInit {
-  @Input() maPhanBcao: String;
-  @Input() maLoaiBcao: String;
+  @Input() maPhanBcao: string;
+  @Input() maLoaiBcao: string;
   @Input() namBcao: number;
   @Input() dotBcao: number;
   @Input() thangBcao: number;
-  text: string = ""
+  @Input() checkDvtt: boolean;
+  text!: string;
   baoCaos: any = [];
   request = {
     namBcao :  0,
@@ -32,7 +33,6 @@ export class DialogBaoCaoCopyComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    debugger
     this.request.loaiCopy = 'C';
     this.request.namBcao = this.namBcao;
     this.request.thangBcao = this.thangBcao;

@@ -1,0 +1,51 @@
+.dialog-gui-duyet {
+  align-items: center;
+  img {
+    margin-top: 30px;
+  }
+  p {
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 23px;
+    text-transform: uppercase;
+    color: #000000;
+    margin: 10px 15px 28px 15px;
+  }
+  .action {
+    width: 100%;
+    & > button:nth-child(1) {
+      background: #ffffff;
+      border: 1px solid #c4c9cc;
+      border-radius: 0px;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 18px;
+      color: #bdbdbd;
+      padding: 11px 30px;
+      width: 48%;
+      margin-right: 5px;
+    }
+    & > button:nth-child(2) {
+      background: #71adff;
+      border-radius: 0px;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 18px;
+      text-align: center;
+      color: #f8f9fa;
+      padding: 11px 30px;
+      border: none;
+      width: 48%;
+      margin-left: 5px;
+    }
+  }
+}
+::ng-deep {
+  .open-dialog-gui-duyet {
+    .ant-modal-body {
+      margin-bottom: 0px !important;
+    }
+  }
+}

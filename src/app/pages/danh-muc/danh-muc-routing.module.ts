@@ -1,23 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from 'src/app/guard/auth.guard';
+import { DanhMucTieuChuanHangDtqgComponent } from './danh-muc-tieu-chuan-hang-dtqg/danh-muc-tieu-chuan-hang-dtqg.component';
 import { DanhMucComponent } from './danh-muc.component';
 
 const routes: Routes = [
   {
     path: '',
     component: DanhMucComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
-        redirectTo: 'nguoi-dung',
+        redirectTo: 'danh-muc-don-vi',
         pathMatch: 'full',
       },
       {
-        path: 'danh-muc-don-vi',
-        loadChildren: () =>
-          import(
-            '../danh-muc/danh-muc-don-vi/danh-muc-don-vi.module'
-          ).then((m) => m.DanhMucDonViModule),
+        path: 'danh-muc-tieu-chuan-hang-dtqg',
+        component: DanhMucTieuChuanHangDtqgComponent,
+        canActivate: [AuthGuard],
       },
     ],
   },

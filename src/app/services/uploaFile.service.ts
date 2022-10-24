@@ -10,11 +10,11 @@ import { BaseService } from './base.service';
 })
 export class UploadFileService extends BaseService {
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'UploadFile');
+    super(httpClient, 'UploadFile', '');
   }
 
   uploadFile(file: File, title?: string): Promise<any> {
-    const url: string = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/upload-attachment`;
+    const url: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
     const formData = new FormData();
     formData.append('file', file);
     formData.append('title', title);
@@ -22,7 +22,7 @@ export class UploadFileService extends BaseService {
     return this.httpClient.post<any>(url, formData).toPromise();
   }
   downloadFile(urlFile: string): Observable<Blob> {
-    const url = `${environment.SERVICE_API}/qlnv-gateway/qlnv-core/file/${urlFile}`;
+    const url = `${environment.SERVICE_API}/qlnv-core/file/${urlFile}`;
     return this.httpClient.get(url, { responseType: 'blob' });
   }
 }

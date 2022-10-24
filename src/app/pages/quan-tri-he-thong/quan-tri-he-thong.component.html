@@ -1,0 +1,21 @@
+<div class="sider-dm-dung-chung">
+  <div id="mySidebar" class="sidebar">
+    <a class="d-flex align-items-center justify-content-between">
+      <span>QUẢN TRỊ HỆ THỐNG</span>
+      <img src="../../../assets/images/mui-ten.png" alt="" srcset="" (click)="openNav()" class="img-collapse-close">
+    </a>
+    <a class="d-flex align-items-center justify-content-between" *ngFor="let route of routes, let i = index"
+      (click)="routerNavigate(route)" [ngClass]="route.isSelected ? 'is-selected' : ''">
+      <span>
+        <i class="icon {{route.icon}} mr-2 icon-menu"></i>
+        <span>{{route.title}}</span>
+      </span>
+    </a>
+  </div>
+
+  <div id="main">
+    <img src="../../../assets/images/mui-ten.png" alt="" srcset="" (click)="openNav()" *ngIf="!isCollapsed"
+      class="img-collapse-open">
+    <router-outlet></router-outlet>
+  </div>
+</div>

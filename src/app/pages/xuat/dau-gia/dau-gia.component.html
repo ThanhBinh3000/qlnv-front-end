@@ -1,116 +1,51 @@
-<div class="contentBor container-div">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <!-- (nzChange)="onChange($event)" -->
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="!userService.isChiCuc()">
+      Kế hoạch bán đấu giá
+    </li>
+    <li nz-menu-item (click)="selectTab(1)" *ngIf="!userService.isChiCuc()">
+      Tổ chức triển khai KH bán đấu giá
+    </li>
+    <li nz-menu-item (click)="selectTab(2)" *ngIf="!userService.isChiCuc()">
+      Điều chỉnh KH bán đấu giá
+    </li>
+    <li nz-menu-item (click)="selectTab(3)" *ngIf="!userService.isChiCuc()">
+      Hợp đồng
+    </li>
+    <li nz-menu-item (click)="selectTab(4)" *ngIf="!userService.isTongCuc()">
+      Quyết định giao nhiệm vụ xuất hàng
+    </li>
+    <li nz-menu-item (click)="selectTab(5)" *ngIf="!userService.isTongCuc()">
+      Kiểm tra chất lượng
+    </li>
+    <li nz-menu-item (click)="selectTab(6)" *ngIf="!userService.isTongCuc()">
+      Xuất kho
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-    <nz-tabset nzType="card">
-      <!-- tab 1 -->
-      <nz-tab [nzTitle]="'Vật tư'">
-        <div class="main-content">
-          <div nz-row [nzGutter]="24">
-            <div
-              nz-col
-              nzXs="24"
-              nzSm="12"
-              nzMd="12"
-              nzLg="6"
-              *ngFor="let dauThau of dauThauList"
-            >
-              <nz-card class="card-tree">
-                <div class="content-item">
-                  <span class="icon" [ngClass]="dauThau.icon"></span>
-                  <div class="content-item-title">{{ dauThau.title }}</div>
-                  <div class="content-item-description">
-                    {{ dauThau.description }}
-                  </div>
-                </div>
-              </nz-card>
-            </div>
-          </div>
-        </div>
-      </nz-tab>
-      <!-- tab 2 -->
-      <nz-tab [nzTitle]="'Lương thực'">
-        <div class="search__container">
-          <div class="search__header">
-            <span class="search__title">Tìm kiếm</span>
-            <div class="search__tools">
-              <button nz-button class="search__button--search">
-                <i nz-icon nzType="search"></i>
-                Tìm kiếm
-              </button>
-              <button nz-button class="search__button--clear">
-                <i nz-icon nzType="close"></i>
-                Xóa điều kiện
-              </button>
-            </div>
-          </div>
-          <div class="search__body" nz-row [nzGutter]="[18, 12]">
-            <div nz-col nzSpan="12">
-              <p class="search__label">Số QĐ</p>
-              <input
-                class="search__input"
-                nz-input
-                [(ngModel)]="searchFilter.soQD"
-              />
-            </div>
-            <div nz-col nzSpan="6">
-              <p class="search__label">Ngày ký từ ngày</p>
-              <nz-date-picker
-                class="search__input"
-                [(ngModel)]="searchFilter.soQD"
-              ></nz-date-picker>
-            </div>
-            <div nz-col nzSpan="6">
-              <p class="search__label">Đến ngày</p>
-              <nz-date-picker
-                class="search__input"
-                [(ngModel)]="searchFilter.soQD"
-              ></nz-date-picker>
-            </div>
-            <div nz-col nzSpan="24">
-              <p class="search__label">Trích yếu</p>
-              <input
-                class="search__input"
-                nz-input
-                [(ngModel)]="searchFilter.soQD"
-              />
-            </div>
-            <div nz-col nzSpan="12">
-              <p class="search__label">Mã đơn vị</p>
-              <input
-                class="search__input"
-                nz-input
-                [(ngModel)]="searchFilter.soQD"
-              />
-            </div>
-            <div nz-col nzSpan="12">
-              <p class="search__label">Tên đơn vị</p>
-              <input
-                class="search__input"
-                nz-input
-                [(ngModel)]="searchFilter.soQD"
-              />
-            </div>
-          </div>
-        </div>
-      </nz-tab>
-      <!-- tab 3 -->
-      <nz-tab [nzTitle]="'Muối'">
-        <button nz-button [nzType]="'primary'" (click)="showModal()">
-          <span>luong thuc</span>
-        </button>
-        <button nz-button [nzType]="'primary'" (click)="showModal2()">
-          <span>lua chon in</span>
-        </button>
-        <app-thong-tin-luong-thuc
-          [isVisible]="isVisible"
-          [handleOk]="handleOk"
-          [handleCancel]="handleCancel"
-        ></app-thong-tin-luong-thuc>
-        <app-lua-chon-in
-          [isVisible]="isVisible2"
-          (handleOk)="handleCancel2($event)"
-          (handleOk)="handleCancel2($event)"
-        ></app-lua-chon-in>
-      </nz-tab>
-    </nz-tabset>
+    <ng-container *ngIf="tabSelected == 0">
+      <app-kehoach-luachon-nhathau></app-kehoach-luachon-nhathau>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-trienkhai-luachon-nhathau></app-trienkhai-luachon-nhathau>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 2">
+      <app-dieu-chinh></app-dieu-chinh>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 3">
+      <app-hop-dong></app-hop-dong>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 4">
+      <app-giao-nhap-hang></app-giao-nhap-hang>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 5">
+      <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 6">
+      <app-xuat-kho></app-xuat-kho>
+    </ng-container>
   </div>
 </div>

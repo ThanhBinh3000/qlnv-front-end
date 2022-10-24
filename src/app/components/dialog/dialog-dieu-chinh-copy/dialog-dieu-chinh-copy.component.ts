@@ -14,6 +14,8 @@ export class DialogDieuChinhCopyComponent implements OnInit {
     @Input() obj: any;
 
     response: any;
+    dotBcao: number;
+    id: any;
 
     constructor(
         private _modalRef: NzModalRef,

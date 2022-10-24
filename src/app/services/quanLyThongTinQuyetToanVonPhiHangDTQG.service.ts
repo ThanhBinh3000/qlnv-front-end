@@ -7,7 +7,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class QuanLyThongTinQuyetToanVonPhiHangDTQGService {
-  constructor(private httpClient: HttpClient) { }
+  constructor(public httpClient: HttpClient) {
+    super(httpClient, 'quanLyThongTinQuyetToanVonPhiHangDTQGService','');
+  }
 
   urlDefault = environment.SERVICE_API;
 

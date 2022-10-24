@@ -6,6 +6,9 @@ import * as dayjs from 'dayjs';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { DeXuatDieuChinhService } from 'src/app/services/deXuatDieuChinh.service';
+import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'dialog-quyet-dinh-giao-chi-tieu',
@@ -19,13 +22,20 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
-  text: string = "";
-
+  text: string = '';
+  isDexuat: boolean = false;
+  type?: string;
+  maDVi?: string;
+  STATUS = STATUS
+  namKeHoach?: number;
+  capDonVi: number;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
+    private quyetDinhDieuChinhChiTieuKeHoachNamService: QuyetDinhDieuChinhChiTieuKeHoachNamService,
     private notification: NzNotificationService,
+    private deXuatDieuChinhService: DeXuatDieuChinhService,
   ) { }
 
   async ngOnInit() {
@@ -34,7 +44,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       await this.search();
       this.spinner.hide();
     } catch (e) {
-      console.log('error: ', e)
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -62,23 +72,52 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       ngayKyDenNgay: null,
       id: 0,
       donViId: null,
+      maDvi: this.maDVi ?? null,
+      namKeHoach: this.namKeHoach ?? null,
       tenDvi: null,
       pageNumber: this.page,
       pageSize: this.pageSize,
       soQD: this.text,
+      soQuyetDinh: this.text,
       trichYeu: null,
       ngayKyTuNgay: null,
-      trangThai: '02'
+      trangThai: STATUS.BAN_HANH,
+      capDvi: this.capDonVi,
     };
-    let res = await this.chiTieuKeHoachNamService.timKiem(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      if (data && data.content && data.content.length > 0) {
-        this.dataTable = data.content;
+    if (this.type && this, this.type == 'de-xuat') {
+      let res = await this.deXuatDieuChinhService.timKiem(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        if (data && data.content && data.content.length > 0) {
+          this.dataTable = data.content;
+        }
+        this.totalRecord = data.totalElements;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      this.totalRecord = data.totalElements;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+    } else if (this.type && this, this.type == 'dieu-chinh') {
+      let res = await this.quyetDinhDieuChinhChiTieuKeHoachNamService.timKiem(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        if (data && data.content && data.content.length > 0) {
+          this.dataTable = data.content;
+        }
+        this.totalRecord = data.totalElements;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+    else {
+      let res = await this.chiTieuKeHoachNamService.timKiem(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        if (data && data.content && data.content.length > 0) {
+          this.dataTable = data.content;
+        }
+        this.totalRecord = data.totalElements;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
@@ -88,9 +127,8 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       this.page = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -102,9 +140,8 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       this.pageSize = event;
       await this.search();
       this.spinner.hide();
-    }
-    catch (e) {
-      console.log('error: ', e)
+    } catch (e) {
+      console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }

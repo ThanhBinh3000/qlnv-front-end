@@ -1,0 +1,38 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('qhk')">
+      Quy hoạch kho
+    </li>
+    <li nz-menu-item (click)="selectTab('khxdth')" >
+      Thông tin đầu tư xây dựng trung hạn (5 năm)
+    </li>
+    <li nz-menu-item (click)="selectTab('khxdhn')" >
+      Kế hoạch đầu tư xây dựng hàng năm
+    </li>
+    <li nz-menu-item (click)="selectTab('khsclhn')" >
+      Kế hoạch sửa chữa lớn hàng năm
+    </li>
+    <li nz-menu-item (click)="selectTab('khschn')" >
+      Kế hoạch sửa chữa hàng năm
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 'qhk'">
+      <app-quy-hoach-kho></app-quy-hoach-kho>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'khxdth'">
+      <app-ke-hoach-xay-dung-trung-han></app-ke-hoach-xay-dung-trung-han>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'khxdhn'">
+      <app-ke-hoach-xay-dung-hang-nam></app-ke-hoach-xay-dung-hang-nam>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'khsclhn'">
+      <app-ke-hoach-sua-chua-lon></app-ke-hoach-sua-chua-lon>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'khschn'">
+      <app-ke-hoach-sua-chua-hang-nam></app-ke-hoach-sua-chua-hang-nam>
+    </ng-container>
+  </div>
+</div>

@@ -19,7 +19,9 @@ export class NhapComponent implements OnInit, AfterViewInit {
 
   constructor(
     private router: Router,
-  ) { }
+  ) {
+
+  }
 
   ngOnInit(): void {
     if (this.router.url) {
@@ -76,5 +78,10 @@ export class NhapComponent implements OnInit, AfterViewInit {
       this.myTab.nativeElement.className =
         'nav nav-tabs expand-sidebar next-an';
     }
+  }
+
+  redirect(url: string) {
+    this.routerUrl = url;
+    window.location.href = url;
   }
 }

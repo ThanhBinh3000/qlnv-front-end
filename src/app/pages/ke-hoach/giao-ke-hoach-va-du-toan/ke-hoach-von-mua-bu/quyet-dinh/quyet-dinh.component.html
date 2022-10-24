@@ -1,0 +1,39 @@
+<nz-affix [nzOffsetTop]="98" class="level2">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      UBTVQH
+    </li>
+    <li nz-menu-item (click)="selectTab(1)">
+      TTCP
+    </li>
+    <li nz-menu-item (click)="selectTab(2)">
+      BTC
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 0">
+  <app-ubtvqh-muabu></app-ubtvqh-muabu>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+  <app-ttcp-muabu></app-ttcp-muabu>
+</ng-container>
+<ng-container *ngIf="tabSelected == 2">
+  <app-btc-mua-bu></app-btc-mua-bu>
+</ng-container>
+<!-- <nz-tabset nzType="card" class="tab-level-2">
+  <nz-tab [nzTitle]="'UBTVQH'">
+    <ng-template nz-tab>
+      <app-ubtvqh-muabu></app-ubtvqh-muabu>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'TTCP'">
+    <ng-template nz-tab>
+      <app-ttcp-muabu></app-ttcp-muabu>
+    </ng-template>
+  </nz-tab>
+  <nz-tab [nzTitle]="'BTC'">
+    <ng-template nz-tab>
+      <app-btc-mua-bu></app-btc-mua-bu>
+    </ng-template>
+  </nz-tab>
+</nz-tabset> -->

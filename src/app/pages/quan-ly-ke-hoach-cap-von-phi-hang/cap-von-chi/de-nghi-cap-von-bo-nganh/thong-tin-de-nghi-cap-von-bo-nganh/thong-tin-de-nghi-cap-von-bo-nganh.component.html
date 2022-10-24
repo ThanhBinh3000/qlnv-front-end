@@ -1,0 +1,291 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+  <div class="btn-group">
+    <button type="button" class="btn btn-sub" (click)="quayLai()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+    <button
+      *ngIf="(!khBanDauGia.trangThai || khBanDauGia.trangThai == globals.prop.NHAP_DU_THAO) && idInput > 0 && !isView"
+      type="button" class="btn btn-sub" (click)="guiDuyet()">
+      <i class="icon htvbdh_tcdt_guiduyet"></i>
+      <span>Hoàn thành</span>
+    </button>
+    <button *ngIf="(!khBanDauGia.trangThai || khBanDauGia.trangThai == globals.prop.NHAP_DU_THAO) && !isView"
+      type="button" class="btn btn-main" (click)="save(false)" [disabled]="!formData.valid">
+      <i class="icon htvbdh_tcdt_save"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
+</nz-affix>
+
+<div class="bg-trang">
+  <form nzLayout="vertical" nz-form [formGroup]="formData">
+    <div class="mt16 flex-card p-lr16">
+      <div class="header mg-t-16">
+        <div class="header-text">
+          <div class="title-chi-tieu">
+            <span [ngClass]="thongTinTrangThai(khBanDauGia.trangThai)">{{titleStatus}}</span>
+            <span>Đề nghị cấp vốn chi dự trữ quốc gia của bộ ngành</span>
+          </div>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="[24]">
+        <div nz-col [nzSpan]="3">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Năm </nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-select formControlName="nam" [nzDisabled]="isView">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="5">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Bộ ngành </nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-select formControlName="boNganh" [nzDisabled]="isView">
+                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
+
+          <!-- <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
+            <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+              [nzSize]="'small'">
+            </nz-input-number>
+          </nz-input-group> -->
+
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Số đề nghị </nz-form-label>
+            <nz-input-group nzAddOnAfter="{{titleSoDeNghi}}" nz-col [nzSpan]="24">
+              <input nz-input formControlName="soDeNghi" [readonly]="isView" />
+            </nz-input-group>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngày đề nghị </nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-input-group>
+                <nz-date-picker class="search__input" formControlName="ngayDeNghi" [nzDisabled]="isView">
+                </nz-date-picker>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <ng-template #error let-control>
+        <app-template-error #error [control]="control"></app-template-error>
+      </ng-template>
+    </div>
+  </form>
+
+  <div class="mt-16 flex-card p-lr16">
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table #phanBo class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="chiTietList">
+        <thead>
+          <tr>
+            <th style="width: 35px">STT</th>
+            <th style="width: 10%">Đơn vị cung cấp hàng</th>
+            <th style="width: 10%">Số tài khoản</th>
+            <th>Ngân hàng</th>
+            <th style="width: 7%">Loại hàng</th>
+            <th style="width: 7%">Chủng loại</th>
+            <th style="width: 6%">Tên hàng</th>
+            <th style="width: 6%">Số lượng</th>
+            <th style="width: 4%">Đơn vị tính</th>
+            <th style="width: 6%">Đơn giá</th>
+            <th style="width: 6%">Thành tiền</th>
+            <th style="width: 6%">Kinh phí đã cấp</th>
+            <th style="width: 6%">Yêu cầu cấp thêm</th>
+            <th style="width: 4%" *ngIf="!isView">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="search-table" *ngIf="!isView">
+            <th></th>
+            <th>
+              <nz-input-group>
+                <input type="text" [(ngModel)]="rowItem.dvCungCapHang" nz-input />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input [(ngModel)]="rowItem.soTaiKhoan" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input [(ngModel)]="rowItem.nganHang" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <nz-select [(ngModel)]="rowItem.maVatTuCha" (ngModelChange)="changeLoaiHangHoa()">
+                  <nz-option *ngFor=" let item of listLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <nz-select [(ngModel)]="rowItem.maVatTu" (ngModelChange)="changeChungLoaiHangHoa()">
+                  <nz-option *ngFor=" let item of listChungLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input [(ngModel)]="rowItem.tenHangHoa" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.soLuong"
+                  (ngModelChange)="changeThanhTien()">
+                </nz-input-number>
+              </nz-input-group>
+
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input [(ngModel)]="rowItem.donViTinh" readonly />
+              </nz-input-group>
+
+            </th>
+            <th>
+              <nz-input-group>
+                <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" [(ngModel)]="rowItem.donGia"
+                  (ngModelChange)="changeThanhTien()">
+                </nz-input-number>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input [(ngModel)]="rowItem.thanhTien" readonly />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <nz-input-number [nzMin]="1" [nzMax]="maxYeuCauCapThem" [nzSize]="'small'"
+                  [(ngModel)]="rowItem.kinhPhiDaCap" (ngModelChange)="changeThanhTien()">
+                </nz-input-number>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input [(ngModel)]="rowItem.ycCapThem" readonly />
+              </nz-input-group>
+            </th>
+            <th style="text-align: center;">
+              <a (click)="themDonViCungCap()">
+                <i class="table-icon icon htvbdh_dau-cong"></i>
+              </a>
+              <a (click)="clearDonviCungCap()">
+                <i class="table-icon icon  htvbdh_nhap-lai1"></i>
+              </a>
+            </th>
+          </tr>
+
+          <tr *ngFor="let item of chiTietList, let idx = index">
+            <ng-container *ngIf="!item.edit; else editTemplate">
+              <td>{{idx+1}}</td>
+              <td>{{item.dvCungCapHang}}</td>
+              <td>{{item.soTaiKhoan}}</td>
+              <td>{{item.nganHang}}</td>
+              <td>{{item.tenVatTuCha}}</td>
+              <td>{{item.tenVatTu}}</td>
+              <td>{{item.tenHangHoa}}</td>
+              <td>{{item.soLuong}}</td>
+              <td>{{item.donViTinh}}</td>
+              <td>{{item.donGia}}</td>
+              <td>{{item.thanhTien}}</td>
+              <td>{{item.kinhPhiDaCap}}</td>
+              <td>{{item.ycCapThem}}</td>
+              <td class="text-center" *ngIf="!isView">
+                <a (click)="showEditItem(idx, 'show')">
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <a (click)="xoaItem(idx)">
+                  <i class="fa fa-trash-o do"></i>
+                </a>
+              </td>
+            </ng-container>
+            <ng-template #editTemplate>
+              <td>{{idx+1}}</td>
+              <td><input type="text" nz-input [(ngModel)]="item.dvCungCapHang" /></td>
+              <td><input type="text" nz-input [(ngModel)]="item.soTaiKhoan" /></td>
+              <td><input type="text" nz-input [(ngModel)]="item.nganHang" /></td>
+              <td>{{item.tenVatTuCha}}</td>
+              <td>{{item.tenVatTu}}</td>
+              <td><input type="text" nz-input [(ngModel)]="item.tenHangHoa" /></td>
+              <td>{{item.soLuong}}</td>
+              <td>{{item.donViTinh}}</td>
+              <td>{{item.donGia}}</td>
+              <td>{{item.thanhTien}}</td>
+              <td>{{item.kinhPhiDaCap}}</td>
+              <td>{{item.ycCapThem}}</td>
+              <td class="text-center">
+                <a class="save" (click)="showEditItem(idx, 'save')">
+                  <i class="fa fa-save"></i>
+                </a>
+                <a (click)="showEditItem(idx, 'huy')">
+                  <i class="fa fa-times do"></i>
+                </a>
+              </td>
+            </ng-template>
+          </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Tổng Cộng:</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>{{ tongCong.tongThanhTien }}</th>
+            <th>{{ tongCong.tongKinhPhiDaCap }}</th>
+            <th>{{ tongCong.tongYeuCauCapThem }}</th>
+            <th></th>
+          </tr>
+
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </div>
+
+  <form nzLayout="vertical" nz-form [formGroup]="formData">
+    <div nz-row [nzGutter]="[24]">
+
+      <div nz-col nzSpan="24">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true">
+            Tài liệu đính kèm
+          </nz-form-label>
+          <div class="list-file">
+            <file-list [data]="listFileDinhKem" [isViewDetail]="isView"></file-list>
+          </div>
+        </nz-form-item>
+      </div>
+
+      <div nz-col nzSpan="24">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true">
+            Ghi chú
+          </nz-form-label>
+          <div class="list-file">
+            <textarea rows="3" nz-input class="search__input" formControlName="ghiChu" [readonly]="isView"></textarea>
+          </div>
+        </nz-form-item>
+      </div>
+
+    </div>
+  </form>
+</div>

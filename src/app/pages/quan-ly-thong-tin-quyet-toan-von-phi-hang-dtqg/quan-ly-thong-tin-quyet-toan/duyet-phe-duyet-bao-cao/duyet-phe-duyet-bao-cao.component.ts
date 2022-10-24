@@ -1,3 +1,4 @@
+import { ROLE_TRUONG_BO_PHAN, ROLE_LANH_DAO, QTVP } from './../../../../Utility/utils';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -8,6 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
 import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
+import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
 // import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 
 
@@ -24,6 +26,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
   searchFilter = {
     maBcao: null,
     maPhanBcao: '1',
+    thongBao: '',
     namQtoan: null,
     ngayTaoDen: null,
     ngayTaoTu: null,
@@ -47,8 +50,10 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
     page: 1,
   }
   donViTao!: any;
-  trangThai!:string;
+  trangThai!: string;
   newDate = new Date();
+  status: boolean;
+  statusTaoMoi = true;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -60,41 +65,29 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
   }
 
   async ngOnInit() {
-    let userName = this.userService.getUserName();
-    await this.getUserInfo(userName); //get user info
+    this.spinner.show()
+    this.userInfo = this.userService.getUserLogin();
     this.searchFilter.namQtoan = new Date().getFullYear()
     this.searchFilter.ngayTaoDen = new Date();
-		this.newDate.setMonth(this.newDate.getMonth() -1);
-		this.searchFilter.ngayTaoTu = this.newDate;
-    this.donViTao = this.userInfo?.dvql;
-    this.userRole = this.userInfo?.roles[0].code;
-
-    if (this.userRole == Utils.TRUONG_BO_PHAN) {
-      this.searchFilter.trangThai = Utils.TT_BC_2;
+    this.newDate.setMonth(this.newDate.getMonth() - 1);
+    this.searchFilter.ngayTaoTu = this.newDate;
+    this.donViTao = this.userInfo?.MA_DVI;
+    if (this.userService.isAccessPermisson(QTVP.ADD_REPORT)) {
+      this.statusTaoMoi = false;
+    }
+    if (this.userService.isAccessPermisson(QTVP.DUYET_QUYET_TOAN_REPORT)) {
+      this.status = true;
+      this.trangThai = Utils.TT_BC_2;
       this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_2));
     } else {
-      this.searchFilter.trangThai = Utils.TT_BC_4;
+      this.status = true;
+      this.trangThai = Utils.TT_BC_4;
       this.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_4));
     }
     this.onSubmit();
   }
 
-  //get user info
-  async getUserInfo(username: string) {
-    await this.userService.getUserInfo(username).toPromise().then(
-      (data) => {
-        if (data?.statusCode == 0) {
-          this.userInfo = data?.data
-          return data?.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    );
-  }
+
 
   redirectThongTinTimKiem() {
     this.router.navigate([
@@ -119,42 +112,34 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
       }
     }
     this.spinner.show();
-    let searchFilterTemp = Object.assign({},this.searchFilter);
-    searchFilterTemp.trangThais= [];
-    searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoTu;
-    searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, 'dd/MM/yyyy') || searchFilterTemp.ngayTaoDen;
-    // if(this.trangThai){
-    //   searchFilterTemp.trangThais.push(this.trangThai)
+    const searchFilterTemp = Object.assign({}, this.searchFilter);
+    searchFilterTemp.trangThais = [];
+    searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoTu;
+    searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoDen;
+
+    // if (!this.trangThai){
+    if (this.userService.isAccessPermisson(QTVP.DUYET_QUYET_TOAN_REPORT)) {
+      searchFilterTemp.trangThais = [Utils.TT_BC_2];
+
+    } else if (this.userService.isAccessPermisson(QTVP.PHE_DUYET_QUYET_TOAN_REPORT)) {
+      searchFilterTemp.trangThais = [Utils.TT_BC_4];
+
+    }
+    else {
+      searchFilterTemp.trangThais = [Utils.TT_BC_2, Utils.TT_BC_4]
+    }
     // }
-    // else{
-    //   searchFilterTemp.trangThais = [Utils.TT_BC_1,Utils.TT_BC_2,Utils.TT_BC_3,Utils.TT_BC_4,Utils.TT_BC_5,Utils.TT_BC_6,Utils.TT_BC_7,Utils.TT_BC_8,Utils.TT_BC_9]
-    // }
-    debugger
-
-		if (!this.trangThai){
-      if(this.userInfo?.roles[0].code == Utils.TRUONG_BO_PHAN) {
-				searchFilterTemp.trangThais = [Utils.TT_BC_2];
-
-			} else if(this.userInfo?.roles[0].code == Utils.LANH_DAO) {
-				searchFilterTemp.trangThais = [Utils.TT_BC_4];
-
-			}
-      else{
-        searchFilterTemp.trangThais = [Utils.TT_BC_2,Utils.TT_BC_4]
-
-      }
-		}
 
     await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;
           this.danhSachBaoCao.forEach(e => {
-            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, 'dd/MM/yyyy');
-            e.ngayTao = this.datePipe.transform(e.ngayTao, 'dd/MM/yyyy');
-            e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, 'dd/MM/yyyy');
-            e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, 'dd/MM/yyyy');
-            e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, 'dd/MM/yyyy');
+            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
+            e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
+            e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+            e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+            e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, Utils.FORMAT_DATE_STR);
           })
           this.totalElements = data.data.totalElements;
           this.totalPages = data.data.totalPages;
@@ -191,13 +176,15 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
 
   taoMoi() {
     this.router.navigate([
-      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/them-moi-bao-cao-quyet-toan',
+      MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/them-moi-bao-cao-quyet-toan',
     ])
   }
-
+  checkViewReport() {
+    return this.userService.isAccessPermisson(QTVP.VIEW_REPORT)
+  }
   xemChiTiet(id: string) {
     this.router.navigate([
-      '/quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg/quan-ly-thong-tin-quyet-toan/them-moi-bao-cao-quyet-toan/' + id,
+      MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/them-moi-bao-cao-quyet-toan/' + id,
     ])
   }
 
@@ -221,14 +208,7 @@ export class DuyetPheDuyetBaoCaoComponent implements OnInit {
     )
   }
 
-  checkDeleteReport(item: any): boolean {
-    var check: boolean;
-    if ((item.trangThai == Utils.TT_BC_1 || item.trangThai == Utils.TT_BC_3 || item.trangThai == Utils.TT_BC_5 || item.trangThai == Utils.TT_BC_8) &&
-      this.userInfo?.username == item.nguoiTao) {
-      check = true;
-    } else {
-      check = false;
-    }
-    return check;
+  checkDeleteReport(trangThai: string) {
+    return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(QTVP.DELETE_REPORT)
   }
 }

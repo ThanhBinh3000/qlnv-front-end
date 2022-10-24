@@ -1,0 +1,71 @@
+::ng-deep {
+  .them-moi-nhap-xuat-hang__body {
+    .title-chi-tieu {
+      padding-top: 10px;
+    }
+
+    .multiple-box {
+      height: 24px;
+
+      .input-multiple {
+        max-height: 20px !important;
+      }
+
+      .select-tag {
+        min-height: 20px !important;
+      }
+
+      .download-file {
+        height: 21px;
+      }
+
+    }
+
+    .ant-col>.ant-form-item {
+      margin-bottom: 0 !important;
+    }
+
+    .table__body,
+    .ghi-chu {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    .ant-form-item-label {
+      label {
+        margin-bottom: 0px !important;
+      }
+    }
+
+    // .ant-form {
+    //   .ant-row {
+    //     .ant-col {
+    //       padding: 0px 9px !important;
+    //     }
+    //   }
+    // }
+
+    // .header-table-nvnh {
+    //   height: 163px;
+    // }
+
+    .main-content {
+      padding-top: 0;
+      margin-top: 10px;
+    }
+  }
+
+  .nhap-xuat-hang {
+    position: absolute;
+    top: 90px;
+    right: 0px;
+
+    .tab-menu.tab-content {
+      border-bottom: none !important;
+    }
+
+    .ant-card-body {
+      padding: 10px !important;
+    }
+  }
+}

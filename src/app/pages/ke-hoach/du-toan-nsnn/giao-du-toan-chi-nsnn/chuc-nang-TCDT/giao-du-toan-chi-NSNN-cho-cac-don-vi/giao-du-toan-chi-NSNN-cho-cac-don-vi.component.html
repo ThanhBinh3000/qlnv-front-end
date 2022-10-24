@@ -1,0 +1,134 @@
+<nz-affix class="menu-lv3" [nzOffsetTop]="43">
+  <div class="tab-content tab-menu" id="myTabContent">
+    <div class="tab-pane fade show active justify-content-between" id="banhanh" role="tabpanel"
+      aria-labelledby="banhanh-tab">
+      <div class="trai">
+      </div>
+      <div class="canphai phai action-top">
+        <button nz-button type="button" class="search__button--clear" (click)="redirectkehoachvonphi()">
+          <i nz-icon nzType="close"></i>
+          <span>Đóng</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nz-affix>
+
+<!--body-->
+<div class="contentBor chi-tieu__body">
+  <div class="contentDetail">
+    <div class="main-content">
+      <nz-card nzTitle="Danh sách giao số kiểm tra NSNN" class="mt16 flex-card p-lr16">
+        <nz-table #basicTable class="nowrap">
+          <thead>
+            <tr>
+              <th width="175px">Số QĐ/CV</th>
+              <th width="175px">Mã phương án</th>
+              <th width="175px">Mã giao</th>
+              <th width="175px">Năm giao</th>
+              <th width="175px">Ngày tạo</th>
+              <th width="175px">Nơi nhận</th>
+              <th width="175px">Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="tep" (click)="downloadFileCv()">
+                  <!-- <i class="icon htvbdh_tcdt_tep"></i> -->
+                  <span>{{soQd?.fileName}}</span>
+                </div>
+              </td>
+              <td>{{maPa}}</td>
+              <td>{{maGiao}}</td>
+              <td>{{namDtoan}}</td>
+              <td>{{ngayNhap}}</td>
+              <td>{{getUnitName()}}</td>
+              <td>{{trangThai}}</td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
+      <div class="tab__container">
+        <nz-tabset nzType="card" class="tab__container">
+          <nz-tab [nzTitle]="'Giao số kiểm tra chi NSNN cho các đơn vị'">
+            <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+              <div nz-col [nzSpan]="1">
+                Đơn vị:
+              </div>
+              <div nz-col [nzSpan]="2">
+                <ng-container *ngIf="!editMoneyUnit; else editMoney">
+                  <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+                </ng-container>
+                <ng-template #editMoney>
+                  <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                    (ngModelChange)="editMoneyUnit=false">
+                    <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    </nz-option>
+                  </nz-select>
+                </ng-template>
+              </div>
+            </div>
+            <nz-table nzBordered class="table__body">
+              <thead>
+                <tr>
+                  <th nzWidth="10%">STT</th>
+                  <th nzWidth="65%">Nội dung</th>
+                  <th nzWidth="25%">Số tiền</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of lstCtietBcao; let i = index">
+                  <td [nzIndentSize]="item.level * 8">
+                    {{getChiMuc(item.stt)}}
+                  </td>
+                  <td>
+                    <div *ngFor="let e of noiDungs">
+                      <div *ngIf="e.id == item.maNdung">
+                        {{e.tenDm}}
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{displayValue(item.soTien)}}</td>
+                </tr>
+              </tbody>
+            </nz-table>
+          </nz-tab>
+        </nz-tabset>
+        <div class="action">
+
+        </div>
+      </div>
+      <div class="ghi-chu">
+        <nz-form-label nzRequired [nzNoColon]="true">
+          Ghi chú
+        </nz-form-label>
+        <ul>
+          <li class="ghi-chu__item">
+            Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng
+            CSDL về Tài
+            chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát xây
+            dựng CSDL về
+            Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo sát
+            xây dựng CSDL
+            về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến khảo
+            sát xây dựng
+            CSDL về Tài chính Công văn xin ý kiến khảo sát xây dựng CSDL về Tài chính Công văn xin ý kiến
+            khảo sát xây
+            dựng CSDL về Tài chính
+          </li>
+          <li class="ghi-chu__item">
+            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế
+            hoạch năm
+            2022
+          </li>
+          <li class="ghi-chu__item">
+            Quyết định về việc phê duyệt kế hoạch lựa chọn nhà thầu cung cấp gạo nhập kho dự trữ quốc gia kế
+            hoạch năm
+            2022
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

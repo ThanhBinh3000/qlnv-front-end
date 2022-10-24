@@ -8,9 +8,10 @@ import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { Subject } from 'rxjs';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { QlLichSuTruyCapService } from 'src/app/services/quantri-nguoidung/qlLichsuTruycap.service';
 
 
 @Component({
@@ -36,6 +37,7 @@ export class QlLsTruyCapComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
   isVisibleChangeTab$ = new Subject();
+  datas: any
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -43,6 +45,7 @@ export class QlLsTruyCapComponent implements OnInit {
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
+    private _qlLichSuTruyCapService: QlLichSuTruyCapService
   ) { }
   // ngAfterViewInit(): void {
   //   throw new Error('Method not implemented.');
@@ -127,38 +130,23 @@ export class QlLsTruyCapComponent implements OnInit {
   }
 
   async search() {
-    let maDonVi = null;
-    if (this.inputDonVi && this.inputDonVi.length > 0) {
-      let getDonVi = this.optionsDonVi.filter(
-        (x) => x.labelDonVi == this.inputDonVi,
-      );
-      if (getDonVi && getDonVi.length > 0) {
-        maDonVi = getDonVi[0].maDvi;
-      }
-    }
+
     let body = {
-      denNgayKy: this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
-        : null,
-      id: 0,
-      // loaiVthh: '00',
-      maDvi: maDonVi,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page,
+      "denNgay": "",
+      "limit": 10,
+      "page": 1,
+      "paggingReq": {
+        "limit": 20,
+        "page": 1
       },
-      soDxuat: this.searchFilter.soDxuat,
-      str: null,
-      trichYeu: this.searchFilter.trichYeu,
-      tuNgayKy: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
-        : null,
+      "str": "",
+      "trangThai": "",
+      "tuNgay": "",
+      "username": ""
     };
-    let res = await this.danhSachDauThauService.timKiem(body);
+    let res = await this._qlLichSuTruyCapService.findList(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.dataTable = data.content;
-      this.totalRecord = data.totalElements;
+      this.datas = res.data;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

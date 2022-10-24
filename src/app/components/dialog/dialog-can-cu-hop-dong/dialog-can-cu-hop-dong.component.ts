@@ -4,7 +4,9 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/hop-dong/hopDongXuatHang.service';
 import { QuanLyHopDongNhapXuatService } from 'src/app/services/quanLyHopDongNhapXuat.service';
+import { STATUS } from "../../../constants/status";
 
 @Component({
   selector: 'dialog-can-cu-hop-dong',
@@ -19,18 +21,23 @@ export class DialogCanCuHopDongComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
   text: string = "";
-
+  hopDongList: any[] = [];
+  data: any[] = [];
+  dataVthh: string;
+  isXuat: boolean = false;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
     private quanLyHopDongNhapXuatService: QuanLyHopDongNhapXuatService,
     private notification: NzNotificationService,
+    private hopDongXuatHang: HopDongXuatHangService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      await this.search();
+      this.hopDongList = this.data;
+      await this.showListHd();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e)
@@ -39,46 +46,101 @@ export class DialogCanCuHopDongComponent implements OnInit {
     }
   }
 
-  handleOk(item: any) {
-    this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
-    this._modalRef.close(item);
+  async showListHd() {
+    if (this.isXuat) {
+      let body = {
+        "loaiVthh": this.dataVthh ?? '',
+        "paggingReq": {
+          limit: 10,
+          page: 0,
+        }
+      };
+      let res = await this.hopDongXuatHang.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+    else {
+      let body = {
+        "loaiVthh": this.dataVthh ?? '',
+        "trangThai": STATUS.DA_KY,
+        "paggingReq": {
+          limit: 10,
+          page: 0,
+        }
+      }
+      let res = await this.quanLyHopDongNhapXuatService.timKiem(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
   }
 
-  handleCancel() {
-    this.isVisible = false;
-    this.isVisibleChange.emit(this.isVisible);
+  handleOk(item: any) {
+    if (item.checked) {
+      if (this.hopDongList.findIndex(hd => hd.id == item.id) == -1) {
+        this.hopDongList.push(item);
+      }
+    } else {
+      this.hopDongList = this.hopDongList.filter(hd => hd.id !== item.id);
+    }
   }
+
 
   onCancel() {
-    this._modalRef.close();
+    this.hopDongList.forEach(hd => {
+      this.dataTable.forEach(dt => {
+        if (hd.id === dt.id) {
+          hd.hhDdiemNhapKhoList = dt.hhDdiemNhapKhoList
+        }
+      })
+    })
+    this._modalRef.close(this.hopDongList);
   }
 
   async search() {
     this.dataTable = [];
     this.totalRecord = 0;
-    let body = {
-      "denNgayHdong": "",
-      "loaiHdong": "",
-      "maDvi": "",
-      "maHhoa": "",
-      "orderBy": "",
-      "orderDirection": "",
-      "paggingReq": {
-        "limit": this.pageSize,
-        "page": this.page
-      },
-      "soHdong": this.text,
-      "str": "",
-      "trangThai": "02",
-      "tthaiHdong": "",
-      "tuNgayHdong": ""
-    };
-    let res = await this.quanLyHopDongNhapXuatService.timKiem(body);
-    if (res.msg == MESSAGE.SUCCESS) {
+    let res: any;
+    if (this.isXuat) {
+      let body = {
+        "loaiVthh": this.dataVthh ?? '',
+        "paggingReq": {
+          "limit": this.pageSize,
+          "page": this.page - 1
+        },
+        "soHd": this.text,
+        "trangThai": STATUS.DA_KY,
+      }
+      res = await this.quanLyHopDongNhapXuatService.timKiem(body);
+    }
+    else {
+      let body = {
+        "loaiVthh": this.dataVthh ?? '',
+        "paggingReq": {
+          limit: this.pageSize,
+          page: this.page - 1,
+        }
+      };
+      res = await this.hopDongXuatHang.search(body);
+    }
+    if (res && res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
+        this.dataTable.forEach(hd => {
+          this.data.forEach(dt => {
+            if (dt.id == hd.id) {
+              hd.checked = true;
+            }
+          });
+        })
       }
       this.totalRecord = data.totalElements;
     } else {

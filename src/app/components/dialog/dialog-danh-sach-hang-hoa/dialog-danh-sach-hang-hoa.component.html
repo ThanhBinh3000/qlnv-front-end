@@ -1,4 +1,4 @@
-<div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+<div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24" class="scroll-modal">
   <nz-table #expandTable [nzData]="listOfMapData" [nzFrontPagination]="false" [nzShowPagination]="false"
     class="table__container-vat-tu">
     <thead>
@@ -22,7 +22,7 @@
             <td>{{ item.ma }}</td>
             <td style="text-align: center">
               <div *ngIf="item?.child?.length == 0 || !item?.child">
-                <i nz-icon nzType="plus" nzTheme="outline" nzColo></i>
+                <i nz-icon nzType="plus" nzTheme="outline" nzColor (click)="selectHangHoa(item)"></i>
               </div>
             </td>
           </tr>

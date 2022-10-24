@@ -1,80 +1,85 @@
 import {
-    AfterViewInit,
-    Component,
-    ElementRef,
-    OnInit,
-    ViewChild
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { SUA_CHUA_ROUTE_LIST } from './sua-chua.constant';
+import {SUA_CHUA_ROUTE_LIST} from "./sua-chua.constant";
 @Component({
-    selector: 'app-sua-chua',
-    templateUrl: './sua-chua.component.html',
-    styleUrls: ['./sua-chua.component.scss'],
+  selector: 'app-sua-chua',
+  templateUrl: './sua-chua.component.html',
+  styleUrls: ['./sua-chua.component.scss']
 })
-export class SuaChuaComponent implements OnInit, AfterViewInit {
-    @ViewChild('myTab') myTab: ElementRef;
-    routes = SUA_CHUA_ROUTE_LIST;
-    routerUrl: string = "";
+export class SuaChuaComponent implements OnInit {
+  @ViewChild('myTab') myTab: ElementRef;
+  routes = SUA_CHUA_ROUTE_LIST;
+  routerUrl: string = "";
+  defaultUrl: string = '/sua-chua'
 
-    constructor(
-        private router: Router,
-    ) { }
+  constructor(
+    private router: Router,
+  ) { }
 
-    ngOnInit(): void {
-        if (this.router.url) {
-            this.routerUrl = this.router.url;
-        }
+  ngOnInit(): void {
+    if (this.router.url) {
+      this.routerUrl = this.router.url;
     }
+  }
 
-    ngAfterViewInit() {
-        if (
-            this.myTab.nativeElement.scrollWidth >
-            this.myTab.nativeElement.clientWidth
-        ) {
-            this.myTab.nativeElement.className =
-                'nav nav-tabs expand-sidebar next-an';
-        } else {
-            this.myTab.nativeElement.className = 'nav nav-tabs';
-        }
+  ngAfterViewInit() {
+    if (
+      this.myTab.nativeElement.scrollWidth >
+      this.myTab.nativeElement.clientWidth
+    ) {
+      this.myTab.nativeElement.className =
+        'nav nav-tabs expand-sidebar next-an';
+    } else {
+      this.myTab.nativeElement.className = 'nav nav-tabs';
     }
+  }
 
-    updateCssOverlay() {
-        setTimeout(() => {
-            let child = document.getElementsByClassName('dau-thau-tab');
-            if (child && child.length > 0) {
-                child[0].parentElement.classList.add('left-0');
-            }
-        }, 200);
-    }
+  updateCssOverlay() {
+    setTimeout(() => {
+      let child = document.getElementsByClassName('dau-thau-tab');
+      if (child && child.length > 0) {
+        child[0].parentElement.classList.add('left-0');
+      }
+    }, 200);
+  }
 
-    endSlide() {
-        if (
-            this.myTab.nativeElement.scrollWidth >
-            this.myTab.nativeElement.clientWidth
-        ) {
-            this.myTab.nativeElement.scrollTo({
-                left: this.myTab.nativeElement.scrollWidth,
-                top: 0,
-                behavior: 'smooth',
-            });
-            this.myTab.nativeElement.className =
-                'nav nav-tabs expand-sidebar prev-an';
-        }
+  endSlide() {
+    if (
+      this.myTab.nativeElement.scrollWidth >
+      this.myTab.nativeElement.clientWidth
+    ) {
+      this.myTab.nativeElement.scrollTo({
+        left: this.myTab.nativeElement.scrollWidth,
+        top: 0,
+        behavior: 'smooth',
+      });
+      this.myTab.nativeElement.className =
+        'nav nav-tabs expand-sidebar prev-an';
     }
+  }
 
-    startSlide() {
-        if (
-            this.myTab.nativeElement.scrollWidth >
-            this.myTab.nativeElement.clientWidth
-        ) {
-            this.myTab.nativeElement.scrollTo({
-                left: 0,
-                top: 0,
-                behavior: 'smooth',
-            });
-            this.myTab.nativeElement.className =
-                'nav nav-tabs expand-sidebar next-an';
-        }
+  startSlide() {
+    if (
+      this.myTab.nativeElement.scrollWidth >
+      this.myTab.nativeElement.clientWidth
+    ) {
+      this.myTab.nativeElement.scrollTo({
+        left: 0,
+        top: 0,
+        behavior: 'smooth',
+      });
+      this.myTab.nativeElement.className =
+        'nav nav-tabs expand-sidebar next-an';
     }
+  }
+
+  redirect(url: string) {
+    this.router.navigate([this.defaultUrl + url]);
+  }
 }

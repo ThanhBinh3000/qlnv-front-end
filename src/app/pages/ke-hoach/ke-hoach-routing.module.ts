@@ -1,62 +1,55 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DieuChinhChiTieuKeHoachNamComponent } from './dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
-import { DieuChinhThongTinChiTieuKeHoachNamComponent } from './dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.component';
+import { AuthGuard } from 'src/app/guard/auth.guard';
 import { KeHoachComponent } from './ke-hoach.component';
 
 const routes: Routes = [
   {
     path: '',
     component: KeHoachComponent,
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
-        redirectTo: 'chi-tieu-ke-hoach-nam-cap-tong-cuc',
+        redirectTo: 'giao-ke-hoach-va-du-toan',
         pathMatch: 'full'
       },
       {
-        path: 'chi-tieu-ke-hoach-nam-cap-tong-cuc',
+        path: 'giao-ke-hoach-va-du-toan',
         loadChildren: () =>
           import(
-            '../ke-hoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
-          ).then((m) => m.ChiTieuKeHoachNamModule),
+            '../ke-hoach/giao-ke-hoach-va-du-toan/giao-ke-hoach-va-du-toan.module'
+          ).then((m) => m.GiaoKeHoachVaDuToanModule),
+        canActivate: [AuthGuard],
       },
       {
-        path: 'chi-tieu-ke-hoach-nam-cap-cuc',
+        path: 'bao-cao',
         loadChildren: () =>
           import(
-            '../ke-hoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
-          ).then((m) => m.ChiTieuKeHoachNamModule),
+            '../ke-hoach/bao-cao/bao-cao.module'
+          ).then((m) => m.BaoCaoModule),
+        canActivate: [AuthGuard],
       },
       {
-        path: 'chi-tieu-ke-hoach-nam-cap-chi-cuc',
+        path: 'du-toan-nsnn',
         loadChildren: () =>
           import(
-            '../ke-hoach/chi-tieu-ke-hoach-nam-cap-tong-cuc/chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
-          ).then((m) => m.ChiTieuKeHoachNamModule),
+            '../ke-hoach/du-toan-nsnn/du-toan-nsnn.module'
+          ).then((m) => m.DuToanNsnnModule),
+        canActivate: [AuthGuard],
       },
       {
-        path: 'chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/:id',
+        path: '',
+        redirectTo: 'dieu-chinh-chi-tieu-ke-hoach-nam',
+        pathMatch: 'full'
+      },
+      {
+        path: 'dieu-chinh-chi-tieu-ke-hoach-nam',
         loadChildren: () =>
           import(
-            '../ke-hoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc.module'
-          ).then((m) => m.ThongTinChiTieuKeHoachNamModule),
-      },
-      {
-        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-        component: DieuChinhChiTieuKeHoachNamComponent
-      },
-      {
-        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-cuc',
-        component: DieuChinhChiTieuKeHoachNamComponent
-      },
-      {
-        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-chi-cuc',
-        component: DieuChinhChiTieuKeHoachNamComponent
-      },
-      {
-        path: 'dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc/dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc/:id',
-        component: DieuChinhThongTinChiTieuKeHoachNamComponent
+            '../ke-hoach/phuong-an-gia/phuong-an-gia.module'
+          ).then((m) => m.PhuongAnGiaModule),
+        canActivate: [AuthGuard],
       },
     ],
   },

@@ -8,9 +8,14 @@ import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { DanhSachDauThauService } from 'src/app/services/danhSachDauThau.service';
+import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { Subject } from 'rxjs';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
+import { convertTrangThai, convertTrangThaiUser } from 'src/app/shared/commonFunction';
+import { QlNguoiSuDungService } from 'src/app/services/quantri-nguoidung/qlNguoiSuDung.service';
+import { ThemMoiNSDComponent } from './them-ql-nguoisudung/tm-nguoisudung.component';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { LoaiDanhMuc } from 'src/app/constants/status';
+import { ActionItem } from 'src/app/constants/form-schema';
 
 
 @Component({
@@ -19,12 +24,18 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
   styleUrls: ['./danhsach.component.scss'],
 })
 export class DanhSachComponent implements OnInit {
+  [x: string]: any;
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   searchValue = '';
   searchFilter = {
-    soDxuat: '',
-    trichYeu: '',
+    PVBC: '',
+    donvi: '',
+
+    maND: '',
+    nhomND: '',
+    status: '',
   };
+  loaiNSD: any;
   inputDonVi: string = '';
   options: any[] = [];
   optionsDonVi: any[] = [];
@@ -39,14 +50,72 @@ export class DanhSachComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
-    private danhSachDauThauService: DanhSachDauThauService,
+    private qlNSDService: QlNguoiSuDungService,
     private notification: NzNotificationService,
     private router: Router,
-    private modal: NzModalService,
-  ) {}
+    private _modalService: NzModalService,
+    private _danhmucService: DanhMucService
+
+  ) {
+    this._danhmucService.danhMucChungGetAll(LoaiDanhMuc.VAI_TRO).then(res => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.LoaiNSD = res.data
+      }
+    });
+    this.initAction();
+  }
   // ngAfterViewInit(): void {
   //   throw new Error('Method not implemented.');
   // }
+
+  initAction() {
+    this.listAction = [
+      new ActionItem({
+        class: 'icon htvbdh_capso',
+        name: 'Khóa/Mở khóa',
+        code: 'capso',
+        onClick: (e, data) => {
+          e.preventDefault();
+          e.stopPropagation();
+        },
+        visible: false,
+        onVisible: (data) => {
+          return true
+        },
+        allowRouter: []
+      }),
+      new ActionItem({
+        class: 'fa fa-pencil-square-o sua',
+        name: 'Sửa',
+        code: 'sua',
+        onClick: (e, data) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.redirectToThemSua(data.username);
+        },
+        visible: false,
+        onVisible: (data) => {
+          return true
+        },
+        allowRouter: []
+      }),
+
+      new ActionItem({
+        class: 'icon htvbdh_xoa xoa',
+        name: 'Xóa',
+        onClick: (e, data) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.xoaItem(data.id)
+        },
+        visible: false,
+        onVisible: (data) => {
+          return true
+        },
+        allowRouter: []
+      }),
+    ]
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -108,18 +177,46 @@ export class DanhSachComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
-  redirectToChiTiet(id: number) {
-    this.router.navigate([
-      '/nhap/dau-thau/danh-sach-dau-thau/them-moi-de-xuat-ke-hoach-lua-chon-nha-thau',
-      id,
-    ]);
+  redirectToChiTiet(data?, detail?) {
+    let modal = this._modalService.create({
+      nzTitle: 'Chi tiết người sử dụng',
+      nzContent: ThemMoiNSDComponent,
+      nzClosable: true,
+      nzFooter: null,
+      nzStyle: { top: '50px' },
+      nzWidth: 900,
+      nzComponentParams: { data, detail },
+    });
+    modal.afterClose.subscribe((b) => {
+      if (b) {
+        this.search()
+      }
+    });
+
+  }
+
+  redirectToThemSua(data?) {
+    let modal = this._modalService.create({
+      nzTitle: data
+        ? 'Cập nhập người sử dụng'
+        : 'Thêm mới người sử dụng',
+      nzContent: ThemMoiNSDComponent,
+      nzClosable: true,
+      nzFooter: null,
+      nzStyle: { top: '50px' },
+      nzWidth: 900,
+      nzComponentParams: { data },
+    });
+    modal.afterClose.subscribe((b) => {
+      if (b) {
+        this.search()
+      }
+    });
+
   }
 
   clearFilter() {
-    this.searchFilter = {
-      soDxuat: '',
-      trichYeu: '',
-    };
+
     this.startValue = null;
     this.endValue = null;
     this.inputDonVi = '';
@@ -137,24 +234,18 @@ export class DanhSachComponent implements OnInit {
       }
     }
     let body = {
-      denNgayKy: this.endValue
-        ? dayjs(this.endValue).format('YYYY-MM-DD')
-        : null,
-      id: 0,
-      // loaiVthh: '00',
-      maDvi: maDonVi,
-      paggingReq: {
+      "dvql": maDonVi ?? "",
+      "fullName": "",
+      "paggingReq": {
         limit: this.pageSize,
         page: this.page,
       },
-      soDxuat: this.searchFilter.soDxuat,
-      str: null,
-      trichYeu: this.searchFilter.trichYeu,
-      tuNgayKy: this.startValue
-        ? dayjs(this.startValue).format('YYYY-MM-DD')
-        : null,
+      "status": "",
+      "sysType": "",
+      "username": ""
+
     };
-    let res = await this.danhSachDauThauService.timKiem(body);
+    let res = await this.qlNSDService.findList(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -191,11 +282,11 @@ export class DanhSachComponent implements OnInit {
   }
 
   convertTrangThai(status: string) {
-    return convertTrangThai(status);
+    return convertTrangThaiUser(status);
   }
 
   xoaItem(item: any) {
-    this.modal.confirm({
+    this._modalService.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
       nzContent: 'Bạn có chắc chắn muốn xóa?',
@@ -206,8 +297,8 @@ export class DanhSachComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.danhSachDauThauService
-            .deleteKeHoachLCNT({ id: item.id })
+          this.
+            qlNSDService.delete({ id: item })
             .then((res) => {
               if (res.msg == MESSAGE.SUCCESS) {
                 this.notification.success(
