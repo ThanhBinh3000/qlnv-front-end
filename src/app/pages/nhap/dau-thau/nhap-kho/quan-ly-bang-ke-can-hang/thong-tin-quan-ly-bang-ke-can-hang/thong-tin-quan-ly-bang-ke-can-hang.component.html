@@ -184,7 +184,9 @@
                             Số phiếu nhập kho
                         </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                            <input nz-input [readonly]="true" formControlName="soPhieuNhapKho"/>
+                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoPhieuNhapKho()">
+                                <input nz-input [readonly]="true" formControlName="soPhieuNhapKho"/>
+                            </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
