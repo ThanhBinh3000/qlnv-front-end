@@ -281,7 +281,7 @@ export class TongHopPhuongAnComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.deXuatKeHoachBanDauGiaService.xoa(item.id).then((res) => {
+          this.tongHopPhuongAnCuuTroService.deleteMuti({ids: [item.id]}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,

@@ -34,7 +34,7 @@
             <div class="title-chi-tieu">
           <span
                   [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do' ">{{formData.value.tenTrangThai}}</span>
-                <span class="title-form">Phiếu nhập kho</span>
+                <span class="title-form">Bảng kê cân hàng</span>
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
     </nz-alert>
 
     <nz-card class="mg-t-16 flex-card p-lr16">
-        <div class="header header-green-background">
+        <div class="mg-t-16 header header-green-background">
             <div class="header-text">
                 <div class="title-chi-tieu">
                     <span></span>
@@ -104,19 +104,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col nzSpan="4">
-                    <nz-form-item>
-                        <nz-form-label [nzNoColon]="true">
-                            Ngày nhập
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-input-group>
-                                <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayTao">
-                                </nz-date-picker>
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
+
                 <div nz-col nzSpan="4">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true">
@@ -150,7 +138,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="4">
+                <div nz-col [nzSpan]="6">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
@@ -160,7 +148,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="4">
+                <div nz-col [nzSpan]="6">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
@@ -190,14 +178,27 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col nzSpan="4">
+                <div nz-col nzSpan="2">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true">
                             Số phiếu nhập kho
                         </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open">
+                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoPhieuNhapKho()">
                                 <input nz-input [readonly]="true" formControlName="soPhieuNhapKho"/>
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="2">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">
+                            Ngày nhập kho
+                        </nz-form-label>
+                        <nz-form-control [nzErrorTip]="error">
+                            <nz-input-group>
+                                <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayNhapKho">
+                                </nz-date-picker>
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -333,75 +334,102 @@
                     <th>Mã cân (A)</th>
                     <th>Số bao bì (1)</th>
                     <th>Trọng lượng bao bì (2)</th>
-                    <th>Hành động</th>
+                    <th width="60px">Hành động</th>
                 </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <input nz-input [(ngModel)]="rowItem.maSo"/>
-                    </td>
-                    <td>
-                        <nz-input-number nz-input [nzSize]="'small'"
-                                         [(ngModel)]="rowItem.soLuongChungTu"></nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number nz-input [nzSize]="'small'"
-                                         [(ngModel)]="rowItem.soLuongThucNhap"></nz-input-number>
-                    </td>
-                    <td>
-
-                    </td>
-                </tr>
-                <tr>
+                <tr *ngIf="formData.value.trangThai != STATUS.DA_DUYET_LDCC">
+                    <th></th>
+                    <th>
+                        <input nz-input [(ngModel)]="rowItem.maCan"/>
+                    </th>
+                    <th>
+                        <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                         [(ngModel)]="rowItem.trongLuongBaoBi"></nz-input-number>
+                    </th>
+                    <th>
+                        <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                         [(ngModel)]="rowItem.trongLuongCaBaoBi"></nz-input-number>
+                    </th>
+                    <th>
+                        <a (click)="addRow()" >
+                            <i class="fa fa-plus"></i>
+                        </a>
+                        <a (click)="clearItemRow()">
+                            <i class="fa fa-refresh"></i>
+                        </a>
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let item of dataTable; let i = index">
-                    <td>{{i + 1}}</td>
-                    <td>{{item.moTaHangHoa}}</td>
-                    <td>
-                        <input nz-input [(ngModel)]="item.maSo"/>
-                    </td>
-                    <td>{{item.donViTinh}}</td>
-                    <td>
-                        <nz-input-number nz-input [nzSize]="'small'"
-                                         [(ngModel)]="item.soLuongChungTu"></nz-input-number>
-                    </td>
-                    <td>
-                        <nz-input-number nz-input [nzSize]="'small'"
-                                         [(ngModel)]="item.soLuongThucNhap"></nz-input-number>
-                    </td>
-                    <td>{{item.donGia}}</td>
-                    <td>{{item.donGia * item.soLuongThucNhap}}</td>
-                    <td>
-
-                    </td>
-                </tr>
+                    <tr *ngFor="let item of dataTable; let i = index">
+                        <td>{{i + 1}}</td>
+                        <td>{{item.maCan}}</td>
+                        <td>{{item.trongLuongBaoBi | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td>{{item.trongLuongCaBaoBi | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td>
+    <!--                         <a (click)="editRow(data.id)"> -->
+    <!--                             <i class="fa fa-pencil"></i> -->
+    <!--                         </a> -->
+    <!--                         <a (click)="deleteRow(data)"> -->
+    <!--                             <i class="fa fa-trash-o do"></i> -->
+    <!--                         </a> -->
+                        </td>
+                    </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>{{ calcTong('trongLuongBaoBi') | number : '1.0-1' : 'vi_VN' }}</td>
+                        <td>{{ calcTong('trongLuongCaBaoBi') | number : '1.0-1' : 'vi_VN' }}</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </nz-table>
         </nz-card>
         <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
             <div nz-row [nzGutter]="[18, 6]">
-                <div nz-col nzSpan="24">
+                <div nz-col nzSpan="12">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                            Tổng số lượng (viết bằng chữ)
+                            Tổng số lượng kể cả bao bì
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <input nz-input [ngModelOptions]="{standalone: true}"
-                                   [ngModel]="dataTable.length > 0 ? convertTien(dataTable[0].soLuongThucNhap) : ''"
-                                   readonly/>
+                            <nz-input-number nz-input nzSize="small" readonly [ngModel]="calcTong('trongLuongCaBaoBi')" [ngModelOptions]="{standalone: true}"
+                                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled
+                            ></nz-input-number>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col nzSpan="24">
+                <div nz-col nzSpan="12">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                            Tổng số lượng (viết bằng chữ)
+                            Tổng trọng lượng bao bì
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <input nz-input [ngModelOptions]="{standalone: true}"
-                                   [ngModel]="dataTable.length > 0 ? convertTien(dataTable[0].soLuongThucNhap * dataTable[0].donGia) : ''"
+                            <nz-input-number nz-input nzSize="small" readonly [ngModel]="calcTong('trongLuongBaoBi')"  [ngModelOptions]="{standalone: true}"
+                                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled
+                            ></nz-input-number>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">
+                            Tổng trọng lượng hàng đã trừ bì
+                        </nz-form-label>
+                        <nz-form-control nz-col [nzErrorTip]="error">
+                            <nz-input-number nz-input nzSize="small" readonly [ngModel]="calcTong('trongLuongCaBaoBi') - calcTong('trongLuongBaoBi')"  [ngModelOptions]="{standalone: true}"
+                                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled
+                            ></nz-input-number>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">
+                            Tổng trọng lượng hàng đã trừ bì (bằng chữ)
+                        </nz-form-label>
+                        <nz-form-control nz-col [nzErrorTip]="error">
+                            <input nz-input [ngModel]="convertTien(calcTong('trongLuongCaBaoBi') - calcTong('trongLuongBaoBi')) "  [ngModelOptions]="{standalone: true}"
                                    readonly/>
                         </nz-form-control>
                     </nz-form-item>

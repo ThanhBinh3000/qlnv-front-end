@@ -143,6 +143,7 @@ export class PhuLuc7Component implements OnInit {
         ...item,
       })
     })
+
     if (this.lstCtietBcao.length > 0) {
       if (!this.lstCtietBcao[0].stt) {
         this.sortWithoutIndex();
@@ -227,7 +228,7 @@ export class PhuLuc7Component implements OnInit {
         if (res.statusCode == 0) {
           this.dsDinhMuc = res.data;
           this.dsDinhMuc.forEach(item => {
-            if (!item.loaiVthh.startsWith('04')) {
+            if (!item.loaiVthh.startsWith('02')) {
               item.tongDmuc = divNumber(item.tongDmuc, 1000);
             }
           })
@@ -450,7 +451,7 @@ export class PhuLuc7Component implements OnInit {
       const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
       const nho = this.lstCtietBcao[item].stt;
       this.lstCtietBcao.forEach(item => {
-        item.stt.replace(nho, str);
+        item.stt = item.stt.replace(nho, str);
       })
     })
   }
@@ -472,7 +473,7 @@ export class PhuLuc7Component implements OnInit {
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
       if (itm.id == initItem.loaiMatHang) {
-        return dm = itm.tongDmuc;
+        dm = itm.tongDmuc;
       }
     })
     if (initItem?.id) {
@@ -526,11 +527,10 @@ export class PhuLuc7Component implements OnInit {
         }
       }
     }
-
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
       if (itm.id == initItem.loaiMatHang) {
-        return dm = itm.tongDmuc;
+        dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -700,7 +700,7 @@ export class PhuLuc7Component implements OnInit {
     let dm = 0;
     this.dsDinhMuc.forEach(itm => {
       if (itm.id == initItem.loaiMatHang) {
-        return dm = itm.tongDmuc;
+        dm = itm.tongDmuc;
       }
     })
     if (initItem?.id) {

@@ -41,7 +41,7 @@ export class CanCuXacDinh {
   tenTlieu: string;
   taiLieu: any;
   moTa: string;
-  fileDinhKems: Array<FileDinhKem>;
+  fileDinhkems: Array<FileDinhKem>;
   ccFileDinhkems: Array<FileDinhKem>;
 }
 
