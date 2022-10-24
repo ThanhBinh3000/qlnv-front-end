@@ -6,7 +6,7 @@ import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {MESSAGE} from 'src/app/constants/message';
 import {DonviService} from 'src/app/services/donvi.service';
 import {Globals} from 'src/app/shared/globals';
-import {Component, OnInit, ChangeDetectorRef} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
@@ -25,10 +25,11 @@ import {ChiTietDiaDiemNhapKho, DiaDiemNhapKho} from 'src/app/models/CuuTro';
 export class DialogDiaDiemNhapKhoComponent implements OnInit {
   tableName: any;
   idDxuat: any;
-  idDxuatDtl: any;
-  nam: number;
-  noEdit: boolean = false;
-  cLoaiVthh: string;
+  @Input() idDxuatDtl: any;
+  @Input() nam: number;
+  @Input() noEdit: boolean = false;
+  @Input() cLoaiVthh: string;
+  @Input() rowDxuatDtlSelect: any;
   cucList: any[] = [];
   chiCucList: any[] = [];
   listDiemKho: any[] = [];
@@ -45,7 +46,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
   chiTietDiemNhapKhoCreate: ChiTietDiaDiemNhapKho = new ChiTietDiaDiemNhapKho();
   chiTietDiemNhapKhoEdit: ChiTietDiaDiemNhapKho = new ChiTietDiaDiemNhapKho();
   dsChiTietDiemNhapKhoClone: Array<ChiTietDiaDiemNhapKho> = [];
-  loaiHangHoa: string;
+  @Input() loaiHangHoa: string;
   idChiTieu: number;
   chiTieu: any;
   phanLoTaiSanEdit: DiaDiemNhapKho | any;
@@ -61,8 +62,8 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
     chungLoaiHH: '',
     loaiHH: ''
   }
-  listPhuongAn: DiaDiemNhapKho | any;
-  phuongAnXuatList: DiaDiemNhapKho[] = [];
+  @Input() listPhuongAn: DiaDiemNhapKho | any;
+  @Input() phuongAnXuatList: DiaDiemNhapKho[] = [];
   listDvi: any[] = [];
 
 
@@ -381,11 +382,18 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
 
   addDiaDiem() {
     if (!this.chiTietDiemNhapKhoCreate.tonKho) {
-      this.notification.error(MESSAGE.ERROR, 'Không tìm thấy loại hàng hóa trong kho');
+      this.notification.error(MESSAGE.ERROR, 'Không tìm thấy loại hàng hóa trong kho.');
+      return;
+    }
+    let total = this.rowDxuatDtlSelect.phuongAnXuat.reduce((prev, cur) => prev = +cur.soLuong, 0);
+    total += this.diaDiemNhapKho.chiTietDiaDiems.reduce((prev, cur) => prev = +cur.soLuong, 0);
+    total += this.chiTietDiemNhapKhoCreate.soLuong;
+    if (total > this.rowDxuatDtlSelect.soLuong) {
+      this.notification.error(MESSAGE.ERROR, 'Vượt quá số lượng tối đa của đề xuất.');
       return;
     }
     this.chiTietDiemNhapKhoCreate.idVirtual = new Date().getTime();
-    this.chiTietDiemNhapKhoCreate.idDxuatDtl = this.idDxuatDtl;
+    //this.chiTietDiemNhapKhoCreate.idDxuatDtl = this.idDxuatDtl;
     this.diaDiemNhapKho.idVirtual = new Date().getTime();
     this.diaDiemNhapKho.chiTietDiaDiems = [...this.diaDiemNhapKho.chiTietDiaDiems, this.chiTietDiemNhapKhoCreate];
     this.newObjectDiaDiem();
@@ -410,6 +418,7 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
   }
 
   startEdit(index: number) {
+    this.tinhTien(this.dsChiTietDiemNhapKhoClone[index]);
     this.chiTietDiemNhapKhoEdit = cloneDeep(this.dsChiTietDiemNhapKhoClone[index]);
     this.changeDiemKho(this.chiTietDiemNhapKhoEdit.maDiemKho, index, true)
     this.changeNhaKho(this.chiTietDiemNhapKhoEdit.maNhaKho, index, true)
@@ -419,6 +428,13 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
   }
 
   saveEdit(i: number) {
+    let total = this.rowDxuatDtlSelect.phuongAnXuat.reduce((prev, cur) => prev = +cur.soLuong, 0);
+    total += this.diaDiemNhapKho.chiTietDiaDiems.reduce((prev, cur) => prev = +cur.soLuong, 0);
+    total += this.dsChiTietDiemNhapKhoClone[i].soLuong;
+    if (total > this.rowDxuatDtlSelect.soLuong) {
+      this.notification.error(MESSAGE.ERROR, 'Vượt quá số lượng tối đa của đề xuất.');
+      return;
+    }
     this.dsChiTietDiemNhapKhoClone[i].isEdit = false;
     Object.assign(
       this.diaDiemNhapKho.chiTietDiaDiems[i],
@@ -562,6 +578,13 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
 
   changeCuc(maDvi: string) {
     this.loadChiCuc(maDvi);
-    this.chiTietDiemNhapKhoCreate.maDvi= this.diaDiemNhapKho.maDvi;
+    this.chiTietDiemNhapKhoCreate.maDvi = this.diaDiemNhapKho.maDvi;
+  }
+
+  tinhTien(item: any) {
+    item.thanhTien = 0;
+    if (item.donGia > 0 && item.soLuong > 0) {
+      item.thanhTien = item.donGia * item.soLuong;
+    }
   }
 }

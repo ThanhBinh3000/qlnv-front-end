@@ -87,6 +87,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
   thongTinChiTietClone: any = {};
   phuongAnXuatList: DiaDiemNhapKho[];
   idDxuatDtlSelect = 0;
+  rowDxuatDtlSelect: any;
   tongSoLuongDtl: number;
 
 
@@ -246,64 +247,54 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
   }
 
   async save(isOther?: boolean) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Lưu thông tin',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 350,
-      nzOnOk: async () => {
-        this.helperService.markFormGroupTouched(this.formData);
-        if (this.formData.invalid) {
-          let invalid = [];
-          let controls = this.formData.controls;
-          for (const name in controls) {
-            if (controls[name].invalid) {
-              invalid.push(name);
-            }
-          }
-          console.log(invalid, 'invalid');
-          this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
-          return;
-        } else {
-          try {
-            this.spinner.show();
-            let body = this.formData.value;
-            // body.fileDinhKem = this.fileDinhKem;
-            body.ngayDxuat = this.datePipe.transform(body.ngayDxuat, 'yyyy-MM-dd');
-            body.thoiGianThucHien = this.datePipe.transform(body.thoiGianThucHien, 'yyyy-MM-dd');
-            body.soDxuat = body.soDxuat + this.maDeXuat;
-            if (this.idInput) {
-              let res = await this.deXuatPhuongAnCuuTroService.update(body);
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                this.summaryData();
-                //this.quayLai();
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
-            } else {
-              body.tongSoLuong = this.tongSLThongTinChiTiet;
-              let res = await this.deXuatPhuongAnCuuTroService.create(body);
-              if (res.msg == MESSAGE.SUCCESS) {
-                this.idInput = res.data.id;
-                this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                this.quayLai();
-              } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-              }
-            }
-
-          } catch (e) {
-            console.log(e)
-          } finally {
-            this.spinner.hide();
-          }
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      let invalid = [];
+      let controls = this.formData.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          invalid.push(name);
         }
       }
-    });
+      console.log(invalid, 'invalid');
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin.');
+      return;
+    } else {
+      try {
+        this.spinner.show();
+        let body = this.formData.value;
+        // body.fileDinhKem = this.fileDinhKem;
+        body.ngayDxuat = this.datePipe.transform(body.ngayDxuat, 'yyyy-MM-dd');
+        body.thoiGianThucHien = this.datePipe.transform(body.thoiGianThucHien, 'yyyy-MM-dd');
+        body.soDxuat = body.soDxuat + this.maDeXuat;
+        if (this.idInput) {
+          let res = await this.deXuatPhuongAnCuuTroService.update(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.summaryData();
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        } else {
+          body.tongSoLuong = this.tongSLThongTinChiTiet;
+          let res = await this.deXuatPhuongAnCuuTroService.create(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.idInput = res.data.id;
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+        }
+
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.spinner.hide();
+      }
+    }
+
   }
 
   async dsLoaiHinhNhapXuat() {
@@ -343,6 +334,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
             if (res.data.thongTinChiTiet.length > 0) {
               res.data.thongTinChiTiet.forEach(s => s.idVirtual = new Date());
               this.idDxuatDtlSelect = res.data.thongTinChiTiet[0].idVirtual;
+              this.rowDxuatDtlSelect = res.data.thongTinChiTiet[0];
               this.showDataKhoView();
             }
           }
@@ -477,7 +469,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Lưu và gửi duyệt',
+      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -646,7 +638,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
     }
     let data = this.loaiVthhInput;
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      // nzTitle: 'Địa điểm kho',
       nzContent: DialogDiaDiemNhapKhoComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -658,7 +650,8 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         // tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
         nam: this.formData.get('nam').value,
         phuongAnXuatList: this.phuongAnXuatList,
-        idDxuatDtl: this.idDxuatDtlSelect
+        idDxuatDtl: this.idDxuatDtlSelect,
+        rowDxuatDtlSelect: this.rowDxuatDtlSelect
       },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
@@ -676,14 +669,13 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
     });
   }
 
-  suaPhuongAn(item: DiaDiemNhapKho) {
-    let data = this.loaiVthhInput;
+  suaPhuongAn(index: number) {
     let noEdit = true;
     if (this.userInfo.CAP_DVI == this.globals.prop.TONG_CUC) {
       noEdit = false;
     }
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
+      // nzTitle: 'Địa điểm kho',
       nzContent: DialogDiaDiemNhapKhoComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -695,23 +687,21 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         // tenCloaiVthh: this.formData.get('tenCloaiVthh').value,
         noEdit: noEdit,
         nam: this.formData.get('nam').value,
-        listPhuongAn: item,
+        listPhuongAn: this.phuongAnXuatList[index],
+        rowDxuatDtlSelect: this.rowDxuatDtlSelect
       },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
-        console.log(data, 111111)
-        console.log(this.formData.get('thongTinChiTiet').value);
-        //let indexRemove = this.phuongAnXuatList.findIndex(s => s.maChiCuc == item.maChiCuc);
-        //this.phuongAnXuatList.splice(indexRemove, 1, data);
-        //Array.from(this.formData.get('thongTinChiTiet').value.phuongAnXuat).findIndex(s=>s.)
         data.chiTietDiaDiems.forEach(s => {
-          // s.maDvi = data.maDvi;
-          // s.maChiCuc = data.maDvi;
-          // s.tenChiCuc = data.tenDvi;
-          this.formData.get('thongTinChiTiet').value.phuongAnXuat ?? new Array().push(s);
+          // s.cloaiVthh = s.chungLoaiHh;
+          // s.tenCloaiVthh = s.tenChungLoaiHh;
+          let curThongTinChiTiet = this.formData.get('thongTinChiTiet').value.find(s1 => s1.idVirtual == this.idDxuatDtlSelect);
+          console.log(curThongTinChiTiet, 'hahaha');
+          if (curThongTinChiTiet) {
+            curThongTinChiTiet.phuongAnXuat.splice(index, 1, s);
+          }
         });
-        console.log(this.formData.get('thongTinChiTiet').value, 123);
         this.showDataKhoView();
       }
     });
@@ -724,6 +714,7 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
         newRow.idVirtual = new Date().getTime();
         newRow.phuongAnXuat = [];
         this.idDxuatDtlSelect = newRow.idVirtual;
+        this.rowDxuatDtlSelect = newRow;
         this.formData.get('thongTinChiTiet').value.push(newRow);
         this.tongSLThongTinChiTiet = 0;
         this.formData.get('thongTinChiTiet').value.forEach(s => this.tongSLThongTinChiTiet += parseInt(s.soLuong));
@@ -853,7 +844,26 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
 
   onClickRowChiTiet(i: number) {
     let thongTinChiTiet = this.formData.get('thongTinChiTiet').value;
-    let value = thongTinChiTiet[i];
-    this.onClickChiTiet(value);
+    this.rowDxuatDtlSelect = thongTinChiTiet[i];
+    this.onClickChiTiet(this.rowDxuatDtlSelect);
+  }
+
+  xoaPhuongAn(index: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        let curThongTinChiTiet = this.formData.get('thongTinChiTiet').value.find(s1 => s1.idVirtual == this.idDxuatDtlSelect);
+        if (curThongTinChiTiet) {
+          curThongTinChiTiet.phuongAnXuat.splice(index, 1);
+        }
+        this.showDataKhoView();
+      }
+    })
   }
 }

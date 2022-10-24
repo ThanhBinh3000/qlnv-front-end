@@ -10,14 +10,12 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
 import { STATUS } from 'src/app/constants/status';
 import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';
 import { ChaogiaUyquyenMualeService } from 'src/app/services/chaogia-uyquyen-muale.service';
-import { DanhSachMuaTrucTiep } from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
 @Component({
   selector: 'app-chaogia-uyquyen-muale',
   templateUrl: './chaogia-uyquyen-muale.component.html',
@@ -51,7 +49,6 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
     canhanTochuc: '',
     loaiVthh: '',
     maDvi: '',
-
   };
 
   filterTable: any = {
@@ -63,7 +60,6 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
     tenLoaiVthh: '',
     tenCloaiVthh: '',
     tenTrangThaiTkhai: '',
-
   };
 
   dataTableAll: any[] = [];
@@ -81,7 +77,7 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
-
+  selectedData: any;
   async ngOnInit() {
     await this.spinner.show();
     this.listVthh = LIST_VAT_TU_HANG_HOA;
@@ -176,9 +172,10 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(id: number) {
-    this.selectedId = id;
+  redirectToChiTiet(selectedData: any) {
+    this.selectedId = selectedData.id;
     this.isDetail = true;
+    this.selectedData = selectedData;
   }
 
   async showList() {

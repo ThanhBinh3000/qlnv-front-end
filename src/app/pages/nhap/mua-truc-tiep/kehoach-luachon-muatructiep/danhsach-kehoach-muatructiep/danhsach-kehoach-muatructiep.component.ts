@@ -5,7 +5,7 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { UserLogin } from 'src/app/models/userlogin';
@@ -47,8 +47,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     trichYeu: '',
     soDxuat: '',
   };
-
-  STATUS = STATUS
   filterTable: any = {
     soDxuat: '',
     namKh: '',
@@ -62,6 +60,8 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     tenTrangThai: '',
     trangThaiTh: '',
   };
+
+  STATUS = STATUS
   listDonVi = [];
   dataTableAll: any[] = [];
   dataTable: any[] = [];
@@ -70,7 +70,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
   totalRecord: number = 0;
   userInfo: UserLogin;
   selectedId: number = 0;
-  isVatTu: boolean = false;
   allChecked = false;
   indeterminate = false;
 
@@ -79,16 +78,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       this.loadListDonVi(),
     ]);
     try {
-      if (this.loaiVthh === "02") {
-        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM")) {
-          window.location.href = '/error/401'
-        }
-      }
-      else {
-        if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XEM")) {
-          window.location.href = '/error/401'
-        }
-      }
       this.userInfo = this.userService.getUserLogin();
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
@@ -118,6 +107,7 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       this.listDonVi = res.data;
     }
   }
+
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
@@ -238,16 +228,9 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       }
     }
     this.isDetail = true;
-    if (this.userService.isTongCuc()) {
-      this.isVatTu = true;
-    } else {
-      this.isVatTu = false;
-    }
     this.selectedId = null;
     this.loaiVthh = this.loaiVthhCache;
   }
-
-
 
   showList() {
     this.isDetail = false;
@@ -257,29 +240,13 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
   detail(data?) {
     this.selectedId = data.id;
     this.isDetail = true;
-    this.loaiVthh = data.loaiVthh;
-    if (data.loaiVthh.startsWith('02')) {
-      this.isVatTu = true;
-    } else {
-      this.isVatTu = false;
-    }
-    if (this.loaiVthh === "02") {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA")) {
-        return;
-      }
-    }
-    else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_SUA")) {
-        return;
-      }
-    }
   }
 
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
     this.searchFilter.soDxuat = null;
     this.searchFilter.ngayTao = null;
-    this.searchFilter.ngayPduyet
+    this.searchFilter.ngayPduyet = null;
     this.searchFilter.trichYeu = null;
     this.searchFilter.loaiVthh = null;
     this.searchFilter.maDvi = null;
@@ -287,16 +254,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
   }
 
   xoaItem(item: any) {
-    if (this.loaiVthh === "02") {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA")) {
-        return;
-      }
-    }
-    else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA")) {
-        return;
-      }
-    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -334,16 +291,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
   }
 
   exportData() {
-    if (this.loaiVthh === "02") {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_EXP")) {
-        return;
-      }
-    }
-    else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_EXP")) {
-        return;
-      }
-    }
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
@@ -382,18 +329,7 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     }
   }
 
-
   deleteSelect() {
-    if (this.loaiVthh === "02") {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA")) {
-        return;
-      }
-    }
-    else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA")) {
-        return;
-      }
-    }
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
@@ -434,7 +370,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
-
 
   filterInTable(key: string, value: string) {
     if (value != '') {

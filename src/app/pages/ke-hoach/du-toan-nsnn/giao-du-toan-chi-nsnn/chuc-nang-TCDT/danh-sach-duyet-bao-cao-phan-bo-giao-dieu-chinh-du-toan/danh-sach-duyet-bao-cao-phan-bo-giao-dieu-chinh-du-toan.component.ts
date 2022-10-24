@@ -79,7 +79,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
   trangThai!: string;
   roleUser: string;
   newDate = new Date();
-
+  isCanbotc: boolean;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private danhMuc: DanhMucHDVService,
@@ -98,6 +98,9 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
 
     this.userInfo = this.userService.getUserLogin();
     this.maDviTao = this.userInfo?.MA_DVI;
+    if (this.userService.isAccessPermisson(GDT.TIEPNHAN_TUCHOI_PA_PBDT)) {
+      this.isCanbotc = true;
+    }
 
     this.searchFilter.ngayTaoDen = new Date();
     this.newDate.setMonth(this.newDate.getMonth() - 1);
@@ -118,16 +121,14 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
       }
     );
 
-    if (this.userService.isAccessPermisson(GDT.TIEPNHAN_TUCHOI_PA_PBDT)) {
+    if (this.userService.isAccessPermisson(GDT.TIEPNHAN_TUCHOI_PA_PBDT) || this.userService.isAccessPermisson(GDT.XEM_PA_TONGHOP_PBDT)) {
       this.trangThai = '7';
-      // this.roleUser = 'canbo';
       this.status = false;
-      this.trangThais.push({
-        id: Utils.TT_BC_7,
-        tenDm: "Mới",
-      });
+      // this.trangThais.push({
+      //   id: Utils.TT_BC_7,
+      //   tenDm: "Mới",
+      // });
       this.searchFilter.loaiTimKiem = '1';
-      // this.donVis = this.donVis.filter(e => e?.maDviCha == this.maDviTao);
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_7));
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_8));
       this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_9));

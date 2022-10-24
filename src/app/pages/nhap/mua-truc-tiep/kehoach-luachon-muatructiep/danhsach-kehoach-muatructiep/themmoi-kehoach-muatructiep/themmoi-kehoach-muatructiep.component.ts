@@ -1,11 +1,10 @@
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, Pipe, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
-import { groupBy, chain } from 'lodash';
+import { chain } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
 import { MESSAGE } from 'src/app/constants/message';
 import {
   CanCuXacDinh,
@@ -13,7 +12,6 @@ import {
   FileDinhKem,
 } from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import VNnum2words from 'vn-num2words';
 import * as dayjs from 'dayjs';
@@ -29,7 +27,6 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { DatePipe } from "@angular/common";
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
@@ -68,11 +65,13 @@ export interface TreeNodeInterface {
   ccFileDinhkems?: TreeNodeInterface[];
   parent?: TreeNodeInterface;
 }
+
 @Component({
   selector: 'app-themmoi-kehoach-muatructiep',
   templateUrl: './themmoi-kehoach-muatructiep.component.html',
   styleUrls: ['./themmoi-kehoach-muatructiep.component.scss']
 })
+
 export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   @Input()
   loaiVthhInput: string;
@@ -83,7 +82,6 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   @Output()
   showListEvent = new EventEmitter<any>();
   editCache: { [key: string]: { edit: boolean; data: DanhSachMuaTrucTiep } } = {};
-
   formData: FormGroup;
   listOfData: DanhSachMuaTrucTiep[] = [];
   cacheData: DanhSachMuaTrucTiep[] = [];
@@ -93,17 +91,13 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   listDiemKho: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
-
   danhMucDonVi: any;
   STATUS = STATUS;
   i = 0;
   editId: string | null = null;
   tabSelected: string = 'thongTinChung';
-  listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
   listNam: any[] = [];
-  listHinhThucDauThau: any[] = [];
-  listLoaiHopDong: any[] = [];
   listOfMapData: VatTu[];
   listOfMapDataClone: VatTu[];
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
@@ -114,7 +108,6 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   canCuKhacList: CanCuXacDinh[] = [];
   userInfo: UserLogin;
   maTrinh: string = '';
-
   addModelBaoGia: any = {
     moTa: '',
     taiLieu: [],
@@ -123,11 +116,8 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     moTa: '',
     taiLieu: [],
   };
-
   taiLieuDinhKemList: any[] = [];
-
   listDataGroup: any[] = [];
-
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -135,6 +125,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   indeterminate = false;
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
+  datePipe = new DatePipe('en-US');
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -156,6 +147,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       id: [],
       maDvi: [],
       tenDvi: ['', [Validators.required]],
+      diaChiDvi: [],
       loaiHinhNx: ['', [Validators.required]],
       kieuNx: ['', [Validators.required]],
       namKh: ['', [Validators.required]],
@@ -182,7 +174,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       tongMucDt: [],
       tongSoLuong: [],
       nguonVon: ['', [Validators.required]],
-      tenChuDt: [],
+      tenChuDt: ['', [Validators.required]],
       moTa: [],
       maDiemKho: [],
       diaDiemKho: [],
@@ -195,7 +187,6 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       donGiaVat: [],
       thanhTien: [],
     });
-
   }
 
   async ngOnInit() {
@@ -227,7 +218,6 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     if (resNv.msg == MESSAGE.SUCCESS) {
       this.listNguonVon = resNv.data;
     }
-
     // loại hình nhập xuất
     this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
@@ -267,20 +257,6 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     }
-  }
-
-  isDetailPermission() {
-    if (this.loaiVthhInput === "02") {
-      if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
-        return true;
-      }
-    }
-    else {
-      if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM")) {
-        return true;
-      }
-    }
-    return false;
   }
 
   initForm() {
@@ -375,7 +351,6 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       this.helperService.setIndexArray(this.listOfData);
       this.convertListData();
     });
-
   }
 
   deleteRow(i: number): void {
@@ -384,22 +359,20 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     this.convertListData();
   }
 
-
-
   async save(isGuiDuyet?) {
-    if (!this.isDetailPermission()) {
-      return;
-    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
       console.log(this.formData);
       return;
     }
-    let pipe = new DatePipe('en-US');
+
     let body = this.formData.value;
     body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
     body.fileDinhkems = this.fileDinhKem;
+    body.ngayTao = this.datePipe.transform(body.ngayTao, 'yyyy-MM-dd');
+    body.tgianKthuc = this.datePipe.transform(body.tgianKthuc, 'yyyy-MM-dd ');
+    body.tgianMkho = this.datePipe.transform(body.tgianMkho, 'yyyy-MM-dd ')
     body.soLuongDiaDiemList = this.listOfData;
     body.ccXdgList = [...this.canCuXacDinhList, ...this.canCuKhacList];
     let res = null;
@@ -438,6 +411,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       });
     }
   }
+
   convertTienTobangChu(tien: number): string {
     return VNnum2words(tien);
   }
@@ -842,13 +816,6 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     };
     switch (event) {
       case 'tai-lieu-dinh-kem':
-        // body.dataType = this.deXuatDieuChinh.fileDinhKems[0].dataType;
-        // body.dataId = this.deXuatDieuChinh.fileDinhKems[0].dataId;
-        // if (this.taiLieuDinhKemList.length > 0) {
-        //   this.chiTieuKeHoachNamService.downloadFileKeHoach(body).subscribe((blob) => {
-        //     saveAs(blob, this.deXuatDieuChinh.fileDinhKems.length > 1 ? 'Tai-lieu-dinh-kem.zip' : this.deXuatDieuChinh.fileDinhKems[0].fileName);
-        //   });
-        // }
         break;
       default:
         break;
@@ -890,5 +857,4 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     };
     await this.spinner.hide();
   }
-
 }

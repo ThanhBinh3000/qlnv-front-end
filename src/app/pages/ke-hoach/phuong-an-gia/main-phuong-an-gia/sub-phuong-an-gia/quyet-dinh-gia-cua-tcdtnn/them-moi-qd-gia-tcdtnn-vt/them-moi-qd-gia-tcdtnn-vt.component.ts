@@ -81,8 +81,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         cloaiVthh: [],
         tchuanCluong: [null],
         gia: [null],
-        giaVat: [null],
-        thongTinGia: [null]
+        giaVat: [null]
       }
     );
   }
@@ -95,9 +94,9 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       this.loadDsVthh(),
       this.loadToTrinhDeXuat(),
       this.maQd = "/QĐ-TCDT",
-      this.getDataDetail(this.idInput),
       this.loadTiLeThue()
     ]);
+    await  this.getDataDetail(this.idInput)
     this.spinner.hide();
   }
 
@@ -105,7 +104,6 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     if (id > 0) {
       let res = await this.quyetDinhGiaTCDTNNService.getDetail(id);
       const data = res.data;
-      console.log(data)
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -119,10 +117,11 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
         trichYeu: data.trichYeu,
         trangThai: data.trangThai,
         ghiChu: data.ghiChu,
-        soDeXuat: data.soToTrinh
+        soDeXuat: data.soToTrinh,
+        soToTrinh : data.soToTrinh
 
       });
-      this.arrThongTinGia = data.thongTinGia
+      this.arrThongTinGia = data.thongTinGiaVt
       this.onChangeSoToTrinh(data.soToTrinh)
     }
   }
@@ -198,7 +197,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       return;
     }
     let currentRow = this.formData.value;
-    let currentLine = currentRow.thongTinGia;
+    let currentLine = currentRow.thongTinGiaVt;
     if (currentLine) {
       currentLine.forEach(item => {
         if (currentRow.loaiGia == 'LG01' && (item.giaQd > item.giaDn || item.giaQdVat > item.giaDnVat)) {
@@ -217,7 +216,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       let body = this.formData.value;
       body.pagType = this.pagType;
       body.soQd = body.soQd + this.maQd
-      body.thongTinGia = this.arrThongTinGia;
+      body.thongTinGiaVt = this.arrThongTinGia;
       let res;
       if (this.idInput > 0) {
         res = await this.quyetDinhGiaTCDTNNService.update(body);
@@ -247,10 +246,17 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   }
 
   async loadDsVthh() {
+    let body = {
+      "str": "02"
+    };
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
     this.dsVthh = [];
-    let res = await this.danhMucService.danhMucChungGetAll("LOAI_HHOA");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsVthh = res.data;
+      if (res.data) {
+        this.dsVthh = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
@@ -302,20 +308,8 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   }
 
   async calculateVAT(index: number, type: number) {
-    let currentRow = this.formData.value;
-    let currentLine = this.arrThongTinGia[index];
-    if (currentRow.loaiGia == 'LG01' && (currentLine.giaQd > currentLine.giaDn || currentLine.giaQdVat > currentLine.giaDnVat)) {
-      this.arrThongTinGia[index].giaQd = 0;
-      this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
-    }
-    if (currentRow.loaiGia == 'LG02' && (currentLine.giaQd < currentLine.giaDn || currentLine.giaQdVat < currentLine.giaDnVat)) {
-      this.arrThongTinGia[index].giaQd = 0;
-      this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
-    }
     if (type === 0) {
       this.arrThongTinGia[index].giaQdVat = this.arrThongTinGia[index].giaQd + this.arrThongTinGia[index].giaQd * this.thueVat;
-    } else if (type === 1) {
-      this.arrThongTinGia[index].giaQd = this.arrThongTinGia[index].giaQdVat - this.arrThongTinGia[index].giaQdVat * this.thueVat;
     }
   }
 

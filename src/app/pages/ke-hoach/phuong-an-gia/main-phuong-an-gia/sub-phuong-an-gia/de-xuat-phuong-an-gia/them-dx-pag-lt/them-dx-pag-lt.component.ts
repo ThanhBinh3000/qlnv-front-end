@@ -64,9 +64,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   rowItemCcXdg: CanCuXacDinhPag = new CanCuXacDinhPag();
   dataEdit: { [key: string]: { edit: boolean; data: CanCuXacDinhPag } } = {};
 
-  dataTableKsGia: any[] = [];
+  dataTableKsGia: any[] ;
 
-  dataTableKqGia: any[] = [];
+  dataTableKqGia: any[] ;
 
 
 
@@ -132,8 +132,14 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
     })
     this.formData.controls['chiPhiChung'].valueChanges.subscribe(value => {
-      const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value + this.formData.controls.chiPhiPbo.value
-      this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
+      if (this.formData.value.loaiHangXdg == 'XDG_LH02') {
+        const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value - this.formData.controls.chiPhiPbo.value
+        this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
+      } else {
+        const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value
+        this.formData.controls['tongChiPhi'].setValue(tongChiPhi);
+      }
+
     })
     this.formData.controls['chiPhiPbo'].valueChanges.subscribe(value => {
       const tongChiPhi = this.formData.controls.giaVonNk.value + this.formData.controls.chiPhiChung.value - this.formData.controls.chiPhiPbo.value
@@ -147,16 +153,18 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     await Promise.all([
       this.isGiaMuaToiDa = this.type == TYPE_PAG.GIA_MUA_TOI_DA,
       this.userInfo = this.userService.getUserLogin(),
-      this.getDataChiTieu(),
+      this.maDx = '/CDTVP-KH&QLHDT',
       this.loadDsNam(),
       this.loadDsLoaiGia(),
       this.loadDsPhuongAnGia(),
       this.loadDsHangHoaPag(),
       this.loadDsQdPduyetKhlcnt(),
       this.loadDsVthh(),
-      this.maDx = '/CDTVP-KH&QLHDT',
-      this.getDataDetail(this.idInput),
+      this.getDataDetail(this.idInput)
     ])
+    if (this.isGiaMuaToiDa) {
+      await this.getDataChiTieu()
+    }
     this.spinner.hide();
   }
 
@@ -195,10 +203,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         lyDoTuChoi: data.lyDoTuChoi
       })
       this.dataTableCanCuXdg = data.canCuPhapLy;
+      this.dsDiaDiemDeHang = data.diaDiemDeHangs;
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableKqGia = data.ketQuaThamDinhGia;
-      this.dsDiaDiemDeHang = data.diaDiemDeHangs;
-      this.updateEditCache();
+      this.updateEditCache()
     }
   }
 
@@ -315,7 +323,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   onChangeLoaiGia($event) {
     this.isVat = ($event == 'LG01' || $event == 'LG03');
-    console.log(this.isVat);
   }
 
   loadDsNam() {
@@ -328,9 +335,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async onChangeSoQd($event) {
-    console.log($event);
     let dataQd = this.dsQdPdKhlcnt.filter(item => item.soQd == $event);
-    console.log(dataQd);
     if (dataQd.length > 0) {
       let dataDetail = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(dataQd[0].id);
       const data = dataDetail.data;
@@ -393,7 +398,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      console.log(this.formData.value)
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
@@ -614,14 +618,22 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   updateEditCache(): void {
     if (this.dataTableCanCuXdg) {
-      let i = 0;
-      this.dataTableCanCuXdg.forEach((item) => {
-        this.dataEdit[i] = {
+      this.dataTableCanCuXdg.forEach((item, index) => {
+        this.dataEdit[index] = {
           edit: false,
           data: { ...item },
         };
-        i++
       });
+    }
+  }
+
+  onChangePp() {
+    if (this.formData.value.loaiHangXdg == 'XDG_LH02') {
+      let tong =+  this.formData.get('giaVonNk').value +  this.formData.get('chiPhiChung').value -  this.formData.get('chiPhiPbo').value
+      this.formData.get('tongChiPhi').setValue(tong)
+    } else {
+      let tong = this.formData.get('chiPhiChung').value +    this.formData.get('giaVonNk').value
+      this.formData.get('tongChiPhi').setValue(tong)
     }
   }
 }

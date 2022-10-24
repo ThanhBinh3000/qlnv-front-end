@@ -15,6 +15,9 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import {STATUS} from "../../../../../constants/status";
+import {
+  QuyetDinhGiaoNhapHangService
+} from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
 
 @Component({
   selector: 'quan-ly-phieu-kiem-tra-chat-luong-hang',
@@ -50,6 +53,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
+  idQdGiaoNvNh : number = 0;
   isTatCa: boolean = false;
 
   allChecked = false;
@@ -74,6 +78,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
+    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
@@ -132,36 +137,28 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   }
 
   async search() {
+    await this.spinner.show();
     let body = {
-      "maDonVi": this.userInfo.MA_DVI,
-      "maVatTuCha": this.isTatCa ? null : this.typeVthh,
-      "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
-        ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-        : null,
-      "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0
-        ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-        : null,
       "paggingReq": {
         "limit": this.pageSize,
         "page": this.page - 1
       },
-      "soPhieu": this.searchFilter.soPhieu,
-      "soQd": this.searchFilter.soQuyetDinh,
+      trangThai : STATUS.BAN_HANH
     };
-    let res = await this.quanLyPhieuKiemTraChatLuongHangService.search(body);
+    let res = await this.quyetDinhNhapXuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
+      this.dataTable.forEach( item =>
+        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      );
+      console.log(this.dataTable);
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    await this.spinner.hide();
   }
 
   async changePageIndex(event) {
@@ -237,10 +234,11 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     });
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
+  redirectToChiTiet(isView: boolean, id: number,idQdGiaoNvNh? : number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
   }
 
   async showList() {
@@ -365,5 +363,23 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
 
   print() {
 
+  }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
+  expandSet2 = new Set<number>();
+  onExpandChange2(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet2.add(id);
+    } else {
+      this.expandSet2.delete(id);
+    }
   }
 }

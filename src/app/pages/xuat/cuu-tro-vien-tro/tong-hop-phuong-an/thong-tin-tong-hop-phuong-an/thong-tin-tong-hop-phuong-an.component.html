@@ -1,8 +1,13 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix" *ngIf="!isQuyetDinh">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
+    </button>
+    <button
+      type="button" *ngIf="checkAvailableByStatus(STATUS.CHUA_TAO_QD)" class="btn btn-sub" (click)="taoQuyetDinh()">
+      <i class="icon htvbdh_tcdt_tao-qd"></i>
+      <span>Tạo quyết định</span>
     </button>
     <button
       *ngIf="checkAvailableByStatus(STATUS.TU_CHOI_LDV)"
@@ -24,18 +29,18 @@
     <!--    </button>-->
     <button
       *ngIf="checkAvailableByStatus(STATUS.CHO_DUYET_LDV)"
-      type="button" class="btn btn-sub" (click)="save(true)">
+      type="button" class="btn btn-sub" (click)="luuVaGuiDuyet()">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
     <button *ngIf="(!khBanDauGia.trangThai || khBanDauGia.trangThai == globals.prop.NHAP_DU_THAO) && !isView" type="
-              button" class="btn btn-main" (click)="save(false)">
+              button" class="btn btn-main" (click)="luu()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
   </div>
 </nz-affix>
-<div class="bg-trang">
+<div class="bg-trang" *ngIf="!isQuyetDinh">
   <div class="mt16 flex-card p-lr16">
     <div class="header header-green-background mg-t-16">
       <div class="header-text">
@@ -126,7 +131,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Mã tổng hợp</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
-                <input readonly nz-input formControlName="maTongHop" />
+                <input readonly nz-input formControlName="maTongHop"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -136,7 +141,8 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày tổng hợp</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker class="search__input" formControlName="ngayTongHop" [nzDisabled]="isView">
+                <nz-date-picker nzFormat="dd/MM/yyyy" class="search__input" formControlName="ngayTongHop"
+                                [nzDisabled]="isView">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
@@ -365,3 +371,7 @@
     </button>
   </div>
 </nz-modal>
+<div *ngIf="isQuyetDinh" class="chi-tiet">
+  <app-thong-tin-quyet-dinh-phe-duyet-phuong-an [idTongHop]="formData.value.id" (showListEvent)="quayLai()">
+  </app-thong-tin-quyet-dinh-phe-duyet-phuong-an>
+</div>

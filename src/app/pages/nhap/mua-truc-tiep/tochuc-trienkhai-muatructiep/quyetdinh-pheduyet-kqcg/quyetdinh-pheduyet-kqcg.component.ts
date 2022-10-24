@@ -8,13 +8,12 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai, convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { STATUS } from 'src/app/constants/status';
+import { QuyetDinhPheDuyetKetQuaChaoGiaMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ket-qua-chao-gia-mtt.service';
 
 @Component({
   selector: 'app-quyetdinh-pheduyet-kqcg',
@@ -22,16 +21,13 @@ import { STATUS } from 'src/app/constants/status';
   styleUrls: ['./quyetdinh-pheduyet-kqcg.component.scss']
 })
 export class QuyetdinhPheduyetKqcgComponent implements OnInit {
-
-
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private modal: NzModalService,
     public userService: UserService,
-    private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService,
+    private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
     private danhMucService: DanhMucService
   ) {
 
@@ -40,27 +36,20 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
   yearNow: number = 0;
 
   searchFilter = {
-    soQdPdKhlcnt: '',
-    soQdinh: '',
-    namKhoach: dayjs().get('year'),
-    ngayTongHop: '',
-    loaiVthh: '',
-    trichYeu: '',
-    soGoiThau: ''
+    namKh: dayjs().get('year'),
+    ngayKy: '',
+    maDvi: '',
+    tenDvi: '',
   };
 
   filterTable: any = {
-    soQd: '',
-    ngayTongHop: '',
-    trichYeu: '',
-    tenGthau: '',
-    statusGT: '',
-    tenNhaThau: '',
-    lyDoHuy: '',
-    donGiaTrcVat: '',
-    tenHdong: '',
-    tgianThienHd: '',
-    statusConvert: '',
+    soQdPdCg: '',
+    ngayKy: '',
+    tenDvi: '',
+    soQdPdKh: '',
+    tenLoaiVthh: '',
+    tenCloaiVthh: '',
+    tenTrangThai: '',
   };
 
   dataTableAll: any[] = [];
@@ -113,42 +102,39 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
   }
 
   async search() {
-    // let body = {
-    //   tuNgayTao: this.searchFilter.ngayTongHop
-    //     ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-    //     : null,
-    //   denNgayTao: this.searchFilter.ngayTongHop
-    //     ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-    //     : null,
-    //   paggingReq: {
-    //     limit: this.pageSize,
-    //     page: this.page - 1,
+    let body = {
+      ngayCgiaTu: this.searchFilter.ngayKy
+        ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
+        : null,
+      ngayCgiaDen: this.searchFilter.ngayKy
+        ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
+        : null,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
 
-    //   },
-    //   soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
-    //   soQdinh: this.searchFilter.soQdinh,
-    //   loaiVthh: this.searchFilter.loaiVthh,
-    //   namKhoach: this.searchFilter.namKhoach,
-    //   trichYeu: this.searchFilter.trichYeu,
-    //   maDvi: this.userInfo.MA_DVI
-    // };
-    // let res = await this.quyetDinhPheDuyetKetQuaLCNTService.search(body);
-    // if (res.msg == MESSAGE.SUCCESS) {
-    //   let data = res.data;
-    //   this.dataTable = data.content;
-    //   this.totalRecord = data.totalElements;
-    //   if (this.dataTable && this.dataTable.length > 0) {
-    //     this.dataTable.forEach((item) => {
-    //       item.statusConvert = this.convertTrangThai(item.trangThai);
-    //       item.statusGT = this.statusGoiThau(item.statusGthau);
-    //     });
-    //   }
-    //   this.dataTableAll = cloneDeep(this.dataTable);
-    // } else {
-    //   this.dataTable = [];
-    //   this.totalRecord = 0;
-    //   this.notification.error(MESSAGE.ERROR, res.msg);
-    // }
+      },
+      namKh: this.searchFilter.namKh,
+      maDvi: this.userInfo.MA_DVI,
+      tenDvi: this.searchFilter.tenDvi,
+    };
+    let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = data.content;
+      this.totalRecord = data.totalElements;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.statusConvert = this.convertTrangThai(item.trangThai);
+          item.statusGT = this.statusGoiThau(item.statusGthau);
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
+    } else {
+      this.dataTable = [];
+      this.totalRecord = 0;
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
 
@@ -164,51 +150,50 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
   }
 
   clearFilter() {
-    this.searchFilter.namKhoach = dayjs().get('year');
-    this.searchFilter.trichYeu = null;
-    this.searchFilter.loaiVthh = null;
-    this.searchFilter.ngayTongHop = null;
-    this.searchFilter.soQdPdKhlcnt = null;
+    this.searchFilter.namKh = dayjs().get('year');
+    this.searchFilter.tenDvi = null;
+    this.searchFilter.ngayKy = null;
+    this.searchFilter.maDvi = null;
     this.search();
   }
 
   xoaItem(item: any) {
-    // this.modal.confirm({
-    //   nzClosable: false,
-    //   nzTitle: 'Xác nhận',
-    //   nzContent: 'Bạn có chắc chắn muốn xóa?',
-    //   nzOkText: 'Đồng ý',
-    //   nzCancelText: 'Không',
-    //   nzOkDanger: true,
-    //   nzWidth: 310,
-    //   nzOnOk: () => {
-    //     this.spinner.show();
-    //     try {
-    //       let body = {
-    //         "id": item.id,
-    //         "maDvi": ""
-    //       }
-    //       this.quyetDinhPheDuyetKetQuaLCNTService.delete(body).then(async (res) => {
-    //         if (res.msg == MESSAGE.SUCCESS) {
-    //           this.notification.success(
-    //             MESSAGE.SUCCESS,
-    //             MESSAGE.DELETE_SUCCESS,
-    //           );
-    //           this.search();
-    //         } else {
-    //           this.notification.error(MESSAGE.ERROR, res.msg);
-    //         }
-    //         await this.search();
-    //         this.spinner.hide();
-    //       });
-    //     }
-    //     catch (e) {
-    //       console.log('error: ', e)
-    //       this.spinner.hide();
-    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //     }
-    //   },
-    // });
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            "id": item.id,
+            "maDvi": ""
+          }
+          this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.delete(body).then(async (res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            await this.search();
+            this.spinner.hide();
+          });
+        }
+        catch (e) {
+          console.log('error: ', e)
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   convertTrangThai(status: string) {
@@ -220,80 +205,76 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
   }
 
   exportData() {
-    // if (this.totalRecord > 0) {
-    //   this.spinner.show();
-    //   try {
-    //     let body = {
-    //       tuNgayTao: this.searchFilter.ngayTongHop
-    //         ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD')
-    //         : null,
-    //       denNgayTao: this.searchFilter.ngayTongHop
-    //         ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')
-    //         : null,
-    //       soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
-    //       soQdinh: this.searchFilter.soQdinh,
-    //       loaiVthh: this.searchFilter.loaiVthh,
-    //       namKhoach: this.searchFilter.namKhoach
-
-    //     };
-    //     this.quyetDinhPheDuyetKetQuaLCNTService
-    //       .export(body)
-    //       .subscribe((blob) =>
-    //         saveAs(blob, 'quyet-dinh-phe-duyet-ket0-qua-lcnt.xlsx'),
-    //       );
-    //     this.spinner.hide();
-    //   } catch (e) {
-    //     console.log('error: ', e);
-    //     this.spinner.hide();
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   }
-    // } else {
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    // }
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          ngayCgiaTu: this.searchFilter.ngayKy
+            ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
+            : null,
+          ngayCgiaDen: this.searchFilter.ngayKy
+            ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
+            : null,
+          namKh: this.searchFilter.namKh
+        };
+        this.quyetDinhPheDuyetKetQuaChaoGiaMTTService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'quyet-dinh-phe-duyet-ket0-qua-lcnt.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   xoa() {
-    // let dataDelete = [];
-    // if (this.dataTable && this.dataTable.length > 0) {
-    //   this.dataTable.forEach((item) => {
-    //     if (item.checked) {
-    //       dataDelete.push(item.id);
-    //     }
-    //   });
-    // }
-    // if (dataDelete && dataDelete.length > 0) {
-    //   this.modal.confirm({
-    //     nzClosable: false,
-    //     nzTitle: 'Xác nhận',
-    //     nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
-    //     nzOkText: 'Đồng ý',
-    //     nzCancelText: 'Không',
-    //     nzOkDanger: true,
-    //     nzWidth: 310,
-    //     nzOnOk: async () => {
-    //       this.spinner.show();
-    //       try {
-    //         let res = await this.quyetDinhPheDuyetKetQuaLCNTService.deleteMuti({ ids: dataDelete });
-    //         if (res.msg == MESSAGE.SUCCESS) {
-    //           this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-    //           await this.search();
-    //           this.getCount.emit();
-    //           this.allChecked = false;
-    //         } else {
-    //           this.notification.error(MESSAGE.ERROR, res.msg);
-    //         }
-    //       } catch (e) {
-    //         console.log('error: ', e);
-    //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //       } finally {
-    //         this.spinner.hide();
-    //       }
-    //     },
-    //   });
-    // }
-    // else {
-    //   this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
-    // }
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.deleteMuti({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.getCount.emit();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
   }
 
   updateAllChecked(): void {
@@ -375,18 +356,13 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQd: '',
-      ngayTongHop: '',
-      trichYeu: '',
-      tenGthau: '',
-      statusGT: '',
-      tenNhaThau: '',
-      lyDoHuy: '',
-      donGiaTrcVat: '',
-      tenHdong: '',
-      tgianThienHd: '',
-      statusConvert: '',
+      soQdPdCg: '',
+      ngayKy: '',
+      tenDvi: '',
+      soQdPdKh: '',
+      tenLoaiVthh: '',
+      tenCloaiVthh: '',
+      tenTrangThai: '',
     }
   }
 }
-

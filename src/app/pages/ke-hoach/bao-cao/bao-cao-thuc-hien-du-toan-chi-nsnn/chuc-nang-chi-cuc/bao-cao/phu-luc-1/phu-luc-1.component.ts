@@ -117,7 +117,7 @@ export class PhuLucIComponent implements OnInit {
         })
     }
 
-    async initialization(){
+    async initialization() {
         this.spinner.show();
         await this.danhMucService.dMNoiDungPhuLuc1().toPromise().then(
             (data) => {
@@ -822,8 +822,8 @@ export class PhuLucIComponent implements OnInit {
         return true;
     }
 
-    getDeleteStatus(maNdung: number){
-        if (this.luyKeDetail.findIndex(e => e.maNdung == maNdung) != -1){
+    getDeleteStatus(maNdung: number) {
+        if (this.luyKeDetail.findIndex(e => e.maNdung == maNdung) != -1) {
             return true;
         }
         return false;
@@ -991,8 +991,13 @@ export class PhuLucIComponent implements OnInit {
     }
 
     export() {
+        const request = {
+            bcaoCtietId: this.id,
+            bcaoId: this.idBcao,
+            dviTien: this.maDviTien,
+        }
         const baoCao = "phuLuc1.xlsx";
-        this.quanLyVonPhiService.exportBaoCao(this.idBcao, this.id).toPromise().then(
+        this.quanLyVonPhiService.exportBaoCao(request).toPromise().then(
             (data) => {
                 fileSaver.saveAs(data, baoCao);
             },

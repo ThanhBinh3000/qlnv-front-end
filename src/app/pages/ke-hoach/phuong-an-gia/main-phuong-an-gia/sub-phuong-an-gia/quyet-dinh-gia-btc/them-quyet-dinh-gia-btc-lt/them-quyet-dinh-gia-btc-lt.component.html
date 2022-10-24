@@ -122,10 +122,11 @@
           </nz-form-item>
         </div>-->
         <div nz-col [nzSpan]="24">
-          <nz-form-item class="form-item">
+
+          <nz-form-item class="form-item" >
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="trichYeu">Trích yếu
             </nz-form-label>
-            <nz-form-control>
+            <nz-form-control  [nzErrorTip]="error">
               <textarea id="trichYeu" formControlName="trichYeu" rows="3" class="search__input" nz-input
                 [readonly]="noEdit"></textarea>
             </nz-form-control>
@@ -231,7 +232,7 @@
                     <nz-input-group>
                       <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
                         [(ngModel)]="arrThongTinGia[idx].giaQd" [nzMin]="0" [nzFormatter]="globals.formatter"
-                        [nzParser]="globals.parser" [nzDisabled]="noEdit" (nzBlur)="calculateVAT(idx,0)">
+                        [nzParser]="globals.parser" [nzDisabled]="isView" (nzBlur)="calculateVAT(idx,0)">
                       </nz-input-number>
                     </nz-input-group>
                   </td>
@@ -239,7 +240,7 @@
                     <nz-input-group>
                       <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
                         [(ngModel)]="arrThongTinGia[idx].giaQdVat" [nzMin]="0" [nzFormatter]="globals.formatter"
-                        [nzParser]="globals.parser" [nzDisabled]="noEdit" (nzBlur)="calculateVAT(idx,1)">
+                        [nzParser]="globals.parser" [nzDisabled]="isView">
                       </nz-input-number>
                     </nz-input-group>
                   </td>

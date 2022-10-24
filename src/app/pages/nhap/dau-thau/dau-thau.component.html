@@ -13,14 +13,13 @@
         <li nz-menu-item (click)="selectTab('hopdong')" *ngIf="!userService.isChiCuc()">
             Hợp đồng
         </li>
-        <li nz-menu-item [nzSelected]="userService.isChiCuc()" (click)="selectTab('qdgnvnh')"
-            *ngIf="!userService.isTongCuc()">
+        <li nz-menu-item [nzSelected]="this.userService.isChiCuc()" (click)="selectTab('qdgnvnh')">
             Quyết định giao nhiệm vụ nhập hàng
         </li>
-        <li nz-menu-item (click)="selectTab('ktcl')" *ngIf="!userService.isTongCuc()">
+        <li nz-menu-item (click)="selectTab('ktcl')" >
             Kiểm tra chất lượng
         </li>
-        <li nz-menu-item (click)="selectTab('nhapkho')" *ngIf="!userService.isTongCuc()">
+        <li nz-menu-item (click)="selectTab('nhapkho')" >
             Nhập kho
         </li>
     </ul>

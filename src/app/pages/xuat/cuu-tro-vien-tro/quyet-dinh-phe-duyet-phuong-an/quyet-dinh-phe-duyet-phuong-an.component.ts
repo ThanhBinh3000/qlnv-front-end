@@ -278,7 +278,7 @@ export class QuyetDinhPheDuyetPhuongAnComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhPheDuyetPhuongAnCuuTroService.delete({id: item.id}).then((res) => {
+          this.quyetDinhPheDuyetPhuongAnCuuTroService.deleteMuti({ids: [item.id]}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -333,15 +333,15 @@ export class QuyetDinhPheDuyetPhuongAnComponent implements OnInit {
           ngayKyTuNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD') : null,
           ngayKyDenNgay: this.searchFilter.ngayKy ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD') : null,
           soKeHoach: this.searchFilter.soKeHoach ?? null,
-          namKeHoach: this.searchFilter.nam,
+          nam: this.searchFilter.nam,
           trichYeu: this.searchFilter.trichYeu ?? null,
           maDvis: [this.userInfo.MA_DVI],
           pageable: null,
         };
-        this.deXuatKeHoachBanDauGiaService
-          .exportList(body)
+        this.quyetDinhPheDuyetPhuongAnCuuTroService
+          .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-de-xuat-ke-hoach-ban-dau-gia.xlsx'),
+            saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-phuong-an-xuat-cuu-tro-vien-tro.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -378,7 +378,7 @@ export class QuyetDinhPheDuyetPhuongAnComponent implements OnInit {
             const body = {
               ids: dataDelete
             }
-            let res = await this.deXuatKeHoachBanDauGiaService.deleteMultiple(body);
+            let res = await this.quyetDinhPheDuyetPhuongAnCuuTroService.deleteMuti(body);
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

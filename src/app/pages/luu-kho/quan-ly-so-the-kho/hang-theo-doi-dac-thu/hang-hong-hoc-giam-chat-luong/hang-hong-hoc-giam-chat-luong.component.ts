@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
 import {UserLogin} from 'src/app/models/userlogin';
@@ -9,14 +9,12 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {MESSAGE} from 'src/app/constants/message';
 import {DANH_MUC_LEVEL} from 'src/app/pages/luu-kho/luu-kho.constant';
-import {isEmpty} from 'lodash';
+import { saveAs } from 'file-saver';
 import {QuanLyDanhSachHangHongHocService} from 'src/app/services/quanLyDanhSachHangHongHoc.service';
 import {cloneDeep} from 'lodash';
-import * as dayjs from 'dayjs';
-import {
-  DialogDanhSachHangHoaComponent
-} from "../../../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
 import {NzModalService} from "ng-zorro-antd/modal";
+import {Globals} from "../../../../../shared/globals";
+import {STATUS} from "../../../../../constants/status";
 
 
 @Component({
@@ -65,10 +63,13 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   danhSachChiCuc: any[] = [];
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
+  idSelected: number;
+   isViewDetail: boolean;
+  getCount = new EventEmitter<any>();
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly userService: UserService,
+    public userService: UserService,
     private readonly donviService: DonviService,
     private readonly danhMucService: DanhMucService,
     private readonly spinner: NgxSpinnerService,
@@ -76,6 +77,7 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
     private donViService: DonviService,
     private readonly notification: NzNotificationService,
     private quanLyDanhSachHangHongHocService: QuanLyDanhSachHangHongHocService,
+    public globals: Globals,
   ) {
     this.formData = this.fb.group({
       maDvi: [null],
@@ -88,19 +90,15 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   }
 
 
-  async ngOnInit(): Promise<void> {
-    try {
+  async ngOnInit() {
       this.spinner.show();
-      this.userInfo = this.userService.getUserLogin()
-      // await this.search()
-      // await this.loaiVTHHGetAll()
-      // await this.loadDanhSachChiCuc()
-      // await this.loadDsTong()
-    } catch (error) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
-    }
+    await Promise.all([
+      this.userInfo = this.userService.getUserLogin(),
+      await this.loaiVTHHGetAll(),
+      await this.loadDanhSachChiCuc(),
+      await this.search(),
+    ])
+   this.spinner.hide()
   }
 
   async changeLoaiHangHoa(id: any) {
@@ -111,13 +109,14 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   }
 
   async loadDanhSachChiCuc() {
-    const body = {
-      maDviCha: this.userInfo.MA_DVI,
-      trangThai: '01',
-    };
-
-    const dsTong = await this.donViService.layDonViTheoCapDo(body);
-    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    if (!this.userService.isChiCuc()) {
+      const body = {
+        maDviCha: this.userInfo.MA_DVI,
+        trangThai: '01',
+      };
+      const dsTong = await this.donViService.layDonViTheoCapDo(body);
+      this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    }
   }
 
   async search() {
@@ -131,40 +130,19 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
     };
     let res = await this.quanLyDanhSachHangHongHocService.search(body)
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dataTable = [...res.data.content]
-      this.totalRecord = res.data.totalElements;
-      this.dataTableAll = cloneDeep(this.dataTable)
+      let data = res.data;
+      this.dataTable = [...data.content];
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
+      this.totalRecord = data.totalElements;
     } else {
-      this.dataTable = [];
-      this.totalRecord = 0;
-      this.notification.error(MESSAGE.ERROR, res.msg)
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
-  }
-
-
-  async loadDsTong() {
-    const body = {
-      maDviCha: this.detail.maDvi,
-      trangThai: '01',
-    };
-
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
-    if (!isEmpty(dsTong)) {
-      this.dsTong = dsTong;
-      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-      this.dsDonViDataSource = dsTong[DANH_MUC_LEVEL.CHI_CUC].map(
-        (item) => item.tenDvi,
-      );
-    }
-  }
-
-  expandSet = new Set<number>();
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
-    } else {
-      this.expandSet.delete(id);
-    }
+    this.spinner.hide();
   }
 
   async loaiVTHHGetAll() {
@@ -192,9 +170,74 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   }
 
   exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          ngayDeXuatTu: this.formData.value.ngayDeXuat ? this.formData.value.ngayDeXuat[0] : null,
+          ngayDeXuatDen: this.formData.value.ngayDeXuat ?  this.formData.value.ngayDeXuat[1] : null,
+          loaiVthh: this.formData.value.loaiVthh,
+          cloaiVthh: this.formData.value.cloaiVthh,
+          maDvi : this.userInfo.MA_DVI
+        };
+        this.quanLyDanhSachHangHongHocService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-hang-hong-hoc.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
   xoa() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quanLyDanhSachHangHongHocService.deleteMuti({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.getCount.emit();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
   }
 
   themMoi() {
@@ -204,6 +247,25 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   onAllChecked(checked) {
     this.dataTable.forEach(({id}) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
+  }
+
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == STATUS.CHUA_TONG_HOP) {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
   }
 
   updateCheckedSet(id: number, checked: boolean): void {
@@ -229,7 +291,10 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
   changePageSize(event) {
   }
 
-  viewDetail(id: number, isUpdate: boolean) {
+  viewDetail(id: number, isView: boolean) {
+    this.idSelected = id;
+    this.isAddNew = true;
+    this.isViewDetail = isView ?? false;
   }
 
   xoaItem(id) {
@@ -244,7 +309,13 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          const res = await this.quanLyDanhSachHangHongHocService.deteleData(id);
+          let body = {
+            "id": id,
+            "ids": [
+              0
+            ]
+          }
+          const res = await this.quanLyDanhSachHangHongHocService.delete(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             this.search();
@@ -268,6 +339,7 @@ export class HangHongHocGiamChatLuongComponent implements OnInit {
 
   onClose() {
     this.isAddNew = false;
+    this.search()
   }
 
   filterInTable(key: string, value: string) {

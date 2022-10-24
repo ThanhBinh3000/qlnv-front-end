@@ -41,7 +41,24 @@ export class CanCuXacDinh {
   tenTlieu: string;
   taiLieu: any;
   moTa: string;
-  fileDinhKems: Array<FileDinhKem>;
+  fileDinhkems: Array<FileDinhKem>;
   ccFileDinhkems: Array<FileDinhKem>;
+}
+
+export class ChiTietThongTinChaoGia {
+  id: number;
+  canhanTochuc: string;
+  mst: string;
+  diaChi: string;
+  sdt: string;
+  ngayChaoGia: number;
+  soLuong: number;
+  dgiaChuaThue: number;
+  thueGtgt: number;
+  thanhTien: number;
+  luaChon: boolean = false;
+  luaChonPduyet: number;
+  idSoQdPduyetCgia: number;
+  fileDinhKems: FileDinhKem = new FileDinhKem();
 }
 

@@ -48,9 +48,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   pagPpXacDinhGias: any[] = [];
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
-  dataTableKsGia: any[] = [];
+  dataTableKsGia: any[];
   dataTableCanCuXdg: any[] = [];
-  dataTableKqGia: any[] = [];
+  dataTableKqGia: any[];
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   dsBoNganh: any[] = [];
@@ -281,7 +281,11 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.updateEditCache(page)
     }
     if (page == 'ppxdg') {
-      this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.chiPhiPhanBo
+      if (this.formData.value.loaiHangXdg == "'XDG_LH02'") {
+        this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung - this.rowItemPpxdg.chiPhiPhanBo
+      } else {
+        this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.giaVonNk + this.rowItemPpxdg.chiPhiChung
+      }
       this.rowItemPpxdg.tenCloaiVthh = this.listVthh.find(s => s.ma = this.rowItemPpxdg.cloaiVthh).ten;
       this.pagPpXacDinhGias = [...this.pagPpXacDinhGias, this.rowItemPpxdg];
       this.rowItemPpxdg = new PhuongPhapXacDinhGia();
@@ -313,20 +317,26 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         maPphapXdg: data.maPphapXdg
       })
       this.pagTtChungs = data.pagTtChungs;
-      if (this.type == 'GMTDBTT') {
-        await this.onChangeLoaiVthh(data.loaiVthh)
-        this.pagTtChungs.forEach(item => {
-          let res = this.listCloaiVthh.find(cloai => cloai.ma = item.cloaiVthh)
-          item.tenCloaiVthh = res.ten
-        })
-      }
       this.pagPpXacDinhGias = data.pagPpXacDinhGias;
-      this.dataTableKqGia = data.dataTableKqGia;
-      this.dataTableKsGia = data.dataTableKsGia;
+      this.dataTableKqGia = data.ketQuaThamDinhGia;
+      this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableCanCuXdg = data.canCuPhapLy;
       this.updateEditCache('ttc')
       this.updateEditCache('ccXdg')
       this.updateEditCache('ppxdg')
+      await this.loadTenCloaiVthh(data.loaiVthh, this.pagTtChungs)
+    }
+  }
+
+  async loadTenCloaiVthh(vthh, ttc) {
+    await this.onChangeLoaiVthh(vthh)
+    if (ttc) {
+      ttc.forEach(item => {
+        let res = this.listCloaiVthh.find(cl => cl.ma == item.cloaiVthh)
+        if (res) {
+          item.tenCloaiVthh = res.ten
+        }
+      })
     }
   }
 
@@ -615,4 +625,12 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     }
   }
 
+  onChangePp() {
+    if (this.formData.value.loaiHangXdg == 'XDG_LH02') {
+     this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.giaVonNk - this.rowItemPpxdg.chiPhiPhanBo
+    } else {
+      this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.giaVonNk
+    }
+    this.pagPpXacDinhGias = []
+  }
 }

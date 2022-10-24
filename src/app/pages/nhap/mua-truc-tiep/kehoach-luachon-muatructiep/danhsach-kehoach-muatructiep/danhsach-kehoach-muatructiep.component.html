@@ -54,8 +54,7 @@
         <div class="group-button">
             <h3>DANH SÁCH ĐỀ XUẤT KẾ HOẠCH MUA TRỰC TIẾP</h3>
             <div class="buttons">
-                <button type="button" class="btn btn-do" (click)="deleteSelect()"
-                    *ngIf="loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA')">
+                <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf=" userService.isCuc()">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
@@ -64,8 +63,7 @@
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="themMoi()"
-                    *ngIf="loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')">
+                <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf=" userService.isCuc()">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
@@ -197,11 +195,11 @@
                         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
                         <td>{{data.soDxuat}}</td>
                         <td>{{data.namKh}}</td>
-                        <td>{{data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-                        <td>{{data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
+                        <td>{{data.ngayTao | date: 'dd/MM/yyyy' }}</td>
+                        <td>{{data.ngayPduyet| date: 'dd/MM/yyyy' }}</td>
                         <td>{{data.trichYeu}}</td>
                         <td>{{data.soQd}}</td>
-                        <td *ngIf="userService.isTongCuc()">{{data.tenloaiVthh}}</td>
+                        <td *ngIf="userService.isTongCuc()">{{data.tenLoaiVthh}}</td>
                         <td>{{data.tenCloaiVthh}}</td>
                         <td>{{data.tongSoLuong}}</td>
                         <td *ngIf="userService.isCuc()">{{data.soQdPduyet}}</td>
@@ -248,7 +246,7 @@
     </div>
 </div>
 <div class="chi-tiet" *ngIf="isDetail">
-    <ng-container *ngIf="!isVatTu">
+    <ng-container>
         <app-themmoi-kehoach-muatructiep [idInput]="selectedId" [loaiVthhInput]="loaiVthh" (showListEvent)="showList()">
         </app-themmoi-kehoach-muatructiep>
     </ng-container>

@@ -215,15 +215,17 @@ export class BaoCao04anComponent implements OnInit {
                 if (res.statusCode == 0) {
                     this.dinhMucs = res.data;
                     this.dinhMucs.forEach(item => {
-                        if (!item.cloaiVthh.startsWith('04')) {
-                            item.nvChuyenMonKv = divNumber(item.nvChuyenMonKv, 1000);
-                            item.nvChuyenMonTc = divNumber(item.nvChuyenMonTc, 1000);
-                            item.tcDieuHanhKv = divNumber(item.tcDieuHanhKv, 1000);
-                            item.tcDieuHanhTc = divNumber(item.tcDieuHanhTc, 1000);
-                            item.ttCaNhanKv = divNumber(item.ttCaNhanKv, 1000);
-                            item.ttCaNhanTc = divNumber(item.ttCaNhanTc, 1000);
+                        if (!item.cloaiVthh.startsWith('02')) {
+                            item.nvChuyenMonDviTt = (item.nvChuyenMonDviTt ? item.nvChuyenMonDviTt : 0) / 1000;
+                            item.nvChuyenMonVp = (item.nvChuyenMonVp ? item.nvChuyenMonVp : 0) / 1000;
+                            item.dieuHanhDviTt = (item.dieuHanhDviTt ? item.dieuHanhDviTt : 0) / 1000;
+                            item.dieuHanhVp = (item.dieuHanhVp ? item.dieuHanhVp : 0) / 1000;
+                            item.ttCaNhanDviTt = (item.ttCaNhanDviTt ? item.ttCaNhanDviTt : 0) / 1000;
+                            item.ttCaNhanVp = (item.ttCaNhanVp ? item.ttCaNhanVp : 0) / 1000;
+                            item.tcDhNvCm = (item.tcDhNvCm ? item.tcDhNvCm : 0) / 1000;
                         }
                     })
+                    console.log(this.dinhMucs);
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -1292,7 +1294,12 @@ export class BaoCao04anComponent implements OnInit {
     }
 
     export() {
-        this.quanLyVonPhiService.exportBaoCao(this.id, this.idBaoCao).toPromise().then(
+        const request = {
+            bcaoCtietId: this.id,
+            bcaoId: this.idBaoCao,
+            dviTien: this.maDviTien,
+        }
+        this.quanLyVonPhiService.exportBaoCao(request).toPromise().then(
             (data) => {
                 fileSaver.saveAs(data, '04a_BCPN-N.xlsx');
             },

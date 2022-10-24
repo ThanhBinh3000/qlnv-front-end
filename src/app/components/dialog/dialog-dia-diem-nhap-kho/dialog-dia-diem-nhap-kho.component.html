@@ -6,6 +6,34 @@
       <span>Đề nghị nhập lại!</span>
     </div>
   </div>
+  <div class="mt16 flex-card p-lr16">
+    <div class="header header-green-background mg-t-16">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span>PHƯƠNG ÁN CỨU TRỢ, VIỆN TRỢ</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24" class="mt-16">
+    <div nz-col [nzSpan]="8">
+      <nz-statistic [nzValueStyle]="{ fontSize:'16px' }" nzTitle="Nội dung"
+                    [nzValue]="rowDxuatDtlSelect.noiDung"></nz-statistic>
+    </div>
+    <div nz-col [nzSpan]="8">
+      <nz-statistic [nzValueStyle]="{ color: '#b22222',fontSize:'16px' }" nzTitle="Tổng số lượng đề xuất"
+                    [nzValue]="rowDxuatDtlSelect.soLuong|number:'1.0-1'"></nz-statistic>
+    </div>
+  </div>
+  <div class="mt16 flex-card p-lr16">
+    <div class="header header-green-background mg-t-16">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span>ĐỊA ĐIỂM KHO</span>
+        </div>
+      </div>
+    </div>
+  </div>
   <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24" class="mt-16">
     <div nz-col [nzSpan]="8">
       <nz-form-item>
@@ -26,6 +54,8 @@
       </nz-form-item>
     </div>
   </div>
+
+
 </form>
 <div nz-col [nzSpan]="24" class="mt-16">
   <!--  <p style="color: red" class="cangiua group-button-search">Đơn vị: kg</p>-->
@@ -97,17 +127,19 @@
         <td>{{chiTietDiemNhapKhoCreate.tonKho}}</td>
         <td>
           <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="chiTietDiemNhapKhoCreate.soLuong"
+                           (nzBlur)="tinhTien(chiTietDiemNhapKhoCreate)"
                            [nzMin]="0" [nzMax]="chiTietDiemNhapKhoCreate.tonKho">
           </nz-input-number>
         </td>
         <td>
           <nz-input-number type="text" nz-input [nzSize]="'small'"
+                           (nzBlur)="tinhTien(chiTietDiemNhapKhoCreate)"
                            [(ngModel)]="chiTietDiemNhapKhoCreate.donGia" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
           >
           </nz-input-number>
         </td>
         <td>
-          <nz-input-number type="text" nz-input [nzSize]="'small'"
+          <nz-input-number type="text" nz-input [nzSize]="'small'" nzDisabled="true"
                            [(ngModel)]="chiTietDiemNhapKhoCreate.thanhTien" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
           >
           </nz-input-number>
@@ -134,7 +166,7 @@
           <td>{{data.tonKho}}</td>
           <td>{{data.soLuong}}</td>
           <td>{{data.donGia}}</td>
-          <td>{{data.thanhTien}}</td>
+          <td>{{data.soLuong * data.donGia|number:'1.0-1'}}</td>
           <td class="text-center" nzRight>
             <a (click)="startEdit(i)">
               <i class="fa fa-pencil"></i>
@@ -189,13 +221,13 @@
           </td>
           <td>{{data.tonKho}}</td>
           <td>
-            <nz-input-number type="text" nz-input [nzSize]="'small'"
+            <nz-input-number type="text" nz-input [nzSize]="'small'" (nzBlur)="tinhTien(data)"
                              [(ngModel)]="data.soLuong" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
             >
             </nz-input-number>
           </td>
           <td>
-            <nz-input-number type="text" nz-input [nzSize]="'small'"
+            <nz-input-number type="text" nz-input [nzSize]="'small'" (nzBlur)="tinhTien(data)"
                              [(ngModel)]="data.donGia" [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT"
             >
             </nz-input-number>

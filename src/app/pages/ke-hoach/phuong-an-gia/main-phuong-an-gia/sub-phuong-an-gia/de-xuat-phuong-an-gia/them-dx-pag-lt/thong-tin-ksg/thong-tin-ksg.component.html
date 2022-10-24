@@ -61,9 +61,9 @@
             </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody >
         <tr *ngFor="let data of dataTable; let idx = index">
-          <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
+          <ng-container *ngIf="(dataEdit && dataEdit[idx] && !dataEdit[idx].edit) ; else editTemplate ">
             <td class="text-center">{{ idx + 1 }}</td>
             <td *ngIf="isTableKetQua">{{ data.tenDviBaoGia }}</td>
             <td *ngIf="!isTableKetQua">{{ data.tenDviThamDinh }}</td>

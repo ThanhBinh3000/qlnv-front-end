@@ -133,11 +133,13 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         ghiChu: data.noiDung,
         soToTrinh: data.soToTrinh
       });
-      this.arrThongTinGia = data.thongTinGia
-      this.arrThongTinGia.forEach(item => {
-       let dataFind =  this.dsDonVi.find(data => data.maDvi == item.maDvi)
-        item.tenDvi = dataFind.tenDvi
-      })
+      this.arrThongTinGia = data.thongTinGiaLt
+      if (this.arrThongTinGia) {
+        this.arrThongTinGia.forEach(item => {
+          let dataFind =  this.dsDonVi.find(data => data.maDvi == item.maDvi)
+          item.tenDvi = dataFind.tenDvi
+        })
+      }
     }
   }
 
@@ -222,36 +224,15 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
 
   async save() {
     this.spinner.show();
-    let err = false;
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
       return;
     }
-
-    let currentRow = this.formData.value;
-    let currentLine = currentRow.thongTinGia;
-    if (currentLine) {
-      currentLine.forEach(item => {
-        //gia mua toi da
-        if (currentRow.loaiGia == 'LG01' && (item.giaQd > item.giaDn || item.giaQdVat > item.giaDnVat)) {
-          err = true;
-          item.giaQd = 0;
-          return this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
-        }
-        //gia ban toi thieu
-        if (currentRow.loaiGia == 'LG02' && (item.giaQd < item.giaDn || item.giaQdVat < item.giaDnVat)) {
-          err = true;
-          item.giaQd = 0;
-          return this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
-        }
-      })
-    }
-    if (!err) {
       let body = this.formData.value;
       body.soQd = body.soQd + this.maQd;
       body.pagType = this.pagType;
-      body.thongTinGia = this.arrThongTinGia;
+      body.thongTinGiaLt = this.arrThongTinGia;
       let res;
       if (this.idInput > 0) {
         res = await this.quyetDinhGiaTCDTNNService.update(body);
@@ -268,7 +249,6 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    }
     this.spinner.hide();
   }
 
@@ -312,6 +292,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
   async onChangeSoToTrinh(event) {
     let curToTrinh = this.dsToTrinhDeXuat.find(item => item.soToTrinh == event);
     if (curToTrinh) {
+      console.log(curToTrinh)
       //loai hh
       this.formData.controls["loaiVthh"].setValue(curToTrinh.loaiVthh);
 
@@ -327,22 +308,6 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
 
       //loai gia
       this.formData.controls["loaiGia"].setValue(curToTrinh.loaiGia);
-
-      //tieu chuan chat luong
-      res = await this.danhMucTieuChuanService.getDetailByMaHh(curToTrinh.loaiVthh);
-      this.dsTieuChuanCl = [];
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res.data) {
-          let tmp = [];
-          tmp.push({ "id": res.data.id, "tenQchuan": res.data.tenQchuan });
-          this.dsTieuChuanCl = tmp;
-        }
-      }
-      if (this.dsTieuChuanCl.length > 0) {
-        this.formData.controls["tchuanCluong"].setValue(this.dsTieuChuanCl[0].id);
-      }
-
-      //thong tin gia
       this.arrThongTinGia = [];
       res = await this.quyetDinhGiaTCDTNNService.loadToTrinhTongHopThongTinGia(curToTrinh.id);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
@@ -351,6 +316,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       } else {
         this.arrThongTinGia = [];
       }
+
       this.radioValue = curToTrinh.soToTrinh;
     }
 
@@ -375,21 +341,24 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     let currentRow = this.formData.value;
     let currentLine = this.arrThongTinGia[index];
     //gia mua toi da
+    if (type === 0) {
+      this.arrThongTinGia[index].giaQdVat = this.arrThongTinGia[index].giaQd + this.arrThongTinGia[index].giaQd * this.thueVat;
+    }
     if (currentRow.loaiGia == 'LG01' && (currentLine.giaQd > currentLine.giaDn || currentLine.giaQdVat > currentLine.giaDnVat)) {
-      this.arrThongTinGia[index].giaQd = 0;
+      currentLine.giaQd = 0
+      currentLine.giaQdVat = 0
       this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
     }
     //gia ban toi thieu
     if (currentRow.loaiGia == 'LG02' && (currentLine.giaQd < currentLine.giaDn || currentLine.giaQdVat < currentLine.giaDnVat)) {
+      currentLine.giaQd = 0
+      currentLine.giaQdVat = 0
       this.arrThongTinGia[index].giaQd = 0;
       this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
+
     }
     //0:gia>vat 1:vat>gia
-    if (type === 0) {
-      this.arrThongTinGia[index].giaQdVat = this.arrThongTinGia[index].giaQd + this.arrThongTinGia[index].giaQd * this.thueVat;
-    } else if (type === 1) {
-      this.arrThongTinGia[index].giaQd = this.arrThongTinGia[index].giaQdVat - this.arrThongTinGia[index].giaQdVat * this.thueVat;
-    }
+
   }
 
   openDialogToTrinh() {

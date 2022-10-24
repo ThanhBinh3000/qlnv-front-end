@@ -11,6 +11,7 @@ import {cloneDeep} from "lodash";
 import {saveAs} from "file-saver";
 import {QuyetDinhGiaCuaBtcService} from "src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaCuaBtc.service";
 import {STATUS} from "../../../../../../constants/status";
+import {Globals} from "../../../../../../shared/globals";
 
 @Component({
   selector: "app-quyet-dinh-gia-btc",
@@ -50,7 +51,8 @@ export class QuyetDinhGiaBtcComponent implements OnInit {
               private notification: NzNotificationService,
               public userService: UserService,
               private modal: NzModalService,
-              private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService
+              private quyetDinhGiaCuaBtcService: QuyetDinhGiaCuaBtcService,
+              public globals : Globals
   ) {
     this.formData = this.fb.group({
       soQd: [null],

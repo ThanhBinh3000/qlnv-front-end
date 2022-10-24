@@ -13,7 +13,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
+import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC } from './phu-luc6.constant';
 
@@ -38,6 +38,7 @@ export class ItemData {
   dtoan2021ThanhQtoan2020: number;
   soChuaQtoan: number;
   checked!: boolean;
+  idDm: number;
 }
 
 @Component({
@@ -65,6 +66,7 @@ export class PhuLuc6Component implements OnInit {
   listIdDelete = "";
   trangThaiPhuLuc = '1';
   initItem: ItemData = {
+    idDm: null,
     id: null,
     stt: "0",
     level: 0,
@@ -89,6 +91,7 @@ export class PhuLuc6Component implements OnInit {
     id: null,
     stt: "0",
     level: 0,
+    idDm: null,
     loaiMatHang: 0,
     maDviTinh: null,
     slHangTte: null,
@@ -110,7 +113,8 @@ export class PhuLuc6Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
-  dsDinhMuc: any[] = [];
+  dsDinhMucN: any[] = [];
+  dsDinhMucX: any[] = [];
   maDviTao!: string;
 
   allChecked = false;
@@ -185,12 +189,60 @@ export class PhuLuc6Component implements OnInit {
     );
     this.changeNam();
     this.getStatusButton();
-    this.getDsDinhMuc();
+    this.getDinhMucPL6N();
+    this.getDinhMucPL6X();
     this.spinner.hide();
   }
 
+  getDinhMucPL6N() {
+    const request = {
+      loaiDinhMuc: '01',
+      maDvi: this.maDviTao,
+    }
+    this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+      res => {
+        if (res.statusCode == 0) {
+          this.dsDinhMucN = res.data;
+          this.dsDinhMucN.forEach(item => {
+            if (!item.loaiVthh.startsWith('02')) {
+              item.tongDmuc = divNumber(item.tongDmuc, 1000);
+            }
+          })
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    )
+  }
+  getDinhMucPL6X() {
+    const request = {
+      loaiDinhMuc: '02',
+      maDvi: this.maDviTao,
+    }
+    this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+      res => {
+        if (res.statusCode == 0) {
+          this.dsDinhMucX = res.data;
+          this.dsDinhMucX.forEach(item => {
+            if (!item.loaiVthh.startsWith('02')) {
+              item.tongDmuc = divNumber(item.tongDmuc, 1000);
+            }
+          })
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    )
+  }
+
   changeNam() {
-    const a = LINH_VUC.find(el => el.id == 1)
+    const a = LINH_VUC.find(el => el.tenDm.includes("Tổng cộng năm"))
     a.tenDm = "Tổng cộng năm " + this.namBcao
     const b = LINH_VUC.find(el => el.id == 2)
     b.tenDm = "Thiếu năm " + (this.namBcao - 1) + " chuyển sang " + this.namBcao
@@ -367,14 +419,17 @@ export class PhuLuc6Component implements OnInit {
     if (n == 1) {
       xau = chiSo[n];
     }
-    // if (n == 2) {
-    //   xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-    // };
+    if (n == 2) {
+      xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+    };
     // if (n == 3) {
     //   xau = String.fromCharCode(k + 96);
     // }
-    if (n == 2) {
+    if (n == 3) {
       xau = "-";
+    }
+    if (n == 4) {
+      xau = "+";
     }
     return xau;
   }
@@ -426,9 +481,16 @@ export class PhuLuc6Component implements OnInit {
     }
     this.replaceIndex(lstIndex, 1);
     let dm: number;
-    this.dsDinhMuc.forEach(itm => {
-      if (itm.idDmChi == initItem.loaiMatHang) {
-        return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+    this.dsDinhMucN.forEach(itm => {
+      if (itm.id == initItem.idDm) {
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
+      }
+    })
+    this.dsDinhMucX.forEach(itm => {
+      if (itm.id == initItem.idDm) {
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -485,9 +547,16 @@ export class PhuLuc6Component implements OnInit {
     }
 
     let dm: number;
-    this.dsDinhMuc.forEach(itm => {
-      if (itm.idDmChi == initItem.loaiMatHang) {
-        return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+    this.dsDinhMucN.forEach(itm => {
+      if (itm.id == initItem.idDm) {
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
+      }
+    })
+    this.dsDinhMucX.forEach(itm => {
+      if (itm.id == initItem.idDm) {
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -560,22 +629,22 @@ export class PhuLuc6Component implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    if (
-      // (!this.editCache[id].data.loaiMatHang && this.editCache[id].data.loaiMatHang !== 0) ||
-      (!this.editCache[id].data.maDviTinh) ||
-      (!this.editCache[id].data.cphiTcong && this.editCache[id].data.cphiTcong !== 0) ||
-      (!this.editCache[id].data.cphiNtruoc && this.editCache[id].data.cphiNtruoc !== 0) ||
-      (!this.editCache[id].data.cphiNnay && this.editCache[id].data.cphiNnay !== 0) ||
-      (!this.editCache[id].data.kphiQtoan && this.editCache[id].data.kphiQtoan !== 0) ||
-      (!this.editCache[id].data.kphiChuaQtoanCong && this.editCache[id].data.kphiChuaQtoanCong !== 0) ||
-      (!this.editCache[id].data.kphiChuaQtoanKpTchi && this.editCache[id].data.kphiChuaQtoanKpTchi !== 0) ||
-      (!this.editCache[id].data.kphiChuaQtoanKpTkiem && this.editCache[id].data.kphiChuaQtoanKpTkiem !== 0) ||
-      (!this.editCache[id].data.soChuaQtoan && this.editCache[id].data.soChuaQtoan !== 0) ||
-      (!this.editCache[id].data.dtoan2021ThanhQtoan2020 && this.editCache[id].data.dtoan2021ThanhQtoan2020 !== 0)
-    ) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
-      return;
-    }
+    // if (
+    //   // (!this.editCache[id].data.loaiMatHang && this.editCache[id].data.loaiMatHang !== 0) ||
+    //   (!this.editCache[id].data.maDviTinh) ||
+    //   (!this.editCache[id].data.cphiTcong && this.editCache[id].data.cphiTcong !== 0) ||
+    //   (!this.editCache[id].data.cphiNtruoc && this.editCache[id].data.cphiNtruoc !== 0) ||
+    //   (!this.editCache[id].data.cphiNnay && this.editCache[id].data.cphiNnay !== 0) ||
+    //   (!this.editCache[id].data.kphiQtoan && this.editCache[id].data.kphiQtoan !== 0) ||
+    //   (!this.editCache[id].data.kphiChuaQtoanCong && this.editCache[id].data.kphiChuaQtoanCong !== 0) ||
+    //   (!this.editCache[id].data.kphiChuaQtoanKpTchi && this.editCache[id].data.kphiChuaQtoanKpTchi !== 0) ||
+    //   (!this.editCache[id].data.kphiChuaQtoanKpTkiem && this.editCache[id].data.kphiChuaQtoanKpTkiem !== 0) ||
+    //   (!this.editCache[id].data.soChuaQtoan && this.editCache[id].data.soChuaQtoan !== 0) ||
+    //   (!this.editCache[id].data.dtoan2021ThanhQtoan2020 && this.editCache[id].data.dtoan2021ThanhQtoan2020 !== 0)
+    // ) {
+    //   this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS)
+    //   return;
+    // }
     if (
       // this.editCache[id].data.cphiTcong <0 ||
       this.editCache[id].data.cphiNtruoc < 0 ||
@@ -659,9 +728,16 @@ export class PhuLuc6Component implements OnInit {
   //thêm phần tử đầu tiên khi bảng rỗng
   addFirst(initItem: ItemData) {
     let dm: number;
-    this.dsDinhMuc.forEach(itm => {
-      if (itm.idDmChi == initItem.loaiMatHang) {
-        return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+    this.dsDinhMucN.forEach(itm => {
+      if (itm.id == initItem.idDm) {
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
+      }
+    })
+    this.dsDinhMucX.forEach(itm => {
+      if (itm.id == initItem.idDm) {
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     if (initItem?.id) {
@@ -797,6 +873,8 @@ export class PhuLuc6Component implements OnInit {
               ...this.initItem,
               loaiMatHang: item.id,
               level: item.level,
+              maDviTinh: item.maDviTinh,
+              idDm: item.idDm
             };
             this.addLow(id, data);
           }
@@ -946,31 +1024,31 @@ export class PhuLuc6Component implements OnInit {
     this.editCache[id].data.kphiTtien = Number(this.editCache[id].data.slHangTte) * Number(this.editCache[id].data.kphiDmuc);
   }
 
-  getDsDinhMuc() {
-    const requestDinhMuc = {
-      idDmChi: null,
-      maDvi: this.maDviTao,
-      paggingReq: {
-        limit: 20,
-        page: 1
-      },
-      parentId: null,
-      str: null,
-      trangThai: null,
-      typeChi: null
-    };
-    this.quanLyVonPhiService.getDinhMucNhapXuat(requestDinhMuc).toPromise().then(
-      async (data) => {
-        const contentData = await data?.data?.content;
-        if (contentData.length != 0) {
-          this.dsDinhMuc = contentData;
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
-  };
+  // getDsDinhMucN() {
+  //   const requestDinhMuc = {
+  //     idDmChi: null,
+  //     maDvi: this.maDviTao,
+  //     paggingReq: {
+  //       limit: 20,
+  //       page: 1
+  //     },
+  //     parentId: null,
+  //     str: null,
+  //     trangThai: null,
+  //     typeChi: null
+  //   };
+  //   this.quanLyVonPhiService.getDinhMucNhapXuat(requestDinhMuc).toPromise().then(
+  //     async (data) => {
+  //       const contentData = await data?.data?.content;
+  //       if (contentData.length != 0) {
+  //         this.dsDinhMucN = contentData;
+  //       }
+  //     },
+  //     err => {
+  //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //     },
+  //   );
+  // };
   displayValue(num: number): string {
     num = exchangeMoney(num, '1', this.maDviTien);
     return displayNumber(num);
