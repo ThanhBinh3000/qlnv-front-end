@@ -182,7 +182,7 @@ export class PhuLuc2Component implements OnInit {
         if (res.statusCode == 0) {
           this.dsDinhMucN = res.data;
           this.dsDinhMucN.forEach(item => {
-            if (!item.loaiVthh.startsWith('02')) {
+            if (!item.loaiVthh.startsWith('04')) {
               item.tongDmuc = divNumber(item.tongDmuc, 1000);
             }
           })
@@ -440,14 +440,14 @@ export class PhuLuc2Component implements OnInit {
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
       if (itm.id == initItem.maNdung) {
-        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
-        return dm = itm.tongDmuc;
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
       if (itm.id == initItem.maNdung) {
-        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
-        return dm = itm.tongDmuc;
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -506,14 +506,14 @@ export class PhuLuc2Component implements OnInit {
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
       if (itm.id == initItem.maNdung) {
-        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
-        return dm = itm.tongDmuc;
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
       if (itm.id == initItem.maNdung) {
-        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
-        return dm = itm.tongDmuc;
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     // them moi phan tu
@@ -676,14 +676,14 @@ export class PhuLuc2Component implements OnInit {
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
       if (itm.id == initItem.maNdung) {
-        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
-        return dm = itm.tongDmuc;
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
       if (itm.id == initItem.maNdung) {
-        // return dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
-        return dm = itm.tongDmuc;
+        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+        dm = itm.tongDmuc;
       }
     })
     if (initItem?.id) {
@@ -954,8 +954,4 @@ export class PhuLuc2Component implements OnInit {
   formatterPercent = value => value ? `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : null;
 
   parserPercent = value => value.replace(/\$\s?|(,*)/g, '')
-
-  viewDetail(data) {
-    console.log(data);
-  }
 }

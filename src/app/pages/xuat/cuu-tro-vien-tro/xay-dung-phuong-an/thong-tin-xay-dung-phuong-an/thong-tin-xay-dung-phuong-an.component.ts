@@ -859,11 +859,9 @@ export class ThongTinXayDungPhuongAnComponent implements OnInit {
       nzWidth: 350,
       nzOnOk: async () => {
         let curThongTinChiTiet = this.formData.get('thongTinChiTiet').value.find(s1 => s1.idVirtual == this.idDxuatDtlSelect);
-        console.log(curThongTinChiTiet,111111111111);
         if (curThongTinChiTiet) {
           curThongTinChiTiet.phuongAnXuat.splice(index, 1);
         }
-        console.log(curThongTinChiTiet,222222222222);
         this.showDataKhoView();
       }
     })

@@ -59,6 +59,15 @@ export class TongHopComponent implements OnInit {
             tenDm: "Phê duyệt",
         },
     ];
+    tableFilter = {
+        maDn: null,
+        qdChiTieu: null,
+        nguonBcao: null,
+        ngayTao: null,
+        ngayTrinh: null,
+        ngayPheDuyet: null,
+        trangThai: null,
+    }
     nguonBcaos: any[] = NGUON_BAO_CAO;
     //phan trang
     totalElements = 0;
@@ -301,6 +310,27 @@ export class TongHopComponent implements OnInit {
     checkDeleteStatus(trangThai: string, loaiDn: string) {
         return Utils.statusDelete.includes(trangThai) &&
             (loaiDn == Utils.THOP_TU_CUC_KV ? this.userService.isAccessPermisson(CVNC.DELETE_SYNTHETIC_CKV) : this.userService.isAccessPermisson(CVNC.DELETE_SYNTHETIC_TC));
+    }
+
+    // Tìm kiếm trong bảng
+    filterInTable(key: string, value: string, isDate: boolean) {
+        if (value && value != '') {
+            this.dataTable = [];
+            let temp = [];
+            if (this.dataTableAll && this.dataTableAll.length > 0) {
+                if (isDate) {
+                    value = this.datePipe.transform(value, Utils.FORMAT_DATE_STR);
+                }
+                this.dataTableAll.forEach((item) => {
+                    if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
+                        temp.push(item)
+                    }
+                });
+            }
+            this.dataTable = [...this.dataTable, ...temp];
+        } else {
+            this.dataTable = cloneDeep(this.dataTableAll);
+        }
     }
 }
 

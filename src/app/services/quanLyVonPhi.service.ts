@@ -149,7 +149,7 @@ export class QuanLyVonPhiService extends BaseService {
   bCDieuChinhDuToanChiTiet1(id: any): Observable<any> {
     return this.httpClient.get(
       // this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/chi-tiet/' + id,
-      'http://192.168.1.109:30101/dieu-chinh-du-toan-chi/chi-tiet/' + id,
+      'http://192.168.1.103:30101/dieu-chinh-du-toan-chi/chi-tiet/' + id,
     );
   }
 
@@ -711,7 +711,7 @@ export class QuanLyVonPhiService extends BaseService {
   }
   updateDieuChinh1(request: any): Observable<any> {
     return this.httpClient.put(
-      'http://192.168.1.109:30101/dieu-chinh-du-toan-chi/cap-nhat',
+      'http://192.168.1.103:30101/dieu-chinh-du-toan-chi/cap-nhat',
       request);
   }
 

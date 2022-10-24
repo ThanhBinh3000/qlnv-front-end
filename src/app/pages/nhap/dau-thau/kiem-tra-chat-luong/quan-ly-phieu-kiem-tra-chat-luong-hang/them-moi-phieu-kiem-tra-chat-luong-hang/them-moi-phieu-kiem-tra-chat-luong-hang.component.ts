@@ -227,7 +227,6 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends BaseComponent imp
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].children;
-      this.listDiaDiemNhap = this.listDiaDiemNhap.filter(item => isEmpty(item.phieuKtraCl));
     }
     let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
     if(dmTieuChuan.data){
@@ -237,6 +236,38 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends BaseComponent imp
       });
     }
     await this.spinner.hide();
+  }
+
+  openDialogDdiemNhapHang() {
+    const modalQD = this.modal.create({
+      nzTitle: 'Danh sách địa điểm nhập hàng',
+      nzContent: DialogTableSelectionComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        dataTable: this.listDiaDiemNhap,
+        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Số lượng'],
+        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'soLuong']
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        console.log(data);
+        this.formData.patchValue({
+          idDdiemGiaoNvNh : data.id,
+          maDiemKho: data.maDiemKho,
+          tenDiemKho: data.tenDiemKho,
+          maNhaKho: data.maNhaKho,
+          tenNhaKho: data.tenNhaKho,
+          maNganKho: data.maNganKho,
+          tenNganKho: data.tenNganKho,
+          maLoKho: data.maLoKho,
+          tenLoKho: data.tenLoKho,
+        })
+      }
+    });
   }
 
   async loadTieuChuan() {
@@ -431,13 +462,12 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends BaseComponent imp
         try {
           let body = {
             id: this.id,
-            lyDoTuChoi: null,
             trangThai: trangThai
           };
           let res =
             await this.quanLyPhieuKiemTraChatLuongHangService.approve(
               body,
-            );
+          );
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             this.back();
@@ -567,35 +597,5 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends BaseComponent imp
     });
   }
 
-  openDialogDdiemNhapHang() {
-    const modalQD = this.modal.create({
-      nzTitle: 'Danh sách địa điểm nhập hàng',
-      nzContent: DialogTableSelectionComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {
-        dataTable: this.listDiaDiemNhap,
-        dataHeader: ['Điểm kho', 'Nhà kho', 'Ngăn kho', 'Lô kho', 'Số lượng'],
-        dataColumn: ['tenDiemKho', 'tenNhaKho', 'tenNganKho', 'tenLoKho', 'soLuong']
-      },
-    });
-    modalQD.afterClose.subscribe(async (data) => {
-      if (data) {
-        console.log(data);
-        this.formData.patchValue({
-          idDdiemGiaoNvNh : data.id,
-          maDiemKho: data.maDiemKho,
-          tenDiemKho: data.tenDiemKho,
-          maNhaKho: data.maNhaKho,
-          tenNhaKho: data.tenNhaKho,
-          maNganKho: data.maNganKho,
-          tenNganKho: data.tenNganKho,
-          maLoKho: data.maLoKho,
-          tenLoKho: data.tenLoKho,
-        })
-      }
-    });
-  }
+
 }

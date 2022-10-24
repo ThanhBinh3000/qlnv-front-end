@@ -323,7 +323,7 @@ export class BaoCao04bComponent implements OnInit {
                 if (res.statusCode == 0) {
                     this.dinhMucs = res.data;
                     this.dinhMucs.forEach(item => {
-                        if (!item.cloaiVthh.startsWith('04')) {
+                        if (!item.cloaiVthh.startsWith('02')) {
                             item.nvChuyenMonDviTt = (item.nvChuyenMonDviTt ? item.nvChuyenMonDviTt : 0) / 1000;
                             item.nvChuyenMonVp = (item.nvChuyenMonVp ? item.nvChuyenMonVp : 0) / 1000;
                             item.dieuHanhDviTt = (item.dieuHanhDviTt ? item.dieuHanhDviTt : 0) / 1000;
@@ -786,8 +786,8 @@ export class BaoCao04bComponent implements OnInit {
                 })
             }
         })
-        const nvChuyenMon = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.1.1.1'));
-        const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.1.1.2'));
+        const nvChuyenMon = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.1.1.2'));
+        const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.1.1.1'));
         const cucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.1.2'));
         const tongCucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == this.findId('0.1.5.1.3'));
 
