@@ -194,7 +194,7 @@ export class PhuLuc4Component implements OnInit {
         if (res.statusCode == 0) {
           this.dsDinhMuc = res.data;
           this.dsDinhMuc.forEach(item => {
-            if (!item.loaiVthh.startsWith('04')) {
+            if (!item.loaiVthh.startsWith('02')) {
               item.tongDmuc = divNumber(item.tongDmuc, 1000);
             }
           })

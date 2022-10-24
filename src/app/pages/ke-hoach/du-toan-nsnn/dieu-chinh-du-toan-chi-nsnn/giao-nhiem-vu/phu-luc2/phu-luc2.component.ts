@@ -690,7 +690,6 @@ export class PhuLuc2Component implements OnInit {
       const item: ItemData = {
         ...initItem,
         stt: "0.1",
-        thienDinhMuc: dm != 0 ? dm : null,
       }
       this.lstCtietBcao.push(item);
       this.editCache[item.id] = {
