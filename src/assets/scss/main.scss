@@ -6780,13 +6780,49 @@ td.action.ant-table-cell {
 
 .link {
   color: blue !important;
-  text-decoration: underline !important;
+  //text-decoration: underline !important;
 }
+
+.bold {
+  font-weight: 600 !important;
+}
+
+.ant-table.ant-table-bordered>.ant-table-container>.ant-table-content>table> {
+  thead,
+  tbody {
+    tr {
+      &.level-1 {
+        td {
+          background: #ebedff;
+        }
+      }
+
+      &.level-2 {
+        td:not(:nth-child(1)):not(:nth-child(2)) {
+          background: #eaeaea;
+        }
+      }
+
+      &.level-3 {
+        td:not(:nth-child(1)):not(:nth-child(2)) {
+          background: #f8f8f8;
+        }
+      }
+
+      & > td, th {
+        border-color: #e1e1e1 !important;
+      }
+    }
+  }
+}
+
+
 
 .selectedRow {
   td {
     background: #d8dcfe !important;
   }
 }
+
 
 // end lấy từ default qua....................................................
