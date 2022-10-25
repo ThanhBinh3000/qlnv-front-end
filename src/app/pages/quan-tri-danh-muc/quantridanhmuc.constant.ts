@@ -16,6 +16,13 @@ export const NHAP_ROUTE_LIST = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
+    title: 'Danh mục hàng hóa',
+    url: `/${NHAP_MAIN_ROUTE}/danh-muc-hang-hoa`,
+    dropdown: 'danh-muc-dinh-muc-phi',
+    idHover: 'danh-muc-dinh-muc-phi',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
     title: 'Danh mục hàng DTQG',
     url: `/${NHAP_MAIN_ROUTE}/danh-muc-hang-dtqg`,
     dropdown: 'danh-muc-hang-dtqg',
