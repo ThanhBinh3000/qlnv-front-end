@@ -63,6 +63,7 @@ export class CapVonNguonChiService extends BaseService {
     dsachHopDong(request: any): Observable<any> {
         return this.httpClient.post(
             this.urlDefault + '/qlnv-khoachphi/hop-dong/danh-sach',
+            // 'http://192.168.10.12:30101/hop-dong/danh-sach/ds-hop-dong',
             request,
         );
     }
@@ -119,6 +120,15 @@ export class CapVonNguonChiService extends BaseService {
     danhSachHopDong(request: any): Observable<any> {
         return this.httpClient.post(
             this.urlDefault + 'qlnv-khoachphi/hop-dong/danh-sach/so-qd',
+            // 'http://192.168.10.12:30101/hop-dong/danh-sach/so-qd',
+            request,
+        )
+    }
+
+    soQdChiTieu(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + 'qlnv-khoachphi/hop-dong/danh-sach/so-qdinh-ctieu',
+            // 'http://192.168.10.12:30101/hop-dong/danh-sach/so-qdinh-ctieu',
             request,
         )
     }
