@@ -209,15 +209,26 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.dataTable.forEach( item =>
-          item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
-      );
-      this.dataTableAll = cloneDeep(this.dataTable);
+      this.convertDataTable();
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide();
+  }
+
+  convertDataTable(){
+    this.dataTable.forEach( item => {
+      item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
+    });
+    this.dataTable.forEach( item => {
+      item.detail.children.forEach( ddNhap => {
+        ddNhap.listPhieuNhapKho.forEach( x => {
+          x.phieuKiemTraCl =  ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
+        });
+      })
+    });
+    console.log(this.dataTable);
   }
 
   export() {
@@ -263,6 +274,14 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
       this.expandSet.add(id);
     } else {
       this.expandSet.delete(id);
+    }
+  }
+  expandSet2 = new Set<number>();
+  onExpandChange2(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet2.add(id);
+    } else {
+      this.expandSet2.delete(id);
     }
   }
 }
