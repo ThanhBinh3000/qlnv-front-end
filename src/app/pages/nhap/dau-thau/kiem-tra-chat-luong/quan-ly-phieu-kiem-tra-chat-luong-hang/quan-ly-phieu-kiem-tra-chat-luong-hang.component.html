@@ -72,13 +72,13 @@
         </thead>
         <tbody>
           <ng-container *ngFor="let item of dataTable , let i = index">
-            <tr>
+            <tr class="level-1">
               <td>{{(page - 1) * pageSize + i + 1}}</td>
               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
               <td></td>
-              <td>{{ item.soQd }}</td>
-              <td>{{ item.namNhap }}</td>
-              <td>{{ item.tgianNkho }}</td>
+              <td class="link bold">{{ item.soQd }}</td>
+              <td class="bold">{{ item.namNhap }}</td>
+              <td class="bold">{{ item.tgianNkho }}</td>
               <td colspan="10"></td>
               <td>
                 <a (click)="redirectToChiTiet(false, 0,item.id)">
@@ -88,8 +88,9 @@
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
               <ng-container *ngFor="let dataDdiem of item.detail.children, let y = index">
-                <tr>
-                  <td colspan="2"></td>
+                <tr class="level-2">
+                  <td></td>
+                  <td></td>
                   <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
                   <td colspan="3"></td>
                   <td>{{dataDdiem.tenDiemKho}}</td>
@@ -99,15 +100,27 @@
                   <td colspan="7"></td>
                 </tr>
                 <ng-container *ngIf="expandSet2.has(y)">
-                  <tr *ngFor="let dataPhieu of dataDdiem.listPhieuKtraCl">
-                    <td colspan="10"></td>
-                    <td>{{dataPhieu.soPhieu}}</td>
+                  <tr class="level-3" *ngFor="let dataPhieu of dataDdiem.listPhieuKtraCl">
+                    <td></td>
+                    <td></td>
+                    <td colspan="8"></td>
+                    <td class="bold">{{dataPhieu.soPhieu}}</td>
                     <td>{{dataPhieu.ngayGdinh}}</td>
                     <td>{{dataPhieu.kqDanhGia}}</td>
-                    <td>{{dataPhieu.phieuNhapKho?.soPhieuNhapKho}}</td>
+                    <td class="link">{{dataPhieu.phieuNhapKho?.soPhieuNhapKho}}</td>
                     <td>{{dataPhieu.phieuNhapKho?.ngayTao | date: 'dd/MM/YYYY' }}</td>
                     <td>{{dataPhieu.tenTrangThai}}</td>
                     <td>
+                      <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(true, dataPhieu.id)">
+                        <i class="fa fa-eye"></i>
+                      </a>
+                      <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, dataPhieu.id)">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a *ngIf="dataPhieu.trangThai == STATUS.DU_THAO">
+                        <i class="fa fa-trash-o do"></i>
+                      </a>
+                    </td>
                   </tr>
                 </ng-container>
               </ng-container>

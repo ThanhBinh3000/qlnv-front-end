@@ -108,15 +108,26 @@ export class QuanLyBangKeCanHangComponent extends BaseComponent implements OnIni
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.dataTable.forEach( item =>
-          item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
-      );
+      this.convertDataTable();
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide();
+  }
+
+  convertDataTable(){
+    this.dataTable.forEach( item => {
+      item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
+    });
+    this.dataTable.forEach( item => {
+      item.detail.children.forEach( ddNhap => {
+        ddNhap.listBangKeCanHang.forEach( x => {
+          x.phieuNhapKho =  ddNhap.listPhieuNhapKho.filter(item => item.soPhieuNhapKho == x.soPhieuNhapKho)[0];
+        });
+      })
+    });
   }
 
   clearFilter() {
@@ -245,6 +256,14 @@ export class QuanLyBangKeCanHangComponent extends BaseComponent implements OnIni
       this.expandSet.add(id);
     } else {
       this.expandSet.delete(id);
+    }
+  }
+  expandSet2 = new Set<number>();
+  onExpandChange2(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet2.add(id);
+    } else {
+      this.expandSet2.delete(id);
     }
   }
 }
