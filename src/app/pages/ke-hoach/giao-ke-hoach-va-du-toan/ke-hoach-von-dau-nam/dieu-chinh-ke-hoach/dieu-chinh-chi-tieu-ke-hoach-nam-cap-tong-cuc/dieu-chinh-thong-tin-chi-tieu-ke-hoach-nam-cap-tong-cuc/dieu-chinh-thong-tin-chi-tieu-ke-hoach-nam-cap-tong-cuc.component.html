@@ -22,7 +22,7 @@
           <span>Phê duyệt</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
-          *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '01' && dieuChinhThongTinChiTieuKHNam.trangThai != '03'">
+          *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '01' && dieuChinhThongTinChiTieuKHNam.trangThai != '03')&& userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_BANHANH')">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>

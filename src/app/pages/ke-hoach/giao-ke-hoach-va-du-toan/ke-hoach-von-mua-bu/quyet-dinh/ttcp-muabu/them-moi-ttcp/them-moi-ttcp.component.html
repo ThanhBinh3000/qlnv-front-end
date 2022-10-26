@@ -4,13 +4,14 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00' && !isView && userService.isTongCuc()  " type="button" class="btn btn-sub"
-      (click)="save(true)">
+    <button
+      *ngIf="(formData.value.trangThai == '00' && !isView && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_BTC_BANHANH')"
+      type="button" class="btn btn-sub" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00'  && !isView && userService.isTongCuc()" type="button" class="btn btn-sub xanh"
-      (click)="save()">
+    <button *ngIf="formData.value.trangThai == '00'  && !isView && userService.isTongCuc()" type="button"
+      class="btn btn-sub xanh" (click)="save()">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
     </button>
