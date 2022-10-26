@@ -1,7 +1,7 @@
+import { FileDinhKem } from './../../../../../../models/FileDinhKem';
 import { DatePipe } from '@angular/common';
 import { DieuChinhQuyetDinhPdKhmttService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/dieuchinh-khmtt/DieuChinhQuyetDinhPdKhmtt.service';
 import { async } from '@angular/core/testing';
-import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -38,6 +38,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   loaiVthhInput: string;
   @Output()
   showListEvent = new EventEmitter<any>();
+  soLuongDiaDiemList: any;
 
   constructor(
     private router: Router,
@@ -46,7 +47,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     public userService: UserService,
     private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
     private dieuChinhQuyetDinhPdKhmttService: DieuChinhQuyetDinhPdKhmttService,
-    private danhSachMuaTrucTiepService: DanhSachMuaTrucTiepService,
     public globals: Globals,
     private danhMucService: DanhMucService,
     private fb: FormBuilder,
@@ -95,9 +95,8 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   isDetail = false;
   dataTable: any[] = [];
   danhsachDxMtt: any[] = [];
-  soLuongDiaDiemList: any[] = [];
-  danhsachDxMttCache: any[] = [];
   dataDetail: any;
+  hhDcQdPduyetKhmttSlddList: any[] = [];
   errorInputRequired: string = 'Dữ liệu không được để trống.';
   STATUS = STATUS;
   userInfo: UserLogin;
@@ -106,6 +105,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   datePickerConfig = DATEPICKER_CONFIG;
   datePipe = new DatePipe('en-US');
   dtl: any[] = [];
+  fileDinhKem: Array<FileDinhKem> = [];
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -183,7 +183,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       let res = await this.dieuChinhQuyetDinhPdKhmttService.getDetail(this.idInput);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        console.log(data, "dcmm");
+        console.log(data,"hello");
         this.formData.patchValue({
           id: data.id,
           soQdDc: data.soQdDc.split("/")[0],
@@ -276,13 +276,11 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
           tenCloaiVthh: data.tenCloaiVthh,
           moTaHangHoa: data.moTaHangHoa,
         })
+        this.danhsachDxMtt = data.hhQdPheduyetKhMttDxList;
+        console.log( this.danhsachDxMtt, "căng thẳng quá");
 
-        this.danhsachDxMtt = data.hhQdPheduyetKhMttDxList
-        data.hhQdPheduyetKhMttDxList.forEach(item => {
-          this.soLuongDiaDiemList.push(item.soLuongDiaDiemList)
-          console.log(this.danhsachDxMtt, "mmmmmm");
-        })
       }
+
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -290,12 +288,12 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     this.spinner.hide();
   }
 
-  async showDetail($event, index) {
+  async showDetail(event, index) {
     await this.spinner.show();
-    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    $event.target.parentElement.classList.add('selectedRow');
+    event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+    event.target.parentElement.classList.add('selectedRow');
     this.dataInput = this.danhsachDxMtt[index];
-    console.log(this.dataInput, "dcmmm");
+    console.log(this.dataInput,"hehehehehe");
     await this.spinner.hide();
   }
 
@@ -340,7 +338,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   }
 
   startEdit(index: number): void {
-    console.log(index);
     this.editCache[index].edit = true;
   }
 
@@ -437,16 +434,20 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   async save(isGuiDuyet?) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      console.log(this.formData);
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       return;
     }
     let body = this.formData.value;
-    body.soQdDc = body.soQdDc + "/" + this.soQdDc;
+    body.soQdDc = body.soQdDc + this.soQdDc;
     body.hhDcQdPduyetKhmttDxList = this.danhsachDxMtt;
+    body.fileDinhKems = this.fileDinhKem;
+    for (const item of body.hhDcQdPduyetKhmttDxList) {
+      item.hhDcQdPduyetKhmttSlddList = item.soLuongDiaDiemList;
+    };
+
     body.ngayKyDc = this.datePipe.transform(body.ngayKyDc, 'yyyy-MM-dd');
     body.ngayHluc = this.datePipe.transform(body.ngayHluc, 'yyyy-MM-dd');
-
+    console.log( body,"hại lão");
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.dieuChinhQuyetDinhPdKhmttService.update(body);

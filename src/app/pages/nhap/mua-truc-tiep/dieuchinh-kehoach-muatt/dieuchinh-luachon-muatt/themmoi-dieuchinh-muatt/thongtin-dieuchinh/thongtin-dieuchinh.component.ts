@@ -1,17 +1,15 @@
-import { DxuatKhLcntService } from './../../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service';
+import { DieuChinhQuyetDinhPdKhmttService } from './../../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/dieuchinh-khmtt/DieuChinhQuyetDinhPdKhmtt.service';
+import { filter } from 'rxjs/operators';
+import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Globals } from "../../../../../../../shared/globals";
 import { MESSAGE } from "../../../../../../../constants/message";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { cloneDeep, chain } from 'lodash';
-import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
-import { DanhSachGoiThau } from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import { NzModalService } from "ng-zorro-antd/modal";
-import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
-import { DialogThemMoiKeHoachMuaTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
 
 @Component({
   selector: 'app-thongtin-dieuchinh',
@@ -20,7 +18,7 @@ import { DialogThemMoiKeHoachMuaTrucTiepComponent } from 'src/app/components/dia
 })
 export class ThongtinDieuchinhComponent implements OnInit {
 
- 
+
   @Input() title;
   @Input() dataInput;
   @Input() isView;
@@ -29,6 +27,7 @@ export class ThongtinDieuchinhComponent implements OnInit {
   listNguonVon: any[] = [];
   listDataGroup: any[] = [];
   listDataGroupCache: any[] = [];
+  hhQdPheduyetKhMttDxList: any[] = [];
   listOfData: any[] = [];
   listOfDataCache: any[] = [];
 
@@ -37,7 +36,8 @@ export class ThongtinDieuchinhComponent implements OnInit {
     private fb: FormBuilder,
     public globals: Globals,
     private danhMucService: DanhMucService,
-   private  dxKhMttService : DanhSachMuaTrucTiepService,
+    private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
+    private dieuChinhQuyetDinhPdKhmttService: DieuChinhQuyetDinhPdKhmttService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
     private modal: NzModalService,
@@ -90,16 +90,25 @@ export class ThongtinDieuchinhComponent implements OnInit {
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        this.listOfData = this.dataInput.soLuongDiaDiemList;
-        console.log(this.dataInput,123321);
         let res;
-        if (this.dataInput.idDxuat) {
-          res = await this.dxKhMttService.getDetail(this.dataInput.idDxuat);
+        if (this.dataInput.idPduyetHdr) {
+          res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail(this.dataInput.idPduyetHdr);
+          this.listOfData = this.dataInput.soLuongDiaDiemList;
+          if (res.msg == MESSAGE.SUCCESS) {
+            let dataFilter = res.data.hhQdPheduyetKhMttDxList.filter(item => item.id == this.dataInput.id)[0];
+            this.helperService.bidingDataInFormGroup(this.formData, dataFilter)
+          }
+        }else{
+          res = await this.dieuChinhQuyetDinhPdKhmttService.getDetail(this.dataInput.idDcHdr)
+          this.listOfData = this.dataInput.hhDcQdPduyetKhmttSlddList;
+          console.log(this.listOfData,"huhuhu");
+          if (res.msg == MESSAGE.SUCCESS) {
+            let dataFilter = res.data.hhDcQdPduyetKhmttDxList.filter(item => item.id == this.dataInput.id)[0];
+            this.helperService.bidingDataInFormGroup(this.formData, dataFilter)
+          }
         }
-        else { res = await this.dxKhMttService.getDetail(this.dataInput.id); }
-        if (res.msg == MESSAGE.SUCCESS) {
-          this.helperService.bidingDataInFormGroup(this.formData, res.data)
-        }
+        
+        this.helperService.setIndexArray(this.listOfData);
         this.convertListData();
       }
     }
@@ -109,7 +118,7 @@ export class ThongtinDieuchinhComponent implements OnInit {
   convertListData() {
     this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()
-      console.log(this.listOfData,123456);
+    console.log(this.listOfData, 123456);
   }
 
   async ngOnInit() {
