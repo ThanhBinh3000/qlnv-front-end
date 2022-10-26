@@ -1,0 +1,377 @@
+<ng-container *ngIf="isDataAvailable">
+    <nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+        <div class="btn-group">
+            <button type="button" class="btn btn-sub" (click)="back()">
+                <i class="fa fa-arrow-left"></i>
+                <span>Quay lại</span>
+            </button>
+            <button *ngIf="saveStatus" type="button" class="btn btn-sub" (click)="action('save')">
+                <i class="icon htvbdh_tcdt_save"></i>
+                <span>Lưu</span>
+            </button>
+            <button *ngIf="submitStatus" type="button" class="btn btn-sub" (click)="action('submit')">
+                <i class="icon htvbdh_tcdt_guiduyet"></i>
+                <span>Trình duyệt</span>
+            </button>
+            <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('nonpass')">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Từ chối</span>
+            </button>
+            <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('pass')">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                <span>Duyệt</span>
+            </button>
+            <button *ngIf="approveStatus" type="button" class="btn btn-sub" (click)="action('nonapprove')">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Từ chối</span>
+            </button>
+            <button *ngIf="approveStatus" type="button" class="btn btn-sub" (click)="action('approve')">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                <span>Phê duyệt</span>
+            </button>
+            <button *ngIf="copyStatus" type="button" class="btn btn-sub" (click)="showDialogCopy()">
+                <i nz-icon nzType="copy" nzTheme="outline"></i>
+                <span>Copy</span>
+            </button>
+        </div>
+    </nz-affix>
+
+    <div class="bg-trang">
+        <div class="mt16 flex-card p-lr16">
+            <div class="header mg-t-16">
+                <div class="header-text">
+                    <div class="title-chi-tieu">
+                        <span [ngClass]="statusClass()">{{titleStatus}}</span>
+                        <span>Tổng hợp đề nghị cấp vốn chi dự trữ quốc gia</span>
+                    </div>
+                </div>
+            </div>
+            <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+                <nz-table class="nowrap mt-16 table-chi-tiet">
+                    <thead>
+                        <tr>
+                            <th>Mã đề nghị</th>
+                            <th>Quyết định chỉ tiêu</th>
+                            <th>Nguồn báo cáo</th>
+                            <th>Công văn</th>
+                            <th>Ngày lập</th>
+                            <th>Ngày trình duyệt</th>
+                            <th>Ngày trưởng BP duyệt</th>
+                            <th>Ngày lãnh đạo duyệt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{maDeNghi}}</td>
+                            <td>{{qdChiTieu}}</td>
+                            <td>
+                                <div *ngFor="let item of nguonBcaos">
+                                    <div *ngIf="item.id == nguonBcao">
+                                        {{item.tenDm}}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
+                                    <button nz-button>
+                                        <i nz-icon nzType="upload"></i>
+                                        Select File
+                                    </button>
+                                </nz-upload>
+                                <div class="tep__sqd" (click)="downloadFileCv()">
+                                    <!-- <i class="icon htvbdh_tcdt_tep"></i> -->
+                                    <span>{{congVan?.fileName}}</span>
+                                </div>
+                            </td>
+                            <td>{{ngayTao}}</td>
+                            <td>{{ngayTrinhDuyet}}</td>
+                            <td>{{ngayDuyet}}</td>
+                            <td>{{ngayPheDuyet}}</td>
+                        </tr>
+                    </tbody>
+                </nz-table>
+            </nz-card>
+        </div>
+
+        <div class="mt-16 flex-card p-lr16">
+            <nz-card class="mt-2px flex-card data-table card-border-content table-card" nzTitle="Danh sách hàng hóa">
+                <div id="tablePrint">
+                    <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }"
+                        style="margin-top: 10px; margin-bottom: 10px;">
+                        <div nz-col [nzSpan]="3">
+                            Đơn vị:
+                            <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+                                <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+                            </ng-container>
+                            <ng-template #editMoney>
+                                <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                                    (ngModelChange)="editMoneyUnit=false">
+                                    <nz-option *ngFor="let item of dviTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                                    </nz-option>
+                                </nz-select>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
+                        <thead>
+                            <tr>
+                                <th style="width: 45px;" rowspan="2">STT</th>
+                                <th rowspan="2" nzWidth="250px">Các cục DTNNKV</th>
+                                <th colspan="3">Cấp tiền mua thóc</th>
+                                <th colspan="4">Cấp tiền mua gạo</th>
+                                <th colspan="4">Cấp tiền mua lương thực</th>
+                                <th rowspan="2">Cấp vốn bằng VTTB</th>
+                                <th rowspan="2">Tổng cục giao vốn hoàn ứng <br /> mua lương thực năm</th>
+                                <th style="width: 75px;" [hidden]="status" rowspan="2">Hàng động</th>
+                            </tr>
+                            <tr>
+                                <th>Vốn cấp</th>
+                                <th>Vốn ứng</th>
+                                <th>Tổng số</th>
+                                <th>Giao dự toán</th>
+                                <th>Vốn cấp</th>
+                                <th>Vốn ứng</th>
+                                <th>Tổng số</th>
+                                <th>Giao dự toán</th>
+                                <th>Vốn ứng</th>
+                                <th>Vốn cấp</th>
+                                <th>Tổng số</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>A</td>
+                                <td>B</td>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>3=1+2</td>
+                                <td>4</td>
+                                <td>5</td>
+                                <td>6</td>
+                                <td>7=4+5+6</td>
+                                <td>8</td>
+                                <td>9</td>
+                                <td>10</td>
+                                <td>11=8+9+10</td>
+                                <td>12</td>
+                                <td>13</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>Tổng số</td>
+                                <td>{{displayMoney(tongSo.vonCapThoc)}}</td>
+                                <td>{{displayMoney(tongSo.vonUngThoc)}}</td>
+                                <td>{{displayMoney(tongSo.tongSoThoc)}}</td>
+                                <td>{{displayMoney(tongSo.giaoDuToanGao)}}</td>
+                                <td>{{displayMoney(tongSo.vonCapGao)}}</td>
+                                <td>{{displayMoney(tongSo.vonUngGao)}}</td>
+                                <td>{{displayMoney(tongSo.tongSoGao)}}</td>
+                                <td>{{displayMoney(tongSo.giaoDuToanMuoi)}}</td>
+                                <td>{{displayMoney(tongSo.vonCapMuoi)}}</td>
+                                <td>{{displayMoney(tongSo.vonUngMuoi)}}</td>
+                                <td>{{displayMoney(tongSo.tongSoMuoi)}}</td>
+                                <td>{{displayMoney(tongSo.capVonVttb)}}</td>
+                                <td>{{displayMoney(tongSo.tcGiaoVonHoanUngNam)}}</td>
+                                <td></td>
+                            </tr>
+                            <tr *ngFor="let data of lstCtietBcao; let i = index">
+                                <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+                                    <td>{{ i + 1 }}</td>
+                                    <td>
+                                        <div *ngFor="let item of cucKhuVucs">
+                                            <div *ngIf="item.maDvi == data.maCucKv">
+                                                {{item.tenDvi}}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {{displayMoney(data.vonCapThoc)}}
+                                    </td>
+                                    <td>
+                                        {{displayMoney(data.vonUngThoc)}}
+                                    </td>
+                                    <td>
+                                        {{displayMoney(data.tongSoThoc)}}
+                                    </td>
+                                    <td>
+                                        {{displayMoney(data.giaoDuToanGao)}}
+                                    </td>
+                                    <td>
+                                        {{displayMoney(data.vonCapGao)}}
+                                    </td>
+                                    <td>
+                                        {{displayMoney(data.vonUngGao)}}
+                                    </td>
+                                    <td>
+                                        {{displayMoney(data.tongSoGao)}}
+                                    </td>
+                                    <td>
+                                        {{displayMoney(data.giaoDuToanMuoi)}}
+                                    </td>
+                                    <td>
+                                        {{displayMoney(data.vonCapMuoi)}}
+                                    </td>
+                                    <td>
+                                        {{displayMoney(data.vonUngMuoi)}}
+                                    </td>
+                                    <td>
+                                        {{displayMoney(data.tongSoMuoi)}}
+                                    </td>
+                                    <td>
+                                        {{displayMoney(data.capVonVttb)}}
+                                    </td>
+                                    <td>
+                                        {{displayMoney(data.tcGiaoVonHoanUngNam)}}
+                                    </td>
+                                    <td [hidden]="status">
+                                        <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                    </td>
+                                </ng-container>
+                                <ng-template #editTemplate>
+                                    <td>{{ i + 1 }}</td>
+                                    <td>
+                                        <div *ngFor="let item of cucKhuVucs">
+                                            <div *ngIf="item.maDvi == data.maCucKv">
+                                                {{item.tenDvi}}
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <fm-input-number class="search__input"
+                                            [class]="editCache[data.id].data.vonCapThoc >= 0?'' : 'input-error-validate' "
+                                            [(ngModel)]="editCache[data.id].data.vonCapThoc"
+                                            (ngModelChange)="changeModel(data.id)">
+                                        </fm-input-number>
+                                    </td>
+                                    <td>
+                                        <fm-input-number class="search__input"
+                                            [class]="editCache[data.id].data.vonUngThoc >= 0?'' : 'input-error-validate' "
+                                            [(ngModel)]="editCache[data.id].data.vonUngThoc"
+                                            (ngModelChange)="changeModel(data.id)">
+                                        </fm-input-number>
+                                    </td>
+                                    <td>
+                                        {{displayMoney(editCache[data.id].data.tongSoThoc)}}
+                                    </td>
+                                    <td>
+                                        <fm-input-number class="search__input"
+                                            [class]="editCache[data.id].data.giaoDuToanGao >= 0?'' : 'input-error-validate' "
+                                            [(ngModel)]="editCache[data.id].data.giaoDuToanGao"
+                                            (ngModelChange)="changeModel(data.id)">
+                                        </fm-input-number>
+                                    </td>
+                                    <td>
+                                        <fm-input-number class="search__input"
+                                            [class]="editCache[data.id].data.vonCapGao >= 0?'' : 'input-error-validate' "
+                                            [(ngModel)]="editCache[data.id].data.vonCapGao"
+                                            (ngModelChange)="changeModel(data.id)">
+                                        </fm-input-number>
+                                    </td>
+                                    <td>
+                                        <fm-input-number class="search__input"
+                                            [class]="editCache[data.id].data.vonUngGao >= 0?'' : 'input-error-validate' "
+                                            [(ngModel)]="editCache[data.id].data.vonUngGao"
+                                            (ngModelChange)="changeModel(data.id)">
+                                        </fm-input-number>
+                                    </td>
+                                    <td>
+                                        {{displayMoney(editCache[data.id].data.tongSoGao)}}
+                                    </td>
+                                    <td>
+                                        <fm-input-number class="search__input"
+                                            [class]="editCache[data.id].data.giaoDuToanMuoi >= 0?'' : 'input-error-validate' "
+                                            [(ngModel)]="editCache[data.id].data.giaoDuToanMuoi"
+                                            (ngModelChange)="changeModel(data.id)">
+                                        </fm-input-number>
+                                    </td>
+                                    <td>
+                                        <fm-input-number class="search__input"
+                                            [class]="editCache[data.id].data.vonCapMuoi >= 0?'' : 'input-error-validate' "
+                                            [(ngModel)]="editCache[data.id].data.vonCapMuoi"
+                                            (ngModelChange)="changeModel(data.id)">
+                                        </fm-input-number>
+                                    </td>
+                                    <td>
+                                        <fm-input-number class="search__input"
+                                            [class]="editCache[data.id].data.vonUngMuoi >= 0?'' : 'input-error-validate' "
+                                            [(ngModel)]="editCache[data.id].data.vonUngMuoi"
+                                            (ngModelChange)="changeModel(data.id)">
+                                        </fm-input-number>
+                                    </td>
+                                    <td>
+                                        {{displayMoney(editCache[data.id].data.tongSoMuoi)}}
+                                    </td>
+                                    <td>
+                                        <fm-input-number class="search__input"
+                                            [class]="editCache[data.id].data.capVonVttb >= 0?'' : 'input-error-validate' "
+                                            [(ngModel)]="editCache[data.id].data.capVonVttb">
+                                        </fm-input-number>
+                                    </td>
+                                    <td>
+                                        <fm-input-number class="search__input"
+                                            [class]="editCache[data.id].data.tcGiaoVonHoanUngNam >= 0?'' : 'input-error-validate' "
+                                            [(ngModel)]="editCache[data.id].data.tcGiaoVonHoanUngNam">
+                                        </fm-input-number>
+                                    </td>
+                                    <td [hidden]="status">
+                                        <i class="fa fa-save" (click)="saveEdit(data.id)"></i>
+                                        <i class="fa fa-times do" (click)="cancelEdit(data.id)"></i>
+                                    </td>
+                                </ng-template>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col nzSpan="24">
+                        <label class="search__label">Thuyết minh</label>
+                        <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
+                    </div>
+                </div>
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="6">
+                        Danh sách văn bản đính kèm
+                        <nz-upload [(nzFileList)]="fileList" [nzBeforeUpload]="beforeUpload" [hidden]="status">
+                            <button nz-button>
+                                <i nz-icon nzType="upload"></i>
+                                Select File
+                            </button>
+                        </nz-upload>
+                        <button nz-button [nzType]="'primary'" (click)="handleUpload()"
+                            [disabled]="fileList.length === 0" [hidden]="status" style="margin-top: 16px">
+                            Thêm vào danh sách
+                        </button>
+                    </div>
+                </div>
+                <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+                    <div nz-col class="gutter-row" [nzSpan]="12">
+                        <nz-table nzBordered class="table__body">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên file</th>
+                                    <th></th>
+                                    <th class="th" [hidden]="status"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let data of lstFiles; let i = index">
+                                    <td>{{ i + 1 }} </td>
+                                    <td>{{ data.fileName }}</td>
+                                    <td>
+                                        <button class="btn btn-function" (click)="downloadFile(data.id)">Xem</button>
+                                    </td>
+                                    <td [hidden]="status">
+                                        <button class="btn btn-function" (click)="deleteFile(data.id)">Xóa</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </nz-table>
+                    </div>
+                </div>
+            </nz-card>
+        </div>
+    </div>
+</ng-container>
