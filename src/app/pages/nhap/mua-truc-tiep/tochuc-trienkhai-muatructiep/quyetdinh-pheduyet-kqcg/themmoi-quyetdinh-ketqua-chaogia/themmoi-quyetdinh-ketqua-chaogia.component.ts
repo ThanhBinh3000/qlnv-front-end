@@ -6,22 +6,15 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { dauThauGoiThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/dauThauGoiThau.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
-import { QuyetDinhPheDuyetKetQuaLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../../constants/status";
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { QuyetDinhPheDuyetKetQuaChaoGiaMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ket-qua-chao-gia-mtt.service';
-import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { DialogCanCuThongTinChaoGiaComponent } from 'src/app/components/dialog/dialog-can-cu-thong-tin-chao-gia/dialog-can-cu-thong-tin-chao-gia.component';
 import { ChaogiaUyquyenMualeService } from 'src/app/services/chaogia-uyquyen-muale.service';
-import { Chain } from '@angular/compiler';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 
 @Component({
   selector: 'app-themmoi-quyetdinh-ketqua-chaogia',
@@ -54,7 +47,6 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
     public globals: Globals,
     public userService: UserService,
     private helperService: HelperService,
-    private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
     private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
   ) {
@@ -125,7 +117,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
     let body = this.formData.value;
     body.soQdPdCg = body.soQdPdCg + this.maQd;
     body.fileDinhKems = this.taiLieuDinhKemList;
-    body.hhChiTietTTinChaoGiaList = this.listMtt
+    body.hhChiTietTTinChaoGiaReqList = this.listMtt
     let res;
     if (this.formData.get('id').value > 0) {
       res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.update(body);
@@ -291,6 +283,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
         const dataDetail = res.data;
         dataDetail.trangThai = STATUS.DU_THAO;
         dataDetail.tenTrangThai = 'Dự Thảo'
+        dataDetail.id = null
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
         this.listMtt = dataDetail.hhChiTietTTinChaoGiaList;
         this.formData.patchValue({
