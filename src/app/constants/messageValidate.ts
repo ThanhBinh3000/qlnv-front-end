@@ -20,7 +20,7 @@ export const MESSAGEVALIDATE = {
   NOT_EMPTY_DOTBC: "Vui lòng chọn đợt báo cáo",
   EXIST_REPORT: "Báo cáo đã tồn tại",
   WRONG_DAY: '"Đến ngày" cần lớn hơn "Từ ngày"',
-  EXIST_CONTRACT: "Hợp đồng không tồn tại",
+  EXIST_CONTRACT: "Không tìm thấy hợp đồng",
   LOCAL_EXIST: "Địa phương nhận đã tồn tại",
   NOT_EXIST_REPORT: "Không tồn tại báo cáo cho việc tổng hợp",
   EXIST_MONEY: "Vui lòng chọn đơn vị tiền",
