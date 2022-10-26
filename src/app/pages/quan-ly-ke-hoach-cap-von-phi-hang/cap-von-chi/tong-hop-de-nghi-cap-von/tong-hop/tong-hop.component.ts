@@ -1,53 +1,36 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, CVNC, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
-import { DialogTaoMoiDeNghiComponent } from '../dialog-tao-moi-de-nghi/dialog-tao-moi-de-nghi.component';
+import { CVNC, NGUON_BAO_CAO, Utils } from 'src/app/Utility/utils';
+import { DialogTaoMoiTongHopComponent } from '../dialog-tao-moi-tong-hop/dialog-tao-moi-tong-hop.component';
 
 @Component({
-    selector: 'app-danh-sach-de-nghi-cap-von',
-    templateUrl: './danh-sach-de-nghi-cap-von.component.html',
-    styleUrls: ['./danh-sach-de-nghi-cap-von.component.scss']
+    selector: 'app-tong-hop',
+    templateUrl: './tong-hop.component.html',
+    styleUrls: ['./tong-hop.component.scss']
 })
-export class DanhSachDeNghiCapVonComponent implements OnInit {
+export class TongHopComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
-
-    //thong tin user
+    //thong tin dang nhap
     userInfo: any;
     //thong tin tim kiem
     searchFilter = {
-        maDn: null,
+        loaiTimKiem: '0',
+        maDeNghi: "",
         trangThai: Utils.TT_BC_1,
         tuNgay: null,
         denNgay: null,
         qdChiTieu: "",
-        canCuGia: "",
         loaiDn: "",
         maDviTao: "",
-        loaiTimKiem: "0",
-    }
-
-    tableFilter = {
-        maDn: null,
-        qdChiTieu: null,
-        canCuGia: null,
-        loaiDn: null,
-        ngayTao: null,
-        ngayTrinh: null,
-        ngayPheDuyet: null,
-        trangThai: null,
-    }
-
-    listIdDelete: string[] = [];
-    // danh sach
+    };
+    //danh muc
     dataTable: any[] = [];
     dataTableAll: any[] = [];
     trangThais: any[] = [
@@ -60,16 +43,32 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
             tenDm: "Trình duyệt",
         },
         {
+            id: Utils.TT_BC_3,
+            tenDm: "Từ chối duyệt",
+        },
+        {
+            id: Utils.TT_BC_4,
+            tenDm: "Duyệt",
+        },
+        {
             id: Utils.TT_BC_5,
-            tenDm: "Lãnh đạo từ chối",
+            tenDm: "Từ chối phê duyệt",
         },
         {
             id: Utils.TT_BC_7,
-            tenDm: "Lãnh đạo phê duyệt",
+            tenDm: "Phê duyệt",
         },
     ];
-    loaiDns: any[] = LOAI_DE_NGHI;
-    canCuGias: any[] = CAN_CU_GIA;
+    tableFilter = {
+        maDn: null,
+        qdChiTieu: null,
+        nguonBcao: null,
+        ngayTao: null,
+        ngayTrinh: null,
+        ngayPheDuyet: null,
+        trangThai: null,
+    }
+    nguonBcaos: any[] = NGUON_BAO_CAO;
     //phan trang
     totalElements = 0;
     totalPages = 0;
@@ -77,76 +76,75 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
         size: 10,
         page: 1,
     }
-    allChecked = false;
     //trang thai
-    statusNewReport = true;
+    allChecked = false;
+    statusNewReport = false;
     statusDelete = false;
-    disable: boolean;
 
     constructor(
-        private spinner: NgxSpinnerService,
-        private notification: NzNotificationService,
-        private modal: NzModalService,
-        public userService: UserService,
         private capVonNguonChiService: CapVonNguonChiService,
+        private modal: NzModalService,
         private datePipe: DatePipe,
+        private userService: UserService,
+        private notification: NzNotificationService,
+        private spinner: NgxSpinnerService,
     ) { }
 
     async ngOnInit() {
-        this.userInfo = this.userService.getUserLogin();
         this.spinner.show();
-        //khoi tao gia tri mac dinh
+        this.userInfo = this.userService.getUserLogin();
+
         this.searchFilter.denNgay = new Date();
         const newDate = new Date();
         newDate.setMonth(newDate.getMonth() - 1);
         this.searchFilter.tuNgay = newDate;
 
         this.searchFilter.maDviTao = this.userInfo?.MA_DVI;
-        // trang thai cua nut tao moi
-        this.statusNewReport = this.userService.isAccessPermisson(CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(CVNC.ADD_DN_MVT);
-        this.statusDelete = this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT);
 
-        //neu cos quyen phe duyet thi trang thai mac dinh la trinh duyet
-        if (this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) || this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT)) {
+        if (!this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV) &&
+            !this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_CKV) &&
+            !this.userService.isAccessPermisson(CVNC.PHE_DUYET_SYNTHETIC_CKV)) {
+            this.nguonBcaos = this.nguonBcaos.filter(e => e.id != Utils.THOP_TU_CUC_KV);
+        }
+
+        if (!this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_TC) &&
+            !this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_TC) &&
+            !this.userService.isAccessPermisson(CVNC.PHE_DUYET_SYNTHETIC_TC)) {
+            this.nguonBcaos = this.nguonBcaos.filter(e => e.id != Utils.THOP_TAI_TC);
+        }
+
+        this.statusNewReport = this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV) || this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_TC);
+        this.statusDelete = this.userService.isAccessPermisson(CVNC.DELETE_SYNTHETIC_CKV) || this.userService.isAccessPermisson(CVNC.DELETE_SYNTHETIC_TC)
+
+        if (this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_CKV) || this.userService.isAccessPermisson(CVNC.DUYET_SYNTHETIC_TC)) {
             this.searchFilter.trangThai = Utils.TT_BC_2;
-        }
-        if (this.userService.isTongCuc()) {
-            this.canCuGias = this.canCuGias.filter(e => e.id == Utils.HD_TRUNG_THAU);
-            this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_VTU);
-            this.searchFilter.canCuGia = Utils.HD_TRUNG_THAU;
-            this.searchFilter.loaiDn = Utils.MUA_VTU;
-            this.disable = true;
         } else {
-            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
-            this.disable = false;
+            if (this.userService.isAccessPermisson(CVNC.PHE_DUYET_SYNTHETIC_CKV) || this.userService.isAccessPermisson(CVNC.PHE_DUYET_SYNTHETIC_TC)) {
+                this.searchFilter.trangThai = Utils.TT_BC_4;
+            }
         }
-
-        this.search();
         this.spinner.hide();
+        this.search();
     }
 
+    //search list bao cao theo tieu chi
     async search() {
-        let trangThais = [];
-        if (this.searchFilter.trangThai) {
-            trangThais = [this.searchFilter.trangThai];
-        }
         const requestReport = {
             loaiTimKiem: this.searchFilter.loaiTimKiem,
-            // maDvi: this.searchFilter.maDviTao,
+            maDnghi: this.searchFilter.maDeNghi,
+            maDvi: this.searchFilter.maDviTao,
             ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
             ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
             soQdChiTieu: this.searchFilter.qdChiTieu,
-            canCuVeGia: this.searchFilter.canCuGia,
             loaiDnghi: this.searchFilter.loaiDn,
-            maDnghi: this.searchFilter.maDn,
             paggingReq: {
                 limit: this.pages.size,
                 page: this.pages.page,
             },
-            trangThais: trangThais,
+            trangThai: this.searchFilter.trangThai,
         };
         this.spinner.show();
-        await this.capVonNguonChiService.timKiemDeNghi(requestReport).toPromise().then(
+        await this.capVonNguonChiService.timKiemDeNghiThop(requestReport).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.dataTable = [];
@@ -157,13 +155,14 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
                             ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
                             ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
                             checked: false,
-                            isEdit: this.checkEditStatus(item.trangThai),
-                            isDelete: this.checkDeleteStatus(item.trangThai),
+                            isEdit: this.checkEditStatus(item.trangThai, item.loaiDnghi),
+                            isDelete: this.checkDeleteStatus(item.trangThai, item.loaiDnghi),
                         })
                     })
                     this.dataTableAll = cloneDeep(this.dataTable);
                     this.totalElements = data.data.totalElements;
                     this.totalPages = data.data.totalPages;
+
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                 }
@@ -187,44 +186,31 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
         this.search();
     }
 
-    //reset tim kiem
     clearFilter() {
-        this.searchFilter.maDn = null
+        this.searchFilter.maDeNghi = null
         this.searchFilter.trangThai = null
         this.searchFilter.tuNgay = null
         this.searchFilter.denNgay = null
         this.searchFilter.qdChiTieu = null
-        if (!this.disable) {
-            this.searchFilter.canCuGia = null
-            this.searchFilter.loaiDn = null
-        }
+        this.searchFilter.loaiDn = null
         this.search();
-    }
-
-    checkEditStatus(trangThai: string) {
-        return Utils.statusSave.includes(trangThai) &&
-            ((this.userInfo?.CAP_DVI == '2' && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT)));
-    }
-
-    checkDeleteStatus(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) &&
-            ((this.userInfo?.CAP_DVI == '2' && this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT)));
     }
 
     getStatusName(trangThai: string) {
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 
-    //them bao cao moi
+    //tao bao cao tong hop moi
     addNewReport() {
         const modalTuChoi = this.modal.create({
-            nzTitle: 'Thông tin tạo mới đề nghị',
-            nzContent: DialogTaoMoiDeNghiComponent,
+            nzTitle: 'Thông tin tổng hợp đề nghị',
+            nzContent: DialogTaoMoiTongHopComponent,
             nzMaskClosable: false,
             nzClosable: false,
             nzWidth: '900px',
             nzFooter: null,
             nzComponentParams: {
+                nguonBcaos: this.nguonBcaos
             },
         });
         modalTuChoi.afterClose.toPromise().then(async (res) => {
@@ -232,20 +218,18 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
                 const obj = {
                     id: null,
                     qdChiTieu: res.qdChiTieu,
-                    loaiDn: res.loaiDn,
-                    tabSelected: res.canCuGia == Utils.HD_TRUNG_THAU ? 'hopdong' : 'dongia',
-                    hopDong: res.hopDong,
+                    tabSelected: res.nguonBcao == Utils.THOP_TAI_TC ? 'tc' : 'danhsach',
                 }
                 this.dataChange.emit(obj);
             }
         });
     }
 
-    //xem chi tiet bao cao
+    //xem chi tiet
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? 'hopdong' : 'dongia',
+            tabSelected: data.loaiDnghi == Utils.THOP_TAI_TC ? 'tc' : 'ckv',
         }
         this.dataChange.emit(obj);
     }
@@ -300,7 +284,7 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
                         })
                     }
                 }
-                this.capVonNguonChiService.xoaDeNghi(request).toPromise().then(
+                this.capVonNguonChiService.xoaDeNghiThop(request).toPromise().then(
                     data => {
                         if (data.statusCode == 0) {
                             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
@@ -316,6 +300,16 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
                 this.spinner.hide();
             },
         });
+    }
+
+    checkEditStatus(trangThai: string, loaiDn: string) {
+        return Utils.statusSave.includes(trangThai) &&
+            (loaiDn == Utils.THOP_TU_CUC_KV ? this.userService.isAccessPermisson(CVNC.EDIT_SYNTHETIC_CKV) : this.userService.isAccessPermisson(CVNC.EDIT_SYNTHETIC_TC));
+    }
+
+    checkDeleteStatus(trangThai: string, loaiDn: string) {
+        return Utils.statusDelete.includes(trangThai) &&
+            (loaiDn == Utils.THOP_TU_CUC_KV ? this.userService.isAccessPermisson(CVNC.DELETE_SYNTHETIC_CKV) : this.userService.isAccessPermisson(CVNC.DELETE_SYNTHETIC_TC));
     }
 
     // Tìm kiếm trong bảng
@@ -338,5 +332,5 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
             this.dataTable = cloneDeep(this.dataTableAll);
         }
     }
-
 }
+
