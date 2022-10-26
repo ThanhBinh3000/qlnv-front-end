@@ -86,7 +86,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     this.updateEditCache();
     this.emitDataTable();
     // Validate tổng dự toán
-    if ((this.dataEdit[this.lastIndex - 1].data?.sluongDtoan + this.calcTong()) > this.tongGiaTri) {
+    if (this.calcTong() > this.tongGiaTri) {
       this.dataTable.splice(this.lastIndex - 1, 1);
       this.notification.error(MESSAGE.ERROR, "Tổng Dự toán không được lớn hơn Tổng giá trị theo QĐ của TTCP");
     }
