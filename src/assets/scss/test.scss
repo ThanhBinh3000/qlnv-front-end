@@ -9,7 +9,7 @@ $f14: $font-size14;
     line-height: 1;
     border: solid 2px #ccc;
     background: #fff;
-    color: $color-text  !important;
+    color: $color-text !important;
     cursor: auto;
 
     &.choxuly {
@@ -798,6 +798,7 @@ app-header {
     //   padding: 4px 15px 8px 15px;
     // }
     font-weight: unset;
+    font-size: 14px;
     color: #666;
     border-radius: 0;
 
@@ -1106,7 +1107,7 @@ $cxl-h: 31px;
   }
 
   td .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-    border: solid 1px $borderinput  !important;
+    border: solid 1px $borderinput !important;
     border-radius: 0px;
   }
 
@@ -1272,7 +1273,7 @@ $cxl-h: 31px;
   }
 
   &.ant-table-column-sort {
-    background-color: $color-f2  !important;
+    background-color: $color-f2 !important;
 
     .ant-table-column-sorter-up {
       &:before {
@@ -1753,7 +1754,7 @@ table tr {
 }
 
 .nz-table-hide-scrollbar .ant-table-fixed .ant-table-thead tr th {
-  background: $color-f2  !important;
+  background: $color-f2 !important;
 }
 
 .ant-row.ant-row-center .ant-radio-group {

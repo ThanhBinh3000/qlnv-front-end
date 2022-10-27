@@ -21,12 +21,13 @@ import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import {BaseComponent} from "../../../../../../components/base/base.component";
-import {FormBuilder, Validators} from "@angular/forms";
+import { BaseComponent } from "../../../../../../components/base/base.component";
+import { FormBuilder, Validators } from "@angular/forms";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'them-moi-phieu-nhap-day-kho',
@@ -55,8 +56,8 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
   listNganLo: any[] = [];
   listPhieuKiemTraChatLuong: any[] = [];
   listSoQuyetDinh: any[] = [];
-  listDiaDiemNhap : any[] = [];
-  dataTable : any[] = [];
+  listDiaDiemNhap: any[] = [];
+  dataTable: any[] = [];
   listNghiemThuBaoQuan: any[] = [];
 
   create: any = {};
@@ -84,6 +85,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
     private thongTinHopDongService: ThongTinHopDongService,
     private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
     private fb: FormBuilder,
+    private helperService: HelperService
   ) {
     super();
     this.formData = this.fb.group({
@@ -93,17 +95,17 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
       maQhns: ['',],
       tenDvi: ['', [Validators.required]],
 
-      soBienBanNhapDayKho : [],
+      soBienBanNhapDayKho: [],
       ngayTao: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-      ngayBdNhap : [],
+      ngayBdNhap: [],
 
-      soQdGiaoNvNh : [],
-      idQdGiaoNvNh : [],
+      soQdGiaoNvNh: [],
+      idQdGiaoNvNh: [],
 
       soHd: [''],
       ngayHd: [null,],
 
-      idDdiemGiaoNvNh : [,[Validators.required]],
+      idDdiemGiaoNvNh: [, [Validators.required]],
       maDiemKho: ['', [Validators.required]],
       tenDiemKho: ['', [Validators.required]],
       maNhaKho: ['', [Validators.required]],
@@ -112,24 +114,24 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
       tenNganKho: ['', [Validators.required]],
       maLoKho: [''],
       tenLoKho: [''],
-      soLuong : [],
+      soLuong: [],
 
       loaiVthh: ['',],
       tenLoaiVthh: ['',],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
-      tenNguoiTao : [''],
-      tenNguoiPduyet : [''],
-      keToanTruong : [''],
-      ghiChu : [''],
-      trangThai : [],
-      tenTrangThai : [],
-      lyDoTuChoi : [],
-      donGiaHd : [],
-      tenKeToanTruong : [],
-      tenKtvBaoQuan : []
-      })
+      tenNguoiTao: [''],
+      tenNguoiPduyet: [''],
+      keToanTruong: [''],
+      ghiChu: [''],
+      trangThai: [],
+      tenTrangThai: [],
+      lyDoTuChoi: [],
+      donGiaHd: [],
+      tenKeToanTruong: [],
+      tenKtvBaoQuan: []
+    })
 
   }
 
@@ -143,7 +145,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
       ]);
       if (this.id > 0) {
         this.loadPhieuNhapDayKho();
-      }else{
+      } else {
         this.initForm();
       }
       this.spinner.hide();
@@ -155,9 +157,9 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
   }
 
   async initForm() {
-    // let res = await this.userService.getId("BANG_KE_CAN_HANG_LT_SEQ");
+    let res = await this.userService.getId("BB_NHAP_DAY_KHO_LT_SEQ");
     this.formData.patchValue({
-      // soBangKe: `${res}/${this.formData.get('nam').value}/BKCH-CCDTVP`,
+      soBienBanNhapDayKho: `${res}/${this.formData.get('nam').value}/BBNĐK`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
@@ -256,9 +258,9 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
   bindingDataDdNhap(data) {
     this.dataTable = data.listPhieuKtraCl;
     let dataFirst = new Date();
-    this.dataTable.forEach( item =>{
+    this.dataTable.forEach(item => {
       let dataCompare = new Date(item.ngayTao);
-      if(dataFirst > dataCompare){
+      if (dataFirst > dataCompare) {
         dataFirst = dataCompare;
       }
     })
@@ -272,8 +274,8 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
       tenNganKho: data.tenNganKho,
       maLoKho: data.maLoKho,
       tenLoKho: data.tenLoKho,
-      soLuong : data.soLuong,
-      ngayBdNhap : dataFirst
+      soLuong: data.soLuong,
+      ngayBdNhap: dataFirst
     });
   }
 
@@ -415,160 +417,101 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
     this.showListEvent.emit();
   }
 
-  save(isGuiDuyet?: boolean) {
+  async save(isGuiDuyet?: boolean) {
     this.spinner.show();
-    let body = {
-      "chiTiets": this.detail.chiTiets,
-      "chungLoaiHangHoa": this.detail.chungLoaiHangHoa ?? null,
-      "fileDinhKems": this.detail.fileDinhKems,
-      "id": this.detail.id ?? null,
-      "keToan": this.detail.keToan ?? null,
-      "kyThuatVien": this.detail.kyThuatVien ?? null,
-      "maDiemKho": this.detail.maDiemKho ?? null,
-      "maNhaKho": this.detail.maNhaKho ?? null,
-      "maNganKho": this.detail.maNganKho ?? null,
-      "maNganLo": this.detail.maNganLo ?? null,
-      "maVatTu": this.detail.maVatTu ?? null,
-      "maVatTuCha": this.detail.maVatTuCha ?? null,
-      "maDvi": this.detail.maDvi ?? null,
-      "maQhns": this.detail.maQhns ?? null,
-      "ngayBatDauNhap": this.detail.ngayBatDauNhap ? dayjs(this.detail.ngayBatDauNhap).format('YYYY-MM-DD') : null,
-      "ngayKetThucNhap": this.detail.ngayKetThucNhap ? dayjs(this.detail.ngayKetThucNhap).format('YYYY-MM-DD') : null,
-      "ngayNhapDayKho": this.detail.ngayNhapDayKho ? dayjs(this.detail.ngayNhapDayKho).format("YYYY-MM-DD") : null,
-      "soBienBan": this.detail.soBienBan ?? null,
-      "thuKho": this.detail.thuKho ?? null,
-      "thuTruong": this.detail.thuTruong ?? null,
-      "qdgnvnxId": this.detail.qdgnvnxId,
-      "bbNghiemThuId": this.detail.bbNghiemThuId,
-      "hopDongId": this.detail.hopDongId,
-    }
-    if (this.id > 0) {
-      this.quanLyPhieuNhapDayKhoService.sua(
-        body,
-      ).then((res) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (isGuiDuyet) {
-            let body = {
-              id: res.data.id,
-              lyDo: null,
-              trangThai: this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN,
-            };
-            this.quanLyPhieuNhapDayKhoService.updateStatus(body);
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.UPDATE_SUCCESS,
-              );
-              this.redirectbienBanNhapDayKho();
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-          } else {
-            this.notification.success(
-              MESSAGE.SUCCESS,
-              MESSAGE.UPDATE_SUCCESS,
-            );
-            this.redirectbienBanNhapDayKho();
-          }
+    try {
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        await this.spinner.hide();
+        return;
+      }
+      let body = this.formData.value;
+      body.chiTiets = this.dataTable;
+      let res;
+      if (this.formData.get('id').value > 0) {
+        res = await this.quanLyPhieuNhapDayKhoService.update(body);
+      } else {
+        res = await this.quanLyPhieuNhapDayKhoService.create(body);
+      }
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (isGuiDuyet) {
+          await this.spinner.hide();
+          this.id = res.data.id;
+          this.pheDuyet();
         } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-      })
-        .catch((e) => {
-          console.error('error: ', e);
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        })
-        .finally(() => {
-          this.spinner.hide();
-        });
-    } else {
-      this.quanLyPhieuNhapDayKhoService.them(
-        body,
-      ).then((res) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (isGuiDuyet) {
-            let body = {
-              id: res.data.id,
-              lyDo: null,
-              trangThai: this.globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN,
-            };
-            this.quanLyPhieuNhapDayKhoService.updateStatus(body);
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-              this.redirectbienBanNhapDayKho();
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
+          if (this.formData.get('id').value) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.back();
           } else {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.redirectbienBanNhapDayKho();
+            this.back();
           }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
+          await this.spinner.hide();
         }
-      }).catch((e) => {
-        console.error('error: ', e);
-        this.notification.error(
-          MESSAGE.ERROR,
-          e.error.errors[0].defaultMessage,
-        );
-      })
-        .finally(() => {
-          this.spinner.hide();
-        });
-    }
-  }
-
-  guiDuyet() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          this.save(true);
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+        await this.spinner.hide();
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
+    };
   }
 
   pheDuyet() {
-    let trangThai = this.globals.prop.NHAP_CHO_DUYET_KE_TOAN;
-    if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_KE_TOAN) {
-      trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
-    } else if (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
-      trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
+    let trangThai = ''
+    let mess = ''
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.TU_CHOI_KTVBQ:
+      case STATUS.TU_CHOI_KT:
+      case STATUS.TU_CHOI_LDCC:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_KTVBQ;
+        mess = 'Bạn có muối gửi duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_KTVBQ: {
+        trangThai = STATUS.CHO_DUYET_KT;
+        mess = 'Bạn có chắc chắn muốn phê duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.CHO_DUYET_LDCC;
+        mess = 'Bạn có chắc chắn muốn phê duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.DA_DUYET_LDCC;
+        mess = 'Bạn có chắc chắn muốn phê duyệt ?'
+        break;
+      }
     }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn duyệt?',
+      nzContent: mess,
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
-      nzWidth: 310,
+      nzWidth: 500,
       nzOnOk: async () => {
         this.spinner.show();
         try {
           let body = {
             id: this.id,
-            lyDo: null,
             trangThai: trangThai,
           };
-          const res = await this.quanLyPhieuNhapDayKhoService.updateStatus(body);
+          let res =
+            await this.quanLyPhieuNhapDayKhoService.approve(
+              body,
+            );
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-            this.redirectbienBanNhapDayKho();
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.back();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
