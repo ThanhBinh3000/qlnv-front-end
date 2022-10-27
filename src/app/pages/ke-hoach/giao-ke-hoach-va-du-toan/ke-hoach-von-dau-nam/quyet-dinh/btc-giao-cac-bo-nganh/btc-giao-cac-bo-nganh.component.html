@@ -63,15 +63,15 @@
     <div class="group-button">
       <h3>Danh sách quyết định của Bộ Tài Chính giao các Bộ ngành</h3>
       <div class="buttons">
-        <button *ngIf="userService.isTongCuc()" type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
+        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN_XOA')" type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN_EXP')" type="button" class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isTongCuc()" type="button" class="btn btn-sub xanh" (click)="themMoi()">
+        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN_THEM')" type="button" class="btn btn-sub xanh" (click)="themMoi()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
