@@ -376,16 +376,17 @@
         </nz-tabset>
         <div class="action-giao-chi-tieu">
           <button type="button" class="btn btn-sub" (click)="deleteSelect()"
-            *ngIf="(tabSelected == 'tu-choi' && userService.isTongCuc()) || (tabSelected == 'cuc' && userService.isCuc())">
+            *ngIf="(tabSelected == 'tu-choi' && userService.isTongCuc()) || (tabSelected == 'cuc' && userService.isCuc())&& userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_XOA')">
             <i class="fa fa-trash-o do"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-sub" (click)="exportData()">
+          <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_EXP')" type="button"
+            class="btn btn-sub" (click)="exportData()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Export</span>
           </button>
           <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
-            *ngIf="(tabSelected == 'tu-choi' && userService.isTongCuc()) || (tabSelected == 'cuc' && userService.isCuc())">
+            *ngIf="(tabSelected == 'tu-choi' && userService.isTongCuc()) || (tabSelected == 'cuc' && userService.isCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_THEM') ">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>

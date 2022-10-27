@@ -1,19 +1,19 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import * as dayjs from 'dayjs';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
-import { QuyetDinhBtcNganhService } from 'src/app/services/quyetDinhBtcNganh.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { STATUS } from "../../../../../../../constants/status";
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {UserLogin} from 'src/app/models/userlogin';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
+import {QuyetDinhBtcNganhService} from 'src/app/services/quyetDinhBtcNganh.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {STATUS} from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-cac-bo-nganh',
@@ -38,6 +38,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   luanPhienList: any[] = []
 
   dataTable: any[] = [];
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly modal: NzModalService,
@@ -49,7 +50,6 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     private quyetDinhTtcpService: QuyetDinhTtcpService,
     private quyetDinhBtcNganhService: QuyetDinhBtcNganhService,
     private notification: NzNotificationService,
-
   ) {
     this.formData = this.fb.group(
       {
@@ -72,8 +72,10 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
       this.getListBoNganh(),
       this.maQd = '/QĐ-BTC',
       this.getDataDetail(this.idInput),
-      this.onChangeNamQd(this.formData.get('namQd').value),
+
     ])
+    await this.onChangeNamQd(this.formData.get('namQd').value);
+    await this.onChangeBoNganh(this.formData.get('idTtcpBoNganh').value);
     this.spinner.hide();
   }
 
@@ -142,7 +144,8 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     }
   }
 
-  downloadFileKeHoach(event) { }
+  downloadFileKeHoach(event) {
+  }
 
   quayLai() {
     this.onClose.emit();
@@ -235,11 +238,14 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     this.spinner.hide();
   }
 
-  xoaKeHoach() { }
+  xoaKeHoach() {
+  }
 
-  themKeHoach() { }
+  themKeHoach() {
+  }
 
   tongGiaTri: number = 0;
+
   onChangeBoNganh($event) {
     let data = this.dsBoNganhTtcp.filter(item => item.maBoNganh == $event);
     if (data.length > 0) {

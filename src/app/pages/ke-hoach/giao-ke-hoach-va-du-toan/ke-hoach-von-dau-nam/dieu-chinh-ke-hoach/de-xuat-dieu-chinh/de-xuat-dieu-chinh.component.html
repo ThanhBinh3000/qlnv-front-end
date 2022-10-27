@@ -53,20 +53,25 @@
       <div class="group-button">
         <h3>Danh sách đề xuất điều chỉnh</h3>
         <div class="buttons">
-          <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
+          <button type="button" class="btn btn-do" (click)="deleteSelect()"
+            *ngIf="(userService.isCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XOA')">
             <i class="fa fa-trash-o do"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-sub" (click)="exportData()">
+          <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_EXP')" type="button"
+            class="btn btn-sub" (click)="exportData()">
             <i class="icon htvbdh_chuyen-xu-ly"></i>
             <span>Export</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="redirectToDieuChinh(false, 0)"
-            *ngIf="userService.isTongCuc()">
+          <button
+            *ngIf="(userService.isTongCuc())&& !userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_TAO_QD')"
+            type="button" class="btn btn-main" (click)="redirectToDieuChinh(false, 0)">
             <i class="icon htvbdh_tcdt_tao-qd"></i>
             <span>Tạo QĐ điều chỉnh</span>
           </button>
-          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)" *ngIf="userService.isCuc()">
+          <button
+            *ngIf="(userService.isCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_THEM')"
+            type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
