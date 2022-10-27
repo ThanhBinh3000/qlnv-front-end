@@ -17,7 +17,7 @@
           <span>Lưu và gửi duyệt</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
-          *ngIf="deXuatDieuChinh.trangThai == '04' && !userService.isTongCuc()">
+          *ngIf="(deXuatDieuChinh.trangThai == '04' && !userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Phê duyệt</span>
         </button>

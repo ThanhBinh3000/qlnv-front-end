@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import {cloneDeep, g} from 'lodash';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
+import { cloneDeep, g } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import {
     DialogCanCuKQLCNTComponent
 } from 'src/app/components/dialog/dialog-can-cu-kqlcnt/dialog-can-cu-kqlcnt.component';
@@ -15,32 +15,32 @@ import {
 import {
     DialogThongTinPhuLucBangGiaHopDongComponent
 } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-bang-gia-hop-dong/dialog-thong-tin-phu-luc-bang-gia-hop-dong.component';
-import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
+import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
 import {
     dauThauGoiThauService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/dauThauGoiThau.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {ThongTinHopDongService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
-import {UploadFileService} from 'src/app/services/uploaFile.service';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {saveAs} from 'file-saver';
-import {DonviLienQuanService} from 'src/app/services/donviLienquan.service';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import { DonviService } from 'src/app/services/donvi.service';
+import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { saveAs } from 'file-saver';
+import { DonviLienQuanService } from 'src/app/services/donviLienquan.service';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import {
     QuyetDinhPheDuyetKetQuaLCNTService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service';
-import {STATUS} from "../../../../../../constants/status";
-import {HelperService} from "../../../../../../services/helper.service";
-import {ThongTinPhuLucHopDongService} from "../../../../../../services/thongTinPhuLucHopDong.service";
+import { STATUS } from "../../../../../../constants/status";
+import { HelperService } from "../../../../../../services/helper.service";
+import { ThongTinPhuLucHopDongService } from "../../../../../../services/thongTinPhuLucHopDong.service";
 import {
     DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import {
     DialogThemChiCucComponent
 } from "../../../../../../components/dialog/dialog-them-chi-cuc/dialog-them-chi-cuc.component";
@@ -184,8 +184,8 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 donGia: [],
                 trangThai: [STATUS.DU_THAO],
                 tenTrangThai: ['Dự thảo'],
-                noiDung : [],
-                dieuKien : []
+                noiDung: [],
+                dieuKien: []
             }
         );
         this.formData.controls['donGiaVat'].valueChanges.subscribe(value => {
@@ -383,7 +383,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
         if (res.msg == MESSAGE.SUCCESS) {
             const data = res.data;
             let dataCurrentLogin = data.qdKhlcnt.hhQdKhlcntDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
-            console.log(data)
+            console.log(dataCurrentLogin, 3333)
             this.listGoiThau = dataCurrentLogin[0].dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
             this.formData.patchValue({
                 soQdKqLcnt: data.soQd,
@@ -421,9 +421,9 @@ export class ThongTinComponent implements OnInit, OnChanges {
             this.dataTable = [];
             if (data) {
                 console.log(data);
-                if(this.userService.isTongCuc()){
+                if (this.userService.isTongCuc()) {
                     this.dataTable = data.children;
-                }else{
+                } else {
                     this.dataTable.push(data);
                 }
                 this.formData.patchValue({
@@ -566,7 +566,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
             nzOnOk: () => {
                 this.spinner.show();
                 try {
-                    this.thongTinPhuLucHopDongService.delete({id: id})
+                    this.thongTinPhuLucHopDongService.delete({ id: id })
                         .then(async () => {
                             await this.loadChiTiet(this.id);
                         });
@@ -587,7 +587,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
         }
     }
 
-    themChiCuc(dataCuc){
+    themChiCuc(dataCuc) {
         const modalQD = this.modal.create({
             nzTitle: 'Thêm địa điểm nhập hàng',
             nzContent: DialogThemChiCucComponent,
@@ -596,7 +596,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
             nzWidth: '1200px',
             nzFooter: null,
             nzComponentParams: {
-                data : dataCuc,
+                data: dataCuc,
                 dataTable: dataCuc.children ? dataCuc.children : [],
             },
         });
