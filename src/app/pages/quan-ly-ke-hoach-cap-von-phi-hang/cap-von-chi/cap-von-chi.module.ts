@@ -8,6 +8,8 @@ import { CapVonChiRoutingModule } from './cap-von-chi-routing.module';
 import { CapVonChiComponent } from './cap-von-chi.component';
 import { TongHopModule } from './tong-hop/tong-hop.module';
 import { TongHopTheoDoiCapVonModule } from './tong-hop-theo-doi-cap-von/tong-hop-theo-doi-cap-von.module';
+import { DeNghiCapVonModule } from './de-nghi-cap-von/de-nghi-cap-von.module';
+import { TongHopDeNghiCapVonModule } from './tong-hop-de-nghi-cap-von/tong-hop-de-nghi-cap-von.module';
 @NgModule({
   declarations: [
     CapVonChiComponent,
@@ -20,7 +22,9 @@ import { TongHopTheoDoiCapVonModule } from './tong-hop-theo-doi-cap-von/tong-hop
     DeNghiCapVonBoNganhModule,
     TongHopModule,
     ThongTriDuyetYDuToanModule,
-    TongHopTheoDoiCapVonModule
+    TongHopTheoDoiCapVonModule,
+    DeNghiCapVonModule,
+    TongHopDeNghiCapVonModule,
   ],
 })
 export class CapVonChiModule { }

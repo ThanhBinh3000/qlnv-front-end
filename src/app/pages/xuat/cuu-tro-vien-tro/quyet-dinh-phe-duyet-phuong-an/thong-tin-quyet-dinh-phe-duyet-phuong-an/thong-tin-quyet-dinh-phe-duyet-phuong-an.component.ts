@@ -753,6 +753,8 @@ export class ThongTinQuyetDinhPheDuyetPhuongAnComponent implements OnInit {
             }
 
             if (res.msg == MESSAGE.SUCCESS) {
+              body.id = res.data.id;
+              body.trangThai = STATUS.BAN_HANH;
               let resBanHanh = await this.quyetDinhPheDuyetPhuongAnCuuTroService.approve(body);
               if (resBanHanh.msg == MESSAGE.SUCCESS) {
                 this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
