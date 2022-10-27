@@ -1,9 +1,9 @@
 <nz-affix [nzOffsetTop]="98" class="level2">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('DXDC')">
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT')" nz-menu-item nzSelected (click)="selectTab('DXDC')">
       Đề xuất điều chỉnh chỉ tiêu kế hoạch
     </li>
-    <li nz-menu-item (click)="selectTab('QDDC')">
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC')" nz-menu-item (click)="selectTab('QDDC')">
       Quyết định điều chỉnh chỉ tiêu hoạch
     </li>
   </ul>

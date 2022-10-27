@@ -9,7 +9,7 @@ export const THONG_TIN_DE_XUAT_DIEU_CHINH = 'thong-tin-de-xuat-dieu-chinh';
 export const DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM = 'dieu-chinh-chi-tieu-ke-hoach-nam';
 export const DIEU_CHINH_THONG_TIN_CHI_TIEU_KE_HOACH_NAM = 'dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam';
 export const DU_TOAN_NSNN = 'du-toan-nsnn';
-export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
+export const ROUTE_LIST_KE_HOACH: Array<any> = [
   {
     icon: 'htvbdh_tcdt_chitieukehoachnam',
     title: 'Giao kế hoạch và vốn',
@@ -17,6 +17,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     dropdown: 'giao-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
+    code:'KHVDTNSNN_GKHDT'
   },
   {
     icon: 'htvbdh_tcdt_tochucthuchien',
@@ -25,6 +26,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     dropdown: 'de-xuat-dieu-chinh-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
+    code:''
   },
   // {
   //   icon: 'htvbdh_tcdt_tochucthuchien',
@@ -49,6 +51,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     dropdown: 'dieu-chinh-chi-tieu',
     idHover: 'giao-chi-tieu',
     hasTab: false,
+    code:'KHVDTNSNN_PAGIA'
   },
   {
     icon: 'htvbdh_tcdt_baocao2',
@@ -57,6 +60,7 @@ export const ROUTE_LIST_KE_HOACH: Array<ChiTietMenu> = [
     dropdown: 'bao-cao',
     idHover: 'giao-chi-tieu',
     hasTab: false,
+    code:'',
     children: []
   },
 ];
