@@ -1,20 +1,16 @@
 import {saveAs} from 'file-saver';
 import {Component, Input, OnInit} from '@angular/core';
 import dayjs from 'dayjs';
-import {cloneDeep} from 'lodash';
+import {cloneDeep, isEmpty} from 'lodash';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {
-  LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT,
-} from 'src/app/constants/config';
-import {DANH_MUC_LEVEL} from 'src/app/pages/luu-kho/luu-kho.constant';
+import {LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT,} from 'src/app/constants/config';
 import {MESSAGE} from 'src/app/constants/message';
 import {UserLogin} from 'src/app/models/userlogin';
 import {DeXuatKeHoachBanDauGiaService} from 'src/app/services/deXuatKeHoachBanDauGia.service';
 import {UserService} from 'src/app/services/user.service';
 import {DonviService} from 'src/app/services/donvi.service';
-import {isEmpty} from 'lodash';
 import {Globals} from 'src/app/shared/globals';
 import {
   TongHopPhuongAnCuuTroService
@@ -56,17 +52,18 @@ export class TongHopPhuongAnComponent implements OnInit {
     loaiVthh: null,
     trichYeu: null,
     maDvi: null,
+    maDviDxuat: null,
     maTongHop: null,
     ngayTongHop: null,
   };
   filterTable: any = {
-    loaiHinhNhapXuat:'',
-    maTongHop:'',
-    ngayTongHop:'',
+    loaiHinhNhapXuat: '',
+    maTongHop: '',
+    ngayTongHop: '',
     tenVthh: '',
     tenCloaiVthh: '',
-    tongSoLuong:'',
-    noiDung:'',
+    tongSoLuong: '',
+    noiDung: '',
     tenTrangThai: '',
   };
   dataTableAll: any[] = [];
@@ -101,8 +98,11 @@ export class TongHopPhuongAnComponent implements OnInit {
         });
       }
       this.searchFilter.loaiVthh = this.loaiVthh;
-      this.initData()
-      await this.search();
+      await Promise.all([
+        this.initData(),
+        this.search()]
+      )
+
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
@@ -118,13 +118,13 @@ export class TongHopPhuongAnComponent implements OnInit {
   }
 
   async loadDsTong() {
-    const body = {
+    /*const body = {
       maDviCha: this.userdetail.maDvi,
       trangThai: '01',
-    };
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    };*/
+    const dsTong = await this.donviService.layDonViCon();
     if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong[DANH_MUC_LEVEL.CUC];
+      this.dsDonvi = dsTong.data;
     }
 
   }
@@ -173,7 +173,8 @@ export class TongHopPhuongAnComponent implements OnInit {
         loaiVatTuHangHoa: this.searchFilter.loaiVthh,
         trichYeu: this.searchFilter.trichYeu,*/
         nam: this.searchFilter.nam,
-        paggingReq:{
+        maDviDxuat: this.searchFilter.maDviDxuat,
+        paggingReq: {
           limit: this.pageSize,
           page: this.page - 1,
         }

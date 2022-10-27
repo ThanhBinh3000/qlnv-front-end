@@ -4,6 +4,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { ObservableService } from 'src/app/services/observable.service';
 import { LIST_PAGES } from '../main-routing.constant';
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'app-main-router',
@@ -17,6 +18,7 @@ export class MainRouterComponent implements OnInit {
   constructor(
     private notification: NzNotificationService,
     private observableService: ObservableService,
+    public userService: UserService,
   ) {
     this.lstPage = LIST_PAGES;
   }

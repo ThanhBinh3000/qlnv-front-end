@@ -4,7 +4,9 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub" (click)="save(true)">
+    <button
+      *ngIf="(formData.value.trangThai == '00' && !isView) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')"
+      type="button" class="btn btn-sub" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>

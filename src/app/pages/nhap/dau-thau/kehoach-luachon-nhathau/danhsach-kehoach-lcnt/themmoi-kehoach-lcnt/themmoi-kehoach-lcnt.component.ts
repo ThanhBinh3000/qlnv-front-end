@@ -1,8 +1,8 @@
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
-import { groupBy , chain } from 'lodash';
+import { groupBy, chain } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
@@ -32,8 +32,8 @@ import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHo
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { STATUS } from "../../../../../../constants/status";
-import {BaseComponent} from "../../../../../../components/base/base.component";
-import {DatePipe} from "@angular/common";
+import { BaseComponent } from "../../../../../../components/base/base.component";
+import { DatePipe } from "@angular/common";
 
 
 export interface TreeNodeInterface {
@@ -63,7 +63,7 @@ export interface TreeNodeInterface {
   templateUrl: './themmoi-kehoach-lcnt.component.html',
   styleUrls: ['./themmoi-kehoach-lcnt.component.scss'],
 })
-export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit , OnChanges {
+export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit, OnChanges {
   @Input()
   loaiVthhInput: string;
   @Input()
@@ -81,8 +81,8 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   userLogin: UserLogin;
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
-  listLoaiHinhNx : any[] = [];
-  listKieuNx : any[] = [];
+  listLoaiHinhNx: any[] = [];
+  listKieuNx: any[] = [];
 
   danhMucDonVi: any;
   STATUS = STATUS;
@@ -116,7 +116,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
 
   taiLieuDinhKemList: any[] = [];
 
-  listDataGroup : any[] = [];
+  listDataGroup: any[] = [];
 
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -145,16 +145,16 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     super();
     this.formData = this.fb.group({
       id: [],
-      maDvi: ['',[Validators.required]],
-      tenDvi : ['',[Validators.required]],
-      loaiHinhNx : ['',[Validators.required]],
-      kieuNx : ['',[Validators.required]],
-      diaChiDvi : [],
+      maDvi: ['', [Validators.required]],
+      tenDvi: ['', [Validators.required]],
+      loaiHinhNx: ['', [Validators.required]],
+      kieuNx: ['', [Validators.required]],
+      diaChiDvi: [],
       namKhoach: [, [Validators.required]],
       soDxuat: [null, [Validators.required]],
       trichYeu: [null],
-      ngayTao : [dayjs().format('YYYY-MM-DD')],
-      ngayPduyet : [],
+      ngayTao: [dayjs().format('YYYY-MM-DD')],
+      ngayPduyet: [],
       soQd: [, [Validators.required]],
       loaiVthh: [, [Validators.required]],
       tenLoaiVthh: [, [Validators.required]],
@@ -173,17 +173,17 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
 
       gtriDthau: [null, [Validators.required]],
       gtriHdong: [null, [Validators.required]],
-      donGiaVat : [''],
+      donGiaVat: [''],
       tongMucDt: [null, [Validators.required]],
-      nguonVon: [null, [Validators.required]],
-      dienGiai : [''],
+      nguonVon: ['NGV01', [Validators.required]],
+      dienGiai: [''],
       tgianNhang: [null, [Validators.required]],
       tgianThien: [null, [Validators.required]],
       ghiChu: [null],
       ldoTuchoi: [],
       trangThai: ['00'],
       tenTrangThai: ['Dự Thảo'],
-      diaDiemDuAn : ['']
+      diaDiemDuAn: ['']
     });
   }
 
@@ -208,7 +208,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     await this.spinner.hide();
   }
 
-  async loadDataComboBox(){
+  async loadDataComboBox() {
     // List nguồn vốn
     this.listNguonVon = [];
     let resNv = await this.danhMucService.danhMucChungGetAll('NGUON_VON');
@@ -225,7 +225,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
     if (resNx.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNx = resNx.data.filter( item => item.phanLoai == 'N');
+      this.listLoaiHinhNx = resNx.data.filter(item => item.phanLoai == 'N');
     }
     // kiểu nhập xuất
     this.listKieuNx = [];
@@ -248,13 +248,13 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   }
 
   async getDetail(id: number) {
-    if(id){
+    if (id) {
       await this.dauThauService
         .getDetail(id)
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             const dataDetail = res.data;
-            this.helperService.bidingDataInFormGroup(this.formData,dataDetail);
+            this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
             this.formData.patchValue({
               soDxuat: dataDetail.soDxuat.split('/')[0]
             })
@@ -290,10 +290,10 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
 
   initForm() {
     this.formData.patchValue({
-      tenDvi : this.userInfo.TEN_DVI,
-      maDvi : this.userInfo.MA_DVI,
-      diaChiDvi : this.userInfo.DON_VI.diaChi,
-      namKhoach : dayjs().get('year'),
+      tenDvi: this.userInfo.TEN_DVI,
+      maDvi: this.userInfo.MA_DVI,
+      diaChiDvi: this.userInfo.DON_VI.diaChi,
+      namKhoach: dayjs().get('year'),
     })
   }
 
@@ -314,10 +314,10 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     let bodyParamVatTu = {
       data,
       isCaseSpecial: true,
-      onlyVatTu : true
+      onlyVatTu: true
     }
     let bodyParamLT = {
-      onlyLuongThuc : true
+      onlyLuongThuc: true
     }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
@@ -330,7 +330,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
-        if(this.userService.isCuc()){
+        if (this.userService.isCuc()) {
           this.formData.patchValue({
             cloaiVthh: data.ma,
             tenCloaiVthh: data.ten,
@@ -345,7 +345,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
               tchuanCluong: res.data ? res.data.tenQchuan : null,
             });
           }
-        }else{
+        } else {
           this.formData.patchValue({
             loaiVthh: data.ma,
             tenLoaiVthh: data.ten
@@ -356,10 +356,10 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   }
 
   themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
-    if(this.userService.isTongCuc()){
+    if (this.userService.isTongCuc()) {
       this.themMoiTongCuc(data, index);
-    }else{
-      this.themMoiCuc(data,index);
+    } else {
+      this.themMoiCuc(data, index);
     }
   }
 
@@ -423,9 +423,9 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
         return;
       }
       if (index >= 0) {
-        this.listOfData[index] =  res.value;
+        this.listOfData[index] = res.value;
       } else {
-        this.listOfData = [...this.listOfData,  res.value];
+        this.listOfData = [...this.listOfData, res.value];
       }
       let tongMucDt: number = 0;
       this.listOfData.forEach((item) => {
@@ -495,12 +495,12 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     }
   }
 
-  setValidator(){
-    if(this.userService.isTongCuc()){
+  setValidator() {
+    if (this.userService.isTongCuc()) {
       this.formData.controls["cloaiVthh"].clearValidators();
       this.formData.controls["tenCloaiVthh"].clearValidators();
       this.formData.controls["moTaHangHoa"].clearValidators();
-    }else{
+    } else {
       this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
@@ -548,7 +548,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     this.showListEvent.emit();
   }
 
-  async guiDuyet(){
+  async guiDuyet() {
     this.userService.isTongCuc() ? await this.guiDuyetTongCuc() : await this.guiDuyetCuc()
   }
 
@@ -1009,8 +1009,8 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     });
   }
 
-  convertListData(){
-    this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi : key, dataChild : value }))
+  convertListData() {
+    this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()
   }
 
@@ -1025,7 +1025,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
 
   async ngOnChanges(changes: SimpleChanges) {
     await this.spinner.show();
-    if(changes){
+    if (changes) {
       await this.getDetail(this.idInput);
     };
     await this.spinner.hide();
