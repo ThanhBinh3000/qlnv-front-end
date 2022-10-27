@@ -382,6 +382,13 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
         soQdPduyet: data.soQdPduyet.split("/")[0],
       });
       this.danhsachDxMtt = data.hhQdPheduyetKhMttDxList;
+      for (const item of this.danhsachDxMtt) {
+        await this.danhSachMuaTrucTiepService.getDetail(item.idDxHdr).then((res) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            item.soLuongDiaDiemList = res.data.soLuongDiaDiemList;
+          }
+        })
+      }
       this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt);
       for (const item of this.danhsachDxMttCache) {
         await this.danhSachMuaTrucTiepService.getDetail(item.idDxuat).then((res) => {
@@ -437,7 +444,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
           this.danhsachDxMtt.push(item.listDxuatHdr)
         })
         for (const item of this.danhsachDxMtt) {
-          await this.danhSachMuaTrucTiepService.getDetail(item.idDxuat).then((res) => {
+          await this.danhSachMuaTrucTiepService.getDetail(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               item.soLuongDiaDiemList = res.data.soLuongDiaDiemList;
             }

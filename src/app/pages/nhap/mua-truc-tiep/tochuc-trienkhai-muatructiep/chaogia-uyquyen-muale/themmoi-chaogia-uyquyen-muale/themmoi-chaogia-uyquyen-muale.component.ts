@@ -120,13 +120,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
       const res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail(this.idInput);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
-        const dataFilterUser = dataDetail.hhQdPheduyetKhMttDxList.filter(item => item.maDvi == this.userInfo.MA_DVI);
-        const dataCurrent = dataFilterUser[0];
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
-        this.formData.patchValue({
-          trangThaiTkhai: dataCurrent.trangThaiTkhai,
-          tenTrangThaiTkhai: dataCurrent.tenTrangThaiTkhai
-        })
         this.convertListData()
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);

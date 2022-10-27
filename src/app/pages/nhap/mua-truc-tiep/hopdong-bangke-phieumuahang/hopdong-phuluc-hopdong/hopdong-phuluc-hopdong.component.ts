@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -16,6 +16,7 @@ import { saveAs } from 'file-saver';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { STATUS } from 'src/app/constants/status';
 import { HopdongPhulucHopdongService } from 'src/app/services/hopdong-phuluc-hopdong.service';
+import { Globals } from 'src/app/shared/globals';
 
 
 @Component({
@@ -24,8 +25,6 @@ import { HopdongPhulucHopdongService } from 'src/app/services/hopdong-phuluc-hop
   styleUrls: ['./hopdong-phuluc-hopdong.component.scss']
 })
 export class HopdongPhulucHopdongComponent implements OnInit {
-
-
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -34,10 +33,13 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     private hopdongPhulucHopdongService: HopdongPhulucHopdongService,
-    private danhMucService: DanhMucService
+    private danhMucService: DanhMucService,
+    public globals: Globals,
   ) {
 
   }
+  @Input()
+  typeVthh: string;
   listNam: any[] = [];
   yearNow: number = 0;
   idMuaTt: number = 0;
@@ -51,16 +53,13 @@ export class HopdongPhulucHopdongComponent implements OnInit {
 
   filterTable: any = {
     namHd: '',
-    soHdong: '',
-    tenHdong: '',
-    ngayKy: '',
+    soQdMtt: '',
+    soQdCgia: '',
+    tgianKthuc: '',
     tenLoaiVthh: '',
     tenCloaiVthh: '',
-    benBan: '',
-    benMua: '',
-    giaTriHd: '',
-    dDiemBmua: '',
-    tenTrangThai: '',
+    tenTrangThaiHd: '',
+    tentrangThaiNh: '',
   };
 
   dataTableAll: any[] = [];
@@ -74,10 +73,14 @@ export class HopdongPhulucHopdongComponent implements OnInit {
   listVthh: any[] = [];
   lastBreadcrumb: string;
   userInfo: UserLogin;
-  isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
   STATUS = STATUS;
+  isDetail: boolean = false;
+  isAddNew: boolean = false;
+  isQuanLy: boolean = false;
+  isView: boolean = false;
+  idQdMtt: number = 0;
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -150,12 +153,21 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     }
   }
 
-
-  redirectToChiTiet(data: any, isView?: boolean) {
+  themMoi(isView: boolean, data: any) {
     this.selectedId = data.id;
     this.isDetail = true;
-    this.isViewDetail = isView ?? false;
-    this.idMuaTt = data.idMusTt
+    this.isAddNew = true;
+    this.isQuanLy = false;
+    this.isView = isView;
+  }
+
+  redirectToChiTiet(isView: boolean, data: any) {
+    this.selectedId = data.id;
+    this.isDetail = true;
+    this.isAddNew = false;
+    this.isQuanLy = true;
+    this.isView = isView;
+    this.idQdMtt = data.idQdMtt;
   }
 
   async showList() {
@@ -300,7 +312,7 @@ export class HopdongPhulucHopdongComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.tenTrangThaiHd == '00') {
             item.checked = true;
           }
         });
@@ -375,17 +387,13 @@ export class HopdongPhulucHopdongComponent implements OnInit {
   clearFilterTable() {
     this.filterTable = {
       namHd: '',
-      soHdong: '',
-      tenHdong: '',
-      ngayKy: '',
-      tenLoaiVthh: '',
+      soQdMtt: '',
+      soQdCgia: '',
+      tgianKthuc: '',
+      tenLoaiVthhL: '',
       tenCloaiVthh: '',
-      benMua: '',
-      benBan: '',
-      giaTriHd: '',
-      dDiemBmua: '',
-      tenTrangThai: '',
-
+      tenTrangThaiHd: '',
+      tentrangThaiNh: '',
     }
   }
 }

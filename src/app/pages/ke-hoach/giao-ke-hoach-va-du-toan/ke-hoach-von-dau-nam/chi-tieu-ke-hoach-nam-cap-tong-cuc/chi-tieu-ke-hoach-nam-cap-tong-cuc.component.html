@@ -272,15 +272,18 @@
         </nz-tabset>
         <ng-template #extraTemplate>
           <div *ngIf=" (capDvi == 2 && userService.isCuc()) || (capDvi ==1 && userService.isTongCuc())">
-            <button type="button" class="btn btn-do" (click)="deleteSelect()">
+            <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_XOA')" type="button"
+              class="btn btn-do" (click)="deleteSelect()">
               <i class="fa fa-trash-o do"></i>
               <span>Xóa</span>
             </button>
-            <button type="button" class="btn btn-sub" (click)="exportData()">
+            <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_EXP')" type="button"
+              class="btn btn-sub" (click)="exportData()">
               <i class="icon htvbdh_chuyen-xu-ly"></i>
               <span>Xuất file</span>
             </button>
-            <button type="button" class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam(0)">
+            <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')" type="button"
+              class="btn btn-main" (click)="redirectThongTinChiTieuKeHoachNam(0)">
               <i class="icon htvbdh_dau-cong"></i>
               <span>Thêm</span>
             </button>

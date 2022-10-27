@@ -8,12 +8,12 @@
             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
         </div>
-        <div nz-col nzSpan="4">
+       <!-- <div nz-col nzSpan="4">
           <label class="search__label"> Cục DTNN KV </label>
           <nz-select [(ngModel)]="searchFilter.maDvi">
             <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
           </nz-select>
-        </div>
+        </div>-->
         <div nz-col nzSpan="4">
           <label class="search__label">Số công văn/đề xuất</label>
           <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.maTongHop"/>
