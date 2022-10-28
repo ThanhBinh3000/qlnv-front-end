@@ -119,7 +119,6 @@ export class BaoCaoComponent implements OnInit {
 	editCache: { [key: string]: { edit: boolean; data: any } } = {};     // phuc vu nut chinh
 
 	tabSelected: string;
-	danhSachChiTietPhuLucTemp: any[] = [];
 	lstKhoanMuc: any[] = KHOAN_MUC;
 	//phan trang
 	tabs: any[] = [];
