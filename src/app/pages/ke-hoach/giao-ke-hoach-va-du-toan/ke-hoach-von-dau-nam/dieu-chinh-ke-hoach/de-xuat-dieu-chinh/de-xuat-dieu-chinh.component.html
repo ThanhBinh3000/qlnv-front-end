@@ -193,14 +193,17 @@
               <td *ngIf="userService.isCuc()" class="text-center">{{data.tenTrangThai}}</td>
               <td class="text-center">{{data.trangThaiDuyet}}</td>
               <td>
-                <a (click)="redirectToChiTiet(true, data.id)">
+                <a *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XEM')"
+                  (click)="redirectToChiTiet(true, data.id)">
                   <i class="icon htvbdh_eye"></i>
                 </a>
-                <a *ngIf="userService.isCuc() && (data.trangThai == globals.prop.DU_THAO || data.trangThai == globals.prop.TU_CHOI)"
+                <a *ngIf="(userService.isCuc() && (data.trangThai == globals.prop.DU_THAO || data.trangThai == globals.prop.TU_CHOI)) 
+                && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_THEM')"
                   (click)="redirectToChiTiet(false, data.id)">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a *ngIf="data.trangThai == globals.prop.DU_THAO && userService.isCuc()" (click)="xoaItem(data)">
+                <a *ngIf="(data.trangThai == globals.prop.DU_THAO && userService.isCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XOA')"
+                  (click)="xoaItem(data)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
                 <a *ngIf="data.trangThai == globals.prop.BAN_HANH" (click)="redirectToDieuChinh(true, data.id)">

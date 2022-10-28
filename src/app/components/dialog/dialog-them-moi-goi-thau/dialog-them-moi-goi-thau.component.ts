@@ -46,7 +46,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     this.formGoiThau = this.fb.group({
       goiThau: [null, [Validators.required]],
       loaiVthh: [null],
-      tenLoaiVthh : [null],
+      tenLoaiVthh: [null],
       cloaiVthh: [null],
       tenCloaiVthh: [null],
       dviTinh: [this.dviTinh],
@@ -81,10 +81,10 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     this.initForm(this.data)
   }
 
-  onChangeCloaiVthh($event){
+  onChangeCloaiVthh($event) {
     let cloaiSelected = this.listChungLoai.filter(item => item.ma == $event);
     this.formGoiThau.patchValue({
-      tenCloaiVthh : cloaiSelected[0].ten
+      tenCloaiVthh: cloaiSelected[0].ten
     })
   }
 
@@ -135,7 +135,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     }
     const body = this.formGoiThau.value;
     body.children = this.dataTable
-    body.children.forEach( item => item.donGia = body.donGia);
+    body.children.forEach(item => item.donGia = body.donGia);
     this._modalRef.close(body);
   }
 
@@ -165,7 +165,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       this.formGoiThau.patchValue({
         soLuong: soLuong,
         diaDiemNhap: diaDiemNhap.substring(0, diaDiemNhap.length - 2)
-      })
+      });
       this.thongtinDauThau = new DanhSachGoiThau();
     }
   }

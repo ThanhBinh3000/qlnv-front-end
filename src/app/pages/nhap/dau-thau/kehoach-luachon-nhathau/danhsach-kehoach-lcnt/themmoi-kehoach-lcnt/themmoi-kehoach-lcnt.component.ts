@@ -34,6 +34,7 @@ import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMu
 import { STATUS } from "../../../../../../constants/status";
 import { BaseComponent } from "../../../../../../components/base/base.component";
 import { DatePipe } from "@angular/common";
+import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
 
 
 export interface TreeNodeInterface {
@@ -141,6 +142,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private dmTieuChuanService: DanhMucTieuChuanService,
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
   ) {
     super();
     this.formData = this.fb.group({
@@ -173,7 +175,8 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
 
       gtriDthau: [null, [Validators.required]],
       gtriHdong: [null, [Validators.required]],
-      donGiaVat: [''],
+      donGiaVat: ['', [Validators.required]],
+      vat: ['5'],
       tongMucDt: [null, [Validators.required]],
       nguonVon: ['NGV01', [Validators.required]],
       dienGiai: [''],
@@ -340,6 +343,23 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
           let res = await this.dmTieuChuanService.getDetailByMaHh(
             this.formData.get('cloaiVthh').value,
           );
+          let bodyPag = {
+            namKeHoach: this.formData.value.namKhoach,
+            loaiVthh: this.formData.value.loaiVthh,
+            cloaiVthh: this.formData.value.cloaiVthh,
+            trangThai: STATUS.BAN_HANH,
+            maDvi: this.formData.value.maDvi
+          }
+          let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+          if (pag.msg == MESSAGE.SUCCESS) {
+            const data = pag.data;
+            this.formData.patchValue({
+              donGiaVat: data.giaQdVat
+            })
+            if (!data.giaQdVat) {
+              this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
+            }
+          }
           if (res.statusCode == API_STATUS_CODE.SUCCESS) {
             this.formData.patchValue({
               tchuanCluong: res.data ? res.data.tenQchuan : null,
@@ -416,6 +436,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
+        donGia: this.formData.value.donGiaVat
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -434,7 +455,6 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       this.formData.patchValue({
         tongMucDt: tongMucDt,
       });
-      this.helperService.setIndexArray(this.listOfData);
       this.convertListData();
     });
 
@@ -1010,6 +1030,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   }
 
   convertListData() {
+    this.helperService.setIndexArray(this.listOfData);
     this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()
   }
@@ -1029,6 +1050,14 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       await this.getDetail(this.idInput);
     };
     await this.spinner.hide();
+  }
+
+  isDisbleForm(): boolean {
+    if (this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP || this.formData.value.trangThai == STATUS.TU_CHOI_LDC) {
+      return false
+    } else {
+      return true
+    }
   }
 
 }

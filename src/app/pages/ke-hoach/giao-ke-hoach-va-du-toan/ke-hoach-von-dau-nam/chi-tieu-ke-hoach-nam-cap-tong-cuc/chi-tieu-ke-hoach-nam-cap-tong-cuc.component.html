@@ -122,14 +122,17 @@
                   <td>{{ data.trichYeu }}</td>
                   <td class="text-center">{{ data.trangThaiDuyet }}</td>
                   <td>
-                    <a (click)="redirectThongTinChiTieuKeHoachNam(data.id, true)">
+                    <a *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_XEM')"
+                      (click)="redirectThongTinChiTieuKeHoachNam(data.id, true)">
                       <i class=" icon htvbdh_eye"></i>
                     </a>
                     <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)"
-                      *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP || data.trangThai === globals.prop.NHAP_TU_CHOI_LD_VU) && !userService.isCuc() && !userService.isChiCuc()">
+                      *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP || data.trangThai === globals.prop.NHAP_TU_CHOI_LD_VU) 
+                      && !userService.isCuc() && !userService.isChiCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a (click)="xoaItem(data)" *ngIf="data.trangThai === globals.prop.DU_THAO && !userService.isCuc()">
+                    <a (click)="xoaItem(data)"
+                      *ngIf="(data.trangThai === globals.prop.DU_THAO && !userService.isCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_XOA')">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
@@ -238,15 +241,17 @@
                   <td>{{ data.trichYeu }}</td>
                   <td class="text-center">{{ data.trangThaiDuyet }}</td>
                   <td>
-                    <a (click)="redirectThongTinChiTieuKeHoachNam(data.id, true)">
+                    <a *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_XEM')"
+                      (click)="redirectThongTinChiTieuKeHoachNam(data.id, true)">
                       <i class="icon htvbdh_eye"></i>
                     </a>
                     <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)"
-                      *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LDC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP)  && !userService.isTongCuc() && !userService.isChiCuc()">
+                      *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LDC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP)
+                        && !userService.isTongCuc() && !userService.isChiCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')">
                       <i class="fa fa-pencil"></i>
                     </a>
                     <a (click)="xoaItem(data)"
-                      *ngIf="data.trangThai === globals.prop.NHAP_DU_THAO && !userService.isChiCuc()">
+                      *ngIf="(data.trangThai === globals.prop.NHAP_DU_THAO && !userService.isChiCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_XOA')">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>

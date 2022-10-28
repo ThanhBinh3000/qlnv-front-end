@@ -110,7 +110,6 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
     private spinner: NgxSpinnerService,
-    private dauThauGoiThauService: dauThauGoiThauService,
     private uploadFileService: UploadFileService,
     private donviLienQuanService: DonviLienQuanService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
@@ -164,7 +163,16 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
         soQdPduyet: [null],
         soQdPdKh: [null],
 
-        diaChi: [null]
+        diaChi: [null],
+        mst: [null],
+        nguoiDdien: [null],
+        chucVu: [null],
+        sdt: [null],
+        fax: [null],
+        soTkhoan: [null],
+        moTai: [null],
+        giayUq: [null],
+
       }
     );
 
@@ -362,20 +370,21 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
     let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.getDetail(idKqLcnt);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
-      let dataCurrentLogin = data.qdKhlcnt.hhChiTietTTinChaoGiaList.filter(item => item.maDvi == this.userInfo.MA_DVI);
-      this.listGoiThau = dataCurrentLogin[0].dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
+      console.log(res, 4444)
+      // let dataCurrentLogin = data.qdKhlcnt.hhChiTietTTinChaoGiaList.filter(item => item.maDvi == this.userInfo.MA_DVI);
+      // this.listGoiThau = dataCurrentLogin[0].dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
       this.formData.patchValue({
         soQdPdCg: data.soQdPdCg,
         soQdPdKh: data.soQdPdKh,
         idQdCgia: data.id,
         ngayKyQdCgia: data.ngayKy,
         ngayHluc: data.ngayHluc,
-        loaiHdong: data.qdKhlcnt.loaiHdong,
-        cloaiVthh: data.qdKhlcnt.cloaiVthh,
-        tenLoaiVthh: data.qdKhlcnt.tenLoaiVthh,
-        loaiVthh: data.qdKhlcnt.loaiVthh,
-        tenCloaiVthh: data.qdKhlcnt.tenCloaiVthh,
-        moTaHangHoa: data.qdKhlcnt.moTaHangHoa,
+        loaiHdong: data.loaiHdong,
+        cloaiVthh: data.cloaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
+        loaiVthh: data.loaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
+        moTaHangHoa: data.moTaHangHoa,
       })
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg)
@@ -433,34 +442,34 @@ export class ThemmoiHopdongPhulucComponent implements OnInit {
   }
 
   async onChangeGoiThau(event) {
-    if (event && this.idQdMtt !== event) {
-      let res = await this.dauThauGoiThauService.chiTietByGoiThauId(event);
-      if (res.msg == MESSAGE.SUCCESS) {
-        const data = res.data;
-        console.log("🚀 ~ file: thong-tin.component.ts ~ line 416 ~ ThongTinComponent ~ onChangeGoiThau ~ data", data)
-        this.formData.patchValue({
-          soNgayThien: data.tgianThienHd ?? null,
-          tenLoaiVthh: data.tenVthh ?? null,
-          loaiVthh: data.loaiVthh ?? null,
-          cloaiVthh: data.cloaiVthh ?? null,
-          tenCloaiVthh: data.tenCloaiVthh ?? null,
-          soLuong: data.soLuong ?? null,
-          donGiaVat: data.donGiaTrcVat && data.vat ? (data.donGiaTrcVat + (data.donGiaTrcVat * data.vat / 100)) : null,
-        })
-        this.onChangeDvlq(data.idNhaThau);
-        this.diaDiemNhapListCuc = data.diaDiemNhapList;
-        this.tongSlHang = 0;
-        this.diaDiemNhapListCuc.forEach(element => {
-          this.tongSlHang += element.soLuong;
-          delete element.id
-        });
-        if (this.userService.isTongCuc()) {
-          this.formData.patchValue({
-            dviTinh: data.dviTinh ?? null
-          })
-        }
-      }
-    }
+    // if (event && this.idQdMtt !== event) {
+    //   let res = await this.dauThauGoiThauService.chiTietByGoiThauId(event);
+    //   if (res.msg == MESSAGE.SUCCESS) {
+    //     const data = res.data;
+    //     console.log("🚀 ~ file: thong-tin.component.ts ~ line 416 ~ ThongTinComponent ~ onChangeGoiThau ~ data", data)
+    //     this.formData.patchValue({
+    //       soNgayThien: data.tgianThienHd ?? null,
+    //       tenLoaiVthh: data.tenVthh ?? null,
+    //       loaiVthh: data.loaiVthh ?? null,
+    //       cloaiVthh: data.cloaiVthh ?? null,
+    //       tenCloaiVthh: data.tenCloaiVthh ?? null,
+    //       soLuong: data.soLuong ?? null,
+    //       donGiaVat: data.donGiaTrcVat && data.vat ? (data.donGiaTrcVat + (data.donGiaTrcVat * data.vat / 100)) : null,
+    //     })
+    //     this.onChangeDvlq(data.idNhaThau);
+    //     this.diaDiemNhapListCuc = data.diaDiemNhapList;
+    //     this.tongSlHang = 0;
+    //     this.diaDiemNhapListCuc.forEach(element => {
+    //       this.tongSlHang += element.soLuong;
+    //       delete element.id
+    //     });
+    //     if (this.userService.isTongCuc()) {
+    //       this.formData.patchValue({
+    //         dviTinh: data.dviTinh ?? null
+    //       })
+    //     }
+    //   }
+    // }
   }
 
   back() {
