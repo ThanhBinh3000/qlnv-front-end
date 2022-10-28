@@ -1,15 +1,15 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {Component, EventEmitter, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserService } from 'src/app/services/user.service';
-import { cloneDeep } from 'lodash';
-import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
-import { saveAs } from 'file-saver';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserService} from 'src/app/services/user.service';
+import {cloneDeep} from 'lodash';
+import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
+import {saveAs} from 'file-saver';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 
 @Component({
@@ -154,7 +154,7 @@ export class TtcpComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhTtcpService.deleteMuti({ idList: dataDelete });
+            let res = await this.quyetDinhTtcpService.deleteMuti({idList: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -171,18 +171,17 @@ export class TtcpComponent implements OnInit {
           }
         },
       });
-    }
-    else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
 
   exportReportDemo() {
     let body = {
-      typeFile : "PDF",
+      typeFile: "PDF",
       fileName: "bc_nhap_xuat_ton_kho_hang_dtnn.jrxml",
-      tenBaoCao:"Hoa_test",
-      nam:2023
+      tenBaoCao: "Hoa_test",
+      nam: 2023
     };
     this.quyetDinhTtcpService
       .exportReport(body)
@@ -190,6 +189,7 @@ export class TtcpComponent implements OnInit {
         saveAs(blob, body.tenBaoCao + ".pdf"),
       );
   }
+
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();
@@ -214,7 +214,6 @@ export class TtcpComponent implements OnInit {
   }
 
 
-
   async onClose() {
     this.isAddNew = false;
     await this.search()
@@ -222,7 +221,7 @@ export class TtcpComponent implements OnInit {
   }
 
   onAllChecked(checked) {
-    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
+    this.dataTable.forEach(({id}) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
   }
 
@@ -235,11 +234,11 @@ export class TtcpComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) =>
+    this.allChecked = this.dataTable.every(({id}) =>
       this.setOfCheckedId.has(id),
     );
     this.indeterminate =
-      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
   }
 
@@ -304,7 +303,7 @@ export class TtcpComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhTtcpService.delete({ id: item.id }).then((res) => {
+          this.quyetDinhTtcpService.delete({id: item.id}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -338,8 +337,7 @@ export class TtcpComponent implements OnInit {
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }

@@ -59,7 +59,6 @@ export class LoginComponent implements OnInit {
       this.apiService.login(user).subscribe(async (res: OldResponseData) => {
         if (res.data) {
           this.authService.saveToken(res.data.token);
-          this.router.navigate(['/']);
           let jsonData = '';
           let permission = await this.userAPIService.getPermission();
           let dvql = await  this.userAPIService.getDvql();
@@ -80,6 +79,7 @@ export class LoginComponent implements OnInit {
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
         }
+        this.router.navigate(['/']);
         this.spinner.hide();
       });
     } catch (err) {
