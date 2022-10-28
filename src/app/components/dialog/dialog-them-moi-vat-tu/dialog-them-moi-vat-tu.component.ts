@@ -25,12 +25,12 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   loaiVthh: any;
   dataChiTieu: any;
   dataEdit: any;
-  errorInputRequired: string = 'Dữ liệu không được để trống.';
   listOfData: any[] = [];
   tableExist: boolean = false;
   selectedChiCuc: boolean = false;
   isValid: boolean = false;
   userInfo: UserLogin;
+  donGia: number = 0;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -103,6 +103,10 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       })
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
+    } else {
+      this.formData.patchValue({
+        donGia: this.donGia,
+      })
     }
     this.checkDisabledSave();
   }

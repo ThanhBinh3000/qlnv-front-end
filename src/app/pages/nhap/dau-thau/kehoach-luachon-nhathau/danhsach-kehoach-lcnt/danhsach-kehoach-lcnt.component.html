@@ -8,23 +8,21 @@
             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
         </div>
-        <div nz-col nzSpan="3" *ngIf="userService.isTongCuc()">
-          <label class="search__label">Loại hàng hóa </label>
-          <nz-select [(ngModel)]="searchFilter.loaiVthh">
-            <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-          </nz-select>
-        </div>
         <div nz-col nzSpan="3">
-          <label class="search__label">Số tờ trình</label>
+          <label class="search__label">Số kế hoạch/tờ trình</label>
           <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soDx" />
         </div>
-        <div nz-col nzSpan="12">
-          <label class="search__label">Trích yếu</label>
-          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.trichYeu" />
+        <div nz-col nzSpan="4">
+          <label class="search__label">Ngày tạo kế hoạch</label>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
         <div nz-col nzSpan="4">
-          <label class="search__label">Ngày ký</label>
+          <label class="search__label">Ngày duyệt kế hoạch</label>
           <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+        </div>
+        <div nz-col nzSpan="11">
+          <label class="search__label">Trích yếu</label>
+          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.trichYeu" />
         </div>
       </div>
       <div nz-col class="cangiua group-button-search">
@@ -70,15 +68,17 @@
                 [nzIndeterminate]="indeterminate" nzDisabled="userService.isChiCuc()"></label>
             </th>
             <th class="text-center" style="width: 2%;">STT</th>
-            <th class="text-center" style="width: 7%;">Số tờ trình</th>
-            <th *ngIf="userService.isTongCuc()" class="text-center" style="width: 7%;">Đơn vị</th>
-            <th class="text-center" style="width: 7%;">Ngày ký</th>
-            <th class="text-center" style="width: 25%;">Trích yếu</th>
-            <th class="text-center" style="width: 9%;">Số QĐ giao chỉ tiêu</th>
+            <th class="text-center" style="width: 7%;">Số kế hoạch/tờ trình</th>
             <th class="text-center" style="width: 7%;">Năm kế hoạch</th>
+            <th class="text-center" style="width: 7%;">Ngày lập KH</th>
+            <th class="text-center" style="width: 7%;">Ngày duyệt KH</th>
+            <th class="text-center" style="width: 9%;">Số QĐ giao chỉ tiêu</th>
             <th class="text-center" style="width: 10%;">Loại hàng hóa</th>
             <th *ngIf="userService.isCuc()" class="text-center" style="width: 12%;">Chủng loại hàng hóa</th>
-            <th class="text-center" style="width: 5%;">Số gói thầu</th>
+            <th class="text-center" style="width: 5%;">Tổng số gói thầu</th>
+            <th class="text-center" style="width: 5%;">Số gói thầu đã trúng</th>
+            <th class="text-center" style="width: 5%;">Số QĐ duyệt KHLCNT</th>
+            <th class="text-center" style="width: 7%;">Thời hạn nhập kho</th>
             <th class="text-center" style="width: 7%;">Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
@@ -149,6 +149,24 @@
               </nz-input-group>
             </th>
             <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
             </th>
           </tr>
         </thead>
@@ -160,23 +178,25 @@
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.soDxuat }}</td>
-            <td *ngIf="userService.isTongCuc()" width="">{{data.tenDvi}}</td>
-            <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.trichYeu }}</td>
-            <td>{{ data.soQd }}</td>
             <td>{{ data.namKhoach }}</td>
-            <td>{{ data.tenVthh }}</td>
-            <td *ngIf="userService.isCuc()">{{ data.tenCloaiVthh }}</td>
+            <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.soQd }}</td>
+            <td>{{ data.tenLoaiVthh }}</td>
+            <td>{{ data.tenCloaiVthh }}</td>
             <td>{{data.soGoiThau}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td>{{ ( userService.isTongCuc() && data.loaiVthh.startsWith("02")) || userService.isCuc() ?
               data.tenTrangThai :
               data.tenTrangThaiTh }}</td>
             <td class="text-left">
-              <a (click)="detail(data)"
-                *ngIf="loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XEM')">
+              <!-- loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XEM')" -->
+              <a (click)="detail(data)" *ngIf="data.trangThai == STATUS.DA_DUYET_LDC">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai=='00' || data.trangThai=='02' || data.trangThai=='04')
+              <a *ngIf="(data.trangThai != STATUS.DA_DUYET_LDC )
               && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_SUA'))"
                 (click)="detail(data)">
                 <i class="fa fa-pencil"></i>
@@ -213,11 +233,11 @@
 <div class="chi-tiet" *ngIf="isDetail">
   <app-themmoi-kehoach-lcnt [idInput]="selectedId" [loaiVthhInput]="loaiVthh" (showListEvent)="showList()">
   </app-themmoi-kehoach-lcnt>
-<!--  <ng-container *ngIf="!isVatTu">-->
+  <!--  <ng-container *ngIf="!isVatTu">-->
 
-<!--  </ng-container>-->
-<!--  <ng-container *ngIf="isVatTu">-->
-<!--    <app-themmoi-kehoach-lcnt-tong-cuc [idInput]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()">-->
-<!--    </app-themmoi-kehoach-lcnt-tong-cuc>-->
-<!--  </ng-container>-->
+  <!--  </ng-container>-->
+  <!--  <ng-container *ngIf="isVatTu">-->
+  <!--    <app-themmoi-kehoach-lcnt-tong-cuc [idInput]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()">-->
+  <!--    </app-themmoi-kehoach-lcnt-tong-cuc>-->
+  <!--  </ng-container>-->
 </div>
