@@ -4550,6 +4550,9 @@ th {
       &>.ant-menu-item {
         font-size: 13px;
         font-weight: 500;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
       }
 
       &>.ant-menu-item-selected,

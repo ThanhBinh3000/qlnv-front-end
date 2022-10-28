@@ -12,7 +12,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
   },
   {
     icon: 'htvbdh_tcdt_nhapkhac2',
-    title: 'Xuất theo phương thức bán đấu giá và trực tiếp',
+    title: 'Xuất theo phương thức bán đấu giá',
     url: `/dau-gia`,
     dropdown: 'dau-thau',
     idHover: 'dauthau',
