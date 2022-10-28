@@ -175,7 +175,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
 
       gtriDthau: [null, [Validators.required]],
       gtriHdong: [null, [Validators.required]],
-      donGiaVat: [''],
+      donGiaVat: ['', [Validators.required]],
       vat: ['5'],
       tongMucDt: [null, [Validators.required]],
       nguonVon: ['NGV01', [Validators.required]],
