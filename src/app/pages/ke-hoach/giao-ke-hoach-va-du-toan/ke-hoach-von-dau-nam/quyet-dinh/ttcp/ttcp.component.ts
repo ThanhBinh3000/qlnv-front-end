@@ -61,6 +61,9 @@ export class TtcpComponent implements OnInit {
     public userService: UserService,
     private modal: NzModalService,
   ) {
+    if (!userService.isAccessPermisson("KHVDTNSNN_GKHDT_VDNDT_QD_TTCP")){
+      window.location.href = '/error/401'
+    }
     this.formData = this.fb.group({
       namQd: [],
       soQd: [],
