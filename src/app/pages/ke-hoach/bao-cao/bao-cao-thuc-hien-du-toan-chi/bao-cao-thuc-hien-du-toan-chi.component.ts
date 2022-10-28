@@ -12,7 +12,9 @@ export class BaoCaoThucHienDuToanChiComponent implements OnInit {
     countChiTieu: number = 0;
     countDieuChinh: number = 0;
     countDuToan: number = 0;
-    tabSelected = 'baocao';
+    tabSelected = 'danhsach';
+
+    data: any;
     constructor(
         private spinner: NgxSpinnerService,
         // private giaoKeHoachVonDauNamService: GiaoKeHoachVonDauNamService,
@@ -45,5 +47,13 @@ export class BaoCaoThucHienDuToanChiComponent implements OnInit {
     }
     selectTab(tab) {
         this.tabSelected = tab;
+    }
+
+    changeTab(obj: any) {
+        this.data = {
+            ...obj,
+            preTab: this.tabSelected,
+        };
+        this.tabSelected = obj?.tabSelected;
     }
 }

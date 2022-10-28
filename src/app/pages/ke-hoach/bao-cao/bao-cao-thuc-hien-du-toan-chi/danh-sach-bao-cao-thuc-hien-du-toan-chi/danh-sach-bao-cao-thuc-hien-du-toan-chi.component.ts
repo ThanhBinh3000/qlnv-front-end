@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -10,6 +10,7 @@ import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BCDTC, LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
 	selector: 'app-danh-sach-bao-cao-thuc-hien-du-toan-chi',
@@ -17,6 +18,8 @@ import { BCDTC, LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_TIM_KIEM, Utils 
 	styleUrls: ['./danh-sach-bao-cao-thuc-hien-du-toan-chi.component.scss'],
 })
 export class DanhSachBaoCaoThucHienDuToanChiComponent implements OnInit {
+	@Output() dataChange = new EventEmitter();
+
 	searchFilter = {
 		maPhanBcao: '0',
 		maDvi: '',
@@ -171,12 +174,36 @@ export class DanhSachBaoCaoThucHienDuToanChiComponent implements OnInit {
 
 	//them moi bao cao
 	addNewReport() {
-
+		const modalTuChoi = this.modal.create({
+			nzTitle: 'Thông tin tạo mới báo cáo thực hiện dự toán chi NSNN',
+			nzContent: DialogTaoMoiComponent,
+			nzMaskClosable: false,
+			nzClosable: false,
+			nzWidth: '900px',
+			nzFooter: null,
+			nzComponentParams: {
+			},
+		});
+		modalTuChoi.afterClose.toPromise().then(async (res) => {
+			if (res) {
+				const obj = {
+					...res,
+					id: null,
+					tabSelected: 'baocao',
+					isSynthetic: false,
+				}
+				this.dataChange.emit(obj);
+			}
+		});
 	}
 
 	//xem chi tiet bao cao
 	viewDetail(data: any) {
-
+		const obj = {
+			id: data.id,
+			tabSelected: 'baocao',
+		}
+		this.dataChange.emit(obj);
 	}
 
 

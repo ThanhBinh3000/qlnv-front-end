@@ -28,4 +28,45 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
             request
         );
     }
+
+    //sinh ma bao cao
+    taoMaBaoCao(): Observable<any> {
+        return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/sinh-ma');
+    }
+
+    //tong hop bao cao ket qua thuc hien von phi hang DTQG
+    tongHopBaoCaoKetQua(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop',
+            request);
+    }
+
+    // them moi bao cao
+    trinhDuyetBaoCaoThucHienDTCService(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/bao-cao/them-moi',
+            request,
+        );
+    }
+
+    // call api chi tiết báo cáo
+    baoCaoChiTiet(id: any): Observable<any> {
+        return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/' + id,);
+    }
+
+    // call api nút chức năng
+    approveBaoCao(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/qlnv-khoachphi/bao-cao/trang-thai',
+            request,
+        );
+    }
+
+    // cap nhat bao cao thuc hien du toan chi
+    updateBaoCaoThucHienDTC(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat',
+            request,
+        );
+    }
 }

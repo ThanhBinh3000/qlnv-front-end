@@ -1,6 +1,6 @@
 
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import * as fileSaver from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -20,6 +20,8 @@ import { LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_GUI_DVCT, Utils } from 
     styleUrls: ['./danh-sach-bao-cao-tu-don-vi-cap-duoi.component.scss'],
 })
 export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
+    @Output() dataChange = new EventEmitter();
+
     searchFilter = {
         ngayTaoTu: '',
         ngayTaoDen: '',
@@ -163,7 +165,11 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
 
     //xem chi tiet bao cao
     viewDetail(data: any) {
-
+        const obj = {
+            id: data.id,
+            tabSelected: 'baocao',
+        }
+        this.dataChange.emit(obj);
     }
 
     //download file về máy tính

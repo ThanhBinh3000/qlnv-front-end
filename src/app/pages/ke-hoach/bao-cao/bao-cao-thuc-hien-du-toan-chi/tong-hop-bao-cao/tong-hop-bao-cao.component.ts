@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -11,6 +11,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BCDTC, LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_GUI_DVCT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
     selector: 'app-tong-hop-bao-cao',
@@ -18,6 +19,8 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
     styleUrls: ['./tong-hop-bao-cao.component.scss'],
 })
 export class TongHopBaoCaoComponent implements OnInit {
+    @Output() dataChange = new EventEmitter();
+
     searchFilter = {
         ngayTaoTu: '',
         ngayTaoDen: '',
@@ -149,12 +152,36 @@ export class TongHopBaoCaoComponent implements OnInit {
 
     //them moi bao cao
     addNewReport() {
-
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Thông tin tổng hợp báo cáo thực hiện dự toán chi NSNN',
+            nzContent: DialogTaoMoiComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                const obj = {
+                    ...res,
+                    id: null,
+                    tabSelected: 'baocao',
+                    isSynthetic: true,
+                }
+                this.dataChange.emit(obj);
+            }
+        });
     }
 
     //xem chi tiet bao cao
     viewDetail(data: any) {
-
+        const obj = {
+            id: data.id,
+            tabSelected: 'baocao',
+        }
+        this.dataChange.emit(obj);
     }
 
     // Tìm kiếm trong bảng
