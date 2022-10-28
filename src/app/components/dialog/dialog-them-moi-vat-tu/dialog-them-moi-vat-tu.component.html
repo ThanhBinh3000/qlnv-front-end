@@ -56,17 +56,16 @@
     <div nz-col [nzSpan]="6">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá gồm thuế (đồng/kg) </nz-form-label>
-        <nz-input-number formControlName="donGia" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
-          [nzSize]="'small'" (input)="calculatorThanhTien()" [nzFormatter]="globals.formatter"
-          [nzParser]="globals.parser">
+        <nz-input-number formControlName="donGia" [nzSize]="'small'" nzDisabled (input)="calculatorThanhTien()"
+          [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
         </nz-input-number>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="5">
       <nz-form-item>
         <nz-form-label [nzNoColon]="true"> Thành tiền gồm thuế (đồng) </nz-form-label>
-        <nz-input-number formControlName="thanhTien" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
-          [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+        <nz-input-number formControlName="thanhTien" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
+          [nzParser]="globals.parser">
         </nz-input-number>
       </nz-form-item>
     </div>
