@@ -3,11 +3,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
-    selector: 'app-bao-cao-thuc-hien-du-toan-chi',
-    templateUrl: './bao-cao-thuc-hien-du-toan-chi.component.html',
-    styleUrls: ['./bao-cao-thuc-hien-du-toan-chi.component.scss']
+    selector: 'app-bao-cao-thuc-hien-von-phi',
+    templateUrl: './bao-cao-thuc-hien-von-phi.component.html',
+    styleUrls: ['./bao-cao-thuc-hien-von-phi.component.scss']
 })
-export class BaoCaoThucHienDuToanChiComponent implements OnInit {
+export class BaoCaoThucHienVonPhiComponent implements OnInit {
     countQuyetDinh: number = 0;
     countChiTieu: number = 0;
     countDieuChinh: number = 0;
