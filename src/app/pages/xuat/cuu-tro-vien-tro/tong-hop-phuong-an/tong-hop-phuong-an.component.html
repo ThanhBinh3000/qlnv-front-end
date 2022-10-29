@@ -10,7 +10,7 @@
         </div>
         <div nz-col nzSpan="4" *ngIf="userService.isTongCuc()">
           <label class="search__label"> Đơn vị đề xuất </label>
-          <nz-select [(ngModel)]="searchFilter.maDvi">
+          <nz-select [(ngModel)]="searchFilter.maDviDxuat">
             <nz-option *ngFor="let p of dsDonvi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
           </nz-select>
         </div>

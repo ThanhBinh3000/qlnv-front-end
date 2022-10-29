@@ -673,7 +673,7 @@ button.btn.btn-create {
 }
 
 .tab-menu.tab-content {
-  border-bottom: solid 1px $color-f0  !important;
+  border-bottom: solid 1px $color-f0 !important;
 }
 
 h3.title.mobile {
@@ -687,7 +687,7 @@ h3.title.mobile {
 button.btn.btn-outline-grey {
   padding-top: 5px;
   padding-bottom: 5px;
-  border: solid 1px $border-nhat2  !important;
+  border: solid 1px $border-nhat2 !important;
   border-radius: 0px;
   background-color: $bordercolor;
   line-height: 1;
@@ -1034,84 +1034,84 @@ td.xanhla {
 td .antext {
   .cam {
     @extend %status;
-    background: $cam  !important;
+    background: $cam !important;
     color: #fff !important;
     border-color: $cam;
   }
 
   .vang {
     @extend %status;
-    background: $vang  !important;
+    background: $vang !important;
     color: #fff !important;
     border-color: $vang;
   }
 
   .trinhxuly {
     @extend %status;
-    color: $color-text  !important;
+    color: $color-text !important;
     border-color: $maincolor;
     background: lighten($bg-header2, $statusBGnum);
   }
 
   .chuyentra {
     @extend %status;
-    color: $color-text  !important;
+    color: $color-text !important;
     background: lighten($tralai, $statusBGnum);
     border-color: $tralai;
   }
 
   .daxuly {
     @extend %status;
-    color: $color-text  !important;
+    color: $color-text !important;
     background: lighten($hoanthanh, $statusBGnum);
     border-color: $hoanthanh;
   }
 
   .chuaxuly {
     @extend %status;
-    color: $color-text  !important;
+    color: $color-text !important;
     background: lighten($khonghoatdong, $statusBGnum);
     border-color: $khonghoatdong;
   }
 
   .choxuly {
     @extend %status;
-    color: $color-text  !important;
+    color: $color-text !important;
     background: lighten($choxuly, $statusBGnum);
     border-color: $choxuly;
   }
 
   .dangxuly {
     @extend %status;
-    color: $color-text  !important;
+    color: $color-text !important;
     background: lighten($dangxuly, $statusBGnum);
     border-color: $dangxuly;
   }
 
   .tralai {
     @extend %status;
-    color: $color-text  !important;
+    color: $color-text !important;
     background: lighten($tralai, $statusBGnum);
     border-color: $tralai;
   }
 
   .thuhoi {
     @extend %status;
-    color: $color-text  !important;
+    color: $color-text !important;
     background: lighten($thuhoi, $statusBGnum);
     border-color: $thuhoi;
   }
 
   .hoanthanh {
     @extend %status;
-    color: $color-text  !important;
+    color: $color-text !important;
     background: lighten($hoanthanh, $statusBGnum);
     border-color: $hoanthanh;
   }
 
   .datiepnhan {
     @extend %status;
-    color: $color-text  !important;
+    color: $color-text !important;
     background: lighten($datiepnhan, $statusBGnum);
     border-color: $datiepnhan;
   }
@@ -1247,7 +1247,7 @@ td .antext {
 }
 
 .ant-menu-dark.ant-menu-horizontal>.ant-menu-item>a {
-  color: $color-menu2  !important;
+  color: $color-menu2 !important;
 }
 
 .menuphai a {
@@ -1573,7 +1573,7 @@ button.btn,
 
 .ant-pagination .ant-select-single.ant-select-show-arrow .ant-select-selection-item,
 .ant-pagination .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-  height: $input-h  !important;
+  height: $input-h !important;
 }
 
 // .ant-pagination .ant-select-single.ant-select-show-arrow .ant-select-selection-item {
@@ -2147,7 +2147,7 @@ span.ant-descriptions-item-content {
   color: #fff $i;
 
   i {
-    font-size: $font-size10  !important;
+    font-size: $font-size10 !important;
     margin-top: 0 !important;
     padding-top: 1px !important;
   }
@@ -2189,7 +2189,7 @@ span.ant-descriptions-item-content {
   background: $bg-nhat2;
 
   &.text-sm {
-    font-size: $font-size11  !important;
+    font-size: $font-size11 !important;
   }
 }
 
@@ -2809,7 +2809,7 @@ span.ant-descriptions-item-content {
 
   input.ant-input,
   .form-control {
-    border: solid 1px $border-nhat2  !important;
+    border: solid 1px $border-nhat2 !important;
     padding-right: 32px;
   }
 }
@@ -2944,7 +2944,7 @@ td .secondary.text-sm {
   .ant-select:not(.ant-select-customize-input) .ant-select-selector,
   &.btn.btn-create,
   .btn.btn-create {
-    border: solid 1px $border-nhat2  !important;
+    border: solid 1px $border-nhat2 !important;
     background: $bg-nhat;
     flex: auto;
   }
@@ -3003,7 +3003,7 @@ td .secondary.text-sm {
     td {
       background: $bg-nhat2;
       // border-top: solid 1px $border-nhat2;
-      border-color: $bg-nhat2  !important;
+      border-color: $bg-nhat2 !important;
     }
   }
 }
@@ -3340,7 +3340,7 @@ td {
       .secondary.bgxam.text-sm {
         margin: -4px -11px -4px 0;
         background: transparent !important;
-        font-size: $font-size11  !important;
+        font-size: $font-size11 !important;
       }
     }
 
@@ -4253,7 +4253,7 @@ td nz-upload .upload-content .card-content {
   }
 
   .menu-lv3 .ant-affix {
-    top: $affix-h  !important;
+    top: $affix-h !important;
   }
 
   .fix.collapse>div.ant-affix .nav-tabs,
@@ -4548,8 +4548,11 @@ th {
 
     &:not(.ant-menu-dark) {
       &>.ant-menu-item {
-        font-size: 11px;
+        font-size: 13px;
         font-weight: 500;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
       }
 
       &>.ant-menu-item-selected,
@@ -4580,7 +4583,7 @@ th {
 
     &:not(.ant-menu-dark) {
       &>.ant-menu-item {
-        font-size: 11px;
+        font-size: 13px;
         font-weight: 500;
         padding: 0 8px;
       }
@@ -4614,7 +4617,7 @@ th {
 
     &:not(.ant-menu-dark) {
       &>.ant-menu-item {
-        font-size: 11px;
+        font-size: 13px;
         font-weight: 500;
       }
 
@@ -5533,7 +5536,7 @@ app-danh-sach-file.hidecard,
       align-items: center;
       justify-content: center;
       min-width: unset;
-      border: solid 1px $color-e4  !important;
+      border: solid 1px $color-e4 !important;
       box-shadow: unset !important;
 
       // transition: all 0s;
@@ -5550,7 +5553,7 @@ app-danh-sach-file.hidecard,
       }
 
       &:hover {
-        border-color: $maincolor  !important;
+        border-color: $maincolor !important;
 
         // transform: scale(1.2);
         // transition: all 0s;
@@ -5745,7 +5748,7 @@ app-danh-sach-file.hidecard,
   color: #fff $i;
 
   i {
-    font-size: $font-size11  !important;
+    font-size: $font-size11 !important;
     margin-top: 0 !important;
     padding-top: 1px !important;
   }
@@ -5786,7 +5789,7 @@ app-danh-sach-file.hidecard,
   height: 18px;
 
   &.text-sm {
-    font-size: $font-size11  !important;
+    font-size: $font-size11 !important;
   }
 }
 
@@ -5983,7 +5986,7 @@ app-danh-sach-file.hidecard,
   }
 
   .ant-checkbox-indeterminate .ant-checkbox-inner {
-    border-color: $maincolor  !important;
+    border-color: $maincolor !important;
 
     &:after {
       background-color: $maincolor;
@@ -6275,7 +6278,7 @@ nz-affix {
 
 .ant-table .ant-table-tbody>tr.cam.allowClick:hover td,
 .ant-table .ant-table-tbody>tr.cam.allowClick {
-  background-color: $cam  !important;
+  background-color: $cam !important;
   color: #824f00;
 }
 
@@ -6780,13 +6783,51 @@ td.action.ant-table-cell {
 
 .link {
   color: blue !important;
-  text-decoration: underline !important;
+  //text-decoration: underline !important;
 }
+
+.bold {
+  font-weight: 600 !important;
+}
+
+.ant-table.ant-table-bordered>.ant-table-container>.ant-table-content>table> {
+
+  thead,
+  tbody {
+    tr {
+      &.level-1 {
+        td {
+          background: #ebedff;
+        }
+      }
+
+      &.level-2 {
+        td:not(:nth-child(1)):not(:nth-child(2)) {
+          background: #eaeaea;
+        }
+      }
+
+      &.level-3 {
+        td:not(:nth-child(1)):not(:nth-child(2)) {
+          background: #f8f8f8;
+        }
+      }
+
+      &>td,
+      th {
+        border-color: #e1e1e1 !important;
+      }
+    }
+  }
+}
+
+
 
 .selectedRow {
   td {
     background: #d8dcfe !important;
   }
 }
+
 
 // end lấy từ default qua....................................................

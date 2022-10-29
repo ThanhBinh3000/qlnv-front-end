@@ -1,6 +1,6 @@
 ::ng-deep {
   .main-menu-top {
-    font-size: 12px;
+    font-size: 15px;
   }
 
   .ant-menu-dark.ant-menu-horizontal,
@@ -85,11 +85,18 @@
 
 
   .ant-menu-dark.ant-menu-horizontal>.ant-menu-item a {
-    align-items: baseline;
+    align-items: center;
     padding-top: 8px !important;
-    display: inline-block;
+    // display: inline-block;
     line-height: 1;
     padding-bottom: 8px !important;
+    display: inline-flex;
+  }
+
+  .navbar-expand-lg .navbar-collapse,
+  .header-style,
+  .ant-menu-dark.ant-menu-horizontal>.ant-menu-item a {
+    height: 37px !important;
   }
 
   .tenvachucvu {

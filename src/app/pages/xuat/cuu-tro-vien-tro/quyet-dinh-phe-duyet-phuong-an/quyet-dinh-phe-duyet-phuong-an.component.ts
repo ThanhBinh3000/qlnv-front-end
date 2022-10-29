@@ -115,13 +115,13 @@ export class QuyetDinhPheDuyetPhuongAnComponent implements OnInit {
   }
 
   async loadDsTong() {
-    const body = {
+    /*const body = {
       maDviCha: this.userdetail.maDvi,
       trangThai: '01',
-    };
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    };*/
+    const dsTong = await this.donviService.layDonViCon();
     if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong[DANH_MUC_LEVEL.CUC];
+      this.dsDonvi = dsTong.data;
     }
 
   }
@@ -278,7 +278,7 @@ export class QuyetDinhPheDuyetPhuongAnComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhPheDuyetPhuongAnCuuTroService.delete({id: item.id}).then((res) => {
+          this.quyetDinhPheDuyetPhuongAnCuuTroService.deleteMuti({ids: [item.id]}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,

@@ -343,7 +343,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       }
       let tongMucDt: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + item.thanhTien;
+        tongMucDt = tongMucDt * item.thanhTien;
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,

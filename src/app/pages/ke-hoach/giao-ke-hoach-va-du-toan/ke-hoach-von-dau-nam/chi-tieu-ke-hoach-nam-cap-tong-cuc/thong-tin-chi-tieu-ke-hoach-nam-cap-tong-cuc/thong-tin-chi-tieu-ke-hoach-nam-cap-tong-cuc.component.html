@@ -19,7 +19,7 @@
           <span>Ban hành</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-          *ngIf="thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_CHO_DUYET_TP ||thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_CHO_DUYET_LD_VU || thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC"
+          *ngIf="(thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_CHO_DUYET_TP ||thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_CHO_DUYET_LD_VU || thongTinChiTieuKeHoachNam.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET')"
           (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
