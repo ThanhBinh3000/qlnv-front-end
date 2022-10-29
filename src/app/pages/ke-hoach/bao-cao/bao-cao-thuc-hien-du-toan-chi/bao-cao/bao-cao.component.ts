@@ -560,7 +560,8 @@ export class BaoCaoComponent implements OnInit {
         await this.baoCaoThucHienDuToanChiService.tongHopBaoCaoKetQua(request).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
-                    this.baoCao = data.data;
+                    this.baoCao.lstBcaos = data.data.lstBcaos;
+                    this.baoCao.lstBcaoDviTrucThuocs = data.data.lstBcaoDviTrucThuocs;
                     await this.baoCao?.lstBcaos?.forEach(item => {
                         item.maDviTien = '1';   // set defaul ma don vi tien la Dong
                         item.checked = false;
@@ -573,7 +574,6 @@ export class BaoCaoComponent implements OnInit {
                         }
                     })
                     this.listFile = [];
-                    this.baoCao.trangThai = "1";
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }

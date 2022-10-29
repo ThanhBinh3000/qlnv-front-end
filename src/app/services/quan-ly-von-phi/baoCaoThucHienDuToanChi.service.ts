@@ -69,4 +69,22 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
             request,
         );
     }
+
+    // call api chi tiết báo cáo
+    baoCaoCapNhatChiTiet(request: any): Observable<any> {
+        return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet', request);
+    }
+
+    // call api chức năng duyet bieu mau
+    approveBieuMau(request: any): Observable<any> {
+        return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/phe-duyet', request);
+    }
+
+    // exprot excel
+    exportBaoCao(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/export',
+            request,
+            { responseType: 'blob' });
+    }
 }
