@@ -10,6 +10,7 @@ import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/ba
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BCVP, LBC_KET_QUA_THUC_HIEN_HANG_DTQG, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
     selector: 'app-danh-sach-bao-cao-thuc-hien-von-phi',
@@ -171,27 +172,27 @@ export class DanhSachBaoCaoThucHienVonPhiComponent implements OnInit {
 
     //them moi bao cao
     addNewReport() {
-        // const modalTuChoi = this.modal.create({
-        // 	nzTitle: 'Thông tin tạo mới báo cáo thực hiện dự toán chi NSNN',
-        // 	nzContent: DialogTaoMoiComponent,
-        // 	nzMaskClosable: false,
-        // 	nzClosable: false,
-        // 	nzWidth: '900px',
-        // 	nzFooter: null,
-        // 	nzComponentParams: {
-        // 	},
-        // });
-        // modalTuChoi.afterClose.toPromise().then(async (res) => {
-        // 	if (res) {
-        // 		const obj = {
-        // 			...res,
-        // 			id: null,
-        // 			tabSelected: 'baocao',
-        // 			isSynthetic: false,
-        // 		}
-        // 		this.dataChange.emit(obj);
-        // 	}
-        // });
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Thông tin tạo mới báo cáo kết quả thực hiện vốn phí hàng DTQG',
+            nzContent: DialogTaoMoiComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                const obj = {
+                    ...res,
+                    id: null,
+                    tabSelected: 'baocao',
+                    isSynthetic: false,
+                }
+                this.dataChange.emit(obj);
+            }
+        });
     }
 
     //xem chi tiet bao cao

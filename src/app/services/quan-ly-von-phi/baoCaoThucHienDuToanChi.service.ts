@@ -87,4 +87,12 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
             request,
             { responseType: 'blob' });
     }
+
+    //lay thong tin luy ke
+    getLuyKe(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/bao-cao/get-luy-ke'
+            , request
+        );
+    }
 }

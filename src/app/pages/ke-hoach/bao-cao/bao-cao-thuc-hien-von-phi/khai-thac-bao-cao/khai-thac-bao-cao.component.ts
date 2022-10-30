@@ -1,18 +1,15 @@
 
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import * as fileSaver from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienVonPhi.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { LBC_KET_QUA_THUC_HIEN_HANG_DTQG, TRANG_THAI_GUI_DVCT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { LBC_KET_QUA_THUC_HIEN_HANG_DTQG, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 
 @Component({
     selector: 'app-khai-thac-bao-cao',
@@ -27,7 +24,7 @@ export class KhaiThacBaoCaoComponent implements OnInit {
         maDvi: '',
         ngayTaoTu: '',
         ngayTaoDen: '',
-        trangThais: [],
+        trangThais: [Utils.TT_BC_7],
         maBcao: '',
         maLoaiBcao: '',
         namBcao: null,
@@ -60,11 +57,9 @@ export class KhaiThacBaoCaoComponent implements OnInit {
 
     constructor(
         private spinner: NgxSpinnerService,
-        private quanLyVonPhiService: QuanLyVonPhiService,
         private baoCaoThucHienVonPhiService: BaoCaoThucHienVonPhiService,
         private notification: NzNotificationService,
         private modal: NzModalService,
-        private danhMuc: DanhMucHDVService,
         private datePipe: DatePipe,
         public userService: UserService,
         public globals: Globals,
