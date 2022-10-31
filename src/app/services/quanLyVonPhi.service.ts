@@ -209,7 +209,7 @@ export class QuanLyVonPhiService extends BaseService {
       'Content-Type': 'multipart/form-data'
     }
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-core/file/upload',
+      this.urlDefault + '/qlnv-core/file/upload-attachment',
       // 'https://192.168.1.109:8091/file/upload',
       request,
       { 'headers': headerss }
@@ -1198,7 +1198,6 @@ export class QuanLyVonPhiService extends BaseService {
   exportBaoCao(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/export',
-      // 'http://192.168.1.109:30101/bao-cao/chi-tiet/export',
       request,
       { responseType: 'blob' });
   }
