@@ -40,7 +40,7 @@ export class KhaiThacBaoCaoComponent implements OnInit {
 
     userInfo: any;
     trangThais: any = TRANG_THAI_TIM_KIEM;
-    trangThai!: string;
+    trangThai = Utils.TT_BC_7;
     baoCaos: any = LBC_KET_QUA_THUC_HIEN_HANG_DTQG;
     totalElements = 0;
     totalPages = 0;
@@ -126,7 +126,6 @@ export class KhaiThacBaoCaoComponent implements OnInit {
         this.searchFilter.ngayTaoTu = null
         this.searchFilter.ngayTaoDen = null
         this.searchFilter.maLoaiBcao = null
-        this.trangThai = null
         this.search();
     }
 

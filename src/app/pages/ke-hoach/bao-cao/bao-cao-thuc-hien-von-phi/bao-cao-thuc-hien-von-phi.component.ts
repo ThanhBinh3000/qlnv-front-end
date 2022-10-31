@@ -10,7 +10,7 @@ import { BCVP } from 'src/app/Utility/utils';
 })
 export class BaoCaoThucHienVonPhiComponent implements OnInit {
 
-    tabSelected = 'danhsach';
+    tabSelected: string;
     data: any;
     isList = false;
     isAccept = false;
@@ -29,16 +29,35 @@ export class BaoCaoThucHienVonPhiComponent implements OnInit {
         this.isCheck = this.userService.isAccessPermisson(BCVP.TIEP_NHAN_REPORT);
         this.isSynthetic = this.userService.isAccessPermisson(BCVP.SYNTHETIC_REPORT);
         this.isExploit = this.userService.isAccessPermisson(BCVP.EXPORT_EXCEL_REPORT);
+        if (this.isList) {
+            this.tabSelected = 'danhsach';
+        } else {
+            if (this.isAccept) {
+                this.tabSelected = 'capduoi';
+            } else {
+                if (this.isSynthetic) {
+                    this.tabSelected = 'tonghop';
+                } else {
+                    if (this.isExploit) {
+                        this.tabSelected = 'khaithac'
+                    }
+                }
+            }
+        }
     }
     selectTab(tab) {
         this.tabSelected = tab;
     }
 
     changeTab(obj: any) {
-        this.data = {
-            ...obj,
-            preTab: this.tabSelected,
-        };
+        if (obj?.preTab) {
+            this.data = obj;
+        } else {
+            this.data = {
+                ...obj,
+                preTab: this.tabSelected,
+            };
+        }
         this.tabSelected = obj?.tabSelected;
     }
 }
