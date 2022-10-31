@@ -26,7 +26,7 @@
                 <td>&nbsp;&nbsp;&nbsp; 1.1 Mua Thóc</td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaThoc" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaThoc" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>
@@ -34,7 +34,7 @@
                 </td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaThoc" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaThoc" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>
@@ -61,7 +61,7 @@
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Luân phiên đổi hàng</td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoLpdh" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoLpdh" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>
@@ -69,7 +69,7 @@
                 </td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoLqdh" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoLqdh" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>
@@ -85,7 +85,7 @@
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Mua gạo xuất cấp hỗ trợ học sinh, dự án trồng rừng</td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoXcht" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoXcht" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>
@@ -93,7 +93,7 @@
                 </td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoXcht" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoXcht" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>
@@ -135,7 +135,7 @@
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Bán thóc</td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanThoc" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanThoc" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>
@@ -143,7 +143,7 @@
                 </td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanThoc" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanThoc" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>
@@ -158,7 +158,7 @@
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Bán gạo</td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanGao" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanGao" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>
@@ -166,7 +166,7 @@
                 </td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanGao" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanGao" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>
@@ -181,7 +181,7 @@
                 <td>&nbsp;&nbsp;&nbsp;2.2 Vốn trình bổ sung mua bù gạo xuất cứu trợ</td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongGaoCtro" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongGaoCtro" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>
@@ -189,7 +189,7 @@
                 </td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaGaoCtro" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaGaoCtro" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>
@@ -206,7 +206,7 @@
                 <td></td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonNsnn" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonNsnn" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>
@@ -220,7 +220,7 @@
                 <td></td>
                 <td>
                     <div>
-                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonTx" [nzMin]="1"
+                        <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonTx" [nzMin]="0"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
                         </nz-input-number>

@@ -211,8 +211,9 @@ export class BtcGiaoTcdtComponent implements OnInit {
 
   themMoi() {
     this.idSelected = 0;
-    this.isViewDetail = false;
+    this.isViewDetail = true;
     this.isAddNew = true;
+
   }
 
   onAllChecked(checked) {
