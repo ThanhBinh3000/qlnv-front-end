@@ -55,6 +55,7 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
             maDvi: this.userInfo?.MA_DVI,
         }
         this.spinner.show();
+        debugger
         this.capVonNguonChiService.soQdChiTieu(request).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
@@ -64,12 +65,12 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
                         this.nam = null;
                     }
                 } else {
-                    this.notification.warning(MESSAGE.WARNING, data?.msg);
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
                     this.nam = null;
                 }
             },
             err => {
-                this.notification.warning(MESSAGE.WARNING, MESSAGE.ERROR_CALL_SERVICE);
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
                 this.nam = null;
             }
         )
