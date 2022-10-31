@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00'" type="button" class="btn btn-sub" (click)="save(true)">
+    <button *ngIf="formData.value.trangThai == '00' && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT_BANHANH')" type="button" class="btn btn-sub" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
@@ -32,7 +32,7 @@
           <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="namQd" [nzDisabled]="isView" nzAllowClear>
+              <nz-select formControlName="namQd" [nzDisabled]="!isView" nzAllowClear>
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
@@ -47,7 +47,7 @@
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
-                <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                <nz-input-number [nzDisabled]="!isView" type="text" nz-input formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                   [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
@@ -62,7 +62,7 @@
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày quyết định
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzDisabled]="isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy">
+              <nz-date-picker [nzDisabled]="!isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy">
               </nz-date-picker>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
@@ -75,7 +75,7 @@
             <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
             <nz-form-control>
               <textarea rows="3" formControlName="trichYeu" class="search__input" nz-input
-                [readonly]="isView"></textarea>
+                [readonly]="!isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -92,23 +92,23 @@
   </nz-card>
   <nz-tabset nzType="card">
     <nz-tab [nzTitle]="'Nhập/ xuất lương thực'">
-      <app-ke-hoach-nhap-xuat-lt #nhapXuatLt [(keHoachNhapXuat)]="keHoachNhapXuat"></app-ke-hoach-nhap-xuat-lt>
+      <app-ke-hoach-nhap-xuat-lt #nhapXuatLt [isView]="isView" [(keHoachNhapXuat)]="keHoachNhapXuat"></app-ke-hoach-nhap-xuat-lt>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Mua tăng'">
-      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [(dataTable)]="muaTangList"></app-ke-hoach-mua-tang>
+      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="muaTangList"></app-ke-hoach-mua-tang>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất giảm'">
-      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [(dataTable)]="xuatGiamList"></app-ke-hoach-mua-tang>
+      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="xuatGiamList"></app-ke-hoach-mua-tang>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất bán'">
-      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [(dataTable)]="xuatBanList"></app-ke-hoach-mua-tang>
+      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="xuatBanList"></app-ke-hoach-mua-tang>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
-      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [(dataTable)]="luanPhienList"></app-ke-hoach-mua-tang>
+      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="luanPhienList"></app-ke-hoach-mua-tang>
     </nz-tab>
   </nz-tabset>
 </div>

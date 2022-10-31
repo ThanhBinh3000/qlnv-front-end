@@ -1,8 +1,7 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import * as dayjs from 'dayjs';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NzModalService} from 'ng-zorro-antd/modal';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {UserLogin} from 'src/app/models/userlogin';
 import {UserService} from 'src/app/services/user.service';
@@ -36,7 +35,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   xuatGiamList: any[] = []
   xuatBanList: any[] = []
   luanPhienList: any[] = []
-
+  hasError: boolean = false;
   dataTable: any[] = [];
 
   constructor(
@@ -199,7 +198,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
-    if (!this.formData.valid) {
+    if (!this.formData.valid || this.hasError) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
@@ -253,6 +252,10 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     } else {
       this.tongGiaTri = 0;
     }
+  }
+
+  takeError($event) {
+    this.hasError = $event;
   }
 }
 

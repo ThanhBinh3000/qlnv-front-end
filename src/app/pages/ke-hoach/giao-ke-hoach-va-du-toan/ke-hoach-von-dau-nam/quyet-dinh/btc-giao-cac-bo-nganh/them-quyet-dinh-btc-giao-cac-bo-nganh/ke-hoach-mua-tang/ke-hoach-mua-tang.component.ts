@@ -20,7 +20,8 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   rowItem: KeHoachMuaXuat = new KeHoachMuaXuat();
   dsNoiDung = [];
   dataEdit: { [key: string]: { edit: boolean; data: KeHoachMuaXuat } } = {};
-
+  @Output()
+  hasError = new EventEmitter<boolean>();
   lastIndex = 0;
   constructor(
     private modal: NzModalService,
@@ -103,9 +104,15 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   }
 
   luuEdit(index: number): void {
+    this.hasError.emit(false);
     Object.assign(this.dataTable[index], this.dataEdit[index].data);
-    this.dataEdit[index].edit = false;
     this.emitDataTable();
+    // Validate tổng dự toán
+    if (this.calcTong() > this.tongGiaTri) {
+      // this.dataTable.splice(this.lastIndex - 1, 1);
+      this.hasError.emit(true)
+      this.notification.error(MESSAGE.ERROR, "Tổng Dự toán không được lớn hơn Tổng giá trị theo QĐ của TTCP");
+    }
   }
 
   updateEditCache(): void {
