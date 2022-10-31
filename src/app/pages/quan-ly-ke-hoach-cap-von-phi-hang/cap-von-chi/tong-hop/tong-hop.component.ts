@@ -17,7 +17,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TongHopDeNghiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
 
 @Component({
-  selector: 'app-tong-hop',
+  selector: 'app-tong-hop-de-nghi-cap-von-bo-nganh',
   templateUrl: './tong-hop.component.html',
   styleUrls: ['./tong-hop.component.scss'],
 })
