@@ -410,7 +410,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
         }
         let tongMucDt: number = 0;
         this.listOfData.forEach((item) => {
-          tongMucDt = tongMucDt + item.soLuong * item.donGia;
+          tongMucDt = tongMucDt + item.soLuong * item.donGia * 1000;
         });
         this.formData.patchValue({
           tongMucDt: tongMucDt,

@@ -92,6 +92,12 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.thongtinDauThau = new DanhSachGoiThau();
     this.loadDonVi();
     if (this.dataEdit) {
+      console.log(this.dataEdit);
+      this.listChiCuc = [{
+        maDvi: this.dataEdit.maDvi,
+        tenDonVi: this.dataEdit.tenDvi,
+        soLuongNhap: this.dataEdit.soLuongChiTieu
+      }]
       this.formData.patchValue({
         maDvi: this.dataEdit.maDvi,
         tenDvi: this.dataEdit.tenDvi,
@@ -99,7 +105,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         tenCcuc: this.dataEdit.tenCcuc,
         soLuong: this.dataEdit.soLuong,
         donGia: this.dataEdit.donGia,
-        thanhTien: this.dataEdit.thanhTien
+        thanhTien: this.dataEdit.thanhTien,
       })
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
@@ -117,17 +123,20 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       trangThai: "01",
       maDviCha: this.userInfo.MA_DVI
     };
-    // let res = await this.donViService.getAll(body);
-    // if (res.msg === MESSAGE.SUCCESS) {
-    //   this.listChiCuc = res.data;
-    // }
-    if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
-      this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
-    }
-    if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
-      this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
-    }
 
+    if (this.dataChiTieu) {
+      if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+        this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
+      }
+      if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
+        this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
+      }
+    } else {
+      // let res = await this.donViService.getAll(body);
+      // if (res.msg === MESSAGE.SUCCESS) {
+      //   this.listChiCuc = res.data;
+      // }
+    }
   }
 
   checkDisabledSave() {
@@ -215,35 +224,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   }
 
-  // reduceRowData(
-  //   indexTable: number,
-  //   indexCell: number,
-  //   indexRow: number,
-  //   stringReplace: string,
-  //   idTable: string,
-  // ): number {
-  //   let sumVal = 0;
-  //   const listTable = document
-  //     .getElementById(idTable)
-  //     ?.getElementsByTagName('table');
-  //   if (listTable && listTable.length >= indexTable) {
-  //     const table = listTable[indexTable];
-  //     for (let i = indexRow; i < table.rows.length - 1; i++) {
-  //       if (
-  //         table.rows[i]?.cells[indexCell]?.innerHTML &&
-  //         table.rows[i]?.cells[indexCell]?.innerHTML != ''
-  //       ) {
-  //         sumVal =
-  //           sumVal +
-  //           parseFloat(this.helperService.replaceAll(table.rows[i].cells[indexCell].innerHTML, stringReplace, ''));
-  //         this.formData.get('soLuong').setValue(sumVal);
-  //         this.calculatorThanhTien();
-  //       }
-  //     }
-  //   }
-  //   return sumVal;
-  // }
-
   calculatorThanhTien() {
     this.formData.patchValue({
       thanhTien:
@@ -259,11 +239,12 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   startEdit(index: number): void {
     this.listOfData[index].edit = true
-    // this.editCache[index].edit = true;
   }
 
   cancelEdit(index: number): void {
-    this.listOfData[index].edit = false
+    if (this.validateSoLuong()) {
+      this.listOfData[index].edit = false
+    }
   }
 
   saveEdit(index: number): void {
@@ -276,11 +257,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
     this.disableChiCuc();
     this.checkDisabledSave();
-  }
-
-  ngAfterViewChecked(): void {
-    const table = document.getElementsByTagName('table');
-    this.tableExist = table && table.length > 0 ? true : false;
   }
 
   updateEditCache(): void {
