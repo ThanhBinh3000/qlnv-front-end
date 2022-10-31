@@ -17,7 +17,7 @@
         <td></td>
         <td>
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.loaiVthh" [nzShowArrow]="false" nzAllowClear
+            <nz-select [nzDisabled]="!isView" [(ngModel)]="rowItem.loaiVthh" [nzShowArrow]="false" nzAllowClear
               (ngModelChange)="onChangeLoaiVthh($event,'add')">
               <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
               </nz-option>
@@ -26,7 +26,7 @@
         </td>
         <td>
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"
+            <nz-select [nzDisabled]="!isView" [(ngModel)]="rowItem.cloaiVthh" [nzShowArrow]="false"
               (ngModelChange)="onChangeCloaiVthh($event)">
               <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
               </nz-option>
@@ -35,12 +35,12 @@
         </td>
         <td>
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.dviTinh" [readonly]="true" />
+            <input nz-input  [(ngModel)]="rowItem.dviTinh" [readonly]="true" />
           </nz-input-group>
         </td>
         <td>
           <nz-input-group>
-            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="rowItem.soLuong"
+            <nz-input-number [nzDisabled]="!isView" [nzSize]="'small'" nz-input [(ngModel)]="rowItem.soLuong"
               (ngModelChange)="calcularTongTien()" [nzMin]="0" [nzFormatter]="globals.formatter"
               [nzParser]="globals.parser">
             </nz-input-number>
@@ -48,23 +48,23 @@
         </td>
         <td>
           <nz-input-group>
-            <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="rowItem.donGia" [nzMin]="0"
+            <nz-input-number [nzDisabled]="!isView" [nzSize]="'small'" nz-input [(ngModel)]="rowItem.donGia" [nzMin]="0"
               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
             </nz-input-number>
           </nz-input-group>
         </td>
         <td>
           <nz-input-group>
-            <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
+            <nz-input-number [nzDisabled]="!isView" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
               [nzDisabled]="true" [(ngModel)]="rowItem.soLuong * rowItem.donGia" [nzMin]="0">
             </nz-input-number>
           </nz-input-group>
         </td>
         <td style="text-align: center;">
-          <a (click)="themMoiItem()">
+          <a (click)="themMoiItem()" *ngIf="!isView">
             <i class="fa fa-plus"></i>
           </a>
-          <a (click)="clearData()">
+          <a (click)="clearData()" *ngIf="!isView">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>
@@ -81,10 +81,10 @@
           <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
           <td style="text-align: center;">
-            <a (click)="editItem(idx)">
+            <a (click)="editItem(idx)" *ngIf="!isView">
               <i class=" fa fa-pencil"></i>
             </a>
-            <a (click)="xoaItem(idx)">
+            <a (click)="xoaItem(idx)" *ngIf="!isView">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
@@ -93,7 +93,7 @@
           <td></td>
           <td>
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.loaiVthh" (ngModelChange)="onChangeLoaiVthh($event,'edit',idx)"
+              <nz-select [nzDisabled]="!isView" [(ngModel)]="dataEdit[idx].data.loaiVthh" (ngModelChange)="onChangeLoaiVthh($event,'edit',idx)"
                 [nzShowArrow]="false">
                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                 <nz-option [nzValue]="item.ma" [nzLabel]="item.ten" *ngFor="let item of dsHangHoa">
@@ -103,7 +103,7 @@
           </td>
           <td>
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.cloaiVthh">
+              <nz-select [nzDisabled]="!isView" [(ngModel)]="dataEdit[idx].data.cloaiVthh">
                 <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoaTable">
                 </nz-option>
               </nz-select>
@@ -119,29 +119,29 @@
           </td>
           <td>
             <nz-input-group>
-              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [nzMin]="0">
+              <nz-input-number [nzDisabled]="!isView" [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [nzMin]="0">
               </nz-input-number>
             </nz-input-group>
           </td>
           <td>
             <nz-input-group>
-              <nz-input-number [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.donGia" [nzMin]="0">
+              <nz-input-number [nzDisabled]="!isView" [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.donGia" [nzMin]="0">
               </nz-input-number>
             </nz-input-group>
           </td>
           <td>
             <nz-input-group>
-              <nz-input-number [nzSize]="'small'" nz-input (ngModelChange)="calcularTongTien()"
+              <nz-input-number [nzDisabled]="!isView" [nzSize]="'small'" nz-input (ngModelChange)="calcularTongTien()"
                 [(ngModel)]="rowItem.tongTien" [nzMin]="0" [nzFormatter]="globals.formatter"
                 [nzParser]="globals.parser">
               </nz-input-number>
             </nz-input-group>
           </td>
           <td class="text-center">
-            <a (click)="luuEdit(idx)" class="save">
+            <a (click)="luuEdit(idx)" *ngIf="!isView" class="save">
               <i class="fa fa-save"></i>
             </a>
-            <a (click)="huyEdit(idx)">
+            <a (click)="huyEdit(idx)" *ngIf="!isView">
               <i class="fa fa-ban do"></i> </a>
           </td>
         </ng-template>
