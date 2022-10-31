@@ -91,7 +91,7 @@ export class UserService extends BaseService {
       listPermission = JSON.parse(jsonPermission);
     }
     if (listPermission && listPermission.length > 0) {
-      let checkPermission = listPermission.filter(x => x.code === permissionCode);
+      let checkPermission = listPermission.find(x => x === permissionCode);
       if (checkPermission && checkPermission.length > 0) {
         return true;
       }
