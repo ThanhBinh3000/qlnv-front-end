@@ -53,6 +53,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
 
   formData: FormGroup;
   yearNow: number = 0;
+  taiLieuDinhKemList: any[] = [];
 
   listNam: any[] = [];
   listBoNganh: any[] = [];
@@ -116,7 +117,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       this.detail.tenTrangThai = "Dự Thảo";
       this.initForm();
       Promise.all([this.getListNam(), this.getListBoNganh(), this.loaiVTHHGetAll()]);
-      this.rowEdit.isView = true;
+      this.rowEdit.isView = false;
       if (this.idInput > 0) {
         this.loadChiTiet(this.idInput)
       }
@@ -133,6 +134,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       'maBoNganh': [null, [Validators.required]],
       'soDeNghi': [null, [Validators.required]],
       'ngayDeNghi': [null, [Validators.required]],
+      'ghiChu':[null]
     });
   }
 
@@ -283,6 +285,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
             'maBoNganh': data.maBoNganh,
             'soDeNghi': data.soDeNghi,
             'ngayDeNghi': data.ngayDeNghi,
+            'ghiChu' : data.ghiChu
           });
 
           this.hanghoa = {
@@ -347,7 +350,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       this.rowEdit.isView = true;
     }
     console.log("this.rowEdit: ", this.rowEdit);
-    
+
   }
 
   deleteRow(item: any, type) {

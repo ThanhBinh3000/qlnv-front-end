@@ -55,6 +55,9 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
     public userService: UserService,
     private modal: NzModalService,
   ) {
+    if (!userService.isAccessPermisson("KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN")){
+      window.location.href = '/error/401'
+    }
     this.formData = this.fb.group({
       namQd: [null],
       soQd: [null],

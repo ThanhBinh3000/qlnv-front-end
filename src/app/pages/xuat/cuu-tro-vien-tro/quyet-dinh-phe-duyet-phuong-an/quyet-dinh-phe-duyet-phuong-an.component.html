@@ -44,17 +44,17 @@
       <h3 class="text-uppercase">Danh sách quyết định phê duyệt phương án xuất viện trợ cứu trợ</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()"
-                *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_XOA')">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
         <button type="button" class="btn btn-sub" (click)="exportData()"
-                *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_EXP')">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="themMoi()"
-                *ngIf="!userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_THEM')">
+                *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_THEM')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tạo quyết định</span>
         </button>
@@ -168,12 +168,12 @@
             </a>
             <a
               *ngIf="data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDTC &&
-               (!userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_THEM'))"
+               (userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_THEM'))"
               (click)="detail(data, false)">
               <i class="fa fa-pencil"></i>
             </a>
             <a *ngIf="data.trangThai==STATUS.DU_THAO && userService.isTongCuc() &&
-            (!userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_XOA'))" (click)="xoaItem(data)">
+            (userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_XOA'))" (click)="xoaItem(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

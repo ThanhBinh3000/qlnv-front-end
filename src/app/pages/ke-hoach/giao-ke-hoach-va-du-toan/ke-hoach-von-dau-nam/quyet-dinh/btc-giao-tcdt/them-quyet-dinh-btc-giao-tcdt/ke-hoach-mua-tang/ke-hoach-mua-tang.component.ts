@@ -18,6 +18,8 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   dataTableChange = new EventEmitter<any[]>();
   @Input()
   dsHangHoa = [];
+  @Input()
+  isView: boolean = false;
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dsChungLoaiHangHoa = [];
   dsChungLoaiHangHoaTable = [];

@@ -9,13 +9,13 @@
     <li nz-menu-item (click)="selectTab(2)">
       Điều chỉnh chỉ tiêu KH
     </li>-->
-    <li nz-menu-item nzSelected (click)="selectTab(0)">
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_UBTV')" nz-menu-item nzSelected (click)="selectTab(0)">
       QĐ của UBTVQH
     </li>
-    <li nz-menu-item (click)="selectTab(1)">
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_TTCP')" nz-menu-item (click)="selectTab(1)">
       QĐ của TTCP
     </li>
-    <li nz-menu-item (click)="selectTab(2)">
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VMBBS_QD_BTC')" nz-menu-item (click)="selectTab(2)">
       QĐ của BTC
     </li>
   </ul>
