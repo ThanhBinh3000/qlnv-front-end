@@ -26,7 +26,7 @@ export class TongHopBaoCaoComponent implements OnInit {
         maBcao: '',
         maDvi: '',
         maDviCha: '',
-        maLoaiBcao: '0',
+        maLoaiBcao: null,
         maPhanBcao: '1',
         namBcao: null,
         ngayTaoDen: '',
