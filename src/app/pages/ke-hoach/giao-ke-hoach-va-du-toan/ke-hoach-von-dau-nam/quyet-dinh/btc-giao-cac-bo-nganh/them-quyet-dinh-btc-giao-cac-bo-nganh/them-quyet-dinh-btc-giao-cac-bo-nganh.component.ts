@@ -198,8 +198,13 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
-    if (!this.formData.valid || this.hasError) {
+    if (!this.formData.valid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      this.spinner.hide();
+      return;
+    }
+    if (this.hasError) {
+      this.notification.error(MESSAGE.ERROR, 'Nội dung dự toán không hợp lệ.')
       this.spinner.hide();
       return;
     }

@@ -1,9 +1,19 @@
-import { Component, OnInit, Input, Output, EventEmitter, DoCheck, IterableDiffers, OnChanges, SimpleChanges } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { KeHoachMuaXuat } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {
+  Component,
+  OnInit,
+  Input,
+  Output,
+  EventEmitter,
+  DoCheck,
+  IterableDiffers,
+  OnChanges,
+  SimpleChanges
+} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {KeHoachMuaXuat} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
@@ -23,6 +33,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   @Output()
   hasError = new EventEmitter<boolean>();
   lastIndex = 0;
+
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
@@ -93,25 +104,30 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     }
   }
 
-  clearData() { }
+  clearData() {
+  }
 
   huyEdit(id: number): void {
     const index = this.dataTable.findIndex((item) => item.idVirtual == id);
     this.dataEdit[id] = {
-      data: { ...this.dataTable[index] },
+      data: {...this.dataTable[index]},
       edit: false,
     };
   }
 
   luuEdit(index: number): void {
     this.hasError.emit(false);
+    let beforeData = {...this.dataTable[index]};
     Object.assign(this.dataTable[index], this.dataEdit[index].data);
     this.emitDataTable();
     // Validate tổng dự toán
     if (this.calcTong() > this.tongGiaTri) {
+      Object.assign(this.dataTable[index], beforeData);
       // this.dataTable.splice(this.lastIndex - 1, 1);
       this.hasError.emit(true)
       this.notification.error(MESSAGE.ERROR, "Tổng Dự toán không được lớn hơn Tổng giá trị theo QĐ của TTCP");
+    } else {
+      this.dataEdit[index].edit = false;
     }
   }
 
@@ -125,7 +141,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
         }
         this.dataEdit[i] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
         i++
         // Validate tổng dự toán
@@ -138,7 +154,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     const dataNd = this.dsNoiDung.filter(d => d.ma == loaiChi)
     if (typeData) {
       if (dataNd.length > 0) {
-        typeData.tenLoaiChi= dataNd[0].giaTri;
+        typeData.tenLoaiChi = dataNd[0].giaTri;
       }
     }
     if (dataNd.length > 0) {
