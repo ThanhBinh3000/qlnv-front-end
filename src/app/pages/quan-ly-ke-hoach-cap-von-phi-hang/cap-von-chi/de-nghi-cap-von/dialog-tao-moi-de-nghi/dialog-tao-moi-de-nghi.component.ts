@@ -55,7 +55,6 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
             maDvi: this.userInfo?.MA_DVI,
         }
         this.spinner.show();
-        debugger
         this.capVonNguonChiService.soQdChiTieu(request).toPromise().then(
             data => {
                 if (data.statusCode == 0) {

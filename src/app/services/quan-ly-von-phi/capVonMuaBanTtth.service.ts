@@ -31,4 +31,45 @@ export class CapVonMuaBanTtthService extends BaseService {
         );
     }
 
+    maNopTienVon(): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/sinh-ma/nop-tien-von'
+        );
+    }
+
+    //chi tiet ma phuong an
+    ctietVonMuaBan(id: any): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/chi-tiet/' + id
+        );
+    }
+
+    themMoiVonMuaBan(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/them-moi',
+            request);
+    }
+
+    //cap nhat phuong an
+    capNhatVonMuaBan(requestUpdate: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/cap-nhat'
+            , requestUpdate);
+    }
+
+    //search list bao cao
+    timKiemCapVon(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/cap-ung-von/danh-sach',
+            request,
+        );
+    }
+
+    maCapVonUng(): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/sinh-ma/cap-von-ung'
+        );
+    }
+
+
 }

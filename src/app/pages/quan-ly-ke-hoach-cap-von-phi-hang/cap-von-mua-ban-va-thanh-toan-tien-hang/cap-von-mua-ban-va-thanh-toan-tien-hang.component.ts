@@ -12,7 +12,7 @@ import { CVNC } from 'src/app/Utility/utils';
 export class CapVonMuaBanVaThanhToanTienHangComponent implements OnInit {
     isVisibleChangeTab$ = new Subject();
     visibleTab: boolean = true;
-    tabSelected: number = 2;
+    tabSelected: number = 0;
     viewDeNghi = true;
     viewTongHop = true;
 

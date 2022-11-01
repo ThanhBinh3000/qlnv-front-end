@@ -6,6 +6,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -14,54 +15,40 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_VON, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 
 export class ItemGui {
-    tuTk: number;
     noiDung: string;
     maNguonNs: number;
-    nienDoNs: number;
+    maChuong: number;
+    maNdkt: number;
     soTien: number;
-    soTienBangChu: string;
-    nopThue: number;
-    ttChoDviHuong: number;
-    thuyetMinh: string;
-    lstFiles: any[] = [];
-    listFile: File[] = [];
-    fileList: NzUploadFile[] = [];
-    listIdFilesDelete: string[] = [];
-    status = true;
-    trangThai: string;
+    soTienChu: string;
+    taiKhoan: number;
 }
 
 export class ItemNhan {
     ngayNhan: string;
-    taiKhoanNhan: number;
-    thuyetMinh: string;
-    lstFiles: any[] = [];
-    listFile: File[] = [];
-    fileList: NzUploadFile[] = [];
-    listIdFilesDelete: string[] = [];
-    status = true;
-    trangThai: string;
+    taiKhoanNhan: string;
 }
 
 @Component({
-    selector: 'app-von-ban-hang',
-    templateUrl: './von-ban-hang.component.html',
-    styleUrls: ['./von-ban-hang.component.scss',
-    ],
+    selector: 'app-ghi-nhan-cap-ung-von-tu-dvct-tai-tong-cuc',
+    templateUrl: './ghi-nhan-cap-ung-von-tu-dvct-tai-tong-cuc.component.html',
+    styleUrls: ['./ghi-nhan-cap-ung-von-tu-dvct-tai-tong-cuc.component.scss'],
 })
-export class VonBanHangComponent implements OnInit {
+export class GhiNhanCapUngVonTuDvctTaiTongCucComponent implements OnInit {
     @Input() data;
     @Output() dataChange = new EventEmitter();
     //thong tin dang nhap
-    id: string;
     userInfo: any;
     //thong tin chung bao cao
-    maNopTien: string;
+    id: string;
+    maCvUv: string;
     ngayTao: string;
-    maDviTao: string;
+    maDonViTao: string;
+    loaiVon: string;
+    soLenhChiTien: string;
     ngayLap: string;
     ngayLapTemp: string;
     ngayNhan: string;
@@ -71,53 +58,46 @@ export class VonBanHangComponent implements OnInit {
     ttGui: ItemGui = new ItemGui();
     ttGuiCache: ItemGui = new ItemGui();
     ttNhan: ItemNhan = new ItemNhan();
+    trangThaiBanGhi = "1";
     newDate = new Date();
     maDviTien: string;
-    checkChild: boolean;
-    checkParent: boolean;
+    thuyetMinh: string;
     //danh muc
     donVis: any[] = [];
     trangThais: any[] = TRANG_THAI_TIM_KIEM;
+    loaiVons: any[] = LOAI_VON;
     donViTiens: any[] = DON_VI_TIEN;
     //trang thai cac nut
+    status = false;
+    statusEdit = true;
     saveStatus = false;
     submitStatus = false;
     passStatus = false;
     approveStatus = false;
     copyStatus = false;
+    printStatus = false;
     editMoneyUnit = false;
     isDataAvailable = false;
-    statusEdit = true;
+    //file
+    lstFiles: any[] = [];
+    listFile: File[] = [];
+    fileList: NzUploadFile[] = [];
+    fileDetail: NzUploadFile;
+    listIdFilesDelete: string[] = [];
     // before uploaf file
-    beforeUploadGui = (file: NzUploadFile): boolean => {
-        this.ttGui.fileList = this.ttGui.fileList.concat(file);
-        return false;
-    };
-
-    // before uploaf file
-    beforeUploadNhan = (file: NzUploadFile): boolean => {
-        this.ttNhan.fileList = this.ttNhan.fileList.concat(file);
+    beforeUpload = (file: NzUploadFile): boolean => {
+        this.fileList = this.fileList.concat(file);
         return false;
     };
 
     // them file vao danh sach
-    handleUploadGui(): void {
-        this.ttGui.fileList.forEach((file: any) => {
+    handleUpload(): void {
+        this.fileList.forEach((file: any) => {
             const id = file?.lastModified.toString();
-            this.ttGui.lstFiles.push({ id: id, fileName: file?.name });
-            this.ttGui.listFile.push(file);
+            this.lstFiles.push({ id: id, fileName: file?.name });
+            this.listFile.push(file);
         });
-        this.ttGui.fileList = [];
-    }
-
-    // them file vao danh sach
-    handleUploadNhan(): void {
-        this.ttNhan.fileList.forEach((file: any) => {
-            const id = file?.lastModified.toString();
-            this.ttNhan.lstFiles.push({ id: id, fileName: file?.name });
-            this.ttNhan.listFile.push(file);
-        });
-        this.ttNhan.fileList = [];
+        this.fileList = [];
     }
 
     constructor(
@@ -187,50 +167,29 @@ export class VonBanHangComponent implements OnInit {
     }
 
     getStatusName() {
-        if (this.checkChild) {
-            return this.trangThais.find(e => e.id == this.ttGui.trangThai).tenDm;
-        }
-        if (this.checkParent) {
-            return this.ttNhan.trangThai == Utils.TT_BC_1 ? "Mới" : this.trangThais.find(e => e.id == this.ttNhan.trangThai)?.tenDm;
-        }
+        return this.trangThais.find(e => e.id == this.trangThaiBanGhi)?.tenDm;
     }
 
     async initialization() {
         //lay id cua de nghi
         this.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-        //lay danh sach danh muc
-        await this.danhMuc.dMDviCon().toPromise().then(
-            data => {
-                if (data.statusCode == 0) {
-                    this.donVis = data.data;
-                } else {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        );
         if (this.id) {
             await this.getDetailReport();
         } else {
-            this.ttGui.trangThai = Utils.TT_BC_1;
-            this.ttNhan.trangThai = Utils.TT_BC_1;
+            this.trangThaiBanGhi = Utils.TT_BC_1;
+            this.maDonViTao = this.userInfo?.MA_DVI;
             this.maDviTien = '1';
-            this.checkChild = true;
-            this.checkParent = false;
-            this.maDviTao = this.userInfo?.MA_DVI;
-            this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+            this.loaiVon = this.data.loaiCap;
+            this.soLenhChiTien = this.data.soLenhChiTien;
             this.ngayLapTemp = this.data.ngayLap;
             this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
-            this.capVonMuaBanTtthService.maNopTienVon().toPromise().then(
+            this.quanLyVonPhiService.maCapVonUng().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
-                        const str = this.userService.isCuc() ? 'CKV' : 'CC';
-                        this.maNopTien = res.data;
-                        const mm: string[] = this.maNopTien.split('.');
-                        this.maNopTien = mm[0] + str + '.' + mm[1];
+                        this.maCvUv = res.data;
+                        const mm = this.maCvUv.split('.');
+                        this.maCvUv = mm[0] + "TCDT" + '.' + mm[1];
                     } else {
                         this.notification.error(MESSAGE.ERROR, res?.msg);
                     }
@@ -239,31 +198,28 @@ export class VonBanHangComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
             );
-
+            this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
         }
         this.getStatusButton();
     }
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        if (this.checkChild) {
-            this.ttGui.status = !(Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTV_BH));
-            this.ttNhan.status = true;
-            this.saveStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTV_BH);
-            this.submitStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_NTV_BH);
-            this.passStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_NTV_BH);
-            this.approveStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_NTV_BH);
-            this.copyStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.COPY_REPORT_NTV_BH);
+        if (Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV)) {
+            this.status = false;
+        } else {
+            this.status = true;
         }
-        if (this.checkParent) {
-            this.ttNhan.status = !(Utils.statusSave.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH));
-            this.ttGui.status = true;
-            this.saveStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH);
-            this.submitStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_BH);
-            this.passStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_BH);
-            this.approveStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV_BH);
-            this.copyStatus = false;
-        }
+        const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
+        this.saveStatus = this.getBtnStatus(Utils.statusSave, CVMB.EDIT_REPORT_GNV, checkChirld);
+        this.submitStatus = this.getBtnStatus(Utils.statusApprove, CVMB.APPROVE_REPORT_GNV, checkChirld);
+        this.passStatus = this.getBtnStatus(Utils.statusDuyet, CVMB.DUYET_REPORT_GNV, checkChirld);
+        this.approveStatus = this.getBtnStatus(Utils.statusPheDuyet, CVMB.PHE_DUYET_REPORT_GNV, checkChirld);
+        this.copyStatus = this.getBtnStatus(Utils.statusCopy, CVMB.COPY_REPORT_GNV, checkChirld);
+    }
+
+    getBtnStatus(status: string[], role: string, check: boolean) {
+        return status.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(role) && check;
     }
 
     back() {
@@ -278,7 +234,7 @@ export class VonBanHangComponent implements OnInit {
         // day file len server
         const upfile: FormData = new FormData();
         upfile.append('file', file);
-        upfile.append('folder', this.maDviTao + '/' + this.maNopTien);
+        upfile.append('folder', this.maDonViTao + '/' + this.maCvUv);
         const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
             (data) => {
                 const objfile = {
@@ -296,45 +252,17 @@ export class VonBanHangComponent implements OnInit {
     }
 
     // xoa file trong bang file
-    deleteFileGui(id: string): void {
-        this.ttGui.lstFiles = this.ttGui.lstFiles.filter((a: any) => a.id !== id);
-        this.ttGui.listFile = this.ttGui.listFile.filter((a: any) => a?.lastModified.toString() !== id);
-        this.ttGui.listIdFilesDelete.push(id);
-    }
-
-    // xoa file trong bang file
-    deleteFileNhan(id: string): void {
-        this.ttNhan.lstFiles = this.ttNhan.lstFiles.filter((a: any) => a.id !== id);
-        this.ttNhan.listFile = this.ttNhan.listFile.filter((a: any) => a?.lastModified.toString() !== id);
-        this.ttNhan.listIdFilesDelete.push(id);
+    deleteFile(id: string): void {
+        this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
+        this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
+        this.listIdFilesDelete.push(id);
     }
 
     //download file về máy tính
-    async downloadFileGui(id: string) {
-        const file: File = this.ttGui.listFile.find(element => element?.lastModified.toString() == id);
+    async downloadFile(id: string) {
+        const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
         if (!file) {
-            const fileAttach = this.ttGui.lstFiles.find(element => element?.id == id);
-            if (fileAttach) {
-                await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
-                    (data) => {
-                        fileSaver.saveAs(data, fileAttach.fileName);
-                    },
-                    err => {
-                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                    },
-                );
-            }
-        } else {
-            const blob = new Blob([file], { type: "application/octet-stream" });
-            fileSaver.saveAs(blob, file.name);
-        }
-    }
-
-    //download file về máy tính
-    async downloadFileNhan(id: string) {
-        const file: File = this.ttNhan.listFile.find(element => element?.lastModified.toString() == id);
-        if (!file) {
-            const fileAttach = this.ttNhan.lstFiles.find(element => element?.id == id);
+            const fileAttach = this.lstFiles.find(element => element?.id == id);
             if (fileAttach) {
                 await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
                     (data) => {
@@ -357,43 +285,31 @@ export class VonBanHangComponent implements OnInit {
             async (data) => {
                 if (data.statusCode == 0) {
                     this.statusEdit = false;
-                    this.maDviTao = data.data.maDvi;
-                    this.checkChild = this.maDviTao == this.userInfo?.MA_DVI;
-                    this.checkParent = this.donVis.findIndex(e => e.maDvi == this.maDviTao) != -1;
+                    this.maCvUv = data.data.maCapUngVonTuCapTren;
                     this.maDviTien = data.data.maDviTien;
-                    this.maNopTien = data.data.maNopTienVon;
+                    this.loaiVon = data.data.loaiCap;
+                    this.soLenhChiTien = data.data.soLenhChiTien;
                     this.ngayLapTemp = data.data.ngayLap;
                     this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
                     this.ttNhan.ngayNhan = data.data.ngayNhan;
                     this.ngayNhan = this.datePipe.transform(this.ttNhan.ngayNhan, Utils.FORMAT_DATE_STR);
                     this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
-                    if (!this.checkParent) {
-                        this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
-                        this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
-                        this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-                    } else {
-                        this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinhDviCha, Utils.FORMAT_DATE_STR);
-                        this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyetDviCha, Utils.FORMAT_DATE_STR);
-                        this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyetDviCha, Utils.FORMAT_DATE_STR);
-                    }
+                    this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                    this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+                    this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                    this.trangThaiBanGhi = data.data.trangThai;
+                    this.thuyetMinh = data.data.thuyetMinh;
                     this.ttGui.noiDung = data.data.noiDung;
-                    this.ttGui.tuTk = data.data.tuTk;
                     this.ttGui.maNguonNs = data.data.maNguonNs;
-                    this.ttGui.nienDoNs = data.data.nienDoNs;
+                    this.ttGui.maChuong = data.data.maChuong;
+                    this.ttGui.maNdkt = data.data.maNdkt;
                     this.ttGui.soTien = data.data.soTien;
-                    this.ttGui.nopThue = data.data.nopThue;
-                    this.ttGui.ttChoDviHuong = data.data.ttChoDviHuong;
-                    this.ttGui.soTienBangChu = data.data.soTienBangChu;
-                    this.ttGui.thuyetMinh = data.data.thuyetMinh;
-                    this.ttGui.trangThai = data.data.trangThai;
+                    this.ttGui.soTienChu = data.data.soTienBangChu;
+                    this.ttGui.taiKhoan = data.data.tuTk;
                     this.ttNhan.taiKhoanNhan = data.data.tkNhan;
-                    this.ttNhan.trangThai = data.data.trangThaiDviCha;
                     this.ttGuiCache = this.ttGui;
-                    this.ttNhan.thuyetMinh = data.data.thuyetMinhDviCha;
-                    this.ttGui.lstFiles = data.data.lstFileGuis;
-                    this.ttGui.listFile = [];
-                    this.ttNhan.lstFiles = data.data.lstFileNhans;
-                    this.ttNhan.listFile = [];
+                    this.lstFiles = data.data.lstFileNhans;
+                    this.listFile = [];
                     this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -412,27 +328,15 @@ export class VonBanHangComponent implements OnInit {
                 id: this.id,
                 maChucNang: mcn,
                 lyDoTuChoi: lyDoTuChoi,
-                maLoai: null,
+                maLoai: "0",
             };
-            if (!this.checkParent) {
-                requestGroupButtons.maLoai = "0";
-            } else {
-                requestGroupButtons.maLoai = "1";
-            }
             this.spinner.show();
             await this.quanLyVonPhiService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
-                    if (!this.checkParent) {
-                        this.ttGui.trangThai = mcn;
-                        this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
-                        this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
-                        this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-                    } else {
-                        this.ttNhan.trangThai = mcn;
-                        this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinhDviCha, Utils.FORMAT_DATE_STR);
-                        this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyetDviCha, Utils.FORMAT_DATE_STR);
-                        this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyetDviCha, Utils.FORMAT_DATE_STR);
-                    }
+                    this.trangThaiBanGhi = mcn;
+                    this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                    this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+                    this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                     this.getStatusButton();
                     if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
@@ -469,16 +373,12 @@ export class VonBanHangComponent implements OnInit {
         });
     }
 
-
     // luu
     async save() {
-        if (this.checkParent) {
-            if (!this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
-                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-                return;
-            }
+        if (!this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
         }
-
         if (this.statusEdit) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
@@ -491,12 +391,7 @@ export class VonBanHangComponent implements OnInit {
         }
         //get list file url
         let checkFile = true;
-        for (const iterator of this.ttGui.listFile) {
-            if (iterator.size > Utils.FILE_SIZE) {
-                checkFile = false;
-            }
-        }
-        for (const iterator of this.ttNhan.listFile) {
+        for (const iterator of this.listFile) {
             if (iterator.size > Utils.FILE_SIZE) {
                 checkFile = false;
             }
@@ -505,41 +400,33 @@ export class VonBanHangComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        const listFileGui: any = [];
-        for (const iterator of this.ttGui.listFile) {
-            listFileGui.push(await this.uploadFile(iterator));
-        }
-        //get list file url
-        const listFileNhan: any = [];
-        for (const iterator of this.ttNhan.listFile) {
-            listFileNhan.push(await this.uploadFile(iterator));
+        const listFile: any = [];
+        for (const iterator of this.listFile) {
+            listFile.push(await this.uploadFile(iterator));
         }
         // gui du lieu trinh duyet len server
         const request = {
             id: this.id,
-            fileDinhKemGuis: listFileGui,
-            listIdDeleteFileGuis: this.ttGui.listIdFilesDelete,
-            fileDinhKemNhans: listFileNhan,
-            listIdDeleteFileNhans: this.ttNhan.listIdFilesDelete,
-            maLoai: "2",
-            maDvi: this.maDviTao,
+            maLoai: '1',
+            maDvi: this.maDonViTao,
             maDviTien: this.maDviTien,
-            maNopTienVon: this.maNopTien,
+            fileDinhKemNhans: listFile,
+            listIdDeleteFileNhans: this.listIdFilesDelete,
+            maCapUngVonTuCapTren: this.maCvUv,
+            loaiCap: this.loaiVon,
+            soLenhChiTien: this.soLenhChiTien,
             ngayLap: this.ngayLapTemp,
             ngayNhan: this.ttNhan.ngayNhan,
-            tuTk: this.ttGui.tuTk,
             noiDung: this.ttGui.noiDung,
             maNguonNs: this.ttGui.maNguonNs,
-            nienDoNs: this.ttGui.nienDoNs,
+            maChuong: this.ttGui.maChuong,
+            maNdkt: this.ttGui.maNdkt,
             soTien: this.ttGui.soTien,
-            nopThue: this.ttGui.nopThue,
-            ttChoDviHuong: this.ttGui.ttChoDviHuong,
-            soTienBangChu: this.ttGui.soTienBangChu,
+            soTienBangChu: this.ttGui.soTienChu,
+            tuTk: this.ttGui.taiKhoan,
             tkNhan: this.ttNhan.taiKhoanNhan,
-            trangThai: this.ttGui.trangThai,
-            trangThaiDviCha: this.ttNhan.trangThai,
-            thuyetMinh: this.ttGui.thuyetMinh,
-            thuyetMinhDviCha: this.ttNhan.thuyetMinh,
+            trangThai: this.trangThaiBanGhi,
+            thuyetMinh: this.thuyetMinh,
         };
         if (!this.id) {
             this.capVonMuaBanTtthService.themMoiVonMuaBan(request).toPromise().then(
@@ -586,13 +473,12 @@ export class VonBanHangComponent implements OnInit {
 
     // luu thay doi
     saveEdit(): void {
-        if (!this.ttGuiCache.tuTk ||
-            (!this.ttGuiCache.ttChoDviHuong && this.ttGuiCache.ttChoDviHuong !== 0)) {
+        if ((!this.ttGuiCache.soTien && this.ttGuiCache.soTien !== 0) ||
+            !this.ttGuiCache.taiKhoan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        if (this.ttGuiCache.nopThue < 0 ||
-            this.ttGuiCache.ttChoDviHuong < 0) {
+        if (this.ttGuiCache.soTien < 0) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
             return;
         }
@@ -600,29 +486,42 @@ export class VonBanHangComponent implements OnInit {
         this.ttGui = this.ttGuiCache;
     }
 
-
-    //lay ten don vi tạo
-    getUnitName(maDvi: string) {
-        return this.donVis.find((item) => item.maDvi == maDvi)?.tenDvi;
-    }
-
     changeDate() {
         this.ngayNhan = this.datePipe.transform(this.ttNhan.ngayNhan, Utils.FORMAT_DATE_STR);
     }
 
-    changeModel() {
-        this.ttGuiCache.soTien = sumNumber([this.ttGuiCache.nopThue, this.ttGuiCache.ttChoDviHuong]);
+    async showDialogCopy() {
+        const obj = {
+            loaiVon: this.loaiVon,
+            soLenhChiTien: this.soLenhChiTien,
+            ngayLap: this.ngayLapTemp,
+        }
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Copy  Nhận cấp ứng vốn từ đơn vị cấp trên',
+            nzContent: DialogDoCopyComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                obj
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                this.doCopy(res);
+            }
+        });
     }
 
-    async doCopy() {
-        let maCvUvNew: string;
-        await this.quanLyVonPhiService.maNopTienVon().toPromise().then(
+    async doCopy(response: any) {
+        let maCVUvNew: string;
+        await this.capVonMuaBanTtthService.maCapVonUng().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
-                    const str = this.userService.isCuc() ? 'CKV' : 'CC';
-                    maCvUvNew = res.data;
-                    const mm: string[] = maCvUvNew.split('.');
-                    maCvUvNew = mm[0] + str + '.' + mm[1];
+                    maCVUvNew = res.data;
+                    const mm = maCVUvNew.split('.');
+                    maCVUvNew = mm[0] + "TCDT" + '.' + mm[1];
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -631,7 +530,10 @@ export class VonBanHangComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
-
+        if (!this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
         if (this.statusEdit) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
@@ -642,36 +544,33 @@ export class VonBanHangComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
             return;
         }
-
         // gui du lieu trinh duyet len server
         const request = {
             id: null,
-            fileDinhKemGuis: [],
-            listIdDeleteFileGuis: [],
+            maLoai: '1',
+            maDvi: this.maDonViTao,
+            maDviTien: '1',
             fileDinhKemNhans: [],
             listIdDeleteFileNhans: [],
-            maLoai: "2",
-            maDvi: this.maDviTao,
-            maDviTien: '1',
-            maNopTienVon: maCvUvNew,
-            ngayLap: this.ngayLapTemp,
-            ngayNhan: null,
-            tuTk: this.ttGui.tuTk,
+            maCapUngVonTuCapTren: maCVUvNew,
+            loaiCap: response.loaiVon,
+            soLenhChiTien: response.soLenhChiTien,
+            ngayLap: response.ngayLap,
+            ngayNhan: this.ttNhan.ngayNhan,
             noiDung: this.ttGui.noiDung,
             maNguonNs: this.ttGui.maNguonNs,
-            nienDoNs: this.ttGui.nienDoNs,
+            maChuong: this.ttGui.maChuong,
+            maNdkt: this.ttGui.maNdkt,
             soTien: this.ttGui.soTien,
-            nopThue: this.ttGui.nopThue,
-            ttChoDviHuong: this.ttGui.ttChoDviHuong,
-            soTienBangChu: this.ttGui.soTienBangChu,
-            tkNhan: "",
+            soTienBangChu: this.ttGui.soTienChu,
+            tuTk: this.ttGui.taiKhoan,
+            tkNhan: this.ttNhan.taiKhoanNhan,
             trangThai: "1",
-            trangThaiDviCha: "1",
             thuyetMinh: "",
-            thuyetMinhDviCha: "",
         };
+
         this.spinner.show();
-        this.capVonMuaBanTtthService.themMoiVonMuaBan(request).toPromise().then(
+        this.quanLyVonPhiService.themMoiVonMuaBan(request).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
                     const modalCopy = this.modal.create({
@@ -682,7 +581,7 @@ export class VonBanHangComponent implements OnInit {
                         nzWidth: '900px',
                         nzFooter: null,
                         nzComponentParams: {
-                            maBcao: maCvUvNew
+                            maBcao: maCVUvNew
                         },
                     });
                 } else {
@@ -706,8 +605,7 @@ export class VonBanHangComponent implements OnInit {
     }
 
     statusClass() {
-        const trangThai = this.checkParent ? this.ttNhan.trangThai : this.ttGui.trangThai;
-        if (Utils.statusSave.includes(trangThai)) {
+        if (Utils.statusSave.includes(this.trangThaiBanGhi)) {
             return 'du-thao-va-lanh-dao-duyet';
         } else {
             return 'da-ban-hanh';

@@ -5,27 +5,29 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
 import { CVMB, LOAI_VON, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
-import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
-    selector: 'app-danh-sach-nop-von-ban',
-    templateUrl: './danh-sach-nop-von-ban.component.html',
-    styleUrls: ['./danh-sach-nop-von-ban.component.scss']
+    selector: 'app-danh-sach-ghi-nhan-cap-ung-von-tai-tong-cuc',
+    templateUrl: './danh-sach-ghi-nhan-cap-ung-von-tai-tong-cuc.component.html',
+    styleUrls: ['./danh-sach-ghi-nhan-cap-ung-von-tai-tong-cuc.component.scss']
 })
-export class DanhSachNopVonBanComponent implements OnInit {
+export class DanhSachGhiNhanCapUngVonTaiTongCucComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
 
     //thong tin user
     userInfo: any;
     //thong tin tim kiem
     searchFilter = {
-        maNop: "",
+        maCvUv: "",
         trangThai: Utils.TT_BC_1,
         tuNgay: null,
         denNgay: null,
+        loaiVon: "",
+        soLenhChiTien: "",
         ngayLap: "",
         maDvi: "",
     };
@@ -54,13 +56,13 @@ export class DanhSachNopVonBanComponent implements OnInit {
         page: 1,
     }
     allChecked = false;
-    //trang thai
-    statusNewReport = true;
+    statusNewReport = false;
     statusDelete = false;
 
     constructor(
         private spinner: NgxSpinnerService,
         private notification: NzNotificationService,
+        private danhMuc: DanhMucHDVService,
         private modal: NzModalService,
         public userService: UserService,
         private capVonMuaBanTtthService: CapVonMuaBanTtthService,
@@ -75,30 +77,26 @@ export class DanhSachNopVonBanComponent implements OnInit {
         const newDate = new Date();
         newDate.setMonth(newDate.getMonth() - 1);
         this.searchFilter.tuNgay = newDate;
-
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
-        // trang thai cua nut tao moi
-        this.statusNewReport = this.userService.isAccessPermisson(CVMB.ADD_REPORT_NTV_BH);
-        this.statusDelete = this.userService.isAccessPermisson(CVMB.DELETE_REPORT_NTV_BH);
-
+        this.statusNewReport = this.userService.isAccessPermisson(CVMB.ADD_REPORT_TC_GNV);
+        this.statusDelete = this.userService.isAccessPermisson(CVMB.DELETE_REPORT_GNV);
         //neu co quyen phe duyet thi trang thai mac dinh la trinh duyet
-        if (this.userService.isAccessPermisson(CVMB.DUYET_REPORT_NTV_BH)) {
+        if (this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV)) {
             this.searchFilter.trangThai = Utils.TT_BC_2;
         } else {
-            if (this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_NTV_BH)) {
+            if (this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV)) {
                 this.searchFilter.trangThai = Utils.TT_BC_4;
             }
         }
-
         this.search();
         this.spinner.hide();
     }
 
     async search() {
         const requestReport = {
-            maNopTienVon: this.searchFilter.maNop,
+            maCapUngVonTuCapTren: this.searchFilter.maCvUv,
             maDvi: this.userInfo?.MA_DVI,
-            maLoai: "2",
+            maLoai: "1",
             ngayLap: this.datePipe.transform(this.searchFilter.ngayLap, Utils.FORMAT_DATE_STR),
             ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
             ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
@@ -155,55 +153,37 @@ export class DanhSachNopVonBanComponent implements OnInit {
 
     //reset tim kiem
     clearFilter() {
-        this.searchFilter.maNop = null
+        this.searchFilter.maCvUv = null
         this.searchFilter.trangThai = null
         this.searchFilter.tuNgay = null
         this.searchFilter.denNgay = null
+        this.searchFilter.loaiVon = null
+        this.searchFilter.soLenhChiTien = null
         this.searchFilter.ngayLap = null
         this.search();
     }
 
     checkEditStatus(trangThai: string) {
-        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTV_BH);
+        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV);
     }
 
     checkDeleteStatus(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DELETE_REPORT_NTV_BH);
+        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DELETE_REPORT_GNV);
     }
 
     getStatusName(trangThai: string) {
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 
-    //them bao cao moi
     addNewReport() {
-        const modalTuChoi = this.modal.create({
-            nzTitle: 'Thông tin tạo mới',
-            nzContent: DialogTaoMoiComponent,
-            nzMaskClosable: false,
-            nzClosable: false,
-            nzWidth: '900px',
-            nzFooter: null,
-            nzComponentParams: {
-            },
-        });
-        modalTuChoi.afterClose.toPromise().then(async (res) => {
-            if (res) {
-                const obj = {
-                    ...res,
-                    id: null,
-                    tabSelected: 'vonban',
-                }
-                this.dataChange.emit(obj);
-            }
-        });
+
     }
 
     //xem chi tiet bao cao
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: 'vonban',
+            tabSelected: 'bc-gnv',
         }
         this.dataChange.emit(obj);
     }

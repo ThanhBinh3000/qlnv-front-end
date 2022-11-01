@@ -132,7 +132,7 @@ export class DanhSachGhiNhanVonBanComponent implements OnInit {
                             ngayDuyet: this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR),
                             ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
                             checked: false,
-                            isEdit: this.checkEditStatus(data.trangThaiDviCha),
+                            isEdit: this.checkEditStatus(item.trangThaiDviCha),
                         })
                     })
                     this.dataTableAll = cloneDeep(this.dataTable);
@@ -184,7 +184,7 @@ export class DanhSachGhiNhanVonBanComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: 'vonbanhang',
+            tabSelected: 'vonban',
         }
         this.dataChange.emit(obj);
     }

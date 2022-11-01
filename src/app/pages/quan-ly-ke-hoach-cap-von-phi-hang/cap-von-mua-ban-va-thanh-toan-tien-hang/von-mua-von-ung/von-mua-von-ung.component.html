@@ -1,30 +1,29 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
     <!-- (nzChange)="onChange($event)" -->
     <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="selectTab('ghinhan')">
-            Ghi nhận cấp ứng vốn từ đơn vị cấp trên
-        </li>
-        <li nz-menu-item (click)="selectTab('cap')">
-            Cấp ứng vốn cho đơn vị cấp dưới
-        </li>
-        <li nz-menu-item (click)="selectTab('tienthua')">
-            Tiền thừa nộp lên đơn vị cấp trên
-        </li>
-        <li nz-menu-item (click)="selectTab('ghinhantienthua')">
-            Tiền thừa từ đơn vị câp dưới
-        </li>
-        <li nz-menu-item (click)="selectTab('thanhtoan')">
-            Thanh toán cho khách hàng
-        </li>
+        <ng-container *ngFor="let data of tabList">
+            <li *ngIf="data.status" [nzSelected]="data.isSelected" nz-menu-item (click)="selectTab(data.code)">
+                {{data.name}}
+            </li>
+        </ng-container>
     </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
     <div class="contentDetail">
-        <!-- <ng-container *ngIf="tabSelected == 'danhsach'">
-            <app-danh-sach-bao-cao-thuc-hien-du-toan-chi (dataChange)="changeTab($event)">
-            </app-danh-sach-bao-cao-thuc-hien-du-toan-chi>
+        <!-- ghi nhan von tu don vi cap tren -->
+        <ng-container *ngIf="tabSelected == 'gnv' && isTongCuc">
+            <app-danh-sach-ghi-nhan-cap-ung-von-tai-tong-cuc (dataChange)="changeTab($event)">
+            </app-danh-sach-ghi-nhan-cap-ung-von-tai-tong-cuc>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'capduoi'">
+        <ng-container *ngIf="tabSelected == 'gnv' && !isTongCuc">
+            <app-danh-sach-ghi-nhan-cap-ung-von-tai-ckv-cc (dataChange)="changeTab($event)">
+            </app-danh-sach-ghi-nhan-cap-ung-von-tai-ckv-cc>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'bc-gnv' && isTongCuc">
+            <app-ghi-nhan-cap-ung-von-tu-dvct-tai-tong-cuc [data]="data" (dataChange)="changeTab($event)">
+            </app-ghi-nhan-cap-ung-von-tu-dvct-tai-tong-cuc>
+        </ng-container>
+        <!-- <ng-container *ngIf="tabSelected == 'capduoi'">
             <app-danh-sach-bao-cao-tu-don-vi-cap-duoi (dataChange)="changeTab($event)">
             </app-danh-sach-bao-cao-tu-don-vi-cap-duoi>
         </ng-container>
