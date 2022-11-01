@@ -1,13 +1,13 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
     <!-- (nzChange)="onChange($event)" -->
     <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="selectTab('khlcnt')" *ngIf="!userService.isChiCuc()">
+        <li nz-menu-item nzSelected (click)="selectTab('khlcnt')" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT')">
             Kế hoạch lựa chọn nhà thầu
         </li>
-        <li nz-menu-item (click)="selectTab('tctkkhlcnt')" *ngIf="!userService.isChiCuc()">
+        <li nz-menu-item (click)="selectTab('tctkkhlcnt')" *ngIf="!userService.isChiCuc()  && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT')">
             Tổ chức triển khai KH lựa chọn nhà thầu
         </li>
-        <li nz-menu-item (click)="selectTab('dckhlcnt')" *ngIf="!userService.isChiCuc()">
+        <li nz-menu-item (click)="selectTab('dckhlcnt')" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT')">
             Điều chỉnh KH lựa chọn nhà thầu
         </li>
         <li nz-menu-item (click)="selectTab('hopdong')" *ngIf="!userService.isChiCuc()">
