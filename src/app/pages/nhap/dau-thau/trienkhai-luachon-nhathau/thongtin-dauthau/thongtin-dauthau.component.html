@@ -61,14 +61,16 @@
                 [nzIndeterminate]="indeterminate"></label>
             </th>
             <th width="30px">STT</th>
-            <th>Số QĐ PD KHLCNT</th>
+            <th>Năm kế hoạch</th>
             <th>Số KH/đề xuất</th>
-            <th>Mã tổng hợp</th>
+            <th>Số QĐ PD KHLCNT</th>
             <th>Số QĐ PD KQLCNT</th>
             <th>Ngày QĐ PD KQLCNT</th>
             <th>Tổng số gói thầu</th>
             <th>Số gói trúng thầu </th>
             <th>Số gói trượt thầu</th>
+            <th>Thời hạn nhập kho</th>
+            <th>Phương thức LCNT</th>
             <th>Loại hàng hóa</th>
             <th>Chủng loại hàng hóa</th>
             <th>Trạng thái</th>
@@ -147,6 +149,8 @@
               </nz-input-group>
             </th>
             <th></th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -156,16 +160,18 @@
                 [nzDisabled]="data.trangThai != '00'"></label>
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-            <td>{{ data.soQd }}</td>
-            <td>{{ data.soTr }}</td>
-            <td>{{ data.idThHdr }}</td>
-            <td></td>
-            <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{ data.tenLoaiVthh }}</td>
-            <td>{{ data.tenCloaiVthh}}</td>
+            <td>{{ data.hhQdKhlcntHdr.namKhoach }}</td>
+            <td>{{ data.soDxuat }}</td>
+            <td>{{ data.hhQdKhlcntHdr.soQd }}</td>
+            <td>{{ data.hhQdKqlcntHdr?.soQd }}</td>
+            <td>{{ data.hhQdKqlcntHdr?.ngayQd }}</td>
+            <td>{{ data.soGthau }}</td>
+            <td>{{ data.soGthauTrung }}</td>
+            <td>{{ data.soGthauTruot }}</td>
+            <td>{{ data.dxuatKhLcntHdr.tgianNhang | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.hhQdKhlcntHdr.tenPthucLcnt }}</td>
+            <td>{{ data.hhQdKhlcntHdr.tenLoaiVthh }}</td>
+            <td>{{ data.hhQdKhlcntHdr.tenCloaiVthh}}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="redirectToChiTiet(data.id)">
