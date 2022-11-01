@@ -44,7 +44,7 @@
       <div nz-row [nzGutter]="[24]">
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Số thông tri </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Số thông tri</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <input nz-input formControlName="soThongTri" [readonly]="isView" />
             </nz-form-control>
@@ -73,7 +73,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Số đề nghị cấp vốn </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true">Mã tổng hợp</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select formControlName="soDnCapVon" [nzDisabled]="isView">
                 <nz-option *ngFor="let p of listDeNghi" [nzValue]="p.id" [nzLabel]="p.soDeNghi"></nz-option>
@@ -114,6 +114,16 @@
               <input nz-input formControlName="khoan" [readonly]="isView" />
             </nz-form-control>
           </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="[24]">
+        <div nz-col [nzSpan]="24">
+        <nz-form-item>
+          <nz-form-label nzRequired [nzNoColon]="true"> Lý do chi </nz-form-label>
+          <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+            <input nz-input formControlName="lyDoChi" [readonly]="isView" />
+          </nz-form-control>
+        </nz-form-item>
         </div>
       </div>
       <ng-template #error let-control>
@@ -215,6 +225,26 @@
                 </a>
               </td>
             </ng-template>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td class="bold">Tổng tiền</td>
+            <td class="text-danger">{{totalTable(chiTietList) | number:
+              '1.0-1'}}</td>
+            <td></td>
+            <td>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td>Tổng tiền TCDT duyệt</td>
+            <td class="text-primary">{{totalTable(chiTietList) | number:
+              '1.0-1'}}</td>
+            <td></td>
+            <td>
+            </td>
           </tr>
         </tbody>
       </nz-table>

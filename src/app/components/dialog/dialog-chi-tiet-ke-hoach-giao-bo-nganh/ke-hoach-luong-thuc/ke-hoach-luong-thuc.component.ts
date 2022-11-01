@@ -44,7 +44,6 @@ export class KeHoachLuongThucComponent implements OnInit {
   }
 
   onChangeInput() {
-    console.log("avvv");
     this.ltThocMuaChange.emit(this.ltThocMua);
     this.ltThocXuatChange.emit(this.ltThocXuat);
     this.ltGaoXuatChange.emit(this.ltGaoXuat);

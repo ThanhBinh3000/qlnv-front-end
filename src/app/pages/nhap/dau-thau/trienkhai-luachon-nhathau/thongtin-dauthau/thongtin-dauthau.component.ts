@@ -133,7 +133,7 @@ export class ThongtinDauthauComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
     };
     let res = await this.thongTinDauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

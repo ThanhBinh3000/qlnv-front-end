@@ -5138,6 +5138,13 @@
     "pdfjs-dist" "~2.11.338"
     "tslib" "^2.0.0"
 
+"ngx-currency@^2.5.3":
+  "integrity" "sha512-NS58eSK1vTIzrtbK1KI6zUpaZrFZtBHGX8aYQefSSf8qz83alB4rIEzXoMn/ZydPhoVTg2vk8m+3aVs6PiPnOA=="
+  "resolved" "https://registry.npmjs.org/ngx-currency/-/ngx-currency-2.5.3.tgz"
+  "version" "2.5.3"
+  dependencies:
+    "tslib" "^2.0.0"
+
 "ngx-print@^1.2.1":
   "integrity" "sha512-+xz5wbVO9N5vAT/W6dgTzbE1RBB1jUeBOSF04Gs66QqTrb46paRAjHgqMr4TvE8CUiTp5aMmkL54QEKat9gj6w=="
   "resolved" "https://registry.npmjs.org/ngx-print/-/ngx-print-1.2.1.tgz"

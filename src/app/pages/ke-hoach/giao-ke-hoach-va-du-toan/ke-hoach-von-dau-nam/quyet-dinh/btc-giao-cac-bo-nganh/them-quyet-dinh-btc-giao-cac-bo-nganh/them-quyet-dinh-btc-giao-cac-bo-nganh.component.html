@@ -110,7 +110,7 @@
   </nz-card>
   <nz-tabset nzType="card">
     <nz-tab [nzTitle]="'Danh sách nội dung dự toán'">
-      <app-ke-hoach-mua-tang [isView]="isView" [(dataTable)]="muaTangList" [tongGiaTri]="tongGiaTri">
+      <app-ke-hoach-mua-tang [isView]="isView" [(dataTable)]="muaTangList" [tongGiaTri]="tongGiaTri" (hasError)="takeError($event)">
       </app-ke-hoach-mua-tang>
     </nz-tab>
     <!-- <nz-tab [nzTitle]="'Xuất giảm'">

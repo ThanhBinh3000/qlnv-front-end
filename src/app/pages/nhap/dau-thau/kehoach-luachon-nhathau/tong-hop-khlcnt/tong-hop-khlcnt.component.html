@@ -22,12 +22,16 @@
               readonly="true" />
           </nz-input-group>
         </div>
-        <div nz-col nzSpan="8">
+        <div nz-col nzSpan="7">
           <label class="search__label">Nội dung tổng hợp</label>
           <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.noiDung" />
         </div>
-        <div nz-col nzSpan="5">
+        <div nz-col nzSpan="3">
           <label class="search__label">Ngày tổng hợp</label>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+        </div>
+        <div nz-col nzSpan="3">
+          <label class="search__label">Ngày ký QĐ</label>
           <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
       </div>
@@ -81,6 +85,7 @@
             <th>Phương thức LCNT</th>
             <th>Loại hợp đồng</th>
             <th>Nguồn vốn</th>
+            <th>Số QĐ PD KHLCNT</th>
             <th>Trạng thái</th>
             <th width="90px" class="text-right">Hành động</th>
           </tr>
@@ -156,6 +161,12 @@
                   (input)="filterInTable('tenTrangThai',filterTable.trangThai)" size="=small" />
               </nz-input-group>
             </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
+                  (input)="filterInTable('tenTrangThai',filterTable.trangThai)" size="=small" />
+              </nz-input-group>
+            </th>
             <th></th>
           </tr>
         </thead>
@@ -176,6 +187,7 @@
             <td>{{ data.tenPthucLcnt }}</td>
             <td>{{ data.tenLoaiHdong }}</td>
             <td>{{ data.tenNguonVon }}</td>
+            <td>{{ data.soQdPdKhlcnt }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="redirectToChiTiet(true, data.id)"
