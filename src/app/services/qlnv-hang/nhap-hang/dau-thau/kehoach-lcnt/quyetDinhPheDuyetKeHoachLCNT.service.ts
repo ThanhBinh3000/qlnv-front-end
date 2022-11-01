@@ -8,20 +8,23 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class QuyetDinhPheDuyetKeHoachLCNTService extends BaseService {
-  GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dx-kh/qd-lcnt', '/qlnv-hang');
   }
 
   getDetailGoiThau(id: number): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt/chi-tiet/goi-thau/${id}`
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/goi-thau/${id}`
     return this.httpClient.get<any>(url).toPromise();
   }
 
+  getDetailDtlCuc(id: number): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-cuc/${id}`
+    return this.httpClient.get<any>(url).toPromise();
+  }
 
   exportList(body: any): Observable<Blob> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/qd-lcnt/ket-xuat`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
 }
