@@ -12,9 +12,9 @@
                 </nz-input-number>
             </div>
             <div nz-col nzSpan="3">
-                <label class="search__label">Tháng báo cáo</label>
-                <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1" [nzMax]="12"
-                    [(ngModel)]="searchFilter.thangBcao"></nz-input-number>
+                <label class="search__label">Đợt báo cáo</label>
+                <nz-input-number class="search__input" [nzSize]="'small'" [nzMin]="1"
+                    [(ngModel)]="searchFilter.dotBcao"></nz-input-number>
             </div>
             <div nz-col nzSpan="3">
                 <label class="search__label">Ngày lập từ</label>
@@ -33,7 +33,7 @@
                     </nz-option>
                 </nz-select>
             </div>
-            <div nz-col nzSpan="6">
+            <div nz-col nzSpan="3">
                 <label class="search__label">Loại báo cáo</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại báo cáo"
                     [(ngModel)]="searchFilter.maLoaiBcao">
@@ -60,7 +60,7 @@
         </div>
     </nz-card>
     <div class="group-button">
-        <h3 class="text-uppercase">DANH SÁCH BÁO CÁO TÌNH HÌNH SỬ DỤNG DỰ TOÁN THÁNG/LŨY KẾ/NĂM TỪ ĐƠN VỊ CẤP DƯỚI</h3>
+        <h3 class="text-uppercase">DANH SÁCH BÁO CÁO KẾT QUẢ THỰC HIỆN VỐN PHÍ HÀNG DTQG TỪ ĐƠN VỊ CẤP DƯỚI</h3>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable" [nzFrontPagination]="false"
@@ -71,7 +71,7 @@
                     <th>Đơn vị lập</th>
                     <th>Mã báo cáo</th>
                     <th>Báo cáo năm</th>
-                    <th>Báo cáo tháng</th>
+                    <th>Báo cáo đợt</th>
                     <th>Công văn</th>
                     <th>Ngày trình duyệt <br> <span>(Ngày đơn vị cấp dưới gửi báo cáo)</span>
                     </th>
@@ -156,7 +156,7 @@
                         {{ data.namBcao }}
                     </td>
                     <td>
-                        {{ data.thangBcao }}
+                        {{ data.dotBcao }}
                     </td>
                     <td>
                         <div class="tep" (click)="downloadFileCv(data?.congVan?.fileUrl, data?.congVan?.fileName)">

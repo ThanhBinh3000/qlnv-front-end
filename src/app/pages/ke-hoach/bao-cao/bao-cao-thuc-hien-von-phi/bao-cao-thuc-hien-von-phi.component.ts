@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
-import { BCDTC } from 'src/app/Utility/utils';
+import { BCVP } from 'src/app/Utility/utils';
 
 @Component({
-    selector: 'app-bao-cao-thuc-hien-du-toan-chi',
-    templateUrl: './bao-cao-thuc-hien-du-toan-chi.component.html',
-    styleUrls: ['./bao-cao-thuc-hien-du-toan-chi.component.scss']
+    selector: 'app-bao-cao-thuc-hien-von-phi',
+    templateUrl: './bao-cao-thuc-hien-von-phi.component.html',
+    styleUrls: ['./bao-cao-thuc-hien-von-phi.component.scss']
 })
-export class BaoCaoThucHienDuToanChiComponent implements OnInit {
+export class BaoCaoThucHienVonPhiComponent implements OnInit {
 
     tabSelected: string;
     data: any;
@@ -16,6 +16,7 @@ export class BaoCaoThucHienDuToanChiComponent implements OnInit {
     isAccept = false;
     isCheck = false;
     isSynthetic = false;
+    isExploit = false;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -23,10 +24,11 @@ export class BaoCaoThucHienDuToanChiComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-        this.isList = this.userService.isAccessPermisson(BCDTC.VIEW_REPORT) || this.userService.isAccessPermisson(BCDTC.VIEW_SYNTHETIC_REPORT);
-        this.isAccept = this.userService.isAccessPermisson(BCDTC.TIEP_NHAN_REPORT);
-        this.isCheck = this.userService.isAccessPermisson(BCDTC.TIEP_NHAN_REPORT);
-        this.isSynthetic = this.userService.isAccessPermisson(BCDTC.SYNTHETIC_REPORT);
+        this.isList = this.userService.isAccessPermisson(BCVP.VIEW_REPORT) || this.userService.isAccessPermisson(BCVP.VIEW_SYNTHETIC_REPORT);
+        this.isAccept = this.userService.isAccessPermisson(BCVP.TIEP_NHAN_REPORT);
+        this.isCheck = this.userService.isAccessPermisson(BCVP.TIEP_NHAN_REPORT);
+        this.isSynthetic = this.userService.isAccessPermisson(BCVP.SYNTHETIC_REPORT);
+        this.isExploit = this.userService.isAccessPermisson(BCVP.EXPORT_EXCEL_REPORT);
         if (this.isList) {
             this.tabSelected = 'danhsach';
         } else {
@@ -35,6 +37,10 @@ export class BaoCaoThucHienDuToanChiComponent implements OnInit {
             } else {
                 if (this.isSynthetic) {
                     this.tabSelected = 'tonghop';
+                } else {
+                    if (this.isExploit) {
+                        this.tabSelected = 'khaithac'
+                    }
                 }
             }
         }

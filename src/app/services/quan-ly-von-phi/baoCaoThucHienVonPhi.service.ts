@@ -8,12 +8,13 @@ import { BaseService } from '../base.service';
 @Injectable({
     providedIn: 'root',
 })
-export class BaoCaoThucHienDuToanChiService extends BaseService {
+export class BaoCaoThucHienVonPhiService extends BaseService {
     constructor(public httpClient: HttpClient) {
         super(httpClient, 'quanLyVonPhi', '');
     }
 
     urlDefault = environment.SERVICE_API;
+
     //search list bao cao
     timBaoCao(request: any): Observable<any> {
         return this.httpClient.post(
@@ -29,23 +30,16 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
         );
     }
 
-    //sinh ma bao cao
+    //sinh ma bao cao (3.2.9)
     taoMaBaoCao(): Observable<any> {
         return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/sinh-ma');
     }
 
-    //tong hop bao cao ket qua thuc hien von phi hang DTQG
-    tongHopBaoCaoKetQua(request: any): Observable<any> {
+    //lay thong tin luy ke
+    getLuyKe(request: any): Observable<any> {
         return this.httpClient.post(
-            this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop',
-            request);
-    }
-
-    // them moi bao cao
-    trinhDuyetBaoCaoThucHienDTCService(request: any): Observable<any> {
-        return this.httpClient.post(
-            this.urlDefault + '/qlnv-khoachphi/bao-cao/them-moi',
-            request,
+            this.urlDefault + '/qlnv-khoachphi/bao-cao/get-luy-ke'
+            , request
         );
     }
 
@@ -62,7 +56,15 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
         );
     }
 
-    // cap nhat bao cao thuc hien du toan chi
+    // trinh duyet bao cao thuc hien du toan chi 3.2.8
+    trinhDuyetBaoCaoThucHienDTCService(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/bao-cao/them-moi',
+            request,
+        );
+    }
+
+    // upload bao cao thuc hien du toan chi
     updateBaoCaoThucHienDTC(request: any): Observable<any> {
         return this.httpClient.put(
             this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat',
@@ -70,14 +72,21 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
         );
     }
 
-    // call api chi tiết báo cáo
-    baoCaoCapNhatChiTiet(request: any): Observable<any> {
-        return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet', request);
+    //tong hop bao cao ket qua thuc hien von phi hang DTQG
+    tongHopBaoCaoKetQua(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop',
+            request);
     }
 
     // call api chức năng duyet bieu mau
     approveBieuMau(request: any): Observable<any> {
         return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/phe-duyet', request);
+    }
+
+    // call api chi tiết báo cáo
+    baoCaoCapNhatChiTiet(request: any): Observable<any> {
+        return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet', request);
     }
 
     // exprot excel
@@ -88,11 +97,10 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
             { responseType: 'blob' });
     }
 
-    //lay thong tin luy ke
-    getLuyKe(request: any): Observable<any> {
+    getDinhMuc(request: any): Observable<any> {
         return this.httpClient.post(
-            this.urlDefault + '/qlnv-khoachphi/bao-cao/get-luy-ke'
-            , request
-        );
+            this.urlDefault + '/qlnv-khoachphi/chung/dinh-muc',
+            request,
+        )
     }
 }
