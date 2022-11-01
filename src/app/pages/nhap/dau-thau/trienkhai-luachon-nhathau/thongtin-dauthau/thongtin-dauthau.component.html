@@ -8,26 +8,30 @@
             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
         </div>
-        <div nz-col nzSpan="3">
+        <!-- <div nz-col nzSpan="3">
           <label class="search__label">Loại hàng hóa </label>
           <nz-select [(ngModel)]="searchFilter.loaiVthh">
             <nz-option *ngFor="let p of listVthh" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
-        </div>
-        <div nz-col nzSpan="6" *ngIf="userService.isTongCuc()">
+        </div> -->
+        <!-- <div nz-col nzSpan="6" *ngIf="userService.isTongCuc()">
           <label class="search__label">Đơn vị</label>
           <input class="search__input" placeholder="Đơn vị" nz-input [(ngModel)]="searchFilter.maDvi" />
-        </div>
-        <div nz-col nzSpan="3">
-          <label class="search__label">Quyết định duyệt KHLCNT</label>
+        </div> -->
+        <div nz-col nzSpan="5">
+          <label class="search__label">Số KH/đề xuất</label>
           <input class="search__input" nz-input [(ngModel)]="searchFilter.soQd" />
         </div>
-        <div nz-col nzSpan="6">
-          <label class="search__label">Trích yếu</label>
+        <div nz-col nzSpan="5">
+          <label class="search__label">Số QĐ PD KHLCNT</label>
           <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
         </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Ngày quyết định</label>
+        <div nz-col nzSpan="5">
+          <label class="search__label">Số QĐ PD KQLCNT</label>
+          <input class="search__input" nz-input [(ngModel)]="searchFilter.trichYeu" />
+        </div>
+        <div nz-col nzSpan="5">
+          <label class="search__label">Ngày QĐ PD KQLCNT</label>
           <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
       </div>
@@ -67,8 +71,8 @@
             <th>Số QĐ PD KQLCNT</th>
             <th>Ngày QĐ PD KQLCNT</th>
             <th>Tổng số gói thầu</th>
-            <th>Số gói trúng thầu </th>
-            <th>Số gói trượt thầu</th>
+            <th>Số gói thầu đã trúng </th>
+            <th>Số gói thầu đã trượt</th>
             <th>Thời hạn nhập kho</th>
             <th>Phương thức LCNT</th>
             <th>Loại hàng hóa</th>

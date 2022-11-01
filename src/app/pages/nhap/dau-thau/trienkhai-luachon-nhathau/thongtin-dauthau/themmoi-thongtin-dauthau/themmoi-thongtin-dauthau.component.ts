@@ -85,12 +85,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     });
   }
   idGoiThau: number = 0;
-  idDtl: number = 0;
   STATUS = STATUS
   itemRow: any = {};
   itemRowUpdate: any = {};
 
-  id: number;
   listNthauNopHs: any[] = [];
   i = 0;
   listNguonVon: any[] = []
@@ -188,7 +186,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetailDtlCuc(this.idInput);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
-      console.log(data);
       this.formData.patchValue({
         namKhoach: data.hhQdKhlcntHdr.namKhoach,
         soQdPdKhlcnt: data.hhQdKhlcntHdr.soQd,
@@ -304,20 +301,14 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       return
     }
     let body = {
-      id: this.idDtl,
+      id: this.idInput,
       trangThai: STATUS.HOAN_THANH_CAP_NHAT
     }
     let res = await this.thongTinDauThauService.approve(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      if (this.formData.get('id').value) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        await this.spinner.hide()
-        this.quayLai();
-      } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        await this.spinner.hide()
-        this.quayLai();
-      }
+      this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      await this.spinner.hide()
+      this.quayLai();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

@@ -289,8 +289,8 @@
                 </div>
             </div>
             <div class="buttons">
-                <button *ngIf="idGoiThau > 0 && !isShowFromKq" class="btn btn-main btn-sm waves-effect waves-light"
-                    (click)="saveGoiThau()">
+                <button *ngIf="idGoiThau > 0 && !isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT"
+                    class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
                     <i class="icon htvbdh_tcdt_save"></i>
                     <span>Lưu</span>
                 </button>
@@ -454,9 +454,10 @@
                             <th>Thành tiền</th>
                             <th>Trạng thái</th>
                             <th>Diễn giải/Lý do</th>
-                            <th *ngIf="!isShowFromKq" width="30px">Thao tác</th>
+                            <th *ngIf="!isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT"
+                                width="30px">Thao tác</th>
                         </tr>
-                        <tr *ngIf="!isShowFromKq">
+                        <tr *ngIf="!isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT">
                             <th></th>
                             <th><input nz-input [(ngModel)]="itemRow.tenNhaThau" /></th>
                             <th><input nz-input [(ngModel)]="itemRow.mst" /></th>
@@ -499,7 +500,8 @@
                                 <td>{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                                 <td>{{ data.tenTrangThai }}</td>
                                 <td>{{ data.lyDo }}</td>
-                                <td *ngIf="!isShowFromKq" class="text-center">
+                                <td *ngIf="!isShowFromKq && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT"
+                                    class="text-center">
                                     <a (click)="startEdit(i)">
                                         <i class=" fa fa-pencil"></i>
                                     </a>
