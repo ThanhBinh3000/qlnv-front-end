@@ -194,6 +194,7 @@ export class BaoCaoComponent implements OnInit {
                 break;
         }
         this.titleStatus = this.getStatusName(this.baoCao.trangThai);
+        this.tabs = [];
         this.getStatusButton();
         this.spinner.hide();
     }
@@ -339,10 +340,14 @@ export class BaoCaoComponent implements OnInit {
     }
 
     back() {
-        const obj = {
-            tabSelected: this.data?.preTab,
+        if (this.data?.preData) {
+            this.dataChange.emit(this.data?.preData)
+        } else {
+            const obj = {
+                tabSelected: this.data?.preTab,
+            }
+            this.dataChange.emit(obj);
         }
-        this.dataChange.emit(obj);
     }
 
     // lay ten don vi tao
@@ -793,8 +798,13 @@ export class BaoCaoComponent implements OnInit {
         return false;
     };
 
-    viewDetail(id) {
-
+    viewDetail(id: string) {
+        const obj = {
+            id: id,
+            preData: this.data,
+            tabSelected: 'next' + this.data?.tabSelected,
+        }
+        this.dataChange.emit(obj);
     }
 
     showDialogCopy() {

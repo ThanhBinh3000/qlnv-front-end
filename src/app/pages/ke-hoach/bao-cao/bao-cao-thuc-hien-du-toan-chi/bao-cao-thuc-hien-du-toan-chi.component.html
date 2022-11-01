@@ -7,11 +7,11 @@
         <li *ngIf="isAccept" nz-menu-item (click)="selectTab('capduoi')">
             Báo cáo từ đơn vị cấp dưới
         </li>
-        <li *ngIf="isCheck" nz-menu-item (click)="selectTab('kiemtra')">
+        <!-- <li *ngIf="isCheck" nz-menu-item (click)="selectTab('kiemtra')">
             Kiểm tra báo cáo các đơn vị cấp dưới
-        </li>
+        </li> -->
         <li *ngIf="isSynthetic" nz-menu-item (click)="selectTab('tonghop')">
-            Tổng hợp báo cáo
+            Tổng hợp báo cáo từ đơn vị cấp dưới
         </li>
     </ul>
 </nz-affix>
@@ -33,6 +33,12 @@
             <app-tong-hop-bao-cao (dataChange)="changeTab($event)"></app-tong-hop-bao-cao>
         </ng-container>
         <ng-container *ngIf="tabSelected == 'baocao'">
+            <app-bao-cao [data]="data" (dataChange)="changeTab($event)"></app-bao-cao>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'nextbaocao'">
+            <app-bao-cao [data]="data" (dataChange)="changeTab($event)"></app-bao-cao>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'nextnextbaocao'">
             <app-bao-cao [data]="data" (dataChange)="changeTab($event)"></app-bao-cao>
         </ng-container>
     </div>
