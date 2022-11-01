@@ -286,22 +286,22 @@ export class Utils {
         statusName = "Trình duyệt"
         break;
       case Utils.TT_BC_3:
-        statusName = "Trưởng BP từ chối"
+        statusName = "Từ chối duyệt"
         break;
       case Utils.TT_BC_4:
-        statusName = "Trưởng BP duyệt"
+        statusName = "Duyệt"
         break;
       case Utils.TT_BC_5:
-        statusName = "Lãnh đạo từ chối"
+        statusName = "Từ chối phê duyệt"
         break;
       case Utils.TT_BC_6:
-        statusName = "Lãnh đạo phê duyệt"
+        statusName = "Phê duyệt"
         break;
       case Utils.TT_BC_7:
-        statusName = "Lãnh đạo phê duyệt"
+        statusName = "Phê duyệt"
         break;
       case Utils.TT_BC_8:
-        statusName = "Từ chối"
+        statusName = "Từ chối tiếp nhận"
         break;
       case Utils.TT_BC_9:
         statusName = "Tiếp nhận"
@@ -336,13 +336,13 @@ export class Utils {
         statusName = "Trình duyệt"
         break;
       case Utils.TT_BC_3:
-        statusName = "Trưởng BP từ chối"
+        statusName = "Từ chối duyệt"
         break;
       case Utils.TT_BC_4:
-        statusName = "Trưởng BP duyệt"
+        statusName = "Duyệt"
         break;
       case Utils.TT_BC_5:
-        statusName = "Lãnh đạo từ chối"
+        statusName = "Từ chối phê duyệt"
         break;
       case Utils.TT_BC_6:
         statusName = "Mới"
@@ -351,7 +351,7 @@ export class Utils {
         statusName = "Mới"
         break;
       case Utils.TT_BC_8:
-        statusName = "Từ chối"
+        statusName = "Từ chối tiếp nhận"
         break;
       case Utils.TT_BC_9:
         statusName = "Tiếp nhận"
@@ -812,27 +812,27 @@ export const TRANG_THAI_TIM_KIEM = [
   },
   {
     id: "3",
-    tenDm: 'Trưởng BP từ chối'
+    tenDm: 'Từ chối duyệt'
   },
   {
     id: "4",
-    tenDm: 'Trưởng BP duyệt'
+    tenDm: 'Duyệt'
   },
   {
     id: "5",
-    tenDm: 'Lãnh đạo từ chối'
+    tenDm: 'Từ chối phê duyệt'
   },
   {
     id: "7",
-    tenDm: 'Lãnh đạo phê duyệt'
+    tenDm: 'Phê duyệt'
   },
   {
     id: "8",
-    tenDm: 'Đơn vị cấp trên từ chối'
+    tenDm: 'Từ chối tiếp nhận'
   },
   {
     id: "9",
-    tenDm: 'Đơn vị cấp trên tiếp nhận'
+    tenDm: 'Tiếp nhận'
   },
   // {
   //     id: "10",

@@ -1,13 +1,13 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('quyetdinh')">
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD')" nz-menu-item nzSelected (click)="selectTab('quyetdinh')">
       Quyết định
     </li>
-    <li nz-menu-item (click)="selectTab('chiteukehoach')">
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH')" nz-menu-item (click)="selectTab('chiteukehoach')">
       Chỉ tiêu kế hoạch
     </li>
-    <li nz-menu-item (click)="selectTab('dieuchinhchitieukh')">
+    <li *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH')" nz-menu-item (click)="selectTab('dieuchinhchitieukh')">
       Điều chỉnh chỉ tiêu KH
     </li>
     <!--<li nz-menu-item (click)="selectTab('dutoannsnn')">

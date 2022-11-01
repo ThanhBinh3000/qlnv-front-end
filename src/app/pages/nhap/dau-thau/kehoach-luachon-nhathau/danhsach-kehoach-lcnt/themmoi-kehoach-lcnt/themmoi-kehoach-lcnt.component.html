@@ -414,7 +414,8 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number nz-input [nzSize]="'small'" nzDisabled>
+                <nz-input-number nz-input [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  [nzParser]="globals.parser" formControlName="donGiaVat" nzDisabled>
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -426,7 +427,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="%">
-                <nz-input-number nz-input [nzSize]="'small'" nzDisabled>
+                <nz-input-number nz-input [nzSize]="'small'" formControlName="vat" nzDisabled>
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -447,9 +448,8 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number class="text-right" nz-input formControlName="tongMucDt" [nzMin]="1"
-                  [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" nzDisabled>
+                <nz-input-number class="text-right" nz-input formControlName="tongMucDt" [nzSize]="'small'"
+                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -488,14 +488,13 @@
         </div>
       </div>
       <div class="buttons">
-        <button type="button" class="btn btn-main"
-          *ngIf="(formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == '') "
-          (click)="themMoiGoiThau()">
+        <button type="button" class="btn btn-main" *ngIf="!isDisbleForm()" (click)="themMoiGoiThau()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
       </div>
     </div>
+    <!-- START TABLE LƯƠNG THỰC -->
     <nz-table *ngIf="!formData.value.loaiVthh?.startsWith('02')" [nzData]="listDataGroup" class="nowrap pd-10"
       nzBordered>
       <thead>
@@ -540,12 +539,10 @@
               <td>{{(dtGoiThau.soLuong * dtGoiThau.donGia * 1000) + (dtGoiThau.soLuong * dtGoiThau.donGia * 1000 *
                 formData.value.gtriDthau / 100 ) | number: '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right" *ngIf="userService.isCuc()">
-                <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
-                  (click)="themMoiGoiThau(dtGoiThau,dtGoiThau.idx)">
+                <a *ngIf="!isDisbleForm()" (click)="themMoiGoiThau(dtGoiThau,dtGoiThau.idx)">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
-                  (click)="deleteRow(dtGoiThau.idx)">
+                <a *ngIf="!isDisbleForm()" (click)="deleteRow(dtGoiThau.idx)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>
@@ -554,6 +551,9 @@
         </ng-container>
       </tbody>
     </nz-table>
+    <!-- END TABLE LƯƠNG THỰC  -->
+
+    <!-- START TABLE VẬT TƯ  -->
     <nz-table *ngIf="formData.value.loaiVthh?.startsWith('02')" [nzData]="listDataGroup" class="nowrap pd-10"
       nzBordered>
       <thead>
@@ -603,13 +603,19 @@
               <td>{{dtGoiThau.donGia | number : '1.0-1' : 'vi_VN'}}</td>
               <td>{{dtGoiThau.soLuong * dtGoiThau.donGia | number: '1.0-1' : 'vi_VN'}}</td>
               <td class="text-right">
+                <a *ngIf="!isDisbleForm()" (click)="themMoiGoiThau(dtGoiThau,dtGoiThau.idx)">
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <a *ngIf="!isDisbleForm()" (click)="deleteRow(dtGoiThau.idx)">
+                  <i class="fa fa-trash-o do"></i>
+                </a>
               </td>
             </tr>
           </ng-container>
         </ng-container>
       </tbody>
     </nz-table>
-
+    <!-- END TABLE VẬT TƯ  -->
   </nz-card>
   <!-- END PHỤ LỤC   -->
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Globals } from 'src/app/shared/globals';
+import {UserService} from "../../../services/user.service";
 @Component({
   selector: 'giao-ke-hoach-va-du-toan',
   templateUrl: './giao-ke-hoach-va-du-toan.component.html',
@@ -8,7 +9,8 @@ import { Globals } from 'src/app/shared/globals';
 export class GiaoKeHoachVaDuToanComponent implements OnInit {
   // tabH = 0;
   constructor(
-    public globals: Globals
+    public globals: Globals,
+    public userService: UserService
   ) { }
   tabSelected = 'kehoachvondaunam';
   ngOnInit() {

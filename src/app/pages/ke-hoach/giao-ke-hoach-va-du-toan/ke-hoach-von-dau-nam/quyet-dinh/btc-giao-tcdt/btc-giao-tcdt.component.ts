@@ -70,6 +70,9 @@ export class BtcGiaoTcdtComponent implements OnInit {
     public userService: UserService,
     private modal: NzModalService,
   ) {
+    if (!userService.isAccessPermisson("KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT")){
+      window.location.href = '/error/401'
+    }
     this.formData = this.fb.group({
       namQd: [null],
       soQd: [null],
@@ -208,8 +211,9 @@ export class BtcGiaoTcdtComponent implements OnInit {
 
   themMoi() {
     this.idSelected = 0;
-    this.isViewDetail = false;
+    this.isViewDetail = true;
     this.isAddNew = true;
+
   }
 
   onAllChecked(checked) {

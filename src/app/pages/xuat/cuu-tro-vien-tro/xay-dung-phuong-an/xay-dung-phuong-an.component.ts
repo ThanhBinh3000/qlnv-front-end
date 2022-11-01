@@ -38,6 +38,33 @@ export class XayDungPhuongAnComponent implements OnInit {
   ) {
   }
 
+  tmpData: any = {
+    "error": true,
+    "total": 3,
+    "data": [
+      {
+        "name": "mot",
+        "error": [
+          "sai ten", "sai so luong"
+        ],
+        "errorLabel": ["input1"]
+      },
+      {
+        "name": "hai",
+        "error": [],
+        "errorLabel": []
+      },
+      {
+        "name": "ba",
+        "error": [
+          "sai tuoi"
+        ],
+        "errorLabel": [
+          "input1"
+        ]
+      }
+    ]
+  }
   @Input()
   loaiVthh: string;
   @Input()
@@ -123,13 +150,13 @@ export class XayDungPhuongAnComponent implements OnInit {
   }
 
   async loadDsTong() {
-    const body = {
+    /*const body = {
       maDviCha: this.userdetail.maDvi,
       trangThai: '01',
-    };
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    };*/
+    const dsTong = await this.donviService.layDonViCon();
     if (!isEmpty(dsTong)) {
-      this.dsDonvi = dsTong[DANH_MUC_LEVEL.CUC];
+      this.dsDonvi = dsTong.data;
     }
 
   }
@@ -178,7 +205,7 @@ export class XayDungPhuongAnComponent implements OnInit {
         loaiVatTuHangHoa: this.searchFilter.loaiVthh,
         nam: this.searchFilter.nam,
         trichYeu: this.searchFilter.trichYeu,
-        paggingReq:{
+        paggingReq: {
           limit: this.pageSize,
           page: this.page - 1,
         }
@@ -460,5 +487,12 @@ export class XayDungPhuongAnComponent implements OnInit {
 
   isOwner(maDvi: any) {
     return this.userInfo.MA_DVI == maDvi;
+  }
+
+  checkValidInput(index: number, input1: string) {
+    console.log(this.tmpData.data[index], 222222222);
+    let isValid = this.tmpData.data[index].errorLabel.includes(input1);
+    console.log(isValid, 1829)
+
   }
 }

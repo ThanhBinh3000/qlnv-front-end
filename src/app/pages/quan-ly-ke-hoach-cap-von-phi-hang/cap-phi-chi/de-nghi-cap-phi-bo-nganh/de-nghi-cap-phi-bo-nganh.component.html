@@ -38,7 +38,7 @@
             </div>
         </nz-card>
         <div class="group-button">
-            <h3 class="text-uppercase">Thông tin đề nghị cấp phí bộ ngành</h3>
+            <h3>Thông tin đề nghị cấp phí DTQG Bộ ngành</h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isTongCuc()">
                     <i class="fa fa-trash-o do"></i>
@@ -68,9 +68,9 @@
                         <th width="7.5%">Bộ ngành</th>
                         <th width="7.5%">Ngày đề nghị</th>
                         <th width="7.5%">Năm</th>
-                        <th width="">Tổng tiền</th>
-                        <th width="">Kinh phí đã cấp</th>
-                        <th width="">Yêu cầu cấp thêm</th>
+                        <th width="">Tổng tiền (đ)</th>
+                        <th width="">Kinh phí đã cấp (đ)</th>
+                        <th width="">Yêu cầu cấp thêm (đ)</th>
                         <th width="7.5%">Trạng thái</th>
                         <th width="7.5%">Hành động</th>
                     </tr>
@@ -79,64 +79,35 @@
                         <th></th>
                         <!-- Số đề nghị -->
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDeNghi"
-                                    (input)="filterInTable('soDeNghi',filterTable.soDeNghi)" size="small" />
-                            </nz-input-group>
+
                         </th>
                         <!-- Bộ Ngành -->
                         <th>
-                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenBoNganh"
-                                    (input)="filterInTable('tenBoNganh',filterTable.tenBoNganh)" size="small" />
+
                         </th>
                         <!-- Ngày đề nghị -->
                         <th>
-                            <nz-date-picker nzFormat="dd-MM-yyyy" [(ngModel)]="filterTable.ngayDeNghi"
-                                (ngModelChange)=" filterInTable('ngayDeNghi',filterTable.ngayDeNghi)">
-                            </nz-date-picker>
+
                         </th>
                         <!-- năm -->
                         <th>
-                            <nz-select [(ngModel)]="filterTable.nam"
-                                (ngModelChange)="filterInTable('nam',filterTable.nam)">
-                                <nz-option *ngFor="let item of listNam " [nzValue]="item.value" [nzLabel]="item.text">
-                                </nz-option>
-                            </nz-select>
+
                         </th>
                         <!-- Tổng tiền -->
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongTien"
-                                    (input)="filterInTable('tongTien',filterTable.tongTien)" size="small" />
-                            </nz-input-group>
+
                         </th>
                         <!-- Kinh phí đã cấp -->
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm"
-                                    [(ngModel)]="filterTable.kinhPhiDaCap"
-                                    (input)="filterInTable('kinhPhiDaCap',filterTable.kinhPhiDaCap)" size="small" />
-                            </nz-input-group>
+
                         </th>
                         <!-- Yêu cầu cấp thêm  -->
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ycCapThem"
-                                    (input)="filterInTable('ycCapThem',filterTable.ycCapThem)" size="small" />
-                            </nz-input-group>
                         </th>
                         <!-- Trạng thái  -->
                         <th>
-                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                                <input type="text" nz-input placeholder="Tìm kiếm"
-                                    [(ngModel)]="filterTable.tenTrangThai"
-                                    (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
-                            </nz-input-group>
                         </th>
                         <th></th>
-                        <ng-template #suffixTemplateInfo>
-                            <i nz-icon nzType="search"></i>
-                        </ng-template>
                     </tr>
                 </thead>
                 <tbody>
