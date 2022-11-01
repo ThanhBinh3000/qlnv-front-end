@@ -14,7 +14,7 @@ export class DialogThemDieuChinhComponent implements OnInit {
   @Input() obj: any;
 
   response: any = {
-    maPhanBcao: null,
+    maPhanBcao: '2',
     namQtoan: null,
   };
 
@@ -26,21 +26,17 @@ export class DialogThemDieuChinhComponent implements OnInit {
 
   async ngOnInit() {
 
-  }
+  };
 
-  handleOk() {
-    if (!this.response.maPhanBcao) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-      return;
-    }
+  async handleOk() {
     if (!this.response.namQtoan) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
     this._modalRef.close(this.response);
-  }
+  };
 
   handleCancel() {
     this._modalRef.close();
-  }
+  };
 }

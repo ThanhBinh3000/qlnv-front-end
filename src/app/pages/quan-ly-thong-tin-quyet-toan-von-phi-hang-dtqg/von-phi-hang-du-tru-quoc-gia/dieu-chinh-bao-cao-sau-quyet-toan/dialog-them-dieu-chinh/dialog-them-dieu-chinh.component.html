@@ -1,11 +1,6 @@
 <div class="modal__content">
   <div class="search__body" nz-row [nzGutter]="[18, 12]">
     <div nz-col nzSpan="6">
-      <label class="search__label">Mã phần báo cáo</label>
-      <input class="search__input" nz-input [class]="response.maPhanBcao ?'' : 'input-error-validate'"
-        [(ngModel)]="response.maPhanBcao" />
-    </div>
-    <div nz-col nzSpan="6">
       <label class="search__label">Năm quyết toán</label>
       <input class="search__input" nz-input [class]="response.namQtoan ?'' : 'input-error-validate'"
         [(ngModel)]="response.namQtoan" />

@@ -106,6 +106,8 @@ export class BaoCaoQuyetToanComponent implements OnInit {
   statusDelete = false;
   allChecked = false;
   isAddNew = false;
+  idSelected: string;
+  isStatus: string;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -288,9 +290,9 @@ export class BaoCaoQuyetToanComponent implements OnInit {
   };
 
   viewDetail(data: any) {
-    this.router.navigate([
-      MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/them-moi-bao-cao-quyet-toan/' + data.id,
-    ])
+    this.isAddNew = true;
+    this.idSelected = data?.id;
+    this.isStatus = data?.trangThai;
   };
 
   getStatusName(trangThai: string) {

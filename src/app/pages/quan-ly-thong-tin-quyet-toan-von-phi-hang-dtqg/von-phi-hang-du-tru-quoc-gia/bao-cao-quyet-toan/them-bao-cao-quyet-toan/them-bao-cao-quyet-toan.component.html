@@ -5,39 +5,39 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="saveStatus" type="button" class="btn btn-sub" (click)="action('save')">
+      <button *ngIf="!saveStatus" type="button" class="btn btn-sub" (click)="action('save')">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
-      <button *ngIf="submitStatus" type="button" class="btn btn-sub" (click)="action('submit')">
+      <button *ngIf="!submitStatus" type="button" class="btn btn-sub" (click)="action('submit')">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Trình duyệt</span>
       </button>
-      <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('nonpass')">
+      <button *ngIf="!passStatus" type="button" class="btn btn-sub" (click)="action('nonpass')">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
-      <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('pass')">
+      <button *ngIf="!passStatus" type="button" class="btn btn-sub" (click)="action('pass')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
-      <button *ngIf="approveStatus" type="button" class="btn btn-sub" (click)="action('nonapprove')">
+      <button *ngIf="!approveStatus" type="button" class="btn btn-sub" (click)="action('nonapprove')">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
-      <button *ngIf="approveStatus" type="button" class="btn btn-sub" (click)="action('approve')">
+      <button *ngIf="!approveStatus" type="button" class="btn btn-sub" (click)="action('approve')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Phê duyệt</span>
       </button>
-      <button *ngIf="acceptStatus" type="button" class="btn btn-sub" (click)="action('nonaccept')">
+      <!-- <button *ngIf="acceptStatus" type="button" class="btn btn-sub" (click)="action('nonaccept')">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
       <button *ngIf="acceptStatus" type="button" class="btn btn-sub" (click)="action('accept')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Tiếp nhận</span>
-      </button>
-      <button *ngIf="copyStatus" type="button" class="btn btn-sub" (click)="showDialogCopy()">
+      </button> -->
+      <button *ngIf="!copyStatus" type="button" class="btn btn-sub" (click)="showDialogCopy()">
         <i nz-icon nzType="copy" nzTheme="outline"></i>
         <span>Copy</span>
       </button>
@@ -71,7 +71,7 @@
                 <td>{{maBcao}}</td>
                 <td>{{namQtoan}}</td>
                 <td>
-                  <nz-upload [nzBeforeUpload]="beforeUploadCV">
+                  <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
                     <button nz-button>
                       <i nz-icon nzType="upload"></i>
                       Select File
@@ -249,7 +249,7 @@
 
         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
           <div nz-col nzSpan="24">
-            <ng-container *ngIf="this.trangThaiBaoCao === '2' ||  this.trangThaiBaoCao === '4'; else thuyetMinhTp">
+            <ng-container *ngIf="this.isStatus === '2' ||  this.isStatus === '4'; else thuyetMinhTp">
               <label class="search__label">Thuyết minh</label>
               <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" disabled></textarea>
             </ng-container>

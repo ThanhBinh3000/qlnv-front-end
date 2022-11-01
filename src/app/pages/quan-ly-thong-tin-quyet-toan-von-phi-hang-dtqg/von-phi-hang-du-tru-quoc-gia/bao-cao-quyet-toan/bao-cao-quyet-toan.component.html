@@ -127,7 +127,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of basicTable.data; let i = index">
+          <tr *ngFor="let data of basicTable?.data; let i = index">
             <td width="45px">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                 [nzDisabled]="!data.isDelete"></label>
@@ -195,6 +195,8 @@
   </div>
 </ng-container>
 <ng-template #templateThemmoi>
-  <app-them-bao-cao-quyet-toan [data]="dataThemMoi" (close)="onClose()">
-  </app-them-bao-cao-quyet-toan>
+  <div class="bg-trang">
+    <app-them-bao-cao-quyet-toan [data]="dataThemMoi" [isStatus]="isStatus" [idInput]="idSelected" (close)="onClose()">
+    </app-them-bao-cao-quyet-toan>
+  </div>
 </ng-template>

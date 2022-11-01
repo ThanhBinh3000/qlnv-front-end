@@ -1,9 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogThemDieuChinhComponent } from './dialog-them-dieu-chinh/dialog-them-dieu-chinh.component';
+// import { DialogTaoMoiBaoCaoQuyetToanComponent } from 'src/app/components/dialog/dialog-tao-moi-bao-cao-quyet-toan/dialog-tao-moi-bao-cao-quyet-toan.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
@@ -11,7 +14,9 @@ import { Utils } from 'src/app/Utility/utils';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
 import { QTVP } from './../../../../Utility/utils';
+
 // import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
+// trang thai ban ghi
 export const TRANG_THAI_TIM_KIEM = [
   {
     id: "1",
@@ -37,18 +42,6 @@ export const TRANG_THAI_TIM_KIEM = [
     id: "6",
     tenDm: 'Lãnh đạo phê duyệt'
   },
-  // {
-  //   id: "8",
-  //   tenDm: 'Đơn vị cấp trên từ chối'
-  // },
-  // {
-  //   id: "9",
-  //   tenDm: 'Đơn vị cấp trên tiếp nhận'
-  // },
-  // {
-  //     id: "10",
-  //     tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
-  // },
 ]
 @Component({
   selector: 'app-dieu-chinh-bao-cao-sau-quyet-toan',
@@ -56,18 +49,19 @@ export const TRANG_THAI_TIM_KIEM = [
   styleUrls: ['./dieu-chinh-bao-cao-sau-quyet-toan.component.scss']
 })
 export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
+  @Input() data
 
-  @Output() dataChange = new EventEmitter();
+  dataThemMoi: any;
   //thong tin dang nhap
   userInfo: any;
   //thong tin tim kiem
   searchFilter = {
-    thongBao: null,
     maBcao: null,
     maPhanBcao: '2',
     namQtoan: null,
     ngayTaoDen: null,
     ngayTaoTu: null,
+    thongBao: null,
     paggingReq: {
       limit: 10,
       page: 1
@@ -77,6 +71,7 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     trangThais: [
     ]
   };
+
   tableFilter = {
     maBcao: null,
     namQtoan: null,
@@ -86,6 +81,7 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     ngayPheDuyet: null,
     trangThai: null,
   }
+
   //danh muc
   danhSachBaoCao: any[] = [];
   danhSachBaoCaoAll: any[] = [];
@@ -101,14 +97,18 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
   trangThai!: string;
   newDate = new Date();
   userRole: string;
-  status = true;
-  statusDelete = false;
-  statusNewReport
+  status = false;
+  statusBtnXoaDk: boolean;
   donVis: any[] = [];
+  maDviTao: string;
   listIdDelete: string[] = [];
   statusBtnValidate = true;
-  statusTaoMoi = true;
+  statusNewReport = true;
+  statusDelete = false;
   allChecked = false;
+  isAddNew = false;
+  idSelected: string;
+  isStatus: string;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private router: Router,
@@ -116,6 +116,7 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
     private userService: UserService,
+    private modal: NzModalService,
   ) {
   }
 
@@ -127,11 +128,11 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     this.newDate.setMonth(this.newDate.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.newDate;
     this.donViTao = this.userInfo?.MA_DVI;
+    this.statusNewReport = this.userService.isAccessPermisson(QTVP.ADD_REPORT)
+    this.statusDelete = this.userService.isAccessPermisson(QTVP.DELETE_REPORT);
     //  check va lay gia tri role trong list role
-    this.statusNewReport = this.userService.isAccessPermisson(QTVP.DIEU_CHINH_REPORT)
-    this.statusDelete = this.userService.isAccessPermisson(QTVP.EDIT_DIEU_CHINH_REPORT);
-
-    if (this.userService.isAccessPermisson(QTVP.EDIT_DIEU_CHINH_REPORT)) {
+    this.statusBtnXoaDk = false;
+    if (this.userService.isAccessPermisson(QTVP.EDIT_REPORT)) {
       this.status = false;
       this.trangThai = Utils.TT_BC_1;
       this.donVis = this.donVis.filter(e => e?.maDviCha == this.donViTao);
@@ -151,30 +152,8 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
         this.searchFilter.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6];
       }
     }
-    this.onSubmit();
+    await this.onSubmit();
     this.spinner.hide()
-  }
-
-  updateSingleChecked(): void {
-    if (this.danhSachBaoCao.every((item) => !item.checked && item.isDelete)) {
-      this.allChecked = false;
-    } else if (this.danhSachBaoCao.every((item) => item.checked && item.isDelete)) {
-      this.allChecked = true;
-    }
-  }
-
-  redirectThongTinTimKiem() {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      0,
-    ]);
-  }
-
-  redirectSuaThongTinTimKiem(id) {
-    this.router.navigate([
-      '/kehoach/thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
-      id,
-    ]);
   }
 
   //search list bao cao theo tieu chi
@@ -216,7 +195,8 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
                 isEdit: this.checkEditStatus(item.trangThai),
                 isDelete: this.checkDeleteStatus(item.trangThai),
               })
-            } else {
+            }
+            else {
               this.danhSachBaoCao.push({
                 ...item,
                 checked: true,
@@ -244,16 +224,6 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     this.spinner.hide();
   }
 
-  checkEditStatus(trangThai: string) {
-    return Utils.statusSave.includes(trangThai) &&
-      (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(QTVP.EDIT_DIEU_CHINH_REPORT));
-  }
-
-  checkDeleteStatus(trangThai: string) {
-    return Utils.statusDelete.includes(trangThai) &&
-      (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(QTVP.DELETE_DIEU_CHINH_REPORT));
-  }
-
   //doi so trang
   onPageIndexChange(page) {
     this.searchFilter.paggingReq.page = page;
@@ -273,7 +243,114 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     this.searchFilter.maBcao = null
     this.searchFilter.thongBao = null
     this.trangThai = null
+    this.onSubmit();
+  };
+
+  checkEditStatus(trangThai: string) {
+    return Utils.statusSave.includes(trangThai) &&
+      (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(QTVP.EDIT_REPORT));
+  };
+
+  checkDeleteStatus(trangThai: string) {
+    return Utils.statusDelete.includes(trangThai) &&
+      (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(QTVP.DELETE_REPORT));
+  };
+
+  //them bao cao moi
+  addNewReport() {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Thông tin tạo mới báo cáo quyết toán vốn, phi hàng DTQG',
+      nzContent: DialogThemDieuChinhComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+      },
+    });
+    modalTuChoi.afterClose.toPromise().then(async (res) => {
+      if (res) {
+        const request = {
+          maPhanBcao: res.maPhanBcao,
+          namQtoan: res.namQtoan
+        }
+        this.isAddNew = true;
+        this.dataThemMoi = request;
+        // await this.quanLyVonPhiService.checkNamTaoMoiQuyetToan(request).toPromise().then(
+        //   (data) => {
+        //     if (data.statusCode == 0) {
+        //       this.isAddNew = true;
+        //       this.dataThemMoi = request;
+        //     } else {
+        //       this.notification.warning(MESSAGE.WARNING, data?.msg)
+        //     }
+        //   },
+        //   (err) => {
+        //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        //   },
+        // );
+      }
+    });
+  };
+
+  viewDetail(data: any) {
+    this.isAddNew = true;
+    this.idSelected = data?.id;
+    this.isStatus = data?.trangThai;
+  };
+
+  getStatusName(trangThai: string) {
+    return this.trangThais.find(e => e.id == trangThai).tenDm;
+  };
+
+  deleteReport(id: string) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        let request = [];
+        if (id) {
+          request = [id];
+        } else {
+          if (this.danhSachBaoCao && this.danhSachBaoCao.length > 0) {
+            this.danhSachBaoCao.forEach(item => {
+              if (item.checked) {
+                request.push(item.id);
+              }
+            })
+          }
+        }
+        this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(request).toPromise().then(
+          data => {
+            if (data.statusCode == 0) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              this.onSubmit();
+            } else {
+              this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+          },
+          err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          }
+        )
+        this.spinner.hide();
+      },
+    });
   }
+
+  updateSingleChecked(): void {
+    if (this.danhSachBaoCao.every((item) => !item.checked && item.isDelete)) {
+      this.allChecked = false;
+    } else if (this.danhSachBaoCao.every((item) => item.checked && item.isDelete)) {
+      this.allChecked = true;
+    }
+  };
 
   updateAllChecked(): void {
     if (this.danhSachBaoCao && this.danhSachBaoCao.length > 0) {
@@ -291,75 +368,7 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
         })
       }
     }
-  }
-
-  async addReport() {
-    this.statusBtnValidate = false;
-    if (!this.searchFilter.namQtoan) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTBLANK)
-      return;
-    } else if (this.searchFilter.namQtoan < 1000 || this.searchFilter.namQtoan > 2999) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.YEAR)
-      return;
-    }
-    const res = {
-      namQtoan: this.searchFilter.namQtoan
-    }
-    await this.quanLyVonPhiService.CtietBcaoQuyetToanNam(res).toPromise().then(
-      async (data) => {
-        if (data.statusCode != 0) {
-          this.notification.error(MESSAGE.ERROR, MESSAGE.CHUA_CO_BAO_CAO);
-          return;
-        } else {
-          this.router.navigate([
-            MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/dieu-chinh-so-lieu-quyet-toan-/' + this.searchFilter.namQtoan,
-          ])
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
-  }
-
-  viewDetail(data: any) {
-    // this.router.navigate([
-    //   MAIN_ROUTE_QUYET_TOAN + '/' + QUAN_LY_QUYET_TOAN + '/dieu-chinh-so-lieu-quyet-toan/' + id,
-    // ])
-    const obj = {
-      id: data.id,
-      tabSelected: 'baocao',
-    }
-    this.dataChange.emit(obj);
-  }
-
-  getStatusName(trangThai: string) {
-    return this.trangThais.find(e => e.id == trangThai).tenDm;
-  }
-
-  deleteReport(id: string) {
-    let request = [];
-    if (!id) {
-      request = this.listIdDelete;
-    } else {
-      request = [id];
-    }
-    this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(request).toPromise().then(
-      data => {
-        if (data.statusCode == 0) {
-          this.listIdDelete = [];
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-          this.onSubmit();
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    )
-  }
-
+  };
 
   changeListIdDelete(id: any) {
     if (this.listIdDelete.findIndex(e => e == id) == -1) {
@@ -367,10 +376,8 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     } else {
       this.listIdDelete = this.listIdDelete.filter(e => e != id);
     }
-  }
-  checkViewReport() {
-    return this.userService.isAccessPermisson(QTVP.VIEW_REPORT)
-  }
+  };
+
   checkAll() {
     let check = true;
     this.danhSachBaoCao.forEach(item => {
@@ -379,8 +386,10 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
       }
     })
     return check;
-  }
-
+  };
+  checkViewReport() {
+    return this.userService.isAccessPermisson(QTVP.VIEW_REPORT)
+  };
   updateAllCheck() {
     this.danhSachBaoCao.forEach(item => {
       if (this.checkDeleteReport(item.trangThai)) {
@@ -388,11 +397,11 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
         this.listIdDelete.push(item.id);
       }
     })
-  }
+  };
 
   checkDeleteReport(trangThai: string) {
-    return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(QTVP.DELETE_DIEU_CHINH_REPORT)
-  }
+    return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(QTVP.DELETE_REPORT)
+  };
 
   // Tìm kiếm trong bảng
   filterInTable(key: string, value: string, isDate: boolean) {
@@ -413,5 +422,10 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     } else {
       this.danhSachBaoCao = cloneDeep(this.danhSachBaoCaoAll);
     }
+  };
+
+  onClose() {
+    this.isAddNew = false;
+    this.onSubmit();
   }
 }
