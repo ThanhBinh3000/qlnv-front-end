@@ -9,14 +9,15 @@ export const GAO = 'gao';
 export const MUOI = 'muoi';
 export const VAT_TU = 'vat-tu';
 
-export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
+export const NHAP_ROUTE_LIST: Array<any> = [
   {
     icon: 'htvbdh_tcdt_nhaptheokehoach',
     title: 'Nhập theo phương thức đấu thầu',
-    url: `/nhap-theo-ke-hoach`,
+    url: `${NHAP_MAIN_ROUTE}/nhap-theo-ke-hoach`,
     dropdown: 'dau-thau',
     idHover: 'dauthau',
     hasTab: true,
+    code:'NHDTQG_PTDT'
   },
   {
     icon: 'htvbdh_tcdt_nhapkhac2',
@@ -25,6 +26,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'mua-truc-tiep',
     idHover: 'mua-truc-tiep',
     hasTab: true,
+    code:'NHDTQG_PTMTT'
   },
   {
     icon: 'htvbdh_tcdt_dieu_chuyen',
@@ -33,6 +35,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'khac',
     idHover: 'khac',
     hasTab: true,
+    code:'NHDTQG_PTMTT'
   },
   {
     icon: 'htvbdh_tcdt_nhapkhac2',
@@ -41,6 +44,7 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'khac',
     idHover: 'khac',
     hasTab: true,
+    code:'NHDTQG_PTMTT'
   },
   {
     icon: 'htvbdh_tcdt_baocao2',
@@ -49,5 +53,6 @@ export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
     dropdown: 'bao-cao',
     idHover: 'bao-cao',
     hasTab: false,
+    code:'NHDTQG_PTMTT'
   },
 ];

@@ -7,16 +7,16 @@
     <li *ngIf="viewTongHop" nz-menu-item (click)="selectTab(1)">
       Tổng hợp cấp vốn các đơn vị
     </li>
-    <li nz-menu-item nzSelected (click)="selectTab(2)">
+    <li nz-menu-item nzSelected  *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN')" (click)="selectTab(2)">
       Đề nghị cấp vốn bộ ngành
     </li>
-    <li nz-menu-item (click)="selectTab(3)">
+    <li nz-menu-item *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP')" (click)="selectTab(3)">
       Tổng hợp
     </li>
-    <li nz-menu-item (click)="selectTab(4)">
+    <li nz-menu-item *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_THONGTRI')" (click)="selectTab(4)">
       Thông tri duyệt y dự toán
     </li>
-    <li nz-menu-item (click)="selectTab(5)">
+    <li nz-menu-item *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TDCAPPHI')" (click)="selectTab(5)">
       Tổng hợp theo dõi cấp vốn
     </li>
   </ul>
@@ -33,7 +33,7 @@
       <app-de-nghi-cap-von-bo-nganh></app-de-nghi-cap-von-bo-nganh>
     </ng-container>
     <ng-container *ngIf="tabSelected == 3">
-      <app-tong-hop></app-tong-hop>
+      <app-tong-hop-de-nghi-cap-von-bo-nganh></app-tong-hop-de-nghi-cap-von-bo-nganh>
     </ng-container>
     <ng-container *ngIf="tabSelected == 4">
       <app-thong-tri-duyet-y-du-toan></app-thong-tri-duyet-y-du-toan>

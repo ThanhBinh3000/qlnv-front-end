@@ -23,7 +23,7 @@ import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog
 import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from 'src/app/constants/status';
-import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 
 @Component({
   selector: 'app-themmoi-tonghop-khlcnt',
@@ -76,7 +76,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     private fb: FormBuilder,
     private helperService: HelperService,
     public globals: Globals,
-    private chiTieuKeHoachNamCapTongCucService : ChiTieuKeHoachNamCapTongCucService
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService
   ) {
     this.formTraCuu = this.fb.group(
       {
@@ -107,7 +107,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
       tchuanCluong: [''],
-      soQdCc : [''],
+      soQdCc: [''],
     })
 
   }
@@ -137,12 +137,12 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
 
   async loadChiTiet() {
     if (this.id > 0) {
-      let res = await this.tongHopDeXuatKHLCNTService.loadChiTiet(this.id);
+      let res = await this.tongHopDeXuatKHLCNTService.getDetail(this.id);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
         this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
-        this.helperService.bidingDataInFormGroup(this.formTraCuu,dataDetail)
-        this.helperService.bidingDataInFormGroup(this.formData,dataDetail);
+        this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail)
+        this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
         this.isTongHop = true;
       }
       else {
@@ -152,7 +152,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     }
   }
 
-  async loadDataComboBox(){
+  async loadDataComboBox() {
     // List nguồn vốn
     this.listNguonVon = [];
     let resNv = await this.danhMucService.danhMucChungGetAll('NGUON_VON');
@@ -192,9 +192,9 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data
         let idTh = await this.userService.getId("HH_DX_KHLCNT_THOP_HDR_SEQ");
-        this.helperService.bidingDataInFormGroup(this.formData,dataDetail)
+        this.helperService.bidingDataInFormGroup(this.formData, dataDetail)
         this.formData.patchValue({
-          id : idTh,
+          id: idTh,
           ngayTao: dayjs().format("YYYY-MM-DD"),
         })
         this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
@@ -219,7 +219,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
         +this.formTraCuu.get('namKhoach').value,
       );
     if (res2.msg == MESSAGE.SUCCESS) {
-     const data = res2.data;
+      const data = res2.data;
       this.formData.patchValue({
         soQdCc: data.soQuyetDinh,
       });
@@ -312,7 +312,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
     this.isQuyetDinh = false;
   }
 
-  idRowSelect : number;
+  idRowSelect: number;
   async showDetail($event, id: number) {
     await this.spinner.show();
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
