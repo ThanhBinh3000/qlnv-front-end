@@ -13,6 +13,9 @@ import { TongHopDieuChinhDuToanChiNSNNComponent } from './tong-hop-dieu-chinh-du
     TongHopDieuChinhDuToanChiNSNNRoutingModule,
     ComponentsModule,
   ],
+  exports: [
+    TongHopDieuChinhDuToanChiNSNNComponent,
+  ]
 })
 
-export class TongHopDieuChinhDuToanChiNSNNModule {}
+export class TongHopDieuChinhDuToanChiNSNNModule { }
