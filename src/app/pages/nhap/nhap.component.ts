@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { NHAP_ROUTE_LIST } from './nhap.constant';
+import {UserService} from "../../services/user.service";
 @Component({
   selector: 'app-nhap',
   templateUrl: './nhap.component.html',
@@ -18,6 +19,7 @@ export class NhapComponent implements OnInit, AfterViewInit {
   routerUrl: string = "";
 
   constructor(
+    public userService: UserService,
     private router: Router,
   ) {
 

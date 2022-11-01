@@ -41,15 +41,15 @@
     <div class="group-button">
       <h3 class="text-uppercase">Thông tin tổng hợp</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isTongCuc()">
+        <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_EXP')" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isTongCuc()">
+        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_THEM')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -142,11 +142,11 @@
               <a (click)="detail(data, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai==globals.prop.NHAP_DU_THAO || data.trangThai==globals.prop.NHAP_TU_CHOI_TP || data.trangThai==globals.prop.NHAP_TU_CHOI_LD_CUC) && userService.isTongCuc()"
+              <a *ngIf="(data.trangThai==globals.prop.NHAP_DU_THAO || data.trangThai==globals.prop.NHAP_TU_CHOI_TP || data.trangThai==globals.prop.NHAP_TU_CHOI_LD_CUC) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_SUA')"
                 (click)="detail(data, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isTongCuc()" (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_XOA')" (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
