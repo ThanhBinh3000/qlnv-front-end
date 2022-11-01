@@ -38,8 +38,8 @@ const routes: Routes = [
       {
         path: CAP_VON_MUA_BAN,
         loadChildren: () =>
-          import('./quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg/quan-ly-cap-von-mua-ban-tt-tien-hang-dtqg.module').then(
-            (m) => m.QuanLyCapVonMuaBanTtTienHangDtqgModule,
+          import('./cap-von-mua-ban-va-thanh-toan-tien-hang/cap-von-mua-ban-va-thanh-toan-tien-hang.module').then(
+            (m) => m.CapVonMuaBanVaThanhToanTienHangModule,
           )
       },
     ],

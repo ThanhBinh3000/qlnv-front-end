@@ -1,0 +1,33 @@
+<nz-affix [nzOffsetTop]="69" class="level1">
+    <!-- (nzChange)="onChange($event)" -->
+    <ul nz-menu nzMode="horizontal">
+        <li nz-menu-item nzSelected (click)="selectTab('nop')">
+            Vốn bán nộp lên đơn vị cấp trên
+        </li>
+        <li nz-menu-item (click)="selectTab('ghinhan')">
+            Vốn bán từ đơn vị cấp dưới
+        </li>
+    </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+    <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 'nop'">
+            <app-danh-sach-nop-von-ban (dataChange)="changeTab($event)">
+            </app-danh-sach-nop-von-ban>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'ghinhan'">
+            <app-danh-sach-ghi-nhan-von-ban (dataChange)="changeTab($event)">
+            </app-danh-sach-ghi-nhan-von-ban>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'vonban'">
+            <app-von-ban-hang [data]="data" (dataChange)="changeTab($event)">
+            </app-von-ban-hang>
+        </ng-container>
+        <!-- <ng-container *ngIf="tabSelected == 'tonghop'">
+            <app-tong-hop-bao-cao (dataChange)="changeTab($event)"></app-tong-hop-bao-cao>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'baocao'">
+            <app-bao-cao [data]="data" (dataChange)="changeTab($event)"></app-bao-cao>
+        </ng-container> -->
+    </div>
+</div>

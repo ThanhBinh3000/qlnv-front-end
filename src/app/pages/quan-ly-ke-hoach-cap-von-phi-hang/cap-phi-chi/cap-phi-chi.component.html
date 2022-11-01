@@ -1,16 +1,17 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
     <!-- (nzChange)="onChange($event)" -->
     <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="selectTab(0)" >
+        <li nz-menu-item nzSelected (click)="selectTab(0)"
+            *ngIf="userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_DEXUAT')">
             Đề nghị cấp phí bộ ngành
         </li>
-        <li nz-menu-item (click)="selectTab(1)">
+        <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TONGHOP')">
             Tổng hợp đề nghị cấp phí Bộ, ngành
         </li>
-        <li nz-menu-item (click)="selectTab(2)">
+        <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_THONGTRI')">
             Thông tri duyệt y dự toán
         </li>
-        <li nz-menu-item (click)="selectTab(3)">
+        <li nz-menu-item (click)="selectTab(3)" *ngIf="userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_TDCAPPHI')">
             Tổng hợp theo dõi cấp phí
         </li>
     </ul>

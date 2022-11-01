@@ -46,6 +46,8 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     loaiVthh: '',
     trichYeu: '',
     soDxuat: '',
+    noiDungTh: '',
+    tenTrangThaiTh: ''
   };
   filterTable: any = {
     soDxuat: '',
@@ -57,8 +59,9 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     tenloaiVthh: '',
     tenCloaiVthh: '',
     tongSoLuong: '',
+    soQdPduyet: '',
     tenTrangThai: '',
-    trangThaiTh: '',
+    tenTrangThaiTh: '',
   };
 
   STATUS = STATUS
@@ -158,7 +161,9 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
+      tenTrangThaiTh: this.searchFilter.tenTrangThaiTh,
       maDvi: this.searchFilter.maDvi,
+      noiDungTh: this.searchFilter.noiDungTh,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -250,6 +255,8 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     this.searchFilter.trichYeu = null;
     this.searchFilter.loaiVthh = null;
     this.searchFilter.maDvi = null;
+    this.searchFilter.tenTrangThaiTh = null;
+    this.searchFilter.noiDungTh = null;
     this.search();
   }
 
@@ -311,6 +318,7 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
           loaiVthh: this.searchFilter.loaiVthh,
           namKh: this.searchFilter.namKh,
           trichYeu: this.searchFilter.trichYeu,
+          tenTrangThaiTh: this.searchFilter.tenTrangThaiTh,
           maDvi: null,
         };
         this.danhSachMuaTrucTiepService
@@ -401,8 +409,9 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       tenloaiVthh: '',
       tenCloaiVthh: '',
       tongSoLuong: '',
+      soQdPduyet: '',
       tenTrangThai: '',
-      trangThaiTh: '',
+      tenTrangThaiTh: '',
     }
   }
 }

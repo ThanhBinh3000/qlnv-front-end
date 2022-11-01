@@ -17,6 +17,8 @@ import { STATUS } from "../../../../../constants/status";
 import { Globals } from 'src/app/shared/globals';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';
+import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
+import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 
 
 @Component({
@@ -30,7 +32,7 @@ export class TongHopKhmttComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private tongHopDeXuatKHMTTService: TongHopDeXuatKHMTTService,
-    private danhSachDauThauService: DanhSachDauThauService,
+    private danhSachMuaTrucTiepService: DanhSachMuaTrucTiepService,
     private modal: NzModalService,
     public userService: UserService,
     private route: ActivatedRoute,
@@ -160,7 +162,7 @@ export class TongHopKhmttComponent implements OnInit {
 
   async searchDanhSachDauThau(body, trangThai) {
     body.trangThai = trangThai
-    return await this.danhSachDauThauService.search(body);
+    return await this.danhSachMuaTrucTiepService.search(body);
   }
 
   async selectTabData(tab: string) {
