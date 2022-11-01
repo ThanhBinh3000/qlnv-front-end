@@ -230,10 +230,9 @@
                                                 <td>{{item.ngayDuyet}}</td>
                                                 <td>{{getStatusName(item.trangThai)}}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-main"
-                                                        (click)="viewDetail(item.id)">
-                                                        <span>Xem</span>
-                                                    </button>
+                                                    <a (click)="viewDetail(item.id)">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         </tbody>

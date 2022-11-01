@@ -307,6 +307,7 @@ export class BaoCaoComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
+        debugger
         const isSynthetic = this.baoCao.lstBcaoDviTrucThuocs.length != 0;
         const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
         const checkParent = this.donVis.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
@@ -347,10 +348,14 @@ export class BaoCaoComponent implements OnInit {
     }
 
     back() {
-        const obj = {
-            tabSelected: this.data?.preTab,
+        if (this.data?.preData) {
+            this.dataChange.emit(this.data?.preData)
+        } else {
+            const obj = {
+                tabSelected: this.data?.preTab,
+            }
+            this.dataChange.emit(obj);
         }
-        this.dataChange.emit(obj);
     }
 
     // lay ten don vi tao
@@ -825,7 +830,12 @@ export class BaoCaoComponent implements OnInit {
     };
 
     viewDetail(id) {
-
+        const obj = {
+            id: id,
+            preData: this.data,
+            tabSelected: 'next' + this.data?.tabSelected,
+        }
+        this.dataChange.emit(obj);
     }
 
     showDialogCopy() {
