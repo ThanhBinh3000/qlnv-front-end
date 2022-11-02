@@ -70,7 +70,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày đề nghị </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker class="search__input" formControlName="ngayDeNghi" [nzDisabled]="isView">
+                <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayDeNghi" [nzDisabled]="isView">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>

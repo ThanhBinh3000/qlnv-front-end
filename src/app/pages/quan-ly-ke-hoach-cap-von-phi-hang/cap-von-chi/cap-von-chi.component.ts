@@ -25,7 +25,7 @@ export class CapVonChiComponent implements OnInit {
     this.viewDeNghi = this.userService.isAccessPermisson(CVNC.VIEW_DN_MLT) || this.userService.isAccessPermisson(CVNC.VIEW_DN_MVT);
     this.viewTongHop = this.userService.isAccessPermisson(CVNC.VIEW_SYNTHETIC_CKV) || this.userService.isAccessPermisson(CVNC.VIEW_SYNTHETIC_TC);
   }
-  tabSelected: number = 2;
+  tabSelected: number = null;
   selectTab(tab: number) {
     this.tabSelected = tab;
   }
