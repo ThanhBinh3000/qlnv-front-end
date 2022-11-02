@@ -16,7 +16,13 @@ export class QuanLyVonPhiService extends BaseService {
 
   urlDefault = environment.SERVICE_API;
 
-
+  //lay danh muc don vi con theo ma don vi vho trc
+  dmDviCon(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-category/dmuc-donvi/tat-ca',
+      request,
+    )
+  }
   //search list bao cao
   timBaoCaoLapThamDinh(request: any): Observable<any> {
     return this.httpClient.post(

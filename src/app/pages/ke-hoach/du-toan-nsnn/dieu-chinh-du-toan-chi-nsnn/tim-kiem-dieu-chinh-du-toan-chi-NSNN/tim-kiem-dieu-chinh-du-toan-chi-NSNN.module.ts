@@ -14,6 +14,9 @@ import { TimKiemDieuChinhDuToanChiNSNNComponent } from './tim-kiem-dieu-chinh-du
     TimKiemDieuChinhDuToanChiNSNNRoutingModule,
     ComponentsModule,
   ],
+  exports: [
+    TimKiemDieuChinhDuToanChiNSNNComponent,
+  ]
 })
 
-export class TimKiemDieuChinhDuToanChiNSNNModule {}
+export class TimKiemDieuChinhDuToanChiNSNNModule { }

@@ -32,7 +32,7 @@ import { DatePipe } from "@angular/common";
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { DialogThemMoiKeHoachMuaTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
 import { STATUS } from 'src/app/constants/status';
-
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 interface ItemData {
   id: string;
   stt: string;
@@ -171,7 +171,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       tgianMkho: ['', [Validators.required]],
       tgianKthuc: ['', [Validators.required]],
       ghiChu: [null],
-      tongMucDt: [],
+      tongMucDt: [null, [Validators.required]],
       tongSoLuong: [],
       nguonVon: ['', [Validators.required]],
       tenChuDt: ['', [Validators.required]],
@@ -343,7 +343,8 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       }
       let tongMucDt: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt * item.thanhTien;
+        tongMucDt = tongMucDt + (item.soLuongDxmtt * item.donGiaVat);
+
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,
@@ -413,7 +414,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   }
 
   convertTienTobangChu(tien: number): string {
-    return VNnum2words(tien);
+    return convertTienTobangChu(tien);
   }
 
   downloadFile(taiLieu: any) {
@@ -837,6 +838,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   }
 
   convertListData() {
+    this.helperService.setIndexArray(this.listOfData);
     this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()
   }

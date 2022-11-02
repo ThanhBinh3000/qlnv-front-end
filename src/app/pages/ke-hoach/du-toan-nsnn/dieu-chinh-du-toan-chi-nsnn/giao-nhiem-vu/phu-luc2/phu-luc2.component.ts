@@ -182,7 +182,7 @@ export class PhuLuc2Component implements OnInit {
         if (res.statusCode == 0) {
           this.dsDinhMucN = res.data;
           this.dsDinhMucN.forEach(item => {
-            if (!item.loaiVthh.startsWith('04')) {
+            if (!item.loaiVthh.startsWith('02')) {
               item.tongDmuc = divNumber(item.tongDmuc, 1000);
             }
           })
@@ -205,7 +205,7 @@ export class PhuLuc2Component implements OnInit {
         if (res.statusCode == 0) {
           this.dsDinhMucX = res.data;
           this.dsDinhMucX.forEach(item => {
-            if (!item.loaiVthh.startsWith('04')) {
+            if (!item.loaiVthh.startsWith('02')) {
               item.tongDmuc = divNumber(item.tongDmuc, 1000);
             }
           })
