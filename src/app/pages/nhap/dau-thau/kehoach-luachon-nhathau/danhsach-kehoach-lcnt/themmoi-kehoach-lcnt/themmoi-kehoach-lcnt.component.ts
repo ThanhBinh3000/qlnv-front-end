@@ -37,28 +37,6 @@ import { DatePipe } from "@angular/common";
 import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
 
 
-export interface TreeNodeInterface {
-  key: string;
-  maDvi: string;
-  tenDvi: string;
-  goiThau: string;
-  soLuongTheoChiTieu?: number;
-  maDiemKho?: string;
-  soLuongDaMua?: number;
-  diaDiemNhap?: string;
-  soLuong?: number;
-  donGia?: number;
-  thanhTien?: string;
-  bangChu?: string;
-  giaTriDamBao?: string;
-  name: string;
-  age?: number;
-  level?: number;
-  expand?: boolean;
-  address?: string;
-  children?: TreeNodeInterface[];
-  parent?: TreeNodeInterface;
-}
 @Component({
   selector: 'app-themmoi-kehoach-lcnt',
   templateUrl: './themmoi-kehoach-lcnt.component.html',
@@ -98,8 +76,6 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   listOfMapData: VatTu[];
   listOfMapDataClone: VatTu[];
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
-  selectHang: any = { ten: '' };
-  errorInputRequired: string = 'Dữ liệu không được để trống.';
   dataChiTieu: any;
   baoGiaThiTruongList: CanCuXacDinh[] = [];
   canCuKhacList: CanCuXacDinh[] = [];
@@ -119,11 +95,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
 
   listDataGroup: any[] = [];
 
-  page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
-  totalRecord: number = 0;
-  allChecked = false;
-  indeterminate = false;
+
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
 
@@ -229,6 +201,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
     if (resNx.msg == MESSAGE.SUCCESS) {
       this.listLoaiHinhNx = resNx.data.filter(item => item.phanLoai == 'N');
+      console.log(this.listLoaiHinhNx);
     }
     // kiểu nhập xuất
     this.listKieuNx = [];
@@ -247,6 +220,16 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
     if (resHd.msg == MESSAGE.SUCCESS) {
       this.listLoaiHopDong = resHd.data;
+    }
+  }
+
+  onChangeLhNx($event) {
+    console.log($event);
+    let dataNx = this.listLoaiHinhNx.filter(item => item.ma == $event);
+    if (dataNx.length > 0) {
+      this.formData.patchValue({
+        kieuNx: dataNx[0].ghiChu
+      })
     }
   }
 
@@ -410,7 +393,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
         }
         let tongMucDt: number = 0;
         this.listOfData.forEach((item) => {
-          tongMucDt = tongMucDt + item.soLuong * item.donGia * 1000;
+          tongMucDt = tongMucDt + item.soLuong * item.donGia;
         });
         this.formData.patchValue({
           tongMucDt: tongMucDt,
@@ -450,7 +433,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       }
       let tongMucDt: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + item.soLuong * item.donGia;
+        tongMucDt = tongMucDt + item.soLuong * item.donGia * 1000;
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,

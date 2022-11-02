@@ -26,7 +26,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
   @Output() soLuongChange = new EventEmitter<number>();
   @Input() isView;
   @Input() isCache: boolean = false;
-  @Input() isLuongThuc;
+  @Input() isTongHop;
 
   formData: FormGroup
   listNguonVon: any[] = [];
@@ -87,27 +87,26 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        let res;
-        if (this.isLuongThuc) {
-          res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
+        let res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
+        if (this.isTongHop) {
           this.listOfData = this.dataInput.dsGoiThau;
         } else {
-          res = await this.dxKhLcntService.getDetail(this.dataInput.id);
-          this.listOfData = this.dataInput.dsGtDtlList;
+          this.listOfData = this.dataInput.dsGtDtlList ? this.dataInput.dsGtDtlList : this.dataInput.dsGoiThau;
         }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
+          let soLuong = res.data.tongMucDt / res.data.donGiaVat / 1000;
+          this.formData.patchValue({
+            soLuong: soLuong,
+            tongMucDt: soLuong * res.data.donGiaVat * 1000
+          });
           if (!this.isCache) {
-            this.formData.patchValue({
-              soLuong: this.dataInput.soLuong,
-              tongMucDt: this.dataInput.soLuong * this.dataInput.donGiaVat * 1000
-            })
-          } else {
-            let soLuong = res.data.tongMucDt / res.data.donGiaVat;
-            this.formData.patchValue({
-              soLuong: soLuong,
-              tongMucDt: soLuong * res.data.donGiaVat * 1000
-            })
+            if (this.dataInput.soLuong) {
+              this.formData.patchValue({
+                soLuong: this.dataInput.soLuong,
+                tongMucDt: this.dataInput.soLuong * this.dataInput.donGiaVat * 1000
+              })
+            }
           }
         }
         this.helperService.setIndexArray(this.listOfData);
