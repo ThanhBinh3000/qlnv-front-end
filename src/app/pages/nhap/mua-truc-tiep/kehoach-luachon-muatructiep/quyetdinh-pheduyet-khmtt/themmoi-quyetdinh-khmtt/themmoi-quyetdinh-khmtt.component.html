@@ -81,7 +81,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký quyết định </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayKy">
+              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"
+                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -90,7 +91,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayHluc">
+              <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy"
+                [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -171,14 +173,14 @@
         <tbody>
           <tr *ngFor="let data of danhsachDxMtt ;let i = index" (click)="showDetail($event,i)">
             <td class="text-center">{{i + 1}} </td>
-            <td>{{ data.tenDvi }}</td>
+            <td>{{ data.dxuatHdr ? data.dxuatHdr.tenDvi : data.tenDvi }}</td>
             <td></td>
-            <td>{{ data.soDxuat }}</td>
-            <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.trichYeu }}</td>
-            <td>{{ data.tenDuAn }}</td>
-            <td>{{ data.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
-            <td>{{ data.tongMucDt | number: '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ data.dxuatHdr ? data.dxuatHdr.soDxuat : data.soDxuat }}</td>
+            <td>{{ data.dxuatHdr ? data.dxuatHdr.ngayPduyet : data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.dxuatHdr ? data.dxuatHdr.trichYeu : data.trichYeu }}</td>
+            <td>{{ data.dxuatHdr ? data.dxuatHdr.tenDuAn : data.tenDuAn }}</td>
+            <td>{{ data.dxuatHdr ? data.dxuatHdr.tongSoLuong : data.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ data.dxuatHdr ? data.dxuatHdr.tongMucDt: data.tongMucDt | number: '1.0-1' : 'vi_VN' }}</td>
           </tr>
         </tbody>
       </nz-table>

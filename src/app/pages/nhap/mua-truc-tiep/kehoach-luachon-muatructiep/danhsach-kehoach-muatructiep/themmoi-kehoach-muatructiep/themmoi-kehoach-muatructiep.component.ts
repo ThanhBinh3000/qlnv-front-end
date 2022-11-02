@@ -208,6 +208,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     } else {
       this.initForm();
     }
+    await this.getDataChiTieu()
     await this.spinner.hide();
   }
 
