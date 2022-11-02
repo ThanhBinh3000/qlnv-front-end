@@ -50,14 +50,18 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
     }
 
     getSoQdChiTieu() {
+        debugger
         const request = {
             namKHoach: this.nam,
             maDvi: this.userInfo?.MA_DVI,
         }
+        console.log(request)
         this.spinner.show();
+        debugger
         this.capVonNguonChiService.soQdChiTieu(request).toPromise().then(
             data => {
                 if (data.statusCode == 0) {
+                    console.log(data)
                     this.response.qdChiTieu = data.data[0];
                     if (!this.response.qdChiTieu) {
                         this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy số quyết định chỉ tiêu cho năm ' + this.nam);
@@ -76,15 +80,20 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
         this.spinner.hide();
     }
 
+    getSoQdChiTieu2() {
+        debugger
+
+    }
+
     getListContract() {
-        if (!this.nam) {
-            this.notification.warning(MESSAGE.WARNING, 'Vui lòng nhập năm');
-            this.response.canCuGia = null;
-            return;
-        }
+        // if (!this.nam) {
+        //     this.notification.warning(MESSAGE.WARNING, 'Vui lòng nhập năm');
+        //     this.response.canCuGia = null;
+        //     return;
+        // }
         if (this.response.canCuGia == Utils.HD_TRUNG_THAU) {
             const request = {
-                namKHoach: this.nam,
+                namKHoach: '2022',
             }
             this.spinner.show();
             this.capVonNguonChiService.danhSachHopDong(request).toPromise().then(
