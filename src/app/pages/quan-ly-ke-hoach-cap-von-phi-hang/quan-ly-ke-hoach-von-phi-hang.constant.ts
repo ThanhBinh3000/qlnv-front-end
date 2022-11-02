@@ -41,6 +41,6 @@ export const ROUTE_LIST_CAP_VON: Array<any> = [
 		dropdown: 'giao-chi-tieu',
 		idHover: 'giao-chi-tieu',
 		hasTab: false,
-		code: ''//'VONPHIHANG_VONMBANTT'
+		code: 'VONPHIHANG_VONMBANTT'
 	},
 ]

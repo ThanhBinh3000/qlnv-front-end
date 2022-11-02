@@ -189,7 +189,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       this.formData.patchValue({
         namKhoach: data.hhQdKhlcntHdr.namKhoach,
         soQdPdKhlcnt: data.hhQdKhlcntHdr.soQd,
-        soQdPdKqLcnt: null,
+        soQdPdKqLcnt: data.soQdPdKqLcnt,
         tenDuAn: data.tenDuAn,
         tenDvi: data.tenDvi,
         tongMucDt: '',
