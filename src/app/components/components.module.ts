@@ -157,7 +157,7 @@ import { DialogThemMoiKeHoachMuaTrucTiepComponent } from './dialog/dialog-them-m
 import { DialogThemChiCucComponent } from './dialog/dialog-them-chi-cuc/dialog-them-chi-cuc.component';
 import { DialogCanCuThongTinChaoGiaComponent } from './dialog/dialog-can-cu-thong-tin-chao-gia/dialog-can-cu-thong-tin-chao-gia.component';
 import { NzStatisticModule } from "ng-zorro-antd/statistic";
-import { DialogTaoMoiBaoCaoQuyetToanComponent } from './dialog/dialog-tao-moi-bao-cao-quyet-toan/dialog-tao-moi-bao-cao-quyet-toan.component';
+import { NgxCurrencyModule } from 'ngx-currency';
 @NgModule({
   declarations: [
     //components
@@ -206,7 +206,6 @@ import { DialogTaoMoiBaoCaoQuyetToanComponent } from './dialog/dialog-tao-moi-ba
     MultipleTagComponent,
     DialogDiaDiemKhoComponent,
     DialogChonPhuLucDieuChinhComponent,
-    DialogTaoMoiBaoCaoQuyetToanComponent,
     //pipes
     FilterPipe,
 
@@ -266,7 +265,7 @@ import { DialogTaoMoiBaoCaoQuyetToanComponent } from './dialog/dialog-tao-moi-ba
     DialogTongHopHangSuaChuaDtqgComponent,
     DialogThemMoiKeHoachMuaTrucTiepComponent,
     DialogThemChiCucComponent,
-    DialogCanCuThongTinChaoGiaComponent
+    DialogCanCuThongTinChaoGiaComponent,
   ],
   imports: [
     CommonModule,
@@ -325,7 +324,8 @@ import { DialogTaoMoiBaoCaoQuyetToanComponent } from './dialog/dialog-tao-moi-ba
     DragDropModule,
     NzPopconfirmModule,
     NzResultModule,
-    NzStatisticModule
+    NzStatisticModule,
+    NgxCurrencyModule
   ],
   exports: [
     FormsModule,
@@ -392,6 +392,7 @@ import { DialogTaoMoiBaoCaoQuyetToanComponent } from './dialog/dialog-tao-moi-ba
     BaseComponent,
     DialogThemChiCucComponent,
     DialogCanCuThongTinChaoGiaComponent,
+    NgxCurrencyModule
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

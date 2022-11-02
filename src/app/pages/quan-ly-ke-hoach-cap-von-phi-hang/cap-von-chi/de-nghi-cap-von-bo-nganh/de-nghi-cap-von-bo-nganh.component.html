@@ -22,7 +22,6 @@
         </div>
       </div>
       <div nz-col class="cangiua group-button-search">
-        <div>
           <button nz-button class="search__button--clear" (click)="clearFilter()">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
@@ -31,21 +30,20 @@
             <i nz-icon nzType="search"></i>
             Tìm kiếm
           </button>
-        </div>
       </div>
     </nz-card>
     <div class="group-button">
       <h3 class="text-uppercase">Thông tin đề nghị cấp vốn bộ ngành</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isTongCuc()">
+        <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isTongCuc()">
+        <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isTongCuc()">
+        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN_THEM')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>
@@ -166,11 +164,11 @@
               <a (click)="detail(data, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThaiId==globals.prop.NHAP_DU_THAO) && userService.isTongCuc()"
+              <a *ngIf="(data.trangThaiId==globals.prop.NHAP_DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN_SUA')"
                 (click)="detail(data, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThaiId==globals.prop.NHAP_DU_THAO && userService.isTongCuc()"
+              <a *ngIf="data.trangThaiId==globals.prop.NHAP_DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN_XOA')"
                 (click)="xoaItem(data.id)">
                 <i class="fa fa-trash-o do"></i>
               </a>

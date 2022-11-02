@@ -104,7 +104,7 @@
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-select formControlName="namKh" (ngModelChange)="getDataChiTieu()" [nzDisabled]="true">
+                            <nz-select formControlName="namKh" [nzDisabled]="true">
                                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                             </nz-select>
                         </nz-form-control>
@@ -436,9 +436,9 @@
                         <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfter="đ">
-                                <nz-input-number class="text-right" nz-input formControlName="tongMucDt" [nzMin]="1"
-                                    [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                                <nz-input-number class="text-right" nz-input formControlName="tongMucDt"
+                                    [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                    nzDisabled>
                                 </nz-input-number>
                             </nz-input-group>
                         </nz-form-control>
@@ -496,7 +496,6 @@
                     <th width="">Đơn giá đã bao gồm VAT(đ/kg)</th>
                     <th width="">Thành tiền (đồng)</th>
                     <th width="">Bằng chữ</th>
-                    <th width="90px">Hành động</th>
                 </tr>
             </thead>
             <tbody>
@@ -517,13 +516,13 @@
                             <td></td>
                             <td></td>
                             <td>{{dtGoiThau.diaDiemNhap}}</td>
-                            <td></td>
-                            <td></td>
+                            <td>{{dtGoiThau.soLuongCtieu}}</td>
+                            <td>{{dtGoiThau.soLuongKhDd}}</td>
                             <td>{{dtGoiThau.soLuongDxmtt | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td>{{dtGoiThau.giaCoThue | number : '1.0-1' : 'vi_VN'}}</td>
+                            <td>{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                             <td>{{dtGoiThau.donGiaVat * dtGoiThau.soLuongDxmtt | number : '1.0-1' : 'vi_VN'}} </td>
-                            <td>{{dtGoiThau.bangChu}}</td>
-                            <td *ngIf="userService.isCuc()"></td>
+                            <td>{{dtGoiThau.soLuongDxmtt?
+                                convertTienTobangChu(dtGoiThau.soLuongDxmtt * dtGoiThau.donGiaVat):''}}</td>
                         </tr>
                     </ng-container>
                 </ng-container>

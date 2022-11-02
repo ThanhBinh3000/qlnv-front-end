@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from "../../../../../services/user.service";
 
 @Component({
   selector: 'app-quyet-dinh',
@@ -7,10 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class QuyetDinhComponent implements OnInit {
   tabSelected: number = 0;
-  constructor() { }
+
+  constructor(public userService: UserService,) {
+  }
 
   ngOnInit() {
   }
+
   selectTab(tab: number) {
     this.tabSelected = tab;
   }

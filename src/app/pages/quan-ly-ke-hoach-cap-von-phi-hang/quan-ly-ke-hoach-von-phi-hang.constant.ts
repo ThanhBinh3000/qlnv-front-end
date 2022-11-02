@@ -7,7 +7,7 @@ export const CAP_VON_CHI = 'cap-von-chi';
 export const CAP_PHI_CHI = 'cap-phi-chi';
 export const CAP_VON_MUA_BAN = 'quan-ly-cap-von-mua-ban-thanh-toan-tien-hang-dtqg';
 
-export const ROUTE_LIST_CAP_VON: Array<ChiTietMenu> = [
+export const ROUTE_LIST_CAP_VON: Array<any> = [
 	// {
 	// 	icon: 'htvbdh_tcdt_chitieukehoachnam',
 	// 	title: 'Cấp vốn chi DTQG',
@@ -23,14 +23,16 @@ export const ROUTE_LIST_CAP_VON: Array<ChiTietMenu> = [
 		dropdown: 'giao-chi-tieu',
 		idHover: 'giao-chi-tieu',
 		hasTab: false,
+    code:'VONPHIHANG_VONCHIDTQG'
 	},
 	{
 		icon: 'htvbdh_tcdt_chitieukehoachnam',
-		title: 'Cấp phi chi nghiệp vụ DTQG',
+		title: 'Cấp phí chi nghiệp vụ DTQG',
 		url: `/${MAIN_ROUTE_CAPVON}/${CAP_PHI_CHI}`,
 		dropdown: 'giao-chi-tieu',
 		idHover: 'giao-chi-tieu',
 		hasTab: false,
+    code:'VONPHIHANG_PHICHINGVU'
 	},
 	{
 		icon: 'htvbdh_tcdt_kehoachvonphi',
@@ -39,5 +41,6 @@ export const ROUTE_LIST_CAP_VON: Array<ChiTietMenu> = [
 		dropdown: 'giao-chi-tieu',
 		idHover: 'giao-chi-tieu',
 		hasTab: false,
+    code:'VONPHIHANG_VONMBANTT'
 	},
 ]

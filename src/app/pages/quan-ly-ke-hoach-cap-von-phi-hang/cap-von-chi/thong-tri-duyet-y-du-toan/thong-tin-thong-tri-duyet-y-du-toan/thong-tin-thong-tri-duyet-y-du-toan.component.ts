@@ -11,6 +11,7 @@ import * as dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import {CurrencyMaskInputMode} from 'ngx-currency'
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
@@ -32,6 +33,7 @@ import { Globals } from 'src/app/shared/globals';
   templateUrl: './thong-tin-thong-tri-duyet-y-du-toan.component.html',
   styleUrls: ['./thong-tin-thong-tri-duyet-y-du-toan.component.scss']
 })
+
 export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   @Input() loaiVthhInput: string;
   @Input() idInput: number;
@@ -41,6 +43,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   @Input() id: number;
   formData: FormGroup;
   cacheData: any[] = [];
+  options = { prefix: '', thousands: '.', decimal: ',', inputMode: CurrencyMaskInputMode.NATURAL }
   fileDinhKem: Array<FileDinhKem> = [];
   userLogin: UserLogin;
   listChiCuc: any[] = [];
@@ -138,13 +141,13 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         },
         [Validators.required],
       ],
-      // lyDoChi: [
-      //   {
-      //     value: this.khBanDauGia ? this.khBanDauGia.lyDoChi : null,
-      //     disabled: this.isView ? true : false,
-      //   },
-      //   [Validators.required],
-      // ],
+      lyDoChi: [
+        {
+          value: this.khBanDauGia ? this.khBanDauGia.lyDoChi : null,
+          disabled: this.isView ? true : false,
+        },
+        [Validators.required],
+      ],
       soDnCapVon: [
         {
           value: this.khBanDauGia ? this.khBanDauGia.soDnCapVon : null,
@@ -202,7 +205,14 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       return true;
     }
   }
-
+  totalTable(data) {
+    if (data && data.length > 0) {
+      let sum = data.map((item) => item.soTien).reduce((prev, next) => Number(prev) + Number(next));
+      return sum ?? 0;
+    } else {
+      return 0
+    }
+  }
   async getListDeNghi() {
     this.listDeNghi = [];
     let body = {

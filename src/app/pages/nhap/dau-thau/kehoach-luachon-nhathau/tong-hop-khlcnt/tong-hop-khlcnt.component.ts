@@ -388,7 +388,7 @@ export class TongHopKhlcntComponent implements OnInit {
           noiDung: this.searchFilter.noiDung
         };
         this.tongHopDeXuatKHLCNTService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
           );
