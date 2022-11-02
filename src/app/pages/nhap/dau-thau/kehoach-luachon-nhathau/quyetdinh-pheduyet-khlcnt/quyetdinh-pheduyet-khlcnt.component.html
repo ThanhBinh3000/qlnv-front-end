@@ -180,10 +180,10 @@
             <td *ngIf="userService.isTongCuc()">{{ data.idThHdr }}</td>
             <td>{{data.tenLoaiVthh}}</td>
             <td>{{data.soGthau}}</td>
+            <td>{{data.soGthauTrung}}</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{data.hhDxuatKhlcnt?.tgianNhang | date: 'dd/MM/YYYY' }}</td>
+            <td>{{data.hhDxuatKhlcnt?.tgianThien}}</td>
             <td *ngIf="userService.isTongCuc()">{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="detail(data)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')">
