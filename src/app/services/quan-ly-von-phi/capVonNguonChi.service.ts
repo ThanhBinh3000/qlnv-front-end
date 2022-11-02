@@ -62,7 +62,7 @@ export class CapVonNguonChiService extends BaseService {
     //danh sach op dong
     dsachHopDong(request: any): Observable<any> {
         return this.httpClient.post(
-            this.urlDefault + '/qlnv-khoachphi/hop-dong/danh-sach',
+            this.urlDefault + '/qlnv-khoachphi/hop-dong/danh-sach/ds-hop-dong',
             // 'http://192.168.10.12:30101/hop-dong/danh-sach/ds-hop-dong',
             request,
         );

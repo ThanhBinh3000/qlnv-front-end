@@ -29,10 +29,10 @@
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Phê duyệt</span>
             </button>
-            <button *ngIf="copyStatus" type="button" class="btn btn-sub" (click)="showDialogCopy()">
+            <!-- <button *ngIf="copyStatus" type="button" class="btn btn-sub" (click)="showDialogCopy()">
                 <i nz-icon nzType="copy" nzTheme="outline"></i>
                 <span>Copy</span>
-            </button>
+            </button> -->
         </div>
     </nz-affix>
 
@@ -51,8 +51,6 @@
                     <thead>
                         <tr>
                             <th>Mã cấp vốn ứng từ đơn vị cấp trên</th>
-                            <th>Loại</th>
-                            <th>Số lệnh chi tiền</th>
                             <th>Ngày lập (lệnh chi tiền)</th>
                             <th>Ngày nhận (lệnh chuyển có)</th>
                             <th>Ngày lập</th>
@@ -64,14 +62,6 @@
                     <tbody>
                         <tr>
                             <td>{{maCvUv}}</td>
-                            <td>
-                                <div *ngFor="let item of loaiVons">
-                                    <div *ngIf="item.id == loaiVon">
-                                        {{item.tenDm}}
-                                    </div>
-                                </div>
-                            </td>
-                            <td>{{soLenhChiTien}}</td>
                             <td>{{ngayLap}}</td>
                             <td>{{ngayNhan}}</td>
                             <td>{{ngayTao}}</td>
@@ -104,83 +94,50 @@
                 <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
                     <thead>
                         <tr>
-                            <th>Nội dung</th>
-                            <th>Mã nguồn NS</th>
-                            <th>Mã chương</th>
-                            <th>Mã NDKT</th>
-                            <th>Số tiền</th>
-                            <th>Số tiền (bằng chữ)</th>
-                            <th>Từ tài khoản</th>
-                            <th [hidden]="status"></th>
+                            <th rowspan="2">Loại</th>
+                            <th rowspan="2">Nội dung</th>
+                            <th rowspan="2">Mã nguồn NS</th>
+                            <th rowspan="2">Niên độ NS</th>
+                            <th rowspan="2">Tổng số tiền</th>
+                            <th colspan="2">Chia ra</th>
+                            <th rowspan="2">Số tiền (bằng chữ)</th>
+                        </tr>
+                        <tr>
+                            <th>Nộp thuế</th>
+                            <th>TT cho ĐV hưởng</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <ng-container *ngIf="!statusEdit; else editTemplate">
-                                <td>
-                                    {{ttGui.noiDung}}
-                                </td>
-                                <td>
-                                    {{ttGui.maNguonNs}}
-                                </td>
-                                <td>
-                                    {{ttGui.maChuong}}
-                                </td>
-                                <td>
-                                    {{ttGui.maNdkt}}
-                                </td>
-                                <td>
-                                    {{displayValue(ttGui.soTien)}}
-                                </td>
-                                <td>
-                                    {{ttGui.soTienChu}}
-                                </td>
-                                <td>
-                                    {{ttGui.taiKhoan}}
-                                </td>
-                                <td [hidden]="status">
-                                    <i class="fa fa-pencil" (click)="startEdit()"></i>
-                                </td>
-                            </ng-container>
-
-                            <ng-template #editTemplate>
-                                <td>
-                                    <input nz-input class="search__input" [(ngModel)]="ttGuiCache.noiDung" />
-                                </td>
-                                <td>
-                                    <input nz-input type="number" class="search__input"
-                                        [(ngModel)]="ttGuiCache.maNguonNs" />
-                                </td>
-                                <td>
-                                    <input nz-input type="number" class="search__input"
-                                        [(ngModel)]="ttGuiCache.maChuong" />
-                                </td>
-                                <td>
-                                    <input nz-input type="number" class="search__input"
-                                        [(ngModel)]="ttGuiCache.maNdkt" />
-                                </td>
-                                <td>
-                                    <fm-input-number class="search__input"
-                                        [class]="(ttGuiCache.soTien || ttGuiCache.soTien === 0) && ttGuiCache.soTien >= 0 ?'' : 'input-error-validate' "
-                                        [(ngModel)]="ttGuiCache.soTien">
-                                    </fm-input-number>
-                                </td>
-                                <td>
-                                    <input nz-input class="search__input" [(ngModel)]="ttGuiCache.soTienChu" />
-                                </td>
-                                <td>
-                                    <input nz-input type="number" class="search__input"
-                                        [class]="ttGuiCache.taiKhoan || ttGuiCache.taiKhoan === 0 ?'' : 'input-error-validate' "
-                                        [(ngModel)]="ttGuiCache.taiKhoan" />
-                                </td>
-                                <td [hidden]="status">
-                                    <a (click)="saveEdit()" class="save">Lưu</a>
-                                    <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                                        (nzOnConfirm)="cancelEdit()" class="save">
-                                        Hủy
-                                    </a>
-                                </td>
-                            </ng-template>
+                            <td>
+                                <div *ngFor="let item of loaiVons">
+                                    <div *ngIf="item.id == ttGui.loaiCap">
+                                        {{item.tenDm}}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {{ttGui.noiDung}}
+                            </td>
+                            <td>
+                                {{ttGui.maNguonNs}}
+                            </td>
+                            <td>
+                                {{ttGui.nienDoNs}}
+                            </td>
+                            <td>
+                                {{displayValue(ttGui.soTien)}}
+                            </td>
+                            <td>
+                                {{displayValue(ttGui.nopThue)}}
+                            </td>
+                            <td>
+                                {{displayValue(ttGui.ttChoDviHuong)}}
+                            </td>
+                            <td>
+                                {{ttGui.soTienBangChu}}
+                            </td>
+                        </tr>
                     </tbody>
                 </nz-table>
             </nz-card>
@@ -203,7 +160,7 @@
                         <div nz-col nzSpan="6">
                             <label class="search__label">Ngày nhận lệnh chuyển có</label>
                             <nz-date-picker class="search__input" [(ngModel)]="ttNhan.ngayNhan"
-                                (ngModelChange)="changeDate()" nzFormat="dd/MM/yyyy"
+                                (ngModelChange)="modelChange()" nzFormat="dd/MM/yyyy"
                                 [class]="ttNhan.ngayNhan ?'' : 'input-error-validate' ">
                             </nz-date-picker>
                         </div>
@@ -241,9 +198,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
+                                    <th>STT</th>
                                     <th>Tên file</th>
-                                    <th nzwidth="10%"></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>

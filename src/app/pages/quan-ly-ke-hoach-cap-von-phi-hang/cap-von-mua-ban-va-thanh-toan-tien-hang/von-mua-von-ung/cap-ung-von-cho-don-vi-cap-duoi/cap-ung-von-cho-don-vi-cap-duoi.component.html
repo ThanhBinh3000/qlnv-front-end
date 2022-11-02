@@ -42,7 +42,7 @@
                 <div class="header-text">
                     <div class="title-chi-tieu">
                         <span [ngClass]="statusClass()">{{getStatusName()}}</span>
-                        <span>Ghi nhận cấp vốn ứng từ đơn vị cấp trên</span>
+                        <span>Danh sách cấp ứng vốn cho đơn vị cấp dưới</span>
                     </div>
                 </div>
             </div>
@@ -50,12 +50,9 @@
                 <nz-table class="nowrap mt-16 table-chi-tiet">
                     <thead>
                         <tr>
-                            <th>Mã cấp vốn ứng từ đơn vị cấp trên</th>
-                            <th>Loại</th>
-                            <th>Số lệnh chi tiền</th>
-                            <th>Ngày lập (lệnh chi tiền)</th>
-                            <th>Ngày nhận (lệnh chuyển có)</th>
-                            <th>Ngày lập</th>
+                            <th>Mã cấp ứng vốn cho đơn vị cấp dưới</th>
+                            <th>Mã cấp ứng vốn nhận từ đơn vị cấp trên</th>
+                            <th>Ngày tạo</th>
                             <th>Ngày trình duyệt</th>
                             <th>Ngày TBP duyệt</th>
                             <th>Ngày lãnh đạo phê duyệt</th>
@@ -63,20 +60,17 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{maCvUv}}</td>
+                            <td>{{maCvUvDuoi}}</td>
+                            <td>{{maCvUvTren}}</td>
                             <td>
-                                <div *ngFor="let item of loaiVons">
-                                    <div *ngIf="item.id == loaiVon">
-                                        {{item.tenDm}}
-                                    </div>
-                                </div>
+                                {{ngayTao}}
                             </td>
-                            <td>{{soLenhChiTien}}</td>
-                            <td>{{ngayLap}}</td>
-                            <td>{{ngayNhan}}</td>
-                            <td>{{ngayTao}}</td>
-                            <td>{{ngayTrinhDuyet}}</td>
-                            <td>{{ngayDuyet}}</td>
+                            <td>
+                                {{ngayTrinhDuyet}}
+                            </td>
+                            <td>
+                                {{ngayDuyet}}
+                            </td>
                             <td>{{ngayPheDuyet}}</td>
                         </tr>
                     </tbody>
@@ -95,7 +89,7 @@
                         <ng-template #editMoney>
                             <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
                                 (ngModelChange)="editMoneyUnit=false">
-                                <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                                <nz-option *ngFor="let item of dviTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
                                 </nz-option>
                             </nz-select>
                         </ng-template>
@@ -104,120 +98,152 @@
                 <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
                     <thead>
                         <tr>
-                            <th>Nội dung</th>
-                            <th>Mã nguồn NS</th>
-                            <th>Mã chương</th>
-                            <th>Mã NDKT</th>
-                            <th>Số tiền</th>
-                            <th>Số tiền (bằng chữ)</th>
-                            <th>Từ tài khoản</th>
-                            <th [hidden]="status"></th>
+                            <th rowspan="2">STT</th>
+                            <th rowspan="2" nzWidth="300px">Đơn vị nhận</th>
+                            <th rowspan="2">Ngày lập (ủy nhiệm chi)</th>
+                            <th rowspan="2">Loại</th>
+                            <th rowspan="2">Ngày nhận (lệnh chuyển có)</th>
+                            <th rowspan="2">Nội dung</th>
+                            <th rowspan="2">Mã nguồn NS</th>
+                            <th rowspan="2">Niên độ NS</th>
+                            <th rowspan="2">Tổng số tiền</th>
+                            <th colspan="2">Chia ra</th>
+                            <th rowspan="2">Bằng chữ</th>
+                            <th rowspan="2" [hidden]="status"></th>
+                        </tr>
+                        <tr>
+                            <th>Nộp thuế</th>
+                            <th>TT cho ĐV hưởng</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <ng-container *ngIf="!statusEdit; else editTemplate">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4=5+6</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td></td>
+                            <td width="2.25%" [hidden]="status"></td>
+                        </tr>
+                        <tr *ngFor="let data of lstCtietBcao; let i = index">
+                            <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+                                <td>{{ i + 1 }}</td>
                                 <td>
-                                    {{ttGui.noiDung}}
+                                    {{getUnitName(data.dviNhan)}}
                                 </td>
                                 <td>
-                                    {{ttGui.maNguonNs}}
+                                    {{data.ngayLapTemp}}
                                 </td>
                                 <td>
-                                    {{ttGui.maChuong}}
+                                    <div *ngFor="let item of loaiVons">
+                                        <div *ngIf="item.id == data.loai">
+                                            {{item.tenDm}}
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>
-                                    {{ttGui.maNdkt}}
+                                    {{data.ngayNhanTemp}}
                                 </td>
                                 <td>
-                                    {{displayValue(ttGui.soTien)}}
+                                    {{data.noiDung}}
                                 </td>
                                 <td>
-                                    {{ttGui.soTienChu}}
+                                    {{data.maNguonNs}}
                                 </td>
                                 <td>
-                                    {{ttGui.taiKhoan}}
+                                    {{data.nienDoNs}}
+                                </td>
+                                <td>
+                                    {{displayValue(data.tongSoTien)}}
+                                </td>
+                                <td>
+                                    {{displayValue(data.nopThue)}}
+                                </td>
+                                <td>
+                                    {{displayValue(data.ttChoDviHuong)}}
+                                </td>
+                                <td>
+                                    {{data.soTienBangChu}}
                                 </td>
                                 <td [hidden]="status">
-                                    <i class="fa fa-pencil" (click)="startEdit()"></i>
+                                    <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                 </td>
-                            </ng-container>
 
+                            </ng-container>
                             <ng-template #editTemplate>
+                                <td>{{ i + 1 }}</td>
                                 <td>
-                                    <input nz-input class="search__input" [(ngModel)]="ttGuiCache.noiDung" />
+                                    {{getUnitName(data.dviNhan)}}
+                                </td>
+                                <td>
+                                    <nz-date-picker class="search__input" [(ngModel)]="editCache[data.id].data.ngayLap"
+                                        nzFormat="dd/MM/yyyy" (ngModelChange)="changeDate(data.id)">
+                                    </nz-date-picker>
+                                </td>
+                                <td>
+                                    <nz-select nzShowSearch nzAllowClear
+                                        [class]="editCache[data.id].data.loai ?'' : 'input-error-validate' "
+                                        nzPlaceHolder="Chọn loại vốn" [(ngModel)]="editCache[data.id].data.loai">
+                                        <nz-option *ngFor="let item of loaiVons" [nzValue]="item.id"
+                                            [nzLabel]="item.tenDm">
+                                        </nz-option>
+                                    </nz-select>
+                                </td>
+                                <td>
+                                    {{data.ngayNhanTemp}}
+                                </td>
+                                <td>
+                                    <input nz-input class="search__input"
+                                        [(ngModel)]="editCache[data.id].data.noiDung" />
                                 </td>
                                 <td>
                                     <input nz-input type="number" class="search__input"
-                                        [(ngModel)]="ttGuiCache.maNguonNs" />
+                                        [(ngModel)]="editCache[data.id].data.maNguonNs" />
                                 </td>
                                 <td>
                                     <input nz-input type="number" class="search__input"
-                                        [(ngModel)]="ttGuiCache.maChuong" />
+                                        [(ngModel)]="editCache[data.id].data.nienDoNs" />
                                 </td>
                                 <td>
-                                    <input nz-input type="number" class="search__input"
-                                        [(ngModel)]="ttGuiCache.maNdkt" />
+                                    {{displayValue(editCache[data.id].data.tongSoTien)}}
                                 </td>
                                 <td>
                                     <fm-input-number class="search__input"
-                                        [class]="(ttGuiCache.soTien || ttGuiCache.soTien === 0) && ttGuiCache.soTien >= 0 ?'' : 'input-error-validate' "
-                                        [(ngModel)]="ttGuiCache.soTien">
+                                        [class]="editCache[data.id].data.nopThue >= 0?'' : 'input-error-validate' "
+                                        [(ngModel)]="editCache[data.id].data.nopThue"
+                                        (ngModelChange)="changeModel(data.id)">
                                     </fm-input-number>
                                 </td>
                                 <td>
-                                    <input nz-input class="search__input" [(ngModel)]="ttGuiCache.soTienChu" />
+                                    <fm-input-number class="search__input"
+                                        [class]="(editCache[data.id].data.ttChoDviHuong || editCache[data.id].data.ttChoDviHuong === 0) && editCache[data.id].data.ttChoDviHuong >= 0 ?'' : 'input-error-validate' "
+                                        [(ngModel)]="editCache[data.id].data.ttChoDviHuong"
+                                        (ngModelChange)="changeModel(data.id)">
+                                    </fm-input-number>
                                 </td>
                                 <td>
-                                    <input nz-input type="number" class="search__input"
-                                        [class]="ttGuiCache.taiKhoan || ttGuiCache.taiKhoan === 0 ?'' : 'input-error-validate' "
-                                        [(ngModel)]="ttGuiCache.taiKhoan" />
+                                    <input nz-input class="search__input"
+                                        [(ngModel)]="editCache[data.id].data.soTienBangChu" />
                                 </td>
                                 <td [hidden]="status">
-                                    <a (click)="saveEdit()" class="save">Lưu</a>
+                                    <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                     <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                                        (nzOnConfirm)="cancelEdit()" class="save">
-                                        Hủy
-                                    </a>
+                                        (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                                 </td>
                             </ng-template>
+                        </tr>
                     </tbody>
                 </nz-table>
-            </nz-card>
-            <div style="margin-top: 20px;"></div>
-            <nz-card class="mt-2px flex-card data-table card-border-content table-card" nzTitle="Thông tin nơi nhận">
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                    <ng-container *ngIf="status; else nhap">
-                        <div nz-col nzSpan="6">
-                            <label class="search__label">
-                                Ngày nhận lệnh chuyển có: <span>{{ngayNhan}}</span>
-                            </label>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <label class="search__label">
-                                Tài khoản nhận: <span>{{ttNhan.taiKhoanNhan}}</span>
-                            </label>
-                        </div>
-                    </ng-container>
-                    <ng-template #nhap>
-                        <div nz-col nzSpan="6">
-                            <label class="search__label">Ngày nhận lệnh chuyển có</label>
-                            <nz-date-picker class="search__input" [(ngModel)]="ttNhan.ngayNhan"
-                                (ngModelChange)="changeDate()" nzFormat="dd/MM/yyyy"
-                                [class]="ttNhan.ngayNhan ?'' : 'input-error-validate' ">
-                            </nz-date-picker>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <label class="search__label">Tài khoản nhận</label>
-                            <nz-input-number class="search__input" nzSize="small" [(ngModel)]="ttNhan.taiKhoanNhan"
-                                [class]="ttNhan.taiKhoanNhan ?'' : 'input-error-validate' ">
-                            </nz-input-number>
-                        </div>
-                    </ng-template>
-                    <div nz-col nzSpan="12">
-                    </div>
-                    <div nz-col nzSpan="24" style="margin-top: 10px;">
-                        <label class="search__label">Thuyết minh</label>
+                    <div nz-col nzSpan="24">
+                        <label class="search__label">Thuyết minh:</label>
                         <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
                     </div>
                 </div>
@@ -241,9 +267,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th nzWidth="7%">STT</th>
+                                    <th>STT</th>
                                     <th>Tên file</th>
-                                    <th nzwidth="10%"></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
