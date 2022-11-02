@@ -9,25 +9,27 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
 import { CVMB, LOAI_VON, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { utils } from 'xlsx';
 
 @Component({
-    selector: 'app-danh-sach-ghi-nhan-von-ban',
-    templateUrl: './danh-sach-ghi-nhan-von-ban.component.html',
-    styleUrls: ['./danh-sach-ghi-nhan-von-ban.component.scss']
+    selector: 'app-danh-sach-ghi-nhan-tien-thua',
+    templateUrl: './danh-sach-ghi-nhan-tien-thua.component.html',
+    //styleUrls: ['./danh-sach-ghi-nhan-cap-ung-von-tai-ckv-cc.component.scss']
 })
-export class DanhSachGhiNhanVonBanComponent implements OnInit {
+export class DanhSachGhiNhanTienThuaComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
 
     //thong tin user
     userInfo: any;
     //thong tin tim kiem
     searchFilter = {
-        maNop: "",
+        maCvUv: "",
         trangThai: Utils.TT_BC_1,
         tuNgay: null,
         denNgay: null,
-        maDviGui: "",
+        maTienThua: "",
         ngayLap: "",
+        maDviGui: "",
         maDvi: "",
     };
 
@@ -55,7 +57,6 @@ export class DanhSachGhiNhanVonBanComponent implements OnInit {
         size: 10,
         page: 1,
     }
-    allChecked = false;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -76,7 +77,7 @@ export class DanhSachGhiNhanVonBanComponent implements OnInit {
         newDate.setMonth(newDate.getMonth() - 1);
         this.searchFilter.tuNgay = newDate;
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
-        //call danh muc
+        //lay danh muc don vi
         await this.danhMuc.dMDviCon().toPromise().then(
             data => {
                 if (data.statusCode == 0) {
@@ -90,10 +91,10 @@ export class DanhSachGhiNhanVonBanComponent implements OnInit {
             }
         );
         //neu co quyen phe duyet thi trang thai mac dinh la trinh duyet
-        if (this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_BH)) {
+        if (this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV)) {
             this.searchFilter.trangThai = Utils.TT_BC_2;
         } else {
-            if (this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV_BH)) {
+            if (this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV)) {
                 this.searchFilter.trangThai = Utils.TT_BC_4;
             }
         }
@@ -103,10 +104,12 @@ export class DanhSachGhiNhanVonBanComponent implements OnInit {
 
     async search() {
         const requestReport = {
-            maNopTienVon: this.searchFilter.maNop,
-            maDviCha: this.userInfo?.MA_DVI,
+            loaiTimKiem: "1",
+            maCapUngVonTuCapTren: this.searchFilter.maCvUv,
+            maNopTienThua: this.searchFilter.maTienThua,
             maDvi: this.searchFilter.maDviGui,
-            maLoai: "2",
+            maDviCha: this.userInfo?.MA_DVI,
+            maLoai: "3",
             ngayLap: this.datePipe.transform(this.searchFilter.ngayLap, Utils.FORMAT_DATE_STR),
             ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
             ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
@@ -131,8 +134,7 @@ export class DanhSachGhiNhanVonBanComponent implements OnInit {
                             ngayTrinhDviCha: this.datePipe.transform(item.ngayTrinhDviCha, Utils.FORMAT_DATE_STR),
                             ngayDuyetDviCha: this.datePipe.transform(item.ngayDuyetDviCha, Utils.FORMAT_DATE_STR),
                             ngayPheDuyetDviCha: this.datePipe.transform(item.ngayPheDuyetDviCha, Utils.FORMAT_DATE_STR),
-                            checked: false,
-                            isEdit: this.checkEditStatus(item.trangThaiDviCha),
+                            isEdit: this.checkEditStatus(item.trangThai),
                         })
                     })
                     this.dataTableAll = cloneDeep(this.dataTable);
@@ -163,33 +165,35 @@ export class DanhSachGhiNhanVonBanComponent implements OnInit {
 
     //reset tim kiem
     clearFilter() {
-        this.searchFilter.maNop = null
+        this.searchFilter.maCvUv = null
         this.searchFilter.trangThai = null
         this.searchFilter.tuNgay = null
         this.searchFilter.denNgay = null
-        this.searchFilter.maDviGui = null
+        this.searchFilter.maTienThua = null
         this.searchFilter.ngayLap = null
+        this.searchFilter.maDviGui = null
         this.search();
-    }
-
-    checkEditStatus(trangThai: string) {
-        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH);
     }
 
     getStatusName(trangThai: string) {
         if (trangThai == Utils.TT_BC_1) {
             return 'Mới';
+        } else {
+            return this.trangThais.find(e => e.id == trangThai)?.tenDm;
         }
-        return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 
     //xem chi tiet bao cao
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: 'vonban',
+            tabSelected: 'bc-tt',
         }
         this.dataChange.emit(obj);
+    }
+
+    checkEditStatus(trangThai: string) {
+        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_TH);
     }
 
     // Tìm kiếm trong bảng

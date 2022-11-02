@@ -27,13 +27,13 @@ export class VonMuaVonUngComponent implements OnInit {
 
     async ngOnInit() {
         this.isTongCuc = this.userService.isTongCuc();
-        this.tabList.forEach(item => {
-            item.status = this.userService.isAccessPermisson(item.role);
-            if (!this.tabSelected && item.status) {
-                this.tabSelected = item.code;
-                item.isSelected = true;
-            }
-        })
+        // this.tabList.forEach(item => {
+        //     item.status = this.userService.isAccessPermisson(item.role);
+        //     if (!this.tabSelected && item.status) {
+        //         this.tabSelected = item.code;
+        //         item.isSelected = true;
+        //     }
+        // })
     }
 
     selectTab(tab) {
