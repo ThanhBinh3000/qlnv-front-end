@@ -129,12 +129,10 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
 
   async loadChiTiet() {
     if (this.id > 0) {
-      let res = await this.tongHopDeXuatKHMTTService.loadChiTiet(this.id);
+      let res = await this.tongHopDeXuatKHMTTService.getDetail(this.id);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
-        dataDetail.hhDxKhMttThopDtls.forEach(element => {
-          this.dataTableDanhSachMTT.push(element.listDxuatHdr);
-        });
+        this.dataTableDanhSachMTT = dataDetail.hhDxKhMttThopDtls;
         this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail)
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
         this.isTongHop = true;
@@ -185,9 +183,7 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
           id: idTh,
           ngayTao: dayjs().format("YYYY-MM-DD"),
         })
-        dataDetail.hhDxKhMttThopDtls.forEach(element => {
-          this.dataTableDanhSachMTT.push(element.listDxuatHdr);
-        });
+        this.dataTableDanhSachMTT = dataDetail.hhDxKhMttThopDtls;
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -305,7 +301,6 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     $event.target.parentElement.classList.add('selectedRow')
     this.idRowSelect = id;
-    console.log(this.idRowSelect, 111111)
     await this.spinner.hide();
   }
 }

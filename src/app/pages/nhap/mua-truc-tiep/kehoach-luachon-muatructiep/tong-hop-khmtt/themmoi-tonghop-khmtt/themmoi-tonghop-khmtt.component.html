@@ -143,15 +143,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of dataTableDanhSachMTT;let i = index" (click)="showDetail($event,data.id)">
+        <tr *ngFor="let data of dataTableDanhSachMTT;let i = index" (click)="showDetail($event,data.dxuatHdr.id)">
           <td class="text-center">{{i + 1}} </td>
-          <td>{{ data.tenDvi }}</td>
-          <td>{{ data.soDxuat }}</td>
-          <td>{{ data.ngayPduyet }}</td>
-          <td>{{ data.trichYeu }}</td>
-          <td>{{ data.tenDuAn }}</td>
-          <td>{{ data.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.tongMucDt | number: '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.dxuatHdr.tenDvi }}</td>
+          <td>{{ data.dxuatHdr.soDxuat }}</td>
+          <td>{{ data.dxuatHdr.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.dxuatHdr.trichYeu }}</td>
+          <td>{{ data.dxuatHdr.tenDuAn }}</td>
+          <td>{{ data.dxuatHdr.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.dxuatHdr.tongMucDt | number: '1.0-1' : 'vi_VN' }}</td>
         </tr>
       </tbody>
     </nz-table>

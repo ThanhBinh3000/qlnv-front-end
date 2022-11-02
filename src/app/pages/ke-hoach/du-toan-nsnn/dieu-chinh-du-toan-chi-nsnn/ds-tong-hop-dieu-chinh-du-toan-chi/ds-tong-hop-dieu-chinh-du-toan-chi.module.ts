@@ -14,6 +14,9 @@ import { DsTongHopDieuChinhDuToanChiComponent } from './ds-tong-hop-dieu-chinh-d
     DsTongHopDieuChinhDuToanChiRoutingModule,
     ComponentsModule,
   ],
+  exports: [
+    DsTongHopDieuChinhDuToanChiComponent,
+  ]
 })
 
-export class DsTongHopDieuChinhDuToanChiModule {}
+export class DsTongHopDieuChinhDuToanChiModule { }

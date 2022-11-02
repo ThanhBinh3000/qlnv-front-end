@@ -194,7 +194,7 @@ export class BaoCaoComponent implements OnInit {
                 break;
         }
         this.titleStatus = this.getStatusName(this.baoCao.trangThai);
-        this.getStatusButton();
+        this.tabs = [];
         this.spinner.hide();
     }
 
@@ -250,10 +250,18 @@ export class BaoCaoComponent implements OnInit {
         }
 
         this.getLuyKe();
+        await this.getDviCon();
+        this.getStatusButton();
+        this.spinner.hide();
+    }
 
-        //lay danh sach danh muc don vi
-        await this.danhMucService.dMDviCon().toPromise().then(
-            (data) => {
+    getDviCon() {
+        const request = {
+            maDviCha: this.baoCao.maDvi,
+            trangThai: '01',
+        }
+        this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
                 } else {
@@ -263,9 +271,7 @@ export class BaoCaoComponent implements OnInit {
             (err) => {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
-        );
-        this.getStatusButton();
-        this.spinner.hide();
+        )
     }
 
     getLuyKe() {
@@ -339,10 +345,14 @@ export class BaoCaoComponent implements OnInit {
     }
 
     back() {
-        const obj = {
-            tabSelected: this.data?.preTab,
+        if (this.data?.preData) {
+            this.dataChange.emit(this.data?.preData)
+        } else {
+            const obj = {
+                tabSelected: this.data?.preTab,
+            }
+            this.dataChange.emit(obj);
         }
-        this.dataChange.emit(obj);
     }
 
     // lay ten don vi tao
@@ -387,6 +397,7 @@ export class BaoCaoComponent implements OnInit {
                     this.baoCao.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
                     this.lstFiles = data.data.lstFiles;
                     this.listFile = [];
+                    this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -427,6 +438,7 @@ export class BaoCaoComponent implements OnInit {
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                     }
+                    this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -793,8 +805,13 @@ export class BaoCaoComponent implements OnInit {
         return false;
     };
 
-    viewDetail(id) {
-
+    viewDetail(id: string) {
+        const obj = {
+            id: id,
+            preData: this.data,
+            tabSelected: 'next' + this.data?.tabSelected,
+        }
+        this.dataChange.emit(obj);
     }
 
     showDialogCopy() {

@@ -199,7 +199,6 @@ export class BaoCaoComponent implements OnInit {
                 break;
         }
         this.titleStatus = this.getStatusName(this.baoCao.trangThai);
-        this.getStatusButton();
         this.spinner.hide();
     }
 
@@ -260,8 +259,18 @@ export class BaoCaoComponent implements OnInit {
         this.getLuyKe();
 
         //lay danh sach danh muc don vi
-        await this.danhMucService.dMDviCon().toPromise().then(
-            (data) => {
+        await this.getDviCon();
+        this.getStatusButton();
+        this.spinner.hide();
+    }
+
+    getDviCon() {
+        const request = {
+            maDviCha: this.baoCao.maDvi,
+            trangThai: '01',
+        }
+        this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
                 } else {
@@ -271,8 +280,7 @@ export class BaoCaoComponent implements OnInit {
             (err) => {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
-        );
-        this.spinner.hide();
+        )
     }
 
     getLuyKe() {
@@ -307,6 +315,7 @@ export class BaoCaoComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
+        debugger
         const isSynthetic = this.baoCao.lstBcaoDviTrucThuocs.length != 0;
         const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
         const checkParent = this.donVis.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
@@ -330,7 +339,7 @@ export class BaoCaoComponent implements OnInit {
         this.passStatus = Utils.statusDuyet.includes(this.baoCao.trangThai) && checkPass && checkChirld;
         this.approveStatus = Utils.statusPheDuyet.includes(this.baoCao.trangThai) && checkApprove && checkChirld;
         this.acceptStatus = Utils.statusTiepNhan.includes(this.baoCao.trangThai) && checkAccept && checkParent;
-        this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && checkCopy && checkChirld;
+        this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && checkCopy && checkChirld && (this.data.preTab != 'khaithac');
         this.printStatus = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && checkChirld;
         this.exportStatus = !(Utils.statusExport.includes(this.baoCao.trangThai) && checkExport && checkChirld);
 
@@ -347,10 +356,14 @@ export class BaoCaoComponent implements OnInit {
     }
 
     back() {
-        const obj = {
-            tabSelected: this.data?.preTab,
+        if (this.data?.preData) {
+            this.dataChange.emit(this.data?.preData)
+        } else {
+            const obj = {
+                tabSelected: this.data?.preTab,
+            }
+            this.dataChange.emit(obj);
         }
-        this.dataChange.emit(obj);
     }
 
     // lay ten don vi tao
@@ -430,6 +443,7 @@ export class BaoCaoComponent implements OnInit {
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                     }
+                    this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -535,6 +549,7 @@ export class BaoCaoComponent implements OnInit {
                             this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
                             this.baoCao.id = data.data.id
                             await this.getDetailReport();
+                            this.getStatusButton();
                         } else {
                             this.notification.error(MESSAGE.ERROR, data?.msg);
                         }
@@ -548,6 +563,7 @@ export class BaoCaoComponent implements OnInit {
                     if (res.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
                         await this.getDetailReport();
+                        this.getStatusButton();
                     } else {
                         this.notification.error(MESSAGE.ERROR, res?.msg);
                     }
@@ -825,7 +841,12 @@ export class BaoCaoComponent implements OnInit {
     };
 
     viewDetail(id) {
-
+        const obj = {
+            id: id,
+            preData: this.data,
+            tabSelected: 'next' + this.data?.tabSelected,
+        }
+        this.dataChange.emit(obj);
     }
 
     showDialogCopy() {

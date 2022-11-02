@@ -92,7 +92,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   dataInput: any;
   dataInputCache: any;
-  isLuongThuc: boolean
+  isTongHop: boolean
 
   constructor(
     private router: Router,
@@ -112,9 +112,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       namKhoach: [dayjs().get('year'), Validators.required],
-      soQd: ['', [Validators.required]],
-      ngayQd: ['', [Validators.required]],
-      ngayHluc: ['', [Validators.required]],
+      soQd: ['',],
+      ngayQd: ['',],
+      ngayHluc: ['',],
       idThHdr: [''],
       idTrHdr: [''],
       soTrHdr: [''],
@@ -133,11 +133,12 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       tenLoaiVthh: ['', [Validators.required]],
       cloaiVthh: [''],
       tenCloaiVthh: [''],
+      moTaHangHoa: [''],
       trangThai: [STATUS.DU_THAO],
       tchuanCluong: [''],
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [''],
-      phanLoai: ['', [Validators.required]],
+      phanLoai: ['TH', [Validators.required]],
 
       gtriDthau: [null,],
       gtriHdong: [null,],
@@ -149,7 +150,16 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     })
   }
 
-  setValidator() {
+  setValidator(isGuiDuyet?) {
+    if (isGuiDuyet) {
+      this.formData.controls["soQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["soQd"].clearValidators();
+      this.formData.controls["ngayQd"].clearValidators();
+      this.formData.controls["ngayHluc"].clearValidators();
+    }
     if (this.formData.get('phanLoai').value == 'TH') {
       this.formData.controls["idThHdr"].setValidators([Validators.required]);
       this.formData.controls["idTrHdr"].clearValidators();
@@ -294,14 +304,16 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     if (!this.isDetailPermission()) {
       return;
     }
-    this.setValidator()
+    this.setValidator(isGuiDuyet)
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       await this.spinner.hide();
       return;
     }
     let body = this.formData.value;
-    body.soQd = body.soQd + "/" + this.maQd;
+    if (this.formData.value.soQd) {
+      body.soQd = this.formData.value.soQd + "/" + this.maQd;
+    }
     body.dsDeXuat = this.danhsachDx;
     body.dsGoiThau = this.danhsachDx;
     body.fileDinhKems = this.fileDinhKem;
@@ -442,7 +454,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.isVatTu = data.loaiVthh.startsWith("02");
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
-        soQd: data.soQd.split("/")[0],
+        soQd: data.soQd?.split("/")[0],
       });
       if (this.isVatTu) {
         this.danhsachDx = data.hhQdKhlcntDtlList[0].dsGoiThau
@@ -586,18 +598,20 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     await this.spinner.hide();
   }
 
+  index = 0;
   async showDetail($event, index) {
     await this.spinner.show();
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     $event.target.parentElement.classList.add('selectedRow');
-    if (this.formData.get('loaiVthh').value.startsWith("02")) {
-      this.isLuongThuc = false;
-    } else {
-      this.isLuongThuc = true
-    }
+    this.isTongHop = this.formData.value.phanLoai == 'TH';
     this.dataInput = this.danhsachDx[index];
     this.dataInputCache = this.danhsachDxCache[index];
+    this.index = index;
     await this.spinner.hide();
+  }
+
+  setNewSoLuong($event) {
+    this.danhsachDx[this.index].soLuong = $event;
   }
 
   expandSet = new Set<number>();

@@ -23,7 +23,7 @@ export const ROUTE_LIST_CAP_VON: Array<any> = [
 		dropdown: 'giao-chi-tieu',
 		idHover: 'giao-chi-tieu',
 		hasTab: false,
-    code:'VONPHIHANG_VONCHIDTQG'
+		code: 'VONPHIHANG_VONCHIDTQG'
 	},
 	{
 		icon: 'htvbdh_tcdt_chitieukehoachnam',
@@ -32,7 +32,7 @@ export const ROUTE_LIST_CAP_VON: Array<any> = [
 		dropdown: 'giao-chi-tieu',
 		idHover: 'giao-chi-tieu',
 		hasTab: false,
-    code:'VONPHIHANG_PHICHINGVU'
+		code: 'VONPHIHANG_PHICHINGVU'
 	},
 	{
 		icon: 'htvbdh_tcdt_kehoachvonphi',
@@ -41,6 +41,6 @@ export const ROUTE_LIST_CAP_VON: Array<any> = [
 		dropdown: 'giao-chi-tieu',
 		idHover: 'giao-chi-tieu',
 		hasTab: false,
-    code:'VONPHIHANG_VONMBANTT'
+		code: 'VONPHIHANG_VONMBANTT'
 	},
 ]

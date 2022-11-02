@@ -10,7 +10,7 @@ import { BCDTC } from 'src/app/Utility/utils';
 })
 export class BaoCaoThucHienDuToanChiComponent implements OnInit {
 
-    tabSelected = 'danhsach';
+    tabSelected: string;
     data: any;
     isList = false;
     isAccept = false;
@@ -27,16 +27,31 @@ export class BaoCaoThucHienDuToanChiComponent implements OnInit {
         this.isAccept = this.userService.isAccessPermisson(BCDTC.TIEP_NHAN_REPORT);
         this.isCheck = this.userService.isAccessPermisson(BCDTC.TIEP_NHAN_REPORT);
         this.isSynthetic = this.userService.isAccessPermisson(BCDTC.SYNTHETIC_REPORT);
+        if (this.isList) {
+            this.tabSelected = 'danhsach';
+        } else {
+            if (this.isAccept) {
+                this.tabSelected = 'capduoi';
+            } else {
+                if (this.isSynthetic) {
+                    this.tabSelected = 'tonghop';
+                }
+            }
+        }
     }
     selectTab(tab) {
         this.tabSelected = tab;
     }
 
     changeTab(obj: any) {
-        this.data = {
-            ...obj,
-            preTab: this.tabSelected,
-        };
+        if (obj?.preTab) {
+            this.data = obj;
+        } else {
+            this.data = {
+                ...obj,
+                preTab: this.tabSelected,
+            };
+        }
         this.tabSelected = obj?.tabSelected;
     }
 }

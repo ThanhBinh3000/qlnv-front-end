@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Globals } from "../../../../../../../shared/globals";
 import { MESSAGE } from "../../../../../../../constants/message";
@@ -8,11 +8,11 @@ import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
-import {DanhSachGoiThau} from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import { DanhSachGoiThau } from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {
   DialogThemMoiVatTuComponent
 } from "../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { NzModalService } from "ng-zorro-antd/modal";
 
 
 @Component({
@@ -23,8 +23,10 @@ import {NzModalService} from "ng-zorro-antd/modal";
 export class ThongtinDexuatComponent implements OnInit, OnChanges {
   @Input() title;
   @Input() dataInput;
+  @Output() soLuongChange = new EventEmitter<number>();
   @Input() isView;
-  @Input() isLuongThuc;
+  @Input() isCache: boolean = false;
+  @Input() isTongHop;
 
   formData: FormGroup
   listNguonVon: any[] = [];
@@ -70,7 +72,9 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
 
       gtriDthau: [null,],
       gtriHdong: [null,],
+      soLuong: [],
       donGiaVat: [''],
+      vat: [5],
       tongMucDt: [null,],
       nguonVon: [null,],
       tgianNhang: [null,],
@@ -83,21 +87,35 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        let res;
-        if(this.isLuongThuc){
-          res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
+        let res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
+        if (this.isTongHop) {
           this.listOfData = this.dataInput.dsGoiThau;
-        }else{
-          res = await this.dxKhLcntService.getDetail(this.dataInput.id);
-          this.listOfData = this.dataInput.dsGtDtlList;
+        } else {
+          this.listOfData = this.dataInput.dsGtDtlList ? this.dataInput.dsGtDtlList : this.dataInput.dsGoiThau;
         }
         if (res.msg == MESSAGE.SUCCESS) {
-          this.helperService.bidingDataInFormGroup(this.formData, res.data)
+          this.helperService.bidingDataInFormGroup(this.formData, res.data);
+          let soLuong = res.data.tongMucDt / res.data.donGiaVat / 1000;
+          this.formData.patchValue({
+            soLuong: soLuong,
+            tongMucDt: soLuong * res.data.donGiaVat * 1000
+          });
+          if (!this.isCache) {
+            if (this.dataInput.soLuong) {
+              this.formData.patchValue({
+                soLuong: this.dataInput.soLuong,
+                tongMucDt: this.dataInput.soLuong * this.dataInput.donGiaVat * 1000
+              })
+            }
+          }
         }
         this.helperService.setIndexArray(this.listOfData);
         this.convertListData();
-      }else{
+      } else {
         this.formData.reset();
+        this.formData.patchValue({
+          vat: 5
+        });
       }
     }
     await this.spinner.hide()
@@ -108,7 +126,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       .value()
   }
 
-  async ngOnInit(){
+  async ngOnInit() {
     await this.spinner.show()
     await this.loadDataComboBox();
     await this.spinner.hide()
@@ -133,7 +151,7 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
     }
   }
 
-  themMoiGoiThau(data?: DanhSachGoiThau, index?: number) {
+  themMoiGoiThau(data?: any, index?: number) {
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm nhập kho',
       nzContent: DialogThemMoiVatTuComponent,
@@ -156,12 +174,16 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
         this.listOfData = [...this.listOfData, res.value];
       }
       let tongMucDt: number = 0;
+      let soLuong: number = 0;
       this.listOfData.forEach((item) => {
         tongMucDt = tongMucDt + item.soLuong * item.donGia;
+        soLuong = soLuong + item.soLuong;
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,
+        soLuong: soLuong
       });
+      this.soLuongChange.emit(soLuong);
       this.helperService.setIndexArray(this.listOfData);
       this.convertListData();
     });
