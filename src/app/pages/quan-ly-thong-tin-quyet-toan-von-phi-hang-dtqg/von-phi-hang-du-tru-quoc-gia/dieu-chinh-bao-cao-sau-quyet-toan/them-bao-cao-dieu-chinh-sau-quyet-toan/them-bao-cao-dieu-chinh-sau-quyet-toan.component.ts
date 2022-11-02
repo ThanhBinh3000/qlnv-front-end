@@ -224,13 +224,23 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
           this.isDataAvailable = true;
         })
         break;
+      case 'nonpass':
+        await this.onSubmit('3', null).then(() => {
+          this.isDataAvailable = true;
+        })
+        break;
+      case 'pass':
+        await this.onSubmit('4', null).then(() => {
+          this.isDataAvailable = true;
+        })
+        break;
       case 'nonapprove':
         await this.tuChoi('5').then(() => {
           this.isDataAvailable = true;
         })
         break;
       case 'approve':
-        await this.onSubmit('7', null).then(() => {
+        await this.onSubmit('6', null).then(() => {
           this.isDataAvailable = true;
         })
         break;
