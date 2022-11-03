@@ -423,7 +423,7 @@ export class VonBanHangComponent implements OnInit {
                 requestGroupButtons.maLoai = "1";
             }
             this.spinner.show();
-            await this.quanLyVonPhiService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
+            await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     if (!this.checkParent) {
                         this.ttGui.trangThai = mcn;
@@ -619,7 +619,7 @@ export class VonBanHangComponent implements OnInit {
 
     async doCopy() {
         let maCvUvNew: string;
-        await this.quanLyVonPhiService.maNopTienVon().toPromise().then(
+        await this.capVonMuaBanTtthService.maNopTienVon().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
                     const str = this.userService.isCuc() ? 'CKV' : 'CC';

@@ -7,6 +7,7 @@ import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-th
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
@@ -80,6 +81,7 @@ export class PhuLucIIComponent implements OnInit {
     constructor(
         private spinner: NgxSpinnerService,
         private quanLyVonPhiService: QuanLyVonPhiService,
+        private baoCaoThucHienDuToanChiService: BaoCaoThucHienDuToanChiService,
         private notification: NzNotificationService,
         private modal: NzModalService,
     ) {
@@ -185,7 +187,7 @@ export class PhuLucIIComponent implements OnInit {
             trangThai: trangThai,
         };
         this.spinner.show();
-        this.quanLyVonPhiService.baoCaoCapNhatChiTiet(request).toPromise().then(
+        this.baoCaoThucHienDuToanChiService.baoCaoCapNhatChiTiet(request).toPromise().then(
             async data => {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -215,7 +217,7 @@ export class PhuLucIIComponent implements OnInit {
                 lyDoTuChoi: lyDoTuChoi,
             };
             this.spinner.show();
-            await this.quanLyVonPhiService.approveBieuMau(requestGroupButtons).toPromise().then(async (data) => {
+            await this.baoCaoThucHienDuToanChiService.approveBieuMau(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.trangThaiPhuLuc = mcn;
                     this.getStatusButton();
@@ -750,23 +752,6 @@ export class PhuLucIIComponent implements OnInit {
         this.editCache[id].data.luyKeGiaiNganNguonNsnn = sumNumber([data.luyKeGiaiNganNguonNsnn, this.editCache[id].data.giaiNganThangNguonNsnn, -data.giaiNganThangNguonNsnn]);
         this.editCache[id].data.luyKeGiaiNganNguonSn = sumNumber([data.luyKeGiaiNganNguonSn, this.editCache[id].data.giaiNganThangNguonSn, -data.giaiNganThangNguonSn]);
         this.editCache[id].data.luyKeGiaiNganNguonQuy = sumNumber([data.luyKeGiaiNganNguonQuy, this.editCache[id].data.giaiNganThangNguonQuy, -data.giaiNganThangNguonQuy]);
-    }
-
-    export() {
-        const request = {
-            bcaoCtietId: this.id,
-            bcaoId: this.idBcao,
-            dviTien: this.maDviTien,
-        }
-        const baoCao = "phuLuc2.xlsx";
-        this.quanLyVonPhiService.exportBaoCao(request).toPromise().then(
-            (data) => {
-                fileSaver.saveAs(data, baoCao);
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
     }
 
     displayValue(num: number): string {

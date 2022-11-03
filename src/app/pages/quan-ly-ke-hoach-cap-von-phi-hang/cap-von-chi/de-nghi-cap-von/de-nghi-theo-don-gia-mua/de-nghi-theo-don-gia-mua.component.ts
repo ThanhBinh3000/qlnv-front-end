@@ -450,10 +450,10 @@ export class DeNghiTheoDonGiaMuaComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
             return;
         }
-        if (this.kphiDaCap > this.tongTien) {
-            this.notification.warning(MESSAGE.WARNING, 'Kinh phí đã cấp không được vượt quá tổng tiền');
-            return;
-        }
+        // if (this.kphiDaCap > this.tongTien) {
+        //     this.notification.warning(MESSAGE.WARNING, 'Kinh phí đã cấp không được vượt quá tổng tiền');
+        //     return;
+        // }
 
         let checkSave = true;
         this.lstCtietBcao.forEach(item => {

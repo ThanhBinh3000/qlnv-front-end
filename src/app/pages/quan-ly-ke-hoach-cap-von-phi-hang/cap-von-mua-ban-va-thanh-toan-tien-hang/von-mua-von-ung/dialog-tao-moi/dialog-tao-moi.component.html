@@ -1,0 +1,53 @@
+<div class="modal__content">
+    <div class="search__body" nz-row [nzGutter]="[18, 12]">
+        <div *ngIf="obj?.tab == 'gnv'" nz-col nzSpan="6">
+            <label class="search__label">Loại</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại vốn" [(ngModel)]="response.loaiCap"
+                [class]="response.loaiCap ?'' : 'input-error-validate'">
+                <nz-option *ngFor="let item of loaiVons" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                </nz-option>
+            </nz-select>
+        </div>
+        <div *ngIf="obj?.tab == 'gnv'" nz-col nzSpan="6">
+            <label class="search__label">Số lệnh chi tiền</label>
+            <input class="search__input" nz-input [class]="response.soLenhChiTien ?'' : 'input-error-validate'"
+                [(ngModel)]="response.soLenhChiTien" />
+        </div>
+        <div *ngIf="obj?.tab == 'gnv'" nz-col nzSpan="6">
+            <label class="search__label">Ngày lập (ủy nhiệm chi)</label>
+            <nz-date-picker class="search__input" [(ngModel)]="response.ngayLap"
+                [class]="response.ngayLap ?'' : 'input-error-validate'" nzFormat="dd/MM/yyyy">
+            </nz-date-picker>
+        </div>
+        <div *ngIf="obj?.tab != 'gnv'" nz-col nzSpan="8">
+            <label class="search__label">Mã cấp ứng vốn nhận từ đơn vị cấp trên</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn mã cấp vốn ứng vốn" [(ngModel)]="response.maCvUv"
+                [class]="response.maCvUv ?'' : 'input-error-validate'">
+                <nz-option *ngFor="let item of obj?.danhSachCapVon" [nzValue]="item.maCapUngVonTuCapTren"
+                    [nzLabel]="item.maCapUngVonTuCapTren">
+                </nz-option>
+            </nz-select>
+        </div>
+        <div *ngIf="obj?.tab != 'gnv' && obj?.tab == 'thanhtoan'" nz-col nzSpan="6">
+            <label class="search__label">Khách hàng</label>
+            <input class="search__input" nz-input [(ngModel)]="response.khachHang"
+                [class]="response.khachHang ?'' : 'input-error-validate'" />
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+            <button nz-button (click)="handleOk()" class="modal__button--save">
+                <i class="icon htvbdh_tcdt_save"></i>
+                Tạo mới
+            </button>
+            <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+                <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
+                Đóng
+            </button>
+        </div>
+    </div>
+</div>

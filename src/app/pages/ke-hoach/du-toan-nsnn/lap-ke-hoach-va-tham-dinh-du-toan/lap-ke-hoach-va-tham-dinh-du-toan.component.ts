@@ -1,23 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
-import { BCDTC } from 'src/app/Utility/utils';
-import { TAB_LIST } from './von-mua-von-ung.constant';
+import { TAB_LIST } from './lap-ke-hoach-va-tham-dinh-du-toan.constant';
 
 @Component({
-    selector: 'app-von-mua-von-ung',
-    templateUrl: './von-mua-von-ung.component.html',
-    styleUrls: ['./von-mua-von-ung.component.scss']
+    selector: 'app-lap-ke-hoach-va-tham-dinh-du-toan',
+    templateUrl: './lap-ke-hoach-va-tham-dinh-du-toan.component.html',
+    styleUrls: ['./lap-ke-hoach-va-tham-dinh-du-toan.component.scss']
 })
-export class VonMuaVonUngComponent implements OnInit {
+export class LapKeHoachVaThamDinhDuToanComponent implements OnInit {
 
     tabSelected!: string;
     data: any;
-    isList = false;
-    isAccept = false;
-    isCheck = false;
-    isSynthetic = false;
-    isTongCuc = true;
     tabList: any[] = TAB_LIST;
 
     constructor(
@@ -26,9 +20,14 @@ export class VonMuaVonUngComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-        this.isTongCuc = this.userService.isTongCuc();
         this.tabList.forEach(item => {
-            item.status = this.userService.isAccessPermisson(item.role);
+            let check = false;
+            item.role.forEach(e => {
+                if (this.userService.isAccessPermisson(e)) {
+                    check = true;
+                }
+            })
+            item.status = check;
             if (!this.tabSelected && item.status) {
                 this.tabSelected = item.code;
                 item.isSelected = true;
