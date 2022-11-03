@@ -14,7 +14,6 @@ export class GiaoNhapHangMuattComponent implements OnInit {
 
   tabs: any[] = [];
   count: Array<number> = [];
-  listVthh: any[] = []
   constructor(
     private danhMucService: DanhMucService,
     private spinner: NgxSpinnerService,
@@ -26,21 +25,14 @@ export class GiaoNhapHangMuattComponent implements OnInit {
   ngOnInit() {
     this.spinner.show();
     this.loaiVTHHGetAll();
-  }
-  async loaiVTHHGetAll() {
+    this.spinner.hide();
 
-    // this.tabs = [
-    //   {
-    //     giaTri: 'Tất cả',
-    //     ma: null,
-    //   },
-    // ];
+  }
+
+  async loaiVTHHGetAll() {
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
-      this.tabs = [
-        ...this.tabs,
-        ...res.data.filter((item) => item.ma == '0101'),
-      ];
+      this.tabs = res.data.filter(item => item.ma == '0101');
     }
   }
 
@@ -48,4 +40,8 @@ export class GiaoNhapHangMuattComponent implements OnInit {
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
   }
+
+
+
+
 }

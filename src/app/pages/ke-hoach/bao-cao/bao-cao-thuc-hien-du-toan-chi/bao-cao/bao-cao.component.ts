@@ -16,7 +16,7 @@ import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BCDTC, Utils } from 'src/app/Utility/utils';
+import { BCDTC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { PHULUCLIST } from './bao-cao.constant';
 
@@ -93,6 +93,7 @@ export class BaoCaoComponent implements OnInit {
     lstFiles: any = [];                         // list File de day vao api
     luyKes: ItemData[] = [];
     luyKeDetail = [];
+    trangThais: any[] = TRANG_THAI_TIM_KIEM;
     //trang thai cac nut
     status = false;                    // trang thai an/ hien cua trang thai
     saveStatus = true;                      // trang thai an/hien nut luu
@@ -193,9 +194,7 @@ export class BaoCaoComponent implements OnInit {
             default:
                 break;
         }
-        this.titleStatus = this.getStatusName(this.baoCao.trangThai);
         this.tabs = [];
-        this.getStatusButton();
         this.spinner.hide();
     }
 
@@ -251,10 +250,18 @@ export class BaoCaoComponent implements OnInit {
         }
 
         this.getLuyKe();
+        await this.getDviCon();
+        this.getStatusButton();
+        this.spinner.hide();
+    }
 
-        //lay danh sach danh muc don vi
-        await this.danhMucService.dMDviCon().toPromise().then(
-            (data) => {
+    async getDviCon() {
+        const request = {
+            maDviCha: this.userInfo?.MA_DVI,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
                 if (data.statusCode == 0) {
                     this.donVis = data.data;
                 } else {
@@ -264,9 +271,7 @@ export class BaoCaoComponent implements OnInit {
             (err) => {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
-        );
-        this.getStatusButton();
-        this.spinner.hide();
+        )
     }
 
     getLuyKe() {
@@ -356,13 +361,13 @@ export class BaoCaoComponent implements OnInit {
     }
 
     // lay ten trang thai ban ghi
-    getStatusName(Status: any) {
-        const utils = new Utils();
-        if (this.baoCao.maDvi == this.userInfo.MA_DVI) {
-            return utils.getStatusName(Status == '7' ? '6' : Status);
-        }
-        if (this.donVis.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1) {
-            return utils.getStatusNameParent(Status == '7' ? '6' : Status);
+    getStatusName(status: string) {
+        const statusMoi = status == Utils.TT_BC_6 || status == Utils.TT_BC_7;
+        const isParent = this.donVis.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
+        if (statusMoi && isParent) {
+            return 'Mới';
+        } else {
+            return this.trangThais.find(e => e.id == status)?.tenDm;
         }
     }
 
@@ -392,6 +397,7 @@ export class BaoCaoComponent implements OnInit {
                     this.baoCao.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
                     this.lstFiles = data.data.lstFiles;
                     this.listFile = [];
+                    this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -432,6 +438,7 @@ export class BaoCaoComponent implements OnInit {
                     } else {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                     }
+                    this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }

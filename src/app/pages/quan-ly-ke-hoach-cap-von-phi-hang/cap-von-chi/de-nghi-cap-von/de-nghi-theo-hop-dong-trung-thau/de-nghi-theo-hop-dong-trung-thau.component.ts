@@ -189,8 +189,11 @@ export class DeNghiTheoHopDongTrungThauComponent implements OnInit {
             this.data?.hopDong.forEach(item => {
                 this.lstCtietBcao.push({
                     ...item,
+                    qdTthau: item.soQdPdKhlcnt,
+                    maHang: item.loaiVthh,
                     thanhTien: item.soLuong * item.donGia,
                     maDviTinh: this.vatTus.find(e => e.ma == item.maHang)?.maDviTinh,
+                    dviDonGia: item.donGiaVat,
                     dviThanhTien: "1",
                     donGiaMua: item.donGia,
                     id: null,
