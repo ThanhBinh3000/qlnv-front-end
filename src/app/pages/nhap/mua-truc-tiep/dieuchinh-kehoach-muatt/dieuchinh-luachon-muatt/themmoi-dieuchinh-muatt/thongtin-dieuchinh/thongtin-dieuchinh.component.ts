@@ -86,7 +86,6 @@ export class ThongtinDieuchinhComponent implements OnInit {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
@@ -98,16 +97,15 @@ export class ThongtinDieuchinhComponent implements OnInit {
             let dataFilter = res.data.hhQdPheduyetKhMttDxList.filter(item => item.id == this.dataInput.id)[0];
             this.helperService.bidingDataInFormGroup(this.formData, dataFilter)
           }
-        }else{
+        } else {
           res = await this.dieuChinhQuyetDinhPdKhmttService.getDetail(this.dataInput.idDcHdr)
           this.listOfData = this.dataInput.hhDcQdPduyetKhmttSlddList;
-          console.log(this.listOfData,"huhuhu");
           if (res.msg == MESSAGE.SUCCESS) {
             let dataFilter = res.data.hhDcQdPduyetKhmttDxList.filter(item => item.id == this.dataInput.id)[0];
             this.helperService.bidingDataInFormGroup(this.formData, dataFilter)
           }
         }
-        
+
         this.helperService.setIndexArray(this.listOfData);
         this.convertListData();
       }
@@ -118,7 +116,7 @@ export class ThongtinDieuchinhComponent implements OnInit {
   convertListData() {
     this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()
-    console.log(this.listOfData, 123456);
+
   }
 
   async ngOnInit() {
