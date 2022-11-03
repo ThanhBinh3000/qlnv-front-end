@@ -5,7 +5,7 @@ export const NHAP_ROUTE_LIST = [
     title: 'Danh mục dùng chung',
     url: `/${NHAP_MAIN_ROUTE}/danh-muc-dung-chung`,
     dropdown: 'ql-danh-muc-dung-chung',
-    idHover: 'qldanh-muc-dung-chung',
+    idHover: 'danh-muc-dung-chung',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
@@ -13,6 +13,13 @@ export const NHAP_ROUTE_LIST = [
     url: `/${NHAP_MAIN_ROUTE}/danh-muc-don-vi`,
     dropdown: 'danh-muc-don-vi',
     idHover: 'danh-muc-don-vi',
+  },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Danh mục hàng hóa',
+    url: `/${NHAP_MAIN_ROUTE}/danh-muc-hang-hoa`,
+    dropdown: 'danh-muc-dinh-muc-phi',
+    idHover: 'danh-muc-dinh-muc-phi',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
@@ -37,7 +44,7 @@ export const NHAP_ROUTE_LIST = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Danh mục định mức phí nhập, xuất, bảo quản',
+    title: 'Dm định mức phí nhập, xuất, bảo quản',
     url: `/${NHAP_MAIN_ROUTE}/danh-muc-dinh-muc-phi`,
     dropdown: 'danh-muc-dinh-muc-phi',
     idHover: 'danh-muc-dinh-muc-phi',

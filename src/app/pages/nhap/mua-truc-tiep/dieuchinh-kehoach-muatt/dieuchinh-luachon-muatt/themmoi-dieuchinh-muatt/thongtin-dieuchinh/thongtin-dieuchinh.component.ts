@@ -1,15 +1,14 @@
-import { DieuChinhQuyetDinhPdKhmttService } from './../../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/dieuchinh-khmtt/DieuChinhQuyetDinhPdKhmtt.service';
-import { filter } from 'rxjs/operators';
-import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Globals } from "../../../../../../../shared/globals";
-import { MESSAGE } from "../../../../../../../constants/message";
-import { DanhMucService } from "../../../../../../../services/danhmuc.service";
-import { cloneDeep, chain } from 'lodash';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { chain } from 'lodash';
+import { NzModalService } from "ng-zorro-antd/modal";
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
-import { NzModalService } from "ng-zorro-antd/modal";
+import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
+import { MESSAGE } from "../../../../../../../constants/message";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
+import { Globals } from "../../../../../../../shared/globals";
+import { DieuChinhQuyetDinhPdKhmttService } from './../../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/dieuchinh-khmtt/DieuChinhQuyetDinhPdKhmtt.service';
 
 @Component({
   selector: 'app-thongtin-dieuchinh',
@@ -86,7 +85,6 @@ export class ThongtinDieuchinhComponent implements OnInit {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
@@ -95,19 +93,18 @@ export class ThongtinDieuchinhComponent implements OnInit {
           res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail(this.dataInput.idPduyetHdr);
           this.listOfData = this.dataInput.soLuongDiaDiemList;
           if (res.msg == MESSAGE.SUCCESS) {
-            let dataFilter = res.data.hhQdPheduyetKhMttDxList.filter(item => item.id == this.dataInput.id)[0];
+            let dataFilter = res.data.hhQdPheduyetKhMttDxList.filter(item => item.idPduyetHdr == this.dataInput.idPduyetHdr)[0];
             this.helperService.bidingDataInFormGroup(this.formData, dataFilter)
           }
-        }else{
+        } else {
           res = await this.dieuChinhQuyetDinhPdKhmttService.getDetail(this.dataInput.idDcHdr)
           this.listOfData = this.dataInput.hhDcQdPduyetKhmttSlddList;
-          console.log(this.listOfData,"huhuhu");
           if (res.msg == MESSAGE.SUCCESS) {
             let dataFilter = res.data.hhDcQdPduyetKhmttDxList.filter(item => item.id == this.dataInput.id)[0];
             this.helperService.bidingDataInFormGroup(this.formData, dataFilter)
           }
         }
-        
+
         this.helperService.setIndexArray(this.listOfData);
         this.convertListData();
       }
@@ -118,7 +115,7 @@ export class ThongtinDieuchinhComponent implements OnInit {
   convertListData() {
     this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()
-    console.log(this.listOfData, 123456);
+
   }
 
   async ngOnInit() {

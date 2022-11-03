@@ -12,6 +12,7 @@ import dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {Globals} from "../../../../../../shared/globals";
+import {UserLogin} from "../../../../../../models/userlogin";
 @Component({
   selector: 'app-de-xuat-phuong-an-gia',
   templateUrl: './de-xuat-phuong-an-gia.component.html',
@@ -28,7 +29,6 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   allChecked = false;
   listVthh: any[] = [];
   dsNam: string[] = [];
-
   dataTable: any[] = [];
   page: number = 1;
   dataTableAll: any[] = [];
@@ -36,6 +36,8 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   pageSize: number = PAGE_SIZE_DEFAULT;
   indeterminate = false;
+
+  userInfo: UserLogin
 
   last30Day = new Date(
     new Date().setTime(this.toDay.getTime() - 30 * 24 * 60 * 60 * 1000),
@@ -76,13 +78,15 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     ngayKy: '',
     trichYeu: '',
     qdCtKhNam: '',
+    soCanCu: '',
     namKeHoach: '',
-    loaiHangHoa: '',
-    loaiGia: '',
-    trangThai: '',
+    tenLoaiVthh: '',
+    tenLoaiGia: '',
+    tenTrangThai: '',
   };
 
   async ngOnInit() {
+    this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     this.search();
     if (this.pagType == 'LT') {
@@ -136,8 +140,8 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,
-
     }
+    body.maDvi = this.userInfo.MA_DVI
     let res = await this.deXuatPAGService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -360,8 +364,8 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
       trichYeu: '',
       quyetDinhChiTieu: '',
       namKeHoach: '',
-      loaiHangHoa: '',
-      loaiGia: '',
+      tenLoaiVthh: '',
+      tenLoaiGia: '',
       trangThai: '',
     }
   }
