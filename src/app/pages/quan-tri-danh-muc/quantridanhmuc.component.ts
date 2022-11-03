@@ -16,17 +16,26 @@ export class QuanTriDanhMucComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
   routes = NHAP_ROUTE_LIST;
   routerUrl: string = "";
+  routerUrlActive : string = "";
   isCollapsed: boolean = true;
   constructor(
     private router: Router,
   ) { }
 
   ngOnInit(): void {
+    console.log(3232222222222222222222222);
     if (this.router.url) {
       this.routerUrl = this.router.url;
+      this.activeUrl(this.router.url);
     }
   }
 
+  activeUrl(url): void{
+    if (this.router.url) {
+      const urlC =  url.split("/");
+      this.routerUrlActive = urlC[urlC.length - 1]
+    }
+  }
   ngAfterViewInit() {
     // if (
     //   this.myTab.nativeElement.scrollWidth >
@@ -41,7 +50,7 @@ export class QuanTriDanhMucComponent implements OnInit, AfterViewInit {
 
   routerNavigate(url) {
     this.routerUrl = url;
-
+    this.activeUrl(url);
     this.router.navigateByUrl(url);
   }
   updateCssOverlay() {

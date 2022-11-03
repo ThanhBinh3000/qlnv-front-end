@@ -220,15 +220,29 @@
               <td><input type="text" nz-input [(ngModel)]="item.dvCungCapHang" /></td>
               <td><input type="text" nz-input [(ngModel)]="item.soTaiKhoan" /></td>
               <td><input type="text" nz-input [(ngModel)]="item.nganHang" /></td>
-              <td>{{item.tenVatTuCha}}</td>
-              <td>{{item.tenVatTu}}</td>
+              <td>
+                <nz-input-group>
+                  <nz-select [(ngModel)]="item.maVatTuCha" (ngModelChange)="changeLoaiHangHoa()">
+                    <nz-option *ngFor="let it of listLoaiHangHoa" [nzValue]="it.ma" [nzLabel]="it.ten">
+                    </nz-option>
+                  </nz-select>
+                </nz-input-group>
+              </td>
+              <td>
+                <nz-input-group>
+                  <nz-select [(ngModel)]="item.maVatTu" (ngModelChange)="changeChungLoaiHangHoa()">
+                    <nz-option *ngFor=" let it of listChungLoaiHangHoa" [nzValue]="it.ma" [nzLabel]="it.ten">
+                    </nz-option>
+                  </nz-select>
+                </nz-input-group>
+              </td>
               <td><input type="text" nz-input [(ngModel)]="item.tenHangHoa" /></td>
-              <td>{{item.soLuong}}</td>
-              <td>{{item.donViTinh}}</td>
-              <td>{{item.donGia}}</td>
-              <td>{{item.thanhTien}}</td>
-              <td>{{item.kinhPhiDaCap}}</td>
-              <td>{{item.ycCapThem}}</td>
+              <td><input type="text" nz-input [(ngModel)]="item.soLuong" /></td>
+              <td><input type="text" nz-input [(ngModel)]="item.donViTinh" /></td>
+              <td><input type="text" nz-input [(ngModel)]="item.donGia" /></td>
+              <td><input type="text" nz-input [(ngModel)]="item.thanhTien" /></td>
+              <td><input type="text" nz-input [(ngModel)]="item.kinhPhiDaCap" /></td>
+              <td><input type="text" nz-input [(ngModel)]="item.ycCapThem" /></td>
               <td class="text-center">
                 <a class="save" (click)="showEditItem(idx, 'save')">
                   <i class="fa fa-save"></i>
