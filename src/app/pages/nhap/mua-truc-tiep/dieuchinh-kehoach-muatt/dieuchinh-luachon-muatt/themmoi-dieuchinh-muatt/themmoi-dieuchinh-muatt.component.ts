@@ -183,7 +183,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       let res = await this.dieuChinhQuyetDinhPdKhmttService.getDetail(this.idInput);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        console.log(data, "hello");
         this.formData.patchValue({
           id: data.id,
           soQdDc: data.soQdDc.split("/")[0],
@@ -210,7 +209,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
 
         });
         this.danhsachDxMtt = data.hhDcQdPduyetKhmttDxList;
-        console.log(this.danhsachDxMtt, 1232);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -262,7 +260,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     this.spinner.show();
     if ($event) {
       let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail($event);
-      console.log(res, "hhhhhhhhhh");
       let qdGoc = this.listQdGoc.filter(item => item.id == $event)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
@@ -281,7 +278,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         for (let item of this.danhsachDxMtt) {
           item.id = null;
         }
-        console.log(this.danhsachDxMtt, "căng thẳng quá");
 
       }
 
@@ -297,7 +293,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     event.target.parentElement.classList.add('selectedRow');
     this.dataInput = this.danhsachDxMtt[index];
-    console.log(this.dataInput, "hehehehehe");
     await this.spinner.hide();
   }
 
@@ -451,7 +446,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
 
     body.ngayKyDc = this.datePipe.transform(body.ngayKyDc, 'yyyy-MM-dd');
     body.ngayHluc = this.datePipe.transform(body.ngayHluc, 'yyyy-MM-dd');
-    console.log(body, "hại lão");
+
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.dieuChinhQuyetDinhPdKhmttService.update(body);
