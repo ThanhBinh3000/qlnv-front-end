@@ -1,13 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { sortBy } from 'lodash';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import { Globals } from 'src/app/shared/globals';
-import { DanhMucService } from '../../../services/danhmuc.service';
-import { KeHoachLuongThucComponent } from './ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
-import { KeHoachXuatGiamComponent } from './ke-hoach-xuat-giam/ke-hoach-xuat-giam.component';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {NzModalRef} from 'ng-zorro-antd/modal';
+import {MESSAGE} from 'src/app/constants/message';
+import {Globals} from 'src/app/shared/globals';
+import {DanhMucService} from '../../../services/danhmuc.service';
+import {KeHoachLuongThucComponent} from './ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
 
 @Component({
   selector: 'app-dialog-chi-tiet-ke-hoach-giao-bo-nganh',
@@ -41,13 +37,16 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   };
   dataTable: any[] = [];
   dsBoNganh: any[];
-  dsHangHoa: any[];
+  dsHangHoa: any[] = [];
   dataEdit: any;
+
   constructor(
     private readonly _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
-    public globals: Globals
-  ) { }
+    public globals: Globals,
+  ) {
+
+  }
 
   async ngOnInit() {
     this.bindingData(this.dataEdit)
@@ -64,9 +63,9 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
   onChangeBoNganh(event) {
-    const boNganh = this.dsBoNganh.filter(item => item.ma == event)
-    if (boNganh.length > 0) {
-      this.keHoach.tenBoNganh = boNganh[0].giaTri;
+    const boNganh = this.dsBoNganh.find(item => item.ma == event)
+    if (boNganh) {
+      this.keHoach.tenBoNganh = boNganh.giaTri;
     }
   }
 
@@ -81,8 +80,11 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   async loadDanhMucHang() {
     await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
       if (hangHoa.msg == MESSAGE.SUCCESS) {
-        const dataVatTu = hangHoa.data.filter(item => item.ma == "02");
-        this.dsHangHoa = dataVatTu[0].child;
+        const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
+        dataVatTu.forEach(item => {
+          this.dsHangHoa = [...this.dsHangHoa, ...item.child]
+        })
+        // this.dsHangHoa = dataVatTu.child;
       }
     })
   }
@@ -116,4 +118,3 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
 }
-
