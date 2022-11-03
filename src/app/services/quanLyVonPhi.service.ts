@@ -885,88 +885,9 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  // trinh duyet bao cao thuc hien du toan chi 3.2.8
-  trinhDuyetBaoCaoThucHienDTCService(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/bao-cao/them-moi',
-      // 'http://192.168.1.109:8094/bao-cao/them-moi',
-      request,
-    );
-  }
-
-  //tong hop bao cao ket qua thuc hien von phi hang DTQG
-  tongHopBaoCaoKetQua(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop',
-      // 'http://192.168.1.101:30101/bao-cao/tong-hop',
-      request);
-  }
-
-  // call api chi tiết báo cáo
-  baoCaoChiTiet(id: any): Observable<any> {
-    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/' + id,);
-  }
-
-  // call api nút chức năng
-  approveBaoCao(request: any): Observable<any> {
-    return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/bao-cao/trang-thai',
-      // 'http://192.168.1.109:8094/bao-cao/trang-thai',
-      request,
-    );
-  }
-
-  // upload bao cao thuc hien du toan chi
-  updateBaoCaoThucHienDTC(request: any): Observable<any> {
-    return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/bao-cao/cap-nhat',
-      // 'http://192.168.1.103:30101/bao-cao/cap-nhat',
-      request,
-    );
-  }
-
-  //search list bao cao
-  timBaoCao(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/bao-cao/danh-sach'
-      // 'http://192.168.1.101:8094/bao-cao/danh-sach'
-      , request)
-  }
-
   // tim kiem danh sach bao cao de duyet cho cuc khu vuc (3.2.9)
   timKiemDuyetBaoCao(request: any): Observable<any> {
     return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/bao-cao/tim-kiem-thong-tin-phe-duyet', request);
-  }
-
-  //sinh ma bao cao (3.2.9)
-  taoMaBaoCao(): Observable<any> {
-    return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/bao-cao/sinh-ma');
-  }
-
-  //xóa báo cáo nút xóa Báo cáo
-  xoaBaoCao(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/bao-cao/xoa',
-      request
-    );
-  }
-
-  // call api chi tiết báo cáo
-  baoCaoCapNhatChiTiet(request: any): Observable<any> {
-    return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet', request);
-  }
-
-  // call api chức năng duyet bieu mau
-  approveBieuMau(request: any): Observable<any> {
-    return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/phe-duyet', request);
-  }
-
-  // exprot excel
-  exportBaoCao(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/export',
-      request,
-      { responseType: 'blob' });
   }
 
   //get user theo dvql
@@ -980,23 +901,6 @@ export class QuanLyVonPhiService extends BaseService {
 
   getListUser1(): Observable<any> {
     return this.httpClient.get('http://192.168.1.109:30101/chung/can-bo');
-  }
-
-  //lay thong tin luy ke
-  getLuyKe(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/bao-cao/get-luy-ke'
-      // 'http://192.168.1.101:30101/bao-cao/get-luy-ke'
-      , request
-    );
-  }
-
-  getDinhMuc(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/chung/dinh-muc',
-      // 'http://192.168.1.103:30101/chung/dinh-muc',
-      request,
-    )
   }
 
   getDinhMucNhapXuat(request: any): Observable<any> {
@@ -1018,6 +922,21 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/quyet-toan/validate',
       request
+    );
+  }
+
+  getDinhMuc(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/chung/dinh-muc',
+      request,
+    )
+  }
+
+  //lay thong tin luy ke
+  getLuyKe(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/bao-cao/get-luy-ke'
+      , request
     );
   }
 }
