@@ -33,7 +33,7 @@ export const TAB_LIST = [
         name: 'Thanh toán cho khách hàng',
         code: 'thanhtoan',
         status: true,
-        role: CVMB.VIEW_REPORT_GNV_TH,
+        role: CVMB.VIEW_REPORT_TTKH,
         isSelected: false,
     },
 ]
