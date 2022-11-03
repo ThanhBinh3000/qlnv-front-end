@@ -18,6 +18,7 @@ import { TongHopTheoDoiCapVonService } from 'src/app/services/ke-hoach/von-phi/t
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-tong-hop-theo-doi-cap-von',
@@ -32,7 +33,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   @Input() id: number;
   formData: FormGroup;
-
+  STATUS:STATUS;
   fileDinhKem: Array<FileDinhKem> = [];
   userLogin: UserLogin;
   listChiCuc: any[] = [];
@@ -189,7 +190,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            trangThai: this.globals.prop.NHAP_BAN_HANH,
+            trangThai: STATUS.HOAN_THANH_CAP_NHAT,
           };
           let res = await this.tongHopTheoDoiCapVonService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {

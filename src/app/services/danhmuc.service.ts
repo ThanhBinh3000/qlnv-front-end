@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
+import {OldResponseData} from "../interfaces/response";
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,11 @@ export class DanhMucService extends BaseService {
   loadDanhMucHangHoa() {
     const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/danh-sach`;
     return this.httpClient.post<any>(url, null);
+  }
+
+  delete(id): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xoa/${id}`;
+    return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
   loadDanhMucHangHoaAsync(): Promise<any> {
@@ -98,6 +104,16 @@ export class DanhMucService extends BaseService {
 
   loadDanhMucHangChiTiet(id: string): Promise<any> {
     const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/chi-tiet/${id}`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
+  layTatCaHangHoaDviQly(): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/danh-sach/all-dvql`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
+  layTatCaDviQly(): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dm-hang/dvql`
     return this.httpClient.get<any>(url).toPromise();
   }
 }

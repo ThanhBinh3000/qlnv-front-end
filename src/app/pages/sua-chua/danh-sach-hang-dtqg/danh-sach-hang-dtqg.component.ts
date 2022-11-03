@@ -330,13 +330,14 @@ export class DanhSachHangDtqgComponent implements OnInit {
 
   openDialog() {
     const modalQD = this.modal.create({
-      nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
+      nzTitle: 'CHỐT DANH SÁCH HÀNG DTQG CẦN SỬA CHỮA',
       nzContent: DialogTongHopHangSuaChuaDtqgComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {
+
       },
     });
     modalQD.afterClose.subscribe((data) => {

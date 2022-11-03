@@ -18,14 +18,6 @@ export const SUA_CHUA_ROUTE_LIST: Array<ChiTietMenu> = [
     hasTab: false,
   },
   {
-    icon: 'htvbdh_tcdt_tochucthuchien',
-    title: 'Quyết định sửa chữa hàng DTQG',
-    url:  '/quyet-dinh-sua-chua',
-    dropdown: 'quyet-dinh-sua-chua',
-    idHover: 'quyet-dinh-sua-chua',
-    hasTab: false,
-  },
-  {
     icon: 'htvbdh_tcdt_dieu_chuyen',
     title: 'Xuất hàng DTQG',
     url: '/xuat-hang-dtqg',

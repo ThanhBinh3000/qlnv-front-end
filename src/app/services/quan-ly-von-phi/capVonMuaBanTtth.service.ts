@@ -116,4 +116,10 @@ export class CapVonMuaBanTtthService extends BaseService {
             this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/them-moi/danh-sach',
             request);
     }
+
+    maThanhToan(): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/sinh-ma/thanh-toan'
+        );
+    }
 }

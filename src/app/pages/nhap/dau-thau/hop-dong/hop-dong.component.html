@@ -6,5 +6,6 @@
     </ul>
 </nz-affix>
 <ng-container *ngFor="let tab of tabs,let i = index">
-    <app-danh-sach-hop-dong *ngIf="tab.ma == loaiVthhSelected" [typeVthh]="tab.ma"></app-danh-sach-hop-dong>
+    <app-main-hop-dong *ngIf="tab.ma == loaiVthhSelected" [typeVthh]="tab.ma">
+    </app-main-hop-dong>
 </ng-container>
