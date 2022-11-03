@@ -554,7 +554,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   async getDataChiTieu() {
-      let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(+this.formData.get('namKeHoach').value)
+      let res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(+this.formData.get('namKeHoach').value)
       if (res2.msg == MESSAGE.SUCCESS) {
         const dataChiTieu = res2.data;
         this.formData.patchValue({

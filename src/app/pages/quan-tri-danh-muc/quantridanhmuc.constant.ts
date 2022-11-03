@@ -44,7 +44,7 @@ export const NHAP_ROUTE_LIST = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Danh mục định mức phí nhập, xuất, bảo quản',
+    title: 'Dm định mức phí nhập, xuất, bảo quản',
     url: `/${NHAP_MAIN_ROUTE}/danh-muc-dinh-muc-phi`,
     dropdown: 'danh-muc-dinh-muc-phi',
     idHover: 'danh-muc-dinh-muc-phi',

@@ -415,6 +415,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     body.ketQuaThamDinhGia = this.dataTableKqGia;
     body.diaDiemDeHangs = this.dsDiaDiemDeHang;
     body.type = this.type;
+    body.maDvi = this.userInfo.MA_DVI
     let res
     if (this.idInput > 0) {
       res = await this.deXuatPAGService.update(body);
@@ -537,15 +538,16 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async getDataChiTieu() {
-    if (this.isGiaMuaToiDa) {
-      let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(+this.formData.get('namKeHoach').value)
+      let res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(+this.formData.get('namKeHoach').value)
       if (res2.msg == MESSAGE.SUCCESS) {
         const dataChiTieu = res2.data;
-        this.formData.patchValue({
-          soCanCu: dataChiTieu.soQuyetDinh,
-        });
-      }
-    }
+        if (dataChiTieu ) {
+          this.formData.patchValue({
+            soCanCu: dataChiTieu.soQuyetDinh,
+          });
+        }
+        }
+
   }
 
   themMoiDiaDiem() {

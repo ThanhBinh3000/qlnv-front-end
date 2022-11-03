@@ -12,6 +12,9 @@ import { LOAI_DON_VI, TrangThaiHoatDong } from 'src/app/constants/status';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
 import {NewHangHoaComponent} from "./new-hang-hoa/new-hang-hoa.component";
+import {DanhMucService} from "../../../services/danhmuc.service";
+import {UserService} from "../../../services/user.service";
+import {DanhMucTieuChuanService} from "../../../services/quantri-danhmuc/danhMucTieuChuan.service";
 
 
 
@@ -33,37 +36,56 @@ export class DanhMucHangHoaComponent implements OnInit {
   nodeDetail: any;
   defaultExpandedKeys: any = [];
   nodeSelected: any = []
-  detailDonVi: FormGroup;
+  detailHangHoa: FormGroup;
   levelNode: number = 0;
   isEditData: boolean = false;
+  listLhbq: any[] = [];
+  listPpbq: any[] = [];
+  listHtbq: any[] = [];
+  listLoaiHang: any[] = [];
+  listDviQly : any[] = [];
+  listDviTinh: any[] = [];
+
 
   constructor(
     private router: Router,
-    private donviService: DonviService,
+    private dmHangService: DanhMucService,
+    private dmDonVi: DonviService,
     private notification: NzNotificationService,
     private formBuilder: FormBuilder,
     private helperService: HelperService,
     private _modalService: NzModalService,
     private spinner: NgxSpinnerService,
+    public userSerivce: UserService,
+    private tieuChuanService : DanhMucTieuChuanService,
   ) {
-    this.detailDonVi = this.formBuilder.group({
+    this.detailHangHoa = this.formBuilder.group({
       id: [''],
-      maDviCha: [''],
-      tenDvi: ['', Validators.required],
-      maDvi: [''],
-      diaChi: [''],
-      fax: [''],
-      sdt: [''],
-      trangThai: [''],
-      type: [],
-      ghiChu: [''],
+      maCha: [''],
+      tenHhCha: ['', ],
+      tenHangHoa: ['', ],
+      maDviTinh: ['', Validators.required],
+      dviQly: ['', Validators.required],
+      tchuanCluong: ['', ],
+      thoiHanLk: ['', ],
+      loaiHang: ['', Validators.required],
+      kyHieu: ['', ],
+      ma: ['', Validators.required],
+      ghiChu: ['',],
+      trangThai: ["01"],
     })
   }
 
   async ngOnInit() {
     this.spinner.show();
     await Promise.all([
-      this.layTatCaDonViTheoTree()
+      this.layTatCaDonViTheoTree(),
+      this.loadListLhBq(),
+      this.loadListPpbq(),
+      this.loadListHtbq(),
+      this.loadListLoaiHang(),
+      this.loadListDviQly(),
+      this.loadDviTinh(),
     ]);
     this.spinner.hide();
   }
@@ -73,22 +95,73 @@ export class DanhMucHangHoaComponent implements OnInit {
    */
 
   async layTatCaDonViTheoTree(id?) {
-    await this.donviService.layTatCaDonViCha(LOAI_DON_VI.PB).then((res: OldResponseData) => {
+    await this.dmHangService.layTatCaHangHoaDviQly().then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.nodes = res.data;
-        this.nodes[0].expanded = true;
-        //  lúc đầu mắc định lấy node gốc to nhất
-        this.nodeSelected = res.data[0].id;
-        // lấy detail đon vị hiện tại
         if (id) {
-          this.showDetailDonVi(id)
+          this.showdetailHangHoa(id)
         } else {
-          this.showDetailDonVi(res.data[0].id)
+          this.showdetailHangHoa(res.data[0].id)
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.error);
       }
     })
+  }
+
+  async loadListLhBq() {
+    this.listLhbq = [];
+    let res = await this.dmHangService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLhbq = res.data;
+    }
+  }
+
+  async loadTieuChuanCluong(maHH) {
+    let res = await this.tieuChuanService.getDetailByMaHh(maHH);
+    this.detailHangHoa.patchValue({
+      tchuanCluong : res.data ? res.data.tenQchuan : null
+    })
+  }
+
+  async loadListPpbq() {
+    this.listPpbq = [];
+    let res = await this.dmHangService.danhMucChungGetAll('PT_BAO_QUAN');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listPpbq = res.data;
+    }
+  }
+
+  async loadListHtbq() {
+    this.listHtbq = [];
+    let res = await this.dmHangService.danhMucChungGetAll('HINH_THUC_BAO_QUAN');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listHtbq = res.data;
+    }
+  }
+
+  async loadListDviQly() {
+    this.listDviQly = [];
+    let res = await this.dmHangService.layTatCaDviQly();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDviQly = res.data;
+      }
+    }
+
+  async loadListLoaiHang() {
+    this.listLoaiHang = [];
+    let res = await this.dmHangService.danhMucChungGetAll('LOAI_HANG_DTQG');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHang = res.data;
+    }
+  }
+
+  async loadDviTinh() {
+    this.listDviTinh = [];
+    let res = await this.dmHangService.danhMucChungGetAll('DON_VI_TINH');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDviTinh = res.data;
+    }
   }
 
   parentNodeSelected: any = [];
@@ -97,29 +170,39 @@ export class DanhMucHangHoaComponent implements OnInit {
     if (event.keys.length > 0) {
       this.nodeSelected = event.node.origin.id;
       this.parentNodeSelected = event?.parentNode?.origin
-      this.showDetailDonVi(event.node.origin.id)
+      this.showdetailHangHoa(event.node.origin.id)
     }
   }
 
-  showDetailDonVi(id?: any) {
+  showdetailHangHoa(id?: any) {
     if (id) {
-      this.donviService.getDetail(id).then((res: OldResponseData) => {
+      this.dmHangService.getDetail(id).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.nodeDetail = res.data;
           // gán giá trị vào form
-          this.levelNode = +res.data.capDvi;
-          this.detailDonVi.patchValue({
-            id: res.data.id,
-            maDviCha: res.data.maDviCha,
-            tenDvi: res.data.tenDvi,
-            maDvi: res.data.maDvi,
-            diaChi: res.data.diaChi,
-            sdt: res.data.sdt,
-            fax: res.data.fax,
-            trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
-            type: res.data.type == LOAI_DON_VI.PB,
-            ghiChu: res.data.ghiChu,
+          this.levelNode = +res.data.cap;
+          this.listLhbq.forEach(item => {
+            item.checked = true
           })
+          let dviTinh = this.listDviTinh.filter(item => item.giaTri == this.nodeDetail.maDviTinh);
+          let detaiParent = this.nodeDetail.detailParent;
+          this.detailHangHoa.patchValue({
+            maCha:detaiParent ? detaiParent.ma : null,
+            id: this.nodeDetail.id,
+            tenHhCha: detaiParent ? detaiParent.ten : null,
+            tenHangHoa: this.nodeDetail.ten,
+            dviQly: this.nodeDetail.dviQly,
+            maDviTinh: dviTinh,
+            tchuanCluong: this.nodeDetail.tchuanCluong,
+            thoiHanLk: this.nodeDetail.thoiHanLk,
+            loaiHang: this.nodeDetail.loaiHang,
+            kyHieu: this.nodeDetail.kyHieu,
+            ma: this.nodeDetail.ma,
+            ghiChu: this.nodeDetail.ghiChu,
+            trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
+          })
+          this.loadTieuChuanCluong(this.detailHangHoa.value.ma);
+          this.loadDetailBq(this.nodeDetail.loaiHinhBq, this.nodeDetail.phuongPhapBq, this.nodeDetail.hinhThucBq  );
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
         }
@@ -127,20 +210,54 @@ export class DanhMucHangHoaComponent implements OnInit {
     }
   }
 
+  loadDetailBq(listLh, listPp, listHt) {
+    if (listHt) {
+      this.listLhbq.forEach(item => {
+        item.checked = undefined
+        listLh.forEach(bq => {
+          if (item.ma == bq.ma) {
+            item.checked = true;
+          }
+        })
+      })
+    }
+    if (listPp) {
+      this.listPpbq.forEach(item => {
+        item.checked = undefined
+        listPp.forEach(bq => {
+          if (item.ma == bq.ma) {
+            item.checked = true;
+          }
+        })
+      })
+    }
+  if (listHt) {
+    this.listHtbq.forEach(item => {
+      item.checked = undefined
+      listHt.forEach(bq => {
+        if (item.ma == bq.ma) {
+          item.checked = true;
+        }
+      })
+    })
+  }
+  }
+
   showEdit(editData: boolean) {
     this.isEditData = editData
   }
 
   update() {
-    this.helperService.markFormGroupTouched(this.detailDonVi);
-    if (this.detailDonVi.invalid) {
+    this.helperService.markFormGroupTouched(this.detailHangHoa);
+    if (this.detailHangHoa.invalid) {
       return;
     }
-    let body = {
-      ...this.detailDonVi.value,
-      trangThai: this.detailDonVi.value.trangThai ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG,
-      type: this.detailDonVi.value.type ? LOAI_DON_VI.PB : null
-    };
+    let body = this.detailHangHoa.value;
+    body.trangThai = this.detailHangHoa.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
+    body.loaiHinhBq = this.listLhbq.filter(item => item.checked === true)
+    body.phuongPhapBq = this.listPpbq.filter(item => item.checked === true)
+    body.hinhThucBq = this.listHtbq.filter(item => item.checked === true)
+    body.loaiHang = this.convertLoaiHh(this.detailHangHoa.value.loaiHang)
     this._modalService.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -150,7 +267,7 @@ export class DanhMucHangHoaComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.donviService.update(body).then((res: OldResponseData) => {
+        this.dmHangService.update(body).then((res: OldResponseData) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.isEditData = false;
@@ -173,7 +290,7 @@ export class DanhMucHangHoaComponent implements OnInit {
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: () => {
-        this.donviService.delete(this.nodeSelected?.id == undefined ? this.nodeSelected : this.nodeSelected?.id).then((res: OldResponseData) => {
+        this.dmHangService.delete(this.nodeSelected?.id == undefined ? this.nodeSelected : this.nodeSelected?.id).then((res: OldResponseData) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             // xét node về không
@@ -187,15 +304,36 @@ export class DanhMucHangHoaComponent implements OnInit {
     });
   }
 
+  convertLoaiHh(loaiVthh) {
+    let loaiHh = loaiVthh
+    switch (loaiHh) {
+      case "3":
+      case "2" : {
+        loaiHh = 'VT'
+        break;
+      }
+      case "1": {
+        loaiHh = 'LT';
+        break;
+      }
+      case "4" : {
+        loaiHh = 'M';
+        break;
+      }
+    }
+    return loaiHh;
+  }
+
+
   create() {
     var nodesTree = this.nodes;
     let modal = this._modalService.create({
-      nzTitle: 'Thêm mới đơn vị',
+      nzTitle: 'Thêm mới mới danh mục hàng hóa',
       nzContent: NewHangHoaComponent,
       nzClosable: true,
       nzFooter: null,
       nzStyle: { top: '50px' },
-      nzWidth: 900,
+      nzWidth: 1200,
       nzComponentParams: { nodesTree },
     });
     modal.afterClose.subscribe(res => {
