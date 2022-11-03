@@ -5,8 +5,9 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import { Router } from '@angular/router';
-import { NHAP_ROUTE_LIST } from './quan-tri-he-thong.constant';
+import {Router} from '@angular/router';
+import {NHAP_ROUTE_LIST} from './quan-tri-he-thong.constant';
+
 @Component({
   selector: 'app-quan-tri-he-thong',
   templateUrl: './quan-tri-he-thong.component.html',
@@ -16,23 +17,26 @@ export class QuanTriHeThongNewComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
   routes = NHAP_ROUTE_LIST;
   routerUrl: string = "";
+  routerUrlActive: string = "";
   isCollapsed: boolean = true;
+
   constructor(
     private router: Router,
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
-
     if (this.router.url) {
       this.routerUrl = this.router.url;
     }
-    this.routes.forEach(route => {
-      if (this.routerUrl.includes(route.idHover)) {
-        route.isSelected = true;
-      } else {
-        route.isSelected = false;
-      }
-    })
+    this.activeUrl(this.router.url);
+  }
+
+  activeUrl(url): void {
+    if (this.router.url) {
+      const urlC = url.split("/");
+      this.routerUrlActive = urlC[urlC.length - 1]
+    }
   }
 
   ngAfterViewInit() {
@@ -48,17 +52,18 @@ export class QuanTriHeThongNewComponent implements OnInit, AfterViewInit {
   }
 
   routerNavigate(route) {
-    this.routes.forEach(item => {
-      if (item.id === route.id) {
-        item.isSelected = true;
-      } else {
-        item.isSelected = false;
-      }
-    })
+    // this.routes.forEach(item => {
+    //   if (item.id === route.id) {
+    //     item.isSelected = true;
+    //   } else {
+    //     item.isSelected = false;
+    //   }
+    // })
     this.routerUrl = route.url;
-
+    this.activeUrl(this.routerUrl);
     this.router.navigateByUrl(route.url);
   }
+
   updateCssOverlay() {
     setTimeout(() => {
       let child = document.getElementsByClassName('dau-thau-tab');
