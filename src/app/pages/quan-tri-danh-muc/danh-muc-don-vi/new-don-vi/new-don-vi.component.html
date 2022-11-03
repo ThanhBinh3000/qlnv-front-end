@@ -25,12 +25,22 @@
           </nz-form-control>
         </nz-form-item>
       </div>
-      <div nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18">
+      <div nz-col nzXs="24" nzSm="24" nzMd="12" nzLg="12">
         <nz-form-item>
           <nz-form-label nzRequired>Tên đơn vị</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-input-group>
               <input nz-input formControlName="tenDvi" />
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
+        <nz-form-item>
+          <nz-form-label >Tên viết tắt</nz-form-label>
+          <nz-form-control >
+            <nz-input-group>
+              <input nz-input formControlName="tenVietTat" />
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
