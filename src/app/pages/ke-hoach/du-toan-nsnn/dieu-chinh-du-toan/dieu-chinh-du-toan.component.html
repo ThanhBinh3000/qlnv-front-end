@@ -1,0 +1,37 @@
+<nz-affix [nzOffsetTop]="69" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <!-- <li *ngIf="isList" nz-menu-item nzSelected (click)="selectTab('danhsach')">
+      Báo cáo
+    </li>
+    <li *ngIf="isAccept" nz-menu-item (click)="selectTab('capduoi')">
+      Báo cáo từ đơn vị cấp dưới
+    </li>
+    <li *ngIf="isSynthetic" nz-menu-item (click)="selectTab('tonghop')">
+      Tổng hợp báo cáo từ đơn vị cấp dưới
+    </li> -->
+    <li nz-menu-item nzSelected (click)="selectTab('danhsach')">
+      Báo cáo
+    </li>
+    <li nz-menu-item (click)="selectTab('capduoi')">
+      Báo cáo từ đơn vị cấp dưới
+    </li>
+    <li nz-menu-item (click)="selectTab('tonghop')">
+      Tổng hợp báo cáo từ đơn vị cấp dưới
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 'danhsach'">
+      <app-danh-sach-bao-cao-dieu-chinh (dataChange)="changeTab($event)">
+      </app-danh-sach-bao-cao-dieu-chinh>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'capduoi'">
+      <app-danh-sach-bao-cao-tu-don-vi-cap-duoi (dataChange)="changeTab($event)">
+      </app-danh-sach-bao-cao-tu-don-vi-cap-duoi>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'tonghop'">
+      <app-tong-hop-bao-cao (dataChange)="changeTab($event)"></app-tong-hop-bao-cao>
+    </ng-container>
+  </div>
+</div>

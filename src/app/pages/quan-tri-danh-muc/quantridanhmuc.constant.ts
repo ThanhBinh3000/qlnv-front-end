@@ -5,7 +5,7 @@ export const NHAP_ROUTE_LIST = [
     title: 'Danh mục dùng chung',
     url: `/${NHAP_MAIN_ROUTE}/danh-muc-dung-chung`,
     dropdown: 'ql-danh-muc-dung-chung',
-    idHover: 'qldanh-muc-dung-chung',
+    idHover: 'danh-muc-dung-chung',
   },
   {
     icon: 'htvbdh_tcdt_icon-common',

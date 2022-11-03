@@ -187,11 +187,14 @@ export class VonBanHangComponent implements OnInit {
     }
 
     getStatusName() {
-        if (this.checkChild) {
-            return this.trangThais.find(e => e.id == this.ttGui.trangThai).tenDm;
-        }
         if (this.checkParent) {
-            return this.ttNhan.trangThai == Utils.TT_BC_1 ? "Mới" : this.trangThais.find(e => e.id == this.ttNhan.trangThai)?.tenDm;
+            if (this.ttNhan.trangThai == Utils.TT_BC_1) {
+                return 'Mới';
+            } else {
+                return this.trangThais.find(e => e.id == this.ttNhan.trangThai).tenDm;
+            }
+        } else {
+            return this.trangThais.find(e => e.id == this.ttGui.trangThai).tenDm;
         }
     }
 
