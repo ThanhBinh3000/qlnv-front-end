@@ -23,7 +23,6 @@ export class QuanTriDanhMucComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(3232222222222222222222222);
     if (this.router.url) {
       this.routerUrl = this.router.url;
       this.activeUrl(this.router.url);
