@@ -4,12 +4,12 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub" (click)="banHanh()">
+    <button *ngIf="formData.value.trangThai == '00' && !isView" type="button" class="btn btn-sub" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
     <button *ngIf="formData.value.trangThai == '00'  && !isView" type="button" class="btn btn-sub xanh"
-      (click)="save()">
+      (click)="save(false)">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
     </button>
@@ -120,7 +120,7 @@
           <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true">Trích yếu
             </nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <textarea [readOnly]="isView" formControlName="trichYeu" rows="3" nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
