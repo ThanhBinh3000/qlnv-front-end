@@ -1,4 +1,4 @@
-import { LOAI_HANG_DTQG, STATUS_DA_DUYET, TEN_HANG_DTQG } from "../constants/config";
+import {LOAI_HANG_DTQG, STATUS_DA_DUYET, STATUS_DA_HOAN_THANH, TEN_HANG_DTQG} from "../constants/config";
 import VNnum2words from 'vn-num2words';
 
 export function convertTrangThai(status: string): string {
@@ -122,7 +122,7 @@ export function thongTinTrangThaiNhap(trangThai: string, statusDaDuyet?: string)
   if (statusDaDuyet && trangThai === statusDaDuyet) {
     return 'da-ban-hanh';
   }
-  else if (trangThai === STATUS_DA_DUYET) {
+  else if (trangThai === STATUS_DA_DUYET || trangThai === STATUS_DA_HOAN_THANH) {
     return 'da-ban-hanh';
   } else {
     return 'du-thao-va-lanh-dao-duyet';

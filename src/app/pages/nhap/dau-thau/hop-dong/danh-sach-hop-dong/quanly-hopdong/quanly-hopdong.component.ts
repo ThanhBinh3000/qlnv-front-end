@@ -1,20 +1,21 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Globals } from 'src/app/shared/globals';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {STATUS} from "../../../../../../constants/status";
-import {HelperService} from "../../../../../../services/helper.service";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { STATUS } from "../../../../../../constants/status";
+import { HelperService } from "../../../../../../services/helper.service";
 import {
   ThongTinHopDongService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {BaseComponent} from "../../../../../../components/base/base.component";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { BaseComponent } from "../../../../../../components/base/base.component";
 import {
   QuyetDinhPheDuyetKetQuaLCNTService
 } from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
-import {MESSAGE} from "../../../../../../constants/message";
-import {UserLogin} from "../../../../../../models/userlogin";
-import {UserService} from "../../../../../../services/user.service";
+import { MESSAGE } from "../../../../../../constants/message";
+import { UserLogin } from "../../../../../../models/userlogin";
+import { UserService } from "../../../../../../services/user.service";
+import { NzModalService } from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-quanly-hopdong',
@@ -22,79 +23,71 @@ import {UserService} from "../../../../../../services/user.service";
   styleUrls: ['./quanly-hopdong.component.scss']
 })
 export class QuanlyHopdongComponent implements OnInit {
-  @Input() id : number;
+  @Input() id: number;
   @Output()
   showListEvent = new EventEmitter<any>();
 
   STATUS = STATUS;
   formData: FormGroup;
-  dataTable : any[] = [];
-  idHopDong : number;
-  isEditHopDong : boolean
-  userInfo : UserLogin;
+  dataTable: any[] = [];
+  idHopDong: number;
+  isEditHopDong: boolean
+  userInfo: UserLogin;
 
   constructor(
     public globals: Globals,
     private helperService: HelperService,
     private fb: FormBuilder,
-    private thongTinHopDong : ThongTinHopDongService,
+    private thongTinHopDong: ThongTinHopDongService,
     private notification: NzNotificationService,
     private spinner: NgxSpinnerService,
-    private kqLcnt : QuyetDinhPheDuyetKetQuaLCNTService,
-    private userService : UserService
+    private kqLcnt: QuyetDinhPheDuyetKetQuaLCNTService,
+    private userService: UserService,
+    private modal: NzModalService,
+
   ) {
     this.formData = this.fb.group({
-      id : [null],
+      id: [],
       namKhoach: [''],
-      soQd: [],
-      soQdCc: [],
-      soQdPdKq: [],
-
-
+      soQdPdKhlcnt: [],
+      soQdPdKqLcnt: [],
       tenDuAn: [],
       tenDvi: [],
-      maDvi: [],
-
+      tongMucDt: [],
+      tongMucDtGoiTrung: [],
+      nguonVon: [''],
+      tenNguonVon: [''],
+      hthucLcnt: [''],
+      tenHthucLcnt: [],
+      pthucLcnt: [''],
+      tenPthucLcnt: [],
+      loaiHdong: [''],
+      tenLoaiHdong: [''],
+      tgianBdauTchuc: [],
+      tgianDthau: [],
+      tgianMthau: [],
+      tgianNhang: [''],
+      gtriDthau: [],
+      gtriHdong: [],
+      donGiaVat: [],
       loaiVthh: [],
       tenLoaiVthh: [],
-      cloaiVthh: [],
       tenCloaiVthh: [],
-
-      tgianBdauTchuc: [null],
-
-      tgianDthau: [null],
-      tgianMthau: [null],
-
-      idGoiThau: [''],
-      tenGthau: [''],
-      soQdPdKhlcnt: [''],
-      ngayQdPdKhlcnt: [''],
-
-      tenVthh: [''],
-      dviTinh: [''],
+      soGthau: [],
+      soGthauTrung: [],
+      soGthauTruot: [],
       soLuong: [''],
       donGia: [''],
       tongTien: [''],
-      tchuanCluong: [''],
-      nguonVon: [''],
-      hthucLcnt: [''],
-      pthucLcnt: [''],
-      loaiHdong: [''],
-      tgianThienHd: [''],
-      tgianNhang: [''],
-      ngayKyBban: ['', [Validators.required]],
-      idNhaThau: ['', [Validators.required]],
-      donGiaTrcVat: ['', [Validators.required]],
-      vat: ['', [Validators.required]],
-      donGiaSauVat: [''],
-      tongTienSauVat: [''],
-      tongTienTrcVat: [''],
+      vat: ['5'],
       ghiChu: ['',],
-      diaDiemNhap: [],
       trangThai: [''],
       tenTrangThai: [''],
-      trangThaiHd : [],
-      tenTrangThaiHd : []
+      soLuongTong: [''],
+      soLuongGtTrung: [''],
+      soLuongNhap: [''],
+      tenTrangThaiHd: [''],
+      trangThaiHd: [''],
     });
   }
 
@@ -103,28 +96,52 @@ export class QuanlyHopdongComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     await Promise.all([
     ]);
-    if(this.id){
+    if (this.id) {
       await this.getDetail(this.id)
     }
     await this.spinner.hide()
   }
 
-  async getDetail(id){
-    if(id){
+  async getDetail(id) {
+    if (id) {
       let res = await this.kqLcnt.getDetail(id);
-      if(res.msg == MESSAGE.SUCCESS){
+      if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        this.helperService.bidingDataInFormGroup(this.formData,data);
-        let dataCurrent = data.qdKhlcnt.hhQdKhlcntDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)
-        this.dataTable = dataCurrent[0].dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG);
-        if(data.listHopDong){
+        console.log(data);
+        this.formData.patchValue({
+          namKhoach: data.namKhoach,
+          soQdPdKhlcnt: data.qdKhlcntDtl.hhQdKhlcntHdr.soQd,
+          soQdPdKqLcnt: data.qdKhlcntDtl.soQdPdKqLcnt,
+          tenDuAn: data.qdKhlcntDtl.tenDuAn,
+          tenLoaiHdong: data.qdKhlcntDtl.hhQdKhlcntHdr.tenLoaiHdong,
+          tenDvi: data.tenDvi,
+          tenNguonVon: data.qdKhlcntDtl.hhQdKhlcntHdr.tenNguonVon,
+          soGthau: data.qdKhlcntDtl.soGthau,
+          tenLoaiVthh: data.qdKhlcntDtl.hhQdKhlcntHdr.tenLoaiVthh,
+          tenCloaiVthh: data.qdKhlcntDtl.hhQdKhlcntHdr.tenCloaiVthh,
+          vat: 5,
+          soGthauTrung: data.qdKhlcntDtl.soGthauTrung,
+          tenTrangThaiHd: data.tenTrangThaiHd,
+          trangThaiHd: data.trangThaiHd,
+          tongMucDt: data.qdKhlcntDtl.soLuong * data.qdKhlcntDtl.donGiaVat * 1000
+        });
+        this.dataTable = data.qdKhlcntDtl.dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG);
+        if (data.listHopDong) {
+          let soLuong = 0
+          let tongMucDtGoiTrung = 0;
           this.dataTable.forEach(item => {
-            let hopDong = data.listHopDong.filter( x  => x.idGoiThau == item.id)[0];
+            let hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0];
             item.hopDong = hopDong
+            soLuong += item.hopDong.soLuong;
+            tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
+          })
+          this.formData.patchValue({
+            soLuongNhap: soLuong,
+            tongMucDtGoiTrung: tongMucDtGoiTrung
           })
         };
-      }else{
-        this.notification.error(MESSAGE.ERROR,res.msg);
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
   }
@@ -137,10 +154,10 @@ export class QuanlyHopdongComponent implements OnInit {
     this.spinner.hide();
   }
 
-  async redirectHopDong(isShowHd:boolean,id : number){
+  async redirectHopDong(isShowHd: boolean, id: number) {
     this.isEditHopDong = isShowHd;
     this.idHopDong = id;
-    if(!isShowHd){
+    if (!isShowHd) {
       await this.ngOnInit()
     }
   }
@@ -149,20 +166,79 @@ export class QuanlyHopdongComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  async approve(){
+  async approve() {
     await this.spinner.show()
-    let body = {
-      id : this.id,
-      trangThai : STATUS.HOAN_THANH_CAP_NHAT
-    }
-    let res = await this.kqLcnt.approve(body);
-    if(res.msg == MESSAGE.SUCCESS){
-      this.notification.success(MESSAGE.SUCCESS,MESSAGE.THAO_TAC_SUCCESS);
-      this.back();
-    }else{
-      this.notification.error(MESSAGE.ERROR,res.msg);
+    if (this.validateData()) {
+      let body = {
+        id: this.id,
+        trangThai: STATUS.HOAN_THANH_CAP_NHAT
+      }
+      let res = await this.kqLcnt.approve(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+        this.back();
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
     await this.spinner.hide()
+  }
+
+  validateData(): boolean {
+    let result = true;
+    this.dataTable.forEach(item => {
+      if (item.hopDong) {
+        if (item.hopDong.trangThai != STATUS.DA_KY) {
+          this.notification.error(MESSAGE.ERROR, "Vui lòng ký tất cả hợp đồng cho các gói thầu");
+          result = false;
+          return
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng thêm các hợp đồng cho các gói thầu");
+        result = false;
+        return
+      }
+    });
+    return result;
+  }
+
+  deleteHopDong(id: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: MESSAGE.DELETE_CONFIRM,
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: id,
+            maDvi: null,
+          };
+          this.thongTinHopDong
+            .delete(body)
+            .then(async (res) => {
+              if (res.msg == MESSAGE.SUCCESS) {
+                await this.getDetail(this.id)
+                this.notification.success(
+                  MESSAGE.SUCCESS,
+                  MESSAGE.DELETE_SUCCESS,
+                );
+              } else {
+                this.notification.error(MESSAGE.ERROR, res.msg);
+              }
+              this.spinner.hide();
+            });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
 }

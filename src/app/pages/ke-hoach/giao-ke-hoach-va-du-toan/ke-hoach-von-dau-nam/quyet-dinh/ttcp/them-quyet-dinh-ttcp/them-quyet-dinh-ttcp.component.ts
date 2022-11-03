@@ -223,7 +223,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   themKeHoach(data?: any, index?, isView?: boolean) {
     const modalQD = this.modal.create({
-      nzTitle: 'Thêm chi tiết kế hoạch giao bộ ngành',
+      nzTitle: 'Kế hoạch dự trữ quốc gia - TTCP giao bộ ngành',
       nzContent: DialogChiTietKeHoachGiaoBoNganhComponent,
       nzMaskClosable: false,
       nzClosable: false,

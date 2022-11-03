@@ -322,40 +322,41 @@ export class ThemMoiQdDcgComponent implements OnInit {
   banHanh() {
     this.modal.confirm({
       nzClosable: false,
-      nzTitle: "Xác nhận",
-      nzContent: "Bạn có chắc chắn muốn ban hành?",
-      nzOkText: "Đồng ý",
-      nzCancelText: "Không",
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn ban hành?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
       nzOnOk: async () => {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
+            id: this.formData.get('id').value,
             lyDoTuChoi: null,
             trangThai: STATUS.BAN_HANH
           };
-          let res =
-            await this.quyetDinhDieuChinhGiaTCDTNNService.approve(
-              body
-            );
+          let res = await this.quyetDinhDieuChinhGiaTCDTNNService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.BAN_HANH_SUCCESS);
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.BAN_HANH_SUCCESS,
+            );
             this.quayLai();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
           this.spinner.hide();
         } catch (e) {
+          console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
-      }
+      },
     });
   }
 
-  async save() {
+  async save(isBanHanh: boolean) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -392,12 +393,22 @@ export class ThemMoiQdDcgComponent implements OnInit {
       res = await this.quyetDinhDieuChinhGiaTCDTNNService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
-      if (this.idInput > 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-      } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      if (isBanHanh) {
+        this.formData.patchValue({
+          id: res.data.id,
+          trangThai: res.data.trangThai
+        })
+        this.banHanh();
       }
-      this.quayLai();
+      else {
+        if (this.idInput > 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        }
+        this.quayLai();
+      }
+
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

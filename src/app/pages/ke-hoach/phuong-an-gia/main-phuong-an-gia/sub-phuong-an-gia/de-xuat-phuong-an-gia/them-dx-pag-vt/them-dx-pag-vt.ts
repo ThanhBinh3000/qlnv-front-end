@@ -118,9 +118,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     await Promise.all([
-      this.loadDsQdPduyetKhlcnt(),
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
+      this.getDataChiTieu(),
       this.loadDsPhuongAnGia(),
       this.loadDsVthh(),
       this.loadDsHangHoaPag(),
@@ -553,20 +553,14 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     };
   }
 
-
-  async loadDsQdPduyetKhlcnt() {
-    let body = {
-      namKhoach: this.formData.get('namKeHoach').value,
-      lastest: 1,
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: 0,
-      },
-    };
-    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsQdPdKhlcnt = res.data.content;
-    }
+  async getDataChiTieu() {
+      let res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(+this.formData.get('namKeHoach').value)
+      if (res2.msg == MESSAGE.SUCCESS) {
+        const dataChiTieu = res2.data;
+        this.formData.patchValue({
+          qdCtKhNam: dataChiTieu.soQuyetDinh,
+        });
+      }
   }
 
   async save(isGuiDuyet?) {

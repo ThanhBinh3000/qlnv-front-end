@@ -16,29 +16,33 @@ import { NhapHangDtqgComponent } from './nhap-hang-dtqg/nhap-hang-dtqg.component
 import { BaoCaoKqComponent } from './bao-cao-kq/bao-cao-kq.component';
 import {ComponentsModule} from "../../components/components.module";
 import {NzTreeViewModule} from "ng-zorro-antd/tree-view";
-import {ThemMoiTongHopComponent} from "./tong-hop-danh-sach/them-moi-tong-hop/them-moi-tong-hop.component";
-import {ThemMoiQdSuaChuaComponent} from "./quyet-dinh-sua-chua/them-moi-qd-sua-chua/them-moi-qd-sua-chua.component";
+import {ThemMoiTongHopComponent} from "./tong-hop-danh-sach/tham-dinh-hang-dtqg/them-moi-tong-hop/them-moi-tong-hop.component";
+import {ThemMoiQdSuaChuaComponent} from "./tong-hop-danh-sach/qd-sua-chua-dtqg/them-moi-qd-sua-chua/them-moi-qd-sua-chua.component";
 import { ThemMoiBaoCaoKqComponent } from './bao-cao-kq/them-moi-bao-cao-kq/them-moi-bao-cao-kq.component';
 import {
     ThongTinHangSuaChuaComponent
 } from "./danh-sach-hang-dtqg/thong-tin-hang-sua-chua/thong-tin-hang-sua-chua.component";
+import {ThamDinhHangDtqgComponent} from "./tong-hop-danh-sach/tham-dinh-hang-dtqg/tham-dinh-hang-dtqg.component";
+import {QdSuaChuaDtqgComponent} from "./tong-hop-danh-sach/qd-sua-chua-dtqg/qd-sua-chua-dtqg.component";
 
 
 @NgModule({
-    declarations: [
-        SuaChuaComponent,
-        DanhSachHangDtqgComponent,
-        TongHopDanhSachComponent,
-        QuyetDinhSuaChuaComponent,
-        XuatHangDtqgComponent,
-        PhieuKiemDinhClComponent,
-        NhapHangDtqgComponent,
-        BaoCaoKqComponent,
-        ThemMoiTongHopComponent,
-        ThemMoiQdSuaChuaComponent,
-        ThemMoiBaoCaoKqComponent,
-        ThongTinHangSuaChuaComponent
-    ],
+  declarations: [
+    SuaChuaComponent,
+    DanhSachHangDtqgComponent,
+    TongHopDanhSachComponent,
+    QuyetDinhSuaChuaComponent,
+    XuatHangDtqgComponent,
+    PhieuKiemDinhClComponent,
+    NhapHangDtqgComponent,
+    BaoCaoKqComponent,
+    ThemMoiTongHopComponent,
+    ThemMoiQdSuaChuaComponent,
+    ThemMoiBaoCaoKqComponent,
+    ThongTinHangSuaChuaComponent,
+    ThamDinhHangDtqgComponent,
+    QdSuaChuaDtqgComponent
+  ],
   imports: [
     CommonModule,
     SuaChuaRoutingModule,

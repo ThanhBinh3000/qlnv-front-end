@@ -143,37 +143,47 @@
                                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
                             </nz-input-group>
                         </th>
-                        <th>
+
+                      <th *ngIf="pagType == 'LT'">
+                        <nz-input-group >
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCanCu"
+                                 (input)="filterInTable('soCanCu',filterTable.soCanCu)" size="small" />
+                        </nz-input-group>
+                      </th>
+                        <th *ngIf="pagType == 'VT'">
                             <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.qdCtKhNam"
-                                    (input)="filterInTable('quyetDinhChiTieu',filterTable.qdCtKhNam)" size="small" />
+                                    (input)="filterInTable('qdCtKhNam',filterTable.qdCtKhNam)" size="small" />
                             </nz-input-group>
                         </th>
                         <th>
-                            <nz-input-group>
+                            <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
                                     (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small" />
                             </nz-input-group>
                         </th>
                         <th>
                             <nz-input-group >
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiHangHoa"
-                                    (input)="filterInTable('loaiHangHoa',filterTable.loaiHangHoa)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
+                                    (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
                             </nz-input-group>
                         </th>
                         <th>
                             <nz-input-group >
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.loaiGia"
-                                    (input)="filterInTable('loaiGia',filterTable.loaiGia)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiGia"
+                                    (input)="filterInTable('tenLoaiGia',filterTable.tenLoaiGia)" size="small" />
                             </nz-input-group>
                         </th>
                         <th>
                             <nz-input-group >
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                                    (input)="filterInTable('trangThai',filterTable.trangThai)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                                    (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
                             </nz-input-group>
                         </th>
                         <th></th>
+                      <ng-template #suffixTemplateInfo>
+                        <i nz-icon nzType="calendar"></i>
+                      </ng-template>
                     </tr>
                 </thead>
                 <tbody>
