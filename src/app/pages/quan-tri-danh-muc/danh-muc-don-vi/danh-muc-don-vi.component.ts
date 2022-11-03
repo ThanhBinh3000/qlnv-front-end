@@ -51,6 +51,7 @@ export class DanhMucDonViComponent implements OnInit {
       maDviCha: [''],
       tenDvi: ['', Validators.required],
       maDvi: [''],
+      tenVietTat: [''],
       diaChi: [''],
       fax: [''],
       sdt: [''],
@@ -111,6 +112,7 @@ export class DanhMucDonViComponent implements OnInit {
           this.detailDonVi.patchValue({
             id: res.data.id,
             maDviCha: res.data.maDviCha,
+            tenVietTat: res.data.tenVietTat,
             tenDvi: res.data.tenDvi,
             maDvi: res.data.maDvi,
             diaChi: res.data.diaChi,

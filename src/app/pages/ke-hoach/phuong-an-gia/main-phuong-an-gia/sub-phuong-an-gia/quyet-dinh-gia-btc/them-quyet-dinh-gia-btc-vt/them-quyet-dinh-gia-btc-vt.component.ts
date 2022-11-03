@@ -101,10 +101,10 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       this.loadDsVthh(),
       this.loadToTrinhDeXuat(),
       this.maQd = "/QĐ-BTC",
-      this.getDataDetail(this.idInput),
-      this.loadTiLeThue()
+      this.loadTiLeThue(),
     ]);
-    this.spinner.hide();
+    this.getDataDetail(this.idInput),
+      this.spinner.hide();
   }
 
   async getDataDetail(id) {
@@ -112,10 +112,6 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       let res = await this.quyetDinhGiaCuaBtcService.getDetail(id);
       const data = res.data;
       this.arrThongTinGia = data.thongTinGiaVt
-      this.arrThongTinGia.forEach(item => {
-        item.giaQd = item.giaQdBtc,
-          item.giaQdVat = item.giaQdVatBtc
-      })
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
@@ -262,7 +258,13 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       let body = this.formData.value;
       body.soQd = body.soQd + this.maQd;
       body.pagType = this.pagType;
-      body.thongTinGiaVt = this.arrThongTinGia
+      body.thongTinGia = this.arrThongTinGia
+    this.arrThongTinGia.forEach(item => {
+      item.donGia = item.giaDn,
+        item.donGiaVat = item.giaDnVat,
+        item.donGiaBtc = item.giaQd,
+        item.donGiaVatBtc = item.giaQdVat
+    })
     this.arrThongTinGia.forEach(item => {
       if (body.loaiGia == 'LG01' && (item.giaQd >item.giaDn || item.giaQdVat > item.giaDnVat)) {
         this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
@@ -308,10 +310,17 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
   }
 
   async loadDsVthh() {
+    let body = {
+      "str": "02"
+    };
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
     this.dsVthh = [];
-    let res = await this.danhMucService.danhMucChungGetAll("LOAI_HHOA");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsVthh = res.data;
+      if (res.data) {
+        this.dsVthh = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
