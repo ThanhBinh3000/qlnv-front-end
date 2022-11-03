@@ -9,13 +9,15 @@
             class="btn btn-sub xanh-nhat" (click)="save(true)">
             <span>Lưu và gửi duyệt</span>
         </button>
-        <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP|| formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isTongCuc()" type="button"
-            class="btn btn-sub do" (click)="tuChoi()">
+        <button
+            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP|| formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isTongCuc()"
+            type="button" class="btn btn-sub do" (click)="tuChoi()">
             <i class="icon htvbdh_tcdt_tuchoi"></i>
             <span>Từ chối</span>
         </button>
-        <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isTongCuc()" type="button"
-            class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
+        <button
+            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isTongCuc()"
+            type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet"></i>
             <span>Duyệt</span>
         </button>

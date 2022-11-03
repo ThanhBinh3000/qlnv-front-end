@@ -220,10 +220,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th>STT</th>
+                                    <th nzWidth="7%">STT</th>
                                     <th>Tên file</th>
-                                    <th></th>
-                                    <th class="th" [hidden]="ttGui.status"></th>
+                                    <th nzWidth="10%"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -231,10 +230,12 @@
                                     <td>{{ i + 1 }} </td>
                                     <td>{{ data.fileName }}</td>
                                     <td>
-                                        <button class="btn btn-function" (click)="downloadFileGui(data.id)">Xem</button>
-                                    </td>
-                                    <td [hidden]="ttGui.status">
-                                        <button class="btn btn-function" (click)="deleteFileGui(data.id)">Xóa</button>
+                                        <a (click)="downloadFileGui(data.id)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a *ngIf="!ttGui.status" (click)="deleteFileGui(data.id)">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -298,10 +299,9 @@
                         <nz-table nzBordered class="table__body">
                             <thead>
                                 <tr>
-                                    <th>STT</th>
+                                    <th nzWidth="7%">STT</th>
                                     <th>Tên file</th>
-                                    <th></th>
-                                    <th class="th" [hidden]="ttNhan.status"></th>
+                                    <th nzWidth="10%"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -309,11 +309,12 @@
                                     <td>{{ i + 1 }} </td>
                                     <td>{{ data.fileName }}</td>
                                     <td>
-                                        <button class="btn btn-function"
-                                            (click)="downloadFileNhan(data.id)">Xem</button>
-                                    </td>
-                                    <td [hidden]="ttNhan.status">
-                                        <button class="btn btn-function" (click)="deleteFileNhan(data.id)">Xóa</button>
+                                        <a (click)="downloadFileNhan(data.id)">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a *ngIf="!ttNhan.status" (click)="deleteFileNhan(data.id)">
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             </tbody>
