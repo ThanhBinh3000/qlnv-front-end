@@ -155,7 +155,7 @@ export class KeHoachLuaChonNhaThauVatTuComponent implements OnInit {
         : null,
     };
     this.totalRecord = 10;
-    let res = await this.danhSachDauThauService.timKiem(body);
+    let res = await this.danhSachDauThauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       if (data && data.content && data.content.length > 0) {

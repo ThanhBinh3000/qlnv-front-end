@@ -1,3 +1,4 @@
+import { KeHoachLuaChonNhaThauVatTuComponent } from './ke-hoach-lua-chon-nha-thau-vat-tu/ke-hoach-lua-chon-nha-thau-vat-tu.component';
 import { ThongTinBienBanGiaoNhanComponent } from './thong-tin-bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan.component';
 import { BienBanGiaoNhanComponent } from './bien-ban-giao-nhan/bien-ban-giao-nhan.component';
 import { NgModule } from '@angular/core';
@@ -67,7 +68,8 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
     BienBanGuiHangComponent,
     ThemBienBanBanGiaoMauComponent,
     BienBanBanGiaoMauComponent,
+    KeHoachLuaChonNhaThauVatTuComponent
   ],
   imports: [CommonModule, VatTuRoutingModule, ComponentsModule, MainModule, DirectivesModule],
 })
-export class VatTuModule {}
+export class VatTuModule { }
