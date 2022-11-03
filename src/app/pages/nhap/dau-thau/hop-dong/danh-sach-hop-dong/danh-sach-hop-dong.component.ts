@@ -19,6 +19,7 @@ import {
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 import { QuyetDinhPheDuyetKetQuaLCNTService } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
 import { STATUS } from "../../../../../constants/status";
+import { BaseComponent } from 'src/app/components/base/base.component';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -26,14 +27,17 @@ import { STATUS } from "../../../../../constants/status";
   styleUrls: ['./danh-sach-hop-dong.component.scss'],
 })
 
-export class DanhSachHopDongComponent implements OnInit {
+export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
   @Input()
   typeVthh: string;
+
   ngayKy: string;
   soHd: string;
   userInfo: UserLogin;
   tenHd: string;
   nhaCungCap: string;
+  nam: number;
+
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -78,10 +82,12 @@ export class DanhSachHopDongComponent implements OnInit {
     private thongTinDauThauService: ThongTinDauThauService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService
   ) {
+    super();
   }
 
   async ngOnInit() {
     this.spinner.show();
+    super.ngOnInit();
     try {
       this.userInfo = this.userService.getUserLogin();
       await this.loadDonVi();
@@ -253,7 +259,7 @@ export class DanhSachHopDongComponent implements OnInit {
     }
   }
 
-  themMoi(isView: boolean, data: any){
+  themMoi(isView: boolean, data: any) {
     this.selectedId = data.id;
     this.isDetail = true;
     this.isAddNew = true;

@@ -134,7 +134,7 @@
           <td >{{ data.ctList.length }}</td>
           <td >{{ data.tenTrangThai }}</td>
           <td style="text-align: center">
-            <a (click)="viewDetail(data.id, true)" *ngIf="!globals.prop.NHAP_CHUA_TONG_HOP">
+            <a (click)="viewDetail(data.id, true)" *ngIf="globals.prop.NHAP_DA_TONG_HOP">
               <i class=" icon htvbdh_eye"></i>
             </a>
             <a (click)="viewDetail(data.id, false)" *ngIf="globals.prop.NHAP_CHUA_TONG_HOP">

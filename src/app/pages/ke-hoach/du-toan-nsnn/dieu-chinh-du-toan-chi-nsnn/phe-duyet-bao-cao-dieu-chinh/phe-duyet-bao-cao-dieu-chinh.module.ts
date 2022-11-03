@@ -7,5 +7,6 @@ import { PheDuyetBaoCaoDieuChinhRoutingModule } from './phe-duyet-bao-cao-dieu-c
 @NgModule({
   declarations: [PheDuyetBaoCaoDieuChinhComponent],
   imports: [CommonModule, PheDuyetBaoCaoDieuChinhRoutingModule, ComponentsModule],
+  exports: [PheDuyetBaoCaoDieuChinhComponent,]
 })
-export class PheDuyetBaoCaoDieuChinhModule {}
+export class PheDuyetBaoCaoDieuChinhModule { }
