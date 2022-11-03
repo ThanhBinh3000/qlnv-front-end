@@ -1267,7 +1267,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
-          console.log("Hide sprinerrrrrrrrrrrrrrrr");
           this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
@@ -1435,10 +1434,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     trangThai = STATUS.CHO_DUYET_TP
                     break;
                   }
-                  case STATUS.TU_CHOI_LDC: {
-                    trangThai = STATUS.CHO_DUYET_LDC
-                    break;
-                  }
+                  // case STATUS.TU_CHOI_LDC: {
+                  //   trangThai = STATUS.CHO_DUYET_LDC
+                  //   break;
+                  // }
                 }
               }
               let body = {
