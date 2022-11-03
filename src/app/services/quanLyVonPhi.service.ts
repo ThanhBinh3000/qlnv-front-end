@@ -85,16 +85,6 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  // // call api nút chức năng cho văn bản
-  // approveVB(request: any): Observable<any> {
-  //   return this.httpClient.put(
-  //     // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/chuc-nang-van-ban',
-  //     // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/chuc-nang',
-  //     this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chuc-nang-van-ban',
-  //     request,
-  //   );
-  // }
-
   // call api chi tiết báo cáo
   bCLapThamDinhDuToanChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
@@ -102,13 +92,6 @@ export class QuanLyVonPhiService extends BaseService {
       // 'http://192.168.1.104:8094/lap-tham-dinh/chi-tiet/' + id,
     );
   }
-
-  // bCLapThamDinhDuToanChiTiet1(id: any): Observable<any> {
-  //   return this.httpClient.get(
-  //     //this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet/' + id,
-  //     'http://192.168.1.100:8094/lap-tham-dinh-du-toan/chi-tiet/' + id,
-  //   );
-  // }
 
   bCDieuChinhDuToanChiTiet(id: any): Observable<any> {
     return this.httpClient.get(
@@ -662,34 +645,6 @@ export class QuanLyVonPhiService extends BaseService {
       request,
     );
   }
-  // timDsachVban(request: any): Observable<any> {
-  //   return this.httpClient.post(
-  //     this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/danh-sach-van-ban',
-  //     // 'http://192.168.1.103:8094/lap-tham-dinh-du-toan/danh-sach-van-ban',
-  //     request,
-  //   );
-  // }
-
-  // ctietVban(id: number): Observable<any> {
-  //   return this.httpClient.get(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chi-tiet-van-ban/' + id
-  //   );
-  // }
-
-  // themMoiVban(request: any): Observable<any> {
-  //   return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/them-moi-van-ban',
-  //     request
-  //   );
-  // }
-
-  // capNhatVban(request: any): Observable<any> {
-  //   return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/cap-nhat-van-ban',
-  //     request
-  //   );
-  // }
-
-
-
-
 
   // call api nút chức năng
   approveThamDinh(request: any): Observable<any> {
