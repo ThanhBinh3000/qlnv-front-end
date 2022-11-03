@@ -307,7 +307,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
                 maLoai: "0",
             };
             this.spinner.show();
-            await this.quanLyVonPhiService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
+            await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.trangThaiBanGhi = mcn;
                     this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
