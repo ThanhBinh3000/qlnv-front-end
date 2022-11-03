@@ -116,7 +116,7 @@ export class ThongTinTonghopComponent implements OnInit {
       "nam": [null, [Validators.required]],
       "nguonTongHop": [null, [Validators.required]],
       "maTongHop": [null],
-      "ngayTongHop": [null],
+      "ngayTongHop": [dayjs().format('DD/MM/YYYY')],
       "maToTrinh": [null],
       "noiDung": [null],
       "khDnCapVonIds": [null],
