@@ -97,7 +97,7 @@ export class ThongtinDexuatMuattComponent implements OnInit {
           res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.idDxHdr);
           this.listOfData = this.dataInput.soLuongDiaDiemList;
         } else {
-          res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.id);
+          res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.idDxuat);
           this.listOfData = this.dataInput.soLuongDiaDiemList;
         }
         if (res.msg == MESSAGE.SUCCESS) {

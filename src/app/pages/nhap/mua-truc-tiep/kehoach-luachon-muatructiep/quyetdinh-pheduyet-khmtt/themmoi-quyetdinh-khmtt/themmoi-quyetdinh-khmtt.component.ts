@@ -260,11 +260,10 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    if (this.formData.value.soQd) {
+    if (this.formData.value.soQdPduyet) {
       body.soQdPduyet = this.formData.value.soQdPduyet + "/" + this.maQd;
     }
-
-    body.hhQdPheduyetKhMttDxList = this.danhsachDxMtt;
+    body.hhQdPheduyetKhMttDxList = this.danhsachDxMtt
     body.idDxuat = this.dataInput.idDxHdr;
     body.fileDinhKems = this.fileDinhKem;
     let res = null;
@@ -374,20 +373,23 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
     });
   }
 
+
   async loadChiTiet(id: number) {
     if (id > 0) {
       let res = await this.quyetDinhPheDuyetKeHoachMTTService.getDetail(id);
+      console.log(res, 5555)
       this.listToTrinh = [];
       this.listDanhSachTongHop = [];
       const data = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
-        soQd: data.soQd?.split("/")[0],
+        soQdPduyet: data.soQdPduyet?.split("/")[0],
       });
-      this.danhsachDxMtt = data;
+      this.danhsachDxMtt = data.hhQdPheduyetKhMttDxList;
       this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt);
+      console.log(this, this.danhsachDxMttCache, 6666)
       for (const item of this.danhsachDxMttCache) {
-        await this.danhSachMuaTrucTiepService.getDetail(item.idDxHdr).then((res) => {
+        await this.danhSachMuaTrucTiepService.getDetail(item.idDxuat).then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             item.soLuongDiaDiemList = res.data.soLuongDiaDiemList;
           }
@@ -395,6 +397,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
       }
     };
   }
+
 
   openDialogTh() {
     if (this.formData.get('phanLoai').value != 'TH') {
