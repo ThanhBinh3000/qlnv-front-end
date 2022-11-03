@@ -64,7 +64,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     private donViService: DonviService,
     public globals: Globals,

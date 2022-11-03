@@ -36,11 +36,14 @@
     <div class="group-button">
       <h3> DANH SÁCH PHIẾU KIỂM TRA CHẤT LƯỢNG</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="export()">
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_EXP')" type="button" class="btn btn-sub"
+          (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" *ngIf="userService.isChiCuc()" (click)="redirectToChiTiet(false, 0)">
+        <button type="button" class="btn btn-main"
+          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"
+          (click)="redirectToChiTiet(false, 0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -48,7 +51,8 @@
     </div>
 
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table nzBordered #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable">
+      <nz-table nzBordered #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+        [nzData]="dataTable">
         <thead>
           <tr>
             <th width="60px">STT</th>
@@ -81,7 +85,8 @@
               <td class="bold">{{ item.tgianNkho }}</td>
               <td colspan="10"></td>
               <td>
-                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"
+                  (click)="redirectToChiTiet(false, 0,item.id)">
                   <i class="fa fa-plus"></i>
                 </a>
               </td>
@@ -111,13 +116,16 @@
                     <td>{{dataPhieu.phieuNhapKho?.ngayTao | date: 'dd/MM/YYYY' }}</td>
                     <td>{{dataPhieu.tenTrangThai}}</td>
                     <td>
-                      <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(true, dataPhieu.id)">
+                      <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_XEM')"
+                        (click)="redirectToChiTiet(true, dataPhieu.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, dataPhieu.id)">
+                      <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_SUA')"
+                        (click)="redirectToChiTiet(false, dataPhieu.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="dataPhieu.trangThai == STATUS.DU_THAO">
+                      <a
+                        *ngIf="dataPhieu.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_XOA')">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>

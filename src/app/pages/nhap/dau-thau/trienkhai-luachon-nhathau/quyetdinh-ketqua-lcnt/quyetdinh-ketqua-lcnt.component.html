@@ -8,26 +8,26 @@
             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
         </div>
-        <div nz-col nzSpan="5">
+        <div nz-col nzSpan="4">
           <label>Quyết QĐ PD KHLCNT</label>
           <input nz-input [(ngModel)]="searchFilter.soQdPdKhlcnt" />
         </div>
-        <div nz-col nzSpan="5">
+        <div nz-col nzSpan="4">
           <label>Quyết QĐ PD KQLCNT</label>
           <input nz-input [(ngModel)]="searchFilter.soQdPdKhlcnt" />
         </div>
-        <div nz-col nzSpan="5">
+        <div nz-col nzSpan="4">
           <label>Ngày ký QĐ PD KQLCNT</label>
           <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
-        <div nz-col nzSpan="5" *ngIf="userService.isTongCuc()">
+        <div nz-col nzSpan="4" *ngIf="userService.isTongCuc()">
           <label>Loại hàng hóa </label>
           <nz-select [(ngModel)]="searchFilter.loaiVthh" nzAllowClear>
             <nz-option *ngFor="let p of listVthh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
             </nz-option>
           </nz-select>
         </div>
-        <div nz-col nzSpan="5" *ngIf="userService.isTongCuc()">
+        <div nz-col nzSpan="4" *ngIf="userService.isTongCuc()">
           <label>Trích yếu</label>
           <input nz-input [(ngModel)]="searchFilter.trichYeu" />
         </div>
@@ -46,11 +46,13 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ LỰA CHỌN NHÀ THẦU</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XOA')" type="button"
+          class="btn btn-sub btn-xoa" (click)="xoa()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_EXP')" type="button"
+          class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
@@ -164,13 +166,16 @@
             <td>{{ data.soGthau }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="redirectToChiTiet(data.id, true)">
+              <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM')"
+                (click)="redirectToChiTiet(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO " (click)="redirectToChiTiet(data.id)">
+              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA')"
+                (click)="redirectToChiTiet(data.id)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO " (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_XOA')"
+                (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
