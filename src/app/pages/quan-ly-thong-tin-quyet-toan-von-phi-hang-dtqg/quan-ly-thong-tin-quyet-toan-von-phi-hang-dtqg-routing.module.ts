@@ -12,12 +12,19 @@ const routes: Routes = [
         redirectTo: 'nguoi-dung',
         pathMatch: 'full',
       },
+      // {
+      //   path: 'quan-ly-thong-tin-quyet-toan',
+      //   loadChildren: () =>
+      //     import('./quan-ly-thong-tin-quyet-toan/quan-ly-thong-tin-quyet-toan.module').then(
+      //       (m) => m.QuanLyThongTinQuyetToanModule,
+      //     )
+      // },
       {
-        path: 'quan-ly-thong-tin-quyet-toan',
+        path: 'quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg',
         loadChildren: () =>
-          import('./quan-ly-thong-tin-quyet-toan/quan-ly-thong-tin-quyet-toan.module').then(
-            (m) => m.QuanLyThongTinQuyetToanModule,
-        )
+          import('./von-phi-hang-du-tru-quoc-gia/von-phi-hang-du-tru-quoc-gia.module').then(
+            (m) => m.VonPhiHangDuTruQuocGiaModule,
+          )
       },
       {
         path: 'von-phi-hang-cua-bo-nganh',

@@ -29,6 +29,17 @@ import { PhuLuc8Component } from './phu-luc8/phu-luc8.component';
     GiaoNhiemVuRoutingModule,
     ComponentsModule,
   ],
+  exports: [
+    GiaoNhiemVuComponent,
+    PhuLuc1Component,
+    PhuLuc2Component,
+    PhuLuc3Component,
+    PhuLuc4Component,
+    PhuLuc5Component,
+    PhuLuc6Component,
+    PhuLuc7Component,
+    PhuLuc8Component,
+  ]
 })
 
 export class GiaoNhiemVuModule { }
