@@ -70,6 +70,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       gtriDthau: [],
       gtriHdong: [],
       donGiaVat: [],
+      loaiVthh: [],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       soGthau: [],
@@ -207,6 +208,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         soLuong: data.soLuong,
         soGthau: data.soGthau,
         soGthauTrung: data.soGthauTrung,
+        loaiVthh: data.hhQdKhlcntHdr.loaiVthh,
         tenLoaiVthh: data.hhQdKhlcntHdr.tenLoaiVthh,
         tenCloaiVthh: data.hhQdKhlcntHdr.tenCloaiVthh,
         tgianBdauTchuc: data.dxuatKhLcntHdr.tgianBdauTchuc,
@@ -429,6 +431,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     return true;
   }
 
-
+  checkRoleData() {
+    if (this.userService.isCuc() && !this.formData.value.loaiVthh?.startsWith('02')) {
+      return true;
+    }
+  }
 
 }

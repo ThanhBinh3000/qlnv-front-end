@@ -3,50 +3,51 @@
     <div nz-col [nzSpan]="10">
       <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table id="table-ql-nhom-quyen" #rowSelectionTable class="nowrap" [nzData]="dataTable"
-          [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
+                  [nzScroll]="{  y: '400px' }"
+                  [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered>
           <thead>
-            <tr>
-              <th width="45px">
-                <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                  [nzIndeterminate]="indeterminate"></label>
-              </th>
-              <th width="50px">STT</th>
-              <th width="300px">Nhóm quyền</th>
-              <th width="100px">Ghi chú</th>
-              <th width="80px">Trạng thái</th>
-            </tr>
-            <tr class="search-table">
-              <th></th>
-              <th></th>
-              <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" name="ma  " />
-                </nz-input-group>
-              </th>
-              <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" name="ma  " />
-                </nz-input-group>
-              </th>
-              <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                  <input type="text" nz-input placeholder="Tìm kiếm" name="giaTri" />
-                </nz-input-group>
-              </th>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
+          <tr>
+            <th nzWidth="50px">
+              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                     [nzIndeterminate]="indeterminate"></label>
+            </th>
+            <th nzWidth="50px">STT</th>
+            <th nzWidth="300px">Nhóm quyền</th>
+            <th nzWidth="300px">Ghi chú</th>
+            <th nzWidth="100px">Trạng thái</th>
+          </tr>
+          <tr class="search-table">
+            <th></th>
+            <th></th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" name="ma  "/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" name="ma  "/>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" name="giaTri"/>
+              </nz-input-group>
+            </th>
+            <ng-template #suffixTemplateInfo>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
           </thead>
           <tbody>
-            <tr *ngFor="let data of rowSelectionTable.data; let idx = index" (click)="showDetail($event,data.id)">
-              <td>
-                <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-              </td>
-              <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
-              <td>{{data.name}}</td>
-              <td>{{data.ghiChu}}</td>
-              <td>{{data.status}}</td>
-            </tr>
+          <tr *ngFor="let data of rowSelectionTable.data; let idx = index" (click)="showDetail($event,data.id)">
+            <td>
+              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
+            </td>
+            <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
+            <td>{{data.name}}</td>
+            <td>{{data.ghiChu}}</td>
+            <td>{{data.status}}</td>
+          </tr>
           </tbody>
         </nz-table>
         <div class="tab-content tab-menu" id="myTabContent">
@@ -56,8 +57,9 @@
             <div class="canphai">
               <!-- begin phân trang  -->
               <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-                [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-                (nzPageSizeChange)="changePageSize($event)">
+                             [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate"
+                             (nzPageIndexChange)="changePageIndex($event)"
+                             (nzPageSizeChange)="changePageSize($event)">
                 <ng-template #rangeTemplate let-range="range" let-total>
                   {{ range[0] }}-{{ range[1] }} of {{ total }} items
                 </ng-template>
@@ -73,19 +75,19 @@
       <nz-card class="mt-2px flex-card data-table card-border-content table-card scroll-modal ">
         <nz-table #expandTable [nzData]="listOfMapData" nzTableLayout="fixed" nzBordered>
           <tbody>
-            <ng-container *ngFor="let data of listOfMapData">
-              <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
-                <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
-                  <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
+          <ng-container *ngFor="let data of listOfMapData">
+            <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+              <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+                <td [nzIndentSize]="item.level! * 20" [nzShowExpand]="!!item.children" [(nzExpand)]="item.expand"
                     (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)">
-                    {{ item.name }}
-                  </td>
-                  <td width="45px" class="text-right">
-                    <label nzDisabled nz-checkbox [ngModel]="isCheckedData(item.key)"></label>
-                  </td>
-                </tr>
-              </ng-container>
+                  {{ item.name }}
+                </td>
+                <td width="45px" class="text-right">
+                  <label nzDisabled nz-checkbox [ngModel]="isCheckedData(item.key)"></label>
+                </td>
+              </tr>
             </ng-container>
+          </ng-container>
           </tbody>
         </nz-table>
       </nz-card>
