@@ -45,7 +45,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   dsHangHoa: any[] = [];
-  dsQdPdKhlcnt: any[] = [];
 
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
@@ -241,8 +240,28 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     }
   }
 
+  async getDataChiTieu() {
+    if (this.type == 'GMTDBTT') {
+      let res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(+this.formData.get('namKeHoach').value)
+      if (res2.msg == MESSAGE.SUCCESS) {
+        const dataChiTieu = res2.data;
+        if (dataChiTieu ) {
+          this.formData.patchValue({
+            soCanCu: dataChiTieu.soQuyetDinh,
+          });
+        } else {
+          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy chỉ tiêu kế hoạch năm ' + dayjs().get('year'))
+          return;
+        }
+      }
+    }
+
+
+
+  }
+
   async loadDsQdPduyetKhlcnt() {
-    if (!this.isGiaMuaToiDa) {
+    if (this.type == 'GCT') {
       let body = {
         namKhoach: this.formData.get('namKeHoach').value,
         lastest: 1,
@@ -257,7 +276,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         if (arr) {
           arr.forEach(item => {
             if (!item.loaiVthh.startsWith("02")) {
-              this.dsQdPdKhlcnt.push(item)
+
             }
           })
         }
@@ -336,21 +355,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,
       });
-    }
-  }
-
-  async onChangeSoQd($event) {
-    let dataQd = this.dsQdPdKhlcnt.filter(item => item.soQd == $event);
-    if (dataQd.length > 0) {
-      let dataDetail = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(dataQd[0].id);
-      const data = dataDetail.data;
-      this.formData.patchValue({
-        loaiVthh: data.loaiVthh,
-        cloaiVthh: data.cloaiVthh,
-        tgianNhang: data.tgianNhang
-      })
-      this.dsDiaDiemDeHang = data.hhQdKhlcntDtlList
-      this.convertDsDiemDeHang(data.hhQdKhlcntDtlList);
     }
   }
 
@@ -535,19 +539,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         }
       }
     });
-  }
-
-  async getDataChiTieu() {
-      let res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(+this.formData.get('namKeHoach').value)
-      if (res2.msg == MESSAGE.SUCCESS) {
-        const dataChiTieu = res2.data;
-        if (dataChiTieu ) {
-          this.formData.patchValue({
-            soCanCu: dataChiTieu.soQuyetDinh,
-          });
-        }
-        }
-
   }
 
   themMoiDiaDiem() {
