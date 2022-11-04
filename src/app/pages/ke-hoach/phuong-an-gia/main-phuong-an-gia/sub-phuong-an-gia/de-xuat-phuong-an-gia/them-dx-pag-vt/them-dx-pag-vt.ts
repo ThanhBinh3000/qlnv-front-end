@@ -563,6 +563,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
           this.formData.patchValue({
             qdCtKhNam: dataChiTieu.soQuyetDinh,
           });
+        } else {
+          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy chỉ tiêu kế hoạch năm ' + dayjs().get('year'))
+          return;
         }
       }
     }
@@ -583,7 +586,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let arr  = res.data.content;
-        console.log(arr)
         if (arr) {
           arr.forEach(item => {
             if (!item.loaiVthh.startsWith("02")) {
@@ -591,6 +593,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
               })
             }
           })
+        } else {
+          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy quyết định phê duyệt kế hoạch mua bán ' + dayjs().get('year'))
+          return;
         }
       }
     }
