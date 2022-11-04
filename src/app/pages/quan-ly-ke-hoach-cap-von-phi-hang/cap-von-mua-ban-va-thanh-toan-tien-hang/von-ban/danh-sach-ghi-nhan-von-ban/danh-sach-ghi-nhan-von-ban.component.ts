@@ -128,9 +128,9 @@ export class DanhSachGhiNhanVonBanComponent implements OnInit {
                             ngayLap: this.datePipe.transform(item.ngayLap, Utils.FORMAT_DATE_STR),
                             ngayNhan: this.datePipe.transform(item.ngayNhan, Utils.FORMAT_DATE_STR),
                             ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
-                            ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
-                            ngayDuyet: this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR),
-                            ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
+                            ngayTrinhDviCha: this.datePipe.transform(item.ngayTrinhDviCha, Utils.FORMAT_DATE_STR),
+                            ngayDuyetDviCha: this.datePipe.transform(item.ngayDuyetDviCha, Utils.FORMAT_DATE_STR),
+                            ngayPheDuyetDviCha: this.datePipe.transform(item.ngayPheDuyetDviCha, Utils.FORMAT_DATE_STR),
                             checked: false,
                             isEdit: this.checkEditStatus(item.trangThaiDviCha),
                         })
@@ -177,6 +177,9 @@ export class DanhSachGhiNhanVonBanComponent implements OnInit {
     }
 
     getStatusName(trangThai: string) {
+        if (trangThai == Utils.TT_BC_1) {
+            return 'Mới';
+        }
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 

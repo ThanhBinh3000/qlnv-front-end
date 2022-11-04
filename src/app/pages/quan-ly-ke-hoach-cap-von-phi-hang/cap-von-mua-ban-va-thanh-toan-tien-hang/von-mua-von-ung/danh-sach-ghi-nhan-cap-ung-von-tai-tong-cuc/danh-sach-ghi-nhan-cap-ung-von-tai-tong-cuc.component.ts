@@ -9,6 +9,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
 import { CVMB, LOAI_VON, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
     selector: 'app-danh-sach-ghi-nhan-cap-ung-von-tai-tong-cuc',
@@ -176,7 +177,30 @@ export class DanhSachGhiNhanCapUngVonTaiTongCucComponent implements OnInit {
     }
 
     addNewReport() {
-
+        const newData = {
+            tab: 'gnv',
+        }
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Thông tin tạo mới',
+            nzContent: DialogTaoMoiComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                obj: newData
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                const obj = {
+                    ...res,
+                    id: null,
+                    tabSelected: 'bc-gnv',
+                }
+                this.dataChange.emit(obj);
+            }
+        });
     }
 
     //xem chi tiet bao cao

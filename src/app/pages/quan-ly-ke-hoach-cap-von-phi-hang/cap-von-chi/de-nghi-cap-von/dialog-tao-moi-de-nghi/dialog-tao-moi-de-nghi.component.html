@@ -23,8 +23,8 @@
             </nz-select>
         </div>
         <div nz-col nzSpan="6" *ngIf="isContract">
-            <label class="search__label">Số hợp đồng</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn số hợp đồng" [(ngModel)]="maHopDong"
+            <label class="search__label">Q/Đ phê duyệt kết quả LCNT</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn quyết định" [(ngModel)]="maHopDong"
                 [class]="maHopDong ?'' : 'input-error-validate'" (ngModelChange)="getContract()">
                 <nz-option *ngFor="let item of lstHdongs" [nzValue]="item" [nzLabel]="item">
                 </nz-option>

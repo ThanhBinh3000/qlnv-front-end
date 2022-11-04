@@ -12,6 +12,8 @@ import { ThemDanhMucDungChungComponent } from './danh-muc-dung-chung/them-danh-m
 import { DanhMucDonViComponent } from './danh-muc-don-vi/danh-muc-don-vi.component';
 import { NewDonViComponent } from './danh-muc-don-vi/new-don-vi/new-don-vi.component';
 import {DanhMucDinhMucPhiComponent} from "./danh-muc-dinh-muc-phi/danh-muc-dinh-muc-phi-component";
+import { DanhMucHangHoaComponent } from './danh-muc-hang-hoa/danh-muc-hang-hoa.component';
+import { NewHangHoaComponent } from './danh-muc-hang-hoa/new-hang-hoa/new-hang-hoa.component';
 
 
 @NgModule({
@@ -21,7 +23,9 @@ import {DanhMucDinhMucPhiComponent} from "./danh-muc-dinh-muc-phi/danh-muc-dinh-
     ThemDanhMucDungChungComponent,
     DanhMucDonViComponent,
     NewDonViComponent,
-    DanhMucDinhMucPhiComponent
+    DanhMucDinhMucPhiComponent,
+    DanhMucHangHoaComponent,
+    NewHangHoaComponent
   ],
   imports: [CommonModule, QuanTriDanhMucRoutingModule, ComponentsModule, MainModule, NzTreeViewModule],
 

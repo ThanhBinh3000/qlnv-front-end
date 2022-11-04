@@ -98,7 +98,9 @@
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="8">
-          <nz-radio-group nzSize="small" class="rdo-input" formControlName="phanLoai">
+          <nz-radio-group
+            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
+            nzSize="small" class="rdo-input" formControlName="phanLoai">
             <nz-form-item>
               <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
               <nz-form-control [nzErrorTip]="error">
@@ -497,14 +499,15 @@
         <div nz-col [nzSpan]="12">
           <nz-card class="mg-t-10 flex-card p-lr16 ">
             <app-thongtin-dexuat [title]="'Nội dung đề xuất của Cục DTNN KV'" [dataInput]="dataInputCache"
-              [isView]="true" [isCache]="true" [isLuongThuc]="isLuongThuc">
+              [isView]="true" [isCache]="true" [isTongHop]="isTongHop">
             </app-thongtin-dexuat>
           </nz-card>
         </div>
         <div nz-col [nzSpan]="12">
           <nz-card class="mg-t-10 flex-card p-lr16 ">
-            <app-thongtin-dexuat [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput" [isView]="false"
-              [isLuongThuc]="isLuongThuc" (soLuongChange)="setNewSoLuong($event)">
+            <app-thongtin-dexuat [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput"
+              [isView]="formData.value.trangThai == STATUS.BAN_HANH" [isTongHop]="isTongHop"
+              (soLuongChange)="setNewSoLuong($event)">
             </app-thongtin-dexuat>
           </nz-card>
         </div>

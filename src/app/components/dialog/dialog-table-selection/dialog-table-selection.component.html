@@ -10,12 +10,6 @@
         <tbody>
             <tr *ngFor="let data of basicTable.data; let i = index">
                 <td class="text-center">{{i+1}}</td>
-                <ng-container *ngIf="code == 'dsQdKhlcnt'">
-                    <td>{{ data.soQd }}</td>
-                    <td>{{ data.ngayQd }}</td>
-                    <td>{{ data.tenLoaiVthh }}</td>
-                    <td>{{ data.tenCloaiVthh }}</td>
-                </ng-container>
                 <td *ngFor="let column of dataColumn;">{{ data[column] }}</td>
                 <td class="text-center">
                     <a (click)="handleOk(data)">

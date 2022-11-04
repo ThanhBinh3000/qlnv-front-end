@@ -1,18 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { Router } from "@angular/router";
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogNhomQuyenComponent } from 'src/app/components/dialog/dialog-nhom-quyen/dialog-nhom-quyen.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { QlNhomQuyenService } from 'src/app/services/quantri-nguoidung/qlNhomQuyen.service';
-import { QlQuyenNSDService } from 'src/app/services/quantri-nguoidung/qlQuyen.service';
-import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { DanhMucDungChungService } from "../../../services/danh-muc-dung-chung.service";
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {DialogNhomQuyenComponent} from 'src/app/components/dialog/dialog-nhom-quyen/dialog-nhom-quyen.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {QlNhomQuyenService} from 'src/app/services/quantri-nguoidung/qlNhomQuyen.service';
+import {QlQuyenNSDService} from 'src/app/services/quantri-nguoidung/qlQuyen.service';
+import {UserService} from 'src/app/services/user.service';
+import {convertTrangThai} from 'src/app/shared/commonFunction';
+import {DanhMucDungChungService} from "../../../services/danh-muc-dung-chung.service";
 
 export interface TreeNodeInterface {
   key: string;
@@ -24,6 +23,7 @@ export interface TreeNodeInterface {
   children?: TreeNodeInterface[];
   parent?: TreeNodeInterface;
 }
+
 @Component({
   selector: 'app-quan-ly-quyen',
   templateUrl: './quan-ly-quyen.component.html',
@@ -58,8 +58,7 @@ export class QuanLyQuyenComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
 
-  listOfMapData: any[] = [
-  ];
+  listOfMapData: any[] = [];
   mapOfExpandedData: { [key: string]: TreeNodeInterface[] } = {};
   listDataSelected: any[] = [];
 
@@ -73,8 +72,7 @@ export class QuanLyQuyenComponent implements OnInit {
     private qlNhomQuyenService: QlNhomQuyenService,
     private qlQuyenNSDService: QlQuyenNSDService
   ) {
-    this.formData = this.fb.group({
-    });
+    this.formData = this.fb.group({});
   }
 
   async ngOnInit() {
@@ -93,9 +91,7 @@ export class QuanLyQuyenComponent implements OnInit {
   }
 
   async getListDataTree() {
-    let body = {
-
-    }
+    let body = {}
     let dataTree = await this.qlQuyenNSDService.getAll(body);
     if (dataTree.msg == MESSAGE.SUCCESS) {
       this.listOfMapData = dataTree.data;
@@ -125,14 +121,14 @@ export class QuanLyQuyenComponent implements OnInit {
     const stack: TreeNodeInterface[] = [];
     const array: TreeNodeInterface[] = [];
     const hashMap = {};
-    stack.push({ ...root, level: 0, expand: false });
+    stack.push({...root, level: 0, expand: false});
 
     while (stack.length !== 0) {
       const node = stack.pop()!;
       this.visitNode(node, hashMap, array);
       if (node.children.length > 0) {
         for (let i = node.children.length - 1; i >= 0; i--) {
-          stack.push({ ...node.children[i], level: node.level! + 1, expand: false, parent: node });
+          stack.push({...node.children[i], level: node.level! + 1, expand: false, parent: node});
         }
       } else {
         delete node.children
@@ -165,11 +161,11 @@ export class QuanLyQuyenComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) =>
+    this.allChecked = this.dataTable.every(({id}) =>
       this.setOfCheckedId.has(id),
     );
     this.indeterminate =
-      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
   }
 
@@ -335,7 +331,7 @@ export class QuanLyQuyenComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.dmDungCungService.deleteMuti({ ids: dataDelete });
+            let res = await this.dmDungCungService.deleteMuti({ids: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -356,6 +352,7 @@ export class QuanLyQuyenComponent implements OnInit {
   }
 
   searchFilter: string;
+
   filterInTable(value) {
     if (value && value != '') {
       this.listOfMapData = [];
@@ -415,7 +412,7 @@ export class QuanLyQuyenComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.dmDungCungService.deleteMuti({ idList: dataDelete });
+            let res = await this.dmDungCungService.deleteMuti({idList: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -530,6 +527,38 @@ export class QuanLyQuyenComponent implements OnInit {
     this.spinner.hide();
   }
 
+  xoaNhomQuyen(data: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          this.qlNhomQuyenService.deleteMuti({ids: [data.id]}).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          });
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
 }
 
 

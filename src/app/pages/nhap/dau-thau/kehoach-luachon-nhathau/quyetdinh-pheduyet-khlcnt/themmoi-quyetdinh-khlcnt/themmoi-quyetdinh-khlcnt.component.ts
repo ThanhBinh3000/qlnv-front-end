@@ -92,7 +92,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
 
   dataInput: any;
   dataInputCache: any;
-  isLuongThuc: boolean
+  isTongHop: boolean
 
   constructor(
     private router: Router,
@@ -138,7 +138,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       tchuanCluong: [''],
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [''],
-      phanLoai: ['', [Validators.required]],
+      phanLoai: ['TH', [Validators.required]],
 
       gtriDthau: [null,],
       gtriHdong: [null,],
@@ -151,19 +151,19 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
   }
 
   setValidator(isGuiDuyet?) {
+    if (isGuiDuyet) {
+      this.formData.controls["soQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayHluc"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["soQd"].clearValidators();
+      this.formData.controls["ngayQd"].clearValidators();
+      this.formData.controls["ngayHluc"].clearValidators();
+    }
     if (this.formData.get('phanLoai').value == 'TH') {
       this.formData.controls["idThHdr"].setValidators([Validators.required]);
       this.formData.controls["idTrHdr"].clearValidators();
       this.formData.controls["soTrHdr"].clearValidators();
-      if (isGuiDuyet) {
-        this.formData.controls["soQd"].setValidators([Validators.required]);
-        this.formData.controls["ngayQd"].setValidators([Validators.required]);
-        this.formData.controls["ngayHluc"].setValidators([Validators.required]);
-      } else {
-        this.formData.controls["soQd"].clearValidators();
-        this.formData.controls["ngayQd"].clearValidators();
-        this.formData.controls["ngayHluc"].clearValidators();
-      }
     }
     if (this.formData.get('phanLoai').value == 'TTr') {
       this.formData.controls["idThHdr"].clearValidators();
@@ -603,11 +603,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     await this.spinner.show();
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     $event.target.parentElement.classList.add('selectedRow');
-    if (this.formData.get('loaiVthh').value.startsWith("02")) {
-      this.isLuongThuc = false;
-    } else {
-      this.isLuongThuc = true
-    }
+    this.isTongHop = this.formData.value.phanLoai == 'TH';
     this.dataInput = this.danhsachDx[index];
     this.dataInputCache = this.danhsachDxCache[index];
     this.index = index;

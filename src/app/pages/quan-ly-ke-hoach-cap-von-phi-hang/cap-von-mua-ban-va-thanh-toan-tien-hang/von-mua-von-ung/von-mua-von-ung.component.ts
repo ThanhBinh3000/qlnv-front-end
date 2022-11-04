@@ -11,7 +11,7 @@ import { TAB_LIST } from './von-mua-von-ung.constant';
 })
 export class VonMuaVonUngComponent implements OnInit {
 
-    tabSelected: string;
+    tabSelected!: string;
     data: any;
     isList = false;
     isAccept = false;

@@ -28,7 +28,7 @@ export class BaoCaoTheoTtqdComponent implements OnInit,AfterViewInit {
     });
   }
 
-  tabSelected: number = 0;
+  tabSelected: number = 5;
 
   selectTab(tab: number) {
     this.tabSelected = tab;

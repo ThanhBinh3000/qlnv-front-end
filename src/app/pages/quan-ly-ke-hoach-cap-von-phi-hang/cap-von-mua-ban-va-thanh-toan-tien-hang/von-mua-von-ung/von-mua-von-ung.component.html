@@ -23,19 +23,40 @@
             <app-ghi-nhan-cap-ung-von-tu-dvct-tai-tong-cuc [data]="data" (dataChange)="changeTab($event)">
             </app-ghi-nhan-cap-ung-von-tu-dvct-tai-tong-cuc>
         </ng-container>
-        <!-- <ng-container *ngIf="tabSelected == 'capduoi'">
-            <app-danh-sach-bao-cao-tu-don-vi-cap-duoi (dataChange)="changeTab($event)">
-            </app-danh-sach-bao-cao-tu-don-vi-cap-duoi>
+        <ng-container *ngIf="tabSelected == 'bc-gnv' && !isTongCuc">
+            <app-ghi-nhan-cap-ung-von-tai-ckv-cc [data]="data" (dataChange)="changeTab($event)">
+            </app-ghi-nhan-cap-ung-von-tai-ckv-cc>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'kiemtra'">
-            <app-kiem-tra-bao-cao-cac-don-vi-cap-duoi (dataChange)="changeTab($event)">
-            </app-kiem-tra-bao-cao-cac-don-vi-cap-duoi>
+        <!-- cap von cho don vi cap duoi -->
+        <ng-container *ngIf="tabSelected == 'cv'">
+            <app-danh-sach-cap-ung-von-cho-don-vi-cap-duoi (dataChange)="changeTab($event)">
+            </app-danh-sach-cap-ung-von-cho-don-vi-cap-duoi>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'tonghop'">
-            <app-tong-hop-bao-cao (dataChange)="changeTab($event)"></app-tong-hop-bao-cao>
+        <ng-container *ngIf="tabSelected == 'bc-cv'">
+            <app-cap-ung-von-cho-don-vi-cap-duoi [data]="data" (dataChange)="changeTab($event)">
+            </app-cap-ung-von-cho-don-vi-cap-duoi>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'baocao'">
-            <app-bao-cao [data]="data" (dataChange)="changeTab($event)"></app-bao-cao>
-        </ng-container> -->
+        <!-- nop tien thua -->
+        <ng-container *ngIf="tabSelected == 'tt'">
+            <app-danh-sach-tien-thua (dataChange)="changeTab($event)">
+            </app-danh-sach-tien-thua>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'gn-tt'">
+            <app-danh-sach-ghi-nhan-tien-thua (dataChange)="changeTab($event)">
+            </app-danh-sach-ghi-nhan-tien-thua>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'bc-tt'">
+            <app-tien-von-thua [data]="data" (dataChange)="changeTab($event)">
+            </app-tien-von-thua>
+        </ng-container>
+        <!-- thanh toan cho khach hang -->
+        <ng-container *ngIf="tabSelected == 'thanhtoan'">
+            <app-danh-sach-thanh-toan-cho-khach-hang (dataChange)="changeTab($event)">
+            </app-danh-sach-thanh-toan-cho-khach-hang>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'bc-thanhtoan'">
+            <app-thanh-toan-cho-khach-hang [data]="data" (dataChange)="changeTab($event)">
+            </app-thanh-toan-cho-khach-hang>
+        </ng-container>
     </div>
 </div>

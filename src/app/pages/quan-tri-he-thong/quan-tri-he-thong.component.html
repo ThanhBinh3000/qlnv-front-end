@@ -4,8 +4,8 @@
       <span>QUẢN TRỊ HỆ THỐNG</span>
       <img src="../../../assets/images/mui-ten.png" alt="" srcset="" (click)="openNav()" class="img-collapse-close">
     </a>
-    <a class="d-flex align-items-center justify-content-between" *ngFor="let route of routes, let i = index"
-      (click)="routerNavigate(route)" [ngClass]="route.isSelected ? 'is-selected' : ''">
+    <a [ngClass]="{'d-flex align-items-center justify-content-between activeMenu': routerUrlActive === route.idHover,'d-flex align-items-center justify-content-between': routerUrlActive !== route.idHover }" *ngFor="let route of routes, let i = index"
+      (click)="routerNavigate(route)" >
       <span>
         <i class="icon {{route.icon}} mr-2 icon-menu"></i>
         <span>{{route.title}}</span>

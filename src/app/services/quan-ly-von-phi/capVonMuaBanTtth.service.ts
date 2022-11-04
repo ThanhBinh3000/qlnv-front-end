@@ -71,5 +71,55 @@ export class CapVonMuaBanTtthService extends BaseService {
         );
     }
 
+    //xóa báo cáo nút xóa Báo cáo
+    xoaCapVon(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/cap-ung-von/xoa',
+            request
+        );
+    }
 
+    //chi tiet ma phuong an
+    ctietCapVon(id: any): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/qlnv-khoachphi/cap-ung-von/chi-tiet/' + id
+        );
+    }
+
+    trinhDuyetVonMuaBan(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/trang-thai',
+            request);
+    }
+
+    trinhDuyetCapVon(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/qlnv-khoachphi/cap-ung-von/trang-thai',
+            request);
+    }
+
+    taoMoiCapVon(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/cap-ung-von/them-moi',
+            request);
+    }
+
+    updateCapVon(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/qlnv-khoachphi/cap-ung-von/cap-nhat',
+            request,
+        );
+    }
+
+    capTatCa(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/them-moi/danh-sach',
+            request);
+    }
+
+    maThanhToan(): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/sinh-ma/thanh-toan'
+        );
+    }
 }

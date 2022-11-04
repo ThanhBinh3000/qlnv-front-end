@@ -105,7 +105,7 @@ export class KiemTraBaoCaoCacDonViCapDuoiComponent implements OnInit {
         } else {
             this.searchFilter.trangThais = [Utils.TT_BC_KT, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
         }
-        await this.quanLyVonPhiService.timBaoCao(this.searchFilter).toPromise().then(res => {
+        await this.baoCaoThucHienDuToanChiService.timBaoCao(this.searchFilter).toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.dataTable = [];
                 res.data.content.forEach(e => {
