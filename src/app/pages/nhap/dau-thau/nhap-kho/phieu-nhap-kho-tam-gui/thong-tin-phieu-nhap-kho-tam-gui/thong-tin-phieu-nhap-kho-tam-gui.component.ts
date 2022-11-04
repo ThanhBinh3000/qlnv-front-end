@@ -59,7 +59,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
     private danhMucService: DanhMucService,
     private notification: NzNotificationService,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private phieuNhapKhoTamGuiService: PhieuNhapKhoTamGuiService,

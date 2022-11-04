@@ -236,7 +236,7 @@
                             <td></td>
                             <td></td>
                             <td>
-                                <a (click)="redirectHopDong(true,data.hopDong.id)">
+                                <a *ngIf="data.hopDong" (click)="redirectHopDong(true,data.hopDong.id)">
                                     <i class="fa fa-pencil"></i>
                                 </a>
                                 <a *ngIf="data.hopDong?.trangThai == STATUS.DU_THAO"

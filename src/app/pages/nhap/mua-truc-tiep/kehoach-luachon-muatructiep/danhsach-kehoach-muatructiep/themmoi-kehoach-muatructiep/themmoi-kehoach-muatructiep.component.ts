@@ -167,7 +167,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       giaMua: ['', [Validators.required]],
       giaChuaThue: ['', [Validators.required]],
       giaCoThue: ['', [Validators.required]],
-      thueGtgt: [],
+      thueGtgt: ['5'],
       tgianMkho: ['', [Validators.required]],
       tgianKthuc: ['', [Validators.required]],
       ghiChu: [null],
@@ -208,6 +208,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     } else {
       this.initForm();
     }
+    await this.getDataChiTieu()
     await this.spinner.hide();
   }
 

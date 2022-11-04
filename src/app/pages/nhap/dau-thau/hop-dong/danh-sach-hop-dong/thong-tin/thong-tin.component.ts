@@ -71,6 +71,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
     @Input() typeVthh: string;
     @Input() idGoiThau: number;
     @Input() dataBinding: any;
+    @Input() idKqLcnt: number;
     @Output()
     showListEvent = new EventEmitter<any>();
 
@@ -410,7 +411,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
                 tenLoaiVthh: dataDtl.hhQdKhlcntHdr.tenLoaiVthh,
                 loaiVthh: dataDtl.hhQdKhlcntHdr.loaiVthh,
                 tenCloaiVthh: dataDtl.hhQdKhlcntHdr.tenCloaiVthh,
-                moTaHangHoa: dataDtl.hhQdKhlcntHdr.moTaHangHoa,
+                moTaHangHoa: dataDtl.dxuatKhLcntHdr.moTaHangHoa,
                 tgianNkho: dataDtl.dxuatKhLcntHdr.tgianNhang
             })
         } else {

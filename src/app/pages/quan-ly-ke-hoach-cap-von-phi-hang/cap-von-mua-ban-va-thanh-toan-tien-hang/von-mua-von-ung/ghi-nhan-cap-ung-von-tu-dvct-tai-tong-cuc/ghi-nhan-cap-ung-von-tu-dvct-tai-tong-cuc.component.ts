@@ -184,7 +184,7 @@ export class GhiNhanCapUngVonTuDvctTaiTongCucComponent implements OnInit {
             this.soLenhChiTien = this.data.soLenhChiTien;
             this.ngayLapTemp = this.data.ngayLap;
             this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
-            this.quanLyVonPhiService.maCapVonUng().toPromise().then(
+            this.capVonMuaBanTtthService.maCapVonUng().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
                         this.maCvUv = res.data;
@@ -331,7 +331,7 @@ export class GhiNhanCapUngVonTuDvctTaiTongCucComponent implements OnInit {
                 maLoai: "0",
             };
             this.spinner.show();
-            await this.quanLyVonPhiService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
+            await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.trangThaiBanGhi = mcn;
                     this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
@@ -570,7 +570,7 @@ export class GhiNhanCapUngVonTuDvctTaiTongCucComponent implements OnInit {
         };
 
         this.spinner.show();
-        this.quanLyVonPhiService.themMoiVonMuaBan(request).toPromise().then(
+        this.capVonMuaBanTtthService.themMoiVonMuaBan(request).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
                     const modalCopy = this.modal.create({

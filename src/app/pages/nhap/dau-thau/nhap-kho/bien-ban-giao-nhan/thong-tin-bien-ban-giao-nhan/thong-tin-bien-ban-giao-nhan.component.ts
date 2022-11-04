@@ -68,7 +68,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
     private donViService: DonviService,
     private notification: NzNotificationService,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     public globals: Globals,
     private fb: FormBuilder,

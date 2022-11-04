@@ -840,7 +840,7 @@ export class BaoCaoComponent implements OnInit {
 
     async doCopy(response) {
         this.spinner.show();
-        const maBaoCao = await this.quanLyVonPhiService.taoMaBaoCao().toPromise().then(
+        const maBaoCao = await this.baoCaoThucHienDuToanChiService.taoMaBaoCao().toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     return data.data;

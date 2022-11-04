@@ -73,7 +73,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent implements OnInit {
     private modal: NzModalService,
     public globals: Globals,
     private routerActive: ActivatedRoute,
-    private userService: UserService,
+    public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private danhMucService: DanhMucService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
