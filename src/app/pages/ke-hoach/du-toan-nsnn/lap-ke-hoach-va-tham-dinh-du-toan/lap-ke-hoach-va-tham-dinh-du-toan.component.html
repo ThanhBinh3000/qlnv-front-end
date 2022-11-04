@@ -10,8 +10,7 @@
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
     <div class="contentDetail">
-        <!-- ghi nhan von tu don vi cap tren -->
-        <ng-container *ngIf="tabSelected == 'gnv' && isTongCuc">
+        <!-- <ng-container *ngIf="tabSelected == 'gnv' && isTongCuc">
             <app-danh-sach-ghi-nhan-cap-ung-von-tai-tong-cuc (dataChange)="changeTab($event)">
             </app-danh-sach-ghi-nhan-cap-ung-von-tai-tong-cuc>
         </ng-container>
@@ -27,7 +26,6 @@
             <app-ghi-nhan-cap-ung-von-tai-ckv-cc [data]="data" (dataChange)="changeTab($event)">
             </app-ghi-nhan-cap-ung-von-tai-ckv-cc>
         </ng-container>
-        <!-- cap von cho don vi cap duoi -->
         <ng-container *ngIf="tabSelected == 'cv'">
             <app-danh-sach-cap-ung-von-cho-don-vi-cap-duoi (dataChange)="changeTab($event)">
             </app-danh-sach-cap-ung-von-cho-don-vi-cap-duoi>
@@ -36,7 +34,6 @@
             <app-cap-ung-von-cho-don-vi-cap-duoi [data]="data" (dataChange)="changeTab($event)">
             </app-cap-ung-von-cho-don-vi-cap-duoi>
         </ng-container>
-        <!-- nop tien thua -->
         <ng-container *ngIf="tabSelected == 'tt'">
             <app-danh-sach-tien-thua (dataChange)="changeTab($event)">
             </app-danh-sach-tien-thua>
@@ -49,7 +46,6 @@
             <app-tien-von-thua [data]="data" (dataChange)="changeTab($event)">
             </app-tien-von-thua>
         </ng-container>
-        <!-- thanh toan cho khach hang -->
         <ng-container *ngIf="tabSelected == 'thanhtoan'">
             <app-danh-sach-thanh-toan-cho-khach-hang (dataChange)="changeTab($event)">
             </app-danh-sach-thanh-toan-cho-khach-hang>
@@ -57,6 +53,6 @@
         <ng-container *ngIf="tabSelected == 'bc-thanhtoan'">
             <app-thanh-toan-cho-khach-hang [data]="data" (dataChange)="changeTab($event)">
             </app-thanh-toan-cho-khach-hang>
-        </ng-container>
+        </ng-container> -->
     </div>
 </div>

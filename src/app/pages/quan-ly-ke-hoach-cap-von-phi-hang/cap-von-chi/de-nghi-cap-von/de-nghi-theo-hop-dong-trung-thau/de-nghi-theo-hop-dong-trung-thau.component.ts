@@ -440,10 +440,10 @@ export class DeNghiTheoHopDongTrungThauComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
             return;
         }
-        if (this.kphiDaCap > this.tongTien) {
-            this.notification.warning(MESSAGE.WARNING, 'Kinh phí đã cấp không được vượt quá tổng tiền');
-            return;
-        }
+        // if  (this.kphiDaCap > this.tongTien) {
+        //     this.notification.warning(MESSAGE.WARNING, 'Kinh phí đã cấp không được vượt quá tổng tiền');
+        //     return;
+        // }
         //get list file url
         let checkFile = true;
         for (const iterator of this.listFile) {

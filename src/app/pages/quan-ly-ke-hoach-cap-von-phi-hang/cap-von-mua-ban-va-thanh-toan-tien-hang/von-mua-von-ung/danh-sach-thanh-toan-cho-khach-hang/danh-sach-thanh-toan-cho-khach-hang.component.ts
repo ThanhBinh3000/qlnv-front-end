@@ -12,10 +12,10 @@ import { CVMB, LOAI_VON, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/util
 import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
-    selector: 'app-danh-sach-tien-thua',
-    templateUrl: './danh-sach-tien-thua.component.html',
+    selector: 'app-danh-sach-thanh-toan-cho-khach-hang',
+    templateUrl: './danh-sach-thanh-toan-cho-khach-hang.component.html',
 })
-export class DanhSachTienThuaComponent implements OnInit {
+export class DanhSachThanhToanChoKhachHangComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
 
     //thong tin user
@@ -26,8 +26,8 @@ export class DanhSachTienThuaComponent implements OnInit {
         trangThai: Utils.TT_BC_1,
         tuNgay: null,
         denNgay: null,
-        maTienThua: "",
-        ngayLap: "",
+        maThanhToan: "",
+        khachHang: "",
         maDvi: "",
     };
 
@@ -78,14 +78,13 @@ export class DanhSachTienThuaComponent implements OnInit {
         newDate.setMonth(newDate.getMonth() - 1);
         this.searchFilter.tuNgay = newDate;
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
-        //trang thai cac nut
-        this.statusNewReport = this.userService.isAccessPermisson(CVMB.ADD_REPORT_NTVT);
-        this.statusDelete = this.userService.isAccessPermisson(CVMB.DELETE_REPORT_NTVT);
+        this.statusNewReport = this.userService.isAccessPermisson(CVMB.ADD_REPORT_TTKH);
+        this.statusDelete = this.userService.isAccessPermisson(CVMB.DELETE_REPORT_TTKH);
         //neu co quyen phe duyet thi trang thai mac dinh la trinh duyet
-        if (this.userService.isAccessPermisson(CVMB.DUYET_REPORT_NTVT)) {
+        if (this.userService.isAccessPermisson(CVMB.DUYET_REPORT_TTKH)) {
             this.searchFilter.trangThai = Utils.TT_BC_2;
         } else {
-            if (this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_NTVT)) {
+            if (this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_TTKH)) {
                 this.searchFilter.trangThai = Utils.TT_BC_4;
             }
         }
@@ -96,6 +95,7 @@ export class DanhSachTienThuaComponent implements OnInit {
 
     async getDanhSachCapVon() {
         const requestReport = {
+            loaiTimKiem: "0",
             maCapUngVonTuCapTren: "",
             maDvi: this.userInfo?.MA_DVI,
             maLoai: "1",
@@ -126,10 +126,9 @@ export class DanhSachTienThuaComponent implements OnInit {
         const requestReport = {
             loaiTimKiem: "0",
             maCapUngVonTuCapTren: this.searchFilter.maCvUv,
-            maNopTienThua: this.searchFilter.maTienThua,
+            maThanhToan: this.searchFilter.maThanhToan,
             maDvi: this.userInfo?.MA_DVI,
-            maLoai: "3",
-            ngayLap: this.datePipe.transform(this.searchFilter.ngayLap, Utils.FORMAT_DATE_STR),
+            maLoai: "4",
             ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
             ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
             paggingReq: {
@@ -146,8 +145,7 @@ export class DanhSachTienThuaComponent implements OnInit {
                     data.data.content.forEach(item => {
                         this.dataTable.push({
                             ...item,
-                            ngayLap: this.datePipe.transform(item.ngayLap, Utils.FORMAT_DATE_STR),
-                            ngayNhan: this.datePipe.transform(item.ngayNhan, Utils.FORMAT_DATE_STR),
+                            ngayThanhToan: this.datePipe.transform(item.ngayThanhToan, Utils.FORMAT_DATE_STR),
                             ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
                             ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
                             ngayDuyet: this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR),
@@ -189,17 +187,17 @@ export class DanhSachTienThuaComponent implements OnInit {
         this.searchFilter.trangThai = null
         this.searchFilter.tuNgay = null
         this.searchFilter.denNgay = null
-        this.searchFilter.maTienThua = null
-        this.searchFilter.ngayLap = null
+        this.searchFilter.maThanhToan = null
+        this.searchFilter.khachHang = null
         this.search();
     }
 
     checkEditStatus(trangThai: string) {
-        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTVT);
+        return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_TTKH);
     }
 
     checkDeleteStatus(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DELETE_REPORT_NTVT);
+        return Utils.statusDelete.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DELETE_REPORT_TTKH);
     }
 
     getStatusName(trangThai: string) {
@@ -209,7 +207,7 @@ export class DanhSachTienThuaComponent implements OnInit {
     addNewReport() {
         const newData = {
             danhSachCapVon: this.danhSachCapVon,
-            tab: 'tt',
+            tab: 'thanhtoan',
         }
         const modalTuChoi = this.modal.create({
             nzTitle: 'Thông tin tạo mới',
@@ -227,7 +225,7 @@ export class DanhSachTienThuaComponent implements OnInit {
                 const obj = {
                     ...res,
                     id: null,
-                    tabSelected: 'bc-tt',
+                    tabSelected: 'bc-thanhtoan',
                 }
                 this.dataChange.emit(obj);
             }
@@ -238,7 +236,7 @@ export class DanhSachTienThuaComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: 'bc-tt',
+            tabSelected: 'bc-thanhtoan',
         }
         this.dataChange.emit(obj);
     }
