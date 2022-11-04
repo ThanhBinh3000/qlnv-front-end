@@ -123,6 +123,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.getDataChiTieu(),
       this.loadDsPhuongAnGia(),
       this.loadDsVthh(),
+      this.loadDsQdPduyetKhlcnt(),
       this.loadDsHangHoaPag(),
       this.loadDsLoaiGia(),
       this.maDx = '/TCDT-KH',
@@ -554,14 +555,47 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   async getDataChiTieu() {
+    if (this.type == 'GMDTBTT') {
       let res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(+this.formData.get('namKeHoach').value)
       if (res2.msg == MESSAGE.SUCCESS) {
         const dataChiTieu = res2.data;
-        this.formData.patchValue({
-          qdCtKhNam: dataChiTieu.soQuyetDinh,
-        });
+        if (dataChiTieu) {
+          this.formData.patchValue({
+            qdCtKhNam: dataChiTieu.soQuyetDinh,
+          });
+        }
       }
+    }
+
   }
+
+  async loadDsQdPduyetKhlcnt() {
+    if (this.type == 'GMDTBTT') {
+      let body = {
+        namKhoach: this.formData.get('namKeHoach').value,
+        lastest: 1,
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0,
+        },
+        maDvi: this.userInfo.MA_DVI
+      };
+      let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let arr  = res.data.content;
+        console.log(arr)
+        if (arr) {
+          arr.forEach(item => {
+            if (!item.loaiVthh.startsWith("02")) {
+              this.formData.patchValue({
+              })
+            }
+          })
+        }
+      }
+    }
+  }
+
 
   async save(isGuiDuyet?) {
     this.spinner.show();
