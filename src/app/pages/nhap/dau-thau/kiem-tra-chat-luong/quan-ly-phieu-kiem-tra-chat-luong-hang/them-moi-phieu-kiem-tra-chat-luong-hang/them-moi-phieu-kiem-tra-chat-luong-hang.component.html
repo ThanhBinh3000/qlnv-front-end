@@ -327,14 +327,13 @@
                 <div nz-col nzSpan="6">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true" nzRequired>
-                            KL hàng thực nhập kho (kg)
+                            SL theo QĐ giao NV NH (kg)
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                                 <nz-input-number type="text" nz-input [nzSize]="'small'"
-                                    placeholder="Nhập khối lượng gạo thực nhập kho" formControlName="soLuongNhapKho"
-                                    [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
-                                    [nzParser]="globals.parser" [nzDisabled]="isDisableField() || isView">
+                                    formControlName="soLuongQdGiaoNvNh" [nzFormatter]="globals.formatter"
+                                    [nzParser]="globals.parser" [nzDisabled]="true">
                                 </nz-input-number>
                             </nz-input-group>
                         </nz-form-control>
@@ -343,14 +342,13 @@
                 <div nz-col nzSpan="6">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true" nzRequired>
-                            KL hàng thực nhập kho (kg)
+                            SL đã nhập kho (kg)
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                                 <nz-input-number type="text" nz-input [nzSize]="'small'"
-                                    placeholder="Nhập khối lượng gạo thực nhập kho" formControlName="soLuongNhapKho"
-                                    [nzMin]="0" [nzMax]="globals.prop.MAX_INPUT" [nzFormatter]="globals.formatter"
-                                    [nzParser]="globals.parser" [nzDisabled]="isDisableField() || isView">
+                                    placeholder="Nhập khối lượng gạo thực nhập kho" formControlName="soLuongDaNhap"
+                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="true">
                                 </nz-input-number>
                             </nz-input-group>
                         </nz-form-control>
