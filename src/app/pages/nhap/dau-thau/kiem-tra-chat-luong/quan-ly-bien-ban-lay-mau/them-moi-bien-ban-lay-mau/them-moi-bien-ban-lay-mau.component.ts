@@ -87,7 +87,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     private modal: NzModalService,
     public globals: Globals,
     private routerActive: ActivatedRoute,
-    private userService: UserService,
+    public userService: UserService,
     private thongTinHopDongService: ThongTinHopDongService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private danhMucService: DanhMucService,

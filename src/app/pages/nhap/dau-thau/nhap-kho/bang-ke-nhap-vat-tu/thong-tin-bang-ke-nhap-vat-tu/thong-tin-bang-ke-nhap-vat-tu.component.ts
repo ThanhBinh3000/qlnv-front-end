@@ -70,7 +70,7 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
     private router: Router,
     private routerActive: ActivatedRoute,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private quanLyBangKeVatTuService: QuanLyBangKeVatTuService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
