@@ -93,23 +93,24 @@ export class ThongtinDexuatMuattComponent implements OnInit {
     if (changes) {
       if (this.dataInput) {
         let res;
-        if (this.dataInput.idDxuat) {
+        if (this.dataInput.idDxHdr) {
+          res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.idDxHdr);
+          this.listOfData = this.dataInput.soLuongDiaDiemList;
+        } else {
           res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.idDxuat);
           this.listOfData = this.dataInput.soLuongDiaDiemList;
         }
-        else {
-          res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.id);
-          this.listOfData = this.dataInput.soLuongDiaDiemList;
-        }
         if (res.msg == MESSAGE.SUCCESS) {
-          this.helperService.bidingDataInFormGroup(this.formData, res.data)
+          this.helperService.bidingDataInFormGroup(this.formData, res.data);
         }
         this.helperService.setIndexArray(this.listOfData);
         this.convertListData();
       } else {
         this.formData.reset();
+        this.formData.patchValue({
+          vat: 5
+        });
       }
-
     }
     await this.spinner.hide()
   }
@@ -132,6 +133,7 @@ export class ThongtinDexuatMuattComponent implements OnInit {
     if (resNv.msg == MESSAGE.SUCCESS) {
       this.listNguonVon = resNv.data;
     }
+
   }
 
   expandSet = new Set<number>();
@@ -143,7 +145,7 @@ export class ThongtinDexuatMuattComponent implements OnInit {
     }
   }
 
-  themMoiSoLuongDiaDiem(data?: DanhSachMuaTrucTiep, index?: number) {
+  themMoiSoLuongDiaDiem(data?: any, index?: number) {
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm nhập kho',
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
@@ -167,7 +169,8 @@ export class ThongtinDexuatMuattComponent implements OnInit {
       }
       let tongMucDt: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + item.thanhTien;
+        tongMucDt = tongMucDt + (item.soLuongDxmtt * item.donGiaVat);
+
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,
@@ -175,6 +178,6 @@ export class ThongtinDexuatMuattComponent implements OnInit {
       this.helperService.setIndexArray(this.listOfData);
       this.convertListData();
     });
-  };
+  }
 
 }
