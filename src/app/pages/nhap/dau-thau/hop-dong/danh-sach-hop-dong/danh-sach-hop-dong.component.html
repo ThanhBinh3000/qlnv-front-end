@@ -16,10 +16,10 @@
           <label class="search__label">Tên hợp đồng</label>
           <input nz-input placeholder="Tên hợp đồng" [(ngModel)]="tenHd" />
         </div>
-        <div nz-col nzSpan="6">
+        <!-- <div nz-col nzSpan="6">
           <label class="search__label">Chủ đầu tư</label>
           <input nz-input [(ngModel)]="nhaCungCap" />
-        </div>
+        </div> -->
         <div nz-col nzSpan="4">
           <label class="search__label">Ngày ký QĐ phê duyệt KQ LCNT</label>
           <nz-range-picker [(ngModel)]="ngayKy" placeholder="Ngày ký" nzFormat="dd/MM/yyyy"></nz-range-picker>
@@ -37,7 +37,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> DANH SÁCH HỢP ĐỒNG MUA</h3>
+      <h3> QUẢN LÝ KÝ HỢP ĐỒNG MUA HÀNG DTQG</h3>
       <div class="buttons">
         <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_XOA')" type="button" class="btn btn-do"
           (click)="deleteSelect()">
@@ -76,7 +76,7 @@
             <th nzWidth="10%">Loại hàng hóa</th>
             <th nzWidth="10%">Chủng loại hàng hóa</th>
             <th nzWidth="10%">Tổng mức đầu tư (đ)</th>
-            <th nzWidth="5%">Trạng thái HĐ</th>
+            <th nzWidth="5%">Trạng thái ký HĐ</th>
             <th nzWidth="5%">Trạng thái nhập hàng</th>
             <th nzWidth="3%">Hành động</th>
           </tr>

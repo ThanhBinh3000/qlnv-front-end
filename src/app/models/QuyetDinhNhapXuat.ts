@@ -68,4 +68,5 @@ export class ThongTinDiaDiemNhap {
     maLoKho: string;
     tenLoKho: string;
     soLuong: number;
+    soLuongDiemKho: number;
 }

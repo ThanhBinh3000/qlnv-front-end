@@ -142,6 +142,7 @@ export class QuanlyHopdongComponent implements OnInit {
             tongMucDtGoiTrung: tongMucDtGoiTrung
           })
         };
+        this.idHopDong = null;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -173,7 +174,7 @@ export class QuanlyHopdongComponent implements OnInit {
     if (this.validateData()) {
       let body = {
         id: this.id,
-        trangThai: STATUS.HOAN_THANH_CAP_NHAT
+        trangThai: STATUS.DA_HOAN_THANH
       }
       let res = await this.kqLcnt.approve(body);
       if (res.msg == MESSAGE.SUCCESS) {

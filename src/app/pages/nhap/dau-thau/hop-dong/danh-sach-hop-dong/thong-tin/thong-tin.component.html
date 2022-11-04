@@ -170,9 +170,11 @@
                         <div nz-col [nzSpan]="3">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true" nzRequired> Số ngày thực hiện</nz-form-label>
-                                <nz-input-number [nzDisabled]="isDisableForm()" nz-input [nzSize]="'small'"
-                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                    formControlName="soNgayThien"></nz-input-number>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-number [nzDisabled]="isDisableForm()" nz-input [nzSize]="'small'"
+                                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                        formControlName="soNgayThien"></nz-input-number>
+                                </nz-form-control>
                             </nz-form-item>
                         </div>
                         <div nz-col [nzSpan]="9">
@@ -410,7 +412,7 @@
                             <nz-form-label [nzNoColon]="true"> Thành tiền</nz-form-label>
                             <nz-input-number [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                 [nzParser]="globals.parser" nz-input
-                                [(ngModel)]="formData.value.soLuong * formData.value.donGia"
+                                [(ngModel)]="formData.value.soLuong * 1000 * formData.value.donGia"
                                 [ngModelOptions]="{standalone: true}" nzDisabled></nz-input-number>
                         </nz-form-item>
                     </div>
@@ -425,7 +427,8 @@
                     <div nz-col [nzSpan]="7">
                         <nz-form-item>
                             <nz-form-label [nzNoColon]="true"> Bằng chữ</nz-form-label>
-                            <input [ngModel]="convertTienTobangChu(formData.value.soLuong * formData.value.donGia)"
+                            <input
+                                [ngModel]="convertTienTobangChu(formData.value.soLuong * formData.value.donGia * 1000)"
                                 nz-input readonly [ngModelOptions]="{standalone: true}" />
                         </nz-form-item>
                     </div>
@@ -491,6 +494,7 @@
                                 <th>Điểm kho</th>
                                 <th>Địa điểm nhập kho</th>
                                 <th>Số lượng</th>
+                                <th>Thành tiền</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -498,6 +502,7 @@
                                 <tr>
                                     <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                                     <td colspan="3">{{item.tenDvi}}</td>
+                                    <td></td>
                                     <td></td>
                                 </tr>
                                 <ng-container *ngIf="expandSet.has(i)">
@@ -507,6 +512,9 @@
                                         <td>{{dtGoiThau.tenDiemKho}}</td>
                                         <td>{{dtGoiThau.diaDiemNhap}}</td>
                                         <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                                        <td>{{dtGoiThau.soLuong * formData.value.donGia * 1000 | number : '1.0-1' :
+                                            'vi_VN'}}
+                                        </td>
                                     </tr>
                                 </ng-container>
                             </ng-container>
