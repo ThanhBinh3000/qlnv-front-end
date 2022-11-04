@@ -16,6 +16,8 @@ import { MangLuoiKhoService } from 'src/app/services/quan-ly-kho-tang/mangLuoiKh
 import { Globals } from 'src/app/shared/globals';
 import dayjs from 'dayjs';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {NewDonViComponent} from "../../quan-tri-danh-muc/danh-muc-don-vi/new-don-vi/new-don-vi.component";
+import {ThemMoiKhoComponent} from "./them-moi-kho/them-moi-kho.component";
 
 
 
@@ -98,7 +100,7 @@ export class MangLuoiKhoComponent implements OnInit {
       this.layTatCaDonViTheoTree(),
       this.getListLoaiKho(),
       this.getListClKho(),
-      this.getListTtKho(),
+      this.getListTtKho()
     ]);
     this.spinner.hide();
   }
@@ -137,7 +139,10 @@ export class MangLuoiKhoComponent implements OnInit {
   async layTatCaDonViTheoTree(id?) {
     await this.donviService.layTatCaDonViCha(LOAI_DON_VI.MLK).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
-        this.nodes = res.data;
+        if (res && res.data) {
+          let listDvi = res.data;
+          this.nodes = listDvi.filter(item => item.maDvi == '0101')
+        }
         this.nodes[0].expanded = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.error);
@@ -149,7 +154,6 @@ export class MangLuoiKhoComponent implements OnInit {
 
   nzClickNodeTree(event: any): void {
     if (event.keys.length > 0) {
-      console.log(event);
       this.nodeSelected = event.node.origin;
       this.getDetailMlkByKey(event.node)
     }
@@ -175,19 +179,18 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   bindingDataDetail(dataNode) {
-    console.log(dataNode);
     this.convertDataChild(dataNode);
-    this.detailDonVi.patchValue({
-      dienTichDat: dataNode.dienTichDat,
-      tichLuongThietKe: dataNode.tichLuongThietKe,
-      tichLuongChua: dataNode.tichLuongChua,
-      tichLuongKd: dataNode.tichLuongKhaDung,
-      soLuongChiCuc: dataNode.soLuongChiCuc,
-      soLuongDiemKho: dataNode.soLuongDiemKho,
-      soLuongNhaKho: dataNode.soLuongNhaKho,
-      soLuongNganKho: dataNode.soLuongNganKho,
-      soLuongNganLo: dataNode.soLuongNganLo,
-    });
+    // this.detailDonVi.patchValue({
+    //   dienTichDat: dataNode.dienTichDat,
+    //   tichLuongThietKe: dataNode.tichLuongThietKe,
+    //   tichLuongChua: dataNode.tichLuongChua,
+    //   tichLuongKd: dataNode.tichLuongKhaDung,
+    //   soLuongChiCuc: dataNode.soLuongChiCuc,
+    //   soLuongDiemKho: dataNode.soLuongDiemKho,
+    //   soLuongNhaKho: dataNode.soLuongNhaKho,
+    //   soLuongNganKho: dataNode.soLuongNganKho,
+    //   soLuongNganLo: dataNode.soLuongNganLo,
+    // });
   }
 
   convertDataChild(dataNode) {
@@ -197,7 +200,7 @@ export class MangLuoiKhoComponent implements OnInit {
     // tichLuongChuaVt: element.tichLuongChuaVt,
     // tichLuongKdLt: element.tichLuongKdLt,
     // tichLuongKdVt: element.tichLuongKdVt
-    if (dataNode.child) {
+    if (dataNode && dataNode.child) {
       dataNode.child.forEach(element => {
         let dataChild = {
           tenDvi: null,
@@ -293,21 +296,21 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   create() {
-    // var nodesTree = this.nodes;
-    // let modal = this._modalService.create({
-    //   nzTitle: 'Thêm mới đơn vị',
-    //   nzContent: NewDonViComponent,
-    //   nzClosable: true,
-    //   nzFooter: null,
-    //   nzStyle: { top: '50px' },
-    //   nzWidth: 900,
-    //   nzComponentParams: { nodesTree },
-    // });
-    // modal.afterClose.subscribe(res => {
-    //   if (res) {
-    //     this.ngOnInit()
-    //   }
-    // });
+    var nodesTree = this.nodes;
+    let modal = this._modalService.create({
+      nzTitle: 'Thêm mới đơn vị',
+      nzContent: ThemMoiKhoComponent,
+      nzClosable: true,
+      nzFooter: null,
+      nzStyle: { top: '50px' },
+      nzWidth: 900,
+      nzComponentParams: { nodesTree },
+    });
+    modal.afterClose.subscribe(res => {
+      if (res) {
+        this.ngOnInit()
+      }
+    });
   }
 
 

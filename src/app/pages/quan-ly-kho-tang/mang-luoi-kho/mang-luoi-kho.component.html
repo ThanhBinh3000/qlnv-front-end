@@ -23,7 +23,20 @@
             </nz-card>
         </div>
         <div nz-col nzXs="24" nzSm="24" nzMd="17" nzLg="17">
-            <nz-card>
+          <div class="bg-trang">
+            <div class="mt16 flex-card p-lr16">
+              <div class="header header-green-background mg-t-16">
+                <div class="header-text">
+                  <div class="title-chi-tieu">
+                    <span *ngIf="levelNode == 0">Tổng cục dự trữ nhà nước</span>
+                    <span *ngIf="levelNode != 0">Các cục provip</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <nz-card *ngIf="levelNode != 0">
                 <div class="group-button">
                     <h2>Thông tin chi tiết mạng lưới kho</h2>
                     <div class="buttons" *ngIf="levelNode >= 4">
@@ -336,6 +349,26 @@
                     </nz-table>
                 </ng-container>
             </nz-card>
+          <nz-card *ngIf="levelNode == 0">
+            <div nz-row [nzGutter]="24">
+            <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6" >
+              <label class="text-center"> Số đơn vị DTNN KV</label>
+              <label class="text-center"> Số chi cục</label>
+              <label class="text-center"> Số điểm kho</label>
+              <label class="text-center"> Số nhà kho</label>
+              <label class="text-center"> Số ngăn kho</label>
+              <label class="text-center"> Tổng tích lượng thiết kế (tấn kho)</label>
+              <label class="text-center"> Tổng tích lượng đã sử dụng (tấn kho)</label>
+              <label class="text-center"> Tổng tích lượng khả dụng</label>
+              <label class="text-center"> Địa chỉ</label>
+              <label class="text-center"> Điện thoại</label>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="18 " nzLg="18">
+              <label class="text-center"> bcd</label>
+            </div>
+            </div>
+          </nz-card>
+
         </div>
     </div>
 </div>
