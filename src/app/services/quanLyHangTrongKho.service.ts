@@ -37,4 +37,8 @@ export class QuanLyHangTrongKhoService extends BaseService {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-trong-kho/tim-kiem`;
     return this.httpClient.post<any>(url_, body).toPromise();
   }
+  getTrangThaiHt(body: any): Promise<any> {
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-trong-kho/trang-thai-ht`;
+    return this.httpClient.post<any>(url_, body).toPromise();
+  }
 }

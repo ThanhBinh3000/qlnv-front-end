@@ -17,6 +17,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { isEmpty } from 'lodash';
 import { Globals } from 'src/app/shared/globals';
 import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
+import {STATUS} from "../../../../constants/status";
 
 @Component({
   selector: 'app-de-nghi-cap-von-bo-nganh',
@@ -28,7 +29,7 @@ export class DeNghiCapVonBoNganhComponent implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
+  STATUS = STATUS;
 
   isDetail: boolean = false;
   listNam: any[] = [];

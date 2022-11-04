@@ -8,6 +8,15 @@
   input {
     border: none;
     background: transparent;
+    font-weight: 700;
+  }
+
+  .ant-input-number {
+    width: 100% !important;
+    border: none;
+    background: transparent;
+    color: #444444;
+    font-weight: 700;
   }
 }
 
@@ -15,6 +24,7 @@
   border-right: solid 1px #e2e2e2;
 
 }
+
 
 ::ng-deep {
   .bg-xam .ant-card-body {

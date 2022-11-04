@@ -80,14 +80,6 @@ export class BaoCaoThucHienDuToanChiService extends BaseService {
         return this.httpClient.put(this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/phe-duyet', request);
     }
 
-    // exprot excel
-    exportBaoCao(request: any): Observable<any> {
-        return this.httpClient.post(
-            this.urlDefault + '/qlnv-khoachphi/bao-cao/chi-tiet/export',
-            request,
-            { responseType: 'blob' });
-    }
-
     //lay thong tin luy ke
     getLuyKe(request: any): Observable<any> {
         return this.httpClient.post(

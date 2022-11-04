@@ -218,6 +218,8 @@ export const LIST_VAT_TU_HANG_HOA = [
 ]
 export const STATUS_DA_DUYET = "29";
 
+export const STATUS_DA_HOAN_THANH = "35";
+
 export const TYPE_PAG = {
   GIA_MUA_TOI_DA: 'GMTDBTT',
   GIA_CU_THE: 'GCT',

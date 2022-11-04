@@ -7,9 +7,12 @@ import { DanhSachCapUngVonChoDonViCapDuoiComponent } from './danh-sach-cap-ung-v
 import { DanhSachGhiNhanCapUngVonTaiCkvCcComponent } from './danh-sach-ghi-nhan-cap-ung-von-tai-ckv-cc/danh-sach-ghi-nhan-cap-ung-von-tai-ckv-cc.component';
 import { DanhSachGhiNhanCapUngVonTaiTongCucComponent } from './danh-sach-ghi-nhan-cap-ung-von-tai-tong-cuc/danh-sach-ghi-nhan-cap-ung-von-tai-tong-cuc.component';
 import { DanhSachGhiNhanTienThuaComponent } from './danh-sach-ghi-nhan-tien-thua/danh-sach-ghi-nhan-tien-thua.component';
+import { DanhSachThanhToanChoKhachHangComponent } from './danh-sach-thanh-toan-cho-khach-hang/danh-sach-thanh-toan-cho-khach-hang.component';
 import { DanhSachTienThuaComponent } from './danh-sach-tien-thua/danh-sach-tien-thua.component';
+import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component';
 import { GhiNhanCapUngVonTaiCkvCcComponent } from './ghi-nhan-cap-ung-von-tai-ckv-cc/ghi-nhan-cap-ung-von-tai-ckv-cc.component';
 import { GhiNhanCapUngVonTuDvctTaiTongCucComponent } from './ghi-nhan-cap-ung-von-tu-dvct-tai-tong-cuc/ghi-nhan-cap-ung-von-tu-dvct-tai-tong-cuc.component';
+import { ThanhToanChoKhachHangComponent } from './thanh-toan-cho-khach-hang/thanh-toan-cho-khach-hang.component';
 import { TienVonThuaComponent } from './tien-von-thua/tien-von-thua.component';
 import { VonMuaVonUngComponent } from './von-mua-von-ung.component';
 
@@ -28,6 +31,11 @@ import { VonMuaVonUngComponent } from './von-mua-von-ung.component';
         DanhSachTienThuaComponent,
         DanhSachGhiNhanTienThuaComponent,
         TienVonThuaComponent,
+        //thanh toan cho khach hang
+        DanhSachThanhToanChoKhachHangComponent,
+        ThanhToanChoKhachHangComponent,
+        //tao moi bao cao
+        DialogTaoMoiComponent,
     ],
     imports: [
         CommonModule,
@@ -45,6 +53,9 @@ import { VonMuaVonUngComponent } from './von-mua-von-ung.component';
         DanhSachTienThuaComponent,
         DanhSachGhiNhanTienThuaComponent,
         TienVonThuaComponent,
+        DanhSachThanhToanChoKhachHangComponent,
+        ThanhToanChoKhachHangComponent,
+        DialogTaoMoiComponent,
     ]
 })
 export class VonMuaVonUngModule { }

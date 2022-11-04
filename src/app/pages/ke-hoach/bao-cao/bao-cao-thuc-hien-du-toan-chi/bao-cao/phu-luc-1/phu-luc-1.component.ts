@@ -990,23 +990,6 @@ export class PhuLucIComponent implements OnInit {
         this.editCache[id].data.luyKeGiaiNganCkTle = divNumber(this.editCache[id].data.luyKeGiaiNganCk, this.editCache[id].data.kphiSdungCk)
     }
 
-    export() {
-        const request = {
-            bcaoCtietId: this.id,
-            bcaoId: this.idBcao,
-            dviTien: this.maDviTien,
-        }
-        const baoCao = "phuLuc1.xlsx";
-        this.baoCaoThucHienDuToanChiService.exportBaoCao(request).toPromise().then(
-            (data) => {
-                fileSaver.saveAs(data, baoCao);
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
-    }
-
     displayValue(num: number): string {
         num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);

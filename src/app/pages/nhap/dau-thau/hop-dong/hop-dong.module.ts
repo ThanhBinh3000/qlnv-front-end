@@ -7,6 +7,7 @@ import { PhuLucComponent } from './danh-sach-hop-dong/phu-luc/phu-luc.component'
 import { ThongTinComponent } from './danh-sach-hop-dong/thong-tin/thong-tin.component';
 import { HopDongComponent } from './hop-dong.component';
 import { QuanlyHopdongComponent } from './danh-sach-hop-dong/quanly-hopdong/quanly-hopdong.component';
+import { MainHopDongComponent } from './main-hop-dong/main-hop-dong.component';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { QuanlyHopdongComponent } from './danh-sach-hop-dong/quanly-hopdong/quan
     ThongTinComponent,
     PhuLucComponent,
     QuanlyHopdongComponent,
+    MainHopDongComponent,
   ],
   imports: [
     CommonModule,

@@ -1,21 +1,27 @@
 <ng-container *ngIf="!isDetail ">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
-      <div class="search__body" nz-row [nzGutter]="20">
-        <div nz-col nzSpan="6">
+      <div nz-row [nzGutter]="20">
+        <div nz-col nzSpan="2">
+          <label class="search__label"> Năm kế hoạch </label>
+          <nz-select [(ngModel)]="nam">
+            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+          </nz-select>
+        </div>
+        <div nz-col nzSpan="3">
           <label class="search__label">Số hợp đồng</label>
-          <input class="search__input" nz-input [(ngModel)]="soHd" placeholder="Số hợp đồng" />
+          <input nz-input [(ngModel)]="soHd" placeholder="Số hợp đồng" />
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="4">
           <label class="search__label">Tên hợp đồng</label>
-          <input class="search__input" nz-input placeholder="Tên hợp đồng" [(ngModel)]="tenHd" />
+          <input nz-input placeholder="Tên hợp đồng" [(ngModel)]="tenHd" />
         </div>
         <div nz-col nzSpan="6">
-          <label class="search__label">Đơn vị mua</label>
-          <input class="search__input" nz-input placeholder="Nhà cung cấp" [(ngModel)]="nhaCungCap" />
+          <label class="search__label">Chủ đầu tư</label>
+          <input nz-input [(ngModel)]="nhaCungCap" />
         </div>
-        <div nz-col nzSpan="6">
-          <label class="search__label">Ngày ký</label>
+        <div nz-col nzSpan="4">
+          <label class="search__label">Ngày ký QĐ phê duyệt KQ LCNT</label>
           <nz-range-picker [(ngModel)]="ngayKy" placeholder="Ngày ký" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
       </div>
@@ -51,7 +57,8 @@
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+      <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+        [nzShowPagination]="false">
         <thead>
           <tr>
             <th nzWidth="2%">
@@ -59,15 +66,18 @@
                 [nzIndeterminate]="indeterminate"></label>
             </th>
             <th nzWidth="2%">STT</th>
+            <th>Năm kế hoạch</th>
+            <th>Số QĐ PD KHLCNT</th>
             <th nzWidth="10%">QĐ PD KHLCNT</th>
-            <th nzWidth="10%">QĐ PD KQLCNT</th>
             <th nzWidth="5%">Tổng số gói thầu</th>
             <th nzWidth="5%">Số gói thầu đã trúng</th>
             <th nzWidth="5%">SL hợp đồng đã ký</th>
+            <th>Thời hạn nhập kho</th>
             <th nzWidth="10%">Loại hàng hóa</th>
             <th nzWidth="10%">Chủng loại hàng hóa</th>
-            <th nzWidth="10%">Tổng mức đầu tư</th>
-            <th nzWidth="5%">Trạng thái</th>
+            <th nzWidth="10%">Tổng mức đầu tư (đ)</th>
+            <th nzWidth="5%">Trạng thái HĐ</th>
+            <th nzWidth="5%">Trạng thái nhập hàng</th>
             <th nzWidth="3%">Hành động</th>
           </tr>
           <tr class="search-table">
@@ -105,12 +115,6 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
-                  (input)="filterInTable('tenDvi',filterTable.tenDvi)" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNthau"
                   (input)="filterInTable('tenNthau',filterTable.tenNthau)" />
               </nz-input-group>
@@ -119,6 +123,30 @@
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.gtriHdSauVat"
                   (input)="filterInTable('gtriHdSauVat',filterTable.gtriHdSauVat)" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
               </nz-input-group>
             </th>
             <th>
@@ -137,16 +165,18 @@
                 [nzDisabled]="data.trangThai!=globals.prop.NHAP_DU_THAO"></label>
             </td>
             <td>{{(page - 1) * pageSize + i + 1}}</td>
-            <td nz-tooltip nzTooltipTitle="{{ data.soQd }}">{{ data.soQd }}</td>
-            <td nz-tooltip nzTooltipTitle="{{ data.soQdPdKhlcnt }}">{{ data.soQdPdKhlcnt }}</td>
+            <td>{{ data.namKhoach}}</td>
+            <td>{{ data.soQdPdKhlcnt}}</td>
+            <td>{{ data.soQd}}</td>
+            <td>{{ data.soGthau}}</td>
+            <td>{{ data.qdKhlcntDtl?.soGthauTrung}}</td>
+            <td>{{ data.listHopDong?.length }}</td>
+            <td>{{ data.qdKhlcntDtl?.dxuatKhLcntHdr?.tgianNhang | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenLoaiVthh }}</td>
+            <td>{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh }}</td>
+            <td>{{ data.qdKhlcntDtl?.donGiaVat * data.qdKhlcntDtl?.soLuong * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ data.tenTrangThaiHd }}</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td nz-tooltip nzTooltipTitle="{{ data.tenLoaiVthh }}">{{ data.tenLoaiVthh }} </td>
-            <td nz-tooltip nzTooltipTitle="{{ data.tenCloaiVthh }}">{{ data.tenCloaiVthh }}</td>
-            <td nz-tooltip nzTooltipTitle="{{ data.gtriHdSauVat }}">{{ data.gtriHdSauVat | number: '1.0-1':'vi_VN'}}
-            </td>
-            <td nz-tooltip nzTooltipTitle="{{ data.tenTrangThaiHd }}">{{ data.tenTrangThaiHd }}</td>
             <td class="text-left">
               <div nz-row>
                 <div nz-col nzSpan="8">

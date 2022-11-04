@@ -6,6 +6,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { TongHopTheoDoiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
@@ -22,7 +23,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
+  STATUS = STATUS;
   isDetail: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;

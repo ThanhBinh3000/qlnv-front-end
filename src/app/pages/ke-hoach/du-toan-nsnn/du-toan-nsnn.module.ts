@@ -5,6 +5,7 @@ import { DieuChinhDuToanModule } from './dieu-chinh-du-toan/dieu-chinh-du-toan.m
 import { DuToanNsnnRoutingModule } from './du-toan-nsnn-routing.module';
 import { DuToanNsnnComponent } from './du-toan-nsnn.component';
 import { GiaoDuToanChiNSNNModule } from './giao-du-toan-chi-nsnn/giao-du-toan-chi-nsnn.module';
+import { LapKeHoachVaThamDinhDuToanModule } from './lap-ke-hoach-va-tham-dinh-du-toan/lap-ke-hoach-va-tham-dinh-du-toan.module';
 import { LapThamDinhModule } from './lap-tham-dinh/lap-tham-dinh.module';
 
 @NgModule({
@@ -16,6 +17,7 @@ import { LapThamDinhModule } from './lap-tham-dinh/lap-tham-dinh.module';
         DuToanNsnnRoutingModule,
         ComponentsModule,
         LapThamDinhModule,
+        LapKeHoachVaThamDinhDuToanModule,
         DieuChinhDuToanModule,
         GiaoDuToanChiNSNNModule,
     ],
