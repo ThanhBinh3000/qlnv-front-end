@@ -195,7 +195,7 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
         })
       }
     }
-  }
+  };
 
   updateSingleChecked(): void {
     if (this.dataTable.every((item) => !item.checked && item.isDelete)) {
@@ -222,13 +222,13 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
   onPageIndexChange(page) {
     this.pages.page = page;
     this.search();
-  }
+  };
 
   //doi so luong phan tu tren 1 trang
   onPageSizeChange(size) {
     this.pages.size = size;
     this.search();
-  }
+  };
 
   // Tìm kiếm trong bảng
   filterInTable(key: string, value: string, isDate: boolean) {

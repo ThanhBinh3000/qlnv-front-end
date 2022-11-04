@@ -562,7 +562,6 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
 
     //nhóm các nút chức năng --báo cáo-----
     getStatusButton() {
-        debugger
         if (Utils.statusSave.includes(this.isStatus) && this.userService.isAccessPermisson(QTVP.EDIT_REPORT)) {
             this.status = false;
         } else {
