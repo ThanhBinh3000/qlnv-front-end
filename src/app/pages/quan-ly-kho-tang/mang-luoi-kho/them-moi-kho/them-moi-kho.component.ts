@@ -31,17 +31,21 @@ export class ThemMoiKhoComponent implements OnInit {
   optionList: string[] = [];
   cureentNodeParent: any
   levelNode: number = 0;
+  checkCreate : any;
+
 
   dataDetail: any;
   constructor(
     private fb: FormBuilder,
+
+
     private notification: NzNotificationService,
     private helperService: HelperService,
     private donviService: DonviService,
     private modal: NzModalRef
   ) {
     this.formDonVi = this.fb.group({
-      maDviCha: [''],
+      maDviCha: [null],
       tenDvi: ['', Validators.required],
       maDvi: ['', Validators.required],
       diaChi: [''],

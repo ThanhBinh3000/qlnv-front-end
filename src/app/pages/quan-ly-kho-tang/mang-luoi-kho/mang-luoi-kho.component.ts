@@ -298,7 +298,7 @@ export class MangLuoiKhoComponent implements OnInit {
   create() {
     var nodesTree = this.nodes;
     let modal = this._modalService.create({
-      nzTitle: 'Thêm mới đơn vị',
+      nzTitle: 'Thêm mới tổ chức kho',
       nzContent: ThemMoiKhoComponent,
       nzClosable: true,
       nzFooter: null,
