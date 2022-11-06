@@ -7,8 +7,8 @@
           <nz-form-label>Chọn ĐV cấp trên(Chi cục/Điểm kho/Nhà kho/Ngăn kho)</nz-form-label>
           <nz-form-control>
             <nz-input-group>
-              <nz-tree-select #treeSelect [nzNodes]="nodesTree" [nzDropdownMatchSelectWidth]="true"
-                              [nzDefaultExpandAll]="true" nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn"
+              <nz-tree-select #treeSelect [nzNodes]="nodesTree" [nzDropdownMatchSelectWidth]="true"  (nzTreeClick)="nzClickNodeTree($event)"
+                              nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn"
                               formControlName="maDviCha">
               </nz-tree-select>
             </nz-input-group>

@@ -18,6 +18,8 @@ import dayjs from 'dayjs';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import {NewDonViComponent} from "../../quan-tri-danh-muc/danh-muc-don-vi/new-don-vi/new-don-vi.component";
 import {ThemMoiKhoComponent} from "./them-moi-kho/them-moi-kho.component";
+import {UserLogin} from "../../../models/userlogin";
+import {UserService} from "../../../services/user.service";
 
 
 
@@ -34,6 +36,7 @@ export class MangLuoiKhoComponent implements OnInit {
     soQD: '',
     maDonVi: ''
   };
+  userInfo: UserLogin
   keySelected: any;
   res: any
   nodes: any = [];
@@ -98,9 +101,9 @@ export class MangLuoiKhoComponent implements OnInit {
     }
     await Promise.all([
       this.layTatCaDonViTheoTree(),
-      this.getListLoaiKho(),
-      this.getListClKho(),
-      this.getListTtKho()
+      // this.getListLoaiKho(),
+      // this.getListClKho(),
+      // this.getListTtKho()
     ]);
     this.spinner.hide();
   }
@@ -137,18 +140,19 @@ export class MangLuoiKhoComponent implements OnInit {
    */
 
   async layTatCaDonViTheoTree(id?) {
-    await this.donviService.layTatCaDonViCha(LOAI_DON_VI.MLK).then((res: OldResponseData) => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (res && res.data) {
-          let listDvi = res.data;
-          this.nodes = listDvi.filter(item => item.maDvi == '0101')
+      await this.donviService.layTatCaDonViCha(LOAI_DON_VI.MLK).then((res: OldResponseData) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (res && res.data) {
+            let listDvi = res.data;
+            this.nodes = listDvi.filter(item => item.maDvi == '0101')
+          }
+          this.nodes[0].expanded = true;
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.error);
         }
-        this.nodes[0].expanded = true;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.error);
-      }
-    })
+      })
   }
+
 
   // parentNodeSelected: any = [];
 
@@ -296,6 +300,7 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   create() {
+
     var nodesTree = this.nodes;
     let modal = this._modalService.create({
       nzTitle: 'Thêm mới tổ chức kho',
@@ -303,8 +308,7 @@ export class MangLuoiKhoComponent implements OnInit {
       nzClosable: true,
       nzFooter: null,
       nzStyle: { top: '50px' },
-      nzWidth: 900,
-      nzComponentParams: { nodesTree },
+      nzWidth: 900
     });
     modal.afterClose.subscribe(res => {
       if (res) {

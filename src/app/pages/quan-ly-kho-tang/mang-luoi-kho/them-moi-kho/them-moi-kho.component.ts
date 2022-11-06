@@ -8,6 +8,9 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzTreeComponent } from 'ng-zorro-antd/tree';
 import { DonviService } from 'src/app/services/donvi.service';
 import { LOAI_DON_VI, TrangThaiHoatDong } from 'src/app/constants/status';
+import {UserLogin} from "../../../../models/userlogin";
+import {UserService} from "../../../../services/user.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 
 @Component({
@@ -32,9 +35,10 @@ export class ThemMoiKhoComponent implements OnInit {
   cureentNodeParent: any
   levelNode: number = 0;
   checkCreate : any;
-
+  userInfo: UserLogin
 
   dataDetail: any;
+   nodeSelected: any;
   constructor(
     private fb: FormBuilder,
 
@@ -42,7 +46,9 @@ export class ThemMoiKhoComponent implements OnInit {
     private notification: NzNotificationService,
     private helperService: HelperService,
     private donviService: DonviService,
-    private modal: NzModalRef
+    private modal: NzModalRef,
+    private userService : UserService,
+    private spinner : NgxSpinnerService
   ) {
     this.formDonVi = this.fb.group({
       maDviCha: [null],
@@ -57,19 +63,45 @@ export class ThemMoiKhoComponent implements OnInit {
       ghiChu: [''],
     })
     this.formDonVi.controls['maDviCha'].valueChanges.subscribe(value => {
-      console.log(value.length / 2);
       let node = this.treeSelect.getTreeNodeByKey(value);
       this.levelNode = node.level
     });
   }
-
-  ngOnInit(): void {
-
+  async ngOnInit() {
+    this.spinner.show();
+    try {
+      await Promise.all([
+        this.userInfo = this.userService.getUserLogin(),
+        this.loadDsDvi()
+      ]);
+      this.spinner.hide();
+    }
+    catch (e) {
+      console.log('error: ', e)
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
 
   enumToSelectList() {
 
+  }
+
+  nzClickNodeTree(event: any): void {
+    if (event.keys.length > 0) {
+      this.nodeSelected = event.node.origin;
+    }
+  }
+
+  async loadDsDvi() {
+      await this.donviService.layTatCaDviDmKho(LOAI_DON_VI.MLK, this.userInfo.MA_DVI).then((res: OldResponseData) => {
+        if (res.msg == MESSAGE.SUCCESS) {
+            this.nodesTree = res.data;
+          }
+          this.nodesTree[0].expanded = false;
+
+      })
   }
 
   handleCancel(): void {
