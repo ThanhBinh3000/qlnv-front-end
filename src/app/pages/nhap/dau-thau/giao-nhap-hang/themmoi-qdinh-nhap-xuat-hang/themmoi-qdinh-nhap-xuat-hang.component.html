@@ -19,7 +19,7 @@
       </button>
       <button type="button" class="btn btn-sub xanh-nhat"
         *ngIf="( formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC )  "
-        (click)="pheDuyet()">
+        (click)="save(true)">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -74,7 +74,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired>
               Năm nhập
             </nz-form-label>
-            <nz-select formControlName="namNhap" (ngModelChange)="getListHopDong()">
+            <nz-select formControlName="namNhap" [nzDisabled]="isDisableForm()" (ngModelChange)="getListHopDong()">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </nz-form-item>
@@ -87,7 +87,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group [nzAddOnAfter]="maQdSuffix">
                 <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                  nzPlaceHolder="Nhập số quyết định" [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isDetail()">
+                  nzPlaceHolder="Nhập số quyết định" [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isDisableForm()">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -99,8 +99,8 @@
               Ngày quyết định
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker nzPlaceHolder="Ngày quyết định" formControlName="ngayQdinh" nzFormat="dd/MM/yyyy"
-                [nzDisabled]="true">
+              <nz-date-picker [nzDisabled]="isDisableForm()" nzPlaceHolder="Ngày quyết định" formControlName="ngayQdinh"
+                nzFormat="dd/MM/yyyy">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -109,7 +109,7 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Căn cứ trên hợp đồng </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDetail() ? '' : openDialogHopDong()">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisableForm() ? '' : openDialogHopDong()">
                 <input class="search__input" [readonly]="true" nz-input formControlName="soHd" readonly />
               </nz-input-group>
               <ng-template #soQDError let-control>
@@ -196,7 +196,7 @@
               Trích yếu
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="trichYeu" [readonly]="isDetail()" />
+              <input nz-input formControlName="trichYeu" [readonly]="isDisableForm()" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -206,7 +206,7 @@
               Tài liệu đính kèm
             </nz-form-label>
           </nz-form-item>
-          <file-list [data]="listFileDinhKem" [isViewDetail]="isViewDetail"></file-list>
+          <file-list [data]="listFileDinhKem" [disabled]="isDisableForm()"></file-list>
         </div>
       </div>
       <ng-template #error let-control>
@@ -221,6 +221,7 @@
         <th nzWidth="25px"></th>
         <th class="text-center">Chi cục DTNN KV</th>
         <th class="text-center">Điểm kho</th>
+        <th class="text-center">Số lượng điểm kho</th>
         <th class="text-center">Nhà kho</th>
         <th class="text-center">Ngăn kho</th>
         <th class="text-center">Lô kho</th>
@@ -267,6 +268,7 @@
           <td></td>
           <td></td>
           <td></td>
+          <td></td>
           <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ item.tenTrangThai }}</td>
           <td *ngIf="userService.isChiCuc()">
@@ -289,6 +291,7 @@
                 </nz-option>
               </nz-select>
             </td>
+            <td>{{rowItem.soLuongDiemKho}}</td>
             <td>
               <nz-select [(ngModel)]="rowItem.maNhaKho" (ngModelChange)="changeNhaKho()">
                 <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
@@ -327,6 +330,7 @@
             <td></td>
             <td></td>
             <td>{{ ddNhap.tenDiemKho }}</td>
+            <td>{{ ddNhap.soLuongDiemKho }}</td>
             <td>{{ ddNhap.tenNhaKho }}</td>
             <td>{{ ddNhap.tenNganKho }}</td>
             <td>{{ ddNhap.tenLoKho }}</td>

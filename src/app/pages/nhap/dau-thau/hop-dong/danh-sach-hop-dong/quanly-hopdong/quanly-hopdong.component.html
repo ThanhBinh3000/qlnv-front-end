@@ -8,7 +8,7 @@
             <button *ngIf="formData.value.trangThaiHd != STATUS.HOAN_THANH_CAP_NHAT" type="button"
                 class="btn btn-sub xanh-nhat" (click)="approve()">
                 <i class="icon htvbdh_checkfile2"></i>
-                <span>Hoàn thành cập nhật</span>
+                <span>Hoàn thành thực hiện</span>
             </button>
         </div>
     </nz-affix>
@@ -222,8 +222,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let data of basicTable.data,let i = index"
-                            (click)="getDetailHopDong($event,data.hopDong?.id)">
+                        <tr *ngFor="let data of basicTable.data,let i = index">
                             <td>{{ i + 1}}</td>
                             <td>{{data.goiThau}}</td>
                             <td>{{data.hopDong?.soHd}}</td>
@@ -236,6 +235,9 @@
                             <td></td>
                             <td></td>
                             <td>
+                                <a *ngIf="data.hopDong" (click)="getDetailHopDong($event,data.hopDong.id)">
+                                    <i class="fa fa-eye"></i>
+                                </a>
                                 <a *ngIf="data.hopDong" (click)="redirectHopDong(true,data.hopDong.id)">
                                     <i class="fa fa-pencil"></i>
                                 </a>

@@ -72,11 +72,14 @@
             <th class="text-center" style="width: 2%;">STT</th>
             <th class="text-center" style="width: 10%;">Số quyết định</th>
             <th class="text-center" style="width: 10%;">Ngày quyết định</th>
+            <th class="text-center" style="width: 8%;">Số hợp đồng</th>
             <th class="text-center" style="width: 8%;">Năm nhập</th>
             <th class="text-center" style="width: 11%;">Loại hàng hóa</th>
             <th class="text-center" style="width: 11%;">Chủng loại hàng hóa</th>
+            <th class="text-center" style="width: 11%;">Thời gian nhập kho muộn nhất</th>
             <th class="text-center" style="width: 40%;">Trích yếu quyết định </th>
             <th class="text-center" style="width: 10%;">Trạng thái </th>
+            <th class="text-center" style="width: 10%;">Trạng thái NH</th>
             <th width="90px">Hành động</th>
           </tr>
           <tr class="search-table">
@@ -123,6 +126,24 @@
             </th>
             <th>
               <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                  (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                  (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+                  (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
                   (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
               </nz-input-group>
@@ -139,19 +160,22 @@
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.soQd }}</td>
             <td>{{ data.ngayQdinh | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.soHd }}</td>
             <td>{{ data.namNhap }}</td>
             <td>{{ data.tenLoaiVthh}}</td>
             <td>{{ data.tenCloaiVthh}}</td>
+            <td>{{ data.tgianNkho | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
+            <td></td>
             <td>
-              <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_XEM')"
+              <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_XEM') && data.trangThai == STATUS.BAN_HANH"
                 (click)="redirectToThongTin(data.id, true)">
                 <span class="icon htvbdh_eye"></span>
               </a>
-              <a (click)="redirectToThongTin(data.id, false)" *ngIf="userService.isCuc() && ( data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC )
-                && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_SUA') ">
-                <i class="fa fa-pencil"></i>
+              <a (click)="redirectToThongTin(data.id, false)" *ngIf="userService.isCuc() && data.trangThai != STATUS.BAN_HANH &&
+                userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_SUA') ">
+                <i class=" fa fa-pencil"></i>
               </a>
               <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == STATUS.DU_THAO
               && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_XOA')">
