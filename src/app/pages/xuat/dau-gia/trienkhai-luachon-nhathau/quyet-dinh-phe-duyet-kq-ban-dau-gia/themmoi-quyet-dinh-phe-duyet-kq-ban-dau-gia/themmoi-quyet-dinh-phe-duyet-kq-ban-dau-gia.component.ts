@@ -16,7 +16,7 @@ import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHo
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyBienBanBanDauGiaService } from 'src/app/services/quanLyBienBanBanDauGia.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quantri-danhmuc/quanLyPhieuKiemTraChatLuongHang.service';
+import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { QuyetDinhPheDuyetKHBDGService } from 'src/app/services/quyetDinhPheDuyetKHBDG.service';
 import { QuyetDinhPheDuyetKQBanDauGiaService } from 'src/app/services/quyetDinhPheDuyetKQBanDauGia.service';
@@ -25,7 +25,7 @@ import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import {STATUS} from "../../../../../../constants/status";
+import { STATUS } from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-themmoi-quyet-dinh-phe-duyet-kq-ban-dau-gia',
@@ -344,15 +344,15 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
         try {
           let trangThai;
           switch (this.detail.trangThai) {
-            case STATUS.DU_THAO : {
+            case STATUS.DU_THAO: {
               trangThai = STATUS.CHO_DUYET_TP
               break;
             }
-            case STATUS.TU_CHOI_TP : {
+            case STATUS.TU_CHOI_TP: {
               trangThai = STATUS.CHO_DUYET_TP
               break;
             }
-            case STATUS.TU_CHOI_LDC : {
+            case STATUS.TU_CHOI_LDC: {
               trangThai = STATUS.CHO_DUYET_TP
               break;
             }
@@ -395,15 +395,15 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
         try {
           let trangThai;
           switch (this.detail.trangThai) {
-            case STATUS.CHO_DUYET_TP : {
+            case STATUS.CHO_DUYET_TP: {
               trangThai = STATUS.CHO_DUYET_LDC
               break;
             }
-            case STATUS.CHO_DUYET_LDC : {
+            case STATUS.CHO_DUYET_LDC: {
               trangThai = STATUS.DA_DUYET_LDC
               break;
             }
-            case STATUS.DA_DUYET_LDC : {
+            case STATUS.DA_DUYET_LDC: {
               trangThai = STATUS.BAN_HANH
               break;
             }
@@ -449,11 +449,11 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
         try {
           let trangThai;
           switch (this.detail.trangThai) {
-            case STATUS.CHO_DUYET_TP : {
+            case STATUS.CHO_DUYET_TP: {
               trangThai = STATUS.TU_CHOI_TP
               break
             }
-            case STATUS.CHO_DUYET_LDC : {
+            case STATUS.CHO_DUYET_LDC: {
               trangThai = STATUS.TU_CHOI_LDC
               break
             }
@@ -523,9 +523,9 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
-          if(isGuiDuyet){
+          if (isGuiDuyet) {
             this.guiDuyet();
-          }else{
+          } else {
             this.notification.success(
               MESSAGE.SUCCESS,
               MESSAGE.UPDATE_SUCCESS,
@@ -540,9 +540,9 @@ export class ThemmoiQuyetDinhPheDuyetKQBanDauGiaComponent implements OnInit {
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
-          if(isGuiDuyet){
+          if (isGuiDuyet) {
             this.guiDuyet(res.data.id);
-          }else{
+          } else {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.back();
           }

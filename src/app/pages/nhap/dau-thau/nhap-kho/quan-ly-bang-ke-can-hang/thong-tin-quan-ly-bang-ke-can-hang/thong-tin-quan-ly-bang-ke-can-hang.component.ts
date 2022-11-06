@@ -18,7 +18,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
 import {
     QuanLyPhieuKiemTraChatLuongHangService
-} from 'src/app/services/quantri-danhmuc/quanLyPhieuKiemTraChatLuongHang.service';
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import {
     QuanLyPhieuNhapKhoService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapKho.service';
