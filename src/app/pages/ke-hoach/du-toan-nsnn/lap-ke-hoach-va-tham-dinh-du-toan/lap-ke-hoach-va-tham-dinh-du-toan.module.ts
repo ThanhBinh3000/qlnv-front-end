@@ -5,6 +5,7 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
 import { BaoCaoModule } from './bao-cao/bao-cao.module';
 import { DanhSachBaoCaoTuDonViCapDuoiComponent } from './danh-sach-bao-cao-tu-don-vi-cap-duoi/danh-sach-bao-cao-tu-don-vi-cap-duoi.component';
 import { DanhSachBaoCaoComponent } from './danh-sach-bao-cao/danh-sach-bao-cao.component';
+import { DanhSachSoKiemTraTranChiTuBTCComponent } from './danh-sach-so-kiem-tra-tran-chi-tu-BTC/danh-sach-so-kiem-tra-tran-chi-tu-BTC.component';
 import { LapKeHoachVaThamDinhDuToanComponent } from './lap-ke-hoach-va-tham-dinh-du-toan.component';
 import { TongHopBaoCaoTuDonViCapDuoiComponent } from './tong-hop-bao-cao-tu-don-vi-cap-duoi/tong-hop-bao-cao-tu-don-vi-cap-duoi.component';
 
@@ -14,6 +15,7 @@ import { TongHopBaoCaoTuDonViCapDuoiComponent } from './tong-hop-bao-cao-tu-don-
         DanhSachBaoCaoComponent,
         DanhSachBaoCaoTuDonViCapDuoiComponent,
         TongHopBaoCaoTuDonViCapDuoiComponent,
+        DanhSachSoKiemTraTranChiTuBTCComponent,
     ],
     imports: [
         CommonModule,

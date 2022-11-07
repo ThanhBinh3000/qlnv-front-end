@@ -84,4 +84,33 @@ export class LapThamDinhService extends BaseService {
             request,
         );
     }
+
+    //tim kiem so giao tran chi
+    timKiemPhuongAn(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/pa-giao-so/danh-sach'
+            , request)
+    }
+
+    //xoa phuong an
+    xoaPhuongAn(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/pa-giao-so/xoa',
+            request
+        );
+    }
+
+    //tao ma PA
+    maPhuongAn(): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/qlnv-khoachphi/pa-giao-so/sinh-ma-pa'
+        );
+    }
+
+    //danh sach bao cao tong hop nen bao cao to
+    danhSachBaoCaoTongHop(maBcao: string): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/qlnv-khoachphi/giao-so/danh-sach/' + maBcao
+        )
+    }
 }
