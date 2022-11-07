@@ -12,23 +12,23 @@ import { Globals } from 'src/app/shared/globals';
 import { BCVP, LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 
 @Component({
-    selector: 'app-danh-sach-bao-cao',
-    templateUrl: './danh-sach-bao-cao.component.html',
+    selector: 'app-danh-sach-so-kiem-tra-tran-chi-tu-BTC',
+    templateUrl: './danh-sach-so-kiem-tra-tran-chi-tu-BTC.component.html',
 })
-export class DanhSachBaoCaoComponent implements OnInit {
+export class DanhSachSoKiemTraTranChiTuBTCComponent implements OnInit {
     @Output() dataChange = new EventEmitter();
 
     searchFilter = {
-        nam: null,
+        loaiTimKiem: "1",
+        namPa: null,
         tuNgay: null,
         denNgay: null,
+        maDvi: "",
         maBaoCao: "",
-        donViTao: "",
-        trangThai: Utils.TT_BC_1,
+        maPaBtc: "",
     };
 
     userInfo: any;
-    trangThais: any = TRANG_THAI_TIM_KIEM;
     dataTable: any[] = [];
     dataTableAll: any[] = [];
 
@@ -68,51 +68,38 @@ export class DanhSachBaoCaoComponent implements OnInit {
         const newDate = new Date();
         newDate.setMonth(newDate.getMonth() - 1);
         this.searchFilter.tuNgay = newDate;
-        this.searchFilter.donViTao = this.userInfo?.MA_DVI;
+        this.searchFilter.maDvi = this.userInfo?.MA_DVI;
         //check quyen va cac nut chuc nang
-        this.statusNewReport = this.userService.isAccessPermisson(LTD.ADD_REPORT);
-        this.statusDelete = this.userService.isAccessPermisson(LTD.DELETE_REPORT) || this.userService.isAccessPermisson(LTD.DELETE_SYNTHETIC_REPORT);
-        if (this.userService.isAccessPermisson(LTD.DUYET_REPORT) || this.userService.isAccessPermisson(LTD.DUYET_SYNTHETIC_REPORT)) {
-            this.searchFilter.trangThai = Utils.TT_BC_2;
-        } else {
-            if (this.userService.isAccessPermisson(LTD.PHE_DUYET_REPORT) || this.userService.isAccessPermisson(LTD.PHE_DUYET_SYNTHETIC_REPORT)) {
-                this.searchFilter.trangThai = Utils.TT_BC_4;
-            }
-        }
+        this.statusNewReport = this.userService.isAccessPermisson(LTD.ADD_SKT_BTC);
+        this.statusDelete = this.userService.isAccessPermisson(LTD.DELETE_SKT_BTC);
         this.search();
         this.spinner.hide();
     }
 
     async search() {
         this.spinner.show();
-        let trangThais = [];
-        if (this.searchFilter.trangThai) {
-            trangThais = [this.searchFilter.trangThai];
-        }
         const requestReport = {
-            loaiTimKiem: "0",
-            maBcao: this.searchFilter.maBaoCao,
-            maDvi: this.searchFilter.donViTao,
-            namBcao: this.searchFilter.nam,
+            loaiTimKiem: this.searchFilter.loaiTimKiem,
+            maDviTao: this.searchFilter.maDvi,
+            maPaBtc: this.searchFilter.maPaBtc,
+            namPa: this.searchFilter.namPa,
             ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
             ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
+            maBcao: this.searchFilter.maBaoCao,
+            str: null,
+            trangThais: [],
             paggingReq: {
                 limit: this.pages.size,
                 page: this.pages.page,
-            },
-            trangThais: trangThais,
+            }
         };
-        await this.lapThamDinhService.timBaoCaoLapThamDinh(requestReport).toPromise().then(res => {
+        await this.lapThamDinhService.timKiemPhuongAn(requestReport).toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.dataTable = [];
                 res.data.content.forEach(item => {
                     this.dataTable.push({
                         ...item,
-                        ngayDuyet: this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR),
                         ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
-                        ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
-                        ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
-                        ngayTraKq: this.datePipe.transform(item.ngayTraKq, Utils.FORMAT_DATE_STR),
                         isEdit: this.checkEditStatus(item),
                         isDelete: this.checkDeleteStatus(item),
                         checked: false,
@@ -144,28 +131,22 @@ export class DanhSachBaoCaoComponent implements OnInit {
 
     //reset tim kiem
     clearFilter() {
-        this.searchFilter.nam = null
+        this.searchFilter.namPa = null
         this.searchFilter.tuNgay = null
         this.searchFilter.denNgay = null
         this.searchFilter.maBaoCao = null
-        this.searchFilter.trangThai = null
+        this.searchFilter.maPaBtc = null
         this.search();
     }
 
     checkEditStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
         return Utils.statusSave.includes(item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(LTD.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.EDIT_REPORT));
+            this.userService.isAccessPermisson(LTD.EDIT_SKT_BTC);
     }
 
     checkDeleteStatus(item: any) {
-        const isSynthetic = item.tongHopTu != "[]";
         return Utils.statusDelete.includes(item.trangThai) &&
-            (isSynthetic ? this.userService.isAccessPermisson(LTD.DELETE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(LTD.DELETE_REPORT));
-    }
-
-    getStatusName(trangThai: string) {
-        return this.trangThais.find(e => e.id == trangThai)?.tenDm;
+            this.userService.isAccessPermisson(LTD.DELETE_SKT_BTC);
     }
 
     //them moi bao cao
@@ -177,7 +158,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: 'baocao',
+            tabSelected: 'skt-btc',
         }
         this.dataChange.emit(obj);
     }
@@ -233,7 +214,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
                         })
                     }
                 }
-                this.lapThamDinhService.xoaBaoCaoLapThamDinh(request).toPromise().then(
+                this.lapThamDinhService.xoaPhuongAn(request).toPromise().then(
                     data => {
                         if (data.statusCode == 0) {
                             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
