@@ -364,6 +364,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
           this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
           this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
           this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+          this.maDviTao = data.data.maDviTao;
           this.getStatusButton();
           if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);

@@ -8,9 +8,12 @@ import { BaoCaoComponent } from './bao-cao/bao-cao.component';
 import { BaoCaoTuDonViCapDuoiComponent } from './bao-cao-tu-don-vi-cap-duoi/bao-cao-tu-don-vi-cap-duoi.component';
 import { DanhSachBaoCaoDieuChinhComponent } from './danh-sach-bao-cao-dieu-chinh/danh-sach-bao-cao-dieu-chinh.component';
 import { DanhSachBaoCaoTuDonViCapDuoiComponent } from './danh-sach-bao-cao-tu-don-vi-cap-duoi/danh-sach-bao-cao-tu-don-vi-cap-duoi.component';
+import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component';
+import { BaoCaoModule } from './bao-cao/bao-cao.module';
 
 @NgModule({
   imports: [
+    BaoCaoModule,
     CommonModule,
     ComponentsModule,
     DirectivesModule,
@@ -18,16 +21,18 @@ import { DanhSachBaoCaoTuDonViCapDuoiComponent } from './danh-sach-bao-cao-tu-do
   declarations: [
     DieuChinhDuToanComponent,
     TongHopBaoCaoComponent,
-    BaoCaoComponent,
     BaoCaoTuDonViCapDuoiComponent,
     DanhSachBaoCaoDieuChinhComponent,
-    DanhSachBaoCaoTuDonViCapDuoiComponent],
+    DanhSachBaoCaoTuDonViCapDuoiComponent,
+    DialogTaoMoiComponent,
+  ],
   exports: [
     DieuChinhDuToanComponent,
     TongHopBaoCaoComponent,
-    BaoCaoComponent,
     BaoCaoTuDonViCapDuoiComponent,
     DanhSachBaoCaoDieuChinhComponent,
-    DanhSachBaoCaoTuDonViCapDuoiComponent],
+    DanhSachBaoCaoTuDonViCapDuoiComponent,
+    DialogTaoMoiComponent,
+  ],
 })
 export class DieuChinhDuToanModule { }
