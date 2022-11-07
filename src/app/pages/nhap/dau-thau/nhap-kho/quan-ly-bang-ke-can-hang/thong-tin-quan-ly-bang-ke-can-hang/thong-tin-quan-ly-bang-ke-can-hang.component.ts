@@ -94,6 +94,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
             soBangKe: [''],
             soPhieuNhapKho: [],
             ngayNhapKho: [],
+            soLuongNhapKho: [],
 
             soQdGiaoNvNh: [],
             idQdGiaoNvNh: [],
@@ -122,7 +123,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
             nguoiGiaoHang: [''],
             cmtNguoiGiaoHang: [''],
             donViGiaoHang: [''],
-            diaChi: [''],
+            diaChiNguoiGiao: [''],
             thoiGianGiaoNhan: [''],
             ghiChu: [''],
 
@@ -296,11 +297,11 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
                 nguoiGiaoHang: null,
                 cmtNguoiGiaoHang: null,
                 donViGiaoHang: null,
-                diaChi: null,
+                diaChiNguoiGiao: null,
                 thoiGianGiaoNhan: null,
             });
         }
-        this.listSoPhieuNhapKho = data.listPhieuNhapKho.filter(item => (item.trangThai == STATUS.DA_DUYET_LDCC && isEmpty(item.bangKeCanHang)));
+        this.listSoPhieuNhapKho = data.listPhieuNhapKho.filter(item => (item.trangThai == STATUS.DU_THAO && isEmpty(item.bangKeCanHang)));
     }
 
     openDialogSoPhieuNhapKho() {
@@ -334,8 +335,9 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
                 nguoiGiaoHang: data.nguoiGiaoHang,
                 cmtNguoiGiaoHang: data.cmtNguoiGiaoHang,
                 donViGiaoHang: data.donViGiaoHang,
-                diaChi: data.diaChi,
+                diaChiNguoiGiao: data.diaChiNguoiGiao,
                 thoiGianGiaoNhan: data.thoiGianGiaoNhan,
+                soLuongNhapKho: data.hangHoaList[0].soLuongThucNhap
             });
         }
     }
@@ -359,8 +361,24 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
     }
 
     addRow() {
-        this.dataTable = [...this.dataTable, this.rowItem];
-        this.rowItem = {};
+        if (this.validateDataRow()) {
+            this.dataTable = [...this.dataTable, this.rowItem];
+            this.rowItem = {};
+        }
+    }
+
+    validateDataRow() {
+        if (this.rowItem.maCan && this.rowItem.trongLuongBaoBi && this.rowItem.trongLuongCaBaoBi) {
+            let tongTrongLuong = this.calcTong('trongLuongCaBaoBi');
+            if (tongTrongLuong + this.rowItem.trongLuongCaBaoBi > this.formData.value.soLuongNhapKho) {
+                this.notification.error(MESSAGE.ERROR, "Trọng lượng bao bì không được vượt quá số lượng nhập kho");
+                return false
+            }
+            return true;
+        } else {
+            this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
+            return false
+        }
     }
 
     cancelEdit(stt: number): void {
@@ -485,46 +503,57 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
     }
 
     async save(isGuiDuyet: boolean) {
-        this.spinner.show();
-        try {
-            this.helperService.markFormGroupTouched(this.formData);
-            if (this.formData.invalid) {
-                await this.spinner.hide();
-                return;
-            }
-            let body = this.formData.value;
-            body.chiTiets = this.dataTable;
-            let res;
-            if (this.formData.get('id').value > 0) {
-                res = await this.quanLyBangKeCanHangService.update(body);
-            } else {
-                res = await this.quanLyBangKeCanHangService.create(body);
-            }
-            if (res.msg == MESSAGE.SUCCESS) {
-                if (isGuiDuyet) {
+        if (this.validateSave()) {
+            this.spinner.show();
+            try {
+                this.helperService.markFormGroupTouched(this.formData);
+                if (this.formData.invalid) {
                     await this.spinner.hide();
-                    this.id = res.data.id;
-                    this.pheDuyet();
+                    return;
+                }
+                let body = this.formData.value;
+                body.chiTiets = this.dataTable;
+                let res;
+                if (this.formData.get('id').value > 0) {
+                    res = await this.quanLyBangKeCanHangService.update(body);
                 } else {
-                    if (this.formData.get('id').value) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                        this.back();
+                    res = await this.quanLyBangKeCanHangService.create(body);
+                }
+                if (res.msg == MESSAGE.SUCCESS) {
+                    if (isGuiDuyet) {
+                        await this.spinner.hide();
+                        this.id = res.data.id;
+                        this.pheDuyet();
                     } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-                        this.back();
+                        if (this.formData.get('id').value) {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                            this.back();
+                        } else {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+                            this.back();
+                        }
+                        await this.spinner.hide();
                     }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res.msg);
                     await this.spinner.hide();
                 }
-            } else {
-                this.notification.error(MESSAGE.ERROR, res.msg);
-                await this.spinner.hide();
+                this.spinner.hide();
+            } catch (e) {
+                console.log('error: ', e);
+                this.spinner.hide();
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             }
-            this.spinner.hide();
-        } catch (e) {
-            console.log('error: ', e);
-            this.spinner.hide();
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         }
+    }
+
+    validateSave() {
+        let tongTrongLuong = this.calcTong('trongLuongCaBaoBi');
+        if (tongTrongLuong != this.formData.value.soLuongNhapKho) {
+            this.notification.error(MESSAGE.ERROR, "Tổng trọng lượng bao bì của bảng kê đang không đủ số lượng nhập kho")
+            return false;
+        }
+        return true;
     }
 
     print() {

@@ -31,6 +31,8 @@ import {
 import { BaseComponent } from "../../../../../../components/base/base.component";
 import { isEmpty } from 'lodash';
 import { HelperService } from "../../../../../../services/helper.service";
+import { DatePipe } from '@angular/common';
+
 
 
 @Component({
@@ -74,7 +76,8 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
     private thongTinHopDongService: ThongTinHopDongService,
     private fb: FormBuilder,
     private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
-    private helperService: HelperService
+    private helperService: HelperService,
+
   ) {
     super();
     this.formData = this.fb.group({
@@ -118,9 +121,11 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
       nguoiGiaoHang: [''],
       cmtNguoiGiaoHang: [''],
       donViGiaoHang: [''],
-      diaChi: [''],
+      diaChiNguoiGiao: [''],
       thoiGianGiaoNhan: [''],
       ghiChu: [''],
+
+      soBangKeCanHang: [''],
 
       trangThai: [],
       tenTrangThai: [],
@@ -305,6 +310,7 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
           idPhieuKtraCl: data.id,
           nguoiTaoPhieuKtraCl: data.tenNguoiTao,
         });
+        this.dataTable[0].soLuongThucNhap = data.soLuongNhapKho;
       }
     });
   }
@@ -426,8 +432,10 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
         await this.spinner.hide();
         return;
       }
+      let pipe = new DatePipe('en-US');
       let body = this.formData.value;
       body.hangHoaList = this.dataTable;
+      body.thoiGianGiaoNhan = pipe.transform(this.formData.value.thoiGianGiaoNhan, 'yyyy-MM-dd HH:mm')
       let res;
       if (this.formData.get('id').value > 0) {
         res = await this.quanLyPhieuNhapKhoService.update(body);
