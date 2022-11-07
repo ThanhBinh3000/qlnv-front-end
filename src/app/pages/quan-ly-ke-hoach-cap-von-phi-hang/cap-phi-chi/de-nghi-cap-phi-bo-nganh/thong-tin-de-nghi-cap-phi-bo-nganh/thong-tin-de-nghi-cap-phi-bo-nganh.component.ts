@@ -289,6 +289,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS && res.data) {
         let data = res.data;
         if (data) {
+          console.log(data);
           this.formData.patchValue({
             'nam': data.nam,
             'maBoNganh': data.maBoNganh,
@@ -296,7 +297,6 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
             'ngayDeNghi': data.ngayDeNghi,
             'ghiChu' : data.ghiChu
           });
-
           this.hanghoa = {
             "maLoaiHangHoa": "",
             "maChungLoaiHangHoa": "",
