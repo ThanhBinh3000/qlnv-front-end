@@ -15,7 +15,8 @@
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </button>
-        <button class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC "
+        <button class="btn btn-sub xanh-nhat"
+            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_DUYET')"
             (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet "></i>
             <span>Duyệt</span>
@@ -379,6 +380,12 @@
                         <td>{{item.trongLuongBaoBi | number : '1.0-1' : 'vi_VN'}}</td>
                         <td>{{item.trongLuongCaBaoBi | number : '1.0-1' : 'vi_VN'}}</td>
                         <td>
+                            <!--                         <a (click)="editRow(data.id)"> -->
+                            <!--                             <i class="fa fa-pencil"></i> -->
+                            <!--                         </a> -->
+                            <!--                         <a (click)="deleteRow(data)"> -->
+                            <!--                             <i class="fa fa-trash-o do"></i> -->
+                            <!--                         </a> -->
                         </td>
                     </tr>
                 </tbody>

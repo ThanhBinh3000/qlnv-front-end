@@ -9,7 +9,7 @@
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
-      <button *ngIf="!submitStatus" type="button" class="btn btn-sub" (click)="action('submit')">
+      <!-- <button *ngIf="!submitStatus" type="button" class="btn btn-sub" (click)="action('submit')">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Trình duyệt</span>
       </button>
@@ -28,7 +28,7 @@
       <button *ngIf="!approveStatus" type="button" class="btn btn-sub" (click)="action('approve')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Phê duyệt</span>
-      </button>
+      </button> -->
       <!-- <button *ngIf="acceptStatus" type="button" class="btn btn-sub" (click)="action('nonaccept')">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
@@ -289,10 +289,9 @@
             <nz-table nzBordered class="table__body">
               <thead>
                 <tr>
-                  <th>STT</th>
+                  <th nzWidth="7%">STT</th>
                   <th>Tên file</th>
-                  <th></th>
-                  <th class="th" [hidden]="status"></th>
+                  <th nzWidth="10%"></th>
                 </tr>
               </thead>
               <tbody>
@@ -300,10 +299,12 @@
                   <td>{{ i + 1 }} </td>
                   <td>{{ data.fileName }}</td>
                   <td>
-                    <button class="btn btn-function" (click)="downloadFile(data.id)">Xem</button>
-                  </td>
-                  <td [hidden]="status">
-                    <button class="btn btn-function" (click)="deleteFile(data.id)">Xóa</button>
+                    <a (click)="downloadFile(data.id)">
+                      <i class="fa fa-eye"></i>
+                    </a>
+                    <a *ngIf="!status" (click)="deleteFile(data.id)">
+                      <i class="fa fa-trash-o do"></i>
+                    </a>
                   </td>
                 </tr>
               </tbody>
