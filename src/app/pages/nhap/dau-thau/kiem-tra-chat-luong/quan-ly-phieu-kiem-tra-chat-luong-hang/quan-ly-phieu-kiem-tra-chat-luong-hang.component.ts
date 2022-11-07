@@ -10,11 +10,11 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quantri-danhmuc/quanLyPhieuKiemTraChatLuongHang.service';
+import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import {STATUS} from "../../../../../constants/status";
+import { STATUS } from "../../../../../constants/status";
 import {
   QuyetDinhGiaoNhapHangService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
@@ -53,13 +53,13 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
-  idQdGiaoNvNh : number = 0;
+  idQdGiaoNvNh: number = 0;
   isTatCa: boolean = false;
 
   allChecked = false;
   indeterminate = false;
 
-  STATUS  = STATUS;
+  STATUS = STATUS;
 
   filterTable: any = {
     soPhieu: '',
@@ -143,13 +143,13 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
         "limit": this.pageSize,
         "page": this.page - 1
       },
-      trangThai : STATUS.BAN_HANH
+      trangThai: STATUS.BAN_HANH
     };
     let res = await this.quyetDinhNhapXuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.dataTable.forEach( item =>
+      this.dataTable.forEach(item =>
         item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
       );
       console.log(this.dataTable);
@@ -213,7 +213,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuKiemTraChatLuongHangService.delete({id : item.id}).then((res) => {
+          this.quanLyPhieuKiemTraChatLuongHangService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -234,7 +234,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     });
   }
 
-  redirectToChiTiet(isView: boolean, id: number,idQdGiaoNvNh? : number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;

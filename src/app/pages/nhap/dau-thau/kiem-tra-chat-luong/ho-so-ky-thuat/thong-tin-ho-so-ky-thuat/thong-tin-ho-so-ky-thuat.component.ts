@@ -102,7 +102,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
     private router: Router,
     private routerActive: ActivatedRoute,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private hoSoKyThuatService: HoSoKyThuatService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,

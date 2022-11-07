@@ -1,44 +1,44 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import {cloneDeep} from 'lodash';
-import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {Subject} from 'rxjs';
+import { cloneDeep } from 'lodash';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Subject } from 'rxjs';
 import {
     DialogDanhSachHangHoaComponent
 } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {QuanLyBangKeCanHangService} from 'src/app/services/quanLyBangKeCanHang.service';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
 import {
     QuanLyPhieuKiemTraChatLuongHangService
-} from 'src/app/services/quantri-danhmuc/quanLyPhieuKiemTraChatLuongHang.service';
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import {
     QuanLyPhieuNhapKhoService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapKho.service';
-import {QuanLyPhieuSoKhoService} from 'src/app/services/quanLySoKho.service';
+import { QuanLyPhieuSoKhoService } from 'src/app/services/quanLySoKho.service';
 import {
     QuyetDinhGiaoNhapHangService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import {ThongTinHopDongService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
-import {TinhTrangKhoHienThoiService} from 'src/app/services/tinhTrangKhoHienThoi.service';
-import {UserService} from 'src/app/services/user.service';
-import {convertTienTobangChu, thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
-import {Globals} from 'src/app/shared/globals';
-import {BaseComponent} from "../../../../../../components/base/base.component";
-import {FormBuilder, Validators} from "@angular/forms";
-import {STATUS} from "../../../../../../constants/status";
+import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { UserService } from 'src/app/services/user.service';
+import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
+import { BaseComponent } from "../../../../../../components/base/base.component";
+import { FormBuilder, Validators } from "@angular/forms";
+import { STATUS } from "../../../../../../constants/status";
 import {
     DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {isEmpty} from 'lodash';
-import {HelperService} from "../../../../../../services/helper.service";
+import { isEmpty } from 'lodash';
+import { HelperService } from "../../../../../../services/helper.service";
 
 @Component({
     selector: 'thong-tin-quan-ly-bang-ke-can-hang',
@@ -72,7 +72,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
         private danhMucService: DanhMucService,
         private notification: NzNotificationService,
         private modal: NzModalService,
-        private userService: UserService,
+        public userService: UserService,
         private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
         private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
         private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
@@ -170,7 +170,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
                     this.dataTable = data.chiTiets;
                 }
             }
-           await this.spinner.hide();
+            await this.spinner.hide();
         }
     }
 
@@ -271,12 +271,12 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
         });
         modalQD.afterClose.subscribe(async (data) => {
             if (data) {
-                this.bindingDataDdNhap(data,true);
+                this.bindingDataDdNhap(data, true);
             }
         });
     }
 
-    bindingDataDdNhap(data,isDetail?) {
+    bindingDataDdNhap(data, isDetail?) {
         this.dataTable = [];
         this.formData.patchValue({
             idDdiemGiaoNvNh: data.id,
@@ -289,7 +289,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
             maLoKho: data.maLoKho,
             tenLoKho: data.tenLoKho,
         });
-        if(isDetail){
+        if (isDetail) {
             this.formData.patchValue({
                 soPhieuNhapKho: null,
                 ngayNhapKho: null,
@@ -300,7 +300,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
                 thoiGianGiaoNhan: null,
             });
         }
-        this.listSoPhieuNhapKho = data.listPhieuNhapKho.filter( item => (item.trangThai == STATUS.DA_DUYET_LDCC && isEmpty(item.bangKeCanHang)));
+        this.listSoPhieuNhapKho = data.listPhieuNhapKho.filter(item => (item.trangThai == STATUS.DA_DUYET_LDCC && isEmpty(item.bangKeCanHang)));
     }
 
     openDialogSoPhieuNhapKho() {
@@ -324,9 +324,9 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
         });
     }
 
-    async bindingDataPhieuNhapKho(id){
+    async bindingDataPhieuNhapKho(id) {
         let res = await this.quanLyPhieuNhapKhoService.getDetail(id);
-        if(res.msg == MESSAGE.SUCCESS){
+        if (res.msg == MESSAGE.SUCCESS) {
             const data = res.data;
             this.formData.patchValue({
                 soPhieuNhapKho: data.soPhieuNhapKho,
@@ -376,21 +376,21 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
     }
 
     pheDuyet() {
-      let trangThai = ''
-      let mess = ''
-      switch (this.formData.get('trangThai').value) {
-        case STATUS.TU_CHOI_LDCC:
-        case STATUS.DU_THAO: {
-          trangThai = STATUS.CHO_DUYET_LDCC;
-          mess = 'Bạn có muối gửi duyệt ?'
-          break;
+        let trangThai = ''
+        let mess = ''
+        switch (this.formData.get('trangThai').value) {
+            case STATUS.TU_CHOI_LDCC:
+            case STATUS.DU_THAO: {
+                trangThai = STATUS.CHO_DUYET_LDCC;
+                mess = 'Bạn có muối gửi duyệt ?'
+                break;
+            }
+            case STATUS.CHO_DUYET_LDCC: {
+                trangThai = STATUS.DA_DUYET_LDCC;
+                mess = 'Bạn có chắc chắn muốn phê duyệt ?'
+                break;
+            }
         }
-        case STATUS.CHO_DUYET_LDCC: {
-          trangThai = STATUS.DA_DUYET_LDCC;
-          mess = 'Bạn có chắc chắn muốn phê duyệt ?'
-          break;
-        }
-      }
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
