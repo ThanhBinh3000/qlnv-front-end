@@ -120,13 +120,13 @@
             {{userService.isCuc() ? ' Quyết định chỉ tiêu kế hoạch của Tổng cục' : 'Quyết định của BTC giao TCDT'}}
           </nz-form-label>
           <nz-form-control [nzErrorTip]="canCuError">
-            <!--  <nz-input-group>
-                <input formControlName="canCu" nz-input nzSize="small" [readonly]="true"/>
-              </nz-input-group>-->
-            <nz-select formControlName="arrCanCu" nzMode="multiple" nzPlaceHolder="Chọn căn cứ"
+            <nz-input-group>
+              <input formControlName="canCu" nz-input nzSize="small" [readonly]="true"/>
+            </nz-input-group>
+            <!--<nz-select formControlName="arrCanCu" nzMode="multiple" nzPlaceHolder="Chọn căn cứ"
                        [nzDisabled]="isViewDetail">
               <nz-option *ngFor="let option of this.dsCanCu" [nzLabel]="option.soQd" [nzValue]="option.id"></nz-option>
-            </nz-select>
+            </nz-select>-->
             <ng-template #canCuError let-control>
               <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
             </ng-template>
@@ -246,7 +246,7 @@
                 <nz-autocomplete #auto (selectionChange)="selectDonViKeyDown($event,'khlt')" [nzBackfill]="false">
                   <ng-container>
                     <nz-auto-option *ngFor="let option of options" [nzValue]="option.tenDvi"
-                                    (click)="selectDonViKHLT(option)">
+                                    (click)="selectDonvi(option)">
                       {{ option.labelDonVi }}
                     </nz-auto-option>
                   </ng-container>
