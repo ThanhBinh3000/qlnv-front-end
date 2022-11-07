@@ -16,10 +16,10 @@
           <label class="search__label">Tên hợp đồng</label>
           <input nz-input placeholder="Tên hợp đồng" [(ngModel)]="tenHd" />
         </div>
-        <div nz-col nzSpan="6">
+        <!-- <div nz-col nzSpan="6">
           <label class="search__label">Chủ đầu tư</label>
           <input nz-input [(ngModel)]="nhaCungCap" />
-        </div>
+        </div> -->
         <div nz-col nzSpan="4">
           <label class="search__label">Ngày ký QĐ phê duyệt KQ LCNT</label>
           <nz-range-picker [(ngModel)]="ngayKy" placeholder="Ngày ký" nzFormat="dd/MM/yyyy"></nz-range-picker>
@@ -37,17 +37,20 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> DANH SÁCH HỢP ĐỒNG MUA</h3>
+      <h3> QUẢN LÝ KÝ HỢP ĐỒNG MUA HÀNG DTQG</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()">
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_XOA')" type="button" class="btn btn-do"
+          (click)="deleteSelect()">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_EXP')" type="button"
+          class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi(false, 0)">
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM')" type="button"
+          class="btn btn-main" (click)="themMoi(false, 0)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm mới</span>
         </button>
@@ -73,7 +76,7 @@
             <th nzWidth="10%">Loại hàng hóa</th>
             <th nzWidth="10%">Chủng loại hàng hóa</th>
             <th nzWidth="10%">Tổng mức đầu tư (đ)</th>
-            <th nzWidth="5%">Trạng thái HĐ</th>
+            <th nzWidth="5%">Trạng thái ký HĐ</th>
             <th nzWidth="5%">Trạng thái nhập hàng</th>
             <th nzWidth="3%">Hành động</th>
           </tr>
@@ -177,12 +180,14 @@
             <td class="text-left">
               <div nz-row>
                 <div nz-col nzSpan="8">
-                  <a (click)="redirectToChiTiet(true, data)">
+                  <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_XEM')"
+                    (click)="redirectToChiTiet(true, data)">
                     <i class="fa fa-eye"></i>
                   </a>
                 </div>
                 <div nz-col nzSpan="8">
-                  <a (click)="redirectToChiTiet(false, data)" *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO">
+                  <a (click)="redirectToChiTiet(false, data)"
+                    *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_SUA')">
                     <i class="fa fa-pencil"></i>
                   </a>
                 </div>

@@ -19,15 +19,15 @@
       </button>
       <button type="button" class="btn btn-sub xanh-nhat"
         *ngIf="( formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC )  "
-        (click)="pheDuyet()">
+        (click)="save(true)">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
-<!--       <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO ) && !isDetail() &&  typeVthh != '02'" type="button" -->
-<!--         class="btn btn-sub xanh-nhat" (click)="save(true)"> -->
-<!--         <i class="icon htvbdh_chuyenvanthu"></i> -->
-<!--         <span>Ban hành</span> -->
-<!--       </button> -->
+      <!--       <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO ) && !isDetail() &&  typeVthh != '02'" type="button" -->
+      <!--         class="btn btn-sub xanh-nhat" (click)="save(true)"> -->
+      <!--         <i class="icon htvbdh_chuyenvanthu"></i> -->
+      <!--         <span>Ban hành</span> -->
+      <!--       </button> -->
       <button
         *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) && !isDetail()"
         type="
@@ -37,8 +37,9 @@
       </button>
     </ng-container>
     <ng-container *ngIf="userService.isChiCuc() && formData.value.trangThaiChiCuc != STATUS.HOAN_THANH_CAP_NHAT">
-      <button *ngIf="(formData.value.trangThai == STATUS.BAN_HANH)" type="button" class="btn btn-sub xanh-nhat"
-        (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT)">
+      <button
+        *ngIf="(formData.value.trangThai == STATUS.BAN_HANH) && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_BANHANH')"
+        type="button" class="btn btn-sub xanh-nhat" (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT)">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành</span>
       </button>
@@ -54,15 +55,16 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-          <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
-            {{ formData.value.tenTrangThai }}
-          </span>
+        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do'">
+          {{ formData.value.tenTrangThai }}
+        </span>
         <span class="title-form">Quyết định giao nhiệm vụ nhập hàng</span>
       </div>
     </div>
   </div>
-  <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP ||  formData.value.trangThai == STATUS.TU_CHOI_LDC"
-            nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.ldoTuchoi}}">
+  <nz-alert class="mg-t-16"
+    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_TP ||  formData.value.trangThai == STATUS.TU_CHOI_LDC" nzShowIcon
+    nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.ldoTuchoi}}">
   </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <form nzLayout="vertical" nz-form [formGroup]="formData">
@@ -72,7 +74,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired>
               Năm nhập
             </nz-form-label>
-            <nz-select formControlName="namNhap" (ngModelChange)="getListHopDong()">
+            <nz-select formControlName="namNhap" [nzDisabled]="isDisableForm()" (ngModelChange)="getListHopDong()">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </nz-form-item>
@@ -85,7 +87,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group [nzAddOnAfter]="maQdSuffix">
                 <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                  nzPlaceHolder="Nhập số quyết định" [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isDetail()">
+                  nzPlaceHolder="Nhập số quyết định" [nzStep]="1" [nzSize]="'small'" [nzDisabled]="isDisableForm()">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -97,8 +99,8 @@
               Ngày quyết định
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker nzPlaceHolder="Ngày quyết định" formControlName="ngayQdinh" nzFormat="dd/MM/yyyy"
-                [nzDisabled]="true">
+              <nz-date-picker [nzDisabled]="isDisableForm()" nzPlaceHolder="Ngày quyết định" formControlName="ngayQdinh"
+                nzFormat="dd/MM/yyyy">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -107,7 +109,7 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Căn cứ trên hợp đồng </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDetail() ? '' : openDialogHopDong()">
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="isDisableForm() ? '' : openDialogHopDong()">
                 <input class="search__input" [readonly]="true" nz-input formControlName="soHd" readonly />
               </nz-input-group>
               <ng-template #soQDError let-control>
@@ -190,11 +192,11 @@
         </div>
         <div nz-col nzSpan="6">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" >
+            <nz-form-label [nzNoColon]="true">
               Trích yếu
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="trichYeu" [readonly]="isDetail()" />
+              <input nz-input formControlName="trichYeu" [readonly]="isDisableForm()" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -204,7 +206,7 @@
               Tài liệu đính kèm
             </nz-form-label>
           </nz-form-item>
-          <file-list [data]="listFileDinhKem" [isViewDetail]="isViewDetail"></file-list>
+          <file-list [data]="listFileDinhKem" [disabled]="isDisableForm()"></file-list>
         </div>
       </div>
       <ng-template #error let-control>
@@ -212,14 +214,14 @@
       </ng-template>
     </form>
   </nz-card>
-  <nz-table [nzData]="dataTable" class="nowrap" nzBordered [nzFrontPagination]="false"
-    [nzShowPagination]="false">
+  <nz-table [nzData]="dataTable" class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
       <tr class="header-table-nvnh">
         <th nzWidth="30px" class="text-center">STT</th>
         <th nzWidth="25px"></th>
         <th class="text-center">Chi cục DTNN KV</th>
         <th class="text-center">Điểm kho</th>
+        <th class="text-center">Số lượng điểm kho</th>
         <th class="text-center">Nhà kho</th>
         <th class="text-center">Ngăn kho</th>
         <th class="text-center">Lô kho</th>
@@ -227,34 +229,34 @@
         <th class="text-center">Trạng thái</th>
         <th *ngIf="userService.isChiCuc()" nzWidth="80px" class="text-center"></th>
       </tr>
-<!--       <tr *ngIf="userService.isCuc() && typeVthh == '02'"> -->
-<!--         <th></th> -->
-<!--         <th></th> -->
-<!--         <th> -->
-<!--           <nz-select [(ngModel)]="rowItem.maDvi" (ngModelChange)="changeChiCuc()"> -->
-<!--             <nz-option *ngFor="let item of listChiCuc" [nzValue]="item.key" [nzLabel]="item.title"> -->
-<!--             </nz-option> -->
-<!--           </nz-select> -->
-<!--         </th> -->
-<!--         <th></th> -->
-<!--         <th></th> -->
-<!--         <th></th> -->
-<!--         <th></th> -->
-<!--         <th> -->
-<!--           <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'" nz-input -->
-<!--             [(ngModel)]="rowItem.soLuong" [nzMin]="0"> -->
-<!--           </nz-input-number> -->
-<!--         </th> -->
-<!--         <th> </th> -->
-<!--         <th style="text-align: center;"> -->
-<!--           <a (click)="themChiCuc()" [ngClass]="{'isDisabled': !validateButtonThem('chiCuc')}"> -->
-<!--             <i class="fa fa-plus"></i> -->
-<!--           </a> -->
-<!--           <a> -->
-<!--             <i (click)="clearDiaDiemNhap()" class="icon htvbdh_nhap-lai1"></i> -->
-<!--           </a> -->
-<!--         </th> -->
-<!--       </tr> -->
+      <!--       <tr *ngIf="userService.isCuc() && typeVthh == '02'"> -->
+      <!--         <th></th> -->
+      <!--         <th></th> -->
+      <!--         <th> -->
+      <!--           <nz-select [(ngModel)]="rowItem.maDvi" (ngModelChange)="changeChiCuc()"> -->
+      <!--             <nz-option *ngFor="let item of listChiCuc" [nzValue]="item.key" [nzLabel]="item.title"> -->
+      <!--             </nz-option> -->
+      <!--           </nz-select> -->
+      <!--         </th> -->
+      <!--         <th></th> -->
+      <!--         <th></th> -->
+      <!--         <th></th> -->
+      <!--         <th></th> -->
+      <!--         <th> -->
+      <!--           <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'" nz-input -->
+      <!--             [(ngModel)]="rowItem.soLuong" [nzMin]="0"> -->
+      <!--           </nz-input-number> -->
+      <!--         </th> -->
+      <!--         <th> </th> -->
+      <!--         <th style="text-align: center;"> -->
+      <!--           <a (click)="themChiCuc()" [ngClass]="{'isDisabled': !validateButtonThem('chiCuc')}"> -->
+      <!--             <i class="fa fa-plus"></i> -->
+      <!--           </a> -->
+      <!--           <a> -->
+      <!--             <i (click)="clearDiaDiemNhap()" class="icon htvbdh_nhap-lai1"></i> -->
+      <!--           </a> -->
+      <!--         </th> -->
+      <!--       </tr> -->
     </thead>
     <tbody>
       <ng-container *ngFor="let item of dataTable , let i = index">
@@ -266,15 +268,16 @@
           <td></td>
           <td></td>
           <td></td>
+          <td></td>
           <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ item.tenTrangThai }}</td>
           <td *ngIf="userService.isChiCuc()">
-<!--             <a *ngIf="userService.isCuc()"> -->
-<!--               <i class="fa fa-pencil"></i> -->
-<!--             </a> -->
-<!--             <a *ngIf="userService.isCuc()"> -->
-<!--               <i (click)=" xoaDiaDiemNhap(i)" class="fa fa-trash-o do"></i> -->
-<!--             </a> -->
+            <!--             <a *ngIf="userService.isCuc()"> -->
+            <!--               <i class="fa fa-pencil"></i> -->
+            <!--             </a> -->
+            <!--             <a *ngIf="userService.isCuc()"> -->
+            <!--               <i (click)=" xoaDiaDiemNhap(i)" class="fa fa-trash-o do"></i> -->
+            <!--             </a> -->
           </td>
         </tr>
         <ng-container *ngIf="expandSet.has(i)">
@@ -288,6 +291,7 @@
                 </nz-option>
               </nz-select>
             </td>
+            <td>{{rowItem.soLuongDiemKho}}</td>
             <td>
               <nz-select [(ngModel)]="rowItem.maNhaKho" (ngModelChange)="changeNhaKho()">
                 <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.key" [nzLabel]="item.title">
@@ -326,6 +330,7 @@
             <td></td>
             <td></td>
             <td>{{ ddNhap.tenDiemKho }}</td>
+            <td>{{ ddNhap.soLuongDiemKho }}</td>
             <td>{{ ddNhap.tenNhaKho }}</td>
             <td>{{ ddNhap.tenNganKho }}</td>
             <td>{{ ddNhap.tenLoKho }}</td>
@@ -333,7 +338,7 @@
               }}</td>
             <td></td>
             <td *ngIf="userService.isChiCuc()" style="text-align: center;">
-              <a >
+              <a>
                 <i class="fa fa-pencil"></i>
               </a>
               <a>

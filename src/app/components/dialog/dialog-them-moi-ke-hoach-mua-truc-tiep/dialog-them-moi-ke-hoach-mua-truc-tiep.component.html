@@ -6,15 +6,15 @@
                 <nz-form-control>
                     <nz-select formControlName="maDvi" (ngModelChange)="changeChiCuc($event)"
                         [nzDisabled]='selectedChiCuc'>
-                        <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+                        <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDonVi"></nz-option>
                     </nz-select>
                 </nz-form-control>
             </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
             <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Tổng số lượng </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24">
+                <nz-form-label nzRequired [nzNoColon]="true"> Tổng số Lượng </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                     <nz-input-number [nzDisabled]="true" formControlName="soLuongDxmtt" [nzMin]="1"
                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
@@ -40,13 +40,13 @@
     <tbody>
         <tr>
             <td>
-                <nz-select [(ngModel)]="thongtinDauThau.maDiemKho" (ngModelChange)="changeDiemKho()">
+                <nz-select [(ngModel)]="thongtinMuaTrucTiep.maDiemKho" (ngModelChange)="changeDiemKho()">
                     <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
             </td>
-            <td>{{thongtinDauThau.diaDiemNhap}} </td>
+            <td>{{thongtinMuaTrucTiep.diaDiemKho}} </td>
             <td>
-                <nz-input-number class="text-right" nz-input [(ngModel)]="thongtinDauThau.soLuongDxmtt" [nzMin]="1"
+                <nz-input-number class="text-right" nz-input [(ngModel)]="thongtinMuaTrucTiep.soLuongDxmtt" [nzMin]="1"
                     [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
             </td>
@@ -60,9 +60,9 @@
             </td>
         </tr>
         <tr *ngFor="let data of editRowTable.data, let i = index" class="editable-row">
-            <ng-container *ngIf="!editCache[i]?.edit; else editTemplate">
+            <ng-container *ngIf="!data.edit; else editTemplate">
                 <td>{{ data.tenDiemKho }}</td>
-                <td>{{ data.diaDiemNhap }}</td>
+                <td>{{ data.diaDiemKho }}</td>
                 <td>{{ data.soLuongDxmtt | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-center">
                     <a (click)="startEdit(i)">
@@ -75,14 +75,14 @@
             </ng-container>
             <ng-template #editTemplate>
                 <td>
-                    <nz-select [(ngModel)]="editCache[i].data.maDiemKho" (ngModelChange)="changeDiemKho(i)">
+                    <nz-select [(ngModel)]="data.maDiemKho" (ngModelChange)="changeDiemKho(i)">
                         <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
                 </td>
-                <td>{{editCache[i].data.diaDiemNhap}} </td>
+                <td>{{data.diaDiemKho}} </td>
                 <td>
-                    <nz-input-number class="text-right" nz-input [(ngModel)]="editCache[i].data.soLuong" [nzMin]="1"
-                        [nzStep]="1" [nzSize]="'small'">
+                    <nz-input-number class="text-right" nz-input [(ngModel)]="data.soLuong" [nzMin]="1" [nzStep]="1"
+                        [nzSize]="'small'">
                     </nz-input-number>
                 </td>
                 <td class="text-center">
@@ -120,3 +120,6 @@
         </div>
     </div>
 </div>
+<ng-template #error let-control>
+    <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>

@@ -1,10 +1,10 @@
-import { ResponseData } from '../../interfaces/response';
+import { ResponseData } from '../../../../../interfaces/response';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { BaseService } from '../base.service';
+import { environment } from '../../../../../../environments/environment';
+import { BaseService } from '../../../../base.service';
 import { Observable } from 'rxjs';
-import { TonKhoDauNamLuongThuc } from '../../models/ThongTinChiTieuKHNam';
+import { TonKhoDauNamLuongThuc } from '../../../../../models/ThongTinChiTieuKHNam';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +14,11 @@ export class QuanLyPhieuKiemTraChatLuongHangService extends BaseService {
 
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'ql-phieu-kiem-tra-chat-luong-hang-lt', '/qlnv-hang');
+  }
+
+  getSoLuongNhap(body: any) {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/so-luong-nhap-kho`
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 
   timKiem(body: any): Promise<any> {

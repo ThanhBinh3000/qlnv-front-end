@@ -7,12 +7,12 @@ export class DanhSachMuaTrucTiep {
   tenDvi: string;
   maDiemKho: string;
   tenDiemKho: string;
-  diaDiemNhap: string;
+  diaDiemKho: string;
+  idDxKhmtt?: number;
   soLuongCtieu: number;
   soLuongKhDd: number;
   soLuongDxmtt: number;
   donGiaVat: number;
-  bangChu: String;
   thanhTien: number;
   idVirtual?: number;
   isEdit: boolean;
