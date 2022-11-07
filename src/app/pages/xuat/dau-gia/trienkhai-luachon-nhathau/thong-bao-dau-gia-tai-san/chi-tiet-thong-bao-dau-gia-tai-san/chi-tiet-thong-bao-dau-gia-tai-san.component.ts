@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -12,7 +12,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quantri-danhmuc/quanLyPhieuKiemTraChatLuongHang.service';
+import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuyetDinhPheDuyetKHBDGService } from 'src/app/services/quyetDinhPheDuyetKHBDG.service';
 import { ThongBaoDauGiaTaiSanService } from 'src/app/services/thongBaoDauGiaTaiSan.service';
 import { UserService } from 'src/app/services/user.service';
@@ -109,7 +109,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
             : null,
           disabled: this.isView ? true : false
         },
-        [Validators.required],,
+        [Validators.required], ,
       ],
       maThongBao: [
         {
@@ -429,7 +429,7 @@ export class ChiTietThongBaoDauGiaTaiSanComponent implements OnInit {
     if (idSoQuyetDinh) {
       let res = await this.qdPheDuyetKhBanDauGia.chiTiet(+idSoQuyetDinh);
       if (res.msg == MESSAGE.SUCCESS) {
-        let phanLoTaiSans =  res.data?.thongTinTaiSanCucs;
+        let phanLoTaiSans = res.data?.thongTinTaiSanCucs;
         // if(this.userService.isTongCuc()){
         //    phanLoTaiSans = res.data?.chiTietList;
         // }else{

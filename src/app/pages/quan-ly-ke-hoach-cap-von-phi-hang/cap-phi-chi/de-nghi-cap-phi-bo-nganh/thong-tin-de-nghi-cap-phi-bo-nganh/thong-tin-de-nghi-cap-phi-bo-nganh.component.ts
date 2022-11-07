@@ -86,7 +86,9 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   oldDataEdit1: any = {};
   oldDataEdit2: any = {};
 
-  create: any = {};
+  create: any = {
+   namPhatSinh : dayjs().get('year'),
+  };
   create1: any = {};
 
   constructor(
@@ -116,13 +118,12 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       this.detail.trangThai = this.globals.prop.NHAP_DU_THAO;
       this.detail.tenTrangThai = "Dự Thảo";
       this.initForm();
-      Promise.all([this.getListNam(), this.getListBoNganh(), this.loaiVTHHGetAll()]);
-      this.rowEdit.isView = false;
+      Promise.all([this.getListNam(), this.getListBoNganh(), this.loaiVTHHGetAll(),this.getListLoaiCPhi()]);
+      this.rowEdit.isView = true;
       if (this.idInput > 0) {
         this.loadChiTiet(this.idInput)
       }
       this.spinner.hide();
-
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
@@ -130,7 +131,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      'nam': [null, [Validators.required]],
+      'nam': [dayjs().get('year'), [Validators.required]],
       'maBoNganh': [null, [Validators.required]],
       'soDeNghi': [null, [Validators.required]],
       'ngayDeNghi': [null, [Validators.required]],
@@ -182,6 +183,14 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
     if (res.msg == MESSAGE.SUCCESS) {
       this.listBoNganh = res.data;
+    }
+  }
+
+  async getListLoaiCPhi() {
+    this.listLoaiChiPhi = [];
+    let res = await this.danhMucService.danhMucChungGetAll('PHI_NGHIEP_VU_DTQG');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiChiPhi = res.data;
     }
   }
 
@@ -280,6 +289,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS && res.data) {
         let data = res.data;
         if (data) {
+          console.log(data);
           this.formData.patchValue({
             'nam': data.nam,
             'maBoNganh': data.maBoNganh,
@@ -287,7 +297,6 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
             'ngayDeNghi': data.ngayDeNghi,
             'ghiChu' : data.ghiChu
           });
-
           this.hanghoa = {
             "maLoaiHangHoa": "",
             "maChungLoaiHangHoa": "",
@@ -384,17 +393,23 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
 
   addRow(type) {
     if (type === 'ct1s') {
+      this.ct1s
       if (!this.ct1s) {
         this.ct1s = [];
       }
       this.sortTableId('ct1s');
       let item = cloneDeep(this.create1);
-      item.stt = this.ct1s.length + 1;
-      item.ct2List = [];
-      this.ct1s = [
-        ...this.ct1s,
-        item,
-      ]
+      if(item.tenDvCungCap && item.soTaiKhoan && item.nganHang){
+        item.stt = this.ct1s.length + 1;
+        item.ct2List = [];
+        this.ct1s = [
+          ...this.ct1s,
+          item,
+        ]
+      }else{
+        this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+        return;
+      }
     }
     else if (type === 'ct2s') {
       if (!this.rowEdit.ct2s) {

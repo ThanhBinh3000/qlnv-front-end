@@ -181,7 +181,7 @@ export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
       // loaiVthh: this.searchFilter.loaiVthh,
       // namKhoach: this.searchFilter.namKhoach,
       // trichYeu: this.searchFilter.trichYeu,
-      maDvi: this.userInfo.MA_DVI,
+      maDvi: this.userService.isTongCuc() ? null : this.userInfo.MA_DVI,
       trangThai: STATUS.BAN_HANH
     };
     let res = await this.quyetDinhPheDuyetKetQuaLCNTService.search(body);

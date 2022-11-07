@@ -15,7 +15,8 @@
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC "
+    <button class="btn btn-sub xanh-nhat"
+      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_DUYET')"
       (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
@@ -178,7 +179,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+        <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Lô kho</nz-form-label>
             <nz-form-control>
@@ -190,8 +191,8 @@
         </div>
         <div nz-col [nzSpan]="2">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true"> Số lượng</nz-form-label>
-            <nz-input-number nzDisabled nz-input formControlName="soLuong" nzSize="small"
+            <nz-form-label [nzNoColon]="true"> Số lượng nhập kho (kg)</nz-form-label>
+            <nz-input-number nzDisabled nz-input formControlName="soLuongNhapKho" nzSize="small"
               [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
 
             </nz-input-number>
@@ -228,8 +229,8 @@
             </td>
             <td>{{i + 1}}</td>
             <td class="link">{{item.soPhieu}}</td>
-            <td class="link">{{item.phieuNhapKho?.soPhieuNhapKho }}</td>
-            <td class="link">{{item.phieuNhapKho?.bangKeCanHang?.soBangKe}}</td>
+            <td class="link">{{item.soPhieuNhapKho }}</td>
+            <td class="link">{{item.soBangKe}}</td>
             <td>{{item.ngayTao | date: 'dd/MM/YYYY'}}</td>
             <td>{{item.soLuongNhapKho | number : '1.0-1' : 'vi_VN' }}</td>
           </tr>

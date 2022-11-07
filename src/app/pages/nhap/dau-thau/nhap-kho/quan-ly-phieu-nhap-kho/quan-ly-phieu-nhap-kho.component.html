@@ -30,22 +30,26 @@
     <div class="group-button">
       <h3>Danh sách phiếu nhập kho </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub" (click)="export()">
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_EXP')" type="button" class="btn btn-sub"
+          (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="print()">
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_IN')" type="button" class="btn btn-sub"
+          (click)="print()">
           <i class="icon htvbdh_tcdt_print"></i>
           <span>In</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)" *ngIf="userService.isChiCuc()">
+        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)" *ngIf="userService.isChiCuc() 
+        && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table nzBordered #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable">
+      <nz-table nzBordered #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+        [nzData]="dataTable">
         <thead>
           <tr>
             <th width="60px">STT</th>
@@ -67,101 +71,63 @@
           </tr>
         </thead>
         <tbody>
-        <ng-container *ngFor="let item of dataTable , let i = index">
-          <tr class="level-1">
-            <td>{{(page - 1) * pageSize + i + 1}}</td>
-            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-            <td></td>
-            <td class="link bold">{{ item.soQd }}</td>
-            <td class="bold">{{ item.namNhap }}</td>
-            <td class="bold">{{ item.tgianNkho }}</td>
-            <td colspan="9"></td>
-            <td>
-              <a (click)="redirectToChiTiet(false, 0,item.id)">
-                <i class="fa fa-plus"></i>
-              </a>
-            </td>
-          </tr>
-          <ng-container *ngIf="expandSet.has(i)">
-            <ng-container *ngFor="let dataDdiem of item.detail.children, let y = index">
-              <tr class="level-2">
-                <td></td>
-                <td></td>
-                <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
-                <td colspan="3"></td>
-                <td>{{dataDdiem.tenDiemKho}}</td>
-                <td>{{dataDdiem.tenNhaKho}}</td>
-                <td>{{dataDdiem.tenNganKho}}</td>
-                <td>{{dataDdiem.tenLoKho}}</td>
-                <td colspan="7"></td>
-              </tr>
-              <ng-container *ngIf="expandSet2.has(y)">
-                <tr class="level-3" *ngFor="let dataPhieu of dataDdiem.listPhieuNhapKho">
+          <ng-container *ngFor="let item of dataTable , let i = index">
+            <tr class="level-1">
+              <td>{{(page - 1) * pageSize + i + 1}}</td>
+              <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+              <td></td>
+              <td class="link bold">{{ item.soQd }}</td>
+              <td class="bold">{{ item.namNhap }}</td>
+              <td class="bold">{{ item.tgianNkho }}</td>
+              <td colspan="9"></td>
+              <td>
+                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                  <i class="fa fa-plus"></i>
+                </a>
+              </td>
+            </tr>
+            <ng-container *ngIf="expandSet.has(i)">
+              <ng-container *ngFor="let dataDdiem of item.detail.children, let y = index">
+                <tr class="level-2">
                   <td></td>
                   <td></td>
-                  <td colspan="8"></td>
-                  <td class="bold">{{dataPhieu.soPhieuNhapKho}}</td>
-                  <td>{{dataPhieu.ngayTao}}</td>
-                  <td class="link">{{dataPhieu.phieuKiemTraCl.soPhieu}}</td>
-                  <td>{{dataPhieu.phieuKiemTraCl.ngayGdinh | date: 'dd/MM/YYYY'}}</td>
-                  <td>{{dataPhieu.tenTrangThai}}</td>
-                  <td>
-                    <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(true, dataPhieu.id)">
-                      <i class="fa fa-eye"></i>
-                    </a>
-                    <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, dataPhieu.id)">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                    <a *ngIf="dataPhieu.trangThai == STATUS.DU_THAO">
-                      <i class="fa fa-trash-o do"></i>
-                    </a>
-                  </td>
+                  <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
+                  <td colspan="3"></td>
+                  <td>{{dataDdiem.tenDiemKho}}</td>
+                  <td>{{dataDdiem.tenNhaKho}}</td>
+                  <td>{{dataDdiem.tenNganKho}}</td>
+                  <td>{{dataDdiem.tenLoKho}}</td>
+                  <td colspan="7"></td>
                 </tr>
+                <ng-container *ngIf="expandSet2.has(y)">
+                  <tr class="level-3" *ngFor="let dataPhieu of dataDdiem.listPhieuNhapKho">
+                    <td></td>
+                    <td></td>
+                    <td colspan="8"></td>
+                    <td class="bold">{{dataPhieu.soPhieuNhapKho}}</td>
+                    <td>{{dataPhieu.ngayTao}}</td>
+                    <td class="link">{{dataPhieu.phieuKiemTraCl.soPhieu}}</td>
+                    <td>{{dataPhieu.phieuKiemTraCl.ngayGdinh | date: 'dd/MM/YYYY'}}</td>
+                    <td>{{dataPhieu.tenTrangThai}}</td>
+                    <td>
+                      <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XEM')"
+                        (click)="redirectToChiTiet(true, dataPhieu.id)">
+                        <i class="fa fa-eye"></i>
+                      </a>
+                      <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_SUA')"
+                        (click)="redirectToChiTiet(false, dataPhieu.id)">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a
+                        *ngIf="dataPhieu.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XOA')">
+                        <i class="fa fa-trash-o do"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </ng-container>
               </ng-container>
             </ng-container>
           </ng-container>
-        </ng-container>
-
-<!--         <ng-container *ngFor="let item of dataTable , let i = index"> -->
-<!--             <tr> -->
-<!--               <td>{{(page - 1) * pageSize + i + 1}}</td> -->
-<!--               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td> -->
-<!--               <td>{{ item.soQd }}</td> -->
-<!--               <td>{{ item.namNhap }}</td> -->
-<!--               <td>{{ item.tgianNkho }}</td> -->
-<!--               <td colspan="9"></td> -->
-<!--               <td> -->
-<!--                 <a (click)="redirectToChiTiet(false, 0,item.id)"> -->
-<!--                   <i class="fa fa-plus"></i> -->
-<!--                 </a> -->
-<!--               </td> -->
-<!--             </tr> -->
-<!--             <ng-container *ngIf="expandSet.has(i)"> -->
-<!--               <tr *ngFor="let dataPhieu of item.detail.listPhieuNhapKho"> -->
-<!--                 <td colspan="5"></td> -->
-<!--                 <td>{{dataPhieu.soPhieuNhapKho}}</td> -->
-<!--                 <td>{{dataPhieu.ngayTao | date: 'dd/MM/YYYY' }}</td> -->
-<!--                 <td>{{dataPhieu.tenDiemKho}}</td> -->
-<!--                 <td>{{dataPhieu.tenNhaKho}}</td> -->
-<!--                 <td>{{dataPhieu.tenNganKho}}</td> -->
-<!--                 <td>{{dataPhieu.tenLoKho}}</td> -->
-<!--                 <td>{{dataPhieu.soPhieuKtraCl}}</td> -->
-<!--                 <td>{{dataPhieu.ngayGuiDuyet | date: 'dd/MM/YYYY'}}</td>  &lt;!&ndash; //Data fake &ndash;&gt; -->
-<!--                 <td>{{dataPhieu.tenTrangThai}}</td> -->
-<!--                 <td> -->
-<!--                   <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(true, dataPhieu.id)"> -->
-<!--                     <i class="fa fa-eye"></i> -->
-<!--                   </a> -->
-<!--                   <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, dataPhieu.id)"> -->
-<!--                     <i class="fa fa-pencil"></i> -->
-<!--                   </a> -->
-<!--                   <a *ngIf="dataPhieu.trangThai == STATUS.DU_THAO" (click)="xoaItem(dataPhieu)"> -->
-<!--                     <i class="fa fa-trash-o do"></i> -->
-<!--                   </a> -->
-<!--                 </td> -->
-<!--               </tr> -->
-<!--             </ng-container> -->
-<!--           </ng-container> -->
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu">

@@ -127,7 +127,7 @@
                         <td>{{ data.ycCapThem }}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td class="text-left">
-                            <a (click)="viewDetail(data, true)">
+                            <a *ngIf="!data.trangThaiId==globals.prop.NHAP_DU_THAO" (click)="viewDetail(data, true)">
                                 <i class="fa fa-eye"></i>
                             </a>
                             <a *ngIf="(data.trangThaiId==globals.prop.NHAP_DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_DEXUAT_SUA')"

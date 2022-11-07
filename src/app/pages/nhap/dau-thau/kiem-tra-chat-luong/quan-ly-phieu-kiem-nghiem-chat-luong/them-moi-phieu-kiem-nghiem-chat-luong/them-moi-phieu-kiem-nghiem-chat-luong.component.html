@@ -9,8 +9,9 @@
       <span>Lưu và gửi duyệt</span>
     </button>
 
-    <button (click)="pheDuyet()" *ngIf="(detail.trangThai == '00' && id > 0) && !isView" type="button"
-      class="btn btn-outline-grey btn-sm waves-effect waves-light">
+    <button (click)="pheDuyet()"
+      *ngIf="(detail.trangThai == '00' && id > 0) && !isView && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_DUYET')"
+      type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>

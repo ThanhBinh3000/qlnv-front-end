@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { STATUS } from 'src/app/constants/status';
+import { UserLogin } from 'src/app/models/userlogin';
 
 @Component({
   selector: 'app-danh-sach-giao-nhap-hang',
@@ -27,8 +28,9 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   @Input()
   listVthh: any[] = [];
 
-  @Output()
-  getCount = new EventEmitter<any>();
+  userInfo: UserLogin;
+
+
   inputDonVi: string = '';
   options: any[] = [];
   optionsDonVi: any[] = [];
@@ -83,13 +85,15 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-    private danhMucService: DanhMucService
+    private danhMucService: DanhMucService,
+    private userSerVice: UserService
   ) {
   }
 
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.userInfo = this.userService.getUserLogin();
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
           value: dayjs().get('year') + i,
@@ -124,7 +128,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
 
   async showList() {
     this.isDetail = false;
-    this.getCount.emit();
     await this.search()
   }
 
@@ -156,6 +159,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
         ? dayjs(this.searchFilter.ngayQuyetDinh[0]).format('YYYY-MM-DD')
         : null,
       "trichYeu": this.searchFilter.trichYeu ? this.searchFilter.trichYeu : null,
+      "maDvi": this.userService.isCuc() ? this.userInfo.MA_DVI : null
     }
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
