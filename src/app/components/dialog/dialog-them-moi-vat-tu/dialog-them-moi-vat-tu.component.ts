@@ -151,7 +151,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     }
     let soLuongDaLenKh = await this.dxuatKhLcntService.getSoLuongAdded(body);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
-    console.log(chiCuc);
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
@@ -167,7 +166,8 @@ export class DialogThemMoiVatTuComponent implements OnInit {
           'diaDiemNhap': res.data.child[i].diaChi,
         };
         this.listDiemKho.push(item);
-      }
+      };
+      this.thongtinDauThau = new DanhSachGoiThau();
     }
   }
 

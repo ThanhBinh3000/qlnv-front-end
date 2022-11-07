@@ -45,7 +45,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   dsHangHoa: any[] = [];
-  dsQdPdKhlcnt: any[] = [];
 
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
@@ -155,6 +154,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin(),
       this.maDx = '/CDTVP-KH&QLHDT',
       this.loadDsNam(),
+      await this.getDataChiTieu(),
       this.loadDsLoaiGia(),
       this.loadDsPhuongAnGia(),
       this.loadDsHangHoaPag(),
@@ -162,9 +162,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.loadDsVthh(),
       this.getDataDetail(this.idInput)
     ])
-    if (this.isGiaMuaToiDa) {
-      await this.getDataChiTieu()
-    }
     this.spinner.hide();
   }
 
@@ -243,8 +240,28 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     }
   }
 
+  async getDataChiTieu() {
+    if (this.type == 'GMTDBTT') {
+      let res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(+this.formData.get('namKeHoach').value)
+      if (res2.msg == MESSAGE.SUCCESS) {
+        const dataChiTieu = res2.data;
+        if (dataChiTieu ) {
+          this.formData.patchValue({
+            soCanCu: dataChiTieu.soQuyetDinh,
+          });
+        } else {
+          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy chỉ tiêu kế hoạch năm ' + dayjs().get('year'))
+          return;
+        }
+      }
+    }
+
+
+
+  }
+
   async loadDsQdPduyetKhlcnt() {
-    if (!this.isGiaMuaToiDa) {
+    if (this.type == 'GCT') {
       let body = {
         namKhoach: this.formData.get('namKeHoach').value,
         lastest: 1,
@@ -255,7 +272,14 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       };
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        this.dsQdPdKhlcnt = res.data.content;
+        let arr  = res.data.content;
+        if (arr) {
+          arr.forEach(item => {
+            if (!item.loaiVthh.startsWith("02")) {
+
+            }
+          })
+        }
       }
     }
   }
@@ -334,21 +358,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     }
   }
 
-  async onChangeSoQd($event) {
-    let dataQd = this.dsQdPdKhlcnt.filter(item => item.soQd == $event);
-    if (dataQd.length > 0) {
-      let dataDetail = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(dataQd[0].id);
-      const data = dataDetail.data;
-      this.formData.patchValue({
-        loaiVthh: data.loaiVthh,
-        cloaiVthh: data.cloaiVthh,
-        tgianNhang: data.tgianNhang
-      })
-      this.dsDiaDiemDeHang = data.hhQdKhlcntDtlList
-      this.convertDsDiemDeHang(data.hhQdKhlcntDtlList);
-    }
-  }
-
   openFile(event) {
     // if (!this.isView) {
     //   let item = {
@@ -410,6 +419,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     body.ketQuaThamDinhGia = this.dataTableKqGia;
     body.diaDiemDeHangs = this.dsDiaDiemDeHang;
     body.type = this.type;
+    body.maDvi = this.userInfo.MA_DVI
     let res
     if (this.idInput > 0) {
       res = await this.deXuatPAGService.update(body);
@@ -529,16 +539,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         }
       }
     });
-  }
-
-  async getDataChiTieu() {
-    let res2 = await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(+this.formData.get('namKeHoach').value)
-    if (res2.msg == MESSAGE.SUCCESS) {
-      const dataChiTieu = res2.data;
-      this.formData.patchValue({
-        soCanCu: dataChiTieu.soQuyetDinh,
-      });
-    }
   }
 
   themMoiDiaDiem() {

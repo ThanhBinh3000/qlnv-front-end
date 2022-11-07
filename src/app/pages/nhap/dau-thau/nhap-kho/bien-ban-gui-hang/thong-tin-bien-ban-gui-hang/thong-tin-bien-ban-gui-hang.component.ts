@@ -46,7 +46,7 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private phieuNhapKhoTamGuiService: PhieuNhapKhoTamGuiService,
     public globals: Globals,

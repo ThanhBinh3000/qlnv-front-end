@@ -39,7 +39,7 @@ export class DialogPhanQuyenComponent implements OnInit {
   danhMucList: any[] = [];
   submited: boolean = false;
   page: number = 1;
-  pageSize: number = 20;
+  pageSize: number = 500;
   dataTable: any[] = [];
   allChecked = false;
   indeterminate = false;
@@ -195,6 +195,7 @@ export class DialogPhanQuyenComponent implements OnInit {
     try {
       this.page = event;
       await this.search();
+      this.bindingData(this.dataEdit)
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);

@@ -9,9 +9,8 @@
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button class="btn btn-sub btn-sm waves-effect waves-light"
-      *ngIf="bienBanGuiHang.trangThai == globals.prop.NHAP_CHO_DUYET_TP || bienBanGuiHang.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC"
-      (click)="pheDuyet()">
+    <button class="btn btn-sub btn-sm waves-effect waves-light" *ngIf="bienBanGuiHang.trangThai == globals.prop.NHAP_CHO_DUYET_TP || bienBanGuiHang.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC
+      && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_BBGH_DUYET')" (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>

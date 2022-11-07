@@ -75,7 +75,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
     private donViService: DonviService,
     public globals: Globals,

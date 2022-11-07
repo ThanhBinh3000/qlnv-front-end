@@ -98,7 +98,9 @@
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="8">
-          <nz-radio-group nzSize="small" class="rdo-input" formControlName="phanLoai">
+          <nz-radio-group
+            [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
+            nzSize="small" class="rdo-input" formControlName="phanLoai">
             <nz-form-item>
               <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
               <nz-form-control [nzErrorTip]="error">

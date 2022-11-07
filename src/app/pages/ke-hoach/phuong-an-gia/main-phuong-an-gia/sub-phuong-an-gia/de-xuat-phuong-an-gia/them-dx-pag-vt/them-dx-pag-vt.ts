@@ -118,11 +118,12 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     await Promise.all([
-      this.loadDsQdPduyetKhlcnt(),
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
+      this.getDataChiTieu(),
       this.loadDsPhuongAnGia(),
       this.loadDsVthh(),
+      this.loadDsQdPduyetKhlcnt(),
       this.loadDsHangHoaPag(),
       this.loadDsLoaiGia(),
       this.maDx = '/TCDT-KH',
@@ -553,21 +554,53 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     };
   }
 
+  async getDataChiTieu() {
+    if (this.type == 'GMDTBTT') {
+      let res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(+this.formData.get('namKeHoach').value)
+      if (res2.msg == MESSAGE.SUCCESS) {
+        const dataChiTieu = res2.data;
+        if (dataChiTieu) {
+          this.formData.patchValue({
+            qdCtKhNam: dataChiTieu.soQuyetDinh,
+          });
+        } else {
+          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy chỉ tiêu kế hoạch năm ' + dayjs().get('year'))
+          return;
+        }
+      }
+    }
+
+  }
 
   async loadDsQdPduyetKhlcnt() {
-    let body = {
-      namKhoach: this.formData.get('namKeHoach').value,
-      lastest: 1,
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: 0,
-      },
-    };
-    let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.dsQdPdKhlcnt = res.data.content;
+    if (this.type == 'GMDTBTT') {
+      let body = {
+        namKhoach: this.formData.get('namKeHoach').value,
+        lastest: 1,
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0,
+        },
+        maDvi: this.userInfo.MA_DVI
+      };
+      let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let arr  = res.data.content;
+        if (arr) {
+          arr.forEach(item => {
+            if (!item.loaiVthh.startsWith("02")) {
+              this.formData.patchValue({
+              })
+            }
+          })
+        } else {
+          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy quyết định phê duyệt kế hoạch mua bán ' + dayjs().get('year'))
+          return;
+        }
+      }
     }
   }
+
 
   async save(isGuiDuyet?) {
     this.spinner.show();

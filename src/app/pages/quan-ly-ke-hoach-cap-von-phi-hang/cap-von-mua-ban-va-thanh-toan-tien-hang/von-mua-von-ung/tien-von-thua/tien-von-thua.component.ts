@@ -224,10 +224,11 @@ export class TienVonThuaComponent implements OnInit {
             this.maDviTien = '1';
             this.checkChild = true;
             this.checkParent = false;
+            this.maCvUv = this.data?.maCvUv;
             this.maDviTao = this.userInfo?.MA_DVI;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
-            this.ngayLapTemp = this.data.ngayLap;
-            this.ngayLap = this.datePipe.transform(this.ngayLapTemp, Utils.FORMAT_DATE_STR);
+            this.ngayLap = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
+            this.ngayLapTemp = this.datePipe.transform(this.newDate, "yyyy-MM-dd");
             this.capVonMuaBanTtthService.maNopTienVon().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
@@ -424,7 +425,7 @@ export class TienVonThuaComponent implements OnInit {
                 requestGroupButtons.maLoai = "1";
             }
             this.spinner.show();
-            await this.quanLyVonPhiService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
+            await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     if (!this.checkParent) {
                         this.ttGui.trangThai = mcn;
@@ -674,7 +675,7 @@ export class TienVonThuaComponent implements OnInit {
 
     async doCopy(response: any) {
         let maCvUvNew: string;
-        await this.quanLyVonPhiService.maNopTienVon().toPromise().then(
+        await this.capVonMuaBanTtthService.maNopTienVon().toPromise().then(
             (res) => {
                 if (res.statusCode == 0) {
                     const str = this.userService.isCuc() ? 'CKV' : 'CC';

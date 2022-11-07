@@ -33,19 +33,23 @@
     <div class="group-button">
       <h3>Danh sách biên bản nhập đầy kho </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isChiCuc()">
+        <button type="button" class="btn btn-do" (click)="deleteSelect()"
+          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="export()">
+        <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_EXP')" type="button" class="btn btn-sub"
+          (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="print()" *ngIf="userService.isCuc()">
+        <button type="button" class="btn btn-sub" (click)="print()"
+          *ngIf="userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_IN')">
           <i class="icon htvbdh_tcdt_print"></i>
           <span>In</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)" *ngIf="userService.isChiCuc()">
+        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
+          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -81,13 +85,13 @@
               </nz-input-group>
             </td>
             <td>
-              <nz-input-group >
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinhNhap"
                   (input)="filterInTable('soQuyetDinhNhap',filterTable.soQuyetDinhNhap)" size="small" />
               </nz-input-group>
             </td>
             <td *ngIf="userService.isCuc()">
-              <nz-input-group >
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBienBan"
                   (input)="filterInTable('soBienBan',filterTable.soBienBan)" size="small" />
               </nz-input-group>
@@ -108,19 +112,19 @@
               </nz-input-group>
             </td>
             <td>
-              <nz-input-group >
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNhaKho"
                   (input)="filterInTable('tenNhaKho',filterTable.tenNhaKho)" size="small" />
               </nz-input-group>
             </td>
             <td>
-              <nz-input-group >
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNganLo"
                   (input)="filterInTable('tenNganLo',filterTable.tenNganLo)" size="small" />
               </nz-input-group>
             </td>
             <td>
-              <nz-input-group >
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
                   (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
               </nz-input-group>
@@ -144,14 +148,17 @@
             <td>{{ data.tenNganLo }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td>
-              <a (click)="redirectToChiTiet(true, data.id)">
+              <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_XEM')"
+                (click)="redirectToChiTiet(true, data.id)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_KTV_BAO_QUAN || data.trangThai == globals.prop.NHAP_TU_CHOI_CAN_BO_KE_TOAN || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CHI_CUC) && userService.isChiCuc()"
+              <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_KTV_BAO_QUAN || data.trangThai == globals.prop.NHAP_TU_CHOI_CAN_BO_KE_TOAN || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CHI_CUC) && userService.isChiCuc()
+              && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_SUA')"
                 (click)="redirectToChiTiet(false, data.id)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isChiCuc()" (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_XOA')"
+                (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

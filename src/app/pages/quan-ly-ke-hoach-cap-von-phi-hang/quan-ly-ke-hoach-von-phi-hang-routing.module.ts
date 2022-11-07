@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { QuanLyKeHoachVonPhiHangComponent } from './quan-ly-ke-hoach-von-phi-hang.component';
-import { CAP_VON_CHI, CAP_VON_MUA_BAN, CAP_VON_NGUON_CHI, CAP_PHI_CHI } from './quan-ly-ke-hoach-von-phi-hang.constant';
+import { CAP_PHI_CHI, CAP_VON_CHI, CAP_VON_MUA_BAN } from './quan-ly-ke-hoach-von-phi-hang.constant';
 
 const routes: Routes = [
   {
@@ -13,13 +13,6 @@ const routes: Routes = [
         path: '',
         redirectTo: 'nguoi-dung',
         pathMatch: 'full',
-      },
-      {
-        path: CAP_VON_NGUON_CHI,
-        loadChildren: () =>
-          import('./cap-von-nguon-chi/cap-von-nguon-chi.module').then(
-            (m) => m.CapVonNguonChiModule,
-          )
       },
       {
         path: CAP_VON_CHI,
