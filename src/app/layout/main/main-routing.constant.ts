@@ -28,7 +28,7 @@ export const LIST_PAGES: RouteInfo[] = [
   {
     title: 'Kế hoạch, vốn và dự toán NSNN',
     route: `${MAIN_ROUTES.kehoach}`,
-    code: ''//'KHVDTNSNN'
+    code: 'KHVDTNSNN'
   },
   {
     title: 'Tình hình cấp vốn, phí hàng',

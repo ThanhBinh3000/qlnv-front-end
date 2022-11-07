@@ -5,6 +5,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { ObservableService } from 'src/app/services/observable.service';
 import { LIST_PAGES } from '../main-routing.constant';
 import {UserService} from "../../../services/user.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-main-router',
@@ -19,16 +20,14 @@ export class MainRouterComponent implements OnInit {
     private notification: NzNotificationService,
     private observableService: ObservableService,
     public userService: UserService,
+    private router: Router
   ) {
     this.lstPage = LIST_PAGES;
   }
 
   ngOnInit(): void {
-    // this.layTatCaChucNangUser();
   }
 
-  layTatCaChucNangUser() {
-  }
   ngAfterViewInit() {
     setTimeout(() => {
       if (this.myTab2.nativeElement.scrollWidth > this.myTab2.nativeElement.clientWidth) {

@@ -49,6 +49,7 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     noiDungTh: '',
     tenTrangThaiTh: ''
   };
+
   filterTable: any = {
     soDxuat: '',
     namKh: '',
