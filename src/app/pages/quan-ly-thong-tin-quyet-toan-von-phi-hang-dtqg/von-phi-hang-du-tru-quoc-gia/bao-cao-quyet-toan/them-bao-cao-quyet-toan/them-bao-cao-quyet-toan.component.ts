@@ -221,7 +221,7 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
                 })
                 break;
             case 'nonpass':
-                await this.onSubmit('3', null).then(() => {
+                await this.tuChoi('3').then(() => {
                     this.isDataAvailable = true;
                 })
                 break;

@@ -5,8 +5,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { Utils } from 'src/app/Utility/utils';
+import { DCDT, Utils } from 'src/app/Utility/utils';
 import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-danh-sach-bao-cao-dieu-chinh',
   templateUrl: './danh-sach-bao-cao-dieu-chinh.component.html',
@@ -86,31 +89,100 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
 
   statusBtnValidateDot = true;
   statusBtnValidateNam = true;
+  statusTaoMoi = true;
   listIdDelete: string[] = [];
   totalPages = 0;
+  userInfo: any;
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private notification: NzNotificationService,
     private datePipe: DatePipe,
     private spinner: NgxSpinnerService,
+    private userService: UserService,
+    private modal: NzModalService,
   ) {
 
   }
 
   ngOnInit() {
+    // if (this.userService.isAccessPermisson(DCDT.ADD_REPORT)) {
+    //   this.statusNewReport = false;
+    // }
+    this.searchFilter.denNgay = new Date();
+    const newDate = new Date();
+    newDate.setMonth(newDate.getMonth() - 1);
+    this.searchFilter.tuNgay = newDate;
+    this.searchFilter.nam = new Date().getFullYear();
+    this.userInfo = this.userService.getUserLogin();
+    this.search();
+    if (this.userInfo.CAP_DVI == '1') {
+      return this.dviGuiKq = true;
+    }
+    this.searchFilter.donViTao = this.userInfo?.MA_DVI;
   };
 
   deleteReport(id: string) {
-
+    let request = [];
+    if (!id) {
+      request = this.listIdDelete;
+    } else {
+      request = [id];
+    }
+    this.spinner.show();
+    this.quanLyVonPhiService.xoaDuToanDieuChinh(request).toPromise().then(
+      data => {
+        if (data.statusCode == 0) {
+          this.listIdDelete = [];
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+          this.search();
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    )
+    this.spinner.hide();
   };
 
   addNewReport() {
-
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Thông tin tạo mới báo cáo điều chỉnh dự toán chi ngân sách nhà nước',
+      nzContent: DialogTaoMoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+      },
+    });
+    modalTuChoi.afterClose.toPromise().then(async (res) => {
+      if (res) {
+        // const request = {
+        //   maPhanBcao: res.maPhanBcao,
+        //   namQtoan: res.namQtoan
+        // }
+        const obj = {
+          ...res,
+          id: null,
+          tabSelected: 'baocao',
+          isSynthetic: false,
+        }
+        this.dataChange.emit(obj);
+      }
+    });
   };
 
   clearFilter() {
-
+    this.searchFilter.nam = null;
+    this.searchFilter.tuNgay = null;
+    this.searchFilter.denNgay = null;
+    this.searchFilter.maBcao = null;
+    this.searchFilter.trangThai = null;
+    this.searchFilter.donViTao = null;
+    this.search();
   };
 
   async search() {
@@ -150,6 +222,8 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
               this.dataTable.push({
                 ...item,
                 checked: false,
+                isEdit: this.checkEditStatus(item.trangThai),
+                isDelete: this.checkDeleteStatus(item.trangThai),
               })
             } else {
               this.dataTable.push({
@@ -249,5 +323,15 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
+  };
+
+  checkEditStatus(trangThai: string) {
+    return Utils.statusSave.includes(trangThai) &&
+      (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(DCDT.EDIT_REPORT));
+  };
+
+  checkDeleteStatus(trangThai: string) {
+    return Utils.statusDelete.includes(trangThai) &&
+      (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(DCDT.DELETE_REPORT));
   };
 }

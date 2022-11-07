@@ -9,9 +9,11 @@ import { BaoCaoTuDonViCapDuoiComponent } from './bao-cao-tu-don-vi-cap-duoi/bao-
 import { DanhSachBaoCaoDieuChinhComponent } from './danh-sach-bao-cao-dieu-chinh/danh-sach-bao-cao-dieu-chinh.component';
 import { DanhSachBaoCaoTuDonViCapDuoiComponent } from './danh-sach-bao-cao-tu-don-vi-cap-duoi/danh-sach-bao-cao-tu-don-vi-cap-duoi.component';
 import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component';
+import { BaoCaoModule } from './bao-cao/bao-cao.module';
 
 @NgModule({
   imports: [
+    BaoCaoModule,
     CommonModule,
     ComponentsModule,
     DirectivesModule,
@@ -19,7 +21,6 @@ import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component
   declarations: [
     DieuChinhDuToanComponent,
     TongHopBaoCaoComponent,
-    BaoCaoComponent,
     BaoCaoTuDonViCapDuoiComponent,
     DanhSachBaoCaoDieuChinhComponent,
     DanhSachBaoCaoTuDonViCapDuoiComponent,
@@ -28,7 +29,6 @@ import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component
   exports: [
     DieuChinhDuToanComponent,
     TongHopBaoCaoComponent,
-    BaoCaoComponent,
     BaoCaoTuDonViCapDuoiComponent,
     DanhSachBaoCaoDieuChinhComponent,
     DanhSachBaoCaoTuDonViCapDuoiComponent,
