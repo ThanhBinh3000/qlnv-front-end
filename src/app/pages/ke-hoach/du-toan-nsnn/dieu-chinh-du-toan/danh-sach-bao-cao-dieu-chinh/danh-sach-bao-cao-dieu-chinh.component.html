@@ -5,7 +5,8 @@
         <label class="search__label">Năm báo cáo</label>
         <nz-input-number [nzSize]="'small'"
           [class]="statusBtnValidateNam || (searchFilter.nam && searchFilter.nam >= 1000 &&  searchFilter.nam <= 2999)?'' : 'input-error-validate' "
-          [(ngModel)]="searchFilter.nam"></nz-input-number>
+          [(ngModel)]="searchFilter.nam">
+        </nz-input-number>
       </div>
       <div nz-col nzSpan="6">
         <label class="search__label">Ngày lập từ</label>
