@@ -272,6 +272,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
 
   calcTong() {
     if (this.listOfData) {
+      console.log(this.listOfData, 5555)
       const sum = this.listOfData.reduce((prev, cur) => {
         prev += cur.soLuongDxmtt;
         return prev;
