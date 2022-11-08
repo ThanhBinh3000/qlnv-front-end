@@ -1,13 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { MESSAGE } from 'src/app/constants/message';
-import { OldResponseData } from 'src/app/interfaces/response';
-import { HelperService } from 'src/app/services/helper.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DonviService } from 'src/app/services/donvi.service';
-import { LOAI_DON_VI, TrangThaiHoatDong } from 'src/app/constants/status';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzModalRef} from 'ng-zorro-antd/modal';
+import {MESSAGE} from 'src/app/constants/message';
+import {OldResponseData} from 'src/app/interfaces/response';
+import {HelperService} from 'src/app/services/helper.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NzTreeComponent} from 'ng-zorro-antd/tree';
+import {DonviService} from 'src/app/services/donvi.service';
+import {LOAI_DON_VI, TrangThaiHoatDong} from 'src/app/constants/status';
 import {UserLogin} from "../../../../models/userlogin";
 import {UserService} from "../../../../services/user.service";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -20,7 +20,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 })
 
 export class ThemMoiKhoComponent implements OnInit {
-  @ViewChild('treeSelect', { static: false }) treeSelect!: NzTreeComponent;
+  @ViewChild('treeSelect', {static: false}) treeSelect!: NzTreeComponent;
 
   data: any;
   nodesTree: any = [];
@@ -30,25 +30,23 @@ export class ThemMoiKhoComponent implements OnInit {
   settings = {};
   formDonVi: FormGroup;
   isVisible = false;
-  selectedNode: any;
-  optionList: string[] = [];
-  cureentNodeParent: any
   levelNode: number = 0;
-  checkCreate : any;
   userInfo: UserLogin
 
   dataDetail: any;
-   nodeSelected: any;
+  nodeSelected: any;
+  dataTable: any[] = [];
+  dvi : string = 'Tấn kho';
+  theTich : string = 'm³';
+
   constructor(
     private fb: FormBuilder,
-
-
     private notification: NzNotificationService,
     private helperService: HelperService,
     private donviService: DonviService,
     private modal: NzModalRef,
-    private userService : UserService,
-    private spinner : NgxSpinnerService
+    private userService: UserService,
+    private spinner: NgxSpinnerService
   ) {
     this.formDonVi = this.fb.group({
       maDviCha: [null],
@@ -64,9 +62,10 @@ export class ThemMoiKhoComponent implements OnInit {
     })
     this.formDonVi.controls['maDviCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
-      this.levelNode = node.level
+      this.levelNode = node.level + 1
     });
   }
+
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -75,8 +74,7 @@ export class ThemMoiKhoComponent implements OnInit {
         this.loadDsDvi()
       ]);
       this.spinner.hide();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -95,45 +93,16 @@ export class ThemMoiKhoComponent implements OnInit {
   }
 
   async loadDsDvi() {
-      await this.donviService.layTatCaDviDmKho(LOAI_DON_VI.MLK, this.userInfo.MA_DVI).then((res: OldResponseData) => {
-        if (res.msg == MESSAGE.SUCCESS) {
-            this.nodesTree = res.data;
-          }
-          this.nodesTree[0].expanded = false;
+    await this.donviService.layTatCaDviDmKho(LOAI_DON_VI.MLK, this.userInfo.MA_DVI).then((res: OldResponseData) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.nodesTree = res.data;
+      }
+      this.nodesTree[0].expanded = false;
 
-      })
+    })
   }
 
   handleCancel(): void {
     this.modal.destroy();
-  }
-
-  add() {
-    this.helperService.markFormGroupTouched(this.formDonVi);
-    if (this.formDonVi.invalid) {
-      return;
-    }
-    let body = this.formDonVi.value;
-    body.trangThai = this.formDonVi.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
-    if (this.levelNode == 2) {
-      body.type = this.formDonVi.get('type').value ? LOAI_DON_VI.PB : null;
-    }
-    if (this.levelNode > 2) {
-      body.type = LOAI_DON_VI.PB
-    }
-    this.donviService.create(body).then((res: OldResponseData) => {
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        this.modal.close(true);
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    }).catch((e) => {
-      console.error('error: ', e);
-      this.notification.error(
-        MESSAGE.ERROR,
-        e.error.errors[0].defaultMessage,
-      );
-    });
   }
 }

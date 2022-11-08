@@ -241,7 +241,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async getDataChiTieu() {
-    if (this.type == 'GMTDBTT') {
+    if (this.type == 'GMTDBTT' && !this.idInput) {
       let res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(+this.formData.get('namKeHoach').value)
       if (res2.msg == MESSAGE.SUCCESS) {
         const dataChiTieu = res2.data;
@@ -261,7 +261,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async loadDsQdPduyetKhlcnt() {
-    if (this.type == 'GCT') {
+    if (this.type == 'GCT' && !this.idInput) {
       let body = {
         namKhoach: this.formData.get('namKeHoach').value,
         lastest: 1,
