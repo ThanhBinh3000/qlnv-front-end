@@ -5,28 +5,28 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import {
   DiaDiemGiaoNhan,
   KeHoachBanDauGia,
   PhanLoTaiSan,
 } from 'src/app/models/KeHoachBanDauGia';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
-import { UserService } from 'src/app/services/user.service';
-import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DeXuatKeHoachBanDauGiaService} from 'src/app/services/deXuatKeHoachBanDauGia.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {DeNghiCapVonBoNganhService} from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
+import {UserService} from 'src/app/services/user.service';
+import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
 import {STATUS} from "../../../../../constants/status";
 
 @Component({
@@ -80,7 +80,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   dsBoNganh: any[] = [];
   maxYeuCauCapThem: number = 2;
   chiTietList: any[] = [];
-  titleSoDeNghi: string = "/BQP-KH";
+  preFixSoDn:string = "KH";
+  titleSoDeNghi: string;
 
   rowItem: IDeNghiCapVon = {
     donViTinh: null,
@@ -162,7 +163,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
 
   async getListBoNganh() {
     this.dsBoNganh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data;
     }
@@ -194,6 +195,14 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     }
   }
 
+  changeBoNganh() {
+    let bnObject = this.dsBoNganh.find(item => item.idText == this.formData.value.boNganh);
+    this.titleSoDeNghi = this.preFixSoDn;
+    if (bnObject) {
+      this.titleSoDeNghi = "/" + bnObject.code + "-" + this.preFixSoDn;
+    }
+  }
+
   back() {
     this.showListEvent.emit();
   }
@@ -208,8 +217,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
                 ...this.listLoaiHangHoa,
                 item
               ];
-            }
-            else {
+            } else {
               this.listLoaiHangHoa = [
                 ...this.listLoaiHangHoa,
                 ...item.child
@@ -230,7 +238,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     });
     if (loaiHangHoa && loaiHangHoa.length > 0) {
       if (!this.idInput) {
-        this.formData.patchValue({ idChungLoaiHangHoa: null })
+        this.formData.patchValue({idChungLoaiHangHoa: null})
       }
       this.rowItem.tenVatTuCha = loaiHangHoa[0].ten;
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
@@ -361,8 +369,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
         let res = await this.deNghiCapVonBoNganhService.sua(body);
         if (res.msg == MESSAGE.SUCCESS) {
           if (isHoanThanh) {
-           this.guiDuyet(this.idInput);
-          }else{
+            this.guiDuyet(this.idInput);
+          } else {
             this.quayLai();
           }
         } else {
@@ -371,10 +379,10 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       } else {
         let res = await this.deNghiCapVonBoNganhService.them(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          this.idInput =res.data.id;
+          this.idInput = res.data.id;
           if (isHoanThanh) {
             this.guiDuyet(this.idInput);
-          }else{
+          } else {
             this.quayLai();
           }
         } else {
@@ -406,7 +414,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: id ? id :this.idInput,
+            id: id ? id : this.idInput,
             trangThaiId: STATUS.HOAN_THANH_CAP_NHAT,
           };
           let res = await this.deNghiCapVonBoNganhService.updateStatus(body);

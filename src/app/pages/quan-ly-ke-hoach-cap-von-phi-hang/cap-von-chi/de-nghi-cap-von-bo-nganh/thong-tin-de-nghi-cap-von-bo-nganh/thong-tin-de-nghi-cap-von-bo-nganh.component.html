@@ -44,8 +44,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Bộ ngành </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="boNganh" [nzDisabled]="isView">
-                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+              <nz-select formControlName="boNganh" [nzDisabled]="isView"  (ngModelChange)="changeBoNganh()">
+                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.idText" [nzLabel]="p.tenDvi"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
