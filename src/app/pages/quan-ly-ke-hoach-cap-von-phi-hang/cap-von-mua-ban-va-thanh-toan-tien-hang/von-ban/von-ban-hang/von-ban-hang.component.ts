@@ -245,6 +245,7 @@ export class VonBanHangComponent implements OnInit {
 
         }
         this.getStatusButton();
+        this.ttGuiCache = this.ttGui;
     }
 
     //check role cho các nut trinh duyet
@@ -253,18 +254,18 @@ export class VonBanHangComponent implements OnInit {
             this.ttGui.status = !(Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTV_BH));
             this.ttNhan.status = true;
             this.saveStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTV_BH);
-            this.submitStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_NTV_BH);
-            this.passStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_NTV_BH);
-            this.approveStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_NTV_BH);
-            this.copyStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.COPY_REPORT_NTV_BH);
+            this.submitStatus = Utils.statusApprove.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_NTV_BH);
+            this.passStatus = Utils.statusDuyet.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_NTV_BH);
+            this.approveStatus = Utils.statusPheDuyet.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_NTV_BH);
+            this.copyStatus = Utils.statusCopy.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.COPY_REPORT_NTV_BH);
         }
         if (this.checkParent) {
             this.ttNhan.status = !(Utils.statusSave.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH));
             this.ttGui.status = true;
             this.saveStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH);
-            this.submitStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_BH);
-            this.passStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_BH);
-            this.approveStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV_BH);
+            this.submitStatus = Utils.statusApprove.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_BH);
+            this.passStatus = Utils.statusDuyet.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_BH);
+            this.approveStatus = Utils.statusPheDuyet.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV_BH);
             this.copyStatus = false;
         }
     }
