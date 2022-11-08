@@ -68,7 +68,7 @@
             <th nzWidth="2%">STT</th>
             <th>Năm kế hoạch</th>
             <th>Số QĐ PD KHLCNT</th>
-            <th nzWidth="10%">QĐ PD KHLCNT</th>
+            <th nzWidth="10%">QĐ PD KQLCNT</th>
             <th nzWidth="5%">Tổng số gói thầu</th>
             <th nzWidth="5%">Số gói thầu đã trúng</th>
             <th nzWidth="5%">SL hợp đồng đã ký</th>
@@ -76,6 +76,7 @@
             <th nzWidth="10%">Loại hàng hóa</th>
             <th nzWidth="10%">Chủng loại hàng hóa</th>
             <th nzWidth="10%">Tổng mức đầu tư (đ)</th>
+            <th nzWidth="5%">Chủ đầu tư</th>
             <th nzWidth="5%">Trạng thái ký HĐ</th>
             <th nzWidth="5%">Trạng thái nhập hàng</th>
             <th nzWidth="3%">Hành động</th>
@@ -155,6 +156,12 @@
                   (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
               </nz-input-group>
             </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+              </nz-input-group>
+            </th>
             <th></th>
           </tr>
         </thead>
@@ -175,6 +182,7 @@
             <td>{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenLoaiVthh }}</td>
             <td>{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh }}</td>
             <td>{{ data.qdKhlcntDtl?.donGiaVat * data.qdKhlcntDtl?.soLuong * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ data.tenDvi}}</td>
             <td>{{ data.tenTrangThaiHd }}</td>
             <td></td>
             <td class="text-left">

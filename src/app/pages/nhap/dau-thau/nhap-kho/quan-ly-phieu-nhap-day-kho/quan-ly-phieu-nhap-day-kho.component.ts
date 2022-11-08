@@ -65,6 +65,9 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
 
+  idQdGiaoNvNh: number = 0;
+  isView: boolean;
+
   filterTable = {
     soQuyetDinhNhap: '',
     soBienBan: '',
@@ -165,13 +168,13 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     this.dataTable.forEach(item => {
       item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
     });
-    this.dataTable.forEach(item => {
-      item.detail.children.forEach(ddNhap => {
-        ddNhap.listPhieuNhapKho.forEach(x => {
-          x.phieuKiemTraCl = ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
-        });
-      })
-    });
+    // this.dataTable.forEach(item => {
+    //   item.detail.children.forEach(ddNhap => {
+    //     ddNhap.listPhieuNhapKho.forEach(x => {
+    //       x.phieuKiemTraCl = ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
+    //     });
+    //   })
+    // });
     console.log(this.dataTable);
   }
 
@@ -200,7 +203,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuNhapDayKhoService.xoa(item.id).then((res) => {
+          this.quanLyPhieuNhapDayKhoService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -304,11 +307,13 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
-    this.isViewDetail = isView;
+    this.isView = isView;
+    this.idQdGiaoNvNh = idQdGiaoNvNh;
   }
+
 
   export() {
     if (this.totalRecord && this.totalRecord > 0) {
@@ -425,7 +430,6 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   print() {
 
   }
-
 
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {
