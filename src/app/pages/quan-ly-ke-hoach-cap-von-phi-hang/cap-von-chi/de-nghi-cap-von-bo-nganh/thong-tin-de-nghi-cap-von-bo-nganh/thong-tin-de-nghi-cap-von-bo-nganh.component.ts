@@ -270,6 +270,18 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     }
   }
 
+  changeThanhTienEdit(id) {
+    if (this.chiTietList[id].soLuong && this.chiTietList[id].donGia) {
+      let thanhTien = this.chiTietList[id].soLuong * this.chiTietList[id].donGia;
+      this.maxYeuCauCapThem = thanhTien;
+      this.chiTietList[id].thanhTien = thanhTien;
+    }
+    if (this.chiTietList[id].kinhPhiDaCap && this.chiTietList[id].thanhTien) {
+      let yeuCauCapThem = this.chiTietList[id].thanhTien - this.chiTietList[id].kinhPhiDaCap;
+      this.chiTietList[id].ycCapThem = yeuCauCapThem;
+    }
+  }
+
 
   themDonViCungCap() {
     let isValid = true;
@@ -316,6 +328,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
             item.edit = true;
           } else {
             item.edit = false;
+            this.tinhTong();
           }
         }
       })
