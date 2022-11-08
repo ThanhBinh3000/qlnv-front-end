@@ -62,10 +62,10 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày lập </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngày lập</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker class="search__input" formControlName="ngayLap" [nzDisabled]="isView">
+                <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy" formControlName="ngayLap" [nzDisabled]="isView">
                 </nz-date-picker>
               </nz-input-group>
             </nz-form-control>
