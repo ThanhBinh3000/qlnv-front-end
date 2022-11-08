@@ -340,11 +340,11 @@
                 <div nz-col nzSpan="4">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                            Địa chỉ
+                            Địa chỉ (của người giao)
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                                <input nz-input formControlName="diaChi" />
+                                <input nz-input formControlName="diaChiNguoiGiao" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -368,7 +368,7 @@
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                                <input nz-input formControlName="moTaHangHoa" readonly />
+                                <input nz-input formControlName="soBangKeCanHang" readonly />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -405,15 +405,15 @@
                         </td>
                         <td>{{item.donViTinh}}</td>
                         <td>
-                            <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="item.soLuongChungTu">
-                            </nz-input-number>
+                            <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
+                                [nzSize]="'small'" [(ngModel)]="item.soLuongChungTu"></nz-input-number>
                         </td>
                         <td>
-                            <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="item.soLuongThucNhap">
-                            </nz-input-number>
+                            <nz-input-number nzDisabled [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                nz-input [nzSize]="'small'" [(ngModel)]="item.soLuongThucNhap"></nz-input-number>
                         </td>
-                        <td>{{item.donGia}}</td>
-                        <td>{{item.donGia * item.soLuongThucNhap}}</td>
+                        <td>{{item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td>{{item.donGia * item.soLuongThucNhap | number : '1.0-1' : 'vi_VN' }}</td>
                         <td>
                             <a (click)="clearItemRow(i)">
                                 <i class="fa fa-refresh"></i>
@@ -452,7 +452,7 @@
                 <div nz-col nzSpan="24">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                            File đính kèm
+                            Chứng từ kèm theo
                         </nz-form-label>
                         <div class="list-file">
                             <file-list></file-list>

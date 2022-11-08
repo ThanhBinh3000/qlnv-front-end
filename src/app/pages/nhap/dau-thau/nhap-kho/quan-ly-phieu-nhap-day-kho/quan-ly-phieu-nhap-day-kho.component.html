@@ -75,94 +75,65 @@
             <th width="161px">Trạng thái</th>
             <th width="130px">Hành động</th>
           </tr>
-          <tr class="search-table">
-            <td *ngIf="userService.isChiCuc()"></td>
-            <td></td>
-            <td *ngIf="userService.isChiCuc()">
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBienBan"
-                  (input)="filterInTable('soBienBan',filterTable.soBienBan)" size="small" />
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinhNhap"
-                  (input)="filterInTable('soQuyetDinhNhap',filterTable.soQuyetDinhNhap)" size="small" />
-              </nz-input-group>
-            </td>
-            <td *ngIf="userService.isCuc()">
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soBienBan"
-                  (input)="filterInTable('soBienBan',filterTable.soBienBan)" size="small" />
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayBatDauNhap"
-                  (input)="filterInTable('ngayBatDauNhap',filterTable.ngayBatDauNhap)" size="small" />
-              </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
-            </td>
-            <td>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDiemKho"
-                  (input)="filterInTable('tenDiemKho',filterTable.tenDiemKho)" size="small" />
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNhaKho"
-                  (input)="filterInTable('tenNhaKho',filterTable.tenNhaKho)" size="small" />
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenNganLo"
-                  (input)="filterInTable('tenNganLo',filterTable.tenNganLo)" size="small" />
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
-              </nz-input-group>
-            </td>
-            <td></td>
-          </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of basicTable.data; let i = index">
-            <th width="45px" *ngIf="userService.isChiCuc()">
-              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
-            </th>
-            <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-            <td *ngIf="userService.isChiCuc()">{{ data.soBienBan }}</td>
-            <td>{{ data.soQuyetDinhNhap }}</td>
-            <td *ngIf="userService.isCuc()">{{ data.soBienBan }}</td>
-            <td>{{ data.ngayNhapDayKho }}</td>
-            <td>{{ data.tenDiemKho }}</td>
-            <td>{{ data.tenNhaKho }}</td>
-            <td>{{ data.tenNganLo }}</td>
-            <td>{{ data.tenTrangThai }}</td>
-            <td>
-              <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_XEM')"
-                (click)="redirectToChiTiet(true, data.id)">
-                <i class="fa fa-eye"></i>
-              </a>
-              <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_KTV_BAO_QUAN || data.trangThai == globals.prop.NHAP_TU_CHOI_CAN_BO_KE_TOAN || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CHI_CUC) && userService.isChiCuc()
-              && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_SUA')"
-                (click)="redirectToChiTiet(false, data.id)">
-                <i class="fa fa-pencil"></i>
-              </a>
-              <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_XOA')"
-                (click)="xoaItem(data)">
-                <i class="fa fa-trash-o do"></i>
-              </a>
-            </td>
-          </tr>
+          <ng-container *ngFor="let item of dataTable , let i = index">
+            <tr class="level-1">
+              <td>{{(page - 1) * pageSize + i + 1}}</td>
+              <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+              <td></td>
+              <td class="link bold">{{ item.soQd }}</td>
+              <td class="bold">{{ item.namNhap }}</td>
+              <td class="bold">{{ item.tgianNkho }}</td>
+              <td colspan="9"></td>
+              <td>
+                <!-- <a (click)="redirectToChiTiet(false, 0,item.id)">
+                  <i class="fa fa-plus"></i>
+                </a> -->
+              </td>
+            </tr>
+            <ng-container *ngIf="expandSet.has(i)">
+              <ng-container *ngFor="let dataDdiem of item.detail.children, let y = index">
+                <tr class="level-2">
+                  <td></td>
+                  <td></td>
+                  <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
+                  <td colspan="3"></td>
+                  <td>{{dataDdiem.tenDiemKho}}</td>
+                  <td>{{dataDdiem.tenNhaKho}}</td>
+                  <td>{{dataDdiem.tenNganKho}}</td>
+                  <td>{{dataDdiem.tenLoKho}}</td>
+                  <td colspan="7"></td>
+                </tr>
+                <ng-container *ngIf="expandSet2.has(y)">
+                  <tr class="level-3" *ngFor="let dataPhieu of dataDdiem.listPhieuNhapKho">
+                    <td></td>
+                    <td></td>
+                    <td colspan="8"></td>
+                    <td class="bold">{{dataPhieu.soPhieuNhapKho}}</td>
+                    <td>{{dataPhieu.ngayTao}}</td>
+                    <td class="link">{{dataPhieu.phieuKiemTraCl.soPhieu}}</td>
+                    <td>{{dataPhieu.phieuKiemTraCl.ngayGdinh | date: 'dd/MM/YYYY'}}</td>
+                    <td>{{dataPhieu.tenTrangThai}}</td>
+                    <td>
+                      <!-- <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XEM')"
+                        (click)="redirectToChiTiet(true, dataPhieu.id)">
+                        <i class="fa fa-eye"></i>
+                      </a>
+                      <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_SUA')"
+                        (click)="redirectToChiTiet(false, dataPhieu.id)">
+                        <i class="fa fa-pencil"></i>
+                      </a>
+                      <a
+                        *ngIf="dataPhieu.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XOA')">
+                        <i class="fa fa-trash-o do"></i>
+                      </a> -->
+                    </td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-container>
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu">
