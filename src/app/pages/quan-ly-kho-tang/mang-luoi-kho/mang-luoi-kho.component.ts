@@ -60,6 +60,7 @@ export class MangLuoiKhoComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private mangLuoiKhoService: MangLuoiKhoService,
     public globals: Globals,
+    private userService: UserService,
     private danhMucService: DanhMucService
   ) {
     this.detailDonVi = this.formBuilder.group({
@@ -99,6 +100,7 @@ export class MangLuoiKhoComponent implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
+    this.userInfo = this.userService.getUserLogin();
     await Promise.all([
       this.layTatCaDonViTheoTree(),
       // this.getListLoaiKho(),
@@ -140,11 +142,10 @@ export class MangLuoiKhoComponent implements OnInit {
    */
 
   async layTatCaDonViTheoTree(id?) {
-      await this.donviService.layTatCaDonViCha(LOAI_DON_VI.MLK).then((res: OldResponseData) => {
+      await this.donviService.layTatCaByMaDvi(LOAI_DON_VI.MLK, this.userInfo.MA_DVI).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           if (res && res.data) {
-            let listDvi = res.data;
-            this.nodes = listDvi.filter(item => item.maDvi == '0101')
+            this.nodes = res.data
           }
           this.nodes[0].expanded = true;
         } else {
@@ -308,7 +309,7 @@ export class MangLuoiKhoComponent implements OnInit {
       nzClosable: true,
       nzFooter: null,
       nzStyle: { top: '50px' },
-      nzWidth: 900
+      nzWidth: 1600
     });
     modal.afterClose.subscribe(res => {
       if (res) {
