@@ -44,10 +44,11 @@ export class MangLuoiKhoComponent implements OnInit {
   defaultExpandedKeys: any = [];
   nodeSelected: any;
   detailDonVi: FormGroup;
-  levelNode: number = 0;
+  levelNode: number = 1;
   isEditData: boolean = false;
   dataTable: any[] = []
   listNam: any[] = [];
+  dvi: string = 'Tấn kho'
 
 
   constructor(
@@ -156,10 +157,11 @@ export class MangLuoiKhoComponent implements OnInit {
 
 
   // parentNodeSelected: any = [];
-
+  theTich : string = 'm³';
   nzClickNodeTree(event: any): void {
     if (event.keys.length > 0) {
       this.nodeSelected = event.node.origin;
+      this.levelNode = this.nodeSelected.capDvi;
       this.getDetailMlkByKey(event.node)
     }
   }
@@ -175,7 +177,6 @@ export class MangLuoiKhoComponent implements OnInit {
           const dataNodeRes = res.data.object;
           this.bindingDataDetail(dataNodeRes);
           this.showDetailDonVi(dataNode.origin.id)
-          this.levelNode = dataNode.level;
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
         }

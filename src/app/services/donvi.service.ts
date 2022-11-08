@@ -34,6 +34,11 @@ export class DonviService extends BaseService {
     return this.httpClient.get<any>(url).toPromise();
   }
 
+  layTatCaByMaDvi(type, maDvi): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/danh-sach/all-tree/${type}/${maDvi}`;
+    return this.httpClient.get<any>(url).toPromise();
+  }
+
   layDonViCon(): Promise<any> {
     const url = `${environment.SERVICE_API}/qlnv-category/dmuc-donvi/ds-donvi-child`;
     return this.httpClient.get<any>(url).toPromise();

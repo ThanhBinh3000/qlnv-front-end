@@ -28,7 +28,7 @@ export class ThemMoiKhoComponent implements OnInit {
     useCheckbox: true
   };
   settings = {};
-  formDonVi: FormGroup;
+  formKho: FormGroup;
   isVisible = false;
   levelNode: number = 0;
   userInfo: UserLogin
@@ -37,7 +37,7 @@ export class ThemMoiKhoComponent implements OnInit {
   nodeSelected: any;
   dataTable: any[] = [];
   dvi : string = 'Tấn kho';
-  theTich : string = 'm³';
+  theTich : string = 'm3';
 
   constructor(
     private fb: FormBuilder,
@@ -48,7 +48,7 @@ export class ThemMoiKhoComponent implements OnInit {
     private userService: UserService,
     private spinner: NgxSpinnerService
   ) {
-    this.formDonVi = this.fb.group({
+    this.formKho = this.fb.group({
       maDviCha: [null],
       tenDvi: ['', Validators.required],
       maDvi: ['', Validators.required],
@@ -60,9 +60,15 @@ export class ThemMoiKhoComponent implements OnInit {
       type: [true],
       ghiChu: [''],
     })
-    this.formDonVi.controls['maDviCha'].valueChanges.subscribe(value => {
+    this.formKho.controls['maDviCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
-      this.levelNode = node.level + 1
+      if (node) {
+        this.levelNode = node.level + 1
+      }
+      if (this.levelNode == 5) {
+        this.notification.error(MESSAGE.ERROR, 'Không được tạo đơn vị kho nhỏ hơn lô kho!')
+        return;
+      }
     });
   }
 

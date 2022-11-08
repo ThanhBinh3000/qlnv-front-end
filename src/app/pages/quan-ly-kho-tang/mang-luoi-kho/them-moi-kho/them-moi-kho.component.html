@@ -1,6 +1,6 @@
 <!-- <div > -->
 <div class="bg-trang scroll-modal">
-  <form nz-form [formGroup]="formDonVi" [nzLayout]="'vertical'">
+  <form nz-form [formGroup]="formKho" [nzLayout]="'vertical'">
     <nz-card class="mt16 flex-card p-lr16">
       <div nz-row [nzGutter]="24">
         <div nz-col [nzSpan]="18">
@@ -22,14 +22,14 @@
             <nz-form-label>Mã đơn vị cấp trên</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input nz-input readonly [(ngModel)]="formDonVi.value.maDviCha" [ngModelOptions]="{standalone: true}"/>
+                <input nz-input readonly [(ngModel)]="formKho.value.maDviCha" [ngModelOptions]="{standalone: true}"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
       </div>
     </nz-card>
-    <div class="mt16 flex-card p-lr16"  *ngIf="levelNode != 0">
+    <div class="mt16 flex-card p-lr16"  *ngIf="levelNode != 0 && levelNode !=5">
       <div class="header header-green-background mg-t-16">
         <div class="header-text">
           <div class="title-chi-tieu">
