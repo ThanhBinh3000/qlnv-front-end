@@ -114,7 +114,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
       tenNganKho: ['', [Validators.required]],
       maLoKho: [''],
       tenLoKho: [''],
-      soLuong: [],
+      soLuongNhapKho: [],
 
       loaiVthh: ['',],
       tenLoaiVthh: ['',],
@@ -257,6 +257,10 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
 
   bindingDataDdNhap(data) {
     this.dataTable = data.listPhieuKtraCl;
+    this.dataTable.forEach(item => {
+      item.soPhieuNhapKho = item.phieuNhapKho?.soPhieuNhapKho
+      item.soBangKe = item.phieuNhapKho?.bangKeCanHang?.soBangKe;
+    })
     let dataFirst = new Date();
     this.dataTable.forEach(item => {
       let dataCompare = new Date(item.ngayTao);
@@ -274,7 +278,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
       tenNganKho: data.tenNganKho,
       maLoKho: data.maLoKho,
       tenLoKho: data.tenLoKho,
-      soLuong: data.soLuong,
+      soLuongNhapKho: data.soLuong * 1000,
       ngayBdNhap: dataFirst
     });
   }
@@ -418,48 +422,60 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
   }
 
   async save(isGuiDuyet?: boolean) {
-    this.spinner.show();
-    try {
-      this.helperService.markFormGroupTouched(this.formData);
-      if (this.formData.invalid) {
-        await this.spinner.hide();
-        return;
-      }
-      let body = this.formData.value;
-      body.chiTiets = this.dataTable;
-      let res;
-      if (this.formData.get('id').value > 0) {
-        res = await this.quanLyPhieuNhapDayKhoService.update(body);
-      } else {
-        res = await this.quanLyPhieuNhapDayKhoService.create(body);
-      }
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (isGuiDuyet) {
+    if (this.validateSave()) {
+      this.spinner.show();
+      try {
+        this.helperService.markFormGroupTouched(this.formData);
+        if (this.formData.invalid) {
           await this.spinner.hide();
-          this.id = res.data.id;
-          this.pheDuyet();
+          return;
+        }
+        let body = this.formData.value;
+        body.chiTiets = this.dataTable;
+        let res;
+        if (this.formData.get('id').value > 0) {
+          res = await this.quanLyPhieuNhapDayKhoService.update(body);
         } else {
-          if (this.formData.get('id').value) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
+          res = await this.quanLyPhieuNhapDayKhoService.create(body);
+        }
+        if (res.msg == MESSAGE.SUCCESS) {
+          if (isGuiDuyet) {
+            await this.spinner.hide();
+            this.id = res.data.id;
+            this.pheDuyet();
           } else {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
+            if (this.formData.get('id').value) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+              this.back();
+            } else {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+              this.back();
+            }
+            await this.spinner.hide();
           }
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
           await this.spinner.hide();
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-        await this.spinner.hide();
-      }
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
-    };
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      } finally {
+        this.spinner.hide();
+      };
+    }
+
+  }
+
+  validateSave(): boolean {
+    if (this.calcTong() != this.formData.value.soLuongNhapKho) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng bảng kê cân hàng và phiếu nhập kho không đủ số lượng đầy kho")
+      return false
+    }
+
+    return true;
   }
 
   pheDuyet() {

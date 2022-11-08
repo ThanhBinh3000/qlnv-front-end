@@ -15,6 +15,9 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import { STATUS } from 'src/app/constants/status';
+import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 
 @Component({
   selector: 'quan-ly-phieu-nhap-day-kho',
@@ -34,6 +37,9 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     maKhoNganLo: '',
     kyThuatVien: '',
   };
+
+
+  STATUS = STATUS
 
   listDiemKho: any[] = [];
   listNganKho: any[] = [];
@@ -80,6 +86,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
+    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService
   ) { }
 
   async ngOnInit() {
@@ -132,36 +139,40 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     }
   }
 
+
   async search() {
-    let param = {
-      "capDvis": '3',
-      "maDvi": this.userInfo.MA_DVI,
-      "maVatTuCha": this.maVthh,
-      "ngayKetThucNhapTu": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 0 ? dayjs(this.searchFilter.ngayKetThucNhap[0]).format('YYYY-MM-DD') : null,
-      "ngayKetThucNhapDen": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 1 ? dayjs(this.searchFilter.ngayKetThucNhap[1]).format('YYYY-MM-DD') : null,
-      "ngayNhapDayKhoDen": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 1 ? dayjs(this.searchFilter.ngayNhapDayKho[1]).format('YYYY-MM-DD') : null,
-      "ngayNhapDayKhoTu": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 0 ? dayjs(this.searchFilter.ngayNhapDayKho[0]).format('YYYY-MM-DD') : null,
-      "pageNumber": this.page,
-      "pageSize": this.pageSize,
-      "soBienBan": this.searchFilter.soBienBan,
-      "soQdNhap": this.searchFilter.soQd,
-    }
-    let res = await this.quanLyPhieuNhapDayKhoService.timKiem(param);
+    await this.spinner.show();
+    let body = {
+      trangThai: STATUS.BAN_HANH,
+      paggingReq: {
+        "limit": this.pageSize,
+        "page": this.page - 1
+      },
+    };
+    let res = await this.quyetDinhNhapXuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-      this.dataTableAll = cloneDeep(this.dataTable);
+      this.convertDataTable();
       this.totalRecord = data.totalElements;
     } else {
-      this.dataTable = [];
-      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    await this.spinner.hide();
+  }
+
+  convertDataTable() {
+    this.dataTable.forEach(item => {
+      item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
+    });
+    this.dataTable.forEach(item => {
+      item.detail.children.forEach(ddNhap => {
+        ddNhap.listPhieuNhapKho.forEach(x => {
+          x.phieuKiemTraCl = ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
+        });
+      })
+    });
+    console.log(this.dataTable);
   }
 
   clearFilter() {
@@ -413,5 +424,23 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
 
   print() {
 
+  }
+
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+  expandSet2 = new Set<number>();
+  onExpandChange2(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet2.add(id);
+    } else {
+      this.expandSet2.delete(id);
+    }
   }
 }

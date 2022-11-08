@@ -173,10 +173,12 @@
                                     <input nz-input class="search__input" [(ngModel)]="ttGuiCache.soTienBangChu" />
                                 </td>
                                 <td [hidden]="ttGui.status">
-                                    <a (click)="saveEdit()" class="save">Lưu</a>
+                                    <a (click)="saveEdit()" class="save">
+                                        <span nz-icon nzType="check" nzTheme="outline"></span>
+                                    </a>
                                     <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                         (nzOnConfirm)="cancelEdit()" class="save">
-                                        Hủy
+                                        <span nz-icon nzType="close" nzTheme="outline"></span>
                                     </a>
                                 </td>
                             </ng-template>

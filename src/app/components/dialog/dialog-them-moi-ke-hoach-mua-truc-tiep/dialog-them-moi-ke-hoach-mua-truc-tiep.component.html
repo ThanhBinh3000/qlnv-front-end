@@ -60,7 +60,7 @@
             </td>
         </tr>
         <tr *ngFor="let data of editRowTable.data, let i = index" class="editable-row">
-            <ng-container *ngIf="!editCache[i]?.edit; else editTemplate">
+            <ng-container *ngIf="!data.edit; else editTemplate">
                 <td>{{ data.tenDiemKho }}</td>
                 <td>{{ data.diaDiemKho }}</td>
                 <td>{{ data.soLuongDxmtt | number : '1.0-1' : 'vi_VN'}}</td>
@@ -75,11 +75,11 @@
             </ng-container>
             <ng-template #editTemplate>
                 <td>
-                    <nz-select [(ngModel)]="editCache[i].data.maDiemKho" (ngModelChange)="changeDiemKho(i)">
+                    <nz-select [(ngModel)]="data.maDiemKho" (ngModelChange)="changeDiemKho(i)">
                         <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
                 </td>
-                <td>{{editCache[i].data.diaDiemKho}} </td>
+                <td>{{data.diaDiemKho}} </td>
                 <td>
                     <nz-input-number class="text-right" nz-input [(ngModel)]="data.soLuong" [nzMin]="1" [nzStep]="1"
                         [nzSize]="'small'">
