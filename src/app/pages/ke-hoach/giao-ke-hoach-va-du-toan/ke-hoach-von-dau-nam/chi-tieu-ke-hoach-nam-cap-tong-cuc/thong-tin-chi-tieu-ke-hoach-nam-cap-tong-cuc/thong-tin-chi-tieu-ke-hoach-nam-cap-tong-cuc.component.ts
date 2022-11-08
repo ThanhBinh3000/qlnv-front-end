@@ -215,7 +215,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       }
     }
-    console.log(this.formData.value, 'asdasdasd');
   }
 
   newObjectLuongThuc() {
@@ -1772,11 +1771,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   selectDonvi(donVi) {
+    this.newObjectLuongThuc();
     this.isAddLuongThuc = true;
     this.keHoachLuongThucCreate.maDonVi = donVi.maDvi;
     this.keHoachLuongThucCreate.tenDonvi = donVi.tenDvi;
     this.keHoachLuongThucCreate.donViId = donVi.id;
-    this.quanLyHangTrongKhoService.getTrangThaiHt({}).then((res) => {
+    this.quanLyHangTrongKhoService.getTrangThaiHt({
+      maDvi: donVi.maDvi,
+      listLoaiVthh: ['0101', '0102']
+    }).then((res) => {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           res.data.forEach((tonKho) => {
