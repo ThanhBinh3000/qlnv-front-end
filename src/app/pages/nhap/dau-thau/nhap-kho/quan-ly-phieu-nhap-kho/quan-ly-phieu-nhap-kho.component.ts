@@ -21,7 +21,7 @@ import { Globals } from 'src/app/shared/globals';
 import {
   QuyetDinhGiaoNhapHangService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
-import {STATUS} from "../../../../../constants/status";
+import { STATUS } from "../../../../../constants/status";
 
 @Component({
   selector: 'quan-ly-phieu-nhap-kho',
@@ -54,7 +54,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   selectedId: number = 0;
   isView: boolean = false;
   isTatCa: boolean = false;
-  idQdGiaoNvNh : number = 0;
+  idQdGiaoNvNh: number = 0;
 
   allChecked = false;
   indeterminate = false;
@@ -111,12 +111,11 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh? : number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
     this.idQdGiaoNvNh = idQdGiaoNvNh;
-
   }
 
   async showList() {
@@ -175,7 +174,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuNhapKhoService.delete({id : item.id}).then((res) => {
+          this.quanLyPhieuNhapKhoService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -217,14 +216,14 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     await this.spinner.hide();
   }
 
-  convertDataTable(){
-    this.dataTable.forEach( item => {
+  convertDataTable() {
+    this.dataTable.forEach(item => {
       item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
     });
-    this.dataTable.forEach( item => {
-      item.detail.children.forEach( ddNhap => {
-        ddNhap.listPhieuNhapKho.forEach( x => {
-          x.phieuKiemTraCl =  ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
+    this.dataTable.forEach(item => {
+      item.detail.children.forEach(ddNhap => {
+        ddNhap.listPhieuNhapKho.forEach(x => {
+          x.phieuKiemTraCl = ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
         });
       })
     });
