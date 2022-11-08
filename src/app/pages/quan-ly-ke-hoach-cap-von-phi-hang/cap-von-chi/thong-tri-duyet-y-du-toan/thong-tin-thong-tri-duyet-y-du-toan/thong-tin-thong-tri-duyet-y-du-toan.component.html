@@ -167,10 +167,10 @@
               </nz-input-group>
             </th>
             <th>
-              <a (click)="them()">
+              <a *ngIf="!isDisableField() && !isView" (click)="them()" >
                 <i class="table-icon icon htvbdh_dau-cong"></i>
               </a>
-              <a (click)="clear()">
+              <a *ngIf="!isDisableField() && !isView" (click)="clear()">
                 <i class="table-icon icon  htvbdh_nhap-lai1"></i>
               </a>
             </th>
@@ -185,10 +185,10 @@
               <td>{{item.soTien}}</td>
               <td>{{item.chuThich}}</td>
               <td>
-                <a (click)="showEditItem(idx, 'show')">
+                <a *ngIf="!isDisableField() && !isView" (click)="showEditItem(idx, 'show')">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a (click)="xoaItem(idx)">
+                <a *ngIf="!isDisableField() && !isView" (click)="xoaItem(idx)">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>
