@@ -1,11 +1,11 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Globals } from "../../../../../../../shared/globals";
 import { MESSAGE } from "../../../../../../../constants/message";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { cloneDeep, chain } from 'lodash';
-
-
+import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
+import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachGoiThau } from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
@@ -14,9 +14,7 @@ import {
 } from "../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
-import { DialogThemMoiKeHoachMuaTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
-import { DanhSachMuaTrucTiep } from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
-
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 
 @Component({
   selector: 'app-thongtin-dexuat-muatt',
@@ -26,15 +24,15 @@ import { DanhSachMuaTrucTiep } from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
 export class ThongtinDexuatMuattComponent implements OnInit {
   @Input() title;
   @Input() dataInput;
+  @Output() soLuongChange = new EventEmitter<number>();
   @Input() isView;
+  @Input() isCache: boolean = false;
+  @Input() isTongHop;
 
   formData: FormGroup
   listNguonVon: any[] = [];
   listDataGroup: any[] = [];
-  listDataGroupCache: any[] = [];
   listOfData: any[] = [];
-  listOfDataCache: any[] = [];
-
 
   constructor(
     private fb: FormBuilder,
@@ -92,16 +90,37 @@ export class ThongtinDexuatMuattComponent implements OnInit {
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        let res;
+        let res
         if (this.dataInput.idDxHdr) {
           res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.idDxHdr);
-          this.listOfData = this.dataInput.soLuongDiaDiemList;
+          if (this.isTongHop) {
+            this.listOfData = this.dataInput.soLuongDiaDiemList;
+          } else {
+            this.listOfData = this.dataInput.listSlddDtl ? this.dataInput.listSlddDtl : this.dataInput.soLuongDiaDiemList;
+          }
         } else {
           res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.idDxuat);
-          this.listOfData = this.dataInput.soLuongDiaDiemList;
+          if (this.isTongHop) {
+            this.listOfData = this.dataInput.listSlddDtl;
+          } else {
+            this.listOfData = this.dataInput.soLuongDiaDiemList ? this.dataInput.soLuongDiaDiemList : this.dataInput.listSlddDtl;
+          }
         }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
+          let soLuongDxmtt = res.data.tongMucDt / res.data.donGiaVat / 1000;
+          this.formData.patchValue({
+            soLuongDxmtt: soLuongDxmtt,
+            tongMucDt: soLuongDxmtt * res.data.donGiaVat * 1000
+          });
+          if (!this.isCache) {
+            if (this.dataInput.soLuongDxmtt) {
+              this.formData.patchValue({
+                soLuongDxmtt: this.dataInput.soLuongDxmtt,
+                tongMucDt: this.dataInput.soLuongDxmtt * this.dataInput.donGiaVat * 1000
+              })
+            }
+          }
         }
         this.helperService.setIndexArray(this.listOfData);
         this.convertListData();
@@ -145,10 +164,10 @@ export class ThongtinDexuatMuattComponent implements OnInit {
     }
   }
 
-  themMoiSoLuongDiaDiem(data?: any, index?: number) {
+  themMoiGoiThau(data?: any, index?: number) {
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm nhập kho',
-      nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
+      nzContent: DialogThemMoiVatTuComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '1200px',
@@ -168,16 +187,25 @@ export class ThongtinDexuatMuattComponent implements OnInit {
         this.listOfData = [...this.listOfData, res.value];
       }
       let tongMucDt: number = 0;
+      let soLuongDxmtt: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + (item.soLuongDxmtt * item.donGiaVat);
-
+        tongMucDt = tongMucDt + item.soLuongDxmtt * item.donGiaVat;
+        soLuongDxmtt = soLuongDxmtt + item.soLuongDxmtt;
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,
+        soLuongDxmtt: soLuongDxmtt
       });
+      this.soLuongChange.emit(soLuongDxmtt);
       this.helperService.setIndexArray(this.listOfData);
       this.convertListData();
     });
+  };
+
+
+
+  convertTienTobangChu(tien: number): string {
+    return convertTienTobangChu(tien);
   }
 
 }

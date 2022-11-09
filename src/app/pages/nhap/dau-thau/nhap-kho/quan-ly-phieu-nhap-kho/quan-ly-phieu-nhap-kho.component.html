@@ -128,47 +128,6 @@
               </ng-container>
             </ng-container>
           </ng-container>
-
-          <!--         <ng-container *ngFor="let item of dataTable , let i = index"> -->
-          <!--             <tr> -->
-          <!--               <td>{{(page - 1) * pageSize + i + 1}}</td> -->
-          <!--               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td> -->
-          <!--               <td>{{ item.soQd }}</td> -->
-          <!--               <td>{{ item.namNhap }}</td> -->
-          <!--               <td>{{ item.tgianNkho }}</td> -->
-          <!--               <td colspan="9"></td> -->
-          <!--               <td> -->
-          <!--                 <a (click)="redirectToChiTiet(false, 0,item.id)"> -->
-          <!--                   <i class="fa fa-plus"></i> -->
-          <!--                 </a> -->
-          <!--               </td> -->
-          <!--             </tr> -->
-          <!--             <ng-container *ngIf="expandSet.has(i)"> -->
-          <!--               <tr *ngFor="let dataPhieu of item.detail.listPhieuNhapKho"> -->
-          <!--                 <td colspan="5"></td> -->
-          <!--                 <td>{{dataPhieu.soPhieuNhapKho}}</td> -->
-          <!--                 <td>{{dataPhieu.ngayTao | date: 'dd/MM/YYYY' }}</td> -->
-          <!--                 <td>{{dataPhieu.tenDiemKho}}</td> -->
-          <!--                 <td>{{dataPhieu.tenNhaKho}}</td> -->
-          <!--                 <td>{{dataPhieu.tenNganKho}}</td> -->
-          <!--                 <td>{{dataPhieu.tenLoKho}}</td> -->
-          <!--                 <td>{{dataPhieu.soPhieuKtraCl}}</td> -->
-          <!--                 <td>{{dataPhieu.ngayGuiDuyet | date: 'dd/MM/YYYY'}}</td>  &lt;!&ndash; //Data fake &ndash;&gt; -->
-          <!--                 <td>{{dataPhieu.tenTrangThai}}</td> -->
-          <!--                 <td> -->
-          <!--                   <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(true, dataPhieu.id)"> -->
-          <!--                     <i class="fa fa-eye"></i> -->
-          <!--                   </a> -->
-          <!--                   <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, dataPhieu.id)"> -->
-          <!--                     <i class="fa fa-pencil"></i> -->
-          <!--                   </a> -->
-          <!--                   <a *ngIf="dataPhieu.trangThai == STATUS.DU_THAO" (click)="xoaItem(dataPhieu)"> -->
-          <!--                     <i class="fa fa-trash-o do"></i> -->
-          <!--                   </a> -->
-          <!--                 </td> -->
-          <!--               </tr> -->
-          <!--             </ng-container> -->
-          <!--           </ng-container> -->
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu">

@@ -15,6 +15,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { isEmpty } from 'lodash';
 import { Globals } from 'src/app/shared/globals';
 import { ThongTriDuyetYCapVonService } from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapVon.service';
+import {STATUS} from "../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tri-duyet-y-du-toan',
@@ -36,7 +37,7 @@ export class ThongTriDuyetYDuToanComponent implements OnInit {
   @Input()
   loaiVthhCache: string;
 
-
+  STATUS = STATUS;
   isDetail: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;

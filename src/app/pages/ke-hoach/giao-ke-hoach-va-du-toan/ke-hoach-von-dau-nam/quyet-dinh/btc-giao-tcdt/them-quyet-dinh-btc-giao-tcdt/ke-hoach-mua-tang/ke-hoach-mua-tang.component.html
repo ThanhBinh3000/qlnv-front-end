@@ -9,7 +9,7 @@
         <th style="width: 10%;">Số lượng</th>
         <th style="width: 10%;">Đơn giá</th>
         <th style="width: 10%;">Dự toán (triệu đồng)</th>
-        <th style="width: 10%;">Thao tác</th>
+        <th style="width: 10%;">Hành động</th>
       </tr>
     </thead>
     <tbody>
@@ -61,10 +61,10 @@
           </nz-input-group>
         </td>
         <td style="text-align: center;">
-          <a (click)="themMoiItem()" *ngIf="!isView">
+          <a (click)="themMoiItem()" *ngIf="isView">
             <i class="fa fa-plus"></i>
           </a>
-          <a (click)="clearData()" *ngIf="!isView">
+          <a (click)="clearData()" *ngIf="isView">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>
@@ -81,10 +81,10 @@
           <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
           <td style="text-align: center;">
-            <a (click)="editItem(idx)" *ngIf="!isView">
+            <a (click)="editItem(idx)" *ngIf="isView">
               <i class=" fa fa-pencil"></i>
             </a>
-            <a (click)="xoaItem(idx)" *ngIf="!isView">
+            <a (click)="xoaItem(idx)" *ngIf="isView">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
@@ -138,10 +138,10 @@
             </nz-input-group>
           </td>
           <td class="text-center">
-            <a (click)="luuEdit(idx)" *ngIf="!isView" class="save">
+            <a (click)="luuEdit(idx)" *ngIf="isView" class="save">
               <i class="fa fa-save"></i>
             </a>
-            <a (click)="huyEdit(idx)" *ngIf="!isView">
+            <a (click)="huyEdit(idx)" *ngIf="isView">
               <i class="fa fa-ban do"></i> </a>
           </td>
         </ng-template>
