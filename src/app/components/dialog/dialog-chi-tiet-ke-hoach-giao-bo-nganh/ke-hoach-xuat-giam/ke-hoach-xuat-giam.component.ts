@@ -1,16 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {NzModalService} from 'ng-zorro-antd/modal';
-import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
 import {ThongTinQuyetDinh} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
 
 @Component({
   selector: 'app-ke-hoach-xuat-giam',
   templateUrl: './ke-hoach-xuat-giam.component.html',
   styleUrls: ['./ke-hoach-xuat-giam.component.scss'],
 })
-export class KeHoachXuatGiamComponent implements OnInit {
+export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
+  @Input() maBoNganh: string;
   @Input()
   dsHangHoa = [];
   @Input()
@@ -156,5 +154,10 @@ export class KeHoachXuatGiamComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.maBoNganh) {
+      this.rowItem = new ThongTinQuyetDinh();
+    }
+  }
 }
 
