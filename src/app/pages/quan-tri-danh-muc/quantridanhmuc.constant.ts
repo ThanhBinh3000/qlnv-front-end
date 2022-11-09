@@ -16,18 +16,18 @@ export const NHAP_ROUTE_LIST = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Danh mục hàng hóa',
+    title: 'Danh mục hàng DTQG',
     url: `/${NHAP_MAIN_ROUTE}/danh-muc-hang-hoa`,
     dropdown: 'danh-muc-hang-hoa',
     idHover: 'danh-muc-hang-hoa',
   },
-  {
-    icon: 'htvbdh_tcdt_icon-common',
-    title: 'Danh mục hàng DTQG',
-    url: `/${NHAP_MAIN_ROUTE}/danh-muc-hang-dtqg`,
-    dropdown: 'danh-muc-hang-dtqg',
-    idHover: 'danh-muc-hang-dtqg',
-  },
+  // {
+  //   icon: 'htvbdh_tcdt_icon-common',
+  //   title: 'Danh mục hàng DTQG',
+  //   url: `/${NHAP_MAIN_ROUTE}/danh-muc-hang-dtqg`,
+  //   dropdown: 'danh-muc-hang-dtqg',
+  //   idHover: 'danh-muc-hang-dtqg',
+  // },
   {
     icon: 'htvbdh_tcdt_icon-common',
     title: 'Danh mục vật tư theo hàng',
@@ -44,7 +44,7 @@ export const NHAP_ROUTE_LIST = [
   },
   {
     icon: 'htvbdh_tcdt_icon-common',
-    title: 'Dm định mức phí nhập, xuất, bảo quản',
+    title: 'DM định mức phí nhập, xuất, bảo quản',
     url: `/${NHAP_MAIN_ROUTE}/danh-muc-dinh-muc-phi`,
     dropdown: 'danh-muc-dinh-muc-phi',
     idHover: 'danh-muc-dinh-muc-phi',
