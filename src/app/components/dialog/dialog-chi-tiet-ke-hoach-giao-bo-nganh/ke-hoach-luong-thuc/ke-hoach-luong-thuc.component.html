@@ -11,22 +11,22 @@
     <tr>
       <td>I</td>
       <td>Lương thực tồn kho đầu kỳ (quy thóc)</td>
-      <td style="text-align: right;"> {{+ltThocTon + +(ltGaoTon * 2)|number: '1.0-1'}} </td>
+      <td style="text-align: right;"> {{+ltThocTon + +(ltGaoTon * 2)|number: '1.0-1': 'vi_VN'}} </td>
     </tr>
     <tr>
       <td>-</td>
       <td>Thóc</td>
-      <td style="text-align: right;"> {{ltThocTon|number: '1.0-1'}} </td>
+      <td style="text-align: right;"> {{ltThocTon|number: '1.0-1': 'vi_VN'}} </td>
     </tr>
     <tr>
       <td>-</td>
       <td>Gạo</td>
-      <td style="text-align: right;"> {{ltGaoTon|number: '1.0-1'}} </td>
+      <td style="text-align: right;"> {{ltGaoTon|number: '1.0-1': 'vi_VN'}} </td>
     </tr>
     <tr>
       <td>II</td>
       <td>Lương thực xuất ra (quy thóc)</td>
-      <td style="text-align: right;"> {{ +ltThocXuat + +(ltGaoXuat * 2)|number: '1.0-1'}} </td>
+      <td style="text-align: right;"> {{ +ltThocXuat + +(ltGaoXuat * 2)|number: '1.0-1': 'vi_VN'}} </td>
     </tr>
     <tr>
       <td>-</td>
@@ -47,7 +47,7 @@
     <tr>
       <td>III</td>
       <td>Lương thực mua vào (quy thóc)</td>
-      <td style="text-align: right;"> {{ +ltThocMua + +(ltGaoMua * 2)|number: '1.0-1'}} </td>
+      <td style="text-align: right;"> {{ +ltThocMua + +(ltGaoMua * 2)|number: '1.0-1': 'vi_VN'}} </td>
     </tr>
     <tr>
       <td>-</td>
@@ -68,17 +68,25 @@
     <tr>
       <td>IV</td>
       <td>Lương thực dự trữ cuối năm (quy thóc)</td>
-      <td style="text-align: right;"> {{ +ltThocDuTru + +(ltGaoDuTru * 2)|number: '1.0-1'}} </td>
+      <!--      <td style="text-align: right;"> {{ +ltThocDuTru + +(ltGaoDuTru * 2)|number: '1.0-1'}} </td>-->
+      <td
+        style="text-align: right;"> {{(+ltThocMua + +(ltGaoMua * 2)) - (+ltThocXuat + +(ltGaoXuat * 2)) + (+ltThocDuTru + +(ltGaoDuTru * 2))|number: '1.0-1'}}
+        ({{ +ltThocDuTru + +(ltGaoDuTru * 2)|number: '1.0-1': 'vi_VN'}})
+      </td>
     </tr>
     <tr>
       <td>-</td>
       <td>Thóc</td>
-      <td style="text-align: right;"> {{ltThocDuTru|number: '1.0-1'}} </td>
+      <td style="text-align: right;"> {{ +ltThocMua - +ltThocXuat + +ltThocDuTru|number: '1.0-1': 'vi_VN'}}
+        ({{ltThocDuTru}})
+      </td>
     </tr>
     <tr>
       <td>-</td>
       <td>Gạo</td>
-      <td style="text-align: right;"> {{ltGaoDuTru|number: '1.0-1'}} </td>
+      <td style="text-align: right;"> {{+ltGaoMua - +ltGaoXuat + +ltGaoDuTru|number: '1.0-1': 'vi_VN'}} ({{ltGaoDuTru}}
+        )
+      </td>
     </tr>
     </tbody>
   </nz-table>
