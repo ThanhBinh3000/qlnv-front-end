@@ -125,7 +125,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       kieuNx: ['', [Validators.required]],
       diaChiDvi: [],
       namKhoach: [, [Validators.required]],
-      soDxuat: [null, [Validators.required]],
+      soDxuat: [null],
       trichYeu: [null],
       ngayTao: [dayjs().format('YYYY-MM-DD')],
       ngayPduyet: [],
@@ -242,7 +242,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
             const dataDetail = res.data;
             this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
             this.formData.patchValue({
-              soDxuat: dataDetail.soDxuat.split('/')[0]
+              soDxuat: dataDetail.soDxuat?.split('/')[0]
             })
             if (dataDetail) {
               this.fileDinhKem = dataDetail.fileDinhKems;
@@ -453,7 +453,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     if (!this.isDetailPermission()) {
       return;
     }
-    this.setValidator();
+    this.setValidator(isGuiDuyet);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
@@ -469,7 +469,9 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     if (this.validateSave()) {
       let pipe = new DatePipe('en-US');
       let body = this.formData.value;
-      body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
+      if (this.formData.get('soDxuat').value) {
+        body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
+      }
       body.tgianDthau = pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
       body.tgianMthau = pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
       body.fileDinhKemReq = this.fileDinhKem;
@@ -501,7 +503,12 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
 
   }
 
-  setValidator() {
+  setValidator(isGuiDuyet) {
+    if (isGuiDuyet) {
+      this.formData.controls["soDxuat"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["soDxuat"].clearValidators();
+    }
     if (this.userService.isTongCuc()) {
       this.formData.controls["cloaiVthh"].clearValidators();
       this.formData.controls["tenCloaiVthh"].clearValidators();
