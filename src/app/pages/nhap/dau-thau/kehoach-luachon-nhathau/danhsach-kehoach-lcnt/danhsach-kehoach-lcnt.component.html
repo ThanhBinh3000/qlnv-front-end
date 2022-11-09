@@ -41,21 +41,32 @@
     <div class="group-button">
       <h3>DANH SÁCH ĐỀ XUẤT KẾ HOẠCH LỰA CHỌN NHÀ THẦU</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()"
-          *ngIf="loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA')">
-          <i class="fa fa-trash-o do"></i>
-          <span>Xóa</span>
-        </button>
+
+        <ng-container
+          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA') || userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA')">
+          <button type="button" class="btn btn-do" (click)="deleteSelect()"
+            *ngIf="loaiVthh == null || (userService.isTongCuc() && loaiVthh == '02') || (userService.isCuc() && loaiVthh != '02')">
+            <i class="fa fa-trash-o do"></i>
+            <span>Xóa</span>
+          </button>
+        </ng-container>
+
         <button type="button" class="btn btn-sub" (click)="exportData()"
           *ngIf="loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_EXP') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_EXP')">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()"
-          *ngIf="loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')">
-          <i class="icon htvbdh_dau-cong"></i>
-          <span>Thêm</span>
-        </button>
+
+        <ng-container
+          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') || userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')">
+          <button
+            *ngIf="loaiVthh == null || (userService.isTongCuc() && loaiVthh == '02') || (userService.isCuc() && loaiVthh != '02')"
+            type="button" class="btn btn-main" (click)="themMoi()">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+        </ng-container>
+
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -175,7 +186,7 @@
                   (input)="filterInTable('soGoiThau',filterTable.soGoiThau)" size="small" />
               </nz-input-group>
             </th>
-            <th>
+            <th *ngIf="userService.isTongCuc()">
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soGoiThau"
                   (input)="filterInTable('soGoiThau',filterTable.soGoiThau)" size="small" />
