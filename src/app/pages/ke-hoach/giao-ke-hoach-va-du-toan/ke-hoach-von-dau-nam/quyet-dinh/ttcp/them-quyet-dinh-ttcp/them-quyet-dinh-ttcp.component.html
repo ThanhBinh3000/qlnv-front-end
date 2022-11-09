@@ -117,7 +117,7 @@
       <tr *ngFor="let data of dataTable; let idx = index">
         <td class="text-center">{{ idx + 1 }}</td>
         <td>{{ data.tenBoNganh }}</td>
-        <td>{{ data.tongTien }}</td>
+        <td>{{ data.tongTien |number: '1.0-1': 'vi_VN'}}</td>
         <td style="text-align: left; white-space: nowrap;">
           <a (click)="themKeHoach(data, idx,true)">
             <i class="fa fa-eye"></i>

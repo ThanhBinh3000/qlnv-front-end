@@ -11,6 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { UserAPIService } from 'src/app/services/user/userApi.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { STORAGE_KEY } from 'src/app/constants/config';
+import {LIST_PAGES} from "../../layout/main/main-routing.constant";
 declare var vgcapluginObject: any;
 
 @Component({
@@ -20,7 +21,7 @@ declare var vgcapluginObject: any;
 })
 export class LoginComponent implements OnInit {
   public formLogin: FormGroup;
-
+  lstPage = [];
   constructor(
     private spinner: NgxSpinnerService,
     private fb: FormBuilder,
@@ -31,7 +32,7 @@ export class LoginComponent implements OnInit {
     private userAPIService: UserAPIService,
     public router: Router,
     private storageService: StorageService,
-  ) { }
+  ) {  this.lstPage = LIST_PAGES;}
 
   ngOnInit(): void {
     this.initForm();
@@ -50,12 +51,14 @@ export class LoginComponent implements OnInit {
     if (this.formLogin.invalid) {
       return;
     }
+
     this.spinner.show();
     try {
       const user = {
         username: form.UserName,
         password: form.Password,
       };
+      let allRoles = '';
       this.apiService.login(user).subscribe(async (res: OldResponseData) => {
         if (res.data) {
           this.authService.saveToken(res.data.token);
@@ -66,6 +69,7 @@ export class LoginComponent implements OnInit {
             let data = permission.data;
             if (data && data.length > 0) {
               jsonData = JSON.stringify(data);
+              allRoles = jsonData;
             }
           } else {
             this.notification.error(MESSAGE.ERROR, permission.msg);
@@ -79,7 +83,7 @@ export class LoginComponent implements OnInit {
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
         }
-        this.router.navigate(['/']);
+        this.router.navigate([this.setDefultModule(allRoles)]);
         this.spinner.hide();
       });
     } catch (err) {
@@ -87,4 +91,18 @@ export class LoginComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  setDefultModule(jsonData){
+    let url = '';
+    for (let item of this.lstPage){
+      if(!item.code || jsonData.includes(item.code)){
+        url = item.route
+        if(url){
+         break;
+        }
+      }
+    }
+    return url;
+  }
+
 }

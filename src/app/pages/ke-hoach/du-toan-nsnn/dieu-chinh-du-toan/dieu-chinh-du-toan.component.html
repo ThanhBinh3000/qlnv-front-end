@@ -33,5 +33,8 @@
     <ng-container *ngIf="tabSelected == 'tonghop'">
       <app-tong-hop-bao-cao (dataChange)="changeTab($event)"></app-tong-hop-bao-cao>
     </ng-container>
+    <ng-container *ngIf="tabSelected == 'baocao'">
+      <app-bao-cao [data]="data" (dataChange)="changeTab($event)"></app-bao-cao>
+    </ng-container>
   </div>
 </div>

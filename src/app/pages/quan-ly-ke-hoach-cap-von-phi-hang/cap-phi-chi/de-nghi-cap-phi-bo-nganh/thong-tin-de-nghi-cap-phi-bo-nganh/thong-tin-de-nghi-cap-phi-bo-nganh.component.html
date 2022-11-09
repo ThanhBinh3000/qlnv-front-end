@@ -66,7 +66,6 @@
     </div>
     <nz-card class="flex-card p-lr16 pd-t-16 mg-t-16">
       <div nz-row [nzGutter]="[24, 6]" class="pd-10">
-
           <div nz-col [nzSpan]="3">
             <nz-form-item>
               <nz-form-label  [nzNoColon]="true"> Dự toán TX được giao (đ)</nz-form-label>
@@ -148,7 +147,7 @@
                                     <a (click)="editRow(data, 'ct1s')">
                                         <i class="fa fa-pencil"></i>
                                     </a>
-                                    <a (click)="deleteRow(data, 'ct1s')">
+                                    <a *ngIf="!data.ct2s || data.ct2s.length == 0" (click)="deleteRow(data, 'ct1s')">
                                         <i class="fa fa-trash-o do"></i>
                                     </a>
                                 </td>
@@ -236,8 +235,12 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input nz-input type="text" [(ngModel)]="create.loaiChiPhi"
-                                    [readonly]="rowEdit.isView" />
+<!--                                <input nz-input type="text" [(ngModel)]="create.loaiChiPhi"-->
+<!--                                    [readonly]="rowEdit.isView" />-->
+                              <nz-select [(ngModel)]="create.loaiChiPhi" [nzDisabled]="rowEdit.isView">
+                                <nz-option *ngFor="let item of listLoaiChiPhi" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                                </nz-option>
+                              </nz-select>
                             </td>
                             <td>
                                 <nz-select [(ngModel)]="create.namPhatSinh" [nzDisabled]="rowEdit.isView">
@@ -288,7 +291,10 @@
                             </ng-container>
                             <ng-template #editItemTemplate>
                                 <td>
-                                    <input nz-input type="text" [(ngModel)]="data.loaiChiPhi" />
+                                  <nz-select [(ngModel)]="data.loaiChiPhi" >
+                                    <nz-option *ngFor="let item of listLoaiChiPhi" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                                    </nz-option>
+                                  </nz-select>
                                 </td>
                                 <td>
                                     <nz-select [(ngModel)]="data.namPhatSinh">

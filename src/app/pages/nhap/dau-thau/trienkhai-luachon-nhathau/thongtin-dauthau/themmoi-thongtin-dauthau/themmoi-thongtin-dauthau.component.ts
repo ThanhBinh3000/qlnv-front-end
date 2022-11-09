@@ -187,6 +187,12 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetailDtlCuc(this.idInput);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
+      let tongMucDtTrung = 0
+      data.dsGoiThau.forEach(item => {
+        if (item.trangThai == STATUS.THANH_CONG) {
+          tongMucDtTrung += item.soLuong * item.donGiaNhaThau * 1000
+        }
+      })
       this.formData.patchValue({
         namKhoach: data.hhQdKhlcntHdr.namKhoach,
         soQdPdKhlcnt: data.hhQdKhlcntHdr.soQd,
@@ -194,7 +200,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         tenDuAn: data.tenDuAn,
         tenDvi: data.tenDvi,
         tongMucDt: '',
-        tongMucDtGoiTrung: '',
+        tongMucDtGoiTrung: tongMucDtTrung,
         tenNguonVon: data.hhQdKhlcntHdr.tenNguonVon,
         tenHthucLcnt: data.hhQdKhlcntHdr.tenHthucLcnt,
         tenPthucLcnt: data.hhQdKhlcntHdr.tenPthucLcnt,
@@ -410,25 +416,30 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   }
 
   validateItemSave(dataSave, index?): boolean {
-    if (dataSave.trangThai == STATUS.TRUNG_THAU) {
-      let filter = this.listNthauNopHs.filter(item => item.trangThai == STATUS.TRUNG_THAU);
-      if (filter.length > 0) {
-        if (index) {
-          let indexFilter = this.listNthauNopHs.indexOf(filter[0]);
-          if (index != indexFilter) {
+    if (dataSave.tenNhaThau && dataSave.mst && dataSave.diaChi && dataSave.sdt && dataSave.donGia && dataSave.trangThai) {
+      if (dataSave.trangThai == STATUS.TRUNG_THAU) {
+        let filter = this.listNthauNopHs.filter(item => item.trangThai == STATUS.TRUNG_THAU);
+        if (filter.length > 0) {
+          if (index) {
+            let indexFilter = this.listNthauNopHs.indexOf(filter[0]);
+            if (index != indexFilter) {
+              this.notification.error(MESSAGE.ERROR, "Trạng thái trúng thầu đã tồn tại, xin vui lòng thay đổi trạng thái bản ghi")
+              return false
+            }
+            return true
+          } else {
             this.notification.error(MESSAGE.ERROR, "Trạng thái trúng thầu đã tồn tại, xin vui lòng thay đổi trạng thái bản ghi")
             return false
           }
-          return true
-        } else {
-          this.notification.error(MESSAGE.ERROR, "Trạng thái trúng thầu đã tồn tại, xin vui lòng thay đổi trạng thái bản ghi")
-          return false
-        }
 
+        }
+        return true;
       }
       return true;
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Xin vui lòng điền đủ thông tin");
+      return false;
     }
-    return true;
   }
 
   checkRoleData() {
