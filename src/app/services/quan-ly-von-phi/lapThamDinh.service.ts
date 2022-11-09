@@ -113,4 +113,59 @@ export class LapThamDinhService extends BaseService {
             this.urlDefault + '/qlnv-khoachphi/giao-so/danh-sach/' + maBcao
         )
     }
+
+    //chi tiet ma phuong an
+    ctietPhuongAn(id: any): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/qlnv-khoachphi/pa-giao-so/chi-tiet/' + id
+        );
+    }
+
+    trinhDuyetPhuongAn(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/qlnv-khoachphi/pa-giao-so/trang-thai',
+            request);
+    }
+
+    //them moi phuong an
+    themMoiPhuongAn(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/pa-giao-so/them-moi',
+            request);
+    }
+
+    //nhap so QD-CV
+    themMoiQdCv(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/qlnv-khoachphi/pa-giao-so/nhap-qd-cv'
+            , request);
+    }
+
+    //cap nhat phuong an
+    capnhatPhuongAn(requestUpdate: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/qlnv-khoachphi/pa-giao-so/cap-nhat'
+            , requestUpdate);
+    }
+
+    //giao so tran chi
+    giaoSoTranChi(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/giao-so/giao-so-dvi-cap-duoi'
+            , request);
+    }
+
+    //tim kiem so giao kiem tra tran chi
+    timKiemSoKiemTraTranChi(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/giao-so/dsach-giao-so'
+            , request)
+    }
+
+    //xem chi tiet so giao tran chi
+    ctietGiaoSoTranChi(id: any): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/qlnv-khoachphi/giao-so/chi-tiet/' + id
+        );
+    }
 }

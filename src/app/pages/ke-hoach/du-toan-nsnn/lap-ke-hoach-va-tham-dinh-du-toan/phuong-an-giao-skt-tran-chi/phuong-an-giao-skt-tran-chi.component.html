@@ -9,17 +9,33 @@
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
-            <button *ngIf="newPlanStatus" type="button" class="btn btn-sub" (click)="taoMoiPhuongAn()">
+            <button *ngIf="submitStatus" type="button" class="btn btn-sub" (click)="action('submit')">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
-                <span>Tạo mới phương án</span>
+                <span>Trình duyệt</span>
             </button>
-            <button *ngIf="editReportStatus" type="button" class="btn btn-sub" (click)="sua()">
+            <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('nonpass')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
-                <span>Sửa</span>
+                <span>Từ chối</span>
             </button>
-            <button *ngIf="exactStatus && status" type="button" class="btn btn-sub">
+            <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('pass')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
-                <span>Chính xác</span>
+                <span>Duyệt</span>
+            </button>
+            <button *ngIf="approveStatus" type="button" class="btn btn-sub" (click)="action('nonapprove')">
+                <i class="icon htvbdh_tcdt_tuchoi"></i>
+                <span>Từ chối</span>
+            </button>
+            <button *ngIf="approveStatus" type="button" class="btn btn-sub" (click)="action('approve')">
+                <i class="icon htvbdh_tcdt_pheduyet"></i>
+                <span>Phê duyệt</span>
+            </button>
+            <button *ngIf="copyStatus" type="button" class="btn btn-sub" (click)="doCopy()">
+                <i nz-icon nzType="copy" nzTheme="outline"></i>
+                <span>Copy</span>
+            </button>
+            <button *ngIf="printStatus" type="button" class="btn btn-sub" (click)="doPrint()">
+                <i nz-icon nzType="printer" nzTheme="outline"></i>
+                <span>In</span>
             </button>
         </div>
     </nz-affix>
@@ -29,7 +45,8 @@
             <div class="header mg-t-16">
                 <div class="header-text">
                     <div class="title-chi-tieu">
-                        <span>Số kiểm tra trần chi từ Bộ tài chính</span>
+                        <span [ngClass]="statusClass()">{{getStatusName()}}</span>
+                        <span>Phương án giao số kiểm tra trần chi NSNN cho các đơn vị</span>
                     </div>
                 </div>
             </div>
@@ -38,7 +55,24 @@
                     <thead>
                         <tr>
                             <th>Mã báo cáo</th>
-                            <th>Số QĐ/CV</th>
+                            <th>
+                                <ng-container *ngIf="statusDeleteCv(); else view">
+                                    <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn xóa quyết định công văn?"
+                                        style="color:black" (nzOnConfirm)="deleteQdCv()">Số QĐ/CV
+                                    </a>
+                                </ng-container>
+                                <ng-template #view>
+                                    Số QĐ/CV
+                                </ng-template>
+                            </th>
+                            <th>
+                                <ng-container *ngIf="!userService.isTongCuc(); else btc">
+                                    Mã phương án cấp trên giao
+                                </ng-container>
+                                <ng-template #btc>
+                                    Mã phương án tổng cục <br />nhập QĐ từ BTC
+                                </ng-template>
+                            </th>
                             <th>Mã phương án</th>
                             <th>Năm phương án</th>
                             <th>Ngày tạo</th>
@@ -48,17 +82,16 @@
                         <tr>
                             <td>{{maBaoCao}}</td>
                             <td>
-                                <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
-                                    <button nz-button>
-                                        <i nz-icon nzType="upload"></i>
-                                        Select File
-                                    </button>
-                                </nz-upload>
-                                <div class="tep__sqd" (click)="downloadFileCv()">
-                                    <span>{{soQdCv?.fileName}}</span>
-                                </div>
+                                <a style="color: #1890ff;" (click)="downloadFileCv()">
+                                    {{soQdCv?.fileName}}
+                                </a>
                             </td>
-                            <td>{{maPaBtc}}</td>
+                            <td>
+                                <a (click)="xemCtietSoTranChi()" style="color: #1890ff;">
+                                    {{ maPaBtc}}
+                                </a>
+                            </td>
+                            <td>{{maPa}}</td>
                             <td>{{namPa}}</td>
                             <td>{{ngayTao}}</td>
                         </tr>
@@ -69,7 +102,7 @@
 
         <div class="mt-16 flex-card p-lr16">
             <nz-card class="mt-2px flex-card data-table card-border-content table-card"
-                nzTitle="Xây dựng phương án giao số kiểm tra trần chi NSNN cho các đơn vị">
+                nzTitle="Xây dựng phương án giao số kiểm tra trần chi NSNN cho các đơn vị" [nzExtra]="extraTemplate">
                 <div id="tablePrint">
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                         <div nz-col [nzSpan]="1">
@@ -92,19 +125,24 @@
                     <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
                         <thead>
                             <tr>
-                                <th rowspan="2" nzWidth="5%">STT</th>
-                                <th rowspan="2" nzWidth="40%">Nội dung</th>
+                                <th rowspan="2" nzWidth="100px">STT</th>
+                                <th rowspan="2">Nội dung</th>
                                 <th rowspan="2">Tổng số</th>
-                                <th colspan="2">Trong đó</th>
-                                <th rowspan="2" colspan="3" [hidden]="status" nzWidth="3%"></th>
-                                <th rowspan="2" [hidden]="status" nzWidth="3%">
+                                <ng-container *ngIf="lstDvi.length > 0">
+                                    <th colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
+                                </ng-container>
+                                <th rowspan="2" colspan="3" [hidden]="status"></th>
+                                <th rowspan="2" [hidden]="status">
                                     <label nz-checkbox [(ngModel)]="allChecked"
                                         (ngModelChange)="updateAllChecked()"></label>
                                 </th>
                             </tr>
                             <tr>
-                                <th>Nguồn NSNN</th>
-                                <th>Nguồn khác</th>
+                                <ng-container *ngIf="lstDvi.length > 0">
+                                    <th *ngFor="let item of lstDvi">
+                                        {{getUnitName(item.maDvi)}}
+                                    </th>
+                                </ng-container>
                             </tr>
                         </thead>
                         <tbody>
@@ -121,8 +159,13 @@
                                         </div>
                                     </td>
                                     <td>{{displayValue(data.tongSo)}}</td>
-                                    <td>{{displayValue(data.nguonNsnn)}}</td>
-                                    <td>{{displayValue(data.nguonKhac)}}</td>
+                                    <td *ngFor="let item of lstDvi">
+                                        <div *ngFor="let e of data.listCtietDvi;">
+                                            <div *ngIf="e.maBcao == item.maBcao">
+                                                {{displayValue(e.soTranChi)}}
+                                            </div>
+                                        </div>
+                                    </td>
                                     <td nzWidth="2.5%" [hidden]="status">
                                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                                     </td>
@@ -153,19 +196,15 @@
                                     <td>
                                         {{displayValue(data.tongSo)}}
                                     </td>
-                                    <td>
-                                        <fm-input-number class="search__input"
-                                            [(ngModel)]="editCache[data.id].data.nguonNsnn"
-                                            [class]="(editCache[data.id].data.nguonNsnn || editCache[data.id].data.nguonNsnn ===0) && editCache[data.id].data.nguonNsnn >= 0?'' : 'input-error-validate'"
-                                            (ngModelChange)="changeModel(data.id)">
-                                        </fm-input-number>
-                                    </td>
-                                    <td>
-                                        <fm-input-number class="search__input"
-                                            [(ngModel)]="editCache[data.id].data.nguonKhac"
-                                            [class]="(editCache[data.id].data.nguonKhac || editCache[data.id].data.nguonKhac ===0) && editCache[data.id].data.nguonKhac >= 0?'' : 'input-error-validate'"
-                                            (ngModelChange)="changeModel(data.id)">
-                                        </fm-input-number>
+                                    <td *ngFor="let item of lstDvi">
+                                        <div *ngFor="let e of editCache[data.id].data.listCtietDvi">
+                                            <div *ngIf="e.maBcao == item.maBcao">
+                                                <fm-input-number class="search__input" [(ngModel)]="e.soTranChi"
+                                                    [class]="(e.soTranChi || e.soTranChi === 0) && e.soTranChi >= 0 ?'' : 'input-error-validate'"
+                                                    (ngModelChange)="changeModel(data.id)">
+                                                </fm-input-number>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td nzWidth="2.5%" [hidden]="status">
                                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
@@ -184,6 +223,23 @@
                                             (ngModelChange)="updateChecked(data.id)"></label>
                                     </td>
                                 </ng-template>
+                            </tr>
+                            <tr *ngIf="assignStatus">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td *ngFor="let item of lstDvi">
+                                    <div *ngFor="let e of lstTtCtiet">
+                                        <div *ngIf="e.maBcao == item.maBcao">
+                                            <ng-container *ngIf="e.trangThai == '0'">
+                                                <a (click)="giaoSoTranChi(e.maBcao)">
+                                                    Giao
+                                                </a>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+
+                                </td>
                             </tr>
                         </tbody>
                     </nz-table>
@@ -235,11 +291,23 @@
                                 </tr>
                             </tbody>
                         </nz-table>
-
                     </div>
                 </div>
-
             </nz-card>
+            <ng-template #extraTemplate>
+                <button *ngIf="!status" type="button" class="btn btn-main" (click)="deleteAllChecked()">
+                    <i class="fa fa-trash-o"></i>
+                    <span>Xóa</span>
+                </button>
+                <button *ngIf="lstCtietBcao.length == 0 && !status" type="button" class="btn btn-main"
+                    (click)="addLine(null)">
+                    <i class="icon htvbdh_dau-cong"></i>
+                    <span>Thêm</span>
+                </button>
+                <button *ngIf="assignStatus" type="button" class="btn btn-main" (click)="giaoSoTranChi(null)">
+                    <span>Giao toàn bộ</span>
+                </button>
+            </ng-template>
         </div>
     </div>
 </ng-container>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { BCDTC } from 'src/app/Utility/utils';
+import { TAB_LIST } from './von-ban.constant';
 
 @Component({
     selector: 'app-von-ban',
@@ -10,12 +11,9 @@ import { BCDTC } from 'src/app/Utility/utils';
 })
 export class VonBanComponent implements OnInit {
 
-    tabSelected = 'nop';
+    tabSelected!: string;
     data: any;
-    isList = false;
-    isAccept = false;
-    isCheck = false;
-    isSynthetic = false;
+    tabList: any[] = TAB_LIST;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -23,13 +21,20 @@ export class VonBanComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-        this.isList = this.userService.isAccessPermisson(BCDTC.VIEW_REPORT) || this.userService.isAccessPermisson(BCDTC.VIEW_SYNTHETIC_REPORT);
-        this.isAccept = this.userService.isAccessPermisson(BCDTC.TIEP_NHAN_REPORT);
-        this.isCheck = this.userService.isAccessPermisson(BCDTC.TIEP_NHAN_REPORT);
-        this.isSynthetic = this.userService.isAccessPermisson(BCDTC.SYNTHETIC_REPORT);
+        this.tabList.forEach(item => {
+            item.isSelected = false;
+            item.status = this.userService.isAccessPermisson(item.role);
+            if (!this.tabSelected && item.status) {
+                this.tabSelected = item.code;
+                item.isSelected = true;
+            }
+        })
     }
     selectTab(tab) {
         this.tabSelected = tab;
+        this.tabList.forEach(e => {
+            e.isSelected = (tab == e.code);
+        })
     }
 
     changeTab(obj: any) {
@@ -38,5 +43,10 @@ export class VonBanComponent implements OnInit {
             preTab: this.tabSelected,
         };
         this.tabSelected = obj?.tabSelected;
+        if (this.tabList.findIndex(e => e.code == this.tabSelected) != -1) {
+            this.tabList.forEach(e => {
+                e.isSelected = (this.tabSelected == e.code);
+            })
+        }
     }
 }

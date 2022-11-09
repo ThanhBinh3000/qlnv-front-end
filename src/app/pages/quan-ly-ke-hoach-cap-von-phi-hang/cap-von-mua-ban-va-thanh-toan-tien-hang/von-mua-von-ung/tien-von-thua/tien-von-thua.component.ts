@@ -15,7 +15,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, numberOnly, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 
 export class ItemGui {
     noiDung: string;
@@ -775,6 +775,19 @@ export class TienVonThuaComponent implements OnInit {
 
     getMoneyUnit() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
+    }
+
+    changeNumber(str: string, code: string) {
+        switch (code) {
+            case 'maNguon':
+                this.ttGuiCache.maNguonNs = numberOnly(str);
+                break;
+            case 'nienDo':
+                this.ttGuiCache.nienDoNs = numberOnly(str);
+                break;
+            default:
+                break;
+        }
     }
 
     statusClass() {
