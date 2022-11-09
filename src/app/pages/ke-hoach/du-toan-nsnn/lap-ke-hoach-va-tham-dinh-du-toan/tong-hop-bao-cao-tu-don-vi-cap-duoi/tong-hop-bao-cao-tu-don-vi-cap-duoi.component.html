@@ -12,7 +12,7 @@
                         {{namHienTai+3}}
                     </ng-container>
                 </nz-descriptions-item>
-                <nz-descriptions-item nzTitle="Trạng thái" [nzSpan]="2">
+                <nz-descriptions-item nzTitle="Trạng thái" [nzSpan]="1">
                     <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
                         <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten">
                         </nz-option>
@@ -33,6 +33,12 @@
     </nz-card>
     <div class="group-button">
         <h3 class="text-uppercase">DANH SÁCH DỰ TÁON NGÂN SÁCH HẰNG NĂM VÀ KHTC 03 NĂM</h3>
+        <div class="buttons">
+            <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
+                <i class="icon htvbdh_tcdt_tao-qd"></i>
+                <span>Tổng hợp</span>
+            </button>
+        </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable" [nzFrontPagination]="false"
