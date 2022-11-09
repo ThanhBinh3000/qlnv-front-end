@@ -52,39 +52,39 @@
 
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table nzBordered #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
-        [nzData]="dataTable">
+        [nzData]="dataTable" [nzScroll]="{ x: '1100px' }">
         <thead>
           <tr>
-            <th width="60px">STT</th>
-            <th></th>
-            <th></th>
-            <th>Số QĐ giao nhiệm vụ</th>
-            <th>Năm KH</th>
-            <th>Nhập hàng trước ngày</th>
-            <th>Điểm kho</th>
-            <th>Nhà kho</th>
-            <th>Ngăn kho</th>
-            <th>Lô kho</th>
+            <th nzLeft width="40px" class="text-center">STT</th>
+            <th nzLeft width="30px" class="text-center"></th>
+            <th nzLeft width="30px" class="text-center"></th>
+            <th nzLeft width="130px"> Số QĐ giao NVNH</th>
+            <th nzLeft width="80px">Năm KH</th>
+            <th nzLeft width="150px">Thời hạn NH</th>
+            <th nzLeft width="150px">Điểm kho</th>
+            <th nzLeft width="150px">Nhà kho</th>
+            <th nzLeft width="150px">Ngăn kho</th>
+            <th nzLeft width="150px">Lô kho</th>
             <th>Số phiếu KTCL</th>
             <th>Ngày giám định</th>
             <th>Kết quả đánh giá</th>
             <th>Số phiếu nhập kho</th>
             <th>Ngày nhập kho</th>
             <th>Trạng thái</th>
-            <th>Hành động</th>
+            <th nzRight>Hành động</th>
           </tr>
         </thead>
         <tbody>
           <ng-container *ngFor="let item of dataTable , let i = index">
             <tr class="level-1">
-              <td>{{(page - 1) * pageSize + i + 1}}</td>
-              <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-              <td></td>
-              <td class="link bold">{{ item.soQd }}</td>
-              <td class="bold">{{ item.namNhap }}</td>
-              <td class="bold">{{ item.tgianNkho }}</td>
+              <td nzLeft>{{(page - 1) * pageSize + i + 1}}</td>
+              <td nzLeft [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+              <td nzLeft></td>
+              <td nzLeft class="link bold">{{ item.soQd }}</td>
+              <td nzLeft class="bold">{{ item.namNhap }}</td>
+              <td nzLeft class="bold">{{ item.tgianNkho }}</td>
               <td colspan="10"></td>
-              <td>
+              <td nzRight>
                 <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"
                   (click)="redirectToChiTiet(false, 0,item.id)">
                   <i class="fa fa-plus"></i>
@@ -94,28 +94,37 @@
             <ng-container *ngIf="expandSet.has(i)">
               <ng-container *ngFor="let dataDdiem of item.detail.children, let y = index">
                 <tr class="level-2">
-                  <td></td>
-                  <td></td>
-                  <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
-                  <td colspan="3"></td>
-                  <td>{{dataDdiem.tenDiemKho}}</td>
-                  <td>{{dataDdiem.tenNhaKho}}</td>
-                  <td>{{dataDdiem.tenNganKho}}</td>
-                  <td>{{dataDdiem.tenLoKho}}</td>
+                  <td nzLeft></td>
+                  <td nzLeft></td>
+                  <td nzLeft [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
+                  <td nzLeft></td>
+                  <td nzLeft></td>
+                  <td nzLeft></td>
+                  <td nzLeft>{{dataDdiem.tenDiemKho}}</td>
+                  <td nzLeft>{{dataDdiem.tenNhaKho}}</td>
+                  <td nzLeft>{{dataDdiem.tenNganKho}}</td>
+                  <td nzLeft>{{dataDdiem.tenLoKho}}</td>
                   <td colspan="7"></td>
                 </tr>
                 <ng-container *ngIf="expandSet2.has(y)">
                   <tr class="level-3" *ngFor="let dataPhieu of dataDdiem.listPhieuKtraCl">
-                    <td></td>
-                    <td></td>
-                    <td colspan="8"></td>
+                    <td nzLeft></td>
+                    <td nzLeft></td>
+                    <td nzLeft></td>
+                    <td nzLeft></td>
+                    <td nzLeft></td>
+                    <td nzLeft></td>
+                    <td nzLeft></td>
+                    <td nzLeft></td>
+                    <td nzLeft></td>
+                    <td nzLeft></td>
                     <td class="bold">{{dataPhieu.soPhieu}}</td>
                     <td>{{dataPhieu.ngayGdinh}}</td>
                     <td>{{dataPhieu.kqDanhGia}}</td>
                     <td class="link">{{dataPhieu.phieuNhapKho?.soPhieuNhapKho}}</td>
                     <td>{{dataPhieu.phieuNhapKho?.ngayTao | date: 'dd/MM/YYYY' }}</td>
                     <td>{{dataPhieu.tenTrangThai}}</td>
-                    <td>
+                    <td nzRight>
                       <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_XEM')"
                         (click)="redirectToChiTiet(true, dataPhieu.id)">
                         <i class="fa fa-eye"></i>

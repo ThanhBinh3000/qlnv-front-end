@@ -1,7 +1,6 @@
 
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import * as fileSaver from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -9,10 +8,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { LTD, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
+import { LTD, Utils } from 'src/app/Utility/utils';
+import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
     selector: 'app-tong-hop-bao-cao-tu-don-vi-cap-duoi',
@@ -63,7 +62,6 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
         private notification: NzNotificationService,
-        private quanLyVonPhiService: QuanLyVonPhiService,
         private modal: NzModalService,
         private danhMuc: DanhMucHDVService,
         public userService: UserService,
@@ -166,7 +164,28 @@ export class TongHopBaoCaoTuDonViCapDuoiComponent implements OnInit {
 
     //them moi bao cao
     addNewReport() {
-
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Thông tin tổng hợp báo cáo',
+            nzContent: DialogTaoMoiComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                tab: 'tonghop'
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                const obj = {
+                    ...res,
+                    id: null,
+                    tabSelected: 'baocao',
+                    isSynthetic: true,
+                }
+                this.dataChange.emit(obj);
+            }
+        });
     }
 
     //xem chi tiet bao cao

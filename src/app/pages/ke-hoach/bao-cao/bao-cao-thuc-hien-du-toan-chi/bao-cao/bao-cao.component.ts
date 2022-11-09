@@ -257,7 +257,7 @@ export class BaoCaoComponent implements OnInit {
 
     async getDviCon() {
         const request = {
-            maDviCha: this.userInfo?.MA_DVI,
+            maDviCha: this.baoCao.maDvi,
             trangThai: '01',
         }
         await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
@@ -536,6 +536,12 @@ export class BaoCaoComponent implements OnInit {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.SUCCESS);
                         this.baoCao.id = data.data.id
                         await this.getDetailReport();
+                        const dataTemp = {
+                            id: data.data.id,
+                            tabSelected: this.data.tabSelected,
+                            preTab: this.data.preTab,
+                        }
+                        this.data = dataTemp;
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }

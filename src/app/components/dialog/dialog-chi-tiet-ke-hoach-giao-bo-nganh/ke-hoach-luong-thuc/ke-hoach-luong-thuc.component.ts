@@ -78,8 +78,9 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!changes.maBoNganh.isFirstChange()) {
+    /*if (!changes.maBoNganh.isFirstChange() || this.maBoNganh == '01') {
       this.initData();
-    }
+    }*/
+    this.initData();
   }
 }

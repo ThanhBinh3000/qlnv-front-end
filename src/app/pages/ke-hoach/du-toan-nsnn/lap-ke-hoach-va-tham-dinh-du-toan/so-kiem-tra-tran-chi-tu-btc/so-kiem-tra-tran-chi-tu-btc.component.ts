@@ -180,7 +180,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             this.maDviTien = '1';
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.maBaoCao = this.data?.maBcao;
-            this.namPa = this.data?.namBcao;
+            this.namPa = this.data?.namHienTai;
 
             this.lapThamDinhService.maPhuongAn().toPromise().then(
                 (res) => {
@@ -894,69 +894,67 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
     }
 
     async taoMoiPhuongAn() {
-        // const listCtietDvi: any[] = [];
-        // const listTtCtiet: any[] = [];
-        // await this.quanLyVonPhiService.maPhuongAn().toPromise().then(
-        //     (res) => {
-        //         if (res.statusCode == 0) {
-        //             this.maPa = res.data;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, res?.msg);
-        //             return;
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //         return;
-        //     },
-        // );
+        const listCtietDvi: any[] = [];
+        const listTtCtiet: any[] = [];
+        await this.lapThamDinhService.maPhuongAn().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    this.maPa = res.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                    return;
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                return;
+            },
+        );
 
-        // this.lstBcao.forEach(item => {
-        //     listCtietDvi.push({
-        //         id: uuid.v4() + 'FE',
-        //         maKhuVuc: item.maDvi,
-        //         soTranChi: 0,
-        //         maBcao: item.maBcao,
-        //     })
-        //     listTtCtiet.push({
-        //         id: null,
-        //         maBcao: item.maBcao,
-        //         trangThai: "0",
-        //     })
-        // })
-        // const lstCtietBcaoTemp: any[] = [];
-        // // gui du lieu trinh duyet len server
-        // this.lstCtietBcao.forEach(item => {
-        //     lstCtietBcaoTemp.push({
-        //         ...item,
-        //         tongSo: item.tongSo,
-        //         nguonNsnn: item.nguonNsnn,
-        //         nguonKhac: item.nguonKhac,
-        //         listCtietDvi: listCtietDvi,
-        //         id: uuid.v4() + 'FE',
-        //     })
-        // })
-        // // gui du lieu trinh duyet len server
-        // const request = {
-        //     id: null,
-        //     idSoTranChi: this.id,
-        //     fileDinhKems: [],
-        //     listIdDeleteFiles: [],
-        //     listCtiet: lstCtietBcaoTemp,
-        //     listTtCtiet: listTtCtiet,
-        //     maDvi: this.maDonViTao,
-        //     maDviTien: this.maDviTien,
-        //     maPa: this.maPa,
-        //     maPaBtc: this.maPaBtc,
-        //     namPa: this.namPa,
-        //     maBcao: this.maBaoCao,
-        //     trangThai: "1",
-        //     thuyetMinh: "",
-        // };
-        // this.dataSource.changeData(request);
-        // this.router.navigate([
-        //     MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + LAP_THAM_DINH + '/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn',
-        // ])
+        this.lstBcao.forEach(item => {
+            listCtietDvi.push({
+                id: uuid.v4() + 'FE',
+                maKhuVuc: item.maDvi,
+                soTranChi: 0,
+                maBcao: item.maBcao,
+            })
+            listTtCtiet.push({
+                id: null,
+                maBcao: item.maBcao,
+                trangThai: "0",
+            })
+        })
+        const lstCtietBcaoTemp: any[] = [];
+        // gui du lieu trinh duyet len server
+        this.lstCtietBcao.forEach(item => {
+            lstCtietBcaoTemp.push({
+                ...item,
+                tongSo: item.tongSo,
+                nguonNsnn: item.nguonNsnn,
+                nguonKhac: item.nguonKhac,
+                listCtietDvi: listCtietDvi,
+                id: uuid.v4() + 'FE',
+            })
+        })
+        // gui du lieu trinh duyet len server
+        const request = {
+            id: null,
+            idSoTranChi: this.id,
+            fileDinhKems: [],
+            listIdDeleteFiles: [],
+            listCtiet: lstCtietBcaoTemp,
+            listTtCtiet: listTtCtiet,
+            maDvi: this.maDonViTao,
+            maDviTien: this.maDviTien,
+            maPa: this.maPa,
+            maPaBtc: this.maPaBtc,
+            namPa: this.namPa,
+            maBcao: this.maBaoCao,
+            trangThai: "1",
+            thuyetMinh: "",
+            tabSelected: 'pa'
+        };
+        this.dataChange.emit(request);
     }
 
     async sua() {
@@ -979,7 +977,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             },
             trangThais: trangThais,
         };
-        await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+        await this.lapThamDinhService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     if (data.data.content?.length > 0) {
@@ -992,11 +990,15 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, "Trạng thái bản ghi không được phép sửa");
             return;
         }
-        this.quanLyVonPhiService.suaBcao(request).toPromise().then(
+        this.lapThamDinhService.suaBcao(request).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-
+                    const obj = {
+                        id: data.data.id,
+                        tabSelected: 'baocao',
+                    }
+                    this.dataChange.emit(obj);
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }

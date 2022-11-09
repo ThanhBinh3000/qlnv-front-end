@@ -12,7 +12,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { displayNumber, DON_VI_TIEN, exchangeMoney, KHOAN_MUC, LA_MA, LTD, TRANG_THAI_GIAO, Utils } from 'src/app/Utility/utils';
-
+import * as uuid from 'uuid';
 export class ItemData {
     id: string;
     stt: string;
@@ -296,118 +296,118 @@ export class SoKiemTraTranChiComponent implements OnInit {
     }
 
     async taoMoiPhuongAn() {
-        // const listCtietDvi: any[] = [];
-        // const listTtCtiet: any[] = [];
-        // let maPaNew: string;
-        // await this.quanLyVonPhiService.maPhuongAn().toPromise().then(
-        //     (res) => {
-        //         if (res.statusCode == 0) {
-        //             maPaNew = res.data;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, res?.msg);
-        //             return;
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //         return;
-        //     },
-        // );
+        const listCtietDvi: any[] = [];
+        const listTtCtiet: any[] = [];
+        let maPaNew: string;
+        await this.lapThamDinhService.maPhuongAn().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    maPaNew = res.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                    return;
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                return;
+            },
+        );
 
-        // this.lstBcao.forEach(item => {
-        //     listCtietDvi.push({
-        //         id: uuid.v4() + 'FE',
-        //         maKhuVuc: item.maDvi,
-        //         soTranChi: 0,
-        //         maBcao: item.maBcao,
-        //     })
-        //     listTtCtiet.push({
-        //         id: null,
-        //         maBcao: item.maBcao,
-        //         trangThai: "0",
-        //     })
-        // })
-        // const lstCtietBcaoTemp: any[] = [];
-        // // gui du lieu trinh duyet len server
-        // this.lstCtietBcao.forEach(item => {
-        //     lstCtietBcaoTemp.push({
-        //         ...item,
-        //         maNhom: item.maNoiDung,
-        //         tongSo: item.soTien,
-        //         listCtietDvi: listCtietDvi,
-        //         id: uuid.v4() + 'FE',
-        //     })
-        // })
+        this.lstBcao.forEach(item => {
+            listCtietDvi.push({
+                id: uuid.v4() + 'FE',
+                maKhuVuc: item.maDvi,
+                soTranChi: 0,
+                maBcao: item.maBcao,
+            })
+            listTtCtiet.push({
+                id: null,
+                maBcao: item.maBcao,
+                trangThai: "0",
+            })
+        })
+        const lstCtietBcaoTemp: any[] = [];
+        // gui du lieu trinh duyet len server
+        this.lstCtietBcao.forEach(item => {
+            lstCtietBcaoTemp.push({
+                ...item,
+                maNhom: item.maNoiDung,
+                tongSo: item.soTien,
+                listCtietDvi: listCtietDvi,
+                id: uuid.v4() + 'FE',
+            })
+        })
 
-        // // gui du lieu trinh duyet len server
-        // const request = {
-        //     id: null,
-        //     idSoTranChi: this.id,
-        //     listCtiet: lstCtietBcaoTemp,
-        //     listTtCtiet: listTtCtiet,
-        //     maDvi: this.maDviNhan,
-        //     maDviTien: '1',
-        //     maPa: maPaNew,
-        //     maPaBtc: this.maPa,
-        //     namPa: this.newDate.getFullYear(),
-        //     maBcao: this.maBaoCao,
-        //     trangThai: "1",
-        //     thuyetMinh: "",
-        // };
-        // this.dataSource.changeData(request);
-        // this.router.navigate([
-        //     MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + LAP_THAM_DINH + '/xay-dung-phuong-an-giao-so-kiem-tra-chi-nsnn',
-        // ])
+        // gui du lieu trinh duyet len server
+        const request = {
+            id: null,
+            idSoTranChi: this.id,
+            listCtiet: lstCtietBcaoTemp,
+            listTtCtiet: listTtCtiet,
+            maDvi: this.maDviNhan,
+            maDviTien: '1',
+            maPa: maPaNew,
+            maPaBtc: this.maPa,
+            namPa: this.newDate.getFullYear(),
+            maBcao: this.maBaoCao,
+            trangThai: "1",
+            thuyetMinh: "",
+            tabSelected: 'pa',
+        };
+        this.dataChange.emit(request);
     }
 
     async sua() {
-        // const request = {
-        //     id: this.id,
-        //     maBcao: this.maBaoCao,
-        // }
-        // let check = false;
-        // const trangThais = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8, Utils.TT_BC_9];
-        // if (this.userService.isTongCuc()) {
-        //     trangThais.push(Utils.TT_BC_7);
-        // }
-        // const requestReport = {
-        //     loaiTimKiem: "0",
-        //     maBcao: this.maBaoCao,
-        //     maDvi: this.userInfo?.MA_DVI,
-        //     paggingReq: {
-        //         limit: 10,
-        //         page: 1,
-        //     },
-        //     trangThais: trangThais,
-        // };
-        // await this.quanLyVonPhiService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
-        //     (data) => {
-        //         if (data.statusCode == 0) {
-        //             if (data.data.content?.length > 0) {
-        //                 check = true;
-        //             }
-        //         }
-        //     }
-        // );
-        // if (!check) {
-        //     this.notification.warning(MESSAGE.WARNING, "Trạng thái bản ghi không được phép sửa");
-        //     return;
-        // }
-        // this.quanLyVonPhiService.suaBcao(request).toPromise().then(
-        //     async (data) => {
-        //         if (data.statusCode == 0) {
-        //             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        //             this.router.navigate([
-        //                 MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + LAP_THAM_DINH + '/bao-cao/' + data.data.id,
-        //             ])
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, data?.msg);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //     },
-        // );
+        const request = {
+            id: this.id,
+            maBcao: this.maBaoCao,
+        }
+        let check = false;
+        const trangThais = [Utils.TT_BC_1, Utils.TT_BC_3, Utils.TT_BC_5, Utils.TT_BC_8, Utils.TT_BC_9];
+        if (this.userService.isTongCuc()) {
+            trangThais.push(Utils.TT_BC_7);
+        }
+        const requestReport = {
+            loaiTimKiem: "0",
+            maBcao: this.maBaoCao,
+            maDvi: this.userInfo?.MA_DVI,
+            paggingReq: {
+                limit: 10,
+                page: 1,
+            },
+            trangThais: trangThais,
+        };
+        await this.lapThamDinhService.timBaoCaoLapThamDinh(requestReport).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    if (data.data.content?.length > 0) {
+                        check = true;
+                    }
+                }
+            }
+        );
+        if (!check) {
+            this.notification.warning(MESSAGE.WARNING, "Trạng thái bản ghi không được phép sửa");
+            return;
+        }
+        this.lapThamDinhService.suaBcao(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                    const obj = {
+                        id: data.data.id,
+                        tabSelected: 'baocao',
+                    }
+                    this.dataChange.emit(obj);
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
     }
 
     displayValue(num: number): string {
