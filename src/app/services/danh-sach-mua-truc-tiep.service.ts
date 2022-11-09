@@ -22,7 +22,7 @@ export class DanhSachMuaTrucTiepService extends BaseService {
   }
 
   getSoLuongAdded(body): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}/${this.table}/count-sl-kh`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/count-sl-kh`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 

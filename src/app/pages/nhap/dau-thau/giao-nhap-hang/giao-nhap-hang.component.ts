@@ -13,13 +13,10 @@ import { Globals } from 'src/app/shared/globals';
 export class GiaoNhapHangComponent implements OnInit {
   loaiVthhSelected: string;
   tabs: any[] = [];
-  count: Array<number> = [];
   listVthh: any[] = []
   constructor(
     private danhMucService: DanhMucService,
     private spinner: NgxSpinnerService,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
-    private notification: NzNotificationService,
     public globals: Globals,
   ) { }
 
@@ -28,46 +25,18 @@ export class GiaoNhapHangComponent implements OnInit {
     this.loaiVTHHGetAll();
   }
   async loaiVTHHGetAll() {
-    this.tabs = [
-      {
-        giaTri: 'Tất cả',
-        ma: null,
-      },
-    ];
+    this.tabs = [];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
         this.listVthh = res.data;
         res.data.forEach((element) => {
-          element.count = 0;
           this.tabs.push(element);
         });
+        this.selectTab(this.tabs[0].ma);
       }
     }
   }
-  // async getCount() {
-  //   try {
-  //     let res = await this.quyetDinhNhapXuatService.getCount();
-  //     if (res.msg == MESSAGE.SUCCESS) {
-  //       if (res.data) {
-  //         this.count = [
-  //           res.data.tatCa,
-  //           res.data.thoc,
-  //           res.data.gao,
-  //           res.data.muoi,
-  //           res.data.vatTu,
-  //         ];
-  //       }
-  //     } else {
-  //       this.notification.error(MESSAGE.ERROR, res.msg);
-  //     }
-  //     this.spinner.hide();
-  //   } catch (e) {
-  //     console.log('error: ', e);
-  //     this.spinner.hide();
-  //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-  //   }
-  // }
 
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
