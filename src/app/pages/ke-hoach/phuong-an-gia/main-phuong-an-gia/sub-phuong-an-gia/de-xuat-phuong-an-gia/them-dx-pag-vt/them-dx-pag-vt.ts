@@ -555,8 +555,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   async getDataChiTieu() {
-    if (this.type == 'GMDTBTT') {
-      let res2 = await this.chiTieuKeHoachNamCapTongCucService.canCuCuc(+this.formData.get('namKeHoach').value)
+    if (this.type == 'GMDTBTT' && !this.idInput) {
+      let res2 = await this.chiTieuKeHoachNamCapTongCucService.chiTeuPag(+this.formData.get('namKeHoach').value)
       if (res2.msg == MESSAGE.SUCCESS) {
         const dataChiTieu = res2.data;
         if (dataChiTieu) {
@@ -569,11 +569,10 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         }
       }
     }
-
   }
 
   async loadDsQdPduyetKhlcnt() {
-    if (this.type == 'GMDTBTT') {
+    if (this.type == 'GMDTBTT' && !this.idInput) {
       let body = {
         namKhoach: this.formData.get('namKeHoach').value,
         lastest: 1,
