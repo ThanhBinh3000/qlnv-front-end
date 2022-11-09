@@ -1,20 +1,21 @@
-import { saveAs } from 'file-saver';
-import { Component, Input, OnInit } from '@angular/core';
+import {saveAs} from 'file-saver';
+import {Component, Input, OnInit} from '@angular/core';
 import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {
   PAGE_SIZE_DEFAULT,
 } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { Globals } from 'src/app/shared/globals';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TongHopDeNghiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {UserService} from 'src/app/services/user.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {Globals} from 'src/app/shared/globals';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {TongHopDeNghiCapVonService} from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
+import {STATUS} from "../../../../constants/status";
 
 @Component({
   selector: 'app-tong-hop-de-nghi-cap-von-bo-nganh',
@@ -27,7 +28,7 @@ export class TongHopComponent implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
+  STATUS = STATUS;
   isDetail: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
@@ -74,7 +75,8 @@ export class TongHopComponent implements OnInit {
     public globals: Globals,
     private TongHopDeNghiCapVonService: TongHopDeNghiCapVonService,
     private fb: FormBuilder
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     try {
@@ -94,6 +96,7 @@ export class TongHopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   initForm() {
     this.formData = this.fb.group({
       maTongHop: [null],
@@ -101,6 +104,7 @@ export class TongHopComponent implements OnInit {
       ngayTongHop: [null],
     })
   }
+
   async initData() {
     this.userInfo = this.userService.getUserLogin();
     this.userdetail.maDvi = this.userInfo.MA_DVI;
@@ -137,6 +141,7 @@ export class TongHopComponent implements OnInit {
       this.indeterminate = true;
     }
   }
+
   // Đang lỗi API phần GET
   async search() {
     this.spinner.show();
@@ -320,6 +325,7 @@ export class TongHopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
+
   deleteSelect() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {

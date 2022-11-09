@@ -25,6 +25,7 @@ import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/de
 import { TongHopDeNghiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
+import {STATUS} from "../../../../../constants/status";
 @Component({
   selector: 'app-thong-tin-tong-hop',
   templateUrl: './thong-tin-tong-hop.component.html',
@@ -69,11 +70,11 @@ export class ThongTinTonghopComponent implements OnInit {
       value: "TCDT"
     },
     {
-      id: "Bộ, ngành",
+      id: "BN",
       value: "Bộ, ngành"
     },
     {
-      id: "Tất cả",
+      id: "ALL",
       value: "Tất cả"
     },
   ]
@@ -114,7 +115,7 @@ export class ThongTinTonghopComponent implements OnInit {
   initForm() {
     this.formData = this.fb.group({
       "nam": [null, [Validators.required]],
-      "nguonTongHop": [null, [Validators.required]],
+      "nguonTongHop": ['ALL', [Validators.required]],
       "maTongHop": [null],
       "ngayTongHop": [dayjs().format('DD/MM/YYYY')],
       "maToTrinh": [null],
@@ -537,19 +538,20 @@ export class ThongTinTonghopComponent implements OnInit {
 
         break;
       // bộ ngành
-      case "Bộ, ngành":
-      case "Tất cả":
+      case "BN":
+      case "ALL":
         this.spinner.show();
         let body = {
           soDeNghi: null,
           maBoNganh: null,
           nam: this.yearNow,
+          trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+          trangThaiTh: STATUS.CHUA_TONG_HOP,
           ngayDeNghiTuNgay: null,
           ngayDeNghiDenNgay: null,
           pageNumber: this.page,
-          pageSize: this.pageSize,
+          pageSize: 100000,
         };
-
         let res = await this.deNghiCapVonBoNganhService.timKiem(body);
         if (res.msg == MESSAGE.SUCCESS) {
           let data = res.data;
@@ -563,11 +565,6 @@ export class ThongTinTonghopComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
         break;
-      // tất cả
-      // case "Tất cả":
-
-      //   break;
-
       default:
         break;
     }
