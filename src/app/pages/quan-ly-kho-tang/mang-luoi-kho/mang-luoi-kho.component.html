@@ -44,20 +44,20 @@
               <h2 *ngIf="levelNode == 5">Thông tin nhà kho </h2>
               <h2 *ngIf="levelNode == 6">Thông tin ngăn kho </h2>
               <h2 *ngIf="levelNode == 7">Thông tin lô kho </h2>
-              <div class="buttons" *ngIf="levelNode > 5 ">
+              <div class="buttons" *ngIf="levelNode > 3 ">
                 <button nz-button class="btn btn-sub do" (click)="delete()">
                   <i class="fa fa-trash-o do"></i>
                   Xóa
                 </button>
-                <button nz-button class="btn btn-sub xanh-nhat" (click)="showEdit(true)" *ngIf="!isEditData">
+                <button nz-button class="btn btn-sub xanh-nhat" (click)="showEdit(false)" *ngIf="isEditData">
                   <i class="icon htvbdh_bosungfile"></i>
                   Sửa
                 </button>
-                <button nz-button class="btn btn-sub" (click)="showEdit(false)" *ngIf="isEditData">
+                <button nz-button class="btn btn-sub" (click)="showEdit(true)" *ngIf="!isEditData">
                   <i class="fa fa-times"></i>
                   Hủy bỏ
                 </button>
-                <button nz-button class="btn btn-sub xanh-nhat" (click)="update()" *ngIf="isEditData">
+                <button nz-button class="btn btn-sub xanh-nhat" (click)="update()" *ngIf="!isEditData">
                   <i class="fa fa-save"></i>
                   Lưu
                 </button>
@@ -71,7 +71,7 @@
                       <nz-form-label>Mã cục</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input formControlName="maDvi" nz-input [readonly]="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -81,7 +81,7 @@
                       <nz-form-label>Tên cục</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input formControlName="tenDvi" nz-input [readonly]="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -91,7 +91,7 @@
                       <nz-form-label>Địa điểm</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input formControlName="diaChi" nz-input [readonly]="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -101,7 +101,7 @@
                       <nz-form-label>Số lượng chi cục</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input nz-input formControlName="soLuongChiCuc" [readonly]="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -111,7 +111,7 @@
                       <nz-form-label>Số lượng điểm kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input nz-input   formControlName="soLuongDiemKho" [readonly]="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -121,7 +121,7 @@
                       <nz-form-label>Số lượng nhà kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input nz-input formControlName="soLuongNhaKho" [readonly]="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -131,7 +131,7 @@
                       <nz-form-label>Số lượng ngăn kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input nz-input formControlName="soLuongNganKho"  [readonly]="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -141,7 +141,7 @@
                       <nz-form-label>Số lượng lô kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input nz-input formControlName="soLuongLoKho"  [readonly]="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -217,7 +217,7 @@
                   </div>
                   <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Trạng thái</nz-form-label>
+                      <nz-form-label >Trạng thái</nz-form-label>
                       <nz-form-item>
                         <label [nzDisabled]="true" nz-checkbox formControlName="trangThai">Hoạt động/Không hoạt
                           động</label>
@@ -233,7 +233,7 @@
                       <nz-form-label>Mã chi cục</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input formControlName="maDvi" nz-input [readonly]="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -243,7 +243,7 @@
                       <nz-form-label>Tên chi cục</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input formControlName="tenDvi" nz-input [readonly]="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -253,7 +253,7 @@
                       <nz-form-label>Địa điểm chi cục</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input formControlName="diaChi" nz-input [readonly]="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -369,7 +369,7 @@
                   </div>
                   <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Trạng thái</nz-form-label>
+                      <nz-form-label >Trạng thái</nz-form-label>
                       <nz-form-item>
                         <label [nzDisabled]="true" nz-checkbox formControlName="trangThai">Hoạt động/Không hoạt
                           động</label>
@@ -385,7 +385,7 @@
                       <nz-form-label>Mã điểm kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input formControlName="maDvi" nz-input [readonly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -395,7 +395,7 @@
                       <nz-form-label>Tên điểm kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input formControlName="tenDvi" nz-input [readonly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -405,7 +405,7 @@
                       <nz-form-label>Địa chỉ điểm kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readonly]="true"/>
+                          <input formControlName="diaChi" nz-input [readonly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -524,14 +524,14 @@
                     <nz-form-item>
                       <nz-form-label>Mô tả</nz-form-label>
                       <nz-form-control>
-                        <textarea [disabled]="true" rows="3" class="search__input" nz-input
+                        <textarea [disabled]="isEditData" rows="3" class="search__input" nz-input
                                   placeholder="Nhập text"></textarea>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Trạng thái</nz-form-label>
+                      <nz-form-label >Trạng thái</nz-form-label>
                       <nz-form-item>
                         <label [nzDisabled]="true" nz-checkbox formControlName="trangThai">Hoạt động/Không hoạt
                           động</label>
@@ -544,29 +544,29 @@
                 <div nz-row [nzGutter]="24">
                   <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Mã nhà kho</nz-form-label>
+                      <nz-form-label >Mã nhà kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input/>
+                          <input formControlName="maDvi" nz-input [readonly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="5">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tên nhà kho</nz-form-label>
+                      <nz-form-label >Tên nhà kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input/>
+                          <input formControlName="tenDvi" nz-input  [readonly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="4">
-                    <nz-form-label nzRequired>Thời điểm sử dụng</nz-form-label>
+                    <nz-form-label >Thời điểm sử dụng</nz-form-label>
                     <nz-form-control [nzErrorTip]="error">
                       <nz-input-group>
-                        <nz-date-picker nzFormat="dd/MM/yyyy"></nz-date-picker>
+                        <nz-date-picker [nzDisabled]="isEditData" nzFormat="dd/MM/yyyy"></nz-date-picker>
                       </nz-input-group>
                     </nz-form-control>
                   </div>
@@ -574,10 +574,12 @@
                     <div nz-row [nzGutter]="24">
                       <div nz-col nzSpan="7">
                         <nz-form-item>
-                          <nz-form-label nzRequired>Loại kho</nz-form-label>
+                          <nz-form-label >Loại kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input nz-input/>
+                              <nz-select [nzDisabled]="isEditData">
+                                <nz-option></nz-option>
+                              </nz-select>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -588,10 +590,10 @@
                       </div>
                       <div nz-col nzSpan="7">
                         <nz-form-item>
-                          <nz-form-label nzRequired>Số ngăn kho</nz-form-label>
+                          <nz-form-label >Số ngăn kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input nz-input/>
+                              <input [readonly]="isEditData" nz-input/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -602,10 +604,10 @@
                       </div>
                       <div nz-col nzSpan="7">
                         <nz-form-item>
-                          <nz-form-label nzRequired> Diện tích (m2)</nz-form-label>
+                          <nz-form-label > Diện tích (m2)</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <input nz-input/>
+                              <input [readonly]="isEditData" nz-input/>
                             </nz-input-group>
                           </nz-form-control>
                         </nz-form-item>
@@ -614,7 +616,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Thuộc điểm kho</nz-form-label>
+                      <nz-form-label >Thuộc điểm kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <input nz-input [readOnly]="true"/>
@@ -624,7 +626,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Chi cục</nz-form-label>
+                      <nz-form-label >Chi cục</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <input nz-input [readOnly]="true"/>
@@ -634,7 +636,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Địa điểm</nz-form-label>
+                      <nz-form-label >Địa điểm</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <input nz-input [readOnly]="true"/>
@@ -644,37 +646,39 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tình trạng kho</nz-form-label>
+                      <nz-form-label >Tình trạng kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input />
+                          <input [readonly]="isEditData" nz-input />
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Chất lượng</nz-form-label>
+                      <nz-form-label >Chất lượng</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input />
+                         <nz-select [nzDisabled]="isEditData">
+                           <nz-option></nz-option>
+                         </nz-select>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Diện tích</nz-form-label>
+                      <nz-form-label >Diện tích</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input/>
+                          <input [readonly]="isEditData" nz-input/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tổng tích lượng thiết kế-LT</nz-form-label>
+                      <nz-form-label >Tổng tích lượng thiết kế - LT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi">
                           <input nz-input [readOnly]="true"/>
@@ -684,7 +688,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tổng tích lượng thiết kế-VT</nz-form-label>
+                      <nz-form-label >Tổng tích lượng thiết kế - VT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi"p>
                           <input nz-input [readOnly]="true"/>
@@ -694,7 +698,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tổng tích lượng đã sử dụng-LT</nz-form-label>
+                      <nz-form-label >Tổng tích lượng đã SD - LT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi">
                           <input nz-input [readOnly]="true"/>
@@ -704,7 +708,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tổng tích lượng đã sử dụng-VT</nz-form-label>
+                      <nz-form-label >Tổng tích lượng đã SD - VT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi">
                           <input nz-input [readOnly]="true"/>
@@ -714,7 +718,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tổng tích lượng khả dụng-LT</nz-form-label>
+                      <nz-form-label >Tổng tích lượng khả dụng - LT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi">
                           <input nz-input [readOnly]="true"/>
@@ -724,7 +728,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tổng tích lượng khả dụng-VT</nz-form-label>
+                      <nz-form-label >Tổng tích lượng khả dụng - VT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi">
                           <input nz-input [readOnly]="true"/>
@@ -734,7 +738,7 @@
                   </div>
                   <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Số lượng ngăn kho</nz-form-label>
+                      <nz-form-label >Số lượng ngăn kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <input nz-input [readOnly]="true"/>
@@ -744,7 +748,7 @@
                   </div>
                   <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Số lượng lô kho</nz-form-label>
+                      <nz-form-label >Số lượng lô kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <input nz-input [readOnly]="true"/>
@@ -754,29 +758,29 @@
                   </div>
                   <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tên thủ kho</nz-form-label>
+                      <nz-form-label >Tên thủ kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input [readOnly]="true"/>
+                          <input nz-input [readOnly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Sơ đồ nhà kho</nz-form-label>
+                      <nz-form-label >Sơ đồ nhà kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input type="file">
+                          <input [readonly]="isEditData" nz-input type="file">
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="24">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Nhiệm vụ</nz-form-label>
+                      <nz-form-label >Nhiệm vụ</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <textarea rows="3" class="search__input" nz-input placeholder="Nhập text"></textarea>
+                        <textarea [readonly]="isEditData" rows="3" class="search__input" nz-input placeholder="Nhập text"></textarea>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -786,27 +790,27 @@
                 <div nz-row [nzGutter]="24">
                   <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Mã ngăn kho</nz-form-label>
+                      <nz-form-label >Mã ngăn kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
-                          <input nz-input/>
+                          <input formControlName="maDvi" nz-input/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tên ngăn kho</nz-form-label>
+                      <nz-form-label >Tên ngăn kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input/>
+                          <input formControlName="tenDvi" nz-input [readonly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Loại kho</nz-form-label>
+                      <nz-form-label >Loại kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <input [readonly]="true" nz-input/>
@@ -816,27 +820,17 @@
                   </div>
                   <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Diện tích (m2)</nz-form-label>
+                      <nz-form-label >Diện tích (m2)</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input nz-input/>
+                          <input nz-input [readonly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Số lượng lô kho</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group>
-                          <input nz-input [readonly]="true"/>
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Thuộc nhà kho</nz-form-label>
+                      <nz-form-label >Số lượng lô kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <input nz-input [readonly]="true"/>
@@ -846,7 +840,7 @@
                   </div>
                   <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Thuộc điểm kho</nz-form-label>
+                      <nz-form-label >Thuộc nhà kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <input nz-input [readonly]="true"/>
@@ -856,7 +850,17 @@
                   </div>
                   <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Thuộc chi cục</nz-form-label>
+                      <nz-form-label >Thuộc điểm kho</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group>
+                          <input nz-input [readonly]="true"/>
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="3">
+                    <nz-form-item>
+                      <nz-form-label >Thuộc chi cục</nz-form-label>
                       <nz-form-control  [nzErrorTip]="error">
                         <nz-input-group>
                           <input nz-input [readonly]="true"/>
@@ -866,7 +870,7 @@
                   </div>
                   <div nz-col [nzSpan]="18">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Địa điểm</nz-form-label>
+                      <nz-form-label >Địa điểm</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <input nz-input [readonly]="true"/>
@@ -876,7 +880,7 @@
                   </div>
                   <div nz-col [nzSpan]="3">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tình trạng ngăn kho</nz-form-label>
+                      <nz-form-label >Tình trạng ngăn kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <input nz-input [readonly]="true"/>
@@ -896,7 +900,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tổng tích lượng thiết kế-LT</nz-form-label>
+                      <nz-form-label >Tổng tích lượng thiết kế - LT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi">
                           <input nz-input [readOnly]="true"/>
@@ -906,7 +910,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tổng tích lượng thiết kế-VT</nz-form-label>
+                      <nz-form-label >Tổng tích lượng thiết kế - VT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi"p>
                           <input nz-input [readOnly]="true"/>
@@ -916,7 +920,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tổng tích lượng đã SD-LT</nz-form-label>
+                      <nz-form-label >Tổng tích lượng đã SD - LT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi">
                           <input nz-input [readOnly]="true"/>
@@ -926,7 +930,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tổng tích lượng đã SD-VT</nz-form-label>
+                      <nz-form-label >Tổng tích lượng đã SD - VT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group [nzAddOnAfter]="dvi">
                           <input nz-input [readOnly]="true"/>
@@ -936,7 +940,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label >Tổng tích lượng khả dụng-LT</nz-form-label>
+                      <nz-form-label >Tổng tích lượng khả dụng - LT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="dvi">
                           <input nz-input [readOnly]="true"/>
@@ -946,7 +950,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label >Tổng tích lượng khả dụng-VT</nz-form-label>
+                      <nz-form-label >Tổng tích lượng khả dụng - VT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="dvi">
                           <input nz-input [readOnly]="true"/>
@@ -956,7 +960,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label >Tổng thể tích thiết kế-LT</nz-form-label>
+                      <nz-form-label >Tổng thể tích thiết kế - LT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
                           <input nz-input />
@@ -966,7 +970,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label >Tổng thể tích thiết kế-VT</nz-form-label>
+                      <nz-form-label >Tổng thể tích thiết kế - VT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
                           <input nz-input />
@@ -976,7 +980,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label >Tổng thế tích đã sử dụng-LT</nz-form-label>
+                      <nz-form-label >Tổng thế tích đã sử dụng - LT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
                           <input nz-input/>
@@ -986,7 +990,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label >Tổng thế tích đã sử dụng-VT</nz-form-label>
+                      <nz-form-label >Tổng thế tích đã sử dụng - VT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
                           <input nz-input/>
@@ -996,7 +1000,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label >Tổng thế tích khả dụng-LT</nz-form-label>
+                      <nz-form-label >Tổng thế tích khả dụng - LT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
                           <input nz-input [readOnly]="true"/>
@@ -1006,7 +1010,7 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label >Tổng thế tích khả dụng-VT</nz-form-label>
+                      <nz-form-label >Tổng thế tích khả dụng - VT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
                           <input nz-input [readOnly]="true"/>
@@ -1032,7 +1036,9 @@
                       <nz-form-label >Loại hàng hóa</nz-form-label>
                       <nz-form-control>
                         <nz-input-group >
-                          <input nz-input [readOnly]="true" />
+                          <nz-select [nzDisabled]="isEditData">
+                            <nz-option></nz-option>
+                          </nz-select>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -1042,7 +1048,9 @@
                       <nz-form-label >Chủng loại hàng hóa</nz-form-label>
                       <nz-form-control>
                         <nz-input-group >
-                          <input nz-input [readOnly]="true" />
+                          <nz-select [nzDisabled]="isEditData">
+                            <nz-option></nz-option>
+                          </nz-select>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -1052,7 +1060,7 @@
                       <nz-form-label >Số lượng</nz-form-label>
                       <nz-form-control>
                         <nz-input-group >
-                          <input nz-input [readOnly]="true" />
+                          <input nz-input [readOnly]="isEditData" />
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -1072,30 +1080,30 @@
                       <nz-form-label >Ngày nhập đầy</nz-form-label>
                       <nz-form-control>
                         <nz-input-group >
-                          <nz-date-picker  nzFormat="dd/MM/yyyy"  [nzDisabled]="true"></nz-date-picker>
+                          <nz-date-picker [nzDisabled]="isEditData"  nzFormat="dd/MM/yyyy"  [nzDisabled]="true"></nz-date-picker>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Nhiệm vụ</nz-form-label>
+                      <nz-form-label >Nhiệm vụ</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <textarea rows="3" class="search__input" nz-input placeholder="Nhập text"></textarea>
+                        <textarea [readonly]="isEditData" rows="3" class="search__input" nz-input placeholder="Nhập text"></textarea>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Ghi chú</nz-form-label>
+                      <nz-form-label >Ghi chú</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <textarea rows="3" class="search__input" nz-input placeholder="Nhập text"></textarea>
+                        <textarea [readonly]="isEditData"  rows="3" class="search__input" nz-input placeholder="Nhập text"></textarea>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Chọn file bản đồ (sờ đồ) ngăn, lô kho</nz-form-label>
+                      <nz-form-label >Chọn file bản đồ (sờ đồ) ngăn, lô kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <input type="file" nz-input>
@@ -1110,149 +1118,39 @@
               </nz-card>
               <nz-card class="mt16 flex-card p-lr16" *ngIf="levelNode == 7">
                 <div nz-row [nzGutter]="24">
-                  <div nz-col [nzSpan]="12">
+                  <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tên lô kho</nz-form-label>
+                      <nz-form-label >Mã lô kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <input nz-input/>
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Mã lô kho</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <input nz-input/>
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Địa điểm</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <input nz-input [readonly]="true" />
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Thời điểm sử dụng</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <nz-date-picker nzFormat="dd/MM/yyyy"></nz-date-picker>
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Loại kho</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <input nz-input [readonly]="true" />
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Thuộc ngăn kho</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <input nz-input [readonly]="true" />
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="3">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Thuộc nhà kho</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <input nz-input [readonly]="true" />
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Thuộc điểm kho</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <input nz-input [readonly]="true" />
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Thuộc chi cục</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <input nz-input [readonly]="true" />
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Diện tích sử dụng</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <input nz-input  />
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Tích lượng thiết kế -LT</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <input nz-input  />
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Tích lượng thiết kế-VT</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <input nz-input  />
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Tích lượng đã sử dụng-LT</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <input nz-input  />
+                        <nz-input-group  >
+                          <input formControlName="maDvi" nz-input [readonly]="true"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tích lượng đã sử dụng-VT</nz-form-label>
+                      <nz-form-label >Tên lô kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
-                          <input nz-input  />
+                          <input formControlName="tenDvi" nz-input [readonly]="isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tích lượng khả dụng-LT</nz-form-label>
+                      <nz-form-label >Thời điểm sử dụng</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group >
+                          <nz-date-picker nzDisabled="true" nzFormat="dd/MM/yyyy"></nz-date-picker>
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Loại kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
                           <input nz-input [readonly]="true" />
@@ -1262,49 +1160,199 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Tích lượng đã sử dụng-VT</nz-form-label>
+                      <nz-form-label >Địa điểm</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
-                          <input nz-input  />
+                          <input nz-input formControlName="diaChi" [readonly]="true" />
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Thể tích thiết kế</nz-form-label>
+                      <nz-form-label >Thuộc ngăn kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
-                          <input nz-input  />
+                          <input nz-input [readonly]="true" />
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Thể tích đã sử dụng-LT</nz-form-label>
+                      <nz-form-label >Thuộc nhà kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
-                          <input nz-input  />
+                          <input nz-input [readonly]="true" />
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Thể tích đã sử dụng-VT</nz-form-label>
+                      <nz-form-label >Thuộc điểm kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
-                          <input nz-input  />
+                          <input nz-input [readonly]="true" />
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Thể tích khả dụng-LT</nz-form-label>
+                      <nz-form-label >Thuộc chi cục</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
+                          <input nz-input [readonly]="true" />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Diện tích sử dụng (m2)</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group >
+                          <input nz-input [readOnly]="isEditData" />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Tích lượng thiết kế - LT</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group [nzAddOnAfter]="dvi" >
+                          <input nz-input [readOnly]="isEditData"  />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Tích lượng thiết kế - VT</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group [nzAddOnAfter]="dvi" >
+                          <input nz-input [readOnly]="true"    />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Tích lượng đã SD - LT</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group [nzAddOnAfter]="dvi" >
+                          <input nz-input [readOnly]="isEditData"    />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Tích lượng đã SD - VT</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group [nzAddOnAfter]="dvi" >
+                          <input nz-input [readOnly]="isEditData"    />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Tích lượng khả dụng - LT</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group [nzAddOnAfter]="dvi" >
+                          <input nz-input [readonly]="true" />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Tích lượng đã sử dụng - VT</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group [nzAddOnAfter]="dvi" >
+                          <input nz-input [readOnly]="true"  />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Thời điểm nhập kho</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group>
+                          <nz-date-picker [nzDisabled]="isEditData" nzFormat="dd/MM/yyyy"></nz-date-picker>
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Tích lượng khả dụng - LT</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group [nzAddOnAfter]="dvi" >
+                          <input nz-input [readOnly]="true"  />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Tích lượng khả dụng - VT</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group [nzAddOnAfter]="dvi" >
+                          <input nz-input [readOnly]="true"  />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Thể tích thiết kế - LT</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group [nzAddOnAfter]="theTich" >
+                          <input nz-input [readOnly]="true"  />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Thể tích thiết kế-VT</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group [nzAddOnAfter]="theTich" >
+                          <input nz-input [readOnly]="true"  />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Thể tích đã sử dụng - LT</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group [nzAddOnAfter]="theTich" >
+                          <input nz-input [readOnly]="true"  />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Thể tích đã sử dụng - VT</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group [nzAddOnAfter]="theTich" >
+                          <input nz-input [readOnly]="true"  />
+                        </nz-input-group>
+                      </nz-form-control>
+                    </nz-form-item>
+                  </div>
+                  <div nz-col [nzSpan]="4">
+                    <nz-form-item>
+                      <nz-form-label >Thể tích khả dụng - LT</nz-form-label>
+                      <nz-form-control [nzErrorTip]="error">
+                        <nz-input-group [nzAddOnAfter]="theTich" >
                           <input nz-input [readonly]="true"  />
                         </nz-input-group>
                       </nz-form-control>
@@ -1312,9 +1360,9 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Thể tích khả dụng-VT</nz-form-label>
+                      <nz-form-label >Thể tích khả dụng - VT</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
+                        <nz-input-group [nzAddOnAfter]="theTich" >
                           <input nz-input  [readonly]="true"   />
                         </nz-input-group>
                       </nz-form-control>
@@ -1322,37 +1370,45 @@
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Loại hàng hóa</nz-form-label>
+                      <nz-form-label >Loại hàng hóa</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
-                          <input nz-input  />
+                          <nz-select [nzDisabled]="isEditData">
+                            <nz-option>
+
+                            </nz-option>
+                          </nz-select>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Chủng loại hàng hóa</nz-form-label>
+                      <nz-form-label >Chủng loại hàng hóa</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
-                          <input nz-input  />
+                          <nz-select [nzDisabled]="isEditData">
+                            <nz-option>
+
+                            </nz-option>
+                          </nz-select>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="2">
+                  <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Số lượng</nz-form-label>
+                      <nz-form-label >Số lượng</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
-                          <input nz-input  />
+                          <input nz-input [readonly]="isEditData" />
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="2">
+                  <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Đơn vị tính</nz-form-label>
+                      <nz-form-label >Đơn vị tính</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
                           <input nz-input [readonly]="true" />
@@ -1360,32 +1416,22 @@
                       </nz-form-control>
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="4">
+                  <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Thời điểm nhập kho</nz-form-label>
+                      <nz-form-label > Tình trạng lô kho </nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <nz-date-picker nzFormat="dd/MM/yyyy"></nz-date-picker>
+                          <input type="text" [readOnly]="true" nz-input>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="6">
                     <nz-form-item>
-                      <nz-form-label nzRequired> Tình trạng lô kho </nz-form-label>
+                      <nz-form-label >Ngày nhập đầy</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input type="text" nz-input>
-                        </nz-input-group>
-                      </nz-form-control>
-                    </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="6">
-                    <nz-form-item>
-                      <nz-form-label nzRequired>Ngày nhập đầy</nz-form-label>
-                      <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group>
-                          <nz-date-picker nzFormat="dd/MM/yyyy"></nz-date-picker>
+                          <nz-date-picker [nzDisabled]="true"  nzFormat="dd/MM/yyyy"></nz-date-picker>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -1393,23 +1439,23 @@
                   <div nz-col [nzSpan]="12"></div>
                   <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Nhiệm vụ</nz-form-label>
+                      <nz-form-label >Nhiệm vụ</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <textarea rows="3" class="search__input" nz-input placeholder="Nhập text"></textarea>
+                        <textarea [readOnly]="isEditData"   rows="3" class="search__input" nz-input placeholder="Nhập text"></textarea>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Ghi chú</nz-form-label>
+                      <nz-form-label >Ghi chú</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <textarea rows="3" class="search__input" nz-input placeholder="Nhập text"></textarea>
+                        <textarea [readOnly]="isEditData"   rows="3" class="search__input" nz-input placeholder="Nhập text"></textarea>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
                   <div nz-col [nzSpan]="12">
                     <nz-form-item>
-                      <nz-form-label nzRequired>Chọn file bản đồ (sờ đồ) ngăn, lô kho</nz-form-label>
+                      <nz-form-label >Chọn file bản đồ (sờ đồ) ngăn, lô kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
                           <input type="file" nz-input>

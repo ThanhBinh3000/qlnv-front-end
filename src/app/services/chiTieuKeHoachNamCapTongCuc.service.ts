@@ -125,7 +125,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   }
 
   chiTeuPag(namKh: number): Promise<any> {
-    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/ct-kh-tc/${namKh}`;
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/ct-kh-tc-pag/${namKh}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 }

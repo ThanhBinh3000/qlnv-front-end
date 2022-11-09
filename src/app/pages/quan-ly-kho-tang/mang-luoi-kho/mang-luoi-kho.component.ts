@@ -45,12 +45,10 @@ export class MangLuoiKhoComponent implements OnInit {
   nodeSelected: any;
   detailDonVi: FormGroup;
   levelNode: number = 1;
-  isEditData: boolean = false;
+  isEditData: boolean = true;
   dataTable: any[] = []
   listNam: any[] = [];
   dvi: string = 'Tấn kho'
-
-
   constructor(
     private router: Router,
     private donviService: DonviService,
@@ -104,9 +102,9 @@ export class MangLuoiKhoComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     await Promise.all([
       this.layTatCaDonViTheoTree(),
-      // this.getListLoaiKho(),
-      // this.getListClKho(),
-      // this.getListTtKho()
+      this.getListLoaiKho(),
+      this.getListClKho(),
+      this.getListTtKho()
     ]);
     this.spinner.hide();
   }
@@ -160,6 +158,7 @@ export class MangLuoiKhoComponent implements OnInit {
   theTich : string = 'm³';
   nzClickNodeTree(event: any): void {
     if (event.keys.length > 0) {
+      this.isEditData = true;
       this.nodeSelected = event.node.origin;
       this.levelNode = this.nodeSelected.capDvi;
       this.getDetailMlkByKey(event.node)
