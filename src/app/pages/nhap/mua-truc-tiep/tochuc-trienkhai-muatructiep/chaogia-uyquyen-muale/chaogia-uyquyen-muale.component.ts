@@ -49,6 +49,7 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
     canhanTochuc: '',
     loaiVthh: '',
     maDvi: '',
+    trangThai: STATUS.BAN_HANH,
   };
 
   filterTable: any = {
@@ -118,6 +119,7 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
       canhanTochuc: this.searchFilter.canhanTochuc,
+      trangThai: this.searchFilter.trangThai,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
