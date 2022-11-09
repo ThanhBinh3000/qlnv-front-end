@@ -164,6 +164,9 @@ export class GhiNhanCapUngVonTaiCkvCcComponent implements OnInit {
     }
 
     getStatusName() {
+        if (this.trangThaiBanGhi == Utils.TT_BC_1) {
+            return 'Mới';
+        }
         return this.trangThais.find(e => e.id == this.trangThaiBanGhi)?.tenDm;
     }
 

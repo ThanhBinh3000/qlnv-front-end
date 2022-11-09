@@ -161,12 +161,12 @@
             <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.tenDvi}}</td>
             <td>{{ data.trichYeu }}</td>
-            <td>{{ data.qdKhlcntDtl?.qdKhlcnt?.tenLoaiVthh }}</td>
-            <td>{{ data.qdKhlcntDtl?.qdKhlcnt?.tenCloaiVthh }}</td>
+            <td>{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenLoaiVthh }}</td>
+            <td>{{ data.qdKhlcntDtl?.hhQdKhlcntHdr?.tenCloaiVthh }}</td>
             <td>{{ data.soGthau }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM')"
+              <a *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_XEM')"
                 (click)="redirectToChiTiet(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>

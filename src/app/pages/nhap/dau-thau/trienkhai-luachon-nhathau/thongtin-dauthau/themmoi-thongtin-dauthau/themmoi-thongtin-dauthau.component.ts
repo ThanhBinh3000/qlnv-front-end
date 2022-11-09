@@ -187,6 +187,12 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetailDtlCuc(this.idInput);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
+      let tongMucDtTrung = 0
+      data.dsGoiThau.forEach(item => {
+        if (item.trangThai == STATUS.THANH_CONG) {
+          tongMucDtTrung += item.soLuong * item.donGiaNhaThau * 1000
+        }
+      })
       this.formData.patchValue({
         namKhoach: data.hhQdKhlcntHdr.namKhoach,
         soQdPdKhlcnt: data.hhQdKhlcntHdr.soQd,
@@ -194,7 +200,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         tenDuAn: data.tenDuAn,
         tenDvi: data.tenDvi,
         tongMucDt: '',
-        tongMucDtGoiTrung: '',
+        tongMucDtGoiTrung: tongMucDtTrung,
         tenNguonVon: data.hhQdKhlcntHdr.tenNguonVon,
         tenHthucLcnt: data.hhQdKhlcntHdr.tenHthucLcnt,
         tenPthucLcnt: data.hhQdKhlcntHdr.tenPthucLcnt,
