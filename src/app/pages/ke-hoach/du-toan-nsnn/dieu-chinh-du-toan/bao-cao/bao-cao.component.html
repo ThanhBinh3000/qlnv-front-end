@@ -181,7 +181,7 @@
                 </tr>
               </tbody>
             </nz-table>
-            <ng-container *ngIf="baoCao.lstBcaoDviTrucThuocs.length != 0">
+            <ng-container *ngIf="baoCao.lstDviTrucThuoc.length != 0">
               <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                 <div nz-col class="gutter-row" [nzSpan]="12">
                   Danh sách báo cáo từ các đơn vị trực thuộc
@@ -216,7 +216,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let item of baoCao?.lstBcaoDviTrucThuocs; let i = index">
+                      <tr *ngFor="let item of baoCao?.lstDviTrucThuoc; let i = index">
                         <td>{{ i + 1 }}</td>
                         <td>{{getUnitName(item.maDvi)}}</td>
                         <td>{{item.maBcao}}</td>
