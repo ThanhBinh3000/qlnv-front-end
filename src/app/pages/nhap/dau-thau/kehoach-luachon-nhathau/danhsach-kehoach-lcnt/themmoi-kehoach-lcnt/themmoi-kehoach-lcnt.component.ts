@@ -454,7 +454,6 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       return;
     }
     this.setValidator();
-    console.log(this.validateSave());
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
@@ -516,12 +515,10 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
 
   validateSave() {
     let pipe = new DatePipe('en-US');
-    console.log(pipe.transform(this.formData.value.tgianBdauTchuc, 'yyyy-MM-dd'));
-    let tgianBdauTchuc = new Date(this.formData.value.tgianBdauTchuc);
+    let tgianBdauTchuc = new Date(pipe.transform(this.formData.value.tgianBdauTchuc, 'yyyy-MM-dd') + " 23:59:59");
     let tgianMthau = new Date(this.formData.value.tgianMthau)
     let tgianDthau = new Date(this.formData.value.tgianDthau)
-    let tgianNhang = new Date(this.formData.value.tgianNhang);
-    console.log(tgianBdauTchuc, tgianMthau, tgianDthau, tgianNhang);
+    let tgianNhang = new Date(pipe.transform(this.formData.value.tgianNhang, 'yyyy-MM-dd') + " 00:00:00");
     if (tgianBdauTchuc >= tgianMthau) {
       this.notification.error(MESSAGE.ERROR, "Thời gian bắt đầu tổ chức không được vượt quá thời gian mở thầu")
       return false

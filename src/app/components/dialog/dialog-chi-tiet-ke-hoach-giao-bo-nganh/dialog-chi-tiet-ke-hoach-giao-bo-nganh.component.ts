@@ -18,6 +18,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   isView: boolean = false;
   errorBn: boolean = false;
   errorTt: boolean = false;
+  nam: any;
   keHoach: any = {
     id: null,
     maBoNganh: null,
@@ -63,6 +64,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
   onChangeBoNganh(event) {
+    console.log(this.keHoach, 'abcc')
     const boNganh = this.dsBoNganh.find(item => item.ma == event)
     if (boNganh) {
       this.keHoach.tenBoNganh = boNganh.giaTri;
@@ -74,7 +76,11 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data;
+      let boTaiChinh = res.data.find(s => s.giaTri === 'Bộ Tài Chính');
+      this.keHoach.maBoNganh = boTaiChinh.ma;
+      this.keHoach.tenBoNganh = boTaiChinh.giaTri;
     }
+
   }
 
   async loadDanhMucHang() {
