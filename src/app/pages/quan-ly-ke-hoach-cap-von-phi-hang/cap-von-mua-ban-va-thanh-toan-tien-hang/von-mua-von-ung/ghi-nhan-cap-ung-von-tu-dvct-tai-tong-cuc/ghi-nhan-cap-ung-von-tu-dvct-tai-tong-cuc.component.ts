@@ -286,6 +286,7 @@ export class GhiNhanCapUngVonTuDvctTaiTongCucComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.statusEdit = false;
                     this.maCvUv = data.data.maCapUngVonTuCapTren;
+                    this.maDonViTao = data.data.maDvi;
                     this.maDviTien = data.data.maDviTien;
                     this.loaiVon = data.data.loaiCap;
                     this.soLenhChiTien = data.data.soLenhChiTien;
