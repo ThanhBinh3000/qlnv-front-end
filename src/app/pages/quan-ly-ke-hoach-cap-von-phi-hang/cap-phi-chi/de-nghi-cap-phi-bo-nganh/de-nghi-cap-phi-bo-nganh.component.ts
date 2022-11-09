@@ -15,6 +15,7 @@ import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/de
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {STATUS} from "../../../../constants/status";
 
 @Component({
   selector: 'app-de-nghi-cap-phi-bo-nganh',
@@ -37,7 +38,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
   loaiVthh: string;
   @Input()
   loaiVthhCache: string;
-
+  STATUS : STATUS;
   isDetail: boolean = false;
   listNam: any[] = [];
   listBoNganh: any[] = [];

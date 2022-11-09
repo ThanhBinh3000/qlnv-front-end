@@ -72,7 +72,7 @@
                     <th>Mã báo cáo</th>
                     <th>Báo cáo năm</th>
                     <th>Báo cáo tháng</th>
-                    <th>Công văn</th>
+                    <th nzWidth="20%">Công văn</th>
                     <th>Ngày trình duyệt <br> <span>(Ngày đơn vị cấp dưới gửi báo cáo)</span>
                     </th>
                     <th>Ngày duyệt <br> <span>(Ngày đơn vị cấp trên kiểm tra đánh giá báo
@@ -164,10 +164,10 @@
                         </div>
                     </td>
                     <td>
-                        {{ data.ngayTrinh }}
+                        {{ data.ngayPheDuyet }}
                     </td>
                     <td>
-                        {{ data.ngayDuyet }}
+                        {{ data.ngayTraKq }}
                     </td>
                     <td>
                         {{getStatusName(data.trangThai)}}

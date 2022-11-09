@@ -454,6 +454,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       return;
     }
     this.setValidator();
+    console.log(this.validateSave());
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
@@ -466,36 +467,39 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       );
       return;
     }
-    let pipe = new DatePipe('en-US');
-    let body = this.formData.value;
-    body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
-    body.tgianDthau = pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
-    body.tgianMthau = pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
-    body.fileDinhKemReq = this.fileDinhKem;
-    body.dsGtReq = this.listOfData;
-    body.ccXdgReq = [...this.baoGiaThiTruongList, ...this.canCuKhacList];
-    let res = null;
-    if (this.formData.get('id').value) {
-      res = await this.dauThauService.update(body);
-    } else {
-      res = await this.dauThauService.create(body);
-    }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (isGuiDuyet) {
-        this.idInput = res.data.id;
-        await this.guiDuyet();
+    if (this.validateSave()) {
+      let pipe = new DatePipe('en-US');
+      let body = this.formData.value;
+      body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
+      body.tgianDthau = pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
+      body.tgianMthau = pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
+      body.fileDinhKemReq = this.fileDinhKem;
+      body.dsGtReq = this.listOfData;
+      body.ccXdgReq = [...this.baoGiaThiTruongList, ...this.canCuKhacList];
+      let res = null;
+      if (this.formData.get('id').value) {
+        res = await this.dauThauService.update(body);
       } else {
-        if (this.formData.get('id').value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.quayLai();
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.quayLai();
-        }
+        res = await this.dauThauService.create(body);
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (isGuiDuyet) {
+          this.idInput = res.data.id;
+          await this.guiDuyet();
+        } else {
+          if (this.formData.get('id').value) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.quayLai();
+          }
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
+
   }
 
   setValidator() {
@@ -508,6 +512,27 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
     }
+  }
+
+  validateSave() {
+    let pipe = new DatePipe('en-US');
+    console.log(pipe.transform(this.formData.value.tgianBdauTchuc, 'yyyy-MM-dd'));
+    let tgianBdauTchuc = new Date(this.formData.value.tgianBdauTchuc);
+    let tgianMthau = new Date(this.formData.value.tgianMthau)
+    let tgianDthau = new Date(this.formData.value.tgianDthau)
+    let tgianNhang = new Date(this.formData.value.tgianNhang);
+    console.log(tgianBdauTchuc, tgianMthau, tgianDthau, tgianNhang);
+    if (tgianBdauTchuc >= tgianMthau) {
+      this.notification.error(MESSAGE.ERROR, "Thời gian bắt đầu tổ chức không được vượt quá thời gian mở thầu")
+      return false
+    } else if (tgianMthau >= tgianDthau) {
+      this.notification.error(MESSAGE.ERROR, "Thời gian mở thầu không được vượt quá thời gian đóng thầu")
+      return false
+    } else if (tgianDthau >= tgianNhang) {
+      this.notification.error(MESSAGE.ERROR, "Thời gian đóng thầu không được vượt quá thời gian nhập hàng")
+      return false
+    }
+    return true;
   }
 
   async getDataChiTieu() {

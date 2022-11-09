@@ -67,14 +67,15 @@
             <th class="text-center" style="width: 10%;">Ngày quyết định</th>
             <th class="text-center" style="width: 35%;">Trích yếu</th>
             <th>Số KH/tờ trình</th>
-            <th>Mã tổng hợp</th>
+            <th *ngIf="userService.isTongCuc()">Mã tổng hợp</th>
             <th class="text-center" style="width: 12%;">Loại hàng hóa</th>
+            <th *ngIf="userService.isCuc()" class="text-center" style="width: 12%;">Chủng loại hàng hóa</th>
             <th class="text-center" style="width: 8%;">Tổng số gói thầu</th>
             <th class="text-center" style="width: 8%;">Số gói thầu đã trúng</th>
             <th class="text-center" style="width: 8%;">SL HĐ đã ký</th>
             <th class="text-center" style="width: 8%;">Thời hạn nhập kho</th>
-            <th class="text-center" style="width: 9%;">Thời gian thực hiện dự án</th>
-            <th *ngIf="userService.isTongCuc()">Trạng thái</th>
+            <th *ngIf="userService.isTongCuc()" class="text-center" style="width: 9%;">Thời gian thực hiện dự án</th>
+            <th>Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
           <tr class="search-table">
@@ -109,6 +110,12 @@
             </th>
             <th>
               <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.idThHdr"
+                  (input)="filterInTable('idThHdr',filterTable.idThHdr)" size="small" />
+              </nz-input-group>
+            </th>
+            <th *ngIf="userService.isTongCuc()">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
                   (input)="filterInTable('namKhoach',filterTable.namKhoach)" size="small" />
               </nz-input-group>
@@ -119,7 +126,7 @@
                   (input)="filterInTable('tenVthh',filterTable.tenVthh)" size="small" />
               </nz-input-group>
             </th>
-            <th>
+            <th *ngIf="userService.isCuc()">
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
                   (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small" />
@@ -149,7 +156,7 @@
                   (input)="filterInTable('tongTien',filterTable.tongTien)" size="small" />
               </nz-input-group>
             </th>
-            <th>
+            <th *ngIf="userService.isTongCuc()">
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongTien"
                   (input)="filterInTable('tongTien',filterTable.tongTien)" size="small" />
@@ -176,14 +183,15 @@
             <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.soTrHdr }}</td>
-            <td>{{ data.idThHdr }}</td>
+            <td *ngIf="userService.isTongCuc()">{{ data.idThHdr }}</td>
             <td>{{data.tenLoaiVthh}}</td>
+            <td *ngIf="userService.isCuc()">{{data.tenCloaiVthh}}</td>
             <td>{{data.soGthau}}</td>
             <td>{{data.soGthauTrung}}</td>
             <td></td>
             <td>{{data.tgianNhang | date: 'dd/MM/YYYY' }}</td>
-            <td>{{data.tgianThien }}</td>
-            <td *ngIf="userService.isTongCuc()">{{ data.tenTrangThai }}</td>
+            <td *ngIf="userService.isTongCuc()">{{data.tgianThien }}</td>
+            <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="detail(data)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')">
                 <i class="fa fa-eye"></i>

@@ -14,7 +14,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyBangKeVatTuService } from 'src/app/services/quanLyBangKeVatTu.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/quantri-danhmuc/quanLyPhieuKiemTraChatLuongHang.service';
+import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapKho.service';
 import { QuanLyPhieuSoKhoService } from 'src/app/services/quanLySoKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
@@ -70,7 +70,7 @@ export class ThongTinBangKeNhapVatTuComponent implements OnInit {
     private router: Router,
     private routerActive: ActivatedRoute,
     private modal: NzModalService,
-    private userService: UserService,
+    public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private quanLyBangKeVatTuService: QuanLyBangKeVatTuService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,

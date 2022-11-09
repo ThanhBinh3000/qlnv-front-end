@@ -107,8 +107,8 @@ export class QuanlyHopdongComponent implements OnInit {
       let res = await this.kqLcnt.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        console.log(data);
         this.formData.patchValue({
+          id: data.id,
           namKhoach: data.namKhoach,
           soQdPdKhlcnt: data.qdKhlcntDtl.hhQdKhlcntHdr.soQd,
           soQdPdKqLcnt: data.qdKhlcntDtl.soQdPdKqLcnt,
@@ -132,14 +132,17 @@ export class QuanlyHopdongComponent implements OnInit {
           this.dataTable.forEach(item => {
             let hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0];
             item.hopDong = hopDong
-            soLuong += item.hopDong.soLuong;
-            tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
+            if (item.hopDong) {
+              soLuong += item.hopDong.soLuong;
+              tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
+            }
           })
           this.formData.patchValue({
             soLuongNhap: soLuong,
             tongMucDtGoiTrung: tongMucDtGoiTrung
           })
         };
+        this.idHopDong = null;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -171,7 +174,7 @@ export class QuanlyHopdongComponent implements OnInit {
     if (this.validateData()) {
       let body = {
         id: this.id,
-        trangThai: STATUS.HOAN_THANH_CAP_NHAT
+        trangThai: STATUS.DA_HOAN_THANH
       }
       let res = await this.kqLcnt.approve(body);
       if (res.msg == MESSAGE.SUCCESS) {
