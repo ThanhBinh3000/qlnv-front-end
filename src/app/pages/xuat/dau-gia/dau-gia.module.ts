@@ -11,9 +11,12 @@ import { KehoachLuachonNhathauModule } from './kehoach-luachon-nhathau/kehoach-l
 import { KiemTraChatLuongModule } from './kiem-tra-chat-luong/kiem-tra-chat-luong.module';
 import { TrienkhaiLuachonNhathauModule } from './trienkhai-luachon-nhathau/trienkhai-luachon-nhathau.module';
 import { XuatKhoModule } from './xuat-kho/xuat-kho.module';
+import { KeHoachBanDauGiaComponent } from './ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.component';
+import {KeHoachBanDauGiaModule} from "./ke-hoach-ban-dau-gia/ke-hoach-ban-dau-gia.module";
 @NgModule({
   declarations: [
     DauGiaComponent,
+    KeHoachBanDauGiaComponent,
   ],
   imports: [
     CommonModule,
@@ -27,6 +30,7 @@ import { XuatKhoModule } from './xuat-kho/xuat-kho.module';
     KehoachLuachonNhathauModule,
     TrienkhaiLuachonNhathauModule,
     XuatKhoModule,
+    KeHoachBanDauGiaModule,
   ],
 })
 export class DauGiaModule { }
