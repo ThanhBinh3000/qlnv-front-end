@@ -32,7 +32,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
   taiLieuDinhKemList: any[] = [];
   listMtt: any[] = [];
   listQdPdKhMtt: any[] = [];
-  idPdKq: number;
+  idQdPdKh: number;
   trangThaiTkhai: string;
   trangthaish = STATUS.BAN_HANH;;
   maQd: string;
@@ -59,7 +59,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
         ngayHluc: [null, [Validators.required]],
         namKh: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null,],
-        idPdKq: ['', [Validators.required]],
+        idQdPdKh: ['', [Validators.required]],
         ghiChu: [null,],
         trangThai: [STATUS.DU_THAO],
         tenTrangThai: ['Dự thảo'],
@@ -275,9 +275,9 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-      this.idPdKq = data.id;
-      console.log(this.idPdKq, 555);
-      const res = await this.chaogiaUyquyenMualeService.getDetail(this.idPdKq);
+      this.idQdPdKh = data.id;
+      console.log(this.idQdPdKh, 555);
+      const res = await this.chaogiaUyquyenMualeService.getDetail(this.idQdPdKh);
       console.log(res, 4444)
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
@@ -296,7 +296,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
       this.trangThaiTkhai = data.trangThaiTkhai
       this.formData.patchValue({
         soQdPdKh: data.soQdPduyet,
-        idPdKq: data.id,
+        idQdPdKh: data.id,
         trangThaiTkhai: data.trangThaiTkhai
       })
       console.log(this.formData);

@@ -92,7 +92,8 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ thông tin đấu thầu
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdKhlcnt()">
+              <nz-input-group nzAddOnAfterIcon="folder-open"
+                (click)="formData.value.trangThai == STATUS.BAN_HANH ? '' : openDialogSoQdKhlcnt()">
                 <input nz-input [readonly]="true" formControlName="soQdPdKhlcnt" />
               </nz-input-group>
             </nz-form-control>

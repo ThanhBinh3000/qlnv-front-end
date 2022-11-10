@@ -328,7 +328,7 @@ export class DanhMucHangHoaComponent implements OnInit {
   create() {
     var nodesTree = this.nodes;
     let modal = this._modalService.create({
-      nzTitle: 'Thêm mới mới danh mục hàng hóa',
+      nzTitle: 'Thêm mới danh mục hàng hóa',
       nzContent: NewHangHoaComponent,
       nzClosable: true,
       nzFooter: null,

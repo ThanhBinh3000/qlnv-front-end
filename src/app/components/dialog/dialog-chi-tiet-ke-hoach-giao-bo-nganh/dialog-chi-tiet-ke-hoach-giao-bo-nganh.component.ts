@@ -18,6 +18,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   isView: boolean = false;
   errorBn: boolean = false;
   errorTt: boolean = false;
+  nam: any;
   keHoach: any = {
     id: null,
     maBoNganh: null,
@@ -39,6 +40,8 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   dsBoNganh: any[];
   dsHangHoa: any[] = [];
   dataEdit: any;
+  radioData: any;
+  radioValue: any;
 
   constructor(
     private readonly _modalRef: NzModalRef,
@@ -49,6 +52,11 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.radioData = [
+      {label: 'Bộ tài chính', value: 'BTC'},
+      {label: 'Bộ ngành khác', value: 'Khac'},
+    ];
+    this.radioValue = 'BTC';
     this.bindingData(this.dataEdit)
     await Promise.all([
       this.getListBoNganh(),
@@ -63,10 +71,32 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
   onChangeBoNganh(event) {
+    //fix btc = tcdt
+    if (event == '01') {
+      event = '0101'
+    }
+    this.dsHangHoa = [];
     const boNganh = this.dsBoNganh.find(item => item.ma == event)
     if (boNganh) {
       this.keHoach.tenBoNganh = boNganh.giaTri;
     }
+
+    this.danhMucService.getDanhMucHangDvql({
+      "dviQly": event
+    }).subscribe((hangHoa) => {
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
+        if (event == '0101') {
+          const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
+          dataVatTu.forEach(item => {
+            this.dsHangHoa = [...this.dsHangHoa, ...item.child]
+          });
+        } else {
+          this.dsHangHoa = hangHoa.data;
+        }
+
+
+      }
+    })
   }
 
   async getListBoNganh() {
@@ -74,7 +104,11 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data;
+      let boTaiChinh = res.data.find(s => s.giaTri === 'Bộ Tài Chính');
+      this.keHoach.maBoNganh = boTaiChinh.ma;
+      this.keHoach.tenBoNganh = boTaiChinh.giaTri;
     }
+
   }
 
   async loadDanhMucHang() {
@@ -117,4 +151,10 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     this._modalRef.close();
   }
 
+  onChangeBoNganhRadio() {
+    if (this.radioValue == 'BTC') {
+      this.keHoach.maBoNganh = '01'
+      this.onChangeBoNganh("0101");
+    }
+  }
 }

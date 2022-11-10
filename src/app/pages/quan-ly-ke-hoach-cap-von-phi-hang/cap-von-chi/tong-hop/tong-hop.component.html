@@ -39,7 +39,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Thông tin tổng hợp 11</h3>
+      <h3 class="text-uppercase">Thông tin tổng hợp</h3>
       <div class="buttons">
         <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_XOA')">
           <i class="fa fa-trash-o do"></i>
@@ -51,7 +51,7 @@
         </button>
         <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_THEM')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
-          <span>Thêm</span>
+          <span>Tổng hợp</span>
         </button>
       </div>
     </div>
@@ -78,7 +78,7 @@
             <th></th>
             <th></th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
                   (ngModelChange)="filterInTable('maTongHop',filterTable.maTongHop)" size="small" />
               </nz-input-group>
@@ -95,40 +95,37 @@
               </nz-date-picker>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongTien"
                   (ngModelChange)="filterInTable('tongTien',filterTable.tongTien)" size="small" />
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.kinhPhiDaCap"
                   (ngModelChange)="filterInTable('kinhPhiDaCap',filterTable.kinhPhiDaCap)" size="small" />
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group >
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ycCapThem"
                   (ngModelChange)="filterInTable('ycCapThem',filterTable.ycCapThem)" size="small" />
               </nz-input-group>
             </th>
             <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
                   (ngModelChange)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
               </nz-input-group>
             </th>
             <th></th>
-            <ng-template #suffixTemplateInfo>
-              <i nz-icon nzType="search"></i>
-            </ng-template>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let data of basicTable.data; let i = index">
             <th width="45px">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
+                [nzDisabled]="data.trangThai != STATUS.DU_THAO"></label>
             </th>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.maTongHop }}</td>
@@ -142,11 +139,11 @@
               <a (click)="detail(data, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai==globals.prop.NHAP_DU_THAO || data.trangThai==globals.prop.NHAP_TU_CHOI_TP || data.trangThai==globals.prop.NHAP_TU_CHOI_LD_CUC) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_SUA')"
+              <a *ngIf="(data.trangThai== STATUS.DU_THAO || data.trangThai== STATUS.TU_CHOI_TP || data.trangThai== STATUS.TU_CHOI_LDC) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_SUA')"
                 (click)="detail(data, false)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_XOA')" (click)="xoaItem(data)">
+              <a *ngIf="data.trangThai== STATUS.DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP_XOA')" (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

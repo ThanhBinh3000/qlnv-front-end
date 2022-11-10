@@ -20,12 +20,7 @@ export class KeHoachLuachonNhathauComponent implements OnInit {
   }
 
   async loaiVTHHGetAll() {
-    this.tabs = [
-      {
-        giaTri: 'Tất cả',
-        ma: null,
-      }
-    ];
+    this.tabs = [];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
@@ -33,6 +28,7 @@ export class KeHoachLuachonNhathauComponent implements OnInit {
           element.count = 0;
           this.tabs.push(element);
         });
+        this.selectTab(this.tabs[0].ma);
       }
     }
   }
