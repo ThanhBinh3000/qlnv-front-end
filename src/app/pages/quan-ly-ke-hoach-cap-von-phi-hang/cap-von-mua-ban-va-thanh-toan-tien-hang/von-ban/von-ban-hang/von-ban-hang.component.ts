@@ -156,7 +156,7 @@ export class VonBanHangComponent implements OnInit {
                 })
                 break;
             case 'submit':
-                await this.onSubmit('2', null).then(() => {
+                await this.submitReport().then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
@@ -262,10 +262,10 @@ export class VonBanHangComponent implements OnInit {
         if (this.checkParent) {
             this.ttNhan.status = !(Utils.statusSave.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH));
             this.ttGui.status = true;
-            this.saveStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH);
-            this.submitStatus = Utils.statusApprove.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_BH);
-            this.passStatus = Utils.statusDuyet.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_BH);
-            this.approveStatus = Utils.statusPheDuyet.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV_BH);
+            this.saveStatus = Utils.statusSave.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH);
+            this.submitStatus = Utils.statusApprove.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_BH);
+            this.passStatus = Utils.statusDuyet.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_BH);
+            this.approveStatus = Utils.statusPheDuyet.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV_BH);
             this.copyStatus = false;
         }
     }
@@ -407,6 +407,21 @@ export class VonBanHangComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+    }
+
+    async submitReport() {
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn trình duyệt?<br/>(Trình duyệt trước khi lưu báo cáo có thể gây lỗi dữ liệu)',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 500,
+            nzOnOk: () => {
+                this.onSubmit(Utils.TT_BC_2, '')
+            },
+        });
     }
 
     // chuc nang check role
