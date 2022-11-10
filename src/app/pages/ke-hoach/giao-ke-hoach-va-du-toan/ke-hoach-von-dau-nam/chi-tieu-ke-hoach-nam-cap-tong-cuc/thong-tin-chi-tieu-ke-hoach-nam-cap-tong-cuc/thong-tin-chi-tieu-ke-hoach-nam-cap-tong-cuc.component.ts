@@ -1494,6 +1494,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, resp.msg);
                   }
                 })
+            } else {
+              this.redirectChiTieuKeHoachNam();
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
