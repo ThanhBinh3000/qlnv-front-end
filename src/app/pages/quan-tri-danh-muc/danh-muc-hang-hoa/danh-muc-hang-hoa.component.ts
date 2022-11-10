@@ -35,7 +35,7 @@ export class DanhMucHangHoaComponent implements OnInit {
   nodes: any = [];
   nodeDetail: any;
   defaultExpandedKeys: any = [];
-  nodeSelected: any = []
+  nodeSelected: any;
   detailHangHoa: FormGroup;
   levelNode: number = 0;
   isEditData: boolean = false;
@@ -168,9 +168,11 @@ export class DanhMucHangHoaComponent implements OnInit {
 
   nzClickNodeTree(event: any): void {
     if (event.keys.length > 0) {
-      this.nodeSelected = event.node.origin.id;
+      this.nodeSelected = event.node.origin;
       this.parentNodeSelected = event?.parentNode?.origin
-      this.showdetailHangHoa(event.node.origin.id)
+      if (this.nodeSelected.ma != null) {
+        this.showdetailHangHoa(this.nodeSelected.id)
+      }
     }
   }
 
