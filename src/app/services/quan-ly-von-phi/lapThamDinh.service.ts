@@ -168,4 +168,32 @@ export class LapThamDinhService extends BaseService {
             this.urlDefault + '/qlnv-khoachphi/giao-so/chi-tiet/' + id
         );
     }
+
+    //tong hop
+    tongHop(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/tong-hop',
+            request,
+        );
+    }
+
+    //tao ma giao
+    maGiao(): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/qlnv-khoachphi/giao-so/sinh-ma-giao-so'
+        );
+    }
+
+    timKiemMaPaDuyet(): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/qlnv-khoachphi/pa-giao-so/danh-sach/pa-lanh-dao-duyet'
+        );
+    }
+
+    //sua bao cao theo so giao tran chi
+    suaBcao(request: any): Observable<any> {
+        return this.httpClient.put(
+            this.urlDefault + '/qlnv-khoachphi/giao-so/cap-nhat/bao-cao',
+            request);
+    }
 }

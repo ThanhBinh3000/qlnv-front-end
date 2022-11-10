@@ -10,6 +10,7 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BCVP, LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 
 @Component({
     selector: 'app-danh-sach-bao-cao',
@@ -170,7 +171,28 @@ export class DanhSachBaoCaoComponent implements OnInit {
 
     //them moi bao cao
     addNewReport() {
-
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Thông tin tạo mới báo cáo',
+            nzContent: DialogTaoMoiComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                tab: 'danhsach'
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                const obj = {
+                    ...res,
+                    id: null,
+                    tabSelected: 'baocao',
+                    isSynthetic: false,
+                }
+                this.dataChange.emit(obj);
+            }
+        });
     }
 
     //xem chi tiet bao cao

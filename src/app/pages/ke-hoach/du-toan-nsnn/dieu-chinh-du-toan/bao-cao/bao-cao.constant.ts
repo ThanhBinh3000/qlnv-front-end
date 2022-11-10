@@ -49,12 +49,19 @@ export const PHU_LUC = [
         status: false,
     },
 ];
-
-export const BAO_CAO_NHAP_HANG_DTQG = '1'; //02
-export const BAO_CAO_XUAT_HANG_DTQG = '2'; //03
-export const BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG = '3'; //4a - xuat
-export const BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG = '4'; //4a -nhap
-export const BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO = '5'; //4b
-export const KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG = '6'; //05
-export const BAO_CAO_TONG_HOP_THUC_HIEN_VON_MUA_BAN_VA_PHI_NHAP_PHI_XUAT_PHI_BAO_QUAN_LAN_DAU = '7'
-export const BAO_CAO_TONG_HOP_THUC_HIEN_VON_MUA_BAN_VA_PHI_NHAP_PHI_XUAT_PHI_BAO_QUAN_LAN_DAU1 = '8'
+//  Tổng hợp điều chỉnh dự toán chi ngân sách nhà nước đợt 1/năm
+export const TONG_HOP_DIEU_CHINH_DU_TOAN_CHI_NGAN_SACH_NHA_NUOC = '1';
+// Dự toán phí nhập xuất hàng DTQG năm 
+export const DU_TOAN_PHI_NHAP_XUAT_HANG_DTQG = '2';
+// Dự toán phí viện trợ cứu trợ năm
+export const DU_TOAN_PHI_VIEN_TRO_CUU_TRO = '3';
+// Dự toán phí bảo quản hàng DTQG năm
+export const DU_TOAN_PHI_BAO_QUAN_HANG = '4';
+// Bảng lương năm 
+export const BANG_LUONG = '5';
+// Báo cáo tình hình thực hiện phí nhập xuất, VTCT hàng dự trữ quốc gia năm
+export const BAO_CAO_TINH_HINH_THUC_HIEN_PHI_NHAP_XUAT_VTCT_HANG = '6';
+// Báo cáo tình hình thực hiện phí bảo quản hàng dự trữ quốc gia theo định mức năm
+export const BAO_CAO_TINH_HINH_THUC_HIEN_PHI_BAO_QUAN_HANG = '7'
+// Bảng tổng hợp tình hình thực hiện điều chỉnh dự toán cải tạo sửa chữa lớn kho DTQG năm
+export const TONG_HOP_TINH_HINH_DIEU_CHINH_DU_TOAN_CAI_TAO_SUA_CHUA = '8'

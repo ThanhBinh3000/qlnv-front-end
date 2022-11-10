@@ -8,6 +8,8 @@ import { DanhSachBaoCaoComponent } from './danh-sach-bao-cao/danh-sach-bao-cao.c
 import { DanhSachPhuongAnGiaoSktTranChiComponent } from './danh-sach-phuong-an-giao-skt-tran-chi/danh-sach-phuong-an-giao-skt-tran-chi.component';
 import { DanhSachSoKiemTraTranChiTuBTCComponent } from './danh-sach-so-kiem-tra-tran-chi-tu-BTC/danh-sach-so-kiem-tra-tran-chi-tu-BTC.component';
 import { DanhSachSoKiemTraTranChiComponent } from './danh-sach-so-kiem-tra-tran-chi/danh-sach-so-kiem-tra-tran-chi.component';
+import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component';
+import { DialogThemMoiQdCvComponent } from './dialog-them-moi-qd-cv/dialog-them-moi-qd-cv.component';
 import { LapKeHoachVaThamDinhDuToanComponent } from './lap-ke-hoach-va-tham-dinh-du-toan.component';
 import { PhuongAnGiaoSktTranChiComponent } from './phuong-an-giao-skt-tran-chi/phuong-an-giao-skt-tran-chi.component';
 import { SoKiemTraTranChiTuBtcComponent } from './so-kiem-tra-tran-chi-tu-btc/so-kiem-tra-tran-chi-tu-btc.component';
@@ -26,6 +28,8 @@ import { TongHopBaoCaoTuDonViCapDuoiComponent } from './tong-hop-bao-cao-tu-don-
         PhuongAnGiaoSktTranChiComponent,
         DanhSachSoKiemTraTranChiComponent,
         SoKiemTraTranChiComponent,
+        DialogTaoMoiComponent,
+        DialogThemMoiQdCvComponent,
     ],
     imports: [
         CommonModule,
