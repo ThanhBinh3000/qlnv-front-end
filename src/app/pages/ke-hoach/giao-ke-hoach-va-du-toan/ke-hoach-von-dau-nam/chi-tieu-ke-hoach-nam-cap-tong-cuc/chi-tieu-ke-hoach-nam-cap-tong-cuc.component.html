@@ -118,9 +118,9 @@
                 <td>{{(page - 1) * pageSize + i + 1}}</td>
                 <td>{{ data.soQuyetDinh }}</td>
                 <td>{{ data.ngayKy }}</td>
-                <td class="text-right">{{ data.namKeHoach }}</td>
+                <td class="text-left">{{ data.namKeHoach }}</td>
                 <td>{{ data.trichYeu }}</td>
-                <td class="text-center">{{ data.trangThaiDuyet }}</td>
+                <td class="text-left">{{ data.trangThaiDuyet }}</td>
                 <td>
                   <a *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_XEM')"
                      (click)="redirectThongTinChiTieuKeHoachNam(data.id, true)">
@@ -238,9 +238,9 @@
                 <td>{{(page - 1) * pageSize + i + 1}}</td>
                 <td>{{ data.soQuyetDinh }}</td>
                 <td>{{ data.ngayKy }}</td>
-                <td class="text-right">{{ data.namKeHoach }}</td>
+                <td class="text-left">{{ data.namKeHoach }}</td>
                 <td>{{ data.trichYeu }}</td>
-                <td class="text-center">{{ data.trangThaiDuyet }}</td>
+                <td class="text-left">{{ data.trangThaiDuyet }}</td>
                 <td>
                   <a *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_XEM')"
                      (click)="redirectThongTinChiTieuKeHoachNam(data.id, true)">
