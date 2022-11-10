@@ -177,7 +177,12 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
       const id = file?.lastModified.toString();
-      this.lstFiles.push({ id: id, fileName: file?.name });
+      this.lstFiles.push({
+        id: id,
+        fileName: file?.name,
+        fileSize: file?.size,
+        fileUrl: file?.url
+      });
       this.listFile.push(file);
     });
     this.fileList = [];
@@ -366,6 +371,18 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
           this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
           this.maDviTao = data.data.maDviTao;
           this.getStatusButton();
+          await this.danhMucService.dMDviTinh().toPromise().then(
+            (data) => {
+              if (data.statusCode == 0) {
+                this.donViTinhs = data?.data;
+              } else {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+              }
+            },
+            (err) => {
+              this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+          );
           if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
           } else {
@@ -385,6 +402,18 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
 
   async getDetailReport() {
     this.spinner.show();
+    await this.danhMucService.dMDviTinh().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.donViTinhs = data?.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    );
     await this.quanLyVonPhiService.CtietBcaoQuyetToan(this.idInput).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
@@ -507,6 +536,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
       namQtoan: this.namQtoan,
       maBcao: this.maBcao,
       maPhanBcao: this.maPhanBcao,
+      thongBao: this.thongBao,
     }));
     //get file cong van url
     const file: any = this.fileDetail;
@@ -758,7 +788,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
       maPhanBcao: this.maPhanBcao,
     };
 
-    this.quanLyVonPhiService.trinhDuyetServiceQuyetToan1(request).toPromise().then(
+    this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
