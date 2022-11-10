@@ -68,7 +68,7 @@
               <th>Ngày phê duyệt<br>(Lãnh đạo duyệt)
               </th>
               <th>Ngày đơn vị cấp trên <br /> trả kết quả</th>
-              <th width>Trạng thái</th>
+              <!-- <th width>Trạng thái</th> -->
             </tr>
           </thead>
           <tbody>
@@ -97,9 +97,9 @@
               <td>{{ngayDuyetTBP}}</td>
               <td>{{ngayDuyetLD}}</td>
               <td>{{ngayCapTrenTraKq}}</td>
-              <td>
+              <!-- <td>
                 {{getStatusName(trangThaiBaoCao)}}
-              </td>
+              </td> -->
             </tr>
           </tbody>
         </nz-table>
@@ -283,10 +283,9 @@
                 <nz-table nzBordered class="table__body">
                   <thead>
                     <tr>
-                      <th>STT</th>
+                      <th nzWidth="7%">STT</th>
                       <th>Tên file</th>
-                      <th></th>
-                      <th class="th" [hidden]="status"></th>
+                      <th nzWidth="10%"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -294,10 +293,12 @@
                       <td>{{ i + 1 }} </td>
                       <td>{{ data.fileName }}</td>
                       <td>
-                        <button class="btn btn-function" (click)="downloadFile(data.id)">Xem</button>
-                      </td>
-                      <td [hidden]="status">
-                        <button class="btn btn-function" (click)="deleteFile(data.id)">Xóa</button>
+                        <a (click)="downloadFile(data.id)">
+                          <i class="fa fa-eye"></i>
+                        </a>
+                        <a *ngIf="!status" (click)="deleteFile(data.id)">
+                          <i class="fa fa-trash-o do"></i>
+                        </a>
                       </td>
                     </tr>
                   </tbody>
