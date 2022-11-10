@@ -2,11 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { Globals } from 'src/app/shared/globals';
-import { TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { DCDT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as fileSaver from 'file-saver';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
-import { BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, PHU_LUC } from './bao-cao.constant';
+
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
 import * as uuid from "uuid";
@@ -16,6 +16,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DatePipe } from '@angular/common';
 import { UserService } from 'src/app/services/user.service';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { BANG_LUONG, BAO_CAO_TINH_HINH_THUC_HIEN_PHI_BAO_QUAN_HANG, BAO_CAO_TINH_HINH_THUC_HIEN_PHI_NHAP_XUAT_VTCT_HANG, DU_TOAN_PHI_BAO_QUAN_HANG, DU_TOAN_PHI_NHAP_XUAT_HANG_DTQG, DU_TOAN_PHI_VIEN_TRO_CUU_TRO, PHU_LUC, TONG_HOP_DIEU_CHINH_DU_TOAN_CHI_NGAN_SACH_NHA_NUOC, TONG_HOP_TINH_HINH_DIEU_CHINH_DU_TOAN_CAI_TAO_SUA_CHUA } from './bao-cao.constant';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 export class ItemDanhSach {
   id!: any;
@@ -43,7 +45,7 @@ export class ItemDanhSach {
   checked!: boolean;
   lstBcaos: ItemData[] = [];
   lstFile: any[] = [];
-  lstBcaoDviTrucThuocs: any[] = [];
+  lstDviTrucThuoc: any[] = [];
   tongHopTuIds!: [];
 }
 
@@ -296,6 +298,8 @@ export class BaoCaoComponent implements OnInit {
           this.baoCao.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
           this.baoCao.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
           this.baoCao.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
+          this.baoCao.lstDviTrucThuoc = data.data.lstDchinhDviTrucThuocs;
+          // this.getStatusButton();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -345,10 +349,15 @@ export class BaoCaoComponent implements OnInit {
           data.id = null;
         }
         if (
-          data.maLoai == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG ||
-          data.maLoai == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG ||
-          data.maLoai == BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO ||
-          data.maLoai == KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG
+          data.maLoai == TONG_HOP_DIEU_CHINH_DU_TOAN_CHI_NGAN_SACH_NHA_NUOC ||
+          data.maLoai == DU_TOAN_PHI_NHAP_XUAT_HANG_DTQG ||
+          data.maLoai == DU_TOAN_PHI_VIEN_TRO_CUU_TRO ||
+          data.maLoai == DU_TOAN_PHI_BAO_QUAN_HANG ||
+          data.maLoai == BANG_LUONG ||
+          data.maLoai == BAO_CAO_TINH_HINH_THUC_HIEN_PHI_NHAP_XUAT_VTCT_HANG ||
+          data.maLoai == BAO_CAO_TINH_HINH_THUC_HIEN_PHI_BAO_QUAN_HANG ||
+          data.maLoai == TONG_HOP_TINH_HINH_DIEU_CHINH_DU_TOAN_CAI_TAO_SUA_CHUA
+
         ) {
           data.listCtiet.forEach(element => {
             if (element?.id.length == 38) {
@@ -364,7 +373,7 @@ export class BaoCaoComponent implements OnInit {
     } else {
       // replace nhung ban ghi dc them moi id thanh null
       baoCaoTemp.tongHopTuIds = [];
-      baoCaoTemp?.lstBcaoDviTrucThuocs?.filter(item => {
+      baoCaoTemp?.lstDviTrucThuoc?.filter(item => {
         baoCaoTemp.tongHopTuIds.push(item.id);
       })
 
@@ -413,15 +422,101 @@ export class BaoCaoComponent implements OnInit {
   };
 
   async onSubmit(mcn: string, lyDoTuChoi: string) {
-
+    if (this.baoCao.id) {
+      if (!this.baoCao?.congVan?.fileUrl) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+        return;
+      }
+      const checkStatusReport = this.baoCao?.lstBcaos?.findIndex(item => item.trangThai != '5');
+      if (checkStatusReport != -1 && mcn == Utils.TT_BC_2) {
+        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WARNING_FINISH_INPUT);
+        return;
+      }
+      const requestGroupButtons = {
+        id: this.baoCao.id,
+        maChucNang: mcn,
+        lyDoTuChoi: lyDoTuChoi,
+      };
+      this.spinner.show();
+      await this.quanLyVonPhiService.approveDieuChinh(requestGroupButtons).toPromise().then(async (data) => {
+        if (data.statusCode == 0) {
+          this.baoCao.trangThai = mcn;
+          this.baoCao.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+          this.baoCao.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
+          if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+          } else {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+          }
+          this.getStatusButton();
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      }, err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      });
+      this.spinner.hide();
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
+    }
   };
 
   async tuChoi(mcn: string) {
-
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.onSubmit(mcn, text);
+      }
+    });
   };
 
   getStatusButton() {
+    debugger
+    const isSynthetic = this.baoCao.lstDviTrucThuoc.length != 0;
+    const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
+    const checkParent = this.donVis.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
+    //kiem tra quyen cua cac user
+    const checkSave = isSynthetic ? this.userService.isAccessPermisson(DCDT.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.EDIT_REPORT);
+    const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(DCDT.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.APPROVE_REPORT);
+    const checkPass = isSynthetic ? this.userService.isAccessPermisson(DCDT.DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.DUYET_REPORT);
+    const checkApprove = isSynthetic ? this.userService.isAccessPermisson(DCDT.PHE_DUYET_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.PHE_DUYET_REPORT);
+    const checkAccept = this.userService.isAccessPermisson(DCDT.TIEP_NHAN_REPORT);
+    const checkCopy = isSynthetic ? this.userService.isAccessPermisson(DCDT.COPY_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.COPY_REPORT);
+    // const checkPrint = isSynthetic ? this.userService.isAccessPermisson(DCDT.PRINT_SYTHETIC_REPORT) : this.userService.isAccessPermisson(DCDT.PRINT_REPORT);
+    if (Utils.statusSave.includes(this.baoCao.trangThai) && checkSave) {
+      this.status = false;
+    } else {
+      this.status = true;
+    }
 
+    this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave && checkChirld;
+    this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && checkSunmit && checkChirld;
+    this.passStatus = Utils.statusDuyet.includes(this.baoCao.trangThai) && checkPass && checkChirld;
+    this.approveStatus = Utils.statusPheDuyet.includes(this.baoCao.trangThai) && checkApprove && checkChirld;
+    this.acceptStatus = Utils.statusTiepNhan.includes(this.baoCao.trangThai) && checkAccept && checkParent;
+    this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && checkCopy && checkChirld;
+    // this.printStatus = Utils.statusPrint.includes(this.baoCao.trangThai) && checkPrint && checkChirld;
+
+    if (this.acceptStatus || this.approveStatus || this.passStatus) {
+      this.okStatus = true;
+    } else {
+      this.okStatus = false;
+    }
+    if (this.saveStatus) {
+      this.finishStatus = false;
+    } else {
+      this.finishStatus = true;
+    }
   };
 
   // call tong hop dieu chinh
@@ -435,7 +530,7 @@ export class BaoCaoComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.baoCao.lstBcaos = data.data.lstDchinhs;
-          this.baoCao.lstBcaoDviTrucThuocs = data.data.lstDchinhDviTrucThuocs;
+          this.baoCao.lstDviTrucThuoc = data.data.lstDchinhDviTrucThuocs;
           this.baoCao.lstBcaos.forEach(item => {
             if (!item.id) {
               item.id = uuid.v4() + 'FE';
@@ -443,7 +538,7 @@ export class BaoCaoComponent implements OnInit {
             item.nguoiBcao = this.userInfo?.sub;
             item.maDviTien = '1';
           })
-          this.baoCao.lstBcaoDviTrucThuocs.forEach(item => {
+          this.baoCao.lstDviTrucThuoc.forEach(item => {
             item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
             item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
           })
@@ -491,7 +586,7 @@ export class BaoCaoComponent implements OnInit {
       namBcao: this.baoCao.namBcao,
       dotBcao: this.baoCao.dotBcao,
       loaiCopy: '',
-      checkDvtt: this.baoCao.lstBcaoDviTrucThuocs.length > 0 ? true : false,
+      checkDvtt: this.baoCao.lstDviTrucThuoc.length > 0 ? true : false,
     }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Copy Báo Cáo',
@@ -533,7 +628,7 @@ export class BaoCaoComponent implements OnInit {
     baoCaoTemp.dotBcao = response.dotBcao;
     if (response.loaiCopy == 'D') {
       //xoa lst don vi truc thuoc theo lua chon tu dialog
-      baoCaoTemp.lstBcaoDviTrucThuocs = [];
+      baoCaoTemp.lstDviTrucThuoc = [];
     }
     // replace nhung ban ghi dc them moi id thanh null
     baoCaoTemp?.lstBcaos?.filter(item => {
@@ -549,7 +644,7 @@ export class BaoCaoComponent implements OnInit {
     baoCaoTemp.id = null;
     baoCaoTemp.maBcao = maBcaoNew;
     baoCaoTemp.tongHopTuIds = [];
-    baoCaoTemp?.lstBcaoDviTrucThuocs?.filter(item => {
+    baoCaoTemp?.lstDviTrucThuoc?.filter(item => {
       baoCaoTemp.tongHopTuIds.push(item.id);
     })
     baoCaoTemp.fileDinhKems = [];

@@ -98,6 +98,8 @@ export class DanhSachGhiNhanCapUngVonTaiTongCucComponent implements OnInit {
             maCapUngVonTuCapTren: this.searchFilter.maCvUv,
             maDvi: this.userInfo?.MA_DVI,
             maLoai: "1",
+            loaiCap: this.searchFilter.loaiVon,
+            soLenhChiTien: this.searchFilter.soLenhChiTien,
             ngayLap: this.datePipe.transform(this.searchFilter.ngayLap, Utils.FORMAT_DATE_STR),
             ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
             ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
