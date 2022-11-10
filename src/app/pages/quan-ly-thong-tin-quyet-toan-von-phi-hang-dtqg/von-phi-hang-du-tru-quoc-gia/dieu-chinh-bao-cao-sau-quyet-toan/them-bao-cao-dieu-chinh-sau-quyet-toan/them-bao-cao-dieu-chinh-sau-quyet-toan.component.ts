@@ -258,11 +258,42 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
 
   async initialization() {
     this.userInfo = this.userService.getUserLogin();
-
     if (this.idInput) {
       await this.getDetailReport();
     } else if (this.data.namQtoan) {
-      await this.getQuyetToan()
+      // await this.getQuyetToan(this.data.namQtoan)
+      this.idInput = null;
+      this.spinner.show();
+      const res = {
+        namQtoan: this.data.namQtoan
+      };
+      await this.quanLyVonPhiService.CtietBcaoQuyetToanNam(res).toPromise().then(
+        async (data) => {
+          if (data.statusCode == 0) {
+            this.lstCtietBcao = data.data.lstCtiet;
+            this.maDviTien = data.data.maDviTien;
+            this.sortByIndex();
+            // this.lstCtietBcao.forEach(item => {
+            //   item.donGiaMua = divMoney(item.donGiaMua, this.maDviTien);
+            //   item.thanhTien = divMoney(item.thanhTien, this.maDviTien);
+            // })
+            this.maDchinh = data.data.maBcao;
+            this.thuyetMinh = data.data.thuyetMinh;
+            this.congVan = data.data.congVan;
+            this.lstFiles = data.data.fileDinhKems;
+            this.listFile = [];
+            this.getTotal()
+            this.updateEditCache();
+          } else {
+            this.notification.warning(MESSAGE.WARNING, data?.msg);
+            this.back();
+          }
+        },
+        (err) => {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        },
+      );
+
       this.isStatus = '1';
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
       this.namQtoan = this.data?.namQtoan;
@@ -314,42 +345,10 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
       this.maDviTien = '1'
     }
     this.getStatusButton();
+    this.spinner.hide();
   };
 
-  async getQuyetToan() {
-    const res = {
-      namQtoan: this.data.namQtoan
-    }
-    this.spinner.show();
-    await this.quanLyVonPhiService.CtietBcaoQuyetToanNam(res).toPromise().then(
-      async (data) => {
-        if (data.statusCode == 0) {
 
-          this.lstCtietBcao = data.data.lstCtiet;
-          this.maDviTien = data.data.maDviTien;
-          this.sortByIndex();
-          // this.lstCtietBcao.forEach(item => {
-          //   item.donGiaMua = divMoney(item.donGiaMua, this.maDviTien);
-          //   item.thanhTien = divMoney(item.thanhTien, this.maDviTien);
-          // })
-          this.maDchinh = data.data.maBcao;
-          this.thuyetMinh = data.data.thuyetMinh;
-          this.congVan = data.data.congVan;
-          this.lstFiles = data.data.fileDinhKems;
-          this.listFile = [];
-          this.getTotal()
-          this.updateEditCache();
-        } else {
-          this.notification.warning(MESSAGE.WARNING, data?.msg);
-          this.back();
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
-    this.spinner.hide();
-  }
 
   async onSubmit(mcn: string, lyDoTuChoi: string) {
     if (this.submitStatus != true && mcn < '2') {
@@ -503,7 +502,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
 
     // replace nhung ban ghi dc them moi id thanh null
     lstCtietBcaoTemp.forEach(item => {
-      if (item.id?.length == 38) {
+      if (item.id?.length == 36) {
         item.id = null;
       }
     })
@@ -525,7 +524,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
 
     const request = JSON.parse(JSON.stringify({
       id: this.idInput,
-      fileDinhKems: this.lstFiles,
+      fileDinhKems: listFile,
       listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiet: lstCtietBcaoTemp,
       maDviTien: this.maDviTien,
@@ -537,6 +536,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
       maBcao: this.maBcao,
       maPhanBcao: this.maPhanBcao,
       thongBao: this.thongBao,
+      maDchinh: this.maDchinh,
     }));
     //get file cong van url
     const file: any = this.fileDetail;
@@ -556,7 +556,10 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
       return;
     }
 
-    //call service them moi
+    console.log(request);
+
+
+    // call service them moi
     this.spinner.show();
     if (this.idInput == null) {
       this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(

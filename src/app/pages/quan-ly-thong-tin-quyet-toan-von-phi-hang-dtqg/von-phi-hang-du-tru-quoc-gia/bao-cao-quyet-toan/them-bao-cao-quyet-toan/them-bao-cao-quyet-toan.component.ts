@@ -480,7 +480,7 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
 
         const request = JSON.parse(JSON.stringify({
             id: this.idInput,
-            fileDinhKems: this.lstFiles,
+            fileDinhKems: listFile,
             listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
             lstCtiet: lstCtietBcaoTemp,
             maDviTien: this.maDviTien,
