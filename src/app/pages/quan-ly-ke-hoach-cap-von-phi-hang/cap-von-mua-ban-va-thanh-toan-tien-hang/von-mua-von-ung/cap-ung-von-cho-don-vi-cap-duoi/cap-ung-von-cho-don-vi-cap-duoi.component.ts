@@ -707,7 +707,7 @@ export class CapUngVonChoDonViCapDuoiComponent implements OnInit {
             maDvi: this.maDviTao,
             maDviTien: this.maDviTien,
             trangThai: "1",
-            thuyetMinh: "",
+            thuyetMinh: this.thuyetMinh,
         }));
 
         this.spinner.show();

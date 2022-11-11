@@ -740,7 +740,7 @@ export class TienVonThuaComponent implements OnInit {
             tkNhan: null,
             trangThai: "1",
             trangThaiDviCha: "1",
-            thuyetMinh: "",
+            thuyetMinh: this.ttGui.thuyetMinh,
             thuyetMinhDviCha: "",
         };
 
