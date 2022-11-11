@@ -13,7 +13,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_VON, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_VON, numberOnly, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 
 export class ItemGui {
     loaiCap: string;
@@ -351,6 +351,11 @@ export class GhiNhanCapUngVonTaiCkvCcComponent implements OnInit {
     async save() {
         if (!this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+
+        if (!numberOnly(this.ttNhan.taiKhoanNhan)) {
+            this.notification.warning(MESSAGE.WARNING, 'Trường chỉ chứa ký tự số');
             return;
         }
         //get list file url

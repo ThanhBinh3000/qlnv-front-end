@@ -172,11 +172,11 @@
                                 </td>
                                 <td [hidden]="ttGui.status">
                                     <a (click)="saveEdit()" class="save">
-                                        <span nz-icon nzType="check" nzTheme="outline"></span>
+                                        Lưu
                                     </a>
                                     <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                         (nzOnConfirm)="cancelEdit()" class="save">
-                                        <span nz-icon nzType="close" nzTheme="outline"></span>
+                                        Hủy
                                     </a>
                                 </td>
                             </ng-template>
@@ -259,7 +259,7 @@
                         </div>
                         <div nz-col nzSpan="6">
                             <label class="search__label">Tài khoản nhận</label>
-                            <input nz-input type="number" class="search__input"
+                            <input nz-input class="search__input"
                                 [class]="ttNhan.taiKhoanNhan ?'' : 'input-error-validate' "
                                 [(ngModel)]="ttNhan.taiKhoanNhan" />
                         </div>
