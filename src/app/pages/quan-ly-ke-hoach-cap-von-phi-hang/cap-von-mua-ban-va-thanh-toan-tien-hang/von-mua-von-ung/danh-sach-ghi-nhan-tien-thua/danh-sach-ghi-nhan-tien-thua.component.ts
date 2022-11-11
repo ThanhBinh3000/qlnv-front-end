@@ -134,7 +134,7 @@ export class DanhSachGhiNhanTienThuaComponent implements OnInit {
                             ngayTrinhDviCha: this.datePipe.transform(item.ngayTrinhDviCha, Utils.FORMAT_DATE_STR),
                             ngayDuyetDviCha: this.datePipe.transform(item.ngayDuyetDviCha, Utils.FORMAT_DATE_STR),
                             ngayPheDuyetDviCha: this.datePipe.transform(item.ngayPheDuyetDviCha, Utils.FORMAT_DATE_STR),
-                            isEdit: this.checkEditStatus(item.trangThai),
+                            isEdit: this.checkEditStatus(item.trangThaiDviCha),
                         })
                     })
                     this.dataTableAll = cloneDeep(this.dataTable);

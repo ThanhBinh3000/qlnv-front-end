@@ -718,7 +718,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
             maDviTien: "1",
             soQdChiTieu: response.qdChiTieu,
             trangThai: "1",
-            thuyetMinh: "",
+            thuyetMinh: this.thuyetMinh,
         }));
 
         this.spinner.show();
