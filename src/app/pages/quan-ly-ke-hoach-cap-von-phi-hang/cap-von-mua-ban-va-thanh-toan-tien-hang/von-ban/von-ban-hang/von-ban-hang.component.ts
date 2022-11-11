@@ -14,10 +14,10 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, numberOnly, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 
 export class ItemGui {
-    tuTk: number;
+    tuTk: string;
     noiDung: string;
     maNguonNs: string;
     nienDoNs: string;
@@ -36,7 +36,7 @@ export class ItemGui {
 
 export class ItemNhan {
     ngayNhan: string;
-    taiKhoanNhan: number;
+    taiKhoanNhan: string;
     thuyetMinh: string;
     lstFiles: any[] = [];
     listFile: File[] = [];
@@ -416,7 +416,7 @@ export class VonBanHangComponent implements OnInit {
         this.modal.confirm({
             nzClosable: false,
             nzTitle: 'Xác nhận',
-            nzContent: 'Bạn có chắc chắn muốn trình duyệt?<br/>(Trình duyệt trước khi lưu báo cáo có thể gây lỗi dữ liệu)',
+            nzContent: 'Bạn có chắc chắn muốn trình duyệt?<br/>(Trình duyệt trước khi lưu báo cáo có thể gây mất dữ liệu)',
             nzOkText: 'Đồng ý',
             nzCancelText: 'Không',
             nzOkDanger: true,
@@ -509,6 +509,11 @@ export class VonBanHangComponent implements OnInit {
         // gui du lieu trinh duyet len server
         if (this.ttGui.soTien > MONEY_LIMIT) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+            return;
+        }
+
+        if (!numberOnly(this.ttNhan.taiKhoanNhan)) {
+            this.notification.warning(MESSAGE.WARNING, 'Trường chỉ chứa ký tự số');
             return;
         }
         //get list file url
@@ -616,6 +621,10 @@ export class VonBanHangComponent implements OnInit {
         if (this.ttGuiCache.nopThue < 0 ||
             this.ttGuiCache.ttChoDviHuong < 0) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
+        if (!numberOnly(this.ttGuiCache.tuTk) || !numberOnly(this.ttGuiCache.maNguonNs) || !numberOnly(this.ttGuiCache.nienDoNs)) {
+            this.notification.warning(MESSAGE.WARNING, 'Trường chỉ chứa ký tự số');
             return;
         }
         this.statusEdit = false;
