@@ -822,7 +822,7 @@ export class PhuLucIComponent implements OnInit {
     }
 
     getDeleteStatus(data: ItemData) {
-        if ((this.luyKeDetail.findIndex(e => e.maNdung == data.maNdung) != -1) && this.getLowStatus(data.stt)) {
+        if ((this.luyKeDetail.findIndex(e => e.maNdung == data.maNdung) != -1) || this.getLowStatus(data.stt)) {
             return true;
         }
         return false;
