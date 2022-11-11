@@ -2,7 +2,6 @@ import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import * as fileSaver from 'file-saver';
 import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
@@ -11,22 +10,8 @@ import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuTo
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { Utils } from 'src/app/Utility/utils';
+import { TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
 
-export const TRANG_THAI_GUI_DVCT = [
-  {
-    id: '9',
-    ten: 'Tiếp nhận'
-  },
-  {
-    id: '8',
-    ten: 'Từ chối'
-  },
-  {
-    id: '7',
-    ten: 'Mới'
-  },
-]
 
 @Component({
   selector: 'app-danh-sach-bao-cao-tu-don-vi-cap-duoi',
@@ -80,7 +65,6 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
     private dieuChinhService: DieuChinhService,
     private notification: NzNotificationService,
     private quanLyVonPhiService: QuanLyVonPhiService,
-    private modal: NzModalService,
     private danhMuc: DanhMucHDVService,
     public userService: UserService,
     private datePipe: DatePipe,
@@ -198,18 +182,6 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
       tabSelected: 'baocao',
     }
     this.dataChange.emit(obj);
-  }
-
-  //download file về máy tính
-  async downloadFileCv(fileUrl, fileName) {
-    await this.quanLyVonPhiService.downloadFile(fileUrl).toPromise().then(
-      (data) => {
-        fileSaver.saveAs(data, fileName);
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
   }
 
   // Tìm kiếm trong bảng
