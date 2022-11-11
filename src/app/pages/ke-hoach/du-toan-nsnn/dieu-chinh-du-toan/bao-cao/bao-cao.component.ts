@@ -1,26 +1,23 @@
 import { DatePipe } from '@angular/common';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
+import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DialogDieuChinhCopyComponent } from 'src/app/components/dialog/dialog-dieu-chinh-copy/dialog-dieu-chinh-copy.component';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { DataService } from 'src/app/services/data.service';
+import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { DCDT, TRANG_THAI_PHU_LUC, Utils } from 'src/app/Utility/utils';
-import { PHU_LUC } from './bao-cao.constant';
 import * as uuid from "uuid";
-import * as fileSaver from 'file-saver';
-import { DialogChonThemBieuMauComponent } from 'src/app/components/dialog/dialog-chon-them-bieu-mau/dialog-chon-them-bieu-mau.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
-import { DialogDieuChinhCopyComponent } from 'src/app/components/dialog/dialog-dieu-chinh-copy/dialog-dieu-chinh-copy.component';
-import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { PHU_LUC } from './bao-cao.constant';
 export class ItemData {
   id: any;
   maLoai: string;
@@ -195,7 +192,8 @@ export class BaoCaoComponent implements OnInit {
     private datePipe: DatePipe,
     private userService: UserService,
     public globals: Globals,
-    private quanLyVonPhiService: QuanLyVonPhiService,
+    private dieuChinhService: DieuChinhService,
+    private QuanLyVonPhiService: QuanLyVonPhiService,
     private notification: NzNotificationService,
     private modal: NzModalService,
   ) {
@@ -283,7 +281,7 @@ export class BaoCaoComponent implements OnInit {
       this.nguoiNhap = this.userInfo?.sub;
       this.maDviTao = this.userInfo?.MA_DVI;
 
-      this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
+      this.dieuChinhService.sinhMaBaoCaoDieuChinh().toPromise().then(
         (data) => {
           if (data.statusCode == 0) {
             this.maBaoCao = data.data;
@@ -335,7 +333,7 @@ export class BaoCaoComponent implements OnInit {
       maDviCha: this.maDviTao,
       trangThai: '01',
     }
-    await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+    await this.QuanLyVonPhiService.dmDviCon(request).toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.donVis = data.data;
@@ -351,7 +349,7 @@ export class BaoCaoComponent implements OnInit {
 
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.bCDieuChinhDuToanChiTiet(this.id).toPromise().then(
+    await this.dieuChinhService.bCDieuChinhDuToanChiTiet(this.id).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.lstDieuChinhs = data.data.lstDchinhs;
@@ -429,7 +427,7 @@ export class BaoCaoComponent implements OnInit {
   };
 
   async getListUser() {
-    this.quanLyVonPhiService.getListUser().toPromise().then(
+    this.QuanLyVonPhiService.getListUser().toPromise().then(
       res => {
         if (res.statusCode == 0) {
           this.canBos = res.data;
@@ -446,7 +444,7 @@ export class BaoCaoComponent implements OnInit {
     const upfile: FormData = new FormData();
     upfile.append('file', file);
     upfile.append('folder', this.maBaoCao + '/' + this.maDviTao);
-    const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
+    const temp = await this.QuanLyVonPhiService.uploadFile(upfile).toPromise().then(
       (data) => {
         const objfile = {
           fileName: data.filename,
@@ -475,7 +473,7 @@ export class BaoCaoComponent implements OnInit {
     if (!file) {
       const fileAttach = this.lstFiles.find(element => element?.id == id);
       if (fileAttach) {
-        await this.quanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
+        await this.QuanLyVonPhiService.downloadFile(fileAttach.fileUrl).toPromise().then(
           (data) => {
             fileSaver.saveAs(data, fileAttach.fileName);
           },
@@ -493,7 +491,7 @@ export class BaoCaoComponent implements OnInit {
   //download file về máy tính
   async downloadFileCv() {
     if (this.congVan?.fileUrl) {
-      await this.quanLyVonPhiService.downloadFile(this.congVan?.fileUrl).toPromise().then(
+      await this.QuanLyVonPhiService.downloadFile(this.congVan?.fileUrl).toPromise().then(
         (data) => {
           fileSaver.saveAs(data, this.congVan?.fileName);
         },
@@ -599,7 +597,7 @@ export class BaoCaoComponent implements OnInit {
     //call service them moi
 
     if (this.id == null) {
-      this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(
+      this.dieuChinhService.trinhDuyetDieuChinhService(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -620,7 +618,7 @@ export class BaoCaoComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updateDieuChinh(request).toPromise().then(
+      this.dieuChinhService.updateDieuChinh(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -678,7 +676,7 @@ export class BaoCaoComponent implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.approveDieuChinh(requestGroupButtons).toPromise().then(async (data) => {
+      await this.dieuChinhService.approveDieuChinh(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           this.trangThaiBaoCao = mcn;
           this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
@@ -925,7 +923,7 @@ export class BaoCaoComponent implements OnInit {
 
   async doCopy(response: any) {
     let maBcaoNew: string;
-    await this.quanLyVonPhiService.sinhMaBaoCaoDieuChinh().toPromise().then(
+    await this.dieuChinhService.sinhMaBaoCaoDieuChinh().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           maBcaoNew = data.data;
@@ -977,9 +975,10 @@ export class BaoCaoComponent implements OnInit {
       dotBcao: response?.dotBcao,
       congVan: null,
       tongHopTuIds: tongHopTuIds,
+      thuyetMinh: this.thuyetMinh,
     };
 
-    this.quanLyVonPhiService.trinhDuyetDieuChinhService(request).toPromise().then(
+    this.dieuChinhService.trinhDuyetDieuChinhService(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);

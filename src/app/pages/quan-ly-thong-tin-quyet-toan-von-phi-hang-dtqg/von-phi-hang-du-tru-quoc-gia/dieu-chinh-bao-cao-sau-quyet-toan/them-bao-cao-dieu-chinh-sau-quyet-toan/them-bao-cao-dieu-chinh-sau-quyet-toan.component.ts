@@ -281,6 +281,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
             this.thuyetMinh = data.data.thuyetMinh;
             this.congVan = data.data.congVan;
             this.lstFiles = data.data.fileDinhKems;
+            console.log(this.lstFiles)
             this.listFile = [];
             this.getTotal()
             this.updateEditCache();
@@ -524,7 +525,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
 
     const request = JSON.parse(JSON.stringify({
       id: this.idInput,
-      fileDinhKems: listFile,
+      fileDinhKems: this.lstFiles,
       listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiet: lstCtietBcaoTemp,
       maDviTien: this.maDviTien,
