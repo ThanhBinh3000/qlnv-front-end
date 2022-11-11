@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -822,8 +821,8 @@ export class PhuLucIComponent implements OnInit {
         return true;
     }
 
-    getDeleteStatus(maNdung: number) {
-        if (this.luyKeDetail.findIndex(e => e.maNdung == maNdung) != -1) {
+    getDeleteStatus(data: ItemData) {
+        if ((this.luyKeDetail.findIndex(e => e.maNdung == data.maNdung) != -1) && this.getLowStatus(data.stt)) {
             return true;
         }
         return false;
