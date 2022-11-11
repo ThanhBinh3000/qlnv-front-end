@@ -830,7 +830,7 @@ export class PhuLucIIIComponent implements OnInit {
     }
 
     getDeleteStatus(data: ItemData) {
-        if ((this.luyKeDetail.findIndex(e => e.maDan == data.maDan) != -1) && this.getLowStatus(data.stt)) {
+        if ((this.luyKeDetail.findIndex(e => e.maDan == data.maDan) != -1) || this.getLowStatus(data.stt)) {
             return true;
         }
         return false;
