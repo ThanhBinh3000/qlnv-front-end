@@ -1,52 +1,40 @@
-import { Component, OnInit } from '@angular/core';
-import { Utils } from 'src/app/Utility/utils';
-import { cloneDeep } from 'lodash';
 import { DatePipe } from '@angular/common';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import * as fileSaver from 'file-saver';
+import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { Utils } from 'src/app/Utility/utils';
 
-export const TRANG_THAI_TIM_KIEM = [
+export const TRANG_THAI_GUI_DVCT = [
   {
-    id: "1",
-    tenDm: 'Đang soạn'
+    id: '9',
+    ten: 'Tiếp nhận'
   },
   {
-    id: "2",
-    tenDm: 'Trình duyệt'
+    id: '8',
+    ten: 'Từ chối'
   },
   {
-    id: "3",
-    tenDm: 'Trưởng BP từ chối'
-  },
-  {
-    id: "4",
-    tenDm: 'Trưởng BP duyệt'
-  },
-  {
-    id: "5",
-    tenDm: 'Lãnh đạo từ chối'
-  },
-  {
-    id: "6",
-    tenDm: 'Lãnh đạo duyệt'
-  },
-  {
-    id: "7",
-    tenDm: 'Mới'
-  },
-  {
-    id: "8",
-    tenDm: 'Từ chối'
-  },
-  {
-    id: "9",
-    tenDm: 'Tiếp nhận'
+    id: '7',
+    ten: 'Mới'
   },
 ]
+
 @Component({
   selector: 'app-danh-sach-bao-cao-tu-don-vi-cap-duoi',
   templateUrl: './danh-sach-bao-cao-tu-don-vi-cap-duoi.component.html',
   styleUrls: ['./danh-sach-bao-cao-tu-don-vi-cap-duoi.component.scss']
 })
 export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
+  @Output() dataChange = new EventEmitter();
 
   searchFilter = {
     loaiTimKiem: '1',
@@ -55,46 +43,174 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
     denNgay: null,
     maBaoCao: "",
     donViTao: "",
-    trangThai: "",
+    trangThai: Utils.TT_BC_7,
   };
+
+  userInfo: any;
+  trangThais: any[] = TRANG_THAI_GUI_DVCT;
+  donVis: any[] = [];
+  dataTable: any[] = [];
+  dataTableAll: any[] = [];
+
+  pages = {
+    size: 10,
+    page: 1,
+  }
+  totalElements = 0;
+  totalPages = 0;
+  allChecked = false;
 
   filterTable: any = {
     maBcao: '',
     ngayTao: '',
-    namHienHanh: '',
+    namQtoan: '',
     dotBcao: '',
     ngayTrinh: '',
     ngayDuyet: '',
     ngayPheDuyet: '',
-    ngayTraKq: ''
+    ngayTraKq: '',
+    tenDvi: '',
+    trangThai: '',
   };
-
-  donVis: any[] = [];
-
-  trangThais: any[] = [];
 
   userRole: string;
-  dataTable: any[] = [];
-  dataTableAll: any[] = [];
   statusCaptren: boolean;
-
-  // khai bao dau bao cao
   constructor(
+    private spinner: NgxSpinnerService,
+    private dieuChinhService: DieuChinhService,
+    private notification: NzNotificationService,
+    private quanLyVonPhiService: QuanLyVonPhiService,
+    private modal: NzModalService,
+    private danhMuc: DanhMucHDVService,
+    public userService: UserService,
     private datePipe: DatePipe,
+    public globals: Globals,
   ) { }
 
-  ngOnInit() {
-  };
+  async ngOnInit() {
+    this.userInfo = this.userService.getUserLogin();
+    this.spinner.show();
+    //khoi tao gia tri mac dinh
+    this.searchFilter.denNgay = new Date();
+    const newDate = new Date();
+    newDate.setMonth(newDate.getMonth() - 1);
+    this.searchFilter.tuNgay = newDate;
+    //lay danh sach ca don vi truc thuoc
+    await this.danhMuc.dMDviCon().toPromise().then(
+      data => {
+        if (data.statusCode == 0) {
+          this.donVis = data.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    );
 
+    this.search();
+    this.spinner.hide();
+  }
 
+  async search() {
+    this.spinner.show();
+    let trangThais = [];
+    if (this.searchFilter.trangThai) {
+      trangThais = [this.searchFilter.trangThai];
+    } else {
+      trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
+    }
+    const requestReport = {
+      loaiTimKiem: this.searchFilter.loaiTimKiem,
+      maBcao: this.searchFilter.maBaoCao,
+      maDvi: this.searchFilter.donViTao,
+      namBcao: this.searchFilter.nam,
+      ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),
+      ngayTaoTu: this.datePipe.transform(this.searchFilter.tuNgay, Utils.FORMAT_DATE_STR),
+      paggingReq: {
+        limit: this.pages.size,
+        page: this.pages.page,
+      },
+      trangThais: trangThais,
+    };
+    await this.dieuChinhService.timKiemDieuChinh(requestReport).toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.dataTable = [];
+        res.data.content.forEach(item => {
+          this.dataTable.push({
+            ...item,
+            congVan: JSON.parse(item.congVan),
+            ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
+            ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
+            ngayDuyet: this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR),
+            ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
+            ngayTraKq: this.datePipe.transform(item.ngayTraKq, Utils.FORMAT_DATE_STR),
+          })
+        })
+        this.dataTableAll = cloneDeep(this.dataTable);
+        this.totalElements = res.data.totalElements;
+        this.totalPages = res.data.totalPages;
+      } else {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+    this.spinner.hide();
+  }
+
+  //doi so trang
+  onPageIndexChange(page) {
+    this.pages.page = page;
+    this.search();
+  }
+
+  //doi so luong phan tu tren 1 trang
+  onPageSizeChange(size) {
+    this.pages.size = size;
+    this.search();
+  }
+
+  //reset tim kiem
   clearFilter() {
+    this.searchFilter.nam = null
+    this.searchFilter.tuNgay = null
+    this.searchFilter.denNgay = null
+    this.searchFilter.maBaoCao = null
+    this.searchFilter.trangThai = null
+    this.searchFilter.donViTao = null
+    this.search();
+  }
 
-  };
+  getUnitName(maDvi: string) {
+    return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
+  }
 
+  getStatusName(trangThai: string) {
+    return this.trangThais.find(e => e.id == trangThai)?.ten;
+  }
 
-  search() {
+  //xem chi tiet bao cao
+  viewDetail(data: any) {
+    const obj = {
+      id: data.id,
+      tabSelected: 'baocao',
+    }
+    this.dataChange.emit(obj);
+  }
 
-  };
+  //download file về máy tính
+  async downloadFileCv(fileUrl, fileName) {
+    await this.quanLyVonPhiService.downloadFile(fileUrl).toPromise().then(
+      (data) => {
+        fileSaver.saveAs(data, fileName);
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
+  }
 
   // Tìm kiếm trong bảng
   filterInTable(key: string, value: string, isDate: boolean) {
@@ -115,6 +231,5 @@ export class DanhSachBaoCaoTuDonViCapDuoiComponent implements OnInit {
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
-  };
-
+  }
 }
