@@ -116,7 +116,7 @@
                 <nz-form-label >Đơn vị tính</nz-form-label>
                 <nz-form-control >
                   <nz-select [nzDisabled]="!isEditData" formControlName="maDviTinh"  nzAllowClear="true">
-                    <nz-option  *ngFor="let p of listDviTinh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                    <nz-option  *ngFor="let p of listDviTinh" [nzValue]="p.ma" [nzLabel]="p.ghiChu">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
