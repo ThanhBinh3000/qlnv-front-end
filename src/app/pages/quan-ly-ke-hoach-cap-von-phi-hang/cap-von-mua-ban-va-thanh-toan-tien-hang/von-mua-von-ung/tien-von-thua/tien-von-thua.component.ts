@@ -492,6 +492,11 @@ export class TienVonThuaComponent implements OnInit {
             return;
         }
 
+        if (!numberOnly(this.ttNhan.taiKhoanNhan)) {
+            this.notification.warning(MESSAGE.WARNING, 'Trường chỉ chứa ký tự số');
+            return;
+        }
+
         // gui du lieu trinh duyet len server
         if (this.ttGui.soTien > MONEY_LIMIT) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
@@ -602,6 +607,11 @@ export class TienVonThuaComponent implements OnInit {
         if (this.ttGuiCache.nopThue < 0 ||
             this.ttGuiCache.ttChoDviHuong < 0) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
+
+        if (!numberOnly(this.ttGuiCache.maNguonNs) || !numberOnly(this.ttGuiCache.nienDoNs)) {
+            this.notification.warning(MESSAGE.WARNING, 'Trường chỉ chứa ký tự số');
             return;
         }
         this.statusEdit = false;
@@ -777,19 +787,6 @@ export class TienVonThuaComponent implements OnInit {
 
     getMoneyUnit() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
-    }
-
-    changeNumber(str: string, code: string) {
-        switch (code) {
-            case 'maNguon':
-                this.ttGuiCache.maNguonNs = numberOnly(str);
-                break;
-            case 'nienDo':
-                this.ttGuiCache.nienDoNs = numberOnly(str);
-                break;
-            default:
-                break;
-        }
     }
 
     statusClass() {
