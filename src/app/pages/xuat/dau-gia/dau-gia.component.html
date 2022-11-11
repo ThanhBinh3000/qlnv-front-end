@@ -4,6 +4,9 @@
     <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="!userService.isChiCuc()">
       Kế hoạch bán đấu giá
     </li>
+    <!--<li nz-menu-item nzSelected (click)="selectTab(0)">
+      Kế hoạch bán đấu giá
+    </li>-->
     <li nz-menu-item (click)="selectTab(1)" *ngIf="!userService.isChiCuc()">
       Tổ chức triển khai KH bán đấu giá
     </li>
@@ -29,6 +32,9 @@
     <ng-container *ngIf="tabSelected == 0">
       <app-kehoach-luachon-nhathau></app-kehoach-luachon-nhathau>
     </ng-container>
+    <!--<ng-container *ngIf="tabSelected == 0">
+      <app-ke-hoach-ban-dau-gia></app-ke-hoach-ban-dau-gia>
+    </ng-container>-->
     <ng-container *ngIf="tabSelected == 1">
       <app-trienkhai-luachon-nhathau></app-trienkhai-luachon-nhathau>
     </ng-container>
