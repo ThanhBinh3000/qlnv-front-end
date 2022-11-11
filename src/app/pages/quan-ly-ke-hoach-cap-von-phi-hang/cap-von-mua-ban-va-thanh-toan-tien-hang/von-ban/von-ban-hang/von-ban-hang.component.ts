@@ -689,7 +689,7 @@ export class VonBanHangComponent implements OnInit {
             tkNhan: "",
             trangThai: "1",
             trangThaiDviCha: "1",
-            thuyetMinh: "",
+            thuyetMinh: this.ttGui.thuyetMinh,
             thuyetMinhDviCha: "",
         };
         this.spinner.show();

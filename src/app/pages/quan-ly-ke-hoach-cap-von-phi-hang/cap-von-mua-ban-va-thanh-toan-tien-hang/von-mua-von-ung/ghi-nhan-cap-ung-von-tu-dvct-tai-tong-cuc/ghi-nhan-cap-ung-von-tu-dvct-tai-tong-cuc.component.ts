@@ -567,7 +567,7 @@ export class GhiNhanCapUngVonTuDvctTaiTongCucComponent implements OnInit {
             tuTk: this.ttGui.taiKhoan,
             tkNhan: this.ttNhan.taiKhoanNhan,
             trangThai: "1",
-            thuyetMinh: "",
+            thuyetMinh: this.thuyetMinh,
         };
 
         this.spinner.show();
