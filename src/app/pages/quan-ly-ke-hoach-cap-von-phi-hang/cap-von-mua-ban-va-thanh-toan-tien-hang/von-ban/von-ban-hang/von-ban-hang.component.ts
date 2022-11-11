@@ -19,8 +19,8 @@ import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, sumNumber
 export class ItemGui {
     tuTk: number;
     noiDung: string;
-    maNguonNs: number;
-    nienDoNs: number;
+    maNguonNs: string;
+    nienDoNs: string;
     soTien: number;
     soTienBangChu: string;
     nopThue: number;
@@ -88,6 +88,7 @@ export class VonBanHangComponent implements OnInit {
     editMoneyUnit = false;
     isDataAvailable = false;
     statusEdit = true;
+    isFirstSave = true;
     // before uploaf file
     beforeUploadGui = (file: NzUploadFile): boolean => {
         this.ttGui.fileList = this.ttGui.fileList.concat(file);
@@ -188,11 +189,7 @@ export class VonBanHangComponent implements OnInit {
 
     getStatusName() {
         if (this.checkParent) {
-            if (this.ttNhan.trangThai == Utils.TT_BC_1) {
-                return 'Mới';
-            } else {
-                return this.trangThais.find(e => e.id == this.ttNhan.trangThai).tenDm;
-            }
+            return this.trangThais.find(e => e.id == this.ttNhan.trangThai).tenDm;
         } else {
             return this.trangThais.find(e => e.id == this.ttGui.trangThai).tenDm;
         }
@@ -218,6 +215,7 @@ export class VonBanHangComponent implements OnInit {
         if (this.id) {
             await this.getDetailReport();
         } else {
+            this.isFirstSave = true;
             this.ttGui.trangThai = Utils.TT_BC_1;
             this.ttNhan.trangThai = Utils.TT_BC_1;
             this.maDviTien = '1';
@@ -263,7 +261,7 @@ export class VonBanHangComponent implements OnInit {
             this.ttNhan.status = !(Utils.statusSave.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH));
             this.ttGui.status = true;
             this.saveStatus = Utils.statusSave.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH);
-            this.submitStatus = Utils.statusApprove.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_BH);
+            this.submitStatus = Utils.statusApprove.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_BH) && !this.isFirstSave;
             this.passStatus = Utils.statusDuyet.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_BH);
             this.approveStatus = Utils.statusPheDuyet.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV_BH);
             this.copyStatus = false;
@@ -398,6 +396,11 @@ export class VonBanHangComponent implements OnInit {
                     this.ttGui.listFile = [];
                     this.ttNhan.lstFiles = data.data.lstFileNhans;
                     this.ttNhan.listFile = [];
+                    if (!this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
+                        this.isFirstSave = true;
+                    } else {
+                        this.isFirstSave = false;
+                    }
                     this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);

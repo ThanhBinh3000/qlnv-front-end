@@ -176,11 +176,7 @@ export class DanhSachGhiNhanTienThuaComponent implements OnInit {
     }
 
     getStatusName(trangThai: string) {
-        if (trangThai == Utils.TT_BC_1) {
-            return 'Mới';
-        } else {
-            return this.trangThais.find(e => e.id == trangThai)?.tenDm;
-        }
+        return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 
     //xem chi tiet bao cao

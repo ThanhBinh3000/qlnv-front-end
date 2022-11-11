@@ -19,9 +19,9 @@ import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_VON, MONEY_LIMIT,
 
 export class ItemGui {
     noiDung: string;
-    maNguonNs: number;
-    maChuong: number;
-    maNdkt: number;
+    maNguonNs: string;
+    maChuong: string;
+    maNdkt: string;
     soTien: number;
     soTienChu: string;
     taiKhoan: number;
