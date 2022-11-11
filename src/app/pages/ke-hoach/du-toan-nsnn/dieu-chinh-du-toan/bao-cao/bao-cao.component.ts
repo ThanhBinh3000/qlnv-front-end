@@ -975,6 +975,7 @@ export class BaoCaoComponent implements OnInit {
       dotBcao: response?.dotBcao,
       congVan: null,
       tongHopTuIds: tongHopTuIds,
+      thuyetMinh: this.thuyetMinh,
     };
 
     this.dieuChinhService.trinhDuyetDieuChinhService(request).toPromise().then(
