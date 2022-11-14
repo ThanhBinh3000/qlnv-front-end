@@ -12,11 +12,17 @@ import { HopdongBangkePhieumuahangComponent } from './hopdong-bangke-phieumuahan
 import { HopdongBangkePhieumuahangModule } from './hopdong-bangke-phieumuahang/hopdong-bangke-phieumuahang.module';
 import { GiaoNhapHangMuattComponent } from './giao-nhap-hang-muatt/giao-nhap-hang-muatt.component';
 import { GiaoNhapHangMuattModule } from './giao-nhap-hang-muatt/giao-nhap-hang-muatt.module';
+import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong/kiem-tra-chat-luong.component';
+import { KiemTraChatLuongModule } from './kiem-tra-chat-luong/kiem-tra-chat-luong.module';
+import { NhapKhoMttComponent } from './nhap-kho-mtt/nhap-kho-mtt.component';
+import { NhapKhoMttModule } from './nhap-kho-mtt/nhap-kho-mtt.module';
 
 
 @NgModule({
   declarations: [
     MuaTrucTiepComponent,
+
+
 
 
 
@@ -31,7 +37,9 @@ import { GiaoNhapHangMuattModule } from './giao-nhap-hang-muatt/giao-nhap-hang-m
     TochucTrienkhaiMuatructiepModule,
     DieuchinhKehoachMuattModule,
     HopdongBangkePhieumuahangModule,
-    GiaoNhapHangMuattModule
+    GiaoNhapHangMuattModule,
+    KiemTraChatLuongModule,
+    NhapKhoMttModule,
   ],
 })
 export class MuaTrucTiepModule { }

@@ -8,12 +8,12 @@ import {MESSAGE} from "../../../../constants/message";
   styleUrls: ['./ke-hoach-ban-dau-gia.component.scss']
 })
 export class KeHoachBanDauGiaComponent implements OnInit {
+  tabs: any;
+  loaiVthhSelected: string;
+
   constructor(private danhMucService: DanhMucService) {
     this.loaiVTHHGetAll();
   }
-
-  tabs: any;
-  loaiVthhSelected: string;
 
   ngOnInit() {
     this.loaiVthhSelected = '';

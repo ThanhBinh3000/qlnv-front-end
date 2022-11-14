@@ -10,11 +10,17 @@
         <li nz-menu-item (click)="selectTab('dckhmtt')" *ngIf="!userService.isChiCuc()">
             Điều chỉnh KH mua trực tiếp
         </li>
-        <li nz-menu-item (click)="selectTab('hdbkpmh')" *ngIf="!userService.isChiCuc()">
+        <li nz-menu-item (click)="selectTab('hdbkpmh')">
             Hợp đồng/Bảng kê,phiếu mua hàng
         </li>
-        <li nz-menu-item (click)="selectTab('gnvnn')" *ngIf="!userService.isChiCuc()">
+        <li nz-menu-item (click)="selectTab('gnvnn')">
             Quyết định giao nhiệm vụ nhập hàng
+        </li>
+        <li nz-menu-item (click)="selectTab('ktcl')">
+            Kiểm tra chất lượng
+        </li>
+        <li nz-menu-item (click)="selectTab('nk')">
+            Nhập kho
         </li>
     </ul>
 </nz-affix>
@@ -34,6 +40,12 @@
         </ng-container>
         <ng-container *ngIf="tabSelected == 'gnvnn'">
             <app-giao-nhap-hang-muatt></app-giao-nhap-hang-muatt>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'ktcl'">
+            <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'nk'">
+            <app-nhap-kho-mtt></app-nhap-kho-mtt>
         </ng-container>
     </div>
 </div>
