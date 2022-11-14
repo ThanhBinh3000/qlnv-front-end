@@ -73,7 +73,6 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       this.listOfData.forEach(item => {
         dataDiemNhap += item.tenDiemKho + "(" + item.soLuongDxmtt + "), "
       })
-      console.log(this.listOfData, 9090);
       this.formData.patchValue({
         listSlddDtl: this.listOfData,
         diaDiemNhap: dataDiemNhap.substring(0, dataDiemNhap.length - 2)
@@ -106,7 +105,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         thanhTien: this.dataEdit.thanhTien,
       })
       this.changeChiCuc(this.dataEdit.maDvi);
-      this.listOfData = this.dataEdit.ListSlddDtl
+      this.listOfData = this.dataEdit.listSlddDtl
     } else {
       this.formData.patchValue({
         donGiaVat: this.donGiaVat,
@@ -272,7 +271,6 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
 
   calcTong() {
     if (this.listOfData) {
-      console.log(this.listOfData, 5555)
       const sum = this.listOfData.reduce((prev, cur) => {
         prev += cur.soLuongDxmtt;
         return prev;
