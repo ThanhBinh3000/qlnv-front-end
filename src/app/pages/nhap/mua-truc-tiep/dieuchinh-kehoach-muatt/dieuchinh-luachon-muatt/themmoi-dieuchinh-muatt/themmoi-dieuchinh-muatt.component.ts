@@ -95,6 +95,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   isDetail = false;
   dataTable: any[] = [];
   danhsachDxMtt: any[] = [];
+  danhsachDxMttCache: any[] = [];
   dataDetail: any;
   hhDcQdPduyetKhmttSlddList: any[] = [];
   errorInputRequired: string = 'Dữ liệu không được để trống.';
@@ -209,6 +210,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
 
         });
         this.danhsachDxMtt = data.hhDcQdPduyetKhmttDxList;
+        this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -275,6 +277,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
           moTaHangHoa: data.moTaHangHoa,
         })
         this.danhsachDxMtt = data.hhQdPheduyetKhMttDxList;
+        this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
         for (let item of this.danhsachDxMtt) {
           item.id = null;
         }
@@ -287,13 +290,27 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     }
     this.spinner.hide();
   }
-
+  index = 0;
   async showDetail(event, index) {
     await this.spinner.show();
     event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     event.target.parentElement.classList.add('selectedRow');
     this.dataInput = this.danhsachDxMtt[index];
+    this.dataInputCache = this.danhsachDxMttCache[index];
+    this.index = index;
     await this.spinner.hide();
+  }
+  setNewSoLuong($event) {
+    this.danhsachDxMtt[this.index].soLuong = $event;
+  }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
   }
 
 
