@@ -1,3 +1,4 @@
+import { DialogDieuChinhQuyetDinhPheDuyetComponent } from './dialog/dialog-dieu-chinh-quyet-dinh-phe-duyet-mtt/dialog-dieu-chinh-quyet-dinh-phe-duyet-mtt.component';
 import { DialogCopyQuyetToanVonPhiHangDtqgComponent } from './dialog/dialog-copy-quyet-toan-von-phi-hang-dtqg/dialog-copy-quyet-toan-von-phi-hang-dtqg.component';
 import { DialogCopyGiaoDuToanComponent } from './dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogDieuChinhCopyComponent } from './dialog/dialog-dieu-chinh-copy/dialog-dieu-chinh-copy.component';
@@ -266,6 +267,7 @@ import { NgxCurrencyModule } from 'ngx-currency';
     DialogThemMoiKeHoachMuaTrucTiepComponent,
     DialogThemChiCucComponent,
     DialogCanCuThongTinChaoGiaComponent,
+    DialogDieuChinhQuyetDinhPheDuyetComponent
   ],
   imports: [
     CommonModule,
@@ -392,7 +394,8 @@ import { NgxCurrencyModule } from 'ngx-currency';
     BaseComponent,
     DialogThemChiCucComponent,
     DialogCanCuThongTinChaoGiaComponent,
-    NgxCurrencyModule
+    NgxCurrencyModule,
+  
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })
