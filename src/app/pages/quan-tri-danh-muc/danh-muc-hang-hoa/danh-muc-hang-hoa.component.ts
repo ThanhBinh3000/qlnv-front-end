@@ -291,7 +291,7 @@ export class DanhMucHangHoaComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.isEditData = false;
-            this.ngOnInit();
+            this.showdetailHangHoa(this.detailHangHoa.value.id);
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
