@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { BCVP } from 'src/app/Utility/utils';
+import { TAB_LIST } from './bao-cao-thuc-hien-von-phi.constant';
 
 @Component({
     selector: 'app-bao-cao-thuc-hien-von-phi',
@@ -10,13 +11,9 @@ import { BCVP } from 'src/app/Utility/utils';
 })
 export class BaoCaoThucHienVonPhiComponent implements OnInit {
 
-    tabSelected: string;
+    tabSelected!: string;
     data: any;
-    isList = false;
-    isAccept = false;
-    isCheck = false;
-    isSynthetic = false;
-    isExploit = false;
+    tabList: any[] = TAB_LIST;
 
     constructor(
         private spinner: NgxSpinnerService,
@@ -24,29 +21,26 @@ export class BaoCaoThucHienVonPhiComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-        this.isList = this.userService.isAccessPermisson(BCVP.VIEW_REPORT) || this.userService.isAccessPermisson(BCVP.VIEW_SYNTHETIC_REPORT);
-        this.isAccept = this.userService.isAccessPermisson(BCVP.TIEP_NHAN_REPORT);
-        this.isCheck = this.userService.isAccessPermisson(BCVP.TIEP_NHAN_REPORT);
-        this.isSynthetic = this.userService.isAccessPermisson(BCVP.SYNTHETIC_REPORT);
-        this.isExploit = this.userService.isAccessPermisson(BCVP.EXPORT_EXCEL_REPORT);
-        if (this.isList) {
-            this.tabSelected = 'danhsach';
-        } else {
-            if (this.isAccept) {
-                this.tabSelected = 'capduoi';
-            } else {
-                if (this.isSynthetic) {
-                    this.tabSelected = 'tonghop';
-                } else {
-                    if (this.isExploit) {
-                        this.tabSelected = 'khaithac'
-                    }
+        this.tabList.forEach(item => {
+            let check = false;
+            item.role.forEach(e => {
+                if (this.userService.isAccessPermisson(e)) {
+                    check = true;
                 }
+            })
+            item.status = check;
+            item.isSelected = false;
+            if (!this.tabSelected && item.status) {
+                this.tabSelected = item.code;
+                item.isSelected = true;
             }
-        }
+        })
     }
     selectTab(tab) {
         this.tabSelected = tab;
+        this.tabList.forEach(e => {
+            e.isSelected = (tab == e.code);
+        })
     }
 
     changeTab(obj: any) {
@@ -59,5 +53,10 @@ export class BaoCaoThucHienVonPhiComponent implements OnInit {
             };
         }
         this.tabSelected = obj?.tabSelected;
+        if (this.tabList.findIndex(e => e.code == this.tabSelected) != -1) {
+            this.tabList.forEach(e => {
+                e.isSelected = (this.tabSelected == e.code);
+            })
+        }
     }
 }
