@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-tong-hop',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tong-hop.component.scss']
 })
 export class TongHopComponent implements OnInit {
-
+  @Input() loaiVthh: string;
   constructor() { }
 
   ngOnInit(): void {
