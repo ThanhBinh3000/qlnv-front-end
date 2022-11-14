@@ -1254,7 +1254,7 @@ export class PhuongAnGiaoSktTranChiComponent implements OnInit {
             maPaBtc: this.maPaBtc,
             maBcao: this.maBaoCao,
             trangThai: "1",
-            thuyetMinh: "",
+            thuyetMinh: this.thuyetMinh,
             maGiao: "",
         };
 

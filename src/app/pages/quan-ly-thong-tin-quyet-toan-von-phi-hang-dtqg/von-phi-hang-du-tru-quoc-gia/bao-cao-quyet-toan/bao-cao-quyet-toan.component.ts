@@ -277,6 +277,7 @@ export class BaoCaoQuyetToanComponent implements OnInit {
             if (data.statusCode == 0) {
               this.isAddNew = true;
               this.dataThemMoi = request;
+              this.idSelected = null;
             } else {
               this.notification.warning(MESSAGE.WARNING, data?.msg)
             }

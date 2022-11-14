@@ -26,9 +26,9 @@
           <label class="search__label">Thông báo quyết toán năm đối với vốn, phi hàng DTQG</label>
           <input class="search__input" nz-input [(ngModel)]="searchFilter.thongBao" />
         </div>
-        <div nz-col nzSpan="12">
+        <div nz-col nzSpan="6">
           <label class="search__label">Trạng thái</label>
-          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
+          <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
             <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
             </nz-option>
           </nz-select>
@@ -120,7 +120,7 @@
                 (ngModelChange)="filterInTable('ngayPheDuyet',tableFilter.ngayPheDuyet, true)">
               </nz-date-picker>
             </th>
-            <th>
+            <th nzWidth="50px">
               <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="tableFilter.trangThai"
                 (ngModelChange)="filterInTable('trangThai',tableFilter.trangThai, false)">
                 <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
