@@ -1,4 +1,4 @@
-import { Ct1sTonghop } from './../../../../../models/TongHopDeNghiCapVon';
+import {Ct1sTonghop} from './../../../../../models/TongHopDeNghiCapVon';
 import {
   Component,
   EventEmitter,
@@ -6,26 +6,27 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import {
   PAGE_SIZE_DEFAULT
 } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { HelperService } from 'src/app/services/helper.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
-import { TongHopDeNghiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {HelperService} from 'src/app/services/helper.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {DeNghiCapVonBoNganhService} from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
+import {TongHopDeNghiCapVonService} from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapVon.service';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {UploadFileService} from 'src/app/services/uploaFile.service';
 import {STATUS} from "../../../../../constants/status";
+
 @Component({
   selector: 'app-thong-tin-tong-hop',
   templateUrl: './thong-tin-tong-hop.component.html',
@@ -79,6 +80,7 @@ export class ThongTinTonghopComponent implements OnInit {
     },
   ]
   isDetail: boolean = false;
+
   constructor(
     private modal: NzModalService,
     private tongHopDeNghiCapVonService: TongHopDeNghiCapVonService,
@@ -92,6 +94,7 @@ export class ThongTinTonghopComponent implements OnInit {
     private uploadFileService: UploadFileService,
   ) {
   }
+
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
@@ -111,13 +114,15 @@ export class ThongTinTonghopComponent implements OnInit {
       this.loadChiTiet(this.idInput);
     }
     this.spinner.hide();
+    console.log(this.formData.value.ngayTongHop);
   }
+
   initForm() {
     this.formData = this.fb.group({
       "nam": [null, [Validators.required]],
       "nguonTongHop": ['ALL', [Validators.required]],
       "maTongHop": [null],
-      "ngayTongHop": [dayjs().format('DD/MM/YYYY')],
+      "ngayTongHop": [null],
       "maToTrinh": [null],
       "noiDung": [null],
       "khDnCapVonIds": [null],
@@ -128,6 +133,7 @@ export class ThongTinTonghopComponent implements OnInit {
       maDonVi: this.userInfo.MA_DVI,
       capDvi: this.userInfo.CAP_DVI,
       nam: this.yearNow,
+      ngayTongHop: new Date().toDateString(),
     })
 
   }
@@ -155,9 +161,9 @@ export class ThongTinTonghopComponent implements OnInit {
           this.listFileDinhKem = [data.fileDinhKem];
           this.listThongTinChiTiet = [...data.cts];
           this.detail.tCThem = [...data.ct1s]
-          this.detail.tCThem.forEach(dt => {
-            dt.tcCapThem = dt.ycCapThem;
-          });
+          // this.detail.tCThem.forEach(dt => {
+          //   dt.tcCapThem = dt.ycCapThem;
+          // });
           this.updateEditCache();
           let phuongAnList = [];
           this.detail.ct1s.forEach(pa => {
@@ -167,18 +173,19 @@ export class ThongTinTonghopComponent implements OnInit {
             phuongAnList = [...phuongAnList, phuongAn];
           });
           this.khDnCapVonIds = res.data.cts.map(item => item.id);
-          this.formData.patchValue({ khDnCapVonIds: this.khDnCapVonIds });
+          this.formData.patchValue({khDnCapVonIds: this.khDnCapVonIds});
         }
       }
     }
   }
+
   async save(isOther?: boolean) {
     // chờ API và body request
     let phuongAnList = [];
     this.detail.tCThem.forEach(pa => {
       const phuongAn = new Ct1sTonghop();
       phuongAn.khDnCapVonId = pa.id;
-      phuongAn.tcCapThem = +pa.tCThem;
+      phuongAn.tcCapThem = +pa.tcCapThem;
       phuongAnList = [...phuongAnList, phuongAn];
     });
     let body = {
@@ -240,9 +247,11 @@ export class ThongTinTonghopComponent implements OnInit {
       );
     }
   }
+
   back() {
     this.showListEvent.emit();
   }
+
   async guiDuyet() {
     this.modal.confirm({
       nzClosable: false,
@@ -318,6 +327,7 @@ export class ThongTinTonghopComponent implements OnInit {
       }
     });
   }
+
   pheDuyet() {
     this.modal.confirm({
       nzClosable: false,
@@ -353,6 +363,7 @@ export class ThongTinTonghopComponent implements OnInit {
       },
     });
   }
+
   async loadListNguonTongHop() {
     let res = await this.deNghiCapVonBoNganhService.timKiem({
       trangThai: this.globals.prop.NHAP_BAN_HANH
@@ -378,6 +389,7 @@ export class ThongTinTonghopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   async changePageSize(event) {
     this.spinner.show();
     try {
@@ -390,6 +402,7 @@ export class ThongTinTonghopComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   async loadDeNghiCapVonBoNganh() {
     this.spinner.show();
     this.isTonghop = true;
@@ -417,6 +430,7 @@ export class ThongTinTonghopComponent implements OnInit {
     }
     this.spinner.hide();
   }
+
   clearFilter() {
     this.formData = this.fb.group({
       "maTongHop": [null],
@@ -428,10 +442,11 @@ export class ThongTinTonghopComponent implements OnInit {
     })
     this.listFileDinhKem = []
   }
+
   cancelEdit(stt: number): void {
     const index = this.detail?.tCThem.findIndex(item => item.stt === stt);
     this.editDataCache[stt] = {
-      data: { ...this.detail?.tCThem[index] },
+      data: {...this.detail?.tCThem[index]},
       edit: false
     };
   }
@@ -448,16 +463,18 @@ export class ThongTinTonghopComponent implements OnInit {
         item.stt = index + 1;
         this.editDataCache[item.stt] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
     }
   }
+
   sortTableId() {
     this.detail?.tCThem.forEach((lt, i) => {
       lt.stt = i + 1;
     });
   }
+
   isDisableField() {
     if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
       return true;
@@ -474,18 +491,21 @@ export class ThongTinTonghopComponent implements OnInit {
     this.editDataCache[stt].edit = true;
   }
 
-  addRow() {
-    if (!this.detail?.tCThem) {
+  loadPhuongAnTongCuc(data?) {
+    // if (!this.detail?.tCThem) {
+    //   this.detail.tCThem = [];
+    // }
+    // this.sortTableId();
+    // let item = cloneDeep(this.create);
+    // item.stt = this.detail?.tCThem.length + 1;
+    // this.detail.tCThem = [
+    //   ...this.detail?.tCThem,
+    //   item,
+    // ]
+    if(!data){
       this.detail.tCThem = [];
     }
-    this.sortTableId();
-    let item = cloneDeep(this.create);
-    item.stt = this.detail?.tCThem.length + 1;
-    this.detail.tCThem = [
-      ...this.detail?.tCThem,
-      item,
-    ]
-
+    this.detail.tCThem = data;
     this.updateEditCache();
     this.clearItemRow();
   }
@@ -493,6 +513,7 @@ export class ThongTinTonghopComponent implements OnInit {
   clearItemRow() {
     this.create = {};
   }
+
   changeSoDeNghi(item) {
     if (item) {
       let getSoDeNghi = this.listNguonTongHop.filter(x => x.soDeNghi == item.soDeNghi);
@@ -507,6 +528,7 @@ export class ThongTinTonghopComponent implements OnInit {
       }
     }
   }
+
   getNameFile(event?: any, item?: FileDinhKem) {
     const element = event.currentTarget as HTMLInputElement;
     const fileList: FileList | null = element.files;
@@ -557,8 +579,10 @@ export class ThongTinTonghopComponent implements OnInit {
           let data = res.data;
           this.listThongTinChiTiet = data.content;
           this.khDnCapVonIds = data.content.map(item => item.id)
-          this.formData.patchValue({ khDnCapVonIds: this.khDnCapVonIds })
+          this.formData.patchValue({khDnCapVonIds: this.khDnCapVonIds})
           this.totalRecord = data.totalElements;
+          // this.detail.tCThem = data.content;
+          this.loadPhuongAnTongCuc(data.content);
         } else {
           this.listThongTinChiTiet = [];
           this.totalRecord = 0;
@@ -571,10 +595,12 @@ export class ThongTinTonghopComponent implements OnInit {
 
     this.spinner.hide();
   }
+
   showList() {
     this.isDetail = false;
     this.isView = false;
   }
+
   goToDetail(data?: any, isView?: boolean) {
     this.selectedId = data.id;
     this.isDetail = true;
