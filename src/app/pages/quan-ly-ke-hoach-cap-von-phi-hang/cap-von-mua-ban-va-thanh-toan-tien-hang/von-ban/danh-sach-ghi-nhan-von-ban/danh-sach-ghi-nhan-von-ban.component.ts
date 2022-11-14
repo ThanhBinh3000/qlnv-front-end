@@ -177,9 +177,6 @@ export class DanhSachGhiNhanVonBanComponent implements OnInit {
     }
 
     getStatusName(trangThai: string) {
-        if (trangThai == Utils.TT_BC_1) {
-            return 'Mới';
-        }
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 

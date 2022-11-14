@@ -13,7 +13,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_VON, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_VON, numberOnly, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 
 export class ItemGui {
     loaiCap: string;
@@ -75,6 +75,7 @@ export class GhiNhanCapUngVonTaiCkvCcComponent implements OnInit {
     printStatus = false;
     editMoneyUnit = false;
     isDataAvailable = false;
+    isFirstSave = true;
     //file
     lstFiles: any[] = [];
     listFile: File[] = [];
@@ -164,9 +165,6 @@ export class GhiNhanCapUngVonTaiCkvCcComponent implements OnInit {
     }
 
     getStatusName() {
-        if (this.trangThaiBanGhi == Utils.TT_BC_1) {
-            return 'Mới';
-        }
         return this.trangThais.find(e => e.id == this.trangThaiBanGhi)?.tenDm;
     }
 
@@ -187,7 +185,7 @@ export class GhiNhanCapUngVonTaiCkvCcComponent implements OnInit {
         }
         const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
         this.saveStatus = this.getBtnStatus(Utils.statusSave, CVMB.EDIT_REPORT_GNV, checkChirld);
-        this.submitStatus = this.getBtnStatus(Utils.statusApprove, CVMB.APPROVE_REPORT_GNV, checkChirld);
+        this.submitStatus = this.getBtnStatus(Utils.statusApprove, CVMB.APPROVE_REPORT_GNV, checkChirld) && !this.isFirstSave;
         this.passStatus = this.getBtnStatus(Utils.statusDuyet, CVMB.DUYET_REPORT_GNV, checkChirld);
         this.approveStatus = this.getBtnStatus(Utils.statusPheDuyet, CVMB.PHE_DUYET_REPORT_GNV, checkChirld);
         this.copyStatus = this.getBtnStatus(Utils.statusCopy, CVMB.COPY_REPORT_GNV, checkChirld);
@@ -283,6 +281,11 @@ export class GhiNhanCapUngVonTaiCkvCcComponent implements OnInit {
                     this.trangThaiBanGhi = data.data.trangThai;
                     this.lstFiles = data.data.lstFileNhans;
                     this.listFile = [];
+                    if (!this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
+                        this.isFirstSave = true;
+                    } else {
+                        this.isFirstSave = false;
+                    }
                     this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -348,6 +351,11 @@ export class GhiNhanCapUngVonTaiCkvCcComponent implements OnInit {
     async save() {
         if (!this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+
+        if (!numberOnly(this.ttNhan.taiKhoanNhan)) {
+            this.notification.warning(MESSAGE.WARNING, 'Trường chỉ chứa ký tự số');
             return;
         }
         //get list file url

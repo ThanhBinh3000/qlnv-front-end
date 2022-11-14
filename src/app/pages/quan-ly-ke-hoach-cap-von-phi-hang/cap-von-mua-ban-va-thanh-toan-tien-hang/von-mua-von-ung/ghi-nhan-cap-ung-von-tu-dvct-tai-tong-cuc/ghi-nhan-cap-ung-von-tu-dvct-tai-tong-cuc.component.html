@@ -148,16 +148,13 @@
                                     <input nz-input class="search__input" [(ngModel)]="ttGuiCache.noiDung" />
                                 </td>
                                 <td>
-                                    <input nz-input type="number" class="search__input"
-                                        [(ngModel)]="ttGuiCache.maNguonNs" />
+                                    <input nz-input class="search__input" [(ngModel)]="ttGuiCache.maNguonNs" />
                                 </td>
                                 <td>
-                                    <input nz-input type="number" class="search__input"
-                                        [(ngModel)]="ttGuiCache.maChuong" />
+                                    <input nz-input class="search__input" [(ngModel)]="ttGuiCache.maChuong" />
                                 </td>
                                 <td>
-                                    <input nz-input type="number" class="search__input"
-                                        [(ngModel)]="ttGuiCache.maNdkt" />
+                                    <input nz-input class="search__input" [(ngModel)]="ttGuiCache.maNdkt" />
                                 </td>
                                 <td>
                                     <fm-input-number class="search__input"
@@ -169,8 +166,8 @@
                                     <input nz-input class="search__input" [(ngModel)]="ttGuiCache.soTienChu" />
                                 </td>
                                 <td>
-                                    <input nz-input type="number" class="search__input"
-                                        [class]="ttGuiCache.taiKhoan || ttGuiCache.taiKhoan === 0 ?'' : 'input-error-validate' "
+                                    <input nz-input class="search__input"
+                                        [class]="ttGuiCache.taiKhoan?'' : 'input-error-validate' "
                                         [(ngModel)]="ttGuiCache.taiKhoan" />
                                 </td>
                                 <td [hidden]="status">
@@ -209,9 +206,9 @@
                         </div>
                         <div nz-col nzSpan="6">
                             <label class="search__label">Tài khoản nhận</label>
-                            <nz-input-number class="search__input" nzSize="small" [(ngModel)]="ttNhan.taiKhoanNhan"
-                                [class]="ttNhan.taiKhoanNhan ?'' : 'input-error-validate' ">
-                            </nz-input-number>
+                            <input nz-input class="search__input"
+                                [class]="ttNhan.taiKhoanNhan ?'' : 'input-error-validate' "
+                                [(ngModel)]="ttNhan.taiKhoanNhan" />
                         </div>
                     </ng-template>
                     <div nz-col nzSpan="12">

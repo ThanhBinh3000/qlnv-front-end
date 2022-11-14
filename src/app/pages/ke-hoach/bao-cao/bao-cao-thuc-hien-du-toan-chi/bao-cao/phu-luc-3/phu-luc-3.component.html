@@ -498,7 +498,7 @@
                     <td>{{ data.ghiChu }}</td>
 
                     <td [hidden]="status">
-                        <ng-container *ngIf="!getDeleteStatus(data.maDan)">
+                        <ng-container *ngIf="!getDeleteStatus(data)">
                             <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                         </ng-container>
                     </td>
@@ -511,7 +511,7 @@
                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                     </td>
                     <td [hidden]="status">
-                        <ng-container *ngIf="!getDeleteStatus(data.maDan)">
+                        <ng-container *ngIf="!getDeleteStatus(data)">
                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                 (ngModelChange)="updateChecked(data.id)"></label>
                         </ng-container>
@@ -755,7 +755,7 @@
                             nz-input />
                     </td>
                     <td [hidden]="status">
-                        <ng-container *ngIf="!getDeleteStatus(data.maDan)">
+                        <ng-container *ngIf="!getDeleteStatus(data)">
                             <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                         </ng-container>
                     </td>
@@ -769,7 +769,7 @@
                         </a>
                     </td>
                     <td [hidden]="status">
-                        <ng-container *ngIf="!getDeleteStatus(data.maDan)">
+                        <ng-container *ngIf="!getDeleteStatus(data)">
                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                 (ngModelChange)="updateChecked(data.id)"></label>
                         </ng-container>

@@ -480,7 +480,7 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
 
         const request = JSON.parse(JSON.stringify({
             id: this.idInput,
-            fileDinhKems: this.lstFiles,
+            fileDinhKems: listFile,
             listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
             lstCtiet: lstCtietBcaoTemp,
             maDviTien: this.maDviTien,
@@ -598,47 +598,13 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
         } else {
             this.status = true;
         }
-        // let checkParent = false;
-        // let checkChirld = false;
-        // const dVi = this.donVis.find(e => e.maDvi == this.maDviTao);
-        // if (dVi && dVi.maDvi == this.userInfo?.MA_DVI) {
-        //     checkChirld = true;
-        // }
         const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-        // if (checkParent) {
-        //     const index: number = this.trangThais.findIndex(e => e.id == Utils.TT_BC_7);
-        //     this.trangThais[index].tenDm = "Mới";
-        // }
         this.saveStatus = this.getBtnStatus(Utils.statusSave, QTVP.ADD_REPORT, checkChirld);
         this.submitStatus = this.getBtnStatus(Utils.statusApprove, QTVP.APPROVE_REPORT, checkChirld);
         this.passStatus = this.getBtnStatus(Utils.statusDuyet, QTVP.DUYET_QUYET_TOAN_REPORT, checkChirld);
         this.approveStatus = this.getBtnStatus(Utils.statusPheDuyet, QTVP.PHE_DUYET_QUYET_TOAN_REPORT, checkChirld);
-        // this.statusBtnDVCT = this.getBtnStatus(Utils.statusTiepNhan, QTVP.EDIT_DIEU_CHINH_REPORT, checkParent);
         this.copyStatus = this.getBtnStatus(Utils.statusCopy, QTVP.COPY_REPORT, checkChirld);
         this.printStatus = this.getBtnStatus(Utils.statusPrint, QTVP.PRINT_REPORT, checkChirld);
-
-        // const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-
-        // const checkSave = this.userService.isAccessPermisson(QTVP.EDIT_REPORT);
-        // const checkSubmit = this.userService.isAccessPermisson(QTVP.APPROVE_REPORT);
-        // const checkPass = this.userService.isAccessPermisson(QTVP.DUYET_QUYET_TOAN_REPORT);
-        // const checkApprove = this.userService.isAccessPermisson(QTVP.PHE_DUYET_QUYET_TOAN_REPORT);
-        // const checkCopy = this.userService.isAccessPermisson(QTVP.COPY_REPORT);
-        // const checkPrint = this.userService.isAccessPermisson(QTVP.PRINT_REPORT);
-
-        // if (Utils.statusSave.includes(this.isStatus) && checkSave) {
-        //     this.status = false;
-        // } else {
-        //     this.status = true;
-        // }
-
-        // this.saveStatus = Utils.statusSave.includes(this.isStatus) && checkSave && checkChirld;
-        // this.submitStatus = Utils.statusSave.includes(this.isStatus) && checkSubmit && checkChirld;
-        // this.passStatus = Utils.statusSave.includes(this.isStatus) && checkPass && checkChirld;
-        // this.approveStatus = Utils.statusSave.includes(this.isStatus) && checkApprove && checkChirld;
-        // this.copyStatus = Utils.statusSave.includes(this.isStatus) && checkCopy && checkChirld;
-        // this.printStatus = Utils.statusSave.includes(this.isStatus) && checkPrint && checkChirld;
-
     }
     getBtnStatus(status: string[], role: string, check: boolean) {
         return !(status.includes(this.isStatus) && this.userService.isAccessPermisson(role) && check);

@@ -148,21 +148,17 @@
 
                             <ng-template #editTemplate>
                                 <td>
-                                    <nz-input-number class="search__input"
-                                        [class]="ttGuiCache.tuTk || ttGuiCache.tuTk === 0 ?'' : 'input-error-validate' "
-                                        nzSize="small" [(ngModel)]="ttGuiCache.tuTk">
-                                    </nz-input-number>
+                                    <input nz-input class="search__input" [(ngModel)]="ttGuiCache.tuTk"
+                                        [class]="ttGuiCache.tuTk?'' : 'input-error-validate' " />
                                 </td>
                                 <td>
                                     <input nz-input class="search__input" [(ngModel)]="ttGuiCache.noiDung" />
                                 </td>
                                 <td>
-                                    <input nz-input type="number" class="search__input"
-                                        [(ngModel)]="ttGuiCache.maNguonNs" />
+                                    <input nz-input class="search__input" [(ngModel)]="ttGuiCache.maNguonNs" />
                                 </td>
                                 <td>
-                                    <input nz-input type="number" class="search__input"
-                                        [(ngModel)]="ttGuiCache.nienDoNs" />
+                                    <input nz-input class="search__input" [(ngModel)]="ttGuiCache.nienDoNs" />
                                 </td>
                                 <td>
                                     {{displayValue(ttGuiCache.soTien)}}
@@ -265,7 +261,7 @@
                         </div>
                         <div nz-col nzSpan="6">
                             <label class="search__label">Tài khoản nhận</label>
-                            <input nz-input type="number" class="search__input"
+                            <input nz-input class="search__input"
                                 [class]="ttNhan.taiKhoanNhan ?'' : 'input-error-validate' "
                                 [(ngModel)]="ttNhan.taiKhoanNhan" />
                         </div>
