@@ -33,7 +33,7 @@
       <div nz-col nzSpan="6">
         <label class="search__label">Trạng thái</label>
         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="searchFilter.trangThai">
-          <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+          <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten">
           </nz-option>
         </nz-select>
       </div>
@@ -53,16 +53,6 @@
 
   <div class="group-button">
     <h3 class="text-uppercase">DANH SÁCH BÁO CÁO TỪ ĐƠN VỊ CẤP DƯỚI</h3>
-    <!-- <div class="buttons">
-      <button *ngIf="statusDelete" type="button" class="btn btn-do" (click)="deleteReport('')">
-        <i class="fa fa-trash-o do"></i>
-        <span>Xóa</span>
-      </button>
-      <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
-        <i class="icon htvbdh_tcdt_tao-qd"></i>
-        <span>Thêm</span>
-      </button>
-    </div> -->
   </div>
 
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -84,6 +74,7 @@
           <th nzWidth="50px" class="text-center"></th>
         </tr>
         <tr class="search-table">
+          <th></th>
           <th>
             <nz-input-group [nzSuffix]="suffixTemplateInfo">
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maBcao"
@@ -137,15 +128,80 @@
             </nz-date-picker>
           </th>
           <th>
+            <nz-input-group [nzSuffix]="suffixTemplateInfo">
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
+                (input)="filterInTable('tenDvi',filterTable.tenDvi, false)" size="small" />
+            </nz-input-group>
+            <ng-template #suffixTemplateInfo>
+              <i nz-icon nzType="search"></i>
+            </ng-template>
+          </th>
+          <th>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
               (ngModelChange)="filterInTable('trangThai',filterTable.trangThai, false)">
-              <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+              <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten">
               </nz-option>
             </nz-select>
           </th>
           <th></th>
         </tr>
       </thead>
+      <tbody>
+        <tr *ngFor="let data of basicTable.data; let i = index">
+          <td>{{ (i + 1) + (pages.page - 1)*pages.size }}</td>
+          <td>
+            <a>
+              {{data.maBcao}}
+            </a>
+          </td>
+          <td>{{data.ngayTao}}</td>
+          <td>{{data.namHienHanh}}</td>
+          <td>{{data.dotBcao}}</td>
+          <td>
+            {{data.ngayTrinh}}
+          </td>
+          <td>
+            {{data.ngayDuyet}}
+          </td>
+
+          <td>
+            {{data.ngayPheDuyet}}
+          </td>
+          <td [hidden]="statusCaptren">
+            {{data.ngayTraKq}}
+          </td>
+          <td>
+            {{data.tenDvi}}
+          </td>
+          <td>
+            {{getStatusName(data.trangThai)}}
+            <ng-container *ngIf="data.trangThai == '8'">
+              <br />
+              Lý do: {{data.lyDoTuChoi}}
+            </ng-container>
+          </td>
+          <td class="text-left">
+            <a (click)="viewDetail(data)">
+              <i class="fa fa-eye"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
     </nz-table>
+    <div class="tab-content tab-menu" id="myTabContent">
+      <div class="tab-pane fade show active justify-content-between">
+        <div class="trai">
+        </div>
+        <div class="canphai">
+          <nz-pagination class="pagination-card" [nzPageIndex]="pages.page" [nzTotal]="totalElements" nzShowSizeChanger
+            [nzPageSize]="pages.size" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="onPageIndexChange($event)"
+            (nzPageSizeChange)="onPageSizeChange($event)">
+            <ng-template #rangeTemplate let-range="range" let-total>
+              {{ range[0] }}-{{ range[1] }} of {{totalElements}} items
+            </ng-template>
+          </nz-pagination>
+        </div>
+      </div>
+    </div>
   </nz-card>
 </div>
