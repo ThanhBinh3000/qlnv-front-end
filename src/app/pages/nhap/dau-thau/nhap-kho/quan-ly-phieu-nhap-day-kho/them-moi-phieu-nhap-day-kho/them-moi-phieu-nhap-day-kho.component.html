@@ -5,24 +5,25 @@
       <span>Quay lại</span>
     </button>
     <button class="btn btn-sub xanh-nhat" type="button"
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) "
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ) "
       (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub do" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
+    <button type="button" class="btn btn-sub do"
+      *ngIf=" !(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ )"
       (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
     <button class="btn btn-sub xanh-nhat"
-      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_DUYET')"
+      *ngIf=" !(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ ) && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_DUYET')"
       (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
     </button>
     <button class="btn btn-sub xanh"
-      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) "
+      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ ) "
       (click)="save(false)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -39,8 +40,9 @@
       </div>
     </div>
   </div>
-  <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
-    nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+  <nz-alert class="mg-t-16"
+    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_KTVBQ "
+    nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
 
   <nz-card class="mg-t-16 flex-card p-lr16">
@@ -228,11 +230,11 @@
               <label nz-checkbox [nzValue]="true" nzDisabled></label>
             </td>
             <td>{{i + 1}}</td>
-            <td class="link">{{item.soPhieu}}</td>
+            <td class="link">{{item.soPhieuKtraCl}}</td>
             <td class="link">{{item.soPhieuNhapKho }}</td>
             <td class="link">{{item.soBangKe}}</td>
-            <td>{{item.ngayTao | date: 'dd/MM/YYYY'}}</td>
-            <td>{{item.soLuongNhapKho | number : '1.0-1' : 'vi_VN' }}</td>
+            <td>{{item.ngayNhap | date: 'dd/MM/YYYY'}}</td>
+            <td>{{item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
           </tr>
         </tbody>
         <tfoot>
@@ -251,7 +253,7 @@
               Ngày bắt đầu nhập
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayBdNhap">
+              <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayBatDauNhap">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -262,7 +264,7 @@
               Ngày kết thúc nhập
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayTao">
+              <nz-date-picker nzDisabled nzFormat="dd/MM/yyyy" formControlName="ngayKetThucNhap">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -321,7 +323,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> KTV bảo quản</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input [readonly]="true" nz-input formControlName="tenKtvBaoQuan" readonly />
+              <input [readonly]="true" nz-input formControlName="tenKyThuatVien" readonly />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -329,7 +331,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Kế toán/Kế toán trưởng</nz-form-label>
             <nz-form-control>
-              <input [readonly]="true" nz-input formControlName="tenKeToanTruong" readonly />
+              <input [readonly]="true" nz-input formControlName="tenKeToan" readonly />
             </nz-form-control>
           </nz-form-item>
         </div>

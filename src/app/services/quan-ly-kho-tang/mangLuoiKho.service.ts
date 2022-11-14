@@ -8,8 +8,9 @@ import { environment } from 'src/environments/environment';
 })
 export class MangLuoiKhoService extends BaseService {
     GATEWAY = '/qlnv-kho';
+    // GATEWAY = '';
     constructor(public httpClient: HttpClient) {
-        super(httpClient, 'mlk', '/qlnv-kho');
+        super(httpClient, 'mlk', '');
     }
 
     getDetailByMa(body) {

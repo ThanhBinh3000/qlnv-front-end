@@ -23,14 +23,6 @@ export class QuanLyVonPhiService extends BaseService {
       request,
     )
   }
-  //search list bao cao
-  timBaoCaoLapThamDinh(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/danh-sach',
-      // 'http://192.168.1.101:30785/lap-tham-dinh/danh-sach',
-      request,
-    );
-  }
 
   timBaoCaoQuyetToanVonPhi(request: any): Observable<any> {
     return this.httpClient.post(
@@ -82,14 +74,6 @@ export class QuanLyVonPhiService extends BaseService {
       // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chuc-nang',
       "http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chuc-nang",
       request,
-    );
-  }
-
-  // call api chi tiết báo cáo
-  bCLapThamDinhDuToanChiTiet(id: any): Observable<any> {
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/chi-tiet/' + id,
-      // 'http://192.168.1.104:8094/lap-tham-dinh/chi-tiet/' + id,
     );
   }
 
@@ -170,14 +154,6 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  //sinh ma bao cao
-  sinhMaBaoCao(): Observable<any> {
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/sinh-ma',
-      // 'http://192.168.1.104:8094/lap-tham-dinh/sinh-ma',
-    );
-  }
-
   //sinh ma bao cao quyet toan
   sinhMaBaoCaoQuyetToan(maPhanBcao: any): Observable<any> {
     return this.httpClient.get(
@@ -197,15 +173,6 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.get(
       this.urlDefault + '/qlnv-khoachphi/dieu-chinh-du-toan-chi/sinh-ma',
       // 'http://192.168.1.103:8094/dieu-chinh-du-toan-chi/sinh-ma',
-    );
-  }
-
-  // trinh duyet
-  trinhDuyetService(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/them-moi',
-      // 'http://192.168.1.104:8094/lap-tham-dinh/them-moi',
-      request,
     );
   }
 
@@ -254,26 +221,6 @@ export class QuanLyVonPhiService extends BaseService {
   giaoDuToan1(request: any): Observable<any> {
     return this.httpClient.post(
       'http://192.168.1.108:30101/giao_du_toan/them-moi',
-      request,
-    );
-  }
-
-
-
-  // upload list
-  updateLapThamDinh(request: any): Observable<any> {
-    return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/chi-tiet/cap-nhat',
-      // 'http://192.168.1.104:8094/lap-tham-dinh/chi-tiet/cap-nhat',
-      request,
-    );
-  }
-
-  // upload list
-  updateBieuMau(request: any): Observable<any> {
-    return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/cap-nhat',
-      // 'http://192.168.1.141:8094/lap-tham-dinh/cap-nhat',
       request,
     );
   }
@@ -347,16 +294,6 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-
-  //tong hop
-  tongHop(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/tong-hop',
-      // 'http://192.168.1.101:30101/lap-tham-dinh/tong-hop',
-      request,
-    );
-  }
-
   //tong hop giao du toan
   tongHopGiaoDuToan(request: any): Observable<any> {
     return this.httpClient.post(
@@ -373,14 +310,6 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   //tao ma PA
-  maPhuongAn(): Observable<any> {
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so/sinh-ma-pa'
-      // 'http://192.168.1.104:8094/pa-giao-so/sinh-ma-pa'
-    );
-  }
-
-  //tao ma PA
   dsachHopDong(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/hop-dong/danh-sach',
@@ -389,13 +318,6 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  //danh sach bao cao tong hop nen bao cao to
-  danhSachBaoCaoTongHop(maBcao: string): Observable<any> {
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/giao-so/danh-sach/' + maBcao
-      // 'http://192.168.1.104:8094/giao-so/danh-sach/' + maBcao
-    )
-  }
   //tao ma PA giao du toan chi NSNN
   maPhuongAnGiao(maLoai: string): Observable<any> {
     return this.httpClient.get(
@@ -423,13 +345,6 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
-  timKiemMaPaDuyet(): Observable<any> {
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so/danh-sach/pa-lanh-dao-duyet'
-      // 'http://192.168.1.104:8094/pa-giao-so/danh-sach/pa-lanh-dao-duyet'
-    );
-  }
-
   // tim kiem danh sach ma phuong an giao dieu chinh du toan NSNN
   timKiemMaPaGiaoNSNN(): Observable<any> {
     return this.httpClient.get(
@@ -443,29 +358,6 @@ export class QuanLyVonPhiService extends BaseService {
       // this.urlDefault + '/qlnv-khoachphi/giao_du_toan/danh-sach/phuong-an-duyet'
       'http://192.168.1.105:8094/giao_du_toan/danh-sach/phuong-an-duyet'
     );
-  }
-  //chi tiet ma phuong an
-  ctietPhuongAn(id: any): Observable<any> {
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so/chi-tiet/' + id
-      // 'http://192.168.1.10?9:8094/pa-giao-so/chi-tiet/' + id
-    );
-  }
-
-  //tao ma giao
-  maGiao(): Observable<any> {
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/giao-so/sinh-ma-giao-so'
-      // 'http://192.168.1.104:8094/giao-so/sinh-ma-giao-so'
-    );
-  }
-
-  //giao so tran chi
-  giaoSoTranChi(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/giao-so/giao-so-dvi-cap-duoi'
-      // 'http://192.168.1.104:8094/giao-so/giao-so-dvi-cap-duoi'
-      , request);
   }
 
   //giao so tran chi trong Giao du toan NSNN
@@ -481,63 +373,6 @@ export class QuanLyVonPhiService extends BaseService {
       , request);
   }
 
-  //them moi phuong an
-  themMoiPhuongAn(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so/them-moi',
-      // 'http://192.168.1.109:8094/pa-giao-so/them-moi',
-      request);
-  }
-
-  //sua bao cao theo so giao tran chi
-  suaBcao(request: any): Observable<any> {
-    return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/giao-so/cap-nhat/bao-cao',
-      // 'http://192.168.1.104:8094/giao-so/cap-nhat/bao-cao',
-      request);
-  }
-
-  //cap nhat phuong an
-  capnhatPhuongAn(requestUpdate: any): Observable<any> {
-    return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so/cap-nhat'
-      // 'http://192.168.1.104:8094/pa-giao-so/cap-nhat'
-      , requestUpdate);
-  }
-
-  //xoa phuong an
-  xoaPhuongAn(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so/xoa',
-      // 'http://192.168.1.104:8094/pa-giao-so/xoa',
-      request
-    );
-  }
-  //xem chi tiet so giao tran chi
-  ctietGiaoSoTranChi(id: any): Observable<any> {
-    return this.httpClient.get(
-      this.urlDefault + '/qlnv-khoachphi/giao-so/chi-tiet/' + id
-      // 'http://192.168.1.104:8094/giao-so/chi-tiet/'+id
-    );
-
-  }
-
-  //tim kiem so giao tran chi
-  timKiemPhuongAn(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so/danh-sach'
-      // 'http://192.168.1.104:8094/pa-giao-so/danh-sach'
-      , request)
-  }
-
-  //tim kiem so giao kiem tra tran chi
-  timKiemSoKiemTraTranChi(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/giao-so/dsach-giao-so'
-      // 'http://192.168.1.101:30101/giao-so/dsach-giao-so'
-      , request)
-  }
-
   //list danh sach phuong an da duoc duyet
   danhsachphuonganduocduyet(maDvi: any): Observable<any> {
     return this.httpClient.post(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/danh-sach-phuong-an/', maDvi);
@@ -548,14 +383,6 @@ export class QuanLyVonPhiService extends BaseService {
   //xoa quyet dinh cong van
   xoaquyetdinhcongvan(request: any): Observable<any> {
     return this.httpClient.delete(this.urlDefault + '/qlnv-khoachphi/pa-giao-so-kt/xoa-qd-cv/' + request);
-  }
-
-  //nhap so QD-CV
-  themMoiQdCv(request: any): Observable<any> {
-    return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so/nhap-qd-cv'
-      // 'http://192.168.1.109:30101/pa-giao-so/nhap-qd-cv'
-      , request);
   }
 
   //nhap so QD giao du toan chi NSNN
@@ -647,25 +474,6 @@ export class QuanLyVonPhiService extends BaseService {
   }
 
   // call api nút chức năng
-  approveThamDinh(request: any): Observable<any> {
-    return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/trang-thai',
-      // 'http://192.168.1.101:30101/lap-tham-dinh/trang-thai',
-      request,
-    );
-  }
-
-
-  // call api nút chức năng
-  approveCtietThamDinh(request: any): Observable<any> {
-    return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/chi-tiet/phe-duyet',
-      // 'http://192.168.1.101:30101/lap-tham-dinh/chi-tiet/phe-duyet',
-      request,
-    );
-  }
-
-  // call api nút chức năng
   approveQuyetToan(request: any): Observable<any> {
     return this.httpClient.put(
       this.urlDefault + '/qlnv-khoachphi/quyet-toan/trang-thai',
@@ -749,13 +557,6 @@ export class QuanLyVonPhiService extends BaseService {
     )
   }
 
-  trinhDuyetPhuongAn(request: any): Observable<any> {
-    return this.httpClient.put(
-      this.urlDefault + '/qlnv-khoachphi/pa-giao-so/trang-thai',
-      // 'http://192.168.1.104:8094/pa-giao-so/trang-thai',
-      request);
-  }
-
   // trinh duyet phuong an giao phan bo du toan NSNN
   trinhDuyetPhuongAnGiao(request: any): Observable<any> {
     return this.httpClient.put(
@@ -767,15 +568,6 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.put(
       'http://192.168.1.101:30101/giao_du_toan/trang-thai',
       request);
-  }
-
-  //xóa báo cáo nút xóa Báo cáo
-  xoaBaoCaoLapThamDinh(request: any): Observable<any> {
-    return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/xoa',
-      // 'http://192.168.1.138:8094/lap-tham-dinh/xoa',
-      request
-    );
   }
 
   //xóa báo cáo nút xóa Báo cáo quyết toán

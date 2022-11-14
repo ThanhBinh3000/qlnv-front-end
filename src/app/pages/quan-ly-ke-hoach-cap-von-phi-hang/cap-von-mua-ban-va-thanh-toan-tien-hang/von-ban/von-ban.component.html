@@ -1,12 +1,11 @@
 <nz-affix [nzOffsetTop]="69" class="level1">
     <!-- (nzChange)="onChange($event)" -->
     <ul nz-menu nzMode="horizontal">
-        <li nz-menu-item nzSelected (click)="selectTab('nop')">
-            Vốn bán nộp lên đơn vị cấp trên
-        </li>
-        <li nz-menu-item (click)="selectTab('ghinhan')">
-            Vốn bán từ đơn vị cấp dưới
-        </li>
+        <ng-container *ngFor="let data of tabList">
+            <li *ngIf="data.status" [nzSelected]="data.isSelected" nz-menu-item (click)="selectTab(data.code)">
+                {{data.name}}
+            </li>
+        </ng-container>
     </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">

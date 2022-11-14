@@ -1,22 +1,21 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { ThongTinQuyetDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {ThongTinQuyetDinh} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 
 @Component({
   selector: 'app-ke-hoach-xuat-giam',
   templateUrl: './ke-hoach-xuat-giam.component.html',
   styleUrls: ['./ke-hoach-xuat-giam.component.scss'],
 })
-export class KeHoachXuatGiamComponent implements OnInit {
+export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
+  @Input() maBoNganh: string;
   @Input()
   dsHangHoa = [];
   @Input()
   dataTable = [];
   @Input()
   tabName: String;
+  @Input() namHienTai: number;
   @Output()
   dataTableChange = new EventEmitter<any[]>();
 
@@ -37,7 +36,8 @@ export class KeHoachXuatGiamComponent implements OnInit {
 
   constructor(
     private modal: NzModalService,
-  ) { }
+  ) {
+  }
 
   ngOnInit(): void {
     this.updateEditCache()
@@ -95,7 +95,7 @@ export class KeHoachXuatGiamComponent implements OnInit {
 
   huyEdit(idx: number): void {
     this.dataEdit[idx] = {
-      data: { ...this.dataTable[idx] },
+      data: {...this.dataTable[idx]},
       edit: false,
     };
   }
@@ -109,9 +109,9 @@ export class KeHoachXuatGiamComponent implements OnInit {
   updateEditCache(): void {
     if (this.dataTable) {
       this.dataTable.forEach((item, index) => {
-          this.dataEdit[index] = {
+        this.dataEdit[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         }
       });
     }
@@ -128,7 +128,7 @@ export class KeHoachXuatGiamComponent implements OnInit {
         typeData.tenVthh = loaiVthh[0].ten;
         this.dsChungLoaiHangHoa = loaiVthh[0].child;
       }
-    } else  {
+    } else {
       this.dsChungLoaiHangHoa = [];
       this.rowItem.dviTinh = null;
       const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
@@ -140,13 +140,13 @@ export class KeHoachXuatGiamComponent implements OnInit {
     }
   }
 
-  onChangeCloaiVthh(event, typeData?: any ) {
+  onChangeCloaiVthh(event, typeData?: any) {
     if (typeData) {
       const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
       if (cloaiVthh.length > 0) {
         typeData.tenCloaiVthh = cloaiVthh[0].ten;
       }
-    } else  {
+    } else {
       const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
       if (cloaiVthh.length > 0) {
         this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
@@ -154,5 +154,10 @@ export class KeHoachXuatGiamComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.maBoNganh) {
+      this.rowItem = new ThongTinQuyetDinh();
+    }
+  }
 }
 

@@ -1,15 +1,15 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { DCDT, Utils } from 'src/app/Utility/utils';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { UserService } from 'src/app/services/user.service';
+import { DCDT, Utils } from 'src/app/Utility/utils';
+import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.component';
 @Component({
   selector: 'app-danh-sach-bao-cao-dieu-chinh',
   templateUrl: './danh-sach-bao-cao-dieu-chinh.component.html',
@@ -95,7 +95,7 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
   userInfo: any;
 
   constructor(
-    private quanLyVonPhiService: QuanLyVonPhiService,
+    private dieuChinhService: DieuChinhService,
     private notification: NzNotificationService,
     private datePipe: DatePipe,
     private spinner: NgxSpinnerService,
@@ -113,7 +113,7 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
     const newDate = new Date();
     newDate.setMonth(newDate.getMonth() - 1);
     this.searchFilter.tuNgay = newDate;
-    this.searchFilter.nam = new Date().getFullYear();
+    // this.searchFilter.nam = new Date().getFullYear();
     this.userInfo = this.userService.getUserLogin();
     this.search();
     if (this.userInfo.CAP_DVI == '1') {
@@ -130,7 +130,7 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
       request = [id];
     }
     this.spinner.show();
-    this.quanLyVonPhiService.xoaDuToanDieuChinh(request).toPromise().then(
+    this.dieuChinhService.xoaDuToanDieuChinh(request).toPromise().then(
       data => {
         if (data.statusCode == 0) {
           this.listIdDelete = [];
@@ -213,7 +213,7 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
     };
     this.spinner.show();
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    await this.quanLyVonPhiService.timKiemDieuChinh(requestReport).toPromise().then(
+    await this.dieuChinhService.timKiemDieuChinh(requestReport).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.dataTable = [];

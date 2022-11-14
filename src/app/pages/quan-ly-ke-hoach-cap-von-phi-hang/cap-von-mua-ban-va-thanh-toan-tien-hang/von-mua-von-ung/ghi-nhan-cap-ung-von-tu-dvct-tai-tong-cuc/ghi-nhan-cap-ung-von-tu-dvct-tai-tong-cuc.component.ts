@@ -15,16 +15,16 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_VON, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_VON, MONEY_LIMIT, numberOnly, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 
 export class ItemGui {
     noiDung: string;
-    maNguonNs: number;
-    maChuong: number;
-    maNdkt: number;
+    maNguonNs: string;
+    maChuong: string;
+    maNdkt: string;
     soTien: number;
     soTienChu: string;
-    taiKhoan: number;
+    taiKhoan: string;
 }
 
 export class ItemNhan {
@@ -286,6 +286,7 @@ export class GhiNhanCapUngVonTuDvctTaiTongCucComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.statusEdit = false;
                     this.maCvUv = data.data.maCapUngVonTuCapTren;
+                    this.maDonViTao = data.data.maDvi;
                     this.maDviTien = data.data.maDviTien;
                     this.loaiVon = data.data.loaiCap;
                     this.soLenhChiTien = data.data.soLenhChiTien;
@@ -381,6 +382,11 @@ export class GhiNhanCapUngVonTuDvctTaiTongCucComponent implements OnInit {
         }
         if (this.statusEdit) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+
+        if (!numberOnly(this.ttNhan.taiKhoanNhan)) {
+            this.notification.warning(MESSAGE.WARNING, 'Trường chỉ chứa ký tự số');
             return;
         }
 
@@ -482,6 +488,11 @@ export class GhiNhanCapUngVonTuDvctTaiTongCucComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
             return;
         }
+        if (!numberOnly(this.ttGuiCache.maChuong) || !numberOnly(this.ttGuiCache.maNdkt) ||
+            !numberOnly(this.ttGuiCache.maNguonNs) || !numberOnly(this.ttGuiCache.taiKhoan)) {
+            this.notification.warning(MESSAGE.WARNING, 'Trường chỉ chứa ký tự số');
+            return;
+        }
         this.statusEdit = false;
         this.ttGui = this.ttGuiCache;
     }
@@ -566,7 +577,7 @@ export class GhiNhanCapUngVonTuDvctTaiTongCucComponent implements OnInit {
             tuTk: this.ttGui.taiKhoan,
             tkNhan: this.ttNhan.taiKhoanNhan,
             trangThai: "1",
-            thuyetMinh: "",
+            thuyetMinh: this.thuyetMinh,
         };
 
         this.spinner.show();

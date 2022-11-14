@@ -219,7 +219,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: this.idInput,
+            id: this.formData.value.id,
             lyDoTuChoi: null,
             trangThai: STATUS.BAN_HANH
           };
@@ -243,7 +243,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     });
   }
 
-  async save() {
+  async save(isBanHanh?) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
@@ -288,12 +288,20 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         res = await this.quyetDinhGiaCuaBtcService.create(body);
       }
       if (res.msg == MESSAGE.SUCCESS) {
-        if (this.idInput > 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        if (isBanHanh) {
+          this.formData.patchValue({
+            id: res.data.id,
+            trangThai: res.data.trangThai
+          })
+          this.banHanh();
         } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          if (this.idInput > 0) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          } else {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }
+          this.quayLai();
         }
-        this.quayLai();
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }

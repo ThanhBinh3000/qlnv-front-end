@@ -48,8 +48,8 @@ import {Globals} from 'src/app/shared/globals';
 import * as XLSX from 'xlsx';
 import {TAB_SELECTED} from './thong-tin-chi-tieu-ke-hoach-nam.constant';
 import {STATUS} from "../../../../../../constants/status";
-import {DANH_MUC_LEVEL} from "../../../../../luu-kho/luu-kho.constant";
 import {QuyetDinhBtcTcdtService} from "../../../../../../services/quyetDinhBtcTcdt.service";
+import {QuanLyHangTrongKhoService} from "../../../../../../services/quanLyHangTrongKho.service";
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -143,11 +143,19 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     private uploadFileService: UploadFileService,
     public userService: UserService,
     public quyetDinhBtcTcdtService: QuyetDinhBtcTcdtService,
+    public quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
   ) {
     this.initForm();
   }
 
   ngOnInit(): void {
+    this.yearNow = dayjs().get('year');
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: this.yearNow - i,
+        text: this.yearNow - i,
+      });
+    }
     this.userInfo = this.userService.getUserLogin();
     this.maQd = '/QĐ-BTC'
     if (this.userInfo) {
@@ -160,19 +168,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     } else if (this.userService.isCuc()) {
       this.lastBreadcrumb = LEVEL.CUC_SHOW;
     }
-    this.findCanCuByYear();
+    this.findCanCuByYear(this.yearNow);
     this.newObjectLuongThuc();
     this.newObjectMuoi();
     this.newObjectVatTu();
     this.loadDanhMucHang();
     this.loadDsCanCu();
-    this.yearNow = dayjs().get('year');
-    for (let i = -3; i < 23; i++) {
-      this.listNam.push({
-        value: this.yearNow - i,
-        text: this.yearNow - i,
-      });
-    }
+
     this.loadDonVi();
     this.formData.patchValue({
       namKeHoach: dayjs().get('year')
@@ -183,13 +185,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
 
-  async findCanCuByYear() {
+  async findCanCuByYear(year: number) {
+    this.formData.patchValue({
+      canCu: null,
+    })
+
     if (this.userService.isCuc()) {
-      let res = await this.chiTieuKeHoachNamService.canCuCuc(dayjs().get('year'));
+      let res = await this.chiTieuKeHoachNamService.canCuCuc(year);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data
         if (data) {
-          console.log(data)
           this.formData.patchValue({
             canCu: data.canCu,
             chiTieuId: data.id
@@ -200,7 +205,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       }
     }
     if (this.userService.isTongCuc()) {
-      let res = await this.chiTieuKeHoachNamService.canCuTongCuc(dayjs().get('year'));
+      let res = await this.chiTieuKeHoachNamService.canCuTongCuc(year);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data
         if (data) {
@@ -210,7 +215,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         }
       }
     }
-
   }
 
   newObjectLuongThuc() {
@@ -768,7 +772,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             soQd: this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[0],
             ngayKy: this.thongTinChiTieuKeHoachNam.ngayKy,
             ngayHieuLuc: this.thongTinChiTieuKeHoachNam.ngayHieuLuc,
-            arrCanCu: JSON.parse(this.thongTinChiTieuKeHoachNam.canCu)
+            // arrCanCu: JSON.parse(this.thongTinChiTieuKeHoachNam.canCu)
           })
           this.loadData();
           // this.formData.patchValue({
@@ -1391,7 +1395,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.thongTinChiTieuKeHoachNam.trichYeu =
       this.formData.get('trichYeu').value;
     this.thongTinChiTieuKeHoachNam.chiTieuId = this.formData.get('chiTieuId').value;
-    this.thongTinChiTieuKeHoachNam.canCu = JSON.stringify(this.formData.get('arrCanCu').value);
+    // this.thongTinChiTieuKeHoachNam.canCu = JSON.stringify(this.formData.get('arrCanCu').value);
+    this.thongTinChiTieuKeHoachNam.canCu = this.formData.get('canCu').value;
     this.thongTinChiTieuKeHoachNam.chiTieuId = this.formData.get('chiTieuId').value;
     this.thongTinChiTieuKeHoachNamInput = cloneDeep(
       this.thongTinChiTieuKeHoachNam,
@@ -1489,6 +1494,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, resp.msg);
                   }
                 })
+            } else {
+              this.redirectChiTieuKeHoachNam();
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -1579,6 +1586,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   selectNam() {
     this.yearNow = this.formData.get('namKeHoach').value;
+    this.findCanCuByYear(this.yearNow);
     if (this.thongTinChiTieuKeHoachNam?.khLuongThuc.length > 0) {
       this.thongTinChiTieuKeHoachNam?.khLuongThuc.forEach((luongThuc) => {
         luongThuc.tkdnGao[0].nam = this.yearNow - 1;
@@ -1762,6 +1770,65 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
       );
     }
+  }
+
+  selectDonvi(donVi) {
+    this.newObjectLuongThuc();
+    this.isAddLuongThuc = true;
+    this.keHoachLuongThucCreate.maDonVi = donVi.maDvi;
+    this.keHoachLuongThucCreate.tenDonvi = donVi.tenDvi;
+    this.keHoachLuongThucCreate.donViId = donVi.id;
+    this.quanLyHangTrongKhoService.getTrangThaiHt({
+      maDvi: donVi.maDvi,
+      listLoaiVthh: ['0101', '0102']
+    }).then((res) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          res.data.forEach((tonKho) => {
+            if (tonKho.loaiVthh == '0101') {
+              switch (tonKho.nam) {
+                case (this.yearNow - 1).toString():
+                  this.keHoachLuongThucCreate.tkdnThoc[0].soLuong =
+                    tonKho.slHienThoi;
+                  break;
+                case (this.yearNow - 2).toString():
+                  this.keHoachLuongThucCreate.tkdnThoc[1].soLuong =
+                    tonKho.slHienThoi;
+                  break;
+                case (this.yearNow - 3).toString():
+                  this.keHoachLuongThucCreate.tkdnThoc[2].soLuong =
+                    tonKho.slHienThoi;
+                  break;
+                default:
+                  break;
+              }
+            } else if (tonKho.loaiVthh == '0102') {
+              switch (tonKho.nam) {
+                case (this.yearNow - 1).toString():
+                  this.keHoachLuongThucCreate.tkdnGao[0].soLuong =
+                    tonKho.slHienThoi;
+                  break;
+                case (this.yearNow - 2).toString():
+                  this.keHoachLuongThucCreate.tkdnGao[1].soLuong =
+                    tonKho.slHienThoi;
+                  break;
+                default:
+                  break;
+              }
+            }
+          });
+        } else {
+          this.keHoachLuongThucCreate.tkdnThoc.forEach((thoc) => {
+            thoc.soLuong = 0;
+          });
+          this.keHoachLuongThucCreate.tkdnGao.forEach((gao) => {
+            gao.soLuong = 0;
+          });
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    })
   }
 
   selectDonViKHLT(donVi) {
@@ -2598,7 +2665,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (donVi) {
       switch (type) {
         case 'khlt':
-          this.selectDonViKHLT(donVi);
+          // this.selectDonViKHLT(donVi);
+          this.selectDonvi(donVi)
           break;
         case 'kh-muoi':
           this.selectDonViMuoi(donVi);

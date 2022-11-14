@@ -193,7 +193,8 @@
             <td *ngIf="userService.isTongCuc()">{{data.tgianThien }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="detail(data)" *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')">
+              <a (click)="detail(data)"
+                *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == '03')

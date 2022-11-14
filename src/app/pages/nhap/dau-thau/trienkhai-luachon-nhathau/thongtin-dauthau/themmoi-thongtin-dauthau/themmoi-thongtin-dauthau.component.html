@@ -93,7 +93,9 @@
                                 <nz-form-label [nzNoColon]="true"> Tổng mức đầu tư các gói thầu đã trúng
                                 </nz-form-label>
                                 <nz-form-control>
-                                    <input nz-input formControlName="tongMucDtGoiTrung" readonly />
+                                    <nz-input-number [nzSize]="'small'" formControlName="tongMucDtGoiTrung"
+                                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                                    </nz-input-number>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>

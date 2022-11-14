@@ -60,7 +60,7 @@
     </nz-card>
 
     <div class="group-button">
-      <h3>Danh sách quyết định của Thủ tướng Chính Phủ </h3>
+      <h3>Danh sách quyết định của Thủ tướng Chính Phủ</h3>
       <div class="buttons">
         <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_XOA')"
           type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
@@ -89,13 +89,13 @@
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
-            <th class="text-center" style="width: 2%;">STT</th>
-            <th class="text-center" style="width: 10%;">Số quyết định</th>
-            <th class="text-center" style="width: 10%;">Năm kế hoạch</th>
-            <th class="text-center" style="width: 10%;">Ngày quyết định</th>
-            <th class="text-center">Trích yếu</th>
-            <th class="text-center" style="width: 10%;">Trạng thái</th>
-            <th class="text-center" width="width: 5%;">Hành động</th>
+            <th class="text-left" style="width: 2%;">STT</th>
+            <th class="text-left" style="width: 10%;">Số quyết định</th>
+            <th class="text-left" style="width: 10%;">Năm kế hoạch</th>
+            <th class="text-left" style="width: 10%;">Ngày quyết định</th>
+            <th class="text-left">Trích yếu</th>
+            <th class="text-left" style="width: 10%;">Trạng thái</th>
+            <th class="text-left" width="width: 5%;">Hành động</th>
             <td width="width: 25%;" [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
               <div class="container">
                 <div class="header">

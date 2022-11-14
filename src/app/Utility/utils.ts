@@ -1418,3 +1418,16 @@ export function separateNumber(str: string): string {
   return displayValue;
 }
 
+export function numberOnly(str: string): boolean {
+  let check = true;
+  if (!str) {
+    return true;
+  }
+  for (let i = 0; i < str.length; i++) {
+    if (str.charCodeAt(i) < 48 || str.charCodeAt(i) > 57) {
+      check = false;
+    }
+  }
+  return check;
+}
+

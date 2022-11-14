@@ -191,18 +191,14 @@
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="redirectToChiTiet(true, data.id)"
-                *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XEM')">
+                *ngIf=" ( data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai==STATUS.CHUA_TAO_QD) && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_SUA'))"
+              <a *ngIf="( data.trangThai == STATUS.CHUA_TAO_QD) && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_SUA'))"
                 (click)="redirectToChiTiet(false, data.id)">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>
-              <a *ngIf="(data.trangThai==STATUS.DA_DU_THAO_QD) && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_SUA'))"
-                (click)="redirectToChiTiet(false, data.id)">
-                <i class="icon htvbdh_pencil"></i>
-              </a>
-              <a *ngIf="(data.trangThai== STATUS.CHUA_TAO_QD ) && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XOA'))"
+              <a *ngIf="( data.trangThai== STATUS.CHUA_TAO_QD ) && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XOA'))"
                 (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>

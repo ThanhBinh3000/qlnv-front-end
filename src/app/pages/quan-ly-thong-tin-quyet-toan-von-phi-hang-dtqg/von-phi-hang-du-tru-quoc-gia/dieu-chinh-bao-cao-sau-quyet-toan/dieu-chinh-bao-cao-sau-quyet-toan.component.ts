@@ -276,19 +276,7 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
         }
         this.isAddNew = true;
         this.dataThemMoi = request;
-        // await this.quanLyVonPhiService.checkNamTaoMoiQuyetToan(request).toPromise().then(
-        //   (data) => {
-        //     if (data.statusCode == 0) {
-        //       this.isAddNew = true;
-        //       this.dataThemMoi = request;
-        //     } else {
-        //       this.notification.warning(MESSAGE.WARNING, data?.msg)
-        //     }
-        //   },
-        //   (err) => {
-        //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //   },
-        // );
+        this.idSelected = null;
       }
     });
   };

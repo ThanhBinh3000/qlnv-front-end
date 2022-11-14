@@ -125,7 +125,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       kieuNx: ['', [Validators.required]],
       diaChiDvi: [],
       namKhoach: [, [Validators.required]],
-      soDxuat: [null, [Validators.required]],
+      soDxuat: [null],
       trichYeu: [null],
       ngayTao: [dayjs().format('YYYY-MM-DD')],
       ngayPduyet: [],
@@ -242,7 +242,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
             const dataDetail = res.data;
             this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
             this.formData.patchValue({
-              soDxuat: dataDetail.soDxuat.split('/')[0]
+              soDxuat: dataDetail.soDxuat?.split('/')[0]
             })
             if (dataDetail) {
               this.fileDinhKem = dataDetail.fileDinhKems;
@@ -453,7 +453,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     if (!this.isDetailPermission()) {
       return;
     }
-    this.setValidator();
+    this.setValidator(isGuiDuyet);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
@@ -466,39 +466,49 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       );
       return;
     }
-    let pipe = new DatePipe('en-US');
-    let body = this.formData.value;
-    body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
-    body.tgianDthau = pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
-    body.tgianMthau = pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
-    body.fileDinhKemReq = this.fileDinhKem;
-    body.dsGtReq = this.listOfData;
-    body.ccXdgReq = [...this.baoGiaThiTruongList, ...this.canCuKhacList];
-    let res = null;
-    if (this.formData.get('id').value) {
-      res = await this.dauThauService.update(body);
-    } else {
-      res = await this.dauThauService.create(body);
-    }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (isGuiDuyet) {
-        this.idInput = res.data.id;
-        await this.guiDuyet();
-      } else {
-        if (this.formData.get('id').value) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.quayLai();
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-          this.quayLai();
-        }
+    if (this.validateSave()) {
+      let pipe = new DatePipe('en-US');
+      let body = this.formData.value;
+      if (this.formData.get('soDxuat').value) {
+        body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      body.tgianDthau = pipe.transform(body.tgianDthau, 'yyyy-MM-dd HH:mm')
+      body.tgianMthau = pipe.transform(body.tgianMthau, 'yyyy-MM-dd HH:mm')
+      body.fileDinhKemReq = this.fileDinhKem;
+      body.dsGtReq = this.listOfData;
+      body.ccXdgReq = [...this.baoGiaThiTruongList, ...this.canCuKhacList];
+      let res = null;
+      if (this.formData.get('id').value) {
+        res = await this.dauThauService.update(body);
+      } else {
+        res = await this.dauThauService.create(body);
+      }
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (isGuiDuyet) {
+          this.idInput = res.data.id;
+          await this.guiDuyet();
+        } else {
+          if (this.formData.get('id').value) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+            this.quayLai();
+          }
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
+
   }
 
-  setValidator() {
+  setValidator(isGuiDuyet) {
+    if (isGuiDuyet) {
+      this.formData.controls["soDxuat"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["soDxuat"].clearValidators();
+    }
     if (this.userService.isTongCuc()) {
       this.formData.controls["cloaiVthh"].clearValidators();
       this.formData.controls["tenCloaiVthh"].clearValidators();
@@ -508,6 +518,25 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
     }
+  }
+
+  validateSave() {
+    let pipe = new DatePipe('en-US');
+    let tgianBdauTchuc = new Date(pipe.transform(this.formData.value.tgianBdauTchuc, 'yyyy-MM-dd') + " 23:59:59");
+    let tgianMthau = new Date(this.formData.value.tgianMthau)
+    let tgianDthau = new Date(this.formData.value.tgianDthau)
+    let tgianNhang = new Date(pipe.transform(this.formData.value.tgianNhang, 'yyyy-MM-dd') + " 00:00:00");
+    if (tgianBdauTchuc >= tgianMthau) {
+      this.notification.error(MESSAGE.ERROR, "Thời gian bắt đầu tổ chức không được vượt quá thời gian mở thầu")
+      return false
+    } else if (tgianMthau >= tgianDthau) {
+      this.notification.error(MESSAGE.ERROR, "Thời gian mở thầu không được vượt quá thời gian đóng thầu")
+      return false
+    } else if (tgianDthau >= tgianNhang) {
+      this.notification.error(MESSAGE.ERROR, "Thời gian đóng thầu không được vượt quá thời gian nhập hàng")
+      return false
+    }
+    return true;
   }
 
   async getDataChiTieu() {

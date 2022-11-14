@@ -15,7 +15,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, numberOnly, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 
 export class ItemGui {
     noiDung: string;
@@ -89,6 +89,7 @@ export class TienVonThuaComponent implements OnInit {
     editMoneyUnit = false;
     isDataAvailable = false;
     statusEdit = true;
+    isFirstSave = true;
     // before uploaf file
     beforeUploadGui = (file: NzUploadFile): boolean => {
         this.ttGui.fileList = this.ttGui.fileList.concat(file);
@@ -189,11 +190,7 @@ export class TienVonThuaComponent implements OnInit {
 
     getStatusName() {
         if (this.checkParent) {
-            if (this.ttNhan.trangThai == Utils.TT_BC_1) {
-                return 'Mới';
-            } else {
-                return this.trangThais.find(e => e.id == this.ttNhan.trangThai).tenDm;
-            }
+            return this.trangThais.find(e => e.id == this.ttNhan.trangThai).tenDm;
         } else {
             return this.trangThais.find(e => e.id == this.ttGui.trangThai).tenDm;
         }
@@ -265,7 +262,7 @@ export class TienVonThuaComponent implements OnInit {
             this.ttNhan.status = !(Utils.statusSave.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_TH));
             this.ttGui.status = true;
             this.saveStatus = Utils.statusSave.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_TH);
-            this.submitStatus = Utils.statusApprove.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_TH);
+            this.submitStatus = Utils.statusApprove.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_TH) && !this.isFirstSave;
             this.passStatus = Utils.statusDuyet.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_TH);
             this.approveStatus = Utils.statusPheDuyet.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV_TH);
             this.copyStatus = false;
@@ -400,6 +397,11 @@ export class TienVonThuaComponent implements OnInit {
                     this.ttGui.listFile = [];
                     this.ttNhan.lstFiles = data.data.lstFileNhans;
                     this.ttNhan.listFile = [];
+                    if (!this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
+                        this.isFirstSave = true;
+                    } else {
+                        this.isFirstSave = false;
+                    }
                     this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -487,6 +489,11 @@ export class TienVonThuaComponent implements OnInit {
 
         if (this.statusEdit) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
+            return;
+        }
+
+        if (!numberOnly(this.ttNhan.taiKhoanNhan)) {
+            this.notification.warning(MESSAGE.WARNING, 'Trường chỉ chứa ký tự số');
             return;
         }
 
@@ -600,6 +607,11 @@ export class TienVonThuaComponent implements OnInit {
         if (this.ttGuiCache.nopThue < 0 ||
             this.ttGuiCache.ttChoDviHuong < 0) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
+            return;
+        }
+
+        if (!numberOnly(this.ttGuiCache.maNguonNs) || !numberOnly(this.ttGuiCache.nienDoNs)) {
+            this.notification.warning(MESSAGE.WARNING, 'Trường chỉ chứa ký tự số');
             return;
         }
         this.statusEdit = false;
@@ -738,7 +750,7 @@ export class TienVonThuaComponent implements OnInit {
             tkNhan: null,
             trangThai: "1",
             trangThaiDviCha: "1",
-            thuyetMinh: "",
+            thuyetMinh: this.ttGui.thuyetMinh,
             thuyetMinhDviCha: "",
         };
 

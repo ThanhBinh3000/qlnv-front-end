@@ -41,6 +41,7 @@ import {
 import {
   ThemMoiTongHopDxNhuCauComponent
 } from "./ke-hoach/ke-hoach-xay-dung-hang-nam/tong-hop-dx-nhu-cau/them-moi-tong-hop-dx-nhu-cau/them-moi-tong-hop-dx-nhu-cau.component";
+import { ThemMoiKhoComponent } from './mang-luoi-kho/them-moi-kho/them-moi-kho.component';
 
 
 @NgModule({
@@ -69,6 +70,7 @@ import {
     ThemMoiDxNhuCauComponent,
     ThemMoiQdPdDxNhuCauComponent,
     ThemMoiTongHopDxNhuCauComponent,
+    ThemMoiKhoComponent,
   ],
     imports: [CommonModule, QuanLyKhoTangRoutingModule, ComponentsModule, MainModule],
 })

@@ -189,6 +189,7 @@ export class DeNghiTheoHopDongTrungThauComponent implements OnInit {
             this.data?.hopDong.forEach(item => {
                 this.lstCtietBcao.push({
                     ...item,
+                    maHdong: item.soHd,
                     qdTthau: item.soQdPdKhlcnt,
                     maHang: item.loaiVthh,
                     thanhTien: item.soLuong * item.donGia,
@@ -265,7 +266,7 @@ export class DeNghiTheoHopDongTrungThauComponent implements OnInit {
             this.approveStatus = Utils.statusPheDuyet.includes(this.trangThai) && isApprove && checkChirld;
         }
         const isCopy = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.COPY_DN_MVT) : this.userService.isAccessPermisson(CVNC.COPY_DN_MLT);
-        this.copyStatus = !(Utils.statusCopy.includes(this.trangThai) && isCopy && checkChirld);
+        this.copyStatus = Utils.statusCopy.includes(this.trangThai) && isCopy && checkChirld;
     }
 
     back() {
