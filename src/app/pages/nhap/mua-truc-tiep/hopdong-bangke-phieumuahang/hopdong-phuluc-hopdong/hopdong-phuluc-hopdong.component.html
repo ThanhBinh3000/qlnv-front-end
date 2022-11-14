@@ -170,7 +170,7 @@
                 </tbody>
             </nz-table>
             <nz-table #rowSelectionTable class="nowrap" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
-                [nzShowPagination]="false" *ngIf="userService.isCuc()">
+                [nzShowPagination]="false" *ngIf="userService.isCuc() || userService.isChiCuc()">
                 <thead>
                     <tr class="header-row">
                         <th width="45px">

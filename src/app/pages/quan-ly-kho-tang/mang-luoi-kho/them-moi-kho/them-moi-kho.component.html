@@ -899,7 +899,7 @@
               <nz-form-label nzRequired>Tích lượng đã sử dụng-LT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group >
-                  <input nz-input  />
+                  <input nz-input [readOnly]="true"  />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -909,6 +909,16 @@
               <nz-form-label nzRequired>Tích lượng đã sử dụng-VT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group >
+                  <input nz-input [readOnly]="true"  />
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label nzRequired>Tích lượng khả dụng - LT</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group >
                   <input nz-input  />
                 </nz-input-group>
               </nz-form-control>
@@ -916,20 +926,10 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired>Tích lượng khả dụng-LT</nz-form-label>
+              <nz-form-label nzRequired>Tích lượng khả dụng - VT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group >
-                  <input nz-input [readonly]="true" />
-                </nz-input-group>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col [nzSpan]="4">
-            <nz-form-item>
-              <nz-form-label nzRequired>Tích lượng đã sử dụng-VT</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-input-group >
-                  <input nz-input  />
+                  <input nz-input   />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -946,10 +946,10 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired>Thể tích đã sử dụng-LT</nz-form-label>
+              <nz-form-label nzRequired>Thể tích đã sử dụng - LT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group >
-                  <input nz-input  />
+                  <input nz-input [readOnly]="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -959,7 +959,7 @@
               <nz-form-label nzRequired>Thể tích đã sử dụng-VT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group >
-                  <input nz-input  />
+                  <input nz-input [readOnly]="true"  />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -989,7 +989,9 @@
               <nz-form-label nzRequired>Loại hàng hóa</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group >
-                  <input nz-input  />
+                  <nz-select [nzDisabled]="true">
+                    <nz-option></nz-option>
+                  </nz-select>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -999,7 +1001,9 @@
               <nz-form-label nzRequired>Chủng loại hàng hóa</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group >
-                  <input nz-input  />
+                  <nz-select [nzDisabled]="true">
+                    <nz-option></nz-option>
+                  </nz-select>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -1009,7 +1013,7 @@
               <nz-form-label nzRequired>Số lượng</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group >
-                  <input nz-input  />
+                  <input nz-input [readOnly]="true"  />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -1029,7 +1033,7 @@
             <nz-form-label nzRequired>Thời điểm nhập kho</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker nzFormat="dd/MM/yyyy"></nz-date-picker>
+                <nz-date-picker [nzDisabled]="true" nzFormat="dd/MM/yyyy"></nz-date-picker>
               </nz-input-group>
             </nz-form-control>
             </nz-form-item>
@@ -1049,7 +1053,7 @@
             <nz-form-label nzRequired>Ngày nhập đầy</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
-                <nz-date-picker nzFormat="dd/MM/yyyy"></nz-date-picker>
+                <nz-date-picker [nzDisabled]="true" nzFormat="dd/MM/yyyy"></nz-date-picker>
               </nz-input-group>
             </nz-form-control>
             </nz-form-item>
