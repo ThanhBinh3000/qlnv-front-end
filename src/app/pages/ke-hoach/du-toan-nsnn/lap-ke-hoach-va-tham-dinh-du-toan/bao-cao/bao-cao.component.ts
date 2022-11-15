@@ -208,7 +208,8 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-
+        //lay danh sach danh muc don vi
+        await this.getDviCon();
         this.getListUser();
         if (this.id) {
             await this.getDetailReport();
@@ -250,8 +251,6 @@ export class BaoCaoComponent implements OnInit {
             }
         }
 
-        //lay danh sach danh muc don vi
-        await this.getDviCon();
         this.getStatusButton();
         this.spinner.hide();
     }
@@ -421,8 +420,7 @@ export class BaoCaoComponent implements OnInit {
     }
 
     getStatusAppendixName(id) {
-        const utils = new Utils();
-        return utils.getStatusAppendixName(id);
+        return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
     }
 
     // call chi tiet bao cao

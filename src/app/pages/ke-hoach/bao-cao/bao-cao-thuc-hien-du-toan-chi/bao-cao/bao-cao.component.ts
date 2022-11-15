@@ -16,7 +16,7 @@ import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BCDTC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { BCDTC, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { PHULUCLIST } from './bao-cao.constant';
 
@@ -202,7 +202,7 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-
+        await this.getDviCon();
         this.getListUser();
         if (this.baoCao.id) {
             await this.getDetailReport();
@@ -250,7 +250,6 @@ export class BaoCaoComponent implements OnInit {
         }
 
         this.getLuyKe();
-        await this.getDviCon();
         this.getStatusButton();
         this.spinner.hide();
     }
@@ -372,8 +371,7 @@ export class BaoCaoComponent implements OnInit {
     }
 
     getStatusAppendixName(id) {
-        const utils = new Utils();
-        return utils.getStatusAppendixName(id);
+        return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
     }
 
     // call chi tiet bao cao

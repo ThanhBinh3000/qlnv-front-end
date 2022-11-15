@@ -16,7 +16,7 @@ import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/ba
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BAO_CAO_DOT, BCVP, divNumber, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { BAO_CAO_DOT, BCVP, divNumber, sumNumber, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM } from './bao-cao.constant';
 
@@ -206,7 +206,7 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-
+        await this.getDviCon();
         this.getListUser();
         if (this.baoCao.id) {
             await this.getDetailReport();
@@ -257,9 +257,6 @@ export class BaoCaoComponent implements OnInit {
         }
 
         this.getLuyKe();
-
-        //lay danh sach danh muc don vi
-        await this.getDviCon();
         this.getStatusButton();
         this.spinner.hide();
     }
@@ -382,8 +379,7 @@ export class BaoCaoComponent implements OnInit {
     }
 
     getStatusAppendixName(id) {
-        const utils = new Utils();
-        return utils.getStatusAppendixName(id);
+        return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
     }
 
     // call chi tiet bao cao
