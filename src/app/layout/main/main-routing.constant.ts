@@ -59,6 +59,11 @@ export const LIST_PAGES: RouteInfo[] = [
     code: 'XHDTQG'
   },
   {
+    title: 'Lưu kho & QL chất lượng',
+    route: MAIN_ROUTES.luuKho,
+    code: 'LKQLCL'
+  },
+  {
     title: 'Điều chuyển nội bộ',
     route: MAIN_ROUTES.dieuChuyen,
     code: 'DCNB'
@@ -67,11 +72,6 @@ export const LIST_PAGES: RouteInfo[] = [
     title: 'Sửa chữa hàng DTQG',
     route: MAIN_ROUTES.suaChua,
     code: 'SCHDTQG'
-  },
-  {
-    title: 'Lưu kho & QL chất lượng',
-    route: MAIN_ROUTES.luuKho,
-    code: 'LKQLCL'
   },
   {
     title: 'QL Định mức nhập, xuất, bảo quản',

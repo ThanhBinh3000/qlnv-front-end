@@ -240,11 +240,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   bindingCanCu(data) {
     if (data && data.length > 0) {
       data.forEach((chiTiet) => {
-        if (chiTiet.loaiCanCu == '00') {
-          this.canCuXacDinhList = [...this.canCuXacDinhList, chiTiet];
-        } else if (chiTiet.loaiCanCu == '01') {
-          this.canCuKhacList = [...this.canCuKhacList, chiTiet];
-        }
+        this.canCuXacDinhList = [...this.canCuXacDinhList, chiTiet];
       });
     }
   }
@@ -582,9 +578,9 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
                 taiLieuBaoGiaThiTruong.loaiCanCu = '00';
                 taiLieuBaoGiaThiTruong.moTa = res.tenTaiLieu;
                 taiLieuBaoGiaThiTruong.idVirtual = new Date().getTime();
-                taiLieuBaoGiaThiTruong.ccFileDinhkems = [];
-                taiLieuBaoGiaThiTruong.ccFileDinhkems = [
-                  ...taiLieuBaoGiaThiTruong.ccFileDinhkems,
+                taiLieuBaoGiaThiTruong.ccFileDinhKems = [];
+                taiLieuBaoGiaThiTruong.ccFileDinhKems = [
+                  ...taiLieuBaoGiaThiTruong.ccFileDinhKems,
                   fileDinhKem,
                 ];
                 this.canCuXacDinhList = [
@@ -597,9 +593,9 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
                 taiLieuCanCuKhac.loaiCanCu = '01';
                 taiLieuCanCuKhac.moTa = res.tenTaiLieu;
                 taiLieuCanCuKhac.idVirtual = new Date().getTime();
-                taiLieuCanCuKhac.ccFileDinhkems = [];
-                taiLieuCanCuKhac.ccFileDinhkems = [
-                  ...taiLieuCanCuKhac.ccFileDinhkems,
+                taiLieuCanCuKhac.ccFileDinhKems = [];
+                taiLieuCanCuKhac.ccFileDinhKems = [
+                  ...taiLieuCanCuKhac.ccFileDinhKems,
                   fileDinhKem,
                 ];
                 this.canCuKhacList = [...this.canCuKhacList, taiLieuCanCuKhac];
@@ -655,7 +651,7 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     taiLieuBaoGiaThiTruong.loaiCanCu = '00';
     taiLieuBaoGiaThiTruong.moTa = this.addModelBaoGia.moTa;
     taiLieuBaoGiaThiTruong.id = new Date().getTime() + 1;
-    taiLieuBaoGiaThiTruong.ccFileDinhkems = this.addModelBaoGia.ccFileDinhkems;
+    taiLieuBaoGiaThiTruong.ccFileDinhKems = this.addModelBaoGia.ccFileDinhkems;
     taiLieuBaoGiaThiTruong.taiLieu = this.addModelBaoGia.taiLieu;
     this.checkDataExistBaoGia(taiLieuBaoGiaThiTruong);
     this.clearBaoGia();
@@ -768,13 +764,13 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     await this.spinner.hide();
   }
 
-  // isDisbleForm(): boolean {
-  //   if (this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP || this.formData.value.trangThai == STATUS.TU_CHOI_LDC) {
-  //     return false
-  //   } else {
-  //     return true
-  //   }
-  // }
+  isDisbleForm(): boolean {
+    if (this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP || this.formData.value.trangThai == STATUS.TU_CHOI_LDC) {
+      return false
+    } else {
+      return true
+    }
+  }
 
 
 

@@ -6,6 +6,8 @@ import { QuyetDinhComponent } from './quyet-dinh/quyet-dinh.component';
 import { MainKeHoachBanDauGiaComponent } from './main-ke-hoach-ban-dau-gia/main-ke-hoach-ban-dau-gia.component';
 import {ComponentsModule} from "../../../../components/components.module";
 import {MainModule} from "../../../../layout/main/main.module";
+import { ThemDeXuatKeHoachBanDauGiaComponent } from './de-xuat/them-de-xuat-ke-hoach-ban-dau-gia/them-de-xuat-ke-hoach-ban-dau-gia.component';
+import { ThemMoiTongHopKeHoachBanDauGiaComponent } from './tong-hop/them-moi-tong-hop-ke-hoach-ban-dau-gia/them-moi-tong-hop-ke-hoach-ban-dau-gia.component';
 
 
 
@@ -14,7 +16,9 @@ import {MainModule} from "../../../../layout/main/main.module";
     DeXuatComponent,
     TongHopComponent,
     QuyetDinhComponent,
-    MainKeHoachBanDauGiaComponent
+    MainKeHoachBanDauGiaComponent,
+    ThemDeXuatKeHoachBanDauGiaComponent,
+    ThemMoiTongHopKeHoachBanDauGiaComponent
   ],
   exports: [
     DeXuatComponent,

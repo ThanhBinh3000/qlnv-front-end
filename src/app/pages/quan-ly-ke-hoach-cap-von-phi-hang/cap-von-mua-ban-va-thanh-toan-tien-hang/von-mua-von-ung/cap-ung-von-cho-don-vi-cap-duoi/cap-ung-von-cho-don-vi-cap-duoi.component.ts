@@ -246,7 +246,7 @@ export class CapUngVonChoDonViCapDuoiComponent implements OnInit {
         }
         const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
         this.saveStatus = this.getBtnStatus(Utils.statusSave, CVMB.EDIT_REPORT_CV, checkChirld);
-        this.submitStatus = this.getBtnStatus(Utils.statusApprove, CVMB.APPROVE_REPORT_CV, checkChirld);
+        this.submitStatus = this.getBtnStatus(Utils.statusApprove, CVMB.APPROVE_REPORT_CV, checkChirld) && !(!this.id);
         this.passStatus = this.getBtnStatus(Utils.statusDuyet, CVMB.DUYET_REPORT_CV, checkChirld);
         this.approveStatus = this.getBtnStatus(Utils.statusPheDuyet, CVMB.PHE_DUYET_REPORT_CV, checkChirld);
         this.copyStatus = this.getBtnStatus(Utils.statusCopy, CVMB.COPY_REPORT_CV, checkChirld);
@@ -365,37 +365,33 @@ export class CapUngVonChoDonViCapDuoiComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
-        if (this.id) {
-            const requestGroupButtons = {
-                id: this.id,
-                maChucNang: mcn,
-                lyDoTuChoi: lyDoTuChoi,
-                maLoai: "0",
-            };
-            await this.capVonMuaBanTtthService.trinhDuyetCapVon(requestGroupButtons).toPromise().then(async (data) => {
-                if (data.statusCode == 0) {
-                    this.trangThai = mcn;
-                    this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
-                    this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
-                    this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-                    this.getStatusButton();
-                    if (mcn == Utils.TT_BC_3 || mcn == Utils.TT_BC_5) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                    } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                    }
-                    if (mcn == Utils.TT_BC_7) {
-                        this.capToanBo();
-                    }
+        const requestGroupButtons = {
+            id: this.id,
+            maChucNang: mcn,
+            lyDoTuChoi: lyDoTuChoi,
+            maLoai: "0",
+        };
+        await this.capVonMuaBanTtthService.trinhDuyetCapVon(requestGroupButtons).toPromise().then(async (data) => {
+            if (data.statusCode == 0) {
+                this.trangThai = mcn;
+                this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+                this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                this.getStatusButton();
+                if (mcn == Utils.TT_BC_3 || mcn == Utils.TT_BC_5) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                 }
-            }, err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            });
-        } else {
-            this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-        }
+                if (mcn == Utils.TT_BC_7) {
+                    this.capToanBo();
+                }
+            } else {
+                this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
     }
 
     //show popup tu choi

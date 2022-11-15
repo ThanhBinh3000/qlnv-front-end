@@ -63,9 +63,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   rowItemCcXdg: CanCuXacDinhPag = new CanCuXacDinhPag();
   dataEdit: { [key: string]: { edit: boolean; data: CanCuXacDinhPag } } = {};
 
-  dataTableKsGia: any[] ;
+  dataTableKsGia: any[];
 
-  dataTableKqGia: any[] ;
+  dataTableKqGia: any[];
 
 
 
@@ -105,7 +105,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         giaDeNghiVat: [null],
         soLuong: [],
         ghiChu: [],
-        diaDiemDeHang: [null, [Validators.required]],
+        diaDiemDeHang: [null],
         //Form căn cứ phương pháp xác định giá
         maPphapXdg: [null, [Validators.required]],
         loaiHangXdg: [],
@@ -245,7 +245,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       let res2 = await this.chiTieuKeHoachNamCapTongCucService.chiTeuPag(+this.formData.get('namKeHoach').value)
       if (res2.msg == MESSAGE.SUCCESS) {
         const dataChiTieu = res2.data;
-        if (dataChiTieu ) {
+        if (dataChiTieu) {
           this.formData.patchValue({
             soCanCu: dataChiTieu.soQuyetDinh,
           });
@@ -272,7 +272,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       };
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        let arr  = res.data.content;
+        let arr = res.data.content;
         if (arr) {
           arr.forEach(item => {
             if (!item.loaiVthh.startsWith("02")) {
@@ -629,10 +629,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   onChangePp() {
     if (this.formData.value.loaiHangXdg == 'XDG_LH02') {
-      let tong =+  this.formData.get('giaVonNk').value +  this.formData.get('chiPhiChung').value -  this.formData.get('chiPhiPbo').value
+      let tong = +  this.formData.get('giaVonNk').value + this.formData.get('chiPhiChung').value - this.formData.get('chiPhiPbo').value
       this.formData.get('tongChiPhi').setValue(tong)
     } else {
-      let tong = this.formData.get('chiPhiChung').value +    this.formData.get('giaVonNk').value
+      let tong = this.formData.get('chiPhiChung').value + this.formData.get('giaVonNk').value
       this.formData.get('tongChiPhi').setValue(tong)
     }
   }
