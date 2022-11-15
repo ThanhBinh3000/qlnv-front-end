@@ -23,8 +23,4 @@ export class MainKeHoachBanDauGiaComponent implements OnInit {
   selectTab(tab) {
     this.tabSelected = tab;
   }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    this.ngOnInit();
-  }
 }

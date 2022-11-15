@@ -15,23 +15,16 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhSachGoiThau, FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
 import { STATUS } from "../../../../../../constants/status";
-import { cloneDeep, assign } from "lodash";
-import {
-  DxuatKhLcntService
-} from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service";
-import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
+import { cloneDeep } from "lodash";
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';
@@ -292,6 +285,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
       body.soQdPduyet = this.formData.value.soQdPduyet + "/" + this.maQd;
     }
     body.hhQdPheduyetKhMttDxList = this.danhsachDx;
+    // body.idDxuat = 
     body.fileDinhKems = this.fileDinhKem;
     let res = null;
     if (this.formData.get('id').value) {
@@ -434,7 +428,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
       this.danhsachDx = data.hhQdPheduyetKhMttDxList;
       this.danhsachDxCache = cloneDeep(this.danhsachDx);
       for (const item of this.danhsachDxCache) {
-        await this.danhSachMuaTrucTiepService.getDetail(item.idDxHdr).then((res) => {
+        await this.danhSachMuaTrucTiepService.getDetail(item.idDxuat).then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             item.listSlddDtl = res.data.soLuongDiaDiemList;
           }
@@ -495,9 +489,25 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
           await this.danhSachMuaTrucTiepService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               item.soLuongDiaDiemList = res.data.soLuongDiaDiemList;
+              item.cloaiVthh = res.data.cloaiVthh;
+              item.diaChiDvi = res.data.diaChiDvi;
+              item.ghiChu = res.data.ghiChu;
+              item.giaChuaThue = res.data.giaChuaThue;
+              item.loaiVthh = res.data.loaiVthh;
+              item.moTaHangHoa = res.data.moTaHangHoa;
+              item.nguonVon = res.data.nguonVon;
+              item.ptMua = res.data.ptMua;
+              item.tchuanCluong = res.data.tchuanCluong;
+              item.tenChuDt = res.data.tenChuDt;
+              item.tgianKthuc = res.data.tgianKthuc;
+              item.tgianMkho = res.data.tgianMkho;
+              item.thueGtgt = res.data.thueGtgt;
+              item.tongMucDt = res.data.tongMucDt;
+              item.idDxuat = res.data.id;
             }
           })
         };
+        // console.log(danhsachDxRs, 1022)
         this.danhsachDxCache = cloneDeep(this.danhsachDx);
         this.dataInput = null;
         this.dataInputCache = null;
@@ -594,41 +604,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
     }
   }
 
-  themMoiTongCuc(data?: any, index?: number) {
-    if (!this.formData.get('loaiVthh').value) {
-      this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
-      return;
-    }
-    const modal = this.modal.create({
-      nzTitle: 'Địa điểm nhập hàng',
-      nzContent: DialogThemMoiGoiThauComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '1200px',
-      nzFooter: null,
-      nzComponentParams: {
-        data: data,
-        loaiVthh: this.formData.get('loaiVthh').value,
-        dviTinh: this.formData.get('loaiVthh').value.maDviTinh,
-      },
-    });
-    modal.afterClose.subscribe((res) => {
-      if (res) {
-        if (index >= 0) {
-          this.danhsachDx[index] = res;
-        } else {
-          this.danhsachDx.push(res);
-        }
-        let tongMucDt: number = 0;
-        this.danhsachDx.forEach((item) => {
-          tongMucDt = tongMucDt + item.soLuongDxmtt * item.donGiaVat;
-        });
-        this.formData.patchValue({
-          tongMucDt: tongMucDt,
-        });
-      }
-    });
-  }
+
 
   deleteRow(index) {
 

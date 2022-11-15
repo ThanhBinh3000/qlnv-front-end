@@ -202,7 +202,7 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-
+        await this.getDviCon();
         this.getListUser();
         if (this.baoCao.id) {
             await this.getDetailReport();
@@ -250,7 +250,6 @@ export class BaoCaoComponent implements OnInit {
         }
 
         this.getLuyKe();
-        await this.getDviCon();
         this.getStatusButton();
         this.spinner.hide();
     }

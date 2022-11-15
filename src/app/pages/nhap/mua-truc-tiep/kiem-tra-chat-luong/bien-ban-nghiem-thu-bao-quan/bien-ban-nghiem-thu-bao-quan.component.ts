@@ -8,12 +8,12 @@ import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyNghiemThuKeLotService } from 'src/app/services/quanLyNghiemThuKeLot.service';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { Globals } from 'src/app/shared/globals';
+import { QuanLyNghiemThuKeLotService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service';
 
 @Component({
   selector: 'app-bien-ban-nghiem-thu-bao-quan',
@@ -246,7 +246,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
           ? dayjs(this.ngayTongHop[0]).format('YYYY-MM-DD')
           : null,
     };
-    let res = await this.quanLyNghiemThuKeLotService.timKiem(body);
+    let res = await this.quanLyNghiemThuKeLotService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -305,7 +305,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyNghiemThuKeLotService.xoa({ id: item.id }).then((res) => {
+          this.quanLyNghiemThuKeLotService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -338,7 +338,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyNghiemThuKeLotService.xoa({ id: item.id }).then((res) => {
+          this.quanLyNghiemThuKeLotService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -383,7 +383,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
               : null,
         };
         this.quanLyNghiemThuKeLotService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-bien-ban-nghiem-thu-bao-quan.xlsx'),
           );
@@ -430,7 +430,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyNghiemThuKeLotService.deleteMultiple({
+            let res = await this.quanLyNghiemThuKeLotService.deleteMuti({
               ids: dataDelete,
             });
             if (res.msg == MESSAGE.SUCCESS) {
