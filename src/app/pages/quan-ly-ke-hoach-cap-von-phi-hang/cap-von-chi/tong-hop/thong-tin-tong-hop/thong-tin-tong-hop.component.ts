@@ -114,7 +114,6 @@ export class ThongTinTonghopComponent implements OnInit {
       this.loadChiTiet(this.idInput);
     }
     this.spinner.hide();
-    console.log(this.formData.value.ngayTongHop);
   }
 
   initForm() {
@@ -144,6 +143,7 @@ export class ThongTinTonghopComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS && res.data) {
         this.isTonghop = true
         let data = res.data
+        console.log(data);
         if (data) {
           this.detail = res.data;
           this.detail.trangThai = data.trangThai;
@@ -183,10 +183,14 @@ export class ThongTinTonghopComponent implements OnInit {
     // chờ API và body request
     let phuongAnList = [];
     this.detail.tCThem.forEach(pa => {
-      const phuongAn = new Ct1sTonghop();
-      phuongAn.khDnCapVonId = pa.id;
-      phuongAn.tcCapThem = +pa.tcCapThem;
-      phuongAnList = [...phuongAnList, phuongAn];
+      if(pa.loai && !pa.isSum){
+        const phuongAn = new Ct1sTonghop();
+        phuongAn.khDnCapVonId = pa.id;
+        phuongAn.tcCapThem = +pa.tcCapThem;
+        phuongAn.loai = pa.loai;
+        phuongAn.tenBoNganh = pa.tenBoNganh;
+        phuongAnList = [...phuongAnList, phuongAn];
+      }
     });
     let body = {
       id: this.detail.id,
@@ -345,8 +349,6 @@ export class ThongTinTonghopComponent implements OnInit {
             lyDoTuChoi: null,
             trangThai: this.globals.prop.NHAP_DA_DUYET_LD_VU,
           };
-          console.log(body);
-
           let res = await this.tongHopDeNghiCapVonService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

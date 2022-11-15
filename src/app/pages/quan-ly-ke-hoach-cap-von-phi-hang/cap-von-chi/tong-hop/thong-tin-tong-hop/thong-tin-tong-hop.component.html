@@ -176,7 +176,7 @@
           <td>{{ data.kinhPhiDaCap | number : '1.0-1' : 'vi_VN'}}</td>
           <td>{{ data.ycCapThem | number : '1.0-1' : 'vi_VN' }}</td>
           <td class="text-left">
-            <a *ngIf="data.soDeNghi" (click)="goToDetail(data, true)">
+            <a *ngIf="!data.isSum" (click)="goToDetail(data, true)">
               <i class="fa fa-eye"></i>
             </a>
           </td>
@@ -261,7 +261,7 @@
                 <td>{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{data.kinhPhiDaCap | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{data.tcCapThem | number : '1.0-1' : 'vi_VN'}}</td>
-                <td *ngIf="data.soDeNghi  &&  !(isDisableField() || isView)">
+                <td *ngIf="!data.isSum  &&  !(isDisableField() || isView)">
                   <a (click)="editRow(data.stt)">
                     <i class="fa fa-pencil"></i>
                   </a>
