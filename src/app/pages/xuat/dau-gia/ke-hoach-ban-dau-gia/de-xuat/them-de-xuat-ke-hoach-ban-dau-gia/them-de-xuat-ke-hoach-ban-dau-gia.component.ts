@@ -21,6 +21,7 @@ import {HelperService} from "../../../../../../services/helper.service";
 import {STATUS} from "../../../../../../constants/status";
 import * as dayjs from "dayjs";
 import {MESSAGE} from "../../../../../../constants/message";
+import {FileDinhKem} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 
 @Component({
   selector: 'app-them-de-xuat-ke-hoach-ban-dau-gia',
@@ -36,12 +37,43 @@ export class ThemDeXuatKeHoachBanDauGiaComponent implements OnInit {
   @Input() id: number;
   STATUS = STATUS;
   formData: FormGroup;
+  fileDinhKem: Array<FileDinhKem> = [];
+  userLogin: UserLogin;
+  listChiCuc: any[] = [];
+  listDiemKho: any[] = [];
+  titleStatus: string = '';
+  titleButtonDuyet: string = '';
+  iconButtonDuyet: string = '';
+  styleStatus: string = 'du-thao-va-lanh-dao-duyet';
+  tabSelected: string = 'thongTinChung';
   listNam: any[] = [];
+  listLoaiHangHoa: any[] = [];
+  errorInputRequired: string = 'Dữ liệu không được để trống.';
+  listPhuongThucThanhToan: any[] = [
+    {
+      ma: '1',
+      giaTri: 'Tiền mặt',
+    },
+    {
+      ma: '2',
+      giaTri: 'Chuyển khoản',
+    },
+  ];
   userInfo: UserLogin;
-  fileDinhKem: any[] = [];
+  listFileDinhKem: any[] = [];
+  expandSet = new Set<number>();
+  bangPhanBoList: Array<any> = [];
+  khBanDauGia: KeHoachBanDauGia = new KeHoachBanDauGia();
+  diaDiemGiaoNhan: DiaDiemGiaoNhan = new DiaDiemGiaoNhan();
+  diaDiemGiaoNhanList: Array<DiaDiemGiaoNhan> = [];
+  phanLoTaiSanList: Array<PhanLoTaiSan> = [];
+  listChungLoaiHangHoa: any[] = [];
   maDxuat: string;
-  listLoaiHinhNhapXuat: any;
-  listKieuNhapXuat: any;
+  listLoaiHopDong: any[] = [];
+  listPhuongThucGiaoNhan: any[] = [];
+  listKieuNhapXuat: any[] = [];
+  listLoaiHinhNhapXuat: any[] = [];
+
 
   constructor(
     private modal: NzModalService,
@@ -146,6 +178,18 @@ export class ThemDeXuatKeHoachBanDauGiaComponent implements OnInit {
   }
 
   selectHangHoa() {
+
+  }
+
+  themMoiBangPhanLoTaiSan(item?: any) {
+
+  }
+
+  onExpandChange(idVirtual: any, $event: boolean) {
+
+  }
+
+  deletePhanLo(idVirtual: any) {
 
   }
 }
