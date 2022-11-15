@@ -279,7 +279,7 @@ export class DanhMucHangHoaComponent implements OnInit {
     if (listPpLm) {
       this.listPpLayMau.forEach(item => {
         item.checked = undefined
-        listHt.forEach(bq => {
+        listPpLm.forEach(bq => {
           if (item.ma == bq.ma) {
             item.checked = true;
           }
