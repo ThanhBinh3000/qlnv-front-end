@@ -134,7 +134,7 @@ export class GhiNhanCapUngVonTaiCkvCcComponent implements OnInit {
                 })
                 break;
             case 'submit':
-                await this.onSubmit('2', null).then(() => {
+                await this.submitReport().then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
@@ -295,6 +295,21 @@ export class GhiNhanCapUngVonTaiCkvCcComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+    }
+
+    async submitReport() {
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn trình duyệt?<br/>(Trình duyệt trước khi lưu báo cáo có thể gây mất dữ liệu)',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 500,
+            nzOnOk: () => {
+                this.onSubmit(Utils.TT_BC_2, '')
+            },
+        });
     }
 
     // chuc nang check role

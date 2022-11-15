@@ -163,7 +163,7 @@ export class BaoCaoComponent implements OnInit {
                 })
                 break;
             case 'submit':
-                await this.onSubmit('2', null).then(() => {
+                await this.submitReport().then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
@@ -305,7 +305,7 @@ export class BaoCaoComponent implements OnInit {
         }
 
         this.saveStatus = Utils.statusSave.includes(this.trangThaiBaoCao) && checkSave && this.isChild;
-        this.submitStatus = Utils.statusApprove.includes(this.trangThaiBaoCao) && checkSunmit && this.isChild;
+        this.submitStatus = Utils.statusApprove.includes(this.trangThaiBaoCao) && checkSunmit && this.isChild && !(!this.id);
         this.passStatus = Utils.statusDuyet.includes(this.trangThaiBaoCao) && checkPass && this.isChild;
         this.approveStatus = Utils.statusPheDuyet.includes(this.trangThaiBaoCao) && checkApprove && this.isChild;
         this.acceptStatus = Utils.statusTiepNhan.includes(this.trangThaiBaoCao) && checkAccept && this.isParent;
@@ -466,6 +466,21 @@ export class BaoCaoComponent implements OnInit {
         );
     }
 
+    async submitReport() {
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn trình duyệt?<br/>(Trình duyệt trước khi lưu báo cáo có thể gây mất dữ liệu)',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 500,
+            nzOnOk: () => {
+                this.onSubmit(Utils.TT_BC_2, '')
+            },
+        });
+    }
+
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
         if (mcn == Utils.TT_BC_2) {
@@ -493,37 +508,31 @@ export class BaoCaoComponent implements OnInit {
                 return;
             }
         }
-        if (this.id) {
-            const requestGroupButtons = {
-                id: this.id,
-                maChucNang: mcn,
-                lyDoTuChoi: lyDoTuChoi,
-            };
-            this.spinner.show();
-            await this.lapThamDinhService.approveThamDinh(requestGroupButtons).toPromise().then(async (data) => {
-                if (data.statusCode == 0) {
-                    this.trangThaiBaoCao = mcn;
-                    this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
-                    this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
-                    this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-                    this.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
-                    this.getStatusButton();
-                    if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                    } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                    }
-                    this.tabs = [];
+        const requestGroupButtons = {
+            id: this.id,
+            maChucNang: mcn,
+            lyDoTuChoi: lyDoTuChoi,
+        };
+        await this.lapThamDinhService.approveThamDinh(requestGroupButtons).toPromise().then(async (data) => {
+            if (data.statusCode == 0) {
+                this.trangThaiBaoCao = mcn;
+                this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+                this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                this.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
+                this.getStatusButton();
+                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                 }
-            }, err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            });
-            this.spinner.hide();
-        } else {
-            this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-        }
+                this.tabs = [];
+            } else {
+                this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
     }
 
     //show popup tu choi

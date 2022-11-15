@@ -170,7 +170,7 @@ export class DeNghiTheoDonGiaMuaComponent implements OnInit {
                 })
                 break;
             case 'submit':
-                await this.onSubmit('2', null).then(() => {
+                await this.submitReport().then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
@@ -263,7 +263,7 @@ export class DeNghiTheoDonGiaMuaComponent implements OnInit {
         }
         const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
         this.saveStatus = this.getBtnStatus(Utils.statusSave, CVNC.EDIT_DN_MLT, checkChirld);
-        this.submitStatus = this.getBtnStatus(Utils.statusApprove, CVNC.APPROVE_DN_MLT, checkChirld);
+        this.submitStatus = this.getBtnStatus(Utils.statusApprove, CVNC.APPROVE_DN_MLT, checkChirld) && !(!this.id);
         if (this.trangThai == Utils.TT_BC_2) {
             this.approveStatus = (this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) && checkChirld);
         } else {
@@ -387,38 +387,49 @@ export class DeNghiTheoDonGiaMuaComponent implements OnInit {
         );
     }
 
+    async submitReport() {
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn trình duyệt?<br/>(Trình duyệt trước khi lưu báo cáo có thể gây mất dữ liệu)',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 500,
+            nzOnOk: () => {
+                this.onSubmit(Utils.TT_BC_2, '')
+            },
+        });
+    }
+
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
         if (!this.congVan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
-        if (this.id) {
-            const requestGroupButtons = {
-                id: this.id,
-                maChucNang: mcn,
-                lyDoTuChoi: lyDoTuChoi,
-            };
-            await this.capVonNguonChiService.trinhDeNghi(requestGroupButtons).toPromise().then(async (data) => {
-                if (data.statusCode == 0) {
-                    this.trangThai = mcn;
-                    this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
-                    this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-                    this.getStatusButton();
-                    if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                    } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                    }
+        const requestGroupButtons = {
+            id: this.id,
+            maChucNang: mcn,
+            lyDoTuChoi: lyDoTuChoi,
+        };
+        await this.capVonNguonChiService.trinhDeNghi(requestGroupButtons).toPromise().then(async (data) => {
+            if (data.statusCode == 0) {
+                this.trangThai = mcn;
+                this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                this.getStatusButton();
+                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                 }
-            }, err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            });
-        } else {
-            this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-        }
+            } else {
+                this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
     }
 
     //show popup tu choi

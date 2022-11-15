@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { BCDTC } from 'src/app/Utility/utils';
+import { TAB_LIST } from './bao-cao-thuc-hien-du-toan-chi.constant';
 
 @Component({
     selector: 'app-bao-cao-thuc-hien-du-toan-chi',
@@ -10,8 +11,9 @@ import { BCDTC } from 'src/app/Utility/utils';
 })
 export class BaoCaoThucHienDuToanChiComponent implements OnInit {
 
-    tabSelected: string;
+    tabSelected!: string;
     data: any;
+    tabList: any[] = TAB_LIST;
     isList = false;
     isAccept = false;
     isCheck = false;
@@ -23,24 +25,26 @@ export class BaoCaoThucHienDuToanChiComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-        this.isList = this.userService.isAccessPermisson(BCDTC.VIEW_REPORT) || this.userService.isAccessPermisson(BCDTC.VIEW_SYNTHETIC_REPORT);
-        this.isAccept = this.userService.isAccessPermisson(BCDTC.TIEP_NHAN_REPORT);
-        this.isCheck = this.userService.isAccessPermisson(BCDTC.TIEP_NHAN_REPORT);
-        this.isSynthetic = this.userService.isAccessPermisson(BCDTC.SYNTHETIC_REPORT);
-        if (this.isList) {
-            this.tabSelected = 'danhsach';
-        } else {
-            if (this.isAccept) {
-                this.tabSelected = 'capduoi';
-            } else {
-                if (this.isSynthetic) {
-                    this.tabSelected = 'tonghop';
+        this.tabList.forEach(item => {
+            let check = false;
+            item.role.forEach(e => {
+                if (this.userService.isAccessPermisson(e)) {
+                    check = true;
                 }
+            })
+            item.status = check;
+            item.isSelected = false;
+            if (!this.tabSelected && item.status) {
+                this.tabSelected = item.code;
+                item.isSelected = true;
             }
-        }
+        })
     }
     selectTab(tab) {
         this.tabSelected = tab;
+        this.tabList.forEach(e => {
+            e.isSelected = (tab == e.code);
+        })
     }
 
     changeTab(obj: any) {
@@ -53,5 +57,10 @@ export class BaoCaoThucHienDuToanChiComponent implements OnInit {
             };
         }
         this.tabSelected = obj?.tabSelected;
+        if (this.tabList.findIndex(e => e.code == this.tabSelected) != -1) {
+            this.tabList.forEach(e => {
+                e.isSelected = (this.tabSelected == e.code);
+            })
+        }
     }
 }

@@ -16,7 +16,6 @@ export class DieuChinhDuToanComponent implements OnInit {
   isAccept = false;
   isCheck = false;
   isSynthetic = false;
-  isExploit = false;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -36,10 +35,6 @@ export class DieuChinhDuToanComponent implements OnInit {
       } else {
         if (this.isSynthetic) {
           this.tabSelected = 'tonghop';
-        } else {
-          if (this.isExploit) {
-            this.tabSelected = 'khaithac'
-          }
         }
       }
     }

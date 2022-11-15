@@ -525,7 +525,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
 
     const request = JSON.parse(JSON.stringify({
       id: this.idInput,
-      fileDinhKems: this.lstFiles,
+      fileDinhKems: listFile,
       listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiet: lstCtietBcaoTemp,
       maDviTien: this.maDviTien,
@@ -1268,6 +1268,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
 
   //download file về máy tính
   async downloadFile(id: string) {
+    debugger
     const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
     if (!file) {
       const fileAttach = this.lstFiles.find(element => element?.id == id);
