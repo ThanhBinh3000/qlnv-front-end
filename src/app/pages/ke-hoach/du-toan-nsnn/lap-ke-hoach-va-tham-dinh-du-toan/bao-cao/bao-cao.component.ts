@@ -11,6 +11,7 @@ import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -67,6 +68,7 @@ export class BaoCaoComponent implements OnInit {
     lstLapThamDinhs: ItemData[] = [];
     phuLucs: any[] = PHU_LUC;
     donVis: any[] = [];						//danh muc don vi con cua don vi dang nhap
+    childUnit: any[] = [];
     tabs: any[] = [];
     lstDviTrucThuoc: any[] = [];
     trangThais: any[] = TRANG_THAI_TIM_KIEM;
@@ -131,6 +133,7 @@ export class BaoCaoComponent implements OnInit {
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
         private lapThamDinhService: LapThamDinhService,
+        private danhMucService: DanhMucHDVService,
         private spinner: NgxSpinnerService,
         private datePipe: DatePipe,
         public userService: UserService,
@@ -208,6 +211,19 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
+
+        await this.danhMucService.dMDviCon().toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    this.childUnit = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
         //lay danh sach danh muc don vi
         await this.getDviCon();
         this.getListUser();
@@ -438,7 +454,7 @@ export class BaoCaoComponent implements OnInit {
                     this.maBaoCao = data.data.maBcao;
                     this.maDviTao = data.data.maDvi;
                     this.isChild = this.userInfo.MA_DVI == this.maDviTao;
-                    this.isParent = this.donVis.findIndex(e => e.maDvi == this.maDviTao) != -1;
+                    this.isParent = this.childUnit.findIndex(e => e.maDvi == this.maDviTao) != -1;
                     this.namHienHanh = data.data.namHienHanh;
                     this.trangThaiBaoCao = data.data.trangThai;
                     this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
