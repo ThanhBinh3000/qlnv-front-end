@@ -27,6 +27,14 @@
             <app-bao-cao [data]="data" (dataChange)="changeTab($event)">
             </app-bao-cao>
         </ng-container>
+        <ng-container *ngIf="tabSelected == 'nextbaocao'">
+            <app-bao-cao [data]="data" (dataChange)="changeTab($event)">
+            </app-bao-cao>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'nextnextbaocao'">
+            <app-bao-cao [data]="data" (dataChange)="changeTab($event)">
+            </app-bao-cao>
+        </ng-container>
         <!-- so kiem tra tran chi tu bo tai chinh -->
         <ng-container *ngIf="tabSelected == 'ds-skt-btc'">
             <app-danh-sach-so-kiem-tra-tran-chi-tu-BTC (dataChange)="changeTab($event)">

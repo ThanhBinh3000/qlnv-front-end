@@ -718,7 +718,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             loaiDnghi: this.nguonBcao,
             soQdChiTieu: response.qdChiTieu,
             trangThai: "1",
-            thuyetMinh: "",
+            thuyetMinh: this.thuyetMinh,
         }));
 
         this.spinner.show();

@@ -82,13 +82,12 @@ export class DanhsachKehoachLcntComponent implements OnInit {
           window.location.href = '/error/401'
         }
       }
+      console.log(this.loaiVthh);
       this.userInfo = this.userService.getUserLogin();
-      this.listVthh = LIST_VAT_TU_HANG_HOA;
-      this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
-          value: this.yearNow - i,
-          text: this.yearNow - i,
+          value: dayjs().get('year') - i,
+          text: dayjs().get('year') - i,
         });
       }
       this.searchFilter.loaiVthh = this.loaiVthh;
@@ -99,7 +98,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-
   }
 
   updateAllChecked(): void {
@@ -162,7 +160,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
-          // item.statusConvert = this.convertTrangThai(item.trangThai);
         });
       }
       this.dataTableAll = cloneDeep(this.dataTable);

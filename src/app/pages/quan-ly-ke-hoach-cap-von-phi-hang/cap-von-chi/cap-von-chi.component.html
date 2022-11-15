@@ -1,17 +1,17 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
-    <li *ngIf="viewDeNghi"  nz-menu-item (click)="selectTab(0)">
+    <li *ngIf="viewDeNghi" nz-menu-item (click)="selectTab(0)">
       Đề nghị cấp vốn các đơn vị
     </li>
     <li *ngIf="viewTongHop" nz-menu-item (click)="selectTab(1)">
-      Tổng hợp cấp vốn các đơn vị
+      Tổng hợp đề nghị cấp vốn các đơn vị
     </li>
-    <li nz-menu-item  *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN')" (click)="selectTab(2)">
+    <li nz-menu-item *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_DENGHIBN')" (click)="selectTab(2)">
       Đề nghị cấp vốn bộ ngành
     </li>
     <li nz-menu-item *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_TONGHOP')" (click)="selectTab(3)">
-      Tổng hợp
+      Tổng hợp cấp vốn bộ ngành
     </li>
     <li nz-menu-item *ngIf="userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_THONGTRI')" (click)="selectTab(4)">
       Thông tri duyệt y dự toán

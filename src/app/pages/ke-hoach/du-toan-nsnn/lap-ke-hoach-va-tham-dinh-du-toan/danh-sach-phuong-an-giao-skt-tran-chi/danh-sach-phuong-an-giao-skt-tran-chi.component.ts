@@ -10,6 +10,7 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { BCVP, LTD, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { DialogThemMoiQdCvComponent } from '../dialog-them-moi-qd-cv/dialog-them-moi-qd-cv.component';
 
 @Component({
     selector: 'app-danh-sach-phuong-an-giao-skt-tran-chi',
@@ -165,7 +166,25 @@ export class DanhSachPhuongAnGiaoSktTranChiComponent implements OnInit {
 
     //them moi bao cao
     addNewReport() {
-
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'NHẬP QĐ/CV GIAO SỐ KIỂM TRA CHI NSNN',
+            nzContent: DialogThemMoiQdCvComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '60%',
+            nzFooter: null,
+            nzComponentParams: {
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                const obj = {
+                    id: res,
+                    tabSelected: 'pa',
+                }
+                this.dataChange.emit(obj);
+            }
+        });
     }
 
     //xem chi tiet bao cao

@@ -40,6 +40,8 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   dsBoNganh: any[];
   dsHangHoa: any[] = [];
   dataEdit: any;
+  radioData: any;
+  radioValue: any;
 
   constructor(
     private readonly _modalRef: NzModalRef,
@@ -50,6 +52,11 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.radioData = [
+      {label: 'Bộ tài chính', value: 'BTC'},
+      {label: 'Bộ ngành khác', value: 'Khac'},
+    ];
+    this.radioValue = 'BTC';
     this.bindingData(this.dataEdit)
     await Promise.all([
       this.getListBoNganh(),
@@ -64,10 +71,31 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
   onChangeBoNganh(event) {
-    console.log(this.keHoach, 'abcc')
-    const boNganh = this.dsBoNganh.find(item => item.ma == event)
-    if (boNganh) {
-      this.keHoach.tenBoNganh = boNganh.giaTri;
+    //fix btc = tcdt
+    if (event == '01') {
+      event = '0101'
+    }
+    this.dsHangHoa = [];
+
+    if (event) {
+      const boNganh = this.dsBoNganh.find(item => item.ma == event)
+      if (boNganh) {
+        this.keHoach.tenBoNganh = boNganh.giaTri;
+      }
+      this.danhMucService.getDanhMucHangDvql({
+        "dviQly": event
+      }).subscribe((hangHoa) => {
+        if (hangHoa.msg == MESSAGE.SUCCESS) {
+          if (event == '0101') {
+            const dataVatTu = hangHoa.data.filter(item => (item.ma == "02" || item.ma == "04"));
+            dataVatTu.forEach(item => {
+              this.dsHangHoa = [...this.dsHangHoa, ...item.child]
+            });
+          } else {
+            this.dsHangHoa = hangHoa.data;
+          }
+        }
+      })
     }
   }
 
@@ -75,10 +103,11 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     this.dsBoNganh = [];
     let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsBoNganh = res.data;
       let boTaiChinh = res.data.find(s => s.giaTri === 'Bộ Tài Chính');
       this.keHoach.maBoNganh = boTaiChinh.ma;
       this.keHoach.tenBoNganh = boTaiChinh.giaTri;
+      //fix theo giao dien moi
+      this.dsBoNganh = res.data.filter(s => s.giaTri != 'Bộ Tài Chính');
     }
 
   }
@@ -96,7 +125,9 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
   luu() {
-    this.keHoachLuongThucComponent.onChangeInput();
+    if (this.keHoachLuongThucComponent) {
+      this.keHoachLuongThucComponent.onChangeInput();
+    }
     if (this.validateData()) {
       this._modalRef.close(this.keHoach);
     }
@@ -123,4 +154,13 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     this._modalRef.close();
   }
 
+  onChangeBoNganhRadio() {
+    if (this.radioValue == 'BTC') {
+      this.keHoach.maBoNganh = '01'
+      this.onChangeBoNganh("0101");
+    } else {
+      this.keHoach.maBoNganh = [];
+      this.onChangeBoNganh("");
+    }
+  }
 }

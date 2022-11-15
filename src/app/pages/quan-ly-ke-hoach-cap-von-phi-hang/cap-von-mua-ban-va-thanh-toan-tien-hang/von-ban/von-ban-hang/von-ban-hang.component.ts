@@ -14,13 +14,13 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, numberOnly, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 
 export class ItemGui {
-    tuTk: number;
+    tuTk: string;
     noiDung: string;
-    maNguonNs: number;
-    nienDoNs: number;
+    maNguonNs: string;
+    nienDoNs: string;
     soTien: number;
     soTienBangChu: string;
     nopThue: number;
@@ -36,7 +36,7 @@ export class ItemGui {
 
 export class ItemNhan {
     ngayNhan: string;
-    taiKhoanNhan: number;
+    taiKhoanNhan: string;
     thuyetMinh: string;
     lstFiles: any[] = [];
     listFile: File[] = [];
@@ -88,6 +88,7 @@ export class VonBanHangComponent implements OnInit {
     editMoneyUnit = false;
     isDataAvailable = false;
     statusEdit = true;
+    isFirstSave = true;
     // before uploaf file
     beforeUploadGui = (file: NzUploadFile): boolean => {
         this.ttGui.fileList = this.ttGui.fileList.concat(file);
@@ -156,7 +157,7 @@ export class VonBanHangComponent implements OnInit {
                 })
                 break;
             case 'submit':
-                await this.onSubmit('2', null).then(() => {
+                await this.submitReport().then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
@@ -188,11 +189,7 @@ export class VonBanHangComponent implements OnInit {
 
     getStatusName() {
         if (this.checkParent) {
-            if (this.ttNhan.trangThai == Utils.TT_BC_1) {
-                return 'Mới';
-            } else {
-                return this.trangThais.find(e => e.id == this.ttNhan.trangThai).tenDm;
-            }
+            return this.trangThais.find(e => e.id == this.ttNhan.trangThai).tenDm;
         } else {
             return this.trangThais.find(e => e.id == this.ttGui.trangThai).tenDm;
         }
@@ -218,6 +215,7 @@ export class VonBanHangComponent implements OnInit {
         if (this.id) {
             await this.getDetailReport();
         } else {
+            this.isFirstSave = true;
             this.ttGui.trangThai = Utils.TT_BC_1;
             this.ttNhan.trangThai = Utils.TT_BC_1;
             this.maDviTien = '1';
@@ -262,10 +260,10 @@ export class VonBanHangComponent implements OnInit {
         if (this.checkParent) {
             this.ttNhan.status = !(Utils.statusSave.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH));
             this.ttGui.status = true;
-            this.saveStatus = Utils.statusSave.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH);
-            this.submitStatus = Utils.statusApprove.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_BH);
-            this.passStatus = Utils.statusDuyet.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_BH);
-            this.approveStatus = Utils.statusPheDuyet.includes(this.ttGui.trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV_BH);
+            this.saveStatus = Utils.statusSave.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH);
+            this.submitStatus = Utils.statusApprove.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_BH) && !this.isFirstSave;
+            this.passStatus = Utils.statusDuyet.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_BH);
+            this.approveStatus = Utils.statusPheDuyet.includes(this.ttNhan.trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV_BH);
             this.copyStatus = false;
         }
     }
@@ -398,6 +396,11 @@ export class VonBanHangComponent implements OnInit {
                     this.ttGui.listFile = [];
                     this.ttNhan.lstFiles = data.data.lstFileNhans;
                     this.ttNhan.listFile = [];
+                    if (!this.ttNhan.ngayNhan || !this.ttNhan.taiKhoanNhan) {
+                        this.isFirstSave = true;
+                    } else {
+                        this.isFirstSave = false;
+                    }
                     this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -407,6 +410,21 @@ export class VonBanHangComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
             },
         );
+    }
+
+    async submitReport() {
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn trình duyệt?<br/>(Trình duyệt trước khi lưu báo cáo có thể gây mất dữ liệu)',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 500,
+            nzOnOk: () => {
+                this.onSubmit(Utils.TT_BC_2, '')
+            },
+        });
     }
 
     // chuc nang check role
@@ -491,6 +509,11 @@ export class VonBanHangComponent implements OnInit {
         // gui du lieu trinh duyet len server
         if (this.ttGui.soTien > MONEY_LIMIT) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
+            return;
+        }
+
+        if (!numberOnly(this.ttNhan.taiKhoanNhan)) {
+            this.notification.warning(MESSAGE.WARNING, 'Trường chỉ chứa ký tự số');
             return;
         }
         //get list file url
@@ -600,6 +623,10 @@ export class VonBanHangComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOT_NEGATIVE);
             return;
         }
+        if (!numberOnly(this.ttGuiCache.tuTk) || !numberOnly(this.ttGuiCache.maNguonNs) || !numberOnly(this.ttGuiCache.nienDoNs)) {
+            this.notification.warning(MESSAGE.WARNING, 'Trường chỉ chứa ký tự số');
+            return;
+        }
         this.statusEdit = false;
         this.ttGui = this.ttGuiCache;
     }
@@ -671,7 +698,7 @@ export class VonBanHangComponent implements OnInit {
             tkNhan: "",
             trangThai: "1",
             trangThaiDviCha: "1",
-            thuyetMinh: "",
+            thuyetMinh: this.ttGui.thuyetMinh,
             thuyetMinhDviCha: "",
         };
         this.spinner.show();

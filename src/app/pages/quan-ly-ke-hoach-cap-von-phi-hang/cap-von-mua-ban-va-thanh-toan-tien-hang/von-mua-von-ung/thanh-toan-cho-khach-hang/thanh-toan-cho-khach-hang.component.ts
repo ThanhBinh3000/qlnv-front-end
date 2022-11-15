@@ -553,7 +553,7 @@ export class ThanhToanChoKhachHangComponent implements OnInit {
             noiDung: this.ttGui.noiDung,
             soTien: this.ttGui.soTien,
             trangThai: "1",
-            thuyetMinh: "",
+            thuyetMinh: this.thuyetMinh,
         };
 
         this.spinner.show();

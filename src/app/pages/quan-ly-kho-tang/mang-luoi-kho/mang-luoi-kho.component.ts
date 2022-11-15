@@ -169,7 +169,7 @@ export class MangLuoiKhoComponent implements OnInit {
     if (dataNode) {
       let body = {
         maDvi: dataNode.origin.key,
-        capDvi: dataNode.level
+        capDvi: this.nodeSelected.capDvi
       }
       await this.mangLuoiKhoService.getDetailByMa(body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
