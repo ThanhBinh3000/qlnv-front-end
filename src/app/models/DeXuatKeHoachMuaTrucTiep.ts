@@ -42,7 +42,7 @@ export class CanCuXacDinh {
   taiLieu: any;
   moTa: string;
   fileDinhkems: Array<FileDinhKem>;
-  ccFileDinhkems: Array<FileDinhKem>;
+  ccFileDinhKems: Array<FileDinhKem>;
 }
 
 export class ChiTietThongTinChaoGia {

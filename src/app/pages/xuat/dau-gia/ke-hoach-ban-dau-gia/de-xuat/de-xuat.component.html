@@ -1,1 +1,4 @@
-<p>de-xuat works!</p>
+<div class="chi-tiet" *ngIf="isDetail">
+  <app-them-de-xuat-ke-hoach-ban-dau-gia [idInput]="selectedId" [isView]="isView" (showListEvent)="showList()">
+  </app-them-de-xuat-ke-hoach-ban-dau-gia>
+</div>

@@ -6,7 +6,7 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./tong-hop.component.scss']
 })
 export class TongHopComponent implements OnInit {
-  @Input() loaiVthh: string;
+  @Input() loaiVthhInput: string;
   constructor() { }
 
   ngOnInit(): void {

@@ -8,8 +8,10 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { QuanLyBienBanBanGiaoService } from 'src/app/services/quanLyBienBanBanGiao.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -40,6 +42,8 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     tenTrangThai: '',
   };
   routerUrl: string;
+
+  STATUS = STATUS;
 
   diemKho: string = '';
   nhaKho: string = '';
@@ -82,6 +86,7 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public userService: UserService,
     public globals: Globals,
+    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService
   ) { }
 
   async ngOnInit() {
@@ -133,39 +138,28 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
   }
 
   async search() {
-    this.spinner.show();
+    await this.spinner.show();
     let body = {
-      "capDvis": '3',
-      "maDvi": this.userInfo.MA_DVI,
-      "maVatTuCha": this.isTatCa ? null : this.typeVthh,
-      soQuyetDinhNhap: this.searchFilter.soQuyetDinhNhap ?? null,
-      soBienBan: this.searchFilter.soBienBan ?? null,
-      ngayBanGiaoMauTu: this.searchFilter.ngayBanGiaoMau ? dayjs(this.searchFilter.ngayBanGiaoMau[0]).format('YYYY/MM/DD') : null,
-      ngayBanGiaoMauDen: this.searchFilter.ngayBanGiaoMau ? dayjs(this.searchFilter.ngayBanGiaoMau[1]).format('YYYY/MM/DD') : null,
-      pageNumber: this.page,
-      pageSize: this.pageSize,
+      "paggingReq": {
+        "limit": this.pageSize,
+        "page": this.page - 1
+      },
+      trangThai: STATUS.BAN_HANH
     };
-    try {
-      let res = await this.quanLyBienBanBanGiaoService.timKiem(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        this.dataTable = data.content;
-        if (this.dataTable && this.dataTable.length > 0) {
-          this.dataTable.forEach((item) => {
-            item.checked = false;
-          });
-        }
-        this.dataTableAll = cloneDeep(this.dataTable);
-        this.totalRecord = data.totalElements;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    } catch (error) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
+    let res = await this.quyetDinhNhapXuatService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = data.content;
+      this.dataTable.forEach(item =>
+        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      );
+      console.log(this.dataTable);
+      this.dataTableAll = cloneDeep(this.dataTable);
+      this.totalRecord = data.totalElements;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
-
+    await this.spinner.hide();
   }
 
   async changePageIndex(event) {
@@ -243,7 +237,7 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
     });
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
@@ -420,6 +414,15 @@ export class QuanLyBienBanBanGiaoMauComponent implements OnInit {
       tenNganKho: '',
       soLuongMau: '',
       tenTrangThai: '',
+    }
+  }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
     }
   }
 }
