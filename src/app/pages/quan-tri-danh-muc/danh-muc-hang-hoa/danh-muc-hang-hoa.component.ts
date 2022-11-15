@@ -45,6 +45,7 @@ export class DanhMucHangHoaComponent implements OnInit {
   listLoaiHang: any[] = [];
   listDviQly : any[] = [];
   listDviTinh: any[] = [];
+  listPpLayMau: any[]=  [];
 
 
   constructor(
@@ -83,6 +84,7 @@ export class DanhMucHangHoaComponent implements OnInit {
       this.layTatCaDonViTheoTree(),
       this.loadListLhBq(),
       this.loadListPpbq(),
+      this.loadListPpLayMau(),
       this.loadListHtbq(),
       this.loadListLoaiHang(),
       this.loadListDviQly(),
@@ -155,6 +157,19 @@ export class DanhMucHangHoaComponent implements OnInit {
     }
   }
 
+  async loadListPpLayMau() {
+    this.listPpLayMau = [];
+    let res = await this.dmHangService.danhMucChungGetAll('PP_LAY_MAU');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listPpLayMau = res.data;
+      if (this.listPpLayMau) {
+        this.listPpLayMau.forEach(item => {
+          item.type = 'pplm'
+        })
+      }
+    }
+  }
+
   async loadListDviQly() {
     this.listDviQly = [];
     let res = await this.dmHangService.layTatCaDviQly();
@@ -222,7 +237,7 @@ export class DanhMucHangHoaComponent implements OnInit {
             trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
           })
           this.loadTieuChuanCluong(this.detailHangHoa.value.ma);
-          this.loadDetailBq(this.nodeDetail.loaiHinhBq, this.nodeDetail.phuongPhapBq, this.nodeDetail.hinhThucBq  );
+          this.loadDetailBq(this.nodeDetail.loaiHinhBq, this.nodeDetail.phuongPhapBq, this.nodeDetail.hinhThucBq, this.nodeDetail.ppLayMau );
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
         }
@@ -230,7 +245,7 @@ export class DanhMucHangHoaComponent implements OnInit {
     }
   }
 
-  loadDetailBq(listLh, listPp, listHt) {
+  loadDetailBq(listLh? , listPp? , listHt? , listPpLm?) {
     if (listHt) {
       this.listLhbq.forEach(item => {
         item.checked = undefined
@@ -261,6 +276,16 @@ export class DanhMucHangHoaComponent implements OnInit {
       })
     })
   }
+    if (listPpLm) {
+      this.listPpLayMau.forEach(item => {
+        item.checked = undefined
+        listHt.forEach(bq => {
+          if (item.ma == bq.ma) {
+            item.checked = true;
+          }
+        })
+      })
+    }
   }
 
   showEdit(editData: boolean) {
@@ -272,11 +297,14 @@ export class DanhMucHangHoaComponent implements OnInit {
     if (this.detailHangHoa.invalid) {
       return;
     }
+    let dviTinh =  this.listDviTinh.filter(item => item.ma == this.detailHangHoa.value.maDviTinh)
     let body = this.detailHangHoa.value;
     body.trangThai = this.detailHangHoa.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
+    body.maDviTinh = dviTinh[0].giaTri
     body.loaiHinhBq = this.listLhbq.filter(item => item.checked === true)
     body.phuongPhapBq = this.listPpbq.filter(item => item.checked === true)
     body.hinhThucBq = this.listHtbq.filter(item => item.checked === true)
+    body.ppLayMau = this.listPpLayMau.filter(item => item.checked === true)
     body.loaiHang = this.convertLoaiHh(this.detailHangHoa.value.loaiHang)
     this._modalService.confirm({
       nzClosable: false,
@@ -299,6 +327,29 @@ export class DanhMucHangHoaComponent implements OnInit {
       }
     });
   }
+  convertLoaiHh(loaiVthh) {
+    let loaiHh = loaiVthh
+    switch (loaiHh) {
+      case "1": {
+        loaiHh = 'LT';
+        break;
+      }
+      case "2" : {
+        loaiHh = 'VT'
+        break;
+      }
+      case "3": {
+        loaiHh = 'VTCN';
+        break;
+      }
+      case "4" : {
+        loaiHh = 'M';
+        break;
+      }
+    }
+    return loaiHh;
+  }
+
 
   delete() {
     this._modalService.confirm({
@@ -322,26 +373,6 @@ export class DanhMucHangHoaComponent implements OnInit {
         })
       }
     });
-  }
-
-  convertLoaiHh(loaiVthh) {
-    let loaiHh = loaiVthh
-    switch (loaiHh) {
-      case "3":
-      case "2" : {
-        loaiHh = 'VT'
-        break;
-      }
-      case "1": {
-        loaiHh = 'LT';
-        break;
-      }
-      case "4" : {
-        loaiHh = 'M';
-        break;
-      }
-    }
-    return loaiHh;
   }
 
 
