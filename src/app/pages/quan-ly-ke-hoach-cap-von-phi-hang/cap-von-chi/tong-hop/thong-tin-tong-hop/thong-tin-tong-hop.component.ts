@@ -568,6 +568,7 @@ export class ThongTinTonghopComponent implements OnInit {
           maBoNganh: null,
           nam: this.yearNow,
           trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+          type: 'TH',
           trangThaiTh: STATUS.CHUA_TONG_HOP,
           ngayDeNghiTuNgay: null,
           ngayDeNghiDenNgay: null,
