@@ -33,6 +33,10 @@ export class DialogThemDieuChinhComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
+    if (this.response.namQtoan >= 3000 || this.response.namQtoan < 1000) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
+      return;
+    }
     this._modalRef.close(this.response);
   };
 
