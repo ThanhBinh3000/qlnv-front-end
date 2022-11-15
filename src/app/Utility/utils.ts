@@ -86,192 +86,6 @@ export class Utils {
   //export
   public static statusExport = [Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_9];
 
-  //role xoa
-  public btnRoleDel = {
-    "status": ['1', '3', '5', '8', '10'],
-    "unit": [1, 2],
-    "role": ROLE_CAN_BO,
-  }
-
-  //role luu
-  public btnRoleSave = {
-    "status": ['1', '3', '5', '8', '10'],
-    "unit": [1, 2],
-    "role": ROLE_CAN_BO,
-  }
-
-  //role trinh duyet
-  public btnRoleApprove = {
-    "status": ['1'],
-    "unit": [1, 2],
-    "role": ROLE_CAN_BO,
-  }
-
-  //role truong bo phan
-  public btnRoleTBP = {
-    "status": ['2'],
-    "unit": [1, 2],
-    "role": ROLE_TRUONG_BO_PHAN,
-  }
-
-  //role lanh dao
-  public btnRoleLD = {
-    "status": ['4'],
-    "unit": [1, 2],
-    "role": ROLE_LANH_DAO,
-  }
-
-  //role gui don vi cap tren
-  public btnRoleGuiDVCT = {
-    "status": ['6'],
-    "unit": [1, 2],
-    "role": ROLE_LANH_DAO,
-  }
-
-  //role don vi cap tren
-  public btnRoleDVCT = {
-    "status": ['7'],
-    "unit": [1, 2],
-    "role": ROLE_CAN_BO,
-  }
-
-  //role lanh dao dieu chinh
-  public btnRoleLDDC = {
-    "status": ['4'],
-    "unit": [1, 2],
-    "role": ROLE_LANH_DAO,
-  }
-
-  //role copy
-  public btnRoleCOPY = {
-    "status": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
-    "unit": [1, 2],
-    "role": ROLE_CAN_BO,
-  }
-
-  //role in
-  public btnRolePRINT = {
-    "status": ['2', '3', '4', '5', '6', '7', '8', '9', '10', '11'],
-    "unit": [1, 2],
-    "role": ROLE_CAN_BO.concat(ROLE_TRUONG_BO_PHAN).concat(ROLE_LANH_DAO),
-  }
-
-  //role copy
-  public btnRoleOK = {
-    "statusBaoCao": ['2', '4', '7'],
-    "statusChiTiet": ['2'],
-    "unit": ROLE_LANH_DAO
-  }
-
-  //role copy
-  public btnRoleExport = {
-    "status": ['6', '7', '9'],
-    "role": ['KH_VP_BC_KQTH_EX']
-  }
-
-  //get role xoa
-  public getRoleDel(status: any, unit: any, role: any): boolean {
-    return !(this.btnRoleDel.status.includes(status) && unit == true && this.btnRoleDel.role.includes(role));
-  }
-
-  //get role luu
-  public getRoleSave(status: any, unit: any, role: any): boolean {
-    return !(this.btnRoleSave.status.includes(status) && unit == true && this.btnRoleSave.role.includes(role));
-  }
-
-  //get role trinh duyet
-  public getRoleApprove(status: any, unit: any, role: any): boolean {
-    return !(this.btnRoleApprove.status.includes(status) && unit == true && this.btnRoleApprove.role.includes(role));
-  }
-
-  //get role truong bo phan
-  public getRoleTBP(status: any, unit: any, role: any): boolean {
-    return !(this.btnRoleTBP.status.includes(status) && unit == true && this.btnRoleTBP.role.includes(role));
-  }
-
-  //get role button lanh dao
-  public getRoleLD(status: any, unit: any, role: any): boolean {
-    return !(this.btnRoleLD.status.includes(status) && unit == true && this.btnRoleLD.role.includes(role));
-  }
-
-  //get role button gui don vi cap tren
-  public getRoleGuiDVCT(status: any, unit: any, role: any): boolean {
-    return !(this.btnRoleGuiDVCT.status.includes(status) && unit == true && this.btnRoleGuiDVCT.role.includes(role));
-  }
-
-  //get role button don vi cap tren
-  public getRoleDVCT(status: any, unit: any, role: any): boolean {
-    return !(this.btnRoleDVCT.status.includes(status) && unit == true && this.btnRoleDVCT.role.includes(role));
-  }
-
-  //role lanh dao dieu chinh
-  public getRoleLDDC(status: any, unit: any, role: any): boolean {
-    return !(this.btnRoleLDDC.status.includes(status) && unit == true && this.btnRoleLDDC.role.includes(role));
-  }
-
-  //role copy
-  public getRoleCopy(status: any, unit: any, role: any): boolean {
-    return !(this.btnRoleCOPY.status.includes(status) && unit == true && this.btnRoleCOPY.role.includes(role));
-  }
-
-  //role in
-  public getRolePrint(status: any, unit: any, role: any): boolean {
-    return !(this.btnRolePRINT.status.includes(status) && unit == true && this.btnRolePRINT.role.includes(role));
-  }
-
-  //role export
-  public getRoleExport(status: any, unit: any, role: any): boolean {
-    return !(this.btnRoleExport.status.includes(status) && unit == true && this.btnRolePRINT.role.includes(role));
-  }
-
-  //role OK/not Ok
-  public getRoleOk(statusBaoCao: any, unit: any, statusChiTiet: any): boolean {
-    return !(this.btnRoleOK.statusBaoCao.includes(statusBaoCao) && unit == true && this.btnRoleOK.statusChiTiet.includes(statusChiTiet));
-  }
-  // lay quyen
-  public getRole(id: number) {
-    let role;
-    switch (id) {
-      case 4:
-        role = 'CAP_TREN'
-        break;
-      case 1:
-        role = 'LANH_DAO'
-        break;
-      case 2:
-        role = 'TRUONG_BO_PHAN'
-        break;
-      case 3:
-        role = 'NHAN_VIEN'
-        break;
-
-      default:
-        role = id;
-        break;
-    }
-    return role;
-  }
-
-  // lay ten don vi theo ma don vi
-  public getUnitLevel(id: number) {
-    let unitLevel;
-    switch (id) {
-      case 1:
-        unitLevel = 'TONG_CUC'
-        break;
-      case 2:
-        unitLevel = 'CUC_KHU_VUC'
-        break;
-      case 3:
-        unitLevel = 'CHI_CUC'
-        break;
-      default:
-        unitLevel = id;
-        break;
-    }
-    return unitLevel;
-  }
-
   // lay ten trang thai theo ma trang thai
   public getStatusName(id: string) {
     let statusName;
@@ -322,62 +136,6 @@ export class Utils {
     return statusName;
   }
 
-  // lay ten trang thai theo ma trang thai
-  public getStatusNameParent(id: string) {
-    let statusName;
-    switch (id) {
-      case Utils.TT_BC_0:
-        statusName = "Đã xóa";
-        break;
-      case Utils.TT_BC_1:
-        statusName = "Đang soạn"
-        break;
-      case Utils.TT_BC_2:
-        statusName = "Trình duyệt"
-        break;
-      case Utils.TT_BC_3:
-        statusName = "Từ chối duyệt"
-        break;
-      case Utils.TT_BC_4:
-        statusName = "Duyệt"
-        break;
-      case Utils.TT_BC_5:
-        statusName = "Từ chối phê duyệt"
-        break;
-      case Utils.TT_BC_6:
-        statusName = "Mới"
-        break;
-      case Utils.TT_BC_7:
-        statusName = "Mới"
-        break;
-      case Utils.TT_BC_8:
-        statusName = "Từ chối tiếp nhận"
-        break;
-      case Utils.TT_BC_9:
-        statusName = "Tiếp nhận"
-        break;
-      case Utils.TT_BC_10:
-        statusName = "Điều chỉnh theo số kiểm tra"
-        break;
-      case Utils.TT_BC_11:
-        statusName = "Đã giao"
-        break;
-      case Utils.TT_BC_KT:
-        statusName = "Chưa có"
-        break;
-      default:
-        statusName = id;
-        break;
-    }
-    return statusName;
-  }
-
-  // lay ten trang thai theo ma trang thai
-  public getStatusAppendixName(id): string {
-    // let statusName = TRANG_THAI_PHU_LUC.find(item => item.id == id)
-    // return statusName?.ten;
-    return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
-  }
 }
 export const ROLE_CAN_BO = ['TC_KH_VP_NV', 'C_KH_VP_NV_KH', 'C_KH_VP_NV_TVQT', 'CC_KH_VP_NV'];
 export const ROLE_TRUONG_BO_PHAN = ['TC_KH_VP_TBP', 'C_KH_VP_TBP_TVQT', 'C_KH_VP_TBP_KH', 'CC_KH_VP_TBP'];
@@ -710,95 +468,6 @@ export const LBC_KET_QUA_THUC_HIEN_HANG_DTQG = [
 ]
 export const BAO_CAO_DOT = "1";
 export const BAO_CAO_NAM = "2";
-// trang thai ban ghi cua anh Ninh
-export const TRANG_THAI_BAN_GHI = [
-  {
-    id: '1',
-    tenDm: 'Đang soạn'
-  },
-  {
-    id: '2',
-    tenDm: 'Trình duyệt'
-  },
-  {
-    id: '3',
-    tenDm: 'Từ chối'
-  },
-  {
-    id: '4',
-    tenDm: 'Duyệt'
-  },
-  {
-    id: '5',
-    tenDm: 'Từ chối'
-  },
-  {
-    id: '6',
-    tenDm: 'Phê duyệt'
-  },
-  {
-    id: '7',
-    tenDm: 'Chờ ghi nhận'
-  },
-  {
-    id: '8',
-    tenDm: 'Từ chối ghi nhận'
-  },
-  {
-    id: '9',
-    tenDm: 'Ghi nhận'
-  },
-]
-
-
-
-// trang thai ban ghi
-export const TRANG_THAI = [
-  {
-    id: 1,
-    tenDm: 'Đang soạn'
-  },
-  {
-    id: 2,
-    tenDm: 'Trình duyệt'
-  },
-  {
-    id: 3,
-    tenDm: 'Trưởng BP từ chối'
-  },
-  {
-    id: 4,
-    tenDm: 'Trưởng BP duyệt'
-  },
-  {
-    id: 5,
-    tenDm: 'Lãnh đạo từ chối'
-  },
-  {
-    id: 6,
-    tenDm: 'Lãnh đạo phê duyệt'
-  },
-  {
-    id: 7,
-    tenDm: 'Gửi ĐV cấp trên'
-  },
-  {
-    id: 8,
-    tenDm: 'ĐV cấp trên từ chối'
-  },
-  {
-    id: 9,
-    tenDm: 'Đv cấp trên duyệt'
-  },
-  {
-    id: 10,
-    tenDm: 'Lãnh đạo yêu cầu điều chỉnh'
-  },
-  {
-    id: 11,
-    tenDm: 'Chưa đánh giá'
-  },
-]
 
 // trang thai ban ghi
 export const TRANG_THAI_TIM_KIEM = [
@@ -971,12 +640,12 @@ export function mulMoney(value, maDonViTien): number {
   }
 }
 
-export function getNumberValue(num): number {
-  if (!num) {
-    return 0;
-  }
-  return Number(num.toFixed(4));
-}
+// export function getNumberValue(num): number {
+//   if (!num) {
+//     return 0;
+//   }
+//   return Number(num.toFixed(4));
+// }
 
 export function sumNumber(num: any): number {
   let check = true;
@@ -1017,31 +686,6 @@ export function divNumber(num1, num2): number {
     return Number(num1) / Number(+num2);
   }
 }
-
-export function fixedNumber(num: number): number {
-  return Number(num.toFixed(Utils.ROUND));
-}
-
-
-// trang thai phan bo du toan chi nsnn
-export const TRANG_THAI_PHAN_BO = [
-  {
-    id: '1',
-    ten: 'Chưa ghi nhận',
-  },
-  {
-    id: '2',
-    ten: 'Chờ ghi nhận',
-  },
-  {
-    id: '3',
-    ten: 'Đã ghi nhận',
-  },
-  {
-    id: '4',
-    ten: 'Chờ tiếp nhận',
-  },
-]
 
 export const TRANG_THAI_GIAO = [
   {
@@ -1114,61 +758,6 @@ export const KHOAN_MUC = [
     idCha: 12100,
     level: 3,
   },
-
-  // {
-  // 	id: 20000,
-  // 	tenDm: "HOẠT ĐỘNG DTQG (Khoản 331)",
-  // 	idCha: 0,
-  // 	level: 0,
-  // },
-  // {
-  // 	id: 21000,
-  // 	tenDm: "Kinh phí thực hiện tự chủ",
-  // 	idCha: 20000,
-  // 	level: 1,
-  // },
-  // {
-  // 	id: 21100,
-  // 	tenDm: "Giao đơn vị thực hiện nhiệm vụ",
-  // 	idCha: 21000,
-  // 	level: 2,
-  // },
-  // {
-  // 	id: 21110,
-  // 	tenDm: "Thanh toán cá nhân và quản lý hành chính",
-  // 	idCha: 21100,
-  // 	level: 3,
-  // },
-  // {
-  // 	id: 21111,
-  // 	tenDm: "Quỹ lương",
-  // 	idCha: 21110,
-  // 	level: 4,
-  // },
-  // {
-  // 	id: 21112,
-  // 	tenDm: "Chi quản lý hành chính theo định mức",
-  // 	idCha: 21110,
-  // 	level: 4,
-  // },
-  // {
-  // 	id: 21113,
-  // 	tenDm: "Kinh phí thực hiện điều chỉnh tiền lương theo Nghị định số 38/2018/NĐ-CP",
-  // 	idCha: 21110,
-  // 	level: 4,
-  // },
-  // {
-  // 	id: 21114,
-  // 	tenDm: "Kinh phí cắt giảm, tiết kiệm và thu hồi chi thường xuyên NSNN năm 2021",
-  // 	idCha: 21110,
-  // 	level: 4,
-  // },
-  // {
-  // 	id: 22000,
-  // 	tenDm: "Kinh phí không thực hiện tự chủ",
-  // 	idCha: 20000,
-  // 	level: 1,
-  // },
   {
     id: 30000,
     tenDm: "SỰ NGHIỆP GIÁO DỤC ĐÀO TẠO (Khoản 085)",
