@@ -165,7 +165,8 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     this.dsBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsBoNganh = res.data;
+      // không lấy bộ tài chính
+      this.dsBoNganh = res.data.filter(item => item.maDvi  !== '01')
     }
   }
 

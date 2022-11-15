@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-quyet-dinh',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./quyet-dinh.component.scss']
 })
 export class QuyetDinhComponent implements OnInit {
-
+  @Input() loaiVthhInput: string;
   constructor() { }
 
   ngOnInit(): void {

@@ -204,7 +204,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
                 })
                 break;
             case 'submit':
-                await this.onSubmit('2', null).then(() => {
+                await this.submitReport().then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
@@ -296,10 +296,10 @@ export class TongHopTaiTongCucComponent implements OnInit {
         }
         const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
         this.saveStatus = this.getBtnStatus(Utils.statusSave, CVNC.EDIT_SYNTHETIC_TC, checkChirld);
-        this.submitStatus = this.getBtnStatus(Utils.statusApprove, CVNC.APPROVE_SYNTHETIC_TC, checkChirld);;
-        this.passStatus = this.getBtnStatus(Utils.statusDuyet, CVNC.DUYET_SYNTHETIC_TC, checkChirld);;
-        this.approveStatus = this.getBtnStatus(Utils.statusPheDuyet, CVNC.PHE_DUYET_SYNTHETIC_TC, checkChirld);;
-        this.copyStatus = this.getBtnStatus(Utils.statusCopy, CVNC.COPY_SYNTHETIC_TC, checkChirld);;
+        this.submitStatus = this.getBtnStatus(Utils.statusApprove, CVNC.APPROVE_SYNTHETIC_TC, checkChirld) && !(!this.id);
+        this.passStatus = this.getBtnStatus(Utils.statusDuyet, CVNC.DUYET_SYNTHETIC_TC, checkChirld);
+        this.approveStatus = this.getBtnStatus(Utils.statusPheDuyet, CVNC.PHE_DUYET_SYNTHETIC_TC, checkChirld);
+        this.copyStatus = this.getBtnStatus(Utils.statusCopy, CVNC.COPY_SYNTHETIC_TC, checkChirld);
     }
 
     getBtnStatus(status: string[], role: string, check: boolean) {
@@ -416,38 +416,49 @@ export class TongHopTaiTongCucComponent implements OnInit {
         );
     }
 
+    async submitReport() {
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn trình duyệt?<br/>(Trình duyệt trước khi lưu báo cáo có thể gây mất dữ liệu)',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 500,
+            nzOnOk: () => {
+                this.onSubmit(Utils.TT_BC_2, '')
+            },
+        });
+    }
+
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
         if (!this.congVan) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
             return;
         }
-        if (this.id) {
-            const requestGroupButtons = {
-                id: this.id,
-                maChucNang: mcn,
-                lyDoTuChoi: lyDoTuChoi,
-            };
-            await this.capVonNguonChiService.trinhDuyetDeNghiTongHop(requestGroupButtons).toPromise().then(async (data) => {
-                if (data.statusCode == 0) {
-                    this.trangThai = mcn;
-                    this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
-                    this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-                    this.getStatusButton();
-                    if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                    } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                    }
+        const requestGroupButtons = {
+            id: this.id,
+            maChucNang: mcn,
+            lyDoTuChoi: lyDoTuChoi,
+        };
+        await this.capVonNguonChiService.trinhDuyetDeNghiTongHop(requestGroupButtons).toPromise().then(async (data) => {
+            if (data.statusCode == 0) {
+                this.trangThai = mcn;
+                this.ngayTrinhDuyet = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                this.getStatusButton();
+                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                 }
-            }, err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            });
-        } else {
-            this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-        }
+            } else {
+                this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
     }
 
     //show popup tu choi

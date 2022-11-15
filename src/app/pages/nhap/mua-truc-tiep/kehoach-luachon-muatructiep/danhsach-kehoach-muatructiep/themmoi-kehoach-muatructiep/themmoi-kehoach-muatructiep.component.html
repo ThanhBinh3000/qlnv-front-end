@@ -338,7 +338,7 @@
             </div>
         </form>
     </nz-card>
-    <nz-card class="mg-t-16 flex-card p-lr16 table-card" *ngIf="!showFromTH">
+    <nz-card class="mg-t-16 flex-card p-lr16 table-card">
         <div class="header header-green-background mg-t-16">
             <div class="header-text">
                 <div class="title-chi-tieu">
@@ -384,10 +384,10 @@
                     <ng-container *ngIf="!editBaoGiaCache[data.id]?.edit; else editBaoGiaTemplate">
                         <td>{{i + 1}}</td>
                         <td>{{data.moTa}}</td>
-                        <td>{{data.ccFileDinhkems && data.ccFileDinhkems.length > 0 ? data.ccFileDinhkems[0].fileName :
+                        <td>{{data.ccFileDinhKems && data.ccFileDinhKems.length > 0 ? data.ccFileDinhKems[0].fileName :
                             ''}}</td>
                         <td class="action text-right">
-                            <a (click)="downloadFile(data.ccFileDinhkems[0])">
+                            <a (click)="downloadFile(data.ccFileDinhKems[0])">
                                 <i class="icon htvbdh_tcdt_import"></i>
                             </a>
                             <a *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC || formData.value.trangThai == ''"
@@ -533,10 +533,10 @@
                             <td>{{MuaTT.soLuongDxmtt?
                                 convertTienTobangChu(MuaTT.soLuongDxmtt * MuaTT.donGiaVat):''}}</td>
                             <td class="text-right">
-                                <a (click)="themMoiSoLuongDiaDiem(MuaTT,MuaTT.idx)">
+                                <a *ngIf="!isDisbleForm()" (click)="themMoiSoLuongDiaDiem(MuaTT,MuaTT.idx)">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a (click)="deleteRow(MuaTT.idx)">
+                                <a *ngIf="!isDisbleForm()" (click)="deleteRow(MuaTT.idx)">
                                     <i class="fa fa-trash-o do"></i>
                                 </a>
                             </td>

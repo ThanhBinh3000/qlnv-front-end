@@ -8,7 +8,7 @@ import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyNghiemThuKeLotService } from 'src/app/services/quanLyNghiemThuKeLot.service';
+import { QuanLyNghiemThuKeLotService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
@@ -247,7 +247,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
         ? dayjs(this.ngayTongHop[0]).format('YYYY-MM-DD')
         : null,
     };
-    let res = await this.quanLyNghiemThuKeLotService.timKiem(body);
+    let res = await this.quanLyNghiemThuKeLotService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -305,7 +305,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
         this.spinner.show();
         try {
           this.quanLyNghiemThuKeLotService
-            .xoa({ id: item.id })
+            .delete({ id: item.id })
             .then((res) => {
               if (res.msg == MESSAGE.SUCCESS) {
                 this.notification.success(
@@ -340,7 +340,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
         this.spinner.show();
         try {
           this.quanLyNghiemThuKeLotService
-            .xoa({ id: item.id })
+            .delete({ id: item.id })
             .then((res) => {
               if (res.msg == MESSAGE.SUCCESS) {
                 this.notification.success(
@@ -384,7 +384,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
             : null,
         };
         this.quanLyNghiemThuKeLotService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-bien-ban-nghiem-thu-bao-quan.xlsx'),
           );
@@ -431,7 +431,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyNghiemThuKeLotService.deleteMultiple({ ids: dataDelete });
+            let res = await this.quanLyNghiemThuKeLotService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

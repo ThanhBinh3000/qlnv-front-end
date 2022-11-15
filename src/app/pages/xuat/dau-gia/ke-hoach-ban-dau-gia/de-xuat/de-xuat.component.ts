@@ -1,4 +1,9 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormGroup} from "@angular/forms";
+import {UserLogin} from "../../../../../models/userlogin";
+import {DiaDiemGiaoNhan, KeHoachBanDauGia, PhanLoTaiSan} from "../../../../../models/KeHoachBanDauGia";
+import {DatePipe} from "@angular/common";
+import {DiaDiemNhapKho} from "../../../../../models/CuuTro";
 
 @Component({
   selector: 'app-de-xuat',
@@ -6,7 +11,15 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./de-xuat.component.scss']
 })
 export class DeXuatComponent implements OnInit {
-  @Input() loaiVthh: string;
+  @Input() loaiVthhInput: string;
+  @Input() idInput: number;
+  @Input() isView: boolean;
+  @Input() isDetail: boolean=true;
+  @Output()
+  showListEvent = new EventEmitter<any>();
+  @Input() id: number;
+  formData: FormGroup;
+  selectedId: any;
 
   constructor() {
   }
@@ -14,4 +27,7 @@ export class DeXuatComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  showList() {
+
+  }
 }

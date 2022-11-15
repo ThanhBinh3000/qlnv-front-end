@@ -35,7 +35,7 @@ export class DanhMucHangHoaComponent implements OnInit {
   nodes: any = [];
   nodeDetail: any;
   defaultExpandedKeys: any = [];
-  nodeSelected: any = []
+  nodeSelected: any;
   detailHangHoa: FormGroup;
   levelNode: number = 0;
   isEditData: boolean = false;
@@ -79,13 +79,13 @@ export class DanhMucHangHoaComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     await Promise.all([
+      this.loadDviTinh(),
       this.layTatCaDonViTheoTree(),
       this.loadListLhBq(),
       this.loadListPpbq(),
       this.loadListHtbq(),
       this.loadListLoaiHang(),
       this.loadListDviQly(),
-      this.loadDviTinh(),
     ]);
     this.spinner.hide();
   }
@@ -114,6 +114,11 @@ export class DanhMucHangHoaComponent implements OnInit {
     let res = await this.dmHangService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
     if (res.msg == MESSAGE.SUCCESS) {
       this.listLhbq = res.data;
+      if (this.listLhbq) {
+        this.listLhbq.forEach(item => {
+          item.type = 'lhbq'
+        })
+      }
     }
   }
 
@@ -129,6 +134,11 @@ export class DanhMucHangHoaComponent implements OnInit {
     let res = await this.dmHangService.danhMucChungGetAll('PT_BAO_QUAN');
     if (res.msg == MESSAGE.SUCCESS) {
       this.listPpbq = res.data;
+      if (this.listPpbq) {
+        this.listPpbq.forEach(item => {
+          item.type = 'ppbq'
+        })
+      }
     }
   }
 
@@ -137,6 +147,11 @@ export class DanhMucHangHoaComponent implements OnInit {
     let res = await this.dmHangService.danhMucChungGetAll('HINH_THUC_BAO_QUAN');
     if (res.msg == MESSAGE.SUCCESS) {
       this.listHtbq = res.data;
+      if (this.listHtbq) {
+        this.listHtbq.forEach(item => {
+          item.type = 'htbq'
+        })
+      }
     }
   }
 
@@ -168,9 +183,11 @@ export class DanhMucHangHoaComponent implements OnInit {
 
   nzClickNodeTree(event: any): void {
     if (event.keys.length > 0) {
-      this.nodeSelected = event.node.origin.id;
+      this.nodeSelected = event.node.origin;
       this.parentNodeSelected = event?.parentNode?.origin
-      this.showdetailHangHoa(event.node.origin.id)
+      if (this.nodeSelected.ma != null) {
+        this.showdetailHangHoa(this.nodeSelected.id)
+      }
     }
   }
 
@@ -184,7 +201,10 @@ export class DanhMucHangHoaComponent implements OnInit {
           this.listLhbq.forEach(item => {
             item.checked = true
           })
-          let dviTinh = this.listDviTinh.filter(item => item.giaTri == this.nodeDetail.maDviTinh);
+          let dviTinh;
+          if (this.nodeDetail.maDviTinh) {
+             dviTinh = this.listDviTinh.filter(item => item.giaTri == this.nodeDetail.maDviTinh);
+          }
           let detaiParent = this.nodeDetail.detailParent;
           this.detailHangHoa.patchValue({
             maCha:detaiParent ? detaiParent.ma : null,
@@ -192,7 +212,7 @@ export class DanhMucHangHoaComponent implements OnInit {
             tenHhCha: detaiParent ? detaiParent.ten : null,
             tenHangHoa: this.nodeDetail.ten,
             dviQly: this.nodeDetail.dviQly,
-            maDviTinh: dviTinh,
+            maDviTinh: dviTinh ? dviTinh[0].ma : null,
             tchuanCluong: this.nodeDetail.tchuanCluong,
             thoiHanLk: this.nodeDetail.thoiHanLk,
             loaiHang: this.nodeDetail.loaiHang,
@@ -271,7 +291,7 @@ export class DanhMucHangHoaComponent implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.isEditData = false;
-            this.ngOnInit();
+            this.showdetailHangHoa(this.detailHangHoa.value.id);
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }

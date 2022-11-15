@@ -3,18 +3,14 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Globals } from "../../../../../../../shared/globals";
 import { MESSAGE } from "../../../../../../../constants/message";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
-import { cloneDeep, chain } from 'lodash';
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
-import { NzSpinComponent } from 'ng-zorro-antd/spin';
+import { chain } from 'lodash';
+
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
-import { DanhSachGoiThau } from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
-import {
-  DialogThemMoiVatTuComponent
-} from "../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { DialogThemMoiKeHoachMuaTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
 
 @Component({
   selector: 'app-thongtin-dexuat-muatt',
@@ -167,7 +163,7 @@ export class ThongtinDexuatMuattComponent implements OnInit {
   themMoiGoiThau(data?: any, index?: number) {
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm nhập kho',
-      nzContent: DialogThemMoiVatTuComponent,
+      nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '1200px',

@@ -25,7 +25,7 @@
                 <label class="search__label">Trạng thái</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
                     [(ngModel)]="searchFilter.trangThai">
-                    <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten">
                     </nz-option>
                 </nz-select>
             </div>
