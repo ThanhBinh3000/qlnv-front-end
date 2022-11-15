@@ -192,7 +192,7 @@
               <td>{{ data.tenDvi }}</td>
               <td>{{ data.diaChiDvi }}</td>
               <td>{{ data.soDxuat }}</td>
-              <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.ngayKy == null ? data.ngayPduyet: data.ngayKy | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.tenDuAn }}</td>
               <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
