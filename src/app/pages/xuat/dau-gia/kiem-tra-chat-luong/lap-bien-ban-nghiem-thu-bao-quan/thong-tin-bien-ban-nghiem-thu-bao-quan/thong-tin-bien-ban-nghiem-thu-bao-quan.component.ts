@@ -18,7 +18,7 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import VNnum2words from 'vn-num2words';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { QuanLyNghiemThuKeLotService } from 'src/app/services/quanLyNghiemThuKeLot.service';
+import { QuanLyNghiemThuKeLotService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service';
 import * as dayjs from 'dayjs';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 
@@ -127,7 +127,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
 
   async loadChiTiet(id) {
     if (id > 0) {
-      let res = await this.quanLyNghiemThuKeLotService.loadChiTiet(id);
+      let res = await this.quanLyNghiemThuKeLotService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detail = res.data;
@@ -391,7 +391,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
             trangThai: '04',
           };
           let res =
-            await this.quanLyNghiemThuKeLotService.updateStatus(
+            await this.quanLyNghiemThuKeLotService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -428,7 +428,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
             trangThai: '01',
           };
           let res =
-            await this.quanLyNghiemThuKeLotService.updateStatus(
+            await this.quanLyNghiemThuKeLotService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -465,7 +465,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
             trangThai: '02',
           };
           let res =
-            await this.quanLyNghiemThuKeLotService.updateStatus(
+            await this.quanLyNghiemThuKeLotService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -504,7 +504,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
             trangThai: '03',
           };
           let res =
-            await this.quanLyNghiemThuKeLotService.updateStatus(
+            await this.quanLyNghiemThuKeLotService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -575,7 +575,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
         "trangThaiNhap": null
       };
       if (this.id > 0) {
-        let res = await this.quanLyNghiemThuKeLotService.sua(
+        let res = await this.quanLyNghiemThuKeLotService.update(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -590,7 +590,7 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
-        let res = await this.quanLyNghiemThuKeLotService.them(
+        let res = await this.quanLyNghiemThuKeLotService.create(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
