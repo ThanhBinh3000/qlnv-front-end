@@ -7,6 +7,7 @@ import { MainKeHoachBanDauGiaComponent } from './main-ke-hoach-ban-dau-gia/main-
 import {ComponentsModule} from "../../../../components/components.module";
 import {MainModule} from "../../../../layout/main/main.module";
 import { ThemDeXuatKeHoachBanDauGiaComponent } from './de-xuat/them-de-xuat-ke-hoach-ban-dau-gia/them-de-xuat-ke-hoach-ban-dau-gia.component';
+import { ThemMoiTongHopKeHoachBanDauGiaComponent } from './tong-hop/them-moi-tong-hop-ke-hoach-ban-dau-gia/them-moi-tong-hop-ke-hoach-ban-dau-gia.component';
 
 
 
@@ -16,7 +17,8 @@ import { ThemDeXuatKeHoachBanDauGiaComponent } from './de-xuat/them-de-xuat-ke-h
     TongHopComponent,
     QuyetDinhComponent,
     MainKeHoachBanDauGiaComponent,
-    ThemDeXuatKeHoachBanDauGiaComponent
+    ThemDeXuatKeHoachBanDauGiaComponent,
+    ThemMoiTongHopKeHoachBanDauGiaComponent
   ],
   exports: [
     DeXuatComponent,
