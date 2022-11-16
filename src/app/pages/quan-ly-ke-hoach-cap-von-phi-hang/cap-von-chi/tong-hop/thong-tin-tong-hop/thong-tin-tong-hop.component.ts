@@ -109,7 +109,7 @@ export class ThongTinTonghopComponent implements OnInit {
       });
     }
     this.initForm();
-    await this.loadListNguonTongHop();
+    // await this.loadListNguonTongHop();
     if (this.idInput) {
       this.loadChiTiet(this.idInput);
     }
@@ -138,13 +138,14 @@ export class ThongTinTonghopComponent implements OnInit {
   }
 
   async loadChiTiet(id: number) {
+    this.spinner.show();
     if (id > 0) {
       let res = await this.tongHopDeNghiCapVonService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
         this.isTonghop = true
         let data = res.data
-        console.log(data);
         if (data) {
+          console.log(data);
           this.detail = res.data;
           this.detail.trangThai = data.trangThai;
           this.detail.tenTrangThai = data.tenTrangThai;
@@ -159,7 +160,7 @@ export class ThongTinTonghopComponent implements OnInit {
             nameFilePhuongAn: data.fileDinhKem.fileName
           });
           this.listFileDinhKem = [data.fileDinhKem];
-          this.listThongTinChiTiet = [...data.cts];
+          this.listThongTinChiTiet = [...data.ct1s];
           this.detail.tCThem = [...data.ct1s]
           // this.detail.tCThem.forEach(dt => {
           //   dt.tcCapThem = dt.ycCapThem;
@@ -177,18 +178,28 @@ export class ThongTinTonghopComponent implements OnInit {
         }
       }
     }
+    this.spinner.hide();
   }
 
   async save(isOther?: boolean) {
     // chờ API và body request
     let phuongAnList = [];
+    console.log(this.detail.tCThem);
     this.detail.tCThem.forEach(pa => {
-      if(pa.loai && !pa.isSum){
+      if(!pa.isSum){
         const phuongAn = new Ct1sTonghop();
         phuongAn.khDnCapVonId = pa.id;
         phuongAn.tcCapThem = +pa.tcCapThem;
-        phuongAn.loai = pa.loai;
+        phuongAn.loaiBn = pa.loaiBn;
+        phuongAn.loaiHang = pa.loaiHang;
+        phuongAn.maBn = pa.maBn;
+        phuongAn.tongTien = pa.tongTien;
+        phuongAn.kinhPhiDaCap = pa.kinhPhiDaCap;
+        phuongAn.nam = pa.nam;
+        phuongAn.ycCapThem = pa.ycCapThem;
         phuongAn.tenBoNganh = pa.tenBoNganh;
+        phuongAn.soDeNghi = pa.soDeNghi;
+        phuongAn.ngayDeNghi = pa.ngayDeNghi;
         phuongAnList = [...phuongAnList, phuongAn];
       }
     });

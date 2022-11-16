@@ -16,6 +16,7 @@ export class TongHopDeNghiCapVonService extends BaseService {
 
   timKiem(body: any): Promise<any> {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/tong-hop-de-nghi-cap-von?`
+    // let url_ = `http://localhost:3333/tong-hop-de-nghi-cap-von?`;
     if (body.maTongHop)
       url_ += 'maTongHop=' + encodeURIComponent('' + body.maTongHop) + '&';
     if (body.maDvis)

@@ -287,7 +287,7 @@
                 <td>{{editDataCache[data.stt]?.data.tongTien}}</td>
                 <td>{{editDataCache[data.stt]?.data.kinhPhiDaCap}}</td>
                 <td>
-                  <input type="text" nz-input class="w-300" [(ngModel)]="editDataCache[data.stt]?.data.tcCapThem"/>
+                  <input type="text" nz-input min="0" max="editDataCache[data.stt]?.data.ycCapThem" class="w-300" [(ngModel)]="editDataCache[data.stt]?.data.tcCapThem"/>
                 </td>
                 <td>
                   <a (click)="saveEdit(data.stt)" class="save"
