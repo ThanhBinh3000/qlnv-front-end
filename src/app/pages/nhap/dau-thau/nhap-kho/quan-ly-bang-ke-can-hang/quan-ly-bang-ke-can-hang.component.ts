@@ -13,7 +13,7 @@ import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import {BaseComponent} from "../../../../../components/base/base.component";
+import { BaseComponent } from "../../../../../components/base/base.component";
 import {
   QuyetDinhGiaoNhapHangService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
@@ -48,7 +48,7 @@ export class QuanLyBangKeCanHangComponent extends BaseComponent implements OnIni
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
-  idQdGiaoNvNh : number = 0;
+  idQdGiaoNvNh: number = 0;
 
   allChecked = false;
   indeterminate = false;
@@ -72,7 +72,7 @@ export class QuanLyBangKeCanHangComponent extends BaseComponent implements OnIni
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-    private quyetDinhNhapXuatService : QuyetDinhGiaoNhapHangService
+    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService
   ) {
     super()
   }
@@ -117,14 +117,27 @@ export class QuanLyBangKeCanHangComponent extends BaseComponent implements OnIni
     await this.spinner.hide();
   }
 
-  convertDataTable(){
-    this.dataTable.forEach( item => {
-      item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
+  convertDataTable() {
+    // this.dataTable.forEach(item => {
+    //   item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
+    // });
+    this.dataTable.forEach(item => {
+      if (this.userService.isChiCuc()) {
+        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      } else {
+        let data = [];
+        item.dtlList.forEach(item => {
+          data = [...data, ...item.children];
+        })
+        item.detail = {
+          children: data
+        }
+      };
     });
-    this.dataTable.forEach( item => {
-      item.detail.children.forEach( ddNhap => {
-        ddNhap.listBangKeCanHang.forEach( x => {
-          x.phieuNhapKho =  ddNhap.listPhieuNhapKho.filter(item => item.soPhieuNhapKho == x.soPhieuNhapKho)[0];
+    this.dataTable.forEach(item => {
+      item.detail.children.forEach(ddNhap => {
+        ddNhap.listBangKeCanHang.forEach(x => {
+          x.phieuNhapKho = ddNhap.listPhieuNhapKho.filter(item => item.soPhieuNhapKho == x.soPhieuNhapKho)[0];
         });
       })
     });
@@ -201,7 +214,7 @@ export class QuanLyBangKeCanHangComponent extends BaseComponent implements OnIni
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh? : number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;

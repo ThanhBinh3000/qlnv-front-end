@@ -116,6 +116,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
       maLoKho: [''],
       tenLoKho: [''],
       soLuongNhapKho: [],
+      soLuong: [],
 
       loaiVthh: ['',],
       tenLoaiVthh: ['',],
@@ -256,7 +257,6 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
   }
 
   bindingDataDdNhap(data, isDetail?: boolean) {
-    console.log(data, isDetail);
     if (!isDetail) {
       this.dataTable = data.listPhieuKtraCl;
       this.dataTable.forEach(item => {
@@ -289,6 +289,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
       maLoKho: data.maLoKho,
       tenLoKho: data.tenLoKho,
       soLuongNhapKho: data.soLuong * 1000,
+      soLuong: data.soLuong
     });
   }
 

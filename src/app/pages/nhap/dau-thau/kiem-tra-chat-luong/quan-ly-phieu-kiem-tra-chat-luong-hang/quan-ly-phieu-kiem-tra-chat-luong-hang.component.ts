@@ -149,10 +149,19 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.dataTable.forEach(item =>
-        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
-      );
-      console.log(this.dataTable);
+      this.dataTable.forEach(item => {
+        if (this.userService.isChiCuc()) {
+          item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+        } else {
+          let data = [];
+          item.dtlList.forEach(item => {
+            data = [...data, ...item.children];
+          })
+          item.detail = {
+            children: data
+          }
+        };
+      });
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
