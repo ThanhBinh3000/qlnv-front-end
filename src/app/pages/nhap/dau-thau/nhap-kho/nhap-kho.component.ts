@@ -20,6 +20,7 @@ export class NhapKhoComponent implements OnInit {
   ngOnInit() {
     this.loaiVTHHGetAll();
   }
+
   async loaiVTHHGetAll() {
     this.tabs = [];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
@@ -29,7 +30,7 @@ export class NhapKhoComponent implements OnInit {
           element.count = 0;
           this.tabs.push(element);
         });
-        this.selectTab[this.tabs[0].ma]
+        this.selectTab(this.tabs[0].ma)
       }
     }
   }

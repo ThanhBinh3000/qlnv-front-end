@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import dayjs from "dayjs";
-import {UserLogin} from "../../models/userlogin";
-import {UserService} from "../../services/user.service";
-import {STATUS} from "../../constants/status";
-import {FormGroup} from "@angular/forms";
+import { UserLogin } from "../../models/userlogin";
+import { UserService } from "../../services/user.service";
+import { STATUS } from "../../constants/status";
+import { FormGroup } from "@angular/forms";
 
 @Component({
   selector: 'app-base',
@@ -14,7 +14,7 @@ export class BaseComponent implements OnInit {
   listNam: any[] = [];
   userInfo: UserLogin;
   STATUS = STATUS
-  formData : FormGroup
+  formData: FormGroup
   constructor(
   ) { }
 

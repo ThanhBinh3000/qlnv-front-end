@@ -22,6 +22,7 @@ import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { HelperService } from 'src/app/services/helper.service';
+import { isEmpty } from 'lodash';
 
 @Component({
   selector: 'them-moi-bien-ban-lay-mau',
@@ -442,7 +443,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     });
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
     if (dataChiCuc) {
-      this.listDiaDiemNhap = dataChiCuc.children;
+      this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
     }
     await this.spinner.hide();
   }
