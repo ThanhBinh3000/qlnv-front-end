@@ -330,7 +330,7 @@ export class QuanLyCanBoComponent implements OnInit {
             labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
           };
           this.optionsDonVi.push(item);
-          // nếu dữ liệu detail có 
+          // nếu dữ liệu detail có
           if (this.data) {
             if (res.data[i].maDvi == this.data.dvql) {
               this.data.dvql = res.data[i].maDvi + ' - ' + res.data[i].tenDvi

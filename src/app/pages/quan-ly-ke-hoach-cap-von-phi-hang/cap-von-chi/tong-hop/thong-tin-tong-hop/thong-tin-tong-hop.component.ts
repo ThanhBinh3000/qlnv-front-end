@@ -184,7 +184,6 @@ export class ThongTinTonghopComponent implements OnInit {
   async save(isOther?: boolean) {
     // chờ API và body request
     let phuongAnList = [];
-    console.log(this.detail.tCThem);
     this.detail.tCThem.forEach(pa => {
       if(!pa.isSum){
         const phuongAn = new Ct1sTonghop();
