@@ -16,7 +16,10 @@ import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog
 import { STATUS } from "../../../../../constants/status";
 import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
+import {
+  TongHopDeXuatKeHoachBanDauGiaService
+} from "../../../../../services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service";
+
 
 @Component({
   selector: 'app-tong-hop',
@@ -39,7 +42,7 @@ export class TongHopComponent implements OnInit {
   ) {
     this.danhMucDonVi = JSON.parse(sessionStorage.getItem('danhMucDonVi'));
   }
-  @Input() loaiVthh: string;
+  @Input() loaiVthhInput: string;
   tabSelected: string = 'phuong-an-tong-hop';
   listNam: any[] = [];
   yearNow: number = 0;
@@ -95,7 +98,7 @@ export class TongHopComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      this.searchFilter.loaiVthh = this.loaiVthh;
+      this.searchFilter.loaiVthh = this.loaiVthhInput;
       await this.search();
       await this.loaiVTHHGetAll();
       this.spinner.hide();
@@ -135,7 +138,7 @@ export class TongHopComponent implements OnInit {
     };
     let res = null;
     if (this.tabSelected == 'phuong-an-tong-hop') {
-      res = await this.tongHopDeXuatKeHoachBanDauGiaService.search(body);
+      res = await this.tongHopDeXuatKeHoachBanDauGiaService.search(body);``
     } else if (this.tabSelected == 'danh-sach-tong-hop') {
       // Trạng thái đã tổng hợp
       res = await this.searchDanhSachDauThau(body, "05")
