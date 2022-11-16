@@ -173,6 +173,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     this.formData.patchValue({
       tenDvi: this.userInfo.TEN_DVI,
       maDvi: this.userInfo.MA_DVI,
+      maQhns: this.userInfo.DON_VI.maQhns,
       loaiBienBan: this.listBienBan[0].ma,
       soBienBan: `${id}/${this.formData.get('nam').value}/BBLM-CCDTVP`,
       tenNguoiTao: this.userInfo.sub
