@@ -30,7 +30,7 @@ export class DeXuatComponent implements OnInit {
   ) {
   }
   @Input()
-  loaiVthh: string;
+  loaiVthhInput: string;
   @Input()
   loaiVthhCache: string;
 
@@ -94,7 +94,7 @@ export class DeXuatComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      this.searchFilter.loaiVthh = this.loaiVthh;
+      this.searchFilter.loaiVthh = this.loaiVthhInput;
       this.initData()
       await this.search();
     } catch (e) {
@@ -224,7 +224,7 @@ export class DeXuatComponent implements OnInit {
       this.isVatTu = false;
     }
     this.selectedId = 0;
-    this.loaiVthh = this.loaiVthhCache;
+    this.loaiVthhInput = this.loaiVthhCache;
   }
 
   showList() {
@@ -235,7 +235,7 @@ export class DeXuatComponent implements OnInit {
   detail(data?: any, isView?: boolean) {
     this.selectedId = data.id;
     this.isDetail = true;
-    this.loaiVthh = data.loaiVthh;
+    this.loaiVthhInput = data.loaiVthh;
     this.isView = isView;
     // if (data.loaiVthh.startsWith('02')) {
     //   this.isVatTu = true;
