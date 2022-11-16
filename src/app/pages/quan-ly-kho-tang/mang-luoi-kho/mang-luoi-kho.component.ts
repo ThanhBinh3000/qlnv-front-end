@@ -20,6 +20,9 @@ import {NewDonViComponent} from "../../quan-tri-danh-muc/danh-muc-don-vi/new-don
 import {ThemMoiKhoComponent} from "./them-moi-kho/them-moi-kho.component";
 import {UserLogin} from "../../../models/userlogin";
 import {UserService} from "../../../services/user.service";
+import {
+  DialogThemMoiSoDuDauKyComponent
+} from "../../../components/dialog/dialog-them-moi-so-du-dau-ky/dialog-them-moi-so-du-dau-ky.component";
 
 
 
@@ -60,7 +63,8 @@ export class MangLuoiKhoComponent implements OnInit {
     private mangLuoiKhoService: MangLuoiKhoService,
     public globals: Globals,
     private userService: UserService,
-    private danhMucService: DanhMucService
+    private danhMucService: DanhMucService,
+    private modals: NzModalService
   ) {
     this.detailDonVi = this.formBuilder.group({
       id: [''],
@@ -161,7 +165,7 @@ export class MangLuoiKhoComponent implements OnInit {
       this.isEditData = true;
       this.nodeSelected = event.node.origin;
       this.levelNode = this.nodeSelected.capDvi;
-      this.getDetailMlkByKey(event.node)
+      // this.getDetailMlkByKey(event.node)
     }
   }
 
@@ -327,5 +331,25 @@ export class MangLuoiKhoComponent implements OnInit {
       }, null);
       return sum;
     }
+  }
+
+  themSoDuDauKy() {
+    const modalQD = this.modals.create({
+      nzTitle: 'KHỞI TẠO SỐ DƯ ĐẦU KỲ CHO NGĂN/LÔ KHO',
+      nzContent: DialogThemMoiSoDuDauKyComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzStyle: { top: '50px' },
+      nzComponentParams: {
+        detail : this.detailDonVi.value
+      },
+    });
+    modalQD.afterClose.subscribe((data) => {
+      if (data) {
+
+      }
+    });
   }
 }
