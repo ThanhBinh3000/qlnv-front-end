@@ -212,7 +212,6 @@ export class NewHangHoaComponent implements OnInit {
   nzClickNodeTree(event: any): void {
     if (event.keys.length > 0) {
       let detail = event.node.origin;
-      console.log(detail)
       if (detail.ma) {
         let dviTinh =  this.listDviTinh.filter(item => item.giaTri == detail.maDviTinh)
         this.formHangHoa.patchValue({
