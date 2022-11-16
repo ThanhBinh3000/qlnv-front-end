@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DIEU_CHINH_DU_TOAN } from './dieu-chinh-du-toan-chi-nsnn/dieu-chinh-du-toan-chi-nsnn.constant';
+
 import { DuToanNsnnComponent } from './du-toan-nsnn.component';
 import { GIAO_DU_TOAN } from './giao-du-toan-chi-nsnn/giao-du-toan-chi-nsnn.constant';
 
@@ -9,84 +9,6 @@ const routes: Routes = [
   {
     path: '',
     component: DuToanNsnnComponent,
-  },
-  /////////// DIEU CHINH DU TOAN CHI NSNN ROUTING
-  {
-    path: DIEU_CHINH_DU_TOAN + '/tim-kiem-dieu-chinh-du-toan-chi-NSNN',
-    loadChildren: () =>
-      import(
-        './dieu-chinh-du-toan-chi-nsnn/tim-kiem-dieu-chinh-du-toan-chi-NSNN/tim-kiem-dieu-chinh-du-toan-chi-NSNN.module'
-      ).then((m) => m.TimKiemDieuChinhDuToanChiNSNNModule),
-  },
-  {
-    path: DIEU_CHINH_DU_TOAN + '/ds-tong-hop-dieu-chinh-du-toan-chi',
-    loadChildren: () =>
-      import(
-        './dieu-chinh-du-toan-chi-nsnn/ds-tong-hop-dieu-chinh-du-toan-chi/ds-tong-hop-dieu-chinh-du-toan-chi.module'
-      ).then((m) => m.DsTongHopDieuChinhDuToanChiModule),
-  },
-  {
-    path: DIEU_CHINH_DU_TOAN + '/tong-hop-dieu-chinh-du-toan-chi-NSNN',
-    loadChildren: () =>
-      import(
-        './dieu-chinh-du-toan-chi-nsnn/tong-hop-dieu-chinh-du-toan-chi-NSNN/tong-hop-dieu-chinh-du-toan-chi-NSNN.module'
-      ).then((m) => m.TongHopDieuChinhDuToanChiNSNNModule),
-  },
-  {
-    path: DIEU_CHINH_DU_TOAN + '/giao-nhiem-vu',
-    loadChildren: () =>
-      import(
-        './dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/giao-nhiem-vu.module'
-      ).then((m) => m.GiaoNhiemVuModule),
-  },
-  {
-    path: DIEU_CHINH_DU_TOAN + '/giao-nhiem-vu/:id',
-    loadChildren: () =>
-      import(
-        './dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/giao-nhiem-vu.module'
-      ).then((m) => m.GiaoNhiemVuModule),
-  },
-  {
-    path: DIEU_CHINH_DU_TOAN + '/giao-nhiem-vu-/:id',
-    loadChildren: () =>
-      import(
-        './dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/giao-nhiem-vu.module'
-      ).then((m) => m.GiaoNhiemVuModule),
-  },
-  {
-    path: DIEU_CHINH_DU_TOAN + '/giao-nhiem-vu-/:dotBcao/:namHienHanh/:maDvi',
-    loadChildren: () =>
-      import(
-        './dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/giao-nhiem-vu.module'
-      ).then((m) => m.GiaoNhiemVuModule),
-  },
-  {
-    path: DIEU_CHINH_DU_TOAN + '/giao-nhiem-vu/0/:namHienHanh',
-    loadChildren: () =>
-      import(
-        './dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/giao-nhiem-vu.module'
-      ).then((m) => m.GiaoNhiemVuModule),
-  },
-  {
-    path: DIEU_CHINH_DU_TOAN + '/giao-nhiem-vu/:loai/:id',
-    loadChildren: () =>
-      import(
-        './dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/giao-nhiem-vu.module'
-      ).then((m) => m.GiaoNhiemVuModule),
-  },
-  {
-    path: DIEU_CHINH_DU_TOAN + '/phe-duyet-bao-cao-dieu-chinh',
-    loadChildren: () =>
-      import(
-        './dieu-chinh-du-toan-chi-nsnn/phe-duyet-bao-cao-dieu-chinh/phe-duyet-bao-cao-dieu-chinh.module'
-      ).then((m) => m.PheDuyetBaoCaoDieuChinhModule),
-  },
-  {
-    path: DIEU_CHINH_DU_TOAN + '/chi-tiet-giao-nhiem-vu/:loai/:id',
-    loadChildren: () =>
-      import(
-        './dieu-chinh-du-toan-chi-nsnn/giao-nhiem-vu/giao-nhiem-vu.module'
-      ).then((m) => m.GiaoNhiemVuModule),
   },
   // //////////////////////// GIAO DU TOAN CHI NSNN ////////////////////////////
   {

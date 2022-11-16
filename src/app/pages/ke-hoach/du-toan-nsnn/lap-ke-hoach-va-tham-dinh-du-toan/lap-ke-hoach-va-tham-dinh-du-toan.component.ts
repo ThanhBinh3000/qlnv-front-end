@@ -28,6 +28,7 @@ export class LapKeHoachVaThamDinhDuToanComponent implements OnInit {
                 }
             })
             item.status = check;
+            item.isSelected = false;
             if (!this.tabSelected && item.status) {
                 this.tabSelected = item.code;
                 item.isSelected = true;

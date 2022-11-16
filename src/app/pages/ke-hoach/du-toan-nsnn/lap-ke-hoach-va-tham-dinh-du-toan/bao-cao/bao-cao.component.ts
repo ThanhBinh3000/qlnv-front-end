@@ -11,6 +11,7 @@ import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -67,6 +68,7 @@ export class BaoCaoComponent implements OnInit {
     lstLapThamDinhs: ItemData[] = [];
     phuLucs: any[] = PHU_LUC;
     donVis: any[] = [];						//danh muc don vi con cua don vi dang nhap
+    childUnit: any[] = [];
     tabs: any[] = [];
     lstDviTrucThuoc: any[] = [];
     trangThais: any[] = TRANG_THAI_TIM_KIEM;
@@ -131,6 +133,7 @@ export class BaoCaoComponent implements OnInit {
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
         private lapThamDinhService: LapThamDinhService,
+        private danhMucService: DanhMucHDVService,
         private spinner: NgxSpinnerService,
         private datePipe: DatePipe,
         public userService: UserService,
@@ -163,7 +166,7 @@ export class BaoCaoComponent implements OnInit {
                 })
                 break;
             case 'submit':
-                await this.onSubmit('2', null).then(() => {
+                await this.submitReport().then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
@@ -209,6 +212,20 @@ export class BaoCaoComponent implements OnInit {
         this.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
 
+        await this.danhMucService.dMDviCon().toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    this.childUnit = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
+        //lay danh sach danh muc don vi
+        await this.getDviCon();
         this.getListUser();
         if (this.id) {
             await this.getDetailReport();
@@ -250,8 +267,6 @@ export class BaoCaoComponent implements OnInit {
             }
         }
 
-        //lay danh sach danh muc don vi
-        await this.getDviCon();
         this.getStatusButton();
         this.spinner.hide();
     }
@@ -305,7 +320,7 @@ export class BaoCaoComponent implements OnInit {
         }
 
         this.saveStatus = Utils.statusSave.includes(this.trangThaiBaoCao) && checkSave && this.isChild;
-        this.submitStatus = Utils.statusApprove.includes(this.trangThaiBaoCao) && checkSunmit && this.isChild;
+        this.submitStatus = Utils.statusApprove.includes(this.trangThaiBaoCao) && checkSunmit && this.isChild && !(!this.id);
         this.passStatus = Utils.statusDuyet.includes(this.trangThaiBaoCao) && checkPass && this.isChild;
         this.approveStatus = Utils.statusPheDuyet.includes(this.trangThaiBaoCao) && checkApprove && this.isChild;
         this.acceptStatus = Utils.statusTiepNhan.includes(this.trangThaiBaoCao) && checkAccept && this.isParent;
@@ -421,8 +436,7 @@ export class BaoCaoComponent implements OnInit {
     }
 
     getStatusAppendixName(id) {
-        const utils = new Utils();
-        return utils.getStatusAppendixName(id);
+        return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
     }
 
     // call chi tiet bao cao
@@ -440,7 +454,7 @@ export class BaoCaoComponent implements OnInit {
                     this.maBaoCao = data.data.maBcao;
                     this.maDviTao = data.data.maDvi;
                     this.isChild = this.userInfo.MA_DVI == this.maDviTao;
-                    this.isParent = this.donVis.findIndex(e => e.maDvi == this.maDviTao) != -1;
+                    this.isParent = this.childUnit.findIndex(e => e.maDvi == this.maDviTao) != -1;
                     this.namHienHanh = data.data.namHienHanh;
                     this.trangThaiBaoCao = data.data.trangThai;
                     this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
@@ -464,6 +478,21 @@ export class BaoCaoComponent implements OnInit {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
             }
         );
+    }
+
+    async submitReport() {
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn trình duyệt?<br/>(Trình duyệt trước khi lưu báo cáo có thể gây mất dữ liệu)',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 500,
+            nzOnOk: () => {
+                this.onSubmit(Utils.TT_BC_2, '')
+            },
+        });
     }
 
     // chuc nang check role
@@ -493,37 +522,31 @@ export class BaoCaoComponent implements OnInit {
                 return;
             }
         }
-        if (this.id) {
-            const requestGroupButtons = {
-                id: this.id,
-                maChucNang: mcn,
-                lyDoTuChoi: lyDoTuChoi,
-            };
-            this.spinner.show();
-            await this.lapThamDinhService.approveThamDinh(requestGroupButtons).toPromise().then(async (data) => {
-                if (data.statusCode == 0) {
-                    this.trangThaiBaoCao = mcn;
-                    this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
-                    this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
-                    this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-                    this.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
-                    this.getStatusButton();
-                    if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                    } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                    }
-                    this.tabs = [];
+        const requestGroupButtons = {
+            id: this.id,
+            maChucNang: mcn,
+            lyDoTuChoi: lyDoTuChoi,
+        };
+        await this.lapThamDinhService.approveThamDinh(requestGroupButtons).toPromise().then(async (data) => {
+            if (data.statusCode == 0) {
+                this.trangThaiBaoCao = mcn;
+                this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+                this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                this.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
+                this.getStatusButton();
+                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                 }
-            }, err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            });
-            this.spinner.hide();
-        } else {
-            this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING)
-        }
+                this.tabs = [];
+            } else {
+                this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
     }
 
     //show popup tu choi

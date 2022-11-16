@@ -16,7 +16,7 @@ import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/ba
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BAO_CAO_DOT, BCVP, divNumber, sumNumber, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { BAO_CAO_DOT, BCVP, divNumber, sumNumber, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { BAO_CAO_CHI_TIET_THUC_HIEN_PHI_NHAP_HANG_DTQG, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_CUU_TRO_VIEN_TRO, BAO_CAO_CHI_TIET_THUC_HIEN_PHI_XUAT_HANG_DTQG, KHAI_THAC_BAO_CAO_CHI_TIET_THUC_HIEN_PHI_BAO_QUAN_LAN_DAU_HANG_DTQG, LISTBIEUMAUDOT, LISTBIEUMAUNAM } from './bao-cao.constant';
 
@@ -92,6 +92,7 @@ export class BaoCaoComponent implements OnInit {
     listIdDelete: any = [];                     // list id delete
     nguoiBcaos: any[];
     donVis: any = [];                           // danh muc don vi
+    childUnit: any = [];
     lstFiles: any = [];                         // list File de day vao api
     luyKes: ItemData[] = [];
     luyKeDetail = [];
@@ -161,7 +162,7 @@ export class BaoCaoComponent implements OnInit {
                 })
                 break;
             case 'submit':
-                await this.onSubmit('2', null).then(() => {
+                await this.submitReport().then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
@@ -207,11 +208,25 @@ export class BaoCaoComponent implements OnInit {
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
 
+        await this.danhMucService.dMDviCon().toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    this.childUnit = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
+
         this.getListUser();
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
             this.baoCao.maDvi = this.userInfo?.MA_DVI;
+            await this.getDviCon();
             this.baoCaoThucHienVonPhiService.taoMaBaoCao().toPromise().then(
                 (data) => {
                     if (data.statusCode == 0) {
@@ -257,9 +272,6 @@ export class BaoCaoComponent implements OnInit {
         }
 
         this.getLuyKe();
-
-        //lay danh sach danh muc don vi
-        await this.getDviCon();
         this.getStatusButton();
         this.spinner.hide();
     }
@@ -317,7 +329,7 @@ export class BaoCaoComponent implements OnInit {
     getStatusButton() {
         const isSynthetic = this.baoCao.lstBcaoDviTrucThuocs.length != 0;
         const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-        const checkParent = this.donVis.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
+        const checkParent = this.childUnit.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
         //kiem tra quyen cua cac user
         const checkSave = isSynthetic ? this.userService.isAccessPermisson(BCVP.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.EDIT_REPORT);
         const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(BCVP.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCVP.APPROVE_REPORT);
@@ -334,7 +346,7 @@ export class BaoCaoComponent implements OnInit {
         }
 
         this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave && checkChirld;
-        this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && checkSunmit && checkChirld;
+        this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && checkSunmit && checkChirld && !(!this.baoCao.id);
         this.passStatus = Utils.statusDuyet.includes(this.baoCao.trangThai) && checkPass && checkChirld;
         this.approveStatus = Utils.statusPheDuyet.includes(this.baoCao.trangThai) && checkApprove && checkChirld;
         this.acceptStatus = Utils.statusTiepNhan.includes(this.baoCao.trangThai) && checkAccept && checkParent;
@@ -373,7 +385,7 @@ export class BaoCaoComponent implements OnInit {
     // lay ten trang thai ban ghi
     getStatusName(status: string) {
         const statusMoi = status == Utils.TT_BC_6 || status == Utils.TT_BC_7;
-        const isParent = this.donVis.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
+        const isParent = this.childUnit.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
         if (statusMoi && isParent) {
             return 'Mới';
         } else {
@@ -382,13 +394,12 @@ export class BaoCaoComponent implements OnInit {
     }
 
     getStatusAppendixName(id) {
-        const utils = new Utils();
-        return utils.getStatusAppendixName(id);
+        return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
     }
 
     // call chi tiet bao cao
     async getDetailReport() {
-        await this.baoCaoThucHienVonPhiService.baoCaoChiTiet(this.baoCao.id).toPromise().then(data => {
+        await this.baoCaoThucHienVonPhiService.baoCaoChiTiet(this.baoCao.id).toPromise().then(async data => {
             if (data.statusCode == 0) {
                 this.baoCao = data.data;
                 this.lstBieuMaus = this.baoCao.maLoaiBcao == BAO_CAO_DOT ? LISTBIEUMAUDOT : LISTBIEUMAUNAM;
@@ -403,6 +414,7 @@ export class BaoCaoComponent implements OnInit {
 
                 this.lstFiles = data.data.lstFiles;
                 this.listFile = [];
+                await this.getDviCon();
                 //this.maDonViTao = data.data.maDvi;
                 this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
                 this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
@@ -417,45 +429,56 @@ export class BaoCaoComponent implements OnInit {
         })
     }
 
+    async submitReport() {
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn trình duyệt?<br/>(Trình duyệt trước khi lưu báo cáo có thể gây mất dữ liệu)',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 500,
+            nzOnOk: () => {
+                this.onSubmit(Utils.TT_BC_2, '')
+            },
+        });
+    }
+
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
-        if (this.baoCao.id) {
-            if (!this.baoCao?.congVan?.fileUrl) {
-                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-                return;
-            }
-            const checkStatusReport = this.baoCao?.lstBcaos?.findIndex(item => item.trangThai != '5');
-            if (checkStatusReport != -1 && mcn == Utils.TT_BC_2) {
-                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WARNING_FINISH_INPUT);
-                return;
-            }
-            const requestGroupButtons = {
-                id: this.baoCao.id,
-                maChucNang: mcn,
-                lyDoTuChoi: lyDoTuChoi,
-            };
-            await this.baoCaoThucHienVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(async (data) => {
-                if (data.statusCode == 0) {
-                    this.baoCao.trangThai = mcn;
-                    this.baoCao.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
-                    this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
-                    this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-                    this.baoCao.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
-                    if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-                    } else {
-                        this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-                    }
-                    this.getStatusButton();
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            }, err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            });
-        } else {
-            this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
+        if (!this.baoCao?.congVan?.fileUrl) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+            return;
         }
+        const checkStatusReport = this.baoCao?.lstBcaos?.findIndex(item => item.trangThai != '5');
+        if (checkStatusReport != -1 && mcn == Utils.TT_BC_2) {
+            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WARNING_FINISH_INPUT);
+            return;
+        }
+        const requestGroupButtons = {
+            id: this.baoCao.id,
+            maChucNang: mcn,
+            lyDoTuChoi: lyDoTuChoi,
+        };
+        await this.baoCaoThucHienVonPhiService.approveBaoCao(requestGroupButtons).toPromise().then(async (data) => {
+            if (data.statusCode == 0) {
+                this.baoCao.trangThai = mcn;
+                this.baoCao.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
+                this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
+                this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                this.baoCao.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
+                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+                } else {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                }
+                this.getStatusButton();
+            } else {
+                this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
     }
 
     //show popup tu choi

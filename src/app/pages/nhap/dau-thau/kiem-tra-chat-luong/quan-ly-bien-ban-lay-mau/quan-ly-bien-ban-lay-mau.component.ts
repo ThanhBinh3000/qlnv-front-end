@@ -17,6 +17,8 @@ import { QuanLyBienBanLayMauService } from 'src/app/services/qlnv-hang/nhap-hang
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import { STATUS } from 'src/app/constants/status';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 
 @Component({
   selector: 'quan-ly-bien-ban-lay-mau',
@@ -72,7 +74,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     tenNganLo: '',
     tenTrangThai: '',
   };
-
+  STATUS = STATUS
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -83,6 +85,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public userService: UserService,
     public globals: Globals,
+    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService
   ) { }
 
   async ngOnInit() {
@@ -134,38 +137,37 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   }
 
   async search() {
-    this.spinner.show();
+    await this.spinner.show();
     let body = {
-      soQuyetDinhNhap: this.searchFilter.soQuyetDinhNhap ?? null,
-      soBienBan: this.searchFilter.soBienBan ?? null,
-      ngayLayMauTu: this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[0]).format('YYYY/MM/DD') : null,
-      ngayLayMauDen: this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[1]).format('YYYY/MM/DD') : null,
       "paggingReq": {
         "limit": this.pageSize,
-        "page": this.page -1
+        "page": this.page - 1
       },
+      trangThai: STATUS.BAN_HANH
     };
-    try {
-      let res = await this.bienBanLayMauService.search(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let data = res.data;
-        this.dataTable = data.content;
-        if (this.dataTable && this.dataTable.length > 0) {
-          this.dataTable.forEach((item) => {
-            item.checked = false;
-          });
-        }
-        this.dataTableAll = cloneDeep(this.dataTable);
-        this.totalRecord = data.totalElements;
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-    } catch (error) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
+    let res = await this.quyetDinhNhapXuatService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = data.content;
+      this.dataTable.forEach(item => {
+        if (this.userService.isChiCuc()) {
+          item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+        } else {
+          let data = [];
+          item.dtlList.forEach(item => {
+            data = [...data, ...item.listBienBanLayMau];
+          })
+          item.detail = {
+            listBienBanLayMau: data
+          }
+        };
+      });
+      this.dataTableAll = cloneDeep(this.dataTable);
+      this.totalRecord = data.totalElements;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
-
+    await this.spinner.hide();
   }
 
   async changePageIndex(event) {
@@ -221,7 +223,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.bienBanLayMauService.delete({id : item.id}).then((res) => {
+          this.bienBanLayMauService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -242,7 +244,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     });
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
@@ -437,4 +439,14 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       tenTrangThai: '',
     }
   }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
 }

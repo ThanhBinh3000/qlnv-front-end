@@ -277,6 +277,8 @@ export class BaoCaoComponent implements OnInit {
       this.namHienHanh = this.data?.namBcao;
       this.namBcao = this.data?.namBcao;
       this.dotBcao = this.data?.dotBcao;
+      this.lstDieuChinhs = this.data?.lstDieuChinhs ? this.data?.lstDieuChinhs : [];
+      this.lstDviTrucThuoc = this.data?.lstDviTrucThuoc ? this.data?.lstDviTrucThuoc : [];
       this.trangThaiBaoCao = "1";
       this.nguoiNhap = this.userInfo?.sub;
       this.maDviTao = this.userInfo?.MA_DVI;
@@ -733,8 +735,7 @@ export class BaoCaoComponent implements OnInit {
   };
 
   getStatusAppendixName(id) {
-    const utils = new Utils();
-    return utils.getStatusAppendixName(id);
+    return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
   }
 
 

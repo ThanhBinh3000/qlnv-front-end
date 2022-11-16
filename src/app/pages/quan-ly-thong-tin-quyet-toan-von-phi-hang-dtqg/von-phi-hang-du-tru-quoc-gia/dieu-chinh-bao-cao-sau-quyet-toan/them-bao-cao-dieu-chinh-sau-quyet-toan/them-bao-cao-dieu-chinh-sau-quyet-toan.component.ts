@@ -273,15 +273,10 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
             this.lstCtietBcao = data.data.lstCtiet;
             this.maDviTien = data.data.maDviTien;
             this.sortByIndex();
-            // this.lstCtietBcao.forEach(item => {
-            //   item.donGiaMua = divMoney(item.donGiaMua, this.maDviTien);
-            //   item.thanhTien = divMoney(item.thanhTien, this.maDviTien);
-            // })
             this.maDchinh = data.data.maBcao;
             this.thuyetMinh = data.data.thuyetMinh;
             this.congVan = data.data.congVan;
             this.lstFiles = data.data.fileDinhKems;
-            console.log(this.lstFiles)
             this.listFile = [];
             this.getTotal()
             this.updateEditCache();
@@ -507,6 +502,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
         item.id = null;
       }
     })
+
     //get list file url
     let checkFile = true;
     for (const iterator of this.listFile) {
@@ -523,9 +519,11 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
       listFile.push(await this.uploadFile(iterator));
     }
 
+
+
     const request = JSON.parse(JSON.stringify({
       id: this.idInput,
-      fileDinhKems: this.lstFiles,
+      fileDinhKems: listFile,
       listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstCtiet: lstCtietBcaoTemp,
       maDviTien: this.maDviTien,
@@ -557,8 +555,12 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
       return;
     }
 
-    console.log(request);
-
+    if (listFile.length > 0) {
+      this.lstFiles = this.lstFiles.filter(item => item.fileUrl !== undefined)
+      request.fileDinhKems = this.lstFiles.concat(listFile);
+    } else {
+      request.fileDinhKems = this.lstFiles;
+    }
 
     // call service them moi
     this.spinner.show();
@@ -1268,6 +1270,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
 
   //download file về máy tính
   async downloadFile(id: string) {
+    debugger
     const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
     if (!file) {
       const fileAttach = this.lstFiles.find(element => element?.id == id);

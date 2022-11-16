@@ -7,8 +7,7 @@
           <nz-form-label>Tên hàng hóa cấp trên</nz-form-label>
           <nz-form-control>
             <nz-input-group>
-              <nz-tree-select #treeSelect [nzNodes]="nodesTree" [nzDropdownMatchSelectWidth]="true"
-                              [nzDefaultExpandAll]="true"  nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn"
+              <nz-tree-select #treeSelect [nzNodes]="nodesTree" (nzTreeClick)="nzClickNodeTree($event)"  nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn"
                               formControlName="maCha">
               </nz-tree-select>
             </nz-input-group>
@@ -112,6 +111,15 @@
           <label    [ngModelOptions]="{standalone: true}" [(ngModel)]="item.checked"  nz-checkbox *ngFor="let item of listHtbq"  >  {{item.giaTri}}
           </label>
         </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+        <nz-form-item>
+          <nz-form-label>Phương pháp lấy mẫu</nz-form-label>
+          <label    [ngModelOptions]="{standalone: true}" [(ngModel)]="item.checked"  nz-checkbox *ngFor="let item of listPpLayMau"  >  {{item.giaTri}}
+          </label>
+        </nz-form-item>
+      </div>
+      <div nz-col nzXs="24" nzSm="24" nzMd="16" nzLg="16">
       </div>
       <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
         <nz-form-item>
