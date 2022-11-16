@@ -159,6 +159,7 @@ import { DialogThemChiCucComponent } from './dialog/dialog-them-chi-cuc/dialog-t
 import { DialogCanCuThongTinChaoGiaComponent } from './dialog/dialog-can-cu-thong-tin-chao-gia/dialog-can-cu-thong-tin-chao-gia.component';
 import { NzStatisticModule } from "ng-zorro-antd/statistic";
 import { NgxCurrencyModule } from 'ngx-currency';
+import { DialogThemDiaDiemPhanLoComponent } from './dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
 @NgModule({
   declarations: [
     //components
@@ -267,7 +268,8 @@ import { NgxCurrencyModule } from 'ngx-currency';
     DialogThemMoiKeHoachMuaTrucTiepComponent,
     DialogThemChiCucComponent,
     DialogCanCuThongTinChaoGiaComponent,
-    DialogDieuChinhQuyetDinhPheDuyetComponent
+    DialogDieuChinhQuyetDinhPheDuyetComponent,
+    DialogThemDiaDiemPhanLoComponent
   ],
   imports: [
     CommonModule,

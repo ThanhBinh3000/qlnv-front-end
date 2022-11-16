@@ -80,3 +80,32 @@ export class DiaDiemGiaoNhan {
     stt: number;
     tenChiCuc: string;
 }
+
+export class DanhSachPhanLo {
+    id: number;
+    maDvi: string;
+    tenDvi: string;
+    maDiemKho: string;
+    tenDiemKho: string;
+    maNganKho: string;
+    tenNganKho: string;
+    maLoKho: string;
+    tenLoKho: string;
+    loaiVthh: string;
+    tenLoaiVthh: string;
+    cloaiVthh: string;
+    tenCloaiVthh: string;
+    maDviTsan: string;
+    soLuong: number;
+    donViTinh: string;
+    giaKhongVat: number;
+    giaKhoiDiem: number;
+    tienDatTruoc: number;
+    idVirtual?: number;
+    isEdit: boolean;
+    children?: DanhSachPhanLo[];
+    level?: number;
+    expand?: boolean;
+    parent?: DanhSachPhanLo
+    diaDiemNhap: string
+}
