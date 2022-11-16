@@ -48,7 +48,7 @@
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="themMoi()"
-                    *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP') && loaiVthh != '02'">
+                    *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP') && loaiVthhInput != '02'">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Tổng hợp</span>
                 </button>
@@ -177,6 +177,6 @@
     </div>
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
-    <app-them-moi-tong-hop-ke-hoach-ban-dau-gia [id]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+    <app-them-moi-tong-hop-ke-hoach-ban-dau-gia [id]="selectedId" [loaiVthh]="loaiVthhInput" (showListEvent)="showList()">
     </app-them-moi-tong-hop-ke-hoach-ban-dau-gia>
 </div>
