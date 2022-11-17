@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit {
           }
           this.storageService.set(STORAGE_KEY.PERMISSION, jsonData);
         } else {
-          this.notification.error(MESSAGE.ERROR, res.error);
+          this.notification.error(MESSAGE.ERROR, res.msg);
         }
         this.router.navigate([this.setDefultModule(allRoles)]);
         this.spinner.hide();

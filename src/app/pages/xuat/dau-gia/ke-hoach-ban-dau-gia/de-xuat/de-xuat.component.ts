@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import dayjs from 'dayjs';
 import { PAGE_SIZE_DEFAULT, LIST_VAT_TU_HANG_HOA } from './../../../../../constants/config';
 import { UserLogin } from './../../../../../models/userlogin';
@@ -13,12 +13,28 @@ import { MESSAGE } from './../../../../../constants/message';
 import { saveAs } from 'file-saver';
 import { DANH_MUC_LEVEL } from './../../../../luu-kho/luu-kho.constant';
 import { deXuatKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBdg.service';
+import { FormGroup } from '@angular/forms';
+
 @Component({
   selector: 'app-de-xuat',
   templateUrl: './de-xuat.component.html',
   styleUrls: ['./de-xuat.component.scss']
 })
 export class DeXuatComponent implements OnInit {
+  @Input()
+  loaiVthh: string;
+  @Input()
+  loaiVthhCache: string;
+  @Input() idInput: number;
+  @Input() isView: boolean;
+  @Input() isDetail: boolean = true;
+  @Output()
+  showListEvent = new EventEmitter<any>();
+  @Input() id: number;
+  formData: FormGroup;
+  selectedId: any;
+  loaiVthhInput: any;
+
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
@@ -29,13 +45,6 @@ export class DeXuatComponent implements OnInit {
     public globals: Globals,
   ) {
   }
-  @Input()
-  loaiVthhInput: string;
-  @Input()
-  loaiVthhCache: string;
-
-
-  isDetail: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
   searchFilter = {
@@ -68,19 +77,14 @@ export class DeXuatComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-
   dsDonvi: any[] = [];
   userInfo: UserLogin;
   userdetail: any = {};
-
-  selectedId: number = 0;
-
   isVatTu: boolean = false;
-
   allChecked = false;
   indeterminate = false;
 
-  isView = false;
+
 
 
   async ngOnInit() {

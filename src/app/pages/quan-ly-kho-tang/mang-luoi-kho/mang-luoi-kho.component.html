@@ -49,6 +49,10 @@
                   <i class="fa fa-trash-o do"></i>
                   Xóa
                 </button>
+                <button nz-button class="btn btn-sub xanh-nhat" (click)="themSoDuDauKy()" *ngIf="isEditData">
+                  <i class="icon htvbdh_dau-cong"></i>
+                  Khởi tạo số dự đầu kỳ
+                </button>
                 <button nz-button class="btn btn-sub xanh-nhat" (click)="showEdit(false)" *ngIf="isEditData">
                   <i class="icon htvbdh_bosungfile"></i>
                   Sửa
