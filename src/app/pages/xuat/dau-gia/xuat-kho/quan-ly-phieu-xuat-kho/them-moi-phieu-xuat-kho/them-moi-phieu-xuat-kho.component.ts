@@ -14,7 +14,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuKiemNghiemChatLuongHangService } from 'src/app/services/quanLyPhieuKiemNghiemChatLuongHang.service';
+import { QuanLyPhieuKiemNghiemChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemNghiemChatLuongHang.service';
 import { QuanLyPhieuXuatKhoService } from 'src/app/services/quanLyPhieuXuatKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
@@ -203,8 +203,7 @@ export class ThemMoiPhieuXuatKhoComponent implements OnInit {
       "pageNumber": 1,
       "trangThai": null,
     };
-    let res = await this.phieuKiemNghiemChatLuongHangService.timKiem(body);
-
+    let res = await this.phieuKiemNghiemChatLuongHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS && res.data.content.length > 0) {
       this.listPhieuKiemTraChatLuong = res.data.content;
     } else {

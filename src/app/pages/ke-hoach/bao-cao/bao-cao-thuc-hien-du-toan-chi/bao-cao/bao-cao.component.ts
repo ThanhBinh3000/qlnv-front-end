@@ -90,6 +90,7 @@ export class BaoCaoComponent implements OnInit {
     listIdDelete: any = [];                     // list id delete
     nguoiBcaos: any[];
     donVis: any = [];                           // danh muc don vi
+    childUnit: any[] = [];
     lstFiles: any = [];                         // list File de day vao api
     luyKes: ItemData[] = [];
     luyKeDetail = [];
@@ -202,12 +203,26 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-        await this.getDviCon();
+
+        await this.danhMucService.dMDviCon().toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    this.childUnit = data.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
+
         this.getListUser();
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
             this.baoCao.maDvi = this.userInfo?.MA_DVI;
+            await this.getDviCon();
             this.baoCaoThucHienDuToanChiService.taoMaBaoCao().toPromise().then(
                 (data) => {
                     if (data.statusCode == 0) {
@@ -308,7 +323,7 @@ export class BaoCaoComponent implements OnInit {
     getStatusButton() {
         const isSynthetic = this.baoCao.lstBcaoDviTrucThuocs.length != 0;
         const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
-        const checkParent = this.donVis.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
+        const checkParent = this.childUnit.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
         //kiem tra quyen cua cac user
         const checkSave = isSynthetic ? this.userService.isAccessPermisson(BCDTC.EDIT_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.EDIT_REPORT);
         const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(BCDTC.APPROVE_SYNTHETIC_REPORT) : this.userService.isAccessPermisson(BCDTC.APPROVE_REPORT);
@@ -362,7 +377,7 @@ export class BaoCaoComponent implements OnInit {
     // lay ten trang thai ban ghi
     getStatusName(status: string) {
         const statusMoi = status == Utils.TT_BC_6 || status == Utils.TT_BC_7;
-        const isParent = this.donVis.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
+        const isParent = this.childUnit.findIndex(e => e.maDvi == this.baoCao.maDvi) != -1;
         if (statusMoi && isParent) {
             return 'Mới';
         } else {
@@ -377,7 +392,7 @@ export class BaoCaoComponent implements OnInit {
     // call chi tiet bao cao
     async getDetailReport() {
         await this.baoCaoThucHienDuToanChiService.baoCaoChiTiet(this.baoCao.id).toPromise().then(
-            (data) => {
+            async (data) => {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
                     this.baoCao?.lstBcaos?.forEach(item => {
@@ -388,6 +403,7 @@ export class BaoCaoComponent implements OnInit {
                             item.checked = false;
                         }
                     })
+                    await this.getDviCon();
                     this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
                     this.baoCao.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
                     this.baoCao.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);

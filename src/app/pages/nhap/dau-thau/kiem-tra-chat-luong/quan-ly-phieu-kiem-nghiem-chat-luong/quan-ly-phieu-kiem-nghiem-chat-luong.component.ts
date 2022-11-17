@@ -4,7 +4,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuKiemNghiemChatLuongHangService } from 'src/app/services/quanLyPhieuKiemNghiemChatLuongHang.service';
+import { QuanLyPhieuKiemNghiemChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemNghiemChatLuongHang.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -158,7 +158,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
       pageNumber: this.page,
       pageSize: this.pageSize,
     };
-    let res = await this.phieuKiemNghiemChatLuongHangService.timKiem(body);
+    let res = await this.phieuKiemNghiemChatLuongHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = [...data.content];
@@ -241,7 +241,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          const res = await this.phieuKiemNghiemChatLuongHangService.xoa(id);
+          const res = await this.phieuKiemNghiemChatLuongHangService.delete(id);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             this.search();
@@ -274,7 +274,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
           this.spinner.show();
           try {
             let res =
-              await this.phieuKiemNghiemChatLuongHangService.deleteMultiple({
+              await this.phieuKiemNghiemChatLuongHangService.deleteMuti({
                 ids: dataDelete,
               });
             if (res.msg == MESSAGE.SUCCESS) {
@@ -362,7 +362,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
           pageNumber: this.page,
           pageSize: this.pageSize,
         };
-        const blob = await this.phieuKiemNghiemChatLuongHangService.exportList(
+        const blob = await this.phieuKiemNghiemChatLuongHangService.export(
           body,
         );
         saveAs(blob, 'danh-sach-phieu-kiem-nghiem-chat-luong.xlsx');

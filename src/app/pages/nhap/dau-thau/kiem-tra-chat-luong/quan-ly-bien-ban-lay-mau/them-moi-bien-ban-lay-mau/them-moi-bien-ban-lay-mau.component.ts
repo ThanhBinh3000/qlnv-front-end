@@ -22,6 +22,7 @@ import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { HelperService } from 'src/app/services/helper.service';
+import { isEmpty } from 'lodash';
 
 @Component({
   selector: 'them-moi-bien-ban-lay-mau',
@@ -172,6 +173,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     this.formData.patchValue({
       tenDvi: this.userInfo.TEN_DVI,
       maDvi: this.userInfo.MA_DVI,
+      maQhns: this.userInfo.DON_VI.maQhns,
       loaiBienBan: this.listBienBan[0].ma,
       soBienBan: `${id}/${this.formData.get('nam').value}/BBLM-CCDTVP`,
       tenNguoiTao: this.userInfo.sub
@@ -442,7 +444,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     });
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
     if (dataChiCuc) {
-      this.listDiaDiemNhap = dataChiCuc.children;
+      this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
     }
     await this.spinner.hide();
   }

@@ -11,7 +11,6 @@ import { Globals } from "../../../../../../shared/globals";
 import { UserService } from "../../../../../../services/user.service";
 import { DonviService } from "../../../../../../services/donvi.service";
 import { TinhTrangKhoHienThoiService } from "../../../../../../services/tinhTrangKhoHienThoi.service";
-import { DanhMucTieuChuanService } from "../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
 import { HelperService } from "../../../../../../services/helper.service";
 import { STATUS } from "../../../../../../constants/status";
 import { MESSAGE } from "../../../../../../constants/message";
@@ -28,6 +27,7 @@ import { DialogThemDiaDiemNhapKhoComponent } from 'src/app/components/dialog/dia
 import { DatePipe } from "@angular/common";
 import { ThongBaoDauGiaTaiSanService } from 'src/app/services/thongBaoDauGiaTaiSan.service';
 import { DialogThemDiaDiemPhanLoComponent } from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 @Component({
   selector: 'app-them-de-xuat-ke-hoach-ban-dau-gia',
   templateUrl: './them-de-xuat-ke-hoach-ban-dau-gia.component.html',
