@@ -1,4 +1,3 @@
-import { DanhSachGoiThau } from '../../../models/DeXuatKeHoachuaChonNhaThau';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
@@ -11,17 +10,20 @@ import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienTh
 import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 import { HelperService } from 'src/app/services/helper.service';
 import { UserLogin } from 'src/app/models/userlogin';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { DxuatKhLcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
+import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
+import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
 
 @Component({
-  selector: 'dialog-dieu-chinh-quyet-dinh-phe-duyet-mtt',
-  templateUrl: './dialog-dieu-chinh-quyet-dinh-phe-duyet-mtt.component.html',
-  styleUrls: ['./dialog-dieu-chinh-quyet-dinh-phe-duyet-mtt.component.scss'],
+  selector: 'app-dialog-them-dia-diem-phan-lo',
+  templateUrl: './dialog-them-dia-diem-phan-lo.component.html',
+  styleUrls: ['./dialog-them-dia-diem-phan-lo.component.scss']
 })
-export class DialogDieuChinhQuyetDinhPheDuyetComponent implements OnInit {
+export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   formData: FormGroup;
-  thongtinDauThau: DanhSachGoiThau
+  thongtinPhanLo: DanhSachPhanLo;
   loaiVthh: any;
   dataChiTieu: any;
   dataEdit: any;
@@ -40,28 +42,38 @@ export class DialogDieuChinhQuyetDinhPheDuyetComponent implements OnInit {
     private donViService: DonviService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private helperService: HelperService,
-    private dxuatKhLcntService: DxuatKhLcntService,
+    private deXuatKhBanDauGiaService: DeXuatKhBanDauGiaService,
     private notification: NzNotificationService,
   ) {
     this.formData = this.fb.group({
       id: [null],
       maDvi: [null, [Validators.required]],
       tenDvi: [null],
-      goiThau: [null, [Validators.required]],
-      tenCcuc: [null],
-      donGia: [0, [Validators.required]],
-      soLuongDaMua: [null],
-      soLuongChiTieu: [null],
-      soLuong: [null, [Validators.required]],
-      thanhTien: [null],
-      bangChu: [null],
+      maDiemKho: [null],
+      tenDiemKho: [null],
+      maNganKho: [null],
+      tenNganKho: [null],
+      maLoKho: [null],
+      tenLoKho: [null],
+      loaiVthh: [null],
+      tenLoaiVthh: [null],
+      cloaiVthh: [null],
+      tenCloaiVthh: [null],
+      maDviTsan: [null],
+      soLuong: [null],
+      dviTinh: [null],
+      giaKhongVat: [null],
+      giaKhoiDiem: [null],
+      tienDatTruoc: [null],
       children: [null],
-      diaDiemNhap: [null]
+
     });
   }
 
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
+  listNganKho: any[] = [];
+  listLoKho: any[] = []
 
   ngOnInit(): void {
     this.initForm();
@@ -77,7 +89,7 @@ export class DialogDieuChinhQuyetDinhPheDuyetComponent implements OnInit {
       })
       this.formData.patchValue({
         children: this.listOfData,
-        diaDiemNhap: dataDiemNhap.substring(0, dataDiemNhap.length - 2)
+
       })
       this._modalRef.close(this.formData);
     }
@@ -89,7 +101,7 @@ export class DialogDieuChinhQuyetDinhPheDuyetComponent implements OnInit {
 
   initForm() {
     this.userInfo = this.userService.getUserLogin();
-    this.thongtinDauThau = new DanhSachGoiThau();
+    this.thongtinPhanLo = new DanhSachPhanLo();
     this.loadDonVi();
     if (this.dataEdit) {
       console.log(this.dataEdit);
@@ -101,8 +113,6 @@ export class DialogDieuChinhQuyetDinhPheDuyetComponent implements OnInit {
       this.formData.patchValue({
         maDvi: this.dataEdit.maDvi,
         tenDvi: this.dataEdit.tenDvi,
-        goiThau: this.dataEdit.goiThau,
-        tenCcuc: this.dataEdit.tenCcuc,
         soLuong: this.dataEdit.soLuong,
         donGia: this.dataEdit.donGia,
         thanhTien: this.dataEdit.thanhTien,
@@ -149,7 +159,7 @@ export class DialogDieuChinhQuyetDinhPheDuyetComponent implements OnInit {
       loaiVthh: this.loaiVthh,
       maDvi: event
     }
-    let soLuongDaLenKh = await this.dxuatKhLcntService.getSoLuongAdded(body);
+    let soLuongDaLenKh = await this.deXuatKhBanDauGiaService.search(body);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
     this.listDiemKho = [];
@@ -163,11 +173,11 @@ export class DialogDieuChinhQuyetDinhPheDuyetComponent implements OnInit {
         const item = {
           'value': res.data.child[i].maDiemkho,
           'text': res.data.child[i].tenDiemkho,
-          'diaDiemNhap': res.data.child[i].diaChi,
+
         };
         this.listDiemKho.push(item);
       };
-      this.thongtinDauThau = new DanhSachGoiThau();
+      this.thongtinPhanLo = new DanhSachPhanLo();
     }
   }
 
@@ -176,26 +186,40 @@ export class DialogDieuChinhQuyetDinhPheDuyetComponent implements OnInit {
       let diemKho = this.listDiemKho.filter(item => item.value == this.editCache[index].data.maDiemKho);
       if (diemKho.length > 0) {
         this.editCache[index].data.tenDiemKho = diemKho[0].text;
-        this.editCache[index].data.diaDiemNhap = diemKho[0].diaDiemNhap;
+
       }
     } else {
-      let diemKho = this.listDiemKho.filter(item => item.value == this.thongtinDauThau.maDiemKho);
+      let diemKho = this.listDiemKho.filter(item => item.value == this.thongtinPhanLo.maDiemKho);
       if (diemKho.length > 0) {
-        this.thongtinDauThau.tenDiemKho = diemKho[0].text;
-        this.thongtinDauThau.diaDiemNhap = diemKho[0].diaDiemNhap;
+        this.thongtinPhanLo.tenDiemKho = diemKho[0].text;
+      }
+    }
+  }
+
+  changeNganKho(index?) {
+    if (index >= 0) {
+      let nganKho = this.listNganKho.filter(item => item.value == this.editCache[index].data.maDiemKho);
+      if (nganKho.length > 0) {
+        this.editCache[index].data.tenNganKho = nganKho[0].text;
+
+      }
+    } else {
+      let nganKho = this.listNganKho.filter(item => item.value == this.thongtinPhanLo.maDiemKho);
+      if (nganKho.length > 0) {
+        this.thongtinPhanLo.tenDiemKho = nganKho[0].text;
       }
     }
   }
 
   addDiemKho() {
-    if (this.thongtinDauThau.maDiemKho && this.thongtinDauThau.soLuong && this.validateSoLuong(true)) {
-      this.thongtinDauThau.donGia = this.formData.get('donGia').value;
-      this.thongtinDauThau.goiThau = this.formData.get('goiThau').value;
-      this.thongtinDauThau.idVirtual = new Date().getTime();
-      this.thongtinDauThau.maDvi = this.formData.get('maDvi').value;
-      this.listOfData = [...this.listOfData, this.thongtinDauThau];
+    if (this.thongtinPhanLo.maDiemKho && this.thongtinPhanLo.soLuong && this.validateSoLuong(true)) {
+      // this.thongtinPhanLo.donGia = this.formData.get('donGia').value;
+      // this.thongtinPhanLo.goiThau = this.formData.get('goiThau').value;
+      this.thongtinPhanLo.idVirtual = new Date().getTime();
+      this.thongtinPhanLo.maDvi = this.formData.get('maDvi').value;
+      this.listOfData = [...this.listOfData, this.thongtinPhanLo];
       this.updateEditCache();
-      this.thongtinDauThau = new DanhSachGoiThau();
+      this.thongtinPhanLo = new DanhSachPhanLo();
       this.disableChiCuc();
       // this.filterData();
       this.checkDisabledSave();
@@ -207,7 +231,7 @@ export class DialogDieuChinhQuyetDinhPheDuyetComponent implements OnInit {
     const soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongDaMua
     let soLuong = 0
     if (isAdd) {
-      soLuong += this.thongtinDauThau.soLuong;
+      soLuong += this.thongtinPhanLo.soLuong;
     }
     this.listOfData.forEach(item => {
       soLuong += item.soLuong
