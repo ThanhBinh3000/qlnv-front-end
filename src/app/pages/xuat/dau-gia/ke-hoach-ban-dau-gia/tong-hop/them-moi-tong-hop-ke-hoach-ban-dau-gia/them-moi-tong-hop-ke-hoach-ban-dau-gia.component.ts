@@ -24,7 +24,9 @@ import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/componen
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from 'src/app/constants/status';
 import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
-import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
+import {
+  TongHopDeXuatKeHoachBanDauGiaService
+} from "../../../../../../services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service";
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
