@@ -174,6 +174,22 @@ export class NewHangHoaComponent implements OnInit {
         loaiHh = 'M';
         break;
       }
+      case "M": {
+        loaiHh = '4';
+        break;
+      }
+      case "VTCN" : {
+        loaiHh = '3'
+        break;
+      }
+      case "VT": {
+        loaiHh = '2';
+        break;
+      }
+      case "LT" : {
+        loaiHh = '1';
+        break;
+      }
     }
     return loaiHh;
   }
@@ -186,6 +202,7 @@ export class NewHangHoaComponent implements OnInit {
     let dviTinh =  this.listDviTinh.filter(item => item.ma == this.formHangHoa.value.maDviTinh)
     let body = this.formHangHoa.value;
     body.maDviTinh = dviTinh[0].giaTri
+    body.ma = this.formHangHoa.value.maCha + this.formHangHoa.value.ma
     body.trangThai = this.formHangHoa.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
     body.loaiHinhBq = this.listLhbq.filter(item => item.checked === true)
     body.phuongPhapBq = this.listPpbq.filter(item => item.checked === true)
@@ -215,9 +232,9 @@ export class NewHangHoaComponent implements OnInit {
       if (detail.ma) {
         let dviTinh =  this.listDviTinh.filter(item => item.giaTri == detail.maDviTinh)
         this.formHangHoa.patchValue({
-          maDviTinh : dviTinh[0].ma,
+          maDviTinh : dviTinh && dviTinh[0] ? dviTinh[0].ma : null,
           dviQly : detail.dviQly,
-          loaiHang : detail.loaiHang
+          loaiHang : this.convertLoaiHh(detail.loaiHang)
         })
       }
     }
