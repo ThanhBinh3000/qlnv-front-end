@@ -26,9 +26,6 @@ export class DialogThongTinCanBoComponent implements OnInit {
   optionsDonVi: any[] = [];
   options: any[] = [];
 
-
-  submited: boolean = false;
-
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -46,7 +43,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
       fullName: [null, [Validators.required, Validators.minLength(8), Validators.maxLength(50)]],
       email: [null, [Validators.required, Validators.email]],
       username: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(16)]],
-      password: [null, [Validators.minLength(8), Validators.maxLength(20)]],
+      password: [null],
       position: [null, [Validators.required]],
       phoneNo: [null, [Validators.required,]],
       status: ['01', [Validators.required]],
@@ -124,6 +121,18 @@ export class DialogThongTinCanBoComponent implements OnInit {
 
   async save() {
     this.spinner.show();
+    if(!this.dataEdit){
+      if(!this.formData.value.password){
+        this.notification.error(MESSAGE.ERROR, "Mật khẩu không được để trống");
+        this.spinner.hide();
+        return;
+      }
+      if(this.formData.value.password.length < 8 || this.formData.value.password.length >20 ){
+        this.notification.error(MESSAGE.ERROR, "Mật khẩu phải từ 8 đến 20 ký tự");
+        this.spinner.hide();
+        return;
+      }
+    }
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
@@ -163,23 +172,24 @@ export class DialogThongTinCanBoComponent implements OnInit {
   }
 
   async bindingData(dataDt) {
-    // console.log(dataEdit);
-    let res = await this.qlNSDService.getDetail(dataDt.id);
-    const dataEdit = res.data;
-    if (dataEdit) {
-      this.formData.patchValue({
-        id: dataEdit.id,
-        fullName: dataEdit.fullName,
-        email: dataEdit.email,
-        username: dataEdit.username,
-        password: dataEdit.password,
-        position: dataEdit.position,
-        phoneNo: dataEdit.phoneNo,
-        status: dataEdit.status,
-        sysType: dataEdit.sysType,
-        dvql: dataEdit.dvql,
-        ghiChu: dataEdit.ghiChu
-      })
+    if(dataDt){
+      let res = await this.qlNSDService.getDetail(dataDt.id);
+      const dataEdit = res.data;
+      if (dataEdit) {
+        this.formData.patchValue({
+          id: dataEdit.id,
+          fullName: dataEdit.fullName,
+          email: dataEdit.email,
+          username: dataEdit.username,
+          password: dataEdit.password,
+          position: dataEdit.position,
+          phoneNo: dataEdit.phoneNo,
+          status: dataEdit.status,
+          sysType: dataEdit.sysType,
+          dvql: dataEdit.dvql,
+          ghiChu: dataEdit.ghiChu
+        })
+      }
     }
     this.laytatcadonvi();
   }
