@@ -38,7 +38,7 @@
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> SL đã lên Kh xuất bán </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                    <nz-input-number [nzDisabled]="true" formControlName="soLuongDaMua" [nzMin]="1"
+                    <nz-input-number [nzDisabled]="true" formControlName="soLuongKh" [nzMin]="1"
                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
@@ -53,6 +53,7 @@
     <thead>
         <tr>
             <th width="200px" class="text-center">Điểm kho</th>
+            <th width="120px" class="text-center">Nhà kho</th>
             <th width="120px" class="text-center">Ngăn kho</th>
             <th width="120px" class="text-center">Lô Kho</th>
             <th width="120px" class="text-center">Chủng loại hành hóa</th>
@@ -72,12 +73,17 @@
                 </nz-select>
             </td>
             <td>
+                <nz-select [(ngModel)]="thongtinPhanLo.maDiemKho" (ngModelChange)="changeDiemKho()">
+                    <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                </nz-select>
+            </td>
+            <td>
                 <nz-select [(ngModel)]="thongtinPhanLo.maNganKho" (ngModelChange)="changeNganKho()">
                     <nz-option *ngFor="let p of listNganKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
             </td>
             <td>
-                <nz-select [(ngModel)]="thongtinPhanLo.tenLoKho" (ngModelChange)="changeDiemKho()">
+                <nz-select [(ngModel)]="thongtinPhanLo.maLoKho" (ngModelChange)="changeDiemKho()">
                     <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
             </td>
@@ -112,7 +118,7 @@
         <tr *ngFor="let data of editRowTable.data, let i = index" class="editable-row">
             <ng-container *ngIf="!data.edit; else editTemplate">
                 <td>{{ data.tenDiemKho }}</td>
-
+                <td>{{ data.tenNganKho }}</td>
                 <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-center">
                     <a (click)="startEdit(i)">
