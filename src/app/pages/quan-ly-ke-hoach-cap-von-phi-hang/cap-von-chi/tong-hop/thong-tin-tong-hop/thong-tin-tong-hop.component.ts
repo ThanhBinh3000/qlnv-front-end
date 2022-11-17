@@ -109,12 +109,11 @@ export class ThongTinTonghopComponent implements OnInit {
       });
     }
     this.initForm();
-    await this.loadListNguonTongHop();
+    // await this.loadListNguonTongHop();
     if (this.idInput) {
       this.loadChiTiet(this.idInput);
     }
     this.spinner.hide();
-    console.log(this.formData.value.ngayTongHop);
   }
 
   initForm() {
@@ -139,12 +138,14 @@ export class ThongTinTonghopComponent implements OnInit {
   }
 
   async loadChiTiet(id: number) {
+    this.spinner.show();
     if (id > 0) {
       let res = await this.tongHopDeNghiCapVonService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
         this.isTonghop = true
         let data = res.data
         if (data) {
+          console.log(data);
           this.detail = res.data;
           this.detail.trangThai = data.trangThai;
           this.detail.tenTrangThai = data.tenTrangThai;
@@ -159,7 +160,7 @@ export class ThongTinTonghopComponent implements OnInit {
             nameFilePhuongAn: data.fileDinhKem.fileName
           });
           this.listFileDinhKem = [data.fileDinhKem];
-          this.listThongTinChiTiet = [...data.cts];
+          this.listThongTinChiTiet = [...data.ct1s];
           this.detail.tCThem = [...data.ct1s]
           // this.detail.tCThem.forEach(dt => {
           //   dt.tcCapThem = dt.ycCapThem;
@@ -177,16 +178,29 @@ export class ThongTinTonghopComponent implements OnInit {
         }
       }
     }
+    this.spinner.hide();
   }
 
   async save(isOther?: boolean) {
     // chờ API và body request
     let phuongAnList = [];
     this.detail.tCThem.forEach(pa => {
-      const phuongAn = new Ct1sTonghop();
-      phuongAn.khDnCapVonId = pa.id;
-      phuongAn.tcCapThem = +pa.tcCapThem;
-      phuongAnList = [...phuongAnList, phuongAn];
+      if(!pa.isSum){
+        const phuongAn = new Ct1sTonghop();
+        phuongAn.khDnCapVonId = pa.id;
+        phuongAn.tcCapThem = +pa.tcCapThem;
+        phuongAn.loaiBn = pa.loaiBn;
+        phuongAn.loaiHang = pa.loaiHang;
+        phuongAn.maBn = pa.maBn;
+        phuongAn.tongTien = pa.tongTien;
+        phuongAn.kinhPhiDaCap = pa.kinhPhiDaCap;
+        phuongAn.nam = pa.nam;
+        phuongAn.ycCapThem = pa.ycCapThem;
+        phuongAn.tenBoNganh = pa.tenBoNganh;
+        phuongAn.soDeNghi = pa.soDeNghi;
+        phuongAn.ngayDeNghi = pa.ngayDeNghi;
+        phuongAnList = [...phuongAnList, phuongAn];
+      }
     });
     let body = {
       id: this.detail.id,
@@ -345,8 +359,6 @@ export class ThongTinTonghopComponent implements OnInit {
             lyDoTuChoi: null,
             trangThai: this.globals.prop.NHAP_DA_DUYET_LD_VU,
           };
-          console.log(body);
-
           let res = await this.tongHopDeNghiCapVonService.updateStatus(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -568,6 +580,7 @@ export class ThongTinTonghopComponent implements OnInit {
           maBoNganh: null,
           nam: this.yearNow,
           trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+          type: 'TH',
           trangThaiTh: STATUS.CHUA_TONG_HOP,
           ngayDeNghiTuNgay: null,
           ngayDeNghiDenNgay: null,

@@ -86,7 +86,7 @@ export const LIST_PAGES: RouteInfo[] = [
   {
     title: 'Quản lý kho tàng',
     route: MAIN_ROUTES.quanLyKhoTang,
-    code: ''
+    code: 'QLKT'
   },
   {
     title: 'Khai thác báo cáo',
