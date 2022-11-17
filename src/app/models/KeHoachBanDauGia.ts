@@ -101,11 +101,12 @@ export class DanhSachPhanLo {
     giaKhongVat: number;
     giaKhoiDiem: number;
     tienDatTruoc: number;
+    soLuongChiTieu: number;
+    soLuongKh: number;
     idVirtual?: number;
     isEdit: boolean;
     children?: DanhSachPhanLo[];
     level?: number;
     expand?: boolean;
-    parent?: DanhSachPhanLo
-    diaDiemNhap: string
+    parent?: DanhSachPhanLo;
 }

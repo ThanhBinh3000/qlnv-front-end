@@ -32,8 +32,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   selectedChiCuc: boolean = false;
   isValid: boolean = false;
   userInfo: UserLogin;
-  donGia: number = 0;
-
+  giaKhongVat: number = 0
   constructor(
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
@@ -65,6 +64,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       giaKhongVat: [null],
       giaKhoiDiem: [null],
       tienDatTruoc: [null],
+      soLuongChiTieu: [null],
+      soLuongKh: [null],
       children: [null],
 
     });
@@ -114,14 +115,14 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         maDvi: this.dataEdit.maDvi,
         tenDvi: this.dataEdit.tenDvi,
         soLuong: this.dataEdit.soLuong,
-        donGia: this.dataEdit.donGia,
+        giaKhongVat: this.dataEdit.giaKhongVat,
         thanhTien: this.dataEdit.thanhTien,
       })
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
     } else {
       this.formData.patchValue({
-        donGia: this.donGia,
+        giaKhongVat: this.giaKhongVat,
       })
     }
     this.checkDisabledSave();
@@ -155,7 +156,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
   async changeChiCuc(event) {
     let body = {
-      year: 2022,
+      namKh: 2022,
       loaiVthh: this.loaiVthh,
       maDvi: event
     }
@@ -166,9 +167,10 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
         tenDvi: res.data.tenTongKho,
-        soLuongDaMua: soLuongDaLenKh.data,
+        soLuongKh: soLuongDaLenKh.data,
         soLuongChiTieu: chiCuc.soLuongNhap
       })
+      console.log(res, 2222)
       for (let i = 0; i < res.data?.child.length; i++) {
         const item = {
           'value': res.data.child[i].maDiemkho,
@@ -198,15 +200,15 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
   changeNganKho(index?) {
     if (index >= 0) {
-      let nganKho = this.listNganKho.filter(item => item.value == this.editCache[index].data.maDiemKho);
+      let nganKho = this.listNganKho.filter(item => item.value == this.editCache[index].data.maNganKho);
       if (nganKho.length > 0) {
         this.editCache[index].data.tenNganKho = nganKho[0].text;
 
       }
     } else {
-      let nganKho = this.listNganKho.filter(item => item.value == this.thongtinPhanLo.maDiemKho);
+      let nganKho = this.listNganKho.filter(item => item.value == this.thongtinPhanLo.maNganKho);
       if (nganKho.length > 0) {
-        this.thongtinPhanLo.tenDiemKho = nganKho[0].text;
+        this.thongtinPhanLo.tenNganKho = nganKho[0].text;
       }
     }
   }
@@ -228,7 +230,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   validateSoLuong(isAdd?) {
-    const soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongDaMua
+    const soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKh
     let soLuong = 0
     if (isAdd) {
       soLuong += this.thongtinPhanLo.soLuong;
@@ -252,7 +254,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.formData.patchValue({
       thanhTien:
         +this.formData.get('soLuong').value *
-        +this.formData.get('donGia').value * 1000,
+        +this.formData.get('giaKhongVat').value * 1000,
     });
     this.formData.patchValue({
       bangChu: VNnum2words(+this.formData.get('thanhTien').value),
