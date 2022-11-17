@@ -12,7 +12,6 @@ import * as uuid from "uuid";
 @Component({
   selector: 'app-dialog-tao-moi',
   templateUrl: './dialog-tao-moi.component.html',
-  styleUrls: ['./dialog-tao-moi.component.css']
 })
 
 export class DialogTaoMoiComponent implements OnInit {
@@ -79,6 +78,10 @@ export class DialogTaoMoiComponent implements OnInit {
     }
     if (!this.response.namBcao) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+      return;
+    }
+    if (this.response.namBcao < 999 && this.response.namBcao > 3000) {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
     this._modalRef.close(this.response);

@@ -48,7 +48,7 @@
       <div class="header mg-t-16">
         <div class="header-text">
           <div class="title-chi-tieu">
-            <span [ngClass]="statusClass()">{{titleStatus}}</span>
+            <span [ngClass]="statusClass()">{{getStatusName(isStatus)}}</span>
             <span>Báo cáo quyết toán vốn, phí hàng dự trữ quốc gia</span>
           </div>
         </div>
@@ -319,10 +319,12 @@
             <i class="fa fa-trash-o do"></i>
             <span>Xóa</span>
           </button>
-          <button type="button" class="btn btn-sub xanh" (click)="addLine(lstCtietBcao.length)" [hidden]="status">
-            <i class="icon htvbdh_dau-cong xanh"></i>
-            <span>Thêm</span>
-          </button>
+          <ng-container *ngIf="lstCtietBcao.length == 0">
+            <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
+              <i class="icon htvbdh_dau-cong"></i>
+              <span>Thêm</span>
+            </button>
+          </ng-container>
         </div>
       </ng-template>
     </div>
