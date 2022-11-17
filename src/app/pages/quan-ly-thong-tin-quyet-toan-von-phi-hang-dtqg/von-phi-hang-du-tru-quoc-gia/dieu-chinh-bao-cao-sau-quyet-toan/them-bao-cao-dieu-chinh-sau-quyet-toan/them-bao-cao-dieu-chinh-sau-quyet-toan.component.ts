@@ -903,6 +903,9 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
   };
   //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
   replaceIndex(lstIndex: number[], heSo: number) {
+    if (heSo == -1) {
+      lstIndex.reverse();
+    }
     //thay doi lai stt cac vi tri vua tim duoc
     lstIndex.forEach(item => {
       const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
@@ -911,7 +914,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
         item.stt = item.stt.replace(nho, str);
       })
     })
-  };
+  }
   //thêm ngang cấp
   addSame(id: any, initItem: ItemData) {
     const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
@@ -1266,7 +1269,11 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
     this.lstFiles = this.lstFiles.filter((a: any) => a.id !== id);
     this.listFile = this.listFile.filter((a: any) => a?.lastModified.toString() !== id);
     this.listIdFilesDelete.push(id);
-  }
+  };
+
+  getStatusName(status: string) {
+    return this.trangThais.find(e => e.id == status)?.tenDm;
+  };
 
   //download file về máy tính
   async downloadFile(id: string) {
@@ -1288,5 +1295,5 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
       const blob = new Blob([file], { type: "application/octet-stream" });
       fileSaver.saveAs(blob, file.name);
     }
-  }
+  };
 };
