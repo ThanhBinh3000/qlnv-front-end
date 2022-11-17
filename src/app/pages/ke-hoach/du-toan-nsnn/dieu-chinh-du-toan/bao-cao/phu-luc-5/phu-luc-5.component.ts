@@ -67,7 +67,6 @@ export class PhuLuc5Component implements OnInit {
 
   async initialization() {
     this.spinner.show();
-    console.log(this.data);
     this.maDviTao = this.data?.maDviTao;
     this.maBaoCao = this.data?.maBaoCao;
     this.id = this.data?.id;
@@ -216,7 +215,6 @@ export class PhuLuc5Component implements OnInit {
       fileData: listFilePl5,
       listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
     };
-    console.log(listFilePl5);
 
 
     await this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(

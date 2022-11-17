@@ -269,8 +269,8 @@ export class BaoCaoComponent implements OnInit {
     this.spinner.show();
     this.id = this.data?.id;
     this.userInfo = this.userService.getUserLogin();
-
     await this.getListUser();
+    await this.getDviCon();
     if (this.id) {
       await this.getDetailReport();
     } else {
@@ -311,7 +311,7 @@ export class BaoCaoComponent implements OnInit {
         })
       }
     }
-    await this.getDviCon();
+
     this.getStatusButton();
     this.changeNam();
     this.changeDot();
@@ -412,6 +412,7 @@ export class BaoCaoComponent implements OnInit {
     this.submitStatus = Utils.statusApprove.includes(this.trangThaiBaoCao) && checkSunmit && checkChirld;
     this.passStatus = Utils.statusDuyet.includes(this.trangThaiBaoCao) && checkPass && checkChirld;
     this.approveStatus = Utils.statusPheDuyet.includes(this.trangThaiBaoCao) && checkApprove && checkChirld;
+    debugger
     this.acceptStatus = Utils.statusTiepNhan.includes(this.trangThaiBaoCao) && checkAccept && this.checkParent;
     this.copyStatus = Utils.statusCopy.includes(this.trangThaiBaoCao) && checkCopy && checkChirld;
     this.printStatus = Utils.statusPrint.includes(this.trangThaiBaoCao) && checkPrint && checkChirld;
@@ -564,7 +565,7 @@ export class BaoCaoComponent implements OnInit {
 
     const request = JSON.parse(JSON.stringify({
       id: this.id,
-      fileDinhKems: this.lstFiles,
+      fileDinhKems: listFile,
       listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstDchinh: this.lstDieuChinhs,
       maBcao: this.maBaoCao,
