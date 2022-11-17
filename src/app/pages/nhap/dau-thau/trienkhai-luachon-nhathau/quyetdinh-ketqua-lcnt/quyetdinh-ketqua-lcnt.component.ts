@@ -129,7 +129,7 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       loaiVthh: this.searchFilter.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
     };
     let res = await this.quyetDinhPheDuyetKetQuaLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
