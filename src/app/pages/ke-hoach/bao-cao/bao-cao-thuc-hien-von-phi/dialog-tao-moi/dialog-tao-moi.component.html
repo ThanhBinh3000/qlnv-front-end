@@ -2,9 +2,14 @@
     <div class="search__body" nz-row [nzGutter]="[18, 12]">
         <div nz-col nzSpan="6">
             <label class="search__label">Năm báo cáo</label>
-            <nz-input-number nzSize="small" [(ngModel)]="response.namBcao"
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn năm báo cáo" [(ngModel)]="response.namBcao"
+                [class]="response.namBcao ?'' : 'input-error-validate'">
+                <nz-option *ngFor="let item of lstNam" [nzValue]="item" [nzLabel]="item">
+                </nz-option>
+            </nz-select>
+            <!-- <nz-input-number nzSize="small" [(ngModel)]="response.namBcao"
                 [class]="response.namBcao && (response.namBcao > 999 && response.namBcao < 3000) ? '' : 'input-error-validate'">
-            </nz-input-number>
+            </nz-input-number> -->
         </div>
         <div nz-col nzSpan="6">
             <label class="search__label">Loại báo cáo</label>

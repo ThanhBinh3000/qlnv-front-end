@@ -49,6 +49,7 @@ export class DeNghiTheoDonGiaMuaComponent implements OnInit {
     //thong tin chung bao cao
     id: string;
     maDeNghi: string;
+    namDn: number;
     qdChiTieu: string;
     canCuGia: string = Utils.QD_DON_GIA;
     loaiDn: string;
@@ -203,6 +204,7 @@ export class DeNghiTheoDonGiaMuaComponent implements OnInit {
             this.maDviTien = '1';
             this.qdChiTieu = this.data?.qdChiTieu;
             this.loaiDn = this.data?.loaiDn;
+            this.namDn = this.data?.namDn;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
 
             this.capVonNguonChiService.maDeNghi().toPromise().then(
@@ -364,6 +366,7 @@ export class DeNghiTheoDonGiaMuaComponent implements OnInit {
                     this.updateEditCache();
                     this.maDviTao = data.data.maDvi;
                     this.maDeNghi = data.data.maDnghi;
+                    this.namDn = data.data.namDn;
                     this.qdChiTieu = data.data.soQdChiTieu;
                     this.canCuGia = data.data.canCuVeGia;
                     this.loaiDn = data.data.loaiDnghi;
@@ -518,6 +521,7 @@ export class DeNghiTheoDonGiaMuaComponent implements OnInit {
             dnghiCapvonCtiets: lstCtietBcaoTemp,
             congVan: this.congVan,
             maDvi: this.maDviTao,
+            namDn: this.namDn,
             maDnghi: this.maDeNghi,
             loaiDnghi: this.loaiDn,
             canCuVeGia: this.canCuGia,
@@ -766,6 +770,7 @@ export class DeNghiTheoDonGiaMuaComponent implements OnInit {
             congVan: null,
             maDvi: this.maDviTao,
             maDnghi: maDeNghiNew,
+            namDn: this.namDn,
             loaiDnghi: this.loaiDn,
             canCuVeGia: this.canCuGia,
             maDviTien: '1',
