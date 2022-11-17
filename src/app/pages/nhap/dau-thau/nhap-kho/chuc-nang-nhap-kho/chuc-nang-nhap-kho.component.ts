@@ -9,11 +9,13 @@ import { Globals } from 'src/app/shared/globals';
 export class ChucNangNhapKhoComponent implements OnInit {
   @Input() typeVthh: string;
 
-  constructor(public userService: UserService, public globals: Globals) {}
+  constructor(public userService: UserService, public globals: Globals) { }
+  tabSelected: number
+  ngOnInit(
+  ) {
+    this.tabSelected = this.typeVthh == '02' ? 0 : 2
+  }
 
-  ngOnInit() {}
-
-  tabSelected = 0;
   selectTab(tab) {
     this.tabSelected = tab;
   }

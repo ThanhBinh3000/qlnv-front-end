@@ -1,0 +1,140 @@
+<form nz-form nzLayout="vertical" [formGroup]="formData">
+  <div nz-row [nzGutter]="24">
+    <div nz-col [nzSpan]="12">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Mã lô kho </nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group>
+            <input nz-input [readonly]="true" formControlName="maNganLo" >
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>Tên lô kho</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input formControlName="tenNganLo" [readonly]="true"/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>Tích lượng đã sử dụng (tấn kho) - LT</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input formControlName="tichLuongDaSdLt"/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>Tích lượng đã sử dụng (tấn kho) - VT</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input formControlName="tichLuongDaSdVt"/>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>Thể tích đã sử dụng - LT</nz-form-label>
+          <nz-form-control>
+            <nz-input-group [nzAddOnAfter]="m3">
+              <input nz-input formControlName="theTichDaSdLt">
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="12">
+        <nz-form-item>
+          <nz-form-label nzRequired>Thể tích đã sử dụng - VT</nz-form-label>
+          <nz-form-control>
+            <nz-input-group  [nzAddOnAfter]="m3">
+              <input  formControlName="theTichDaSdVt" nz-input>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired>Loại hàng hóa</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="loaiVthh">
+              <nz-option></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired>Chủng loại hàng hóa</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="cloaiVthh">
+              <nz-option></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired>Số lượng (tồn kho)</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input formControlName="soLuongTonKho">
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired>Đơn vị tính</nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input nz-input  formControlName="donViTinh"     [readonly]="true">
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    <div nz-col [nzSpan]="6">
+      <nz-form-item>
+        <nz-form-label nzRequired>Thời điểm nhập kho</nz-form-label>
+        <nz-form-control>
+          <nz-date-picker formControlName="ngayNhapKho"></nz-date-picker>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+      <div nz-col [nzSpan]="6">
+        <nz-form-item>
+          <nz-form-label nzRequired>Ngày nhập đầy cuối cùng</nz-form-label>
+          <nz-form-control>
+            <nz-date-picker formControlName="ngayNhapCuoi"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    <ng-template #error let-control>
+      <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+      </ng-container>
+    </ng-template>
+    </div>
+</form>
+    <div class="modal-footer">
+      <div class="nut">
+        <div class="cantrai">
+        </div>
+        <div class="canphai">
+          <button nz-button (click)="handleCancel()" class="modal__button--cancel">
+            <i nz-icon nzType="close"></i>
+            Đóng
+          </button>
+          <button nz-button (click)="save()" class="modal__button--save">
+            <i nz-icon nzType="save"></i>
+            Lưu
+          </button>
+        </div>
+      </div>
+    </div>

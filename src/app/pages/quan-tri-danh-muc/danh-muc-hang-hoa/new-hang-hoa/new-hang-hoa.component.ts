@@ -35,6 +35,7 @@ export class NewHangHoaComponent implements OnInit {
   listLoaiHang: any[] = [];
   listDviQly : any[] = [];
    listDviTinh: any[] = [];
+   listPpLayMau: any[] = [];
   constructor(
     private fb: FormBuilder,
     private notification: NzNotificationService,
@@ -61,12 +62,13 @@ export class NewHangHoaComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     await Promise.all([
-      this.loadListLhBq(),
-      this.loadListPpbq(),
-      this.loadListHtbq(),
       this.loadListLoaiHang(),
       this.loadListDviQly(),
       this.loadDviTinh(),
+      this.loadListLhBq(),
+      this.loadListPpLayMau(),
+      this.loadListPpbq(),
+      this.loadListHtbq()
     ]);
     this.spinner.hide();
   }
@@ -92,6 +94,19 @@ export class NewHangHoaComponent implements OnInit {
       if (this.listPpbq) {
         this.listPpbq.forEach(item => {
           item.type = 'ppbq'
+        })
+      }
+    }
+  }
+
+  async loadListPpLayMau() {
+    this.listPpLayMau = [];
+    let res = await this.dmHangService.danhMucChungGetAll('PP_LAY_MAU');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listPpLayMau = res.data;
+      if (this.listPpLayMau) {
+        this.listPpLayMau.forEach(item => {
+          item.type = 'pplm'
         })
       }
     }
@@ -143,13 +158,16 @@ export class NewHangHoaComponent implements OnInit {
   convertLoaiHh(loaiVthh) {
     let loaiHh = loaiVthh
     switch (loaiHh) {
-      case "3":
+      case "1": {
+        loaiHh = 'LT';
+        break;
+      }
       case "2" : {
         loaiHh = 'VT'
         break;
       }
-      case "1": {
-        loaiHh = 'LT';
+      case "3": {
+        loaiHh = 'VTCN';
         break;
       }
       case "4" : {
@@ -165,12 +183,14 @@ export class NewHangHoaComponent implements OnInit {
     if (this.formHangHoa.invalid) {
       return;
     }
-    this.formHangHoa.get('maDviTinh').setValue(this.listDviTinh.filter(item => item.ma == this.formHangHoa.value.maDviTinh));
+    let dviTinh =  this.listDviTinh.filter(item => item.ma == this.formHangHoa.value.maDviTinh)
     let body = this.formHangHoa.value;
+    body.maDviTinh = dviTinh[0].giaTri
     body.trangThai = this.formHangHoa.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
     body.loaiHinhBq = this.listLhbq.filter(item => item.checked === true)
     body.phuongPhapBq = this.listPpbq.filter(item => item.checked === true)
     body.hinhThucBq = this.listHtbq.filter(item => item.checked === true)
+    body.ppLayMau = this.listPpLayMau.filter(item => item.checked === true)
     body.loaiHang = this.convertLoaiHh(this.formHangHoa.value.loaiHang)
     this.dmHangService.create(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
@@ -186,5 +206,20 @@ export class NewHangHoaComponent implements OnInit {
         e.error.errors[0].defaultMessage,
       );
     });
+  }
+
+
+  nzClickNodeTree(event: any): void {
+    if (event.keys.length > 0) {
+      let detail = event.node.origin;
+      if (detail.ma) {
+        let dviTinh =  this.listDviTinh.filter(item => item.giaTri == detail.maDviTinh)
+        this.formHangHoa.patchValue({
+          maDviTinh : dviTinh[0].ma,
+          dviQly : detail.dviQly,
+          loaiHang : detail.loaiHang
+        })
+      }
+    }
   }
 }

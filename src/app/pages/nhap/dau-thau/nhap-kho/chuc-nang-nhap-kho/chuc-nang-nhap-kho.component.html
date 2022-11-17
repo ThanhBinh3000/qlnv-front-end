@@ -1,13 +1,14 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="level2">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
+    <li nz-menu-item [nzSelected]="typeVthh == '02'" (click)="selectTab(0)"
+      *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
       Phiếu nhập kho tạm gửi
     </li>
     <li nz-menu-item (click)="selectTab(1)" *ngIf="typeVthh == '02' || typeVthh == '' || typeVthh == null">
       Biên bản gửi hàng
     </li>
-    <li nz-menu-item (click)="selectTab(2)">
+    <li nz-menu-item [nzSelected]="typeVthh != '02'" (click)="selectTab(2)">
       Phiếu nhập kho
     </li>
     <li nz-menu-item (click)="selectTab(3)" *ngIf="typeVthh != '02'">

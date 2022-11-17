@@ -54,7 +54,7 @@
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
-          *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_THEM')">
+          *ngIf="userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_THEM')">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
