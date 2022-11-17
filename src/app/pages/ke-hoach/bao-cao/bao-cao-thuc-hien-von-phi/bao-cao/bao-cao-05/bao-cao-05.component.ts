@@ -125,7 +125,9 @@ export class BaoCao05Component implements OnInit {
         if (this.lstCtietBcao.length > 0) {
             //xap xep lai cac phan tu va lay thong tin cac vat tu da duoc chon
             this.lstCtietBcao?.filter(item => {
-                item.listCtiet.sort((a, b) => a.maVtu - b.maVtu);
+                if (item.listCtiet.length > 0) {
+                    item.listCtiet.sort((a, b) => a.maVtu - b.maVtu);
+                }
             });
             this.lstCtietBcao[0]?.listCtiet.forEach(item => {
                 if (item.loaiMatHang == 0) {
@@ -139,7 +141,9 @@ export class BaoCao05Component implements OnInit {
         } else {
             if (this.luyKes.length > 0) {
                 this.luyKes.forEach(item => {
-                    item.listCtiet.sort((a, b) => a.maVtu - b.maVtu);
+                    if (item.listCtiet.length > 0) {
+                        item.listCtiet.sort((a, b) => a.maVtu - b.maVtu);
+                    }
                 });
                 this.luyKes[0].listCtiet.forEach(item => {
                     if (item.loaiMatHang == 0) {
@@ -155,13 +159,13 @@ export class BaoCao05Component implements OnInit {
                     item.listCtiet.forEach(e => {
                         lstCtiet.push({
                             ...e,
-                            sl: e.loaiMatHang == 0 ? 0 : e.sl,
+                            sl: (e.loaiMatHang == 1 || !this.data?.thangBcao) ? e.sl : 0,
                         })
                     })
                     this.lstCtietBcao.push({
                         ...item,
                         listCtiet: lstCtiet,
-                        trongDotTcong: 0,
+                        trongDotTcong: !this.data?.thangBcao ? item.trongDotTcong : 0,
                         header: '5-B',
                         id: uuid.v4() + 'FE',
                     })

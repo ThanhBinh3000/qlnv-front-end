@@ -217,8 +217,21 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
   }
 
   convertDataTable() {
+    // this.dataTable.forEach(item => {
+    //   item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
+    // });
     this.dataTable.forEach(item => {
-      item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
+      if (this.userService.isChiCuc()) {
+        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      } else {
+        let data = [];
+        item.dtlList.forEach(item => {
+          data = [...data, ...item.children];
+        })
+        item.detail = {
+          children: data
+        }
+      };
     });
     this.dataTable.forEach(item => {
       item.detail.children.forEach(ddNhap => {

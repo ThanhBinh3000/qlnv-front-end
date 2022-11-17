@@ -18,13 +18,15 @@
         <span>Duyệt</span>
       </button>
       <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) && isDetailPermission()"
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) &&
+        userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')"
         type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP ) && isDetailPermission()"
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP ) &&
+        userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')"
         type="
         button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
@@ -43,13 +45,15 @@
         <span>Duyệt</span>
       </button>
       <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && isDetailPermission()"
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )
+        && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM')"
         type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && isDetailPermission()"
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )
+        && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM')"
         type="
           button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>

@@ -223,12 +223,12 @@
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="(data.trangThai != STATUS.DA_DUYET_LDC )
-              && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_SUA'))"
+              && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM'))"
                 (click)="detail(data)">
                 <i class="fa fa-pencil"></i>
               </a>
               <a *ngIf="data.trangThai=='00'
-              && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_SUA'))"
+              && (loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM'))"
                 (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
