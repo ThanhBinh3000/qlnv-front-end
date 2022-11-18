@@ -231,6 +231,7 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
             if (res) {
                 const obj = {
                     id: null,
+                    namDn: res.namDn,
                     qdChiTieu: res.qdChiTieu,
                     loaiDn: res.loaiDn,
                     tabSelected: res.canCuGia == Utils.HD_TRUNG_THAU ? 'hopdong' : 'dongia',

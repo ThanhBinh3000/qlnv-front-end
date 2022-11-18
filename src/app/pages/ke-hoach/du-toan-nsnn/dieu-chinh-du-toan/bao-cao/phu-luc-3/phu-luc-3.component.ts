@@ -332,7 +332,7 @@ export class PhuLuc3Component implements OnInit {
     if (
       this.editCache[id].data.dkienThienDtoan < 0 ||
       this.editCache[id].data.dkienThienLuong < 0 ||
-      this.editCache[id].data.dtoanLke < 0 ||
+      // this.editCache[id].data.dtoanLke < 0 ||
       this.editCache[id].data.dtoanThieuNtruoc < 0 ||
       this.editCache[id].data.khoachLuong < 0 ||
       this.editCache[id].data.tdiemBcaoDtoan < 0 ||
@@ -392,8 +392,13 @@ export class PhuLuc3Component implements OnInit {
     this.lstDchinh.forEach(item => {
 
       const tongNcauDtoanN = item.tongNcauDtoanN
-      if (item.tdiemBcaoDtoan > MONEY_LIMIT ||
-        item.dkienThienDtoan > MONEY_LIMIT || item.dtoanThieuNtruoc > MONEY_LIMIT || item.tongNcauDtoanN > MONEY_LIMIT || item.dtoanLke > MONEY_LIMIT || item.dtoanDchinh > MONEY_LIMIT
+      if (
+        item.tdiemBcaoDtoan > MONEY_LIMIT ||
+        item.dkienThienDtoan > MONEY_LIMIT ||
+        item.dtoanThieuNtruoc > MONEY_LIMIT ||
+        item.tongNcauDtoanN > MONEY_LIMIT ||
+        // item.dtoanLke > MONEY_LIMIT || 
+        item.dtoanDchinh > MONEY_LIMIT
       ) {
         checkMoneyRange = false;
         return;

@@ -58,6 +58,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
     id: string;
     maDeNghi: string;
     qdChiTieu: string;
+    namDn: number;
     nguonBcao: string = Utils.THOP_TAI_TC;
     congVan: ItemCongVan;
     ngayTao: string;
@@ -260,6 +261,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
             this.maDviTao = this.userInfo?.MA_DVI;
             this.maDviTien = '1';
             this.qdChiTieu = this.data?.qdChiTieu;
+            this.namDn = this.data?.namDn;
             this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
             this.cucKhuVucs.forEach(item => {
                 this.lstCtietBcao.push({
@@ -389,6 +391,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
                     this.id = data.data.id;
                     this.total(-1, this.tongSo);
                     this.maDviTao = data.data.maDvi;
+                    this.namDn = data.data.namDn;
                     this.lstCtietBcao = data.data.thopTcCtiets;
                     this.maDviTien = data.data.maDviTien;
                     this.lstCtietBcao.forEach(item => {
@@ -540,6 +543,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
             maDvi: this.maDviTao,
             maDviTien: this.maDviTien,
             maDnghi: this.maDeNghi,
+            namDn: this.namDn,
             loaiDnghi: this.nguonBcao,
             congVan: this.congVan,
             soQdChiTieu: this.qdChiTieu,
@@ -725,6 +729,7 @@ export class TongHopTaiTongCucComponent implements OnInit {
             thopTcCtiets: lstCtietBcaoTemp,
             maDvi: this.maDviTao,
             maDnghi: maDeNghiNew,
+            namDn: this.namDn,
             loaiDnghi: this.nguonBcao,
             maDviTien: "1",
             soQdChiTieu: response.qdChiTieu,

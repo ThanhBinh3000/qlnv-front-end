@@ -217,6 +217,7 @@ export class TongHopComponent implements OnInit {
             if (res) {
                 const obj = {
                     id: null,
+                    namDn: res.namDn,
                     qdChiTieu: res.qdChiTieu,
                     tabSelected: res.nguonBcao == Utils.THOP_TAI_TC ? 'tc' : 'danhsach',
                 }

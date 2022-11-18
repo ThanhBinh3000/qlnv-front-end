@@ -810,13 +810,19 @@ export class BaoCaoComponent implements OnInit {
 
     xemSoKiemTra() {
         if (this.userService.isTongCuc()) {
-            // this.router.navigate([
-            //     MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + LAP_THAM_DINH + '/so-kiem-tra-tran-chi-tu-btc/' + this.giaoSoTranChiId
-            // ]);
+            const obj = {
+                id: this.giaoSoTranChiId,
+                preData: this.data,
+                tabSelected: 'skt-btc'
+            }
+            this.dataChange.emit(obj);
         } else {
-            // this.router.navigate([
-            //     MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + LAP_THAM_DINH + '/so-kiem-tra-chi-nsnn/' + this.giaoSoTranChiId
-            // ]);
+            const obj = {
+                id: this.giaoSoTranChiId,
+                preData: this.data,
+                tabSelected: 'skt'
+            }
+            this.dataChange.emit(obj);
         }
     }
 

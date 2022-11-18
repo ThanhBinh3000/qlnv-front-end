@@ -9,8 +9,9 @@ export class UserLogin {
   MA_KTBQ: string;
   MA_TCKT: string;
   MA_TR: string;
-  DON_VI : any;
-  constructor(initObj: any,dvql:any) {
+  DON_VI: any;
+  TEN_DAY_DU: any
+  constructor(initObj: any, dvql: any) {
     if (initObj) {
       for (var key in initObj) {
         this[key] = initObj[key];
