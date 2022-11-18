@@ -11,15 +11,11 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { STATUS } from "../../../../../constants/status";
 import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import {
-  TongHopDeXuatKeHoachBanDauGiaService
-} from "../../../../../services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service";
-
+import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
 
 @Component({
   selector: 'app-tong-hop',
@@ -32,7 +28,7 @@ export class TongHopComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
-    private danhSachDauThauService: DanhSachDauThauService,
+
     private modal: NzModalService,
     public userService: UserService,
     private route: ActivatedRoute,
@@ -42,7 +38,9 @@ export class TongHopComponent implements OnInit {
   ) {
     this.danhMucDonVi = JSON.parse(sessionStorage.getItem('danhMucDonVi'));
   }
-  @Input() loaiVthhInput: string;
+  @Input()
+  loaiVthhInput: string;
+  @Input() loaiVthh: string;
   tabSelected: string = 'phuong-an-tong-hop';
   listNam: any[] = [];
   yearNow: number = 0;
@@ -98,7 +96,7 @@ export class TongHopComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-      this.searchFilter.loaiVthh = this.loaiVthhInput;
+      this.searchFilter.loaiVthh = this.loaiVthh;
       await this.search();
       await this.loaiVTHHGetAll();
       this.spinner.hide();
@@ -138,13 +136,15 @@ export class TongHopComponent implements OnInit {
     };
     let res = null;
     if (this.tabSelected == 'phuong-an-tong-hop') {
-      res = await this.tongHopDeXuatKeHoachBanDauGiaService.search(body);``
+
+      res = await this.tongHopDeXuatKeHoachBanDauGiaService.search(body);
+
     } else if (this.tabSelected == 'danh-sach-tong-hop') {
       // Trạng thái đã tổng hợp
-      res = await this.searchDanhSachDauThau(body, "05")
+      // res = await this.searchDanhSachDauThau(body, "05")
     } else {
       // Trạng thái chưa tổng hợp
-      res = await this.searchDanhSachDauThau(body, "11")
+      // res = await this.searchDanhSachDauThau(body, "11")
     }
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
@@ -173,10 +173,10 @@ export class TongHopComponent implements OnInit {
     this.spinner.hide();
   }
 
-  async searchDanhSachDauThau(body, trangThai) {
-    body.trangThai = trangThai
-    return await this.danhSachDauThauService.search(body);
-  }
+  // async searchDanhSachDauThau(body, trangThai) {
+  //   body.trangThai = trangThai
+  //   return await this.danhSachDauThauService.search(body);
+  // }
 
   async selectTabData(tab: string) {
     this.spinner.show();
