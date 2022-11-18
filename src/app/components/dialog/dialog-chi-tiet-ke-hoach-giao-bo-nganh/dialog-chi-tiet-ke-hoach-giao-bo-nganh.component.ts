@@ -81,6 +81,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       const boNganh = this.dsBoNganh.find(item => item.ma == event)
       if (boNganh) {
         this.keHoach.tenBoNganh = boNganh.giaTri;
+        this.keHoach.tongTien=null;
       }
       this.danhMucService.getDanhMucHangDvql({
         "dviQly": event

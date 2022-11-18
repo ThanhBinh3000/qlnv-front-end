@@ -14,7 +14,8 @@
   <nz-form-item nz-col nzSpan="8" class="form-item">
     <nz-form-label [nzNoColon]="true" nzFor="gia-tri">Tổng giá trị (Triệu đồng)</nz-form-label>
     <nz-input-group id="gia-tri">
-      <input [readonly]="isView" type="text" nz-input [(ngModel)]="keHoach.tongTien"/>
+      <nz-input-number [readonly]="isView" [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [(ngModel)]="keHoach.tongTien">
+      </nz-input-number>
     </nz-input-group>
     <span class="error-text" *ngIf="errorTt">{{globals.prop.REQUIRED}}</span>
   </nz-form-item>
@@ -23,36 +24,32 @@
   <nz-tabset nzType="card" class="mt-16 tab-level-3">
     <nz-tab *ngIf="radioValue=='BTC'" [nzTitle]="'Nhập - xuất lương thực'">
       <app-ke-hoach-luong-thuc #keHoachLuongThuc [(ltGaoMua)]="keHoach.ltGaoMua" [isView]="isView" [namHienTai]="nam"
-                               [(ltGaoXuat)]="keHoach.ltGaoXuat" [(ltThocMua)]="keHoach.ltThocMua"
-                               [(ltThocXuat)]="keHoach.ltThocXuat" [maBoNganh]="keHoach.maBoNganh">
+        [(ltGaoXuat)]="keHoach.ltGaoXuat" [(ltThocMua)]="keHoach.ltThocMua" [(ltThocXuat)]="keHoach.ltThocXuat"
+        [maBoNganh]="keHoach.maBoNganh">
       </app-ke-hoach-luong-thuc>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Mua tăng'">
       <app-ke-hoach-xuat-giam [isView]="isView" [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttMuaTang"
-                              [namHienTai]="nam" [maBoNganh]="keHoach.maBoNganh"
-                              [(dataTable)]="keHoach.muaTangList">
+        [namHienTai]="nam" [maBoNganh]="keHoach.maBoNganh" [(dataTable)]="keHoach.muaTangList">
       </app-ke-hoach-xuat-giam>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất giảm'">
       <app-ke-hoach-xuat-giam [isView]="isView" [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttXuatGiam"
-                              [namHienTai]="nam" [maBoNganh]="keHoach.maBoNganh"
-                              [(dataTable)]="keHoach.xuatGiamList">
+        [namHienTai]="nam" [maBoNganh]="keHoach.maBoNganh" [(dataTable)]="keHoach.xuatGiamList">
       </app-ke-hoach-xuat-giam>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất bán'">
       <app-ke-hoach-xuat-giam [isView]="isView" [dsHangHoa]="dsHangHoa" [(tongGtri)]="keHoach.ttXuatBan"
-                              [namHienTai]="nam" [maBoNganh]="keHoach.maBoNganh"
-                              [(dataTable)]="keHoach.xuatBanList">
+        [namHienTai]="nam" [maBoNganh]="keHoach.maBoNganh" [(dataTable)]="keHoach.xuatBanList">
       </app-ke-hoach-xuat-giam>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Luân phiên đổi hàng'">
       <app-ke-hoach-xuat-giam [isView]="isView" [dsHangHoa]="dsHangHoa" [tabName]="'LuanPhien'" [namHienTai]="nam"
-                              [maBoNganh]="keHoach.maBoNganh"
-                              [(dataTable)]="keHoach.luanPhienList">
+        [maBoNganh]="keHoach.maBoNganh" [(dataTable)]="keHoach.luanPhienList">
       </app-ke-hoach-xuat-giam>
     </nz-tab>
   </nz-tabset>
