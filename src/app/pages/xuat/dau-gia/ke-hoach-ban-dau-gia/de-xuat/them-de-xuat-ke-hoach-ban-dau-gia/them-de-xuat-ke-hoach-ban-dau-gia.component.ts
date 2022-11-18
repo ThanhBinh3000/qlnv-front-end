@@ -135,7 +135,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       tgianTtoan: [null, [Validators.required]],
       tgianGnhan: [null, [Validators.required]],
       thongBaoKh: [null, [Validators.required]],
-      khoanTienDatTruoc: ['10'],
+      khoanTienDatTruoc: [null],
       tongSoLuong: [null],
       tongTienKdiem: [null],
       tongTienDatTruoc: [null],
@@ -331,13 +331,15 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       nzContent: DialogThemDiaDiemPhanLoComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1500px',
+      nzWidth: '2000px',
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
-        giaKhongVat: this.giaChuaVat
+        giaKhongVat: this.giaChuaVat,
+        khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
+        namKh: this.formData.get('namKh').value,
       },
     });
     modalGT.afterClose.subscribe((res) => {
