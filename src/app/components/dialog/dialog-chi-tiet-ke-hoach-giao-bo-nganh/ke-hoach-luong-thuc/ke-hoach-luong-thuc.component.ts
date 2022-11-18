@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {QuanLyHangTrongKhoService} from "../../../../services/quanLyHangTrongKho.service";
 import {MESSAGE} from "../../../../constants/message";
+import { Globals } from './../../../../shared/globals';
 
 @Component({
   selector: 'app-ke-hoach-luong-thuc',
@@ -42,7 +43,8 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   ltGaoDuTru: number;
 
 
-  constructor(private quanLyHangTrongKhoService: QuanLyHangTrongKhoService) {
+  constructor(private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
+    public globals: Globals) {
   }
 
   ngOnInit(): void {

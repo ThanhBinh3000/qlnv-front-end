@@ -39,7 +39,8 @@
         </td>
         <td style="width: 10%;">
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.soLuong" />
+            <nz-input-number  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [readonly]="isView" [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [(ngModel)]="rowItem.soLuong">
+            </nz-input-number>
           </nz-input-group>
         </td>
         <td style="text-align: center;">

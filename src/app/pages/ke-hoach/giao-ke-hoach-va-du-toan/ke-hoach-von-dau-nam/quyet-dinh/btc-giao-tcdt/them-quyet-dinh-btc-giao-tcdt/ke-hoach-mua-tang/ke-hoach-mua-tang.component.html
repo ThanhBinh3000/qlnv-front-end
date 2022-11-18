@@ -48,8 +48,9 @@
         </td>
         <td>
           <nz-input-group>
-            <nz-input-number (ngModelChange)="calcularTongTien(rowItem)" [nzStep]="0.1" [nzDisabled]="!isView"
-              [nzSize]="'small'" nz-input [(ngModel)]="rowItem.donGia" [nzMin]="0">
+            <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+              (ngModelChange)="calcularTongTien(rowItem)" [nzStep]="0.1" [nzDisabled]="!isView" [nzSize]="'small'"
+              nz-input [(ngModel)]="rowItem.donGia" [nzMin]="0">
             </nz-input-number>
           </nz-input-group>
         </td>
