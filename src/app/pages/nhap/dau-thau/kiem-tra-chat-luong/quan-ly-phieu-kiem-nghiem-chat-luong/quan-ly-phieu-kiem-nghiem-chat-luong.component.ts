@@ -14,13 +14,16 @@ import { MESSAGE } from 'src/app/constants/message';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
 import { Globals } from 'src/app/shared/globals';
+import { BaseComponent } from 'src/app/components/base/base.component';
+import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
   templateUrl: './quan-ly-phieu-kiem-nghiem-chat-luong.component.html',
   styleUrls: ['./quan-ly-phieu-kiem-nghiem-chat-luong.component.scss'],
 })
-export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
+export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent implements OnInit {
   @Input() typeVthh: string;
   toDay = new Date();
   last30Day = new Date(
@@ -91,10 +94,14 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public userService: UserService,
     public globals: Globals,
-  ) { }
+    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService
+  ) {
+    super();
+  }
 
   async ngOnInit() {
     this.spinner.show();
+    super.ngOnInit();
     try {
       if (this.typeVthh == 'tat-ca') {
         this.isTatCa = true;
@@ -141,38 +148,37 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
   }
 
   async search() {
-    this.spinner.show();
+    await this.spinner.show();
     let body = {
-      "capDvis": '3',
-      maDvi: this.userInfo.MA_DVI,
-      maVatTuCha: this.isTatCa ? null : this.typeVthh,
-      ngayBanGiaoMauTu: this.searchFilter.ngayBanGiaoMau
-        ? dayjs(this.searchFilter.ngayBanGiaoMau[0]).format('YYYY-MM-DD')
-        : null,
-      ngayBanGiaoMauDen: this.searchFilter.ngayBanGiaoMau
-        ? dayjs(this.searchFilter.ngayBanGiaoMau[1]).format('YYYY-MM-DD')
-        : null,
-      soPhieu: this.searchFilter.soPhieu || null,
-      soQdNhap: this.searchFilter.soQdNhap || null,
-      soBbBanGiao: this.searchFilter.soBbBanGiao || null,
-      pageNumber: this.page,
-      pageSize: this.pageSize,
+      "paggingReq": {
+        "limit": this.pageSize,
+        "page": this.page - 1
+      },
+      trangThai: this.STATUS.BAN_HANH
     };
-    let res = await this.phieuKiemNghiemChatLuongHangService.search(body);
+    let res = await this.quyetDinhNhapXuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
-      this.dataTable = [...data.content];
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
+      this.dataTable = data.content;
+      // this.dataTable.forEach(item => {
+      //   if (this.userService.isChiCuc()) {
+      //     item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      //   } else {
+      //     let data = [];
+      //     item.dtlList.forEach(item => {
+      //       data = [...data, ...item.listBienBanLayMau];
+      //     })
+      //     item.detail = {
+      //       listBienBanLayMau: data
+      //     }
+      //   };
+      // });
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    this.spinner.hide();
+    await this.spinner.hide();
   }
 
   async changePageIndex(event) {
@@ -229,7 +235,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     this.search();
   }
 
-  xoaItem(id) {
+  xoaItem(data) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -241,7 +247,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          const res = await this.phieuKiemNghiemChatLuongHangService.delete(id);
+          const res = await this.phieuKiemNghiemChatLuongHangService.delete({ id: data.id });
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             this.search();
@@ -303,7 +309,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
@@ -394,4 +400,14 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent implements OnInit {
     WindowPrt.print();
     WindowPrt.close();
   }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
 }
