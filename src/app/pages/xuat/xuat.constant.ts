@@ -1,7 +1,7 @@
 import { ChiTietMenu } from "src/app/models/ChiTietMenu";
 
-export const NHAP_MAIN_ROUTE = 'xuat';
-export const NHAP_ROUTE_LIST: Array<ChiTietMenu> = [
+export const XUAT_MAIN_ROUTE = 'xuat';
+export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
   {
     icon: 'htvbdh_tcdt_nhaptheokehoach',
     title: 'Xuất cứu trợ, viện trợ',
