@@ -1,93 +1,94 @@
 <nz-card class="bg-trang mt16 flex-card p-lr16">
   <nz-table nzBordered [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
-    <tr>
-      <th style="width: 10%;">STT</th>
-      <th style="width: 60%;">Chỉ tiêu</th>
-      <th style="width: 30%;">Kế hoạch năm {{namHienTai}}</th>
-    </tr>
+      <tr>
+        <th style="width: 10%;">STT</th>
+        <th style="width: 60%;">Chỉ tiêu</th>
+        <th style="width: 30%;">Kế hoạch năm {{namHienTai}} (tấn)</th>
+      </tr>
     </thead>
     <tbody>
-    <tr>
-      <td>I</td>
-      <td>Lương thực tồn kho đầu kỳ (quy thóc)</td>
-      <td style="text-align: right;"> {{+ltThocTon + +(ltGaoTon * 2)|number: '1.0-1': 'vi_VN'}} </td>
-    </tr>
-    <tr>
-      <td>-</td>
-      <td>Thóc</td>
-      <td style="text-align: right;"> {{ltThocTon|number: '1.0-1': 'vi_VN'}} </td>
-    </tr>
-    <tr>
-      <td>-</td>
-      <td>Gạo</td>
-      <td style="text-align: right;"> {{ltGaoTon|number: '1.0-1': 'vi_VN'}} </td>
-    </tr>
-    <tr>
-      <td>II</td>
-      <td>Lương thực xuất ra (quy thóc)</td>
-      <td style="text-align: right;"> {{ +ltThocXuat + +(ltGaoXuat * 2)|number: '1.0-1': 'vi_VN'}} </td>
-    </tr>
-    <tr>
-      <td>-</td>
-      <td>Thóc</td>
-      <td style="text-align: right;">
-        <div><input [readonly]="isView" style="text-align: right;" type="text" nz-input [(ngModel)]="ltThocXuat"
-                    type="number"/></div>
-      </td>
-    </tr>
-    <tr>
-      <td>-</td>
-      <td>Gạo</td>
-      <td style="text-align: right;">
-        <div><input [readonly]="isView" style="text-align: right;" type="text" nz-input [(ngModel)]="ltGaoXuat"
-                    type="number"/></div>
-      </td>
-    </tr>
-    <tr>
-      <td>III</td>
-      <td>Lương thực mua vào (quy thóc)</td>
-      <td style="text-align: right;"> {{ +ltThocMua + +(ltGaoMua * 2)|number: '1.0-1': 'vi_VN'}} </td>
-    </tr>
-    <tr>
-      <td>-</td>
-      <td>Thóc</td>
-      <td style="text-align: right;">
-        <div><input [readonly]="isView" style="text-align: right;" type="text" nz-input [(ngModel)]="ltThocMua"
-                    type="number"/></div>
-      </td>
-    </tr>
-    <tr>
-      <td>-</td>
-      <td>Gạo</td>
-      <td style="text-align: right;">
-        <div><input [readonly]="isView" style="text-align: right;" type="text" nz-input [(ngModel)]="ltGaoMua"
-                    type="number"/></div>
-      </td>
-    </tr>
-    <tr>
-      <td>IV</td>
-      <td>Lương thực dự trữ cuối năm (quy thóc)</td>
-      <!--      <td style="text-align: right;"> {{ +ltThocDuTru + +(ltGaoDuTru * 2)|number: '1.0-1'}} </td>-->
-      <td
-        style="text-align: right;"> {{(+ltThocMua + +(ltGaoMua * 2)) - (+ltThocXuat + +(ltGaoXuat * 2)) + (+ltThocDuTru + +(ltGaoDuTru * 2))|number: '1.0-1'}}
-        ({{ +ltThocDuTru + +(ltGaoDuTru * 2)|number: '1.0-1': 'vi_VN'}})
-      </td>
-    </tr>
-    <tr>
-      <td>-</td>
-      <td>Thóc</td>
-      <td style="text-align: right;"> {{ +ltThocMua - +ltThocXuat + +ltThocDuTru|number: '1.0-1': 'vi_VN'}}
-        ({{ltThocDuTru}})
-      </td>
-    </tr>
-    <tr>
-      <td>-</td>
-      <td>Gạo</td>
-      <td style="text-align: right;"> {{+ltGaoMua - +ltGaoXuat + +ltGaoDuTru|number: '1.0-1': 'vi_VN'}} ({{ltGaoDuTru}}
-        )
-      </td>
-    </tr>
+      <tr>
+        <td>I</td>
+        <td>Lương thực tồn kho đầu kỳ (quy thóc)</td>
+        <td style="text-align: right;"> {{+ltThocTon + +(ltGaoTon * 2)|number: '1.0-1': 'vi_VN'}} </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Thóc</td>
+        <td style="text-align: right;"> {{ltThocTon|number: '1.0-1': 'vi_VN'}} </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Gạo</td>
+        <td style="text-align: right;"> {{ltGaoTon|number: '1.0-1': 'vi_VN'}} </td>
+      </tr>
+      <tr>
+        <td>II</td>
+        <td>Lương thực xuất ra (quy thóc)</td>
+        <td style="text-align: right;"> {{ +ltThocXuat + +(ltGaoXuat * 2)|number: '1.0-1': 'vi_VN'}} </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Thóc</td>
+        <td style="text-align: right;">
+          <div><input [readonly]="isView" style="text-align: right;" type="text" nz-input [(ngModel)]="ltThocXuat"
+              type="number" /></div>
+        </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Gạo</td>
+        <td style="text-align: right;">
+          <div><input [readonly]="isView" style="text-align: right;" type="text" nz-input [(ngModel)]="ltGaoXuat"
+              type="number" /></div>
+        </td>
+      </tr>
+      <tr>
+        <td>III</td>
+        <td>Lương thực mua vào (quy thóc)</td>
+        <td style="text-align: right;"> {{ +ltThocMua + +(ltGaoMua * 2)|number: '1.0-1': 'vi_VN'}} </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Thóc</td>
+        <td style="text-align: right;">
+          <div><input [readonly]="isView" style="text-align: right;" type="text" nz-input [(ngModel)]="ltThocMua"
+              type="number" /></div>
+        </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Gạo</td>
+        <td style="text-align: right;">
+          <div><input [readonly]="isView" style="text-align: right;" type="text" nz-input [(ngModel)]="ltGaoMua"
+              type="number" /></div>
+        </td>
+      </tr>
+      <tr>
+        <td>IV</td>
+        <td>Lương thực dự trữ cuối năm (quy thóc)</td>
+        <!--      <td style="text-align: right;"> {{ +ltThocDuTru + +(ltGaoDuTru * 2)|number: '1.0-1'}} </td>-->
+        <td style="text-align: right;"> {{(+ltThocMua + +(ltGaoMua * 2)) - (+ltThocXuat + +(ltGaoXuat * 2)) +
+          (+ltThocDuTru + +(ltGaoDuTru * 2))|number: '1.0-1'}}
+          ({{ +ltThocDuTru + +(ltGaoDuTru * 2)|number: '1.0-1': 'vi_VN'}})
+        </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Thóc</td>
+        <td style="text-align: right;"> {{ +ltThocMua - +ltThocXuat + +ltThocDuTru|number: '1.0-1': 'vi_VN'}}
+          ({{ltThocDuTru}})
+        </td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>Gạo</td>
+        <td style="text-align: right;"> {{+ltGaoMua - +ltGaoXuat + +ltGaoDuTru|number: '1.0-1': 'vi_VN'}}
+          ({{ltGaoDuTru}}
+          )
+        </td>
+      </tr>
     </tbody>
   </nz-table>
 </nz-card>
