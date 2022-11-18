@@ -996,6 +996,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                     const obj = {
                         id: data.data.id,
+                        preData: this.data,
                         tabSelected: 'baocao',
                     }
                     this.dataChange.emit(obj);

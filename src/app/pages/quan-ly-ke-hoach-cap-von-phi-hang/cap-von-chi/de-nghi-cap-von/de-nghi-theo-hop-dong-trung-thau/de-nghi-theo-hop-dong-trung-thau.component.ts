@@ -37,6 +37,7 @@ export class DeNghiTheoHopDongTrungThauComponent implements OnInit {
     userInfo: any;
     //thong tin chung bao cao
     maDeNghi: string;
+    namDn: number;
     qdChiTieu: string;
     canCuGia: string = Utils.HD_TRUNG_THAU;
     loaiDn: string;
@@ -186,6 +187,7 @@ export class DeNghiTheoHopDongTrungThauComponent implements OnInit {
             this.maDviTao = this.userInfo?.MA_DVI;
             this.qdChiTieu = this.data?.qdChiTieu;
             this.loaiDn = this.data?.loaiDn;
+            this.namDn = this.data?.namDn;
             this.data?.hopDong.forEach(item => {
                 this.lstCtietBcao.push({
                     ...item,
@@ -355,6 +357,7 @@ export class DeNghiTheoHopDongTrungThauComponent implements OnInit {
                     this.lstCtietBcao = data.data.dnghiCapvonCtiets;
                     this.maDviTao = data.data.maDvi;
                     this.maDeNghi = data.data.maDnghi;
+                    this.namDn = data.data.namDn;
                     this.qdChiTieu = data.data.soQdChiTieu;
                     this.canCuGia = data.data.canCuVeGia;
                     this.loaiDn = data.data.loaiDnghi;
@@ -487,6 +490,7 @@ export class DeNghiTheoHopDongTrungThauComponent implements OnInit {
             congVan: this.congVan,
             maDvi: this.maDviTao,
             maDnghi: this.maDeNghi,
+            namDn: this.namDn,
             loaiDnghi: this.loaiDn,
             canCuVeGia: this.canCuGia,
             maDviTien: "1",
@@ -603,6 +607,7 @@ export class DeNghiTheoHopDongTrungThauComponent implements OnInit {
             congVan: null,
             maDvi: this.maDviTao,
             maDnghi: maDeNghiNew,
+            namDn: this.namDn,
             loaiDnghi: this.loaiDn,
             canCuVeGia: this.canCuGia,
             maDviTien: "1",
