@@ -117,6 +117,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends BaseComponent impl
       tenNganKho: ['', [Validators.required]],
       maLoKho: [''],
       tenLoKho: [''],
+      idDdiemGiaoNvNh: [''],
       soQdGiaoNvNh: ['', [Validators.required]],
       idQdGiaoNvNh: ['', [Validators.required]],
       soHd: [''],
@@ -136,7 +137,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends BaseComponent impl
       ketLuan: [],
 
       ngayTao: [dayjs().format('YYYY-MM-DD')],
-      tenNguoiTao: [''],
+      tenKyThuatVien: [''],
       ngayKnghiem: [''],
       hthucBquan: [''],
     });
@@ -175,6 +176,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends BaseComponent impl
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
+      tenKyThuatVien: this.userInfo.TEN_DAY_DU,
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
     });
@@ -187,6 +189,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends BaseComponent impl
       if (res.data) {
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, data);
+        this.bindingDataBbLayMau(data.soBbLayMau.split('/')[0], true);
+        this.dataTableChiTieu = data.listKquaKngiem;
       }
     }
   }
@@ -243,14 +247,20 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends BaseComponent impl
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
-      case STATUS.TU_CHOI_LDCC:
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_LDCC;
+        trangThai = STATUS.CHO_DUYET_TP;
         mess = 'Bạn có muối gửi duyệt ?'
         break;
       }
-      case STATUS.CHO_DUYET_LDCC: {
-        trangThai = STATUS.DA_DUYET_LDCC;
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.CHO_DUYET_LDC;
+        mess = 'Bạn có chắc chắn muốn phê duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.DA_DUYET_LDC;
         mess = 'Bạn có chắc chắn muốn phê duyệt ?'
         break;
       }
@@ -375,12 +385,12 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends BaseComponent impl
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-      this.bindingDataBbLayMau(data);
+      this.bindingDataBbLayMau(data.id, false);
     });
   }
 
-  async bindingDataBbLayMau(data) {
-    let res = await this.quanLyBienBanLayMauService.getDetail(data.id);
+  async bindingDataBbLayMau(id, isChiTiet) {
+    let res = await this.quanLyBienBanLayMauService.getDetail(id);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       this.formData.patchValue({
@@ -407,12 +417,14 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends BaseComponent impl
         ngayNhapDayKho: data.bbNhapDayKho.ngayKetThucNhap,
         tenThuKho: data.bbNhapDayKho.tenNguoiTao
       })
-      let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
-      if (dmTieuChuan.data) {
-        this.dataTableChiTieu = dmTieuChuan.data.children;
-        this.dataTableChiTieu.forEach(element => {
-          element.edit = false
-        });
+      if (!isChiTiet) {
+        let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
+        if (dmTieuChuan.data) {
+          this.dataTableChiTieu = dmTieuChuan.data.children;
+          this.dataTableChiTieu.forEach(element => {
+            element.edit = false
+          });
+        }
       }
     }
   }
