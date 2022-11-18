@@ -227,7 +227,7 @@ export class DanhMucHangHoaComponent implements OnInit {
             tenHhCha: detaiParent ? detaiParent.ten : null,
             tenHangHoa: this.nodeDetail.ten,
             dviQly: this.nodeDetail.dviQly,
-            maDviTinh: dviTinh ? dviTinh[0].ma : null,
+            maDviTinh: dviTinh && dviTinh[0] ? dviTinh[0].ma : null,
             tchuanCluong: this.nodeDetail.tchuanCluong,
             thoiHanLk: this.nodeDetail.thoiHanLk,
             loaiHang: this.nodeDetail.loaiHang,
