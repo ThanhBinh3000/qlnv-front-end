@@ -7,7 +7,7 @@
         <th style="width: 25%;">Chủng loại hàng hoá</th>
         <th style="width: 5%;">Đơn vị tính</th>
         <th style="width: 10%;">Kế hoạch năm {{namHienTai}}</th>
-        <th style="width: 10%;">Thao tác</th>
+        <th style="width: 10%;">Hành động</th>
       </tr>
     </thead>
     <tbody>
@@ -60,10 +60,10 @@
           <td>{{ data.dviTinh }}</td>
           <td>{{ data.soLuong }}</td>
           <td style="text-align: center;">
-            <a (click)="editItem(idx)">
+            <a *ngIf="(data.trangThai == '00')" (click)="editItem(idx)">
               <i class=" fa fa-pencil"></i>
             </a>
-            <a (click)="xoaItem(idx)">
+            <a *ngIf="(data.trangThai == '00')" (click)="xoaItem(idx)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
@@ -73,7 +73,7 @@
           <td style="width: 45%;">
             <nz-input-group>
               <nz-select [(ngModel)]="dataEdit[idx].data.loaiVthh" [nzShowArrow]="false" nzAllowClear
-                         (ngModelChange)="onChangeLoaiVthh($event, dataEdit[idx].data)">
+                (ngModelChange)="onChangeLoaiVthh($event, dataEdit[idx].data)">
                 <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
                 </nz-option>
               </nz-select>
@@ -82,7 +82,7 @@
           <td style="width: 25%;">
             <nz-input-group>
               <nz-select [(ngModel)]="dataEdit[idx].data.cloaiVthh" [nzShowArrow]="false"
-                         (ngModelChange)="onChangeCloaiVthh($event, dataEdit[idx].data)">
+                (ngModelChange)="onChangeCloaiVthh($event, dataEdit[idx].data)">
                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
                 <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
                 </nz-option>
