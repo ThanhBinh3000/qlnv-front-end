@@ -185,7 +185,7 @@ export class ThongTinTonghopComponent implements OnInit {
     // chờ API và body request
     let phuongAnList = [];
     this.detail.tCThem.forEach(pa => {
-      if(!pa.isSum){
+      if (!pa.isSum) {
         const phuongAn = new Ct1sTonghop();
         phuongAn.khDnCapVonId = pa.id;
         phuongAn.tcCapThem = +pa.tcCapThem;
@@ -514,7 +514,7 @@ export class ThongTinTonghopComponent implements OnInit {
     //   ...this.detail?.tCThem,
     //   item,
     // ]
-    if(!data){
+    if (!data) {
       this.detail.tCThem = [];
     }
     this.detail.tCThem = data;
@@ -564,48 +564,50 @@ export class ThongTinTonghopComponent implements OnInit {
     }
   }
 
-  async loadThongTinChiTiet(nguongTongHopId: string) {
+  async loadThongTinChiTiet(nguonTongHopId: string) {
     this.isTonghop = true;
-    switch (nguongTongHopId) {
-      //Tổng cục dự trữ
-      case "TCDT":
-
-        break;
-      // bộ ngành
-      case "BN":
-      case "ALL":
-        this.spinner.show();
-        let body = {
-          soDeNghi: null,
-          maBoNganh: null,
-          nam: this.yearNow,
-          trangThai: STATUS.HOAN_THANH_CAP_NHAT,
-          type: 'TH',
-          trangThaiTh: STATUS.CHUA_TONG_HOP,
-          ngayDeNghiTuNgay: null,
-          ngayDeNghiDenNgay: null,
-          pageNumber: this.page,
-          pageSize: 100000,
-        };
-        let res = await this.deNghiCapVonBoNganhService.timKiem(body);
-        if (res.msg == MESSAGE.SUCCESS) {
-          let data = res.data;
-          this.listThongTinChiTiet = data.content;
-          this.khDnCapVonIds = data.content.map(item => item.id)
-          this.formData.patchValue({khDnCapVonIds: this.khDnCapVonIds})
-          this.totalRecord = data.totalElements;
-          // this.detail.tCThem = data.content;
-          this.loadPhuongAnTongCuc(data.content);
-        } else {
-          this.listThongTinChiTiet = [];
-          this.totalRecord = 0;
-          this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-        break;
-      default:
-        break;
+    this.spinner.show();
+    if (nguonTongHopId == 'TCDT') {
+      let body = {
+        nguonTongHop: nguonTongHopId,
+        nam:this.yearNow
+      };
+      let res = await this.deNghiCapVonBoNganhService.loadThTCDT(body);
+      //to do
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.listThongTinChiTiet = data;
+        this.loadPhuongAnTongCuc(data);
+      }
+    } else {
+      let body = {
+        soDeNghi: null,
+        maBoNganh: null,
+        nam: this.yearNow,
+        trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+        type: 'TH',
+        loaiTh: nguonTongHopId,
+        trangThaiTh: STATUS.CHUA_TONG_HOP,
+        ngayDeNghiTuNgay: null,
+        ngayDeNghiDenNgay: null,
+        pageNumber: this.page,
+        pageSize: 100000,
+      };
+      let res = await this.deNghiCapVonBoNganhService.timKiem(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.listThongTinChiTiet = data.content;
+        this.khDnCapVonIds = data.content.map(item => item.id)
+        this.formData.patchValue({khDnCapVonIds: this.khDnCapVonIds})
+        this.totalRecord = data.totalElements;
+        // this.detail.tCThem = data.content;
+        this.loadPhuongAnTongCuc(data.content);
+      } else {
+        this.listThongTinChiTiet = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
-
     this.spinner.hide();
   }
 
