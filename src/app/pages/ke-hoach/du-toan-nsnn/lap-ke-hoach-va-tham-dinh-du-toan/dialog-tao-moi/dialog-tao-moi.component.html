@@ -10,8 +10,8 @@
         </div>
         <div nz-col nzSpan="6" *ngIf="tab == 'danhsach' || (tab == 'tonghop' && response.loai == 2)">
             <label class="search__label">Năm báo cáo</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn năm báo cáo" [(ngModel)]="response.namBcao"
-                [class]="response.namBcao ?'' : 'input-error-validate'">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn năm báo cáo" [(ngModel)]="response.namHienTai"
+                [class]="response.namHienTai ?'' : 'input-error-validate'">
                 <nz-option *ngFor="let item of lstNam" [nzValue]="item" [nzLabel]="item">
                 </nz-option>
             </nz-select>
