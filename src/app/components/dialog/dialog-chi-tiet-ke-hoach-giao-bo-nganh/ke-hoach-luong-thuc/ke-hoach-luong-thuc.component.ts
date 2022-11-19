@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {QuanLyHangTrongKhoService} from "../../../../services/quanLyHangTrongKho.service";
 import {MESSAGE} from "../../../../constants/message";
-import { Globals } from './../../../../shared/globals';
+import {Globals} from './../../../../shared/globals';
 
 @Component({
   selector: 'app-ke-hoach-luong-thuc',
@@ -12,22 +12,22 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   @Input() keHoach: any = {};
   @Output() keHoachChange = new EventEmitter<number>();
   @Input()
-  ltGaoMua: number
+  ltGaoMua: number = 0
   @Output()
   ltGaoMuaChange = new EventEmitter<number>();
 
   @Input()
-  ltGaoXuat: number
+  ltGaoXuat: number = 0
   @Output()
   ltGaoXuatChange = new EventEmitter<number>();
 
   @Input()
-  ltThocXuat: number
+  ltThocXuat: number = 0
   @Output()
   ltThocXuatChange = new EventEmitter<number>();
 
   @Input()
-  ltThocMua: number
+  ltThocMua: number = 0
   @Output()
   ltThocMuaChange = new EventEmitter<number>();
 
@@ -37,14 +37,14 @@ export class KeHoachLuongThucComponent implements OnInit, OnChanges {
   dataTable = [];
   @Input() namHienTai: number;
   @Input() maBoNganh: string;
-  ltThocTon: number;
-  ltGaoTon: number;
-  ltThocDuTru: number;
-  ltGaoDuTru: number;
+  ltThocTon: number = 0;
+  ltGaoTon: number = 0;
+  ltThocDuTru: number = 0;
+  ltGaoDuTru: number = 0;
 
 
   constructor(private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
-    public globals: Globals) {
+              public globals: Globals) {
   }
 
   ngOnInit(): void {

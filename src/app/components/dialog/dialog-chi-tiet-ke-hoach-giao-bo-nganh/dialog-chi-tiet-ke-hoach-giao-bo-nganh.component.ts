@@ -4,6 +4,7 @@ import {MESSAGE} from 'src/app/constants/message';
 import {Globals} from 'src/app/shared/globals';
 import {DanhMucService} from '../../../services/danhmuc.service';
 import {KeHoachLuongThucComponent} from './ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
+import {cloneDeep} from 'lodash';
 
 @Component({
   selector: 'app-dialog-chi-tiet-ke-hoach-giao-bo-nganh',
@@ -13,8 +14,6 @@ import {KeHoachLuongThucComponent} from './ke-hoach-luong-thuc/ke-hoach-luong-th
 export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
 
   @ViewChild('keHoachLuongThuc') keHoachLuongThucComponent: KeHoachLuongThucComponent;
-
-
   isView: boolean = false;
   errorBn: boolean = false;
   errorTt: boolean = false;
@@ -23,14 +22,14 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     id: null,
     maBoNganh: null,
     tenBoNganh: null,
-    tongTien: null,
-    ltGaoMua: null,
-    ltThocMua: null,
-    ltGaoXuat: null,
-    ltThocXuat: null,
-    ttMuaTang: null,
-    ttXuatBan: null,
-    ttXuatGiam: null,
+    tongTien: 0,
+    ltGaoMua: 0,
+    ltThocMua: 0,
+    ltGaoXuat: 0,
+    ltThocXuat: 0,
+    ttMuaTang: 0,
+    ttXuatBan: 0,
+    ttXuatGiam: 0,
     muaTangList: [],
     xuatGiamList: [],
     xuatBanList: [],
@@ -48,25 +47,29 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     private danhMucService: DanhMucService,
     public globals: Globals,
   ) {
-
-  }
-
-  async ngOnInit() {
     this.radioData = [
       {label: 'Bộ tài chính', value: 'BTC'},
       {label: 'Bộ ngành khác', value: 'Khac'},
     ];
     this.radioValue = 'BTC';
-    this.bindingData(this.dataEdit)
+  }
+
+  async ngOnInit() {
+    if (this.dataEdit) {
+      this.keHoach = cloneDeep(this.dataEdit);
+    }
     await Promise.all([
       this.getListBoNganh(),
       this.loadDanhMucHang()
     ]);
-  }
-
-  bindingData(dataEdit) {
-    if (dataEdit) {
-      this.keHoach = dataEdit;
+    if (this.dataEdit) {
+      if (this.dataEdit.tenBoNganh === 'Bộ tài chính') {
+        this.radioValue = 'BTC';
+      } else {
+        this.radioValue = 'Khac';
+      }
+    } else {
+      this.radioValue = 'BTC';
     }
   }
 
@@ -81,7 +84,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       const boNganh = this.dsBoNganh.find(item => item.ma == event)
       if (boNganh) {
         this.keHoach.tenBoNganh = boNganh.giaTri;
-        this.keHoach.tongTien=null;
+        this.keHoach.tongTien = 0;
       }
       this.danhMucService.getDanhMucHangDvql({
         "dviQly": event
@@ -101,12 +104,15 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
   async getListBoNganh() {
+    console.log(this.keHoach, 111111111)
     this.dsBoNganh = [];
     let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
     if (res.msg == MESSAGE.SUCCESS) {
-      let boTaiChinh = res.data.find(s => s.giaTri === 'Bộ Tài Chính');
-      this.keHoach.maBoNganh = boTaiChinh.ma;
-      this.keHoach.tenBoNganh = boTaiChinh.giaTri;
+      if (!this.dataEdit) {
+        let boTaiChinh = res.data.find(s => s.giaTri === 'Bộ Tài Chính');
+        this.keHoach.maBoNganh = boTaiChinh.ma;
+        this.keHoach.tenBoNganh = boTaiChinh.giaTri;
+      }
       //fix theo giao dien moi
       this.dsBoNganh = res.data.filter(s => s.giaTri != 'Bộ Tài Chính');
     }
