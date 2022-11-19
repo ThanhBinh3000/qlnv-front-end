@@ -228,7 +228,12 @@ export class BaoCaoComponent implements OnInit {
         await this.getDviCon();
         this.getListUser();
         if (this.id) {
-            await this.getDetailReport();
+            this.lstDviTrucThuoc = this.data?.lstDviTrucThuoc ? this.data?.lstDviTrucThuoc : [];
+            if (this.lstDviTrucThuoc?.length == 0) {
+                this.lstLapThamDinhs = this.data?.lstLapThamDinhs ? this.data?.lstLapThamDinhs : [];
+            } else {
+                await this.getDetailReport();
+            }
         } else {
             this.isChild = true;
             this.isParent = false;
