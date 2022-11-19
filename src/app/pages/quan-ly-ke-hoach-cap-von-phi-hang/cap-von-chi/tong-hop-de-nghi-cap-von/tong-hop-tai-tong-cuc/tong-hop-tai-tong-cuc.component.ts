@@ -236,6 +236,10 @@ export class TongHopTaiTongCucComponent implements OnInit {
         this.spinner.hide();
     }
 
+    getStatusName() {
+        return this.trangThais.find(e => e.id == this.trangThai)?.tenDm;
+    }
+
     async initialization() {
         //lay id cua de nghi
         this.id = this.data?.id;
