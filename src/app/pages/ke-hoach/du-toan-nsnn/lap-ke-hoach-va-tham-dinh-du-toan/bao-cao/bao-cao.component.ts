@@ -229,7 +229,7 @@ export class BaoCaoComponent implements OnInit {
         this.getListUser();
         if (this.id) {
             this.lstDviTrucThuoc = this.data?.lstDviTrucThuoc ? this.data?.lstDviTrucThuoc : [];
-            if (this.lstDviTrucThuoc?.length == 0) {
+            if (this.lstDviTrucThuoc && this.lstDviTrucThuoc?.length > 0) {
                 this.lstLapThamDinhs = this.data?.lstLapThamDinhs ? this.data?.lstLapThamDinhs : [];
             } else {
                 await this.getDetailReport();
@@ -372,7 +372,6 @@ export class BaoCaoComponent implements OnInit {
 
     //upload file
     async uploadFile(file: File) {
-        debugger
         // day file len server
         const upfile: FormData = new FormData();
         upfile.append('file', file);
