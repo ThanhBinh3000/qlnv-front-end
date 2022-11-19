@@ -33,9 +33,9 @@
         <td>Thóc</td>
         <td style="text-align: right;">
           <div>
-              <nz-input-number [readonly]="isView" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"  [(ngModel)]="ltThocXuat">
-              </nz-input-number>
-            </div>
+           <nz-input-number  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [readonly]="isView" [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [(ngModel)]="ltThocXuat">
+            </nz-input-number>
+          </div>
         </td>
       </tr>
       <tr>
@@ -43,9 +43,9 @@
         <td>Gạo</td>
         <td style="text-align: right;">
           <div>
-              <nz-input-number [readonly]="isView" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"  [(ngModel)]="ltGaoMua">
-              </nz-input-number>
-            </div>
+           <nz-input-number  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [readonly]="isView" [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [(ngModel)]="ltGaoXuat">
+            </nz-input-number>
+          </div>
         </td>
       </tr>
       <tr>
@@ -58,9 +58,9 @@
         <td>Thóc</td>
         <td style="text-align: right;">
           <div>
-              <nz-input-number [readonly]="isView" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"  [(ngModel)]="ltThocXuat">
-              </nz-input-number>
-            </div>
+           <nz-input-number  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [readonly]="isView" [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [(ngModel)]="ltThocMua">
+            </nz-input-number>
+          </div>
         </td>
       </tr>
       <tr>
@@ -68,9 +68,10 @@
         <td>Gạo</td>
         <td style="text-align: right;">
           <div>
-              <nz-input-number [readonly]="isView" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"  [(ngModel)]="ltGaoMua">
-              </nz-input-number>
-            </div>
+           <nz-input-number  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [readonly]="isView" [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [(ngModel)]="ltGaoMua">
+            </nz-input-number>
+          </div>
+
         </td>
       </tr>
       <tr>

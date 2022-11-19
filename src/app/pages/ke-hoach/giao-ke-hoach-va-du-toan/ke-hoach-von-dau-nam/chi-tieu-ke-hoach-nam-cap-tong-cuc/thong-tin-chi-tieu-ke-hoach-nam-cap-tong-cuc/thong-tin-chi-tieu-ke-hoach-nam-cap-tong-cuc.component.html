@@ -261,12 +261,14 @@
               <td class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[1].soLuong}}</td>
               <td class="text-right">{{calculatorntnTongQuyThocCreate()}}</td>
               <td class="text-right">
-                <input class="w-120" nz-input nzSize="small" appNumberOnly
-                  [(ngModel)]="keHoachLuongThucCreate.ntnThoc" />
+                <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
+                  [(ngModel)]="keHoachLuongThucCreate.ntnThoc">
+                </nz-input-number>
               </td>
               <td class="text-right">
-                <input class="w-120" nz-input nzSize="small" appNumberOnly
-                  [(ngModel)]="keHoachLuongThucCreate.ntnGao" />
+                  <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
+                  [(ngModel)]="keHoachLuongThucCreate.ntnGao">
+                </nz-input-number>
               </td>
               <td class="text-right">{{calculatorxtnTongSoQuyThocCreate()}}</td>
               <td class="text-right">{{calculatorxtnTongThocCreate()}}</td>
