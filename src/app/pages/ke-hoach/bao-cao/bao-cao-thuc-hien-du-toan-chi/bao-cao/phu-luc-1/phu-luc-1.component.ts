@@ -156,7 +156,7 @@ export class PhuLucIComponent implements OnInit {
         this.namHienHanh = this.data?.namHienHanh;
         this.luyKeDetail = this.data?.luyKeDetail?.lstCtietBcaos;
         this.status = this.data?.status;
-        this.statusEdit = this.status && this.maLoaiBcao != '527';
+        this.statusEdit = this.status || this.maLoaiBcao == '527';
         this.statusBtnFinish = this.data?.statusBtnFinish;
 
         this.data?.lstCtietBcaos.forEach(item => {
