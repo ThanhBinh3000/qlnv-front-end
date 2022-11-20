@@ -587,7 +587,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       trangThai: "1",
       thuyetMinh: "",
       idPaBTC: this.id,
-      tabSelected: 'phuongAnPhanBo',
+      tabSelected: 'phuongAnGiaoDuToan',
     };
 
     const request2 = {
@@ -605,7 +605,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       trangThai: "1",
       thuyetMinh: "",
       idPaBTC: this.id,
-      tabSelected: 'phuongAnPhanBo',
+      tabSelected: 'phuongAnGiaoDieuChinh',
     };
 
     if (loaiPa) {

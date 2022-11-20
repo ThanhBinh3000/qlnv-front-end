@@ -8,6 +8,8 @@ import { DuToanGiaoTuCapTrenComponent } from './du-toan-giao-tu-cap-tren/du-toan
 import { GiaoDuToanComponent } from './giao-du-toan.component';
 import { PhanBoDuToanComponent } from './phan-bo-du-toan/phan-bo-du-toan.component';
 import { QuyetDinhBoTaiChinhComponent } from './quyet-dinh-bo-tai-chinh/quyet-dinh-bo-tai-chinh.component';
+import { TaoMoiGiaoDieuChinhDuToanComponent } from './tao-moi-giao-dieu-chinh-du-toan/tao-moi-giao-dieu-chinh-du-toan.component';
+import { TaoMoiGiaoDuToanComponent } from './tao-moi-giao-du-toan/tao-moi-giao-du-toan.component';
 import { TaoMoiQuyetDinhBtcComponent } from './tao-moi-quyet-dinh-btc/tao-moi-quyet-dinh-btc.component';
 import { ThemPhuongAnPhanBoComponent } from './them-phuong-an-phan-bo/them-phuong-an-phan-bo.component';
 
@@ -19,7 +21,8 @@ import { ThemPhuongAnPhanBoComponent } from './them-phuong-an-phan-bo/them-phuon
     QuyetDinhBoTaiChinhComponent,
     DialogTaoMoiComponent,
     TaoMoiQuyetDinhBtcComponent,
-    ThemPhuongAnPhanBoComponent,
+    TaoMoiGiaoDieuChinhDuToanComponent,
+    TaoMoiGiaoDuToanComponent,
   ],
   imports: [
     CommonModule,
@@ -34,7 +37,8 @@ import { ThemPhuongAnPhanBoComponent } from './them-phuong-an-phan-bo/them-phuon
     QuyetDinhBoTaiChinhComponent,
     DialogTaoMoiComponent,
     TaoMoiQuyetDinhBtcComponent,
-    ThemPhuongAnPhanBoComponent,
+    TaoMoiGiaoDieuChinhDuToanComponent,
+    TaoMoiGiaoDuToanComponent,
   ],
 })
 export class GiaoDuToanModule { }
