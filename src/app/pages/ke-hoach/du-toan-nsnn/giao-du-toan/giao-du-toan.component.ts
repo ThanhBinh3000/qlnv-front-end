@@ -7,13 +7,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GiaoDuToanComponent implements OnInit {
 
+  tabSelected: string = "quyetDinh";
+  data: any;
+
   constructor(
 
   ) { }
 
   async ngOnInit() {
+  };
 
+
+  selectTab(tab) {
+    this.tabSelected = tab;
   }
 
+  changeTab(obj: any) {
+    if (obj?.preTab) {
+      this.data = obj;
+    } else {
+      this.data = {
+        ...obj,
+        preTab: this.tabSelected,
+      };
+    }
+    this.tabSelected = obj?.tabSelected;
+  }
 
 }

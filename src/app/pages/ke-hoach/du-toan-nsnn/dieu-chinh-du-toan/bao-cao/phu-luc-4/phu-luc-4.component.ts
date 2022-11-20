@@ -159,7 +159,7 @@ export class PhuLuc4Component implements OnInit {
     }
     this.getTotal();
     this.updateEditCache();
-
+    await this.getDinhMucPL4();
     //lay danh sach danh muc don vi
     await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
@@ -187,7 +187,7 @@ export class PhuLuc4Component implements OnInit {
       }
     );
     this.getStatusButton();
-    this.getDinhMucPL4();
+    
     this.spinner.hide();
   }
 

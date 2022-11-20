@@ -1,0 +1,40 @@
+<nz-affix [nzOffsetTop]="69" class="level1">
+    <ul nz-menu nzMode="horizontal">
+        <li nz-menu-item nzSelected (click)="selectTab('dsquyetDinh')">
+            Quyết định từ Bộ Tài Chính
+        </li>
+        <li nz-menu-item (click)="selectTab('phanBo')">
+            Phân bổ dự toán
+        </li>
+        <li nz-menu-item (click)="selectTab('giaoTuCapTren')">
+            Dự toán giao từ đơn vị cấp trên
+        </li>
+        <li nz-menu-item (click)="selectTab('baoCaoCapDuoi')">
+            Báo cáo từ đươn vị cấp dưới
+        </li>
+    </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+    <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 'dsquyetDinh'">
+            <app-quyet-dinh-bo-tai-chinh (dataChange)="changeTab($event)">
+            </app-quyet-dinh-bo-tai-chinh>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'quyetDinhBTC'">
+            <app-tao-moi-quyet-dinh-btc (dataChange)="changeTab($event)">
+            </app-tao-moi-quyet-dinh-btc>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'phanBo'">
+            <app-phan-bo-du-toan (dataChange)="changeTab($event)">
+            </app-phan-bo-du-toan>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'giaoTuCapTren'">
+            <app-du-toan-giao-tu-cap-tren (dataChange)="changeTab($event)">
+            </app-du-toan-giao-tu-cap-tren>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'baoCaoCapDuoi'">
+            <app-bao-cao-tu-don-vi-cap-duoi (dataChange)="changeTab($event)">
+            </app-bao-cao-tu-don-vi-cap-duoi>
+        </ng-container>
+    </div>
+</div>
