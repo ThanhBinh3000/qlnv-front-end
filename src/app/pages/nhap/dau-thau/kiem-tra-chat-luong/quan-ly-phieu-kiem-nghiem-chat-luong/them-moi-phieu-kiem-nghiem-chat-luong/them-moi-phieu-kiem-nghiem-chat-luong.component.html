@@ -1,29 +1,31 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
   <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="redirectPhieuKiemNghiemChatLuongHang()">
+    <button type="button" class="btn btn-sub" (click)="back()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button class="btn btn-sub" *ngIf="!isDisableField() && !isView" (click)="guiDuyet()">
+    <button class="btn btn-sub xanh-nhat" type="button"
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC) "
+      (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-
-    <button (click)="pheDuyet()"
-      *ngIf="(detail.trangThai == '00' && id > 0) && !isView && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKNCL_DUYET')"
-      type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light">
-      <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span>Duyệt</span>
-    </button>
-    <a type="button" class="btn btn-outline-grey btn-sm waves-effect waves-light"
-      *ngIf="phieuKiemNghiemChatLuongHang.trangThai == globals.prop.NHAP_CHO_DUYET_KTV_BAO_QUAN || phieuKiemNghiemChatLuongHang.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC"
+    <button type="button" class="btn btn-sub do"
+      *ngIf=" formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC "
       (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
-    </a>
-    <button (click)="save(false)" *ngIf="!isDisableField() && !isView" [disabled]="!isValid" type="
-          button" class="btn btn-sub xanh">
-      <i class="icon htvbdh_tcdt_save"></i>
+    </button>
+    <button class="btn btn-sub xanh-nhat"
+      *ngIf=" formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC "
+      (click)="pheDuyet()">
+      <i class="icon htvbdh_tcdt_pheduyet "></i>
+      <span>Duyệt</span>
+    </button>
+    <button class="btn btn-sub xanh"
+      *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC ) "
+      (click)="save(false)">
+      <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
   </div>
@@ -34,7 +36,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do' ">{{formData.value.tenTrangThai}}</span>
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do' ">{{formData.value.tenTrangThai}}</span>
         <span class="title-form">Phiếu kiểm nghiệm chất lượng hàng DTQG</span>
       </div>
     </div>
@@ -61,7 +63,7 @@
               Năm
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="nam" (ngModelChange)="loadSoQuyetDinh()" nzDisabled>
+              <nz-select formControlName="nam" (ngModelChange)="loadBbLayMau()" nzDisabled>
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -132,7 +134,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> KTV bảo quản</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="tenNguoiTao" readonly />
+              <input nz-input formControlName="tenKyThuatVien" readonly />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -213,10 +215,12 @@
             <nz-form-label [nzNoColon]="true">
               Hình thức bảo quản
             </nz-form-label>
-            <nz-select formControlName="hthucBquan" [disabled]="isView">
-              <nz-option *ngFor="let item of listHinhThucBaoQuan" [nzValue]="item.maHthuc" [nzLabel]="item.tenHthuc">
-              </nz-option>
-            </nz-select>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select formControlName="hthucBquan" [disabled]="isView">
+                <nz-option *ngFor="let item of listHinhThucBaoQuan" [nzValue]="item.maHthuc" [nzLabel]="item.tenHthuc">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="3">
@@ -248,14 +252,16 @@
             <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayLayMau" nzDisabled>
             </nz-date-picker>
           </nz-form-item>
-        </div>`
+        </div>
         <div nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Ngày kiểm nghiệm phiếu mẫu
+              Ngày kiểm nghiệm mẫu
             </nz-form-label>
-            <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKnghiem">
-            </nz-date-picker>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayKnghiem">
+              </nz-date-picker>
+            </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="24">
