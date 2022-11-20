@@ -46,10 +46,10 @@
                     thời gian
                     chỉnh lý quyết toán ngân sách - ngày 31/1 năm sau đối với báo cáo năm)
                 </th>
-                <th nzWidth="2.5%" class="th" rowspan="4" [hidden]="status && maLoaiBcao != '527" nzRight></th>
-                <th nzWidth="2.5%" class="th" rowspan="4" [hidden]="status && maLoaiBcao != '527" nzRight></th>
-                <th nzWidth="2.5%" class="th" rowspan="4" [hidden]="status && maLoaiBcao != '527" nzRight></th>
-                <th nzWidth="2.5%" class="th" rowspan="4" [hidden]="status && maLoaiBcao != '527" nzRight>
+                <th nzWidth="2.5%" class="th" rowspan="4" [hidden]="status" nzRight></th>
+                <th nzWidth="2.5%" class="th" rowspan="4" [hidden]="status" nzRight></th>
+                <th nzWidth="2.5%" class="th" rowspan="4" [hidden]="status" nzRight></th>
+                <th nzWidth="2.5%" class="th" rowspan="4" [hidden]="status" nzRight>
                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
                     </label>
                 </th>
@@ -168,10 +168,10 @@
                 <td>40=39/5</td>
                 <td>41</td>
                 <td>42=41/6 </td>
-                <td [hidden]="status && maLoaiBcao != '527" nzRight></td>
-                <td [hidden]="status && maLoaiBcao != '527" nzRight></td>
-                <td [hidden]="status && maLoaiBcao != '527" nzRight></td>
-                <td [hidden]="status && maLoaiBcao != '527" nzRight></td>
+                <td [hidden]="status" nzRight></td>
+                <td [hidden]="status" nzRight></td>
+                <td [hidden]="status" nzRight></td>
+                <td [hidden]="status" nzRight></td>
             </tr>
             <tr>
                 <td></td>
@@ -234,10 +234,10 @@
                 <td>{{displayValue(total.luyKeGiaiNganNsttTle)}}</td>
                 <td>{{displayValue(total.luyKeGiaiNganCk)}}</td>
                 <td>{{displayValue(total.luyKeGiaiNganCkTle)}}</td>
-                <td [hidden]="status && maLoaiBcao != '527" nzRight></td>
-                <td [hidden]="status && maLoaiBcao != '527" nzRight></td>
-                <td [hidden]="status && maLoaiBcao != '527" nzRight></td>
-                <td [hidden]="status && maLoaiBcao != '527" nzRight></td>
+                <td [hidden]="status" nzRight></td>
+                <td [hidden]="status" nzRight></td>
+                <td [hidden]="status" nzRight></td>
+                <td [hidden]="status" nzRight></td>
             </tr>
             <tr *ngFor="let data of lstCtietBcao; let i = index">
                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
@@ -310,20 +310,20 @@
                     <td>{{displayValue(data.luyKeGiaiNganCk)}}</td>
                     <td>{{displayValue(data.luyKeGiaiNganCkTle)}}</td>
 
-                    <td [hidden]="status && maLoaiBcao != '527">
+                    <td [hidden]="status">
                         <ng-container *ngIf="!getDeleteStatus(data)">
                             <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                         </ng-container>
                     </td>
-                    <td [hidden]="status && maLoaiBcao != '527">
+                    <td [hidden]="status">
                         <ng-container *ngIf="!getLowStatus(data.stt)">
                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </ng-container>
                     </td>
-                    <td [hidden]="status && maLoaiBcao != '527">
+                    <td [hidden]="status">
                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                     </td>
-                    <td [hidden]="status && maLoaiBcao != '527">
+                    <td [hidden]="status">
                         <ng-container *ngIf="!getDeleteStatus(data)">
                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                 (ngModelChange)="updateChecked(data.id)"></label>
@@ -545,7 +545,7 @@
                     <td>
                         {{displayValue(editCache[data.id].data.luyKeGiaiNganCkTle)}}
                     </td>
-                    <td [hidden]="status && maLoaiBcao != '527">
+                    <td [hidden]="status">
                         <ng-container *ngIf="!getDeleteStatus(data)">
                             <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                         </ng-container>
@@ -553,13 +553,13 @@
                     <td>
                         <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                     </td>
-                    <td [hidden]="status && maLoaiBcao != '527">
+                    <td [hidden]="status">
                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                             (nzOnConfirm)="cancelEdit(data.id)" class="save">
                             Hủy
                         </a>
                     </td>
-                    <td [hidden]="status && maLoaiBcao != '527">
+                    <td [hidden]="status">
                         <ng-container *ngIf="!getDeleteStatus(data)">
                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                 (ngModelChange)="updateChecked(data.id)"></label>

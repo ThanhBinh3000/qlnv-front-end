@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  AUTHEN_API: 'http://192.168.1.117:8888',
-  SERVICE_API: 'http://192.168.1.117:8888',
+  AUTHEN_API: 'http://192.168.1.118:8888',
+  SERVICE_API: 'http://192.168.1.118:8888',
   LOCAL: 'http://192.168.5.212:189'
 };
 
