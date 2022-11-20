@@ -23,11 +23,19 @@ export class BaoCaoThucHienVonPhiComponent implements OnInit {
     async ngOnInit() {
         this.tabList.forEach(item => {
             let check = false;
-            item.role.forEach(e => {
-                if (this.userService.isAccessPermisson(e)) {
-                    check = true;
-                }
-            })
+            if (item.code == 'vanphong') {
+                item.role.forEach(e => {
+                    if (this.userService.isAccessPermisson(e) && this.userService.isCuc()) {
+                        check = true;
+                    }
+                })
+            } else {
+                item.role.forEach(e => {
+                    if (this.userService.isAccessPermisson(e)) {
+                        check = true;
+                    }
+                })
+            }
             item.status = check;
             item.isSelected = false;
             if (!this.tabSelected && item.status) {

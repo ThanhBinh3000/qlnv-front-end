@@ -69,7 +69,7 @@
 
         <div class="mt-16 flex-card p-lr16">
             <nz-card class="mt-2px flex-card data-table card-border-content table-card"
-                nzTitle="Xây dựng phương án giao số kiểm tra trần chi NSNN cho các đơn vị">
+                nzTitle="Xây dựng phương án giao số kiểm tra trần chi NSNN cho các đơn vị" [nzExtra]="extraTemplate">
                 <div id="tablePrint">
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                         <div nz-col [nzSpan]="1">
@@ -240,6 +240,18 @@
                 </div>
 
             </nz-card>
+            <ng-template #extraTemplate>
+                <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
+                    <i class="fa fa-trash-o"></i>
+                    <span>Xóa</span>
+                </button>
+                <ng-container *ngIf="lstCtietBcao.length == 0">
+                    <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
+                        <i class="icon htvbdh_dau-cong"></i>
+                        <span>Thêm</span>
+                    </button>
+                </ng-container>
+            </ng-template>
         </div>
     </div>
 </ng-container>
