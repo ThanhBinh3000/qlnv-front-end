@@ -38,19 +38,19 @@ export const LINH_VUC = [
     level: 1,
   },
   {
-    id: 2001,
+    id: 200,
     tenDm: "Bảo quản thường xuyên",
     idCha: 2000,
     level: 2,
   },
   {
-    id: 94,
+    id: 201,
     tenDm: "Bảo quản lần đầu - mới",
     idCha: 2000,
     level: 2,
   },
   {
-    id: 95,
+    id: 202,
     tenDm: "Bảo quản lần đầu - bổ sung",
     idCha: 2000,
     level: 2,
