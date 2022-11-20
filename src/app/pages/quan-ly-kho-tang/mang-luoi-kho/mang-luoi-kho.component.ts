@@ -165,7 +165,7 @@ export class MangLuoiKhoComponent implements OnInit {
       this.isEditData = true;
       this.nodeSelected = event.node.origin;
       this.levelNode = this.nodeSelected.capDvi;
-      // this.getDetailMlkByKey(event.node)
+      this.getDetailMlkByKey(event.node)
     }
   }
 

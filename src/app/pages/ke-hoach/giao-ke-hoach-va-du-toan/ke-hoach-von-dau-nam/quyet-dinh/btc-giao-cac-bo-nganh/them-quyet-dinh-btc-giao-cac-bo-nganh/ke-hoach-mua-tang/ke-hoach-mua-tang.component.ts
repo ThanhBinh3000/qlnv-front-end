@@ -14,6 +14,7 @@ import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {MESSAGE} from 'src/app/constants/message';
 import {KeHoachMuaXuat} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
+import { Globals } from './../../../../../../../../shared/globals';
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
@@ -38,6 +39,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     private modal: NzModalService,
     private danhMucService: DanhMucService,
     private notification: NzNotificationService,
+    public globals: Globals
   ) {
   }
 

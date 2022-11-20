@@ -2,27 +2,30 @@
     <nz-table [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
             <tr>
+                <th>STT</th>
                 <th style="width: 70%;">Chỉ tiêu</th>
-                <th style="width: 10%;">Số lượng(Tấn)</th>
-                <th style="width: 10%;">Đơn giá(Đồng/Kg)</th>
+                <th style="width: 10%;">Số lượng (Tấn)</th>
+                <th style="width: 10%;">Đơn giá (Đồng/Kg)</th>
                 <th style="width: 10%;">Trị giá (Triệu đồng)</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Vốn chi mua lương thực</td>
-                <td>
+                <td rowspan="5">1</td>
+                <td style="font-weight: 500;">Vốn chi mua lương thực</td>
+                <td style="font-weight: 500;">
                     {{ (keHoachNhapXuat.soLuongMuaGaoLpdh + keHoachNhapXuat.soLuongMuaGaoXcht ) * 2 +
                     keHoachNhapXuat.soLuongMuaThoc | number : '1.0-1' : 'vi_VN'}}
                 </td>
                 <td></td>
-                <td>{{ (( keHoachNhapXuat.soLuongMuaThoc * keHoachNhapXuat.donGiaMuaThoc ) +
+                <td style="font-weight: 500;">{{ (( keHoachNhapXuat.soLuongMuaThoc * keHoachNhapXuat.donGiaMuaThoc ) +
                     (keHoachNhapXuat.soLuongMuaGaoLpdh * keHoachNhapXuat.donGiaMuaGaoLqdh) +
                     (keHoachNhapXuat.soLuongMuaGaoXcht * keHoachNhapXuat.donGiaMuaGaoXcht)) / 1000 | number : '1.0-1' :
                     'vi_VN'}}
                 </td>
             </tr>
             <tr>
+
                 <td>&nbsp;&nbsp;&nbsp; 1.1 Mua Thóc</td>
                 <td>
                     <div>
@@ -44,6 +47,7 @@
                     'vi_VN'}}</td>
             </tr>
             <tr>
+
                 <td>&nbsp;&nbsp;&nbsp;1.2 Mua Gạo</td>
                 <td>
                     {{ keHoachNhapXuat.soLuongMuaGaoLpdh + keHoachNhapXuat.soLuongMuaGaoXcht | number : '1.0-1' :
@@ -58,6 +62,7 @@
                 </td>
             </tr>
             <tr>
+
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Luân phiên đổi hàng</td>
                 <td>
                     <div>
@@ -82,6 +87,7 @@
                 </td>
             </tr>
             <tr>
+
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Mua gạo xuất cấp hỗ trợ học sinh, dự án trồng rừng</td>
                 <td>
                     <div>
@@ -105,20 +111,24 @@
                 </td>
             </tr>
             <tr>
-                <td>Nguồn vốn có</td>
+                <td rowspan="7">2</td>
+                <td style="font-weight: 500;">Nguồn vốn có</td>
                 <td>
 
                 </td>
                 <td>
 
                 </td>
-                <td>
-
-                </td>
+                <td style="font-weight: 500;">{{ ((keHoachNhapXuat.soLuongBanThoc * keHoachNhapXuat.donGiaBanThoc)
+                    +(keHoachNhapXuat.soLuongBanGao * keHoachNhapXuat.donGiaBanGao)
+                    +(keHoachNhapXuat.soLuongGaoCtro * keHoachNhapXuat.donGiaGaoCtro)
+                    +((keHoachNhapXuat.tongTienVonNsnn)
+                    +(keHoachNhapXuat.tongTienVonTx))*1000) / 1000 | number : '1.0-1' :'vi_VN' }}
             </tr>
             <tr>
+
                 <td>&nbsp;&nbsp;&nbsp;2.1 Tiền thu được từ xuất bán</td>
-                <td>
+                <td style="font-weight: 500;">
                     {{ keHoachNhapXuat.soLuongBanThoc +
                     (keHoachNhapXuat.soLuongBanGao + keHoachNhapXuat.soLuongGaoCtro) * 2 | number : '1.0-1' :
                     'vi_VN' }}
@@ -132,6 +142,7 @@
                 </td>
             </tr>
             <tr>
+
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Bán thóc</td>
                 <td>
                     <div>
@@ -155,6 +166,7 @@
                 </td>
             </tr>
             <tr>
+
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ Bán gạo</td>
                 <td>
                     <div>
@@ -178,6 +190,7 @@
                 </td>
             </tr>
             <tr>
+
                 <td>&nbsp;&nbsp;&nbsp;2.2 Vốn trình bổ sung mua bù gạo xuất cứu trợ</td>
                 <td>
                     <div>
@@ -201,6 +214,7 @@
                 </td>
             </tr>
             <tr>
+
                 <td>&nbsp;&nbsp;&nbsp;2.3 Vốn NSNN bố trí từ nguồn chi DTQG</td>
                 <td></td>
                 <td></td>
@@ -214,6 +228,7 @@
                 </td>
             </tr>
             <tr>
+
                 <td>&nbsp;&nbsp;&nbsp;2.4 Vốn bố trí từ nguồn thường xuyên để mua gạo xuất cấp hỗ trợ học sinh, dự án
                     trồng rừng</td>
                 <td></td>
