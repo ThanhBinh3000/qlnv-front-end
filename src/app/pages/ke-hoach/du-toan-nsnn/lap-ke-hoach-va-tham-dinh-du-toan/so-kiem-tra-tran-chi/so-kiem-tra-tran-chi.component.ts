@@ -370,7 +370,7 @@ export class SoKiemTraTranChiComponent implements OnInit {
         }
         const requestReport = {
             loaiTimKiem: "0",
-            maBcao: this.maBaoCao,
+            maBcaos: !this.maBaoCao ? [] : [this.maBaoCao],
             maDvi: this.userInfo?.MA_DVI,
             paggingReq: {
                 limit: 10,
@@ -397,6 +397,7 @@ export class SoKiemTraTranChiComponent implements OnInit {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                     const obj = {
                         id: data.data.id,
+                        preData: this.data,
                         tabSelected: 'baocao',
                     }
                     this.dataChange.emit(obj);

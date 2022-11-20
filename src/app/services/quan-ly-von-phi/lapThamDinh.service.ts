@@ -196,4 +196,10 @@ export class LapThamDinhService extends BaseService {
             this.urlDefault + '/qlnv-khoachphi/giao-so/cap-nhat/bao-cao',
             request);
     }
+
+    tongHopPa(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/tong-hop-theo-ma-pa',
+            request);
+    }
 }

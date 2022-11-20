@@ -56,6 +56,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
     //thong tin chung bao cao
     id: string;
     maDeNghi: string;
+    namDn: number;
     qdChiTieu: string;
     nguonBcao: string = Utils.THOP_TU_CUC_KV;
     congVan: ItemCongVan;
@@ -264,6 +265,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
         );
         if (!this.id) {
             this.qdChiTieu = this.data?.qdChiTieu;
+            this.namDn = this.data?.namDn;
             this.maDviTao = this.userInfo?.MA_DVI;
             await this.callSynthetic();
             this.trangThai = '1';
@@ -431,6 +433,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
                     })
                     this.updateListCtietBcao();
                     this.maDeNghi = data.data.maDnghi;
+                    this.namDn = data.data.namDn;
                     this.qdChiTieu = data.data.soQdChiTieu;
                     this.congVan = data.data.congVan;
                     this.ngayTao = this.datePipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
@@ -540,6 +543,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             thopCucKvCtiets: this.lstCtietBcao,
             maDvi: this.maDviTao,
             maDnghi: this.maDeNghi,
+            namDn: this.namDn,
             maDviTien: "1",
             congVan: this.congVan,
             loaiDnghi: this.nguonBcao,
@@ -723,6 +727,7 @@ export class TongHopTuCucKhuVucComponent implements OnInit {
             thopCucKvCtiets: lstCtietBcaoTemp,
             maDvi: this.maDviTao,
             maDnghi: maDeNghiNew,
+            namDn: this.namDn,
             maDviTien: "1",
             loaiDnghi: this.nguonBcao,
             soQdChiTieu: response.qdChiTieu,

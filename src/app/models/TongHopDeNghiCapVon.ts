@@ -21,4 +21,14 @@ export class TongHopDeNghiCapVon {
 export class Ct1sTonghop {
   khDnCapVonId: number;
   tcCapThem: number;
+  tenBoNganh: string;
+  loaiBn: string;
+  loaiHang: string;
+  maBn: string;
+  tongTien: number;
+  kinhPhiDaCap: number;
+  ycCapThem: number;
+  soDeNghi: string;
+  ngayDeNghi: string;
+  nam: number;
 }

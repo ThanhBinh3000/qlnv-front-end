@@ -7,6 +7,9 @@ import { MainKeHoachBanDauGiaComponent } from './main-ke-hoach-ban-dau-gia/main-
 import {ComponentsModule} from "../../../../components/components.module";
 import {MainModule} from "../../../../layout/main/main.module";
 import { ThemDeXuatKeHoachBanDauGiaComponent } from './de-xuat/them-de-xuat-ke-hoach-ban-dau-gia/them-de-xuat-ke-hoach-ban-dau-gia.component';
+import { ThemMoiTongHopKeHoachBanDauGiaComponent } from './tong-hop/them-moi-tong-hop-ke-hoach-ban-dau-gia/them-moi-tong-hop-ke-hoach-ban-dau-gia.component';
+import { ThemQuyetDinhBanDauGiaComponent } from './quyet-dinh/them-quyet-dinh-ban-dau-gia/them-quyet-dinh-ban-dau-gia.component';
+import { ThongtinDexuatKhbdgComponent } from './quyet-dinh/them-quyet-dinh-ban-dau-gia/thongtin-dexuat-khbdg/thongtin-dexuat-khbdg.component';
 
 
 
@@ -16,7 +19,10 @@ import { ThemDeXuatKeHoachBanDauGiaComponent } from './de-xuat/them-de-xuat-ke-h
     TongHopComponent,
     QuyetDinhComponent,
     MainKeHoachBanDauGiaComponent,
-    ThemDeXuatKeHoachBanDauGiaComponent
+    ThemDeXuatKeHoachBanDauGiaComponent,
+    ThemMoiTongHopKeHoachBanDauGiaComponent,
+    ThemQuyetDinhBanDauGiaComponent,
+    ThongtinDexuatKhbdgComponent
   ],
   exports: [
     DeXuatComponent,

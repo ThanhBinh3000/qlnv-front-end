@@ -168,6 +168,16 @@
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
               <nz-form-item>
+                <nz-form-label>Phương pháp lấy mẫu</nz-form-label>
+                <label [ngModelOptions]="{standalone: true}"  [(ngModel)]="item.checked" [nzDisabled]="!isEditData" nz-checkbox *ngFor="let item of listPpLayMau"  >  {{item.giaTri}}
+                </label>
+              </nz-form-item>
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="16" nzLg="16">
+
+            </div>
+            <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
+              <nz-form-item>
                 <nz-form-label>Trạng thái</nz-form-label>
                 <label nz-checkbox formControlName="trangThai" [nzDisabled]="!isEditData">Hoạt động/ Không hoạt
                   động</label>

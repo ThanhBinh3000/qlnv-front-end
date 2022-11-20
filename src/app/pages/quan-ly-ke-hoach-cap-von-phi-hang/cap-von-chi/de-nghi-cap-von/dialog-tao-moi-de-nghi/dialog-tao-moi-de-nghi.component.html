@@ -2,8 +2,9 @@
     <div class="search__body" nz-row [nzGutter]="[18, 12]">
         <div nz-col nzSpan="6">
             <label class="search__label">Năm</label>
-            <nz-input-number nzSize="small" [(ngModel)]="nam"
-                [class]="nam && (nam > 999 && nam < 3000) ? '' : 'input-error-validate'" (change)="getSoQdChiTieu()">
+            <nz-input-number nzSize="small" [(ngModel)]="response.namDn"
+                [class]="response.namDn && (response.namDn > 999 && response.namDn < 3000) ? '' : 'input-error-validate'"
+                (change)="getSoQdChiTieu()">
             </nz-input-number>
         </div>
         <div nz-col nzSpan="6">
