@@ -3,7 +3,7 @@
         <li nz-menu-item nzSelected (click)="selectTab('dsquyetDinh')">
             Quyết định từ Bộ Tài Chính
         </li>
-        <li nz-menu-item (click)="selectTab('phanBo')">
+        <li nz-menu-item (click)="selectTab('dsphanBo')">
             Phân bổ dự toán
         </li>
         <li nz-menu-item (click)="selectTab('giaoTuCapTren')">
@@ -24,7 +24,7 @@
             <app-tao-moi-quyet-dinh-btc (dataChange)="changeTab($event)">
             </app-tao-moi-quyet-dinh-btc>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'phanBo'">
+        <ng-container *ngIf="tabSelected == 'dsphanBo'">
             <app-phan-bo-du-toan (dataChange)="changeTab($event)">
             </app-phan-bo-du-toan>
         </ng-container>
@@ -35,6 +35,10 @@
         <ng-container *ngIf="tabSelected == 'baoCaoCapDuoi'">
             <app-bao-cao-tu-don-vi-cap-duoi (dataChange)="changeTab($event)">
             </app-bao-cao-tu-don-vi-cap-duoi>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'phuongAnPhanBo'">
+            <app-them-phuong-an-phan-bo (dataChange)="changeTab($event)">
+            </app-them-phuong-an-phan-bo>
         </ng-container>
     </div>
 </div>

@@ -9,6 +9,7 @@ import { GiaoDuToanComponent } from './giao-du-toan.component';
 import { PhanBoDuToanComponent } from './phan-bo-du-toan/phan-bo-du-toan.component';
 import { QuyetDinhBoTaiChinhComponent } from './quyet-dinh-bo-tai-chinh/quyet-dinh-bo-tai-chinh.component';
 import { TaoMoiQuyetDinhBtcComponent } from './tao-moi-quyet-dinh-btc/tao-moi-quyet-dinh-btc.component';
+import { ThemPhuongAnPhanBoComponent } from './them-phuong-an-phan-bo/them-phuong-an-phan-bo.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { TaoMoiQuyetDinhBtcComponent } from './tao-moi-quyet-dinh-btc/tao-moi-qu
     QuyetDinhBoTaiChinhComponent,
     DialogTaoMoiComponent,
     TaoMoiQuyetDinhBtcComponent,
+    ThemPhuongAnPhanBoComponent,
   ],
   imports: [
     CommonModule,
@@ -32,6 +34,7 @@ import { TaoMoiQuyetDinhBtcComponent } from './tao-moi-quyet-dinh-btc/tao-moi-qu
     QuyetDinhBoTaiChinhComponent,
     DialogTaoMoiComponent,
     TaoMoiQuyetDinhBtcComponent,
+    ThemPhuongAnPhanBoComponent,
   ],
 })
 export class GiaoDuToanModule { }
