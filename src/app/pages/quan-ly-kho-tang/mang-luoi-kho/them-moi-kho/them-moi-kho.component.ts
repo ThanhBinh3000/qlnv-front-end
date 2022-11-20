@@ -12,6 +12,8 @@ import {UserLogin} from "../../../../models/userlogin";
 import {UserService} from "../../../../services/user.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {DanhMucService} from "../../../../services/danhmuc.service";
+import {MangLuoiKhoService} from "../../../../services/quan-ly-kho-tang/mangLuoiKho.service";
+import {Globals} from "../../../../shared/globals";
 
 
 @Component({
@@ -39,23 +41,26 @@ export class ThemMoiKhoComponent implements OnInit {
   dataTable: any[] = [];
   dvi : string = 'Tấn kho';
   theTich : string = 'm3';
+  dienTich : string = 'm2';
   dsChungLoaiHangHoa: any[] =[];
   dsLoaiHangHoa: any[] =[];
+   listTinhTrang: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     private notification: NzNotificationService,
     private helperService: HelperService,
     private donviService: DonviService,
+    private khoService : MangLuoiKhoService,
     private modal: NzModalRef,
     private userService: UserService,
     private danhMucService: DanhMucService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    public globals : Globals
   ) {
     this.formKho = this.fb.group({
-      nganKhoId: [null],
-      tenDvi: ['', Validators.required],
-      maDvi: ['', Validators.required],
+      maCha: [null],
+      nganKhoId : [''],
       diaChi: [''],
       tenChiCuc : [''],
       tenNganLo: [''],
@@ -70,6 +75,7 @@ export class ThemMoiKhoComponent implements OnInit {
       loaiVthh : [''],
       cloaiVthh : [''],
       trangThai: [true],
+      diaDiem : [''],
       type: [true],
       ghiChu: [''],
       nhiemVu: [''],
@@ -82,9 +88,9 @@ export class ThemMoiKhoComponent implements OnInit {
       tichLuongKdLt : [''],
       tichLuongKdVt : [''],
       theTichTk : [''],
-      tinhtrangId: ['']
+      tinhTrangId: ['']
     })
-    this.formKho.controls['nganKhoId'].valueChanges.subscribe(value => {
+    this.formKho.controls['maCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
       if (node) {
         this.levelNode = node.level + 1
@@ -96,6 +102,14 @@ export class ThemMoiKhoComponent implements OnInit {
       // }
     });
   }
+
+  loadDetailParent(node) {
+    switch (node.level) {
+
+    }
+  }
+
+
 
   async loaiVTHHGetAll() {
     try {
@@ -117,13 +131,22 @@ export class ThemMoiKhoComponent implements OnInit {
     }
   }
 
+  async loadTinhTrangLoKho() {
+      this.listTinhTrang = [];
+      let res = await this.danhMucService.danhMucChungGetAll('CL_KHO');
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.listTinhTrang = res.data;
+      }
+  }
+
   async ngOnInit() {
     this.spinner.show();
     try {
       await Promise.all([
         this.userInfo = this.userService.getUserLogin(),
         this.loaiVTHHGetAll(),
-        this.loadDsDvi()
+        this.loadDsDvi(),
+        this.loadTinhTrangLoKho()
       ]);
       this.spinner.hide();
     } catch (e) {
@@ -146,12 +169,6 @@ export class ThemMoiKhoComponent implements OnInit {
 
   }
 
-  nzClickNodeTree(event: any): void {
-    if (event.keys.length > 0) {
-      this.nodeSelected = event.node.origin;
-    }
-  }
-
   async loadDsDvi() {
     await this.donviService.layTatCaDviDmKho(LOAI_DON_VI.MLK, this.userInfo.MA_DVI).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
@@ -164,5 +181,28 @@ export class ThemMoiKhoComponent implements OnInit {
 
   handleCancel(): void {
     this.modal.destroy();
+  }
+
+  save() {
+    this.helperService.markFormGroupTouched(this.formKho);
+    if (this.formKho.invalid) {
+      return;
+    }
+    let body = this.formKho.value;
+    body.nganKhoId = this.formKho.value.maCha;
+    this.khoService.create(body).then((res: OldResponseData) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        this.modal.close(true);
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }).catch((e) => {
+      console.error('error: ', e);
+      this.notification.error(
+        MESSAGE.ERROR,
+        e.error.errors[0].defaultMessage,
+      );
+    });
   }
 }

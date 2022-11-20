@@ -43,6 +43,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   editItem(index: number): void {
     this.dataEdit[index].edit = true;
     this.onChangeLoaiVthh(this.dataEdit[index].data.loaiVthh, 'edit', index);
+    console.log(this.dataEdit[index].data, "huhu");
   }
 
 
@@ -92,8 +93,9 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   }
 
 
-  calcularTongTien() {
-    this.rowItem.tongTien = this.rowItem.soLuong * this.rowItem.donGia;
+  calcularTongTien(rowData) {
+    rowData.tongTien = rowData.soLuong * rowData.donGia;
+
   }
 
   luuEdit(index: number): void {
