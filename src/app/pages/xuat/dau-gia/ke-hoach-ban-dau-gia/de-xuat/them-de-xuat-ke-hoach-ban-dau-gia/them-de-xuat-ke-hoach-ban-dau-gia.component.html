@@ -27,7 +27,7 @@
       type="
         button" class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
-      <span>haha</span>
+      <span>Lưu</span>
     </button>
   </div>
 </nz-affix>
@@ -89,7 +89,7 @@
             <div nz-col [nzSpan]="6">
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Địa chỉ </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
+                <nz-form-control>
                   <input nz-input readonly formControlName="diaChi" />
                 </nz-form-control>
               </nz-form-item>
@@ -99,7 +99,7 @@
             <div nz-col [nzSpan]="2">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">Năm kế hoạch</nz-form-label>
-                <nz-form-control nz-col [nzErrorTip]="error">
+                <nz-form-control nz-col>
                   <nz-select formControlName="namKh" (ngModelChange)="getDataChiTieu()" [nzDisabled]="true">
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                   </nz-select>
@@ -414,9 +414,9 @@
         <div nz-col [nzSpan]="3">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm </nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
+            <nz-form-control>
               <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number class="text-right" nz-input formControlName="tongSoLuong" [nzSize]="'small'"
+                <nz-input-number class="text-right" nz-input formControlName="tongTienKdiem" [nzSize]="'small'"
                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                 </nz-input-number>
               </nz-input-group>
@@ -428,7 +428,7 @@
             <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="đ">
-                <nz-input-number class="text-right" nz-input formControlName="tongSoLuong" [nzSize]="'small'"
+                <nz-input-number class="text-right" nz-input formControlName="tongTienDatTruoc" [nzSize]="'small'"
                   [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
                 </nz-input-number>
               </nz-input-group>
@@ -443,65 +443,65 @@
           <span>Thêm</span>
         </button>
       </div>
-      <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-        <nz-table #phanBo class="nowrap mt-16 table-chi-tiet" nzBordered [nzData]="listDataGroup">
-          <thead>
+
+      <nz-table [nzData]="listOfData" class="nowrap pd-10" nzBordered>
+        <thead>
+          <tr>
+            <th width="60px" class="text-center">STT</th>
+            <th width="">Chi cục</th>
+            <th width="">Điểm kho</th>
+            <th width="">Nhà kho</th>
+            <th width="">Ngăn kho</th>
+            <th width="">Lô kho</th>
+            <th width="">Chủng loại hàng hóa</th>
+            <th width="">Mã đơn vị tài sản</th>
+            <th width="">Số lượng</th>
+            <th width="">Đơn vị tính</th>
+            <th width="">Đơn giá dự kiến không VAT (đ/kg)</th>
+            <th width="">Giá khởi điểm (đồng)</th>
+            <th width="">Số tiền đặt trước (đồng)</th>
+            <th style="width: 5%;">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of listOfData , let i = index">
             <tr>
-              <th style="width: 35px">STT</th>
-              <th style="width: 5%">Chi cục</th>
-              <th style="width: 5%">Điểm kho</th>
-              <th style="width: 5%">Ngăn kho</th>
-              <th style="width: 5%">Lô kho</th>
-              <th style="width: 10%">Chủng loại hàng hoá</th>
-              <th style="width: 10%">Mã đơn vị tài sản</th>
-              <th style="width: 5%">Số lượng</th>
-              <th style="width: 10%">Đơn vị tính</th>
-              <th style="width: 10%">Đơn giá dự kiến không VAT (đ/kg)</th>
-              <th style="width: 10%">Giá khởi điểm (đồng)</th>
-              <th style="width: 10%">Số tiền đặt trước (đồng)</th>
-              <th style="width: 10%">Hành động</th>
+              <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+              <td colspan="7">{{item.tenDvi}}</td>
+              <td>{{item.soLuong}}</td>
+              <td colspan="3"></td>
+              <td>{{item.soLuong * item.giaKhongVat/10 | number : '1.0-1' : 'vi_VN'}}</td>
+              <td></td>
+
             </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngFor="let item of listDataGroup , let i = index">
-              <tr>
-                <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                <td colspan="3">{{item.tenDvi}}</td>
-                <td>{{item.soLuong}}</td>
+            <ng-container *ngIf="expandSet.has(i)">
+              <tr *ngFor="let phanLo of item.children, let y = index">
                 <td></td>
                 <td></td>
-                <td>{{item.giaKhoiDiem}}</td>
-                <td>{{item.soTienDatTruoc}}</td>
-                <td>
-                  <a>
+                <td>{{phanLo.tenDiemKho}}</td>
+                <td>{{phanLo.tenNhakho}}</td>
+                <td>{{phanLo.tenNganKho}}</td>
+                <td>{{phanLo.tenLoKho}}</td>
+                <td>{{phanLo.tenCloaiVthh}}</td>
+                <td>{{phanLo.maDviTsan}}</td>
+                <td>{{phanLo.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td></td>
+                <td>{{phanLo.giaKhongVat | number : '1.0-1' : 'vi_VN' }}</td>
+                <td>{{phanLo.giaKhoiDiem | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{phanLo.soLuong * phanLo.giaKhongVat/10 | number : '1.0-1' : 'vi_VN'}}</td>
+                <td class="text-right">
+                  <a *ngIf="!isDisbleForm()">
                     <i class="fa fa-pencil"></i>
                   </a>
-                  <a>
+                  <a *ngIf="!isDisbleForm()" (click)="deleteRow(phanLo.idx)">
                     <i class="fa fa-trash-o do"></i>
                   </a>
                 </td>
               </tr>
-              <ng-container *ngIf="expandSet.has(i)">
-                <tr *ngFor="let chiTiet of item.dataChild, let y = index">
-                  <td nzWidtd="35px"></td>
-                  <td></td>
-                  <td>{{chiTiet.tenDiemKho}}</td>
-                  <td>{{chiTiet.tenNganKho}}</td>
-                  <td>{{chiTiet.tenNganLo}}</td>
-                  <td>{{chiTiet.tenChungLoaiHh}}</td>
-                  <td>{{chiTiet.maDonViTaiSan}}</td>
-                  <td>{{chiTiet.soLuong}}</td>
-                  <td>{{chiTiet.donViTinh}}</td>
-                  <td>{{chiTiet.donGiaChuaVAT}}</td>
-                  <td>{{chiTiet.giaKhoiDiem}}</td>
-                  <td>{{chiTiet.soTienDatTruoc}}</td>
-                  <td></td>
-                </tr>
-              </ng-container>
             </ng-container>
-          </tbody>
-        </nz-table>
-      </nz-card>
+          </ng-container>
+        </tbody>
+      </nz-table>
     </nz-card>
 
     <nz-card class="mt16 flex-card p-lr16">
@@ -517,7 +517,7 @@
       </div>
       <nz-card class="mt-2px flex-card data-table card-border-content table-card">
         <nz-table id="table-phieu-kncl" #ttChungDDGiaoNhan class="nowrap mt-16 table-chi-tiet"
-          [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="listDataGroup" nzBordered>
+          [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="listOfData" nzBordered>
           <thead>
             <tr>
               <th style="width: 2%">STT</th>
@@ -527,17 +527,17 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of listDataGroup; let i = index">
+            <tr *ngFor="let item of listOfData; let i = index">
               <td>{{i + 1}}</td>
-              <td>{{ item.tenChiCuc }}</td>
-              <td>{{ item.diaChi }}</td>
+              <td>{{ item.tenDvi }}</td>
+              <td>{{ item.diaDiemNhap }}</td>
               <td>{{ item.soLuong }}</td>
             </tr>
-            <tr *ngIf="listDataGroup.length > 0">
+            <tr *ngIf="listOfData.length > 0">
               <td></td>
               <td>Cộng</td>
               <td></td>
-              <td>{{formData.get("soLuong").value}}</td>
+              <td></td>
             </tr>
           </tbody>
         </nz-table>
