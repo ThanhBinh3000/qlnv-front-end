@@ -17,8 +17,8 @@
                 <nz-form-label nzRequired [nzNoColon]="true">SL xuất bán (KH) </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                     <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1"
-                        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
-                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                        (input)="calculatorGiaKhoiDiem()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </nz-form-control>
             </nz-form-item>
@@ -28,8 +28,8 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> SL xuất bán theo chỉ tiêu </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                     <nz-input-number [nzDisabled]="true" formControlName="soLuongChiTieu" [nzMin]="1"
-                        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
-                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                        (input)="calculatorGiaKhoiDiem()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </nz-form-control>
             </nz-form-item>
@@ -39,8 +39,8 @@
                 <nz-form-label nzRequired [nzNoColon]="true"> SL đã lên Kh xuất bán </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                     <nz-input-number [nzDisabled]="true" formControlName="soLuongKh" [nzMin]="1"
-                        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
-                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                        (input)="calculatorGiaKhoiDiem()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </nz-form-control>
             </nz-form-item>
@@ -88,29 +88,19 @@
                 </nz-select>
             </td>
             <td>
-                <nz-select [(ngModel)]="thongtinPhanLo.tenCloaiVthh" (ngModelChange)="changeHoangHoa()">
-                    <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzValue]="p.value" [nzLabel]="p.text">
-                    </nz-option>
-                </nz-select>
+                <input nz-input [(ngModel)]="thongtinPhanLo.tenCloaiVthh" class="w-150" [disabled]="true" />
             </td>
             <td>
-                <nz-input-number class="text-right" nz-input [(ngModel)]="thongtinPhanLo.maDviTsan" [nzMin]="1"
-                    [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                </nz-input-number>
+                <input nz-input [(ngModel)]="thongtinPhanLo.maDviTsan" class="w-150" />
             </td>
-            <td>
-
-            </td>
-            <td>
-                <input nz-input class="w-150" />
-            </td>
+            <td>{{thongtinPhanLo.duDau}}</td>
             <td>
                 <nz-input-number class="text-right" nz-input [(ngModel)]="thongtinPhanLo.soLuong" [nzMin]="1"
                     [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
             </td>
-            <td></td>
-
+            <td>{{thongtinPhanLo.giaKhongVat}}</td>
+            <td>{{thongtinPhanLo.giaKhoiDiem}}</td>
             <td class="text-center">
                 <a (click)="addDiemKho()">
                     <i class="icon htvbdh_dau-cong xanhla"></i>
@@ -123,8 +113,15 @@
         <tr *ngFor="let data of editRowTable.data, let i = index" class="editable-row">
             <ng-container *ngIf="!data.edit; else editTemplate">
                 <td>{{ data.tenDiemKho }}</td>
+                <td>{{ data.tenNhakho }}</td>
                 <td>{{ data.tenNganKho }}</td>
+                <td>{{ data.tenLoKho }}</td>
+                <td>{{ data.tenCloaiVthh }}</td>
+                <td>{{ data.maDviTsan | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.duDau | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.giaKhongVat | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.giaKhoiDiem | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-center">
                     <a (click)="startEdit(i)">
                         <i class="fa fa-pencil"></i>
@@ -136,16 +133,49 @@
             </ng-container>
             <ng-template #editTemplate>
                 <td>
-                    <nz-select [(ngModel)]="data.maDiemKho" (ngModelChange)="changeDiemKho(i)">
+                    <nz-select [(ngModel)]="data.maDiemKho" (ngModelChange)="changeDiemKho()">
                         <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
+                </td>
+                <td>
+                    <nz-select [(ngModel)]="data.maNhaKho" (ngModelChange)="changeNhaKho()">
+                        <nz-option *ngFor="let p of listNhaKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    </nz-select>
+                </td>
+                <td>
+                    <nz-select [(ngModel)]="data.maNganKho" (ngModelChange)="changeNganKho()">
+                        <nz-option *ngFor="let p of listNganKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    </nz-select>
+                </td>
+                <td>
+                    <nz-select [(ngModel)]="data.maLoKho" (ngModelChange)="changeLoKho()">
+                        <nz-option *ngFor="let p of listLoKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    </nz-select>
+                </td>
+                <td>
+                    <input nz-input [(ngModel)]="data.tenCloaiVthh" class="w-150" [disabled]="true" />
+                </td>
+                <td>
+                    <input nz-input [(ngModel)]="data.maDviTsan" class="w-150" />
+                </td>
+                <td>
+                    <nz-input-number class="text-right" nz-input [(ngModel)]="data.duDau" [nzMin]="1" [nzStep]="1"
+                        [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                    </nz-input-number>
                 </td>
 
                 <td>
                     <nz-input-number class="text-right" nz-input [(ngModel)]="data.soLuong" [nzMin]="1" [nzStep]="1"
-                        [nzSize]="'small'">
+                        [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </td>
+
+                <td>
+                    <nz-input-number class="text-right" nz-input [(ngModel)]="data.giaKhongVat" [nzMin]="1" [nzStep]="1"
+                        [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                    </nz-input-number>
+                </td>
+                <td>{{thongtinPhanLo.giaKhoiDiem}}</td>
                 <td class="text-center">
                     <a (click)="saveEdit(i)" class="save">
                         <i class="icon htvbdh_tcdt_save"></i>
@@ -157,8 +187,16 @@
             </ng-template>
         </tr>
         <tr *ngIf="listOfData.length > 0">
-            <td colspan="2" class="first-last-row-table background-last-row text-left">Cộng</td>
-            <td colspan="2" class="background-last-row text-left"> {{ calcTong() | number : '1.0-1' : 'vi_VN' }}
+            <td colspan="6" class="first-last-row-table background-last-row text-left">Cộng</td>
+            <td class="background-last-row text-left"> {{ calcTonKho() | number : '1.0-1' : 'vi_VN' }}
+            </td>
+            <td class="background-last-row text-left"> {{ calcTong() | number : '1.0-1' : 'vi_VN' }}
+            </td>
+            <td>
+            </td>
+            <td class="background-last-row text-left"> {{ calcGiaKhoiDiem() | number : '1.0-1' : 'vi_VN' }}
+            </td>
+            <td colspan="2">
             </td>
         </tr>
     </tbody>

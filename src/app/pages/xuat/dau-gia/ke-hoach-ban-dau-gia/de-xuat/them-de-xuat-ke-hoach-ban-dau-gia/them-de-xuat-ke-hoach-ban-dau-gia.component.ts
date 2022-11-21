@@ -128,8 +128,8 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       tenCloaiVthh: [, [Validators.required]],
       moTaHangHoa: [, [Validators.required]],
       tchuanCluong: [null],
-      tgianDkienTu: [null, [Validators.required]],
-      tgianDkienDen: [null, [Validators.required]],
+      tgianDkienTu: [null],
+      tgianDkienDen: [null],
       loaiHdong: [null, [Validators.required]],
       tgianKyHdong: [null, [Validators.required]],
       tgianTtoan: [null, [Validators.required]],
@@ -160,7 +160,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       tgianGnhanGhiChu: [null],
       pthucTtoan: [null, [Validators.required]],
       pthucGnhan: [null, [Validators.required]],
-      thoiGianDuKien: [null, [Validators.required]],
+      thoiGianDuKien: [null],
       TgianGnhanGhiChu: [null],
     });
   }
@@ -232,7 +232,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
             if (dataDetail) {
               this.fileDinhKem = dataDetail.fileDinhKems;
               this.listOfData = dataDetail.dsGtDtlList;
-              this.convertListData();
             }
           }
         })
@@ -354,25 +353,26 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       let tongSoLuong: number = 0;
       let tongTienKdiem: number = 0;
       let tongTienDatTruoc: number = 0;
+      console.log(this.listOfData, 9999)
       this.listOfData.forEach((item) => {
         tongSoLuong = tongSoLuong + item.soLuong;
-        tongTienKdiem = tongTienKdiem + item.tongTienKdiem;
-        tongTienDatTruoc = tongTienDatTruoc + item.tienDatTruoc
+        tongTienKdiem = tongTienKdiem + item.giaKhoiDiem;
+        tongTienDatTruoc = tongTienDatTruoc + item.soLuong * item.giaKhongVat / 10
       });
       this.formData.patchValue({
         tongSoLuong: tongSoLuong,
         tongTienKdiem: tongTienKdiem,
         tongTienDatTruoc: tongTienDatTruoc,
       });
-      this.convertListData();
-    });
 
+    });
+    console.log(this.listOfData, 6666)
   }
 
   deleteRow(i: number): void {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
     this.helperService.setIndexArray(this.listOfData);
-    this.convertListData();
+
   }
 
   async save(isGuiDuyet?) {
@@ -382,7 +382,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
       return;
     }
-    let pipe = new DatePipe('en-US');
+    // let pipe = new DatePipe('en-US');
     let body = this.formData.value;
     if (this.formData.get('soDxuat').value) {
       body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
@@ -655,11 +655,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     });
   }
 
-  convertListData() {
-    this.helperService.setIndexArray(this.listOfData);
-    this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
-      .value()
-  }
+
 
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {
