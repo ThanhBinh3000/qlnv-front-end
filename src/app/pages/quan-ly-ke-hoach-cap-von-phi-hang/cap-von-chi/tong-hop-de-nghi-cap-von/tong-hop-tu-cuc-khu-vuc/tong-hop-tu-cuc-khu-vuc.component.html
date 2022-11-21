@@ -41,7 +41,7 @@
             <div class="header mg-t-16">
                 <div class="header-text">
                     <div class="title-chi-tieu">
-                        <span [ngClass]="statusClass()">{{titleStatus}}</span>
+                        <span [ngClass]="statusClass()">{{getStatusName()}}</span>
                         <span>Tổng hợp đề nghị cấp vốn chi dự trữ quốc gia</span>
                     </div>
                 </div>
@@ -51,6 +51,7 @@
                     <thead>
                         <tr>
                             <th>Mã đề nghị</th>
+                            <th>Năm đề nghị</th>
                             <th>Quyết định chỉ tiêu</th>
                             <th>Nguồn báo cáo</th>
                             <th>Công văn</th>
@@ -63,6 +64,7 @@
                     <tbody>
                         <tr>
                             <td>{{maDeNghi}}</td>
+                            <td>{{namDn}}</td>
                             <td>{{qdChiTieu}}</td>
                             <td>
                                 <div *ngFor="let item of nguonBcaos">

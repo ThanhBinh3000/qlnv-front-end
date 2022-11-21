@@ -327,11 +327,11 @@ export class DanhSachBaoCaoDieuChinhComponent implements OnInit {
 
   checkEditStatus(trangThai: string) {
     return Utils.statusSave.includes(trangThai) &&
-      (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(DCDT.EDIT_REPORT));
+      (this.userService.isAccessPermisson(DCDT.EDIT_REPORT));
   };
 
   checkDeleteStatus(trangThai: string) {
     return Utils.statusDelete.includes(trangThai) &&
-      (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(DCDT.DELETE_REPORT));
+      (this.userService.isAccessPermisson(DCDT.DELETE_REPORT));
   };
 }

@@ -87,6 +87,8 @@ export class DanhSachPhanLo {
     tenDvi: string;
     maDiemKho: string;
     tenDiemKho: string;
+    maNhaKho: string;
+    tenNhaKho: string;
     maNganKho: string;
     tenNganKho: string;
     maLoKho: string;
@@ -100,6 +102,7 @@ export class DanhSachPhanLo {
     donViTinh: string;
     giaKhongVat: number;
     giaKhoiDiem: number;
+    duDau: number;
     tienDatTruoc: number;
     soLuongChiTieu: number;
     soLuongKh: number;

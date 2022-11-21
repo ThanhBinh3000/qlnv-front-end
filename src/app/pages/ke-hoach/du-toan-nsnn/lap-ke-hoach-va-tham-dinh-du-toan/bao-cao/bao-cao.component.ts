@@ -228,7 +228,12 @@ export class BaoCaoComponent implements OnInit {
         await this.getDviCon();
         this.getListUser();
         if (this.id) {
-            await this.getDetailReport();
+            this.lstDviTrucThuoc = this.data?.lstDviTrucThuoc ? this.data?.lstDviTrucThuoc : [];
+            if (this.lstDviTrucThuoc && this.lstDviTrucThuoc?.length > 0) {
+                this.lstLapThamDinhs = this.data?.lstLapThamDinhs ? this.data?.lstLapThamDinhs : [];
+            } else {
+                await this.getDetailReport();
+            }
         } else {
             this.isChild = true;
             this.isParent = false;
@@ -367,7 +372,6 @@ export class BaoCaoComponent implements OnInit {
 
     //upload file
     async uploadFile(file: File) {
-        debugger
         // day file len server
         const upfile: FormData = new FormData();
         upfile.append('file', file);
@@ -810,13 +814,19 @@ export class BaoCaoComponent implements OnInit {
 
     xemSoKiemTra() {
         if (this.userService.isTongCuc()) {
-            // this.router.navigate([
-            //     MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + LAP_THAM_DINH + '/so-kiem-tra-tran-chi-tu-btc/' + this.giaoSoTranChiId
-            // ]);
+            const obj = {
+                id: this.giaoSoTranChiId,
+                preData: this.data,
+                tabSelected: 'skt-btc'
+            }
+            this.dataChange.emit(obj);
         } else {
-            // this.router.navigate([
-            //     MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + LAP_THAM_DINH + '/so-kiem-tra-chi-nsnn/' + this.giaoSoTranChiId
-            // ]);
+            const obj = {
+                id: this.giaoSoTranChiId,
+                preData: this.data,
+                tabSelected: 'skt'
+            }
+            this.dataChange.emit(obj);
         }
     }
 

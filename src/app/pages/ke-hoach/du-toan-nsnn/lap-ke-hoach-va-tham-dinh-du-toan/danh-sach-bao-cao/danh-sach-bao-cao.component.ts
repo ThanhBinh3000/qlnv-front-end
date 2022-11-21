@@ -92,7 +92,7 @@ export class DanhSachBaoCaoComponent implements OnInit {
         }
         const requestReport = {
             loaiTimKiem: "0",
-            maBcao: this.searchFilter.maBaoCao,
+            maBcaos: !this.searchFilter.maBaoCao ? [] : [this.searchFilter.maBaoCao],
             maDvi: this.searchFilter.donViTao,
             namBcao: this.searchFilter.nam,
             ngayTaoDen: this.datePipe.transform(this.searchFilter.denNgay, Utils.FORMAT_DATE_STR),

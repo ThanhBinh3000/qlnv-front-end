@@ -73,8 +73,8 @@
                 </nz-select>
             </td>
             <td>
-                <nz-select [(ngModel)]="thongtinPhanLo.maDiemKho" (ngModelChange)="changeDiemKho()">
-                    <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                <nz-select [(ngModel)]="thongtinPhanLo.maNhaKho" (ngModelChange)="changeNhaKho()">
+                    <nz-option *ngFor="let p of listNhaKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
             </td>
             <td>
@@ -83,19 +83,24 @@
                 </nz-select>
             </td>
             <td>
-                <nz-select [(ngModel)]="thongtinPhanLo.maLoKho" (ngModelChange)="changeDiemKho()">
-                    <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                <nz-select [(ngModel)]="thongtinPhanLo.maLoKho" (ngModelChange)="changeLoKho()">
+                    <nz-option *ngFor="let p of listLoKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
             </td>
             <td>
-                <nz-select [(ngModel)]="thongtinPhanLo.maDiemKho" (ngModelChange)="changeDiemKho()">
-                    <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                <nz-select [(ngModel)]="thongtinPhanLo.tenCloaiVthh" (ngModelChange)="changeHoangHoa()">
+                    <nz-option *ngFor="let p of listChungLoaiHangHoa" [nzValue]="p.value" [nzLabel]="p.text">
+                    </nz-option>
                 </nz-select>
             </td>
             <td>
-                <input nz-input class="w-150" />
+                <nz-input-number class="text-right" nz-input [(ngModel)]="thongtinPhanLo.maDviTsan" [nzMin]="1"
+                    [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                </nz-input-number>
             </td>
-            <td></td>
+            <td>
+
+            </td>
             <td>
                 <input nz-input class="w-150" />
             </td>

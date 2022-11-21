@@ -969,7 +969,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         }
         const requestReport = {
             loaiTimKiem: "0",
-            maBcao: this.maBaoCao,
+            maBcaos: !this.maBaoCao ? [] : [this.maBaoCao],
             maDvi: this.maDonViTao,
             paggingReq: {
                 limit: 10,
@@ -996,6 +996,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                     const obj = {
                         id: data.data.id,
+                        preData: this.data,
                         tabSelected: 'baocao',
                     }
                     this.dataChange.emit(obj);

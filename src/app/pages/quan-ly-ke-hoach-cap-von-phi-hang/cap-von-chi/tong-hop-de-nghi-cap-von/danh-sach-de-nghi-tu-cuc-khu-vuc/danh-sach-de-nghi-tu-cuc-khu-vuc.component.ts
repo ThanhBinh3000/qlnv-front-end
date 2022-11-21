@@ -27,6 +27,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
     searchFilter = {
         loaiTimKiem: '1',
         trangThai: Utils.TT_BC_7,
+        namDn: null,
         tuNgay: "",
         denNgay: "",
         qdChiTieu: "",
@@ -72,6 +73,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
         this.statusNewReport = !this.userService.isAccessPermisson(CVNC.ADD_SYNTHETIC_CKV);
 
         this.searchFilter.qdChiTieu = this.data?.qdChiTieu;
+        this.searchFilter.namDn = this.data?.namDn;
         //lay danh sach danh muc
         this.danhMuc.dMDviCon().toPromise().then(
             data => {
@@ -152,6 +154,7 @@ export class DanhSachDeNghiTuCucKhuVucComponent implements OnInit {
     addNewReport() {
         const obj = {
             id: null,
+            namDn: this.data.namDn,
             qdChiTieu: this.data.qdChiTieu,
             tabSelected: 'ckv',
         }

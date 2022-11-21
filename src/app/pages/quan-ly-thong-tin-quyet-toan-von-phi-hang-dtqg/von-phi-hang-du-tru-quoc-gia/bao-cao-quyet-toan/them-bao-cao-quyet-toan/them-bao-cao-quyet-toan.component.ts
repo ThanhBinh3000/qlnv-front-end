@@ -248,7 +248,7 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
             default:
                 break;
         }
-        this.titleStatus = this.trangThais.find(e => e.id == this.isStatus)?.tenDm;
+        // this.titleStatus = this.trangThais.find(e => e.id == this.isStatus)?.tenDm;
         this.spinner.hide();
     };
 
@@ -311,6 +311,10 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
         this.getStatusButton();
     };
 
+    getStatusName(status: string) {
+        return this.trangThais.find(e => e.id == status)?.tenDm;
+    }
+
     async onSubmit(mcn: string, lyDoTuChoi: string) {
         if (this.submitStatus != true && mcn < '2') {
             this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
@@ -326,6 +330,7 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
             await this.quanLyVonPhiService.approveQuyetToan(requestGroupButtons).toPromise().then(async (data) => {
                 if (data.statusCode == 0) {
                     this.isStatus = mcn;
+                    this.titleStatus = mcn;
                     this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
                     this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
                     this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
@@ -832,6 +837,9 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
     };
     //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
     replaceIndex(lstIndex: number[], heSo: number) {
+        if (heSo == -1) {
+            lstIndex.reverse();
+        }
         //thay doi lai stt cac vi tri vua tim duoc
         lstIndex.forEach(item => {
             const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
@@ -840,7 +848,7 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
                 item.stt = item.stt.replace(nho, str);
             })
         })
-    };
+    }
     //thêm ngang cấp
     addSame(id: any, initItem: ItemData) {
         const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
