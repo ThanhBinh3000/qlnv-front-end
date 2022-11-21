@@ -6,6 +6,7 @@ import { ThongTinQuyetDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Globals } from 'src/app/shared/globals';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
@@ -15,6 +16,9 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   @Input()
   dataTable = [];
+  @Input()
+  trangThai :any=[];
+  STATUS=STATUS;
   @Output()
   dataTableChange = new EventEmitter<any[]>();
   @Input()

@@ -7,9 +7,9 @@
         <th style="width: 25%;">Chủng loại hàng hóa</th>
         <th style="width: 10%;">Đơn vị tính</th>
         <th style="width: 10%;">Số lượng</th>
-        <th style="width: 10%;">Đơn giá</th>
+        <th style="width: 10%;">Đơn giá (triệu đồng)</th>
         <th style="width: 10%;">Dự toán (triệu đồng)</th>
-        <th style="width: 10%;">Hành động</th>
+        <th *ngIf="trangThai != STATUS.BAN_HANH " style="width: 10%;">Hành động</th>
       </tr>
     </thead>
     <tbody>
@@ -17,8 +17,8 @@
         <td></td>
         <td>
           <nz-input-group>
-            <nz-select [nzDisabled]="!isView" [(ngModel)]="rowItem.loaiVthh" [nzShowArrow]="false" nzAllowClear
-              (ngModelChange)="onChangeLoaiVthh($event,'add')">
+            <nz-select nzShowSearch nzAllowClear [nzDisabled]="!isView" [(ngModel)]="rowItem.loaiVthh"
+              [nzShowArrow]="false" nzAllowClear (ngModelChange)="onChangeLoaiVthh($event,'add')">
               <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
               </nz-option>
             </nz-select>

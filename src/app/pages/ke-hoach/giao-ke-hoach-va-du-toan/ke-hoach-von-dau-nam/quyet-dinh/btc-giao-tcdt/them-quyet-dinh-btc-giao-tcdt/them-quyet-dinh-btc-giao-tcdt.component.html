@@ -99,22 +99,22 @@
     </nz-tab>
 
     <nz-tab [nzTitle]="'Mua tăng'">
-      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="muaTangList">
+      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="muaTangList" [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất giảm'">
-      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="xuatGiamList">
+      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="xuatGiamList" [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất bán'">
-      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="xuatBanList">
+      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="xuatBanList" [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
-      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="luanPhienList">
+      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="luanPhienList" [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>
   </nz-tabset>
