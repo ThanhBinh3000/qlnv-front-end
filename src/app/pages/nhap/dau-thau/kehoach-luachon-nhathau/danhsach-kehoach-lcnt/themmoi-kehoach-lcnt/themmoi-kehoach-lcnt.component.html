@@ -17,17 +17,14 @@
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) &&
-        userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')"
-        type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC) &&
+        userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')" type="button" class="btn btn-sub xanh-nhat"
+        (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP ) &&
-        userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')"
-        type="
+      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP ) &&
+        userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')" type="
         button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -44,17 +41,14 @@
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )
-        && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM')"
-        type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )
+        && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM')" type="button"
+        class="btn btn-sub xanh-nhat" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )
-        && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM')"
-        type="
+      <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )
+        && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM')" type="
           button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -338,7 +332,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div nz-col [nzSpan]="6" *ngIf="!this.loaiVthhInput.startsWith('02')">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Thời gian nhập hàng trước ngày </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -350,7 +344,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="6">
+        <div nz-col [nzSpan]="6" *ngIf="this.loaiVthhInput.startsWith('02')">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Thời gian thực dự án (ngày) </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24">
@@ -569,7 +563,8 @@
           <th>Số lượng theo chỉ tiêu theo kế hoạch</th>
           <th>Đã lên kế hoạch mua</th>
           <th>Số lượng</th>
-          <th>Đơn giá VAT (đ)</th>
+          <th>Đơn vị tính</th>
+          <th>Đơn giá đã bao gồm VAT (đ)</th>
           <th>Thành tiền</th>
           <th style="width: 5%;">Hành động</th>
         </tr>
