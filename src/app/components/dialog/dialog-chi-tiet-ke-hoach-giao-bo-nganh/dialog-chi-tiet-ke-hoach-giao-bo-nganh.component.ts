@@ -42,6 +42,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   dataEdit: any;
   radioData: any;
   radioValue: any;
+  errorInputRequired: string = 'Dữ liệu không được để trống.';
 
   constructor(
     private readonly _modalRef: NzModalRef,

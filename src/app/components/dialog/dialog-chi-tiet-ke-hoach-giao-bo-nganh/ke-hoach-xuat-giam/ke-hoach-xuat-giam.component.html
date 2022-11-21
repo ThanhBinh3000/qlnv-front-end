@@ -39,7 +39,9 @@
         </td>
         <td style="width: 10%;">
           <nz-input-group>
-            <nz-input-number  [nzFormatter]="globals.formatter" [nzParser]="globals.parser"  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [readonly]="isView" [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [(ngModel)]="rowItem.soLuong">
+            <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+              [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [readonly]="isView" [nzMin]="1" [nzStep]="1"
+              [nzSize]="'small'" [(ngModel)]="rowItem.soLuong">
             </nz-input-number>
           </nz-input-group>
         </td>
@@ -61,10 +63,10 @@
           <td>{{ data.dviTinh }}</td>
           <td>{{ data.soLuong }}</td>
           <td style="text-align: center;">
-            <a *ngIf="(data.trangThai == '00')" (click)="editItem(idx)">
+            <a *ngIf="!isView" (click)="editItem(idx)">
               <i class=" fa fa-pencil"></i>
             </a>
-            <a *ngIf="(data.trangThai == '00')" (click)="xoaItem(idx)">
+            <a *ngIf="!isView" (click)="xoaItem(idx)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
@@ -113,8 +115,13 @@
     <tfoot>
       <tr *ngIf="tabName != 'LuanPhien'">
         <td style="text-align: right; font-weight: 700" colspan="4">Tổng giá trị (Triệu đồng)</td>
-        <td><input [readonly]="isView" [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()"
-            style="text-align: left;" type="number" nz-input /></td>
+        <td>
+          <nz-input-number [readonly]="isView" [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()"
+            style="text-align: left;" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+            [readonly]="isView" [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()" style="text-align: left;"
+            [nzMin]="0">
+          </nz-input-number>
+        </td>
         <td></td>
       </tr>
     </tfoot>
