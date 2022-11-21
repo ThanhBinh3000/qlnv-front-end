@@ -160,7 +160,7 @@ export class PhuLuc7Component implements OnInit {
     }
     this.getTotal();
     this.updateEditCache();
-
+    await this.getDinhMucPL7();
     //lay danh sach danh muc don vi
     await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
@@ -221,7 +221,7 @@ export class PhuLuc7Component implements OnInit {
     ]
     this.changeNam()
     this.getStatusButton();
-    this.getDinhMucPL7();
+    
     this.spinner.hide();
   };
 
