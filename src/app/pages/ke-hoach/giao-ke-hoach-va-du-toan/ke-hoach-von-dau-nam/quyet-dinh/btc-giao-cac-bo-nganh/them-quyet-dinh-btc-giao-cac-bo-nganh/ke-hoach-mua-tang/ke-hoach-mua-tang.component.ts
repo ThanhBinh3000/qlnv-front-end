@@ -26,7 +26,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   @Input()
   dataTable = [];
   @Input()
-  trangThai :any=[];
+  trangThai: any = [];
   @Output()
   dataTableChange = new EventEmitter<any[]>();
   @Input('isView') isView: boolean;
@@ -101,14 +101,15 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     if (this.rowItem.loaiChi && this.rowItem.sluongDtoan != null) {
       this.rowItem.idDanhMuc = +this.rowItem.idDanhMuc;
       this.dataTable = [...this.dataTable, this.rowItem]
-      this.rowItem = new KeHoachMuaXuat();
+
       this.updateEditCache();
       this.emitDataTable();
       // Validate tổng dự toán
-      if (this.calcTong() > this.tongGiaTri) {
+      if (this.rowItem.loaiChi == "DT01" && this.rowItem.sluongDtoan > this.tongGiaTri && this.calcTong()) {
         this.dataTable.splice(this.lastIndex - 1, 1);
-        this.notification.error(MESSAGE.ERROR, "Tổng Dự toán không được lớn hơn Tổng giá trị theo QĐ của TTCP");
+        this.notification.error(MESSAGE.ERROR, "Tổng Dự toán không được lớn hơn Tổng kế hoạch chi DTQG theo QĐ của TTCP");
       }
+      this.rowItem = new KeHoachMuaXuat();
     } else {
       this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
     }
@@ -132,11 +133,11 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     Object.assign(this.dataTable[index], this.dataEdit[index].data);
     this.emitDataTable();
     // Validate tổng dự toán
-    if (this.calcTong() > this.tongGiaTri) {
+    if (this.rowItem.loaiChi == "DT01" && this.rowItem.sluongDtoan > this.tongGiaTri && this.calcTong()) {
       Object.assign(this.dataTable[index], beforeData);
       // this.dataTable.splice(this.lastIndex - 1, 1);
       this.hasError.emit(true)
-      this.notification.error(MESSAGE.ERROR, "Tổng Dự toán không được lớn hơn Tổng giá trị theo QĐ của TTCP");
+      this.notification.error(MESSAGE.ERROR, "Tổng Dự toán không được lớn hơn Tổng kế hoạch chi DTQG theo QĐ của TTCP");
     } else {
       this.dataEdit[index].edit = false;
     }
