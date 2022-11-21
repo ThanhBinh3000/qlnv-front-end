@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { STORAGE_KEY } from 'src/app/constants/config';
+import { StorageService } from 'src/app/services/storage.service';
 import { UserService } from 'src/app/services/user.service';
 import { BCDTC } from 'src/app/Utility/utils';
 import { TAB_LIST } from './bao-cao-thuc-hien-du-toan-chi.constant';
@@ -22,9 +24,16 @@ export class BaoCaoThucHienDuToanChiComponent implements OnInit {
     constructor(
         private spinner: NgxSpinnerService,
         public userService: UserService,
+        private storageService: StorageService
     ) { }
 
     async ngOnInit() {
+        let listPermission = [];
+        var jsonPermission = this.storageService.get(STORAGE_KEY.PERMISSION);
+        if (jsonPermission && jsonPermission.length > 0) {
+            listPermission = JSON.parse(jsonPermission);
+        }
+        console.log(listPermission)
         this.tabList.forEach(item => {
             let check = false;
             item.role.forEach(e => {

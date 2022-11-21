@@ -168,7 +168,8 @@ export class PhuLuc6Component implements OnInit {
     }
     this.getTotal();
     this.updateEditCache();
-
+    await this.getDinhMucPL6N();
+    await this.getDinhMucPL6X();
     //lay danh sach danh muc don vi
     await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
@@ -197,8 +198,7 @@ export class PhuLuc6Component implements OnInit {
     );
     this.changeNam();
     this.getStatusButton();
-    this.getDinhMucPL6N();
-    this.getDinhMucPL6X();
+    
     this.spinner.hide();
   }
 

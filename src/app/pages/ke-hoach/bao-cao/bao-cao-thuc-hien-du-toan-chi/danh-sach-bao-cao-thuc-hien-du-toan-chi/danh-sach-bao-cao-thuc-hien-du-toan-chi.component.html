@@ -78,6 +78,7 @@
                     <th>Mã báo cáo</th>
                     <th>Báo cáo năm</th>
                     <th>Báo cáo tháng</th>
+                    <th>Loại báo cáo</th>
                     <th>Ngày lập</th>
                     <th>Ngày trình duyệt</th>
                     <th>Ngày duyệt</th>
@@ -164,6 +165,13 @@
                     </td>
                     <td>
                         {{ data.thangBcao}}
+                    </td>
+                    <td>
+                        <div *ngFor="let item of baoCaos">
+                            <div *ngIf="item.id == data.maLoaiBcao">
+                                {{item.tenDm}}
+                            </div>
+                        </div>
                     </td>
                     <td>
                         {{data.ngayTao}}
