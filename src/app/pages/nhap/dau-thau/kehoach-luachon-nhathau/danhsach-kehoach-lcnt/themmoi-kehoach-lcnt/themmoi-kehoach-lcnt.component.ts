@@ -110,8 +110,6 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     public globals: Globals,
     public userService: UserService,
     private helperService: HelperService,
-    private donviService: DonviService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private dmTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
@@ -124,7 +122,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       loaiHinhNx: ['', [Validators.required]],
       kieuNx: ['', [Validators.required]],
       diaChiDvi: [],
-      namKhoach: [, [Validators.required]],
+      namKhoach: [dayjs().get('year'), [Validators.required]],
       soDxuat: [null],
       trichYeu: [null],
       ngayTao: [dayjs().format('YYYY-MM-DD')],
@@ -163,7 +161,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   }
 
   async ngOnInit() {
-    await this.spinner.show();
+    this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maTrinh = '/' + this.userInfo.MA_TR;
     for (let i = -3; i < 23; i++) {
@@ -172,14 +170,15 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
         text: dayjs().get('year') - i,
       });
     }
-    await Promise.all([
-      this.loadDataComboBox(),
-    ]);
     if (this.idInput > 0) {
-      await this.getDetail(this.idInput);
+      // await this.getDetail(this.idInput);
     } else {
       this.initForm();
     }
+    await Promise.all([
+      this.loadDataComboBox(),
+      this.getDataChiTieu()
+    ]);
     await this.spinner.hide();
   }
 
@@ -262,15 +261,16 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
 
   isDetailPermission() {
     if (this.loaiVthhInput === "02") {
-      if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
+      if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
         return true;
       }
     }
     else {
-      if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM")) {
+      if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM")) {
         return true;
       }
     }
+    this.notification.error(MESSAGE.ERROR, "Bạn không có quyền truy cập chức năng này !")
     return false;
   }
 
@@ -279,7 +279,6 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       tenDvi: this.userInfo.TEN_DVI,
       maDvi: this.userInfo.MA_DVI,
       diaChiDvi: this.userInfo.DON_VI.diaChi,
-      namKhoach: dayjs().get('year'),
     })
   }
 
@@ -376,7 +375,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       nzContent: DialogThemMoiGoiThauComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1200px',
+      nzWidth: '1500px',
       nzFooter: null,
       nzComponentParams: {
         data: data,
@@ -393,7 +392,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
         }
         let tongMucDt: number = 0;
         this.listOfData.forEach((item) => {
-          tongMucDt = tongMucDt + item.soLuong * item.donGia;
+          tongMucDt = tongMucDt + item.soLuong * item.donGiaVat;
         });
         this.formData.patchValue({
           tongMucDt: tongMucDt,
@@ -513,10 +512,16 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       this.formData.controls["cloaiVthh"].clearValidators();
       this.formData.controls["tenCloaiVthh"].clearValidators();
       this.formData.controls["moTaHangHoa"].clearValidators();
+      this.formData.controls["donGiaVat"].clearValidators();
+      this.formData.controls["tgianNhang"].clearValidators();
+      this.formData.controls["tgianThien"].setValidators([Validators.required]);
     } else {
       this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
+      this.formData.controls["donGiaVat"].setValidators([Validators.required]);
+      this.formData.controls["tgianNhang"].setValidators([Validators.required]);
+      this.formData.controls["tgianThien"].clearValidators();
     }
   }
 
@@ -1057,11 +1062,9 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    await this.spinner.show();
     if (changes) {
       await this.getDetail(this.idInput);
     };
-    await this.spinner.hide();
   }
 
   isDisbleForm(): boolean {
