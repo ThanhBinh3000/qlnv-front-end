@@ -38,14 +38,20 @@ export const LINH_VUC = [
     level: 1,
   },
   {
-    id: 2001,
+    id: 200,
     tenDm: "Bảo quản thường xuyên",
     idCha: 2000,
     level: 2,
   },
   {
-    id: 94,
+    id: 201,
     tenDm: "Bảo quản lần đầu - mới",
+    idCha: 2000,
+    level: 2,
+  },
+  {
+    id: 202,
+    tenDm: "Bảo quản lần đầu - bổ sung",
     idCha: 2000,
     level: 2,
   },
@@ -126,13 +132,13 @@ export const LINH_VUC = [
   },
   {
     id: 50016,
-    tenDm: "Bảo quản lần đầu nhà bạt  24.75 m2",
+    tenDm: "Bảo quản lần đầu nhà bạt  24,75 m2",
     idCha: 5000,
     level: 2,
   },
   {
     id: 50017,
-    tenDm: "Bảo quản lần đầu nhà bạt  60 m2",
+    tenDm: "Bảo quản lần đầu nhà bạt  60,0 m2",
     idCha: 5000,
     level: 2,
   },
@@ -180,13 +186,31 @@ export const LINH_VUC = [
   },
   {
     id: 50025,
-    tenDm: "Bảo quản thường xuyên nhà bạt  nhẹ 24.75 m2",
+    tenDm: "Bảo quản thường xuyên nhà bạt nhẹ 24.75 m2",
     idCha: 5000,
     level: 2,
   },
   {
     id: 50026,
     tenDm: "Bảo quản thường xuyên nhà bạt nhẹ  60 m2",
+    idCha: 5000,
+    level: 2,
+  },
+  {
+    id: 50027,
+    tenDm: "Bảo quản định kỳ nhà bạt 16,5 m2",
+    idCha: 5000,
+    level: 2,
+  },
+  {
+    id: 50028,
+    tenDm: "Bảo quản định kỳ nhà bạt 24.75 m2",
+    idCha: 5000,
+    level: 2,
+  },
+  {
+    id: 50029,
+    tenDm: "Bảo quản định kỳ nhà bạt  60 m2",
     idCha: 5000,
     level: 2,
   },
@@ -424,7 +448,7 @@ export const LINH_VUC = [
   //===============
   {
     id: 70000,
-    tenDm: "Thóc bảo quản đổ rời trong điều kiện áp suất thấp",
+    tenDm: "Thóc bảo quản đóng bao trong điều kiện áp suất thấp",
     idCha: 1,
     level: 1,
   },

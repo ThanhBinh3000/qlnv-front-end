@@ -969,7 +969,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         }
         const requestReport = {
             loaiTimKiem: "0",
-            maBcao: this.maBaoCao,
+            maBcaos: !this.maBaoCao ? [] : [this.maBaoCao],
             maDvi: this.maDonViTao,
             paggingReq: {
                 limit: 10,

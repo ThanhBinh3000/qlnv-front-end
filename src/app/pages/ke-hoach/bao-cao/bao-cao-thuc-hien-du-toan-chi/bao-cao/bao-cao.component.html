@@ -61,6 +61,7 @@
                             <th>Mã báo cáo</th>
                             <th>Báo cáo năm</th>
                             <th>Báo cáo tháng</th>
+                            <th>Loại báo cáo</th>
                             <th>Người tạo</th>
                             <th>Ngày lập</th>
                             <th>Công văn</th>
@@ -75,6 +76,13 @@
                             <td>{{baoCao?.maBcao}}</td>
                             <td>{{baoCao?.namBcao}}</td>
                             <td>{{baoCao?.thangBcao}}</td>
+                            <td>
+                                <div *ngFor="let item of loaiBcaos">
+                                    <div *ngIf="item.id == baoCao.maLoaiBcao">
+                                        {{item.tenDm}}
+                                    </div>
+                                </div>
+                            </td>
                             <td>{{baoCao?.nguoiTao}}</td>
                             <td>{{baoCao?.ngayTao}}</td>
                             <td>
