@@ -2,10 +2,10 @@
   <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
       <tr>
-        <th class="text-center" style="width: 2%;">STT</th>
-        <th style="width: 73%;">Nội dung</th>
-        <th style="width: 20%;">Dự toán</th>
-        <th style="width: 5%;">Hành động</th>
+        <th class="text-center" nzWidth="2%;">STT</th>
+        <th nzWidth="70%">Nội dung</th>
+        <th>Dự toán</th>
+        <th *ngIf="trangThai != STATUS.BAN_HANH">Hành động</th>
       </tr>
     </thead>
     <tbody>

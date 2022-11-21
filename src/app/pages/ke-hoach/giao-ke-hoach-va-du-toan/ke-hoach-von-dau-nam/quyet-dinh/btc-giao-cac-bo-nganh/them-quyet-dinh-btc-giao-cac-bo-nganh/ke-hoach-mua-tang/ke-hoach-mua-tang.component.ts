@@ -15,6 +15,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { KeHoachMuaXuat } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Globals } from './../../../../../../../../shared/globals';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
@@ -24,6 +25,8 @@ import { Globals } from './../../../../../../../../shared/globals';
 export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   @Input()
   dataTable = [];
+  @Input()
+  trangThai :any=[];
   @Output()
   dataTableChange = new EventEmitter<any[]>();
   @Input('isView') isView: boolean;
@@ -34,7 +37,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   @Output()
   hasError = new EventEmitter<boolean>();
   lastIndex = 0;
-
+  STATUS = STATUS;
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
