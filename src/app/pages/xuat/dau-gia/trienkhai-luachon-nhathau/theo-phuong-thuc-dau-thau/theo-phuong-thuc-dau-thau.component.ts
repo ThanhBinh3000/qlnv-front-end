@@ -16,7 +16,7 @@ export class TheoPhuongThucDauThauComponent implements OnInit {
   ngOnInit() {
 
   }
-  tabSelected: number = 0;
+  tabSelected: number;
   selectTab(tab: number) {
     this.tabSelected = tab;
   }
