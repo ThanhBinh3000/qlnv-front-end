@@ -80,6 +80,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
         namQd: [dayjs().get('year'), [Validators.required]],
         trichYeu: [null],
         trangThai: ['00'],
+        ghiChu:['']
       }
     );
   }

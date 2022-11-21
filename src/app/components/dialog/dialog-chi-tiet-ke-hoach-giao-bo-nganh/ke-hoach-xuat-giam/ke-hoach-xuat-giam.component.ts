@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {ThongTinQuyetDinh} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { Globals } from './../../../../shared/globals';
 
 @Component({
   selector: 'app-ke-hoach-xuat-giam',
@@ -36,6 +37,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
 
   constructor(
     private modal: NzModalService,
+    public globals: Globals
   ) {
   }
 
