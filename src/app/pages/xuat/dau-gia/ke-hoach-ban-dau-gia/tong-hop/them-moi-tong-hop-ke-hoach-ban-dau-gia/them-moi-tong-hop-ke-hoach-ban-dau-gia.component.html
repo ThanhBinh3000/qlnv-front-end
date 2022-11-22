@@ -20,7 +20,7 @@
         <div class="header-text">
             <div class="title-chi-tieu">
                 <span></span>
-                <span>Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu</span>
+                <span>Tổng hợp đề xuất kế hoạch bán đấu giá</span>
             </div>
         </div>
     </div>
@@ -32,7 +32,7 @@
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                            <nz-select formControlName="namKhoach">
+                            <nz-select formControlName="namKh">
                                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                             </nz-select>
                         </nz-form-control>
@@ -75,7 +75,7 @@
                             KH bán đấu giá
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" id="ngay-qd"
+                            <nz-range-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy" id="ngay-qd"
                                 class="search__input">
                             </nz-range-picker>
                             <ng-template #error let-control>
@@ -185,6 +185,33 @@
                 <div nz-col [nzSpan]="6">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
+                            Hình thức lựa chọn nhà thầu
+                        </nz-form-label>
+                        <nz-form-control nz-col [nzSpan]="24">
+                            <nz-select formControlName="hthucLcnt" nzPlaceHolder="Hình thức lựa chọn nhà thầu"
+                                nzDisabled="true">
+                                <nz-option *ngFor="let p of listHinhThucDauThau" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="6">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true"> Phương thức đấu thầu </nz-form-label>
+                        <nz-form-control nz-col [nzSpan]="24">
+                            <nz-select formControlName="pthucLcnt" nzPlaceHolder="Phương thức đấu thầu"
+                                nzDisabled="true">
+                                <nz-option *ngFor="let p of listPhuongThucDauThau" [nzValue]="p.ma"
+                                    [nzLabel]="p.giaTri">
+                                </nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzSpan]="6">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">
                             Loại hợp đồng
                         </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24">
@@ -259,7 +286,7 @@
             </tbody>
         </nz-table>
         <!-- <app-themmoi-kehoach-lcnt *ngIf="idRowSelect" [idInput]="idRowSelect" [showFromTH]="true">
-      </app-themmoi-kehoach-lcnt> -->
+        </app-themmoi-kehoach-lcnt> -->
     </nz-card>
     <!--  End Thông tin đề xuất-->
 </div>
@@ -267,7 +294,7 @@
 <ng-template #error let-control>
     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
-<div *ngIf="isQuyetDinh" class="chi-tiet">
-    <!-- <app-themmoi-quyetdinh-khlcnt [id]="selectedId" [dataTongHop]="formData.value" (showListEvent)="showTongHop()">
-    </app-themmoi-quyetdinh-khlcnt> -->
-</div>
+<!-- <div *ngIf="isQuyetDinh" class="chi-tiet">
+    <app-themmoi-quyetdinh-khlcnt [id]="selectedId" [dataTongHop]="formData.value" (showListEvent)="showTongHop()">
+    </app-themmoi-quyetdinh-khlcnt>
+</div> -->

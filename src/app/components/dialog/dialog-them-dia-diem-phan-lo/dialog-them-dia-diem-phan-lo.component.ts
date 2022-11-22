@@ -102,7 +102,17 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       })
       this.formData.patchValue({
         children: this.listOfData,
-        diaDiemNhap: dataDiemNhap.substring(0, dataDiemNhap.length - 2)
+        maDiemKho: this.listOfData[0].maDiemKho,
+        maNganKho: this.listOfData[0].maNganKho,
+        maLoKho: this.listOfData[0].maLoKho,
+        loaiVthh: this.listOfData[0].loaiVthh,
+        cloaiVthh: this.listOfData[0].cloaiVthh,
+        maDviTsan: this.listOfData[0].maDviTsan,
+        tienDatTruoc: this.listOfData[0].tienDatTruoc,
+        maNhaKho: this.listOfData[0].maNhaKho,
+        soLuongChiTieu: this.listOfData[0].soLuongChiTieu,
+        soLuongKh: this.listOfData[0].soLuongKh,
+        diaDiemKho: dataDiemNhap.substring(0, dataDiemNhap.length - 2)
       })
       this._modalRef.close(this.formData);
       console.log(this.listOfData, 4444)
@@ -127,11 +137,28 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.formData.patchValue({
         maDvi: this.dataEdit.maDvi,
         tenDvi: this.dataEdit.tenDvi,
-
+        maDiemKho: this.dataEdit.maDiemKho,
+        diaDiemKho: this.dataEdit.diaDiemKho,
+        tenDiemKho: this.dataEdit.tenDiemKho,
+        maNhaKho: this.dataEdit.maNhaKho,
+        tenNhakho: this.dataEdit.tenNhakho,
+        maNganKho: this.dataEdit.maNganKho,
+        tenNganKho: this.dataEdit.tenNganKho,
+        maLoKho: this.dataEdit.maLoKho,
+        tenLoKho: this.dataEdit.tenLoKho,
+        loaiVthh: this.dataEdit.loaiVthh,
+        tenLoaiVthh: this.dataEdit.tenLoaiVthh,
+        cloaiVthh: this.dataEdit.cloaiVthh,
+        tenCloaiVthh: this.dataEdit.tenCloaiVthh,
+        maDviTsan: this.dataEdit.maDviTsan,
         soLuong: this.dataEdit.soLuong,
+        dviTinh: this.dataEdit.dviTinh,
         giaKhongVat: this.dataEdit.giaKhongVat,
         giaKhoiDiem: this.dataEdit.giaKhoiDiem,
-        maDviTsan: this.dataEdit.maDviTsan,
+        tienDatTruoc: this.dataEdit.tienDatTruoc,
+        duDau: this.dataEdit.duDau,
+        soLuongChiTieu: this.dataEdit.soLuongChiTieu,
+        soLuongKh: this.dataEdit.soLuongKh,
       })
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
@@ -158,10 +185,10 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
       }
     } else {
-      // let res = await this.donViService.getAll(body);
-      // if (res.msg === MESSAGE.SUCCESS) {
-      //   this.listChiCuc = res.data;
-      // }
+      let res = await this.donViService.getAll(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        this.listChiCuc = res.data;
+      }
     }
   }
 
@@ -185,7 +212,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
         tenDvi: res.data.tenTongKho,
-        soLuongKh: soLuongDaLenKh.data,
+        // soLuongKh: soLuongDaLenKh.data,
         soLuongChiTieu: chiCuc.soLuongNhap
       })
       for (let i = 0; i < res.data?.child.length; i++) {
@@ -334,11 +361,13 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
   addDiemKho() {
     if (this.thongtinPhanLo.maDiemKho && this.thongtinPhanLo.soLuong && this.validateSoLuong(true)) {
+      this.thongtinPhanLo.maDvi = this.formData.get('maDvi').value;
       this.thongtinPhanLo.giaKhongVat = this.formData.get('giaKhongVat').value;
+      this.thongtinPhanLo.soLuongChiTieu = this.formData.get('soLuongChiTieu').value;
+      this.thongtinPhanLo.soLuongKh = this.formData.get('soLuongKh').value;
       this.calculatorGiaKhoiDiem();
       this.thongtinPhanLo.giaKhoiDiem = this.formData.get('giaKhoiDiem').value;
       this.thongtinPhanLo.idVirtual = new Date().getTime();
-      this.thongtinPhanLo.maDvi = this.formData.get('maDvi').value;
       this.listOfData = [...this.listOfData, this.thongtinPhanLo];
       this.updateEditCache();
       this.thongtinPhanLo = new DanhSachPhanLo();
@@ -432,6 +461,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       return sum;
     }
   }
+
   calcTonKho() {
     if (this.listOfData) {
       const sum = this.listOfData.reduce((prev, cur) => {
@@ -439,6 +469,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         return prev;
       }, 0);
       this.formData.get('duDau').setValue(sum);
+      this.calculatorGiaKhoiDiem();
       return sum;
     }
   }
@@ -450,6 +481,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         return prev;
       }, 0);
       this.formData.get('giaKhoiDiem').setValue(sum);
+      this.calculatorGiaKhoiDiem();
       return sum;
     }
   }

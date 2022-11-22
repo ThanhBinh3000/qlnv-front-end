@@ -197,7 +197,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   }
 
   changeBoNganh() {
-    let bnObject = this.dsBoNganh.find(item => item.idText == this.formData.value.boNganh);
+    let bnObject = this.dsBoNganh.find(item => item.code == this.formData.value.boNganh);
     this.titleSoDeNghi = this.preFixSoDn;
     if (bnObject) {
       this.titleSoDeNghi = "/" + bnObject.code + "-" + this.preFixSoDn;
