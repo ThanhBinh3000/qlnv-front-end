@@ -83,6 +83,7 @@ export class TongHopComponent implements OnInit {
       if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP") || !this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_XEM")) {
         window.location.href = '/error/401'
       }
+
       this.userInfo = this.userService.getUserLogin();
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
@@ -259,6 +260,7 @@ export class TongHopComponent implements OnInit {
     if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP")) {
       return;
     }
+
     this.isDetail = true;
     this.selectedId = null;
   }
@@ -268,6 +270,7 @@ export class TongHopComponent implements OnInit {
       || (!isView && !this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_SUA"))) {
       return;
     }
+
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
@@ -306,6 +309,7 @@ export class TongHopComponent implements OnInit {
     if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_XOA")) {
       return;
     }
+
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -396,6 +400,7 @@ export class TongHopComponent implements OnInit {
     if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_XOA")) {
       return;
     }
+
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {

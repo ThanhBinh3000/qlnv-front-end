@@ -245,6 +245,7 @@ export class DeXuatComponent implements OnInit {
     } else {
       this.isVatTu = false;
     }
+
     if (this.loaiVthh === "02") {
       if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_SUA")) {
         return;
@@ -268,6 +269,7 @@ export class DeXuatComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+
     if (this.loaiVthh === "02") {
       if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA")) {
         return;
@@ -278,6 +280,7 @@ export class DeXuatComponent implements OnInit {
         return;
       }
     }
+
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -389,6 +392,7 @@ export class DeXuatComponent implements OnInit {
   }
 
   deleteSelect() {
+
     if (this.loaiVthh === "02") {
       if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA")) {
         return;
@@ -399,6 +403,7 @@ export class DeXuatComponent implements OnInit {
         return;
       }
     }
+
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
