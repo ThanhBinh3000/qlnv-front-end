@@ -1,7 +1,9 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {ThongTinQuyetDinh} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { ThongTinQuyetDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { Globals } from './../../../../shared/globals';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'app-ke-hoach-xuat-giam',
@@ -37,7 +39,8 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
 
   constructor(
     private modal: NzModalService,
-    public globals: Globals
+    public globals: Globals,
+    private notification: NzNotificationService,
   ) {
   }
 
@@ -82,13 +85,18 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   }
 
   themMoiItem() {
-    if (!this.dataTable) {
-      this.dataTable = [];
+    if (this.rowItem.loaiVthh && this.rowItem.soLuong != null) {
+      if (!this.dataTable) {
+        this.dataTable = [];
+      }
+      this.dataTable = [...this.dataTable, this.rowItem]
+      this.rowItem = new ThongTinQuyetDinh();
+      this.updateEditCache()
+      this.emitDataTable()
     }
-    this.dataTable = [...this.dataTable, this.rowItem]
-    this.rowItem = new ThongTinQuyetDinh();
-    this.updateEditCache()
-    this.emitDataTable()
+    else {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
+    }
   }
 
   clearData() {
@@ -97,7 +105,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
 
   huyEdit(idx: number): void {
     this.dataEdit[idx] = {
-      data: {...this.dataTable[idx]},
+      data: { ...this.dataTable[idx] },
       edit: false,
     };
   }
@@ -113,7 +121,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         }
       });
     }

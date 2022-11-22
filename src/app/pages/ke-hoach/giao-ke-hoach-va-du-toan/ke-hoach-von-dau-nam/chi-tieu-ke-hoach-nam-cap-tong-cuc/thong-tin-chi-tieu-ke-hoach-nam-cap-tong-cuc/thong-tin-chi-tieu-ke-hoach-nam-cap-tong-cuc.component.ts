@@ -7,15 +7,15 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import {saveAs} from 'file-saver';
-import {cloneDeep} from 'lodash';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {DialogLuaChonInComponent} from 'src/app/components/dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
+import { saveAs } from 'file-saver';
+import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogLuaChonInComponent } from 'src/app/components/dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
 import {
   DialogQuyetDinhGiaoChiTieuComponent
 } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
@@ -28,28 +28,28 @@ import {
 import {
   DialogThongTinLuongThucComponent
 } from 'src/app/components/dialog/dialog-thong-tin-luong-thuc/dialog-thong-tin-luong-thuc.component';
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {ItemDetail} from 'src/app/models/itemDetail';
-import {KeHoachLuongThuc} from 'src/app/models/KeHoachLuongThuc';
-import {KeHoachMuoi} from 'src/app/models/KeHoachMuoi';
-import {KeHoachVatTu, VatTuThietBi} from 'src/app/models/KeHoachVatTu';
-import {ThongTinChiTieuKeHoachNam} from 'src/app/models/ThongTinChiTieuKHNam';
-import {UserLogin} from 'src/app/models/userlogin';
-import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {UploadFileService} from 'src/app/services/uploaFile.service';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { ItemDetail } from 'src/app/models/itemDetail';
+import { KeHoachLuongThuc } from 'src/app/models/KeHoachLuongThuc';
+import { KeHoachMuoi } from 'src/app/models/KeHoachMuoi';
+import { KeHoachVatTu, VatTuThietBi } from 'src/app/models/KeHoachVatTu';
+import { ThongTinChiTieuKeHoachNam } from 'src/app/models/ThongTinChiTieuKHNam';
+import { UserLogin } from 'src/app/models/userlogin';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
 import * as XLSX from 'xlsx';
-import {TAB_SELECTED} from './thong-tin-chi-tieu-ke-hoach-nam.constant';
-import {STATUS} from "../../../../../../constants/status";
-import {QuyetDinhBtcTcdtService} from "../../../../../../services/quyetDinhBtcTcdt.service";
-import {QuanLyHangTrongKhoService} from "../../../../../../services/quanLyHangTrongKho.service";
+import { TAB_SELECTED } from './thong-tin-chi-tieu-ke-hoach-nam.constant';
+import { STATUS } from "../../../../../../constants/status";
+import { QuyetDinhBtcTcdtService } from "../../../../../../services/quyetDinhBtcTcdt.service";
+import { QuanLyHangTrongKhoService } from "../../../../../../services/quanLyHangTrongKho.service";
 
 @Component({
   selector: 'app-thong-tin-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -150,10 +150,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   ngOnInit(): void {
     this.yearNow = dayjs().get('year');
-    for (let i = -3; i < 23; i++) {
+    for (let i = 0; i < 5; i++) {
       this.listNam.push({
-        value: this.yearNow - i,
-        text: this.yearNow - i,
+        value: this.yearNow + i,
+        text: this.yearNow + i,
       });
     }
     this.userInfo = this.userService.getUserLogin();
@@ -900,8 +900,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (tableLuongThuc && tableLuongThuc.length > 0) {
       let sheetLuongThuc = XLSX.utils.table_to_sheet(tableLuongThuc[0]);
       sheetLuongThuc['!cols'] = [];
-      sheetLuongThuc['!cols'][24] = {hidden: true};
-      sheetLuongThuc['!cols'][25] = {hidden: true};
+      sheetLuongThuc['!cols'][24] = { hidden: true };
+      sheetLuongThuc['!cols'][25] = { hidden: true };
       XLSX.utils.book_append_sheet(workbook, sheetLuongThuc, 'sheetLuongThuc');
     }
     const tableMuoi = document
@@ -910,8 +910,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (tableMuoi && tableMuoi.length > 0) {
       let sheetMuoi = XLSX.utils.table_to_sheet(tableMuoi[0]);
       sheetMuoi['!cols'] = [];
-      sheetMuoi['!cols'][12] = {hidden: true};
-      sheetMuoi['!cols'][13] = {hidden: true};
+      sheetMuoi['!cols'][12] = { hidden: true };
+      sheetMuoi['!cols'][13] = { hidden: true };
       XLSX.utils.book_append_sheet(workbook, sheetMuoi, 'sheetMuoi');
     }
     const tableVatTu = document
@@ -1386,7 +1386,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       return;
     }
     this.thongTinChiTieuKeHoachNam.soQuyetDinh = this.formData.get('soQd').value ? `${this.formData.get('soQd').value
-    }/${this.qdTCDT}` : null;
+      }/${this.qdTCDT}` : null;
     this.thongTinChiTieuKeHoachNam.ngayKy = this.formData.get('ngayKy').value ?? null;
     this.thongTinChiTieuKeHoachNam.ngayHieuLuc =
       this.formData.get('ngayHieuLuc').value ?? null;
@@ -1649,14 +1649,14 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   calculatorxtnTongThoc(i: number): number {
     this.dsKeHoachLuongThucClone[i].xtnTongThoc = this.dsKeHoachLuongThucClone[
       i
-      ].xtnThoc.reduce((a, b) => a + +b.soLuong, 0);
+    ].xtnThoc.reduce((a, b) => a + +b.soLuong, 0);
     return this.dsKeHoachLuongThucClone[i].xtnTongThoc;
   }
 
   calculatorxtnTongGao(i: number): number {
     this.dsKeHoachLuongThucClone[i].xtnTongGao = this.dsKeHoachLuongThucClone[
       i
-      ].xtnGao.reduce((a, b) => a + +b.soLuong, 0);
+    ].xtnGao.reduce((a, b) => a + +b.soLuong, 0);
     return this.dsKeHoachLuongThucClone[i].xtnTongGao;
   }
 
@@ -1837,7 +1837,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachLuongThucCreate.tenDonvi = donVi.tenDvi;
     this.keHoachLuongThucCreate.donViId = donVi.id;
     this.chiTieuKeHoachNamService
-      .tonKhoDauNam({maDvi: donVi.maDvi, maVthhList: ['010103', '010101']})
+      .tonKhoDauNam({ maDvi: donVi.maDvi, maVthhList: ['010103', '010101'] })
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {
