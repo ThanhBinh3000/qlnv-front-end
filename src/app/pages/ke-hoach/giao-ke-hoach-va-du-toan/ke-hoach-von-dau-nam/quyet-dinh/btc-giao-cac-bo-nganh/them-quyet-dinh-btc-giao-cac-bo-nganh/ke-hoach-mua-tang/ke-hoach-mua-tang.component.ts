@@ -97,7 +97,6 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   }
 
   themMoiItem() {
-    console.log(this.rowItem, "hihihi");
     if (this.rowItem.loaiChi && this.rowItem.sluongDtoan != null) {
       this.rowItem.idDanhMuc = +this.rowItem.idDanhMuc;
       this.dataTable = [...this.dataTable, this.rowItem]
@@ -107,7 +106,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
       // Validate tổng dự toán
       if (this.rowItem.loaiChi == "DT01" && this.rowItem.sluongDtoan > this.tongGiaTri && this.calcTong()) {
         this.dataTable.splice(this.lastIndex - 1, 1);
-        this.notification.error(MESSAGE.ERROR, "Tổng Dự toán không được lớn hơn Tổng kế hoạch chi DTQG theo QĐ của TTCP");
+        this.notification.error(MESSAGE.ERROR, "Dự toán chi DTQG không được lớn hơn kế hoạch chỉ tiêu của Thủ tướng chính phủ");
       }
       this.rowItem = new KeHoachMuaXuat();
     } else {
