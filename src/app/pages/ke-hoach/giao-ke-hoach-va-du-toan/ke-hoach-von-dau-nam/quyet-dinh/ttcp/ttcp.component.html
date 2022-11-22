@@ -199,6 +199,6 @@
 </ng-container>
 
 <ng-template #templateThemmoi>
-  <app-them-quyet-dinh-ttcp [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()">
+  <app-them-quyet-dinh-ttcp [isView]="isViewDetail" [idInput]="idSelected" (onClose)="onClose()" [trangThai]="formData.value.trangThai">
   </app-them-quyet-dinh-ttcp>
 </ng-template>

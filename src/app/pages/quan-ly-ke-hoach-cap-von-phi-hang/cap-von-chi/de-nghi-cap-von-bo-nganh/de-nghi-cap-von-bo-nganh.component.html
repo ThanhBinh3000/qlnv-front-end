@@ -135,9 +135,9 @@
             <td>{{ data.tenBoNganh }}</td>
             <td>{{ data.ngayDeNghi | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.nam }}</td>
-            <td>{{ data.tongTien }}</td>
-            <td>{{ data.kinhPhiDaCap }}</td>
-            <td>{{ data.ycCapThem }}</td>
+            <td>{{ data.tongTien  | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>{{ data.kinhPhiDaCap  | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>{{ data.ycCapThem  | number : '1.0-1' : 'vi_VN'}}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a *ngIf="data.trangThaiId !== STATUS.DU_THAO" (click)="detail(data, true)">
