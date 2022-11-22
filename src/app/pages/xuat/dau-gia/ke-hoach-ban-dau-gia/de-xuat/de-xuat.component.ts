@@ -76,16 +76,16 @@ export class DeXuatComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      // if (this.loaiVthh === "02") {
-      //   if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT") || !this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_XEM")) {
-      //     window.location.href = '/error/401'
-      //   }
-      // }
-      // else {
-      //   if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XEM")) {
-      //     window.location.href = '/error/401'
-      //   }
-      // }
+      if (this.loaiVthh === "02") {
+        if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT") || !this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_XEM")) {
+          window.location.href = '/error/401'
+        }
+      }
+      else {
+        if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_LT_DEXUAT") || !this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_LT_DEXUAT_XEM")) {
+          window.location.href = '/error/401'
+        }
+      }
       console.log(this.loaiVthh);
       this.userInfo = this.userService.getUserLogin();
       for (let i = -3; i < 23; i++) {
@@ -211,16 +211,16 @@ export class DeXuatComponent implements OnInit {
   }
 
   themMoi() {
-    // if (this.loaiVthh === "02") {
-    //   if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
-    //     return;
-    //   }
-    // }
-    // else {
-    //   if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM")) {
-    //     return;
-    //   }
-    // }
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM")) {
+        return;
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM")) {
+        return;
+      }
+    }
     this.isDetail = true;
     if (this.userService.isTongCuc()) {
       this.isVatTu = true;
@@ -245,16 +245,17 @@ export class DeXuatComponent implements OnInit {
     } else {
       this.isVatTu = false;
     }
-    // if (this.loaiVthh === "02") {
-    //   if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA")) {
-    //     return;
-    //   }
-    // }
-    // else {
-    //   if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_SUA")) {
-    //     return;
-    //   }
-    // }
+
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_SUA")) {
+        return;
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_LT_DEXUAT_SUA")) {
+        return;
+      }
+    }
   }
 
   clearFilter() {
@@ -268,16 +269,18 @@ export class DeXuatComponent implements OnInit {
   }
 
   xoaItem(item: any) {
-    // if (this.loaiVthh === "02") {
-    //   if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA")) {
-    //     return;
-    //   }
-    // }
-    // else {
-    //   if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA")) {
-    //     return;
-    //   }
-    // }
+
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA")) {
+        return;
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA")) {
+        return;
+      }
+    }
+
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -341,16 +344,16 @@ export class DeXuatComponent implements OnInit {
   // }
 
   exportData() {
-    // if (this.loaiVthh === "02") {
-    //   if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_EXP")) {
-    //     return;
-    //   }
-    // }
-    // else {
-    //   if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_EXP")) {
-    //     return;
-    //   }
-    // }
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_EXP")) {
+        return;
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_LT_DEXUAT_EXP")) {
+        return;
+      }
+    }
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
@@ -389,16 +392,18 @@ export class DeXuatComponent implements OnInit {
   }
 
   deleteSelect() {
-    // if (this.loaiVthh === "02") {
-    //   if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA")) {
-    //     return;
-    //   }
-    // }
-    // else {
-    //   if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA")) {
-    //     return;
-    //   }
-    // }
+
+    if (this.loaiVthh === "02") {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA")) {
+        return;
+      }
+    }
+    else {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA")) {
+        return;
+      }
+    }
+
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {

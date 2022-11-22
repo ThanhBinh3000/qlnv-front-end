@@ -97,6 +97,7 @@ export class DanhSachPhanLo {
     loaiVthh: string;
     tenLoaiVthh: string;
     cloaiVthh: string;
+    dviTinh: string;
     tenCloaiVthh: string;
     maDviTsan: string;
     soLuong: number;
