@@ -44,7 +44,6 @@ export class ItemCongVan {
 
 export class BaoCaoComponent implements OnInit {
   @Input() data;
-
   @Output() dataChange = new EventEmitter();
 
   //thong tin dang nhap
@@ -917,7 +916,7 @@ export class BaoCaoComponent implements OnInit {
   getNewData(obj: any) {
     const index = this.lstDieuChinhs.findIndex(e => e.maLoai == this.tabs[0].id);
     if (obj?.lstCtietDchinh) {
-      // this.getDetailReport();
+      this.getDetailReport();
       // this.data = {
       //   ...this.lstDieuChinhs[index],
       //   maDviTao: this.maDviTao,
