@@ -25,9 +25,10 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   @Input()
   idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
-
+  @Input()
+  trangThai:any=[];
   formData: FormGroup;
-
+  STATUS=STATUS;
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   maQd: string;
