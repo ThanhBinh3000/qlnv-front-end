@@ -167,7 +167,6 @@
                     <ng-template #ok>
                       {{ getStatusBM(data.trangThai) }}
                     </ng-template>
-
                   </td>
                   <td>
                     <ng-container
@@ -328,7 +327,7 @@
               </app-phu-luc-7>
             </ng-container>
             <ng-container *ngIf="tab.id == '8'">
-              <app-phu-luc-8 [data]="data" (dataChange)="getNewData($event)">
+              <app-phu-luc-8 [data]="tabData" (dataChange)="getNewData($event)">
               </app-phu-luc-8>
             </ng-container>
           </nz-tab>
