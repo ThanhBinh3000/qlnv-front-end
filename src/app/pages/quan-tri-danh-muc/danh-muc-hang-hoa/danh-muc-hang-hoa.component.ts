@@ -46,7 +46,8 @@ export class DanhMucHangHoaComponent implements OnInit {
   listDviQly : any[] = [];
   listDviTinh: any[] = [];
   listPpLayMau: any[]=  [];
-
+  listOfOption: Array<{ maDvi: string; tenDvi: string }> = [];
+  listOfTagOption: any[] = [];
 
   constructor(
     private router: Router,
@@ -175,6 +176,11 @@ export class DanhMucHangHoaComponent implements OnInit {
     let res = await this.dmHangService.layTatCaDviQly();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDviQly = res.data;
+      if (this.listDviQly) {
+        this.listDviQly.forEach(item => {
+          this.listOfOption.push({maDvi: item.maDvi, tenDvi : item.tenDvi})
+        })
+      }
       }
     }
 
@@ -221,6 +227,7 @@ export class DanhMucHangHoaComponent implements OnInit {
              dviTinh = this.listDviTinh.filter(item => item.giaTri == this.nodeDetail.maDviTinh);
           }
           let detaiParent = this.nodeDetail.detailParent;
+          this.listOfTagOption = this.nodeDetail.dmHangDvqls;
           this.detailHangHoa.patchValue({
             maCha:detaiParent ? detaiParent.ma : null,
             id: this.nodeDetail.id,

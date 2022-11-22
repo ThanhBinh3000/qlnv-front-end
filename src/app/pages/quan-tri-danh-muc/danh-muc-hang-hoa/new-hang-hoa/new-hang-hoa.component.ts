@@ -36,6 +36,8 @@ export class NewHangHoaComponent implements OnInit {
   listDviQly : any[] = [];
    listDviTinh: any[] = [];
    listPpLayMau: any[] = [];
+  listOfOption: Array<{ maDvi: string; tenDvi: string }> = [];
+  listOfTagOption: any[] = [];
   constructor(
     private fb: FormBuilder,
     private notification: NzNotificationService,
@@ -130,6 +132,11 @@ export class NewHangHoaComponent implements OnInit {
     let res = await this.dmHangService.layTatCaDviQly();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDviQly = res.data;
+      if (this.listDviQly) {
+        this.listDviQly.forEach(item => {
+          this.listOfOption.push({maDvi: item.maDvi, tenDvi : item.tenDvi})
+        })
+      }
     }
   }
 
@@ -201,6 +208,7 @@ export class NewHangHoaComponent implements OnInit {
     }
     let dviTinh =  this.listDviTinh.filter(item => item.ma == this.formHangHoa.value.maDviTinh)
     let body = this.formHangHoa.value;
+    body.dmHangDvqls = this.listOfTagOption;
     body.maDviTinh = dviTinh[0].giaTri
     body.ma = this.formHangHoa.value.maCha + this.formHangHoa.value.ma
     body.trangThai = this.formHangHoa.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
