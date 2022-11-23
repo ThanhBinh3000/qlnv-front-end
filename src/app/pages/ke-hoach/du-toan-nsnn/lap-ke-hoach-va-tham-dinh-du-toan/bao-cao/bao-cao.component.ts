@@ -610,7 +610,7 @@ export class BaoCaoComponent implements OnInit {
 
         const request = JSON.parse(JSON.stringify({
             id: this.id,
-            fileDinhKems: this.lstFiles,
+            fileDinhKems: listFile,
             listIdDeleteFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
             lstLapThamDinhs: this.lstLapThamDinhs,
             maBcao: this.maBaoCao,
