@@ -56,6 +56,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   dsDiaDiemDeHang: any[] = [];
   dsPhuongAnGia: any[] = [];
   dsLoaiHangXdg: any[] = [];
+  listQdCtKh: any[] = [];
 
   maDx: string;
 
@@ -81,9 +82,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private uploadFileService: UploadFileService,
-    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
-    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
-
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService
   ) {
     this.formData = this.fb.group(
       {
@@ -95,6 +94,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         loaiGia: ['', [Validators.required]],
         trichYeu: [null],
         soCanCu: [null],
+        qdCtKhNam: [null],
         trangThai: ['00'],
         tenTrangThai: ['Dự Thảo'],
         cloaiVthh: [null, [Validators.required]],
@@ -163,6 +163,26 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.getDataDetail(this.idInput)
     ])
     this.spinner.hide();
+  }
+  async loadDsQdPduyetKhlcnt() {
+    if (this.type == 'GCT') {
+      let body = {
+        namKhoach: this.formData.value.namKeHoach,
+        maDvi: this.userInfo.MA_DVI,
+        loaiVthh : this.formData.value.loaiVthh,
+        trangThai : STATUS.BAN_HANH
+      };
+      let res = await this.deXuatPAGService.loadQdGiaoKhMuaBan(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let arr  = res.data;
+        if (arr) {
+          this.listQdCtKh = arr;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Không tìm thấy chỉ tiêu kế hoạch năm ' + dayjs().get('year'))
+        return;
+      }
+    }
   }
 
   async getDataDetail(id) {
@@ -258,30 +278,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
 
 
-  }
-
-  async loadDsQdPduyetKhlcnt() {
-    if (this.type == 'GCT' && !this.idInput) {
-      let body = {
-        namKhoach: this.formData.get('namKeHoach').value,
-        lastest: 1,
-        paggingReq: {
-          limit: this.globals.prop.MAX_INTERGER,
-          page: 0,
-        },
-      };
-      let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        let arr = res.data.content;
-        if (arr) {
-          arr.forEach(item => {
-            if (!item.loaiVthh.startsWith("02")) {
-
-            }
-          })
-        }
-      }
-    }
   }
 
   async loadDsVthh() {

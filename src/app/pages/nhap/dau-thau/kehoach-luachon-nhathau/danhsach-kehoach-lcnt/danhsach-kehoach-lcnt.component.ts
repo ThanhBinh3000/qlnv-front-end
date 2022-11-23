@@ -30,8 +30,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   }
   @Input()
   loaiVthh: string;
-  @Input()
-  loaiVthhCache: string;
   isDetail: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
@@ -66,7 +64,6 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   totalRecord: number = 0;
   userInfo: UserLogin;
   selectedId: number = 0;
-  isVatTu: boolean = false;
   allChecked = false;
   indeterminate = false;
 
@@ -212,13 +209,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
       }
     }
     this.isDetail = true;
-    if (this.userService.isTongCuc()) {
-      this.isVatTu = true;
-    } else {
-      this.isVatTu = false;
-    }
     this.selectedId = null;
-    this.loaiVthh = this.loaiVthhCache;
   }
 
   showList() {
@@ -229,19 +220,13 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   detail(data?) {
     this.selectedId = data.id;
     this.isDetail = true;
-    this.loaiVthh = data.loaiVthh;
-    if (data.loaiVthh.startsWith('02')) {
-      this.isVatTu = true;
-    } else {
-      this.isVatTu = false;
-    }
     if (this.loaiVthh === "02") {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_SUA")) {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
         return;
       }
     }
     else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_SUA")) {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
         return;
       }
     }

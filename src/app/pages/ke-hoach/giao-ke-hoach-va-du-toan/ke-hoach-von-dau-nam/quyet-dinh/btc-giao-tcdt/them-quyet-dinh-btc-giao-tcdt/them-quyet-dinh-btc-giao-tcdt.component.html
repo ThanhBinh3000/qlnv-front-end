@@ -99,34 +99,37 @@
     </nz-tab>
 
     <nz-tab [nzTitle]="'Mua tăng'">
-      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="muaTangList" [trangThai]="formData.value.trangThai">
+      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="muaTangList"
+        [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất giảm'">
-      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="xuatGiamList" [trangThai]="formData.value.trangThai">
+      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="xuatGiamList"
+        [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất bán'">
-      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="xuatBanList" [trangThai]="formData.value.trangThai">
+      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="xuatBanList"
+        [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>
 
     <nz-tab [nzTitle]="'Xuất luân phiên đổi hàng'">
-      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="luanPhienList" [trangThai]="formData.value.trangThai">
+      <app-ke-hoach-mua-tang [dsHangHoa]="dsHangHoa" [isView]="isView" [(dataTable)]="luanPhienList"
+        [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>
   </nz-tabset>
   <form nzLayout="vertical" nz-form [formGroup]="formData">
-  <div nz-col [nzSpan]="24">
-    <nz-form-item class="form-item">
-      <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Ghi chú</nz-form-label>
-      <nz-form-control>
-        <textarea rows="3" formControlName="ghiChu" class="search__input" nz-input
-          [readonly]="!isView"></textarea>
-      </nz-form-control>
-    </nz-form-item>
-  </div>
-</form>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item class="form-item">
+        <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Ghi chú</nz-form-label>
+        <nz-form-control>
+          <textarea rows="3" formControlName="ghiChu" class="search__input" nz-input [readonly]="!isView"></textarea>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </form>
 </div>

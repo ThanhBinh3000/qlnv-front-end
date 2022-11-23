@@ -1,13 +1,13 @@
 <form nz-form [formGroup]="formGoiThau">
   <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
     <div nz-col [nzSpan]="listChungLoai.length > 0 ? '6' : '12'">
-      <nz-form-item>
+      <nz-form-item [nzErrorTip]="error">
         <nz-form-label nzRequired [nzNoColon]="true"> Tên gói thầu </nz-form-label>
         <input nz-input formControlName="goiThau" [readonly]="isReadOnly" />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="6" *ngIf="listChungLoai.length > 0">
-      <nz-form-item>
+      <nz-form-item [nzErrorTip]="error">
         <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
         <nz-select formControlName="cloaiVthh" [nzDisabled]="dataTable.length > 0 && isReadOnly"
           (ngModelChange)="onChangeCloaiVthh($event)">
@@ -15,35 +15,43 @@
         </nz-select>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="6">
-      <nz-form-item>
+    <div nz-col [nzSpan]="4">
+      <nz-form-item [nzErrorTip]="error">
+        <nz-form-label nzRequired [nzNoColon]="true"> Cục DTNN KV </nz-form-label>
+        <nz-select formControlName="maDvi" (ngModelChange)="onChangeCuc($event)">
+          <nz-option *ngFor="let p of listDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+        </nz-select>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="2">
+      <nz-form-item [nzErrorTip]="error">
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị tính </nz-form-label>
         <input nz-input formControlName="dviTinh" readonly />
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="6">
-      <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá tạm tính </nz-form-label>
+      <nz-form-item [nzErrorTip]="error">
+        <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá đề xuất </nz-form-label>
         <nz-input-number formControlName="donGiaTamTinh" class="text-right" nz-input [nzSize]="'small'"
           [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="6">
-      <nz-form-item>
+      <nz-form-item [nzErrorTip]="error">
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá đã duyệt bao gồm thuế VAT </nz-form-label>
         <nz-input-number formControlName="donGiaVat" nzDisabled nz-input [nzSize]="'small'"
           [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="6">
-      <nz-form-item>
+      <nz-form-item [nzErrorTip]="error">
         <nz-form-label nzRequired [nzNoColon]="true">Tổng số lượng nhập</nz-form-label>
         <nz-input-number formControlName="soLuong" class="text-right" nz-input [nzMin]="1" [nzStep]="1"
           [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="6">
-      <nz-form-item>
+      <nz-form-item [nzErrorTip]="error">
         <nz-form-label nzRequired [nzNoColon]="true">Tổng thành tiền tạm tính (đ)</nz-form-label>
         <nz-input-number [ngModel]="formGoiThau.value.soLuong * formGoiThau.value.donGiaTamTinh"
           [ngModelOptions]="{standalone: true}" class="text-right" nz-input [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
@@ -51,7 +59,7 @@
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="6">
-      <nz-form-item>
+      <nz-form-item [nzErrorTip]="error">
         <nz-form-label nzRequired [nzNoColon]="true"> Tổng thành tiền theo đơn giá đã duyệt (đ) </nz-form-label>
         <nz-input-number nz-input [ngModel]="formGoiThau.value.soLuong * formGoiThau.value.donGiaVat"
           [ngModelOptions]="{standalone: true}" nzDisabled [nzSize]="'small'" [nzFormatter]="globals.formatter"
@@ -65,24 +73,26 @@
     <nz-table nzBordered [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable">
       <thead>
         <tr>
-          <th width="60px">STT</th>
-          <th width="600px">Tên đơn vị </th>
+          <th width="60px"></th>
+          <th>Chi cục DTNN</th>
+          <th>Điểm kho</th>
           <th>SL chỉ tiêu KH</th>
           <th>SL đã lên KH mua</th>
           <th>Số lượng nhập</th>
           <th>Thành tiền tạm tính (đ)</th>
           <th>Thành tiền theo đơn giá đã duyệt (đ)</th>
-          <th width="80px" *ngIf="!isReadOnly">Thao tác</th>
+          <th width="120px" *ngIf="!isReadOnly" class="text-center">Thao tác</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngIf="!isReadOnly">
           <td></td>
           <td>
-            <nz-select [(ngModel)]="thongtinDauThau.maDvi">
-              <nz-option *ngFor="let p of listDonVi" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+            <nz-select [(ngModel)]="thongtinDauThau.maDvi" (ngModelChange)="onChangeChiCuc($event)">
+              <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
             </nz-select>
           </td>
+          <td></td>
           <td></td>
           <td></td>
           <td>
@@ -93,7 +103,7 @@
           <td></td>
           <td></td>
           <td class="text-center">
-            <a (click)="addDiemKho()">
+            <a (click)="addChiCuc()">
               <i class="icon htvbdh_dau-cong xanhla"></i>
             </a>
             <a (click)="clearDiemKho()">
@@ -101,23 +111,66 @@
             </a>
           </td>
         </tr>
-        <tr *ngFor="let data of dataTable; let i = index">
-          <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-          <td>{{ data.tenDvi }}</td>
-          <td></td>
-          <td></td>
-          <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.soLuong * formGoiThau.value.donGiaTamTinh | number : '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.soLuong * formGoiThau.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-          <td *ngIf="!isReadOnly">
-            <a (click)="startEdit(i)">
-              <i class="fa fa-pencil"></i>
-            </a>
-            <a (click)="deleteRow(i)">
-              <i class="fa fa-trash-o do"></i>
-            </a>
-          </td>
-        </tr>
+        <ng-container *ngFor="let data of dataTable , let i = index">
+          <tr>
+            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td>{{ data.tenDvi }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ data.soLuong * formGoiThau.value.donGiaTamTinh | number : '1.0-1' : 'vi_VN' }}</td>
+            <td>{{ data.soLuong * formGoiThau.value.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
+            <td *ngIf="!isReadOnly" class="text-center">
+              <a (click)="startEdit(i)">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a (click)="deleteRow(i)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </tr>
+          <ng-container *ngIf="expandSet.has(i)">
+            <tr>
+              <td></td>
+              <td></td>
+              <td>
+                <nz-select [(ngModel)]="thongTinDiemKho.maDvi">
+                  <nz-option *ngFor="let p of listDiemKhoMap[data.maDvi]" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
+                  </nz-option>
+                </nz-select>
+              </td>
+              <td></td>
+              <td></td>
+              <td>
+                <nz-input-number [(ngModel)]="thongTinDiemKho.soLuong" class="text-right" nz-input [nzMin]="1"
+                  [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                </nz-input-number>
+              </td>
+              <td></td>
+              <td></td>
+              <td class="text-center">
+                <a (click)="addDiemKho(i,data.maDvi)">
+                  <i class="icon htvbdh_dau-cong xanhla"></i>
+                </a>
+                <a (click)="clearDiemKho()">
+                  <i class="fa fa-refresh"></i>
+                </a>
+              </td>
+            </tr>
+            <tr *ngFor="let itemChild of data.children ">
+              <td></td>
+              <td></td>
+              <td>{{itemChild.tenDvi}}</td>
+              <td></td>
+              <td></td>
+              <td>{{itemChild.soLuong}}</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </ng-container>
+        </ng-container>
       </tbody>
     </nz-table>
   </nz-card>
@@ -138,3 +191,6 @@
     </div>
   </div>
 </div>
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>
