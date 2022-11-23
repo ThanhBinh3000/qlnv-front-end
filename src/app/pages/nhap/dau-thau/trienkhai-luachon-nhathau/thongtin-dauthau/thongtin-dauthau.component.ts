@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -26,7 +26,7 @@ import {
   styleUrls: ['./thongtin-dauthau.component.scss']
 })
 export class ThongtinDauthauComponent implements OnInit {
-
+  @Input() loaiVthh: string;
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -77,9 +77,6 @@ export class ThongtinDauthauComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
-  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
-  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
   lastBreadcrumb: string;
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
@@ -124,7 +121,7 @@ export class ThongtinDauthauComponent implements OnInit {
       denNgayQd: this.searchFilter.ngayQd
         ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
         : null,
-      loaiVthh: this.searchFilter.loaiVthh,
+      loaiVthh: this.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
       soQd: this.searchFilter.soQd,
