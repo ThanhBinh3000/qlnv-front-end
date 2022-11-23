@@ -8,7 +8,7 @@ import {MESSAGE} from "../../../../constants/message";
   styleUrls: ['./ke-hoach-ban-dau-gia.component.scss']
 })
 export class KeHoachBanDauGiaComponent implements OnInit {
-  tabs: any;
+  tabs: any[]=[];
   loaiVthhSelected: string;
 
   constructor(private danhMucService: DanhMucService) {
@@ -16,16 +16,16 @@ export class KeHoachBanDauGiaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loaiVthhSelected = '';
+    this.loaiVthhSelected = '0101';
   }
 
   async loaiVTHHGetAll() {
-    this.tabs = [
+    /*this.tabs = [
       {
         giaTri: 'Tất cả',
         ma: ""
       }
-    ];
+    ];*/
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
@@ -40,9 +40,9 @@ export class KeHoachBanDauGiaComponent implements OnInit {
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
   }
-
+/*
   ngOnChanges(changes: SimpleChanges): void {
     this.ngOnInit();
-  }
+  }*/
 
 }

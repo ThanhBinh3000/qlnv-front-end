@@ -1061,6 +1061,15 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     }
   }
 
+  expandSet2 = new Set<number>();
+  onExpandChange2(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet2.add(id);
+    } else {
+      this.expandSet2.delete(id);
+    }
+  }
+
   async ngOnChanges(changes: SimpleChanges) {
     if (changes) {
       await this.getDetail(this.idInput);

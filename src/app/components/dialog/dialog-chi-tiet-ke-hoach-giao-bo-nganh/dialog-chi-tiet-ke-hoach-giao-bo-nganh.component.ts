@@ -5,6 +5,7 @@ import {Globals} from 'src/app/shared/globals';
 import {DanhMucService} from '../../../services/danhmuc.service';
 import {KeHoachLuongThucComponent} from './ke-hoach-luong-thuc/ke-hoach-luong-thuc.component';
 import {cloneDeep} from 'lodash';
+import {DonviService} from "../../../services/donvi.service";
 
 @Component({
   selector: 'app-dialog-chi-tiet-ke-hoach-giao-bo-nganh',
@@ -46,6 +47,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   constructor(
     private readonly _modalRef: NzModalRef,
     private danhMucService: DanhMucService,
+    private donviService: DonviService,
     public globals: Globals,
   ) {
     this.radioData = [
@@ -64,7 +66,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       this.loadDanhMucHang()
     ]);
     if (this.dataEdit) {
-      if (this.dataEdit.tenBoNganh === 'Bộ tài chính') {
+      if (this.dataEdit.tenBoNganh === 'Bộ Tài chính') {
         this.radioValue = 'BTC';
       } else {
         this.radioValue = 'Khac';
@@ -75,17 +77,17 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
   onChangeBoNganh(event) {
-    //fix btc = tcdt
-    if (event == '01') {
-      event = '0101'
-    }
     this.dsHangHoa = [];
-
     if (event) {
-      const boNganh = this.dsBoNganh.find(item => item.ma == event)
+      const boNganh = this.dsBoNganh.find(item => item.maDvi == event)
       if (boNganh) {
-        this.keHoach.tenBoNganh = boNganh.giaTri;
+        this.keHoach.tenBoNganh = boNganh.tenDvi;
+        this.keHoach.maBoNganh = boNganh.maDvi;
         this.keHoach.tongTien = 0;
+      }
+      //fix btc = tcdt
+      if (event == '01') {
+        event = '0101'
       }
       this.danhMucService.getDanhMucHangDvql({
         "dviQly": event
@@ -105,17 +107,17 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   }
 
   async getListBoNganh() {
-    console.log(this.keHoach, 111111111)
     this.dsBoNganh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    let res = await this.donviService.layTatCaDonViByLevel(0);
+    //let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
     if (res.msg == MESSAGE.SUCCESS) {
       if (!this.dataEdit) {
-        let boTaiChinh = res.data.find(s => s.giaTri === 'Bộ Tài Chính');
-        this.keHoach.maBoNganh = boTaiChinh.ma;
-        this.keHoach.tenBoNganh = boTaiChinh.giaTri;
+        let boTaiChinh = res.data.find(s => s.code === 'BTC');
+        this.keHoach.maBoNganh = boTaiChinh.maDvi;
+        this.keHoach.tenBoNganh = boTaiChinh.tenDvi;
       }
       //fix theo giao dien moi
-      this.dsBoNganh = res.data.filter(s => s.giaTri != 'Bộ Tài Chính');
+      this.dsBoNganh = res.data.filter(s => s.code != 'BTC');
     }
 
   }
@@ -167,7 +169,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
       this.keHoach.maBoNganh = '01'
       this.onChangeBoNganh("0101");
     } else {
-      this.keHoach.maBoNganh = [];
+      //this.keHoach.maBoNganh = [];
       this.onChangeBoNganh("");
     }
   }
