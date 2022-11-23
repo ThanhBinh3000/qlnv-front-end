@@ -44,10 +44,14 @@ export class LapKeHoachVaThamDinhDuToanComponent implements OnInit {
     }
 
     changeTab(obj: any) {
-        this.data = {
-            ...obj,
-            preTab: this.tabSelected,
-        };
+        if (obj?.preTab) {
+            this.data = obj;
+        } else {
+            this.data = {
+                ...obj,
+                preTab: this.tabSelected,
+            };
+        }
         this.tabSelected = obj?.tabSelected;
         if (this.tabList.findIndex(e => e.code == this.tabSelected) != -1) {
             this.tabList.forEach(e => {

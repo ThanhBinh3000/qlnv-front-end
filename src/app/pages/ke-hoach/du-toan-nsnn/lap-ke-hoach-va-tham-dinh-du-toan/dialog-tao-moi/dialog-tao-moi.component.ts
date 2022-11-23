@@ -196,7 +196,6 @@ export class DialogTaoMoiComponent implements OnInit {
 
     //kiem tra cac bao cao trong phuong an da dc tiep nhan lai chua
     async checkReportStatus() {
-        debugger
         this.checkReport = true;
         let message = '';
         const data = this.lstPa.find(e => e.maPa == this.response.maPa);
