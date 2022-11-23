@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -22,6 +22,8 @@ import { STATUS } from 'src/app/constants/status';
   styleUrls: ['./quyetdinh-ketqua-lcnt.component.scss']
 })
 export class QuyetdinhKetquaLcntComponent implements OnInit {
+
+  @Input() loaiVthh: String
 
   constructor(
     private router: Router,

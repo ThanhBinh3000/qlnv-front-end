@@ -12,7 +12,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, mulMoney } from 'src/app/Utility/utils';
+import { displayNumber, divMoney, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, mulMoney, NOT_OK, OK } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 
 export class ItemData {
@@ -146,6 +146,30 @@ export class PhuLuc8Component implements OnInit {
     }
   }
 
+  //show popup tu choi dùng cho nut ok - not ok
+  async pheDuyetChiTiet(mcn: string) {
+    this.spinner.show();
+    if (mcn == OK) {
+      await this.onSubmit(mcn, null);
+    } else if (mcn == NOT_OK) {
+      const modalTuChoi = this.modal.create({
+        nzTitle: 'Not OK',
+        nzContent: DialogTuChoiComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {},
+      });
+      modalTuChoi.afterClose.toPromise().then(async (text) => {
+        if (text) {
+          await this.onSubmit(mcn, text);
+        }
+      });
+    }
+    this.spinner.hide();
+  }
+
   // chuc nang check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
     if (this.id) {
@@ -159,11 +183,11 @@ export class PhuLuc8Component implements OnInit {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();
-          const obj = {
-            trangThai: mcn,
-            lyDoTuChoi: lyDoTuChoi,
-          }
-          this.dataChange.emit(obj);
+          // const obj = {
+          //   trangThai: mcn,
+          //   lyDoTuChoi: lyDoTuChoi,
+          // }
+          this.dataChange.emit(data.data);
           // if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
           // 	this.notification.success(MESSAGE.SUCCESS, MESSAGE.REVERT_SUCCESS);
           // } else {
@@ -391,11 +415,11 @@ export class PhuLuc8Component implements OnInit {
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          const obj = {
-            trangThai: '-1',
-            lyDoTuChoi: null,
-          };
-          this.dataChange.emit(obj);
+          // const obj = {
+          //   trangThai: '-1',
+          //   lyDoTuChoi: null,
+          // };
+          this.dataChange.emit(data.data);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }

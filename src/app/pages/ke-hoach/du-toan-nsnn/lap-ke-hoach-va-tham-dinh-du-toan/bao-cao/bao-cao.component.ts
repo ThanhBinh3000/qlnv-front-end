@@ -228,11 +228,9 @@ export class BaoCaoComponent implements OnInit {
         await this.getDviCon();
         this.getListUser();
         if (this.id) {
-            this.lstDviTrucThuoc = this.data?.lstDviTrucThuoc ? this.data?.lstDviTrucThuoc : [];
-            if (this.lstDviTrucThuoc && this.lstDviTrucThuoc?.length > 0) {
+            await this.getDetailReport();
+            if (this.data?.lstDviTrucThuoc && this.data?.lstDviTrucThuoc.length > 0) {
                 this.lstLapThamDinhs = this.data?.lstLapThamDinhs ? this.data?.lstLapThamDinhs : [];
-            } else {
-                await this.getDetailReport();
             }
         } else {
             this.isChild = true;
@@ -502,6 +500,10 @@ export class BaoCaoComponent implements OnInit {
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
         if (mcn == Utils.TT_BC_2) {
+            if (!this.congVan) {
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+                return;
+            }
             let check = true;
             this.lstLapThamDinhs.forEach(item => {
                 if (item.trangThai != '5') {
@@ -608,7 +610,7 @@ export class BaoCaoComponent implements OnInit {
 
         const request = JSON.parse(JSON.stringify({
             id: this.id,
-            fileDinhKems: this.lstFiles,
+            fileDinhKems: listFile,
             listIdDeleteFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
             lstLapThamDinhs: this.lstLapThamDinhs,
             maBcao: this.maBaoCao,

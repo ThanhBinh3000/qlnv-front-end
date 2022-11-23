@@ -196,6 +196,7 @@ export class DialogTaoMoiComponent implements OnInit {
 
     //kiem tra cac bao cao trong phuong an da dc tiep nhan lai chua
     async checkReportStatus() {
+        debugger
         this.checkReport = true;
         let message = '';
         const data = this.lstPa.find(e => e.maPa == this.response.maPa);
@@ -204,7 +205,7 @@ export class DialogTaoMoiComponent implements OnInit {
             lstMaBcao.push(e.maBcao);
         })
         const requestReport = {
-            loaiTimKiem: "0",
+            loaiTimKiem: "1",
             maBcaos: lstMaBcao,
             maDvi: null,
             namBcao: null,
@@ -219,11 +220,16 @@ export class DialogTaoMoiComponent implements OnInit {
                 if (res.statusCode == 0) {
                     res.data.content.forEach(item => {
                         if (item.trangThai != Utils.TT_BC_9) {
-                            message += item.maBcao;
+                            if (!message) {
+                                message += item.maBcao;
+                            } else {
+                                message = message + ', ' + item.maBcao;
+                            }
+
                         }
                     })
                     if (message) {
-                        this.notification.warning(MESSAGE.WARNING, 'Báo cáo: ' + message + 'còn thiếu');
+                        this.notification.warning(MESSAGE.WARNING, 'Báo cáo: ' + message + ' còn thiếu');
                         this.checkReport = false;
                     } else {
                         this.response.maBcao = data.maBcao;

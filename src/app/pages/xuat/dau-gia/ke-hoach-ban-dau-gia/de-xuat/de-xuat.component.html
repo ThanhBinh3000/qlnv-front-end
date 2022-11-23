@@ -39,11 +39,11 @@
             </div>
         </nz-card>
         <div class="group-button">
-            <h3> DANH SÁCH KẾ HOẠCH BÁN ĐẤU GIÁ </h3>
+            <h3> DANH SÁCH KẾ HOẠCH BÁN ĐẤU GIÁ</h3>
             <div class="buttons">
 
                 <ng-container
-                    *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XOA') || userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_XOA')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA') || userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA')">
                     <button type="button" class="btn btn-do" (click)="deleteSelect()"
                         *ngIf="loaiVthh == null || (userService.isTongCuc() && loaiVthh == '02') || (userService.isCuc() && loaiVthh != '02')">
                         <i class="fa fa-trash-o do"></i>
@@ -52,13 +52,13 @@
                 </ng-container>
 
                 <button type="button" class="btn btn-sub" (click)="exportData()"
-                    *ngIf="loaiVthh === '02' ? userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_EXP') : userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_EXP')">
+                    *ngIf="loaiVthh === '02' ? userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_EXP')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
 
                 <ng-container
-                    *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM') || userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM') || userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM')">
                     <button
                         *ngIf="loaiVthh == null || (userService.isTongCuc() && loaiVthh == '02') || (userService.isCuc() && loaiVthh != '02')"
                         type="button" class="btn btn-main" (click)="themMoi()">
