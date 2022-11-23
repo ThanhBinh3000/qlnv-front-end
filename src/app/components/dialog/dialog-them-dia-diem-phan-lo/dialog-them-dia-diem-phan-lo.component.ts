@@ -34,7 +34,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   selectedChiCuc: boolean = false;
   isValid: boolean = false;
   userInfo: UserLogin;
-  giaKhongVat: number = 0;
   listDiemKhoEdit: any[] = [];
   khoanTienDatTruoc: number;
   namKh: number;
@@ -77,8 +76,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       soLuongKh: [null],
       duDau: [null],
       diaDiemKho: [null],
+      giaDuocDuyet: [null],
       children: [null],
-
     });
   }
 
@@ -108,6 +107,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         loaiVthh: this.listOfData[0].loaiVthh,
         cloaiVthh: this.listOfData[0].cloaiVthh,
         maDviTsan: this.listOfData[0].maDviTsan,
+        giaKhongVat: this.listOfData[0].giaKhongVat,
         tienDatTruoc: this.listOfData[0].tienDatTruoc,
         maNhaKho: this.listOfData[0].maNhaKho,
         soLuongChiTieu: this.listOfData[0].soLuongChiTieu,
@@ -163,9 +163,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
     } else {
-      this.formData.patchValue({
-        giaKhongVat: this.giaKhongVat,
-      })
+      // this.formData.patchValue({
+      //   giaKhongVat: this.giaKhongVat,
+      // })
     }
     this.checkDisabledSave();
   }
@@ -203,11 +203,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       maDvi: event
     }
     let soLuongDaLenKh = await this.deXuatKhBanDauGiaService.search(body);
-    console.log(soLuongDaLenKh, 45545)
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
-    console.log(res, 11111)
-
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
@@ -222,7 +219,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           'diaDiemKho': res.data.child[i].diaChi,
           listDiemKhoEdit: res.data.child[i],
         };
-        console.log(item, 6786767)
         this.listDiemKho.push(item);
       };
       this.thongtinPhanLo = new DanhSachPhanLo();
@@ -345,7 +341,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           nam: this.namKh,
         }
         const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body)
-        console.log(res, 555)
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {
             this.thongtinPhanLo.cloaiVthh = res.data[0].cloaiVthh;
@@ -362,7 +357,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   addDiemKho() {
     if (this.thongtinPhanLo.maDiemKho && this.thongtinPhanLo.soLuong && this.validateSoLuong(true)) {
       this.thongtinPhanLo.maDvi = this.formData.get('maDvi').value;
-      this.thongtinPhanLo.giaKhongVat = this.formData.get('giaKhongVat').value;
       this.thongtinPhanLo.soLuongChiTieu = this.formData.get('soLuongChiTieu').value;
       this.thongtinPhanLo.soLuongKh = this.formData.get('soLuongKh').value;
       this.calculatorGiaKhoiDiem();
@@ -401,7 +395,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.formData.patchValue({
       giaKhoiDiem:
         +this.thongtinPhanLo.soLuong *
-        +this.formData.get('giaKhongVat').value,
+        +this.thongtinPhanLo.giaKhongVat,
     });
   }
 
