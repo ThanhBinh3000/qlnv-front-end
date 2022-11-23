@@ -128,4 +128,9 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/ct-kh-tc-pag/${namKh}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
+
+  trangThaiHienThoi(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}/qlnv-luukho/hang-trong-kho/trang-thai-ht`;
+    return this.httpClient.post(url, body).toPromise();
+  }
 }

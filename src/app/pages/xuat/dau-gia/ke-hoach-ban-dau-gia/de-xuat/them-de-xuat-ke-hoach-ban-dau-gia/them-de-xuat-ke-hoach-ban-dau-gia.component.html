@@ -251,7 +251,7 @@
             <nz-form-label nzRequired class="label-color-kh"> Thời gian dự kiến tổ chức BĐG
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy">
+              <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy" (ngModelChange)="changeThoiGianDuKien">
               </nz-range-picker>
             </nz-form-control>
           </nz-form-item>
