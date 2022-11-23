@@ -70,7 +70,7 @@ export class BtcGiaoTcdtComponent implements OnInit {
     public userService: UserService,
     private modal: NzModalService,
   ) {
-    if (!userService.isAccessPermisson("KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT")){
+    if (!userService.isAccessPermisson("KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT")) {
       window.location.href = '/error/401'
     }
     this.formData = this.fb.group({
@@ -387,8 +387,14 @@ export class BtcGiaoTcdtComponent implements OnInit {
         let xuatGiam = 0;
         let xuatBan = 0;
         let xuatPlDh = 0;
-        muaLuongThuc = (data.keHoachNhapXuat.soLuongMuaThoc * data.keHoachNhapXuat.donGiaMuaThoc) + (data.keHoachNhapXuat.soLuongMuaGaoLpdh * data.keHoachNhapXuat.donGiaMuaGaoLqdh) + (data.keHoachNhapXuat.soLuongMuaGaoXcht * data.keHoachNhapXuat.donGiaMuaGaoXcht);
-        nguonVonCo = (data.keHoachNhapXuat.soLuongBanThoc * data.keHoachNhapXuat.donGiaBanThoc) + (data.keHoachNhapXuat.soLuongBanGao * data.keHoachNhapXuat.donGiaBanGao) + (data.keHoachNhapXuat.soLuongGaoCtro * data.keHoachNhapXuat.donGiaGaoCtro) + data.keHoachNhapXuat.tongTienVonNsnn + data.keHoachNhapXuat.tongTienVonTx;
+        muaLuongThuc = (data.keHoachNhapXuat.soLuongMuaThoc * data.keHoachNhapXuat.donGiaMuaThoc) / 1000
+          + (data.keHoachNhapXuat.soLuongMuaGaoLpdh * data.keHoachNhapXuat.donGiaMuaGaoLqdh) / 1000
+          + (data.keHoachNhapXuat.soLuongMuaGaoXcht * data.keHoachNhapXuat.donGiaMuaGaoXcht) / 1000;
+        nguonVonCo = (data.keHoachNhapXuat.soLuongBanThoc * data.keHoachNhapXuat.donGiaBanThoc) / 1000
+          + (data.keHoachNhapXuat.soLuongBanGao * data.keHoachNhapXuat.donGiaBanGao) / 1000
+          + (data.keHoachNhapXuat.soLuongGaoCtro * data.keHoachNhapXuat.donGiaGaoCtro) / 1000
+          + data.keHoachNhapXuat.tongTienVonNsnn
+          + data.keHoachNhapXuat.tongTienVonTx;
         data.muaTangList.forEach(item => {
           muaTang += item.tongTien;
         })
