@@ -64,6 +64,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   pagTtChungs: any[] = []
   maDx: string;
   dataTable: any[] = [];
+  listQdCtKh: any[] = [];
   dsPhuongAnGia: any[] = [];
   dsLoaiHangXdg: any[] = [];
   STATUS: any;
@@ -80,8 +81,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private uploadFileService: UploadFileService,
-    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
-    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService
   ) {
     this.formData = this.fb.group(
       {
@@ -98,7 +98,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         ghiChu: [],
         noiDung: [null],
         lyDoTuChoi: [],
-        qdCtKhNam: [null, [Validators.required]],
+        qdCtKhNam: [null],
+        soCanCu: [null],
         maPphapXdg: [null, [Validators.required]],
         loaiHangXdg: []
       }
@@ -561,7 +562,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         const dataChiTieu = res2.data;
         if (dataChiTieu) {
           this.formData.patchValue({
-            qdCtKhNam: dataChiTieu.soQuyetDinh,
+            soCanCu: dataChiTieu.soQuyetDinh,
           });
         } else {
           this.notification.error(MESSAGE.ERROR, 'Không tìm thấy chỉ tiêu kế hoạch năm ' + dayjs().get('year'))
@@ -572,33 +573,25 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   async loadDsQdPduyetKhlcnt() {
-    if (this.type == 'GMDTBTT' && !this.idInput) {
+    if (this.type == 'GCT') {
       let body = {
-        namKhoach: this.formData.get('namKeHoach').value,
-        lastest: 1,
-        paggingReq: {
-          limit: this.globals.prop.MAX_INTERGER,
-          page: 0,
-        },
-        maDvi: this.userInfo.MA_DVI
+        namKhoach: this.formData.value.namKeHoach,
+        maDvi: this.userInfo.MA_DVI,
+        loaiVthh : this.formData.value.loaiVthh,
+        trangThai : STATUS.BAN_HANH
       };
-      let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
+      let res = await this.giaDeXuatGiaService.loadQdGiaoKhMuaBan(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        let arr  = res.data.content;
+        let arr  = res.data;
         if (arr) {
-          arr.forEach(item => {
-            if (!item.loaiVthh.startsWith("02")) {
-              this.formData.patchValue({
-              })
-            }
-          })
+          this.listQdCtKh = arr;
+          }
         } else {
-          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy quyết định phê duyệt kế hoạch mua bán ' + dayjs().get('year'))
+          this.notification.error(MESSAGE.ERROR, 'Không tồn tại quyết định giao chỉ tiêu kế hoạch năm!')
           return;
         }
       }
     }
-  }
 
 
   async save(isGuiDuyet?) {
