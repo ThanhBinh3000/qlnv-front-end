@@ -607,15 +607,15 @@
                   [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
           <thead>
           <tr>
-            <th class="text-center" width="40px" nzLeft>STT</th>
-            <th class="text-center" width="330px" nzLeft>
+            <th class="text-center" width="2%" nzLeft>STT</th>
+            <th class="text-center" width="48%" nzLeft>
               {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}
             </th>
-            <th class="text-center" width="480px">Tồn kho đầu năm</th>
-            <th class="text-center" width="150px">Nhập trong năm</th>
-            <th class="text-center" width="480px">Xuất trong năm</th>
-            <th class="text-center" width="150px">Tồn kho cuối năm</th>
-            <th rowspan="3" *ngIf="!this.isViewDetail" class="text-right" width="90px" nzRight>
+            <th class="text-center" width="10%">Tồn kho đầu năm</th>
+            <th class="text-center" width="10%">Nhập trong năm</th>
+            <th class="text-center" width="10%">Xuất trong năm</th>
+            <th class="text-center" width="10%">Tồn kho cuối năm</th>
+            <th *ngIf="!this.isViewDetail" class="text-center" width="10%" nzRight>
               Hành động
             </th>
           </tr>
@@ -649,7 +649,7 @@
             <td>
               <nz-form-control nzErrorTip="Vui lòng nhập đơn vị">
                 <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
-                                class="search__input autocomplete__input donvi__input w-300">
+                                class="search__input autocomplete__input donvi__input ">
                   <input placeholder="Chọn cục dự trữ nhà nước khu vực" nz-input (input)="onInput($event, 'muoi')"
                          [nzAutocomplete]="autoMuoi" class="" [(ngModel)]="keHoachMuoiCreate.tenDonVi"
                          (input)="changeDonViMuoi()"/>
@@ -710,7 +710,7 @@
             <!--              </nz-input-number>-->
             <!--            </td>-->
             <!--            <td class="text-right">{{calculatortkcnTongMuoiCreate()}}</td>-->
-            <td *ngIf="!this.isViewDetail" class="text-right" nzRight>
+            <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
               <a class="save" (click)="themMoiMuoiDuTru()" [ngClass]="{'isDisabled': !isAddMuoi}"
                  style="margin-right: 30px;">
                 <i class="icon htvbdh_dau-cong"></i>
@@ -726,31 +726,33 @@
             <ng-container *ngIf="!dsMuoiClone[i]?.isEdit; else editTemplateMuoi">
               <td class="text-right">{{dataMuoi.stt}}</td>
               <td class="text-left">{{dataMuoi.tenDonVi}}</td>
-              <td class="text-right">{{dataMuoi.tkdnTongSoMuoi | number: '1.0-1'}}</td>
-              <ng-container *ngIf="dataMuoi?.tkdnMuoi?.length > 0">
-                <td *ngFor="let itemMuoi of dataMuoi.tkdnMuoi" class="text-right">{{itemMuoi.soLuong | number:
-                  '1.0-1'}} </td>
-              </ng-container>
-              <ng-container *ngIf="dataMuoi?.tkdnMuoi?.length == 0">
-                <td class="text-right">0</td>
-                <td class="text-right">0</td>
-                <td class="text-right">0</td>
-              </ng-container>
-              <td class="text-right">{{dataMuoi.ntnTongSoMuoi | number: '1.0-1'}}</td>
-              <td class="text-right">{{dataMuoi.xtnTongSoMuoi | number: '1.0-1'}}</td>
-              <ng-container *ngIf="dataMuoi?.xtnMuoi?.length > 0">
-                <td *ngFor="let itemMuoi of dataMuoi.xtnMuoi" class="text-right">{{itemMuoi.soLuong | number:
-                  '1.0-1'}} </td>
-              </ng-container>
-              <ng-container *ngIf="dataMuoi?.xtnMuoi?.length == 0">
-                <td class="text-right">0</td>
-                <td class="text-right">0</td>
-                <td class="text-right">0</td>
-              </ng-container>
-              <td class="text-right">{{dataMuoi.tkcnTongSoMuoi | number: '1.0-1'}}</td>
+<!--              <td class="text-right">{{dataMuoi.tkdnTongSoMuoi | number: '1.0-1'}}</td>-->
+<!--              <ng-container *ngIf="dataMuoi?.tkdnMuoi?.length > 0">-->
+<!--                <td *ngFor="let itemMuoi of dataMuoi.tkdnMuoi" class="text-right">{{itemMuoi.soLuong | number:-->
+<!--                  '1.0-1'}} </td>-->
+<!--              </ng-container>-->
+<!--              <ng-container *ngIf="dataMuoi?.tkdnMuoi?.length == 0">-->
+<!--                <td class="text-right">0</td>-->
+<!--                <td class="text-right">0</td>-->
+<!--                <td class="text-right">0</td>-->
+<!--              </ng-container>-->
+              <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
+              <td class="text-right">{{dataMuoi.nhapTrongNam | number: '1.0-1'}}</td>
+              <td class="text-right">{{dataMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
+              <td class="text-right">{{dataMuoi.tonKhoCuoiNam | number: '1.0-1'}}</td>
+<!--              <ng-container *ngIf="dataMuoi?.xtnMuoi?.length > 0">-->
+<!--                <td *ngFor="let itemMuoi of dataMuoi.xtnMuoi" class="text-right">{{itemMuoi.soLuong | number:-->
+<!--                  '1.0-1'}} </td>-->
+<!--              </ng-container>-->
+<!--              <ng-container *ngIf="dataMuoi?.xtnMuoi?.length == 0">-->
+<!--                <td class="text-right">0</td>-->
+<!--                <td class="text-right">0</td>-->
+<!--                <td class="text-right">0</td>-->
+<!--              </ng-container>-->
+<!--              <td class="text-right">{{dataMuoi.tkcnTongSoMuoi | number: '1.0-1'}}</td>-->
               <!-- <td *ngIf="disableBanHanh()">{{
               convertTrangThai(thongTinChiTieuKeHoachNam.trangThai) }}</td> -->
-              <td *ngIf="!this.isViewDetail" class="text-right" nzRight>
+              <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
                 <a (click)="startEditMuoi(i)">
                   <i class="fa fa-pencil"></i>
                 </a>
