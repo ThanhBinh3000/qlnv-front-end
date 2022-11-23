@@ -1,18 +1,18 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as dayjs from 'dayjs';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {UserLogin} from 'src/app/models/userlogin';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
-import {QuyetDinhBtcNganhService} from 'src/app/services/quyetDinhBtcNganh.service';
-import {MESSAGE} from 'src/app/constants/message';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {STATUS} from "../../../../../../../constants/status";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
+import { Globals } from 'src/app/shared/globals';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
+import { QuyetDinhBtcNganhService } from 'src/app/services/quyetDinhBtcNganh.service';
+import { MESSAGE } from 'src/app/constants/message';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { STATUS } from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-cac-bo-nganh',
@@ -127,10 +127,10 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
   }
 
   loadDsNam() {
-    for (let i = -3; i < 23; i++) {
+    for (let i = 0; i < 5; i++) {
       this.dsNam.push({
-        value: dayjs().get('year') - i,
-        text: dayjs().get('year') - i,
+        value: dayjs().get('year') + i,
+        text: dayjs().get('year') + i,
       });
     }
   }

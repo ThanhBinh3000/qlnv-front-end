@@ -5,6 +5,7 @@ import { DieuChinhDuToanModule } from './dieu-chinh-du-toan/dieu-chinh-du-toan.m
 import { DuToanNsnnRoutingModule } from './du-toan-nsnn-routing.module';
 import { DuToanNsnnComponent } from './du-toan-nsnn.component';
 import { GiaoDuToanChiNSNNModule } from './giao-du-toan-chi-nsnn/giao-du-toan-chi-nsnn.module';
+import { GiaoDuToanModule } from './giao-du-toan/giao-du-toan.module';
 import { LapKeHoachVaThamDinhDuToanModule } from './lap-ke-hoach-va-tham-dinh-du-toan/lap-ke-hoach-va-tham-dinh-du-toan.module';
 
 @NgModule({
@@ -17,6 +18,7 @@ import { LapKeHoachVaThamDinhDuToanModule } from './lap-ke-hoach-va-tham-dinh-du
         ComponentsModule,
         LapKeHoachVaThamDinhDuToanModule,
         DieuChinhDuToanModule,
+        GiaoDuToanModule,
         GiaoDuToanChiNSNNModule,
     ],
     providers: [DatePipe]

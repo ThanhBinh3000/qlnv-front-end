@@ -6,7 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { NHAP_ROUTE_LIST } from './xuat.constant';
+import { XUAT_ROUTE_LIST } from './xuat.constant';
 @Component({
   selector: 'app-xuat',
   templateUrl: './xuat.component.html',
@@ -14,7 +14,7 @@ import { NHAP_ROUTE_LIST } from './xuat.constant';
 })
 export class XuatComponent implements OnInit, AfterViewInit {
   @ViewChild('myTab') myTab: ElementRef;
-  routes = NHAP_ROUTE_LIST;
+  routes = XUAT_ROUTE_LIST;
   routerUrl: string = "";
   defaultUrl: string = '/xuat'
 

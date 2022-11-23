@@ -29,4 +29,11 @@ export const TAB_LIST = [
         role: [BCVP.EXPORT_EXCEL_REPORT],
         isSelected: false,
     },
+    // {
+    //     name: 'Báo cáo tại văn phòng',
+    //     code: 'vanphong',
+    //     status: true,
+    //     role: [BCVP.VIEW_REPORT, BCVP.VIEW_SYNTHETIC_REPORT],
+    //     isSelected: false,
+    // },
 ]

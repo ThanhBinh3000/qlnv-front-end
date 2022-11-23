@@ -17,9 +17,9 @@ import { CAN_CU_GIA, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 export class DialogTaoMoiDeNghiComponent implements OnInit {
     @Input() obj: any;
 
-    nam: number;
     userInfo: any;
     response: any = {
+        namDn: null,
         qdChiTieu: null,
         canCuGia: null,
         loaiDn: null,
@@ -51,7 +51,7 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
 
     getSoQdChiTieu() {
         const request = {
-            namKHoach: this.nam,
+            namKHoach: this.response.namDn,
             maDvi: this.userInfo?.MA_DVI,
         }
         this.spinner.show();
@@ -60,31 +60,31 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.response.qdChiTieu = data.data[0];
                     if (!this.response.qdChiTieu) {
-                        this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy số quyết định chỉ tiêu cho năm ' + this.nam);
-                        this.nam = null;
+                        this.notification.warning(MESSAGE.WARNING, 'Không tìm thấy số quyết định chỉ tiêu cho năm ' + this.response.namDn);
+                        this.response.namDn = null;
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
-                    this.nam = null;
+                    this.response.namDn = null;
                 }
             },
             err => {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                this.nam = null;
+                this.response.namDn = null;
             }
         )
         this.spinner.hide();
     }
 
     getListContract() {
-        if (!this.nam) {
+        if (!this.response.namDn) {
             this.notification.warning(MESSAGE.WARNING, 'Vui lòng nhập năm');
             this.response.canCuGia = null;
             return;
         }
         if (this.response.canCuGia == Utils.HD_TRUNG_THAU) {
             const request = {
-                namKHoach: this.nam,
+                namKHoach: this.response.namDn,
             }
             this.spinner.show();
             this.capVonNguonChiService.danhSachHopDong(request).toPromise().then(
@@ -150,7 +150,7 @@ export class DialogTaoMoiDeNghiComponent implements OnInit {
     }
 
     handleOk() {
-        if (!this.nam) {
+        if (!this.response.namDn) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }

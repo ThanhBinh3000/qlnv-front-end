@@ -112,12 +112,11 @@
         <ng-template #editTemplate>
           <td>{{i + 1}}</td>
           <td>
-            <input nz-input class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.maDvi"
-              [class]="editCache[data.id].data.maDvi?'' : 'input-error-validate'" />
+            <input nz-input class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.maDvi" />
           </td>
           <td>
-            <input nz-input class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.khoachQdGiaoNvu"
-              [class]="editCache[data.id].data.khoachQdGiaoNvu?'' : 'input-error-validate'" />
+            <input nz-input class="search__input" nzSize="small"
+              [(ngModel)]="editCache[data.id].data.khoachQdGiaoNvu" />
           </td>
           <td>
             <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.khoachLuong"
@@ -136,9 +135,7 @@
             </fm-input-number>
           </td>
           <td>
-            <input nz-input class="search__input" nzSize="small"
-              [class]="editCache[data.id].data.tdiemBcaoCcu?'' : 'input-error-validate'"
-              [(ngModel)]="editCache[data.id].data.tdiemBcaoCcu" />
+            <input nz-input class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.tdiemBcaoCcu" />
           </td>
           <td>
             <nz-input-number class="search__input" nzSize="small" [(ngModel)]="editCache[data.id].data.dkienThienLuong"
@@ -162,8 +159,7 @@
           </td>
           <td>
             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.dtoanLke"
-              (ngModelChange)="changeModel(data.id)"
-              [class]="editCache[data.id].data.dtoanLke ===0?'' : 'input-error-validate'">
+              (ngModelChange)="changeModel(data.id)">
             </fm-input-number>
           </td>
           <td>
@@ -211,11 +207,11 @@
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
-    <button type="button" class="btn btn-main" (click)="onSubmit('1', null)" [hidden]="statusBtnOk">
+    <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('1')" [hidden]="statusBtnOk">
       <i nz-icon nzType="check" nzTheme="outline"></i>
       <span>OK</span>
     </button>
-    <button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="statusBtnOk">
+    <button type="button" class="btn btn-main" (click)="pheDuyetChiTiet('0')" [hidden]="statusBtnOk">
       <i nz-icon nzType="close" nzTheme="outline"></i>
       <span>Not OK</span>
     </button>

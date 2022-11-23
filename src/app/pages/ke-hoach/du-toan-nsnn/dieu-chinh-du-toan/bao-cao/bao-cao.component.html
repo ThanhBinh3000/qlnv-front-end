@@ -167,7 +167,6 @@
                     <ng-template #ok>
                       {{ getStatusBM(data.trangThai) }}
                     </ng-template>
-
                   </td>
                   <td>
                     <ng-container
@@ -188,21 +187,12 @@
                   </td>
 
                   <td>
-                    <ng-container *ngIf="data?.id?.length != 38">
-                      <ng-container *ngIf="data.giaoCho == userInfo?.sub && !status; else xem">
-                        <button type="button" class="btn btn-main" (click)="newTab(data.maLoai)">
-                          <span>Nhập dữ liệu</span>
-                        </button>
-                        <button type="button" class="btn btn-main">
-                          <span>Biểu mẫu nhập số liệu</span>
-                        </button>
-                      </ng-container>
-                      <ng-template #xem>
-                        <button type="button" class="btn btn-main" (click)="newTab(data.maLoai)">
-                          <span>Xem</span>
-                        </button>
-                      </ng-template>
-                    </ng-container>
+                    <a *ngIf="!status && userInfo?.sub == data.giaoCho && data.id" (click)="newTab(data.maLoai)">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    <a *ngIf="status" (click)="newTab(data.maLoai)">
+                      <i class="fa fa-eye"></i>
+                    </a>
                   </td>
                   <td [hidden]="status">
                     <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
@@ -309,35 +299,35 @@
           </nz-tab>
           <nz-tab *ngFor="let tab of tabs" nzClosable [nzTitle]="tab.tenPl">
             <ng-container *ngIf="tab.id == '1'">
-              <app-phu-luc-1 [data]="data" (dataChange)="getNewData($event)">
+              <app-phu-luc-1 [data]="tabData" (dataChange)="getNewData($event)">
               </app-phu-luc-1>
             </ng-container>
             <ng-container *ngIf="tab.id == '2'">
-              <app-phu-luc-2 [data]="data" (dataChange)="getNewData($event)">
+              <app-phu-luc-2 [data]="tabData" (dataChange)="getNewData($event)">
               </app-phu-luc-2>
             </ng-container>
             <ng-container *ngIf="tab.id == '3'">
-              <app-phu-luc-3 [data]="data" (dataChange)="getNewData($event)">
+              <app-phu-luc-3 [data]="tabData" (dataChange)="getNewData($event)">
               </app-phu-luc-3>
             </ng-container>
             <ng-container *ngIf="tab.id == '4'">
-              <app-phu-luc-4 [data]="data" (dataChange)="getNewData($event)">
+              <app-phu-luc-4 [data]="tabData" (dataChange)="getNewData($event)">
               </app-phu-luc-4>
             </ng-container>
             <ng-container *ngIf="tab.id == '5'">
-              <app-phu-luc-5 [data]="data" (dataChange)="getNewData($event)">
+              <app-phu-luc-5 [data]="tabData" (dataChange)="getNewData($event)">
               </app-phu-luc-5>
             </ng-container>
             <ng-container *ngIf="tab.id == '6'">
-              <app-phu-luc-6 [data]="data" (dataChange)="getNewData($event)">
+              <app-phu-luc-6 [data]="tabData" (dataChange)="getNewData($event)">
               </app-phu-luc-6>
             </ng-container>
             <ng-container *ngIf="tab.id == '7'">
-              <app-phu-luc-7 [data]="data" (dataChange)="getNewData($event)">
+              <app-phu-luc-7 [data]="tabData" (dataChange)="getNewData($event)">
               </app-phu-luc-7>
             </ng-container>
             <ng-container *ngIf="tab.id == '8'">
-              <app-phu-luc-8 [data]="data" (dataChange)="getNewData($event)">
+              <app-phu-luc-8 [data]="tabData" (dataChange)="getNewData($event)">
               </app-phu-luc-8>
             </ng-container>
           </nz-tab>

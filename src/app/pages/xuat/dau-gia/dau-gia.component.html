@@ -1,13 +1,13 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="!userService.isChiCuc()">
+    <li nz-menu-item (click)="selectTab(0)" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG')">
       Kế hoạch bán đấu giá
     </li>
     <!--<li nz-menu-item nzSelected (click)="selectTab(0)">
       Kế hoạch bán đấu giá
     </li>-->
-    <li nz-menu-item (click)="selectTab(1)" *ngIf="!userService.isChiCuc()">
+    <li nz-menu-item nzSelected (click)="selectTab(1)" *ngIf="!userService.isChiCuc() && userService.isAccessPermisson('XHDTQG_PTDG_TCKHBDG')">
       Tổ chức triển khai KH bán đấu giá
     </li>
     <li nz-menu-item (click)="selectTab(2)" *ngIf="!userService.isChiCuc()">
@@ -29,9 +29,9 @@
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-     <ng-container *ngIf="tabSelected == 0">
-      <app-kehoach-luachon-nhathau></app-kehoach-luachon-nhathau>
-    </ng-container>-->
+<!--     <ng-container *ngIf="tabSelected == 0">-->
+<!--      <app-kehoach-luachon-nhathau></app-kehoach-luachon-nhathau>-->
+<!--    </ng-container>-->
     <ng-container *ngIf="tabSelected == 0">
       <app-ke-hoach-ban-dau-gia></app-ke-hoach-ban-dau-gia>
     </ng-container>

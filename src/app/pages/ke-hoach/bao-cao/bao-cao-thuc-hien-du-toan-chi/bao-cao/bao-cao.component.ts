@@ -16,7 +16,7 @@ import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BCDTC, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { BCDTC, LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { PHULUCLIST } from './bao-cao.constant';
 
@@ -95,6 +95,7 @@ export class BaoCaoComponent implements OnInit {
     luyKes: ItemData[] = [];
     luyKeDetail = [];
     trangThais: any[] = TRANG_THAI_TIM_KIEM;
+    loaiBcaos: any[] = LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI;
     //trang thai cac nut
     status = false;                    // trang thai an/ hien cua trang thai
     saveStatus = true;                      // trang thai an/hien nut luu

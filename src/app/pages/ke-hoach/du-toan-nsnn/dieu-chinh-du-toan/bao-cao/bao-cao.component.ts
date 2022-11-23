@@ -44,7 +44,6 @@ export class ItemCongVan {
 
 export class BaoCaoComponent implements OnInit {
   @Input() data;
-
   @Output() dataChange = new EventEmitter();
 
   //thong tin dang nhap
@@ -177,6 +176,7 @@ export class BaoCaoComponent implements OnInit {
     return false;
   };
 
+
   // them file vao danh sach
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
@@ -186,6 +186,8 @@ export class BaoCaoComponent implements OnInit {
     });
     this.fileList = [];
   };
+
+  tabData: any;
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -269,8 +271,8 @@ export class BaoCaoComponent implements OnInit {
     this.spinner.show();
     this.id = this.data?.id;
     this.userInfo = this.userService.getUserLogin();
-
     await this.getListUser();
+    await this.getDviCon();
     if (this.id) {
       await this.getDetailReport();
     } else {
@@ -295,7 +297,9 @@ export class BaoCaoComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
       );
-      if (this.lstDviTrucThuoc?.length == 0) {
+      if (this.data?.isSynthetic) {
+        await this.tongHop();
+      } else if (this.lstDviTrucThuoc?.length == 0) {
         this.phuLucs.forEach(item => {
           this.lstDieuChinhs.push({
             id: uuid.v4() + 'FE',
@@ -311,12 +315,48 @@ export class BaoCaoComponent implements OnInit {
         })
       }
     }
-    await this.getDviCon();
+
     this.getStatusButton();
     this.changeNam();
     this.changeDot();
     this.spinner.hide();
   };
+
+  async tongHop() {
+    this.spinner.show();
+    const response = {
+      dotBcao: this.dotBcao,
+      namBcao: this.namBcao,
+      lstDieuChinhs: [],
+      lstDviTrucThuoc: [],
+    };
+    await this.dieuChinhService.tongHopDieuChinhDuToan(response).toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.lstDieuChinhs = data.data.lstDchinhs;
+          this.lstDviTrucThuoc = data.data.lstDchinhDviTrucThuocs;
+          this.lstDieuChinhs.forEach(item => {
+            if (!item.id) {
+              item.id = uuid.v4() + 'FE';
+            }
+            item.giaoCho = this.userInfo?.sub;
+            item.maDviTien = '1';
+            item.trangThai = '3';
+          })
+          this.lstDviTrucThuoc.forEach(item => {
+            item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
+            item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+          })
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    );
+    this.spinner.hide();
+  }
 
   changeNam() {
     this.phuLucs.forEach(item => {
@@ -564,7 +604,7 @@ export class BaoCaoComponent implements OnInit {
 
     const request = JSON.parse(JSON.stringify({
       id: this.id,
-      fileDinhKems: this.lstFiles,
+      fileDinhKems: listFile,
       listIdFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
       lstDchinh: this.lstDieuChinhs,
       maBcao: this.maBaoCao,
@@ -732,7 +772,7 @@ export class BaoCaoComponent implements OnInit {
       }
       this.dataChange.emit(obj);
     }
-  };
+  }
 
   getStatusAppendixName(id) {
     return TRANG_THAI_PHU_LUC.find(item => item.id == id)?.ten;
@@ -834,7 +874,7 @@ export class BaoCaoComponent implements OnInit {
       this.selectedIndex = index + 1;
     } else {
       const item = this.lstDieuChinhs.find(e => e.maLoai == id);
-      this.data = {
+      this.tabData = {
         ...item,
         maDviTao: this.maDviTao,
         namHienHanh: this.namHienHanh,
@@ -875,19 +915,26 @@ export class BaoCaoComponent implements OnInit {
 
   getNewData(obj: any) {
     const index = this.lstDieuChinhs.findIndex(e => e.maLoai == this.tabs[0].id);
-    if (obj?.trangThai == '-1') {
+    if (obj?.lstCtietDchinh) {
       this.getDetailReport();
-      this.data = {
-        ...this.lstDieuChinhs[index],
-        maDviTao: this.maDviTao,
-        namHienHanh: this.namHienHanh,
-        trangThaiBaoCao: this.trangThaiBaoCao,
-        statusBtnOk: this.okStatus,
-        statusBtnFinish: this.finishStatus,
-        status: this.status,
-        namBcao: this.namBcao,
-        maBaoCao: this.maBaoCao
-      }
+      // this.data = {
+      //   ...this.lstDieuChinhs[index],
+      //   maDviTao: this.maDviTao,
+      //   namHienHanh: this.namHienHanh,
+      //   trangThaiBaoCao: this.trangThaiBaoCao,
+      //   statusBtnOk: this.okStatus,
+      //   statusBtnFinish: this.finishStatus,
+      //   status: this.status,
+      //   namBcao: this.namBcao,
+      //   maBaoCao: this.maBaoCao
+      // }
+      this.lstDieuChinhs[index].lstCtietDchinh = obj.lstCtietDchinh;
+      this.lstDieuChinhs[index].maDviTien = obj.maDviTien;
+      this.lstDieuChinhs[index].trangThai = obj.trangThai;
+      this.lstDieuChinhs[index].thuyetMinh = obj.thuyetMinh;
+      this.lstDieuChinhs[index].lyDoTuChoi = obj.lyDoTuChoi;
+      this.lstDieuChinhs[index].giaoCho = obj.giaoCho;
+      // this.lstDieuChinhs[index].giaoCho = obj.giaoCho;
       this.tabs = [];
       this.tabs.push(PHU_LUC.find(e => e.id == this.lstDieuChinhs[index].maLoai));
       this.selectedIndex = this.tabs.length + 1;

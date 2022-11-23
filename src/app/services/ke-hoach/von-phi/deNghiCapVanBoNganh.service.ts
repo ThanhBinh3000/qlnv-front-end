@@ -15,8 +15,8 @@ export class DeNghiCapVonBoNganhService extends BaseService {
   }
 
   timKiem(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/search?`
-    // let url_ = `http://localhost:3333/de-nghi-cap-von-bo-nganh/search?`
+    // let url_ = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/search?`
+    let url_ = `http://localhost:3333/de-nghi-cap-von-bo-nganh/search?`
     if (body.soDeNghi)
       url_ += 'soDeNghi=' + encodeURIComponent('' + body.soDeNghi) + '&';
     if (body.maBoNganh)
@@ -29,6 +29,8 @@ export class DeNghiCapVonBoNganhService extends BaseService {
       url_ += 'trangThai=' + encodeURIComponent('' + body.trangThai) + '&';
     if (body.type)
       url_ += 'type=' + encodeURIComponent('' + body.type) + '&';
+    if (body.loaiTh)
+      url_ += 'loaiTh=' + encodeURIComponent('' + body.loaiTh) + '&';
     if (body.trangThaiTh)
       url_ += 'trangThaiTh=' + encodeURIComponent('' + body.trangThaiTh) + '&';
     if (body.ngayDeNghiDenNgay)
@@ -41,6 +43,12 @@ export class DeNghiCapVonBoNganhService extends BaseService {
       url_ += 'paggingReq.limit=' + encodeURIComponent('' + body.pageSize) + '&';
     url_ = url_.replace(/[?&]$/, '');
     return this.httpClient.get<any>(url_).toPromise();
+  }
+
+  loadThTCDT(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/tong-hop/TCDT`;
+    // const url = `http://localhost:3333/de-nghi-cap-von-bo-nganh/tong-hop/TCDT`;
+    return this.httpClient.post(url, body).toPromise();
   }
 
   loadChiTiet(id: number): Promise<any> {

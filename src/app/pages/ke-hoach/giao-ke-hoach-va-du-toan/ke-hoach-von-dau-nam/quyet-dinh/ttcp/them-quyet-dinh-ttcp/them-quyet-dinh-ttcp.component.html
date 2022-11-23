@@ -51,7 +51,7 @@
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
-                <nz-input-number type="text" nz-input formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                <nz-input-number [nzDisabled]="isView" type="text" nz-input formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                                  [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
@@ -63,7 +63,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
-            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày quyết định
+            <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd">Ngày ký quyết định
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker [nzDisabled]="isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy">
@@ -85,9 +85,9 @@
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item nz-col nzSpan="24" class="form-item">
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh" > Tài liệu đính kèm</nz-form-label>
             <div class="list-file">
-              <file-list [data]="taiLieuDinhKemList"></file-list>
+              <file-list [data]="taiLieuDinhKemList" [isViewDetail]="false"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -118,8 +118,8 @@
         <td class="text-center">{{ idx + 1 }}</td>
         <td>{{ data.tenBoNganh }}</td>
         <td>{{ data.tongTien |number: '1.0-1': 'vi_VN'}}</td>
-        <td style="text-align: left; white-space: nowrap;">
-          <a (click)="themKeHoach(data, idx,true)">
+        <td tyle="text-align: left; white-space: nowrap;">
+          <a  *ngIf="isView" (click)="themKeHoach(data, idx,true)">
             <i class="fa fa-eye"></i>
           </a>
           <a *ngIf="!isView" (click)="themKeHoach(data, idx,false)">

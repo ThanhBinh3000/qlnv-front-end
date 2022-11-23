@@ -9,11 +9,13 @@ import {
   OnChanges,
   SimpleChanges
 } from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {MESSAGE} from 'src/app/constants/message';
-import {KeHoachMuaXuat} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { MESSAGE } from 'src/app/constants/message';
+import { KeHoachMuaXuat } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { Globals } from './../../../../../../../../shared/globals';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
@@ -23,6 +25,8 @@ import {DanhMucService} from 'src/app/services/danhmuc.service';
 export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   @Input()
   dataTable = [];
+  @Input()
+  trangThai: any = [];
   @Output()
   dataTableChange = new EventEmitter<any[]>();
   @Input('isView') isView: boolean;
@@ -33,11 +37,12 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   @Output()
   hasError = new EventEmitter<boolean>();
   lastIndex = 0;
-
+  STATUS = STATUS;
   constructor(
     private modal: NzModalService,
     private danhMucService: DanhMucService,
     private notification: NzNotificationService,
+    public globals: Globals
   ) {
   }
 
@@ -92,16 +97,22 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   }
 
   themMoiItem() {
-    this.rowItem.idDanhMuc = +this.rowItem.idDanhMuc;
-    this.dataTable = [...this.dataTable, this.rowItem]
-    this.rowItem = new KeHoachMuaXuat();
-    this.updateEditCache();
-    this.emitDataTable();
-    // Validate tổng dự toán
-    if (this.calcTong() > this.tongGiaTri) {
-      this.dataTable.splice(this.lastIndex - 1, 1);
-      this.notification.error(MESSAGE.ERROR, "Tổng Dự toán không được lớn hơn Tổng giá trị theo QĐ của TTCP");
+    if (this.rowItem.loaiChi && this.rowItem.sluongDtoan != null) {
+      this.rowItem.idDanhMuc = +this.rowItem.idDanhMuc;
+      this.dataTable = [...this.dataTable, this.rowItem]
+
+      this.updateEditCache();
+      this.emitDataTable();
+      // Validate tổng dự toán
+      if (this.rowItem.loaiChi == "DT01" && this.rowItem.sluongDtoan > this.tongGiaTri && this.calcTong()) {
+        this.dataTable.splice(this.lastIndex - 1, 1);
+        this.notification.error(MESSAGE.ERROR, "Dự toán chi DTQG không được lớn hơn kế hoạch chỉ tiêu của Thủ tướng chính phủ");
+      }
+      this.rowItem = new KeHoachMuaXuat();
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
     }
+
   }
 
   clearData() {
@@ -110,22 +121,22 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   huyEdit(id: number): void {
     const index = this.dataTable.findIndex((item) => item.idVirtual == id);
     this.dataEdit[id] = {
-      data: {...this.dataTable[index]},
+      data: { ...this.dataTable[index] },
       edit: false,
     };
   }
 
   luuEdit(index: number): void {
     this.hasError.emit(false);
-    let beforeData = {...this.dataTable[index]};
+    let beforeData = { ...this.dataTable[index] };
     Object.assign(this.dataTable[index], this.dataEdit[index].data);
     this.emitDataTable();
     // Validate tổng dự toán
-    if (this.calcTong() > this.tongGiaTri) {
+    if (this.rowItem.loaiChi == "DT01" && this.rowItem.sluongDtoan > this.tongGiaTri && this.calcTong()) {
       Object.assign(this.dataTable[index], beforeData);
       // this.dataTable.splice(this.lastIndex - 1, 1);
       this.hasError.emit(true)
-      this.notification.error(MESSAGE.ERROR, "Tổng Dự toán không được lớn hơn Tổng giá trị theo QĐ của TTCP");
+      this.notification.error(MESSAGE.ERROR, "Tổng Dự toán không được lớn hơn Tổng kế hoạch chi DTQG theo QĐ của TTCP");
     } else {
       this.dataEdit[index].edit = false;
     }
@@ -141,7 +152,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
         }
         this.dataEdit[i] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
         i++
         // Validate tổng dự toán

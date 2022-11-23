@@ -13,7 +13,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
+import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, NOT_OK, OK } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC } from './phu-luc4.constant';
 
@@ -159,7 +159,14 @@ export class PhuLuc4Component implements OnInit {
     }
     this.getTotal();
     this.updateEditCache();
-
+    await this.getDinhMucPL4();
+    this.data?.lstCtietDchinh.forEach(item => {
+      this.dsDinhMuc.forEach(itm => {
+        if (itm.id = item.maNdung) {
+          item.dinhMuc = itm.thienDinhMuc
+        }
+      })
+    })
     //lay danh sach danh muc don vi
     await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
@@ -187,7 +194,7 @@ export class PhuLuc4Component implements OnInit {
       }
     );
     this.getStatusButton();
-    this.getDinhMucPL4();
+
     this.spinner.hide();
   }
 
@@ -283,11 +290,11 @@ export class PhuLuc4Component implements OnInit {
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          const obj = {
-            trangThai: '-1',
-            lyDoTuChoi: null,
-          };
-          this.dataChange.emit(obj);
+          // const obj = {
+          //   trangThai: '-1',
+          //   lyDoTuChoi: null,
+          // };
+          this.dataChange.emit(data.data);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -297,6 +304,29 @@ export class PhuLuc4Component implements OnInit {
       },
     );
 
+    this.spinner.hide();
+  }
+  //show popup tu choi dùng cho nut ok - not ok
+  async pheDuyetChiTiet(mcn: string) {
+    this.spinner.show();
+    if (mcn == OK) {
+      await this.onSubmit(mcn, null);
+    } else if (mcn == NOT_OK) {
+      const modalTuChoi = this.modal.create({
+        nzTitle: 'Not OK',
+        nzContent: DialogTuChoiComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {},
+      });
+      modalTuChoi.afterClose.toPromise().then(async (text) => {
+        if (text) {
+          await this.onSubmit(mcn, text);
+        }
+      });
+    }
     this.spinner.hide();
   }
 
@@ -313,11 +343,11 @@ export class PhuLuc4Component implements OnInit {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();
-          const obj = {
-            trangThai: mcn,
-            lyDoTuChoi: lyDoTuChoi,
-          }
-          this.dataChange.emit(obj);
+          // const obj = {
+          //   trangThai: mcn,
+          //   lyDoTuChoi: lyDoTuChoi,
+          // }
+          this.dataChange.emit(data.data);
           if (mcn == '0') {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
           } else {
