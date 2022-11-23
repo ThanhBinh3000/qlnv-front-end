@@ -51,14 +51,11 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       tenCloaiVthh: [null],
       dviTinh: [this.dviTinh],
       soLuong: [null],
-      donGia: [null, [Validators.required]],
-      thanhTien: [null],
+      donGiaVat: [320000, [Validators.required]],
+      donGiaTamTinh: [null, [Validators.required]],
     });
-    this.formGoiThau.controls['soLuong'].valueChanges.subscribe(value => {
-      this.calendarThanhTien();
-    });
-    this.formGoiThau.controls['donGia'].valueChanges.subscribe(value => {
-      this.calendarThanhTien();
+    this.formGoiThau.controls['donGiaTamTinh'].valueChanges.subscribe(value => {
+      this.validateRangPrice();
     });
   }
 
@@ -96,6 +93,16 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     let res = await this.donviService.getAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDonVi = res.data;
+    }
+  }
+
+  validateRangPrice() {
+    let value = +this.formGoiThau.get('donGiaTamTinh').value
+    let priceMin = 200000;
+    let priceMax = 500000;
+    console.log(value);
+    if (value > priceMax || value < priceMin) {
+      this.notification.error(MESSAGE.ERROR, "Đơn giá tạm tính phải nằm trong khoảng giá tối thiểu - tối đa : " + priceMin + "đ - " + priceMax + "đ");
     }
   }
 
@@ -152,22 +159,32 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   addDiemKho() {
-    if (this.thongtinDauThau.maDvi && this.thongtinDauThau.soLuong) {
-      let dataDvi = this.listDonVi.filter(d => d.maDvi == this.thongtinDauThau.maDvi)
-      this.thongtinDauThau.tenDvi = dataDvi[0].tenDvi;
-      this.dataTable = [...this.dataTable, this.thongtinDauThau];
-      let soLuong: number = 0;
-      let diaDiemNhap: string = "";
-      this.dataTable.forEach(item => {
-        soLuong = soLuong + item.soLuong,
-          diaDiemNhap = diaDiemNhap + this.thongtinDauThau.tenDvi + "(" + this.thongtinDauThau.soLuong + "), "
-      });
-      this.formGoiThau.patchValue({
-        soLuong: soLuong,
-        diaDiemNhap: diaDiemNhap.substring(0, diaDiemNhap.length - 2)
-      });
-      this.thongtinDauThau = new DanhSachGoiThau();
+    if (this.validateDataAdd()) {
+      if (this.thongtinDauThau.maDvi && this.thongtinDauThau.soLuong) {
+        let dataDvi = this.listDonVi.filter(d => d.maDvi == this.thongtinDauThau.maDvi)
+        this.thongtinDauThau.tenDvi = dataDvi[0].tenDvi;
+        this.dataTable = [...this.dataTable, this.thongtinDauThau];
+        let soLuong: number = 0;
+        this.dataTable.forEach(item => {
+          soLuong = soLuong + item.soLuong
+        });
+        this.formGoiThau.patchValue({
+          soLuong: soLuong
+        });
+        this.thongtinDauThau = new DanhSachGoiThau();
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
+      }
     }
+  }
+
+  validateDataAdd(): boolean {
+    let data = this.dataTable.filter(item => item.maDvi == this.thongtinDauThau.maDvi);
+    if (data.length > 0) {
+      this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
+      return false
+    }
+    return true;
   }
 
   startEdit(i) {

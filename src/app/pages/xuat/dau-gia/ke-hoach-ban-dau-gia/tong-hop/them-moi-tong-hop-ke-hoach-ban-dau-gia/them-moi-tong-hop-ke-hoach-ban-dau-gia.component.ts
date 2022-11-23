@@ -14,17 +14,17 @@ import { MESSAGE } from 'src/app/constants/message';
 import { ThongTinTongHopDeXuatLCNT } from 'src/app/models/ThongTinTongHopDeXuatLCNT';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as dayjs from 'dayjs';
+import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from 'src/app/constants/status';
 import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
-import {
-  TongHopDeXuatKeHoachBanDauGiaService
-} from "../../../../../../services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service";
+import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -53,7 +53,9 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
   listNam: any[] = [];
   yearNow: number = 0;
   idDeXuat: number = 0;
+  listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
+  listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
   listVthh: any[] = [];
   idPA: number = 0;
@@ -79,32 +81,30 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
   ) {
     this.formTraCuu = this.fb.group(
       {
+        namKh: [dayjs().get('year'), [Validators.required]],
         loaiVthh: [null, [Validators.required]],
         tenLoaiVthh: [null, [Validators.required]],
         cloaiVthh: [null, [Validators.required]],
         tenCloaiVthh: [null, [Validators.required]],
-        namKh: [dayjs().get('year'), [Validators.required]],
-        ngayKy: [null, [Validators.required]],
-        loaiHdong: ['', [Validators.required]],
+        ngayPduyet: [null, , [Validators.required]]
       }
     );
     this.formData = this.fb.group({
       id: [],
+      maThop: [''],
+      ngayThop: [, [Validators.required]],
+      namKh: [, [Validators.required]],
       loaiVthh: [, [Validators.required]],
       cloaiVthh: [, [Validators.required]],
-      namKhoach: [, [Validators.required]],
-      ngayTao: [, [Validators.required]],
-      noiDung: ['', [Validators.required]],
-      hthucLcnt: ['', [Validators.required]],
-      pthucLcnt: ['', [Validators.required]],
-      loaiHdong: ['', [Validators.required]],
-      nguonVon: ['', [Validators.required]],
-      ghiChu: ['',],
-      trangThai: [''],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
-      tchuanCluong: [''],
-      soQdCc: [''],
+      moTaHangHoa: [''],
+      loaiHdong: ['', [Validators.required]],
+      noiDungThop: ['', [Validators.required]],
+      tgianDkienTu: [''],
+      tgianDkienDen: [''],
+      trangThai: [''],
+      soQdPd: [''],
     })
 
   }
@@ -137,7 +137,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
       let res = await this.tongHopDeXuatKeHoachBanDauGiaService.getDetail(this.id);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
-        this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
+        this.dataTableDanhSachDX = dataDetail.thopDxKhBdgDtlList;
         this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail)
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
         this.isTongHop = true;
@@ -156,6 +156,18 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
     if (resNv.msg == MESSAGE.SUCCESS) {
       this.listNguonVon = resNv.data;
     }
+    // phương thức đấu thầu
+    this.listPhuongThucDauThau = [];
+    let resPt = await this.danhMucService.danhMucChungGetAll('PT_DTHAU');
+    if (resPt.msg == MESSAGE.SUCCESS) {
+      this.listPhuongThucDauThau = resPt.data;
+    }
+    // hình thức đấu thầu
+    this.listHinhThucDauThau = [];
+    let resPtdt = await this.danhMucService.danhMucChungGetAll('HT_LCNT');
+    if (resPtdt.msg == MESSAGE.SUCCESS) {
+      this.listHinhThucDauThau = resPtdt.data;
+    }
     // hợp đồng
     this.listLoaiHopDong = [];
     let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
@@ -173,7 +185,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
         return;
       }
       let body = this.formTraCuu.value;
-      let res = await this.tongHopDeXuatKeHoachBanDauGiaService.search(body);
+      let res = await this.tongHopDeXuatKeHoachBanDauGiaService.tonghop(body);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data
         let idTh = await this.userService.getId("HH_DX_KHLCNT_THOP_HDR_SEQ");
@@ -306,7 +318,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
     await this.spinner.hide();
   }
 }
-
 
 
 
