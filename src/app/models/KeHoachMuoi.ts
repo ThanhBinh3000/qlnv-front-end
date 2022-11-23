@@ -13,6 +13,13 @@ export class KeHoachMuoi {
   id: number;
   isEdit: boolean;
 
+  //Hoaot updated
+  tonKhoDauNam: number;
+  nhapTrongNam: number;
+  xuatTrongNamMuoi: number;
+  tonKhoCuoiNam: number;
+
+
   tkdnTongSoMuoi: number;
   tkdnMuoi: Array<ItemDetail>;
 
@@ -20,7 +27,6 @@ export class KeHoachMuoi {
   ntnTongSoMuoi: number;
   dcNtnTongSoMuoi: number;
   sdcNtnTongSoMuoi: number;
-  nhapTrongNam: string;
 
   tdcXtnTongSoMuoi: number;
   xtnTongSoMuoi: number;

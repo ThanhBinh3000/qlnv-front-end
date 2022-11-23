@@ -241,16 +241,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   newObjectMuoi() {
     this.keHoachMuoiCreate = new KeHoachMuoi();
-    this.keHoachMuoiCreate.xtnMuoi = [
-      new ItemDetail(0),
-      new ItemDetail(0),
-      new ItemDetail(0),
-    ];
-    this.keHoachMuoiCreate.tkdnMuoi = [
-      new ItemDetail(0),
-      new ItemDetail(0),
-      new ItemDetail(0),
-    ];
+    // this.keHoachMuoiCreate.xtnMuoi = [
+    //   new ItemDetail(0),
+    //   new ItemDetail(0),
+    //   new ItemDetail(0),
+    // ];
+    // this.keHoachMuoiCreate.tkdnMuoi = [
+    //   new ItemDetail(0),
+    //   new ItemDetail(0),
+    //   new ItemDetail(0),
+    // ];
     this.keHoachMuoiCreate.ntnTongSoMuoi = 0;
   }
 
@@ -2162,48 +2162,50 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachMuoiDialog.maDonVi = this.keHoachMuoiCreate.maDonVi;
     this.keHoachMuoiDialog.ntnTongSoMuoi = this.keHoachMuoiCreate.ntnTongSoMuoi;
     this.keHoachMuoiDialog.tenDonVi = this.keHoachMuoiCreate.tenDonVi;
-    this.keHoachMuoiDialog.tkcnTongSoMuoi =
-      this.keHoachMuoiCreate.tkcnTongSoMuoi;
-    this.keHoachMuoiDialog.donViTinh = MESSAGE.DON_VI_TINH_LUONG_THUC;
-    const tkdnMuoi1 = {
-      id: null,
-      nam: this.yearNow - 1,
-      soLuong: this.keHoachMuoiCreate.tkdnMuoi[0].soLuong,
-      vatTuId: null,
-    };
-    const tkdnMuoi2 = {
-      id: null,
-      nam: this.yearNow - 2,
-      soLuong: this.keHoachMuoiCreate.tkdnMuoi[1].soLuong,
-      vatTuId: null,
-    };
-    const tkdnMuoi3 = {
-      id: null,
-      nam: this.yearNow - 3,
-      soLuong: this.keHoachMuoiCreate.tkdnMuoi[2].soLuong,
-      vatTuId: null,
-    };
+    this.keHoachMuoiDialog.tonKhoDauNam = this.keHoachMuoiCreate.tonKhoDauNam;
+    this.keHoachMuoiDialog.nhapTrongNam = this.keHoachMuoiCreate.nhapTrongNam;
+    this.keHoachMuoiDialog.xuatTrongNamMuoi = this.keHoachMuoiCreate.xuatTrongNamMuoi;
+    this.keHoachMuoiDialog.tonKhoCuoiNam = this.keHoachMuoiCreate.tonKhoCuoiNam;
+    // this.keHoachMuoiDialog.donViTinh = MESSAGE.DON_VI_TINH_LUONG_THUC;
+    // const tkdnMuoi1 = {
+    //   id: null,
+    //   nam: this.yearNow - 1,
+    //   soLuong: this.keHoachMuoiCreate.tkdnMuoi[0].soLuong,
+    //   vatTuId: null,
+    // };
+    // const tkdnMuoi2 = {
+    //   id: null,
+    //   nam: this.yearNow - 2,
+    //   soLuong: this.keHoachMuoiCreate.tkdnMuoi[1].soLuong,
+    //   vatTuId: null,
+    // };
+    // const tkdnMuoi3 = {
+    //   id: null,
+    //   nam: this.yearNow - 3,
+    //   soLuong: this.keHoachMuoiCreate.tkdnMuoi[2].soLuong,
+    //   vatTuId: null,
+    // };
     // this.keHoachMuoiDialog.tkdnMuoi = [tkdnMuoi1, tkdnMuoi2, tkdnMuoi3];
-    this.keHoachMuoiDialog.tkdnTongSoMuoi =
-      this.keHoachMuoiCreate.tkdnTongSoMuoi;
-    const xtnMuoi1 = {
-      id: null,
-      nam: this.yearNow - 1,
-      soLuong: this.keHoachMuoiCreate.xtnMuoi[0].soLuong,
-      vatTuId: null,
-    };
-    const xtnMuoi2 = {
-      id: null,
-      nam: this.yearNow - 2,
-      soLuong: this.keHoachMuoiCreate.xtnMuoi[1].soLuong,
-      vatTuId: null,
-    };
-    const xtnMuoi3 = {
-      id: null,
-      nam: this.yearNow - 3,
-      soLuong: this.keHoachMuoiCreate.xtnMuoi[2].soLuong,
-      vatTuId: null,
-    };
+    // this.keHoachMuoiDialog.tkdnTongSoMuoi =
+    //   this.keHoachMuoiCreate.tkdnTongSoMuoi;
+    // const xtnMuoi1 = {
+    //   id: null,
+    //   nam: this.yearNow - 1,
+    //   soLuong: this.keHoachMuoiCreate.xtnMuoi[0].soLuong,
+    //   vatTuId: null,
+    // };
+    // const xtnMuoi2 = {
+    //   id: null,
+    //   nam: this.yearNow - 2,
+    //   soLuong: this.keHoachMuoiCreate.xtnMuoi[1].soLuong,
+    //   vatTuId: null,
+    // };
+    // const xtnMuoi3 = {
+    //   id: null,
+    //   nam: this.yearNow - 3,
+    //   soLuong: this.keHoachMuoiCreate.xtnMuoi[2].soLuong,
+    //   vatTuId: null,
+    // };
     // this.keHoachMuoiDialog.xtnMuoi = [xtnMuoi1, xtnMuoi2, xtnMuoi3];
     this.keHoachMuoiDialog.xtnTongSoMuoi = this.keHoachMuoiCreate.xtnTongSoMuoi;
     this.keHoachMuoiDialog.stt =
@@ -2215,7 +2217,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.newObjectMuoi();
     if (this.userInfo.CAP_DVI === LEVEL_USER.CUC) {
       this.keHoachMuoiCreate.tenDonVi = this.tenDonViCuc;
-      // this.isAddLuongThuc = true;
     }
     this.dsMuoiClone = cloneDeep(this.thongTinChiTieuKeHoachNam.khMuoiDuTru);
     this.loadData();
