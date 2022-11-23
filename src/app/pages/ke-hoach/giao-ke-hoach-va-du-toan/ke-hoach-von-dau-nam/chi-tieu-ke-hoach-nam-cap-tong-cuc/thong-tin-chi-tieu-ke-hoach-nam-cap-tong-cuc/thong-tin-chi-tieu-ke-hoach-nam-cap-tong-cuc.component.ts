@@ -1789,15 +1789,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               switch (tonKho.nam) {
                 case (this.yearNow - 1).toString():
                   this.keHoachLuongThucCreate.tkdnThoc[0].soLuong =
-                    tonKho.slHienThoi;
+                    tonKho.duDau;
                   break;
                 case (this.yearNow - 2).toString():
                   this.keHoachLuongThucCreate.tkdnThoc[1].soLuong =
-                    tonKho.slHienThoi;
+                    tonKho.duDau;
                   break;
                 case (this.yearNow - 3).toString():
                   this.keHoachLuongThucCreate.tkdnThoc[2].soLuong =
-                    tonKho.slHienThoi;
+                    tonKho.duDau;
                   break;
                 default:
                   break;
@@ -1806,11 +1806,11 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
               switch (tonKho.nam) {
                 case (this.yearNow - 1).toString():
                   this.keHoachLuongThucCreate.tkdnGao[0].soLuong =
-                    tonKho.slHienThoi;
+                    tonKho.duDau;
                   break;
                 case (this.yearNow - 2).toString():
                   this.keHoachLuongThucCreate.tkdnGao[1].soLuong =
-                    tonKho.slHienThoi;
+                    tonKho.duDau;
                   break;
                 default:
                   break;
@@ -1982,7 +1982,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   calculatortkdnTongGaoCreate(): string {
     this.keHoachLuongThucCreate.tkdnTongGao =
-      this.keHoachLuongThucCreate?.tkdnThoc.reduce((a, b) => a + +b.soLuong, 0);
+      this.keHoachLuongThucCreate?.tkdnGao.reduce((a, b) => a + +b.soLuong, 0);
     return this.keHoachLuongThucCreate.tkdnTongGao
       ? Intl.NumberFormat('en-US').format(
         this.keHoachLuongThucCreate.tkdnTongGao,
