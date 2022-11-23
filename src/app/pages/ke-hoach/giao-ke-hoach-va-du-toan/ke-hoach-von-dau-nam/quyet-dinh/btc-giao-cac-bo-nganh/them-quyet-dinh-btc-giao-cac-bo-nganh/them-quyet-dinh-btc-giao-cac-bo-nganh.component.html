@@ -5,7 +5,8 @@
       <span>Quay lại</span>
     </button>
     <button *ngIf="formData.value.trangThai == '00'
-      && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN_BANHANH')" type="button" class="btn btn-sub" (click)="save(true)">
+      && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN_BANHANH')" type="button" class="btn btn-sub"
+            (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
@@ -34,7 +35,7 @@
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="namQd" (ngModelChange)="onChangeNamQd($event)" [nzDisabled]="isView"
-                nzAllowClear="true">
+                         nzAllowClear="true">
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
@@ -50,7 +51,7 @@
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
                 <nz-input-number [nzDisabled]="isView" type="text" nz-input formControlName="soQd" [nzMin]="1"
-                  [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
+                                 [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
               <ng-template #error let-control>
@@ -65,7 +66,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker [nzDisabled]="isView" formControlName="ngayQd" nzFormat="dd/MM/yyyy" id="ngay-qd"
-                class="search__input">
+                              class="search__input">
               </nz-date-picker>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
@@ -78,7 +79,7 @@
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="nam-qd">Bộ ngành</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="idTtcpBoNganh" (ngModelChange)="onChangeBoNganh($event)" [nzDisabled]="isView"
-                nzAllowClear="true">
+                         nzAllowClear="true">
                 <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
               </nz-select>
@@ -93,13 +94,13 @@
             <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
             <nz-form-control>
               <textarea [readOnly]="isView" formControlName="trichYeu" rows="3" class="search__input"
-                nz-input></textarea>
+                        nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm </nz-form-label>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>
             <div class="list-file">
               <file-list [disabled]="isView" [data]="taiLieuDinhKemList"></file-list>
             </div>
@@ -110,7 +111,13 @@
   </nz-card>
   <nz-tabset nzType="card">
     <nz-tab [nzTitle]="'Danh sách nội dung dự toán'">
-      <app-ke-hoach-mua-tang [isView]="isView" [(dataTable)]="muaTangList" [tongGiaTri]="tongGiaTri" (hasError)="takeError($event)" [trangThai]="formData.value.trangThai">
+      <div>
+        <span class="text-right">
+          <h2 style="font-size: 100%;">ĐƠN VỊ : TRIỆU ĐỒNG</h2>
+        </span>
+      </div>
+      <app-ke-hoach-mua-tang [isView]="isView" [(dataTable)]="muaTangList" [tongGiaTri]="tongGiaTri"
+                             (hasError)="takeError($event)" [trangThai]="formData.value.trangThai">
       </app-ke-hoach-mua-tang>
     </nz-tab>
     <!-- <nz-tab [nzTitle]="'Xuất giảm'">
