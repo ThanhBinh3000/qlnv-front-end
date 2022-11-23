@@ -45,6 +45,7 @@ export class ThemMoiKhoComponent implements OnInit {
   dsChungLoaiHangHoa: any[] =[];
   dsLoaiHangHoa: any[] =[];
    listTinhTrang: any[] = [];
+  listFileDinhKem: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -77,29 +78,34 @@ export class ThemMoiKhoComponent implements OnInit {
       trangThai: [true],
       diaDiem : [''],
       type: [true],
+      coLoKho : [false],
       ghiChu: [''],
       nhiemVu: [''],
+      tichLuongTkLt : [''],
       tichLuongTkVt: [''],
       tichLuongSdLt: [''],
       tichLuongSdVt: [''],
-      tichLuongTkLt : [''],
+      theTichSdLt : [''],
+      theTichSdVt : [''],
       namSuDung: [''],
       dienTichDat : [''],
       tichLuongKdLt : [''],
       tichLuongKdVt : [''],
-      theTichTk : [''],
-      tinhTrangId: ['']
+      theTichKdLt : [''],
+      theTichKdVt : [''],
+      theTichTkLt : [''],
+      theTichTkVt : [''],
+      namNhap : [''],
+      tinhtrangId: [''],
+      soLuongTonKho: [''],
+      ngayNhapDay: [''],
+      donViTinh: ['']
     })
     this.formKho.controls['maCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
       if (node) {
         this.levelNode = node.level + 1
       }
-      // if (this.levelNode == 5) {
-      //   this.levelNode = null;
-      //   this.notification.error(MESSAGE.ERROR, 'Không được tạo đơn vị kho nhỏ hơn lô kho!')
-      //   return;
-      // }
     });
   }
 
@@ -183,14 +189,39 @@ export class ThemMoiKhoComponent implements OnInit {
     this.modal.destroy();
   }
 
-  save() {
+  saveNganLo() {
     this.helperService.markFormGroupTouched(this.formKho);
     if (this.formKho.invalid) {
       return;
     }
     let body = this.formKho.value;
     body.nganKhoId = this.formKho.value.maCha;
-    this.khoService.create(body).then((res: OldResponseData) => {
+    body.fileDinhkems = this.listFileDinhKem;
+    this.khoService.createKho('ngan-lo',body).then((res: OldResponseData) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        this.modal.close(true);
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }).catch((e) => {
+      console.error('error: ', e);
+      this.notification.error(
+        MESSAGE.ERROR,
+        e.error.errors[0].defaultMessage,
+      );
+    });
+  }
+
+  saveNganKho() {
+    this.helperService.markFormGroupTouched(this.formKho);
+    if (this.formKho.invalid) {
+      return;
+    }
+    let body = this.formKho.value;
+    body.nhakhoId = this.formKho.value.maCha;
+    body.fileDinhkems = this.listFileDinhKem;
+    this.khoService.createKho('ngan-kho',body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         this.modal.close(true);
