@@ -1,38 +1,48 @@
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { saveAs } from 'file-saver';
-import { groupBy, chain } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {saveAs} from 'file-saver';
+import {groupBy, chain} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {
+  DialogThemMoiVatTuComponent
+} from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {
+  DanhSachDauThauService
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
+import {UploadFileService} from 'src/app/services/uploaFile.service';
 import VNnum2words from 'vn-num2words';
 import * as dayjs from 'dayjs';
-import { Globals } from 'src/app/shared/globals';
-import { API_STATUS_CODE, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { HelperService } from 'src/app/services/helper.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
-import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import { STATUS } from "../../../../../../constants/status";
-import { BaseComponent } from "../../../../../../components/base/base.component";
-import { DatePipe } from "@angular/common";
-import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
-import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
-import { DialogThemDiaDiemPhanLoComponent } from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
+import {Globals} from 'src/app/shared/globals';
+import {API_STATUS_CODE, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {UserLogin} from 'src/app/models/userlogin';
+import {UserService} from 'src/app/services/user.service';
+import {VatTu} from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
+import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {HelperService} from 'src/app/services/helper.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {TinhTrangKhoHienThoiService} from 'src/app/services/tinhTrangKhoHienThoi.service';
+import {
+  DialogDanhSachHangHoaComponent
+} from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import {
+  DialogThemMoiGoiThauComponent
+} from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
+import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import {STATUS} from "../../../../../../constants/status";
+import {BaseComponent} from "../../../../../../components/base/base.component";
+import {DatePipe} from "@angular/common";
+import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import {DanhSachPhanLo} from 'src/app/models/KeHoachBanDauGia';
+import {DeXuatKhBanDauGiaService} from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
+import {
+  DialogThemDiaDiemPhanLoComponent
+} from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
 
 @Component({
   selector: 'app-them-de-xuat-ke-hoach-ban-dau-gia',
@@ -225,11 +235,12 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
         .then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
             const dataDetail = res.data;
-            this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
-            this.formData.patchValue({
-              soDxuat: dataDetail.soDxuat?.split('/')[0]
-            })
             if (dataDetail) {
+              this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+              this.formData.patchValue({
+                soDxuat: dataDetail.soDxuat?.split('/')[0],
+                thoiGianDuKien: dataDetail.tgianDkienTu && dataDetail.tgianDkienDen ? [dataDetail.tgianDkienTu, dataDetail.tgianDkienDen] : null
+              })
               this.fileDinhKem = dataDetail.fileDinhKems;
               this.listOfData = dataDetail.dsPhanLoList;
             }
@@ -248,8 +259,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_SUA") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM")) {
         return true;
       }
-    }
-    else {
+    } else {
       if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_LT_DEXUAT_SUA") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM")) {
         return true;
       }
@@ -645,7 +655,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
   }
 
 
-
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
@@ -671,4 +680,13 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     }
   }
 
+  changeThoiGianDuKien() {
+    let value = this.formData.get('thoiGianDuKien').value;
+    if (value) {
+      this.formData.patchValue({
+        tgianDkienTu: value[0],
+        tgianDkienDen: value[1],
+      })
+    }
+  }
 }

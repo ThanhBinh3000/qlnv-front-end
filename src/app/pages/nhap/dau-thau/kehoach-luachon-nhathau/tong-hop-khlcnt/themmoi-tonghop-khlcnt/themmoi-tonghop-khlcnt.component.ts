@@ -271,7 +271,7 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
   }
 
   selectHangHoa() {
-    // let data = this.loaiVthh;
+    let data = this.loaiVthh;
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,
@@ -279,7 +279,9 @@ export class ThemmoiTonghopKhlcntComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        data: data
+      },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
