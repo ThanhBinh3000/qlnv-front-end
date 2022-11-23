@@ -57,7 +57,6 @@ export class NewHangHoaComponent implements OnInit {
       trangThai: [true],
       kyHieu: [''],
       maDviTinh: ['', Validators.required],
-      dviQly: ['', Validators.required],
     })
   }
 
@@ -133,9 +132,10 @@ export class NewHangHoaComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDviQly = res.data;
       if (this.listDviQly) {
-        this.listDviQly.forEach(item => {
-          this.listOfOption.push({maDvi: item.maDvi, tenDvi : item.tenDvi})
-        })
+        this.listOfOption = this.listDviQly.map(item => ({
+          maDvi : item.maDvi,
+          tenDvi : item.tenDvi
+        }))
       }
     }
   }
@@ -202,8 +202,10 @@ export class NewHangHoaComponent implements OnInit {
   }
 
   add() {
+    this.spinner.show()
     this.helperService.markFormGroupTouched(this.formHangHoa);
     if (this.formHangHoa.invalid) {
+      this.spinner.hide();
       return;
     }
     let dviTinh =  this.listDviTinh.filter(item => item.ma == this.formHangHoa.value.maDviTinh)
@@ -225,11 +227,9 @@ export class NewHangHoaComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }).catch((e) => {
-      console.error('error: ', e);
-      this.notification.error(
-        MESSAGE.ERROR,
-        e.error.errors[0].defaultMessage,
-      );
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
   }
 
@@ -241,7 +241,6 @@ export class NewHangHoaComponent implements OnInit {
         let dviTinh =  this.listDviTinh.filter(item => item.giaTri == detail.maDviTinh)
         this.formHangHoa.patchValue({
           maDviTinh : dviTinh && dviTinh[0] ? dviTinh[0].ma : null,
-          dviQly : detail.dviQly,
           loaiHang : this.convertLoaiHh(detail.loaiHang)
         })
       }

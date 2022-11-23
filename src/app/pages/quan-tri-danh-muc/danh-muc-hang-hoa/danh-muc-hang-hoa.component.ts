@@ -1,21 +1,20 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { NzFormatEmitEvent, NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DonviService } from 'src/app/services/donvi.service';
-import { ResponseData, OldResponseData } from 'src/app/interfaces/response';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { HelperService } from 'src/app/services/helper.service';
-import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
-import { LOAI_DON_VI, TrangThaiHoatDong } from 'src/app/constants/status';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {NzFormatEmitEvent, NzTreeComponent} from 'ng-zorro-antd/tree';
+import {DonviService} from 'src/app/services/donvi.service';
+import {ResponseData, OldResponseData} from 'src/app/interfaces/response';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {HelperService} from 'src/app/services/helper.service';
+import {NzTreeSelectComponent} from 'ng-zorro-antd/tree-select';
+import {LOAI_DON_VI, TrangThaiHoatDong} from 'src/app/constants/status';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {NewHangHoaComponent} from "./new-hang-hoa/new-hang-hoa.component";
 import {DanhMucService} from "../../../services/danhmuc.service";
 import {UserService} from "../../../services/user.service";
 import {DanhMucTieuChuanService} from "../../../services/quantri-danhmuc/danhMucTieuChuan.service";
-
 
 
 @Component({
@@ -24,7 +23,7 @@ import {DanhMucTieuChuanService} from "../../../services/quantri-danhmuc/danhMuc
   styleUrls: ['./danh-muc-hang-hoa.component.scss']
 })
 export class DanhMucHangHoaComponent implements OnInit {
-  @ViewChild('nzTreeSelectComponent', { static: false }) nzTreeSelectComponent!: NzTreeSelectComponent;
+  @ViewChild('nzTreeSelectComponent', {static: false}) nzTreeSelectComponent!: NzTreeSelectComponent;
   searchValue = '';
   searchFilter = {
     soQD: '',
@@ -43,11 +42,14 @@ export class DanhMucHangHoaComponent implements OnInit {
   listPpbq: any[] = [];
   listHtbq: any[] = [];
   listLoaiHang: any[] = [];
-  listDviQly : any[] = [];
+  listDviQly: any[] = [];
   listDviTinh: any[] = [];
-  listPpLayMau: any[]=  [];
+  listPpLayMau: any[] = [];
   listOfOption: Array<{ maDvi: string; tenDvi: string }> = [];
   listOfTagOption: any[] = [];
+  listTenDviQly: any[] = [];
+  listDvqlReq: Array<{ maDvi: string; tenDvi: string }> = [];
+
 
   constructor(
     private router: Router,
@@ -59,19 +61,18 @@ export class DanhMucHangHoaComponent implements OnInit {
     private _modalService: NzModalService,
     private spinner: NgxSpinnerService,
     public userSerivce: UserService,
-    private tieuChuanService : DanhMucTieuChuanService,
+    private tieuChuanService: DanhMucTieuChuanService,
   ) {
     this.detailHangHoa = this.formBuilder.group({
       id: [''],
       maCha: [''],
-      tenHhCha: ['', ],
-      tenHangHoa: ['', ],
+      tenHhCha: ['',],
+      tenHangHoa: ['',],
       maDviTinh: ['', Validators.required],
-      dviQly: ['', Validators.required],
-      tchuanCluong: ['', ],
-      thoiHanLk: ['', ],
+      tchuanCluong: ['',],
+      thoiHanLk: ['',],
       loaiHang: ['', Validators.required],
-      kyHieu: ['', ],
+      kyHieu: ['',],
       ma: ['', Validators.required],
       ghiChu: ['',],
       trangThai: ["01"],
@@ -128,7 +129,7 @@ export class DanhMucHangHoaComponent implements OnInit {
   async loadTieuChuanCluong(maHH) {
     let res = await this.tieuChuanService.getDetailByMaHh(maHH);
     this.detailHangHoa.patchValue({
-      tchuanCluong : res.data ? res.data.tenQchuan : null
+      tchuanCluong: res.data ? res.data.tenQchuan : null
     })
   }
 
@@ -177,12 +178,13 @@ export class DanhMucHangHoaComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDviQly = res.data;
       if (this.listDviQly) {
-        this.listDviQly.forEach(item => {
-          this.listOfOption.push({maDvi: item.maDvi, tenDvi : item.tenDvi})
-        })
-      }
+        for (let x = 0; x < this.listDviQly.length; x++) {
+          this.listOfOption.push({maDvi: this.listDviQly[x].tenDvi, tenDvi: this.listDviQly[x].tenDvi})
+          this.listTenDviQly.push(this.listDviQly[x].tenDvi)
+        }
       }
     }
+  }
 
   async loadListLoaiHang() {
     this.listLoaiHang = [];
@@ -207,6 +209,7 @@ export class DanhMucHangHoaComponent implements OnInit {
       this.nodeSelected = event.node.origin;
       this.parentNodeSelected = event?.parentNode?.origin
       if (this.nodeSelected.ma != null) {
+        this.isEditData = false;
         this.showdetailHangHoa(this.nodeSelected.id)
       }
     }
@@ -219,17 +222,19 @@ export class DanhMucHangHoaComponent implements OnInit {
           this.nodeDetail = res.data;
           // gán giá trị vào form
           this.levelNode = +res.data.cap;
-          this.listLhbq.forEach(item => {
-            item.checked = true
-          })
           let dviTinh;
           if (this.nodeDetail.maDviTinh) {
-             dviTinh = this.listDviTinh.filter(item => item.giaTri == this.nodeDetail.maDviTinh);
+            dviTinh = this.listDviTinh.filter(item => item.giaTri == this.nodeDetail.maDviTinh);
+          }
+          this.listOfTagOption = [];
+          if (this.nodeDetail.dmHangDvqls) {
+            this.nodeDetail.dmHangDvqls.forEach(item => {
+              this.listOfTagOption.push(item.tenDvi)
+            })
           }
           let detaiParent = this.nodeDetail.detailParent;
-          this.listOfTagOption = this.nodeDetail.dmHangDvqls;
           this.detailHangHoa.patchValue({
-            maCha:detaiParent ? detaiParent.ma : null,
+            maCha: detaiParent ? detaiParent.ma : null,
             id: this.nodeDetail.id,
             tenHhCha: detaiParent ? detaiParent.ten : null,
             tenHangHoa: this.nodeDetail.ten,
@@ -244,7 +249,7 @@ export class DanhMucHangHoaComponent implements OnInit {
             trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
           })
           this.loadTieuChuanCluong(this.detailHangHoa.value.ma);
-          this.loadDetailBq(this.nodeDetail.loaiHinhBq, this.nodeDetail.phuongPhapBq, this.nodeDetail.hinhThucBq, this.nodeDetail.ppLayMau );
+          this.loadDetailBq(this.nodeDetail.loaiHinhBq, this.nodeDetail.phuongPhapBq, this.nodeDetail.hinhThucBq, this.nodeDetail.ppLayMau);
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
         }
@@ -252,7 +257,7 @@ export class DanhMucHangHoaComponent implements OnInit {
     }
   }
 
-  loadDetailBq(listLh? , listPp? , listHt? , listPpLm?) {
+  loadDetailBq(listLh?, listPp?, listHt?, listPpLm?) {
     if (listHt) {
       this.listLhbq.forEach(item => {
         item.checked = undefined
@@ -273,16 +278,16 @@ export class DanhMucHangHoaComponent implements OnInit {
         })
       })
     }
-  if (listHt) {
-    this.listHtbq.forEach(item => {
-      item.checked = undefined
-      listHt.forEach(bq => {
-        if (item.ma == bq.ma) {
-          item.checked = true;
-        }
+    if (listHt) {
+      this.listHtbq.forEach(item => {
+        item.checked = undefined
+        listHt.forEach(bq => {
+          if (item.ma == bq.ma) {
+            item.checked = true;
+          }
+        })
       })
-    })
-  }
+    }
     if (listPpLm) {
       this.listPpLayMau.forEach(item => {
         item.checked = undefined
@@ -304,8 +309,17 @@ export class DanhMucHangHoaComponent implements OnInit {
     if (this.detailHangHoa.invalid) {
       return;
     }
-    let dviTinh =  this.listDviTinh.filter(item => item.ma == this.detailHangHoa.value.maDviTinh)
+    let dviTinh = this.listDviTinh.filter(item => item.ma == this.detailHangHoa.value.maDviTinh)
     let body = this.detailHangHoa.value;
+    if (this.listOfTagOption && this.listOfOption) {
+      this.listOfTagOption.forEach(item => {
+        let index = this.listTenDviQly.indexOf(item);
+        if (index && index > -1) {
+          this.listDvqlReq.push({maDvi: this.listDviQly[index].maDvi, tenDvi: this.listDviQly[index].tenDvi});
+        }
+      })
+    }
+    body.dmHangDvqls = this.listDvqlReq;
     body.trangThai = this.detailHangHoa.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
     body.maDviTinh = dviTinh[0].giaTri
     body.loaiHinhBq = this.listLhbq.filter(item => item.checked === true)
@@ -334,6 +348,7 @@ export class DanhMucHangHoaComponent implements OnInit {
       }
     });
   }
+
   convertLoaiHh(loaiVthh) {
     let loaiHh = loaiVthh
     switch (loaiHh) {
@@ -390,9 +405,9 @@ export class DanhMucHangHoaComponent implements OnInit {
       nzContent: NewHangHoaComponent,
       nzClosable: true,
       nzFooter: null,
-      nzStyle: { top: '50px' },
+      nzStyle: {top: '50px'},
       nzWidth: 1200,
-      nzComponentParams: { nodesTree },
+      nzComponentParams: {nodesTree},
     });
     modal.afterClose.subscribe(res => {
       if (res) {
