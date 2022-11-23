@@ -13,7 +13,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
+import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, NOT_OK, OK } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC } from './phu-luc2.constant';
 
@@ -96,6 +96,8 @@ export class PhuLuc2Component implements OnInit {
   statusBtnOk: boolean;
   dsDinhMucN: any[] = [];
   dsDinhMucX: any[] = [];
+  listVattu: any[] = [];
+  listVatTuFull: any[] = [];
   maDviTao!: string;
 
   allChecked = false;
@@ -119,6 +121,7 @@ export class PhuLuc2Component implements OnInit {
 
   async initialization() {
     this.spinner.show();
+    console.log(this.data);
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
     this.maDviTien = "1";
@@ -128,12 +131,32 @@ export class PhuLuc2Component implements OnInit {
     this.status = this.data?.status;
     this.statusBtnFinish = this.data?.statusBtnFinish;
     this.maDviTao = this.data?.maDviTao;
+    await this.getDinhMucPL2N();
+    await this.getDinhMucPL2X();
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
         ncauKphi: item.ncauKphi,
       })
     })
+    this.data?.lstCtietDchinh.forEach(item => {
+      this.dsDinhMucN.forEach(itm => {
+        if (itm.id = item.maNdung) {
+          item.thienDinhMuc = itm.tongDmuc
+        }
+      })
+    })
+    this.data?.lstCtietDchinh.forEach(item => {
+      this.dsDinhMucX.forEach(itm => {
+        if (itm.id = item.maNdung) {
+          item.thienDinhMuc = itm.tongDmuc
+        }
+      })
+    })
+    this.data?.lstCtietDchinh.forEach(item => {
+      item.thienThanhTien = item.thienCong * item.thienDinhMuc
+    });
+
     if (this.lstCtietBcao.length > 0) {
       if (!this.lstCtietBcao[0].stt) {
         this.sortWithoutIndex();
@@ -143,8 +166,6 @@ export class PhuLuc2Component implements OnInit {
     }
     this.getTotal();
     this.updateEditCache();
-    await this.getDinhMucPL2N();
-    await this.getDinhMucPL2X();
     //lay danh sach danh muc don vi
     await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
@@ -171,18 +192,45 @@ export class PhuLuc2Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+    // await this.getListVtu()
     this.getStatusButton();
     // this.getdsDinhMucN();
-    
+
+    // const listVT = [];
+    // this.listVattu.forEach(item => {
+    //   this.listVatTuFull.push({
+    //     id: item.id,
+    //     tenDm: item.ten,
+    //     idCha: 0,
+    //     level: 1,
+    //     maDviTinh: ""
+    //   })
+    //   item.forEach(itm => {
+    //   })
+    // })
+
     this.spinner.hide();
   }
 
-  getDinhMucPL2N() {
+  async getListVtu() {
+    //lay danh sach vat tu
+    await this.danhMucService.dMVatTu().toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.listVattu = res.data;
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+  }
+
+  async getDinhMucPL2N() {
     const request = {
       loaiDinhMuc: '01',
       maDvi: this.maDviTao,
     }
-    this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+    await this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
       res => {
         if (res.statusCode == 0) {
           this.dsDinhMucN = res.data;
@@ -200,12 +248,12 @@ export class PhuLuc2Component implements OnInit {
       }
     )
   }
-  getDinhMucPL2X() {
+  async getDinhMucPL2X() {
     const request = {
       loaiDinhMuc: '02',
       maDvi: this.maDviTao,
     }
-    this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+    await this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
       res => {
         if (res.statusCode == 0) {
           this.dsDinhMucX = res.data;
@@ -293,11 +341,11 @@ export class PhuLuc2Component implements OnInit {
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          const obj = {
-            trangThai: '-1',
-            lyDoTuChoi: null,
-          };
-          this.dataChange.emit(obj);
+          // const obj = {
+          //   trangThai: '-1',
+          //   lyDoTuChoi: null,
+          // };
+          this.dataChange.emit(data.data);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -307,6 +355,30 @@ export class PhuLuc2Component implements OnInit {
       },
     );
 
+    this.spinner.hide();
+  }
+
+  //show popup tu choi dùng cho nut ok - not ok
+  async pheDuyetChiTiet(mcn: string) {
+    this.spinner.show();
+    if (mcn == OK) {
+      await this.onSubmit(mcn, null);
+    } else if (mcn == NOT_OK) {
+      const modalTuChoi = this.modal.create({
+        nzTitle: 'Not OK',
+        nzContent: DialogTuChoiComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {},
+      });
+      modalTuChoi.afterClose.toPromise().then(async (text) => {
+        if (text) {
+          await this.onSubmit(mcn, text);
+        }
+      });
+    }
     this.spinner.hide();
   }
 
@@ -323,11 +395,11 @@ export class PhuLuc2Component implements OnInit {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();
-          const obj = {
-            trangThai: mcn,
-            lyDoTuChoi: lyDoTuChoi,
-          }
-          this.dataChange.emit(obj);
+          // const obj = {
+          //   trangThai: mcn,
+          //   lyDoTuChoi: lyDoTuChoi,
+          // }
+          this.dataChange.emit(data.data);
           if (mcn == '0') {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
           } else {
@@ -695,6 +767,7 @@ export class PhuLuc2Component implements OnInit {
       const item: ItemData = {
         ...initItem,
         stt: "0.1",
+        thienDinhMuc: dm != 0 ? dm : null,
       }
       this.lstCtietBcao.push(item);
       this.editCache[item.id] = {
