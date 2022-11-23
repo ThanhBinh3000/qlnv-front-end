@@ -188,7 +188,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       let tongMucDtTrung = 0
-      data.dsGoiThau.forEach(item => {
+      data.children.forEach(item => {
         if (item.trangThai == STATUS.THANH_CONG) {
           tongMucDtTrung += item.soLuong * item.donGiaNhaThau * 1000
         }
@@ -226,8 +226,8 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         trangThai: data.trangThai,
         tenTrangThai: data.tenTrangThai
       })
-      this.listOfData = data.dsGoiThau;
-      this.danhsachDx = data.dsGoiThau;
+      this.listOfData = data.children;
+      this.danhsachDx = data.children;
       this.convertListData()
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
