@@ -160,6 +160,75 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
   // render lần lầu khi vào trang
   async ngOnInit() {
+    this.action('init');
+  };
+
+  async action(code: string) {
+    this.spinner.show();
+    this.isDataAvailable = false;
+    switch (code) {
+      case 'init':
+        await this.initialization().then(() => {
+          this.isDataAvailable = true;
+        });
+        break;
+      case 'detail':
+        await this.getDetailReport().then(() => {
+          this.isDataAvailable = true;
+        });
+        break;
+      case 'save':
+        await this.save().then(() => {
+          this.isDataAvailable = true;
+        })
+        break;
+      case 'submit':
+        await this.submitReport().then(() => {
+          this.isDataAvailable = true;
+        })
+        break;
+      case 'nonpass':
+        await this.tuChoi('3').then(() => {
+          this.isDataAvailable = true;
+        })
+        break;
+      case 'pass':
+        await this.onSubmit('4', null).then(() => {
+          this.isDataAvailable = true;
+        })
+        break;
+      case 'nonapprove':
+        await this.tuChoi('5').then(() => {
+          this.isDataAvailable = true;
+        })
+        break;
+      case 'approve':
+        await this.onSubmit('6', null).then(() => {
+          this.isDataAvailable = true;
+        })
+        break;
+      case 'approveDVCT':
+        await this.onSubmit('7', null).then(() => {
+          this.isDataAvailable = true;
+        })
+        break;
+      case 'receive':
+        await this.onSubmit('8', null).then(() => {
+          this.isDataAvailable = true;
+        })
+        break;
+      case 'refuse':
+        await this.tuChoi('9').then(() => {
+          this.isDataAvailable = true;
+        })
+        break;
+      default:
+        break;
+    }
+    this.spinner.hide();
+  }
+
+  async initialization() {
     this.spinner.show();
     // lấy id bản ghi từ router
     this.id = this.routerActive.snapshot.paramMap.get('id');
@@ -232,6 +301,21 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     this.getStatusButton();
     this.spinner.hide();
   };
+
+  async submitReport() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn trình duyệt?<br/>(Trình duyệt trước khi lưu báo cáo có thể gây mất dữ liệu)',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 500,
+      nzOnOk: () => {
+        this.onSubmit(Utils.TT_BC_2, '')
+      },
+    });
+  }
 
   // =====================================================================================
 
@@ -447,14 +531,10 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
   // đóng
   back() {
-    if (this.data?.preData) {
-      this.dataChange.emit(this.data?.preData)
-    } else {
-      const obj = {
-        tabSelected: this.data?.preTab,
-      }
-      this.dataChange.emit(obj);
+    const obj = {
+      tabSelected: this.data?.preTab,
     }
+    this.dataChange.emit(obj);
   };
 
   // in
@@ -883,7 +963,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
   };
 
   // từ chối
-  tuChoi(mcn: string) {
+  async tuChoi(mcn: string) {
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,

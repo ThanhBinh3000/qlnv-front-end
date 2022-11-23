@@ -5,6 +5,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { ThongTinQuyetDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { Globals } from 'src/app/shared/globals';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-ke-hoach-mua-tang',
@@ -14,6 +16,9 @@ import { Globals } from 'src/app/shared/globals';
 export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   @Input()
   dataTable = [];
+  @Input()
+  trangThai :any=[];
+  STATUS=STATUS;
   @Output()
   dataTableChange = new EventEmitter<any[]>();
   @Input()
@@ -27,7 +32,8 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
 
   constructor(
     private modal: NzModalService,
-    public globals: Globals
+    public globals: Globals,
+    private notification: NzNotificationService,
   ) {
   }
 
@@ -70,11 +76,16 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
 
 
   themMoiItem() {
-    this.rowItem.tongTien = this.rowItem.soLuong * this.rowItem.donGia
-    this.dataTable = [...this.dataTable, this.rowItem]
-    this.rowItem = new ThongTinQuyetDinh();
-    this.updateEditCache();
-    this.emitDataTable();
+    if (this.rowItem.loaiVthh && this.rowItem.soLuong && this.rowItem.donGia != null) {
+      this.rowItem.tongTien = this.rowItem.soLuong * this.rowItem.donGia
+      this.dataTable = [...this.dataTable, this.rowItem]
+      this.rowItem = new ThongTinQuyetDinh();
+      this.updateEditCache();
+      this.emitDataTable();
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
+    }
   }
 
 

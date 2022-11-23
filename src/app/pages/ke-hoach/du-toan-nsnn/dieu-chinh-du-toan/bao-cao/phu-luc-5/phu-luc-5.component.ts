@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { NOT_OK, OK } from 'src/app/Utility/utils';
 @Component({
   selector: 'app-phu-luc-5',
   templateUrl: './phu-luc-5.component.html',
@@ -145,6 +146,31 @@ export class PhuLuc5Component implements OnInit {
       this.statusBtnOk = true;
     }
   }
+
+  //show popup tu choi dùng cho nut ok - not ok
+  async pheDuyetChiTiet(mcn: string) {
+    this.spinner.show();
+    if (mcn == OK) {
+      await this.onSubmit(mcn, null);
+    } else if (mcn == NOT_OK) {
+      const modalTuChoi = this.modal.create({
+        nzTitle: 'Not OK',
+        nzContent: DialogTuChoiComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {},
+      });
+      modalTuChoi.afterClose.toPromise().then(async (text) => {
+        if (text) {
+          await this.onSubmit(mcn, text);
+        }
+      });
+    }
+    this.spinner.hide();
+  }
+
   // chuc nang check role
   async onSubmit(mcn: string, lyDoTuChoi: string) {
     if (this.id) {
@@ -158,11 +184,11 @@ export class PhuLuc5Component implements OnInit {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();
-          const obj = {
-            trangThai: mcn,
-            lyDoTuChoi: lyDoTuChoi,
-          }
-          this.dataChange.emit(obj);
+          // const obj = {
+          //   trangThai: mcn,
+          //   lyDoTuChoi: lyDoTuChoi,
+          // }
+          this.dataChange.emit(data.data);
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
           // }
         } else {
@@ -221,11 +247,11 @@ export class PhuLuc5Component implements OnInit {
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          const obj = {
-            trangThai: '-1',
-            lyDoTuChoi: null,
-          };
-          this.dataChange.emit(obj);
+          // const obj = {
+          //   trangThai: '-1',
+          //   lyDoTuChoi: null,
+          // };
+          this.dataChange.emit(data.data);
           this.listFile = [];
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
