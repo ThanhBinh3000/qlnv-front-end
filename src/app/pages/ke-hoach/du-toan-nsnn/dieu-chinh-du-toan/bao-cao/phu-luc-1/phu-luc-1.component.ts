@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, NOT_OK, OK, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC } from './phu-luc1.constant';
 
@@ -232,11 +232,11 @@ export class PhuLuc1Component implements OnInit {
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          const obj = {
-            trangThai: '-1',
-            lyDoTuChoi: null,
-          };
-          this.dataChange.emit(obj);
+          // const obj = {
+          //   trangThai: '-1',
+          //   lyDoTuChoi: null,
+          // };
+          this.dataChange.emit(data.data);
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -246,6 +246,30 @@ export class PhuLuc1Component implements OnInit {
       },
     );
 
+    this.spinner.hide();
+  }
+
+  //show popup tu choi dùng cho nut ok - not ok
+  async pheDuyetChiTiet(mcn: string) {
+    this.spinner.show();
+    if (mcn == OK) {
+      await this.onSubmit(mcn, null);
+    } else if (mcn == NOT_OK) {
+      const modalTuChoi = this.modal.create({
+        nzTitle: 'Not OK',
+        nzContent: DialogTuChoiComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {},
+      });
+      modalTuChoi.afterClose.toPromise().then(async (text) => {
+        if (text) {
+          await this.onSubmit(mcn, text);
+        }
+      });
+    }
     this.spinner.hide();
   }
 
@@ -262,11 +286,11 @@ export class PhuLuc1Component implements OnInit {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();
-          const obj = {
-            trangThai: mcn,
-            lyDoTuChoi: lyDoTuChoi,
-          }
-          this.dataChange.emit(obj);
+          // const obj = {
+          //   trangThai: mcn,
+          //   lyDoTuChoi: lyDoTuChoi,
+          // }
+          this.dataChange.emit(data.data);
           if (mcn == '0') {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
           } else {

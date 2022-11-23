@@ -5,15 +5,15 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button class="btn btn-main" (click)="save()" [hidden]="statusBtnSave">
+            <button class="btn btn-main" (click)="action('save')" [hidden]="statusBtnSave">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
-            <button class="btn btn-main" (click)="onSubmit('2',null)" [hidden]="statusBtnApprove">
+            <button class="btn btn-main" (click)="action('submit')" [hidden]="statusBtnApprove">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Trình duyệt</span>
             </button>
-            <button class="btn btn-main" (click)="onSubmit('7',null)" [hidden]="statusBtnGuiDVCT">
+            <button class="btn btn-main" (click)="action('approveDVCT')" [hidden]="statusBtnGuiDVCT">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Gửi đơn vị cấp trên</span>
             </button>
@@ -21,27 +21,27 @@
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Tổng hợp</span>
             </button>
-            <a class="btn btn-main" (click)="tuChoi('3')" [hidden]="statusBtnTBP">
+            <a class="btn btn-main" (click)="action('nonpass')" [hidden]="statusBtnTBP">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </a>
-            <button class="btn btn-main" (click)="onSubmit('4',null)" [hidden]="statusBtnTBP">
+            <button class="btn btn-main" (click)="action('pass')" [hidden]="statusBtnTBP">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
             </button>
-            <button class="btn btn-main" (click)="tuChoi('5')" [hidden]="statusBtnLD">
+            <button class="btn btn-main" (click)="action('nonapprove')" [hidden]="statusBtnLD">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Từ chối</span>
             </button>
-            <a class="btn btn-main" (click)="onSubmit('6',null)" [hidden]="statusBtnLD">
+            <a class="btn btn-main" (click)="action('approve')" [hidden]="statusBtnLD">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Phê duyệt</span>
             </a>
-            <button class="btn btn-main" (click)="tuChoi('8')" [hidden]="statusBtnDVCT">
+            <button class="btn btn-main" (click)="action('refuse')" [hidden]="statusBtnDVCT">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Từ chối</span>
             </button>
-            <a class="btn btn-main" (click)="onSubmit('9',null)" [hidden]="statusBtnDVCT">
+            <a class="btn btn-main" (click)="action('receive')" [hidden]="statusBtnDVCT">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Tiếp nhận</span>
             </a>
