@@ -980,6 +980,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         this.dsMuoiClone = cloneDeep(
           this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
         );
+        this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
+        this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
+        this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
+        this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoCuoiNam, 0);
         this.loadData();
       },
     });
@@ -1279,7 +1283,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   banHanh() {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
-    console.log(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide()
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -1412,7 +1415,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.thongTinChiTieuKeHoachNamInput.khMuoi = cloneDeep(
       this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
     );
-
+    console.log(this.thongTinChiTieuKeHoachNam.khMuoiDuTru);
     this.thongTinChiTieuKeHoachNamInput.khMuoi.forEach((muoi) => {
       // delete muoi.maDonVi;
       delete muoi.tkdnTongSoMuoi;
@@ -2394,6 +2397,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam.khMuoiDuTru[i],
       this.dsMuoiClone[i],
     );
+    this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
+    this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
+    this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
+    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoCuoiNam, 0);
     this.cdr.detectChanges();
   }
 
@@ -2803,7 +2810,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     let res = await this.quyetDinhBtcTcdtService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsCanCu = res.data.content;
-      console.log(this.dsCanCu);
     }
   }
 }
