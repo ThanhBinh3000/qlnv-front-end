@@ -15,8 +15,8 @@ export class DeNghiCapVonBoNganhService extends BaseService {
   }
 
   timKiem(body: any): Promise<any> {
-    // let url_ = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/search?`
-    let url_ = `http://localhost:3333/de-nghi-cap-von-bo-nganh/search?`
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/search?`
+    // let url_ = `http://localhost:3333/de-nghi-cap-von-bo-nganh/search?`
     if (body.soDeNghi)
       url_ += 'soDeNghi=' + encodeURIComponent('' + body.soDeNghi) + '&';
     if (body.maBoNganh)
