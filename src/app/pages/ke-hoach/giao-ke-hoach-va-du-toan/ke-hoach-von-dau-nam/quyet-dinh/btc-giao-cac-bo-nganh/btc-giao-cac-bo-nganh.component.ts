@@ -1,16 +1,17 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormGroup, FormBuilder} from '@angular/forms';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
 import * as dayjs from 'dayjs';
-import { QuyetDinhBtcNganhService } from 'src/app/services/quyetDinhBtcNganh.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { UserService } from 'src/app/services/user.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { KeHoachMuaXuat } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {QuyetDinhBtcNganhService} from 'src/app/services/quyetDinhBtcNganh.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {UserService} from 'src/app/services/user.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {cloneDeep} from 'lodash';
+import {saveAs} from 'file-saver';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {KeHoachMuaXuat} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+
 @Component({
   selector: 'app-btc-giao-cac-bo-nganh',
   templateUrl: './btc-giao-cac-bo-nganh.component.html',
@@ -47,15 +48,16 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   setOfCheckedId = new Set<number>();
   dataTable: any[] = [];
   dataTableAll: any[] = [];
+  rowSelected: number = 0;
 
   constructor(private readonly fb: FormBuilder,
-    private quyetDinhBtcNganhService: QuyetDinhBtcNganhService,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    public userService: UserService,
-    private modal: NzModalService,
+              private quyetDinhBtcNganhService: QuyetDinhBtcNganhService,
+              private spinner: NgxSpinnerService,
+              private notification: NzNotificationService,
+              public userService: UserService,
+              private modal: NzModalService,
   ) {
-    if (!userService.isAccessPermisson("KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN")){
+    if (!userService.isAccessPermisson("KHVDTNSNN_GKHDT_VDNDT_QD_BTCBN")) {
       window.location.href = '/error/401'
     }
     this.formData = this.fb.group({
@@ -145,7 +147,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhBtcNganhService.deleteMuti({ idList: dataDelete });
+            let res = await this.quyetDinhBtcNganhService.deleteMuti({idList: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -162,8 +164,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
           }
         },
       });
-    }
-    else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
@@ -204,7 +205,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   }
 
   onAllChecked(checked) {
-    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
+    this.dataTable.forEach(({id}) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
   }
 
@@ -217,11 +218,11 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) =>
+    this.allChecked = this.dataTable.every(({id}) =>
       this.setOfCheckedId.has(id),
     );
     this.indeterminate =
-      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
   }
 
@@ -258,6 +259,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   viewDetail(id: number, isViewDetail: boolean) {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;
@@ -277,7 +279,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhBtcNganhService.delete({ id: item.id }).then((res) => {
+          this.quyetDinhBtcNganhService.delete({id: item.id}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -311,8 +313,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -362,6 +363,7 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
     if (id) {
       let res = await this.quyetDinhBtcNganhService.getDetail(id);
       this.muaTangList = res.data.muaTangList;
+      this.rowSelected = id;
     }
   }
 
@@ -374,7 +376,6 @@ export class BtcGiaoCacBoNganhComponent implements OnInit {
       return sum;
     }
   }
-
 
 
 }
