@@ -103,76 +103,52 @@
               <th></th>
               <th></th>
               <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <nz-input-group>
                   <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soVanBan"
                     (input)="filterInTable('soVanBan',filterTable.soVanBan)" />
                 </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
               </th>
               <th *ngIf="userService.isTongCuc()">
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <nz-input-group>
                   <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDonVi"
                     (input)="filterInTable('tenDonVi',filterTable.tenDonVi)" />
                 </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
               </th>
               <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <nz-input-group>
                   <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
                     (input)="filterInTable('ngayKy',filterTable.ngayKy)" />
                 </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
               </th>
               <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <nz-input-group>
                   <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" />
                 </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
               </th>
               <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <nz-input-group>
                   <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdKeHoachNam"
                     (input)="filterInTable('soQdKeHoachNam',filterTable.soQdKeHoachNam)" />
                 </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
               </th>
               <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <nz-input-group>
                   <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
                     (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" />
                 </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
               </th>
               <th>
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <nz-input-group>
                   <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenHangHoa"
                     (input)="filterInTable('tenHangHoa',filterTable.tenHangHoa)" />
                 </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
               </th>
               <th *ngIf="userService.isCuc()">
-                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <nz-input-group>
                   <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
                 </nz-input-group>
-                <ng-template #suffixTemplateInfo>
-                  <i nz-icon nzType="search"></i>
-                </ng-template>
               </th>
               <th></th>
               <th></th>
@@ -197,7 +173,7 @@
                   (click)="redirectToChiTiet(true, data.id)">
                   <i class="icon htvbdh_eye"></i>
                 </a>
-                <a *ngIf="(userService.isCuc() && (data.trangThai == globals.prop.DU_THAO || data.trangThai == globals.prop.TU_CHOI)) 
+                <a *ngIf="(userService.isCuc() && (data.trangThai == globals.prop.DU_THAO || data.trangThai == globals.prop.TU_CHOI))
                 && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_THEM')"
                   (click)="redirectToChiTiet(false, data.id)">
                   <i class="fa fa-pencil"></i>
