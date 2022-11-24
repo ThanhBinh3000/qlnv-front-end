@@ -61,7 +61,7 @@ export class ThongTinKsgComponent implements OnInit {
     if(!this.dataTable){
       this.dataTable=[];
     }
-    this.rowItem.donGiaVat = this.rowItem.donGia * this.vat
+    this.rowItem.donGiaVat = this.rowItem.donGia * this.vat +  this.rowItem.donGia
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new ThongTinKhaoSatGia();
     this.emitDataTable();
@@ -147,7 +147,7 @@ export class ThongTinKsgComponent implements OnInit {
   }
 
   saveEdit(idx: number): void {
-    this.dataEdit[idx].data.donGiaVat =this.dataEdit[idx].data.donGia * this.vat
+    this.dataEdit[idx].data.donGiaVat =this.dataEdit[idx].data.donGia * this.vat + this.dataEdit[idx].data.donGia
     Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
     this.dataEdit[idx].edit = false;
   }

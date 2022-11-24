@@ -155,9 +155,9 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
           // item.statusConvert = this.convertTrangThai(item.trangThai);
         });
       }
-      if (this.userService.isTongCuc()) {
-        this.dataTable = this.dataTable.filter(item => item.trangThai != STATUS.DU_THAO)
-      }
+      // if (this.userService.isTongCuc()) {
+      //   this.dataTable = this.dataTable.filter(item => item.trangThai != STATUS.DU_THAO)
+      // }
       this.dataTableAll = cloneDeep(this.dataTable);
     } else {
       this.dataTable = [];
