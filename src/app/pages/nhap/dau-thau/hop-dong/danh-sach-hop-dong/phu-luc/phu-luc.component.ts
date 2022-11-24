@@ -1,21 +1,21 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {saveAs} from 'file-saver';
-import {Globals} from 'src/app/shared/globals';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { saveAs } from 'file-saver';
+import { Globals } from 'src/app/shared/globals';
 import {
   DialogThongTinPhuLucHopDongMuaComponent
 } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-hop-dong-mua/dialog-thong-tin-phu-luc-hop-dong-mua.component';
-import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
-import {FileDinhKem} from 'src/app/models/FileDinhKem';
-import {UploadFileService} from 'src/app/services/uploaFile.service';
-import {UserService} from 'src/app/services/user.service';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {MESSAGE} from 'src/app/constants/message';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {ThongTinPhuLucHopDongService} from 'src/app/services/thongTinPhuLucHopDong.service';
-import {HelperService} from "../../../../../../services/helper.service";
-import {STATUS} from "../../../../../../constants/status";
+import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
+import { FileDinhKem } from 'src/app/models/FileDinhKem';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { UserService } from 'src/app/services/user.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MESSAGE } from 'src/app/constants/message';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { ThongTinPhuLucHopDongService } from 'src/app/services/thongTinPhuLucHopDong.service';
+import { HelperService } from "../../../../../../services/helper.service";
+import { STATUS } from "../../../../../../constants/status";
 
 
 @Component({
@@ -27,7 +27,7 @@ export class PhuLucComponent implements OnInit {
   @Input() idPhuLuc: number;
   @Input() detailHopDong: any = {};
   @Input() isViewPhuLuc: boolean;
-  @Input() typeVthh: string;
+  @Input() loaiVthh: String;
   @Output()
   showChiTietEvent = new EventEmitter<any>();
   fileDinhKem: Array<FileDinhKem> = [];
@@ -179,7 +179,7 @@ export class PhuLucComponent implements OnInit {
               .then((res) => {
                 if (res.msg == MESSAGE.SUCCESS) {
                   this.approve(this.idPhuLuc);
-                  this.isViewPhuLuc=true;
+                  this.isViewPhuLuc = true;
                 } else {
                   this.notification.error(MESSAGE.ERROR, res.msg);
                 }
@@ -207,7 +207,7 @@ export class PhuLucComponent implements OnInit {
               .then((res) => {
                 if (res.msg == MESSAGE.SUCCESS) {
                   this.approve(res.data.id);
-                  this.isViewPhuLuc=true;
+                  this.isViewPhuLuc = true;
                 } else {
                   this.notification.error(MESSAGE.ERROR, res.msg);
                 }
@@ -244,7 +244,7 @@ export class PhuLucComponent implements OnInit {
   validateForm = (control: FormControl): { [s: string]: boolean } => {
     console.log(control);
     if (!control.value) {
-      return {required: true};
+      return { required: true };
     }
     return {};
   };
