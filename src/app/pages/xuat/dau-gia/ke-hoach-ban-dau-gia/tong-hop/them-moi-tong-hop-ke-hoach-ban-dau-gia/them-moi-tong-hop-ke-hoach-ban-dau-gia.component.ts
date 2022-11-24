@@ -137,6 +137,9 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
         this.dataTableDanhSachDX = dataDetail.thopDxKhBdgDtlList;
+        this.formTraCuu.patchValue({
+          ngayPduyet: [dataDetail.ngayDuyetTu, dataDetail.ngayDuyetDen],
+        });
         this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail)
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
         this.isTongHop = true;
@@ -244,6 +247,16 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
         return;
       }
       let body = this.formData.value;
+      body.ngayDuyetDen = this.formData.get('ngayPduyet').value
+        ? dayjs(this.formData.get('ngayPduyet').value[0]).format(
+          'YYYY-MM-DD',
+        )
+        : null,
+        body.ngayDuyetTu = this.formData.get('ngayPduyet').value
+          ? dayjs(this.formData.get('ngayPduyet').value[1]).format(
+            'YYYY-MM-DD',
+          )
+          : null;
       let res = await this.tongHopDeXuatKeHoachBanDauGiaService.create(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.id = res.data.id;
