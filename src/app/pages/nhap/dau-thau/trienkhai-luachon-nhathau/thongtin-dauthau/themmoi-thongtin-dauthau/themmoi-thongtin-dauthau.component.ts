@@ -28,6 +28,7 @@ import { NzModalService } from "ng-zorro-antd/modal";
 })
 export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   @Input() idInput: number;
+  @Input() loaiVthh: String;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isShowFromKq: boolean;
@@ -184,6 +185,28 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
 
   async getDetail() {
     this.spinner.show();
+    if (this.loaiVthh.startsWith('02')) {
+      await this.detailVatTu();
+    } else {
+      await this.detailLuongThuc();
+    }
+
+    this.spinner.hide();
+  }
+
+  async detailVatTu() {
+    const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail(this.idInput);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data;
+      this.formData.patchValue({
+        trangThai: data.trangThaiDt,
+        tenTrangThai: data.tenTrangThaiDt,
+      })
+      this.danhsachDx = data.children;
+    }
+  }
+
+  async detailLuongThuc() {
     const res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetailDtlCuc(this.idInput);
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
@@ -227,12 +250,10 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         tenTrangThai: data.tenTrangThai
       })
       this.listOfData = data.children;
-      this.danhsachDx = data.children;
       this.convertListData()
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    this.spinner.hide();
   }
 
   convertListData() {
@@ -302,15 +323,26 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   pipe = new DatePipe('en-US');
   async save() {
     await this.spinner.show();
-    let filter = this.listOfData.filter(item => item.trangThai == STATUS.CHUA_CAP_NHAT);
-    if (filter.length > 0) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng cập nhật thông tin các gói thầu");
-      await this.spinner.hide();
-      return
+    if (this.loaiVthh.startsWith("02")) {
+      let filter = this.danhsachDx.filter(item => item.trangThai == STATUS.CHUA_CAP_NHAT);
+      if (filter.length > 0) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng cập nhật thông tin các gói thầu");
+        await this.spinner.hide();
+        return
+      }
+    } else {
+      let filter = this.listOfData.filter(item => item.trangThai == STATUS.CHUA_CAP_NHAT);
+      if (filter.length > 0) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng cập nhật thông tin các gói thầu");
+        await this.spinner.hide();
+        return
+      }
     }
+
     let body = {
       id: this.idInput,
-      trangThai: STATUS.HOAN_THANH_CAP_NHAT
+      trangThai: STATUS.HOAN_THANH_CAP_NHAT,
+      loaiVthh: this.loaiVthh
     }
     let res = await this.thongTinDauThauService.approve(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -323,13 +355,15 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     await this.spinner.hide()
   }
 
+
+
   async saveGoiThau() {
     await this.spinner.show()
     let body = {
       idGoiThau: this.idGoiThau,
-      nthauDuThauList: this.listNthauNopHs
+      nthauDuThauList: this.listNthauNopHs,
+      loaiVthh: this.loaiVthh
     }
-    console.log(body);
     let res = await this.thongTinDauThauService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -343,11 +377,11 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   async showDetail($event, dataGoiThau: any) {
     await this.spinner.show();
     this.listNthauNopHs = [];
-    this.idGoiThau = dataGoiThau.id;
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     $event.target.parentElement.classList.add('selectedRow')
 
-    let res = await this.thongTinDauThauService.getDetail(this.idGoiThau);
+    this.idGoiThau = dataGoiThau.id;
+    let res = await this.thongTinDauThauService.getDetailThongTin(this.idGoiThau, this.loaiVthh);
     if (res.msg == MESSAGE.SUCCESS) {
       this.itemRow.soLuong = dataGoiThau.soLuong;
       this.listNthauNopHs = res.data;
@@ -357,6 +391,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+
     await this.spinner.hide();
   }
 
@@ -443,8 +478,11 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
   }
 
   checkRoleData() {
-    if (this.userService.isCuc() && !this.formData.value.loaiVthh?.startsWith('02')) {
+    if (this.userService.isCuc() && !this.loaiVthh.startsWith('02')) {
       return true;
+    }
+    if (this.userService.isTongCuc() && this.loaiVthh.startsWith('02')) {
+      return true
     }
   }
 

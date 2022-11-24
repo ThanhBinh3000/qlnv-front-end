@@ -158,10 +158,14 @@ export class SoKiemTraTranChiComponent implements OnInit {
     }
 
     back() {
-        const obj = {
-            tabSelected: this.data?.preTab,
+        if (this.data?.preData) {
+            this.dataChange.emit(this.data?.preData)
+        } else {
+            const obj = {
+                tabSelected: this.data?.preTab,
+            }
+            this.dataChange.emit(obj);
         }
-        this.dataChange.emit(obj);
     }
 
     //download file về máy tính
