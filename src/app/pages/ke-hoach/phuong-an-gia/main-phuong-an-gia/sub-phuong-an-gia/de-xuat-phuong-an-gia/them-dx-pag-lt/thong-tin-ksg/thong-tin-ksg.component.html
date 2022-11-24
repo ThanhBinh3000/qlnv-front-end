@@ -29,7 +29,7 @@
                 </nz-input-number>
             </th>
             <th>
-                <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.donGiaVat" [nzFormatter]="globals.formatter"
+                <nz-input-number disabled [nzSize]="'small'" [(ngModel)]="rowItem.donGia * vat" [nzFormatter]="globals.formatter"
                     [nzParser]="globals.parser">
                 </nz-input-number>
             </th>
@@ -68,8 +68,8 @@
             <td *ngIf="isTableKetQua">{{ data.tenDviBaoGia }}</td>
             <td *ngIf="!isTableKetQua">{{ data.tenDviThamDinh }}</td>
             <td *ngIf="isTableKetQua">{{ data.cloaiVthh }}</td>
-            <td>{{data.donGia }}</td>
-            <td >{{data.donGiaVat }}</td>
+            <td>{{data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
+            <td >{{data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
             <td *ngIf="isTableKetQua">{{data.thoiHanBaoGia }}</td>
             <td>{{data.fileDinhKem?.fileName }}</td>
             <td *ngIf="isTableKetQua">{{data.ghiChu }}</td>
@@ -102,7 +102,7 @@
             </nz-input-number>
           </td>
           <td>
-            <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGiaVat" [nzFormatter]="globals.formatter"
+            <nz-input-number disabled [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia * vat" [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser">
             </nz-input-number>
           </td>
@@ -116,7 +116,7 @@
               </nz-input-group>
               <ng-template #suffixIcon>
                 <i class="icon htvbdh_tcdt_tep"></i>
-                <input class="input-file" (change)="getNameFile($event)" type="file" />
+                <input class="input-file" (change)="getNameFile($event, '',null,dataEdit[idx].data )" type="file" />
               </ng-template>
             </nz-form-control>
           </td>
