@@ -108,7 +108,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
         this.dataTable.splice(this.lastIndex - 1, 1);
         this.notification.error(MESSAGE.ERROR, "Dự toán chi DTQG không được lớn hơn kế hoạch chỉ tiêu của Thủ tướng chính phủ");
       }
-      this.rowItem = new KeHoachMuaXuat();
+      // this.rowItem = new KeHoachMuaXuat();
     } else {
       this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
     }
@@ -132,7 +132,7 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
     Object.assign(this.dataTable[index], this.dataEdit[index].data);
     this.emitDataTable();
     // Validate tổng dự toán
-    if (this.rowItem.loaiChi == "DT01" && this.rowItem.sluongDtoan > this.tongGiaTri && this.calcTong()) {
+    if (this.dataTable[index].loaiChi == "DT01" && this.dataTable[index].sluongDtoan > this.tongGiaTri && this.calcTong()) {
       Object.assign(this.dataTable[index], beforeData);
       // this.dataTable.splice(this.lastIndex - 1, 1);
       this.hasError.emit(true)
