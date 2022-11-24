@@ -752,7 +752,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.keHoachMuoiShow = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
           );
-
+          console.log(this.dsMuoiClone);
           if (this.thongTinChiTieuKeHoachNam.soQuyetDinh && this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/').length > 1) {
             this.qdTCDT = this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[1];
           }
@@ -1415,7 +1415,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.thongTinChiTieuKeHoachNamInput.khMuoi = cloneDeep(
       this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
     );
-    console.log(this.thongTinChiTieuKeHoachNam.khMuoiDuTru);
     this.thongTinChiTieuKeHoachNamInput.khMuoi.forEach((muoi) => {
       // delete muoi.maDonVi;
       delete muoi.tkdnTongSoMuoi;
@@ -1423,11 +1422,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       delete muoi.tkcnTongSoMuoi;
       // muoi.xuatTrongNam = cloneDeep(muoi.xtnMuoi);
       delete muoi.xtnMuoi;
-      muoi.nhapTrongNam = cloneDeep(muoi.ntnTongSoMuoi);
+      muoi.donViTinh = 'Kg';
+      // muoi.nhapTrongNam = cloneDeep(muoi.ntnTongSoMuoi);
       delete muoi.ntnTongSoMuoi;
       delete muoi.xtnTongSoMuoi;
+      delete muoi.sdcXtnMuoi;
+      delete muoi.tdcXtnMuoi;
+      delete muoi.xuatTrongNam;
       delete muoi.id;
     });
+    console.log(this.thongTinChiTieuKeHoachNamInput.khMuoi);
     delete this.thongTinChiTieuKeHoachNamInput.khMuoiDuTru;
     const khVatTu = this.thongTinChiTieuKeHoachNamInput.khVatTu;
     for (let i = 0; i < khVatTu.length; i++) {
@@ -1611,16 +1615,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         luongThuc.xtnThoc[2].nam = this.yearNow - 3;
       });
     }
-    if (this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.length > 0) {
-      this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.forEach((muoi) => {
-        muoi.tkdnMuoi[0].nam = this.yearNow - 1;
-        muoi.tkdnMuoi[1].nam = this.yearNow - 2;
-        muoi.tkdnMuoi[2].nam = this.yearNow - 3;
-        muoi.xtnMuoi[0].nam = this.yearNow - 1;
-        muoi.xtnMuoi[1].nam = this.yearNow - 2;
-        muoi.xtnMuoi[2].nam = this.yearNow - 3;
-      });
-    }
+    // if (this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.length > 0) {
+    //   this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.forEach((muoi) => {
+    //     muoi.tkdnMuoi[0].nam = this.yearNow - 1;
+    //     muoi.tkdnMuoi[1].nam = this.yearNow - 2;
+    //     muoi.tkdnMuoi[2].nam = this.yearNow - 3;
+    //     muoi.xtnMuoi[0].nam = this.yearNow - 1;
+    //     muoi.xtnMuoi[1].nam = this.yearNow - 2;
+    //     muoi.xtnMuoi[2].nam = this.yearNow - 3;
+    //   });
+    // }
   }
 
   convertTrangThai(status: string) {
