@@ -181,13 +181,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.newObjectVatTu();
     this.loadDanhMucHang();
     this.loadDsCanCu();
-
     this.loadDonVi();
-    this.formData.patchValue({
-      namKeHoach: dayjs().get('year')
-    });
     if (this.id > 0) {
       this.loadThongTinChiTieuKeHoachNam(this.id);
+    } else {
+      this.formData.patchValue({
+        namKeHoach: dayjs().get('year')
+      });
     }
   }
 
@@ -728,7 +728,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.thongTinChiTieuKeHoachNam = res.data;
-          this.yearNowClone = cloneDeep(this.thongTinChiTieuKeHoachNam.namKeHoach);
+          // this.yearNowClone = cloneDeep(this.thongTinChiTieuKeHoachNam.namKeHoach);
           this.thongTinChiTieuKeHoachNam.fileDinhKemReqs =
             res.data.fileDinhKems;
           if (this.thongTinChiTieuKeHoachNam?.fileDinhKemReqs?.length > 0) {
@@ -752,7 +752,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.keHoachMuoiShow = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
           );
-          console.log(this.dsMuoiClone);
           if (this.thongTinChiTieuKeHoachNam.soQuyetDinh && this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/').length > 1) {
             this.qdTCDT = this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[1];
           }
@@ -762,7 +761,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.keHoachVatTuShow = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khVatTu,
           );
-          this.yearNow = this.thongTinChiTieuKeHoachNam.namKeHoach;
+          // this.yearNow = this.thongTinChiTieuKeHoachNam.namKeHoach;
           if (this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV) {
             this.formData.controls['ngayKy'].setValidators([Validators.required])
             this.formData.controls['ngayHieuLuc'].setValidators([Validators.required])
@@ -776,7 +775,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             namKeHoach: this.thongTinChiTieuKeHoachNam.namKeHoach,
             canCu: this.thongTinChiTieuKeHoachNam.canCu,
             trichYeu: this.thongTinChiTieuKeHoachNam.trichYeu,
-            soQd: this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[0],
+            soQd: this.thongTinChiTieuKeHoachNam.soQuyetDinh ? this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[0] : null,
             ngayKy: this.thongTinChiTieuKeHoachNam.ngayKy,
             ngayHieuLuc: this.thongTinChiTieuKeHoachNam.ngayHieuLuc,
             // arrCanCu: JSON.parse(this.thongTinChiTieuKeHoachNam.canCu)
