@@ -131,19 +131,7 @@
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="5" *ngIf="type=='GMTDBTT'">
-          <nz-form-item class="form-item">
-            <nz-form-label [nzNoColon]="true"  class="label-color-kh"> Quyết định giao
-              chỉ tiêu kế hoạch năm</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" >
-                <input type="text" nz-input formControlName="soCanCu" readonly/>
-              </nz-input-group>
-              <ng-template #error let-control>
-                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                </ng-container>
-              </ng-template>
-            </nz-form-control>
-          </nz-form-item>
+
         </div>
         <div nz-col [nzSpan]="5" *ngIf="type=='GCT'">
           <nz-form-item class="form-item">
@@ -164,6 +152,21 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzSpan="24">
+              Căn cứ pháp lý
+            </nz-form-label>
+          </nz-form-item>
+          <nz-form-item>
+            <div class="list-file" nz-col nzSpan="24">
+              <file-list [data]="fileDinhKem"
+                [disabled]="isView">
+              </file-list>
+            </div>
+          </nz-form-item>
+        </div>
+
       </div>
     </form>
   </nz-card>
@@ -341,7 +344,7 @@
                          formControlName="diaDiemDeHang"/>
                 </nz-input-group>
                 <ng-template #suffixIconSearch>
-                  <button nz-button nzType="primary" nzSearch (click)="themMoiDiaDiem()"><i nz-icon
+                  <button nz-button nzType="primary" nzSearch (click)="themMoiDiaDiem()" [disabled]="isView"><i nz-icon
                                                                                             nzType="plus"></i></button>
                 </ng-template>
                 <ng-template #error let-control>
@@ -553,11 +556,11 @@
     <nz-tab [nzTitle]="'Thông tin khảo sát giá'" *ngIf="isGiaMuaToiDa">
       <nz-card class="mt16 p-lr16 card-table pd-10">
         <span class="sub-title mb-10">KẾT QUẢ KHẢO SÁT GIÁ THỊ TRƯỜNG</span>
-        <app-thong-tin-ksg *ngIf="dataTableKsGia || !idInput" [vat]="formData.value.vat ? formData.value.vat : 1 " [isTableKetQua]="true" [listCloaiVthh]="listCloaiVthh" [(dataTable)]="dataTableKsGia"
+        <app-thong-tin-ksg *ngIf="dataTableKsGia || !idInput" [vat]="formData.value.vat / 100 ? formData.value.vat : 0 " [isTableKetQua]="true" [listCloaiVthh]="listCloaiVthh" [(dataTable)]="dataTableKsGia"
                            [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">
         </app-thong-tin-ksg>
         <span class="sub-title mb-10">KẾT QUẢ THẨM ĐỊNH GIÁ</span>
-        <app-thong-tin-ksg *ngIf="dataTableKsGia || !idInput" [vat]="formData.value.vat ? formData.value.vat : 1 "  [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"
+        <app-thong-tin-ksg *ngIf="dataTableKsGia || !idInput" [vat]="formData.value.vat / 100 ? formData.value.vat : 0 "  [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"
                            [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"></app-thong-tin-ksg>
       </nz-card>
     </nz-tab>
@@ -683,12 +686,12 @@
           </div>
         </form>
         <span class="sub-title mb-10">GIÁ THỊ TRUỜNG</span>
-        <app-thong-tin-ksg [vat]="formData.value.vat ? formData.value.vat : 1 "  *ngIf="!idInput || dataTableKsGia" [isTableKetQua]="true"
+        <app-thong-tin-ksg [vat]="formData.value.vat ? formData.value.vat/100 : 0 "  *ngIf="!idInput || dataTableKsGia" [isTableKetQua]="true"
                            [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"
                            [listCloaiVthh]="listCloaiVthh" [(dataTable)]="dataTableKsGia">
         </app-thong-tin-ksg>
         <span class="sub-title mb-10">GIÁ CỦA SỞ TÀI CHÍNH</span>
-        <app-thong-tin-ksg [vat]="formData.value.vat ? formData.value.vat : 1 "   *ngIf="!idInput || dataTableKqGia" [isTableKetQua]="false"
+        <app-thong-tin-ksg [vat]="formData.value.vat ? formData.value.vat/100 : 0 "   *ngIf="!idInput || dataTableKqGia" [isTableKetQua]="false"
                            [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"
                            [(dataTable)]="dataTableKqGia">
         </app-thong-tin-ksg>
