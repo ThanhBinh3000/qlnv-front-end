@@ -39,9 +39,8 @@
         </td>
         <td style="width: 10%;">
           <nz-input-group>
-            <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-              [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [disabled]="isView" [nzMin]="1" [nzStep]="1"
-              [nzSize]="'small'" [(ngModel)]="rowItem.soLuong">
+            <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parserInput" [disabled]="isView"
+              [nzMin]="1" [nzStep]="0.1" [nzSize]="'small'" [(ngModel)]="rowItem.soLuong">
             </nz-input-number>
           </nz-input-group>
         </td>
@@ -54,68 +53,6 @@
           </a>
         </td>
       </tr>
-
-      <tr *ngFor="let data of dataTable; let idx = index">
-        <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
-          <td>{{ idx + 1 }}</td>
-          <td>{{ data.tenVthh }}</td>
-          <td>{{ data.tenCloaiVthh }}</td>
-          <td>{{ data.dviTinh }}</td>
-          <td>{{ data.soLuong }}</td>
-          <td style="text-align: center;">
-            <a *ngIf="(data.trangThai == '00')" (click)="editItem(idx)">
-              <i class=" fa fa-pencil"></i>
-            </a>
-            <a *ngIf="(data.trangThai == '00')" (click)="xoaItem(idx)">
-              <i class="fa fa-trash-o do"></i>
-            </a>
-          </td>
-        </ng-container>
-        <ng-template #editTemplate>
-          <td></td>
-          <td style="width: 45%;">
-            <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.loaiVthh" [nzShowArrow]="false" nzAllowClear
-                (ngModelChange)="onChangeLoaiVthh($event, dataEdit[idx].data)">
-                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsHangHoa">
-                </nz-option>
-              </nz-select>
-            </nz-input-group>
-          </td>
-          <td style="width: 25%;">
-            <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.cloaiVthh" [nzShowArrow]="false"
-                (ngModelChange)="onChangeCloaiVthh($event, dataEdit[idx].data)">
-                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChungLoaiHangHoa">
-                </nz-option>
-              </nz-select>
-            </nz-input-group>
-          </td>
-          <td style="width: 5%;">
-            <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.dviTinh" [readonly]="true" />
-            </nz-input-group>
-          </td>
-          <td style="width: 10%;">
-            <nz-input-group>
-              <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [readonly]="isView" [nzMin]="1"
-                [nzStep]="1" [nzSize]="'small'" [(ngModel)]="rowItem.soLuong">
-              </nz-input-number>
-            </nz-input-group>
-          </td>
-          <td style="text-align: center;">
-            <a (click)="themMoiItem()">
-              <i class="fa fa-plus"></i>
-            </a>
-            <a (click)="clearData()">
-              <i class="fa fa-trash-o do"></i>
-            </a>
-          </td>
-        </ng-template>
-      </tr>
-
       <tr *ngFor="let data of dataTable; let idx = index">
         <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
           <td>{{ idx + 1 }}</td>
@@ -177,9 +114,8 @@
       <tr *ngIf="tabName != 'LuanPhien'">
         <td style="text-align: right; font-weight: 700" colspan="4">Tổng giá trị (Triệu đồng)</td>
         <td>
-          <nz-input-number [readonly]="isView" [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()"
-            style="text-align: left;" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-            [readonly]="isView" [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()" style="text-align: left;"
+          <nz-input-number [nzDisabled]="isView" [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()"
+            style="text-align: left;" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parserInput"
             [nzMin]="0">
           </nz-input-number>
         </td>

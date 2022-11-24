@@ -5,7 +5,7 @@
   <nz-form-item *ngIf="radioValue=='Khac'" nz-col nzSpan="8" class="form-item" style="padding-right: 15px;">
     <nz-form-label [nzNoColon]="true" nzFor="bo-nganh">Bộ ngành</nz-form-label>
     <nz-select [nzDisabled]="isView" [(ngModel)]="keHoach.maBoNganh" (ngModelChange)="onChangeBoNganh($event)">
-      <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsBoNganh">
+      <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsBoNganh">
       </nz-option>
     </nz-select>
     <span class="error-text" *ngIf="errorBn">{{globals.prop.REQUIRED}}</span>
@@ -14,8 +14,8 @@
   <nz-form-item nz-col nzSpan="8" class="form-item">
     <nz-form-label [nzNoColon]="true" nzFor="gia-tri">Tổng giá trị (Triệu đồng)</nz-form-label>
     <nz-input-group id="gia-tri">
-      <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="isView" [nzMin]="1"
-                       [nzStep]="1" [nzSize]="'small'" [(ngModel)]="keHoach.tongTien">
+      <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parserInput" [nzDisabled]="isView" [nzMin]="1"
+                       np [nzSize]="'small'" [(ngModel)]="keHoach.tongTien">
       </nz-input-number>
     </nz-input-group>
     <span class="error-text" *ngIf="errorTt">{{globals.prop.REQUIRED}}</span>
