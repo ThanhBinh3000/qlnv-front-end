@@ -60,7 +60,7 @@
                 </div>
                 <div nz-col [nzSpan]="5">
                     <nz-form-item class="form-item">
-                        <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd"> Ngày phê duyệt
+                        <!-- <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd"> Ngày phê duyệt
                             KH bán đấu giá
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
@@ -71,6 +71,12 @@
                                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
                                 </ng-container>
                             </ng-template>
+                        </nz-form-control> -->
+                        <nz-form-label nzRequired [nzNoColon]="true"> Ngày phê duyệt
+                            KH bán đấu giá </nz-form-label>
+                        <nz-form-control [nzErrorTip]="error">
+                            <nz-range-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
+                            </nz-range-picker>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -174,8 +180,8 @@
                         <nz-form-label nzRequired class="label-color-kh"> Thời gian dự kiến tổ chức BĐG
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy">
-                            </nz-range-picker>
+                            <!-- <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy">
+                            </nz-range-picker> -->
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -238,6 +244,6 @@
     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-    <!-- <app-themmoi-quyetdinh-khlcnt [id]="selectedId" [dataTongHop]="formData.value" (showListEvent)="showTongHop()">
-    </app-themmoi-quyetdinh-khlcnt> -->
+    <app-them-quyet-dinh-ban-dau-gia [id]="selectedId" [dataTongHop]="formData.value" (showListEvent)="showTongHop()">
+    </app-them-quyet-dinh-ban-dau-gia>
 </div>
