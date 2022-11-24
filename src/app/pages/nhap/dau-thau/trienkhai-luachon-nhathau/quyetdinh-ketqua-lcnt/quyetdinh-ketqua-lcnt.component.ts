@@ -124,11 +124,10 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
-
       },
       soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
       soQdinh: this.searchFilter.soQdinh,
-      loaiVthh: this.searchFilter.loaiVthh,
+      loaiVthh: this.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
       maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
@@ -138,12 +137,12 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       let data = res.data;
       this.dataTable = data.content;
       this.totalRecord = data.totalElements;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.statusConvert = this.convertTrangThai(item.trangThai);
-          item.statusGT = this.statusGoiThau(item.statusGthau);
-        });
-      }
+      // if (this.dataTable && this.dataTable.length > 0) {
+      //   this.dataTable.forEach((item) => {
+      //     item.statusConvert = this.convertTrangThai(item.trangThai);
+      //     item.statusGT = this.statusGoiThau(item.statusGthau);
+      //   });
+      // }
       this.dataTableAll = cloneDeep(this.dataTable);
     } else {
       this.dataTable = [];

@@ -552,9 +552,12 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       this.formData.patchValue({
-        soQd: this.dataChiTieu.soQuyetDinh,
+        soQd: this.dataChiTieu.soQuyetDinh
       });
     }
+    this.formData.patchValue({
+      soQd: '150/TCDT',
+    });
   }
 
   convertTienTobangChu(tien: number): string {
@@ -1067,6 +1070,15 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       this.expandSet2.add(id);
     } else {
       this.expandSet2.delete(id);
+    }
+  }
+
+  expandSet3 = new Set<number>();
+  onExpandChange3(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet3.add(id);
+    } else {
+      this.expandSet3.delete(id);
     }
   }
 

@@ -430,12 +430,26 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="12">
+        <div nz-col [nzSpan]="6">
+        </div>
+        <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Chủ đầu tư </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <input nz-input readonly formControlName="tenDvi" />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Tổng mức đầu tư theo đơn giá đã duyệt </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group nzAddOnAfter="đ">
+                <nz-input-number class="text-right" nz-input formControlName="tongMucDt" [nzSize]="'small'"
+                  [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
+                </nz-input-number>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -579,7 +593,7 @@
             <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
             <td>{{item.goiThau}}</td>
             <td>{{item.tenCloaiVthh}}</td>
-            <td>{{item.tenDvi}}</td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -600,44 +614,68 @@
             </td>
           </tr>
           <ng-container *ngIf="expandSet.has(i)">
-            <ng-container *ngFor="let dtGoiThau of item.children, let y = index">
+            <ng-container *ngFor="let cuc of item.children, let y = index">
               <tr>
                 <td></td>
                 <td></td>
+                <td class="text-right" [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)">
+                </td>
+                <td>{{cuc.tenDvi}}</td>
                 <td></td>
-                <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
-                <td>{{dtGoiThau.tenDvi}}</td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{item.dviTinh }}</td>
                 <td>{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{dtGoiThau.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{dtGoiThau.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{cuc.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{cuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-right">
                 </td>
               </tr>
               <ng-container *ngIf="expandSet2.has(y)">
-                <tr *ngFor="let diemKho of dtGoiThau.children">
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>{{diemKho.tenDvi}}</td>
-                  <td></td>
-                  <td></td>
-                  <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td></td>
-                  <td>{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{diemKho.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{diemKho.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td class="text-right">
-                  </td>
-                </tr>
+                <ng-container *ngFor="let chiCuc of cuc.children, let z = index">
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right" [nzExpand]="expandSet3.has(z)" (nzExpandChange)="onExpandChange3(z, $event)">
+                    </td>
+                    <td>{{chiCuc.tenDvi}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{chiCuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td></td>
+                    <td>{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{chiCuc.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td>{{chiCuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                    <td class="text-right">
+                    </td>
+                  </tr>
+                  <ng-container *ngIf="expandSet3.has(z)">
+                    <tr *ngFor="let diemKho of chiCuc.children">
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>{{diemKho.tenDvi}}</td>
+                      <td></td>
+                      <td></td>
+                      <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td></td>
+                      <td>{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td>{{diemKho.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td>{{diemKho.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                      <td class="text-right">
+                      </td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
               </ng-container>
             </ng-container>
           </ng-container>
