@@ -17,10 +17,12 @@
         </div>
     </nz-affix>
     <div class="bg-trang">
-        <div class="header">
+        <div class="header" *ngIf="isTongHop">
             <div class="header-text">
                 <div class="title-chi-tieu">
-                    <span>
+                     <span
+                       [ngClass]="formData.value.trangThaiTh == STATUS.DA_TAO_TT ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+                        {{ formData.value.tenTrangThaiTh }}
                     </span>
                     <span>TIÊU CHÍ TỔNG HỢP</span>
                 </div>
@@ -121,7 +123,7 @@
                                 xuất
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
-                                <nz-range-picker formControlName="ngayDx" nzFormat="dd/MM/yyyy" id="ngay-qd"
+                                <nz-range-picker formControlName="ngayDx" nzFormat="dd/MM/yyyy"
                                     class="search__input">
                                 </nz-range-picker>
                                 <ng-template #error let-control>

@@ -124,7 +124,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.getDataChiTieu(),
       this.loadDsPhuongAnGia(),
       this.loadDsVthh(),
-      this.loadDsQdPduyetKhlcnt(),
+      // this.loadDsQdPduyetKhlcnt(),
       this.loadDsHangHoaPag(),
       this.loadDsLoaiGia(),
       this.maDx = '/TCDT-KH',

@@ -75,6 +75,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     namKeHoach: '',
     tenLoaiGia: '',
     tenLoaiVthh: '',
+    tenCloaiVthh: '',
     tenTrangThai: '',
   };
 

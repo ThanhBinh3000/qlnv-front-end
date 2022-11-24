@@ -87,10 +87,11 @@
                         <th class="text-center" style="width: 2%;">STT</th>
                         <th class="text-center" style="width: 9%;">Số quyết định</th>
                         <th class="text-center" style="width: 9%;">Ngày ký</th>
-                        <th class="text-center" style="width: 32%;">Trích yếu</th>
+                        <th class="text-center" style="width: 25%;">Trích yếu</th>
                         <th class="text-center" style="width: 9%;">Năm kế hoạch</th>
                         <th class="text-center" style="width: 8%;">Loại giá</th>
-                        <th class="text-center" style="width: 11%;">Loại hàng hóa</th>
+                        <th class="text-center" style="width: 10%;">Loại hàng hóa</th>
+                        <th class="text-center" style="width: 10%;">Chủng loại hàng hóa</th>
                         <th class="text-center" style="width: 9%;">Trạng thái</th>
                         <th class="text-center" width="width: 5%;">Hành động</th>
                     </tr>
@@ -136,6 +137,12 @@
                                     (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
                             </nz-input-group>
                         </th>
+                      <th>
+                        <nz-input-group >
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
+                                 (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small" />
+                        </nz-input-group>
+                      </th>
                         <th>
                             <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm"
