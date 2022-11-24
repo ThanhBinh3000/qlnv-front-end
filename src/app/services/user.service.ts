@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { StorageService } from './storage.service';
-import { STORAGE_KEY } from '../constants/config';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {StorageService} from './storage.service';
+import {STORAGE_KEY} from '../constants/config';
 import jwt_decode from "jwt-decode";
-import { UserLogin } from '../models/userlogin';
-import { ResponseData } from '../interfaces/response';
-import { MESSAGE } from '../constants/message';
-import { BaseService } from './base.service';
+import {UserLogin} from '../models/userlogin';
+import {ResponseData} from '../interfaces/response';
+import {MESSAGE} from '../constants/message';
+import {BaseService} from './base.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -66,7 +67,7 @@ export class UserService extends BaseService {
     // }
     // return new UserLogin({})
     // var userInfo = decodeURIComponent(escape(window.atob(decoded.toString())));
-    return new UserLogin(decoded,dvql);
+    return new UserLogin(decoded, dvql);
   }
 
   isTongCuc() {
@@ -129,13 +130,13 @@ export class UserService extends BaseService {
   }
 
   async getId(sequenceName: string) {
-    if(sequenceName){
+    if (sequenceName) {
       const url = `${environment.SERVICE_API}/qlnv-system/system/${sequenceName}`;
       let res = await this.httpClient.get<any>(url).toPromise();
-      if(res.msg == MESSAGE.SUCCESS){
+      if (res.msg == MESSAGE.SUCCESS) {
         return res.data;
       }
-    }else{
+    } else {
       console.error('Sequence Name is null')
     }
   }

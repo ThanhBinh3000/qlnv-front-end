@@ -752,7 +752,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.keHoachMuoiShow = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
           );
-
+          console.log(this.dsMuoiClone);
           if (this.thongTinChiTieuKeHoachNam.soQuyetDinh && this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/').length > 1) {
             this.qdTCDT = this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[1];
           }
@@ -1282,6 +1282,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   banHanh() {
     this.spinner.show();
+    this.formData.controls["soQd"].setValidators([Validators.required]);
+    this.formData.controls["ngayKy"].setValidators([Validators.required]);
+    this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide()
@@ -1389,6 +1392,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   save(isGuiDuyet?: boolean) {
     this.spinner.show();
+    if (isGuiDuyet) {
+      this.formData.controls["soQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayKy"].setValidators([Validators.required]);
+      this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["soQd"].clearValidators();
+      this.formData.controls["ngayKy"].clearValidators();
+      this.formData.controls["ngayHieuLuc"].clearValidators();
+    }
+    ;
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
@@ -1415,7 +1428,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.thongTinChiTieuKeHoachNamInput.khMuoi = cloneDeep(
       this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
     );
-    console.log(this.thongTinChiTieuKeHoachNam.khMuoiDuTru);
     this.thongTinChiTieuKeHoachNamInput.khMuoi.forEach((muoi) => {
       // delete muoi.maDonVi;
       delete muoi.tkdnTongSoMuoi;
@@ -1423,11 +1435,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       delete muoi.tkcnTongSoMuoi;
       // muoi.xuatTrongNam = cloneDeep(muoi.xtnMuoi);
       delete muoi.xtnMuoi;
-      muoi.nhapTrongNam = cloneDeep(muoi.ntnTongSoMuoi);
+      muoi.donViTinh = 'Kg';
+      // muoi.nhapTrongNam = cloneDeep(muoi.ntnTongSoMuoi);
       delete muoi.ntnTongSoMuoi;
       delete muoi.xtnTongSoMuoi;
+      delete muoi.sdcXtnMuoi;
+      delete muoi.tdcXtnMuoi;
+      delete muoi.xuatTrongNam;
       delete muoi.id;
     });
+    console.log(this.thongTinChiTieuKeHoachNamInput.khMuoi);
     delete this.thongTinChiTieuKeHoachNamInput.khMuoiDuTru;
     const khVatTu = this.thongTinChiTieuKeHoachNamInput.khVatTu;
     for (let i = 0; i < khVatTu.length; i++) {
@@ -1611,16 +1628,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         luongThuc.xtnThoc[2].nam = this.yearNow - 3;
       });
     }
-    if (this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.length > 0) {
-      this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.forEach((muoi) => {
-        muoi.tkdnMuoi[0].nam = this.yearNow - 1;
-        muoi.tkdnMuoi[1].nam = this.yearNow - 2;
-        muoi.tkdnMuoi[2].nam = this.yearNow - 3;
-        muoi.xtnMuoi[0].nam = this.yearNow - 1;
-        muoi.xtnMuoi[1].nam = this.yearNow - 2;
-        muoi.xtnMuoi[2].nam = this.yearNow - 3;
-      });
-    }
+    // if (this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.length > 0) {
+    //   this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.forEach((muoi) => {
+    //     muoi.tkdnMuoi[0].nam = this.yearNow - 1;
+    //     muoi.tkdnMuoi[1].nam = this.yearNow - 2;
+    //     muoi.tkdnMuoi[2].nam = this.yearNow - 3;
+    //     muoi.xtnMuoi[0].nam = this.yearNow - 1;
+    //     muoi.xtnMuoi[1].nam = this.yearNow - 2;
+    //     muoi.xtnMuoi[2].nam = this.yearNow - 3;
+    //   });
+    // }
   }
 
   convertTrangThai(status: string) {
@@ -2235,7 +2252,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
     this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
     this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
-    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoCuoiNam, 0);
+    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
     this.loadData();
   }
 
@@ -2400,7 +2417,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
     this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
     this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
-    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoCuoiNam, 0);
+    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
     this.cdr.detectChanges();
   }
 

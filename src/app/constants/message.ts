@@ -29,6 +29,7 @@ export const MESSAGE = {
   TRINH_DUYET_SUCCESS: 'Trình duyệt thành công',
   THAO_TAC_SUCCESS: 'Thao tác thành công',
   QD_TCDT: 'QD-TCDT',
+  QD_BTC: 'QD-BTC',
   ERROR_NOT_EMPTY: 'Dữ liệu không được để trống.',
   TU_CHOI_SUCCESS: 'Từ chối thành công.',
   DATA_EMPTY: 'Data rỗng. Vui lòng thêm data để export.',
