@@ -1,5 +1,5 @@
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -42,7 +42,7 @@ import {
   templateUrl: './them-de-xuat-ke-hoach-ban-dau-gia.component.html',
   styleUrls: ['./them-de-xuat-ke-hoach-ban-dau-gia.component.scss']
 })
-export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implements OnInit {
+export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implements OnInit, OnChanges {
   @Input()
   loaiVthhInput: string;
   @Input()
