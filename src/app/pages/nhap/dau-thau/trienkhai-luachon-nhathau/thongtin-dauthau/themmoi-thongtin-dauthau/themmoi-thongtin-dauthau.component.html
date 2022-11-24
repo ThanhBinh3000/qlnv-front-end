@@ -371,7 +371,9 @@
                         <tr>
                             <th rowspan="2" style="width: 2%;">STT</th>
                             <th rowspan="2">Tên gói thầu</th>
+                            <th rowspan="2">Chủng loại hàng hóa</th>
                             <th rowspan="2">Cục DTNN KV</th>
+                            <th rowspan="2">Chi Cục DTNN KV</th>
                             <th colspan="3">Kế hoạch đấu thầu</th>
                             <th colspan="4">Kết quả đấu thầu</th>
                             <th rowspan="2" style="width: 5%;">Trạng thái đấu thầu</th>
@@ -392,15 +394,17 @@
                             <tr>
                                 <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                                 <td>{{item.goiThau}}</td>
+                                <td>{{item.cloaiVthh}}</td>
+                                <td>{{item.tenDvi}}</td>
                                 <td></td>
                                 <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td>{{item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td>{{item.soLuong * item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td>{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td>{{item.tenNhaThau}}</td>
                                 <td>{{item.donGiaNhaThau | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td>{{item.soLuong * item.donGiaNhaThau * 1000 | number: '1.0-1' : 'vi_VN' }}
+                                <td>{{item.soLuong * item.donGiaNhaThau | number: '1.0-1' : 'vi_VN' }}
                                 </td>
-                                <td>{{(item.donGiaNhaThau - item.donGia) * item.soLuong * 1000 | number:
+                                <td>{{(item.donGiaNhaThau - item.donGiaVat) * item.soLuong | number:
                                     '1.0-1' : 'vi_VN' }} </td>
                                 <td>{{item.tenTrangThai}}</td>
                                 <td>
@@ -413,10 +417,12 @@
                                 <tr *ngFor="let dtGoiThau of item.children, let y = index">
                                     <td></td>
                                     <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td>{{dtGoiThau.tenDvi}}</td>
                                     <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td>{{dtGoiThau.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td>{{dtGoiThau.soLuong * dtGoiThau.donGia | number: '1.0-1' : 'vi_VN'}}</td>
+                                    <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                                    <td>{{dtGoiThau.soLuong * item.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

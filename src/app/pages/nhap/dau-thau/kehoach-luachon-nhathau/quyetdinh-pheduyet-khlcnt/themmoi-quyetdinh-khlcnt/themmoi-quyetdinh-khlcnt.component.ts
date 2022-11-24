@@ -648,7 +648,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     }
   }
 
-  themMoiTongCuc(data?: any, index?: number) {
+  themMoiGoiThau(data?: any, index?: number) {
     if (!this.formData.get('loaiVthh').value) {
       this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
       return;
@@ -694,6 +694,16 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       this.expandSet2.add(id);
     } else {
       this.expandSet2.delete(id);
+    }
+  }
+
+
+  expandSet3 = new Set<number>();
+  onExpandChange3(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet3.add(id);
+    } else {
+      this.expandSet3.delete(id);
     }
   }
 

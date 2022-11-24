@@ -68,14 +68,13 @@ export class ThongTinComponent implements OnInit, OnChanges {
     @Input() id: number;
     @Input() isView: boolean = false;
     @Input() isQuanLy: boolean = false;
-    @Input() typeVthh: string;
+    @Input() loaiVthh: String;
     @Input() idGoiThau: number;
     @Input() dataBinding: any;
     @Input() idKqLcnt: number;
     @Output()
     showListEvent = new EventEmitter<any>();
 
-    loaiVthh: string;
     loaiStr: string;
     maVthh: string;
     routerVthh: string;
@@ -252,22 +251,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
     }
 
     async getListQdKqLcnt() {
-        await this.spinner.show();
-        let body = {
-            trangThai: STATUS.BAN_HANH,
-            maDvi: this.userInfo.MA_DVI,
-            paggingReq: {
-                "limit": this.globals.prop.MAX_INTERGER,
-                "page": 0
-            },
-        }
-        let res = await this.ketQuaLcntService.search(body);
-        if (res.msg == MESSAGE.SUCCESS) {
-            this.listKqLcnt = res.data.content.filter(item => item.trangThaiHd != STATUS.HOAN_THANH_CAP_NHAT);
-        } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-        await this.spinner.hide();
+
     }
 
     async loadChiTiet(id) {
@@ -371,7 +355,26 @@ export class ThongTinComponent implements OnInit, OnChanges {
         });
     }
 
-    openDialogKQLCNT() {
+    async openDialogKQLCNT() {
+        await this.spinner.show();
+        let body = {
+            trangThai: STATUS.BAN_HANH,
+            maDvi: this.userInfo.MA_DVI,
+            paggingReq: {
+                "limit": this.globals.prop.MAX_INTERGER,
+                "page": 0
+            },
+            loaiVthh: this.loaiVthh
+        }
+        let res = await this.ketQuaLcntService.search(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+            this.listKqLcnt = res.data.content.filter(item => item.trangThaiHd != STATUS.HOAN_THANH_CAP_NHAT);
+        } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+        await this.spinner.hide();
+
+
         const modalQD = this.modal.create({
             nzTitle: 'Danh sách kết quả lựa chọn nhà thầu',
             nzContent: DialogTableSelectionComponent,
@@ -397,27 +400,51 @@ export class ThongTinComponent implements OnInit, OnChanges {
         let res = await this.ketQuaLcntService.getDetail(idKqLcnt);
         if (res.msg == MESSAGE.SUCCESS) {
             const data = res.data;
-            console.log(data);
-            const dataDtl = data.qdKhlcntDtl
+            if (this.loaiVthh.startsWith('02')) {
+                this.bindingDataKqLcntVatTu(data);
+            } else {
+                this.bindingDataKqLcntLuongThuc(data);
+            }
 
-            this.listGoiThau = dataDtl.dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
-            this.formData.patchValue({
-                soQdKqLcnt: data.soQd,
-                idQdKqLcnt: data.id,
-                ngayQdKqLcnt: data.ngayTao,
-                soQdPdKhlcnt: data.soQdPdKhlcnt,
-                loaiHdong: dataDtl.hhQdKhlcntHdr.loaiHdong,
-                cloaiVthh: dataDtl.hhQdKhlcntHdr.cloaiVthh,
-                tenLoaiVthh: dataDtl.hhQdKhlcntHdr.tenLoaiVthh,
-                loaiVthh: dataDtl.hhQdKhlcntHdr.loaiVthh,
-                tenCloaiVthh: dataDtl.hhQdKhlcntHdr.tenCloaiVthh,
-                moTaHangHoa: dataDtl.dxuatKhLcntHdr.moTaHangHoa,
-                tgianNkho: dataDtl.dxuatKhLcntHdr.tgianNhang
-            })
         } else {
             this.notification.error(MESSAGE.ERROR, res.msg)
         }
         await this.spinner.hide();
+    }
+
+    bindingDataKqLcntVatTu(data) {
+        this.listGoiThau = data.qdKhlcnt.children;
+        this.formData.patchValue({
+            soQdKqLcnt: data.soQd,
+            idQdKqLcnt: data.id,
+            ngayQdKqLcnt: data.ngayTao,
+            soQdPdKhlcnt: data.soQdPdKhlcnt,
+            // loaiHdong: dataDtl.hhQdKhlcntHdr.loaiHdong,
+            // cloaiVthh: dataDtl.hhQdKhlcntHdr.cloaiVthh,
+            // tenLoaiVthh: dataDtl.hhQdKhlcntHdr.tenLoaiVthh,
+            // loaiVthh: dataDtl.hhQdKhlcntHdr.loaiVthh,
+            // tenCloaiVthh: dataDtl.hhQdKhlcntHdr.tenCloaiVthh,
+            // moTaHangHoa: dataDtl.dxuatKhLcntHdr.moTaHangHoa,
+            // tgianNkho: dataDtl.dxuatKhLcntHdr.tgianNhang
+        })
+    }
+
+    bindingDataKqLcntLuongThuc(data) {
+        const dataDtl = data.qdKhlcntDtl
+        this.listGoiThau = dataDtl.dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
+        this.formData.patchValue({
+            soQdKqLcnt: data.soQd,
+            idQdKqLcnt: data.id,
+            ngayQdKqLcnt: data.ngayTao,
+            soQdPdKhlcnt: data.soQdPdKhlcnt,
+            loaiHdong: dataDtl.hhQdKhlcntHdr.loaiHdong,
+            cloaiVthh: dataDtl.hhQdKhlcntHdr.cloaiVthh,
+            tenLoaiVthh: dataDtl.hhQdKhlcntHdr.tenLoaiVthh,
+            loaiVthh: dataDtl.hhQdKhlcntHdr.loaiVthh,
+            tenCloaiVthh: dataDtl.hhQdKhlcntHdr.tenCloaiVthh,
+            moTaHangHoa: dataDtl.dxuatKhLcntHdr.moTaHangHoa,
+            tgianNkho: dataDtl.dxuatKhLcntHdr.tgianNhang
+        })
     }
 
     openDialogGoiThau() {
@@ -439,8 +466,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
             if (data) {
                 console.log(data);
                 this.spinner.show();
-                let res = await this.thongTinDauThauService.getDetail(data.id);
-                console.log(res);
+                let res = await this.thongTinDauThauService.getDetailThongTin(data.id, this.loaiVthh);
                 if (res.msg == MESSAGE.SUCCESS) {
                     let nhaThauTrung = res.data.filter(item => item.trangThai == STATUS.TRUNG_THAU)[0];
                     console.log(nhaThauTrung);

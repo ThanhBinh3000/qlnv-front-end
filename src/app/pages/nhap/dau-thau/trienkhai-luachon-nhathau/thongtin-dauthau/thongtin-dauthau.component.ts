@@ -26,7 +26,7 @@ import {
   styleUrls: ['./thongtin-dauthau.component.scss']
 })
 export class ThongtinDauthauComponent implements OnInit {
-  @Input() loaiVthh: string;
+  @Input() loaiVthh: String;
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -180,8 +180,13 @@ export class ThongtinDauthauComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(id: number) {
-    this.selectedId = id;
+  redirectToChiTiet(data) {
+    // VẬt tư
+    if (this.loaiVthh.startsWith('02')) {
+      this.selectedId = data.hhQdKhlcntHdr.id;
+    } else {
+      this.selectedId = data.id;
+    }
     this.isDetail = true;
   }
 
