@@ -179,12 +179,11 @@
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM')"
-                (click)="redirectToChiTiet(data.id)">
+                (click)="redirectToChiTiet(data)">
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT 
-              && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA')"
-                (click)="redirectToChiTiet(data.id)">
+              && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA')" (click)="redirectToChiTiet(data)">
                 <i class="icon htvbdh_soanthao"></i>
               </a>
             </td>
@@ -212,6 +211,6 @@
   </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-  <app-themmoi-thongtin-dauthau [idInput]="selectedId" (showListEvent)="showList()">
+  <app-themmoi-thongtin-dauthau [idInput]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-themmoi-thongtin-dauthau>
 </ng-container>

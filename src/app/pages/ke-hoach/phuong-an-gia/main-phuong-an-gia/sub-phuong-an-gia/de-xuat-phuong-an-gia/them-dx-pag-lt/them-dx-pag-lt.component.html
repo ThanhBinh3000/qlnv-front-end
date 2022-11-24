@@ -557,11 +557,11 @@
     <nz-tab [nzTitle]="'Thông tin khảo sát giá'" *ngIf="isGiaMuaToiDa">
       <nz-card class="mt16 p-lr16 card-table pd-10">
         <span class="sub-title mb-10">KẾT QUẢ KHẢO SÁT GIÁ THỊ TRƯỜNG</span>
-        <app-thong-tin-ksg *ngIf="dataTableKsGia || !idInput" [isTableKetQua]="true" [listCloaiVthh]="listCloaiVthh" [(dataTable)]="dataTableKsGia"
+        <app-thong-tin-ksg *ngIf="dataTableKsGia || !idInput" [vat]="formData.value.vat ? formData.value.vat : 1 " [isTableKetQua]="true" [listCloaiVthh]="listCloaiVthh" [(dataTable)]="dataTableKsGia"
                            [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">
         </app-thong-tin-ksg>
         <span class="sub-title mb-10">KẾT QUẢ THẨM ĐỊNH GIÁ</span>
-        <app-thong-tin-ksg *ngIf="dataTableKsGia || !idInput" [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"
+        <app-thong-tin-ksg *ngIf="dataTableKsGia || !idInput" [vat]="formData.value.vat ? formData.value.vat : 1 "  [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"
                            [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"></app-thong-tin-ksg>
       </nz-card>
     </nz-tab>

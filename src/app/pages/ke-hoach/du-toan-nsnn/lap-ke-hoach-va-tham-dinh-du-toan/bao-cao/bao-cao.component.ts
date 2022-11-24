@@ -228,9 +228,11 @@ export class BaoCaoComponent implements OnInit {
         await this.getDviCon();
         this.getListUser();
         if (this.id) {
+            debugger
             await this.getDetailReport();
-            if (this.data?.lstDviTrucThuoc && this.data?.lstDviTrucThuoc.length > 0) {
+            if (this.data?.idSoTranChi) {
                 this.lstLapThamDinhs = this.data?.lstLapThamDinhs ? this.data?.lstLapThamDinhs : [];
+                this.giaoSoTranChiId = this.data?.idSoTranChi;
             }
         } else {
             this.isChild = true;
@@ -672,6 +674,9 @@ export class BaoCaoComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                         await this.getDetailReport();
+                        if (this.data?.idSoTranChi) {
+                            this.data.idSoTranChi = null;
+                        }
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }

@@ -30,6 +30,7 @@ import { isEmpty } from 'lodash'
 export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
+  @Input() loaiVthh: String;
   @Input() isViewDetail: boolean;
   @Input() idInput: number;
 
@@ -37,7 +38,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
   taiLieuDinhKemList: any[] = [];
 
   listQdPdKhlcnt: any[] = []
-  maQd: string;
+  maQd: String;
   listNam: any[] = [];
 
   userInfo: UserLogin;
@@ -70,6 +71,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         ghiChu: [null,],
         trangThai: ['00'],
         tenTrangThai: ['Dự thảo'],
+        loaiVthh: [''],
+        cloaiVthh: ['']
       }
     );
   }
@@ -78,7 +81,6 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     await this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
     this.maQd = "/" + this.userInfo.MA_QD;
-    await this.getListQdPdKhlcnt();
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
@@ -205,16 +207,31 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     });
   }
 
-  async getListQdPdKhlcnt() {
-    let body = {
-      namKhoach: this.formData.get('namKhoach').value,
-      trangThaiDtl: STATUS.HOAN_THANH_CAP_NHAT,
-      maDvi: this.userInfo.MA_DVI,
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: 0,
-      },
-    };
+  async openDialogSoQdKhlcnt() {
+    let body
+    if (this.loaiVthh.startsWith("02")) {
+      body = {
+        namKhoach: this.formData.get('namKhoach').value,
+        trangThaiDt: STATUS.HOAN_THANH_CAP_NHAT,
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0,
+        },
+        loaiVthh: this.loaiVthh
+      };
+    } else {
+      body = {
+        namKhoach: this.formData.get('namKhoach').value,
+        trangThaiDtl: STATUS.HOAN_THANH_CAP_NHAT,
+        maDvi: this.userInfo.MA_DVI,
+        paggingReq: {
+          limit: this.globals.prop.MAX_INTERGER,
+          page: 0,
+        },
+        loaiVthh: this.loaiVthh
+      };
+    }
+
     let res = await this.thongTinDauThauService.search(body);
     this.listQdPdKhlcnt = res.data.content.filter(item => isEmpty(item.soQdPdKqLcnt));
     this.listQdPdKhlcnt.forEach(element => {
@@ -222,9 +239,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
       element.tenCloaiVthh = element.hhQdKhlcntHdr.tenCloaiVthh;
       element.tenLoaiVthh = element.hhQdKhlcntHdr.tenLoaiVthh;
     });
-  }
 
-  openDialogSoQdKhlcnt() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch lựa chọn nhà thầu',
       nzContent: DialogTableSelectionComponent,
@@ -243,7 +258,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         this.formData.patchValue({
           soQdPdKhlcnt: data.hhQdKhlcntHdr.soQd,
           idQdPdKhlcnt: data.hhQdKhlcntHdr.id,
-          idQdPdKhlcntDtl: data.id,
+          idQdPdKhlcntDtl: this.loaiVthh.startsWith('02') ? null : data.id,
+          loaiVthh: data.loaiVthh,
+          cloaiVthh: data.cloaiVthh
         })
       }
     });
