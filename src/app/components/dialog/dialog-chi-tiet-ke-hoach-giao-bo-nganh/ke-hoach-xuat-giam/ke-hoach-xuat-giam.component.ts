@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { ThongTinQuyetDinh } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { Globals } from './../../../../shared/globals';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {ThongTinQuyetDinh} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {Globals} from './../../../../shared/globals';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
 
 @Component({
   selector: 'app-ke-hoach-xuat-giam',
@@ -93,8 +93,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
       this.rowItem = new ThongTinQuyetDinh();
       this.updateEditCache()
       this.emitDataTable()
-    }
-    else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
     }
   }
@@ -105,7 +104,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
 
   huyEdit(idx: number): void {
     this.dataEdit[idx] = {
-      data: { ...this.dataTable[idx] },
+      data: {...this.dataTable[idx]},
       edit: false,
     };
   }
@@ -121,7 +120,7 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         }
       });
     }
@@ -130,36 +129,39 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   onChangeLoaiVthh(event, typeData?: any) {
     if (typeData) {
       this.dsChungLoaiHangHoa = [];
+      typeData.cloaiVthh = null;
       typeData.dviTinh = null;
-      const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
-      if (loaiVthh.length > 0) {
-        typeData.cloaiVthh = null;
-        typeData.dviTinh = loaiVthh[0].maDviTinh;
-        typeData.tenVthh = loaiVthh[0].ten;
-        this.dsChungLoaiHangHoa = loaiVthh[0].child;
+      const loaiVthh = this.dsHangHoa.find(item => item.ma == event);
+      if (loaiVthh) {
+        typeData.dviTinh = loaiVthh.maDviTinh;
+        typeData.tenVthh = loaiVthh.ten;
+        this.dsChungLoaiHangHoa = loaiVthh.child;
       }
     } else {
       this.dsChungLoaiHangHoa = [];
+      this.rowItem.cloaiVthh = null;
       this.rowItem.dviTinh = null;
-      const loaiVthh = this.dsHangHoa.filter(item => item.ma == event);
-      if (loaiVthh.length > 0) {
-        this.rowItem.dviTinh = loaiVthh[0].maDviTinh;
-        this.rowItem.tenVthh = loaiVthh[0].ten;
-        this.dsChungLoaiHangHoa = loaiVthh[0].child;
+      const loaiVthh = this.dsHangHoa.find(item => item.ma == event);
+      if (loaiVthh) {
+        this.rowItem.tenVthh = loaiVthh.ten;
+        this.rowItem.dviTinh = loaiVthh.maDviTinh;
+        this.dsChungLoaiHangHoa = loaiVthh.child;
       }
     }
   }
 
   onChangeCloaiVthh(event, typeData?: any) {
     if (typeData) {
-      const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
-      if (cloaiVthh.length > 0) {
-        typeData.tenCloaiVthh = cloaiVthh[0].ten;
+      const cloaiVthh = this.dsChungLoaiHangHoa.find(item => item.ma == event);
+      if (cloaiVthh) {
+        typeData.tenCloaiVthh = cloaiVthh.ten;
+        typeData.dviTinh = cloaiVthh.maDviTinh;
       }
     } else {
-      const cloaiVthh = this.dsChungLoaiHangHoa.filter(item => item.ma == event);
-      if (cloaiVthh.length > 0) {
-        this.rowItem.tenCloaiVthh = cloaiVthh[0].ten;
+      const cloaiVthh = this.dsChungLoaiHangHoa.find(item => item.ma == event);
+      if (cloaiVthh) {
+        this.rowItem.tenCloaiVthh = cloaiVthh.ten;
+        this.rowItem.dviTinh = cloaiVthh.maDviTinh;
       }
     }
   }
