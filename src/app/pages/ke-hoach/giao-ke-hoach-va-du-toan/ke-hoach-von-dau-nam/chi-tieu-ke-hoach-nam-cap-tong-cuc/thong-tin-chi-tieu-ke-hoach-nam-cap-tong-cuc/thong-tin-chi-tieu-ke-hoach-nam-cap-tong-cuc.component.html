@@ -73,7 +73,7 @@
         </div>
         <div nz-col nzSpan="4">
           <!-- <nz-form-item> -->
-          <nz-form-label  [nzNoColon]="true" class="text-left"> Số quyết định</nz-form-label>
+          <nz-form-label [nzNoColon]="true" class="text-left"> Số quyết định</nz-form-label>
           <nz-form-control [nzErrorTip]="soQDError">
             <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
               <input formControlName="soQd" nz-input nzSize="small" placeholder="Nhập số quyết định" appNumberOnly
@@ -86,7 +86,7 @@
           <!-- </nz-form-item> -->
         </div>
         <div nz-col nzSpan="4">
-          <nz-form-label  [nzNoColon]="true" class="text-left"> Ngày ký
+          <nz-form-label [nzNoColon]="true" class="text-left"> Ngày ký
           </nz-form-label>
           <nz-form-control nz-col [nzErrorTip]="ngayKyError1">
             <nz-date-picker [nzDisabled]="isViewDetail" class="search__input" [nzDisabledDate]="disabledStartDate"
@@ -99,7 +99,7 @@
         </div>
         <div nz-col nzSpan="4">
           <!-- <nz-form-item> -->
-          <nz-form-label  [nzNoColon]="true" class="text-left"> Ngày hiệu lực
+          <nz-form-label [nzNoColon]="true" class="text-left"> Ngày hiệu lực
           </nz-form-label>
           <nz-form-control nz-col [nzErrorTip]="ngayHieuLucError">
             <nz-date-picker [nzDisabled]="isViewDetail" nzFormat="dd-MM-yyyy" formControlName="ngayHieuLuc"
@@ -696,7 +696,7 @@
               </nz-input-number>
             </td>
             <td class="text-right">
-              {{keHoachMuoiCreate.tonKhoCuoiNam}}
+              {{(keHoachMuoiCreate.tonKhoDauNam ? keHoachMuoiCreate.tonKhoDauNam : 0) + (keHoachMuoiCreate.nhapTrongNam ? keHoachMuoiCreate.nhapTrongNam : 0) - (keHoachMuoiCreate.xuatTrongNamMuoi ? keHoachMuoiCreate.xuatTrongNamMuoi : 0)}}
             </td>
             <!--            <td class="text-right">-->
             <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
@@ -740,7 +740,8 @@
               <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
               <td class="text-right">{{dataMuoi.nhapTrongNam | number: '1.0-1'}}</td>
               <td class="text-right">{{dataMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
-              <td class="text-right">{{dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
+              <td
+                class="text-right">{{dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
               <!--              <ng-container *ngIf="dataMuoi?.xtnMuoi?.length > 0">-->
               <!--                <td *ngFor="let itemMuoi of dataMuoi.xtnMuoi" class="text-right">{{itemMuoi.soLuong | number:-->
               <!--                  '1.0-1'}} </td>-->
@@ -791,7 +792,8 @@
                                  [(ngModel)]="dsMuoiClone[i].xuatTrongNamMuoi">
                 </nz-input-number>
               </td>
-              <td class="text-right">{{dataMuoi.tonKhoDauNam + dsMuoiClone[i].nhapTrongNam - dsMuoiClone[i].xuatTrongNamMuoi | number: '1.0-1'}}</td>
+              <td
+                class="text-right">{{dataMuoi.tonKhoDauNam + dsMuoiClone[i].nhapTrongNam - dsMuoiClone[i].xuatTrongNamMuoi | number: '1.0-1'}}</td>
               <!--              <td class="text-right">-->
               <!--                <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
               <!--                                 [nzMax]="dsMuoiClone[i].tonKhoDauNam" [nzSize]="'small'"-->
