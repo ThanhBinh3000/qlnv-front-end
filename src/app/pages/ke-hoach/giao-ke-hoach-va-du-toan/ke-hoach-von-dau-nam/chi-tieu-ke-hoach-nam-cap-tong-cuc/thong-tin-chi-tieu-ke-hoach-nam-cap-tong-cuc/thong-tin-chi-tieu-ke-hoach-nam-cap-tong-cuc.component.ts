@@ -1282,6 +1282,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   banHanh() {
     this.spinner.show();
+    this.formData.controls["soQd"].setValidators([Validators.required]);
+    this.formData.controls["ngayKy"].setValidators([Validators.required]);
+    this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide()
@@ -1389,6 +1392,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   save(isGuiDuyet?: boolean) {
     this.spinner.show();
+    if (isGuiDuyet) {
+      this.formData.controls["soQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayKy"].setValidators([Validators.required]);
+      this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["soQd"].clearValidators();
+      this.formData.controls["ngayKy"].clearValidators();
+      this.formData.controls["ngayHieuLuc"].clearValidators();
+    }
+    ;
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
@@ -2239,7 +2252,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
     this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
     this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
-    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoCuoiNam, 0);
+    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
     this.loadData();
   }
 
@@ -2404,7 +2417,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
     this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
     this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
-    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoCuoiNam, 0);
+    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
     this.cdr.detectChanges();
   }
 

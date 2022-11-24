@@ -15,6 +15,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -38,6 +39,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   startValue: Date | null = null;
   endValue: Date | null = null;
   page: number = 1;
+  STATUS = STATUS;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
