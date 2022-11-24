@@ -79,6 +79,7 @@ export class TtcpComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     this.search();
   }

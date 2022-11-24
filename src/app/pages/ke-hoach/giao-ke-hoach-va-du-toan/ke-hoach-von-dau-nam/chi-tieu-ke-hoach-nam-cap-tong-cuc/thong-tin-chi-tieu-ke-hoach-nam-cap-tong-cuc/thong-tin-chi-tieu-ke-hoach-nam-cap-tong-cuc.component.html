@@ -389,8 +389,8 @@
               <th *ngIf="data.stt ==  null" class="background-last-row"></th>
             </ng-container>
             <ng-template #editTemplate>
-              <th class="text-right">{{data.stt}}</th>
-              <th class="text-left">{{data.tenDonvi}}</th>
+              <th nzLeft class="text-right">{{data.stt}}</th>
+              <th nzLeft class="text-left">{{data.tenDonvi}}</th>
               <th class="text-right">{{data.tkdnTongSoQuyThoc | number:
                 '1.0-1'}}</th>
               <th class="text-right">{{data.tkdnTongThoc | number: '1.0-1'}}
