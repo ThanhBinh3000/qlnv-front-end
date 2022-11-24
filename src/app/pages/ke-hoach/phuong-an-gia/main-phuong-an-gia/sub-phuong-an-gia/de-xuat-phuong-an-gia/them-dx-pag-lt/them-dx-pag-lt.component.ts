@@ -100,7 +100,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         tenTrangThai: ['Dự Thảo'],
         cloaiVthh: [null, [Validators.required]],
         moTa: [null],
-        tchuanCluong: [null],
+        tchuanCluong: [''],
         giaDeNghi: [null, [Validators.required]],
         vat: [5],
         giaDeNghiVat: [null],
@@ -305,17 +305,14 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async onChangeCloaiVthh(event) {
-    let res = await this.danhMucTieuChuanService.getDetailByMaHh(event);
-    if (res.statusCode == API_STATUS_CODE.SUCCESS) {
-      this.formData.patchValue({
-        tchuanCluong: res.data ? res.data.tenQchuan : null
-      })
-    }
     this.dviTinh = '';
     let resp = await this.danhMucService.getDetail(event);
     if (resp.msg == MESSAGE.SUCCESS) {
-      if (resp.data && resp.data.maDviTinh) {
+      if (resp.data) {
         this.dviTinh = resp.data.maDviTinh
+        this.formData.patchValue({
+          tchuanCluong : resp.data.tchuanCluong
+        })
       }
     }
   }
