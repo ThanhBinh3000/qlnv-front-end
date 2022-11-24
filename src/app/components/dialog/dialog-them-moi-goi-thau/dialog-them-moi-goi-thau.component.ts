@@ -25,13 +25,16 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   loaiVthh?: any;
   isReadOnly?: boolean = false;
   listChungLoai = [];
-  listDonVi = [];
+  listCuc = [];
   listChiCuc = [];
   dataTable: any[] = [];
-  thongtinDauThau: DanhSachGoiThau = new DanhSachGoiThau();
+  thongTinCuc: DanhSachGoiThau = new DanhSachGoiThau();
+  thongTinChiCuc: DanhSachGoiThau = new DanhSachGoiThau();
   thongTinDiemKho: DanhSachGoiThau = new DanhSachGoiThau();
-  listDiemKho: any[] = [];
+
+  listChiCucMap = {};
   listDiemKhoMap = {};
+
 
   listPhuongThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
@@ -57,7 +60,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       soLuong: [null],
       donGiaVat: [320000, [Validators.required]],
       donGiaTamTinh: [null, [Validators.required]],
-      maDvi: ['', [Validators.required]]
+      maDvi: ['']
     });
     this.formGoiThau.controls['donGiaTamTinh'].valueChanges.subscribe(value => {
       this.validateRangPrice();
@@ -99,18 +102,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     };
     let res = await this.donviService.getAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listDonVi = res.data;
-    }
-  }
-
-  async loadListDonVi2() {
-    let body = {
-      "trangThai": "01",
-      "maDviCha": "0101"
-    };
-    let res = await this.donviService.getTreeAll(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listDonVi = res.data[0].children;
+      this.listCuc = res.data;
     }
   }
 
@@ -121,16 +113,14 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     };
     let res = await this.donviService.getTreeAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listChiCuc = res.data[0].children;
+      this.listChiCucMap[$event] = res.data[0].children;
+      console.log(this.listChiCucMap);
     }
   }
 
-  async onChangeChiCuc($event) {
-    let chiCuc = this.listChiCuc.filter(item => item.maDvi == $event)[0];
-    this.listDiemKho = chiCuc.children;
-    this.listDiemKhoMap[$event] = this.listDiemKho;
-    console.log(this.listDiemKhoMap);
-
+  async onChangeChiCuc($event, maCuc) {
+    let chiCuc = this.listChiCucMap[maCuc].filter(item => item.maDvi == $event)[0];
+    this.listDiemKhoMap[$event] = chiCuc.children;
   }
 
   validateRangPrice() {
@@ -196,12 +186,12 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
     }
   }
 
-  addChiCuc() {
-    if (this.validateDataAdd('chiCuc')) {
-      if (this.thongtinDauThau.maDvi && this.thongtinDauThau.soLuong) {
-        let dataDvi = this.listChiCuc.filter(d => d.maDvi == this.thongtinDauThau.maDvi)
-        this.thongtinDauThau.tenDvi = dataDvi[0].tenDvi;
-        this.dataTable = [...this.dataTable, this.thongtinDauThau];
+  addCuc() {
+    if (this.validateDataAdd('cuc')) {
+      if (this.thongTinCuc.maDvi && this.thongTinCuc.soLuong) {
+        let dataDvi = this.listCuc.filter(d => d.maDvi == this.thongTinCuc.maDvi)
+        this.thongTinCuc.tenDvi = dataDvi[0].tenDvi;
+        this.dataTable = [...this.dataTable, this.thongTinCuc];
         let soLuong: number = 0;
         this.dataTable.forEach(item => {
           soLuong = soLuong + item.soLuong,
@@ -210,19 +200,35 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
         this.formGoiThau.patchValue({
           soLuong: soLuong
         });
-        this.thongtinDauThau = new DanhSachGoiThau();
+        this.thongTinCuc = new DanhSachGoiThau();
       } else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
       }
     }
   }
 
-  addDiemKho(i, maChiCuc) {
+  addChiCuc(i, maCuc) {
+    if (this.validateDataAdd('chiCuc')) {
+      if (this.thongTinChiCuc.maDvi && this.thongTinChiCuc.soLuong) {
+        let dataDvi = this.listChiCucMap[maCuc].filter(d => d.maDvi == this.thongTinChiCuc.maDvi)
+        this.thongTinChiCuc.tenDvi = dataDvi[0].tenDvi;
+        this.dataTable[i].children = [...this.dataTable[i].children, this.thongTinChiCuc];
+        this.dataTable[i].children.forEach(item => {
+          item.children = []
+        })
+        this.thongTinChiCuc = new DanhSachGoiThau();
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
+      }
+    }
+  }
+
+  addDiemKho(i, y, maChiCuc) {
     if (this.validateDataAdd('diemKho')) {
       if (this.thongTinDiemKho.maDvi && this.thongTinDiemKho.soLuong) {
         let dataDvi = this.listDiemKhoMap[maChiCuc].filter(d => d.maDvi == this.thongTinDiemKho.maDvi);
         this.thongTinDiemKho.tenDvi = dataDvi[0].tenDvi;
-        this.dataTable[i].children = [...this.dataTable[i].children, this.thongTinDiemKho];
+        this.dataTable[i].children[y].children = [...this.dataTable[i].children[y].children, this.thongTinDiemKho];
         this.thongTinDiemKho = new DanhSachGoiThau();
       } else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
@@ -231,8 +237,16 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
   }
 
   validateDataAdd(type): boolean {
+    if (type == 'cuc') {
+      let data = this.dataTable.filter(item => item.maDvi == this.thongTinCuc.maDvi);
+      if (data.length > 0) {
+        this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
+        return false
+      }
+      return true;
+    }
     if (type == 'chiCuc') {
-      let data = this.dataTable.filter(item => item.maDvi == this.thongtinDauThau.maDvi);
+      let data = this.dataTable.filter(item => item.maDvi == this.thongTinChiCuc.maDvi);
       if (data.length > 0) {
         this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
         return false
@@ -240,7 +254,7 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       return true;
     }
     if (type == 'diemKho') {
-      let data = this.dataTable.filter(item => item.maDvi == this.thongtinDauThau.maDvi);
+      let data = this.dataTable.filter(item => item.maDvi == this.thongTinDiemKho.maDvi);
       if (data.length > 0) {
         this.notification.error(MESSAGE.ERROR, "Đơn vị đã tồn tại, xin vui lòng thêm đơn vị khác")
         return false
@@ -253,8 +267,18 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
 
   }
 
-  deleteRow(i) {
-    this.dataTable = this.dataTable.filter((item, index) => index !== i);
+  deleteRow(i, y, z) {
+    console.log(i, y, z);
+    if (i >= 0 && y >= 0 && z >= 0) {
+      // this.dataTable[i].children[y].children = this.dataTable[i].children[y].children.splice(z, 1);
+      this.dataTable[i].children[y].children = this.dataTable[i].children[y].children.filter((d, index) => index !== z);
+    } else if (i >= 0 && y >= 0) {
+      // this.dataTable[i].children = this.dataTable[i].children.splice(y, 1);
+      this.dataTable[i].children = this.dataTable[i].children.filter((d, index) => index !== y);
+    } else if (i >= 0) {
+      this.dataTable = this.dataTable.filter((d, index) => index !== i);
+      // this.dataTable = this.dataTable.splice(i, 1);
+    }
   }
 
   clearDiemKho() {
@@ -267,6 +291,14 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       this.expandSet.add(id);
     } else {
       this.expandSet.delete(id);
+    }
+  }
+  expandSet2 = new Set<number>();
+  onExpandChange2(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet2.add(id);
+    } else {
+      this.expandSet2.delete(id);
     }
   }
 }

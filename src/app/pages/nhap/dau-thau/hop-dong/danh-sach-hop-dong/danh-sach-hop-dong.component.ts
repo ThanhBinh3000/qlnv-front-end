@@ -28,8 +28,7 @@ import { BaseComponent } from 'src/app/components/base/base.component';
 })
 
 export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
-  @Input()
-  typeVthh: string;
+  @Input() loaiVthh: String;
 
   ngayKy: string;
   soHd: string;
@@ -178,11 +177,11 @@ export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
       },
       // soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
       // soQdinh: this.searchFilter.soQdinh,
-      // loaiVthh: this.searchFilter.loaiVthh,
       // namKhoach: this.searchFilter.namKhoach,
       // trichYeu: this.searchFilter.trichYeu,
       maDvi: this.userService.isTongCuc() ? null : this.userInfo.MA_DVI,
-      trangThai: STATUS.BAN_HANH
+      trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh
     };
     let res = await this.quyetDinhPheDuyetKetQuaLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
