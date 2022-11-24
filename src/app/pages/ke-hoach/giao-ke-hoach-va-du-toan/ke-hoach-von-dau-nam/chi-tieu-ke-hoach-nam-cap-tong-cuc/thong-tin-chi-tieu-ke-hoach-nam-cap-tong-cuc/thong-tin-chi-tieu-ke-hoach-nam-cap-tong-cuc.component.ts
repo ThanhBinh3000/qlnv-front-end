@@ -175,7 +175,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     } else if (this.userService.isCuc()) {
       this.lastBreadcrumb = LEVEL.CUC_SHOW;
     }
-    this.findCanCuByYear(this.yearNow);
     this.newObjectLuongThuc();
     this.newObjectMuoi();
     this.newObjectVatTu();
@@ -188,11 +187,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.formData.patchValue({
         namKeHoach: dayjs().get('year')
       });
+      this.findCanCuByYear(this.yearNow);
     }
   }
 
 
-  async findCanCuByYear(year: number) {
+  async findCanCuByYear(year: number, id?) {
     this.formData.patchValue({
       canCu: null,
     })
@@ -203,7 +203,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         let data = res.data
         if (data) {
           this.formData.patchValue({
-            canCu: data.canCu,
+            canCu: data.soQuyetDinh,
             chiTieuId: data.id
           })
         }
@@ -781,9 +781,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             // arrCanCu: JSON.parse(this.thongTinChiTieuKeHoachNam.canCu)
           })
           this.loadData();
-          // this.formData.patchValue({
-          //   soQD: this.formData.get('soQd').value?.split('/')[0],
-          // });
+          this.formData.patchValue({
+            soQD: this.formData.get('soQd').value?.split('/')[0],
+          });
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -1920,11 +1920,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.optionsDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
-          const item = {
-            ...res.data[i],
-            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-          };
-          this.optionsDonVi.push(item);
+          if (res.data[i].type != 'PB') {
+            const item = {
+              ...res.data[i],
+              labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+            };
+            this.optionsDonVi.push(item);
+          } else {
+            continue;
+          }
         }
         this.options = cloneDeep(this.optionsDonVi);
       } else {
