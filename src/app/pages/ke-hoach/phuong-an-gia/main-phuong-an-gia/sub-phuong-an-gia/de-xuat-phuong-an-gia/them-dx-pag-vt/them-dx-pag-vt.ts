@@ -102,7 +102,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         soCanCu: [null],
         maPphapXdg: [null, [Validators.required]],
         loaiHangXdg: [],
-        vat:  [5]
+        vat:  [10]
       }
     );
     this.STATUS = STATUS
@@ -122,7 +122,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.getDataChiTieu(),
+      // this.getDataChiTieu(),
       this.loadDsPhuongAnGia(),
       this.loadDsVthh(),
       // this.loadDsQdPduyetKhlcnt(),
