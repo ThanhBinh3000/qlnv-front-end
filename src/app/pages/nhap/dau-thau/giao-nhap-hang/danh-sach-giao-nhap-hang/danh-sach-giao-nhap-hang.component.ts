@@ -24,7 +24,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 
 export class DanhSachGiaoNhapHangComponent implements OnInit {
   @Input()
-  typeVthh: string;
+  loaiVthh: string;
   @Input()
   listVthh: any[] = [];
 
@@ -58,7 +58,6 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
   ngayQuyetDinhDefault: any[] = [];
   maVthh: string;
   routerVthh: string;
-  loaiVthh: string = '';
   isDetail: boolean = false;
   selectedId: number = 0;
 
@@ -148,7 +147,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
       "denNgayQd": this.searchFilter.ngayQuyetDinh
         ? dayjs(this.searchFilter.ngayQuyetDinh[1]).format('YYYY-MM-DD')
         : null,
-      "loaiVthh": this.typeVthh,
+      "loaiVthh": this.loaiVthh,
       "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
       "paggingReq": {
         "limit": this.pageSize,
@@ -252,7 +251,7 @@ export class DanhSachGiaoNhapHangComponent implements OnInit {
           "loaiQd": null,
           "maDvi": null,
           "maVthh": null,
-          "loaiVthh": this.typeVthh,
+          "loaiVthh": this.loaiVthh,
           "namNhap": this.searchFilter.namNhap ? this.searchFilter.namNhap : null,
           "ngayQd": null,
           "orderBy": null,
