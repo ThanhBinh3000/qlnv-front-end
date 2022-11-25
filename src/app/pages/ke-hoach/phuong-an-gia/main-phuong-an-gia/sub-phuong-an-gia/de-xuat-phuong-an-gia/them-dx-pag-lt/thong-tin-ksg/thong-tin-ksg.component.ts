@@ -43,6 +43,7 @@ export class ThongTinKsgComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.vat)
     this.emitDataTable()
     this.updateEditCache()
   }

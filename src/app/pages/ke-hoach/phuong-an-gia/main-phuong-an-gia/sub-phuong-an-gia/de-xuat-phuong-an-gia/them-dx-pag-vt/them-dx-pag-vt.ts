@@ -101,7 +101,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         qdCtKhNam: [null],
         soCanCu: [null],
         maPphapXdg: [null, [Validators.required]],
-        loaiHangXdg: []
+        loaiHangXdg: [],
+        vat:  [5]
       }
     );
     this.STATUS = STATUS

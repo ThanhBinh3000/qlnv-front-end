@@ -556,11 +556,11 @@
     <nz-tab [nzTitle]="'Thông tin khảo sát giá'" *ngIf="isGiaMuaToiDa">
       <nz-card class="mt16 p-lr16 card-table pd-10">
         <span class="sub-title mb-10">KẾT QUẢ KHẢO SÁT GIÁ THỊ TRƯỜNG</span>
-        <app-thong-tin-ksg *ngIf="dataTableKsGia || !idInput" [vat]="formData.value.vat / 100 ? formData.value.vat : 0 " [isTableKetQua]="true" [listCloaiVthh]="listCloaiVthh" [(dataTable)]="dataTableKsGia"
+        <app-thong-tin-ksg *ngIf="dataTableKsGia || !idInput" [vat]="formData.value.vat  ? formData.value.vat / 100 : 0 " [isTableKetQua]="true" [listCloaiVthh]="listCloaiVthh" [(dataTable)]="dataTableKsGia"
                            [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'">
         </app-thong-tin-ksg>
         <span class="sub-title mb-10">KẾT QUẢ THẨM ĐỊNH GIÁ</span>
-        <app-thong-tin-ksg *ngIf="dataTableKsGia || !idInput" [vat]="formData.value.vat / 100 ? formData.value.vat : 0 "  [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"
+        <app-thong-tin-ksg *ngIf="dataTableKsGia || !idInput" [vat]="formData.value.vat ? formData.value.vat/ 100  : 0 "  [isTableKetQua]="false" [(dataTable)]="dataTableKqGia"
                            [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"></app-thong-tin-ksg>
       </nz-card>
     </nz-tab>
@@ -686,12 +686,12 @@
           </div>
         </form>
         <span class="sub-title mb-10">GIÁ THỊ TRUỜNG</span>
-        <app-thong-tin-ksg [vat]="formData.value.vat ? formData.value.vat/100 : 0 "  *ngIf="!idInput || dataTableKsGia" [isTableKetQua]="true"
+        <app-thong-tin-ksg [vat]="formData.value.vat ? formData.value.vat / 100 : 0 "  *ngIf="!idInput || dataTableKsGia" [isTableKetQua]="true"
                            [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"
                            [listCloaiVthh]="listCloaiVthh" [(dataTable)]="dataTableKsGia">
         </app-thong-tin-ksg>
         <span class="sub-title mb-10">GIÁ CỦA SỞ TÀI CHÍNH</span>
-        <app-thong-tin-ksg [vat]="formData.value.vat ? formData.value.vat/100 : 0 "   *ngIf="!idInput || dataTableKqGia" [isTableKetQua]="false"
+        <app-thong-tin-ksg [vat]="formData.value.vat ? formData.value.vat / 100 : 0 "   *ngIf="!idInput || dataTableKqGia" [isTableKetQua]="false"
                            [isVat]="formData.value.loaiGia == 'LG01' || formData.value.loaiGia == 'LG03'"
                            [(dataTable)]="dataTableKqGia">
         </app-thong-tin-ksg>
