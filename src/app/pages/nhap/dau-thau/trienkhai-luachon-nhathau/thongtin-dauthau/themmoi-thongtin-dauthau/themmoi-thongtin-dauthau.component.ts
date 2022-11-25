@@ -486,4 +486,23 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     }
   }
 
+  expandSet2 = new Set<number>();
+  onExpandChange2(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet2.add(id);
+    } else {
+      this.expandSet2.delete(id);
+    }
+  }
+
+
+  expandSet3 = new Set<number>();
+  onExpandChange3(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet3.add(id);
+    } else {
+      this.expandSet3.delete(id);
+    }
+  }
+
 }

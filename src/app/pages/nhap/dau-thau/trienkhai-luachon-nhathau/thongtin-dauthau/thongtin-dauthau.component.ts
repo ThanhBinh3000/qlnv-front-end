@@ -182,11 +182,12 @@ export class ThongtinDauthauComponent implements OnInit {
 
   redirectToChiTiet(data) {
     // VẬt tư
-    if (this.loaiVthh.startsWith('02')) {
-      this.selectedId = data.hhQdKhlcntHdr.id;
-    } else {
-      this.selectedId = data.id;
-    }
+    // if (this.loaiVthh.startsWith('02')) {
+    //   this.selectedId = data.hhQdKhlcntHdr.id;
+    // } else {
+    //   this.selectedId = data.id;
+    // }
+    this.selectedId = data.id;
     this.isDetail = true;
   }
 

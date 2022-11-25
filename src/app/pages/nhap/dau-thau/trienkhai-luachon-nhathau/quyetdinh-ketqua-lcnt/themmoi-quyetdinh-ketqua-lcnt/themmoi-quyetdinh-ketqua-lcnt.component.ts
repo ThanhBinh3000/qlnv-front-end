@@ -67,7 +67,7 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
         trichYeu: [null,],
         soQdPdKhlcnt: ['', [Validators.required]],
         idQdPdKhlcnt: ['', [Validators.required]],
-        idQdPdKhlcntDtl: ['', [Validators.required]],
+        idQdPdKhlcntDtl: [''],
         ghiChu: [null,],
         trangThai: ['00'],
         tenTrangThai: ['Dự thảo'],
@@ -217,7 +217,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
           limit: this.globals.prop.MAX_INTERGER,
           page: 0,
         },
-        loaiVthh: this.loaiVthh
+        loaiVthh: this.loaiVthh,
+        trangThai: STATUS.BAN_HANH,
+        lastest: 1
       };
     } else {
       body = {
@@ -235,9 +237,9 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     let res = await this.thongTinDauThauService.search(body);
     this.listQdPdKhlcnt = res.data.content.filter(item => isEmpty(item.soQdPdKqLcnt));
     this.listQdPdKhlcnt.forEach(element => {
-      element.soQdPdKhlcnt = element.hhQdKhlcntHdr.soQd;
-      element.tenCloaiVthh = element.hhQdKhlcntHdr.tenCloaiVthh;
-      element.tenLoaiVthh = element.hhQdKhlcntHdr.tenLoaiVthh;
+      element.soQdPdKhlcnt = element.hhQdKhlcntHdr?.soQd;
+      element.tenCloaiVthh = element.hhQdKhlcntHdr?.tenCloaiVthh;
+      element.tenLoaiVthh = element.hhQdKhlcntHdr?.tenLoaiVthh;
     });
 
     const modalQD = this.modal.create({
@@ -256,8 +258,8 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          soQdPdKhlcnt: data.hhQdKhlcntHdr.soQd,
-          idQdPdKhlcnt: data.hhQdKhlcntHdr.id,
+          soQdPdKhlcnt: data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.soQd : data.soQd,
+          idQdPdKhlcnt: data.hhQdKhlcntHdr ? data.hhQdKhlcntHdr.id : data.id,
           idQdPdKhlcntDtl: this.loaiVthh.startsWith('02') ? null : data.id,
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh
