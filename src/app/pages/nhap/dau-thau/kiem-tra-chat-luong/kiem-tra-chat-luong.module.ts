@@ -19,6 +19,7 @@ import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-
 import { QuanLyPhieuKiemNghiemChatLuongComponent } from './quan-ly-phieu-kiem-nghiem-chat-luong/quan-ly-phieu-kiem-nghiem-chat-luong.component';
 import { ThemMoiPhieuKiemNghiemChatLuongComponent } from './quan-ly-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component';
 import { ThanhphanLaymauComponent } from './quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/thanhphan-laymau/thanhphan-laymau.component';
+import { ThemMoHoSoKyThuatComponent } from './ho-so-ky-thuat/them-mo-ho-so-ky-thuat/them-mo-ho-so-ky-thuat.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { ThanhphanLaymauComponent } from './quan-ly-bien-ban-lay-mau/them-moi-bi
     QuanLyPhieuKiemNghiemChatLuongComponent,
     ThemMoiPhieuKiemNghiemChatLuongComponent,
     ThanhphanLaymauComponent,
+    ThemMoHoSoKyThuatComponent,
   ],
   imports: [
     CommonModule,
