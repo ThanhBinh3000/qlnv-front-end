@@ -82,7 +82,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         giaDng: [],
         giaDngVat: [],
         trangThaiTh: [],
-        trangThaiTt: []
+        trangThaiTt: [],
+        tenTrangThaiTh: ['Chưa tạo tờ trình'],
       }
     );
     this.formTraCuu = this.fb.group(
@@ -130,7 +131,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         cloaiVthh: data.cloaiVthh,
         maDvis: data.maDvis,
         ngayDx: [data.ngayDxTu, data.ngayDxDen],
-        loaiGia: data.loaiGia,
+        loaiGia: data.loaiGia
       });
       this.bindingDataTongHop(res.data, null)
     }
@@ -280,7 +281,8 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       giaDng: giaDng,
       giaDngVat: giaDngVat,
       trangThaiTh: data.trangThaiTh,
-      trangThaiTt: data.trangThaiTt
+      trangThaiTt: data.trangThaiTt.tenTrangThaiTh,
+      tenTrangThaiTh: data.tenTrangThaiTh,
     })
     this.dataTable = data.pagChiTiets;
   }

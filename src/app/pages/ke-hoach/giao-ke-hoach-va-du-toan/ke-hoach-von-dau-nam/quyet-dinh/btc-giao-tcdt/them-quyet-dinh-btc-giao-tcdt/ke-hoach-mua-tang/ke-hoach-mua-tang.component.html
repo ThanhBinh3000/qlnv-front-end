@@ -126,14 +126,14 @@
           </td>
           <td>
             <nz-input-group>
-              <nz-input-number (ngModelChange)="calcularTongTien(dataEdit[idx].data)" [nzDisabled]="!isView"
-                [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [nzMin]="0" [nzStep]="0.1" [nzParser]="globals.parserInput">
+              <nz-input-number (change)="calcularTongTien(dataEdit[idx].data)" [nzDisabled]="!isView"
+                [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [nzMin]="0" [nzParser]="globals.parser">
               </nz-input-number>
             </nz-input-group>
           </td>
           <td>
             <nz-input-group>
-              <nz-input-number (ngModelChange)="calcularTongTien(dataEdit[idx].data)" [nzStep]="0.1" [nzParser]="globals.parserInput"
+              <nz-input-number (change)="calcularTongTien(dataEdit[idx].data)" [nzStep]="0.1" [nzParser]="globals.parserInput"
                 [nzDisabled]="!isView" [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.donGia" [nzMin]="0">
               </nz-input-number>
             </nz-input-group>

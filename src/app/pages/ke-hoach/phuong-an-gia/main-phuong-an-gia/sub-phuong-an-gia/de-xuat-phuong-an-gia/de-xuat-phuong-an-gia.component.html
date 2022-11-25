@@ -112,9 +112,10 @@
                         <th class="text-center" style="width: 10%;">Số đề xuất</th>
                         <th class="text-center" style="width: 9%;">Ngày ký</th>
                         <th class="text-center" style="width: 18%;">Trích yếu</th>
-                        <th class="text-center" style="width: 15%;">Quyết định giao chỉ tiêu kế hoạch</th>
+                        <th class="text-center" style="width: 10%;">Quyết định giao chỉ tiêu kế hoạch</th>
                         <th class="text-center" style="width: 9%;">Năm kế hoạch</th>
                         <th class="text-center" style="width: 9%;">Loại hàng hóa</th>
+                        <th class="text-center" style="width: 9%;">Chủng loại hàng hóa</th>
                         <th class="text-center" style="width: 9%;">Loại giá</th>
                         <th class="text-center" style="width: 9%;">Trạng thái</th>
                         <th class="text-center" width="width: 5%;">Hành động</th>
@@ -168,6 +169,12 @@
                                     (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
                             </nz-input-group>
                         </th>
+                      <th>
+                        <nz-input-group >
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh"
+                                 (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small" />
+                        </nz-input-group>
+                      </th>
                         <th>
                             <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiGia"
@@ -200,6 +207,7 @@
                         <td *ngIf="pagType == 'LT'">{{ data.soCanCu }}</td>
                         <td>{{ data.namKeHoach }}</td>
                         <td>{{ data.tenLoaiVthh }}</td>
+                        <td>{{ data.tenCloaiVthh }}</td>
                         <td>{{ data.tenLoaiGia }}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td>

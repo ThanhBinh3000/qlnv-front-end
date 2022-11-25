@@ -21,6 +21,7 @@ export class DialogDdiemDeHangComponent implements OnInit {
 
   rowItem: DiaDiemDeHang = new DiaDiemDeHang();
   userInfo: UserLogin
+  dviTinh: string = '';
 
   constructor(
     private _modalRef: NzModalRef,

@@ -13,6 +13,7 @@ import { saveAs } from 'file-saver';
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {Globals} from "../../../../../../shared/globals";
 import {UserLogin} from "../../../../../../models/userlogin";
+import {STATUS} from "../../../../../../constants/status";
 @Component({
   selector: 'app-de-xuat-phuong-an-gia',
   templateUrl: './de-xuat-phuong-an-gia.component.html',
@@ -81,6 +82,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
     soCanCu: '',
     namKeHoach: '',
     tenLoaiVthh: '',
+    tenCloaiVthh: '',
     tenLoaiGia: '',
     tenTrangThai: '',
   };
@@ -153,6 +155,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
           // item.statusConvert = this.convertTrangThai(item.trangThai);
         });
       }
+      console.log(this.dataTable)
       this.dataTableAll = cloneDeep(this.dataTable);
     } else {
       this.dataTable = [];

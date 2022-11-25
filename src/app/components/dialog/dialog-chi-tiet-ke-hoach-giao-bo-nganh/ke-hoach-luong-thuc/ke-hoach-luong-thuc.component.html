@@ -9,7 +9,7 @@
     </thead>
     <tbody>
       <tr>
-        <td>I</td>
+        <td><strong>I</strong></td>
         <td>Lương thực tồn kho đầu kỳ (quy thóc)</td>
         <td style="text-align: right;"><strong> {{+ltThocTon + +(ltGaoTon * 2)|number: '1.0-1': 'vi_VN'}} </strong></td>
       </tr>
@@ -24,7 +24,7 @@
         <td style="text-align: right;"> {{ltGaoTon|number: '1.0-1': 'vi_VN'}} </td>
       </tr>
       <tr>
-        <td>II</td>
+        <td><strong>II</strong></td>
         <td>Lương thực xuất ra (quy thóc)</td>
         <td style="text-align: right;"><strong>{{ +ltThocXuat + +(ltGaoXuat * 2)|number: '1.0-1': 'vi_VN'}} </strong>
         </td>
@@ -52,7 +52,7 @@
         </td>
       </tr>
       <tr>
-        <td>III</td>
+        <td><strong>III</strong></td>
         <td>Lương thực mua vào (quy thóc)</td>
         <td style="text-align: right;"><strong> {{ +ltThocMua + +(ltGaoMua * 2)|number: '1.0-1': 'vi_VN'}}</strong></td>
       </tr>
@@ -81,7 +81,7 @@
         </td>
       </tr>
       <tr>
-        <td>IV</td>
+        <td><strong>IV</strong></td>
         <td>Lương thực dự trữ cuối năm (quy thóc)</td>
         <!--      <td style="text-align: right;"> {{ +ltThocDuTru + +(ltGaoDuTru * 2)|number: '1.0-1'}} </td>-->
         <td style="text-align: right;"><strong> {{(+ltThocMua + +(ltGaoMua * 2)) - (+ltThocXuat + +(ltGaoXuat * 2)) +

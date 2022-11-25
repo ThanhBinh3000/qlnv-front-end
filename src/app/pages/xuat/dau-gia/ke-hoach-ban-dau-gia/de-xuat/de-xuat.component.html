@@ -83,15 +83,16 @@
                         <th class="text-center" style="width: 7%;">Số KH/tờ trình</th>
                         <th class="text-center" style="width: 7%;">Ngày lập KH</th>
                         <th class="text-center" style="width: 7%;">Ngày duyệt KH</th>
-                        <th class="text-center" style="width: 9%;">Ngày ký</th>
+                        <th class="text-center" style="width: 5%;">Số QĐ duyệt KH bán ĐG</th>
+                        <th class="text-center" style="width: 9%;">Ngày ký QĐ</th>
                         <th class="text-center" style="width: 10%;">Trích yếu</th>
                         <th class="text-center" style="width: 10%;">Loại hàng hóa</th>
                         <th class="text-center" style="width: 12%;">Chủng loại hàng hóa</th>
                         <th class="text-center" style="width: 5%;">Số ĐV tài sản</th>
                         <th class="text-center" style="width: 5%;">SL HĐ đã ký</th>
                         <th class="text-center" style="width: 5%;">Số QĐ giao chỉ tiêu</th>
-                        <th class="text-center" style="width: 5%;">Số QĐ duyệt KH bán ĐG</th>
-                        <th class="text-center" style="width: 7%;">Trạng thái</th>
+                        <th class="text-center" style="width: 7%;">Trạng thái đề xuất</th>
+                        <th class="text-center" style="width: 7%;">Mã tổng hợp</th>
                         <th width="90px">Hành động</th>
                     </tr>
                     <tr class="search-table">
@@ -126,6 +127,12 @@
                             <ng-template #suffixTemplateInfo123>
                                 <i nz-icon nzType="calendar"></i>
                             </ng-template>
+                        </th>
+                        <th>
+                            <nz-input-group>
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
+                                    (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small" />
+                            </nz-input-group>
                         </th>
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo123">
@@ -173,17 +180,19 @@
                                     (input)="filterInTable('soQdCtieu',filterTable.soQdCtieu)" size="small" />
                             </nz-input-group>
                         </th>
-                        <th>
-                            <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdPd"
-                                    (input)="filterInTable('soQdPd',filterTable.soQdPd)" size="small" />
-                            </nz-input-group>
-                        </th>
+
                         <th>
                             <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm"
                                     [(ngModel)]="filterTable.tenTrangThai"
                                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
+                            </nz-input-group>
+                        </th>
+                        <th *ngIf="userService.isTongCuc()">
+                            <nz-input-group>
+                                <input type="text" nz-input placeholder="Tìm kiếm" ngDefaultControl
+                                    [(ngModel)]="filterTable.tenTrangThaiTh"
+                                    (input)="filterInTable('tenTrangThaiTh',filterTable.tenTrangThaiTh)" size="small" />
                             </nz-input-group>
                         </th>
                         <th>
@@ -201,6 +210,7 @@
                         <td>{{ data.soDxuat }}</td>
                         <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
+                        <td>{{ data.soQdPd}}</td>
                         <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trichYeu }}</td>
                         <td>{{ data.tenLoaiVthh }}</td>
@@ -208,8 +218,8 @@
                         <td>{{ data.soDviTsan}}</td>
                         <td>{{ data.slHdDaKy}}</td>
                         <td>{{ data.soQdCtieu}}</td>
-                        <td>{{ data.soQdPd}}</td>
                         <td>{{ data.tenTrangThai }}</td>
+                        <td *ngIf="userService.isTongCuc()">{{ data.maThop == null? data.tenTrangThaiTh: data.maThop}}
                         <td class="text-left">
                             <a (click)="detail(data)">
                                 <i class="fa fa-eye"></i>

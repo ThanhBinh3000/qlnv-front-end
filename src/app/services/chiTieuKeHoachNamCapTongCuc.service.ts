@@ -1,10 +1,10 @@
-import { ResponseData } from './../interfaces/response';
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { BaseService } from './base.service';
-import { Observable } from 'rxjs';
-import { TonKhoDauNamLuongThuc } from '../models/ThongTinChiTieuKHNam';
+import {ResponseData} from './../interfaces/response';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {BaseService} from './base.service';
+import {Observable} from 'rxjs';
+import {TonKhoDauNamLuongThuc} from '../models/ThongTinChiTieuKHNam';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +18,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   timKiem(body: any): Promise<any> {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam?`;
+    // let url_ = `http://localhost:3333/chi-tieu-ke-hoach-nam?`;
     if (body.maDvi)
       url_ += 'donViId=' + encodeURIComponent('' + body.donViId) + '&';
     if (body.donViId)
@@ -53,6 +54,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   loadThongTinChiTieuKeHoachNam(id: number): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/${id}`;
+    // const url_ = `http://localhost:3333/chi-tieu-ke-hoach-nam/${id}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 
@@ -70,7 +72,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/export/list`;
-    return this.httpClient.post(url, body, { responseType: 'blob' });
+    return this.httpClient.post(url, body, {responseType: 'blob'});
   }
 
   deleteData(id: any): Promise<any> {
@@ -80,6 +82,7 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   themMoiChiTieuKeHoach(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam`;
+    // const url = `http://localhost:3333/chi-tieu-ke-hoach-nam`;
     return this.httpClient.post(url, body).toPromise();
   }
 
@@ -92,18 +95,22 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
     const url = `${environment.SERVICE_API}/qlnv-kho/kt-tinhtrang-hienthoi/thong-tin`;
     return this.httpClient.post(url, body).toPromise();
   }
+
   downloadFile(): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/download/import-template`;
-    return this.httpClient.post(url, null, { responseType: 'blob' });
+    return this.httpClient.post(url, null, {responseType: 'blob'});
   }
+
   downloadFileKeHoach(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}/qlnv-core/file/download`;
-    return this.httpClient.post(url, body, { responseType: 'blob' });
+    return this.httpClient.post(url, body, {responseType: 'blob'});
   }
+
   deleteMultiple(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/delete/multiple`;
     return this.httpClient.post(url, body).toPromise();
   }
+
   getCountChiTieu(): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/count`;
     return this.httpClient.get(url).toPromise();

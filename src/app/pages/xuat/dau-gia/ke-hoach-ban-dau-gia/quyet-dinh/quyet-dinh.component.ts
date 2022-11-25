@@ -6,11 +6,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { UserService } from './../../../../../services/user.service';
-import { DieuChinhQuyetDinhPdKhmttService } from './../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/dieuchinh-khmtt/DieuChinhQuyetDinhPdKhmtt.service';
 import { Globals } from './../../../../../shared/globals';
 import { MESSAGE } from 'src/app/constants/message';
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
+import { QuyetDinhPdKhBdgService } from './../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 
 @Component({
   selector: 'app-quyet-dinh',
@@ -36,13 +36,16 @@ export class QuyetDinhComponent implements OnInit {
 
   filterTable: any = {
     namKh: '',
-    soQdDc: '',
-    ngayKyDc: '',
-    soQdDcGoc: '',
+    soQdPd: '',
+    ngayKyQd: '',
     trichYeu: '',
+    soDxuat: '',
+    maThop: '',
     tenLoaiVthh: '',
     tenCloaiVthh: '',
-    tenTrangThai: '',
+    soDviTsan: '',
+    slHdDaKy: '',
+    tenTrangThai:'',
   };
 
   allChecked = false;
@@ -60,7 +63,7 @@ export class QuyetDinhComponent implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
-    private DieuChinhQuyetDinhPdKhmttService: DieuChinhQuyetDinhPdKhmttService,
+    private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
     public globals: Globals,
   ) { }
 
@@ -104,7 +107,7 @@ export class QuyetDinhComponent implements OnInit {
       },
       maDvi: this.userInfo.MA_DVI
     };
-    let res = await this.DieuChinhQuyetDinhPdKhmttService.search(body);
+    let res = await this.quyetDinhPdKhBdgService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -224,7 +227,7 @@ export class QuyetDinhComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.DieuChinhQuyetDinhPdKhmttService.deleteMuti({ idList: dataDelete });
+            let res = await this.quyetDinhPdKhBdgService.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -264,7 +267,7 @@ export class QuyetDinhComponent implements OnInit {
             id: item.id,
             maDvi: '',
           };
-          this.DieuChinhQuyetDinhPdKhmttService.delete(body).then(async () => {
+          this.quyetDinhPdKhBdgService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
@@ -293,7 +296,7 @@ export class QuyetDinhComponent implements OnInit {
           namKhoach: this.searchFilter.namKh,
 
         };
-        this.DieuChinhQuyetDinhPdKhmttService
+        this.quyetDinhPdKhBdgService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),

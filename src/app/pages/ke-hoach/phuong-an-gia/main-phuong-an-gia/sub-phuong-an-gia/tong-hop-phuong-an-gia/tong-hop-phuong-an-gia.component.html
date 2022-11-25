@@ -99,7 +99,7 @@
                         <th class="text-center" style="width: 7%;">Loại giá</th>
                         <th class="text-center" style="width: 9%;">Trạng thái tổng hợp</th>
                         <th class="text-center" style="width: 9%;">Mã tờ trình</th>
-                        <th class="text-center" style="width: 7%;">Trạng thái</th>
+                        <th class="text-center" style="width: 7%;">Trạng thái tờ trình</th>
                         <th class="text-center" width="width: 5%;">Hành động</th>
                     </tr>
                     <tr class="header-row search">
@@ -198,7 +198,7 @@
                         <td><a class="link" (click)="viewDetail(data.id, true,false)">{{ data.soToTrinh }}</a></td>
                         <td>{{ data.soToTrinh ? data.tenTrangThaiTt : '' }}</td>
                         <td>
-                            <a (click)="viewDetail(data.id, true,true)" *ngIf="!(data.trangThaiTh == STATUS.CHUA_TAO_TT || data.trangThaiTt == STATUS.TU_CHOI_LDV || data.trangThaiTt == STATUS.DU_THAO)">
+                            <a (click)="viewDetail(data.id, true,true)" *ngIf="!(data.trangThaiTt == STATUS.TU_CHOI_LDV)">
                                 <i class="fa fa-eye"></i>
                             </a>
                             <a *ngIf="data.trangThaiTh == STATUS.CHUA_TAO_TT || data.trangThaiTt == STATUS.TU_CHOI_LDV || data.trangThaiTt == STATUS.DU_THAO" (click)="viewDetail(data.id, false,false)">

@@ -13,6 +13,9 @@ import {NzModalService} from "ng-zorro-antd/modal";
 })
 export class ThongTinKsgComponent implements OnInit {
   @Input()
+  vat: any;
+
+  @Input()
   isTableKetQua: boolean;
 
   @Input()
@@ -40,6 +43,7 @@ export class ThongTinKsgComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.vat)
     this.emitDataTable()
     this.updateEditCache()
   }
@@ -58,13 +62,14 @@ export class ThongTinKsgComponent implements OnInit {
     if(!this.dataTable){
       this.dataTable=[];
     }
+    this.rowItem.donGiaVat = this.rowItem.donGia * this.vat +  this.rowItem.donGia
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new ThongTinKhaoSatGia();
     this.emitDataTable();
     this.updateEditCache()
   }
 
-  getNameFile(event?: any, tableName?: string, item?: FileDinhKem) {
+  getNameFile(event?: any, tableName?: string, item?: FileDinhKem, type? : any) {
     const element = event.currentTarget as HTMLInputElement;
     const fileList: FileList | null = element.files;
     if (fileList) {
@@ -81,13 +86,24 @@ export class ThongTinKsgComponent implements OnInit {
             item.fileUrl = resUpload.url;
           }
           else {
-            if (!this.rowItem.fileDinhKem) {
-              this.rowItem.fileDinhKem = new FileDinhKem();
+            if (!type) {
+              if (!this.rowItem.fileDinhKem ) {
+                this.rowItem.fileDinhKem = new FileDinhKem();
+              }
+              this.rowItem.fileDinhKem.fileName = resUpload.filename;
+              this.rowItem.fileDinhKem.fileSize = resUpload.size;
+              this.rowItem.fileDinhKem.fileUrl = resUpload.url;
+              this.rowItem.fileDinhKem.idVirtual = new Date().getTime();
+            } else {
+              if (!type.fileDinhKem ) {
+                type.fileDinhKem  = new FileDinhKem();
+              }
+              type.fileDinhKem.fileName = resUpload.filename;
+              type.fileDinhKem.fileSize = resUpload.size;
+              type.fileDinhKem.fileUrl = resUpload.url;
+              type.fileDinhKem.idVirtual = new Date().getTime();
             }
-            this.rowItem.fileDinhKem.fileName = resUpload.filename;
-            this.rowItem.fileDinhKem.fileSize = resUpload.size;
-            this.rowItem.fileDinhKem.fileUrl = resUpload.url;
-            this.rowItem.fileDinhKem.idVirtual = new Date().getTime();
+
           }
         });
     }
@@ -132,6 +148,7 @@ export class ThongTinKsgComponent implements OnInit {
   }
 
   saveEdit(idx: number): void {
+    this.dataEdit[idx].data.donGiaVat =this.dataEdit[idx].data.donGia * this.vat + this.dataEdit[idx].data.donGia
     Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
     this.dataEdit[idx].edit = false;
   }
@@ -139,9 +156,8 @@ export class ThongTinKsgComponent implements OnInit {
     this.dataEdit[stt].edit = true;
   }
   cancelEdit(stt: number): void {
-    const index = this.dataTable.findIndex(item => item.stt === stt);
     this.dataEdit[stt] = {
-      data: { ...this.dataTable[index] },
+      data: { ...this.dataTable[stt] },
       edit: false
     };
   }
