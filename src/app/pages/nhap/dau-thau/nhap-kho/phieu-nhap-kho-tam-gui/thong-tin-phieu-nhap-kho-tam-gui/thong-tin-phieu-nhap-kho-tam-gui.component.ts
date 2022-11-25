@@ -17,6 +17,10 @@ import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienTh
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {
+  DialogQuyetDinhGiaoChiTieuComponent
+} from "../../../../../../components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component";
 
 @Component({
   selector: 'app-thong-tin-phieu-nhap-kho-tam-gui',
@@ -53,6 +57,8 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
   detailHopDong: any = {};
   listFileDinhKem: any[] = [];
   listHopDong: any[] = [];
+  formData: FormGroup;
+  errorInputRequired: string = 'Dữ liệu không được để trống.';
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -65,7 +71,12 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
     private phieuNhapKhoTamGuiService: PhieuNhapKhoTamGuiService,
     private thongTinHopDongService: ThongTinHopDongService,
     public globals: Globals,
-  ) { }
+    private fb : FormBuilder
+  ) {
+    this.formData = this.fb.group({
+      namKeHoach: []
+    })
+  }
 
   async loadDiemKho() {
     let body = {
@@ -125,18 +136,13 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.create.dvt = "Tấn";
       this.userInfo = this.userService.getUserLogin();
-      this.detail.trangThai = this.globals.prop.NHAP_DU_THAO;
-      this.detail.tenTrangThai = 'Dự thảo';
       this.detail.maDonVi = this.userInfo.MA_DVI;
-      this.detail.ngayTaoPhieu = dayjs().format('YYYY-MM-DD');
-      this.detail.chiTiets = [];
       await Promise.all([
-        this.loadDiemKho(),
-        this.loadSoQuyetDinh(),
+        // this.loadDiemKho(),
+        // this.loadSoQuyetDinh(),
       ]);
-      await this.loadChiTiet(this.id);
+      // await this.loadChiTiet(this.id);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -494,38 +500,7 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
   async save(isOther: boolean) {
     this.spinner.show();
     try {
-      let body = {
-        "chiTiets": [
-          {
-            "donGia": this.chiTietHopDong.donGia,
-            "donViTinh": this.chiTietHopDong.donViTinh,
-            "maSo": null,
-            "phieuNkTgId": null,
-            "soLuongChungTu": this.chiTietHopDong.soLuongChungTu,
-            "soLuongThucNhap": this.chiTietHopDong.soLuongThucNhap,
-            "stt": null,
-            "thanhTien": this.chiTietHopDong.soLuongThucNhap * this.chiTietHopDong.donGia,
-            "vthh": this.chiTietHopDong.vthh
-          }
-        ],
-        "co": this.detail.co,
-        "fileDinhKems": this.listFileDinhKem,
-        "id": this.id,
-        "loaiVthh": this.typeVthh,
-        "maDiemKho": this.detail.maDiemKho,
-        "maNganKho": this.detail.maNganKho,
-        "maNganLo": this.detail.maNganLo,
-        "maNhaKho": this.detail.maNhaKho,
-        "ngayNhapKho": this.detail.ngayNhapKho ? dayjs(this.detail.ngayNhapKho).format("YYYY-MM-DD") : null,
-        "ngayTaoPhieu": this.detail.ngayTaoPhieu ? dayjs(this.detail.ngayTaoPhieu).format("YYYY-MM-DD") : null,
-        "nguoiGiaoHang": this.detail.nguoiGiaoHang,
-        "no": this.detail.no,
-        "qdgnvnxId": this.detail.qdgnvnxId,
-        "soPhieu": this.detail.soPhieu,
-        "thoiGianGiaoNhanHang": this.detail.thoiGianGiaoNhanHang,
-        "tongSoLuong": this.detail.tongSoLuong,
-        "tongSoTien": this.detail.tongSoTien,
-      };
+      let body = this.formData.value
       if (this.id > 0) {
         let res = await this.phieuNhapKhoTamGuiService.chinhSua(
           body,
@@ -588,20 +563,38 @@ export class ThongTinPhieuNhapKhoTamGuiComponent implements OnInit {
       let res = await this.thongTinHopDongService.loadChiTietSoHopDong(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.detailHopDong = res.data;
-        this.detail.hopDongId = this.detailHopDong.id;
-        this.detail.tenVatTuCha = this.detailHopDong.tenVthh;
-        this.detail.tenVatTu = this.detailHopDong.tenCloaiVthh;
-        this.detail.maVatTuCha = this.detailHopDong.loaiVthh;
-        this.detail.maVatTu = this.detailHopDong.cloaiVthh;
-        this.chiTietHopDong.tenCloaiVthh = this.detailHopDong.tenCloaiVthh;
-        this.chiTietHopDong.vthh = this.detailHopDong.cloaiVthh;
-        this.chiTietHopDong.donViTinh = this.detailHopDong.donViTinh;
-        this.chiTietHopDong.soLuongChungTu = this.detailHopDong.soLuong;
-        this.chiTietHopDong.donGia = this.detailHopDong.donGiaVat;
+        this.formData.patchValue({
+
+        })
       }
       else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
+  }
+
+  openDialogGiaoNvNhapHang() {
+    // if (this.idInput >= 0 && !this.isView) {
+      const modalQD = this.modal.create({
+        nzTitle: 'Số quyết định giao nhiệm vụ nhập hàng',
+        nzContent: DialogQuyetDinhGiaoChiTieuComponent,
+        nzMaskClosable: false,
+        nzClosable: false,
+        nzWidth: '900px',
+        nzFooter: null,
+        nzComponentParams: {
+          capDonVi: 2,
+        },
+      });
+      modalQD.afterClose.subscribe(async (data) => {
+        if (data) {
+          this.formData.patchValue({
+            qdGiaoChiTieuId: data ? data.id : null,
+            qdGiaoChiTieuNam: data ? data.soQuyetDinh : null,
+          });
+          this.spinner.hide();
+        }
+      });
+    // }
   }
 }

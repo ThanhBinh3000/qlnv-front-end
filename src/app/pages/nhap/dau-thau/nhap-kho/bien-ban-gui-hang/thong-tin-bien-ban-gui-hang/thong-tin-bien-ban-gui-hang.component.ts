@@ -17,6 +17,10 @@ import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { PhieuNhapKhoTamGui } from './../../../../../../models/PhieuNhapKhoTamGui';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {
+  DialogQuyetDinhGiaoChiTieuComponent
+} from "../../../../../../components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component";
 @Component({
   selector: 'app-thong-tin-bien-ban-gui-hang',
   templateUrl: './thong-tin-bien-ban-gui-hang.component.html',
@@ -42,6 +46,9 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
   listHopDong: any[] = [];
   detailHopDong: any = {};
   detailGiaoNhap: any = {};
+  errorInputRequired: string = 'Dữ liệu không được để trống.';
+  formData: FormGroup;
+  listFileDinhKem: any[] = [];
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
@@ -52,21 +59,23 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
     public globals: Globals,
     private thongTinHopDongService: ThongTinHopDongService,
     private bienBanGuiHangService: BienBanGuiHangService,
-  ) { }
+    private fb: FormBuilder,
+  ) {
+    this.formData = this.fb.group({
+      namKeHoach: []
+    })
+  }
 
   async ngOnInit() {
     this.spinner.show();
     try {
 
       this.userInfo = this.userService.getUserLogin();
-      this.bienBanGuiHang.maDvi = this.userInfo.MA_DVI;
-      this.bienBanGuiHang.trangThai = this.globals.prop.NHAP_DU_THAO;
-      this.bienBanGuiHang.tenTrangThai = 'Dự thảo';
       await Promise.all([
-        this.loadPhieuNhapKhoTamGui(),
-        this.loadSoQuyetDinh(),
+        // this.loadPhieuNhapKhoTamGui(),
+        // this.loadSoQuyetDinh(),
       ]);
-      await this.loadChiTiet(this.id);
+      // await this.loadChiTiet(this.id);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -310,34 +319,7 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
   async save(isOther: boolean) {
     this.spinner.show();
     try {
-      let body = {
-        "benGiao": this.bienBanGuiHang.benGiao,
-        "benNhan": this.bienBanGuiHang.benNhan,
-        "capDvi": this.bienBanGuiHang.capDvi,
-        "chatLuong": this.bienBanGuiHang.chatLuong,
-        "chiTiets": this.bienBanGuiHang.chiTiets,
-        "donViCungCap": this.bienBanGuiHang.donViCungCap,
-        "donViTinh": this.bienBanGuiHang.donViTinh,
-        "ghiChu": this.bienBanGuiHang.ghiChu,
-        "hopDongId": this.bienBanGuiHang.hopDongId,
-        "id": this.bienBanGuiHang.id,
-        "loaiVthh": this.bienBanGuiHang.loaiVthh,
-        "lyDoTuChoi": null,
-        "maDvi": this.bienBanGuiHang.maDvi,
-        "maVatTu": this.bienBanGuiHang.maVatTu,
-        "maVatTuCha": this.bienBanGuiHang.maVatTuCha,
-        "ngayGui": this.bienBanGuiHang.ngayGui,
-        "ngayHopDong": this.bienBanGuiHang.ngayHopDong,
-        "phieuNkTgId": this.bienBanGuiHang.phieuNkTgId,
-        "qdgnvnxId": this.bienBanGuiHang.qdgnvnxId,
-        "soBienBan": this.bienBanGuiHang.soBienBan,
-        "soLuong": this.bienBanGuiHang.soLuong,
-        "thoiGian": this.bienBanGuiHang.thoiGian,
-        "tinhTrang": this.bienBanGuiHang.tinhTrang,
-        "trachNhiemBenGiao": this.bienBanGuiHang.trachNhiemBenGiao,
-        "trachNhiemBenNhan": this.bienBanGuiHang.trachNhiemBenNhan,
-        "trangThai": this.bienBanGuiHang.trangThai
-      };
+      let body = this.formData.value
       if (this.id > 0) {
         let res = await this.bienBanGuiHangService.chinhSua(
           body,
@@ -455,4 +437,29 @@ export class ThongTinBienBanGuiHangComponent implements OnInit {
       }
     }
   }
+  openDialogGiaoNvNhapHang() {
+    // if (this.idInput >= 0 && !this.isView) {
+    const modalQD = this.modal.create({
+      nzTitle: 'Số quyết định giao nhiệm vụ nhập hàng',
+      nzContent: DialogQuyetDinhGiaoChiTieuComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        capDonVi: 2,
+      },
+    });
+    modalQD.afterClose.subscribe(async (data) => {
+      if (data) {
+        this.formData.patchValue({
+          qdGiaoChiTieuId: data ? data.id : null,
+          qdGiaoChiTieuNam: data ? data.soQuyetDinh : null,
+        });
+        this.spinner.hide();
+      }
+    });
+    // }
+  }
+
 }
