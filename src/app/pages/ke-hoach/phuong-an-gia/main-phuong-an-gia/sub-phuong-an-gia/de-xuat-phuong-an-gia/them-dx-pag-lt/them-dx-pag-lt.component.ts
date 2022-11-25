@@ -40,7 +40,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   STATUS: any;
   isGiaMuaToiDa: boolean = false;
   isVat: boolean = false;
-
+  fileDinhKem: any;
   formData: FormGroup;
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
@@ -67,7 +67,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   dataTableKsGia: any[];
 
   dataTableKqGia: any[];
-   dviTinh: string;
+  dviTinh: string;
 
 
 
@@ -155,7 +155,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin(),
       this.maDx = '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT',
       this.loadDsNam(),
-      await this.getDataChiTieu(),
+      // await this.getDataChiTieu(),
       this.loadDsLoaiGia(),
       this.loadDsPhuongAnGia(),
       this.loadDsHangHoaPag(),
@@ -224,6 +224,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.dsDiaDiemDeHang = data.diaDiemDeHangs;
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableKqGia = data.ketQuaThamDinhGia;
+      this.fileDinhKem = data.fileDinhKems;
       this.updateEditCache()
     }
   }
@@ -243,7 +244,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         );
       }
     }
-  } w
+  }
 
   async loadDsPhuongAnGia() {
     this.dsPhuongAnGia = [];
@@ -424,6 +425,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     body.ketQuaKhaoSatGiaThiTruong = this.dataTableKsGia;
     body.ketQuaThamDinhGia = this.dataTableKqGia;
     body.diaDiemDeHangs = this.dsDiaDiemDeHang;
+    body.fileDinhKems = this.fileDinhKem;
     body.type = this.type;
     body.maDvi = this.userInfo.MA_DVI
     let res

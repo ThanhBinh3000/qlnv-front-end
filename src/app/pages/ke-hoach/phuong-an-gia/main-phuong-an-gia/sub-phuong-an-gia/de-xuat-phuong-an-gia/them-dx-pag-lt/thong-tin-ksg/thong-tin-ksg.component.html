@@ -29,7 +29,7 @@
                 </nz-input-number>
             </th>
             <th>
-                <nz-input-number disabled [nzSize]="'small'" [(ngModel)]="rowItem.donGia * vat" [nzFormatter]="globals.formatter"
+                <nz-input-number disabled [nzSize]="'small'" [(ngModel)]=" rowItem.donGia + rowItem.donGia * vat" [nzFormatter]="globals.formatter"
                     [nzParser]="globals.parser">
                 </nz-input-number>
             </th>
@@ -102,7 +102,7 @@
             </nz-input-number>
           </td>
           <td>
-            <nz-input-number disabled [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia * vat" [nzFormatter]="globals.formatter"
+            <nz-input-number disabled [nzSize]="'small'" [(ngModel)]="dataEdit[idx].data.donGia * vat + dataEdit[idx].data.donGia" [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser">
             </nz-input-number>
           </td>

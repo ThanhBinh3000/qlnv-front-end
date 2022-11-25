@@ -172,7 +172,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.thueVat = res.data[0].giaTri;
     } else {
-      this.thueVat = 5;
+      this.thueVat = 5/100;
     }
   }
 
