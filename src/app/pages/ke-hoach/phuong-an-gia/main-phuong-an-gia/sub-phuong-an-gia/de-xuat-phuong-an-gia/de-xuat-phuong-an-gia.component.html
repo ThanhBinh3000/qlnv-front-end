@@ -112,7 +112,8 @@
                         <th class="text-center" style="width: 10%;">Số đề xuất</th>
                         <th class="text-center" style="width: 9%;">Ngày ký</th>
                         <th class="text-center" style="width: 18%;">Trích yếu</th>
-                        <th class="text-center" style="width: 10%;">Quyết định giao chỉ tiêu kế hoạch</th>
+                        <th class="text-center" *ngIf="type == 'GCT'" style="width: 10%;">Quyết định phê duyệt kế hoạch mua/bán
+                        </th>
                         <th class="text-center" style="width: 9%;">Năm kế hoạch</th>
                         <th class="text-center" style="width: 9%;">Loại hàng hóa</th>
                         <th class="text-center" style="width: 9%;">Chủng loại hàng hóa</th>
@@ -144,14 +145,7 @@
                                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
                             </nz-input-group>
                         </th>
-
-                      <th *ngIf="pagType == 'LT'">
-                        <nz-input-group >
-                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCanCu"
-                                 (input)="filterInTable('soCanCu',filterTable.soCanCu)" size="small" />
-                        </nz-input-group>
-                      </th>
-                        <th *ngIf="pagType == 'VT'">
+                        <th *ngIf="type == 'GCT'">
                             <nz-input-group >
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.qdCtKhNam"
                                     (input)="filterInTable('qdCtKhNam',filterTable.qdCtKhNam)" size="small" />
@@ -203,21 +197,20 @@
                         <td>{{ data.soDeXuat }}</td>
                         <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trichYeu }}</td>
-                        <td *ngIf="pagType == 'VT'">{{ data.qdCtKhNam }}</td>
-                        <td *ngIf="pagType == 'LT'">{{ data.soCanCu }}</td>
+                        <td *ngIf="type == 'GCT'">{{ data.qdCtKhNam }}</td>
                         <td>{{ data.namKeHoach }}</td>
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenCloaiVthh }}</td>
                         <td>{{ data.tenLoaiGia }}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td>
-                            <a (click)="viewDetail(data.id, true)" *ngIf="!(data.trangThai == '00' || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP)">
+                            <a (click)="viewDetail(data.id, true)" *ngIf="(!(data.trangThai == '00' || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP)) || (userService.isTongCuc() && type == 'GMTDBTT')">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="data.trangThai == '00' || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP"  (click)="viewDetail(data.id, false)">
+                            <a *ngIf="(data.trangThai == '00' || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP)  "  (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="data.trangThai == '00'" (click)="xoaItem(data)">
+                            <a *ngIf="(data.trangThai == '00')" (click)="xoaItem(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>

@@ -281,7 +281,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       giaDng: giaDng,
       giaDngVat: giaDngVat,
       trangThaiTh: data.trangThaiTh,
-      trangThaiTt: data.trangThaiTt.tenTrangThaiTh,
+      trangThaiTt: data.tenTrangThaiTh,
       tenTrangThaiTh: data.tenTrangThaiTh,
     })
     this.dataTable = data.pagChiTiets;

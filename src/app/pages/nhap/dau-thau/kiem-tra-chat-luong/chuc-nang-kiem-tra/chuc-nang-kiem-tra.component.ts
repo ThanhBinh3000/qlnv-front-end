@@ -9,12 +9,14 @@ import { Globals } from 'src/app/shared/globals';
 export class ChucNangKiemTraComponent implements OnInit {
   @Input() typeVthh: string;
 
-  constructor(public userService: UserService, public globals: Globals) {}
+  constructor(public userService: UserService, public globals: Globals) { }
 
   ngOnInit() {
     console.log(this.typeVthh);
+    this.tabSelected = this.typeVthh.startsWith('02') ? 3 : 0;
   }
-  tabSelected = 0;
+
+  tabSelected: number = 0;
   selectTab(tab) {
     this.tabSelected = tab;
   }
