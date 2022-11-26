@@ -152,10 +152,8 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
-          // item.statusConvert = this.convertTrangThai(item.trangThai);
         });
       }
-      console.log(this.dataTable)
       this.dataTableAll = cloneDeep(this.dataTable);
     } else {
       this.dataTable = [];

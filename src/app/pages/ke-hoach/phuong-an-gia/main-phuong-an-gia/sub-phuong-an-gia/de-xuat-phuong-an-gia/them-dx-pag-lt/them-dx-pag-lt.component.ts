@@ -40,7 +40,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   STATUS: any;
   isGiaMuaToiDa: boolean = false;
   isVat: boolean = false;
-  fileDinhKem: any;
+  fileDinhKem: any[] = [];
   formData: FormGroup;
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
@@ -155,11 +155,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin(),
       this.maDx = '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT',
       this.loadDsNam(),
-      // await this.getDataChiTieu(),
       this.loadDsLoaiGia(),
       this.loadDsPhuongAnGia(),
       this.loadDsHangHoaPag(),
-      // this.loadDsQdPduyetKhlcnt(),
       this.loadDsVthh(),
       this.getDataDetail(this.idInput)
     ])
@@ -168,9 +166,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   async loadDsQdPduyetKhlcnt() {
     if (this.type == 'GCT') {
       let body = {
-        namKhoach: this.formData.value.namKeHoach,
+        namKeHoach: this.formData.value.namKeHoach,
         maDvi: this.userInfo.MA_DVI,
         loaiVthh : this.formData.value.loaiVthh,
+        cloaiVthh : this.formData.value.cloaiVthh,
         trangThai : STATUS.BAN_HANH
       };
       let res = await this.deXuatPAGService.loadQdGiaoKhMuaBan(body);
@@ -306,6 +305,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async onChangeCloaiVthh(event) {
+    this.formData.patchValue({
+      qdCtKhNam : null
+    })
+    await this.loadDsQdPduyetKhlcnt();
     this.dviTinh = '';
     let resp = await this.danhMucService.getDetail(event);
     if (resp.msg == MESSAGE.SUCCESS) {
@@ -415,7 +418,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.fileDinhKems = this.taiLieuDinhKemList;
     if (body.soDeXuat) {
       body.soDeXuat = body.soDeXuat + this.maDx;
     } else {
@@ -425,7 +427,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     body.ketQuaKhaoSatGiaThiTruong = this.dataTableKsGia;
     body.ketQuaThamDinhGia = this.dataTableKqGia;
     body.diaDiemDeHangs = this.dsDiaDiemDeHang;
-    body.fileDinhKems = this.fileDinhKem;
+    body.fileDinhKemReqs = this.fileDinhKem;
     body.type = this.type;
     body.maDvi = this.userInfo.MA_DVI
     let res
