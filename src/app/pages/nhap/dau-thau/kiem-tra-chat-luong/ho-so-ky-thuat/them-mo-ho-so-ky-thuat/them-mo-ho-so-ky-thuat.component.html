@@ -1,14 +1,14 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
     <div class="btn-group">
-        <a type="button" class="btn btn-sub" (click)="back()">
+        <a type="button" class="btn btn-sub">
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </a>
-        <button type="button" class="btn btn-sub" (click)="print()">
+        <button type="button" class="btn btn-sub">
             <i class="icon htvbdh_tcdt_print"></i>
             <span>In</span>
         </button>
-        <button type="button" class="btn btn-sub" *ngIf="!isDisableField() && !isView" (click)="guiDuyet()">
+        <button type="button" class="btn btn-sub" *ngIf="!isDisableField() && !isView">
             <i class="icon htvbdh_tcdt_guiduyet"></i>
             <span>Lưu và gửi duyệt</span>
         </button>
@@ -23,7 +23,7 @@
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </a>
-        <button type="button" class="btn btn-sub" *ngIf="!isDisableField() && !isView" (click)="save(false)">
+        <button type="button" class="btn btn-sub" *ngIf="!isDisableField() && !isView">
             <i class="icon  htvbdh_tcdt_save"></i>
             <span>Lưu</span>
         </button>
