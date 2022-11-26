@@ -8,10 +8,12 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyBienBanChuanBiKhoService } from 'src/app/services/quanLyBienBanChuanBiKho.service';
+import { QuanLyBienBanChuanBiKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanChuanBiKho.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
@@ -22,7 +24,7 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./bien-ban-chuan-bi-kho.component.scss']
 })
 export class BienBanChuanBiKhoComponent implements OnInit {
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
   qdTCDT: string = MESSAGE.QD_TCDT;
 
   searchFilter = {
@@ -73,12 +75,13 @@ export class BienBanChuanBiKhoComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
+    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
   ) { }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (!this.typeVthh || this.typeVthh == '') {
+      if (!this.loaiVthh || this.loaiVthh == '') {
         this.isTatCa = true;
       }
       this.userInfo = this.userService.getUserLogin();
@@ -126,33 +129,39 @@ export class BienBanChuanBiKhoComponent implements OnInit {
   }
 
   async search() {
+    await this.spinner.show();
     let body = {
-      "capDvis": '3',
-      "ngayBienBanTu": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 1
-        ? dayjs(this.searchFilter.ngayBienBan[0]).format('YYYY-MM-DD')
-        : null,
-      "ngayBienBanDen": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 0
-        ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
-        : null,
-      "pageSize": this.pageSize,
-      "pageNumber": this.page,
-      "soBienBan": this.searchFilter.soBienBan,
-      "soQdNhap": this.searchFilter.soQuyetDinhNhap
+      "paggingReq": {
+        "limit": this.pageSize,
+        "page": this.page - 1
+      },
+      loaiVthh: this.loaiVthh,
+      trangThai: STATUS.BAN_HANH,
+      bienBan: ['bienBanChuanBiKho']
     };
-    let res = await this.bienBanChuanBiKhoService.timKiem(body);
+    let res = await this.quyetDinhNhapXuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
+      this.dataTable.forEach(item => {
+        if (this.userService.isChiCuc()) {
+          item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+        } else {
+          let data = [];
+          item.dtlList.forEach(item => {
+            data = [...data, ...item.listBienBanChuanBiKho];
+          })
+          item.detail = {
+            listBienBanChuanBiKho: data
+          }
+        };
+      });
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    await this.spinner.hide();
   }
 
   async changePageIndex(event) {
@@ -206,7 +215,7 @@ export class BienBanChuanBiKhoComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.bienBanChuanBiKhoService.deleteData(item.id).then((res) => {
+          this.bienBanChuanBiKhoService.delete(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -244,7 +253,7 @@ export class BienBanChuanBiKhoComponent implements OnInit {
       try {
         let body = {
           "maDonVi": this.userInfo.MA_DVI,
-          "maHangHoa": this.typeVthh,
+          "maHangHoa": this.loaiVthh,
           "maNganKho": null,
           "ngayKiemTraDenNgay": this.searchFilter.ngayBienBan && this.searchFilter.ngayBienBan.length > 1
             ? dayjs(this.searchFilter.ngayBienBan[1]).format('YYYY-MM-DD')
@@ -263,7 +272,7 @@ export class BienBanChuanBiKhoComponent implements OnInit {
           "trangThai": null
         };
         this.bienBanChuanBiKhoService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-bien-ban-chuan-bi-kho.xlsx'),
           );
@@ -299,7 +308,7 @@ export class BienBanChuanBiKhoComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.bienBanChuanBiKhoService.deleteMultiple({ ids: dataDelete });
+            let res = await this.bienBanChuanBiKhoService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -355,5 +364,14 @@ export class BienBanChuanBiKhoComponent implements OnInit {
 
   print() {
 
+  }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
   }
 }
