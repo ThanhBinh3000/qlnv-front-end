@@ -45,6 +45,11 @@ export class BaoCaoThucHienVonPhiComponent implements OnInit {
         })
     }
     selectTab(tab) {
+        if (tab == 'vanphong') {
+            this.data = {
+                tabSelected: tab,
+            }
+        }
         this.tabSelected = tab;
         this.tabList.forEach(e => {
             e.isSelected = (tab == e.code);
