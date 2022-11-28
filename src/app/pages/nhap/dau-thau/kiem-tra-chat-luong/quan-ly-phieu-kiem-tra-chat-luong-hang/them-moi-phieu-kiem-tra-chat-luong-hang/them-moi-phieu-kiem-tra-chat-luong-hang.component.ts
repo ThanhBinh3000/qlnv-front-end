@@ -156,7 +156,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends BaseComponent imp
       soPhieu: `${res}/${this.formData.get('nam').value}/KTCL-CCDTKVVP`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
-      maQhmaQhnsns: this.userInfo.DON_VI.maQhns,
+      maQhns: this.userInfo.DON_VI.maQhns,
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
     });
@@ -172,23 +172,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends BaseComponent imp
   }
 
   async loadSoQuyetDinh() {
-    let body = {
-      "maDvi": this.userInfo.MA_DVI,
-      "maVthh": this.typeVthh,
-      "paggingReq": {
-        "limit": this.globals.prop.MAX_INTERGER,
-        "page": 0
-      },
-      "trangThai": STATUS.BAN_HANH,
-      "namNhap": this.formData.get('nam').value
-    }
-    let res = await this.quyetDinhGiaoNhapHangService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.listSoQuyetDinh = data.content.filter(x => !x.loaiVthh.startsWith("02"));
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
+
   }
 
   async openDialogSoQd() {

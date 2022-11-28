@@ -12,7 +12,7 @@ import { ChiTietBienBanChuanBiKho } from 'src/app/models/BienBanChuanBiKho';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyBienBanChuanBiKhoService } from 'src/app/services/quanLyBienBanChuanBiKho.service';
+import { QuanLyBienBanChuanBiKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanChuanBiKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
@@ -644,7 +644,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent implements OnInit {
 
   async loadChiTiet(id: number) {
     if (id > 0) {
-      let res = await this.bienBanChuanBiKhoService.loadChiTiet(id);
+      let res = await this.bienBanChuanBiKhoService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detail = res.data;
@@ -783,7 +783,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent implements OnInit {
         "maDvi": this.detail.maDvi,
       };
       if (this.id > 0) {
-        let res = await this.bienBanChuanBiKhoService.sua(
+        let res = await this.bienBanChuanBiKhoService.update(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -798,7 +798,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
-        let res = await this.bienBanChuanBiKhoService.them(
+        let res = await this.bienBanChuanBiKhoService.create(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -837,7 +837,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent implements OnInit {
             trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
           };
           let res =
-            await this.bienBanChuanBiKhoService.updateStatus(
+            await this.bienBanChuanBiKhoService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -878,7 +878,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent implements OnInit {
             trangThai: trangThai,
           };
           let res =
-            await this.bienBanChuanBiKhoService.updateStatus(
+            await this.bienBanChuanBiKhoService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -917,7 +917,7 @@ export class ThongTinTongHopDeXuatNhuCauChiCucComponent implements OnInit {
             trangThai: this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP ? this.globals.prop.NHAP_TU_CHOI_TP : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
           };
           let res =
-            await this.bienBanChuanBiKhoService.updateStatus(
+            await this.bienBanChuanBiKhoService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {

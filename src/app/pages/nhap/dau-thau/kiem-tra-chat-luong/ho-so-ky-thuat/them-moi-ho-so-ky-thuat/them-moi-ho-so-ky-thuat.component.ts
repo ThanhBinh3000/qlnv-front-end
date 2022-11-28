@@ -24,14 +24,17 @@ import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/comm
 import { Globals } from 'src/app/shared/globals';
 import { BaseComponent } from "../../../../../../components/base/base.component";
 import { FormBuilder, Validators } from '@angular/forms';
-import { PAGE_SIZE_DEFAULT } from './../../../../../../constants/config';
+import { PAGE_SIZE_DEFAULT } from '../../../../../../constants/config';
+import { HelperService } from '../../../../../../services/helper.service';
+import { DatePipe } from '@angular/common';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
-  selector: 'app-them-mo-ho-so-ky-thuat',
-  templateUrl: './them-mo-ho-so-ky-thuat.component.html',
-  styleUrls: ['./them-mo-ho-so-ky-thuat.component.scss']
+  selector: 'app-them-moi-ho-so-ky-thuat',
+  templateUrl: './them-moi-ho-so-ky-thuat.component.html',
+  styleUrls: ['./them-moi-ho-so-ky-thuat.component.scss']
 })
-export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit {
+export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit {
 
   @Input() id: number;
   @Input() isView: boolean;
@@ -65,32 +68,6 @@ export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit 
   listDaiDienCuc: any[] = [];
   listDaiDienChiCuc: any[] = [];
   listDaiDienDonVi: any[] = [];
-  listDaiDien: any[] = [
-    {
-      "daiDien": null,
-      "hoSoKyThuatId": null,
-      "id": null,
-      "idTemp": 1,
-      "loaiDaiDien": '2',
-      "stt": null
-    },
-    {
-      "daiDien": null,
-      "hoSoKyThuatId": null,
-      "id": null,
-      "idTemp": 1,
-      "loaiDaiDien": '3',
-      "stt": null
-    },
-    {
-      "daiDien": null,
-      "hoSoKyThuatId": null,
-      "id": null,
-      "idTemp": 1,
-      "loaiDaiDien": '0',
-      "stt": null
-    },
-  ];
   fileDinhKem: any[] = [];
   listCanCu: any[] = [];
   listFileDinhKem: any[] = [];
@@ -99,6 +76,8 @@ export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit 
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
+  datePipe = new DatePipe('en-US');
+  STATUS = STATUS;
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
@@ -115,6 +94,7 @@ export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit 
     private quanLyBienBanBanGiaoService: QuanLyBienBanBanGiaoService,
     public globals: Globals,
     private fb: FormBuilder,
+    private helperService: HelperService,
   ) {
     super();
     this.formData = this.fb.group({
@@ -152,7 +132,6 @@ export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit 
         this.loadSoQuyetDinh(),
       ]);
       await this.loadChiTiet(this.id);
-      this.loadDaiDien();
       this.detail.loaiVthh = this.typeVthh;
       this.detail.tenVthh = "Vật tư";
       this.spinner.hide();
@@ -161,6 +140,10 @@ export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit 
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
+
+  quayLai() {
+    this.showListEvent.emit();
   }
 
   isDisableField() {
@@ -213,37 +196,6 @@ export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit 
     }
   }
 
-  loadDaiDien() {
-    if (this.listDaiDien && this.listDaiDien.length > 0) {
-      this.listDaiDienCuc = this.listDaiDien.filter(x => x.loaiDaiDien == this.capCuc);
-      this.listDaiDienChiCuc = this.listDaiDien.filter(x => x.loaiDaiDien == this.capChiCuc);
-      this.listDaiDienDonVi = this.listDaiDien.filter(x => x.loaiDaiDien == this.capDonVi);
-    }
-  }
-
-  addDaiDien(type) {
-    if (!this.listDaiDien) {
-      this.listDaiDien = [];
-    }
-    let item = {
-      "daiDien": null,
-      "hoSoKyThuatId": this.id,
-      "id": null,
-      "idTemp": new Date().getTime(),
-      "loaiDaiDien": type,
-      "stt": null
-    }
-    this.listDaiDien = [
-      item,
-      ...this.listDaiDien
-    ]
-    this.loadDaiDien();
-  }
-
-  xoaDaiDien(item) {
-    this.listDaiDien = this.listDaiDien.filter(x => x.idTemp != item.idTemp);
-    this.loadDaiDien();
-  }
 
   async loadBanGiaoMau() {
     let body = {
@@ -354,10 +306,6 @@ export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit 
           if (this.detail.bienBanGiaoMauId) {
             this.detail.bienBanGiaoMauId = +this.detail.bienBanGiaoMauId;
           }
-          if (this.detail.chiTiets && this.detail.chiTiets.length > 0) {
-            this.listDaiDien = this.detail.chiTiets;
-            this.loadDaiDien();
-          }
           if (this.detail.fdkCanCus) {
             this.listCanCu = this.detail.fdkCanCus;
           }
@@ -368,45 +316,18 @@ export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit 
         }
       }
     }
+    else {
+      let id = await this.userService.getId("HO_SO_KY_THUAT_SEQ")
+      this.formData.patchValue({
+        id: id+"/"+dayjs().get('year')+"/HSKT-CDTKVVP",
+        tenDvi: this.userInfo.TEN_DVI,
+        maDvi: this.userInfo.MA_DVI,
+        diaChiDvi: this.userInfo.DON_VI.diaChi,
+      })
+    }
   }
 
-  guiDuyet() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: async () => {
-        this.spinner.show();
-        try {
-          await this.save(true);
-          let body = {
-            id: this.id,
-            lyDoTuChoi: null,
-            trangThai: this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC,
-          };
-          let res =
-            await this.hoSoKyThuatService.updateStatus(
-              body,
-            );
-          if (res.msg == MESSAGE.SUCCESS) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
-          } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-          }
-          this.spinner.hide();
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
+
 
   pheDuyet() {
     let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
@@ -435,7 +356,6 @@ export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit 
             );
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -474,7 +394,6 @@ export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit 
             );
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-            this.back();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
@@ -488,95 +407,94 @@ export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit 
     });
   }
 
-  huyBo() {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn hủy bỏ các thao tác đang làm?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.back();
-      },
-    });
-  }
 
-  back() {
-    this.showListEvent.emit();
-  }
-
-  async save(isOther: boolean) {
-    this.spinner.show();
-    try {
-      let body = {
-        "bienBanGiaoMauId": this.detail.bienBanGiaoMauId,
-        "capDvi": null,
-        "cbtlCanHoanThien": null,
-        "chiTiets": this.listDaiDien,
-        "diaDiemKiemTra": this.detail.diaDiemKiemTra,
-        "donViCungCap": this.detail.donViCungCap,
-        "fdkCanCus": this.listCanCu,
-        "fileDinhKemReqs": this.listFileDinhKem,
-        "hopDongId": this.detail.hopDongId,
-        "id": this.id,
-        "ketLuan": this.detail.ketLuan,
-        "loaiVthh": this.detail.loaiVthh,
-        "maDvi": this.detail.maDvi,
-        "maVatTu": this.detail.maVatTu,
-        "maVatTuCha": this.detail.maVatTuCha,
-        "ngayHopDong": this.detail?.ngayHopDong ? dayjs(this.detail?.ngayHopDong).format('YYYY-MM-DD') : null,
-        "ngayKiemTra": this.detail.ngayKiemTra,
-        "qdgnvnxId": this.detail.qdgnvnxId,
-        "soBienBan": this.detail.soBienBan,
-        "soLuongThucNhap": this.detail.soLuongThucNhap,
-        "tgBsTruocNgay": null,
-        "tgHtTruocNgay": null,
-        "thoiGianNhap": this.detail?.thoiGianNhap ? dayjs(this.detail?.thoiGianNhap).format('YYYY-MM-DD') : null,
-        "vbtlCanBoSung": null
-      }
-      if (this.id > 0) {
-        let res = await this.hoSoKyThuatService.sua(
-          body,
-        );
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
-            this.notification.success(
-              MESSAGE.SUCCESS,
-              MESSAGE.UPDATE_SUCCESS,
-            );
-            this.back();
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-      } else {
-        let res = await this.hoSoKyThuatService.them(
-          body,
-        );
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (!isOther) {
-            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-            this.back();
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-      }
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
 
   thongTinTrangThai(trangThai: string): string {
     return thongTinTrangThaiNhap(trangThai);
   }
 
-  print() {
+  async save(isGuiDuyet?) {
 
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+      return;
+    }
+    let body = this.formData.value;
+    body.ngayTao = this.datePipe.transform(body.ngayTao, 'yyyy-MM-dd');
+    body.fileDinhkems = this.fileDinhKem;
+    let res = null;
+    if (this.formData.get('id').value) {
+      res = await this.hoSoKyThuatService.update(body);
+    } else {
+      res = await this.hoSoKyThuatService.create(body);
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (isGuiDuyet) {
+        this.id = res.data.id;
+        await this.guiDuyet();
+      } else {
+        if (this.formData.get('id').value) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          this.quayLai();
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.quayLai();
+        }
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+  async guiDuyet() {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        await this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            trangThai: '',
+          };
+          switch (this.formData.get('trangThai').value) {
+            case STATUS.TU_CHOI_LDC:
+            case STATUS.TU_CHOI_TP:
+            case STATUS.DU_THAO: {
+              body.trangThai = STATUS.CHO_DUYET_TP;
+              break;
+            }
+            case STATUS.CHO_DUYET_TP: {
+              body.trangThai = STATUS.CHO_DUYET_LDC;
+              break;
+            }
+            case STATUS.CHO_DUYET_LDC: {
+              body.trangThai = STATUS.DA_DUYET_LDC;
+              break;
+            }
+          }
+          let res = await this.hoSoKyThuatService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(
+              MESSAGE.SUCCESS,
+              MESSAGE.THAO_TAC_SUCCESS,
+            );
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          await this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          await this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 }
