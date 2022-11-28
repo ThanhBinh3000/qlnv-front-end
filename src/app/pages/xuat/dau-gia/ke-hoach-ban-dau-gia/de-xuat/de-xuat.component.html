@@ -188,7 +188,7 @@
                                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
                             </nz-input-group>
                         </th>
-                        <th *ngIf="userService.isTongCuc()">
+                        <th>
                             <nz-input-group>
                                 <input type="text" nz-input placeholder="Tìm kiếm" ngDefaultControl
                                     [(ngModel)]="filterTable.tenTrangThaiTh"
@@ -219,7 +219,7 @@
                         <td>{{ data.slHdDaKy}}</td>
                         <td>{{ data.soQdCtieu}}</td>
                         <td>{{ data.tenTrangThai }}</td>
-                        <td *ngIf="userService.isTongCuc()">{{ data.maThop == null? data.tenTrangThaiTh: data.maThop}}
+                        <td>{{ data.maThop == null? data.tenTrangThaiTh: data.maThop}}
                         <td class="text-left">
                             <a (click)="detail(data)">
                                 <i class="fa fa-eye"></i>
