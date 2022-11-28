@@ -66,7 +66,8 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
   }
 
   updateStatus(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/status`;
+    // const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/status`;
+    const url = `http://localhost:3333/chi-tieu-ke-hoach-nam/status`;
     return this.httpClient.put(url, body).toPromise();
   }
 

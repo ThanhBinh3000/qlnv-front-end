@@ -2725,6 +2725,12 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     );
   }
 
+  checkStatusFieldBanHanh(): boolean {
+    return (
+      this.thongTinChiTieuKeHoachNam.trangThai !== STATUS.DA_DUYET_LDC
+    );
+  }
+
   selectDonViKeyDown(event, type) {
     const donVi = this.optionsDonVi.find(
       (donVi) => donVi.tenDvi === event.nzValue.trim(),
