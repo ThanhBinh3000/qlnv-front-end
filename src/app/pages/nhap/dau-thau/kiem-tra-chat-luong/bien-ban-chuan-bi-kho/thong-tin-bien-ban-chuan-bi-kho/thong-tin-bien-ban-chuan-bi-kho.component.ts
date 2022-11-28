@@ -33,6 +33,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
   @Input() id: number;
   @Input() isView: boolean;
   @Input() loaiVthh: string;
+  @Input() idQdGiaoNvNh: number;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -70,13 +71,12 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
     private modal: NzModalService,
     private userService: UserService,
     public globals: Globals,
-    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private danhMucService: DanhMucService,
     private thongTinHopDongService: ThongTinHopDongService,
     private donViService: DonviService,
     private fb: FormBuilder,
     private bienBanChuanBiKhoService: QuanLyBienBanChuanBiKhoService,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     private helperService: HelperService
   ) {
@@ -123,7 +123,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
 
         loaiHinhKho: [''],
         tichLuong: [''],
-
+        ngayNghiemThu: [''],
         ketLuan: [],
         kqDanhGia: [],
         lyDoTuChoi: [''],
@@ -194,7 +194,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
 
   async bindingDataQd(id) {
     await this.spinner.show();
-    let dataRes = await this.quyetDinhNhapXuatService.getDetail(id)
+    let dataRes = await this.quyetDinhGiaoNhapHangService.getDetail(id)
     const data = dataRes.data;
     this.formData.patchValue({
       soQdGiaoNvNh: data.soQd,
@@ -305,9 +305,9 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
       trangThai: this.STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
     });
-    // if (this.idQdGiaoNvNh) {
-    //   await this.bindingDataQd(this.idQdGiaoNvNh, true);
-    // }
+    if (this.idQdGiaoNvNh) {
+      await this.bindingDataQd(this.idQdGiaoNvNh);
+    }
   }
 
   convertTien(tien: number): string {
@@ -338,9 +338,9 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
       let res = await this.bienBanChuanBiKhoService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          this.bienBanChuanBiKho = res.data;
-          this.dsChiTietChuanBiKhoClone = this.bienBanChuanBiKho.chiTiets;
-          this.initForm();
+          const data = res.data;
+          this.helperService.bidingDataInFormGroup(this.formData, data);
+          await this.bindingDataQd(data.idQdGiaoNvNh);
         }
       }
     }
@@ -436,9 +436,20 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
   }
 
   pheDuyet() {
-    let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
-    if (this.bienBanChuanBiKho.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
-      trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
+    let trangThai = ''
+    switch (this.formData.value.trangThai) {
+      case this.STATUS.DU_THAO: {
+        trangThai = this.STATUS.CHO_DUYET_TK;
+        break;
+      }
+      case this.STATUS.CHO_DUYET_TK: {
+        trangThai = this.STATUS.CHO_DUYET_LDCC;
+        break;
+      }
+      case this.STATUS.CHO_DUYET_LDCC: {
+        trangThai = this.STATUS.DA_DUYET_LDCC;
+        break;
+      }
     }
     this.modal.confirm({
       nzClosable: false,
@@ -477,6 +488,17 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
   }
 
   tuChoi() {
+    let trangThai = ''
+    switch (this.detail.trangThai) {
+      case this.STATUS.CHO_DUYET_TK: {
+        trangThai = this.STATUS.TU_CHOI_TK;
+        break;
+      }
+      case this.STATUS.CHO_DUYET_LDCC: {
+        trangThai = this.STATUS.TU_CHOI_LDCC;
+        break;
+      }
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -493,7 +515,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: this.bienBanChuanBiKho.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP ? this.globals.prop.NHAP_TU_CHOI_TP : this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
+            trangThai: trangThai,
           };
           let res =
             await this.bienBanChuanBiKhoService.approve(

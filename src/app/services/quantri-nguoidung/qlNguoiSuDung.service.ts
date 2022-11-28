@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { BaseService } from '../base.service';
-import { OldResponseData } from 'src/app/interfaces/response';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {environment} from 'src/environments/environment';
+import {BaseService} from '../base.service';
+import {OldResponseData} from 'src/app/interfaces/response';
 
 
 @Injectable({
@@ -10,6 +10,7 @@ import { OldResponseData } from 'src/app/interfaces/response';
 })
 export class QlNguoiSuDungService extends BaseService {
   gateway: string = '/qlnv-system'
+
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'user', '/qlnv-system');
   }

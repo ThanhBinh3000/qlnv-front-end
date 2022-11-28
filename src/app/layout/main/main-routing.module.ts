@@ -42,7 +42,7 @@ const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
-        path: MAIN_ROUTES.khknBaoQuan,
+        path: MAIN_ROUTES.khcnBaoQuan,
         loadChildren: () =>
           import('../../pages/khkn-bao-quan/khkn-bao-quan.module').then((m) => m.KhknBaoQuanModule),
         canActivate: [AuthGuard],
@@ -136,4 +136,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class MainRoutingModule { }
+export class MainRoutingModule {
+}

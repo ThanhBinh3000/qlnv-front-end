@@ -8,7 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { PhieuNhapKhoTamGuiService } from 'src/app/services/phieuNhapKhoTamGui.service';
+import { PhieuNhapKhoTamGuiService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/phieuNhapKhoTamGui.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 @Component({

@@ -81,7 +81,6 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
         private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
         private thongTinHopDongService: ThongTinHopDongService,
         public globals: Globals,
-        private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
         private helperService: HelperService,
     ) {
         super();
@@ -234,7 +233,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
 
     async bindingDataQd(id) {
         await this.spinner.show();
-        let dataRes = await this.quyetDinhNhapXuatService.getDetail(id)
+        let dataRes = await this.quyetDinhGiaoNhapHangService.getDetail(id)
         const data = dataRes.data;
         this.formData.patchValue({
             soQdGiaoNvNh: data.soQd,

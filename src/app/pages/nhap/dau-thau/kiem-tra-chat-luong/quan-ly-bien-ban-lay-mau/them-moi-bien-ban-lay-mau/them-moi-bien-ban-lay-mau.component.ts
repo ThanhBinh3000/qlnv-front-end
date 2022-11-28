@@ -96,7 +96,6 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
     private fb: FormBuilder,
     private helperService: HelperService,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService
   ) {
     this.formData = this.fb.group({
       id: [],
@@ -427,7 +426,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
   async bindingDataQd(id) {
     await this.spinner.show();
-    let dataRes = await this.quyetDinhNhapXuatService.getDetail(id)
+    let dataRes = await this.quyetDinhGiaoNhapHangService.getDetail(id)
     const data = dataRes.data;
     this.formData.patchValue({
       soQdGiaoNvNh: data.soQd,

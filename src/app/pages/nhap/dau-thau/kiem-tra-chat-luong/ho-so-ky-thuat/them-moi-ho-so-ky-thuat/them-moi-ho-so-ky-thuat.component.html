@@ -38,7 +38,7 @@
                     <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do'">
                         {{ formData.value.tenTrangThai }}
                     </span>
-                    <span>Đề xuất kế hoạch mua trực tiếp</span>
+                    <span>Hồ sơ kỹ thuật nhập vật tư</span>
                 </div>
             </div>
         </div>
@@ -59,54 +59,53 @@
             </div>
             <form nzLayout="vertical" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="[24]">
-                    <div nz-col [nzSpan]="3">
+                    <div nz-col [nzSpan]="4">
                         <nz-form-item>
                             <nz-form-label nzRequired [nzNoColon]="true">Số hồ sơ kỹ thuật</nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group>
-                                    <nz-input-number formControlName="" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                                        [nzSize]="'small'" nz-input readonly formControlName="">
+                                    <nz-input-number formControlName="id" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                                        [nzSize]="'small'" nz-input nzDisabled>
                                     </nz-input-number>
                                 </nz-input-group>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div nz-col [nzSpan]="3">
+                    <div nz-col [nzSpan]="4">
                         <nz-form-item>
                             <nz-form-label nzRequired [nzNoColon]="true"> Số biên bàn lấy mẫu/Bàn giao mẫu
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
-                                <nz-select formControlName="">
+                                <nz-select formControlName="soBienBan">
                                     <nz-option [nzValue]="" [nzLabel]="">
                                     </nz-option>
                                 </nz-select>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div nz-col [nzSpan]="3">
+                    <div nz-col [nzSpan]="4">
                         <nz-form-item>
                             <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ giao nhiệm vụ nhập hàng
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
-                                <input nz-input readonly formControlName="" />
+                                <input nz-input readonly formControlName="soQdNv" />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
 
-                    <div nz-col [nzSpan]="3">
+                    <div nz-col [nzSpan]="4">
                         <nz-form-item>
                             <nz-form-label nzRequired [nzNoColon]="true">Số hợp đồng</nz-form-label>
                             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                                <input nz-input readonly formControlName="" />
+                                <input nz-input readonly formControlName="soHd" />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
                     <div nz-col [nzSpan]="3">
                         <nz-form-item>
-                            <nz-form-label [nzNoColon]="true"> Đơn vị nhập hồ sơ kỹ thuật </nz-form-label>
+                            <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị nhập hồ sơ kỹ thuật </nz-form-label>
                             <nz-form-control nz-col [nzSpan]="24">
-                                <input placeholder="" nz-input formControlName="trichYeu"
-                                    [readonly]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''" />
+                                <input readonly placeholder="" nz-input formControlName="tenDvi" />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -119,11 +118,11 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div nz-col [nzSpan]="3">
+                    <div nz-col [nzSpan]="2">
                         <nz-form-item>
-                            <nz-form-label [nzNoColon]="true">Trạng thái</nz-form-label>
+                            <nz-form-label nzRequired [nzNoColon]="true">Trạng thái</nz-form-label>
                             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                                <nz-select formControlName="" [nzDisabled]="true">
+                                <nz-select formControlName="tenTrangThai" [nzDisabled]="true">
                                     <nz-option [nzValue]="" [nzLabel]=""></nz-option>
                                 </nz-select>
                             </nz-form-control>
@@ -145,13 +144,13 @@
         <nz-table [nzData]="" class="nowrap pd-10" nzBordered>
             <thead>
                 <tr>
-                    <th width="60px" class="text-center">STT</th>
+                    <th width="50px" class="text-center">STT</th>
                     <th width="">Tên hồ sơ tài liệu</th>
                     <th width="100px">Loại tài liệu</th>
                     <th width="100px">Số lượng </th>
                     <th width="">Ghi chú</th>
                     <th width="">File đính kèm</th>
-                    <th style="width: 50px;">Hành động</th>
+                    <th width="100px">Hành động</th>
                 </tr>
                 <tr class="search-table">
                     <th></th>
@@ -182,6 +181,8 @@
                     </th>
 
                     <th>
+                        <i class="icon htvbdh_dau-cong"></i>
+                        <i class="icon htvbdh_lammoi"></i>
                     </th>
                 </tr>
             </thead>
@@ -197,11 +198,17 @@
                         <td></td>
                         <td class="text-right">
                             <a>
+                                <i class="icon htvbdh_tcdt_import"></i>
+                            </a>
+                            <a>
                                 <i class="fa fa-pencil"></i>
                             </a>
+
                             <a>
                                 <i class="fa fa-trash-o do"></i>
                             </a>
+
+
                         </td>
                     </tr>
                 </ng-container>
@@ -235,11 +242,11 @@
         <nz-table [nzData]="" class="nowrap pd-10" nzBordered>
             <thead>
                 <tr>
-                    <th width="60px" class="text-center">STT</th>
+                    <th width="50px" class="text-center">STT</th>
                     <th width="">Tên biên bản</th>
-                    <th width="100px">Trang thái</th>
+                    <th width="150px">Trang thái</th>
                     <th width="">File đính kèm </th>
-                    <th style="width: 50px;">Hành động</th>
+                    <th width="100px">Hành động</th>
                 </tr>
 
             </thead>
@@ -248,9 +255,9 @@
                 <ng-container>
                     <tr>
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>Tên biên bản</td>
+                        <td>Dự thảo</td>
+                        <td>File đính kèm</td>
                         <td class="text-right">
                             <a>
                                 <i class="fa fa-pencil"></i>
