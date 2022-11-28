@@ -68,14 +68,14 @@ export class ThongTinBienBanGuiHangComponent extends BaseComponent implements On
     this.formData = this.fb.group({
       id: [],
       nam: [dayjs().get('year')],
+      namKeHoach: [''],
       maDvi: ['', [Validators.required]],
       maQhns: ['',],
       tenDvi: ['', [Validators.required]],
 
-      soPhieuNhapKhoTamGui: [],
-      ngayNhapKho: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
-      soNo: [],
-      soCo: [],
+      soBienBanGuiHang: [],
+      ngayTao: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
+
 
       soQdGiaoNvNh: [],
       idQdGiaoNvNh: [],
