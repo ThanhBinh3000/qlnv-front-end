@@ -77,7 +77,7 @@
           <nz-form-control [nzErrorTip]="soQDError">
             <nz-input-group nzAddOnAfter="/{{qdTCDT}}">
               <input formControlName="soQd" nz-input nzSize="small" placeholder="Nhập số quyết định" appNumberOnly
-                     [readonly]="checkStatusFieldBanHanh()"/>
+              />
             </nz-input-group>
             <ng-template #soQDError let-control>
               <ng-container *ngIf="control.hasError('required')">{{errorInputRequired}}</ng-container>
@@ -89,7 +89,7 @@
           <nz-form-label [nzNoColon]="true" class="text-left"> Ngày ký
           </nz-form-label>
           <nz-form-control nz-col [nzErrorTip]="ngayKyError1">
-            <nz-date-picker [nzDisabled]="checkStatusFieldBanHanh()" class="search__input" [nzDisabledDate]="disabledStartDate"
+            <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate"
                             nzFormat="dd-MM-yyyy" formControlName="ngayKy" nzPlaceHolder="Ngày ký">
             </nz-date-picker>
             <ng-template #ngayKyError let-control>
@@ -102,7 +102,7 @@
           <nz-form-label [nzNoColon]="true" class="text-left"> Ngày hiệu lực
           </nz-form-label>
           <nz-form-control nz-col [nzErrorTip]="ngayHieuLucError">
-            <nz-date-picker [nzDisabled]="checkStatusFieldBanHanh()" nzFormat="dd-MM-yyyy" formControlName="ngayHieuLuc"
+            <nz-date-picker nzFormat="dd-MM-yyyy" formControlName="ngayHieuLuc"
                             nzPlaceHolder="Ngày hiệu lực">
             </nz-date-picker>
             <ng-template #ngayHieuLucError let-control>
