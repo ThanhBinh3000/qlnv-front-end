@@ -79,7 +79,7 @@ export class BangKeNhapVatTuComponent implements OnInit {
       await Promise.all([
         // this.loadDiemKho(),
         // this.loadNganLo(),
-        this.search(),
+        // this.search(),
       ]);
       this.spinner.hide();
     }
