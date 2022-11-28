@@ -15,45 +15,36 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { DanhSachGoiThau, FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { environment } from 'src/environments/environment';
 import { STATUS } from "../../../../../../constants/status";
 import { cloneDeep } from "lodash";
-import {
-  DxuatKhLcntService
-} from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service";
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
 import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
-
 
 @Component({
   selector: 'app-them-quyet-dinh-ban-dau-gia',
   templateUrl: './them-quyet-dinh-ban-dau-gia.component.html',
   styleUrls: ['./them-quyet-dinh-ban-dau-gia.component.scss']
 })
-export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
 
+export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
   @Input() dataTongHop: any;
   @Output()
   showListEvent = new EventEmitter<any>();
 
-
   formData: FormGroup;
   formThongTinChung: FormGroup;
-
   selectedCanCu: any = {};
   listOfMapData: VatTu[];
   listOfMapDataClone: VatTu[];
@@ -63,32 +54,22 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
   errorGhiChu: boolean = false;
   maQd: string = null;
   fileDinhKem: Array<FileDinhKem> = [];
-
-
   listVatTuHangHoa: any[] = [];
   fileList: any[] = [];
   listDanhSachTongHop: any[] = [];
   listToTrinh: any[] = [];
   urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
-
   lastBreadcrumb: string;
   userInfo: UserLogin;
-
   danhMucDonVi: any;
   danhsachDx: any[] = [];
   danhsachDxCache: any[] = [];
-
   iconButtonDuyet: string;
   titleButtonDuyet: string;
-
   listNam: any[] = [];
   yearNow: number = 0;
-
   listOfData: any[] = [];
-
-
   STATUS = STATUS
-
   dataInput: any;
   dataInputCache: any;
   isTongHop: boolean
@@ -107,6 +88,7 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
     private helperService: HelperService,
     public globals: Globals,
   ) {
+
     this.formData = this.fb.group({
       id: [null],
       namKh: [dayjs().get('year'), Validators.required],
@@ -167,14 +149,13 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
   }
 
   isDetailPermission() {
-    if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
+    if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_SUA") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_THEM")) {
       return true;
     }
     return false;
   }
 
   deleteSelect() {
-
   }
 
   async ngOnInit() {
@@ -206,12 +187,10 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
 
   initForm() {
     this.formData.patchValue({
-      namKhoach: dayjs().get('year'),
+      namKh: dayjs().get('year'),
       phanLoai: this.loaiVthh == '02' ? 'TTr' : 'TH'
     })
   }
-
-
 
   async bindingDataTongHop(dataTongHop?) {
     if (dataTongHop) {
@@ -220,7 +199,7 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
         tenCloaiVthh: dataTongHop.tenCloaiVthh,
         loaiVthh: dataTongHop.loaiVthh,
         tenLoaiVthh: dataTongHop.tenLoaiVthh,
-        namKhoach: +dataTongHop.namKhoach,
+        namKh: +dataTongHop.namKh,
         idThHdr: dataTongHop.id,
         tchuanCluong: dataTongHop.tchuanCluong,
         phanLoai: 'TH',
@@ -228,13 +207,11 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
       await this.selectMaTongHop(dataTongHop.id);
     }
     await this.listDsTongHopToTrinh();
-
   }
 
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
   }
-
 
   async listDsTongHopToTrinh() {
     await this.spinner.show();
@@ -251,8 +228,6 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
     if (resTh.msg == MESSAGE.SUCCESS) {
       this.listDanhSachTongHop = resTh.data.content;
     }
-    console.log(resTh, 2222)
-
   }
 
   async save(isGuiDuyet?) {
@@ -437,7 +412,6 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
   }
 
   openDialogTh() {
-    console.log(this.listDanhSachTongHop, 5555)
     if (this.formData.get('phanLoai').value != 'TH') {
       return;
     }
@@ -648,7 +622,6 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
   }
 
   deleteRow(index) {
-
   }
 
   expandSet2 = new Set<number>();
@@ -660,7 +633,6 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
     }
   }
 
-
   expandSet3 = new Set<number>();
   onExpandChange3(id: number, checked: boolean): void {
     if (checked) {
@@ -669,5 +641,4 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
       this.expandSet3.delete(id);
     }
   }
-
 }

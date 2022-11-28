@@ -60,18 +60,6 @@
                 </div>
                 <div nz-col [nzSpan]="5">
                     <nz-form-item class="form-item">
-                        <!-- <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="ngay-qd"> Ngày phê duyệt
-                            KH bán đấu giá
-                        </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-range-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy" id="ngay-qd"
-                                class="search__input">
-                            </nz-range-picker>
-                            <ng-template #error let-control>
-                                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                                </ng-container>
-                            </ng-template>
-                        </nz-form-control> -->
                         <nz-form-label nzRequired [nzNoColon]="true"> Ngày phê duyệt
                             KH bán đấu giá </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
@@ -179,7 +167,6 @@
         </form>
     </nz-card>
     <!--  End thông tin chung-->
-
     <!--  Start Thông tin đề xuất-->
     <nz-card class="mg-t-16 flex-card p-lr16 " *ngIf="isTongHop">
         <div class="header header-green-background mg-t-16">
@@ -226,10 +213,8 @@
         <app-them-de-xuat-ke-hoach-ban-dau-gia *ngIf="idRowSelect" [idInput]="idRowSelect" [showFromTH]="true">
         </app-them-de-xuat-ke-hoach-ban-dau-gia>
     </nz-card>
-
     <!--  End Thông tin đề xuất-->
 </div>
-
 <ng-template #error let-control>
     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
