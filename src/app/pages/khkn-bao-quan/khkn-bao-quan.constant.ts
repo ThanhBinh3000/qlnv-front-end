@@ -1,7 +1,7 @@
 import { MAIN_ROUTES } from "src/app/layout/main/main-routing.constant";
 import { ChiTietMenu } from "src/app/models/ChiTietMenu";
 
-export const KHKN_BAO_QUAN_MAIN_ROUTE = MAIN_ROUTES.khknBaoQuan;
+export const KHKN_BAO_QUAN_MAIN_ROUTE = MAIN_ROUTES.khcnBaoQuan;
 export const KHKN_BAO_QUAN_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_congtrinhnghiencuu',
