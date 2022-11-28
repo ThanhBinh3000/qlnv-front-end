@@ -10,8 +10,6 @@ import { ThongTinHoSoKyThuatComponent } from './ho-so-ky-thuat/thong-tin-ho-so-k
 import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong.component';
 import { LapBienBanNghiemThuBaoQuanComponent } from './lap-bien-ban-nghiem-thu-bao-quan/lap-bien-ban-nghiem-thu-bao-quan.component';
 import { ThongTinBienBanNghiemThuBaoQuanComponent } from './lap-bien-ban-nghiem-thu-bao-quan/thong-tin-bien-ban-nghiem-thu-bao-quan/thong-tin-bien-ban-nghiem-thu-bao-quan.component';
-import { QuanLyBienBanBanGiaoMauComponent } from './quan-ly-bien-ban-ban-giao-mau/quan-ly-bien-ban-ban-giao-mau.component';
-import { ThemMoiBienBanBanGiaoMauComponent } from './quan-ly-bien-ban-ban-giao-mau/them-moi-bien-ban-ban-giao-mau/them-moi-bien-ban-ban-giao-mau.component';
 import { QuanLyBienBanLayMauComponent } from './quan-ly-bien-ban-lay-mau/quan-ly-bien-ban-lay-mau.component';
 import { ThemMoiBienBanLayMauKhoComponent } from './quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/them-moi-bien-ban-lay-mau.component';
 import { QuanLyPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-tra-chat-luong-hang/quan-ly-phieu-kiem-tra-chat-luong-hang.component';
@@ -32,9 +30,7 @@ import { ThemMoiHoSoKyThuatComponent } from './ho-so-ky-thuat/them-moi-ho-so-ky-
     QuanLyPhieuKiemTraChatLuongHangComponent,
     ThemMoiPhieuKiemTraChatLuongHangComponent,
     QuanLyBienBanLayMauComponent,
-    QuanLyBienBanBanGiaoMauComponent,
     ThemMoiBienBanLayMauKhoComponent,
-    ThemMoiBienBanBanGiaoMauComponent,
     BienBanChuanBiKhoComponent,
     ThongTinBienBanChuanBiKhoComponent,
     HoSoKyThuatComponent,
@@ -56,7 +52,6 @@ import { ThemMoiHoSoKyThuatComponent } from './ho-so-ky-thuat/them-moi-ho-so-ky-
     LapBienBanNghiemThuBaoQuanComponent,
     QuanLyPhieuKiemTraChatLuongHangComponent,
     QuanLyBienBanLayMauComponent,
-    QuanLyBienBanBanGiaoMauComponent,
     BienBanChuanBiKhoComponent,
     HoSoKyThuatComponent,
   ]

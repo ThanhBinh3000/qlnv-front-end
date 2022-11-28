@@ -77,10 +77,10 @@
               <td class="bold">{{ item.tgianNkho }}</td>
               <td colspan="7"></td>
               <td>
-                <!-- <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"
+                <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_THEM')"
                   (click)="redirectToChiTiet(false, 0,item.id)">
                   <i class="fa fa-plus"></i>
-                </a> -->
+                </a>
               </td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
@@ -97,7 +97,17 @@
                 <td></td>
                 <td></td>
                 <td>{{bbCbKho.tenTrangThai}}</td>
-                <td></td>
+                <td>
+                  <a *ngIf="bbCbKho.trangThai == STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, bbCbKho.id)">
+                    <i class="fa fa-eye"></i>
+                  </a>
+                  <a *ngIf="bbCbKho.trangThai != STATUS.DA_DUYET_LDCC" (click)="redirectToChiTiet(false, bbCbKho.id)">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a *ngIf="bbCbKho.trangThai == STATUS.DU_THAO" (click)="xoaItem(bbCbKho)">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
               </tr>
             </ng-container>
           </ng-container>

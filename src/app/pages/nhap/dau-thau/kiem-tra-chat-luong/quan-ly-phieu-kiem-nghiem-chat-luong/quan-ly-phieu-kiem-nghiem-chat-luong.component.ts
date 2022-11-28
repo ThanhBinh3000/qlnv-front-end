@@ -94,7 +94,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public userService: UserService,
     public globals: Globals,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
     super();
   }
@@ -156,7 +156,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
       },
       trangThai: this.STATUS.BAN_HANH
     };
-    let res = await this.quyetDinhNhapXuatService.search(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;

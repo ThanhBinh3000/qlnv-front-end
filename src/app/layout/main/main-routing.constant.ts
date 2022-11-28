@@ -12,7 +12,7 @@ export const MAIN_ROUTES = {
   xuat: 'xuat',
   xuatKhac: 'xuat-khac',
   dinhMucNhapXuat: 'dinh-muc-nhap-xuat',
-  khknBaoQuan: 'khkn-bao-quan',
+  khcnBaoQuan: 'khcn-bao-quan',
   quanLyKhoTang: 'quan-ly-kho-tang',
   danhMuc: 'danh-muc',
   // quantrihethong: 'quan-tri-he-thong',
@@ -79,8 +79,8 @@ export const LIST_PAGES: RouteInfo[] = [
     code: 'QLĐMNXBQ'
   },
   {
-    title: 'KH&KN bảo quản',
-    route: MAIN_ROUTES.khknBaoQuan,
+    title: 'KH&CN bảo quản',
+    route: MAIN_ROUTES.khcnBaoQuan,
     code: 'KHCNBQ'
   },
   {

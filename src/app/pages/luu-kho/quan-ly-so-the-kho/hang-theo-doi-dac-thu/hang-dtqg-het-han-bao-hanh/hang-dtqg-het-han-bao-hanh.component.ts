@@ -1,20 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DonviService } from 'src/app/services/donvi.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { UserService } from 'src/app/services/user.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
-import { isEmpty } from 'lodash';
-import { HangDtqgHetHanBaoHanhService } from 'src/app/services/hangthuocdientheodoidacthu/hang-dtqg-het-han-bao-hanh.service';
-import { cloneDeep } from 'lodash';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DonviService} from 'src/app/services/donvi.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {UserService} from 'src/app/services/user.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {DANH_MUC_LEVEL} from 'src/app/pages/luu-kho/luu-kho.constant';
+import {isEmpty} from 'lodash';
+import {
+  HangDtqgHetHanBaoHanhService
+} from 'src/app/services/hangthuocdientheodoidacthu/hang-dtqg-het-han-bao-hanh.service';
+import {cloneDeep} from 'lodash';
 import * as dayjs from 'dayjs';
-import { saveAs } from 'file-saver';
-import { Globals } from 'src/app/shared/globals';
+import {saveAs} from 'file-saver';
+import {Globals} from 'src/app/shared/globals';
 
 
 @Component({
@@ -68,7 +70,9 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     private danhMucService: DanhMucService,
     private hangDtqgHetHanBaoHanhService: HangDtqgHetHanBaoHanhService,
     public globals: Globals,
-  ) { }
+  ) {
+  }
+
   async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
@@ -81,6 +85,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       this.spinner.hide();
     }
   }
+
   initForm(): void {
     this.formData = this.fb.group({
       "maChungLoaiHang": [null],
@@ -88,12 +93,14 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       "maLoaiHang": [null],
     })
   }
+
   async initData() {
     this.userInfo = this.userService.getUserLogin();
     this.detail.maDvi = this.userInfo.MA_DVI;
     this.detail.tenDvi = this.userInfo.TEN_DVI;
     await this.loadDsTong();
   }
+
   async loadDsTong() {
     const body = {
       maDviCha: this.detail.maDvi,
@@ -108,6 +115,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       }
     }
   }
+
   async loaiVTHHGetAll() {
     try {
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
@@ -116,8 +124,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
             if (item.cap === "1" && item.ma != '01') {
               this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
               this.onChangeLoaiHHAutoComplete('')
-            }
-            else {
+            } else {
               this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
             }
           })
@@ -129,12 +136,14 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
 
     }
   }
+
   async changeLoaiHangHoa() {
     let loaiHangHoa = this.listLoaiHangHoa.filter(x => x.ma == this.formData.value.maLoaiHang);
     if (loaiHangHoa && loaiHangHoa.length > 0) {
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }
   }
+
   onChangeLoaiHH(id: any) {
     if (id && id !== '') {
       this.listChungLoaiHangHoa = []
@@ -153,6 +162,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       }
     }
   }
+
   onChangeChungLoaiHH(id: any) {
     if (id && id !== '') {
       let data = this.listChungLoaiHangHoa.find(item => item.ma === id)
@@ -167,6 +177,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       }
     }
   }
+
   async search() {
     this.spinner.show();
     let body = {
@@ -195,6 +206,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     }
     this.spinner.hide()
   }
+
   filterInTable(key: string, value: string, date: boolean) {
     if (value && value != '') {
       this.dataTable = [];
@@ -219,6 +231,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
+
   clearFilter() {
     this.formData.reset();
     this.filterTable = {
@@ -242,6 +255,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     this.initData()
     this.search()
   }
+
   exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show()
@@ -272,6 +286,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
     }
 
   }
+
   async changePageIndex(event) {
     this.spinner.show();
     try {
@@ -284,6 +299,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   async changePageSize(event) {
     this.spinner.show();
     try {
@@ -298,6 +314,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
   onChangeLoaiHHAutoComplete(value: any) {
     this.dsChungLoaiHangHoaDataSource = []
     this.formData.get('maChungLoaiHang').setValue('')
@@ -320,6 +337,7 @@ export class HangDtqgHetHanBaoHanhComponent implements OnInit {
       );
     }
   }
+
   onChangeChungLoaiHHAutoComplete(value: any) {
     if (value) {
       let data = this.listChungLoaiHangHoa.find((item) => item.ten.toString().toLowerCase() == this.formData.value.maChungLoaiHang.toString().toLowerCase())
