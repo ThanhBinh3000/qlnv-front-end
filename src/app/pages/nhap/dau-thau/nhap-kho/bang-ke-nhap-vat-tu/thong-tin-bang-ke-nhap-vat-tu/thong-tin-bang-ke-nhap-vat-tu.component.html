@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button class="btn btn-sub btn-sm waves-effect waves-light" *ngIf="!isDisableField() && !isView"
+    <button class="btn btn-sub btn-sm waves-effect waves-light" *ngIf="!isView"
             (click)="guiDuyet()">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
@@ -20,7 +20,7 @@
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button *ngIf="!isDisableField() && !isView" (click)="save(false)"
+    <button *ngIf="!isView" (click)="save(false)"
             class="btn btn-main btn-sm waves-effect waves-light">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
@@ -280,13 +280,13 @@
         <th width="60px" class="text-center">STT</th>
         <th class="text-center">SỐ LƯỢNG</th>
         <th class="text-center">SỐ SERIAL/MÃ SẢN PHẨM</th>
-        <th width="140px" class="text-center" *ngIf="!(isDisableField() || isView)">
+        <th width="140px" class="text-center" *ngIf="!isView">
           HÀNH ĐỘNG
         </th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngIf="!(isDisableField() || isView)">
+      <tr *ngIf="!isView">
         <td></td>
         <td>
           <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="create.soLuong" [nzMin]="0"
@@ -309,7 +309,7 @@
           <td class="text-center">{{i + 1}}</td>
           <td>{{data.soLuong ?? 0 | number: '1.0-1'}}</td>
           <td>{{data.soSerial}}</td>
-          <td *ngIf="!(isDisableField() || isView)">
+          <td *ngIf="! isView">
             <a (click)="editRow(data.stt)">
               <i class="fa fa-pencil"></i>
             </a>

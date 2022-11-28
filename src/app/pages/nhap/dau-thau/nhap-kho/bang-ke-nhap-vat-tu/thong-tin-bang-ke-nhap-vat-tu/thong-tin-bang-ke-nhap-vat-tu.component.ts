@@ -100,6 +100,7 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
       soQdGiaoNvNh: ['',],
       soPhieuNhapKhoTamGui: ['',],
       soHd: ['', ],
+      ngayKetThucNhap: ['', ],
       maDiemKho: ['', [Validators.required]],
       tenDiemKho: ['', [Validators.required]],
       maNhaKho: ['', [Validators.required]],
@@ -183,65 +184,6 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
     });
   };
 
-
-  isDisableField() {
-    if (this.detail && (this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_TP || this.detail.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC || this.detail.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC)) {
-      return true;
-    }
-  }
-
-
-  async loadDiemKho() {
-    let body = {
-      maDviCha: this.detail.maDvi,
-      trangThai: '01',
-    }
-    const res = await this.donViService.getTreeAll(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        res.data.forEach(element => {
-          if (element && element.capDvi == '3' && element.children) {
-            this.listDiemKho = [
-              ...this.listDiemKho,
-              ...element.children
-            ]
-          }
-        });
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  changeDiemKho(fromChiTiet: boolean) {
-    let diemKho = this.listDiemKho.filter(x => x.key == this.detail.maDiemKho);
-    if (!fromChiTiet) {
-      this.detail.maNhaKho = null;
-    }
-    if (diemKho && diemKho.length > 0) {
-      this.listNhaKho = diemKho[0].children;
-      if (fromChiTiet) {
-        this.changeNhaKho(fromChiTiet);
-      }
-    }
-  }
-
-  changeNhaKho(fromChiTiet: boolean) {
-    let nhaKho = this.listNhaKho.filter(x => x.key == this.detail.maNhaKho);
-    if (nhaKho && nhaKho.length > 0) {
-      this.listNganKho = nhaKho[0].children;
-      if (fromChiTiet) {
-        this.changeNganKho();
-      }
-    }
-  }
-
-  changeNganKho() {
-    let nganKho = this.listNganKho.filter(x => x.key == this.detail.maNganKho);
-    if (nganKho && nganKho.length > 0) {
-      this.listNganLo = nganKho[0].children;
-    }
-  }
 
   async loadSoPhieuNhapKho() {
     let body = {
@@ -486,38 +428,10 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detail = res.data;
-          if (this.detail.children) {
-            this.detail.detail = this.detail.children;
-          }
-          if (this.detail.soKho) {
-            this.detail.soKho = +this.detail.soKho;
-          }
-          this.changeDiemKho(true);
-          await this.changeSoQuyetDinh(true);
         }
       }
     }
-    else {
-      this.detail.tenDvi = this.userInfo.TEN_DVI;
-      this.detail.maDvi = this.userInfo.MA_DVI;
-    }
     this.updateEditCache();
-  }
-
-  caculatorSoLuongBaoBi() {
-    if (this.detail && this.detail?.chiTiets && this.detail?.chiTiets.length > 0) {
-      let sum = this.detail?.chiTiets.map(item => item.soBaoBi).reduce((prev, next) => prev + next);
-      return sum ?? 0;
-    }
-    return 0;
-  }
-
-  caculatorSoLuongCaBi() {
-    if (this.detail && this.detail?.chiTiets && this.detail?.chiTiets.length > 0) {
-      let sum = this.detail?.chiTiets.map(item => item.trongLuongCaBi).reduce((prev, next) => prev + next);
-      return sum ?? 0;
-    }
-    return 0;
   }
 
   convertTien(tien: number): string {
@@ -779,10 +693,6 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
 
   print() {
 
-  }
-
-  thongTinTrangThai(trangThai: string): string {
-    return thongTinTrangThaiNhap(trangThai);
   }
 
   async bindingDataQd(id) {
