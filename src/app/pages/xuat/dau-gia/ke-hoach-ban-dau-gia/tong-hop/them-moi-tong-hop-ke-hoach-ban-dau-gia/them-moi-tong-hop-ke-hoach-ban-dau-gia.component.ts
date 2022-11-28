@@ -25,6 +25,8 @@ import { Globals } from 'src/app/shared/globals';
 import { STATUS } from 'src/app/constants/status';
 import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
+import { API_STATUS_CODE } from 'src/app/constants/config';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -78,6 +80,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
     private fb: FormBuilder,
     private helperService: HelperService,
     public globals: Globals,
+    private dmTieuChuanService: DanhMucTieuChuanService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService
   ) {
     this.formTraCuu = this.fb.group(
@@ -104,6 +107,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
       trangThai: [''],
       soQdPd: [''],
       ngayPduyet: [''],
+      tchuanCluong: [''],
     })
 
   }
