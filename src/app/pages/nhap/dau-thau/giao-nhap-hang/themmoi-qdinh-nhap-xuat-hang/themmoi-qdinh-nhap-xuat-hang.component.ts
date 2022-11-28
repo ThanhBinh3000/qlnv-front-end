@@ -92,7 +92,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public globals: Globals,
     public userService: UserService,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private uploadFileService: UploadFileService,
     private thongTinHopDongSercive: ThongTinHopDongService,
     private helperService: HelperService,
@@ -362,9 +362,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     body.fileDinhKems = this.listFileDinhKem;
     let res;
     if (this.formData.get('id').value > 0) {
-      res = await this.quyetDinhNhapXuatService.update(body);
+      res = await this.quyetDinhGiaoNhapHangService.update(body);
     } else {
-      res = await this.quyetDinhNhapXuatService.create(body);
+      res = await this.quyetDinhGiaoNhapHangService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
@@ -407,7 +407,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   async loadThongTinQdNhapXuatHang(id: number) {
-    await this.quyetDinhNhapXuatService
+    await this.quyetDinhGiaoNhapHangService
       .getDetail(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
@@ -488,7 +488,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             trangThai: trangThai,
           };
           let res =
-            await this.quyetDinhNhapXuatService.approve(
+            await this.quyetDinhGiaoNhapHangService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -538,7 +538,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             trangThai: trangThai,
           };
           let res =
-            await this.quyetDinhNhapXuatService.approve(
+            await this.quyetDinhGiaoNhapHangService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -762,7 +762,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     let body = {
       detailList: this.dataTable
     }
-    let res = await this.quyetDinhNhapXuatService.updateDdiemNhap(body);
+    let res = await this.quyetDinhGiaoNhapHangService.updateDdiemNhap(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
       this.redirectQdNhapXuat();
