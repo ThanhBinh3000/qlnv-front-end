@@ -1,5 +1,5 @@
 <div class="input-group-search" nz-row [nzGutter]="24">
-  <nz-radio-group [(ngModel)]="radioValue" (ngModelChange)="onChangeBoNganhRadio()" nzSpan="8">
+  <nz-radio-group [nzDisabled]="isView" [(ngModel)]="radioValue" (ngModelChange)="onChangeBoNganhRadio()" nzSpan="8">
     <label nz-radio [nzValue]="o.value" *ngFor="let o of radioData">{{ o.label }}</label>
   </nz-radio-group>
   <nz-form-item *ngIf="radioValue=='Khac'" nz-col nzSpan="8" class="form-item" style="padding-right: 15px;">

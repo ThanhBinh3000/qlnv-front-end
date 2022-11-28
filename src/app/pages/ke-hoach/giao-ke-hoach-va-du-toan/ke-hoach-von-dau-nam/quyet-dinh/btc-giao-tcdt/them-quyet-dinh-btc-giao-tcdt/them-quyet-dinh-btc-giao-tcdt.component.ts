@@ -90,7 +90,7 @@ export class ThemQuyetDinhBtcGiaoTcdtComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.maQd = '/' + this.userInfo.MA_QD,
+      // this.maQd = '/' + this.userInfo.MA_QD,
       this.getDataDetail(this.idInput),
       this.loadDanhMucHang()
     ])

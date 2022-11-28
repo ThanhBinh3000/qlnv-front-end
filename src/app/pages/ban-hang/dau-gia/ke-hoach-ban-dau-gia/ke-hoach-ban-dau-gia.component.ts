@@ -16,7 +16,7 @@ export class KeHoachBanDauGiaComponent implements OnInit {
   constructor(
     private danhMucService: DanhMucService,
     private spinner: NgxSpinnerService,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private notification: NzNotificationService,
   ) { }
 
@@ -41,7 +41,7 @@ export class KeHoachBanDauGiaComponent implements OnInit {
   }
   async getCount() {
     try {
-      let res = await this.quyetDinhNhapXuatService.getCount();
+      let res = await this.quyetDinhGiaoNhapHangService.getCount();
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.count = [res.data.tatCa, res.data.thoc, res.data.gao, res.data.muoi, res.data.vatTu];

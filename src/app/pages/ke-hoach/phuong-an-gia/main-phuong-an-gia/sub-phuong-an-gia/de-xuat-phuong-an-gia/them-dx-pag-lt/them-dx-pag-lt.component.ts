@@ -40,7 +40,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   STATUS: any;
   isGiaMuaToiDa: boolean = false;
   isVat: boolean = false;
-
+  fileDinhKem: any[] = [];
   formData: FormGroup;
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
@@ -67,6 +67,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   dataTableKsGia: any[];
 
   dataTableKqGia: any[];
+  dviTinh: string;
 
 
 
@@ -88,7 +89,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       {
         id: [],
         namKeHoach: [dayjs().get('year'), [Validators.required]],
-        soDeXuat: [, [Validators.required]],
+        soDeXuat: ['', [Validators.required]],
         loaiVthh: [null, [Validators.required]],
         ngayKy: [null, [Validators.required]],
         loaiGia: ['', [Validators.required]],
@@ -99,7 +100,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         tenTrangThai: ['Dự Thảo'],
         cloaiVthh: [null, [Validators.required]],
         moTa: [null],
-        tchuanCluong: [null],
+        tchuanCluong: [''],
         giaDeNghi: [null, [Validators.required]],
         vat: [5],
         giaDeNghiVat: [null],
@@ -152,13 +153,11 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     await Promise.all([
       this.isGiaMuaToiDa = this.type == TYPE_PAG.GIA_MUA_TOI_DA,
       this.userInfo = this.userService.getUserLogin(),
-      this.maDx = '/CDTVP-KH&QLHDT',
+      this.maDx = '/' + this.userInfo.DON_VI.tenVietTat + '-KH&QLHDT',
       this.loadDsNam(),
-      await this.getDataChiTieu(),
       this.loadDsLoaiGia(),
       this.loadDsPhuongAnGia(),
       this.loadDsHangHoaPag(),
-      this.loadDsQdPduyetKhlcnt(),
       this.loadDsVthh(),
       this.getDataDetail(this.idInput)
     ])
@@ -167,9 +166,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   async loadDsQdPduyetKhlcnt() {
     if (this.type == 'GCT') {
       let body = {
-        namKhoach: this.formData.value.namKeHoach,
+        namKeHoach: this.formData.value.namKeHoach,
         maDvi: this.userInfo.MA_DVI,
         loaiVthh : this.formData.value.loaiVthh,
+        cloaiVthh : this.formData.value.cloaiVthh,
         trangThai : STATUS.BAN_HANH
       };
       let res = await this.deXuatPAGService.loadQdGiaoKhMuaBan(body);
@@ -192,7 +192,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
-        soDeXuat: data.soDeXuat.split('/')[0],
+        soDeXuat: data.soDeXuat ? data.soDeXuat.split('/')[0] : '',
         loaiVthh: data.loaiVthh,
         ngayKy: data.ngayKy,
         loaiGia: data.loaiGia,
@@ -223,6 +223,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.dsDiaDiemDeHang = data.diaDiemDeHangs;
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableKqGia = data.ketQuaThamDinhGia;
+      this.fileDinhKem = data.fileDinhKems;
       this.updateEditCache()
     }
   }
@@ -242,7 +243,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         );
       }
     }
-  } w
+  }
 
   async loadDsPhuongAnGia() {
     this.dsPhuongAnGia = [];
@@ -304,11 +305,19 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   async onChangeCloaiVthh(event) {
-    let res = await this.danhMucTieuChuanService.getDetailByMaHh(event);
-    if (res.statusCode == API_STATUS_CODE.SUCCESS) {
-      this.formData.patchValue({
-        tchuanCluong: res.data ? res.data.tenQchuan : null
-      })
+    this.formData.patchValue({
+      qdCtKhNam : null
+    })
+    await this.loadDsQdPduyetKhlcnt();
+    this.dviTinh = '';
+    let resp = await this.danhMucService.getDetail(event);
+    if (resp.msg == MESSAGE.SUCCESS) {
+      if (resp.data) {
+        this.dviTinh = resp.data.maDviTinh
+        this.formData.patchValue({
+          tchuanCluong : resp.data.tchuanCluong
+        })
+      }
     }
   }
 
@@ -401,6 +410,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.spinner.show();
+    this.setValidator(isGuiDuyet)
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -408,12 +418,16 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    body.fileDinhKems = this.taiLieuDinhKemList;
-    body.soDeXuat = body.soDeXuat + this.maDx;
+    if (body.soDeXuat) {
+      body.soDeXuat = body.soDeXuat + this.maDx;
+    } else {
+      body.soDeXuat = ''
+    }
     body.canCuPhapLy = this.dataTableCanCuXdg;
     body.ketQuaKhaoSatGiaThiTruong = this.dataTableKsGia;
     body.ketQuaThamDinhGia = this.dataTableKqGia;
     body.diaDiemDeHangs = this.dsDiaDiemDeHang;
+    body.fileDinhKemReqs = this.fileDinhKem;
     body.type = this.type;
     body.maDvi = this.userInfo.MA_DVI
     let res
@@ -441,6 +455,28 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
+  }
+
+  setValidator(isGuiDuyet){
+    if (isGuiDuyet) {
+      this.formData.controls["namKeHoach"].setValidators([Validators.required]);
+      this.formData.controls["soDeXuat"].setValidators([Validators.required]);
+      this.formData.controls["loaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["ngayKy"].setValidators([Validators.required]);
+      this.formData.controls["loaiGia"].setValidators([Validators.required]);
+      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
+      this.formData.controls["giaDeNghi"].setValidators([Validators.required]);
+      this.formData.controls["maPphapXdg"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["namKeHoach"].clearValidators();
+      this.formData.controls["soDeXuat"].clearValidators();
+      this.formData.controls["loaiVthh"].clearValidators();
+      this.formData.controls["ngayKy"].clearValidators();
+      this.formData.controls["loaiGia"].clearValidators();
+      this.formData.controls["cloaiVthh"].clearValidators();
+      this.formData.controls["giaDeNghi"].clearValidators();
+      this.formData.controls["maPphapXdg"].clearValidators();
+    }
   }
 
   async pheDuyet() {
@@ -547,6 +583,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.dsDiaDiemDeHang,
+        dviTinh : this.dviTinh
       },
     });
     modalGT.afterClose.subscribe((res) => {

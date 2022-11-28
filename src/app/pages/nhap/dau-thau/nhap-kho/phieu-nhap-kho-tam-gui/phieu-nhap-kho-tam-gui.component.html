@@ -52,76 +52,75 @@
     </div>
 
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable">
+      <nz-table nzBordered class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable">
         <thead>
           <tr>
-            <th width="45px" *ngIf="userService.isChiCuc()">
-              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                [nzIndeterminate]="indeterminate"></label>
-            </th>
             <th width="60px">STT</th>
-            <th width="161px">Số phiếu</th>
-            <th width="161px">Số quyết định nhập</th>
-            <th width="161px">Ngày nhập kho</th>
+            <th width="30px"></th>
+            <th>Số QĐ giao nhiệm vụ</th>
+            <th>Năm kế hoạch</th>
+            <th>Thời gian NH</th>
             <th>Điểm kho</th>
-            <th width="295px">Nhà kho</th>
-            <th width="295px">Ngăn lô</th>
-            <th width="295px">Trạng thái</th>
-            <th width="140px">Hành động</th>
-          </tr>
-          <tr class="search-table">
-            <th *ngIf="userService.isChiCuc()"></th>
-            <th></th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soPhieu"
-                  (input)="filterInTable('soPhieu',filterTable.soPhieu)" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinhNhap"
-                  (input)="filterInTable('soQuyetDinhNhap',filterTable.soQuyetDinhNhap)" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayNhapKho"
-                  (input)="filterInTable('ngayNhapKho',filterTable.ngayNhapKho)" />
-              </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.diemKho"
-                  (input)="filterInTable('tenDiemKho',filterTable.diemKho)" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nhaKho"
-                  (input)="filterInTable('tenNhaKho',filterTable.nhaKho)" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nganLo"
-                  (input)="filterInTable('tenNganLo',filterTable.nganLo)" />
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.trangThai)" />
-              </nz-input-group>
-            </th>
-            <th></th>
+            <th>Nhà kho</th>
+            <th>Ngăn kho</th>
+            <th>Lô kho</th>
+            <th>Số phiếu NK tạm gửi</th>
+            <th>Ngày NK tạm gửi </th>
+            <th>Số BB gửi hàng</th>
+            <th>Số BB lấy mẫu/BG mẫu</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of basicTable.data; let i = index">
+          <ng-container *ngFor="let item of dataTable , let i = index">
+            <tr class="level-2">
+              <td>{{(page - 1) * pageSize + i + 1}}</td>
+              <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+              <td class="bold">{{ item.soQd }}</td>
+              <td class="bold">{{ item.namNhap }}</td>
+              <td class="bold">{{ item.tgianNkho }}</td>
+              <td colspan="9"></td>
+              <td>
+                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                  <i class="fa fa-plus"></i>
+                </a>
+              </td>
+            </tr>
+            <ng-container *ngIf="expandSet.has(i)">
+              <tr *ngFor="let dataDdiem of item.detail.children">
+                <td></td>
+                <td></td>
+                <td colspan="3"></td>
+                <td>{{dataDdiem.tenDiemKho}}</td>
+                <td>{{dataDdiem.tenNhaKho}}</td>
+                <td>{{dataDdiem.tenNganKho}}</td>
+                <td>{{dataDdiem.tenLoKho}}</td>
+                <td>{{dataDdiem.phieuNhapKhoTamGui?.soPhieuNhapKhoTamGui}}</td>
+                <td>{{dataDdiem.phieuNhapKhoTamGui?.ngayNhapKho | date : 'dd/MM/yyyy' }}</td>
+                <td></td>
+                <td></td>
+                <td>{{dataDdiem.phieuNhapKhoTamGui?.tenTrangThai}}</td>
+                <td>
+                  <a (click)="redirectToChiTiet(true, dataDdiem.phieuNhapKhoTamGui?.id)">
+                    <i *ngIf="dataDdiem.phieuNhapKhoTamGui?.trangThai == STATUS.DA_HOAN_THANH && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XEM')"
+                      class="fa fa-eye"></i>
+                  </a>
+                  <a *ngIf="(dataDdiem.phieuNhapKhoTamGui && dataDdiem.phieuNhapKhoTamGui.trangThai != STATUS.DA_HOAN_THANH ) && userService.isChiCuc()
+                  && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_THEM')"
+                    (click)="redirectToChiTiet(false, dataDdiem.phieuNhapKhoTamGui?.id)">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a *ngIf="dataDdiem.phieuNhapKhoTamGui?.trangThai == STATUS.DU_THAO && userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XOA')"
+                    (click)="xoaItem(dataDdiem.phieuNhapKhoTamGui)">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+
+          <!-- <tr *ngFor="let data of basicTable.data; let i = index">
             <th width="45px" *ngIf="userService.isChiCuc()">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                 [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
@@ -135,20 +134,9 @@
             <td>{{data.tenNganLo}}</td>
             <td>{{data.tenTrangThai}}</td>
             <td>
-              <a (click)="redirectToChiTiet(true, data.id)">
-                <i *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XEM')" class="fa fa-eye"></i>
-              </a>
-              <a *ngIf="(data.trangThai==globals.prop.NHAP_DU_THAO || data.trangThai==globals.prop.NHAP_CHO_DUYET_LD_CUC) && userService.isChiCuc()
-              && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_SUA')"
-                (click)="redirectToChiTiet(false, data.id)">
-                <i class="fa fa-pencil"></i>
-              </a>
-              <a *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XOA')"
-                (click)="xoaItem(data)">
-                <i class="fa fa-trash-o do"></i>
-              </a>
+              
             </td>
-          </tr>
+          </tr> -->
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu">
@@ -172,6 +160,6 @@
 </ng-container>
 <ng-container *ngIf="isDetail">
   <app-thong-tin-phieu-nhap-kho-tam-gui [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
-    [typeVthh]="typeVthh">
+    [loaiVthh]="loaiVthh">
   </app-thong-tin-phieu-nhap-kho-tam-gui>
 </ng-container>

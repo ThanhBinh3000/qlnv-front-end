@@ -1,16 +1,27 @@
-import { Component, Input, OnInit, EventEmitter } from '@angular/core';
-import  dayjs  from 'dayjs';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { UserLogin } from './../../../../../models/userlogin';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { UserService } from './../../../../../services/user.service';
-import { DieuChinhQuyetDinhPdKhmttService } from './../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/dieuchinh-khmtt/DieuChinhQuyetDinhPdKhmtt.service';
-import { Globals } from './../../../../../shared/globals';
-import { MESSAGE } from 'src/app/constants/message';
-import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
+import { cloneDeep } from 'lodash';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import * as dayjs from 'dayjs';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Subject } from 'rxjs';
+import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
+import { LEVEL, LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { MESSAGE } from 'src/app/constants/message';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
+import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
+import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
+import { ItemDetail } from 'src/app/models/itemDetail';
+import { STATUS } from 'src/app/constants/status';
+import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
+import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
+import { NullTemplateVisitor } from '@angular/compiler';
 
 @Component({
   selector: 'app-quyet-dinh',
@@ -18,151 +29,206 @@ import { saveAs } from 'file-saver';
   styleUrls: ['./quyet-dinh.component.scss']
 })
 export class QuyetDinhComponent implements OnInit {
-  @Input()
-  loaiVthhInput: string;
-  @Input() typeVthh: string;
-  isDetail: boolean = false;
-  selectedId: number = 0;
-  isViewDetail: boolean;
-  searchValue = '';
-  listNam: any[] = [];
-
+  @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
+  @Input() loaiVthh: string;
+  yearNow = dayjs().get('year');
   searchFilter = {
-    soQdDc: '',
     namKh: dayjs().get('year'),
-    ngayKyDc: '',
-    trichYeu: '',
+    soQdPd: null,
+    trichYeu: null,
+    loaiVthh: null,
+    ngayKyQd: null,
+    soTrHdr: null,
   };
-
   filterTable: any = {
     namKh: '',
-    soQdDc: '',
-    ngayKyDc: '',
-    soQdDcGoc: '',
+    soQdPd: '',
+    ngayKyQd: '',
     trichYeu: '',
+    soTrHdr: '',
+    idThHdr: '',
     tenLoaiVthh: '',
     tenCloaiVthh: '',
+    soDviTsan: '',
+    slHdDaKy: '',
     tenTrangThai: '',
   };
-
-  allChecked = false;
-  indeterminate = false;
+  STATUS = STATUS
   dataTableAll: any[] = [];
-  getCount = new EventEmitter<any>();
-  dataTable: any[] = [];
+  isDetail: boolean = false;
+  selectedId: number = 0;
+  listVthh: any;
+  listNam: any[] = [];
+  startValue: Date | null = null;
+  endValue: Date | null = null;
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
+  dataTable: any[] = [];
+
+  tabSelected: string = 'quyet-dinh';
+  isVisibleChangeTab$ = new Subject();
+  visibleTab: boolean = false;
+  listOfMapData: VatTu[];
+  listOfMapDataClone: VatTu[];
+  mapOfExpandedData: { [key: string]: VatTu[] } = {};
+  selectHang: any = { ten: "" };
+
+  lastBreadcrumb: string;
   userInfo: UserLogin;
 
   constructor(
+    private router: Router,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private modal: NzModalService,
+    private danhMucService: DanhMucService,
+    private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
+    private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
     public userService: UserService,
-    private DieuChinhQuyetDinhPdKhmttService: DieuChinhQuyetDinhPdKhmttService,
-    public globals: Globals,
   ) { }
 
   async ngOnInit() {
-    this.spinner.show();
+    await this.spinner.show();
     try {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XEM")) {
+        window.location.href = '/error/401'
+      }
       this.userInfo = this.userService.getUserLogin();
+      this.isVisibleChangeTab$.subscribe((value: boolean) => {
+        this.visibleTab = value;
+      });
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
+          value: this.yearNow - i,
+          text: this.yearNow - i,
         });
       }
       await this.search();
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
+      await this.spinner.hide();
+    }
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    console.log(
-      this.dataTable
-    )
+  }
+
+
+  insert() {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
+      return;
+    }
+    this.isDetail = true;
+    this.selectedId = null;
+  }
+
+  detail(data?) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_SUA")) {
+      return;
+    }
+    this.isDetail = true;
+    this.selectedId = data.id;
+  }
+
+  delete(data?) {
+    // if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
+    //   return;
+    // }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: MESSAGE.DELETE_CONFIRM,
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            "id": data.id,
+            "maDvi": null
+          }
+          this.quyetDinhPdKhBdgService.delete(body).then(async (res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              await this.search();
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            }
+            else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          });
+        }
+        catch (e) {
+          console.log('error: ', e)
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  clearFilter() {
+    this.searchFilter.namKh = dayjs().get('year');
+    this.searchFilter.soQdPd = null;
+    this.searchFilter.trichYeu = null;
+    this.searchFilter.ngayKyQd = null;
+    this.searchFilter.soTrHdr = null;
+
+    this.search();
+
   }
 
   async search() {
-    this.spinner.show();
+    this.dataTable = [];
     let body = {
-      ngayKyDcTu: this.searchFilter.ngayKyDc
-        ? dayjs(this.searchFilter.ngayKyDc[0]).format('YYYY-MM-DD')
+      ngayKyQdTu: this.searchFilter.ngayKyQd
+        ? dayjs(this.searchFilter.ngayKyQd[0]).format('YYYY-MM-DD')
         : null,
-      ngayKyDcDen: this.searchFilter.ngayKyDc
-        ? dayjs(this.searchFilter.ngayKyDc[1]).format('YYYY-MM-DD')
+      ngayKyQdDen: this.searchFilter.ngayKyQd
+        ? dayjs(this.searchFilter.ngayKyQd[1]).format('YYYY-MM-DD')
         : null,
-      soQdDc: this.searchFilter.soQdDc,
+      loaiVthh: this.loaiVthh,
       namKh: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
+      soQdPd: this.searchFilter.soQdPd,
+      soTrHdr: this.searchFilter.soTrHdr,
+      lastest: 0,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
     };
-    let res = await this.DieuChinhQuyetDinhPdKhmttService.search(body);
+    let res = await this.quyetDinhPdKhBdgService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.totalRecord = data.totalElements;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
+      if (data && data.content && data.content.length > 0) {
+        this.dataTable = data.content;
+
       }
-      this.dataTableAll = cloneDeep(this.dataTable);
+      this.dataTableAll = cloneDeep(this.dataTable)
+      this.totalRecord = data.totalElements;
     } else {
       this.dataTable = [];
-      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    this.spinner.hide();
   }
 
   async changePageIndex(event) {
     this.spinner.show();
     try {
       this.page = event;
+      await this.search();
       this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
+    }
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-
-  updateAllChecked(): void {
-    this.indeterminate = false;
-    if (this.allChecked) {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
-            item.checked = true;
-          }
-        });
-      }
-    } else {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-    }
-  }
-
-  updateSingleChecked(): void {
-    if (this.dataTable.every((item) => !item.checked)) {
-      this.allChecked = false;
-      this.indeterminate = false;
-    } else if (this.dataTable.every((item) => item.checked)) {
-      this.allChecked = true;
-      this.indeterminate = false;
-    } else {
-      this.indeterminate = true;
     }
   }
 
@@ -170,40 +236,67 @@ export class QuyetDinhComponent implements OnInit {
     this.spinner.show();
     try {
       this.pageSize = event;
+      await this.search();
       this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
+    }
+    catch (e) {
+      console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
 
-  redirectToChiTiet(id: number, isView?: boolean) {
-    this.selectedId = id;
-    this.isDetail = true;
-    this.isViewDetail = isView ?? false;
-  }
 
-  convertTrangThai(status: string) {
-    return this.convertTrangThai(status);
-  }
-
-  async showList() {
+  showList() {
     this.isDetail = false;
-    await this.search();
-  }
-
-  clearFilter() {
-    this.searchFilter = {
-      soQdDc: '',
-      namKh: dayjs().get('year'),
-      ngayKyDc: '',
-      trichYeu: '',
-    };
     this.search();
   }
 
-  xoa() {
+  convertTrangThaiTable(status: string) {
+    return convertTrangThai(status);
+  }
+
+  exportData() {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_EXP")) {
+      return;
+    }
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = {
+          ngayKyQdTu: this.searchFilter.ngayKyQd
+            ? dayjs(this.searchFilter.ngayKyQd[0]).format('YYYY-MM-DD')
+            : null,
+          ngayKyQdDen: this.searchFilter.ngayKyQd
+            ? dayjs(this.searchFilter.ngayKyQd[1]).format('YYYY-MM-DD')
+            : null,
+          loaiVthh: this.searchFilter.loaiVthh,
+          namKh: this.searchFilter.namKh,
+          trichYeu: this.searchFilter.trichYeu,
+          soQdPd: this.searchFilter.soQdPd,
+          soTrHdr: this.searchFilter.soTrHdr,
+          lastest: 0,
+        };
+        this.quyetDinhPdKhBdgService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.xlsx')
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
+  deleteSelect() {
+    // if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
+    //   return;
+    // }
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
@@ -224,88 +317,24 @@ export class QuyetDinhComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.DieuChinhQuyetDinhPdKhmttService.deleteMuti({ idList: dataDelete });
+            let res = await this.quyetDinhPdKhBdgService.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
-              this.getCount.emit();
-              this.allChecked = false;
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
+            this.spinner.hide();
           } catch (e) {
             console.log('error: ', e);
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          } finally {
             this.spinner.hide();
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
           }
         },
       });
     }
     else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
-    }
-  }
-
-
-  xoaItem(item: any) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: item.id,
-            maDvi: '',
-          };
-          this.DieuChinhQuyetDinhPdKhmttService.delete(body).then(async () => {
-            await this.search();
-            this.spinner.hide();
-          });
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-
-  exportData() {
-    if (this.totalRecord > 0) {
-      this.spinner.show();
-      try {
-        let body = {
-          ngayKyDcTu: this.searchFilter.ngayKyDc
-            ? dayjs(this.searchFilter.ngayKyDc[0]).format('YYYY-MM-DD')
-            : null,
-          ngayKyDcDen: this.searchFilter.ngayKyDc
-            ? dayjs(this.searchFilter.ngayKyDc[1]).format('YYYY-MM-DD')
-            : null,
-          soQdDc: this.searchFilter.soQdDc,
-
-          namKhoach: this.searchFilter.namKh,
-
-        };
-        this.DieuChinhQuyetDinhPdKhmttService
-          .export(body)
-          .subscribe((blob) =>
-            saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
-          );
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
 
@@ -329,15 +358,50 @@ export class QuyetDinhComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      namKhoach: '',
-      soQdDc: '',
-      ngayKyDc: '',
-      soQdDcGoc: '',
+      namKh: '',
+      soQdPd: '',
+      ngayKyQd: '',
       trichYeu: '',
+      soTrHdr: '',
+      idThHdr: '',
       tenLoaiVthh: '',
       tenCloaiVthh: '',
-      trangThai: '',
-    };
+      soDviTsan: '',
+      slHdDaKy: '',
+      tenTrangThai: '',
+    }
   }
 
+  allChecked = false;
+  indeterminate = false;
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == '00') {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
 }

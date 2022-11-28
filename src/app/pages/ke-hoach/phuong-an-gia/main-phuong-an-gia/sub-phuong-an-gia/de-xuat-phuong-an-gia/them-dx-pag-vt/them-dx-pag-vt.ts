@@ -68,6 +68,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   dsPhuongAnGia: any[] = [];
   dsLoaiHangXdg: any[] = [];
   STATUS: any;
+   fileDinhKemList: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -101,7 +102,8 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         qdCtKhNam: [null],
         soCanCu: [null],
         maPphapXdg: [null, [Validators.required]],
-        loaiHangXdg: []
+        loaiHangXdg: [],
+        vat:  [10]
       }
     );
     this.STATUS = STATUS
@@ -121,10 +123,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.getDataChiTieu(),
+      // this.getDataChiTieu(),
       this.loadDsPhuongAnGia(),
       this.loadDsVthh(),
-      this.loadDsQdPduyetKhlcnt(),
       this.loadDsHangHoaPag(),
       this.loadDsLoaiGia(),
       this.maDx = '/TCDT-KH',
@@ -323,6 +324,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.dataTableKqGia = data.ketQuaThamDinhGia;
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableCanCuXdg = data.canCuPhapLy;
+      this.fileDinhKemList = data.fileDinhKems;
       this.updateEditCache('ttc')
       this.updateEditCache('ccXdg')
       this.updateEditCache('ppxdg')
@@ -331,6 +333,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   async loadTenCloaiVthh(vthh, ttc) {
+    await this.loadDsQdPduyetKhlcnt();
     await this.onChangeLoaiVthh(vthh)
     if (ttc) {
       ttc.forEach(item => {
@@ -610,6 +613,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     body.ketQuaThamDinhGia = this.dataTableKqGia;
     body.type = this.type;
     body.soDeXuat = body.soDeXuat + this.maDx;
+    body.fileDinhKemReqs = this.fileDinhKemList;
     let res
     if (this.idInput > 0) {
       res = await this.giaDeXuatGiaService.update(body);

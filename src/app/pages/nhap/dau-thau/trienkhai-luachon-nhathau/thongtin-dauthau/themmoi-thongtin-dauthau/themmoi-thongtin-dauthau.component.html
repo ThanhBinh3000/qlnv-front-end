@@ -374,6 +374,7 @@
                             <th rowspan="2">Chủng loại hàng hóa</th>
                             <th rowspan="2">Cục DTNN KV</th>
                             <th rowspan="2">Chi Cục DTNN KV</th>
+                            <th rowspan="2">Điểm kho</th>
                             <th colspan="3">Kế hoạch đấu thầu</th>
                             <th colspan="4">Kết quả đấu thầu</th>
                             <th rowspan="2" style="width: 5%;">Trạng thái đấu thầu</th>
@@ -395,7 +396,8 @@
                                 <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                                 <td>{{item.goiThau}}</td>
                                 <td>{{item.cloaiVthh}}</td>
-                                <td>{{item.tenDvi}}</td>
+                                <td></td>
+                                <td></td>
                                 <td></td>
                                 <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
@@ -414,22 +416,72 @@
                                 </td>
                             </tr>
                             <ng-container *ngIf="expandSet.has(i)">
-                                <tr *ngFor="let dtGoiThau of item.children, let y = index">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>{{dtGoiThau.tenDvi}}</td>
-                                    <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td>{{dtGoiThau.soLuong * item.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-right"> </td>
-                                </tr>
+                                <ng-container *ngFor="let cuc of item.children, let y = index">
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right" [nzExpand]="expandSet2.has(y)"
+                                            (nzExpandChange)="onExpandChange2(y, $event)">
+                                        </td>
+                                        <td>{{cuc.tenDvi}}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                                        <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                                        <td>{{cuc.soLuong * item.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right"> </td>
+                                    </tr>
+                                    <ng-container *ngIf="expandSet2.has(y)">
+                                        <ng-container *ngFor="let chiCuc of cuc.children, let z = index">
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class="text-right" [nzExpand]="expandSet3.has(z)"
+                                                    (nzExpandChange)="onExpandChange3(z, $event)">
+                                                </td>
+                                                <td>{{chiCuc.tenDvi}}</td>
+                                                <td></td>
+                                                <td>{{chiCuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                                                <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                                                <td>{{chiCuc.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <ng-container *ngIf="expandSet3.has(z)">
+                                                <tr *ngFor="let diemKho of chiCuc.children">
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>{{diemKho.tenDvi}}</td>
+                                                    <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                                                    <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                                                    <td>{{diemKho.soLuong * item.donGiaVat | number : '1.0-1' :
+                                                        'vi_VN'}}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+
                             </ng-container>
                         </ng-container>
                     </tbody>
@@ -555,17 +607,6 @@
                 </nz-table>
             </nz-card>
         </nz-card>
-        <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form class="mt-16">
-            <nz-form-item>
-                <nz-form-label [nzNoColon]="true">
-                    Ghi chú
-                </nz-form-label>
-                <nz-form-control>
-                    <textarea nz-input [rows]="3" formControlName="ghiChu"></textarea>
-                </nz-form-control>
-            </nz-form-item>
-        </form>
     </nz-card>
     <!-- END DANH SÁCH CÁC GÓI THẦU -->
-
 </div>

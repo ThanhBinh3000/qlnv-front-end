@@ -10,7 +10,7 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyBienBanChuanBiKhoService } from 'src/app/services/quanLyBienBanChuanBiKho.service';
+import { QuanLyBienBanChuanBiKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanChuanBiKho.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
@@ -143,7 +143,7 @@ export class BienBanGiaoNhanComponent implements OnInit {
       "soBienBan": this.searchFilter.soBienBan,
       "soQdNhap": this.searchFilter.soQuyetDinhNhap
     };
-    let res = await this.bienBanChuanBiKhoService.timKiem(body);
+    let res = await this.bienBanChuanBiKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -212,7 +212,7 @@ export class BienBanGiaoNhanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.bienBanChuanBiKhoService.deleteData(item.id).then((res) => {
+          this.bienBanChuanBiKhoService.delete(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -269,7 +269,7 @@ export class BienBanGiaoNhanComponent implements OnInit {
           "trangThai": null
         };
         this.bienBanChuanBiKhoService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-bien-ban-chuan-bi-kho.xlsx'),
           );
@@ -305,7 +305,7 @@ export class BienBanGiaoNhanComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.bienBanChuanBiKhoService.deleteMultiple({ ids: dataDelete });
+            let res = await this.bienBanChuanBiKhoService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

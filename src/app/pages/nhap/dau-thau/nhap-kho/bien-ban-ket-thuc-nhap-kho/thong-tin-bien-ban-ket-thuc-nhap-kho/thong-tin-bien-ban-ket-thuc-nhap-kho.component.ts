@@ -9,7 +9,7 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyBienBanChuanBiKhoService } from 'src/app/services/quanLyBienBanChuanBiKho.service';
+import { QuanLyBienBanChuanBiKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanChuanBiKho.service';
 import { QuanLyBienBanKetThucNhapKhoService } from 'src/app/services/quanLyBienBanKetThucNhapKho.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapKho.service';
@@ -768,7 +768,7 @@ export class ThongTinBienBanKetThucNhapKhoComponent implements OnInit {
       "soQdNhap": null,
       "trangThai": this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC
     };
-    let res = await this.bienBanChuanBiKhoService.timKiem(body);
+    let res = await this.bienBanChuanBiKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listBienBanChuanBiKho = data.content;

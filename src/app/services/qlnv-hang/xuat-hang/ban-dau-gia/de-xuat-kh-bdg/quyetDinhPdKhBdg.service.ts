@@ -9,7 +9,7 @@ export class QuyetDinhPdKhBdgService extends BaseService {
     GATEWAY = '/qlnv-hang';
 
     constructor(public httpClient: HttpClient) {
-        super(httpClient, 'ban-dau-gia/qd-kh-bdg', '');
+        super(httpClient, 'ban-dau-gia/qd-pd-bdg', '');
     }
 
 }

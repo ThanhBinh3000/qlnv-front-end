@@ -94,7 +94,7 @@
             <th style="width: 25%;">Trích yếu</th>
             <th style="width: 10%;">Trạng thái</th>
             <th class="text-center" width="width: 5%;">Hành động</th>
-            <td width="width: 25%;" [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
+            <td [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
               <div class="container">
                 <div class="header">
                   <h3 class="first">Bộ</h3>
@@ -102,7 +102,7 @@
                 </div>
                 <div class="content" *ngFor="let data of listBoNganh">
                   <div class="content-item">
-                    <div class="first">{{data.tenBoNganh}}</div>
+                    <div class="first"><p>{{data.tenBoNganh}}</p></div>
                     <div class="second">{{data.tongTien | number : '1.0-1' : 'vi_VN'}}</div>
                   </div>
                 </div>

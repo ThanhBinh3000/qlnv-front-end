@@ -175,24 +175,24 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     } else if (this.userService.isCuc()) {
       this.lastBreadcrumb = LEVEL.CUC_SHOW;
     }
-    this.findCanCuByYear(this.yearNow);
     this.newObjectLuongThuc();
     this.newObjectMuoi();
     this.newObjectVatTu();
     this.loadDanhMucHang();
     this.loadDsCanCu();
-
     this.loadDonVi();
-    this.formData.patchValue({
-      namKeHoach: dayjs().get('year')
-    });
     if (this.id > 0) {
       this.loadThongTinChiTieuKeHoachNam(this.id);
+    } else {
+      this.formData.patchValue({
+        namKeHoach: dayjs().get('year')
+      });
+      this.findCanCuByYear(this.yearNow);
     }
   }
 
 
-  async findCanCuByYear(year: number) {
+  async findCanCuByYear(year: number, id?) {
     this.formData.patchValue({
       canCu: null,
     })
@@ -203,7 +203,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         let data = res.data
         if (data) {
           this.formData.patchValue({
-            canCu: data.canCu,
+            canCu: data.soQuyetDinh,
             chiTieuId: data.id
           })
         }
@@ -728,7 +728,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.thongTinChiTieuKeHoachNam = res.data;
-          this.yearNowClone = cloneDeep(this.thongTinChiTieuKeHoachNam.namKeHoach);
+          // this.yearNowClone = cloneDeep(this.thongTinChiTieuKeHoachNam.namKeHoach);
           this.thongTinChiTieuKeHoachNam.fileDinhKemReqs =
             res.data.fileDinhKems;
           if (this.thongTinChiTieuKeHoachNam?.fileDinhKemReqs?.length > 0) {
@@ -752,7 +752,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.keHoachMuoiShow = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
           );
-
           if (this.thongTinChiTieuKeHoachNam.soQuyetDinh && this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/').length > 1) {
             this.qdTCDT = this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[1];
           }
@@ -762,7 +761,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.keHoachVatTuShow = cloneDeep(
             this.thongTinChiTieuKeHoachNam.khVatTu,
           );
-          this.yearNow = this.thongTinChiTieuKeHoachNam.namKeHoach;
+          // this.yearNow = this.thongTinChiTieuKeHoachNam.namKeHoach;
           if (this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDC || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.DA_DUYET_LDV) {
             this.formData.controls['ngayKy'].setValidators([Validators.required])
             this.formData.controls['ngayHieuLuc'].setValidators([Validators.required])
@@ -776,15 +775,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             namKeHoach: this.thongTinChiTieuKeHoachNam.namKeHoach,
             canCu: this.thongTinChiTieuKeHoachNam.canCu,
             trichYeu: this.thongTinChiTieuKeHoachNam.trichYeu,
-            soQd: this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[0],
+            soQd: this.thongTinChiTieuKeHoachNam.soQuyetDinh ? this.thongTinChiTieuKeHoachNam.soQuyetDinh.split('/')[0] : null,
             ngayKy: this.thongTinChiTieuKeHoachNam.ngayKy,
             ngayHieuLuc: this.thongTinChiTieuKeHoachNam.ngayHieuLuc,
             // arrCanCu: JSON.parse(this.thongTinChiTieuKeHoachNam.canCu)
           })
           this.loadData();
-          // this.formData.patchValue({
-          //   soQD: this.formData.get('soQd').value?.split('/')[0],
-          // });
+          this.formData.patchValue({
+            soQD: this.formData.get('soQd').value?.split('/')[0],
+          });
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -1282,6 +1281,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   banHanh() {
     this.spinner.show();
+    this.formData.controls["soQd"].setValidators([Validators.required]);
+    this.formData.controls["ngayKy"].setValidators([Validators.required]);
+    this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide()
@@ -1389,6 +1391,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   save(isGuiDuyet?: boolean) {
     this.spinner.show();
+    // if (isGuiDuyet) {
+    //   this.formData.controls["soQd"].setValidators([Validators.required]);
+    //   this.formData.controls["ngayKy"].setValidators([Validators.required]);
+    //   this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
+    // } else {
+    //   this.formData.controls["soQd"].clearValidators();
+    //   this.formData.controls["ngayKy"].clearValidators();
+    //   this.formData.controls["ngayHieuLuc"].clearValidators();
+    // };
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
@@ -1415,7 +1426,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.thongTinChiTieuKeHoachNamInput.khMuoi = cloneDeep(
       this.thongTinChiTieuKeHoachNam.khMuoiDuTru,
     );
-    console.log(this.thongTinChiTieuKeHoachNam.khMuoiDuTru);
     this.thongTinChiTieuKeHoachNamInput.khMuoi.forEach((muoi) => {
       // delete muoi.maDonVi;
       delete muoi.tkdnTongSoMuoi;
@@ -1423,11 +1433,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       delete muoi.tkcnTongSoMuoi;
       // muoi.xuatTrongNam = cloneDeep(muoi.xtnMuoi);
       delete muoi.xtnMuoi;
-      muoi.nhapTrongNam = cloneDeep(muoi.ntnTongSoMuoi);
+      muoi.donViTinh = 'Kg';
+      // muoi.nhapTrongNam = cloneDeep(muoi.ntnTongSoMuoi);
       delete muoi.ntnTongSoMuoi;
       delete muoi.xtnTongSoMuoi;
+      delete muoi.sdcXtnMuoi;
+      delete muoi.tdcXtnMuoi;
+      delete muoi.xuatTrongNam;
       delete muoi.id;
     });
+    console.log(this.thongTinChiTieuKeHoachNamInput.khMuoi);
     delete this.thongTinChiTieuKeHoachNamInput.khMuoiDuTru;
     const khVatTu = this.thongTinChiTieuKeHoachNamInput.khVatTu;
     for (let i = 0; i < khVatTu.length; i++) {
@@ -1611,16 +1626,16 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
         luongThuc.xtnThoc[2].nam = this.yearNow - 3;
       });
     }
-    if (this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.length > 0) {
-      this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.forEach((muoi) => {
-        muoi.tkdnMuoi[0].nam = this.yearNow - 1;
-        muoi.tkdnMuoi[1].nam = this.yearNow - 2;
-        muoi.tkdnMuoi[2].nam = this.yearNow - 3;
-        muoi.xtnMuoi[0].nam = this.yearNow - 1;
-        muoi.xtnMuoi[1].nam = this.yearNow - 2;
-        muoi.xtnMuoi[2].nam = this.yearNow - 3;
-      });
-    }
+    // if (this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.length > 0) {
+    //   this.thongTinChiTieuKeHoachNam?.khMuoiDuTru.forEach((muoi) => {
+    //     muoi.tkdnMuoi[0].nam = this.yearNow - 1;
+    //     muoi.tkdnMuoi[1].nam = this.yearNow - 2;
+    //     muoi.tkdnMuoi[2].nam = this.yearNow - 3;
+    //     muoi.xtnMuoi[0].nam = this.yearNow - 1;
+    //     muoi.xtnMuoi[1].nam = this.yearNow - 2;
+    //     muoi.xtnMuoi[2].nam = this.yearNow - 3;
+    //   });
+    // }
   }
 
   convertTrangThai(status: string) {
@@ -1904,11 +1919,15 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.optionsDonVi = [];
       if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
-          const item = {
-            ...res.data[i],
-            labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
-          };
-          this.optionsDonVi.push(item);
+          if (res.data[i].type != 'PB') {
+            const item = {
+              ...res.data[i],
+              labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
+            };
+            this.optionsDonVi.push(item);
+          } else {
+            continue;
+          }
         }
         this.options = cloneDeep(this.optionsDonVi);
       } else {
@@ -2235,7 +2254,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
     this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
     this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
-    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoCuoiNam, 0);
+    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
     this.loadData();
   }
 
@@ -2400,7 +2419,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.sumTotalKhDuTruMuoi.tonKhoDauNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoDauNam, 0);
     this.sumTotalKhDuTruMuoi.nhapTrongNam = this.dsMuoiClone?.reduce((a, b) => a + +b.nhapTrongNam, 0);
     this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi = this.dsMuoiClone?.reduce((a, b) => a + +b.xuatTrongNamMuoi, 0);
-    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.dsMuoiClone?.reduce((a, b) => a + +b.tonKhoCuoiNam, 0);
+    this.sumTotalKhDuTruMuoi.tonKhoCuoiNam = this.sumTotalKhDuTruMuoi.tonKhoDauNam + this.sumTotalKhDuTruMuoi.nhapTrongNam - this.sumTotalKhDuTruMuoi.xuatTrongNamMuoi;
     this.cdr.detectChanges();
   }
 
@@ -2704,6 +2723,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.id === 0 || this.isViewDetail
     );
   }
+
 
   selectDonViKeyDown(event, type) {
     const donVi = this.optionsDonVi.find(

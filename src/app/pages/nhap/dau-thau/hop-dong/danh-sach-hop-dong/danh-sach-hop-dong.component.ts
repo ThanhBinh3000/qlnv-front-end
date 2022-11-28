@@ -89,6 +89,7 @@ export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
     super.ngOnInit();
     try {
       this.userInfo = this.userService.getUserLogin();
+      console.log(this.loaiVthh);
       await this.loadDonVi();
       await this.search();
       this.spinner.hide();

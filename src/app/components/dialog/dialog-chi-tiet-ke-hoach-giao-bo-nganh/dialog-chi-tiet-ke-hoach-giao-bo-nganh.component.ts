@@ -99,7 +99,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
               this.dsHangHoa = [...this.dsHangHoa, ...item.child]
             });
           } else {
-            this.dsHangHoa = hangHoa.data;
+            this.dsHangHoa = hangHoa.data.filter(item => item.cap == 1);
           }
         }
       })

@@ -13,6 +13,10 @@
             <app-danh-sach-bao-cao-thuc-hien-von-phi (dataChange)="changeTab($event)">
             </app-danh-sach-bao-cao-thuc-hien-von-phi>
         </ng-container>
+        <ng-container *ngIf="tabSelected == 'vanphong'">
+            <app-danh-sach-bao-cao-thuc-hien-von-phi [data]="data" (dataChange)="changeTab($event)">
+            </app-danh-sach-bao-cao-thuc-hien-von-phi>
+        </ng-container>
         <ng-container *ngIf="tabSelected == 'capduoi'">
             <app-danh-sach-bao-cao-tu-don-vi-cap-duoi (dataChange)="changeTab($event)">
             </app-danh-sach-bao-cao-tu-don-vi-cap-duoi>

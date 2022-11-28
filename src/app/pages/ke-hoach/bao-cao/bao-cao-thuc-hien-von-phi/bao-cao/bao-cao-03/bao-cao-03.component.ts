@@ -65,8 +65,8 @@ export class BaoCao03Component implements OnInit {
     tuNgay: any;
     denNgay: any;
     listIdDelete = "";
-    trangThaiPhuLuc = '1';
-
+    trangThaiPhuLuc = '3';
+    luyKes: any[] = []          // lay bao cao nam
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
@@ -114,6 +114,7 @@ export class BaoCao03Component implements OnInit {
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnExport = this.data?.statusBtnExport;
+        this.luyKes = this.data?.luyKes.find(item => item.maLoai == '5')?.lstCtietBcaos;
         if (this.status) {
             this.tuNgay = this.datePipe.transform(this.data?.tuNgay, Utils.FORMAT_DATE_STR);
             this.denNgay = this.datePipe.transform(this.data?.denNgay, Utils.FORMAT_DATE_STR);
@@ -124,12 +125,21 @@ export class BaoCao03Component implements OnInit {
         this.idBaoCao = this.data?.idBaoCao;
         this.trangThaiPhuLuc = this.data?.trangThai;
         // 03
-        this.data?.lstCtietBcaos.forEach(item => {
-            const id = parseInt(item.header, 10) - 31;
-            this.lstCtietBcao[id].data.push({
-                ...item,
+        if (!this.data?.dotBcao && this.trangThaiPhuLuc == '3') {
+            this.luyKes.forEach(item => {
+                const id = parseInt(item.header, 10) - 31;
+                this.lstCtietBcao[id].data.push({
+                    ...item,
+                })
             })
-        })
+        } else {
+            this.data?.lstCtietBcaos.forEach(item => {
+                const id = parseInt(item.header, 10) - 31;
+                this.lstCtietBcao[id].data.push({
+                    ...item,
+                })
+            })
+        }
         this.idPhuLuc.forEach(id => {
             this.lstCtietBcao[id].lstVtu = this.lstVatTuFull;
             this.lstCtietBcao[id].data.forEach(item => {

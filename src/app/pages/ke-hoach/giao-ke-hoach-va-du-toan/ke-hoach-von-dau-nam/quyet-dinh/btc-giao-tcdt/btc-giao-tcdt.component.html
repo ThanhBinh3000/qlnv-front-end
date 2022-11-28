@@ -90,13 +90,13 @@
               <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                 [nzIndeterminate]="indeterminate"></label>
             </th>
-            <th class="text-left" style="width: 2%;">STT</th>
-            <th class="text-left" style="width: 10%;">Số quyết định</th>
-            <th class="text-left" style="width: 10%;">Ngày quyết định</th>
-            <th class="text-left" style="width: 35%;">Trích yếu</th>
-            <th class="text-left" style="width: 10%;">Trạng thái</th>
-            <th class="text-left" width="width: 5%;">Hành động</th>
-            <td width="width: 25%;" [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
+            <th class="text-left">STT</th>
+            <th class="text-left">Số quyết định</th>
+            <th class="text-left">Ngày quyết định</th>
+            <th class="text-left">Trích yếu</th>
+            <th class="text-left">Trạng thái</th>
+            <th class="text-left">Hành động</th>
+            <td width="400px" [attr.rowspan]="dataTable.length + 2" class="tong-ket-nam">
               <div class="container">
                 <div class="header">
                   <h3 class="first">BỘ</h3>
@@ -191,16 +191,16 @@
             </ng-template>
           </tr>
           <tr *ngFor="let data of rowSelectionTable.data; let idx = index" (click)="getDetailRow(data.id)">
-            <th width="45px">
+            <td width="45px">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                 [nzDisabled]="data.trangThai != '00'"></label>
-            </th>
-            <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
-            <td>{{ data.soQd }}</td>
-            <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.trichYeu }}</td>
-            <td>{{ data.tenTrangThai }}</td>
-            <td>
+            </td>
+            <td [ngClass]="(rowSelected==data.id)?'bg-selected':''" class="text-center">{{(page-1)*pageSize+idx+1}}</td>
+            <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.soQd }}</td>
+            <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
+            <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.trichYeu }}</td>
+            <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">{{ data.tenTrangThai }}</td>
+            <td [ngClass]="(rowSelected==data.id)?'bg-selected':''">
               <a *ngIf="	(data.trangThai !== '00') && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT_XEM')"
                 (click)="viewDetail(data.id, false)">
                 <i class="fa fa-eye"></i>

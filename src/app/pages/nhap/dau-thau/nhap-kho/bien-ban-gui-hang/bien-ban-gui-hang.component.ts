@@ -18,7 +18,7 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./bien-ban-gui-hang.component.scss']
 })
 export class BienBanGuiHangComponent implements OnInit {
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
 
@@ -230,7 +230,7 @@ export class BienBanGuiHangComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "loaiVthh": this.typeVthh,
+          "loaiVthh": this.loaiVthh,
           "maDvi": this.userInfo.MA_DVI,
           "ngayGuiHangDen": this.searchFilter.ngayGuiHang && this.searchFilter.ngayGuiHang.length > 1
             ? dayjs(this.searchFilter.ngayGuiHang[1]).format('YYYY-MM-DD')

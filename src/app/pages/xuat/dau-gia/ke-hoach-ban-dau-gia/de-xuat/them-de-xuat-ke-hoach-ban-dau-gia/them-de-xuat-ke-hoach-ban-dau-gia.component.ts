@@ -1,5 +1,5 @@
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, OnChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -42,7 +42,7 @@ import {
   templateUrl: './them-de-xuat-ke-hoach-ban-dau-gia.component.html',
   styleUrls: ['./them-de-xuat-ke-hoach-ban-dau-gia.component.scss']
 })
-export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implements OnInit {
+export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implements OnInit, OnChanges {
   @Input()
   loaiVthhInput: string;
   @Input()
@@ -405,7 +405,17 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     if (this.formData.get('soDxuat').value) {
       body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
     }
-    body.fileDinhKemReq = this.fileDinhKem;
+    body.tgianDkienDen = this.formData.get('thoiGianDuKien').value
+      ? dayjs(this.formData.get('thoiGianDuKien').value[0]).format(
+        'YYYY-MM-DD',
+      )
+      : null,
+      body.tgianDkienTu = this.formData.get('thoiGianDuKien').value
+        ? dayjs(this.formData.get('thoiGianDuKien').value[1]).format(
+          'YYYY-MM-DD',
+        )
+        : null,
+      body.fileDinhKemReq = this.fileDinhKem;
     body.dsPhanLoReq = this.listOfData;
     let res = null;
     if (this.formData.get('id').value) {
@@ -672,13 +682,13 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     }
   }
 
-  changeThoiGianDuKien() {
-    let value = this.formData.get('thoiGianDuKien').value;
-    if (value) {
-      this.formData.patchValue({
-        tgianDkienTu: value[0],
-        tgianDkienDen: value[1],
-      })
-    }
-  }
+  // changeThoiGianDuKien() {
+  //   let value = this.formData.get('thoiGianDuKien').value;
+  //   if (value) {
+  //     this.formData.patchValue({
+  //       tgianDkienTu: value[0],
+  //       tgianDkienDen: value[1],
+  //     })
+  //   }
+  // }
 }

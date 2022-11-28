@@ -55,7 +55,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public globals: Globals,
     private userService: UserService,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhiemVuXuatHangService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhiemVuXuatHangService,
   ) {
     this.initForm();
   }
@@ -245,7 +245,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
         "namXuat": dayjs().get('year'),
       }
       if (this.id > 0) {
-        let res = await this.quyetDinhNhapXuatService.sua(
+        let res = await this.quyetDinhGiaoNhapHangService.sua(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -260,7 +260,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
-        let res = await this.quyetDinhNhapXuatService.them(
+        let res = await this.quyetDinhGiaoNhapHangService.them(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -285,7 +285,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   loadThongTinQdNhapXuatHang(id: number) {
-    this.quyetDinhNhapXuatService
+    this.quyetDinhGiaoNhapHangService
       .loadChiTiet(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
@@ -345,7 +345,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             trangThai: this.globals.prop.NHAP_CHO_DUYET_TP,
           };
           let res =
-            await this.quyetDinhNhapXuatService.updateStatus(
+            await this.quyetDinhGiaoNhapHangService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -386,7 +386,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             trangThai: trangThai,
           };
           let res =
-            await this.quyetDinhNhapXuatService.updateStatus(
+            await this.quyetDinhGiaoNhapHangService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -429,7 +429,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             trangThai: trangThai,
           };
           let res =
-            await this.quyetDinhNhapXuatService.updateStatus(
+            await this.quyetDinhGiaoNhapHangService.updateStatus(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {

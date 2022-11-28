@@ -8,7 +8,7 @@
             <nz-form-label>Chọn ĐV cấp trên(Chi cục/Điểm kho/Nhà kho/Ngăn kho)</nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <nz-tree-select #treeSelect [nzNodes]="nodesTree" [nzDropdownMatchSelectWidth]="true"
+                <nz-tree-select #treeSelect [nzNodes]="nodesTree"
                                 nzShowSearch nzVirtualHeight="300px" nzPlaceHolder="Vui lòng chọn"
                                 formControlName="maCha">
                 </nz-tree-select>
@@ -820,7 +820,7 @@
             <nz-form-item>
               <nz-form-label nzRequired>Loại kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select [nzDisabled]="true" formControlName="loaiKhoId">
+                <nz-select [nzDisabled]="true" formControlName="loaikhoId">
                   <nz-option></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -831,7 +831,7 @@
               <nz-form-label nzRequired>Thuộc ngăn kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group >
-                  <input  formControlName="tenNganKho" nz-input [readonly]="true" />
+                  <input  formControlName="tenNgankho" nz-input [readonly]="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -841,7 +841,7 @@
               <nz-form-label nzRequired>Thuộc nhà kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group >
-                  <input formControlName="tenNhaKho" nz-input [readonly]="true" />
+                  <input formControlName="tenNhakho" nz-input [readonly]="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -851,7 +851,7 @@
               <nz-form-label nzRequired>Thuộc điểm kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group >
-                  <input formControlName="tenDiemKho" nz-input [readonly]="true" />
+                  <input formControlName="tenDiemkho" nz-input [readonly]="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -1040,7 +1040,7 @@
             <nz-form-item>
             <nz-form-label nzRequired> Tình trạng lô kho </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="tinhTrangId">
+              <nz-select formControlName="tinhtrangId">
                 <nz-option *ngFor="let item of listTinhTrang" [nzValue]="item.ma" [nzLabel]="item.giaTri">
 
                 </nz-option>
