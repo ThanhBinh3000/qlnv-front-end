@@ -24,17 +24,17 @@ import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/comm
 import { Globals } from 'src/app/shared/globals';
 import { BaseComponent } from "../../../../../../components/base/base.component";
 import { FormBuilder, Validators } from '@angular/forms';
-import { PAGE_SIZE_DEFAULT } from './../../../../../../constants/config';
-import { HelperService } from './../../../../../../services/helper.service';
+import { PAGE_SIZE_DEFAULT } from '../../../../../../constants/config';
+import { HelperService } from '../../../../../../services/helper.service';
 import { DatePipe } from '@angular/common';
 import { STATUS } from 'src/app/constants/status';
 
 @Component({
-  selector: 'app-them-mo-ho-so-ky-thuat',
-  templateUrl: './them-mo-ho-so-ky-thuat.component.html',
-  styleUrls: ['./them-mo-ho-so-ky-thuat.component.scss']
+  selector: 'app-them-moi-ho-so-ky-thuat',
+  templateUrl: './them-moi-ho-so-ky-thuat.component.html',
+  styleUrls: ['./them-moi-ho-so-ky-thuat.component.scss']
 })
-export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit {
+export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit {
 
   @Input() id: number;
   @Input() isView: boolean;
@@ -316,12 +316,18 @@ export class ThemMoHoSoKyThuatComponent extends BaseComponent implements OnInit 
         }
       }
     }
-    else{
-      id=await this.userService.getId("HO_SO_KY_THUAT_SEQ")
+    else {
+      let id = await this.userService.getId("HO_SO_KY_THUAT_SEQ")
+      this.formData.patchValue({
+        id: id+"/"+dayjs().get('year')+"/HSKT-CDTKVVP",
+        tenDvi: this.userInfo.TEN_DVI,
+        maDvi: this.userInfo.MA_DVI,
+        diaChiDvi: this.userInfo.DON_VI.diaChi,
+      })
     }
   }
 
-  
+
 
   pheDuyet() {
     let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
