@@ -6,6 +6,7 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { BaseComponent } from 'src/app/components/base/base.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
@@ -23,7 +24,7 @@ import { Globals } from 'src/app/shared/globals';
   templateUrl: './bien-ban-chuan-bi-kho.component.html',
   styleUrls: ['./bien-ban-chuan-bi-kho.component.scss']
 })
-export class BienBanChuanBiKhoComponent implements OnInit {
+export class BienBanChuanBiKhoComponent extends BaseComponent implements OnInit {
   @Input() loaiVthh: string;
   qdTCDT: string = MESSAGE.QD_TCDT;
 
@@ -75,8 +76,11 @@ export class BienBanChuanBiKhoComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
-  ) { }
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
+  ) {
+    super();
+    super.ngOnInit
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -139,7 +143,7 @@ export class BienBanChuanBiKhoComponent implements OnInit {
       trangThai: STATUS.BAN_HANH,
       bienBan: ['bienBanChuanBiKho']
     };
-    let res = await this.quyetDinhNhapXuatService.search(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -215,7 +219,7 @@ export class BienBanChuanBiKhoComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.bienBanChuanBiKhoService.delete(item.id).then((res) => {
+          this.bienBanChuanBiKhoService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -236,7 +240,7 @@ export class BienBanChuanBiKhoComponent implements OnInit {
     });
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;

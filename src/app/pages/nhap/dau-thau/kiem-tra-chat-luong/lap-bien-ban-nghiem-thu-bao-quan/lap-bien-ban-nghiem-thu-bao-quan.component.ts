@@ -87,7 +87,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
     public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public globals: Globals,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
   ) { }
 
   async ngOnInit() {
@@ -235,7 +235,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
       },
       trangThai: STATUS.BAN_HANH
     };
-    let res = await this.quyetDinhNhapXuatService.search(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;

@@ -69,13 +69,12 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
     private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
     public globals: Globals,
-    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private hoSoKyThuatService: HoSoKyThuatService,
     private thongTinHopDongService: ThongTinHopDongService,
     private fb: FormBuilder,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private helperService: HelperService,
 
   ) {
@@ -161,10 +160,10 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
       soPhieuNhapKho: `${res}/${this.formData.get('nam').value}/PNK-CCDTVP`,
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
-      maQhmaQhnsns: this.userInfo.DON_VI.maQhns,
+      maQhns: this.userInfo.DON_VI.maQhns,
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
-      tenNguoiTao: this.userInfo.sub
+      tenNguoiTao: this.userInfo.TEN_DAY_DU
     });
     if (this.idQdGiaoNvNh) {
       await this.bindingDataQd(this.idQdGiaoNvNh);
@@ -220,7 +219,7 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
 
   async bindingDataQd(id) {
     await this.spinner.show();
-    let dataRes = await this.quyetDinhNhapXuatService.getDetail(id)
+    let dataRes = await this.quyetDinhGiaoNhapHangService.getDetail(id)
     const data = dataRes.data;
     this.formData.patchValue({
       soQdGiaoNvNh: data.soQd,

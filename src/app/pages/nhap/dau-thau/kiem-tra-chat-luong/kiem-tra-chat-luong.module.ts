@@ -10,8 +10,6 @@ import { ThongTinHoSoKyThuatComponent } from './ho-so-ky-thuat/thong-tin-ho-so-k
 import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong.component';
 import { LapBienBanNghiemThuBaoQuanComponent } from './lap-bien-ban-nghiem-thu-bao-quan/lap-bien-ban-nghiem-thu-bao-quan.component';
 import { ThongTinBienBanNghiemThuBaoQuanComponent } from './lap-bien-ban-nghiem-thu-bao-quan/thong-tin-bien-ban-nghiem-thu-bao-quan/thong-tin-bien-ban-nghiem-thu-bao-quan.component';
-import { QuanLyBienBanBanGiaoMauComponent } from './quan-ly-bien-ban-ban-giao-mau/quan-ly-bien-ban-ban-giao-mau.component';
-import { ThemMoiBienBanBanGiaoMauComponent } from './quan-ly-bien-ban-ban-giao-mau/them-moi-bien-ban-ban-giao-mau/them-moi-bien-ban-ban-giao-mau.component';
 import { QuanLyBienBanLayMauComponent } from './quan-ly-bien-ban-lay-mau/quan-ly-bien-ban-lay-mau.component';
 import { ThemMoiBienBanLayMauKhoComponent } from './quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/them-moi-bien-ban-lay-mau.component';
 import { QuanLyPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-tra-chat-luong-hang/quan-ly-phieu-kiem-tra-chat-luong-hang.component';
@@ -20,7 +18,8 @@ import { QuanLyPhieuKiemNghiemChatLuongComponent } from './quan-ly-phieu-kiem-ng
 import { ThemMoiPhieuKiemNghiemChatLuongComponent } from './quan-ly-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component';
 import { ThanhphanLaymauComponent } from './quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/thanhphan-laymau/thanhphan-laymau.component';
 import { ThongtinThuchienComponent } from './bien-ban-chuan-bi-kho/thong-tin-bien-ban-chuan-bi-kho/thongtin-thuchien/thongtin-thuchien.component';
-import { ThemMoHoSoKyThuatComponent } from './ho-so-ky-thuat/them-mo-ho-so-ky-thuat/them-mo-ho-so-ky-thuat.component';
+import { ThemMoiHoSoKyThuatComponent } from './ho-so-ky-thuat/them-moi-ho-so-ky-thuat/them-moi-ho-so-ky-thuat.component';
+
 
 @NgModule({
   declarations: [
@@ -31,9 +30,7 @@ import { ThemMoHoSoKyThuatComponent } from './ho-so-ky-thuat/them-mo-ho-so-ky-th
     QuanLyPhieuKiemTraChatLuongHangComponent,
     ThemMoiPhieuKiemTraChatLuongHangComponent,
     QuanLyBienBanLayMauComponent,
-    QuanLyBienBanBanGiaoMauComponent,
     ThemMoiBienBanLayMauKhoComponent,
-    ThemMoiBienBanBanGiaoMauComponent,
     BienBanChuanBiKhoComponent,
     ThongTinBienBanChuanBiKhoComponent,
     HoSoKyThuatComponent,
@@ -42,7 +39,7 @@ import { ThemMoHoSoKyThuatComponent } from './ho-so-ky-thuat/them-mo-ho-so-ky-th
     ThemMoiPhieuKiemNghiemChatLuongComponent,
     ThanhphanLaymauComponent,
     ThongtinThuchienComponent,
-    ThemMoHoSoKyThuatComponent,
+    ThemMoiHoSoKyThuatComponent,
   ],
   imports: [
     CommonModule,
@@ -55,7 +52,6 @@ import { ThemMoHoSoKyThuatComponent } from './ho-so-ky-thuat/them-mo-ho-so-ky-th
     LapBienBanNghiemThuBaoQuanComponent,
     QuanLyPhieuKiemTraChatLuongHangComponent,
     QuanLyBienBanLayMauComponent,
-    QuanLyBienBanBanGiaoMauComponent,
     BienBanChuanBiKhoComponent,
     HoSoKyThuatComponent,
   ]

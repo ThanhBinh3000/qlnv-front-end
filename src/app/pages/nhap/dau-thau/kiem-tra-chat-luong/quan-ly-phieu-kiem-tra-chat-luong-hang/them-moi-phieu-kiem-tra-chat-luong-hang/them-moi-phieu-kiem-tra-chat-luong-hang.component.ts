@@ -69,7 +69,6 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends BaseComponent imp
     private thongTinHopDongService: ThongTinHopDongService,
     private donViService: DonviService,
     private fb: FormBuilder,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
     private thongTinHopDong: ThongTinHopDongService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private helperService: HelperService
@@ -198,7 +197,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends BaseComponent imp
 
   async bindingDataQd(id, isSetTc?) {
     await this.spinner.show();
-    let dataRes = await this.quyetDinhNhapXuatService.getDetail(id)
+    let dataRes = await this.quyetDinhGiaoNhapHangService.getDetail(id)
     const data = dataRes.data;
     this.formData.patchValue({
       soQdGiaoNvNh: data.soQd,

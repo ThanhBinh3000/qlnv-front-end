@@ -29,10 +29,10 @@
   </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-  <app-phieu-nhap-kho-tam-gui [typeVthh]="typeVthh"></app-phieu-nhap-kho-tam-gui>
+  <app-phieu-nhap-kho-tam-gui [loaiVthh]="typeVthh"></app-phieu-nhap-kho-tam-gui>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-  <app-bien-ban-gui-hang [typeVthh]="typeVthh"></app-bien-ban-gui-hang>
+  <app-bien-ban-gui-hang [loaiVthh]="typeVthh"></app-bien-ban-gui-hang>
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
   <quan-ly-phieu-nhap-kho [typeVthh]="typeVthh"></quan-ly-phieu-nhap-kho>

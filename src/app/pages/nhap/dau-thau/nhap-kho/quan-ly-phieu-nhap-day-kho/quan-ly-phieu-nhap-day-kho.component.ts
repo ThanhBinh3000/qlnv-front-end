@@ -89,7 +89,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) { }
 
   async ngOnInit() {
@@ -152,7 +152,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
         "page": this.page - 1
       },
     };
-    let res = await this.quyetDinhNhapXuatService.search(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
