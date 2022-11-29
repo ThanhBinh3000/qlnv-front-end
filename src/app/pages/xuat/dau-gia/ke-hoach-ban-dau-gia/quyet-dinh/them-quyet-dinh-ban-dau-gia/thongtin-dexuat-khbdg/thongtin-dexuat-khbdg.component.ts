@@ -1,25 +1,23 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { Globals } from "../../../../../../../shared/globals";
 import { MESSAGE } from "../../../../../../../constants/message";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
-import { cloneDeep, chain } from 'lodash';
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
-import { NzSpinComponent } from 'ng-zorro-antd/spin';
+import { chain } from 'lodash';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
-import { DanhSachGoiThau } from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
-import {
-  DialogThemMoiVatTuComponent
-} from "../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
+import { DialogThemDiaDiemPhanLoComponent } from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
+import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-thongtin-dexuat-khbdg',
   templateUrl: './thongtin-dexuat-khbdg.component.html',
   styleUrls: ['./thongtin-dexuat-khbdg.component.scss']
 })
+
 export class ThongtinDexuatKhbdgComponent implements OnInit {
   @Input() title;
   @Input() dataInput;
@@ -32,7 +30,7 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
   listNguonVon: any[] = [];
   listDataGroup: any[] = [];
   listOfData: any[] = [];
-
+  dataChiTieu: any;
 
   constructor(
     private fb: FormBuilder,
@@ -42,12 +40,13 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
     private modal: NzModalService,
+    private notification: NzNotificationService,
   ) {
+
     this.formData = this.fb.group({
       id: [],
       maDvi: [''],
       tenDvi: [''],
-
       loaiHdong: [null,],
       tgianKyHdong: [null,],
       tgianKyHdongGhiChu: [null,],
@@ -81,7 +80,6 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
         this.formData.patchValue({
           tgianBdauTchuc: [res.data?.tgianDkienTu, res.data?.tgianDkienTu],
         });
-        console.log(res, 9999)
         if (this.isTongHop) {
           this.listOfData = this.dataInput.dsGoiThau;
         } else {
@@ -89,27 +87,27 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
         }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
-          let soLuong = res.data.tongMucDt / res.data.donGiaVat / 1000;
+          // let soLuong = res.data.tongMucDt / res.data.donGiaVat / 1000;
           this.formData.patchValue({
-            soLuong: soLuong,
-            tongMucDt: soLuong * res.data.donGiaVat * 1000
+            // soLuong: soLuong,
+            // tongMucDt: soLuong * res.data.donGiaVat * 1000
           });
-          if (!this.isCache) {
-            if (this.dataInput.soLuong) {
-              this.formData.patchValue({
-                soLuong: this.dataInput.soLuong,
-                tongMucDt: this.dataInput.soLuong * this.dataInput.donGiaVat * 1000
-              })
-            }
-          }
+          // if (!this.isCache) {
+          //   if (this.dataInput.soLuong) {
+          //     this.formData.patchValue({
+          //       soLuong: this.dataInput.soLuong,
+          //       tongMucDt: this.dataInput.soLuong * this.dataInput.donGiaVat * 1000
+          //     })
+          //   }
+          // }
         }
         this.helperService.setIndexArray(this.listOfData);
         this.convertListData();
       } else {
         this.formData.reset();
-        this.formData.patchValue({
-          vat: 5
-        });
+        // this.formData.patchValue({
+        //   vat: 5
+        // });
       }
     }
     await this.spinner.hide()
@@ -136,17 +134,24 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
     }
   }
 
-  themMoiGoiThau(data?: any, index?: number) {
+  themMoiBangPhanLoTaiSan(data?: DanhSachPhanLo, index?: number) {
+    if (!this.formData.get('loaiVthh').value) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+      return;
+    }
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm nhập kho',
-      nzContent: DialogThemMoiVatTuComponent,
+      nzContent: DialogThemDiaDiemPhanLoComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1200px',
+      nzWidth: '2000px',
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
+        dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
+        khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
+        namKh: this.formData.get('namKh').value,
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -158,22 +163,19 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
       } else {
         this.listOfData = [...this.listOfData, res.value];
       }
-      let tongMucDt: number = 0;
-      let soLuong: number = 0;
+      let tongSoLuong: number = 0;
+      let tongTienKdiem: number = 0;
+      let tongTienDatTruoc: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + item.soLuong * item.donGia;
-        soLuong = soLuong + item.soLuong;
+        tongSoLuong = tongSoLuong + item.soLuong;
+        tongTienKdiem = tongTienKdiem + item.giaKhoiDiem;
+        tongTienDatTruoc = tongTienDatTruoc + item.soLuong * item.giaKhongVat / 10
       });
       this.formData.patchValue({
-        tongMucDt: tongMucDt,
-        soLuong: soLuong
+        tongSoLuong: tongSoLuong,
+        tongTienKdiem: tongTienKdiem,
+        tongTienDatTruoc: tongTienDatTruoc,
       });
-      this.soLuongChange.emit(soLuong);
-      this.helperService.setIndexArray(this.listOfData);
-      this.convertListData();
     });
-  };
-
-
-
+  }
 }

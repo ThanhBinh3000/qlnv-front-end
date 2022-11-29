@@ -25,15 +25,14 @@ export class DeXuatComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
   ) {
-
   }
+
   @Input()
   loaiVthh: string;
-  @Input()
-  loaiVthhCache: string;
   isDetail: boolean = false;
   listNam: any[] = [];
-  yearNow: number = 0;
+  yeaearNow: number = 0;
+  STATUS = STATUS
 
   searchFilter = {
     namKh: dayjs().get('year'),
@@ -43,8 +42,6 @@ export class DeXuatComponent implements OnInit {
     loaiVthh: '',
     trichYeu: '',
   };
-
-  STATUS = STATUS
 
   filterTable: any = {
     namKh: '',
@@ -86,7 +83,6 @@ export class DeXuatComponent implements OnInit {
           window.location.href = '/error/401'
         }
       }
-      console.log(this.loaiVthh);
       this.userInfo = this.userService.getUserLogin();
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -222,13 +218,7 @@ export class DeXuatComponent implements OnInit {
       }
     }
     this.isDetail = true;
-    if (this.userService.isTongCuc()) {
-      this.isVatTu = true;
-    } else {
-      this.isVatTu = false;
-    }
     this.selectedId = null;
-    this.loaiVthh = this.loaiVthhCache;
   }
 
   showList() {
@@ -239,20 +229,13 @@ export class DeXuatComponent implements OnInit {
   detail(data?) {
     this.selectedId = data.id;
     this.isDetail = true;
-    this.loaiVthh = data.loaiVthh;
-    if (data.loaiVthh.startsWith('02')) {
-      this.isVatTu = true;
-    } else {
-      this.isVatTu = false;
-    }
-
     if (this.loaiVthh === "02") {
-      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_SUA")) {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM")) {
         return;
       }
     }
     else {
-      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_LT_DEXUAT_SUA")) {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM")) {
         return;
       }
     }
@@ -269,7 +252,6 @@ export class DeXuatComponent implements OnInit {
   }
 
   xoaItem(item: any) {
-
     if (this.loaiVthh === "02") {
       if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA")) {
         return;
@@ -280,7 +262,6 @@ export class DeXuatComponent implements OnInit {
         return;
       }
     }
-
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -317,32 +298,6 @@ export class DeXuatComponent implements OnInit {
     });
   }
 
-  // convertTrangThai(status: string) {
-  //   switch (status) {
-  //     case '00': {
-  //       return 'Dự thảo'
-  //     }
-  //     case '03': {
-  //       return 'Từ chối - TP'
-  //     }
-  //     case '12': {
-  //       return 'Từ chối - LĐ Cục'
-  //     }
-  //     case '01': {
-  //       return 'Chờ duyệt - TP'
-  //     }
-  //     case '09': {
-  //       return 'Chờ duyệt - LĐ Cục'
-  //     }
-  //     case '02': {
-  //       return 'Đã duyệt'
-  //     }
-  //     case '05': {
-  //       return 'Tổng hợp'
-  //     }
-  //   }
-  // }
-
   exportData() {
     if (this.loaiVthh === "02") {
       if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_EXP")) {
@@ -378,7 +333,7 @@ export class DeXuatComponent implements OnInit {
         this.deXuatKhBanDauGiaService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-tong-hop-ke-hoach-lcnt.xlsx'),
+            saveAs(blob, 'danh-sach-tong-hop-ke-hoach-bdg.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -392,7 +347,6 @@ export class DeXuatComponent implements OnInit {
   }
 
   deleteSelect() {
-
     if (this.loaiVthh === "02") {
       if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA")) {
         return;
@@ -403,7 +357,6 @@ export class DeXuatComponent implements OnInit {
         return;
       }
     }
-
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {

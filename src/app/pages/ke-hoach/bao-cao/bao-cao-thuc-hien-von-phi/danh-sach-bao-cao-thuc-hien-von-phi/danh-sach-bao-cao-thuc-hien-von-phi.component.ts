@@ -1,6 +1,6 @@
 
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -18,6 +18,7 @@ import { DialogTaoMoiComponent } from '../dialog-tao-moi/dialog-tao-moi.componen
     styleUrls: ['./danh-sach-bao-cao-thuc-hien-von-phi.component.scss'],
 })
 export class DanhSachBaoCaoThucHienVonPhiComponent implements OnInit {
+    @Input() data;
     @Output() dataChange = new EventEmitter();
 
     searchFilter = {
@@ -31,6 +32,7 @@ export class DanhSachBaoCaoThucHienVonPhiComponent implements OnInit {
         namBcao: null,
         thangBcao: null,
         dotBcao: '',
+        reportType: null,
         paggingReq: {
             limit: 10,
             page: 1
@@ -77,6 +79,9 @@ export class DanhSachBaoCaoThucHienVonPhiComponent implements OnInit {
         this.searchFilter.namBcao = date.getFullYear();
         date.setMonth(date.getMonth() - 1);
         this.searchFilter.ngayTaoTu = date.toDateString();
+        if (this.data?.tabSelected == 'vanphong') {
+            this.searchFilter.reportType = '1';
+        }
         //check quyen va cac nut chuc nang
         this.statusNewReport = this.userService.isAccessPermisson(BCVP.ADD_REPORT);
         this.statusDelete = this.userService.isAccessPermisson(BCVP.DELETE_REPORT) || this.userService.isAccessPermisson(BCVP.DELETE_SYNTHETIC_REPORT);
@@ -188,7 +193,7 @@ export class DanhSachBaoCaoThucHienVonPhiComponent implements OnInit {
                     ...res,
                     id: null,
                     tabSelected: 'baocao',
-                    isSynthetic: false,
+                    isSynthetic: this.data?.tabSelected == 'vanphong' ? true : false,
                 }
                 this.dataChange.emit(obj);
             }

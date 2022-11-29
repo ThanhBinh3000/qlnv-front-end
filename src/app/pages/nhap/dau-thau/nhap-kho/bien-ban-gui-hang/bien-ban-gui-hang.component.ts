@@ -126,7 +126,7 @@ export class BienBanGuiHangComponent implements OnInit {
       pageSize: this.pageSize,
       pageNumber: this.page
     };
-    let res = await this.bienBanGuiHangService.timKiem(body);
+    let res = await this.bienBanGuiHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -193,7 +193,7 @@ export class BienBanGuiHangComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.bienBanGuiHangService.deleteData(item.id).then((res) => {
+          this.bienBanGuiHangService.delete(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -252,7 +252,7 @@ export class BienBanGuiHangComponent implements OnInit {
           "trangThai": null
         };
         this.bienBanGuiHangService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-bien-ban-gui-hang.xlsx'),
           );
@@ -288,7 +288,7 @@ export class BienBanGuiHangComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.bienBanGuiHangService.deleteMultiple({ ids: dataDelete });
+            let res = await this.bienBanGuiHangService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
