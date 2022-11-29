@@ -110,4 +110,11 @@ export class BaoCaoThucHienVonPhiService extends BaseService {
             request,
         )
     }
+
+    tongHopVanPhong(request: any): Observable<any> {
+        return this.httpClient.post(
+            this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop-vp',
+            request,
+        )
+    }
 }
