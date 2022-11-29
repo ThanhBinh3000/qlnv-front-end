@@ -63,6 +63,7 @@ export class TongHopComponent implements OnInit {
     tenLoaiVthh: '',
     tenTrangThai: '',
   }
+
   STATUS = STATUS;
   dataTableAll: any[] = [];
   isDetail: boolean = false;
@@ -77,13 +78,13 @@ export class TongHopComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   dsLoaiHangHoa: any[] = [];
+
   async ngOnInit() {
     this.spinner.show();
     try {
       if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP") || !this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_XEM")) {
         window.location.href = '/error/401'
       }
-
       this.userInfo = this.userService.getUserLogin();
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
@@ -197,7 +198,6 @@ export class TongHopComponent implements OnInit {
     }
   }
 
-
   async bindingDataHangHoa(data) {
     if (data.loaiHang == "M" || data.loaiHang == "LT") {
 
@@ -260,7 +260,6 @@ export class TongHopComponent implements OnInit {
     if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP")) {
       return;
     }
-
     this.isDetail = true;
     this.selectedId = null;
   }
@@ -270,7 +269,6 @@ export class TongHopComponent implements OnInit {
       || (!isView && !this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_SUA"))) {
       return;
     }
-
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
@@ -280,7 +278,6 @@ export class TongHopComponent implements OnInit {
     let tongSL = 0;
     let tongTien = 0;
     if (list.length > 0) {
-      // console.log(list);
       list.forEach(function (value) {
         tongSL += value.soLuong;
         tongTien += value.thanhTien;
@@ -302,14 +299,12 @@ export class TongHopComponent implements OnInit {
     this.searchFilter.noiDungThop = null;
     this.searchFilter.ngayThop = null;
     this.search();
-    console.log(this.searchFilter);
   }
 
   xoaItem(item: any) {
     if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_XOA")) {
       return;
     }
-
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -345,20 +340,6 @@ export class TongHopComponent implements OnInit {
     }
     return '';
   }
-
-  // convertTrangThai(status: string) {
-  //   switch (status) {
-  //     case STATUS.CHUA_TAO_QD: {
-  //       return 'Chưa tạo QĐ'
-  //     }
-  //     case STATUS.DA_DU_THAO_QD: {
-  //       return 'Đã dự thảo QĐ'
-  //     }
-  //     case STATUS.DA_BAN_HANH_QD: {
-  //       return 'Đã ban hành QĐ'
-  //     }
-  //   }
-  // }
 
   exportData() {
     if (this.totalRecord > 0) {
@@ -400,7 +381,6 @@ export class TongHopComponent implements OnInit {
     if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_XOA")) {
       return;
     }
-
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
