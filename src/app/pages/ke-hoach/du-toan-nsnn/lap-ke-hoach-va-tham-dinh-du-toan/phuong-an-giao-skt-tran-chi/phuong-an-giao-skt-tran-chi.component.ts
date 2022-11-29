@@ -533,7 +533,7 @@ export class PhuongAnGiaoSktTranChiComponent implements OnInit {
         const request = {
             id: this.id,
             idSoTranChi: this.idSoTranChi,
-            fileDinhKems: this.lstFiles,
+            fileDinhKems: listFile,
             listIdDeleteFiles: this.listIdFilesDelete,
             listCtiet: lstCtietBcaoTemp,
             listTtCtiet: this.lstTtCtiet,

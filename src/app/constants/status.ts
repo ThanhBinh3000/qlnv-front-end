@@ -45,8 +45,7 @@ export enum STATUS {
   CHUA_THUC_HIEN = '43',
   DANG_THUC_HIEN = '44',
   DA_HOAN_THANH = '45',
-  CHUA_CHOT = '46',
-  DA_CHOT = '47',
+  DA_NGHIEM_THU = '46',
   DA_DUYET = '48'
 }
 

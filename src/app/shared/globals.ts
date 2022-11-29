@@ -7,4 +7,5 @@ export class Globals {
   prop: any = jsonGlobals;
   formatter = (value) => value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
   parser = value => value.replaceAll('.', '');
+  parserInput = value => value.replaceAll(',', '.');
 }

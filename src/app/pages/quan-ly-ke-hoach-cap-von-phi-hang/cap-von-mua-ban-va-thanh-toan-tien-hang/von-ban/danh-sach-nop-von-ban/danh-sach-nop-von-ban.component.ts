@@ -210,27 +210,19 @@ export class DanhSachNopVonBanComponent implements OnInit {
 
     updateAllChecked(): void {
         if (this.dataTable && this.dataTable.length > 0) {
-            if (this.allChecked) {
-                this.dataTable.forEach(item => {
-                    if (item.isDelete) {
-                        item.checked = true;
-                    }
-                })
-            } else {
-                this.dataTable.forEach(item => {
-                    if (item.isDelete) {
-                        item.checked = false;
-                    }
-                })
-            }
+            this.dataTable.forEach(item => {
+                if (item.isDelete) {
+                    item.checked = this.allChecked;
+                }
+            })
         }
     }
 
     updateSingleChecked(): void {
-        if (this.dataTable.every((item) => !item.checked && item.isDelete)) {
-            this.allChecked = false;
-        } else if (this.dataTable.every((item) => item.checked && item.isDelete)) {
+        if (this.dataTable.every((item) => item.checked || !item.isDelete)) {
             this.allChecked = true;
+        } else {
+            this.allChecked = false;
         }
     }
 

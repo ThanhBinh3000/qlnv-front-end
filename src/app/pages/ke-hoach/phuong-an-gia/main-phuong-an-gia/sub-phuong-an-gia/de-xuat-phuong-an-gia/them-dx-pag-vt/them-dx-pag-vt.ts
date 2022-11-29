@@ -64,9 +64,11 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   pagTtChungs: any[] = []
   maDx: string;
   dataTable: any[] = [];
+  listQdCtKh: any[] = [];
   dsPhuongAnGia: any[] = [];
   dsLoaiHangXdg: any[] = [];
   STATUS: any;
+   fileDinhKemList: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -80,8 +82,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     private danhMucService: DanhMucService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private uploadFileService: UploadFileService,
-    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
-    private quyetDinhPheDuyetKeHoachLCNTService: QuyetDinhPheDuyetKeHoachLCNTService,
+    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService
   ) {
     this.formData = this.fb.group(
       {
@@ -98,9 +99,11 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         ghiChu: [],
         noiDung: [null],
         lyDoTuChoi: [],
-        qdCtKhNam: [null, [Validators.required]],
+        qdCtKhNam: [null],
+        soCanCu: [null],
         maPphapXdg: [null, [Validators.required]],
-        loaiHangXdg: []
+        loaiHangXdg: [],
+        vat:  [10]
       }
     );
     this.STATUS = STATUS
@@ -120,10 +123,9 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
       this.loadDsNam(),
-      this.getDataChiTieu(),
+      // this.getDataChiTieu(),
       this.loadDsPhuongAnGia(),
       this.loadDsVthh(),
-      this.loadDsQdPduyetKhlcnt(),
       this.loadDsHangHoaPag(),
       this.loadDsLoaiGia(),
       this.maDx = '/TCDT-KH',
@@ -322,6 +324,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.dataTableKqGia = data.ketQuaThamDinhGia;
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableCanCuXdg = data.canCuPhapLy;
+      this.fileDinhKemList = data.fileDinhKems;
       this.updateEditCache('ttc')
       this.updateEditCache('ccXdg')
       this.updateEditCache('ppxdg')
@@ -330,6 +333,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   async loadTenCloaiVthh(vthh, ttc) {
+    await this.loadDsQdPduyetKhlcnt();
     await this.onChangeLoaiVthh(vthh)
     if (ttc) {
       ttc.forEach(item => {
@@ -561,7 +565,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         const dataChiTieu = res2.data;
         if (dataChiTieu) {
           this.formData.patchValue({
-            qdCtKhNam: dataChiTieu.soQuyetDinh,
+            soCanCu: dataChiTieu.soQuyetDinh,
           });
         } else {
           this.notification.error(MESSAGE.ERROR, 'Không tìm thấy chỉ tiêu kế hoạch năm ' + dayjs().get('year'))
@@ -572,33 +576,25 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   }
 
   async loadDsQdPduyetKhlcnt() {
-    if (this.type == 'GMDTBTT' && !this.idInput) {
+    if (this.type == 'GCT') {
       let body = {
-        namKhoach: this.formData.get('namKeHoach').value,
-        lastest: 1,
-        paggingReq: {
-          limit: this.globals.prop.MAX_INTERGER,
-          page: 0,
-        },
-        maDvi: this.userInfo.MA_DVI
+        namKhoach: this.formData.value.namKeHoach,
+        maDvi: this.userInfo.MA_DVI,
+        loaiVthh : this.formData.value.loaiVthh,
+        trangThai : STATUS.BAN_HANH
       };
-      let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
+      let res = await this.giaDeXuatGiaService.loadQdGiaoKhMuaBan(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        let arr  = res.data.content;
+        let arr  = res.data;
         if (arr) {
-          arr.forEach(item => {
-            if (!item.loaiVthh.startsWith("02")) {
-              this.formData.patchValue({
-              })
-            }
-          })
+          this.listQdCtKh = arr;
+          }
         } else {
-          this.notification.error(MESSAGE.ERROR, 'Không tìm thấy quyết định phê duyệt kế hoạch mua bán ' + dayjs().get('year'))
+          this.notification.error(MESSAGE.ERROR, 'Không tồn tại quyết định giao chỉ tiêu kế hoạch năm!')
           return;
         }
       }
     }
-  }
 
 
   async save(isGuiDuyet?) {
@@ -617,6 +613,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     body.ketQuaThamDinhGia = this.dataTableKqGia;
     body.type = this.type;
     body.soDeXuat = body.soDeXuat + this.maDx;
+    body.fileDinhKemReqs = this.fileDinhKemList;
     let res
     if (this.idInput > 0) {
       res = await this.giaDeXuatGiaService.update(body);

@@ -159,13 +159,13 @@ export class BaoCao05Component implements OnInit {
                     item.listCtiet.forEach(e => {
                         lstCtiet.push({
                             ...e,
-                            sl: (e.loaiMatHang == 1 || !this.data?.thangBcao) ? e.sl : 0,
+                            sl: (e.loaiMatHang == 1 || !this.data?.dotBcao) ? e.sl : 0,
                         })
                     })
                     this.lstCtietBcao.push({
                         ...item,
                         listCtiet: lstCtiet,
-                        trongDotTcong: !this.data?.thangBcao ? item.trongDotTcong : 0,
+                        trongDotTcong: !this.data?.dotBcao ? item.trongDotTcong : 0,
                         header: '5-B',
                         id: uuid.v4() + 'FE',
                     })

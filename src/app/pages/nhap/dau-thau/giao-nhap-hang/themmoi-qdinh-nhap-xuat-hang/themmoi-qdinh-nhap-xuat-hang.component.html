@@ -37,9 +37,8 @@
       </button>
     </ng-container>
     <ng-container *ngIf="userService.isChiCuc() && formData.value.trangThaiChiCuc != STATUS.HOAN_THANH_CAP_NHAT">
-      <button
-        *ngIf="(formData.value.trangThai == STATUS.BAN_HANH) && userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_BANHANH')"
-        type="button" class="btn btn-sub xanh-nhat" (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT)">
+      <button *ngIf="(formData.value.trangThai == STATUS.BAN_HANH)" type="button" class="btn btn-sub xanh-nhat"
+        (click)="saveDdiemNhap(STATUS.HOAN_THANH_CAP_NHAT)">
         <i class="icon htvbdh_duyet"></i>
         <span>Hoàn thành</span>
       </button>
@@ -74,7 +73,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired>
               Năm nhập
             </nz-form-label>
-            <nz-select formControlName="namNhap" [nzDisabled]="isDisableForm()" (ngModelChange)="getListHopDong()">
+            <nz-select formControlName="namNhap" [nzDisabled]="isDisableForm()">
               <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
             </nz-select>
           </nz-form-item>
@@ -155,7 +154,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3">
+        <div nz-col [nzSpan]="3" *ngIf="loaiVthh == '02'">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Tên hàng hóa</nz-form-label>
             <nz-form-control>
@@ -178,7 +177,7 @@
             <input nz-input [readonly]="true" formControlName="donViTinh" />
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="3">
+        <div nz-col nzSpan="3" *ngIf="loaiVthh == '02'">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">
               Thời gian nhập kho muộn nhất
@@ -229,34 +228,6 @@
         <th class="text-center">Trạng thái</th>
         <th *ngIf="userService.isChiCuc()" nzWidth="80px" class="text-center"></th>
       </tr>
-      <!--       <tr *ngIf="userService.isCuc() && typeVthh == '02'"> -->
-      <!--         <th></th> -->
-      <!--         <th></th> -->
-      <!--         <th> -->
-      <!--           <nz-select [(ngModel)]="rowItem.maDvi" (ngModelChange)="changeChiCuc()"> -->
-      <!--             <nz-option *ngFor="let item of listChiCuc" [nzValue]="item.key" [nzLabel]="item.title"> -->
-      <!--             </nz-option> -->
-      <!--           </nz-select> -->
-      <!--         </th> -->
-      <!--         <th></th> -->
-      <!--         <th></th> -->
-      <!--         <th></th> -->
-      <!--         <th></th> -->
-      <!--         <th> -->
-      <!--           <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'" nz-input -->
-      <!--             [(ngModel)]="rowItem.soLuong" [nzMin]="0"> -->
-      <!--           </nz-input-number> -->
-      <!--         </th> -->
-      <!--         <th> </th> -->
-      <!--         <th style="text-align: center;"> -->
-      <!--           <a (click)="themChiCuc()" [ngClass]="{'isDisabled': !validateButtonThem('chiCuc')}"> -->
-      <!--             <i class="fa fa-plus"></i> -->
-      <!--           </a> -->
-      <!--           <a> -->
-      <!--             <i (click)="clearDiaDiemNhap()" class="icon htvbdh_nhap-lai1"></i> -->
-      <!--           </a> -->
-      <!--         </th> -->
-      <!--       </tr> -->
     </thead>
     <tbody>
       <ng-container *ngFor="let item of dataTable , let i = index">

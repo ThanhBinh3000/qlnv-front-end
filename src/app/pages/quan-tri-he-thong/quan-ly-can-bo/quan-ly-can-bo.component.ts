@@ -1,19 +1,22 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { Router } from "@angular/router";
-import { saveAs } from 'file-saver';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogPhanQuyenComponent } from 'src/app/components/dialog/dialog-phan-quyen/dialog-phan-quyen.component';
-import { DialogThongTinCanBoComponent } from 'src/app/components/dialog/dialog-thong-tin-can-bo/dialog-thong-tin-can-bo.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DonviService } from 'src/app/services/donvi.service';
-import { QlNguoiSuDungService } from 'src/app/services/quantri-nguoidung/qlNguoiSuDung.service';
-import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { DanhMucDungChungService } from "../../../services/danh-muc-dung-chung.service";
+import {Component, Input, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {Router} from "@angular/router";
+import {saveAs} from 'file-saver';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {DialogPhanQuyenComponent} from 'src/app/components/dialog/dialog-phan-quyen/dialog-phan-quyen.component';
+import {
+  DialogThongTinCanBoComponent
+} from 'src/app/components/dialog/dialog-thong-tin-can-bo/dialog-thong-tin-can-bo.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DonviService} from 'src/app/services/donvi.service';
+import {QlNguoiSuDungService} from 'src/app/services/quantri-nguoidung/qlNguoiSuDung.service';
+import {UserService} from 'src/app/services/user.service';
+import {convertTrangThai} from 'src/app/shared/commonFunction';
+import {DanhMucDungChungService} from "../../../services/danh-muc-dung-chung.service";
+
 @Component({
   selector: 'app-quan-ly-can-bo',
   templateUrl: './quan-ly-can-bo.component.html',
@@ -65,9 +68,7 @@ export class QuanLyCanBoComponent implements OnInit {
     private router: Router,
     private donViService: DonviService
   ) {
-    this.formData = this.fb.group({
-
-    });
+    this.formData = this.fb.group({});
   }
 
   async ngOnInit() {
@@ -99,11 +100,11 @@ export class QuanLyCanBoComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) =>
+    this.allChecked = this.dataTable.every(({id}) =>
       this.setOfCheckedId.has(id),
     );
     this.indeterminate =
-      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
   }
 
@@ -209,7 +210,7 @@ export class QuanLyCanBoComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.dmDungCungService.xoa(item.id).then((res) => {
+          this.qlNsdService.delete({id: item.id}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -259,7 +260,7 @@ export class QuanLyCanBoComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.dmDungCungService.deleteMuti({ ids: dataDelete });
+            let res = await this.dmDungCungService.deleteMuti({ids: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -395,7 +396,7 @@ export class QuanLyCanBoComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.dmDungCungService.deleteMuti({ idList: dataDelete });
+            let res = await this.dmDungCungService.deleteMuti({idList: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

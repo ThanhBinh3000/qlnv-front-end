@@ -19,8 +19,14 @@ export class MangLuoiKhoService extends BaseService {
         return this._httpClient.post<any>(url, body).toPromise();
     }
 
-  create(body): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ngan-lo/them-moi`;
+  createKho(type, body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/${type}/them-moi`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
+
+  updateKho(type, body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/${type}/cap-nhat`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
 }

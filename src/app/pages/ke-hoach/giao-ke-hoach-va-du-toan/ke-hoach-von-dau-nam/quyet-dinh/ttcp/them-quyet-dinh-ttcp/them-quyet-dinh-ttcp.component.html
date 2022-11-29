@@ -6,12 +6,12 @@
     </button>
     <button *ngIf="(formData.value.trangThai == globals.prop.NHAP_DU_THAO && !isView) &&
             userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_BANHANH')" type="button" class="btn btn-sub"
-            (click)="save(true)">
+      (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
     <button *ngIf="formData.value.trangThai == globals.prop.DU_THAO && !isView" type="button" class="btn btn-sub xanh"
-            (click)="save()">
+      (click)="save()">
       <i class="icon htvbdh_luu"></i>
       <span>Lưu</span>
     </button>
@@ -51,8 +51,8 @@
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="so-qd">Số quyết định</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}" id="so-qd">
-                <nz-input-number [nzDisabled]="isView" type="text" nz-input formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                                 [nzSize]="'small'">
+                <nz-input-number [nzDisabled]="isView" type="text" nz-input formControlName="soQd" [nzMin]="1"
+                  [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
               <ng-template #error let-control>
@@ -79,13 +79,13 @@
             <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
             <nz-form-control>
               <textarea rows="3" formControlName="trichYeu" class="search__input" nz-input
-                        [readonly]="isView"></textarea>
+                [readonly]="isView"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item nz-col nzSpan="24" class="form-item">
-            <nz-form-label [nzNoColon]="true" class="label-color-kh" > Tài liệu đính kèm</nz-form-label>
+            <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>
             <div class="list-file">
               <file-list [data]="taiLieuDinhKemList" [isViewDetail]="false"></file-list>
             </div>
@@ -103,33 +103,38 @@
       </button>
     </div>
   </div>
+  <div>
+    <span class="text-right">
+      <h2 style="font-size: 100%; margin-top: 0.5%;">ĐƠN VỊ : TRIỆU ĐỒNG</h2>
+    </span>
+  </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <nz-table [nzData]="dataTable" class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
-      <tr>
-        <th class="text-center" style="width: 5%;">STT</th>
-        <th style="width: 75%;">Bộ</th>
-        <th style="width: 15%;">Kế hoạch năm</th>
-        <th class="text-center" style="width: 5%;">Hành động</th>
-      </tr>
+        <tr>
+          <th class="text-center" style="width: 5%;">STT</th>
+          <th style="width: 75%;">Bộ</th>
+          <th style="width: 15%;">Kế hoạch năm</th>
+          <th class="text-center" style="width: 5%;">Hành động</th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let data of dataTable; let idx = index">
-        <td class="text-center">{{ idx + 1 }}</td>
-        <td>{{ data.tenBoNganh }}</td>
-        <td>{{ data.tongTien |number: '1.0-1': 'vi_VN'}}</td>
-        <td tyle="text-align: left; white-space: nowrap;">
-          <a  *ngIf="isView" (click)="themKeHoach(data, idx,true)">
-            <i class="fa fa-eye"></i>
-          </a>
-          <a *ngIf="!isView" (click)="themKeHoach(data, idx,false)">
-            <i class="fa fa-pencil"></i>
-          </a>
-          <a *ngIf="!isView" (click)="xoaKeHoach(idx)">
-            <i class="fa fa-trash-o do"></i>
-          </a>
-        </td>
-      </tr>
+        <tr *ngFor="let data of dataTable; let idx = index">
+          <td class="text-center">{{ idx + 1 }}</td>
+          <td>{{ data.tenBoNganh }}</td>
+          <td>{{ data.tongTien |number: '1.0-1': 'vi_VN'}}</td>
+          <td tyle="text-align: left; white-space: nowrap;">
+            <a *ngIf="isView" (click)="themKeHoach(data, idx,true)">
+              <i class="fa fa-eye"></i>
+            </a>
+            <a *ngIf="!isView" (click)="themKeHoach(data, idx,false)">
+              <i class="fa fa-pencil"></i>
+            </a>
+            <a *ngIf="!isView" (click)="xoaKeHoach(idx)">
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </td>
+        </tr>
       </tbody>
     </nz-table>
   </nz-card>

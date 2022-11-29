@@ -1,4 +1,9 @@
 <div>
+    <div>
+        <span class="text-right">
+            <h2 style="font-size: 100%; margin-top: 0.5%;">ĐƠN VỊ : TRIỆU ĐỒNG</h2>
+        </span>
+    </div>
     <nz-table [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
             <tr>
@@ -30,16 +35,14 @@
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaThoc" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaThoc" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>
@@ -67,16 +70,14 @@
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoLpdh" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoLqdh" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>
@@ -92,16 +93,14 @@
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongMuaGaoXcht" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaMuaGaoXcht" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>
@@ -147,16 +146,14 @@
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanThoc" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanThoc" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>
@@ -171,16 +168,14 @@
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongBanGao" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaBanGao" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>
@@ -195,16 +190,14 @@
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.soLuongGaoCtro" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.donGiaGaoCtro" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>
@@ -221,8 +214,7 @@
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonNsnn" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>
@@ -236,8 +228,7 @@
                 <td>
                     <div>
                         <nz-input-number nz-input [(ngModel)]="keHoachNhapXuat.tongTienVonTx" [nzMin]="0"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="!isView">
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="0.1" [nzSize]="'small'" [nzDisabled]="!isView">
                         </nz-input-number>
                     </div>
                 </td>

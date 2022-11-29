@@ -126,9 +126,8 @@
               <nz-form-item>
                 <nz-form-label nzRequired>Đơn vị quản lý</nz-form-label>
                 <nz-form-control >
-                  <nz-select [nzDisabled]="!isEditData" formControlName="dviQly"  nzAllowClear="true">
-                    <nz-option  *ngFor="let p of listDviQly" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
-                    </nz-option>
+                  <nz-select [nzDisabled]="!isEditData"  nzMode="tags"  [ngModelOptions]="{standalone: true}" [(ngModel)]="listOfTagOption">
+                    <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.tenDvi" [nzValue]="option.maDvi"></nz-option>
                   </nz-select>
                 </nz-form-control>
               </nz-form-item>

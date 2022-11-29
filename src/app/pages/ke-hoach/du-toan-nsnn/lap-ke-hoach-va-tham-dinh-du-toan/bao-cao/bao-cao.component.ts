@@ -228,9 +228,11 @@ export class BaoCaoComponent implements OnInit {
         await this.getDviCon();
         this.getListUser();
         if (this.id) {
+            debugger
             await this.getDetailReport();
-            if (this.data?.lstDviTrucThuoc && this.data?.lstDviTrucThuoc.length > 0) {
+            if (this.data?.idSoTranChi) {
                 this.lstLapThamDinhs = this.data?.lstLapThamDinhs ? this.data?.lstLapThamDinhs : [];
+                this.giaoSoTranChiId = this.data?.idSoTranChi;
             }
         } else {
             this.isChild = true;
@@ -610,7 +612,7 @@ export class BaoCaoComponent implements OnInit {
 
         const request = JSON.parse(JSON.stringify({
             id: this.id,
-            fileDinhKems: this.lstFiles,
+            fileDinhKems: listFile,
             listIdDeleteFiles: this.listIdFilesDelete,                      // id file luc get chi tiet tra ra( de backend phuc vu xoa file)
             lstLapThamDinhs: this.lstLapThamDinhs,
             maBcao: this.maBaoCao,
@@ -672,6 +674,9 @@ export class BaoCaoComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                         await this.getDetailReport();
+                        if (this.data?.idSoTranChi) {
+                            this.data.idSoTranChi = null;
+                        }
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }

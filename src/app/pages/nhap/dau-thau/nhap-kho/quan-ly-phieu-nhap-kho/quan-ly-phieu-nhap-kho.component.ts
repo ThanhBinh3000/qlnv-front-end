@@ -77,7 +77,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     private router: Router,
     public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private modal: NzModalService,
     public globals: Globals,
   ) { }
@@ -204,7 +204,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
         "page": this.page - 1
       },
     };
-    let res = await this.quyetDinhNhapXuatService.search(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;

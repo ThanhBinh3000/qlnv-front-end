@@ -456,7 +456,7 @@ export class SoKiemTraTranChiTuBtcComponent implements OnInit {
         // gui du lieu trinh duyet len server
         const request = JSON.parse(JSON.stringify({
             id: this.id,
-            fileDinhKems: this.lstFiles,
+            fileDinhKems: listFile,
             listIdDeleteFiles: this.listIdFilesDelete,
             listCtiet: lstCtietBcaoTemp,
             listTtCtiet: [],

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -22,6 +22,8 @@ import { STATUS } from 'src/app/constants/status';
   styleUrls: ['./quyetdinh-ketqua-lcnt.component.scss']
 })
 export class QuyetdinhKetquaLcntComponent implements OnInit {
+
+  @Input() loaiVthh: String
 
   constructor(
     private router: Router,
@@ -122,11 +124,10 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
-
       },
       soQdPdKhlcnt: this.searchFilter.soQdPdKhlcnt,
       soQdinh: this.searchFilter.soQdinh,
-      loaiVthh: this.searchFilter.loaiVthh,
+      loaiVthh: this.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
       maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
@@ -136,12 +137,12 @@ export class QuyetdinhKetquaLcntComponent implements OnInit {
       let data = res.data;
       this.dataTable = data.content;
       this.totalRecord = data.totalElements;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.statusConvert = this.convertTrangThai(item.trangThai);
-          item.statusGT = this.statusGoiThau(item.statusGthau);
-        });
-      }
+      // if (this.dataTable && this.dataTable.length > 0) {
+      //   this.dataTable.forEach((item) => {
+      //     item.statusConvert = this.convertTrangThai(item.trangThai);
+      //     item.statusGT = this.statusGoiThau(item.statusGthau);
+      //   });
+      // }
       this.dataTableAll = cloneDeep(this.dataTable);
     } else {
       this.dataTable = [];

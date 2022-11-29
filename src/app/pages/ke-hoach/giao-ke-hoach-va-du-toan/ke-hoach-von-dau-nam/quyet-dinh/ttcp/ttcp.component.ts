@@ -10,6 +10,8 @@ import {cloneDeep} from 'lodash';
 import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
 import {saveAs} from 'file-saver';
 import {NzModalService} from 'ng-zorro-antd/modal';
+import {UserLogin} from './../../../../../../models/userlogin';
+import {STATUS} from 'src/app/constants/status';
 
 
 @Component({
@@ -53,6 +55,10 @@ export class TtcpComponent implements OnInit {
   boTaiChinh: number = 100
   listBoNganh: any[] = [];
   namDataSelect: number;
+  userInfo: UserLogin;
+  STATUS = STATUS;
+  rowSelected: number = 0;
+
   constructor(
     private readonly fb: FormBuilder,
     private quyetDinhTtcpService: QuyetDinhTtcpService,
@@ -61,7 +67,7 @@ export class TtcpComponent implements OnInit {
     public userService: UserService,
     private modal: NzModalService,
   ) {
-    if (!userService.isAccessPermisson("KHVDTNSNN_GKHDT_VDNDT_QD_TTCP")){
+    if (!userService.isAccessPermisson("KHVDTNSNN_GKHDT_VDNDT_QD_TTCP")) {
       window.location.href = '/error/401'
     }
     this.formData = this.fb.group({
@@ -69,10 +75,13 @@ export class TtcpComponent implements OnInit {
       soQd: [],
       ngayQd: [[]],
       trichYeu: [null],
+      trangThai: [],
+      maDvi: []
     });
   }
 
   async ngOnInit() {
+    this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     this.search();
   }
@@ -109,6 +118,9 @@ export class TtcpComponent implements OnInit {
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,
+    }
+    if (this.userService.isCuc()) {
+      body.maDvi = this.userInfo.MA_DVI
     }
     let res = await this.quyetDinhTtcpService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -389,6 +401,7 @@ export class TtcpComponent implements OnInit {
       let res = await this.quyetDinhTtcpService.getDetail(id);
       this.listBoNganh = res.data.listBoNganh;
       this.namDataSelect = res.data.namQd
+      this.rowSelected = id;
     }
   }
 

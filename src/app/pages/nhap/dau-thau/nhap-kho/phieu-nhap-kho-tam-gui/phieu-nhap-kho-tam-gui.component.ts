@@ -6,11 +6,14 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { BaseComponent } from 'src/app/components/base/base.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
-import { PhieuNhapKhoTamGuiService } from 'src/app/services/phieuNhapKhoTamGui.service';
+import { PhieuNhapKhoTamGuiService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/phieuNhapKhoTamGui.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
@@ -19,8 +22,8 @@ import { Globals } from 'src/app/shared/globals';
   templateUrl: './phieu-nhap-kho-tam-gui.component.html',
   styleUrls: ['./phieu-nhap-kho-tam-gui.component.scss']
 })
-export class PhieuNhapKhoTamGuiComponent implements OnInit {
-  @Input() typeVthh: string;
+export class PhieuNhapKhoTamGuiComponent extends BaseComponent implements OnInit {
+  @Input() loaiVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
 
@@ -69,7 +72,11 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-  ) { }
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
+  ) {
+    super();
+    super.ngOnInit();
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -119,28 +126,49 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
   }
 
   async search() {
+    await this.spinner.show();
     let body = {
-      "capDvis": '3',
-      soPhieu: this.searchFilter.soPhieu,
-      soQuyetDinh: this.searchFilter.soQuyetDinh,
-      ngayNhapKho: this.searchFilter.ngayNhapKho,
-      pageSize: this.pageSize,
-      pageNumber: this.page
+      trangThai: this.STATUS.BAN_HANH,
+      paggingReq: {
+        "limit": this.pageSize,
+        "page": this.page - 1
+      },
+      "loaiVthh": this.loaiVthh
     };
-    let res = await this.phieuNhapKhoTamGuiService.timKiem(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-      this.dataTableAll = cloneDeep(this.dataTable);
+      this.convertDataTable();
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    await this.spinner.hide();
+  }
+
+  convertDataTable() {
+    this.dataTable.forEach(item => {
+      if (this.userService.isChiCuc()) {
+        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      } else {
+        let data = [];
+        item.dtlList.forEach(item => {
+          data = [...data, ...item.children];
+        })
+        item.detail = {
+          children: data
+        }
+      };
+    });
+    // this.dataTable.forEach(item => {
+    //   item.detail.children.forEach(ddNhap => {
+    //     ddNhap.listPhieuNhapKho.forEach(x => {
+    //       x.phieuKiemTraCl = ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
+    //     });
+    //   })
+    // });
+    console.log(this.dataTable);
   }
 
   async changePageIndex(event) {
@@ -194,7 +222,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.phieuNhapKhoTamGuiService.deleteData(item.id).then((res) => {
+          this.phieuNhapKhoTamGuiService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -215,7 +243,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
     });
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
@@ -231,7 +259,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "loaiVthh": this.typeVthh,
+          "loaiVthh": this.loaiVthh,
           "maDvi": this.userInfo.MA_DVI,
           "ngayNhapKhoDen": this.searchFilter.ngayNhapKho && this.searchFilter.ngayNhapKho.length > 1
             ? dayjs(this.searchFilter.ngayNhapKho[1]).format('YYYY-MM-DD')
@@ -253,7 +281,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
           "trangThai": null
         };
         this.phieuNhapKhoTamGuiService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-phieu-nhap-kho-tam-gui.xlsx'),
           );
@@ -289,7 +317,7 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.phieuNhapKhoTamGuiService.deleteMultiple({ ids: dataDelete });
+            let res = await this.phieuNhapKhoTamGuiService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -342,6 +370,15 @@ export class PhieuNhapKhoTamGuiComponent implements OnInit {
 
   print() {
 
+  }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
   }
 
 }

@@ -85,7 +85,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public userService: UserService,
     public globals: Globals,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) { }
 
   async ngOnInit() {
@@ -143,9 +143,10 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
         "limit": this.pageSize,
         "page": this.page - 1
       },
-      trangThai: STATUS.BAN_HANH
+      trangThai: STATUS.BAN_HANH,
+      loaiVthh: this.loaiVthh
     };
-    let res = await this.quyetDinhNhapXuatService.search(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;

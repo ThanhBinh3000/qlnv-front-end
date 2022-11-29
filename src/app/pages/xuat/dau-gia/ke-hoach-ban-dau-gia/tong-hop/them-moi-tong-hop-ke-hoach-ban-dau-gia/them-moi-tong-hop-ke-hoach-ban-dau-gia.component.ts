@@ -25,6 +25,8 @@ import { Globals } from 'src/app/shared/globals';
 import { STATUS } from 'src/app/constants/status';
 import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
+import { API_STATUS_CODE } from 'src/app/constants/config';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -32,6 +34,7 @@ import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-
   styleUrls: ['./them-moi-tong-hop-ke-hoach-ban-dau-gia.component.scss']
 })
 export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
+
 
   @Input() loaiVthh: string
   @Input() id: number;
@@ -77,34 +80,34 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
     private fb: FormBuilder,
     private helperService: HelperService,
     public globals: Globals,
+    private dmTieuChuanService: DanhMucTieuChuanService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService
   ) {
     this.formTraCuu = this.fb.group(
       {
-        namKh: [dayjs().get('year'), [Validators.required]],
         loaiVthh: [null, [Validators.required]],
         tenLoaiVthh: [null, [Validators.required]],
         cloaiVthh: [null, [Validators.required]],
         tenCloaiVthh: [null, [Validators.required]],
-        ngayPduyet: [null, , [Validators.required]]
+        namKh: [dayjs().get('year'), [Validators.required]],
+        ngayPduyet: [null, [Validators.required]],
       }
     );
     this.formData = this.fb.group({
-      id: [],
-      maThop: [''],
-      ngayThop: [, [Validators.required]],
-      namKh: [, [Validators.required]],
-      loaiVthh: [, [Validators.required]],
       cloaiVthh: [, [Validators.required]],
+      id: [],
+      loaiVthh: [, [Validators.required]],
+      namKh: [, [Validators.required]],
+      ngayDuyetTu: [''],
+      ngayDuyetDen: [''],
+      ngayThop: [, [Validators.required]],
+      noiDungThop: ['', [Validators.required]],
       tenLoaiVthh: [''],
       tenCloaiVthh: [''],
-      moTaHangHoa: [''],
-      loaiHdong: ['', [Validators.required]],
-      noiDungThop: ['', [Validators.required]],
-      tgianDkienTu: [''],
-      tgianDkienDen: [''],
       trangThai: [''],
       soQdPd: [''],
+      ngayPduyet: [''],
+      tchuanCluong: [''],
     })
 
   }
@@ -138,6 +141,9 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data;
         this.dataTableDanhSachDX = dataDetail.thopDxKhBdgDtlList;
+        this.formTraCuu.patchValue({
+          ngayPduyet: [dataDetail.ngayDuyetTu, dataDetail.ngayDuyetDen],
+        });
         this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail)
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
         this.isTongHop = true;
@@ -185,16 +191,21 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
         return;
       }
       let body = this.formTraCuu.value;
+      if (body.ngayPduyet) {
+        body.ngayDuyetTu = body.ngayPduyet[0];
+        body.ngayDuyetDen = body.ngayPduyet[1];
+      }
+      delete body.ngayDx;
       let res = await this.tongHopDeXuatKeHoachBanDauGiaService.tonghop(body);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data
-        let idTh = await this.userService.getId("HH_DX_KHLCNT_THOP_HDR_SEQ");
+        let idTh = await this.userService.getId("XH_THOP_DX_KH_BDG_SEQ");
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail)
         this.formData.patchValue({
           id: idTh,
-          ngayTao: dayjs().format("YYYY-MM-DD"),
+          ngayThop: dayjs().format("YYYY-MM-DD"),
         })
-        this.dataTableDanhSachDX = dataDetail.hhDxKhLcntThopDtlList;
+        this.dataTableDanhSachDX = dataDetail.thopDxKhBdgDtlList;
         await this.getDataChiTieu();
         this.isTongHop = true;
       } else {
@@ -213,14 +224,15 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
   async getDataChiTieu() {
     let res2 =
       await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-        +this.formTraCuu.get('namKhoach').value,
+        +this.formTraCuu.get('namKh').value,
       );
     if (res2.msg == MESSAGE.SUCCESS) {
       const data = res2.data;
       this.formData.patchValue({
-        soQdCc: data.soQuyetDinh,
+        soQdPd: data.soQuyetDinh,
       });
     }
+    console.log(res2, 222)
   }
 
   isDetailPermission() {
@@ -231,9 +243,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
   }
 
   async save() {
-    if (!this.isDetailPermission()) {
-      return;
-    }
     this.helperService.markFormGroupTouched(this.formData);
     await this.spinner.show();
     try {
@@ -242,6 +251,16 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
         return;
       }
       let body = this.formData.value;
+      body.ngayDuyetDen = this.formData.get('ngayPduyet').value
+        ? dayjs(this.formData.get('ngayPduyet').value[0]).format(
+          'YYYY-MM-DD',
+        )
+        : null,
+        body.ngayDuyetTu = this.formData.get('ngayPduyet').value
+          ? dayjs(this.formData.get('ngayPduyet').value[1]).format(
+            'YYYY-MM-DD',
+          )
+          : null;
       let res = await this.tongHopDeXuatKeHoachBanDauGiaService.create(body);
       if (res.msg == MESSAGE.SUCCESS) {
         this.id = res.data.id;
@@ -268,7 +287,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
   }
 
   selectHangHoa() {
-    // let data = this.loaiVthh;
+    let data = this.loaiVthh;
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,
@@ -276,7 +295,9 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        data: data
+      },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {

@@ -174,7 +174,7 @@
                 <span class="icon htvbdh_eye"></span>
               </a>
               <a (click)="redirectToThongTin(data.id, false)" *ngIf="userService.isCuc() && data.trangThai != STATUS.BAN_HANH &&
-                userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_SUA') ">
+                userService.isAccessPermisson('NHDTQG_PTDT_QDGNVNH_THEM') ">
                 <i class=" fa fa-pencil"></i>
               </a>
               <a (click)="xoaItem(data)" *ngIf="userService.isCuc() && data.trangThai == STATUS.DU_THAO
@@ -208,6 +208,6 @@
 </ng-container>
 <ng-container *ngIf="isDetail">
   <app-themmoi-qdinh-nhap-xuat-hang [id]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail"
-    [typeVthh]="typeVthh">
+    [loaiVthh]="loaiVthh">
   </app-themmoi-qdinh-nhap-xuat-hang>
 </ng-container>

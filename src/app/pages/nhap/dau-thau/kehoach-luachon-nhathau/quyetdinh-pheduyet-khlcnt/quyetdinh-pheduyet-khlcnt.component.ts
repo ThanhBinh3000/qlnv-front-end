@@ -189,7 +189,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
       denNgayQd: this.searchFilter.ngayQd
         ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
         : null,
-      loaiVthh: this.searchFilter.loaiVthh,
+      loaiVthh: this.loaiVthh,
       namKhoach: this.searchFilter.namKhoach,
       trichYeu: this.searchFilter.trichYeu,
       soQd: this.searchFilter.soQd,
@@ -200,7 +200,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi : this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
+      maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
     };
     let res = await this.quyetDinhPheDuyetKeHoachLCNTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

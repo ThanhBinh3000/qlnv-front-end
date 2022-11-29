@@ -68,14 +68,13 @@ export class ThongTinComponent implements OnInit, OnChanges {
     @Input() id: number;
     @Input() isView: boolean = false;
     @Input() isQuanLy: boolean = false;
-    @Input() typeVthh: string;
+    @Input() loaiVthh: String;
     @Input() idGoiThau: number;
     @Input() dataBinding: any;
     @Input() idKqLcnt: number;
     @Output()
     showListEvent = new EventEmitter<any>();
 
-    loaiVthh: string;
     loaiStr: string;
     maVthh: string;
     routerVthh: string;
@@ -111,7 +110,6 @@ export class ThongTinComponent implements OnInit, OnChanges {
         chucVu: '',
     };
     titleStatus: string = '';
-    styleStatus: string = 'du-thao-va-lanh-dao-duyet';
     diaDiemNhapListCuc = [];
     donGiaCore: number = 0;
     tongSlHang: number = 0;
@@ -252,22 +250,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
     }
 
     async getListQdKqLcnt() {
-        await this.spinner.show();
-        let body = {
-            trangThai: STATUS.BAN_HANH,
-            maDvi: this.userInfo.MA_DVI,
-            paggingReq: {
-                "limit": this.globals.prop.MAX_INTERGER,
-                "page": 0
-            },
-        }
-        let res = await this.ketQuaLcntService.search(body);
-        if (res.msg == MESSAGE.SUCCESS) {
-            this.listKqLcnt = res.data.content.filter(item => item.trangThaiHd != STATUS.HOAN_THANH_CAP_NHAT);
-        } else {
-            this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-        await this.spinner.hide();
+
     }
 
     async loadChiTiet(id) {
@@ -371,7 +354,26 @@ export class ThongTinComponent implements OnInit, OnChanges {
         });
     }
 
-    openDialogKQLCNT() {
+    async openDialogKQLCNT() {
+        await this.spinner.show();
+        let body = {
+            trangThai: STATUS.BAN_HANH,
+            maDvi: this.userInfo.MA_DVI,
+            paggingReq: {
+                "limit": this.globals.prop.MAX_INTERGER,
+                "page": 0
+            },
+            loaiVthh: this.loaiVthh
+        }
+        let res = await this.ketQuaLcntService.search(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+            this.listKqLcnt = res.data.content.filter(item => item.trangThaiHd != STATUS.HOAN_THANH_CAP_NHAT);
+        } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+        await this.spinner.hide();
+
+
         const modalQD = this.modal.create({
             nzTitle: 'Danh sách kết quả lựa chọn nhà thầu',
             nzContent: DialogTableSelectionComponent,
@@ -397,27 +399,48 @@ export class ThongTinComponent implements OnInit, OnChanges {
         let res = await this.ketQuaLcntService.getDetail(idKqLcnt);
         if (res.msg == MESSAGE.SUCCESS) {
             const data = res.data;
-            console.log(data);
-            const dataDtl = data.qdKhlcntDtl
+            if (this.loaiVthh.startsWith('02')) {
+                this.bindingDataKqLcntVatTu(data);
+            } else {
+                this.bindingDataKqLcntLuongThuc(data);
+            }
 
-            this.listGoiThau = dataDtl.dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
-            this.formData.patchValue({
-                soQdKqLcnt: data.soQd,
-                idQdKqLcnt: data.id,
-                ngayQdKqLcnt: data.ngayTao,
-                soQdPdKhlcnt: data.soQdPdKhlcnt,
-                loaiHdong: dataDtl.hhQdKhlcntHdr.loaiHdong,
-                cloaiVthh: dataDtl.hhQdKhlcntHdr.cloaiVthh,
-                tenLoaiVthh: dataDtl.hhQdKhlcntHdr.tenLoaiVthh,
-                loaiVthh: dataDtl.hhQdKhlcntHdr.loaiVthh,
-                tenCloaiVthh: dataDtl.hhQdKhlcntHdr.tenCloaiVthh,
-                moTaHangHoa: dataDtl.dxuatKhLcntHdr.moTaHangHoa,
-                tgianNkho: dataDtl.dxuatKhLcntHdr.tgianNhang
-            })
         } else {
             this.notification.error(MESSAGE.ERROR, res.msg)
         }
         await this.spinner.hide();
+    }
+
+    bindingDataKqLcntVatTu(data) {
+        this.listGoiThau = data.hhQdKhlcntHdr.children;
+        this.formData.patchValue({
+            soQdKqLcnt: data.soQd,
+            idQdKqLcnt: data.id,
+            ngayQdKqLcnt: data.ngayTao,
+            soQdPdKhlcnt: data.soQdPdKhlcnt,
+            loaiHdong: data.hhQdKhlcntHdr.loaiHdong,
+            loaiVthh: data.hhQdKhlcntHdr.loaiVthh,
+            tenLoaiVthh: data.hhQdKhlcntHdr.tenLoaiVthh,
+            soNgayThien: data.hhQdKhlcntHdr.tgianThien
+        })
+    }
+
+    bindingDataKqLcntLuongThuc(data) {
+        const dataDtl = data.qdKhlcntDtl
+        this.listGoiThau = dataDtl.dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
+        this.formData.patchValue({
+            soQdKqLcnt: data.soQd,
+            idQdKqLcnt: data.id,
+            ngayQdKqLcnt: data.ngayTao,
+            soQdPdKhlcnt: data.soQdPdKhlcnt,
+            loaiHdong: dataDtl.hhQdKhlcntHdr.loaiHdong,
+            cloaiVthh: dataDtl.hhQdKhlcntHdr.cloaiVthh,
+            tenLoaiVthh: dataDtl.hhQdKhlcntHdr.tenLoaiVthh,
+            loaiVthh: dataDtl.hhQdKhlcntHdr.loaiVthh,
+            tenCloaiVthh: dataDtl.hhQdKhlcntHdr.tenCloaiVthh,
+            moTaHangHoa: dataDtl.dxuatKhLcntHdr.moTaHangHoa,
+            tgianNkho: dataDtl.dxuatKhLcntHdr.tgianNhang
+        })
     }
 
     openDialogGoiThau() {
@@ -430,22 +453,22 @@ export class ThongTinComponent implements OnInit, OnChanges {
             nzFooter: null,
             nzComponentParams: {
                 dataTable: this.listGoiThau,
-                dataHeader: ['Tên gói thầu', 'Tên đơn vị', 'Số lượng', 'Đơn giá', 'Đơn giá nhà thầu'],
-                dataColumn: ['goiThau', 'tenDvi', 'soLuong', 'donGia', 'donGiaNhaThau'],
+                dataHeader: ['Tên gói thầu', 'Tên đơn vị', 'Số lượng', 'Đơn giá Vat', 'Đơn giá nhà thầu'],
+                dataColumn: ['goiThau', 'tenDvi', 'soLuong', 'donGiaVat', 'donGiaNhaThau'],
             },
         });
         modalQD.afterClose.subscribe(async (data) => {
             this.dataTable = [];
             if (data) {
-                console.log(data);
                 this.spinner.show();
-                let res = await this.thongTinDauThauService.getDetail(data.id);
-                console.log(res);
+                let res = await this.thongTinDauThauService.getDetailThongTin(data.id, this.loaiVthh);
                 if (res.msg == MESSAGE.SUCCESS) {
                     let nhaThauTrung = res.data.filter(item => item.trangThai == STATUS.TRUNG_THAU)[0];
-                    console.log(nhaThauTrung);
                     if (this.userService.isTongCuc()) {
                         this.dataTable = data.children;
+                        this.dataTable.forEach(item => {
+                            item.donGiaVat = data.donGiaNhaThau
+                        })
                     } else {
                         this.dataTable.push(data);
                     }
@@ -467,46 +490,6 @@ export class ThongTinComponent implements OnInit, OnChanges {
 
     convertTienTobangChu(tien: number): string {
         return convertTienTobangChu(tien);
-    }
-
-    expandSet = new Set<number>();
-
-    onExpandChange(id: number, checked: boolean): void {
-        if (checked) {
-            this.expandSet.add(id);
-        } else {
-            this.expandSet.delete(id);
-        }
-    }
-
-    async onChangeGoiThau(event) {
-        if (event && this.idGoiThau !== event) {
-            let res = await this.dauThauGoiThauService.chiTietByGoiThauId(event);
-            if (res.msg == MESSAGE.SUCCESS) {
-                const data = res.data;
-                this.formData.patchValue({
-                    soNgayThien: data.tgianThienHd ?? null,
-                    tenLoaiVthh: data.tenVthh ?? null,
-                    loaiVthh: data.loaiVthh ?? null,
-                    cloaiVthh: data.cloaiVthh ?? null,
-                    tenCloaiVthh: data.tenCloaiVthh ?? null,
-                    soLuong: data.soLuong ?? null,
-                    donGiaVat: data.donGiaTrcVat && data.vat ? (data.donGiaTrcVat + (data.donGiaTrcVat * data.vat / 100)) : null,
-                })
-                this.onChangeDvlq(data.idNhaThau);
-                this.diaDiemNhapListCuc = data.diaDiemNhapList;
-                this.tongSlHang = 0;
-                this.diaDiemNhapListCuc.forEach(element => {
-                    this.tongSlHang += element.soLuong;
-                    delete element.id
-                });
-                if (this.userService.isTongCuc()) {
-                    this.formData.patchValue({
-                        dviTinh: data.dviTinh ?? null
-                    })
-                }
-            }
-        }
     }
 
     back() {
@@ -546,10 +529,6 @@ export class ThongTinComponent implements OnInit, OnChanges {
 
     deleteTaiLieu(index: number) {
         this.fileDinhKem = this.fileDinhKem.filter((item, i) => i !== index)
-    }
-
-    onChangeDvlq(event) {
-        this.dvLQuan = this.listDviLquan.find(item => item.id == event);
     }
 
     guiDuyet() {
@@ -612,31 +591,43 @@ export class ThongTinComponent implements OnInit, OnChanges {
         }
     }
 
-    themChiCuc(dataCuc) {
-        const modalQD = this.modal.create({
-            nzTitle: 'Thêm địa điểm nhập hàng',
-            nzContent: DialogThemChiCucComponent,
-            nzMaskClosable: false,
-            nzClosable: false,
-            nzWidth: '1200px',
-            nzFooter: null,
-            nzComponentParams: {
-                data: dataCuc,
-                dataTable: dataCuc.children ? dataCuc.children : [],
-            },
-        });
-        modalQD.afterClose.subscribe(async (data) => {
-            if (data) {
-                dataCuc.children = data;
-            }
-        });
-    }
-
     isDisableForm(): boolean {
         if (this.formData.value.trangThai == STATUS.DA_KY) {
             return true;
         } else {
             return false
+        }
+    }
+
+    getNameFile($event) {
+
+    }
+
+    expandSet = new Set<number>();
+    onExpandChange(id: number, checked: boolean): void {
+        if (checked) {
+            this.expandSet.add(id);
+        } else {
+            this.expandSet.delete(id);
+        }
+    }
+
+    expandSet2 = new Set<number>();
+    onExpandChange2(id: number, checked: boolean): void {
+        if (checked) {
+            this.expandSet2.add(id);
+        } else {
+            this.expandSet2.delete(id);
+        }
+    }
+
+
+    expandSet3 = new Set<number>();
+    onExpandChange3(id: number, checked: boolean): void {
+        if (checked) {
+            this.expandSet3.add(id);
+        } else {
+            this.expandSet3.delete(id);
         }
     }
 }

@@ -72,7 +72,7 @@ export class QuanLyBangKeCanHangComponent extends BaseComponent implements OnIni
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
     super()
   }
@@ -104,7 +104,7 @@ export class QuanLyBangKeCanHangComponent extends BaseComponent implements OnIni
         "page": this.page - 1
       },
     };
-    let res = await this.quyetDinhNhapXuatService.search(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;

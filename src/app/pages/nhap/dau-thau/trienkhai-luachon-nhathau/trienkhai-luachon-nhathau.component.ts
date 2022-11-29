@@ -18,15 +18,11 @@ export class TrienkhaiLuachonNhathauComponent implements OnInit {
   }
 
   async loaiVTHHGetAll() {
-    this.tabs = [
-      {
-        giaTri: 'Tất cả',
-        ma: null,
-      }
-    ];
+    this.tabs = [];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       this.tabs = [...this.tabs, ...res.data];
+      this.selectTab(this.tabs[0].ma);
     }
   }
 

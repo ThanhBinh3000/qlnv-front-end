@@ -141,8 +141,7 @@
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenTrangThai }}</td>
                         <td class="text-left">
-                            <a (click)="redirectToChiTiet(true, data.id)"
-                                *ngIf=" ( data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_XEM')">
+                            <a (click)="redirectToChiTiet(true, data.id)">
                                 <i class="fa fa-eye"></i>
                             </a>
                             <a *ngIf="( data.trangThai == STATUS.CHUA_TAO_QD) && (userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_TONGHOP_SUA'))"

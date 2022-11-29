@@ -1,4 +1,9 @@
 <div>
+  <div>
+    <span class="text-right">
+      <h2 style="font-size: 100%; margin-top: 0.5%;">ĐƠN VỊ : TRIỆU ĐỒNG</h2>
+    </span>
+  </div>
   <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
     <thead>
       <tr>
@@ -41,24 +46,21 @@
         <td>
           <nz-input-group>
             <nz-input-number [nzDisabled]="!isView" [nzSize]="'small'" nz-input [(ngModel)]="rowItem.soLuong"
-              (ngModelChange)="calcularTongTien(rowItem)" [nzMin]="0" [nzFormatter]="globals.formatter"
-              [nzParser]="globals.parser">
+              (ngModelChange)="calcularTongTien(rowItem)" [nzMin]="0" [nzStep]="0.1">
             </nz-input-number>
           </nz-input-group>
         </td>
         <td>
           <nz-input-group>
-            <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-              (ngModelChange)="calcularTongTien(rowItem)" [nzStep]="0.1" [nzDisabled]="!isView" [nzSize]="'small'"
-              nz-input [(ngModel)]="rowItem.donGia" [nzMin]="0">
+            <nz-input-number (ngModelChange)="calcularTongTien(rowItem)" [nzStep]="0.1" [nzDisabled]="!isView"
+              [nzSize]="'small'" nz-input [(ngModel)]="rowItem.donGia" [nzMin]="0">
             </nz-input-number>
           </nz-input-group>
         </td>
         <td>
           <nz-input-group>
-            <nz-input-number [nzDisabled]="!isView" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-              [nzParser]="globals.parser" nz-input [nzDisabled]="true" [(ngModel)]="rowItem.soLuong * rowItem.donGia"
-              [nzMin]="0">
+            <nz-input-number [nzDisabled]="!isView" [nzSize]="'small'" nz-input [nzDisabled]="true"
+              [(ngModel)]="rowItem.soLuong * rowItem.donGia" [nzMin]="0" [nzStep]="0.1">
             </nz-input-number>
           </nz-input-group>
         </td>
@@ -121,23 +123,22 @@
           </td>
           <td>
             <nz-input-group>
-              <nz-input-number (ngModelChange)="calcularTongTien(dataEdit[idx].data)" [nzDisabled]="!isView"
-                [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [nzMin]="0">
+              <nz-input-number (change)="calcularTongTien(dataEdit[idx].data)" [nzDisabled]="!isView" [nzSize]="'small'"
+                nz-input [(ngModel)]="dataEdit[idx].data.soLuong" [nzMin]="0" [nzParser]="globals.parser">
               </nz-input-number>
             </nz-input-group>
           </td>
           <td>
             <nz-input-group>
-              <nz-input-number (ngModelChange)="calcularTongTien(dataEdit[idx].data)" [nzStep]="0.1"
-                [nzDisabled]="!isView" [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.donGia" [nzMin]="0">
+              <nz-input-number (change)="calcularTongTien(dataEdit[idx].data)" [nzStep]="0.1" [nzDisabled]="!isView"
+                [nzSize]="'small'" nz-input [(ngModel)]="dataEdit[idx].data.donGia" [nzMin]="0">
               </nz-input-number>
             </nz-input-group>
           </td>
           <td>
             <nz-input-group>
               <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" nz-input
-                [(ngModel)]="dataEdit[idx].data.tongTien" [nzMin]="0" [nzFormatter]="globals.formatter"
-                [nzParser]="globals.parser">
+                [(ngModel)]="dataEdit[idx].data.tongTien" [nzMin]="0" [ [nzStep]="0.1">
               </nz-input-number>
             </nz-input-group>
           </td>

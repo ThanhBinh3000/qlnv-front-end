@@ -1,15 +1,15 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormGroup, FormBuilder} from '@angular/forms';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
 import * as dayjs from 'dayjs';
-import { QuyetDinhBtcTcdtService } from 'src/app/services/quyetDinhBtcTcdt.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { UserService } from 'src/app/services/user.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { cloneDeep } from 'lodash';
-import { saveAs } from 'file-saver';
-import { NzModalService } from 'ng-zorro-antd/modal';
+import {QuyetDinhBtcTcdtService} from 'src/app/services/quyetDinhBtcTcdt.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {UserService} from 'src/app/services/user.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {cloneDeep} from 'lodash';
+import {saveAs} from 'file-saver';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'app-btc-giao-tcdt',
@@ -62,15 +62,16 @@ export class BtcGiaoTcdtComponent implements OnInit {
     xuatPlDh: 0,
     tongTien: 0,
   }
+  rowSelected: number = 0;
 
   constructor(private readonly fb: FormBuilder,
-    private quyetDinhBtcTcdtService: QuyetDinhBtcTcdtService,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    public userService: UserService,
-    private modal: NzModalService,
+              private quyetDinhBtcTcdtService: QuyetDinhBtcTcdtService,
+              private spinner: NgxSpinnerService,
+              private notification: NzNotificationService,
+              public userService: UserService,
+              private modal: NzModalService,
   ) {
-    if (!userService.isAccessPermisson("KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT")){
+    if (!userService.isAccessPermisson("KHVDTNSNN_GKHDT_VDNDT_QD_BTCTCDT")) {
       window.location.href = '/error/401'
     }
     this.formData = this.fb.group({
@@ -163,7 +164,7 @@ export class BtcGiaoTcdtComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhBtcTcdtService.deleteMuti({ idList: dataDelete });
+            let res = await this.quyetDinhBtcTcdtService.deleteMuti({idList: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -180,8 +181,7 @@ export class BtcGiaoTcdtComponent implements OnInit {
           }
         },
       });
-    }
-    else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
@@ -217,7 +217,7 @@ export class BtcGiaoTcdtComponent implements OnInit {
   }
 
   onAllChecked(checked) {
-    this.dataTable.forEach(({ id }) => this.updateCheckedSet(id, checked));
+    this.dataTable.forEach(({id}) => this.updateCheckedSet(id, checked));
     this.refreshCheckedStatus();
   }
 
@@ -230,11 +230,11 @@ export class BtcGiaoTcdtComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.allChecked = this.dataTable.every(({ id }) =>
+    this.allChecked = this.dataTable.every(({id}) =>
       this.setOfCheckedId.has(id),
     );
     this.indeterminate =
-      this.dataTable.some(({ id }) => this.setOfCheckedId.has(id)) &&
+      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
       !this.allChecked;
   }
 
@@ -294,7 +294,7 @@ export class BtcGiaoTcdtComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quyetDinhBtcTcdtService.delete({ id: item.id }).then((res) => {
+          this.quyetDinhBtcTcdtService.delete({id: item.id}).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -329,8 +329,7 @@ export class BtcGiaoTcdtComponent implements OnInit {
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
@@ -387,8 +386,14 @@ export class BtcGiaoTcdtComponent implements OnInit {
         let xuatGiam = 0;
         let xuatBan = 0;
         let xuatPlDh = 0;
-        muaLuongThuc = (data.keHoachNhapXuat.soLuongMuaThoc * data.keHoachNhapXuat.donGiaMuaThoc) + (data.keHoachNhapXuat.soLuongMuaGaoLpdh * data.keHoachNhapXuat.donGiaMuaGaoLqdh) + (data.keHoachNhapXuat.soLuongMuaGaoXcht * data.keHoachNhapXuat.donGiaMuaGaoXcht);
-        nguonVonCo = (data.keHoachNhapXuat.soLuongBanThoc * data.keHoachNhapXuat.donGiaBanThoc) + (data.keHoachNhapXuat.soLuongBanGao * data.keHoachNhapXuat.donGiaBanGao) + (data.keHoachNhapXuat.soLuongGaoCtro * data.keHoachNhapXuat.donGiaGaoCtro) + data.keHoachNhapXuat.tongTienVonNsnn + data.keHoachNhapXuat.tongTienVonTx;
+        muaLuongThuc = (data.keHoachNhapXuat.soLuongMuaThoc * data.keHoachNhapXuat.donGiaMuaThoc) / 1000
+          + (data.keHoachNhapXuat.soLuongMuaGaoLpdh * data.keHoachNhapXuat.donGiaMuaGaoLqdh) / 1000
+          + (data.keHoachNhapXuat.soLuongMuaGaoXcht * data.keHoachNhapXuat.donGiaMuaGaoXcht) / 1000;
+        nguonVonCo = (data.keHoachNhapXuat.soLuongBanThoc * data.keHoachNhapXuat.donGiaBanThoc) / 1000
+          + (data.keHoachNhapXuat.soLuongBanGao * data.keHoachNhapXuat.donGiaBanGao) / 1000
+          + (data.keHoachNhapXuat.soLuongGaoCtro * data.keHoachNhapXuat.donGiaGaoCtro) / 1000
+          + data.keHoachNhapXuat.tongTienVonNsnn
+          + data.keHoachNhapXuat.tongTienVonTx;
         data.muaTangList.forEach(item => {
           muaTang += item.tongTien;
         })
@@ -409,6 +414,7 @@ export class BtcGiaoTcdtComponent implements OnInit {
         this.dataDetailSelected.xuatPlDh = xuatPlDh;
         this.dataDetailSelected.tongTien = muaLuongThuc + nguonVonCo + muaTang + xuatGiam + xuatBan + xuatPlDh;
       }
+      this.rowSelected = id;
       // if (res.data?.muaTangList) {
       //   this.muaTangList = res.data.muaTangList;
       // } if (res.data?.xuatGiamList) {

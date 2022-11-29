@@ -1,20 +1,19 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {Globals} from "../../../../../../../shared/globals";
-import {MESSAGE} from "../../../../../../../constants/message";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
-import {cloneDeep, chain} from 'lodash';
-import {
-  DanhSachDauThauService
-} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
-import {NzSpinComponent} from 'ng-zorro-antd/spin';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {HelperService} from 'src/app/services/helper.service';
-import {DanhSachGoiThau} from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Globals } from "../../../../../../../shared/globals";
+import { MESSAGE } from "../../../../../../../constants/message";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
+import { cloneDeep, chain } from 'lodash';
+import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
+import { NzSpinComponent } from 'ng-zorro-antd/spin';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { HelperService } from 'src/app/services/helper.service';
+import { DanhSachGoiThau } from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {
   DialogThemMoiVatTuComponent
 } from "../../../../../../../components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { NzModalService } from "ng-zorro-antd/modal";
+import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
 
 @Component({
   selector: 'app-thongtin-dexuat-khbdg',
@@ -39,7 +38,7 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
     private fb: FormBuilder,
     public globals: Globals,
     private danhMucService: DanhMucService,
-    private dxKhLcntService: DanhSachDauThauService,
+    private deXuatKhBanDauGiaService: DeXuatKhBanDauGiaService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
     private modal: NzModalService,
@@ -48,39 +47,29 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
       id: [],
       maDvi: [''],
       tenDvi: [''],
-      loaiHinhNx: [''],
-      kieuNx: [''],
-      diaChiDvi: [],
-      namKhoach: [,],
+
+      loaiHdong: [null,],
+      tgianKyHdong: [null,],
+      tgianKyHdongGhiChu: [null,],
+      tgianTtoan: [null,],
+      tgianTtoanGhiChu: [null,],
+      pthucTtoan: [null,],
+      tgianGnhan: [null,],
+      tgianGnhanGhiChu: [null,],
+      khoanTienDatTruoc: [null,],
+      tongSoLuong: [null,],
+      tongTienKdiem: [null,],
+      tongTienDatTruoc: [null,],
+      diaChi: [],
+      pthucGnhan: [null,],
+      thongBaoKh: [null,],
+      namKh: [,],
       soDxuat: [null,],
       trichYeu: [null],
-      ngayPduyet: [],
-      soQd: [,],
-      loaiVthh: [,],
-      tenLoaiVthh: [,],
-      cloaiVthh: [,],
-      tenCloaiVthh: [,],
-      moTaHangHoa: [,],
-      tchuanCluong: [null],
-      tenDuAn: [null,],
-      loaiHdong: [null,],
-      hthucLcnt: [null,],
-      pthucLcnt: [null,],
-      tgianBdauTchuc: [null,],
-
-      tgianDthau: [null,],
-      tgianMthau: [null,],
-
-      gtriDthau: [null,],
-      gtriHdong: [null,],
-      soLuong: [],
-      donGiaVat: [''],
-      vat: [5],
-      tongMucDt: [null,],
-      nguonVon: [null,],
-      tgianNhang: [null,],
-      ghiChu: [null],
       ldoTuchoi: [],
+      tgianDkienDen: [null,],
+      tgianDkienTu: [null,],
+      tgianBdauTchuc: [],
     });
   }
 
@@ -88,11 +77,15 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        let res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
+        let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
+        this.formData.patchValue({
+          tgianBdauTchuc: [res.data?.tgianDkienTu, res.data?.tgianDkienTu],
+        });
+        console.log(res, 9999)
         if (this.isTongHop) {
           this.listOfData = this.dataInput.dsGoiThau;
         } else {
-          this.listOfData = this.dataInput.dsGtDtlList ? this.dataInput.dsGtDtlList : this.dataInput.dsGoiThau;
+          this.listOfData = this.dataInput.dsPhanLoList ? this.dataInput.dsPhanLoList : this.dataInput.dsGoiThau;
         }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
@@ -123,28 +116,18 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
   }
 
   convertListData() {
-    this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({tenDvi: key, dataChild: value}))
+    this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()
   }
 
   async ngOnInit() {
     await this.spinner.show()
-    await this.loadDataComboBox();
     await this.spinner.hide()
   }
 
-  async loadDataComboBox() {
-    // List nguồn vốn
-    this.listNguonVon = [];
-    let resNv = await this.danhMucService.danhMucChungGetAll('NGUON_VON');
-    if (resNv.msg == MESSAGE.SUCCESS) {
-      this.listNguonVon = resNv.data;
-    }
 
-  }
 
   expandSet = new Set<number>();
-
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id);
@@ -190,5 +173,7 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
       this.convertListData();
     });
   };
+
+
 
 }

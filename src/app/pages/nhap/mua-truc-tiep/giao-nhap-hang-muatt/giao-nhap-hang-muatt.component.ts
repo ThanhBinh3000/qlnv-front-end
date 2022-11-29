@@ -17,7 +17,7 @@ export class GiaoNhapHangMuattComponent implements OnInit {
   constructor(
     private danhMucService: DanhMucService,
     private spinner: NgxSpinnerService,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private notification: NzNotificationService,
     public globals: Globals,
   ) { }

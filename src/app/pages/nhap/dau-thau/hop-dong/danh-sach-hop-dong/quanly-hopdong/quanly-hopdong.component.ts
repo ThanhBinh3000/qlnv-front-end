@@ -24,6 +24,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 })
 export class QuanlyHopdongComponent implements OnInit {
   @Input() id: number;
+  @Input() loaiVthh: String;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -107,46 +108,88 @@ export class QuanlyHopdongComponent implements OnInit {
       let res = await this.kqLcnt.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        this.formData.patchValue({
-          id: data.id,
-          namKhoach: data.namKhoach,
-          soQdPdKhlcnt: data.qdKhlcntDtl.hhQdKhlcntHdr.soQd,
-          soQdPdKqLcnt: data.qdKhlcntDtl.soQdPdKqLcnt,
-          tenDuAn: data.qdKhlcntDtl.tenDuAn,
-          tenLoaiHdong: data.qdKhlcntDtl.hhQdKhlcntHdr.tenLoaiHdong,
-          tenDvi: data.tenDvi,
-          tenNguonVon: data.qdKhlcntDtl.hhQdKhlcntHdr.tenNguonVon,
-          soGthau: data.qdKhlcntDtl.soGthau,
-          tenLoaiVthh: data.qdKhlcntDtl.hhQdKhlcntHdr.tenLoaiVthh,
-          tenCloaiVthh: data.qdKhlcntDtl.hhQdKhlcntHdr.tenCloaiVthh,
-          vat: 5,
-          soGthauTrung: data.qdKhlcntDtl.soGthauTrung,
-          tenTrangThaiHd: data.tenTrangThaiHd,
-          trangThaiHd: data.trangThaiHd,
-          tongMucDt: data.qdKhlcntDtl.soLuong * data.qdKhlcntDtl.donGiaVat * 1000
-        });
-        this.dataTable = data.qdKhlcntDtl.dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG);
-        if (data.listHopDong) {
-          let soLuong = 0
-          let tongMucDtGoiTrung = 0;
-          this.dataTable.forEach(item => {
-            let hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0];
-            item.hopDong = hopDong
-            if (item.hopDong) {
-              soLuong += item.hopDong.soLuong;
-              tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
-            }
-          })
-          this.formData.patchValue({
-            soLuongNhap: soLuong,
-            tongMucDtGoiTrung: tongMucDtGoiTrung
-          })
-        };
-        this.idHopDong = null;
+        if (this.loaiVthh.startsWith('02')) {
+          this.detailVatTu(data);
+        } else {
+          this.detailLuongThuc(data);
+        }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
+  }
+
+  detailVatTu(data) {
+    console.log(data);
+    this.formData.patchValue({
+      id: data.id,
+      namKhoach: data.namKhoach,
+      soQdPdKhlcnt: data.hhQdKhlcntHdr.soQd,
+      tenLoaiHdong: data.hhQdKhlcntHdr.tenLoaiHdong,
+      tenNguonVon: data.hhQdKhlcntHdr.tenNguonVon,
+      tenLoaiVthh: data.hhQdKhlcntHdr.tenLoaiVthh,
+      tenCloaiVthh: data.hhQdKhlcntHdr.tenCloaiVthh,
+      vat: 5,
+      tenTrangThaiHd: data.tenTrangThaiHd,
+      trangThaiHd: data.trangThaiHd,
+    });
+    this.dataTable = data.hhQdKhlcntHdr.children.filter(item => item.trangThai == STATUS.THANH_CONG);
+    if (data.listHopDong) {
+      let soLuong = 0
+      let tongMucDtGoiTrung = 0;
+      this.dataTable.forEach(item => {
+        let hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0];
+        item.hopDong = hopDong
+        if (item.hopDong) {
+          soLuong += item.hopDong.soLuong;
+          tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
+        }
+      })
+      this.formData.patchValue({
+        soLuongNhap: soLuong,
+        tongMucDtGoiTrung: tongMucDtGoiTrung
+      })
+    };
+    this.idHopDong = null;
+  }
+
+  detailLuongThuc(data) {
+    this.formData.patchValue({
+      id: data.id,
+      namKhoach: data.namKhoach,
+      soQdPdKhlcnt: data.qdKhlcntDtl.hhQdKhlcntHdr.soQd,
+      soQdPdKqLcnt: data.qdKhlcntDtl.soQdPdKqLcnt,
+      tenDuAn: data.qdKhlcntDtl.tenDuAn,
+      tenLoaiHdong: data.qdKhlcntDtl.hhQdKhlcntHdr.tenLoaiHdong,
+      tenDvi: data.tenDvi,
+      tenNguonVon: data.qdKhlcntDtl.hhQdKhlcntHdr.tenNguonVon,
+      soGthau: data.qdKhlcntDtl.soGthau,
+      tenLoaiVthh: data.qdKhlcntDtl.hhQdKhlcntHdr.tenLoaiVthh,
+      tenCloaiVthh: data.qdKhlcntDtl.hhQdKhlcntHdr.tenCloaiVthh,
+      vat: 5,
+      soGthauTrung: data.qdKhlcntDtl.soGthauTrung,
+      tenTrangThaiHd: data.tenTrangThaiHd,
+      trangThaiHd: data.trangThaiHd,
+      tongMucDt: data.qdKhlcntDtl.soLuong * data.qdKhlcntDtl.donGiaVat * 1000
+    });
+    this.dataTable = data.qdKhlcntDtl.dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG);
+    if (data.listHopDong) {
+      let soLuong = 0
+      let tongMucDtGoiTrung = 0;
+      this.dataTable.forEach(item => {
+        let hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0];
+        item.hopDong = hopDong
+        if (item.hopDong) {
+          soLuong += item.hopDong.soLuong;
+          tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
+        }
+      })
+      this.formData.patchValue({
+        soLuongNhap: soLuong,
+        tongMucDtGoiTrung: tongMucDtGoiTrung
+      })
+    };
+    this.idHopDong = null;
   }
 
   async getDetailHopDong($event, id: number) {

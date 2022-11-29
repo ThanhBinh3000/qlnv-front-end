@@ -20,6 +20,7 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
   formData: FormGroup;
   totalRecord: number = 10;
   danhMucList: any[] = [];
+  listApDungCn: any[] = [];
   selectedValue = null;
 
   constructor(
@@ -41,13 +42,15 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
       giaTri: [null, [Validators.required]],
       thuTuHienThi : [null],
       phanLoai : [],
+      apDung : [null, [Validators.required]],
       ghiChu: [null]
     });
   }
 
   async ngOnInit() {
     await Promise.all([
-      this.getDmList()
+      this.getDmList(),
+      this.getListApDungCn()
     ])
     // this.bindingData(this.dataEdit);
     this.helperService.bidingDataInFormGroup(this.formData,this.dataEdit);
@@ -96,6 +99,13 @@ export class DialogThemDanhMucDungChungComponent implements OnInit {
   async getDmList() {
     let data = await this.dmService.danhMucChungGetAll("DANH_MUC_DC");
     this.danhMucList = data.data;
+  }
+
+  async getListApDungCn() {
+    let data = await this.dmService.danhMucChungGetAll("AP_DUNG_CN");
+    if (data) {
+      this.listApDungCn = data.data;
+    }
   }
 
   handleCancel() {

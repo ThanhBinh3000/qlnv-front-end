@@ -34,7 +34,7 @@ import { STATUS } from "../../../../../constants/status";
 })
 export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   @Input() id: number;
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
   @Input() isViewDetail: boolean;
@@ -92,7 +92,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public globals: Globals,
     public userService: UserService,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private uploadFileService: UploadFileService,
     private thongTinHopDongSercive: ThongTinHopDongService,
     private helperService: HelperService,
@@ -135,7 +135,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.maQdSuffix = "/" + this.userInfo.MA_QD;
     await Promise.all([
-      await this.getListHopDong(),
       await this.loadDiemKho()
     ])
     if (this.id > 0) {
@@ -150,13 +149,16 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     this.formData.patchValue({
       tenDvi: this.userInfo.TEN_DVI,
       maDvi: this.userInfo.MA_DVI,
-      loaiVthh: this.typeVthh
+      loaiVthh: this.loaiVthh
     });
   }
 
-  async getListHopDong() {
+  async openDialogHopDong() {
+    if (this.isChiTiet) {
+      return;
+    }
     let body = {
-      "loaiVthh": this.typeVthh,
+      "loaiVthh": this.loaiVthh,
       "trangThai": STATUS.DA_KY,
       "namHd": this.formData.get('namNhap').value,
       "paggingReq": {
@@ -169,12 +171,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
       this.listHopDong = res.data.content;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  async openDialogHopDong() {
-    if (this.isChiTiet) {
-      return;
     }
     const modalQD = this.modal.create({
       nzTitle: 'Thông tin hợp đồng',
@@ -212,6 +208,15 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           if (data.loaiVthh.startsWith('02')) {
             let dataUserLogin = data.details.filter(item => item.maDvi == this.userInfo.MA_DVI);
             this.dataTable = dataUserLogin[0].children;
+            this.dataTable.forEach(x => {
+              x.soLuong = null;
+              x.children.forEach(y => {
+                y.maDiemKho = y.maDvi;
+                y.soLuongDiemKho = y.soLuong;
+                y.tenDiemKho = y.tenDvi
+                y.soLuong = null;
+              })
+            });
           } else {
             this.dataTable = data.details;
           }
@@ -357,9 +362,9 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     body.fileDinhKems = this.listFileDinhKem;
     let res;
     if (this.formData.get('id').value > 0) {
-      res = await this.quyetDinhNhapXuatService.update(body);
+      res = await this.quyetDinhGiaoNhapHangService.update(body);
     } else {
-      res = await this.quyetDinhNhapXuatService.create(body);
+      res = await this.quyetDinhGiaoNhapHangService.create(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
@@ -402,7 +407,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
   }
 
   async loadThongTinQdNhapXuatHang(id: number) {
-    await this.quyetDinhNhapXuatService
+    await this.quyetDinhGiaoNhapHangService
       .getDetail(id)
       .then((res) => {
         if (res.msg == MESSAGE.SUCCESS) {
@@ -425,7 +430,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
                 }
                 this.listDiemKho.forEach(item => {
                   let ttDk = x.children.filter(x => x.maDiemKho == item.key)[0];
-                  item.soLuongDiemKho = ttDk.soLuong;
+                  item.soLuongDiemKho = ttDk.soLuongDiemKho;
                 })
                 console.log(this.listDiemKho);
                 this.formData.patchValue({
@@ -442,10 +447,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       })
-  }
-
-  convertListGroup() {
-
   }
 
   pheDuyet() {
@@ -487,7 +488,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             trangThai: trangThai,
           };
           let res =
-            await this.quyetDinhNhapXuatService.approve(
+            await this.quyetDinhGiaoNhapHangService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -537,7 +538,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             trangThai: trangThai,
           };
           let res =
-            await this.quyetDinhNhapXuatService.approve(
+            await this.quyetDinhGiaoNhapHangService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -761,7 +762,7 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
     let body = {
       detailList: this.dataTable
     }
-    let res = await this.quyetDinhNhapXuatService.updateDdiemNhap(body);
+    let res = await this.quyetDinhGiaoNhapHangService.updateDdiemNhap(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
       this.redirectQdNhapXuat();

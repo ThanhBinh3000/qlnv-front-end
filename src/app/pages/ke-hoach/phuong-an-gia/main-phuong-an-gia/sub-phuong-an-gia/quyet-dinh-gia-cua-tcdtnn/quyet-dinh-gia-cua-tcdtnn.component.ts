@@ -75,6 +75,7 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
     namKeHoach: '',
     tenLoaiGia: '',
     tenLoaiVthh: '',
+    tenCloaiVthh: '',
     tenTrangThai: '',
   };
 
@@ -125,6 +126,9 @@ export class QuyetDinhGiaCuaTcdtnnComponent implements OnInit {
           this.dataTable.forEach((item) => {
             item.checked = false;
           });
+        }
+        if(this.userService.isCuc()) {
+          this.dataTable = this.dataTable.filter(item => item.trangThai == STATUS.BAN_HANH)
         }
         this.dataTableAll = cloneDeep(this.dataTable);
       } else {

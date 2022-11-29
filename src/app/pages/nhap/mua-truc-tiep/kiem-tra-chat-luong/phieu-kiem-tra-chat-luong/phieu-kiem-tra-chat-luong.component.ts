@@ -80,7 +80,7 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
-    private quyetDinhNhapXuatService: QuyetDinhGiaoNhapHangService,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
@@ -147,7 +147,7 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
       },
       trangThai: STATUS.BAN_HANH
     };
-    let res = await this.quyetDinhNhapXuatService.search(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;

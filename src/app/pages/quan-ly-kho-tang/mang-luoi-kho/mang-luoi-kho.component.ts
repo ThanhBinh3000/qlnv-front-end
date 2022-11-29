@@ -73,7 +73,7 @@ export class MangLuoiKhoComponent implements OnInit {
       diaChi: [''],
       namSuDung: [''],
       dienTichDat: [''],
-
+      loaikhoId: [''],
       tongTichLuongTkLt: [''],
       tongTichLuongTkVt: [''],
       tongTichLuongDsd: [''],
@@ -232,10 +232,11 @@ export class MangLuoiKhoComponent implements OnInit {
           this.nodeDetail = res.data;
           // gán giá trị vào form
           this.detailDonVi.patchValue({
-            tenDvi: res.data.tenDvi,
-            maDvi: res.data.maDvi,
-            trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
-            diaChi: res.data.diaChi
+            tenDvi: this.nodeDetail.tenDvi,
+            maDvi:this.nodeDetail.maDvi,
+            trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
+            diaChi: this.nodeDetail.diaChi,
+            loaikhoId : this.nodeDetail.loaikhoId
           });
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);

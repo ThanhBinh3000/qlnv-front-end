@@ -218,7 +218,7 @@ export class DialogThemMoiQdCvComponent implements OnInit {
         const request = JSON.parse(JSON.stringify(
             {
                 id: null,
-                fileDinhKems: this.lstFiles,
+                fileDinhKems: listFile,
                 listIdDeleteFiles: this.listIdFilesDelete,
                 namGiao: this.namGiao,
                 maPa: this.maPa,

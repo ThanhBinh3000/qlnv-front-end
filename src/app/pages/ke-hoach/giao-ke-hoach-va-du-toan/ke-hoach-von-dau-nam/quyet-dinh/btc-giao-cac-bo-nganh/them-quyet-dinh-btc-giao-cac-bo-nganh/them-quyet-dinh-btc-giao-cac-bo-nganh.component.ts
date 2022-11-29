@@ -13,6 +13,7 @@ import { QuyetDinhBtcNganhService } from 'src/app/services/quyetDinhBtcNganh.ser
 import { MESSAGE } from 'src/app/constants/message';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { STATUS } from "../../../../../../../constants/status";
+import {DonviService} from "../../../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-them-quyet-dinh-btc-giao-cac-bo-nganh',
@@ -49,6 +50,7 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     private quyetDinhTtcpService: QuyetDinhTtcpService,
     private quyetDinhBtcNganhService: QuyetDinhBtcNganhService,
     private notification: NzNotificationService,
+    private donviService: DonviService,
   ) {
     this.formData = this.fb.group(
       {
@@ -120,7 +122,8 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
 
   async getListBoNganh() {
     this.dsBoNganh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    let res = await this.donviService.layTatCaDonViByLevel(0);
+    // let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data;
     }
@@ -263,5 +266,3 @@ export class ThemQuyetDinhBtcGiaoCacBoNganhComponent implements OnInit {
     this.hasError = $event;
   }
 }
-
-

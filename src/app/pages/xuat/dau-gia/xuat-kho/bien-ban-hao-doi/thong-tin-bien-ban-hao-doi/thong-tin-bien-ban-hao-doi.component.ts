@@ -10,7 +10,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { PhieuNhapKhoTamGuiService } from 'src/app/services/phieuNhapKhoTamGui.service';
+import { PhieuNhapKhoTamGuiService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/phieuNhapKhoTamGui.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
@@ -300,7 +300,7 @@ export class ThongTinBienBanHaoDoiComponent implements OnInit {
             trangThai: '04',
           };
           let res =
-            await this.quanLyBienBanTinhKhoService.updateStatus(
+            await this.quanLyBienBanTinhKhoService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -337,7 +337,7 @@ export class ThongTinBienBanHaoDoiComponent implements OnInit {
             trangThai: '01',
           };
           let res =
-            await this.quanLyBienBanTinhKhoService.updateStatus(
+            await this.quanLyBienBanTinhKhoService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -374,7 +374,7 @@ export class ThongTinBienBanHaoDoiComponent implements OnInit {
             trangThai: '01',
           };
           let res =
-            await this.quanLyBienBanTinhKhoService.updateStatus(
+            await this.quanLyBienBanTinhKhoService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -413,7 +413,7 @@ export class ThongTinBienBanHaoDoiComponent implements OnInit {
             trangThai: '03',
           };
           let res =
-            await this.quanLyBienBanTinhKhoService.updateStatus(
+            await this.quanLyBienBanTinhKhoService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -468,7 +468,7 @@ export class ThongTinBienBanHaoDoiComponent implements OnInit {
         "tongSoLuong": this.detail.tongSoLuong,
       };
       if (this.id > 0) {
-        let res = await this.quanLyBienBanTinhKhoService.chinhSua(
+        let res = await this.quanLyBienBanTinhKhoService.update(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -483,7 +483,7 @@ export class ThongTinBienBanHaoDoiComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
-        let res = await this.quanLyBienBanTinhKhoService.themMoi(
+        let res = await this.quanLyBienBanTinhKhoService.create(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {

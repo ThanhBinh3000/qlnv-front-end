@@ -84,10 +84,9 @@
         <nz-form-item>
           <nz-form-label nzRequired>Đơn vị quản lý</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-          <nz-select formControlName="dviQly"  nzAllowClear="true">
-            <nz-option *ngFor="let p of listDviQly" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi">
-            </nz-option>
-          </nz-select>
+            <nz-select size="small"  nzMode="tags"  [ngModelOptions]="{standalone: true}" [(ngModel)]="listOfTagOption">
+              <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.tenDvi" [nzValue]="option"></nz-option>
+            </nz-select>
           </nz-form-control>
         </nz-form-item>
       </div>

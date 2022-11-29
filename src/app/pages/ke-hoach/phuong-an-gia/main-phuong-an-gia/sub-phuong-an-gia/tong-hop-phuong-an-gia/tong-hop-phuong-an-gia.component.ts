@@ -11,6 +11,7 @@ import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { TongHopPhuongAnGiaService } from 'src/app/services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service';
 import { STATUS } from 'src/app/constants/status';
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
 @Component({
   selector: 'app-tong-hop-phuong-an-gia',
   templateUrl: './tong-hop-phuong-an-gia.component.html',
@@ -47,6 +48,7 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
   idSelected: number = 0;
   constructor(private readonly fb: FormBuilder,
     private spinner: NgxSpinnerService,
+    private danhMucService: DanhMucService,
     private notification: NzNotificationService,
     public userService: UserService,
     private modal: NzModalService,
@@ -85,7 +87,16 @@ export class TongHopPhuongAnGiaComponent implements OnInit {
 
   async ngOnInit() {
     this.loadDsNam();
+    this.loadDsVthh();
     this.search();
+  }
+
+  async loadDsVthh() {
+    this.listVthh = [];
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_HHOA");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listVthh = res.data.filter(item => item.ma != "02");
+    }
   }
 
   initForm(): void {

@@ -5,7 +5,7 @@
                 <i class="fa fa-arrow-left"></i>
                 <span>Quay lại</span>
             </button>
-            <button *ngIf="formData.value.trangThaiHd != STATUS.HOAN_THANH_CAP_NHAT" type="button"
+            <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH" type="button"
                 class="btn btn-sub xanh-nhat" (click)="approve()">
                 <i class="icon htvbdh_checkfile2"></i>
                 <span>Hoàn thành thực hiện</span>
@@ -16,8 +16,7 @@
         <div class="header header-green-background">
             <div class="header-text">
                 <div class="title-chi-tieu">
-                    <span
-                        [ngClass]="formData.value.trangThaiHd == STATUS.HOAN_THANH_CAP_NHAT ? 'status-xanh' : 'status-do'">
+                    <span [ngClass]="formData.value.trangThaiHd == STATUS.DA_HOAN_THANH ? 'status-xanh' : 'status-do'">
                         {{ formData.value.tenTrangThaiHd }}
                     </span>
                     <span>Quản lý hợp đồng/phụ lục hợp đồng</span>
@@ -250,12 +249,13 @@
                     </tbody>
                 </nz-table>
             </nz-card>
-            <app-thong-tin *ngIf="idHopDong" [id]="idHopDong" [isQuanLy]="true">
+            <app-thong-tin [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isQuanLy]="true">
             </app-thong-tin>
         </nz-card>
     </div>
 </ng-container>
 <ng-template #tempHopDong>
-    <app-thong-tin [id]="idHopDong" (showListEvent)="redirectHopDong(false,null)" [dataBinding]="formData.value">
+    <app-thong-tin [id]="idHopDong" [loaiVthh]="loaiVthh" (showListEvent)="redirectHopDong(false,null)"
+        [dataBinding]="formData.value">
     </app-thong-tin>
 </ng-template>

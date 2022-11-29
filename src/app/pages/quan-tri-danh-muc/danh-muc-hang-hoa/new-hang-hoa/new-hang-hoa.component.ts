@@ -36,6 +36,8 @@ export class NewHangHoaComponent implements OnInit {
   listDviQly : any[] = [];
    listDviTinh: any[] = [];
    listPpLayMau: any[] = [];
+  listOfOption: Array<{ maDvi: string; tenDvi: string }> = [];
+  listOfTagOption: any[] = [];
   constructor(
     private fb: FormBuilder,
     private notification: NzNotificationService,
@@ -55,7 +57,6 @@ export class NewHangHoaComponent implements OnInit {
       trangThai: [true],
       kyHieu: [''],
       maDviTinh: ['', Validators.required],
-      dviQly: ['', Validators.required],
     })
   }
 
@@ -130,6 +131,12 @@ export class NewHangHoaComponent implements OnInit {
     let res = await this.dmHangService.layTatCaDviQly();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDviQly = res.data;
+      if (this.listDviQly) {
+        this.listOfOption = this.listDviQly.map(item => ({
+          maDvi : item.maDvi,
+          tenDvi : item.tenDvi
+        }))
+      }
     }
   }
 
@@ -195,12 +202,15 @@ export class NewHangHoaComponent implements OnInit {
   }
 
   add() {
+    this.spinner.show()
     this.helperService.markFormGroupTouched(this.formHangHoa);
     if (this.formHangHoa.invalid) {
+      this.spinner.hide();
       return;
     }
     let dviTinh =  this.listDviTinh.filter(item => item.ma == this.formHangHoa.value.maDviTinh)
     let body = this.formHangHoa.value;
+    body.dmHangDvqls = this.listOfTagOption;
     body.maDviTinh = dviTinh[0].giaTri
     body.ma = this.formHangHoa.value.maCha + this.formHangHoa.value.ma
     body.trangThai = this.formHangHoa.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
@@ -217,11 +227,9 @@ export class NewHangHoaComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }).catch((e) => {
-      console.error('error: ', e);
-      this.notification.error(
-        MESSAGE.ERROR,
-        e.error.errors[0].defaultMessage,
-      );
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     });
   }
 
@@ -233,7 +241,6 @@ export class NewHangHoaComponent implements OnInit {
         let dviTinh =  this.listDviTinh.filter(item => item.giaTri == detail.maDviTinh)
         this.formHangHoa.patchValue({
           maDviTinh : dviTinh && dviTinh[0] ? dviTinh[0].ma : null,
-          dviQly : detail.dviQly,
           loaiHang : this.convertLoaiHh(detail.loaiHang)
         })
       }

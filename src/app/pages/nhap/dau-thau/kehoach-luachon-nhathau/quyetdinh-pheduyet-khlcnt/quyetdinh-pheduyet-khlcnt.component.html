@@ -73,7 +73,7 @@
             <th class="text-center" style="width: 8%;">Tổng số gói thầu</th>
             <th class="text-center" style="width: 8%;">Số gói thầu đã trúng</th>
             <th class="text-center" style="width: 8%;">SL HĐ đã ký</th>
-            <th class="text-center" style="width: 8%;">Thời hạn nhập kho</th>
+            <th *ngIf="loaiVthh != '02'" class="text-center" style="width: 8%;">Thời hạn nhập kho</th>
             <th *ngIf="userService.isTongCuc()" class="text-center" style="width: 9%;">Thời gian thực hiện dự án</th>
             <th>Trạng thái</th>
             <th width="90px">Hành động</th>
@@ -150,7 +150,7 @@
                   (input)="filterInTable('tongTien',filterTable.tongTien)" size="small" />
               </nz-input-group>
             </th>
-            <th>
+            <th *ngIf="loaiVthh != '02'">
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tongTien"
                   (input)="filterInTable('tongTien',filterTable.tongTien)" size="small" />
@@ -189,7 +189,7 @@
             <td>{{data.soGthau}}</td>
             <td>{{data.soGthauTrung}}</td>
             <td></td>
-            <td>{{data.tgianNhang | date: 'dd/MM/YYYY' }}</td>
+            <td *ngIf="loaiVthh != '02'">{{data.tgianNhang | date: 'dd/MM/YYYY' }}</td>
             <td *ngIf="userService.isTongCuc()">{{data.tgianThien }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
@@ -197,8 +197,8 @@
                 *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == '03')
-                && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_SUA')) && userService.isTongCuc()"
+              <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
+                && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_QDLCNT_THEM')) && userService.isTongCuc()"
                 (click)="detail(data)">
                 <i class="fa fa-pencil"></i>
               </a>

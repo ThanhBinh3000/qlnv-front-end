@@ -32,7 +32,7 @@ export class TongHopBaoCaoComponent implements OnInit {
         ngayTaoDen: '',
         ngayTaoTu: '',
         paggingReq: {
-            limit: 20,
+            limit: 10,
             page: 1
         },
         str: '',
