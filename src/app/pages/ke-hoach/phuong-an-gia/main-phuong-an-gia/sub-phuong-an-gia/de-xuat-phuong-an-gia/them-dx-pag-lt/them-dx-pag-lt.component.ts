@@ -312,12 +312,17 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     })
     await this.loadDsQdPduyetKhlcnt();
     this.dviTinh = '';
-    let resp = await this.danhMucService.getDetail(event);
+    let resp = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
     if (resp.msg == MESSAGE.SUCCESS) {
-      if (resp.data) {
-        this.dviTinh = resp.data.maDviTinh
+      this.dviTinh = resp.data.maDviTinh;
+    }
+    let res = await this.danhMucTieuChuanService.getDetailByMaHh(
+      this.formData.get('cloaiVthh').value,
+    );
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
         this.formData.patchValue({
-          tchuanCluong : resp.data.tchuanCluong
+          tchuanCluong : res.data.tenQchuan
         })
       }
     }
