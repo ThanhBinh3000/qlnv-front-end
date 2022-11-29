@@ -237,7 +237,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.thongBanDauGiaTaiSanService.deleteData(item.id).then((res) => {
+          this.khCnCongTrinhNghienCuu.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,

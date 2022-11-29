@@ -92,11 +92,29 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
 
   ngOnInit() {
     console.log(this.formThongTinChung);
+    if (this.id) {
+      this.getDetail(this.id);
+    } else {
+      this.initForm()
+    }
+    this.getListCapDt();
+  }
+
+  async getDetail(id) {
+    let res = await this.khCnCongTrinhNghienCuu.getDetail(id);
+    if (res.msg == MESSAGE.SUCCESS) {
+      const data = res.data;
+      this.helperService.bidingDataInFormGroup(this.formData, data);
+      this.dataTableTienDo = data.tienDoThucHien;
+      this.dataTable = data.children;
+    }
+  }
+
+  async initForm() {
     this.formData.patchValue({
       trangThai: "00",
       tenTrangThai: "Dự Thảo"
     })
-    this.getListCapDt();
   }
 
   async getListCapDt() {
