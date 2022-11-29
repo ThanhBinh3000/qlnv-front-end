@@ -4,7 +4,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NgxSpinnerService } from 'ngx-spinner';
-
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
@@ -62,7 +61,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
   listDiemKho: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
-
   danhMucDonVi: any;
   STATUS = STATUS;
   i = 0;
@@ -73,7 +71,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
   listNam: any[] = [];
   listHinhThucDauThau: any[] = [];
   listLoaiHopDong: any[] = [];
-
   listOfMapData: VatTu[];
   listOfMapDataClone: VatTu[];
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
@@ -113,6 +110,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     private dmTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
+
     super();
     this.formData = this.fb.group({
       id: [],
@@ -195,7 +193,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
     if (resNx.msg == MESSAGE.SUCCESS) {
       this.listLoaiHinhNx = resNx.data.filter(item => item.phanLoai == 'N');
-      console.log(this.listLoaiHinhNx);
     }
     // kiểu nhập xuất
     this.listKieuNx = [];
@@ -212,7 +209,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
   }
 
   onChangeLhNx($event) {
-    console.log($event);
     let dataNx = this.listLoaiHinhNx.filter(item => item.ma == $event);
     if (dataNx.length > 0) {
       this.formData.patchValue({
@@ -249,15 +245,16 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
 
   isDetailPermission() {
     if (this.loaiVthhInput === "02") {
-      if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_SUA") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM")) {
-        return true;
-      }
-    } else {
-      if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_LT_DEXUAT_SUA") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM")) {
+      if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM")) {
         return true;
       }
     }
-    this.notification.error(MESSAGE.ERROR, "Bạn không có quyền truy cập chức năng này!!! ")
+    else {
+      if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM")) {
+        return true;
+      }
+    }
+    this.notification.error(MESSAGE.ERROR, "Bạn không có quyền truy cập chức năng này !")
     return false;
   }
 
@@ -327,7 +324,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     });
   }
 
-
   themMoiBangPhanLoTaiSan(data?: DanhSachPhanLo, index?: number) {
     if (!this.formData.get('loaiVthh').value) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
@@ -360,7 +356,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       let tongSoLuong: number = 0;
       let tongTienKdiem: number = 0;
       let tongTienDatTruoc: number = 0;
-      console.log(this.listOfData, 9999)
       this.listOfData.forEach((item) => {
         tongSoLuong = tongSoLuong + item.soLuong;
         tongTienKdiem = tongTienKdiem + item.giaKhoiDiem;
@@ -371,15 +366,12 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
         tongTienKdiem: tongTienKdiem,
         tongTienDatTruoc: tongTienDatTruoc,
       });
-
     });
-    console.log(this.listOfData, 6666)
   }
 
   deleteRow(i: number): void {
     this.listOfData = this.listOfData.filter((d, index) => index !== i);
     this.helperService.setIndexArray(this.listOfData);
-
   }
 
   async save(isGuiDuyet?) {
@@ -399,7 +391,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       );
       return;
     }
-
     let pipe = new DatePipe('en-US');
     let body = this.formData.value;
     if (this.formData.get('soDxuat').value) {
@@ -458,7 +449,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     }
   }
 
-
   async getDataChiTieu() {
     let res2 =
       await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
@@ -467,19 +457,16 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       this.formData.patchValue({
-        soQdCtieu: this.dataChiTieu.soQuyetDinh,
+        soQdCtieu: this.dataChiTieu.soQuyetDinh
       });
     }
+    this.formData.patchValue({
+      soQdCtieu: '150/TCDT',
+    });
   }
 
   convertTienTobangChu(tien: number): string {
     return VNnum2words(tien);
-  }
-
-  downloadFile(taiLieu: any) {
-    this.uploadFileService.downloadFile(taiLieu.fileUrl).subscribe((blob) => {
-      saveAs(blob, taiLieu.fileName);
-    });
   }
 
   quayLai() {
@@ -542,7 +529,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       },
     });
   }
-
 
   async guiDuyetCuc() {
     this.modal.confirm({
@@ -655,7 +641,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       },
     });
   }
-
 
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {

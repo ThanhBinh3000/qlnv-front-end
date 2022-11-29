@@ -91,6 +91,19 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       }
     );
   }
+  setValidator(isGuiDuyet){
+    if (isGuiDuyet) {
+      this.formData.controls["namKeHoach"].setValidators([Validators.required]);
+      this.formData.controls["soQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayKy"].setValidators([Validators.required]);
+      this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["namKeHoach"].clearValidators();
+      this.formData.controls["soQd"].clearValidators();
+      this.formData.controls["ngayKy"].clearValidators();
+      this.formData.controls["ngayHieuLuc"].clearValidators();
+    }
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -245,41 +258,44 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
 
   async save(isBanHanh?) {
     this.spinner.show();
+    this.setValidator(isBanHanh)
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();
       return;
     }
     let err =false;
-    this.arrThongTinGia.forEach(item => {
-      item.giaQdBtc = item.giaQd,
-        item.giaQdVatBtc = item.giaQdVat
-    })
       let body = this.formData.value;
-      body.soQd = body.soQd + this.maQd;
+      body.soQd = body.soQd ?  body.soQd + this.maQd : "";
       body.pagType = this.pagType;
       body.thongTinGia = this.arrThongTinGia
-    this.arrThongTinGia.forEach(item => {
-      item.donGia = item.giaDn,
-        item.donGiaVat = item.giaDnVat,
-        item.donGiaBtc = item.giaQd,
-        item.donGiaVatBtc = item.giaQdVat
-    })
-    this.arrThongTinGia.forEach(item => {
-      if (body.loaiGia == 'LG01' && (item.giaQd >item.giaDn || item.giaQdVat > item.giaDnVat)) {
-        this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
-        item.giaQd = 0;
-        item.giaQdVat = 0;
-        err = true;
-      }
-      //gia ban toi thieu
-      if (body.loaiGia == 'LG02' && (item.giaQd <item.giaDn || item.giaQdVat < item.giaDnVat)) {
-        this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
-        item.giaQd = 0;
-        item.giaQdVat = 0;
-        err = true;
-      }
-    })
+    if (this.arrThongTinGia) {
+      this.arrThongTinGia.forEach(item => {
+        item.giaQdBtc = item.giaQd,
+          item.giaQdVatBtc = item.giaQdVat
+      })
+      this.arrThongTinGia.forEach(item => {
+        item.donGia = item.giaDn,
+          item.donGiaVat = item.giaDnVat,
+          item.donGiaBtc = item.giaQd,
+          item.donGiaVatBtc = item.giaQdVat
+      })
+      this.arrThongTinGia.forEach(item => {
+        if (body.loaiGia == 'LG01' && (item.giaQd >item.giaDn || item.giaQdVat > item.giaDnVat)) {
+          this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
+          item.giaQd = 0;
+          item.giaQdVat = 0;
+          err = true;
+        }
+        //gia ban toi thieu
+        if (body.loaiGia == 'LG02' && (item.giaQd <item.giaDn || item.giaQdVat < item.giaDnVat)) {
+          this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
+          item.giaQd = 0;
+          item.giaQdVat = 0;
+          err = true;
+        }
+      })
+    }
     if (!err) {
       let res;
       if (this.idInput > 0) {

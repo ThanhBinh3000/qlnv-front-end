@@ -16,7 +16,6 @@ export class KhknBaoQuanComponent implements OnInit, AfterViewInit {
     @ViewChild('myTab') myTab: ElementRef;
     routes = KHKN_BAO_QUAN_ROUTE_LIST;
     routerUrl: string = "";
-    defaultUrl: string = '/khkn-bao-quan'
 
     constructor(
         private router: Router,
@@ -80,6 +79,7 @@ export class KhknBaoQuanComponent implements OnInit, AfterViewInit {
     }
 
     redirect(url: string) {
-        this.router.navigate([this.defaultUrl + url]);
+        this.routerUrl = url;
+        this.router.navigate([url]);
     }
 }
