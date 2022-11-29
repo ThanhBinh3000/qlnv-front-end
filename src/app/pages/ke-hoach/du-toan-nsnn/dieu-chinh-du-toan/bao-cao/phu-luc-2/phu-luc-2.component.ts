@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -10,6 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, NOT_OK, OK } from "src/app/Utility/utils";
 import * as uuid from "uuid";
+import { DialogThemKhoanMucComponent } from '../../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { LINH_VUC } from './phu-luc2.constant';
 
 export class ItemData {
@@ -45,6 +46,7 @@ export class PhuLuc2Component implements OnInit {
   //danh muc
   donVis: any = [];
   noiDungs: any[] = LINH_VUC;
+  // noiDungs: any[] = [];
   noiDungs1: any[] = [];
   donViTinhs: any[] = [];
   lstCtietBcao: ItemData[] = [];
@@ -99,16 +101,42 @@ export class PhuLuc2Component implements OnInit {
   statusBtnOk: boolean;
   dsDinhMucN: any[] = [];
   dsDinhMucX: any[] = [];
-  listVatTu: any[] = [];
-  listVatTuFull: any[] = [];
+
   maDviTao!: string;
 
   allChecked = false;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   editMoneyUnit = false;
   isDataAvailable = false;
-
   noiDungFull: any[] = [];
+
+  listVatTu: any[] = [];
+  listVatTuFull: any[] = [
+
+  ];
+
+
+  listVatTuNhap: any[] = [
+    {
+      id: 1000,
+      tenDm: "Nhập",
+      maCha: 0,
+      level: 0,
+      ma: 1000,
+      maDviTinh: ""
+    },
+  ]
+  listVatTuXuat: any[] = [
+    {
+      id: 2000,
+      tenDm: "Xuất",
+      maCha: 0,
+      level: 0,
+      ma: 2000,
+      maDviTinh: ""
+    },
+  ]
+
   constructor(
     private spinner: NgxSpinnerService,
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -221,21 +249,11 @@ export class PhuLuc2Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
-
-
     await this.getListVtu()
+    await this.addListVatTu()
     this.getStatusButton();
-
-
-    console.log(this.listVatTu);
-    // this.listVatTu.forEach(vtu => {
-
-    // })
-    // this.getdsDinhMucN();
-
     this.spinner.hide();
   };
-
 
   addListNoiDung(noiDungTemp) {
     const a = [];
@@ -274,7 +292,88 @@ export class PhuLuc2Component implements OnInit {
     })
   };
 
-  addListVatTu() {
+  async addListVatTu() {
+    const lstVtuCon1 = []
+    const lstVtuCon2 = []
+    const lstVtuCon3 = []
+    const lstVtuCon4 = []
+
+    this.listVatTu.forEach(vtu => {
+      this.listVatTuNhap.push({
+        id: vtu.ma,
+        maVtu: vtu.ma,
+        tenDm: vtu.ten,
+        maDviTinh: vtu.maDviTinh,
+        maCha: '1000',
+        level: Number(vtu.cap),
+      });
+
+      vtu.children.forEach(vtuCon => {
+        const maCha = vtuCon?.ma.slice(0, -2)
+        lstVtuCon1.push({
+          id: vtuCon.ma,
+          maVtu: vtuCon.ma,
+          tenDm: vtuCon.ten,
+          maDviTinh: vtuCon.maDviTinh,
+          maCha: maCha,
+          level: Number(vtuCon.cap),
+        })
+
+        vtuCon?.children.forEach(vtuConn => {
+          const maCha = vtuConn?.ma.slice(0, -2)
+          lstVtuCon2.push({
+            id: vtuConn.ma,
+            maVtu: vtuConn.ma,
+            tenDm: vtuConn.ten,
+            maDviTinh: vtuConn.maDviTinh,
+            maCha: maCha,
+            level: Number(vtuConn.cap),
+          })
+        })
+      })
+    })
+    const mangGop12 = lstVtuCon1.concat(lstVtuCon2)
+    this.listVatTuNhap = this.listVatTuNhap.concat(mangGop12)
+    this.listVatTu.forEach(vtu => {
+      this.listVatTuXuat.push({
+        id: vtu.ma + 1,
+        maVtu: vtu.ma,
+        tenDm: vtu.ten,
+        maDviTinh: vtu.maDviTinh,
+        maCha: '2000',
+        level: Number(vtu.cap),
+      });
+
+      vtu.children.forEach(vtuCon => {
+        const maCha = vtuCon?.ma.slice(0, -2)
+        lstVtuCon3.push({
+          id: vtuCon.ma + 1,
+          maVtu: vtuCon.ma,
+          tenDm: vtuCon.ten,
+          maDviTinh: vtuCon.maDviTinh,
+          maCha: maCha,
+          level: Number(vtuCon.cap),
+        })
+
+        vtuCon?.children.forEach(vtuConn => {
+          const maCha = vtuConn?.ma.slice(0, -2)
+          lstVtuCon4.push({
+            id: vtuConn.ma + 1,
+            maVtu: vtuConn.ma,
+            tenDm: vtuConn.ten,
+            maDviTinh: vtuConn.maDviTinh,
+            maCha: maCha,
+            level: Number(vtuConn.cap),
+          })
+        })
+      })
+    })
+    const mangGop34 = lstVtuCon3.concat(lstVtuCon4)
+    this.listVatTuXuat = this.listVatTuXuat.concat(mangGop34)
+    this.listVatTuFull = this.listVatTuXuat.concat(this.listVatTuNhap)
+    // gan lai noi dung
+    // this.noiDungs = this.listVatTuFull;
+    // console.log(this.noiDungs);
 
   }
 

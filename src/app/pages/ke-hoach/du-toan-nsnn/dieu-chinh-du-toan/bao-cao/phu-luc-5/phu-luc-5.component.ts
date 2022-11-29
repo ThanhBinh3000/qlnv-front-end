@@ -45,7 +45,12 @@ export class PhuLuc5Component implements OnInit {
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
       const id = file?.lastModified.toString();
-      this.lstFiles.push({ id: id, fileName: file?.name });
+      this.lstFiles.push({
+        id: id,
+        fileName: file?.name,
+        fileSize: file?.size,
+        fileUrl: file?.url
+      });
       this.listFile.push(file);
     });
     this.fileList = [];
@@ -254,7 +259,7 @@ export class PhuLuc5Component implements OnInit {
           //   lyDoTuChoi: null,
           // };
           this.dataChange.emit(data.data);
-          // this.listFile = []; 
+          this.listFile = [];
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
