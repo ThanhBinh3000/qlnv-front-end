@@ -21,15 +21,6 @@
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="12">
-      <!-- <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true">Loại hợp đồng</nz-form-label>
-        <nz-form-control [nzErrorTip]="error">
-          <nz-select formControlName="loaiHdong" nzDisabled>
-            <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-            </nz-option>
-          </nz-select>
-        </nz-form-control>
-      </nz-form-item> -->
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Loại hợp đồng </nz-form-label>
         <nz-form-control [nzErrorTip]="error">
@@ -265,7 +256,7 @@
             <td>{{dtGoiThau.giaKhoiDiem }}</td>
             <td>{{dtGoiThau.tienDatTruoc }}</td>
             <td *ngIf="!isView">
-              <a (click)="themMoiGoiThau(dtGoiThau,dtGoiThau.idx)">
+              <a (click)="themMoiBangPhanLoTaiSan(dtGoiThau,dtGoiThau.idx)">
                 <i class="fa fa-pencil"></i>
               </a>
             </td>

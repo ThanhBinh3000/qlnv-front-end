@@ -455,7 +455,6 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     this.setValidator(isGuiDuyet);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
       return;
     }
     if (this.listOfData.length == 0) {

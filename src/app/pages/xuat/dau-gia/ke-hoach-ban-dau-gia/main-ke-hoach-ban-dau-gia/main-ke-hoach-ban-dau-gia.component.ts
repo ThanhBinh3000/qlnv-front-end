@@ -1,4 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-main-ke-hoach-ban-dau-gia',
@@ -8,19 +9,21 @@ import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@an
 export class MainKeHoachBanDauGiaComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
-  @Input() loaiVthh: string;
+  @Input() inputLoaiVthh: string;
   @Input() idInput: number;
   @Output()
   showListEvent = new EventEmitter<any>();
-  tabSelected: number = 0;
 
-  constructor() {
+  constructor(
+    public userService: UserService
+  ) {
   }
 
   ngOnInit(): void {
   }
 
-  selectTab(tab) {
+  tabSelected: number = 0;
+  selectTab(tab: number) {
     this.tabSelected = tab;
   }
 }

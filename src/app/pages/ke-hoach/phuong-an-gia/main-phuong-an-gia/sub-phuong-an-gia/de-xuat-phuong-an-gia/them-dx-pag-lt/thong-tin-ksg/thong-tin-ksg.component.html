@@ -77,10 +77,10 @@
                 <a (click)="downloadFile(data.fileDinhKem)">
                     <i class="icon htvbdh_tcdt_import "></i>
                 </a>
-                <a (click)="editRow(idx)">
+                <a *ngIf="!isView" (click)="editRow(idx)">
                     <i class="fa fa-pencil"></i>
                 </a>
-                <a (click)="deleteItem(idx)">
+                <a *ngIf="!isView" (click)="deleteItem(idx)">
                     <i class="fa fa-trash-o do"></i>
                 </a>
             </td>
