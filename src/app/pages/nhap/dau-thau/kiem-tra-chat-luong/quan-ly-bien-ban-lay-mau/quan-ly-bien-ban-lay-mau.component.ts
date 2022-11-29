@@ -26,7 +26,7 @@ import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-ha
   styleUrls: ['./quan-ly-bien-ban-lay-mau.component.scss'],
 })
 export class QuanLyBienBanLayMauComponent implements OnInit {
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
 
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -47,9 +47,6 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   diemKho: string = '';
   nhaKho: string = '';
   nganLo: string = '';
-
-  loaiVthh: string;
-  routerVthh: string;
 
   userInfo: UserLogin;
 
@@ -92,9 +89,6 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     this.routerUrl = this.router.url;
     this.spinner.show();
     try {
-      if (!this.typeVthh || this.typeVthh == '') {
-        this.isTatCa = true;
-      }
       this.userInfo = this.userService.getUserLogin();
       await this.search();
       this.spinner.hide();
@@ -262,7 +256,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       try {
         let body = {
           "maDvi": this.userInfo.MA_DVI,
-          "maVatTuCha": this.isTatCa ? null : this.typeVthh,
+          "maVatTuCha": this.isTatCa ? null : this.loaiVthh,
           "ngayLayMauDen": this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[1]).format('YYYY/MM/DD') : null,
           "ngayLayMauTu": this.searchFilter.ngayLayMau ? dayjs(this.searchFilter.ngayLayMau[0]).format('YYYY/MM/DD') : null,
           "orderBy": null,
@@ -391,22 +385,6 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-  }
-
-  getTitleVthh() {
-    if (this.router.url.indexOf("/thoc/") != -1) {
-      this.loaiVthh = "01";
-      this.routerVthh = 'thoc';
-    } else if (this.router.url.indexOf("/gao/") != -1) {
-      this.loaiVthh = "00";
-      this.routerVthh = 'gao';
-    } else if (this.router.url.indexOf("/muoi/") != -1) {
-      this.loaiVthh = "02";
-      this.routerVthh = 'muoi';
-    } else if (this.router.url.indexOf("/vat-tu/") != -1) {
-      this.loaiVthh = "03";
-      this.routerVthh = 'vat-tu';
     }
   }
 

@@ -606,7 +606,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       "pageNumber": 1,
       "trangThai": this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
     }
-    let res = await this.bienBanGuiHangService.timKiem(body);
+    let res = await this.bienBanGuiHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listBienBanGuiHang = data.content;
