@@ -125,7 +125,12 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
       const id = file?.lastModified.toString();
-      this.lstFiles.push({ id: id, fileName: file?.name });
+      this.lstFiles.push({
+        id: id,
+        fileName: file?.name,
+        fileSize: file?.size,
+        fileUrl: file?.url
+      });
       this.listFile.push(file);
     });
     this.fileList = [];
@@ -506,7 +511,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     // gui du lieu trinh duyet len server
     const request = JSON.parse(JSON.stringify({
       id: this.id,
-      fileDinhKems: this.lstFiles,
+      fileDinhKems: listFile,
       listIdFiles: this.listIdFilesDelete,
       lstCtiets: lstCtietBcaoTemp,
       maDvi: this.maDonViTao,
