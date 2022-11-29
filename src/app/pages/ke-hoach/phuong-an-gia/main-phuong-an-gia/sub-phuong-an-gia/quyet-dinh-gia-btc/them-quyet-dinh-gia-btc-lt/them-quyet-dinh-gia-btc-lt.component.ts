@@ -91,6 +91,22 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
     );
   }
 
+  setValidator(isGuiDuyet){
+    if (isGuiDuyet) {
+      this.formData.controls["namKeHoach"].setValidators([Validators.required]);
+      this.formData.controls["soQd"].setValidators([Validators.required]);
+      this.formData.controls["ngayKy"].setValidators([Validators.required]);
+      this.formData.controls["ngayHieuLuc"].setValidators([Validators.required]);
+      this.formData.controls["trichYeu"].setValidators([Validators.required]);
+    } else {
+      this.formData.controls["namKeHoach"].clearValidators();
+      this.formData.controls["soQd"].clearValidators();
+      this.formData.controls["ngayKy"].clearValidators();
+      this.formData.controls["ngayHieuLuc"].clearValidators();
+      this.formData.controls["trichYeu"].clearValidators();
+    }
+  }
+
   async ngOnInit() {
     this.spinner.show();
     await   this.loadToTrinhDeXuat();
@@ -254,6 +270,7 @@ export class ThemQuyetDinhGiaBtcLtComponent implements OnInit {
 
   async save(isBanHanh?) {
     this.spinner.show();
+    this.setValidator(isBanHanh);
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.spinner.hide();

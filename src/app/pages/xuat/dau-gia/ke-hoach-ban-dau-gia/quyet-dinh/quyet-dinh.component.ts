@@ -9,19 +9,15 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import { LEVEL, LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
-import { ItemDetail } from 'src/app/models/itemDetail';
+import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { STATUS } from 'src/app/constants/status';
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
-import { NullTemplateVisitor } from '@angular/compiler';
 
 @Component({
   selector: 'app-quyet-dinh',
@@ -32,6 +28,7 @@ export class QuyetDinhComponent implements OnInit {
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   @Input() loaiVthh: string;
   yearNow = dayjs().get('year');
+
   searchFilter = {
     namKh: dayjs().get('year'),
     soQdPd: null,
@@ -40,6 +37,7 @@ export class QuyetDinhComponent implements OnInit {
     ngayKyQd: null,
     soTrHdr: null,
   };
+
   filterTable: any = {
     namKh: '',
     soQdPd: '',
@@ -53,6 +51,7 @@ export class QuyetDinhComponent implements OnInit {
     slHdDaKy: '',
     tenTrangThai: '',
   };
+
   STATUS = STATUS
   dataTableAll: any[] = [];
   isDetail: boolean = false;
@@ -65,7 +64,6 @@ export class QuyetDinhComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
-
   tabSelected: string = 'quyet-dinh';
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
@@ -73,7 +71,6 @@ export class QuyetDinhComponent implements OnInit {
   listOfMapDataClone: VatTu[];
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
   selectHang: any = { ten: "" };
-
   lastBreadcrumb: string;
   userInfo: UserLogin;
 
@@ -91,7 +88,7 @@ export class QuyetDinhComponent implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XEM")) {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT") || !this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_XEM")) {
         window.location.href = '/error/401'
       }
       this.userInfo = this.userService.getUserLogin();
@@ -116,7 +113,7 @@ export class QuyetDinhComponent implements OnInit {
 
 
   insert() {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
+    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_THEM")) {
       return;
     }
     this.isDetail = true;
@@ -124,7 +121,7 @@ export class QuyetDinhComponent implements OnInit {
   }
 
   detail(data?) {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_SUA")) {
+    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_SUA")) {
       return;
     }
     this.isDetail = true;
@@ -132,9 +129,9 @@ export class QuyetDinhComponent implements OnInit {
   }
 
   delete(data?) {
-    // if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
-    //   return;
-    // }
+    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_XOA")) {
+      return;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -176,9 +173,7 @@ export class QuyetDinhComponent implements OnInit {
     this.searchFilter.trichYeu = null;
     this.searchFilter.ngayKyQd = null;
     this.searchFilter.soTrHdr = null;
-
     this.search();
-
   }
 
   async search() {
@@ -208,7 +203,6 @@ export class QuyetDinhComponent implements OnInit {
       this.dataTable = data.content;
       if (data && data.content && data.content.length > 0) {
         this.dataTable = data.content;
-
       }
       this.dataTableAll = cloneDeep(this.dataTable)
       this.totalRecord = data.totalElements;
@@ -257,7 +251,7 @@ export class QuyetDinhComponent implements OnInit {
   }
 
   exportData() {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_EXP")) {
+    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_EXP")) {
       return;
     }
     if (this.totalRecord > 0) {
@@ -280,7 +274,7 @@ export class QuyetDinhComponent implements OnInit {
         this.quyetDinhPdKhBdgService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-lua-chon-nha-thau.xlsx')
+            saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-ban-dau-gia.xlsx')
           );
         this.spinner.hide();
       } catch (e) {
@@ -294,9 +288,9 @@ export class QuyetDinhComponent implements OnInit {
   }
 
   deleteSelect() {
-    // if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
-    //   return;
-    // }
+    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_XOA")) {
+      return;
+    }
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {

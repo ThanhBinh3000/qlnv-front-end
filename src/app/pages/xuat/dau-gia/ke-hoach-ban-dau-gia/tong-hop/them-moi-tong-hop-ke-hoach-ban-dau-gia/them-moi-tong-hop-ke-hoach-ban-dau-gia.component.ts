@@ -14,18 +14,15 @@ import { MESSAGE } from 'src/app/constants/message';
 import { ThongTinTongHopDeXuatLCNT } from 'src/app/models/ThongTinTongHopDeXuatLCNT';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as dayjs from 'dayjs';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from 'src/app/constants/status';
 import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
-import { API_STATUS_CODE } from 'src/app/constants/config';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 
 @Component({
@@ -33,9 +30,8 @@ import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMu
   templateUrl: './them-moi-tong-hop-ke-hoach-ban-dau-gia.component.html',
   styleUrls: ['./them-moi-tong-hop-ke-hoach-ban-dau-gia.component.scss']
 })
+
 export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
-
-
   @Input() loaiVthh: string
   @Input() id: number;
   @Output()
@@ -51,15 +47,9 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
   visibleTab: boolean = false;
   i = 0;
   editId: string | null = null;
-  // loaiVTHH: number = 0;
-  chiTiet: ThongTinTongHopDeXuatLCNT = new ThongTinTongHopDeXuatLCNT();
   listNam: any[] = [];
   yearNow: number = 0;
   idDeXuat: number = 0;
-  listPhuongThucDauThau: any[] = [];
-  listNguonVon: any[] = [];
-  listHinhThucDauThau: any[] = [];
-  listLoaiHopDong: any[] = [];
   listVthh: any[] = [];
   idPA: number = 0;
   selectedId: number = 0;
@@ -83,6 +73,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
     private dmTieuChuanService: DanhMucTieuChuanService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService
   ) {
+
     this.formTraCuu = this.fb.group(
       {
         loaiVthh: [null, [Validators.required]],
@@ -93,6 +84,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
         ngayPduyet: [null, [Validators.required]],
       }
     );
+
     this.formData = this.fb.group({
       cloaiVthh: [, [Validators.required]],
       id: [],
@@ -109,7 +101,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
       ngayPduyet: [''],
       tchuanCluong: [''],
     })
-
   }
 
   async ngOnInit() {
@@ -124,7 +115,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
       }
       this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
       await Promise.all([
-        this.loadDataComboBox(),
         this.loadChiTiet(),
       ]);
       await this.spinner.hide();
@@ -152,33 +142,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
         this.isTongHop = false;
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    }
-  }
-
-  async loadDataComboBox() {
-    // List nguồn vốn
-    this.listNguonVon = [];
-    let resNv = await this.danhMucService.danhMucChungGetAll('NGUON_VON');
-    if (resNv.msg == MESSAGE.SUCCESS) {
-      this.listNguonVon = resNv.data;
-    }
-    // phương thức đấu thầu
-    this.listPhuongThucDauThau = [];
-    let resPt = await this.danhMucService.danhMucChungGetAll('PT_DTHAU');
-    if (resPt.msg == MESSAGE.SUCCESS) {
-      this.listPhuongThucDauThau = resPt.data;
-    }
-    // hình thức đấu thầu
-    this.listHinhThucDauThau = [];
-    let resPtdt = await this.danhMucService.danhMucChungGetAll('HT_LCNT');
-    if (resPtdt.msg == MESSAGE.SUCCESS) {
-      this.listHinhThucDauThau = resPtdt.data;
-    }
-    // hợp đồng
-    this.listLoaiHopDong = [];
-    let resHd = await this.danhMucService.danhMucChungGetAll('LOAI_HDONG');
-    if (resHd.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHopDong = resHd.data;
     }
   }
 
@@ -243,6 +206,9 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
   }
 
   async save() {
+    if (!this.isDetailPermission()) {
+      return;
+    }
     this.helperService.markFormGroupTouched(this.formData);
     await this.spinner.show();
     try {

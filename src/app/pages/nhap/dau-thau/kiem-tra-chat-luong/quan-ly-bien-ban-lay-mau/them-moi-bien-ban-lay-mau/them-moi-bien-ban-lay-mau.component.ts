@@ -33,7 +33,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() isTatCa: boolean;
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -151,7 +151,6 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     await Promise.all([
       this.loadPhuongPhapLayMau(),
       this.loadLoaiBienBan(),
-      this.loadSoQuyetDinh(),
     ]);
     if (this.id > 0) {
       await this.loadBienbanLayMau();
@@ -175,7 +174,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       maQhns: this.userInfo.DON_VI.maQhns,
       loaiBienBan: this.listBienBan[0].ma,
       soBienBan: `${id}/${this.formData.get('nam').value}/BBLM-CCDTVP`,
-      tenNguoiTao: this.userInfo.sub
+      tenNguoiTao: this.userInfo.TEN_DAY_DU
     });
   }
 
@@ -383,10 +382,10 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
   }
 
-  async loadSoQuyetDinh() {
+  async openDialogSoQd() {
     let body = {
       "maDvi": this.userInfo.MA_DVI,
-      "maVthh": this.typeVthh,
+      "loaiVthh": this.loaiVthh,
       "paggingReq": {
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
@@ -401,9 +400,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-  }
 
-  async openDialogSoQd() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
       nzContent: DialogTableSelectionComponent,
@@ -443,7 +440,11 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     });
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
     if (dataChiCuc) {
-      this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
+      if (this.loaiVthh.startsWith('02')) {
+        this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
+      } else {
+        this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
+      }
     }
     await this.spinner.hide();
   }
