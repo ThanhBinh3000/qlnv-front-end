@@ -5,10 +5,12 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { BaseComponent } from 'src/app/components/base/base.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { BienBanGuiHangService } from 'src/app/services/bienBanGuiHang.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
@@ -17,7 +19,7 @@ import { Globals } from 'src/app/shared/globals';
   templateUrl: './bien-ban-gui-hang.component.html',
   styleUrls: ['./bien-ban-gui-hang.component.scss']
 })
-export class BienBanGuiHangComponent implements OnInit {
+export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
   @Input() loaiVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
@@ -68,7 +70,11 @@ export class BienBanGuiHangComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-  ) { }
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
+  ) {
+    super();
+    super.ngOnInit();
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -118,28 +124,49 @@ export class BienBanGuiHangComponent implements OnInit {
   }
 
   async search() {
+    await this.spinner.show();
     let body = {
-      "capDvis": '3',
-      soBienBan: this.searchFilter.soBienBan,
-      soQuyetDinh: this.searchFilter.soQuyetDinh,
-      ngayGuiHang: this.searchFilter.ngayGuiHang,
-      pageSize: this.pageSize,
-      pageNumber: this.page
+      trangThai: this.STATUS.BAN_HANH,
+      paggingReq: {
+        "limit": this.pageSize,
+        "page": this.page - 1
+      },
+      "loaiVthh": this.loaiVthh
     };
-    let res = await this.bienBanGuiHangService.search(body);
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-      this.dataTableAll = cloneDeep(this.dataTable);
+      this.convertDataTable();
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    await this.spinner.hide();
+  }
+
+  convertDataTable() {
+    this.dataTable.forEach(item => {
+      if (this.userService.isChiCuc()) {
+        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      } else {
+        let data = [];
+        item.dtlList.forEach(item => {
+          data = [...data, ...item.children];
+        })
+        item.detail = {
+          children: data
+        }
+      };
+    });
+    // this.dataTable.forEach(item => {
+    //   item.detail.children.forEach(ddNhap => {
+    //     ddNhap.listPhieuNhapKho.forEach(x => {
+    //       x.phieuKiemTraCl = ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
+    //     });
+    //   })
+    // });
+    console.log(this.dataTable);
   }
 
   async changePageIndex(event) {
