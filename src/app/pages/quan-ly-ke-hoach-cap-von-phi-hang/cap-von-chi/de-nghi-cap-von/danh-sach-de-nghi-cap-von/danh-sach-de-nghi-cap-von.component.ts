@@ -37,6 +37,7 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
 
     tableFilter = {
         maDn: null,
+        namDn: null,
         qdChiTieu: null,
         canCuGia: null,
         loaiDn: null,
