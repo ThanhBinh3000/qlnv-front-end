@@ -120,6 +120,7 @@ export class PhuLuc5Component implements OnInit {
 
   //download file về máy tính
   async downloadFile(id: string) {
+    this.spinner.show();
     const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
     if (!file) {
       const fileAttach = this.lstFiles.find(element => element?.id == id);
@@ -137,6 +138,7 @@ export class PhuLuc5Component implements OnInit {
       const blob = new Blob([file], { type: "application/octet-stream" });
       fileSaver.saveAs(blob, file.name);
     }
+    this.spinner.hide();
   }
 
   getStatusButton() {
@@ -252,7 +254,7 @@ export class PhuLuc5Component implements OnInit {
           //   lyDoTuChoi: null,
           // };
           this.dataChange.emit(data.data);
-          this.listFile = [];
+          // this.listFile = []; 
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }

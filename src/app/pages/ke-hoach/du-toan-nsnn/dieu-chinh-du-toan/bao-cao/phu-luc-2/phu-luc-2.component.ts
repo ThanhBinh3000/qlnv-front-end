@@ -1,8 +1,4 @@
-import { DatePipe, Location } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -12,7 +8,6 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { UserService } from 'src/app/services/user.service';
 import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, NOT_OK, OK } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { LINH_VUC } from './phu-luc2.constant';
@@ -35,6 +30,11 @@ export class ItemData {
   checked!: boolean;
 }
 
+export class Details {
+  data: ItemData[] = [];
+  lstVtu: any[] = [];
+}
+
 @Component({
   selector: 'app-phu-luc-2',
   templateUrl: './phu-luc-2.component.html',
@@ -45,6 +45,7 @@ export class PhuLuc2Component implements OnInit {
   //danh muc
   donVis: any = [];
   noiDungs: any[] = LINH_VUC;
+  noiDungs1: any[] = [];
   donViTinhs: any[] = [];
   lstCtietBcao: ItemData[] = [];
   donViTiens: any[] = DON_VI_TIEN;
@@ -90,13 +91,15 @@ export class PhuLuc2Component implements OnInit {
     ncauKphi: null,
     checked: false,
   };
+
+
   //trang thai cac nut
   status: false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
   dsDinhMucN: any[] = [];
   dsDinhMucX: any[] = [];
-  listVattu: any[] = [];
+  listVatTu: any[] = [];
   listVatTuFull: any[] = [];
   maDviTao!: string;
 
@@ -104,6 +107,8 @@ export class PhuLuc2Component implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   editMoneyUnit = false;
   isDataAvailable = false;
+
+  noiDungFull: any[] = [];
   constructor(
     private spinner: NgxSpinnerService,
     private quanLyVonPhiService: QuanLyVonPhiService,
@@ -121,7 +126,31 @@ export class PhuLuc2Component implements OnInit {
 
   async initialization() {
     this.spinner.show();
-    console.log(this.data);
+    await this.danhMucService.dMNoiDungPhuLuc2DC().toPromise().then(
+      (data) => {
+        if (data.statusCode == 0) {
+          this.noiDungs1 = data.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+      }
+    );
+
+    this.noiDungs1.forEach(item => {
+      if (!item.maCha) {
+        this.noiDungFull.push({
+          ...item,
+          tenDm: item.giaTri,
+          ten: item.giaTri,
+          level: 0,
+          idCha: 0,
+        })
+      }
+    })
+    this.addListNoiDung(this.noiDungFull);
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
     this.maDviTien = "1";
@@ -192,37 +221,61 @@ export class PhuLuc2Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
-    // await this.getListVtu()
+
+
+    await this.getListVtu()
     this.getStatusButton();
+
+
+    console.log(this.listVatTu);
+    // this.listVatTu.forEach(vtu => {
+
+    // })
     // this.getdsDinhMucN();
 
-    // const listVT = [];
-    // this.listVattu.forEach(item => {
-    //   this.listVatTuFull.push({
-    //     id: item.id,
-    //     tenDm: item.ten,
-    //     idCha: 0,
-    //     level: 1,
-    //     maDviTinh: ""
-    //   })
-    //   item.forEach(itm => {
-    //   })
-    // })
-
     this.spinner.hide();
+  };
+
+
+  addListNoiDung(noiDungTemp) {
+    const a = [];
+    noiDungTemp.forEach(item => {
+      this.noiDungs1.forEach(el => {
+        if (item.ma == el.maCha) {
+          el = {
+            ...el,
+            tenDm: el.giaTri,
+            ten: item.giaTri,
+            level: item.level + 1,
+            idCha: item.id,
+          }
+          this.noiDungFull.push(el);
+          a.push(el);
+        }
+      });
+    })
+    if (a.length > 0) {
+      this.addListNoiDung(a);
+    }
   }
 
   async getListVtu() {
     //lay danh sach vat tu
     await this.danhMucService.dMVatTu().toPromise().then(res => {
       if (res.statusCode == 0) {
-        this.listVattu = res.data;
+        this.listVatTu = res.data;
+        console.log(this.listVatTu);
+
       } else {
         this.notification.error(MESSAGE.ERROR, res?.msg);
       }
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+  };
+
+  addListVatTu() {
+
   }
 
   async getDinhMucPL2N() {
@@ -230,6 +283,7 @@ export class PhuLuc2Component implements OnInit {
       loaiDinhMuc: '01',
       maDvi: this.maDviTao,
     }
+
     await this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
       res => {
         if (res.statusCode == 0) {
@@ -247,7 +301,7 @@ export class PhuLuc2Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     )
-  }
+  };
   async getDinhMucPL2X() {
     const request = {
       loaiDinhMuc: '02',
