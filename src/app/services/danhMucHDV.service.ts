@@ -47,7 +47,7 @@ export class DanhMucHDVService extends BaseService {
     );
   }
 
-  chiTietDonVi(id: string): Observable<any>{
+  chiTietDonVi(id: string): Observable<any> {
     return this.httpClient.get(
       this.urlDefault + "/qlnv-category/dmuc-donvi/chi-tiet/" + id
     );
@@ -798,6 +798,13 @@ export class DanhMucHDVService extends BaseService {
   dMNoiDungKinhPhiPL1DieuChinh(): Observable<any> {
     return this.httpClient.get(
       this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/danh-muc-noi-dung-kinh-phi-dieu-chinh-pl1",
+    );
+  }
+
+  //danh muc bao cao ket qua thuc hien (bao cao 04b)
+  dMNoiDungPhuLuc2DC(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/NOI_DUNG_PL2_DC",
     );
   }
 }
