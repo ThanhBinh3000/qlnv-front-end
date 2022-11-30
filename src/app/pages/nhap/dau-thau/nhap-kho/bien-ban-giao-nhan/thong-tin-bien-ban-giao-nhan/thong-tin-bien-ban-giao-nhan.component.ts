@@ -72,7 +72,12 @@ export class ThongTinBienBanGiaoNhanComponent extends BaseComponent implements O
   listHopDong: any[] = [];
   listDiaDiemNhap: any[] = [];
   dataTable: any[] = [];
+  dataTableCuc: any[] = [];
+  dataTableChiCuc: any[] = [];
+  dataTableGiaoHang: any[] = [];
   benNhan: ChiTiet = new ChiTiet();
+  daiDienCuc: ChiTiet = new ChiTiet();
+  daiDienChiCuc: ChiTiet = new ChiTiet();
   benGiao: ChiTiet = new ChiTiet();
 
   constructor(
@@ -461,28 +466,47 @@ export class ThongTinBienBanGiaoNhanComponent extends BaseComponent implements O
   }
 
   addDaiDien(bienBan: ChiTiet, type: string) {
-    // if ((type == '00' && (!this.chiTietBienBanGuiHangBenNhan.daiDien || !this.chiTietBienBanGuiHangBenNhan.chucVu))
-    //   || (type == '01' && (!this.chiTietBienBanGuiHangBenGiao.daiDien || !this.chiTietBienBanGuiHangBenGiao.chucVu))) {
-    //   return;
-    // }
-
     const chiTiet = new ChiTiet();
     chiTiet.loaiBen = type;
-    chiTiet.chucVu = bienBan.chucVu;
-    chiTiet.daiDien = bienBan.daiDien;
-    this.dataTable.push(chiTiet);
+    if (type == "00") {
+      chiTiet.chucVu = this.daiDienCuc.chucVu;
+      chiTiet.daiDien = this.daiDienCuc.daiDien;
+      this.dataTableCuc.push(chiTiet);
+    }
+    if (type == "01") {
+      chiTiet.chucVu = this.daiDienChiCuc.chucVu;
+      chiTiet.daiDien = this.daiDienChiCuc.daiDien;
+      this.dataTableChiCuc.push(chiTiet);
+    }
+    if (type == "02") {
+      chiTiet.chucVu = this.benNhan.chucVu;
+      chiTiet.daiDien = this.benNhan.daiDien;
+      this.dataTableGiaoHang.push(chiTiet);
+    }
     this.clearDaiDien(type);
   }
 
 
   clearDaiDien(type: string) {
-    if (type === '00') {
-      this.benGiao = new ChiTiet();
-    } else {
+    if (type === '02') {
       this.benNhan = new ChiTiet();
     }
+    if (type === '00') {
+      this.daiDienCuc = new ChiTiet();
+    }
+    if (type === '01') {
+      this.daiDienChiCuc = new ChiTiet();
+    }
   }
-  deleteBienBan(id: number) {
-    // this.bienBanGuiHang.chiTiets = this.bienBanGuiHang.chiTiets.filter(bienBan => bienBan.id !== id);
+  deleteBienBan(idx: number, type) {
+    if (type == '00') {
+      this.dataTableCuc.splice(idx, 1);
+    }
+    if (type == '01') {
+      this.dataTableChiCuc.splice(idx, 1);
+    }
+    if (type == '02') {
+      this.dataTableGiaoHang.splice(idx, 1);
+    }
   }
 }
