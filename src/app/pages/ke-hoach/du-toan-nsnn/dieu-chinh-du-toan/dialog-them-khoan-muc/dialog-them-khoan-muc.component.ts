@@ -28,17 +28,17 @@ export class DialogThemKhoanMucComponent implements OnInit {
         })
         this.lstKhoanMuc = this.obj.lstKhoanMuc;
         if (!this.maKhoanMuc) {
-            this.maKhoanMuc = this.lstKhoanMuc.find(e => e.level == 0).id;
+            this.maKhoanMuc = this.lstKhoanMuc.find(e => e.level == 0).maVtu;
             this.lstParent = this.lstKhoanMuc.filter(e => e.level == 0);
         } else {
-            var idCha: number = this.lstKhoanMuc.find(e => e.id == this.maKhoanMuc).idCha;
-            this.lstParent = this.lstKhoanMuc.filter(e => e.idCha == idCha);
+            var idCha: number = this.lstKhoanMuc.find(e => e.id == this.maKhoanMuc).maCha;
+            this.lstParent = this.lstKhoanMuc.filter(e => e.maCha == idCha);
         }
         this.changeModel();
     }
 
     changeModel() {
-        this.lstChild = this.lstKhoanMuc.filter(e => e.idCha == this.maKhoanMuc);
+        this.lstChild = this.lstKhoanMuc.filter(e => e.maCha == this.maKhoanMuc);
     }
 
     handleOk() {
