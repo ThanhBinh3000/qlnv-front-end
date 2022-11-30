@@ -72,17 +72,17 @@ export class UserService extends BaseService {
 
   isTongCuc() {
     let user = this.getUserLogin();
-    return user.CAP_DVI == "1" || (user.CAP_DVI == "2" && user.VAI_TRO && user.VAI_TRO == 'VU')
+    return user.CAP_DVI == "1";
   }
 
   isCuc() {
     let user = this.getUserLogin();
-    return user.CAP_DVI == "2" && (!user.VAI_TRO ||  user.VAI_TRO !== 'VU')
+    return user.CAP_DVI == "2" ;
   }
 
   isChiCuc() {
     let user = this.getUserLogin();
-    return user.CAP_DVI == "3" || (user.CAP_DVI == "2" && user.VAI_TRO && user.VAI_TRO == 'CUC')
+    return user.CAP_DVI == "3";
   }
 
   isAccessPermisson(permissionCode) {

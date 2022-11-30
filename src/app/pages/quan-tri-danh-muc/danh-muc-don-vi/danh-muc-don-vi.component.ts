@@ -58,7 +58,6 @@ export class DanhMucDonViComponent implements OnInit {
       trangThai: [''],
       type: [],
       ghiChu: [''],
-      vaiTro: [''],
     })
   }
 
