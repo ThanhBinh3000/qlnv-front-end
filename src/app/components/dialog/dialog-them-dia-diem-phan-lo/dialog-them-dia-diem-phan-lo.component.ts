@@ -1,23 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import {Component, OnInit} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {NzModalRef} from 'ng-zorro-antd/modal';
 import VNnum2words from 'vn-num2words';
-import { Globals } from 'src/app/shared/globals';
-import { UserService } from 'src/app/services/user.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { LOAI_HANG_DTQG } from 'src/app/constants/config';
-import { HelperService } from 'src/app/services/helper.service';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DxuatKhLcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
-import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
-import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
-import { cloneDeep } from 'lodash';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
+import {Globals} from 'src/app/shared/globals';
+import {UserService} from 'src/app/services/user.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {TinhTrangKhoHienThoiService} from 'src/app/services/tinhTrangKhoHienThoi.service';
+import {LOAI_HANG_DTQG} from 'src/app/constants/config';
+import {HelperService} from 'src/app/services/helper.service';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DxuatKhLcntService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {DeXuatKeHoachBanDauGiaService} from 'src/app/services/deXuatKeHoachBanDauGia.service';
+import {DeXuatKhBanDauGiaService} from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
+import {DanhSachPhanLo} from 'src/app/models/KeHoachBanDauGia';
+import {cloneDeep} from 'lodash';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {QuanLyHangTrongKhoService} from 'src/app/services/quanLyHangTrongKho.service';
 @Component({
   selector: 'app-dialog-them-dia-diem-phan-lo',
   templateUrl: './dialog-them-dia-diem-phan-lo.component.html',
@@ -37,6 +37,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   listDiemKhoEdit: any[] = [];
   khoanTienDatTruoc: number;
   namKh: number;
+
   constructor(
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
@@ -115,7 +116,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         diaDiemKho: dataDiemNhap.substring(0, dataDiemNhap.length - 2)
       })
       this._modalRef.close(this.formData);
-      console.log(this.listOfData, 4444)
     }
   }
 
@@ -188,6 +188,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       let res = await this.donViService.getAll(body);
       if (res.msg === MESSAGE.SUCCESS) {
         this.listChiCuc = res.data;
+        this.listChiCuc.map(v => Object.assign(v, {tenDonVi: v.tenDvi}))
       }
     }
   }
@@ -220,7 +221,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           listDiemKhoEdit: res.data.child[i],
         };
         this.listDiemKho.push(item);
-      };
+      }
+      ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     }
   }
@@ -240,7 +242,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           listNganKhoEdit: diemKho[0].listDiemKhoEdit.child[i],
         };
         this.listNhaKho.push(item);
-      };
+      }
+      ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     } else {
       let diemKho = this.listDiemKho.filter(item => item.value == this.thongtinPhanLo.maDiemKho);
@@ -256,7 +259,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           listNganKhoEdit: diemKho[0].listDiemKhoEdit.child[i],
         };
         this.listNhaKho.push(item);
-      };
+      }
+      ;
     }
   }
 
@@ -274,7 +278,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           listLoKhoEdit: nhakho[0].listNganKhoEdit.child[i],
         };
         this.listNganKho.push(item);
-      };
+      }
+      ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     } else {
       let nhakho = this.listNhaKho.filter(item => item.value == this.thongtinPhanLo.maNhaKho);
@@ -289,7 +294,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           listLoKhoEdit: nhakho[0].listNganKhoEdit.child[i],
         };
         this.listNganKho.push(item);
-      };
+      }
+      ;
     }
   }
 
@@ -305,7 +311,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           'text': nganKho[0].listLoKhoEdit.child[i].tenLokho,
         };
         this.listLoKho.push(item);
-      };
+      }
+      ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     } else {
       let nganKho = this.listNganKho.filter(item => item.value == this.thongtinPhanLo.maNganKho);
@@ -319,7 +326,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           'text': nganKho[0].listLoKhoEdit.child[i].tenNganlo,
         };
         this.listLoKho.push(item);
-      };
+      }
+      ;
     }
 
   }
@@ -400,7 +408,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
 
-
   editCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   startEdit(index: number): void {
@@ -431,7 +438,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.listOfData.forEach((item, index) => {
       this.editCache[index] = {
         edit: false,
-        data: { ...item }
+        data: {...item}
       };
     });
   }
