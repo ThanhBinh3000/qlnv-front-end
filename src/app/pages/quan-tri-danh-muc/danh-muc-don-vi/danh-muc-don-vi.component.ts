@@ -58,6 +58,7 @@ export class DanhMucDonViComponent implements OnInit {
       trangThai: [''],
       type: [],
       ghiChu: [''],
+      vaiTro: [''],
     })
   }
 
@@ -121,6 +122,7 @@ export class DanhMucDonViComponent implements OnInit {
             trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
             type: res.data.type == LOAI_DON_VI.PB,
             ghiChu: res.data.ghiChu,
+            vaiTro: res.data.vaiTro,
           })
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
