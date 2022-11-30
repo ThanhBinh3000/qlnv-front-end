@@ -28,12 +28,6 @@ export class BaoCaoThucHienDuToanChiComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-        let listPermission = [];
-        var jsonPermission = this.storageService.get(STORAGE_KEY.PERMISSION);
-        if (jsonPermission && jsonPermission.length > 0) {
-            listPermission = JSON.parse(jsonPermission);
-        }
-        console.log(listPermission)
         this.tabList.forEach(item => {
             let check = false;
             item.role.forEach(e => {

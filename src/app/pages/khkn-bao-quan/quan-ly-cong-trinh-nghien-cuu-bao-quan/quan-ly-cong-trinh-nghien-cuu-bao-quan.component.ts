@@ -15,6 +15,7 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { ThongBaoDauGiaTaiSanService } from 'src/app/services/thongBaoDauGiaTaiSan.service';
 import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { KhCnCongTrinhNghienCuu } from 'src/app/services/kh-cn-bao-quan/khCnCongTrinhNghienCuu';
 @Component({
   selector: 'app-quan-ly-cong-trinh-nghien-cuu-bao-quan',
   templateUrl: './quan-ly-cong-trinh-nghien-cuu-bao-quan.component.html',
@@ -81,6 +82,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     private thongBanDauGiaTaiSanService: ThongBaoDauGiaTaiSanService,
     public globals: Globals,
     private danhMucService: DanhMucService,
+    private khCnCongTrinhNghienCuu: KhCnCongTrinhNghienCuu,
   ) { }
 
   async ngOnInit() {
@@ -155,21 +157,16 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
 
   async search() {
     let body = {
-      "maThongBaoBDG": this.searchFilter.maThongBaoBDG,
-      "maVatTuCha": this.searchFilter.maVatTuCha,
-      "namKeHoach": this.searchFilter.namKeHoach,
-      "ngayToChucBDGDenNgay": this.searchFilter.ngayToChuc && this.searchFilter.ngayToChuc.length > 0
-        ? dayjs(this.searchFilter.ngayToChuc[1]).format('YYYY-MM-DD')
-        : null,
-      "ngayToChucBDGTuNgay": this.searchFilter.ngayToChuc && this.searchFilter.ngayToChuc.length > 0
-        ? dayjs(this.searchFilter.ngayToChuc[0]).format('YYYY-MM-DD')
-        : null,
-      "soQuyetDinhPheDuyetKHBDG": this.searchFilter.soQuyetDinhPheDuyetKHBDG,
-      "trichYeu": this.searchFilter.trichYeu,
-      "pageSize": this.pageSize,
-      "pageNumber": this.page
+      maDeTai: this.searchFilter.maThongBaoBDG,
+      tenDeTai: this.searchFilter.maVatTuCha,
+      capDeTai: this.searchFilter.namKeHoach,
+      trangThai: this.searchFilter.trichYeu,
+      paggingReq: {
+        limit: this.pageSize,
+        page: this.page - 1,
+      },
     };
-    let res = await this.thongBanDauGiaTaiSanService.timKiem(body);
+    let res = await this.khCnCongTrinhNghienCuu.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -240,7 +237,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.thongBanDauGiaTaiSanService.deleteData(item.id).then((res) => {
+          this.khCnCongTrinhNghienCuu.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,

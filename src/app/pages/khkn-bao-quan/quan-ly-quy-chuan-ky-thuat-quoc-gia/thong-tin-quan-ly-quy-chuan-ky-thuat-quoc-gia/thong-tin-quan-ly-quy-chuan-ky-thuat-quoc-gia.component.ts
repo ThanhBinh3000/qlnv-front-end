@@ -1,24 +1,36 @@
-import { cloneDeep } from 'lodash';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {cloneDeep} from 'lodash';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { BienBanChuanBiKho, ChiTietBienBanChuanBiKho } from 'src/app/models/BienBanChuanBiKho';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyBienBanChuanBiKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanChuanBiKho.service';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { UserService } from 'src/app/services/user.service';
-import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {BienBanChuanBiKho, ChiTietBienBanChuanBiKho} from 'src/app/models/BienBanChuanBiKho';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {
+  QuanLyBienBanChuanBiKhoService
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanChuanBiKho.service';
+import {
+  QuyetDinhGiaoNhapHangService
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
+import {ThongTinHopDongService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
+import {TinhTrangKhoHienThoiService} from 'src/app/services/tinhTrangKhoHienThoi.service';
+import {UserService} from 'src/app/services/user.service';
+import {convertTienTobangChu, thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
+
+export interface tieuChuanKyThuat {
+  tenChiTieu: string;
+  chiTieuCha: boolean;
+  chungLoaiHangHoa?: string;
+  mucYeuCauNhap?: number;
+  mucYeuCauXuat?: number;
+}
 
 @Component({
   selector: 'app-thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia',
@@ -54,6 +66,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
   formData: FormGroup;
   listHopDong: any[] = [];
   listHinhThucBaoQuan: any[] = [];
+  radioApDung: string= 'vthh';
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -69,7 +82,8 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
     private donViService: DonviService,
     private fb: FormBuilder,
     private bienBanChuanBiKhoService: QuanLyBienBanChuanBiKhoService,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -127,227 +141,23 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
     }
   }
 
-  initForm() {
+  initForm(): void {
     this.formData = this.fb.group({
-      soQD: [
-        {
-          value: this.detail
-            ? this.detail.qdgnvnxId
-            : null,
-          disabled: this.isView ? true : false
-        },
-        [],
-      ],
-      donVi: [
-        {
-          value: this.detail.tenDvi, disabled: true
-        },
-        [],
-      ],
-      maQHNS: [
-        {
-          value: this.detail.maDvi, disabled: true
-        },
-        [],
-      ],
-      soBienBan: [
-        {
-          value: this.detail
-            ? this.detail.soBienBan
-            : null,
-          disabled: this.isView ? true : false
-        },
-        [],
-      ],
-      ngayNghiemThu: [
-        {
-          value: this.detail
-            ? this.detail.ngayNghiemThu
-            : null,
-          disabled: this.isView ? true : false
-        },
-        [],
-      ],
-      thuTruongDonVi: [
-        {
-          value: this.detail
-            ? this.detail.thuTruongDonVi
-            : null,
-          disabled: this.isView ? true : false
-        },
-
-        [],
-      ],
-      keToanDonVi: [
-        {
-          value: this.detail
-            ? this.detail.keToanDonVi
-            : null,
-          disabled: this.isView ? true : false
-        },
-
-        [],
-      ],
-      kyThuatVienBaoQuan: [
-        {
-          value: this.detail
-            ? this.detail.kyThuatVien
-            : null,
-          disabled: this.isView ? true : false
-        },
-
-        [],
-      ],
-      thuKho: [
-        {
-          value: this.detail
-            ? this.detail.thuKho
-            : null,
-          disabled: this.isView ? true : false
-        },
-
-        [],
-      ],
-      tenVatTuCha: [
-        {
-          value: this.detail
-            ? this.detail.tenVatTuCha
-            : null, disabled: true
-        },
-        [],
-      ],
-      tenVatTu: [
-        {
-          value: this.detail
-            ? this.detail.tenVatTu
-            : null, disabled: true
-        },
-        [],
-      ],
-      loaiHinhKho: [
-        {
-          value: this.detail
-            ? this.detail.loaiHinhKho
-            : null,
-          disabled: this.isView ? true : false
-        },
-
-        [],
-      ],
-      tichLuong: [
-        {
-          value: this.detail
-            ? this.detail.tichLuong
-            : null, disabled: true
-        },
-        [],
-      ],
-      diemKho: [
-        {
-          value: this.detail
-            ? this.detail.maDiemKho
-            : null,
-          disabled: this.isView ? true : false
-        },
-
-        [],
-      ],
-      nhaKho: [
-        {
-          value: this.detail
-            ? this.detail.maNhaKho
-            : null,
-          disabled: this.isView ? true : false
-        },
-
-        [],
-      ],
-      nganKho: [
-        {
-          value: this.detail
-            ? this.detail.maNganKho
-            : null,
-          disabled: this.isView ? true : false
-        },
-
-        [],
-      ],
-      loKho: [
-        {
-          value: this.detail
-            ? this.detail.maNganLo
-            : null,
-          disabled: this.isView ? true : false
-        },
-
-        [],
-      ],
-      phuongThucBaoQuan: [
-        {
-          value: this.detail
-            ? this.detail.ptBaoQuan
-            : null,
-          disabled: this.isView ? true : false
-        },
-
-        [],
-      ],
-      thucNhap: [
-        {
-          value: this.detail
-            ? this.detail.thucNhap
-            : null,
-          disabled: this.isView ? true : false
-        },
-
-        [],
-      ],
-      hinhThucBaoQuan: [
-        {
-          value: this.detail
-            ? this.detail.htBaoQuan
-            : null,
-          disabled: this.isView ? true : false
-        },
-
-        [],
-      ],
-      dinhMucDuocGiao: [
-        {
-          value: this.detail
-            ? this.detail.dinhMucDuocGiao
-            : null, disabled: true
-        },
-        [],
-      ],
-      ketLuan: [
-        {
-          value: this.detail
-            ? this.detail.ketLuan
-            : null,
-          disabled: this.isView ? true : false
-        },
-        [],
-      ],
-      tongSo: [
-        {
-          value: this.detail
-            ? null
-            : null,
-          disabled: this.isView ? true : false
-        },
-        [],
-      ],
-      soHopDong: [
-        {
-          value: this.detail
-            ? this.detail.soHopDong
-            : null,
-          disabled: this.isView ? true : false
-        },
-        [],
-      ],
-      qdgnvnxId: [],
+      soVanBan: [null],
+      ngayKy: [null],
+      ngayHieuLuc: [null],
+      soHieuQuyChuan: [null],
+      apDungTai: [null],
+      idVanBanThayThe: [null],
+      soVanBanThayThe: [null],
+      loaiApDung: [null],
+      danhSachApDung: [],
+      trichYeu: [null],
+      thoiGianLuuKhoToiDa: [null],
+      trangThai: [null],
+      trangThaiHl: [null],
+      fileDinhKem: [],
+      tieuChuanKyThuat: []
     });
   }
 
@@ -435,8 +245,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
         this.detail.hopDongId = this.detailHopDong.id;
         this.detail.maVatTu = this.detailHopDong.cloaiVthh;
         this.detail.maVatTuCha = this.detailHopDong.loaiVthh;
-      }
-      else {
+      } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
@@ -831,9 +640,11 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
   print() {
 
   }
+
   newObjectChiTietChuanBiKho() {
     this.chiTietChuanBiKhoCreate = new ChiTietBienBanChuanBiKho();
   }
+
   addChiTiet() {
     if (!this.chiTietChuanBiKhoCreate.noiDung) {
       return;
@@ -855,6 +666,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
     this.newObjectChiTietChuanBiKho();
     this.dsChiTietChuanBiKhoClone = cloneDeep(this.detail.chiTiets);
   }
+
   deleteData(id: number) {
     this.modal.confirm({
       nzClosable: false,
@@ -875,9 +687,11 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
       },
     });
   }
+
   startEdit(index: number) {
     this.dsChiTietChuanBiKhoClone[index].isEdit = true;
   }
+
   saveEdit(i: number) {
     this.dsChiTietChuanBiKhoClone[i].isEdit = false;
     Object.assign(
@@ -885,10 +699,12 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
       this.dsChiTietChuanBiKhoClone[i],
     );
   }
+
   cancelEdit(index: number) {
     this.dsChiTietChuanBiKhoClone = cloneDeep(this.detail.chiTiets);
     this.dsChiTietChuanBiKhoClone[index].isEdit = false;
   }
+
   calcChiPhiTrongNam(): string {
     this.chiTietChuanBiKhoCreate.thanhTienTrongNam = +this.chiTietChuanBiKhoCreate.soLuongTrongNam
       * +this.chiTietChuanBiKhoCreate.donGiaTrongNam;
@@ -896,6 +712,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
       ? Intl.NumberFormat('en-US').format(this.chiTietChuanBiKhoCreate.thanhTienTrongNam)
       : '0';
   }
+
   calcTongGiaTri(): string {
     if (!this.chiTietChuanBiKhoCreate.thanhTienQt) {
       this.chiTietChuanBiKhoCreate.thanhTienQt = 0;
@@ -911,7 +728,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
   calcTongCong(): string {
     const tong = this.dsChiTietChuanBiKhoClone.length > 0 ?
       this.dsChiTietChuanBiKhoClone.reduce((total, currentValue) =>
-        total + currentValue.thanhTienTrongNam
+          total + currentValue.thanhTienTrongNam
         , 0) : 0
     this.formData.patchValue({
       tongSo: tong

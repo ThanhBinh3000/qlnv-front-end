@@ -1277,7 +1277,6 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
 
   //download file về máy tính
   async downloadFile(id: string) {
-    debugger
     const file: File = this.listFile.find(element => element?.lastModified.toString() == id);
     if (!file) {
       const fileAttach = this.lstFiles.find(element => element?.id == id);

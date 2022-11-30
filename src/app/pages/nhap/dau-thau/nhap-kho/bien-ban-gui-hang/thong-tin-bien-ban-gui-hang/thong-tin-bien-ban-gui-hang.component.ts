@@ -127,8 +127,9 @@ export class ThongTinBienBanGuiHangComponent extends BaseComponent implements On
 
       tinhTrang: [],
       chatLuong: [],
-      phuongPhap: []
+      phuongPhap: [],
 
+      dvt: []
     })
   }
 

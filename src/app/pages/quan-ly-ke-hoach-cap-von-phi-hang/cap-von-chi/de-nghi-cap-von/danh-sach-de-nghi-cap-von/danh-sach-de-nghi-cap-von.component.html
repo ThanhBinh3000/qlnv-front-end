@@ -107,6 +107,15 @@
                     </th>
                     <th>
                         <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="tableFilter.namDn"
+                                (input)="filterInTable('namDn',tableFilter.namDn, false)" size="small" />
+                        </nz-input-group>
+                        <ng-template #suffixTemplateInfo>
+                            <i nz-icon nzType="search"></i>
+                        </ng-template>
+                    </th>
+                    <th>
+                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
                             <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="tableFilter.qdChiTieu"
                                 (input)="filterInTable('soQdChiTieu',tableFilter.qdChiTieu, false)" size="small" />
                         </nz-input-group>
@@ -151,7 +160,7 @@
                             </nz-option>
                         </nz-select>
                     </th>
-                    <th></th>
+                    <th></th> 
                 </tr> -->
             </thead>
             <tbody>
