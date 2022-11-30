@@ -246,12 +246,14 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         tenTrangThai: data.tenTrangThai,
         lyDoTuChoi: data.lyDoTuChoi
       })
+      await this.loadDsQdPduyetKhlcnt();
+      await this.loadDsQdPduyetKhBdg();
+      await this.loadDetailNh(data.qdCtKhNam ? data.qdCtKhNam : null)
       this.dataTableCanCuXdg = data.canCuPhapLy;
       this.dsDiaDiemDeHang = data.diaDiemDeHangs;
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableKqGia = data.ketQuaThamDinhGia;
       this.fileDinhKem = data.fileDinhKems;
-      this.loadDetailNh(data.qdCtKhNam ? data.qdCtKhNam : null)
       this.updateEditCache()
     }
   }
@@ -388,6 +390,10 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   onChangeLoaiGia($event) {
     this.isVat = ($event == 'LG01' || $event == 'LG03');
+    this.formData.patchValue({
+      qdCtKhNam: null,
+      cloaiVthh : null
+    })
   }
 
   loadDsNam() {
@@ -466,15 +472,13 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
           }
         }
         if (this.formData.value.loaiGia == "LG04") {
-          if (this.formData.value.giaDeNghiVat < this.detailNhaphang.donGiaVat && this.formData.value.loaiGia == 'LG03') {
+          if (this.formData.value.giaDeNghi < this.detailNhaphang.donGiaVat && this.formData.value.loaiGia == 'LG04') {
             this.notification.error(MESSAGE.ERROR, "Sai!!!")
             this.spinner.hide();
             return;
           }
         }
-
       }
-
     }
 
     let body = this.formData.value;
@@ -730,7 +734,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     }
   }
 
-  loadDetailNh(event) {
+  async loadDetailNh(event) {
     let arr = this.listQdCtKh.filter(item => item.soQd == event)
     if (arr) {
       this.detailNhaphang = arr[0]
