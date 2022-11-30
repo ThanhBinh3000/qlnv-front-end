@@ -26,6 +26,7 @@ import {BaseComponent} from "../../../../../../components/base/base.component";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
+import {ChiTiet} from "../../../../../../models/BienBanGuiHang";
 @Component({
   selector: 'app-thong-tin-bien-ban-giao-nhan',
   templateUrl: './thong-tin-bien-ban-giao-nhan.component.html',
@@ -57,6 +58,7 @@ export class ThongTinBienBanGiaoNhanComponent extends BaseComponent implements O
   listBienBanGuiHang: any[] = [];
   listBienBanHoSoKyThuat: any[] = [];
   listFileDinhKem: Array<FileDinhKem> = [];
+  fileDinhKem: Array<FileDinhKem> = [];
   listCanCu: Array<FileDinhKem> = [];
   create: any = {};
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
@@ -70,6 +72,8 @@ export class ThongTinBienBanGiaoNhanComponent extends BaseComponent implements O
   listHopDong: any[] = [];
   listDiaDiemNhap: any[] = [];
   dataTable: any[] = [];
+  benNhan: ChiTiet = new ChiTiet();
+  benGiao: ChiTiet = new ChiTiet();
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -456,4 +460,29 @@ export class ThongTinBienBanGiaoNhanComponent extends BaseComponent implements O
     }
   }
 
+  addDaiDien(bienBan: ChiTiet, type: string) {
+    // if ((type == '00' && (!this.chiTietBienBanGuiHangBenNhan.daiDien || !this.chiTietBienBanGuiHangBenNhan.chucVu))
+    //   || (type == '01' && (!this.chiTietBienBanGuiHangBenGiao.daiDien || !this.chiTietBienBanGuiHangBenGiao.chucVu))) {
+    //   return;
+    // }
+
+    const chiTiet = new ChiTiet();
+    chiTiet.loaiBen = type;
+    chiTiet.chucVu = bienBan.chucVu;
+    chiTiet.daiDien = bienBan.daiDien;
+    this.dataTable.push(chiTiet);
+    this.clearDaiDien(type);
+  }
+
+
+  clearDaiDien(type: string) {
+    if (type === '00') {
+      this.benGiao = new ChiTiet();
+    } else {
+      this.benNhan = new ChiTiet();
+    }
+  }
+  deleteBienBan(id: number) {
+    // this.bienBanGuiHang.chiTiets = this.bienBanGuiHang.chiTiets.filter(bienBan => bienBan.id !== id);
+  }
 }
