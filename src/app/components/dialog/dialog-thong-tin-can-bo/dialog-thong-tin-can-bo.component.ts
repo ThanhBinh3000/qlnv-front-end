@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { Globals } from 'src/app/shared/globals';
-import { HelperService } from "../../../services/helper.service";
-import { DanhMucDungChungService } from "../../../services/danh-muc-dung-chung.service";
-import { Router } from "@angular/router";
-import { QlNguoiSuDungService } from 'src/app/services/quantri-nguoidung/qlNguoiSuDung.service';
-import { DonviService } from 'src/app/services/donvi.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {NzModalRef} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {Globals} from 'src/app/shared/globals';
+import {HelperService} from "../../../services/helper.service";
+import {DanhMucDungChungService} from "../../../services/danh-muc-dung-chung.service";
+import {Router} from "@angular/router";
+import {QlNguoiSuDungService} from 'src/app/services/quantri-nguoidung/qlNguoiSuDung.service';
+import {DonviService} from 'src/app/services/donvi.service';
 
 @Component({
   selector: 'dialog-thong-tin-can-bo',
@@ -25,6 +25,10 @@ export class DialogThongTinCanBoComponent implements OnInit {
   sysTypeList: any[] = [];
   optionsDonVi: any[] = [];
   options: any[] = [];
+  optionsPhongBan: any[] = [];
+  optionsPhongBanFilter: any[] = [];
+  suggestPhongBan: any[] = [];
+
 
   constructor(
     private router: Router,
@@ -49,6 +53,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
       status: ['01', [Validators.required]],
       sysType: ['APP', [Validators.required]],
       dvql: [null, [Validators.required]],
+      phongBan: [null],
       ghiChu: [null]
     });
   }
@@ -78,6 +83,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
     try {
       let res = await this.donViService.layTatCaDonVi();
       this.optionsDonVi = [];
+      this.optionsPhongBan = [];
       if (res.msg == MESSAGE.SUCCESS) {
         for (let i = 0; i < res.data.length; i++) {
           var item = {
@@ -85,10 +91,14 @@ export class DialogThongTinCanBoComponent implements OnInit {
             labelDonVi: res.data[i].maDvi + ' - ' + res.data[i].tenDvi,
           };
           this.optionsDonVi.push(item);
+          this.optionsPhongBan.push(item);
           // nếu dữ liệu detail có
           if (this.dataEdit) {
             if (res.data[i].maDvi == this.formData.get('dvql').value) {
               this.formData.get('dvql').setValue(res.data[i].maDvi + ' - ' + res.data[i].tenDvi)
+            }
+            if (res.data[i].maDvi == this.formData.get('phongBan').value) {
+              this.formData.get('phongBan').setValue(res.data[i].maDvi + ' - ' + res.data[i].tenDvi)
             }
           }
         }
@@ -114,6 +124,17 @@ export class DialogThongTinCanBoComponent implements OnInit {
     }
   }
 
+  onInputPhongBan(e: Event): void {
+    const value = (e.target as HTMLInputElement).value;
+    if (!value || value.indexOf('@') >= 0) {
+      this.suggestPhongBan = [];
+    } else {
+      this.suggestPhongBan = this.optionsPhongBanFilter.filter(
+        (x) => x.labelDonVi.toLowerCase().indexOf(value.toLowerCase()) != -1,
+      );
+    }
+  }
+
   async getSysType() {
     let res = await this.dmService.danhMucChungGetAll("KIEU_XT");
     this.sysTypeList = res.data;
@@ -121,13 +142,13 @@ export class DialogThongTinCanBoComponent implements OnInit {
 
   async save() {
     this.spinner.show();
-    if(!this.dataEdit){
-      if(!this.formData.value.password){
+    if (!this.dataEdit) {
+      if (!this.formData.value.password) {
         this.notification.error(MESSAGE.ERROR, "Mật khẩu không được để trống");
         this.spinner.hide();
         return;
       }
-      if(this.formData.value.password.length < 8 || this.formData.value.password.length >20 ){
+      if (this.formData.value.password.length < 8 || this.formData.value.password.length > 20) {
         this.notification.error(MESSAGE.ERROR, "Mật khẩu phải từ 8 đến 20 ký tự");
         this.spinner.hide();
         return;
@@ -141,6 +162,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
     }
     let body = this.formData.value;
     body.dvql = this.formData.get('dvql').value.split('-')[0].trim();
+    body.phongBan = this.formData.get('phongBan').value.split('-')[0].trim();
     let res
     if (this.dataEdit != null) {
       res = await this.qlNSDService.update(body);
@@ -166,13 +188,12 @@ export class DialogThongTinCanBoComponent implements OnInit {
   }
 
 
-
   handleCancel() {
     this._modalRef.destroy();
   }
 
   async bindingData(dataDt) {
-    if(dataDt){
+    if (dataDt) {
       let res = await this.qlNSDService.getDetail(dataDt.id);
       const dataEdit = res.data;
       if (dataEdit) {
@@ -187,10 +208,20 @@ export class DialogThongTinCanBoComponent implements OnInit {
           status: dataEdit.status,
           sysType: dataEdit.sysType,
           dvql: dataEdit.dvql,
+          phongBan: dataEdit.phongBan,
           ghiChu: dataEdit.ghiChu
         })
       }
     }
     this.laytatcadonvi();
+  }
+
+  changeDvql() {
+    this.formData.patchValue({
+      phongBan:''
+    });
+    this.suggestPhongBan = [];
+    this.optionsPhongBanFilter = this.optionsPhongBan.filter(s => s.maDviCha == this.formData.get('dvql').value.split('-')[0].trim()
+      && s.type == 'PB');
   }
 }
