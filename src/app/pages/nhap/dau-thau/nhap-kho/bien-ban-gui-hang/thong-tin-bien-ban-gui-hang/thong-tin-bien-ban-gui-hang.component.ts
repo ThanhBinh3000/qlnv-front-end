@@ -122,6 +122,8 @@ export class ThongTinBienBanGuiHangComponent extends BaseComponent implements On
       lyDoTuChoi: [],
       donGiaHd: [],
 
+      benNhan: [''],
+      benGiao: [''],
       trachNhiemBenNhan: [],
       trachNhiemBenGiao: [],
 
@@ -164,7 +166,8 @@ export class ThongTinBienBanGuiHangComponent extends BaseComponent implements On
       maQhns: this.userInfo.DON_VI.maQhns,
       trangThai: this.STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
-      tenNguoiTao: this.userInfo.TEN_DAY_DU
+      tenNguoiTao: this.userInfo.TEN_DAY_DU,
+      benNhan: this.userInfo.TEN_DVI,
     });
     if (this.idQdGiaoNvNh) {
       await this.bindingDataQd(this.idQdGiaoNvNh);
@@ -179,14 +182,15 @@ export class ThongTinBienBanGuiHangComponent extends BaseComponent implements On
   }
 
   async loadChiTiet(id) {
-    // if (id > 0) {
-    //   let res = await this.bienBanGuiHangService.chiTiet(id);
-    //   if (res.msg == MESSAGE.SUCCESS) {
-    //     if (res.data) {
-    //       this.bienBanGuiHang = res.data;
-    //     }
-    //   }
-    // }
+    if (id > 0) {
+      let res = await this.bienBanGuiHangService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          const data = res.data;
+          this.helperService.bidingDataInFormGroup(this.formData, data);
+        }
+      }
+    }
   }
 
 

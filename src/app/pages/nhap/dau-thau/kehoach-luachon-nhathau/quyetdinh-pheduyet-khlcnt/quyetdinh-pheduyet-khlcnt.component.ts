@@ -123,7 +123,7 @@ export class QuyetdinhPheduyetKhlcntComponent implements OnInit {
   }
 
   detail(data?) {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_SUA")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
       return;
     }
     this.isDetail = true;
