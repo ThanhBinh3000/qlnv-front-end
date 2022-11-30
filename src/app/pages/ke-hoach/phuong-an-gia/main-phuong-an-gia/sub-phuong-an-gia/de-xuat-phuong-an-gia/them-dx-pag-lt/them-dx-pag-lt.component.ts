@@ -1,27 +1,31 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogDdiemDeHangComponent } from 'src/app/components/dialog/dialog-ddiem-de-hang/dialog-ddiem-de-hang.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { API_STATUS_CODE, TYPE_PAG } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
-import { CanCuXacDinhPag, ThongTinKhaoSatGia } from 'src/app/models/DeXuatPhuongAnGia';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { UserLogin } from 'src/app/models/userlogin';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import { DeXuatPAGService } from 'src/app/services/ke-hoach/phuong-an-gia/deXuatPAG.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { saveAs } from 'file-saver';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {
+  DialogDdiemDeHangComponent
+} from 'src/app/components/dialog/dialog-ddiem-de-hang/dialog-ddiem-de-hang.component';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {API_STATUS_CODE, TYPE_PAG} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {STATUS} from 'src/app/constants/status';
+import {CanCuXacDinhPag, ThongTinKhaoSatGia} from 'src/app/models/DeXuatPhuongAnGia';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {UserLogin} from 'src/app/models/userlogin';
+import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import {DeXuatPAGService} from 'src/app/services/ke-hoach/phuong-an-gia/deXuatPAG.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {
+  QuyetDinhPheDuyetKeHoachLCNTService
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
+import {UploadFileService} from 'src/app/services/uploaFile.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {saveAs} from 'file-saver';
 
 
 @Component({
@@ -57,7 +61,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   dsPhuongAnGia: any[] = [];
   dsLoaiHangXdg: any[] = [];
   listQdCtKh: any[] = [];
-  detailNhaphang : any;
+  detailNhaphang: any;
   maDx: string;
 
   dataTableCanCuXdg: any[] = [];
@@ -68,7 +72,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   dataTableKqGia: any[];
   dviTinh: string;
-
 
 
   constructor(
@@ -163,23 +166,46 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     ])
     this.spinner.hide();
   }
+
   async loadDsQdPduyetKhlcnt() {
     if (this.type == 'GCT') {
       let body = {
         namKeHoach: this.formData.value.namKeHoach,
         maDvi: this.userInfo.MA_DVI,
-        loaiVthh : this.formData.value.loaiVthh,
-        cloaiVthh : this.formData.value.cloaiVthh,
-        trangThai : STATUS.BAN_HANH
+        loaiVthh: this.formData.value.loaiVthh,
+        cloaiVthh: this.formData.value.cloaiVthh,
+        trangThai: STATUS.BAN_HANH
       };
-      let res = await this.deXuatPAGService.loadQdGiaoKhMuaBan(body);
+      let res = await this.deXuatPAGService.loadQdGiaoKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        let arr  = res.data;
+        let arr = res.data;
         if (arr) {
           this.listQdCtKh = arr;
         }
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Không tìm thấy chỉ tiêu kế hoạch năm ' + dayjs().get('year'))
+        this.notification.error(MESSAGE.ERROR, 'Không tìm thấy kế hoạch lựa chọn nhà thầu năm ' + dayjs().get('year'))
+        return;
+      }
+    }
+  }
+
+  async loadDsQdPduyetKhBdg() {
+    if (this.type == 'GCT') {
+      let body = {
+        namKeHoach: this.formData.value.namKeHoach,
+        maDvi: this.userInfo.MA_DVI,
+        loaiVthh: this.formData.value.loaiVthh,
+        cloaiVthh: this.formData.value.cloaiVthh,
+        trangThai: STATUS.BAN_HANH
+      };
+      let res = await this.deXuatPAGService.loadQdGiaoKhBdg(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let arr = res.data;
+        if (arr) {
+          this.listQdCtKh = arr;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Không tìm thấy kế hoạch bán đầu giá năm' + dayjs().get('year'))
         return;
       }
     }
@@ -280,7 +306,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     }
 
 
-
   }
 
   async loadDsVthh() {
@@ -308,9 +333,14 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   async onChangeCloaiVthh(event) {
     this.formData.patchValue({
-      qdCtKhNam : null
+      qdCtKhNam: null
     })
-    await this.loadDsQdPduyetKhlcnt();
+    if (this.formData.value.loaiGia == "LG03") {
+      await this.loadDsQdPduyetKhlcnt();
+    }
+    if (this.formData.value.loaiGia == "LG04") {
+      await this.loadDsQdPduyetKhBdg();
+    }
     this.dviTinh = '';
     let resp = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
     if (resp.msg == MESSAGE.SUCCESS) {
@@ -322,7 +352,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.formData.patchValue({
-          tchuanCluong : res.data.tenQchuan
+          tchuanCluong: res.data.tenQchuan
         })
       }
     }
@@ -343,8 +373,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
             item.fileName = resUpload.filename;
             item.fileSize = resUpload.size;
             item.fileUrl = resUpload.url;
-          }
-          else {
+          } else {
             if (!this.rowItemCcXdg.fileDinhKem) {
               this.rowItemCcXdg.fileDinhKem = new FileDinhKem();
             }
@@ -404,7 +433,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
 
-
   downloadFile(item: FileDinhKem) {
     this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
       saveAs(blob, item.fileName);
@@ -430,11 +458,21 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         this.spinner.hide();
         return;
       } else {
-        if (this.formData.value.giaDeNghiVat > this.detailNhaphang.donGiaVat && this.formData.value.loaiGia == 'LG03') {
-          this.notification.error(MESSAGE.ERROR, "Đơn giá VAT không được vượt mức so với quyết định giao kế hoạch mua bán!")
-          this.spinner.hide();
-          return;
+        if (this.formData.value.loaiGia == "LG03") {
+          if (this.formData.value.giaDeNghiVat > this.detailNhaphang.donGiaVat && this.formData.value.loaiGia == 'LG03') {
+            this.notification.error(MESSAGE.ERROR, "Đơn giá VAT không được vượt mức so với quyết định giao kế hoạch mua bán!")
+            this.spinner.hide();
+            return;
+          }
         }
+        if (this.formData.value.loaiGia == "LG04") {
+          if (this.formData.value.giaDeNghiVat < this.detailNhaphang.donGiaVat && this.formData.value.loaiGia == 'LG03') {
+            this.notification.error(MESSAGE.ERROR, "Sai!!!")
+            this.spinner.hide();
+            return;
+          }
+        }
+
       }
 
     }
@@ -479,7 +517,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     this.spinner.hide();
   }
 
-  setValidator(isGuiDuyet){
+  setValidator(isGuiDuyet) {
     if (isGuiDuyet) {
       this.formData.controls["namKeHoach"].setValidators([Validators.required]);
       this.formData.controls["soDeXuat"].setValidators([Validators.required]);
@@ -605,7 +643,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataTable: this.dsDiaDiemDeHang,
-        dviTinh : this.dviTinh
+        dviTinh: this.dviTinh
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -642,7 +680,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   cancelEdit(index: number) {
     this.dataEdit[index] = {
-      data: { ...this.dataTableCanCuXdg[index] },
+      data: {...this.dataTableCanCuXdg[index]},
       edit: false,
     };
   }
@@ -676,7 +714,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.dataTableCanCuXdg.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
     }
@@ -684,7 +722,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
 
   onChangePp() {
     if (this.formData.value.loaiHangXdg == 'XDG_LH02') {
-      let tong = +  this.formData.get('giaVonNk').value + this.formData.get('chiPhiChung').value - this.formData.get('chiPhiPbo').value
+      let tong = +this.formData.get('giaVonNk').value + this.formData.get('chiPhiChung').value - this.formData.get('chiPhiPbo').value
       this.formData.get('tongChiPhi').setValue(tong)
     } else {
       let tong = this.formData.get('chiPhiChung').value + this.formData.get('giaVonNk').value
@@ -693,7 +731,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   }
 
   loadDetailNh(event) {
-    let arr = this.listQdCtKh.filter(item => item.soQd ==event)
+    let arr = this.listQdCtKh.filter(item => item.soQd == event)
     if (arr) {
       this.detailNhaphang = arr[0]
     }

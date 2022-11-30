@@ -583,7 +583,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         loaiVthh : this.formData.value.loaiVthh,
         trangThai : STATUS.BAN_HANH
       };
-      let res = await this.giaDeXuatGiaService.loadQdGiaoKhMuaBan(body);
+      let res = await this.giaDeXuatGiaService.loadQdGiaoKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let arr  = res.data;
         if (arr) {
