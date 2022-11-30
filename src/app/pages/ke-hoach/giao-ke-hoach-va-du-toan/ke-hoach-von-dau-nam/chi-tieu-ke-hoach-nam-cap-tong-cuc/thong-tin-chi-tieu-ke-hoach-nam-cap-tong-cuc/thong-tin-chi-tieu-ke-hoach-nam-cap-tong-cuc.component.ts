@@ -2719,8 +2719,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   disableBanHanh(): boolean {
     return (
-      this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.DU_THAO ||
-      this.id === 0 || this.isViewDetail
+      this.thongTinChiTieuKeHoachNam.trangThai === STATUS.BAN_HANH
     );
   }
 
