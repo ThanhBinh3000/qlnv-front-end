@@ -126,15 +126,6 @@
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
               <nz-form-item>
-                <nz-form-label>Vai trò</nz-form-label>
-                <nz-radio-group [nzDisabled]="!isEditData" formControlName="vaiTro">
-                  <label nz-radio nzValue="VU">Vụ</label>
-                  <label nz-radio nzValue="CUC">Cục</label>
-                </nz-radio-group>
-              </nz-form-item>
-            </div>
-            <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="24">
-              <nz-form-item>
                 <nz-form-label>Ghi chú</nz-form-label>
                 <nz-form-control>
                   <textarea nz-input [rows]="3" formControlName="ghiChu" [readonly]="!isEditData"></textarea>
