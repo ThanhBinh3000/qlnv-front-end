@@ -199,7 +199,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
           this.dataTable = [];
           const data = res.data;
           this.formData.patchValue({
-            soHdong: data.soHd,
+            soHdong: data.soHdong,
             tenHdong: data.tenHdong,
             idHdong: data.id,
             loaiVthh: data.loaiVthh,
