@@ -103,8 +103,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       //   if (curChiCuc) {
 
       //   }
-      // })
-      console.log(this.formData, "jhjjjjjjjj");
+      //
       this.formData.patchValue({
         children: this.listOfData,
         maDiemKho: this.listOfData[0].maDiemKho,
@@ -121,7 +120,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         diaChi: curChiCuc.diaChi
 
       })
-      console.log(this.formData, 555555555);
       this._modalRef.close(this.formData);
     }
   }
