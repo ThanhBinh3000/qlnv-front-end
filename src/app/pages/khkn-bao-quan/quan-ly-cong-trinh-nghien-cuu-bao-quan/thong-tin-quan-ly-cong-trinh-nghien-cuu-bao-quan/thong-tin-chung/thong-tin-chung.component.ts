@@ -1,9 +1,12 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import * as dayjs from "dayjs";
-import {MESSAGE} from "../../../../../constants/message";
-import {DanhMucService} from "../../../../../services/danhmuc.service";
-import {STATUS} from "../../../../../constants/status";
+import { MESSAGE } from "../../../../../constants/message";
+import { DanhMucService } from "../../../../../services/danhmuc.service";
+import { STATUS } from "../../../../../constants/status";
+import { BaseComponent } from 'src/app/components/base/base.component';
+import { HelperService } from 'src/app/services/helper.service';
+import { Globals } from 'src/app/shared/globals';
 
 
 @Component({
@@ -11,23 +14,59 @@ import {STATUS} from "../../../../../constants/status";
   templateUrl: './thong-tin-chung.component.html',
   styleUrls: ['./thong-tin-chung.component.scss']
 })
-export class ThongTinChungComponent implements OnInit {
+export class ThongTinChungComponent extends BaseComponent implements OnInit {
   @Input() id: number;
+
+  @Input() formThongTinChung: any = {};
+  @Output()
+  formThongTinChungSubmit = new EventEmitter<any>();
+
   @Input() isView: boolean;
+
   @Input() typeVthh: string;
+
   @Input() idInput: number;
+
   @Output()
   showListEvent = new EventEmitter<any>();
-  formData: FormGroup;
+
   listCapDt: any[] = [];
   listNam: any[] = [];
-  STATUS: STATUS;
-  listTrangThai: any[] = [{ma: STATUS.DU_THAO, giaTri: 'Dự thảo'}, {ma: STATUS.DA_DUYET, giaTri: 'Đã duyệt'}, {
-    ma: STATUS.DANG_THUC_HIEN,
-    giaTri: 'Đang thực hiện'
-  }, {ma: STATUS.DA_NGHIEM_THU, giaTri: 'Đã nghiệm thu'}];
 
-  constructor(private fb: FormBuilder, private danhMucService: DanhMucService,) {
+  listTrangThai: any[] = [
+    { ma: STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: STATUS.DA_DUYET, giaTri: 'Đã duyệt' },
+    { ma: STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
+    { ma: STATUS.DA_NGHIEM_THU, giaTri: 'Đã nghiệm thu' }
+  ];
+
+
+  constructor(
+    private fb: FormBuilder,
+    private danhMucService: DanhMucService,
+    private helperService: HelperService,
+    public globals: Globals
+  ) {
+    super();
+    super.ngOnInit();
+    this.formData = this.fb.group({
+      maDeTai: ['', [Validators.required]],
+      tenDeTai: ['', [Validators.required]],
+      capDeTai: ['', [Validators.required]],
+      tuNam: [],
+      denNam: [],
+      chuNhiem: [''],
+      chucVu: [],
+      email: [null,],
+      sdt: [null],
+      suCanThiet: [null],
+      mucTieu: [null],
+      phamVi: [null],
+      trangThai: [null,],
+      tongChiPhi: [null],
+      phuongPhap: [null],
+      noiDung: [null],
+    });
   }
 
   ngOnInit() {
@@ -39,32 +78,26 @@ export class ThongTinChungComponent implements OnInit {
       });
     }
     this.getListCapDt();
-    // this.initForm();
+    this.helperService.bidingDataInFormGroup(this.formData, this.formThongTinChung);
   }
 
-  selectTab() {
-
+  save() {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   initForm() {
-    this.formData = this.fb.group({
-      "maDt": [null, [Validators.required]],
-      "tenDt": [null, [Validators.required]],
-      "capDt": [null, [Validators.required]],
-      "tuNam": [null, [Validators.required]],
-      "denNam": [null, [Validators.required]],
-      "chuNhiemDt": [null, []],
-      "chucVu": [null, []],
-      "email": [null, []],
-      "soDt": [null, []],
-      "suCanThiet": [null, []],
-      "mucTieu": [null, []],
-      "phamVi": [null, []],
-      "trangThaiTh": [null, [STATUS.DU_THAO]],
-      "tongChiPhi": [null, []],
-      "ppNghienCuu": [null, []],
-      "noiDungDt": [null, []],
-    })
+
+  }
+
+  onChangeInput() {
+    this.formThongTinChung = this.formData.value;
+    console.log(this.formThongTinChung);
+    this.formThongTinChungSubmit.emit(this.formThongTinChung);
   }
 
   async getListCapDt() {

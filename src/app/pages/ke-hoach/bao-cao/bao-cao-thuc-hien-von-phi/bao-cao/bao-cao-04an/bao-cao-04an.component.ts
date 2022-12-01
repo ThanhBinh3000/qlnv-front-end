@@ -225,7 +225,6 @@ export class BaoCao04anComponent implements OnInit {
                             item.tcDhNvCm = (item.tcDhNvCm ? item.tcDhNvCm : 0) / 1000;
                         }
                     })
-                    console.log(this.dinhMucs);
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -1036,6 +1035,7 @@ export class BaoCao04anComponent implements OnInit {
         this.lstCtietBcao = [];
         const data: ItemData = lstCtietBcaoTemp.find(e => e.level == 0);
         this.addFirst(data);
+        debugger
         lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e.id != data.id);
         let lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
         while (lstTemp.length != 0 || level == 0) {

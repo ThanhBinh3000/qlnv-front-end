@@ -57,7 +57,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
   dsPhuongAnGia: any[] = [];
   dsLoaiHangXdg: any[] = [];
   listQdCtKh: any[] = [];
-
+  detailNhaphang : any;
   maDx: string;
 
   dataTableCanCuXdg: any[] = [];
@@ -216,6 +216,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         noiDung: data.noiDung,
         tgianNhang: data.tgianNhang,
         soCanCu: data.soCanCu,
+        qdCtKhNam: data.qdCtKhNam,
         tenTrangThai: data.tenTrangThai,
         lyDoTuChoi: data.lyDoTuChoi
       })
@@ -224,6 +225,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
       this.dataTableKqGia = data.ketQuaThamDinhGia;
       this.fileDinhKem = data.fileDinhKems;
+      this.loadDetailNh(data.qdCtKhNam ? data.qdCtKhNam : null)
       this.updateEditCache()
     }
   }
@@ -417,6 +419,21 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.spinner.hide();
       return;
     }
+    if (this.detailNhaphang) {
+      if (this.detailNhaphang.donGiaVat == 0) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đơn giá VAT ở quyết định giao kế hoạch mua bán")
+        this.spinner.hide();
+        return;
+      } else {
+        if (this.formData.value.giaDeNghiVat > this.detailNhaphang.donGiaVat && this.formData.value.loaiGia == 'LG03') {
+          this.notification.error(MESSAGE.ERROR, "Đơn giá VAT không được vượt mức so với quyết định giao kế hoạch mua bán!")
+          this.spinner.hide();
+          return;
+        }
+      }
+
+    }
+
     let body = this.formData.value;
     if (body.soDeXuat) {
       body.soDeXuat = body.soDeXuat + this.maDx;
@@ -667,6 +684,13 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     } else {
       let tong = this.formData.get('chiPhiChung').value + this.formData.get('giaVonNk').value
       this.formData.get('tongChiPhi').setValue(tong)
+    }
+  }
+
+  loadDetailNh(event) {
+    let arr = this.listQdCtKh.filter(item => item.soQd ==event)
+    if (arr) {
+      this.detailNhaphang = arr[0]
     }
   }
 }
