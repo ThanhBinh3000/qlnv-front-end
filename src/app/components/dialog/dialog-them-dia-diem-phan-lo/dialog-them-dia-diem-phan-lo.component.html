@@ -14,7 +14,7 @@
 
         <div nz-col [nzSpan]="5">
             <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">SL xuất bán (KH) </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">SL xuất theo chỉ tiêu KH giao đầu năm</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                     <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1"
                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
@@ -25,7 +25,7 @@
         </div>
         <div nz-col [nzSpan]="5">
             <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> SL xuất bán theo chỉ tiêu </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Tổng SL xuất bán theo KH đã được duyệt </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                     <nz-input-number [nzDisabled]="true" formControlName="soLuongChiTieu" [nzMin]="1"
                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
@@ -36,7 +36,7 @@
         </div>
         <div nz-col [nzSpan]="5">
             <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> SL đã lên Kh xuất bán </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Tổng SL xuất bán đề xuất </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                     <nz-input-number [nzDisabled]="true" formControlName="soLuongKh" [nzMin]="1"
                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
@@ -48,6 +48,12 @@
     </div>
     <br />
 </form>
+
+<div class="text-danger float-right" nzRight>
+    <span>
+        Đơn vị: kg
+    </span>
+</div>
 <nz-table #groupingTable #editRowTable nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
     [nzShowPagination]="false" id="table-them-thong-tin-goi-thau">
     <thead>
@@ -60,8 +66,8 @@
             <th width="120px" class="text-center">Mã đơn vị tài sản</th>
             <th width="120px" class="text-center">Tồn kho</th>
             <th width="120px" class="text-center">SL xuất bán (KH)</th>
-            <th width="120px" class="text-center">Đơn giá dự kiến không VAT(đ/kg)</th>
-            <th width="120px" class="text-center">Giá khởi điển (đồng)</th>
+            <th width="120px" class="text-center">Đơn giá đề xuất không VAT(đ/kg)</th>
+            <th width="120px" class="text-center">Giá khởi điểm (đồng)</th>
             <th width="120px" class="text-center">Đơn giá được duyệt</th>
             <th width="80px" class="text-center">Hành động</th>
         </tr>

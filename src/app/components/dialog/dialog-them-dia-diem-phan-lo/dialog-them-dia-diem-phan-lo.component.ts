@@ -1,23 +1,23 @@
-import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {NzModalRef} from 'ng-zorro-antd/modal';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { NzModalRef } from 'ng-zorro-antd/modal';
 import VNnum2words from 'vn-num2words';
-import {Globals} from 'src/app/shared/globals';
-import {UserService} from 'src/app/services/user.service';
-import {DonviService} from 'src/app/services/donvi.service';
-import {MESSAGE} from 'src/app/constants/message';
-import {TinhTrangKhoHienThoiService} from 'src/app/services/tinhTrangKhoHienThoi.service';
-import {LOAI_HANG_DTQG} from 'src/app/constants/config';
-import {HelperService} from 'src/app/services/helper.service';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DxuatKhLcntService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {DeXuatKeHoachBanDauGiaService} from 'src/app/services/deXuatKeHoachBanDauGia.service';
-import {DeXuatKhBanDauGiaService} from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
-import {DanhSachPhanLo} from 'src/app/models/KeHoachBanDauGia';
-import {cloneDeep} from 'lodash';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {QuanLyHangTrongKhoService} from 'src/app/services/quanLyHangTrongKho.service';
+import { Globals } from 'src/app/shared/globals';
+import { UserService } from 'src/app/services/user.service';
+import { DonviService } from 'src/app/services/donvi.service';
+import { MESSAGE } from 'src/app/constants/message';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { LOAI_HANG_DTQG } from 'src/app/constants/config';
+import { HelperService } from 'src/app/services/helper.service';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DxuatKhLcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
+import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
+import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
+import { cloneDeep } from 'lodash';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
 @Component({
   selector: 'app-dialog-them-dia-diem-phan-lo',
   templateUrl: './dialog-them-dia-diem-phan-lo.component.html',
@@ -55,6 +55,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       id: [null],
       maDvi: [null, [Validators.required]],
       tenDvi: [null],
+      diaChi:[null],
       maNhaKho: [null],
       tenNhakho: [null],
       maDiemKho: [null],
@@ -96,10 +97,13 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
   save() {
     if (this.validateSoLuong()) {
-      let dataDiemNhap = '';
-      this.listOfData.forEach(item => {
-        dataDiemNhap += item.tenDiemKho + "(" + item.soLuong + "), "
-      })
+      let dataDiemNhap = ''; let curChiCuc = this.listChiCuc.find(x => this.formData.get('maDvi').value == x.maDvi);
+      // this.listOfData.map(s => {
+
+      //   if (curChiCuc) {
+
+      //   }
+      //
       this.formData.patchValue({
         children: this.listOfData,
         maDiemKho: this.listOfData[0].maDiemKho,
@@ -113,7 +117,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         maNhaKho: this.listOfData[0].maNhaKho,
         soLuongChiTieu: this.listOfData[0].soLuongChiTieu,
         soLuongKh: this.listOfData[0].soLuongKh,
-        diaDiemKho: dataDiemNhap.substring(0, dataDiemNhap.length - 2)
+        diaChi: curChiCuc.diaChi
+
       })
       this._modalRef.close(this.formData);
     }
@@ -174,22 +179,28 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.listChiCuc = [];
     let body = {
       trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI
+      maDviCha: this.userInfo.MA_DVI,
+      type: [null, 'MLK']
     };
 
-    if (this.dataChiTieu) {
-      if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
-        this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
-      }
-      if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
-        this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
-      }
-    } else {
-      let res = await this.donViService.getAll(body);
-      if (res.msg === MESSAGE.SUCCESS) {
-        this.listChiCuc = res.data;
-        this.listChiCuc.map(v => Object.assign(v, {tenDonVi: v.tenDvi}))
-      }
+    // if (this.dataChiTieu) {
+    //   if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+    //     this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
+    //   }
+    //   if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
+    //     this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
+    //   }
+    // } else {
+    //   let res = await this.donViService.getAll(body);
+    //   if (res.msg === MESSAGE.SUCCESS) {
+    //     this.listChiCuc = res.data;
+    //     this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
+    //   }
+    // }
+    let res = await this.donViService.getAll(body);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.listChiCuc = res.data;
+      this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
     }
   }
 
@@ -438,7 +449,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.listOfData.forEach((item, index) => {
       this.editCache[index] = {
         edit: false,
-        data: {...item}
+        data: { ...item }
       };
     });
   }

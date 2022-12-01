@@ -117,11 +117,11 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       maDvi: ['', [Validators.required]],
       tenDvi: ['', [Validators.required]],
       loaiHinhNx: ['', [Validators.required]],
-      kieuNx: ['', [Validators.required]],
+      kieuNx: [''],
       diaChi: [],
       namKh: [dayjs().get('year'), [Validators.required]],
       soDxuat: [null],
-      trichYeu: [null],
+      trichYeu: [, [Validators.required]],
       ngayTao: [dayjs().format('YYYY-MM-DD')],
       ngayPduyet: [],
       soQdCtieu: [, [Validators.required]],
@@ -137,7 +137,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       loaiHdong: [null, [Validators.required]],
       tgianKyHdong: [null, [Validators.required]],
       tgianTtoan: [null, [Validators.required]],
-      tgianGnhan: [null, [Validators.required]],
+      tgianGnhan: [null],
       thongBaoKh: [null, [Validators.required]],
       khoanTienDatTruoc: [null],
       tongSoLuong: [null],
@@ -161,7 +161,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       tgianTtoanGhiChu: [null],
       tgianGnhanGhiChu: [null],
       pthucTtoan: [null, [Validators.required]],
-      pthucGnhan: [null, [Validators.required]],
+      pthucGnhan: [null],
     });
   }
 
@@ -330,7 +330,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       return;
     }
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm nhập kho',
+      nzTitle: 'Thêm địa điểm giao nhận hàng',
       nzContent: DialogThemDiaDiemPhanLoComponent,
       nzMaskClosable: false,
       nzClosable: false,
