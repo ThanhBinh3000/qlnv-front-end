@@ -183,20 +183,20 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       type: [null, 'MLK']
     };
 
-    // if (this.dataChiTieu) {
-    //   if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
-    //     this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
-    //   }
-    //   if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
-    //     this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
-    //   }
-    // } else {
-    //   let res = await this.donViService.getAll(body);
-    //   if (res.msg === MESSAGE.SUCCESS) {
-    //     this.listChiCuc = res.data;
-    //     this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
-    //   }
-    // }
+    if (this.dataChiTieu) {
+      if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+        this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
+      }
+      if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
+        this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
+      }
+    } else {
+      let res = await this.donViService.getAll(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        this.listChiCuc = res.data;
+        this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
+      }
+    }
     let res = await this.donViService.getAll(body);
     if (res.msg === MESSAGE.SUCCESS) {
       this.listChiCuc = res.data;
