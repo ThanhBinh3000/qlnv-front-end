@@ -124,7 +124,7 @@
                         <th></th>
                         <th></th>
                       <th>
-                        <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                        <nz-input-group >
                           <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
                                  (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small" />
                         </nz-input-group>
@@ -136,7 +136,7 @@
                             </nz-input-group>
                         </th>
                         <th>
-                            <nz-input-group >
+                            <nz-input-group [nzSuffix]="suffixTemplateInfo" >
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
                                     (input)="filterInTable('ngayKy',filterTable.ngayKy)" size="small" />
                             </nz-input-group>
@@ -206,10 +206,10 @@
                             <a (click)="viewDetail(data.id, true)" *ngIf="(!(data.trangThai == '00' || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP)) || (userService.isTongCuc() && type == 'GMTDBTT')">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="(data.trangThai == '00' || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP)  "  (click)="viewDetail(data.id, false)">
+                            <a *ngIf="(data.trangThai == '00' || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP) && checkRole(data.trangThai) "  (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="(data.trangThai == '00')" (click)="xoaItem(data)">
+                            <a *ngIf="(data.trangThai == '00') && checkRole(data.trangThai)" (click)="xoaItem(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>
