@@ -83,7 +83,7 @@
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị quản lý </nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-input-group [nzSuffix]="suffixIcon">
-            <input nz-input formControlName="dvql" (input)="onInput($event)" [nzAutocomplete]="auto" />
+            <input nz-input formControlName="dvql" (input)="onInput($event)" [nzAutocomplete]="auto" (ngModelChange)="changeDvql()" />
           </nz-input-group>
         </nz-form-control>
         <ng-template #suffixIcon>
@@ -91,6 +91,23 @@
         </ng-template>
         <nz-autocomplete #auto>
           <nz-auto-option *ngFor="let option of options" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-form-item>
+    </div>
+    <div nz-col [nzSpan]="24">
+      <nz-form-item>
+        <nz-form-label nzRequired [nzNoColon]="true"> Phòng ban </nz-form-label>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-input-group [nzSuffix]="suffixIcon">
+            <input nz-input formControlName="phongBan" (input)="onInputPhongBan($event)" [nzAutocomplete]="autoPhongBan" />
+          </nz-input-group>
+        </nz-form-control>
+        <ng-template #suffixIcon>
+          <i nz-icon nzType="search"></i>
+        </ng-template>
+        <nz-autocomplete #autoPhongBan>
+          <nz-auto-option *ngFor="let option of suggestPhongBan" [nzValue]="option.labelDonVi">{{ option.labelDonVi }}
           </nz-auto-option>
         </nz-autocomplete>
       </nz-form-item>

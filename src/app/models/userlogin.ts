@@ -10,7 +10,8 @@ export class UserLogin {
   MA_TCKT: string;
   MA_TR: string;
   DON_VI: any;
-  TEN_DAY_DU: any
+  TEN_DAY_DU: any;
+  PHONG_BAN: string
   constructor(initObj: any, dvql: any) {
     if (initObj) {
       for (var key in initObj) {

@@ -72,7 +72,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_THEM')" type="button"
+        <button *ngIf="userService.isTongCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_QD_TTCP_THEM')" type="button"
                 class="btn btn-sub xanh" (click)="themMoi()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
