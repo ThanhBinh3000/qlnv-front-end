@@ -90,10 +90,10 @@
                                 [nzIndeterminate]="indeterminate"></label>
                         </th>
                         <th class="text-center" style="width: 2%;">STT</th>
-                        <th class="text-center" style="width: 9%;">Mã tổng hợp</th>
+                      <th class="text-center" style="width: 10%;">Năm kế hoạch</th>
+                      <th class="text-center" style="width: 9%;">Mã tổng hợp</th>
                         <th class="text-center" style="width: 9%;">Ngày tổng hợp</th>
                         <th class="text-center" style="width: 13%;">Nội dung tổng hợp</th>
-                        <th class="text-center" style="width: 10%;">Năm kế hoạch</th>
                         <th class="text-center" style="width: 7%;">Loại hàng hóa</th>
                         <th class="text-center" style="width: 9%;">Chủng loại hàng hóa</th>
                         <th class="text-center" style="width: 7%;">Loại giá</th>
@@ -105,6 +105,12 @@
                     <tr class="header-row search">
                         <th></th>
                         <th></th>
+                      <th>
+                        <nz-input-group >
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
+                                 (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small" />
+                        </nz-input-group>
+                      </th>
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo">
                                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soTT"
@@ -129,12 +135,7 @@
                             </nz-input-group>
                         </th>
 
-                        <th>
-                            <nz-input-group >
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
-                                    (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small" />
-                            </nz-input-group>
-                        </th>
+
 
                         <th>
                             <nz-input-group>
@@ -187,10 +188,10 @@
                                 [nzDisabled]="data.trangThai != '00'"></label>
                         </th>
                         <td class="text-center">{{(page-1)*pageSize+idx+1}}</td>
-                        <td>{{ data.id }}</td>
+                      <td>{{ data.namTongHop }}</td>
+                      <td>{{ data.id }}</td>
                         <td>{{ data.ngayTongHop | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.noiDung }}</td>
-                        <td>{{ data.namTongHop }}</td>
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenCloaiVthh }}</td>
                         <td>{{ data.tenLoaiGia }}</td>
