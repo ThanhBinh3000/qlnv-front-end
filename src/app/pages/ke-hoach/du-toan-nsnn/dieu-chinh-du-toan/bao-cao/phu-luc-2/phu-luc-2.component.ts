@@ -18,8 +18,10 @@ export class ItemData {
   id: any;
   stt: string;
   level: number;
-  maNdung: number;
+  maNdung: string;
   maDviTinh: number;
+  maVtu: string
+
   thienSluongKhoachDgiao: number;
   thienSluongTteThien: number;
   thienSluongUocThien: number;
@@ -65,8 +67,9 @@ export class PhuLuc2Component implements OnInit {
     id: null,
     stt: "0",
     level: 0,
-    maNdung: 0,
+    maNdung: "",
     maDviTinh: null,
+    maVtu: "",
     thienSluongKhoachDgiao: null,
     thienSluongTteThien: null,
     thienSluongUocThien: null,
@@ -81,8 +84,9 @@ export class PhuLuc2Component implements OnInit {
     id: null,
     stt: "0",
     level: 0,
-    maNdung: 0,
+    maNdung: "",
     maDviTinh: null,
+    maVtu: "",
     thienSluongKhoachDgiao: null,
     thienSluongTteThien: null,
     thienSluongUocThien: null,
@@ -108,31 +112,28 @@ export class PhuLuc2Component implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   editMoneyUnit = false;
   isDataAvailable = false;
-  noiDungFull: any[] = [];
 
   listVatTu: any[] = [];
-  listVatTuFull: any[] = [
-
-  ];
-
+  listVatTuFull: any[] = [];
 
   listVatTuNhap: any[] = [
     {
-      id: 1000,
+      id: "1000",
       tenDm: "Nhập",
       maCha: 0,
       level: 0,
-      maVtu: 1000,
+      maVtu: "1000",
       maDviTinh: ""
     },
   ]
+
   listVatTuXuat: any[] = [
     {
-      id: 2000,
+      id: "2000",
       tenDm: "Xuất",
       maCha: 0,
       level: 0,
-      maVtu: 2000,
+      maVtu: "2000",
       maDviTinh: ""
     },
   ]
@@ -154,31 +155,6 @@ export class PhuLuc2Component implements OnInit {
 
   async initialization() {
     this.spinner.show();
-    await this.danhMucService.dMNoiDungPhuLuc2DC().toPromise().then(
-      (data) => {
-        if (data.statusCode == 0) {
-          this.noiDungs1 = data.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      (err) => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-      }
-    );
-
-    this.noiDungs1.forEach(item => {
-      if (!item.maCha) {
-        this.noiDungFull.push({
-          ...item,
-          tenDm: item.giaTri,
-          ten: item.giaTri,
-          level: 0,
-          idCha: 0,
-        })
-      }
-    })
-    this.addListNoiDung(this.noiDungFull);
     this.id = this.data?.id;
     this.maBieuMau = this.data?.maBieuMau;
     this.maDviTien = "1";
@@ -251,31 +227,10 @@ export class PhuLuc2Component implements OnInit {
     );
     await this.getListVtu()
     await this.addListVatTu()
+    this.tinhToan();
     this.getStatusButton();
     this.spinner.hide();
   };
-
-  addListNoiDung(noiDungTemp) {
-    const a = [];
-    noiDungTemp.forEach(item => {
-      this.noiDungs1.forEach(el => {
-        if (item.ma == el.maCha) {
-          el = {
-            ...el,
-            tenDm: el.giaTri,
-            ten: item.giaTri,
-            level: item.level + 1,
-            idCha: item.id,
-          }
-          this.noiDungFull.push(el);
-          a.push(el);
-        }
-      });
-    })
-    if (a.length > 0) {
-      this.addListNoiDung(a);
-    }
-  }
 
   async getListVtu() {
     //lay danh sach vat tu
@@ -288,6 +243,19 @@ export class PhuLuc2Component implements OnInit {
       }
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+  };
+
+  async tinhToan() {
+    this.lstCtietBcao.forEach(item => {
+      if (item.thienDinhMuc) {
+        item.thienThanhTien = item.thienCong * item.thienDinhMuc;
+        item.ncauKphi = item.thienThanhTien + item.kphiThieuNtruoc;
+      } else {
+        item.thienDinhMuc = 0;
+        item.thienThanhTien = item.thienCong * item.thienDinhMuc;
+        item.ncauKphi = item.thienThanhTien + item.kphiThieuNtruoc;
+      }
     })
   };
 
@@ -369,9 +337,11 @@ export class PhuLuc2Component implements OnInit {
     })
     const mangGop34 = lstVtuCon3.concat(lstVtuCon4)
     this.listVatTuXuat = this.listVatTuXuat.concat(mangGop34)
-    this.listVatTuFull = this.listVatTuXuat.concat(this.listVatTuNhap)
+    this.listVatTuFull = this.listVatTuNhap.concat(this.listVatTuXuat)
     // gan lai noi dung
     this.noiDungs = this.listVatTuFull;
+    console.log(this.noiDungs);
+
   }
 
   async getDinhMucPL2N() {
@@ -490,23 +460,23 @@ export class PhuLuc2Component implements OnInit {
     console.log(request);
 
 
-    // this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
-    //   async data => {
-    //     if (data.statusCode == 0) {
-    //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-    //       // const obj = {
-    //       //   trangThai: '-1',
-    //       //   lyDoTuChoi: null,
-    //       // };
-    //       this.dataChange.emit(data.data);
-    //     } else {
-    //       this.notification.error(MESSAGE.ERROR, data?.msg);
-    //     }
-    //   },
-    //   err => {
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   },
-    // );
+    this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
+      async data => {
+        if (data.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          // const obj = {
+          //   trangThai: '-1',
+          //   lyDoTuChoi: null,
+          // };
+          this.dataChange.emit(data.data);
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
 
     this.spinner.hide();
   }
@@ -669,13 +639,13 @@ export class PhuLuc2Component implements OnInit {
     this.replaceIndex(lstIndex, 1);
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
-      if (itm.cloaiVthh == initItem.maNdung) {
+      if (itm.cloaiVthh == initItem.maVtu) {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
-      if (itm.cloaiVthh == initItem.maNdung) {
+      if (itm.cloaiVthh == initItem.maVtu) {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
@@ -735,13 +705,13 @@ export class PhuLuc2Component implements OnInit {
 
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
-      if (itm.cloaiVthh == initItem.maNdung) {
+      if (itm.cloaiVthh == initItem.maVtu) {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
-      if (itm.cloaiVthh == initItem.maNdung) {
+      if (itm.cloaiVthh == initItem.maVtu) {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
@@ -841,6 +811,7 @@ export class PhuLuc2Component implements OnInit {
     Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     this.sum(this.lstCtietBcao[index].stt);
+    this.tinhToan();
     this.updateEditCache();
   }
 
@@ -905,13 +876,13 @@ export class PhuLuc2Component implements OnInit {
   addFirst(initItem: ItemData) {
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
-      if (itm.cloaiVthh == initItem.maNdung) {
+      if (itm.cloaiVthh == initItem.maVtu) {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
-      if (itm.cloaiVthh == initItem.maNdung) {
+      if (itm.cloaiVthh == initItem.maVtu) {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
@@ -972,6 +943,7 @@ export class PhuLuc2Component implements OnInit {
     })
 
     this.lstCtietBcao = lstTemp;
+    this.tinhToan();
   }
 
   setDetail() {
@@ -1010,9 +982,11 @@ export class PhuLuc2Component implements OnInit {
   }
   addLine(id: any) {
     const maNdung: any = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
+    const maVtu: any = this.lstCtietBcao.find(e => e.id == id)?.maVtu;
     const obj = {
       maKhoanMuc: maNdung,
       lstKhoanMuc: this.noiDungs,
+      maVtu: maVtu,
     }
 
     const modalIn = this.modal.create({
@@ -1034,6 +1008,7 @@ export class PhuLuc2Component implements OnInit {
             ...this.initItem,
             maNdung: res.maKhoanMuc,
             level: this.noiDungs.find(e => e.id == maNdung)?.level,
+            maVtu: res.maVtu,
           };
           if (this.lstCtietBcao.length == 0) {
             this.addFirst(data);
@@ -1046,15 +1021,16 @@ export class PhuLuc2Component implements OnInit {
           if (this.lstCtietBcao.findIndex(e => e.maNdung == item.id) == -1) {
             const data: ItemData = {
               ...this.initItem,
-              maNdung: item.maVtu,
+              maNdung: item.id,
               level: item.level,
               maDviTinh: item.maDviTinh,
+              maVtu: item.maVtu,
             };
             this.addLow(id, data);
           }
         })
 
-
+        this.tinhToan();
         this.updateEditCache();
       }
     });

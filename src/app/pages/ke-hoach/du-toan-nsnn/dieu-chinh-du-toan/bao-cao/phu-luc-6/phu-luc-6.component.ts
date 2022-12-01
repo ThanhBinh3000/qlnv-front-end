@@ -7,6 +7,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -15,6 +16,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, NOT_OK, OK } from "src/app/Utility/utils";
 import * as uuid from "uuid";
+// import { DialogThemKhoanMucComponent } from '../../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { LINH_VUC } from './phu-luc6.constant';
 
 export class ItemData {
@@ -24,6 +26,8 @@ export class ItemData {
   level: number;
   loaiMatHang: number;
   maDviTinh: number;
+  maVtu: string;
+
   slHangTte: number;
   kphiDmuc: number;
   kphiTtien: number;
@@ -69,6 +73,7 @@ export class PhuLuc6Component implements OnInit {
     id: null,
     stt: "0",
     level: 0,
+    maVtu: "",
     loaiMatHang: 0,
     maDviTinh: null,
     slHangTte: null,
@@ -91,6 +96,7 @@ export class PhuLuc6Component implements OnInit {
     stt: "0",
     level: 0,
     idDm: null,
+    maVtu: "",
     loaiMatHang: 0,
     maDviTinh: null,
     slHangTte: null,
@@ -115,6 +121,41 @@ export class PhuLuc6Component implements OnInit {
   dsDinhMucN: any[] = [];
   dsDinhMucX: any[] = [];
   maDviTao!: string;
+  listVatTu: any[] = [];
+  listVatTuFull: any[] = [];
+
+  listVatTuNhap: any[] = [
+    {
+      id: "1000",
+      tenDm: "Nhập",
+      maCha: "111",
+      level: 1,
+      maVtu: "1000",
+      maDviTinh: ""
+    },
+  ]
+
+  listVatTuXuat: any[] = [
+    {
+      id: "2000",
+      tenDm: "Nhập",
+      maCha: "111",
+      level: 1,
+      maVtu: "2000",
+      maDviTinh: ""
+    },
+  ]
+
+  listVatTuVTCT: any[] = [
+    {
+      id: "3000",
+      tenDm: "VTCT",
+      maCha: "111",
+      level: 1,
+      maVtu: "3000",
+      maDviTinh: ""
+    },
+  ]
 
   allChecked = false;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -211,10 +252,163 @@ export class PhuLuc6Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+
+    await this.getListVtu()
+    this.addListVatTu()
     this.changeNam();
     this.getStatusButton();
 
     this.spinner.hide();
+  }
+
+  async getListVtu() {
+    //lay danh sach vat tu
+    await this.danhMucService.dMVatTu().toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.listVatTu = res.data;
+
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+  };
+
+
+  async addListVatTu() {
+    const lstVtuCon1 = []
+    const lstVtuCon2 = []
+
+    const lstVtuCon3 = []
+    const lstVtuCon4 = []
+
+    const lstVtuCon5 = []
+    const lstVtuCon6 = []
+
+    this.listVatTu.forEach(vtu => {
+      this.listVatTuNhap.push({
+        id: vtu.ma,
+        maVtu: vtu.ma,
+        tenDm: vtu.ten,
+        maDviTinh: vtu.maDviTinh,
+        maCha: '1000',
+        level: Number(vtu.cap) + 1,
+      });
+
+      vtu?.child.forEach(vtuCon => {
+        const maCha = vtuCon?.ma.slice(0, -2)
+        lstVtuCon1.push({
+          id: vtuCon.ma,
+          maVtu: vtuCon.ma,
+          tenDm: vtuCon.ten,
+          maDviTinh: vtuCon.maDviTinh,
+          maCha: maCha,
+          level: Number(vtuCon.cap) + 1,
+        })
+
+        vtuCon?.child.forEach(vtuConn => {
+          const maCha = vtuConn?.ma.slice(0, -2)
+          lstVtuCon2.push({
+            id: vtuConn.ma,
+            maVtu: vtuConn.ma,
+            tenDm: vtuConn.ten,
+            maDviTinh: vtuConn.maDviTinh,
+            maCha: maCha,
+            level: Number(vtuConn.cap) + 1,
+          })
+        })
+      })
+    })
+    const mangGop12 = lstVtuCon1.concat(lstVtuCon2)
+    this.listVatTuNhap = this.listVatTuNhap.concat(mangGop12)
+
+    // lst xuat
+    this.listVatTu.forEach(vtu => {
+      this.listVatTuXuat.push({
+        id: vtu.ma + 1,
+        maVtu: vtu.ma,
+        tenDm: vtu.ten,
+        maDviTinh: vtu.maDviTinh,
+        maCha: '2000',
+        level: Number(vtu.cap) + 1,
+      });
+
+      vtu?.child.forEach(vtuCon => {
+        const maCha = vtuCon?.ma.slice(0, -2) + 1
+        lstVtuCon3.push({
+          id: vtuCon.ma + 1,
+          maVtu: vtuCon.ma,
+          tenDm: vtuCon.ten,
+          maDviTinh: vtuCon.maDviTinh,
+          maCha: maCha,
+          level: Number(vtuCon.cap) + 1,
+        })
+
+        vtuCon?.child.forEach(vtuConn => {
+          const maCha = vtuConn?.ma.slice(0, -2) + 1
+          lstVtuCon4.push({
+            id: vtuConn.ma + 1,
+            maVtu: vtuConn.ma,
+            tenDm: vtuConn.ten,
+            maDviTinh: vtuConn.maDviTinh,
+            maCha: maCha,
+            level: Number(vtuConn.cap) + 1,
+          })
+        })
+      })
+    })
+
+    const mangGop34 = lstVtuCon3.concat(lstVtuCon4)
+    this.listVatTuXuat = this.listVatTuXuat.concat(mangGop34)
+
+    // lst VTCT
+    this.listVatTu.forEach(vtu => {
+      this.listVatTuVTCT.push({
+        id: vtu.ma + 2,
+        maVtu: vtu.ma,
+        tenDm: vtu.ten,
+        maDviTinh: vtu.maDviTinh,
+        maCha: '3000',
+        level: Number(vtu.cap) + 1,
+      });
+
+      vtu?.child.forEach(vtuCon => {
+        const maCha = vtuCon?.ma.slice(0, -2) + 1
+        lstVtuCon5.push({
+          id: vtuCon.ma + 2,
+          maVtu: vtuCon.ma,
+          tenDm: vtuCon.ten,
+          maDviTinh: vtuCon.maDviTinh,
+          maCha: maCha,
+          level: Number(vtuCon.cap) + 1,
+        })
+
+        vtuCon?.child.forEach(vtuConn => {
+          const maCha = vtuConn?.ma.slice(0, -2) + 1
+          lstVtuCon6.push({
+            id: vtuConn.ma + 2,
+            maVtu: vtuConn.ma,
+            tenDm: vtuConn.ten,
+            maDviTinh: vtuConn.maDviTinh,
+            maCha: maCha,
+            level: Number(vtuConn.cap) + 1,
+          })
+        })
+      })
+    })
+
+    const mangGop56 = lstVtuCon5.concat(lstVtuCon6)
+    this.listVatTuVTCT = this.listVatTuVTCT.concat(mangGop56)
+
+
+
+    this.listVatTuFull = this.listVatTuNhap.concat(this.listVatTuXuat)
+    this.listVatTuFull = this.listVatTuFull.concat(this.listVatTuVTCT)
+    // gan lai noi dung
+    // this.lstMatHang = this.listVatTuFull;
+    console.log(this.listVatTuFull);
+
   }
 
   getDinhMucPL6N() {
