@@ -192,7 +192,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
     if (resNx.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNx = resNx.data.filter(item => item.phanLoai == 'N');
+      this.listLoaiHinhNx = resNx.data.filter(item => item.phanLoai == 'V');
     }
     // kiểu nhập xuất
     this.listKieuNx = [];

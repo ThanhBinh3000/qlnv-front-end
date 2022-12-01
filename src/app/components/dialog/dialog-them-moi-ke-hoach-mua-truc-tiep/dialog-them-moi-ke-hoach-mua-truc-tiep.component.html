@@ -11,19 +11,57 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
+    </div>
+    <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+        <div nz-col [nzSpan]="5">
             <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Tổng số Lượng </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> SL theo chỉ tiêu kế hoạch năm </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                    <nz-input-number [nzDisabled]="true" formControlName="soLuongDxmtt" [nzMin]="1"
+                    <nz-input-number [nzDisabled]="true" formControlName="soLuongChiTieu" [nzMin]="1"
                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </nz-form-control>
             </nz-form-item>
         </div>
-    </div>
-    <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+        <div nz-col [nzSpan]="5">
+            <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> SL kế hoạch dự định </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                    <nz-input-number [nzDisabled]="true" formControlName="soLuongKhDd" [nzMin]="1"
+                        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
+                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                    </nz-input-number>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
+            <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Tổng số lượng </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                    <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1"
+                        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
+                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                    </nz-input-number>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+            <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá gồm thuế (đồng/kg) </nz-form-label>
+                <nz-input-number formControlName="donGia" [nzSize]="'small'" nzDisabled (input)="calculatorThanhTien()"
+                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                </nz-input-number>
+            </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="5">
+            <nz-form-item>
+                <nz-form-label [nzNoColon]="true"> Thành tiền gồm thuế (đồng) </nz-form-label>
+                <nz-input-number formControlName="thanhTien" [nzSize]="'small'" nzDisabled
+                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                </nz-input-number>
+            </nz-form-item>
+        </div>
     </div>
     <br />
 </form>
@@ -33,7 +71,7 @@
         <tr>
             <th width="200px" class="text-center">Điểm kho</th>
             <th class="text-center">Địa điểm kho</th>
-            <th width="120px" class="text-center">SL đề xuất mua trực tiếp (Tấn)</th>
+            <th width="120px" class="text-center">Số lượng mua trực tiếp (Tấn)</th>
             <th width="80px" class="text-center">Hành động</th>
         </tr>
     </thead>
@@ -44,9 +82,9 @@
                     <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
             </td>
-            <td>{{thongtinMuaTrucTiep.diaDiemKho}} </td>
+            <td>{{thongtinMuaTrucTiep.diaDiemNhap}} </td>
             <td>
-                <nz-input-number class="text-right" nz-input [(ngModel)]="thongtinMuaTrucTiep.soLuongDxmtt" [nzMin]="1"
+                <nz-input-number class="text-right" nz-input [(ngModel)]="thongtinMuaTrucTiep.soLuong" [nzMin]="1"
                     [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                 </nz-input-number>
             </td>
@@ -62,8 +100,8 @@
         <tr *ngFor="let data of editRowTable.data, let i = index" class="editable-row">
             <ng-container *ngIf="!data.edit; else editTemplate">
                 <td>{{ data.tenDiemKho }}</td>
-                <td>{{ data.diaDiemKho }}</td>
-                <td>{{ data.soLuongDxmtt | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.diaDiemNhap }}</td>
+                <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-center">
                     <a (click)="startEdit(i)">
                         <i class="fa fa-pencil"></i>
@@ -79,7 +117,7 @@
                         <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
                 </td>
-                <td>{{data.diaDiemKho}} </td>
+                <td>{{data.diaDiemNhap}} </td>
                 <td>
                     <nz-input-number class="text-right" nz-input [(ngModel)]="data.soLuong" [nzMin]="1" [nzStep]="1"
                         [nzSize]="'small'">

@@ -2,21 +2,20 @@ import { Validators } from "@angular/forms";
 
 
 export class DanhSachMuaTrucTiep {
-  id: number;
   maDvi: string;
   tenDvi: string;
   maDiemKho: string;
   tenDiemKho: string;
-  diaDiemKho: string;
-  idDxKhmtt?: number;
-  soLuongCtieu: number;
-  soLuongKhDd: number;
-  soLuongDxmtt: number;
-  donGiaVat: number;
-  thanhTien: number;
+  diaDiemNhap: string;
+  donGia: number;
+  goiThau: string;
+  id: number;
+  soLuong: number;
+  soLuongTheoChiTieu: number;
+  thanhTien: string;
   idVirtual?: number;
   isEdit: boolean;
-  ccFileDinhkems?: DanhSachMuaTrucTiep[];
+  children?: DanhSachMuaTrucTiep[];
   level?: number;
   expand?: boolean;
   parent?: DanhSachMuaTrucTiep
@@ -41,8 +40,8 @@ export class CanCuXacDinh {
   tenTlieu: string;
   taiLieu: any;
   moTa: string;
-  fileDinhkems: Array<FileDinhKem>;
-  ccFileDinhKems: Array<FileDinhKem>;
+  fileDinhKems: Array<FileDinhKem>;
+  children: Array<FileDinhKem>;
 }
 
 export class ChiTietThongTinChaoGia {
