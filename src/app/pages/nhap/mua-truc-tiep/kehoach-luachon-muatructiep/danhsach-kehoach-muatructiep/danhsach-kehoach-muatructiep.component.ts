@@ -1,17 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
-import dayjs from 'dayjs';
-import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
+import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
-import { STATUS } from 'src/app/constants/status';
 import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
+import { saveAs } from 'file-saver';
+import { STATUS } from 'src/app/constants/status';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-danhsach-kehoach-muatructiep',
@@ -31,24 +31,20 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
   }
   @Input()
   loaiVthh: string;
-  @Input()
-  loaiVthhCache: string;
   isDetail: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
 
   searchFilter = {
-    soDx: '',
     namKh: dayjs().get('year'),
+    soDxuat: '',
     ngayTao: '',
     ngayPduyet: '',
-    maDvi: '',
     loaiVthh: '',
-    trichYeu: '',
-    soDxuat: '',
-    noiDungTh: '',
-    tenTrangThaiTh: ''
+    trichYeu: ''
   };
+
+  STATUS = STATUS
 
   filterTable: any = {
     soDxuat: '',
@@ -59,15 +55,13 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     soQd: '',
     tenloaiVthh: '',
     tenCloaiVthh: '',
-    tongSoLuong: '',
-    soQdPduyet: '',
+    soLuong: '',
     tenTrangThai: '',
-    tenTrangThaiTh: '',
+    maThop: '',
   };
 
-  STATUS = STATUS
-  listDonVi = [];
   dataTableAll: any[] = [];
+  listVthh: any[] = [];
   dataTable: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -78,16 +72,13 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
   indeterminate = false;
 
   async ngOnInit() {
-    await Promise.all([
-      this.loadListDonVi(),
-    ]);
     try {
+      console.log(this.loaiVthh);
       this.userInfo = this.userService.getUserLogin();
-      this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
-          value: this.yearNow - i,
-          text: this.yearNow - i,
+          value: dayjs().get('year') - i,
+          text: dayjs().get('year') - i,
         });
       }
       this.searchFilter.loaiVthh = this.loaiVthh;
@@ -97,18 +88,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-
-  }
-
-  async loadListDonVi() {
-    let body = {
-      "trangThai": "01",
-      "capDvi": "2"
-    };
-    let res = await this.donviService.getAll(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.listDonVi = res.data;
     }
   }
 
@@ -155,16 +134,14 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       ngayDuyetTu: this.searchFilter.ngayPduyet
         ? dayjs(this.searchFilter.ngayTao[0]).format('YYYY-MM-DD')
         : null,
-      ngayDuyetDen: this.searchFilter.ngayTao
+      ngayDuyetDen: this.searchFilter.ngayPduyet
         ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
         : null,
       soDxuat: this.searchFilter.soDxuat,
       loaiVthh: this.searchFilter.loaiVthh,
       namKh: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
-      tenTrangThaiTh: this.searchFilter.tenTrangThaiTh,
-      maDvi: this.searchFilter.maDvi,
-      noiDungTh: this.searchFilter.noiDungTh,
+      maDvi: null,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -177,7 +154,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      console.log(this.dataTable)
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
           item.checked = false;
@@ -191,7 +167,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
-    console.log(this.dataTable)
   }
 
   async changePageIndex(event) {
@@ -223,19 +198,8 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
   }
 
   themMoi() {
-    if (this.loaiVthh === "02") {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_THEM")) {
-        return;
-      }
-    }
-    else {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_LT_DEXUAT_THEM")) {
-        return;
-      }
-    }
     this.isDetail = true;
     this.selectedId = null;
-    this.loaiVthh = this.loaiVthhCache;
   }
 
   showList() {
@@ -255,9 +219,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     this.searchFilter.ngayPduyet = null;
     this.searchFilter.trichYeu = null;
     this.searchFilter.loaiVthh = null;
-    this.searchFilter.maDvi = null;
-    this.searchFilter.tenTrangThaiTh = null;
-    this.searchFilter.noiDungTh = null;
     this.search();
   }
 
@@ -312,15 +273,13 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
           ngayDuyetTu: this.searchFilter.ngayPduyet
             ? dayjs(this.searchFilter.ngayTao[0]).format('YYYY-MM-DD')
             : null,
-          ngayDuyetDen: this.searchFilter.ngayTao
+          ngayDuyetDen: this.searchFilter.ngayPduyet
             ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
             : null,
-          soDxuat: this.searchFilter.soDx,
+          soDxuat: this.searchFilter.soDxuat,
           loaiVthh: this.searchFilter.loaiVthh,
           namKh: this.searchFilter.namKh,
           trichYeu: this.searchFilter.trichYeu,
-          tenTrangThaiTh: this.searchFilter.tenTrangThaiTh,
-          maDvi: null,
         };
         this.danhSachMuaTrucTiepService
           .export(body)
@@ -386,7 +345,6 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          console.log(item[key])
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1 || item[key] == value) {
             temp.push(item)
           }
@@ -409,10 +367,9 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       soQd: '',
       tenloaiVthh: '',
       tenCloaiVthh: '',
-      tongSoLuong: '',
-      soQdPduyet: '',
+      soLuong: '',
       tenTrangThai: '',
-      tenTrangThaiTh: '',
+      maThop: '',
     }
   }
 }

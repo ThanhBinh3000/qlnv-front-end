@@ -1,25 +1,21 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import * as dayjs from 'dayjs';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
 import { HelperService } from 'src/app/services/helper.service';
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { STATUS } from "../../../../../constants/status";
 import { Globals } from 'src/app/shared/globals';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';
-import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
-
 
 @Component({
   selector: 'app-tong-hop-khmtt',
@@ -61,7 +57,8 @@ export class TongHopKhmttComponent implements OnInit {
     id: '',
     ngayTao: '',
     noiDung: '',
-    namKhoach: '',
+    namKh: '',
+    tenLoaiVthh: '',
     tenCloaiVthh: '',
     tenTrangThai: '',
     SoQdPduyet: '',
@@ -83,7 +80,7 @@ export class TongHopKhmttComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XEM")) {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_TONGHOP") || !this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_TONGHOP_XEM")) {
         window.location.href = '/error/401'
       }
       this.userInfo = this.userService.getUserLogin();
@@ -120,7 +117,7 @@ export class TongHopKhmttComponent implements OnInit {
       },
       loaiVthh: this.searchFilter.loaiVthh,
       cloaiVthh: this.searchFilter.cloaiVthh,
-      namKhoach: this.searchFilter.namKh,
+      namKh: this.searchFilter.namKh,
       noiDung: this.searchFilter.noiDung
     };
     let res = null;
@@ -193,7 +190,7 @@ export class TongHopKhmttComponent implements OnInit {
   }
 
   selectHangHoa() {
-    let data = this.loaiVthh;
+    // let data = this.loaiVthh;
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,
@@ -201,10 +198,7 @@ export class TongHopKhmttComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {
-        data,
-        onlyLuongThuc: true,
-      },
+      nzComponentParams: {},
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
@@ -272,7 +266,7 @@ export class TongHopKhmttComponent implements OnInit {
   }
 
   themMoi() {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP")) {
       return;
     }
     this.isDetail = true;
@@ -280,8 +274,8 @@ export class TongHopKhmttComponent implements OnInit {
   }
 
   redirectToChiTiet(isView: boolean, id: number) {
-    if ((isView && !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XEM"))
-      || (!isView && !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_SUA"))) {
+    if ((isView && !this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_TONGHOP_XEM"))
+      || (!isView && !this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_TONGHOP_SUA"))) {
       return;
     }
     this.selectedId = id;
@@ -315,10 +309,11 @@ export class TongHopKhmttComponent implements OnInit {
     this.searchFilter.noiDung = null;
     this.searchFilter.ngayThop = null;
     this.search();
+    console.log(this.searchFilter);
   }
 
   xoaItem(item: any) {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XOA")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_TONGHOP_XOA")) {
       return;
     }
     this.modal.confirm({
@@ -384,7 +379,7 @@ export class TongHopKhmttComponent implements OnInit {
             : null,
           loaiVthh: this.searchFilter.loaiVthh,
           cloaiVthh: this.searchFilter.cloaiVthh,
-          namKhoach: this.searchFilter.namKh,
+          namKh: this.searchFilter.namKh,
           noiDung: this.searchFilter.noiDung
         };
         this.tongHopDeXuatKHMTTService
@@ -408,7 +403,7 @@ export class TongHopKhmttComponent implements OnInit {
   }
 
   deleteSelect() {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_XOA")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_TONGHOP_XOA")) {
       return;
     }
     let dataDelete = [];
@@ -475,7 +470,8 @@ export class TongHopKhmttComponent implements OnInit {
       id: '',
       ngayTao: '',
       noiDung: '',
-      namKhoach: '',
+      namKh: '',
+      tenLoaiVthh: '',
       tenCloaiVthh: '',
       tenTrangThai: '',
       SoQdPduyet: '',
