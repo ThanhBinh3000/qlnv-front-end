@@ -40,6 +40,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   dsBoNganh: any[];
   dsHangHoa: any[] = [];
   dataEdit: any;
+  dataToanBn: any;
   radioData: any;
   radioValue: any;
   errorInputRequired: string = 'Dữ liệu không được để trống.';

@@ -12,10 +12,13 @@ import {MESSAGE} from 'src/app/constants/message';
 })
 export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   @Input() maBoNganh: string;
+  @Input() tab: string;
   @Input()
   dsHangHoa = [];
   @Input()
   dataTable = [];
+  @Input()
+  dataToanBn = [];
   @Input()
   tabName: String;
   @Input() namHienTai: number;
@@ -30,6 +33,10 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
 
   @Input()
   isView: boolean = false;
+
+  tongSoVT: number = 0;
+  tongSoLT: number = 0;
+  tongSoBnKhac: number = 0;
 
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
@@ -47,6 +54,17 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.updateEditCache()
     this.emitDataTable();
+    for (let item of this.dataToanBn) {
+      if (item.maBn == '01' && !item.isSum && item.stt == 2) {
+        this.tongSoLT = item.tongSo;
+      }
+      if (item.maBn == '01' && !item.isSum && item.stt == 3) {
+        this.tongSoVT = item.tongSo;
+      }
+      if (item.maBn == this.maBoNganh && !item.isSum) {
+        this.tongSoBnKhac = item.tongSo;
+      }
+    }
   }
 
   initData() {
