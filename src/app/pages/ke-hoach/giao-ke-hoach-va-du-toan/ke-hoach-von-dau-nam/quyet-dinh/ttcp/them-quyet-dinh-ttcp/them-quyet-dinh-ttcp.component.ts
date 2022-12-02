@@ -1,19 +1,20 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
 import {
   DialogChiTietKeHoachGiaoBoNganhComponent
 } from 'src/app/components/dialog/dialog-chi-tiet-ke-hoach-giao-bo-nganh/dialog-chi-tiet-ke-hoach-giao-bo-nganh.component';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { Globals } from 'src/app/shared/globals';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuyetDinhTtcpService } from 'src/app/services/quyetDinhTtcp.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { UserService } from 'src/app/services/user.service';
-import { UserLogin } from 'src/app/models/userlogin';
-import { HelperService } from 'src/app/services/helper.service';
-import { STATUS } from "../../../../../../../constants/status";
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {Globals} from 'src/app/shared/globals';
+import {MESSAGE} from 'src/app/constants/message';
+import {QuyetDinhTtcpService} from 'src/app/services/quyetDinhTtcp.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {UserService} from 'src/app/services/user.service';
+import {UserLogin} from 'src/app/models/userlogin';
+import {HelperService} from 'src/app/services/helper.service';
+import {STATUS} from "../../../../../../../constants/status";
+import {DonviService} from "../../../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-them-quyet-dinh-ttcp',
@@ -26,14 +27,17 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   idInput: number;
   @Output('onClose') onClose = new EventEmitter<any>();
   @Input()
-  trangThai:any=[];
+  trangThai: any = [];
   formData: FormGroup;
-  STATUS=STATUS;
+  STATUS = STATUS;
   taiLieuDinhKemList: any[] = [];
   dsNam: any[] = [];
   maQd: string;
   userInfo: UserLogin;
   dataTable: any[] = [];
+  dataTableAllBn: any[] = [];
+  totalBnKh: number = 0;
+  totalBtcKh: number = 0;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -44,6 +48,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     private notification: NzNotificationService,
     public userService: UserService,
     private helperService: HelperService,
+    private donviService: DonviService,
   ) {
     this.formData = this.fb.group({
       id: [],
@@ -57,6 +62,9 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
+    if(!this.idInput){
+      this.getListBoNganh();
+    }
     await Promise.all([
       (this.userInfo = this.userService.getUserLogin()),
       this.loadDsNam(),
@@ -64,6 +72,16 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       this.getDataDetail(this.idInput),
     ]);
     this.spinner.hide();
+  }
+
+  expandSet = new Set<number>();
+
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
   }
 
   async getDataDetail(id) {
@@ -79,8 +97,85 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         trichYeu: data.trichYeu,
       });
       this.dataTable = data.listBoNganh;
+      if(data.listChiTangToanBoNganh.length > 0){
+        for (let item of data.listChiTangToanBoNganh) {
+          var obj = {
+            "stt": item.stt,
+            "maCha": item.maBn == '01' ? item.maBn : null,
+            "maBn": item.maBn,
+            "tenBn": item.tenBn,
+            "isSum":  false,
+            "tongSo": item.tongSo
+          };
+          this.dataTableAllBn.push(obj);
+        }
+        this.dataTableAllBn.unshift( {
+          "stt": 1,
+          "maCha": null,
+          "maBn": null,
+          "tenBn": "Bộ Tài Chính",
+          "isSum":  true,
+          "tongSo": 0
+        })
+        this.onInputNumberBNChange();
+      }
       this.taiLieuDinhKemList = data.fileDinhkems;
     }
+  }
+
+  async getListBoNganh() {
+    this.dataTableAllBn = [];
+    let res = await this.donviService.layTatCaDonViByLevel(0);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let i = 1;
+      for (let item of res.data) {
+        var obj = {
+          "stt": i,
+          "maCha": null,
+          "maBn": item.maDvi,
+          "tenBn": item.tenDvi,
+          "isSum": item.maDvi == '01' ? true : false,
+          "tongSo": 0
+        };
+        this.dataTableAllBn.push(obj);
+        if (item.maDvi == '01') {
+          i = i + 2;
+          this.addDetailItem(this.dataTableAllBn, item.maDvi);
+        }
+        i++;
+      }
+    }
+  }
+
+  addDetailItem(dataTableAllBn, maCha) {
+    dataTableAllBn.push({
+      "stt": 2,
+      "maCha": maCha,
+      "maBn": maCha,
+      "tenBn": "   Lương thực",
+      "isSum": false,
+      "tongSo": 0
+    }, {
+      "stt": 3,
+      "maCha": maCha,
+      "maBn": maCha,
+      "tenBn": "   Vật tư, thiết bị",
+      "isSum": false,
+      "tongSo": 0
+    })
+  }
+
+  onInputNumberBNChange() {
+    let total = 0;
+    let totalBtc = 0;
+    this.dataTableAllBn.forEach(function (item) {
+      if (item.maBn == '01') {
+        totalBtc = totalBtc + Number(item.tongSo);
+      }
+      total = total + Number(item.tongSo);
+    })
+    this.totalBnKh = total;
+    this.totalBtcKh = totalBtc;
   }
 
   loadDsNam() {
@@ -191,8 +286,11 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     let body = this.formData.value;
     body.soQd = body.soQd + this.maQd;
     body.listBoNganh = this.dataTable;
+    body.listToanBoNganh = this.dataTableAllBn.filter(item => item.isSum == false);
     body.fileDinhKems = this.taiLieuDinhKemList;
     let res;
+    // console.log(body);
+    // return;
     if (this.idInput > 0) {
       res = await this.quyetDinhTtcpService.update(body);
     } else {

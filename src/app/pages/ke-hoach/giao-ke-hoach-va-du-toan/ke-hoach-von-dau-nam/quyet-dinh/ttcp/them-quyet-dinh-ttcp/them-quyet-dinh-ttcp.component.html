@@ -31,8 +31,8 @@
       </div>
     </div>
     <form nzLayout="vertical" nz-form [formGroup]="formData">
-      <div nz-row [nzGutter]="20">
-        <div nz-col [nzSpan]="3">
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" nzFor="nam-qd">Năm kế hoạch</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
@@ -74,7 +74,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24">
+        <div nz-col [nzSpan]="12">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzFor="ngay-qd">Trích yếu</nz-form-label>
             <nz-form-control>
@@ -94,21 +94,68 @@
       </div>
     </form>
   </nz-card>
-  <div class="group-button">
-    <h3>Kế hoạch giao Bộ ngành</h3>
-    <div class="buttons" *ngIf="!isView">
-      <button type="button" class="btn btn-sub xanh" (click)="themKeHoach()">
-        <i class="icon htvbdh_dau-cong"></i>
-        <span>Thêm</span>
-      </button>
+
+  <div class="header header-green-background mg-t-16">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span></span>
+        <span>Kế hoạch NSNN chi tăng DTQG toàn bộ, ngành</span>
+      </div>
     </div>
   </div>
-  <div>
+  <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+    <div>
     <span class="text-right">
-      <h2 style="font-size: 100%; margin-top: 0.5%;">ĐƠN VỊ : TRIỆU ĐỒNG</h2>
+      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Triệu đồng</h2>
     </span>
+    </div>
+    <nz-table [nzData]="dataTableAllBn" class="nowrap table__container-tt" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th class="text-center" style="width: 5%;">STT</th>
+        <th class="text-center" style="width: 75%;">Bộ</th>
+        <th class="text-center" style="width: 15%;">Kế hoạch năm(tấn)</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="text-center"></td>
+        <td class="text-center"><b>Tổng số</b></td>
+        <td class="text-right">{{totalBnKh | number : '1.0-1' : 'vi_VN'}}</td>
+      </tr>
+      <tr *ngFor="let data of dataTableAllBn; let idx = index">
+        <td class="text-center">{{ data.stt }}</td>
+        <td *ngIf="data.maCha">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - {{ data.tenBn }}</td>
+        <td *ngIf="!data.maCha"> {{ data.tenBn }}</td>
+        <td *ngIf="!data.isSum" class="text-right"><input (input)="onInputNumberBNChange()" type="number" nz-input [(ngModel)]="data.tongSo"  /></td>
+        <td *ngIf="data.isSum" class="text-right">{{totalBtcKh  | number : '1.0-1' : 'vi_VN'}}</td>
+      </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+  <div class="header header-green-background mg-t-16">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span></span>
+        <span>Kế hoạch DTQG giao từng Bộ ngành</span>
+      </div>
+    </div>
+    <div class="group-button">
+      <!--      <h3 class="text-uppercase">Kế hoạch DTQG giao từng Bộ ngành</h3>-->
+      <div class="buttons" *ngIf="!isView">
+        <button type="button" class="btn btn-sub xanh" (click)="themKeHoach()">
+          <i class="icon htvbdh_dau-cong"></i>
+          <span>Thêm</span>
+        </button>
+      </div>
+    </div>
   </div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+    <div>
+    <span class="text-right">
+      <h2 style="font-size: 100%; margin-top: 0.5%;font-style: italic;color: red">Đơn vị : Triệu đồng</h2>
+    </span>
+    </div>
     <nz-table [nzData]="dataTable" class="nowrap" nzBordered [nzFrontPagination]="false" [nzShowPagination]="false">
       <thead>
         <tr>
