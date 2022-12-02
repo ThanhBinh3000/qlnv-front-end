@@ -15,6 +15,8 @@ import {UserLogin} from 'src/app/models/userlogin';
 import {HelperService} from 'src/app/services/helper.service';
 import {STATUS} from "../../../../../../../constants/status";
 import {DonviService} from "../../../../../../../services/donvi.service";
+import {CurrencyMaskInputMode} from 'ngx-currency'
+
 
 @Component({
   selector: 'app-them-quyet-dinh-ttcp',
@@ -38,6 +40,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   dataTableAllBn: any[] = [];
   totalBnKh: number = 0;
   totalBtcKh: number = 0;
+  options = {allowZero: true,allowNegative:true,precision:0, prefix: '', thousands: '.', decimal: ',', inputMode: CurrencyMaskInputMode.FINANCIAL}
 
   constructor(
     private readonly fb: FormBuilder,
@@ -62,7 +65,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    if(!this.idInput){
+    if (!this.idInput) {
       this.getListBoNganh();
     }
     await Promise.all([
@@ -97,24 +100,24 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         trichYeu: data.trichYeu,
       });
       this.dataTable = data.listBoNganh;
-      if(data.listChiTangToanBoNganh.length > 0){
+      if (data.listChiTangToanBoNganh.length > 0) {
         for (let item of data.listChiTangToanBoNganh) {
           var obj = {
             "stt": item.stt,
             "maCha": item.maBn == '01' ? item.maBn : null,
             "maBn": item.maBn,
             "tenBn": item.tenBn,
-            "isSum":  false,
+            "isSum": false,
             "tongSo": item.tongSo
           };
           this.dataTableAllBn.push(obj);
         }
-        this.dataTableAllBn.unshift( {
+        this.dataTableAllBn.unshift({
           "stt": 1,
           "maCha": null,
           "maBn": null,
           "tenBn": "Bộ Tài Chính",
-          "isSum":  true,
+          "isSum": true,
           "tongSo": 0
         })
         this.onInputNumberBNChange();
@@ -331,7 +334,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
       nzComponentParams: {
         dataEdit: data,
         isView: isView,
-        nam: this.formData.get('namQd').value
+        nam: this.formData.get('namQd').value,
       },
     });
     modalQD.afterClose.subscribe((data) => {
