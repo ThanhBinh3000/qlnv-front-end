@@ -473,7 +473,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         }
         if (this.formData.value.loaiGia == "LG04") {
           if (this.formData.value.giaDeNghi < this.detailNhaphang.donGiaVat && this.formData.value.loaiGia == 'LG04') {
-            this.notification.error(MESSAGE.ERROR, "Sai!!!")
+            this.notification.error(MESSAGE.ERROR, "Đơn giá VAT không được ít hơn so với quyết định giao kế hoạch mua bán!!!!")
             this.spinner.hide();
             return;
           }

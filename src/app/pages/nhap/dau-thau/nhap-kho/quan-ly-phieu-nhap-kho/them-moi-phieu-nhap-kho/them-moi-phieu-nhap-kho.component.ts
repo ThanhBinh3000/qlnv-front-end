@@ -21,7 +21,7 @@ import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import { HoSoKyThuatService } from 'src/app/services/hoSoKyThuat.service';
+import { HoSoKyThuatService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoKyThuat.service';
 import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { STATUS } from "../../../../../../constants/status";
@@ -43,7 +43,7 @@ import { DatePipe } from '@angular/common';
 export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
   @Input() isTatCa: boolean;
   @Input() idQdGiaoNvNh: number;
   @Output()
@@ -106,9 +106,9 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
       tenNganKho: ['', [Validators.required]],
       maLoKho: [''],
       tenLoKho: [''],
-      soPhieuKtraCl: [''],
+      soPhieuKtraCl: ['', [Validators.required]],
+      soBienBanGuiHang: ['', [Validators.required]],
       nguoiTaoPhieuKtraCl: [''],
-
       loaiVthh: ['',],
       tenLoaiVthh: ['',],
       cloaiVthh: [''],
@@ -139,7 +139,7 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
       super.ngOnInit();
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
-        this.loadSoQuyetDinh(),
+        // this.loadSoQuyetDinh(),
       ]);
       if (this.id) {
         await this.loadChiTiet(this.id);
@@ -179,13 +179,14 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
   async loadSoQuyetDinh() {
     let body = {
       "maDvi": this.userInfo.MA_DVI,
-      "maVthh": this.typeVthh,
+      "maVthh": this.loaiVthh,
       "paggingReq": {
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
       },
       "trangThai": STATUS.BAN_HANH,
-      "namNhap": this.formData.get('nam').value
+      "namNhap": this.formData.get('nam').value,
+      "loaiVthh": this.loaiVthh
     }
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -197,6 +198,7 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
   }
 
   async openDialogSoQd() {
+    await this.loadSoQuyetDinh()
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
       nzContent: DialogTableSelectionComponent,
@@ -259,7 +261,7 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.dataTable = [];
-        this.listPhieuKtraCl = [];
+
         this.formData.patchValue({
           idDdiemGiaoNvNh: data.id,
           maDiemKho: data.maDiemKho,
@@ -270,13 +272,22 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
           tenNganKho: data.tenNganKho,
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
-          soPhieuKtraCl: '',
-          idPhieuKtrnaCl: '',
-          nguoiTaoPhieuKtraCl: '',
+
         });
-        this.listPhieuKtraCl = data.listPhieuKtraCl.filter(item => (item.trangThai == STATUS.DA_DUYET_LDCC && isEmpty(item.phieuNhapKho)));
+        if (this.loaiVthh.startsWith('02')) {
+          this.formData.patchValue({
+            nguoiTaoPhieuKtraCl: data.bienBanGuiHang.tenNguoiTao,
+            soBienBanGuiHang: data.bienBanGuiHang.soBienBanGuiHang,
+          });
+        } else {
+          this.listPhieuKtraCl = [];
+          this.listPhieuKtraCl = data.listPhieuKtraCl.filter(item => (item.trangThai == STATUS.DA_DUYET_LDCC && isEmpty(item.phieuNhapKho)));
+          this.formData.patchValue({
+            soPhieuKtraCl: '',
+          });
+        }
         let dataObj = {
-          moTaHangHoa: this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh,
+          moTaHangHoa: this.loaiVthh.startsWith('02') ? (this.formData.value.tenCloaiVthh ? this.formData.value.tenCloaiVthh : this.formData.value.tenLoaiVthh) : (this.formData.value.moTaHangHoa ? this.formData.value.moTaHangHoa : this.formData.value.tenCloaiVthh),
           maSo: '',
           donViTinh: '',
           soLuongChungTu: 0,
@@ -306,7 +317,6 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
       if (data) {
         this.formData.patchValue({
           soPhieuKtraCl: data.soPhieu,
-          idPhieuKtraCl: data.id,
           nguoiTaoPhieuKtraCl: data.tenNguoiTao,
         });
         this.dataTable[0].soLuongThucNhap = data.soLuongNhapKho;
@@ -426,6 +436,7 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
   async save(isGuiDuyet: boolean) {
     await this.spinner.show();
     try {
+      this.setValidator();
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
         await this.spinner.hide();
@@ -464,6 +475,17 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
       console.log('error: ', e);
       this.notification.error(MESSAGE.ERROR, (e?.error?.message ?? MESSAGE.SYSTEM_ERROR));
       await this.spinner.hide();
+    }
+  }
+
+  setValidator() {
+    if (this.loaiVthh == '02') {
+      this.formData.controls["soPhieuKtraCl"].clearValidators();
+      this.formData.controls["soBienBanGuiHang"].setValidators([Validators.required]);
+
+    } else {
+      this.formData.controls["soPhieuKtraCl"].setValidators([Validators.required]);
+      this.formData.controls["soBienBanGuiHang"].clearValidators();
     }
   }
 

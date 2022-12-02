@@ -159,14 +159,6 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
         }
       };
     });
-    // this.dataTable.forEach(item => {
-    //   item.detail.children.forEach(ddNhap => {
-    //     ddNhap.listPhieuNhapKho.forEach(x => {
-    //       x.phieuKiemTraCl = ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
-    //     });
-    //   })
-    // });
-    console.log(this.dataTable);
   }
 
   async changePageIndex(event) {

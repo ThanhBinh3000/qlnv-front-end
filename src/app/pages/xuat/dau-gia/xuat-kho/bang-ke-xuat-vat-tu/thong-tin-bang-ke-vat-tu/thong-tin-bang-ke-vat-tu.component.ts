@@ -13,7 +13,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyBangKeVatTuService } from 'src/app/services/quanLyBangKeVatTu.service';
+import { QuanLyBangKeVatTuService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyBangKeVatTu.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapKho.service';
 import { QuanLyPhieuSoKhoService } from 'src/app/services/quanLySoKho.service';
@@ -443,7 +443,7 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
 
   async loadChiTiet(id) {
     if (id > 0) {
-      let res = await this.quanLyBangKeVatTuService.loadChiTiet(id);
+      let res = await this.quanLyBangKeVatTuService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.detail = res.data;
@@ -565,7 +565,7 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
             trangThai: '04',
           };
           let res =
-            await this.quanLyBangKeVatTuService.updateStatus(
+            await this.quanLyBangKeVatTuService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -606,7 +606,7 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
             trangThai: trangThai,
           };
           let res =
-            await this.quanLyBangKeVatTuService.updateStatus(
+            await this.quanLyBangKeVatTuService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -643,7 +643,7 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
             trangThai: '02',
           };
           let res =
-            await this.quanLyBangKeVatTuService.updateStatus(
+            await this.quanLyBangKeVatTuService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -682,7 +682,7 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
             trangThai: '03',
           };
           let res =
-            await this.quanLyBangKeVatTuService.updateStatus(
+            await this.quanLyBangKeVatTuService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -740,7 +740,7 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
         "trangThai": this.detail.trangThai,
       };
       if (this.id > 0) {
-        let res = await this.quanLyBangKeVatTuService.sua(
+        let res = await this.quanLyBangKeVatTuService.update(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -755,7 +755,7 @@ export class ThongTinBangKeVatTuComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
-        let res = await this.quanLyBangKeVatTuService.them(
+        let res = await this.quanLyBangKeVatTuService.create(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
