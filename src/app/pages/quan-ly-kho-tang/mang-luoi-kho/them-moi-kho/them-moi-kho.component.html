@@ -694,7 +694,7 @@
           <div nz-col [nzSpan]="20">
 
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="6" *ngIf="checkLoKho == true" >
             <nz-form-item>
               <nz-form-label >Loại hàng hóa</nz-form-label>
               <nz-form-control>
@@ -704,7 +704,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="6" *ngIf="checkLoKho == true">
             <nz-form-item>
               <nz-form-label >Chủng loại hàng hóa</nz-form-label>
               <nz-form-control>
@@ -714,7 +714,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="6" *ngIf="checkLoKho == true" >
             <nz-form-item>
               <nz-form-label >Số lượng</nz-form-label>
               <nz-form-control>
@@ -724,7 +724,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="3" *ngIf="checkLoKho == true" >
             <nz-form-item>
               <nz-form-label >Đơn vị tính</nz-form-label>
               <nz-form-control>
@@ -734,7 +734,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="3" *ngIf="checkLoKho == true">
             <nz-form-item>
               <nz-form-label >Ngày nhập đầy</nz-form-label>
               <nz-form-control>

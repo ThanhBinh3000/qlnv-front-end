@@ -50,8 +50,10 @@ export class MangLuoiKhoComponent implements OnInit {
   levelNode: number = 1;
   isEditData: boolean = true;
   dataTable: any[] = []
+  fileDinhKems: any[] = []
   listNam: any[] = [];
   dvi: string = 'Tấn kho'
+  checkLoKho: boolean= true;
   constructor(
     private router: Router,
     private donviService: DonviService,
@@ -91,6 +93,7 @@ export class MangLuoiKhoComponent implements OnInit {
       soLuongNganKho: [''],
       soLuongLoKho: [''],
       trangThai: [''],
+      coLoKho: [''],
       thuKho: ['']
     })
   }
@@ -171,7 +174,7 @@ export class MangLuoiKhoComponent implements OnInit {
 
   checkStatusSurplus() {
     let check = false;
-    if ((this.levelNode == 7 && !this.detailDonVi.value.tongTichLuongDsd)  || (this.levelNode == 6 && this.detailDonVi.value.coLoKho == '01' )) {
+    if ((this.levelNode == 7 && !this.detailDonVi.value.tongTichLuongDsd)  || (this.levelNode == 6 && !this.detailDonVi.value.coLoKho && !this.detailDonVi.value.tongTichLuongDsd)) {
       check = true
     }
     return check;
@@ -360,5 +363,12 @@ export class MangLuoiKhoComponent implements OnInit {
 
       }
     });
+  }
+  changeLoKho() {
+    if (this.detailDonVi.value.coLoKho) {
+      this.checkLoKho = true;
+    }else {
+      this.checkLoKho = false;
+    }
   }
 }

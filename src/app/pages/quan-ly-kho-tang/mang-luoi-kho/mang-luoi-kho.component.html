@@ -897,7 +897,7 @@
                       <nz-form-label ></nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <label nz-checkbox >Có lô kho</label>
+                          <label nz-checkbox formControlName="coLoKho"  (ngModelChange)="changeLoKho()">Có lô kho</label>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -1035,7 +1035,7 @@
                   <div nz-col [nzSpan]="20">
 
                   </div>
-                  <div nz-col [nzSpan]="6">
+                  <div nz-col [nzSpan]="6" *ngIf="!checkLoKho">
                     <nz-form-item>
                       <nz-form-label >Loại hàng hóa</nz-form-label>
                       <nz-form-control>
@@ -1047,7 +1047,7 @@
                       </nz-form-control>
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="6">
+                  <div nz-col [nzSpan]="6" *ngIf="!checkLoKho">
                     <nz-form-item>
                       <nz-form-label >Chủng loại hàng hóa</nz-form-label>
                       <nz-form-control>
@@ -1059,7 +1059,7 @@
                       </nz-form-control>
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="6">
+                  <div nz-col [nzSpan]="6" *ngIf="!checkLoKho">
                     <nz-form-item>
                       <nz-form-label >Số lượng</nz-form-label>
                       <nz-form-control>
@@ -1069,7 +1069,7 @@
                       </nz-form-control>
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="3">
+                  <div nz-col [nzSpan]="3" *ngIf="!checkLoKho">
                     <nz-form-item>
                       <nz-form-label >Đơn vị tính</nz-form-label>
                       <nz-form-control>
@@ -1079,7 +1079,7 @@
                       </nz-form-control>
                     </nz-form-item>
                   </div>
-                  <div nz-col [nzSpan]="3">
+                  <div nz-col [nzSpan]="3" *ngIf="!checkLoKho">
                     <nz-form-item>
                       <nz-form-label >Ngày nhập đầy</nz-form-label>
                       <nz-form-control>
@@ -1109,14 +1109,9 @@
                     <nz-form-item>
                       <nz-form-label >Chọn file bản đồ (sờ đồ) ngăn, lô kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group>
-                          <input type="file" nz-input>
-                        </nz-input-group>
+                        <file-list [data]="fileDinhKems" [disabled]="!isEditData"></file-list>
                       </nz-form-control>
                     </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <img src="https://haymora.com/upload/images/cong_nghe_thong_tin/2020/tecapro/tecapro-logo.png" alt="">
                   </div>
                 </div>
               </nz-card>
@@ -1462,13 +1457,10 @@
                       <nz-form-label >Chọn file bản đồ (sờ đồ) ngăn, lô kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <input type="file" nz-input>
+                          <file-list [data]="fileDinhKems" [disabled]="!isEditData"></file-list>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
-                  </div>
-                  <div nz-col [nzSpan]="12">
-                    <img src="https://haymora.com/upload/images/cong_nghe_thong_tin/2020/tecapro/tecapro-logo.png" alt="">
                   </div>
                 </div>
               </nz-card>

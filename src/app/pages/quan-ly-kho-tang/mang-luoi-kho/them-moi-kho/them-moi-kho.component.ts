@@ -47,6 +47,7 @@ export class ThemMoiKhoComponent implements OnInit {
   dsLoaiHangHoa: any[] = [];
   listTinhTrang: any[] = [];
   listFileDinhKem: any[] = [];
+  checkLoKho: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -275,6 +276,10 @@ export class ThemMoiKhoComponent implements OnInit {
   }
 
   changeLoKho() {
-
+    if (this.formKho.value.coLoKho) {
+      this.checkLoKho = true;
+    }else {
+      this.checkLoKho = false;
+    }
   }
 }
