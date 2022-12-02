@@ -6,6 +6,7 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { BaseComponent } from 'src/app/components/base/base.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
@@ -19,7 +20,7 @@ import { Globals } from 'src/app/shared/globals';
   templateUrl: './bang-ke-nhap-vat-tu.component.html',
   styleUrls: ['./bang-ke-nhap-vat-tu.component.scss']
 })
-export class BangKeNhapVatTuComponent implements OnInit {
+export class BangKeNhapVatTuComponent extends BaseComponent implements OnInit {
   @Input() loaiVthh: string;
 
   searchFilter = {
@@ -67,7 +68,10 @@ export class BangKeNhapVatTuComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-  ) { }
+  ) {
+    super();
+    super.ngOnInit();
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -272,7 +276,7 @@ export class BangKeNhapVatTuComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
@@ -387,4 +391,23 @@ export class BangKeNhapVatTuComponent implements OnInit {
   print() {
 
   }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
+  expandSet2 = new Set<number>();
+  onExpandChange2(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet2.add(id);
+    } else {
+      this.expandSet2.delete(id);
+    }
+  }
+
 }
