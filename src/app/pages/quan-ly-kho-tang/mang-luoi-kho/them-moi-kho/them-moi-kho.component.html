@@ -556,7 +556,7 @@
               <nz-form-label ></nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
-                  <label formControlName="coLoKho" nz-checkbox >Có lô kho</label>
+                  <label formControlName="coLoKho" (ngModelChange)="changeLoKho()" nz-checkbox >Có lô kho</label>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -694,7 +694,7 @@
           <div nz-col [nzSpan]="20">
 
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="6" *ngIf="checkLoKho == true" >
             <nz-form-item>
               <nz-form-label >Loại hàng hóa</nz-form-label>
               <nz-form-control>
@@ -704,7 +704,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="6" *ngIf="checkLoKho == true">
             <nz-form-item>
               <nz-form-label >Chủng loại hàng hóa</nz-form-label>
               <nz-form-control>
@@ -714,7 +714,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="6">
+          <div nz-col [nzSpan]="6" *ngIf="checkLoKho == true" >
             <nz-form-item>
               <nz-form-label >Số lượng</nz-form-label>
               <nz-form-control>
@@ -724,7 +724,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="3" *ngIf="checkLoKho == true" >
             <nz-form-item>
               <nz-form-label >Đơn vị tính</nz-form-label>
               <nz-form-control>
@@ -734,7 +734,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="3">
+          <div nz-col [nzSpan]="3" *ngIf="checkLoKho == true">
             <nz-form-item>
               <nz-form-label >Ngày nhập đầy</nz-form-label>
               <nz-form-control>
@@ -781,7 +781,7 @@
               <nz-form-label nzRequired>Tên lô kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group >
-                  <input formControlName="tenNganLo" nz-input/>
+                  <input formControlName="tenNganlo" nz-input/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -791,7 +791,7 @@
               <nz-form-label nzRequired>Mã lô kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group >
-                  <input formControlName="maNganLo" nz-input/>
+                  <input formControlName="maNganlo" nz-input/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -1078,11 +1078,10 @@
           <div nz-col [nzSpan]="12">
             <nz-form-item>
               <nz-form-label nzRequired>Chọn file bản đồ (sờ đồ) lô kho</nz-form-label>
-              <nz-form-control [nzErrorTip]="error">
+              <nz-form-control >
                 <nz-input-group>
-                  <div class="file-list">
-                    <file-list [data]="listFileDinhKem" ></file-list>
-                  </div>
+                  <file-list [data]="listFileDinhKem">
+                  </file-list>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -1214,7 +1213,16 @@
         </div>
 
       </div>
-    </nz-card>
+      <nz-card class="mt16 flex-card p-lr16" *ngIf="levelNode == 5">
+        <div class="mt16 flex-card p-lr16">
+            <div class="header-text">
+              <div class="title-chi-tieu">
+                <span>Lô kho là cấp nhỏ nhất trong mạng lưới kho!</span>
+              </div>
+          </div>
+        </div>
+      </nz-card>
+      </nz-card>
     <ng-template #error let-control>
       <app-template-error #error [control]="control"></app-template-error>
     </ng-template>
@@ -1228,7 +1236,7 @@
           <i aria-hidden="true" class="fa fa-sign-out"></i>
           <span>Thoát</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="saveNganLo()">
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="saveKho(levelNode)">
           <div *ngIf="!data">
             <i class="fa fa-save" aria-hidden="true"></i>
             Lưu

@@ -87,7 +87,7 @@ export class DanhSachPhanLo {
     tenDvi: string;
     maDiemKho: string;
     diaDiemKho: string;
-    tenDiemKho: string;
+    tenDiemKho: string
     maNhaKho: string;
     tenNhakho: string;
     maNganKho: string;
@@ -97,18 +97,19 @@ export class DanhSachPhanLo {
     loaiVthh: string;
     tenLoaiVthh: string;
     cloaiVthh: string;
-    dviTinh: string;
     tenCloaiVthh: string;
     maDviTsan: string;
+    duDau: number;
     soLuong: number;
-    donViTinh: string;
     giaKhongVat: number;
     giaKhoiDiem: number;
-    giaDuocDuyet: number = 1000;
-    duDau: number;
+    donGiaVat: number;
+    giaKhoiDiemDduyet: number;
     tienDatTruoc: number;
+    tienDatTruocDduyet: number;
     soLuongChiTieu: number;
     soLuongKh: number;
+    dviTinh: string;
     idVirtual?: number;
     isEdit: boolean;
     children?: DanhSachPhanLo[];
