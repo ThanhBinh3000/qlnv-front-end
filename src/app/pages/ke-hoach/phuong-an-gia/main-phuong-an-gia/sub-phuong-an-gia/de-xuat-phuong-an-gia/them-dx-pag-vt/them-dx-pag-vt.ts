@@ -68,7 +68,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
   dsPhuongAnGia: any[] = [];
   dsLoaiHangXdg: any[] = [];
   STATUS: any;
-   fileDinhKemList: any[] = [];
+  fileDinhKemList: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,

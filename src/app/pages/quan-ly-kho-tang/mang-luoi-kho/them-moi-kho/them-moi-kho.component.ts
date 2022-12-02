@@ -32,6 +32,7 @@ export class ThemMoiKhoComponent implements OnInit {
   };
   settings = {};
   formKho: FormGroup;
+  formDvi: FormGroup;
   isVisible = false;
   levelNode: number = 0;
   userInfo: UserLogin
@@ -39,12 +40,12 @@ export class ThemMoiKhoComponent implements OnInit {
   dataDetail: any;
   nodeSelected: any;
   dataTable: any[] = [];
-  dvi : string = 'Tấn kho';
-  theTich : string = 'm3';
-  dienTich : string = 'm2';
-  dsChungLoaiHangHoa: any[] =[];
-  dsLoaiHangHoa: any[] =[];
-   listTinhTrang: any[] = [];
+  dvi: string = 'Tấn kho';
+  theTich: string = 'm3';
+  dienTich: string = 'm2';
+  dsChungLoaiHangHoa: any[] = [];
+  dsLoaiHangHoa: any[] = [];
+  listTinhTrang: any[] = [];
   listFileDinhKem: any[] = [];
 
   constructor(
@@ -52,52 +53,65 @@ export class ThemMoiKhoComponent implements OnInit {
     private notification: NzNotificationService,
     private helperService: HelperService,
     private donviService: DonviService,
-    private khoService : MangLuoiKhoService,
+    private khoService: MangLuoiKhoService,
     private modal: NzModalRef,
     private userService: UserService,
     private danhMucService: DanhMucService,
     private spinner: NgxSpinnerService,
-    public globals : Globals
+    public globals: Globals
   ) {
+    this.formDvi = this.fb.group({
+      maDviCha: [''],
+      tenDvi: ['', Validators.required],
+      maDvi: ['', Validators.required],
+      diaChi: [''],
+      tenVietTat: [''],
+      sdt: [''],
+      fax: [''],
+      trangThai: ['01'],
+      type: ['MLK'],
+      ghiChu: [''],
+    })
     this.formKho = this.fb.group({
       maCha: [null],
-      nganKhoId : [''],
+      nganKhoId: [''],
       diaChi: [''],
-      tenChiCuc : [''],
-      tenNganLo: [''],
-      maNganLo : [''],
+      tenChiCuc: [''],
+      tenNganlo: [''],
+      maNganlo: [''],
+      ngankhoId: [''],
       tenDiemkho: [''],
-      maDiemkho : [''],
-      diemkhoId : [''],
+      maDiemkho: [''],
+      diemkhoId: [''],
       tenNhakho: [''],
       maNhakho: [''],
       tenNgankho: [''],
-      maNgankho :[''],
-      loaikhoId : [''],
-      nhakhoId : [''],
-      loaiVthh : [''],
-      cloaiVthh : [''],
+      maNgankho: [''],
+      loaikhoId: [''],
+      nhakhoId: [''],
+      loaiVthh: [''],
+      cloaiVthh: [''],
       trangThai: [true],
-      diaDiem : [''],
+      diaDiem: [''],
       type: [true],
-      coLoKho : [false],
+      coLoKho: [false],
       ghiChu: [''],
       nhiemVu: [''],
-      tichLuongTkLt : [''],
+      tichLuongTkLt: [''],
       tichLuongTkVt: [''],
       tichLuongSdLt: [''],
       tichLuongSdVt: [''],
-      theTichSdLt : [''],
-      theTichSdVt : [''],
+      theTichSdLt: [''],
+      theTichSdVt: [''],
       namSuDung: [''],
-      dienTichDat : [''],
-      tichLuongKdLt : [''],
-      tichLuongKdVt : [''],
-      theTichKdLt : [''],
-      theTichKdVt : [''],
-      theTichTkLt : [''],
-      theTichTkVt : [''],
-      namNhap : [''],
+      dienTichDat: [''],
+      tichLuongKdLt: [''],
+      tichLuongKdVt: [''],
+      theTichKdLt: [''],
+      theTichKdVt: [''],
+      theTichTkLt: [''],
+      theTichTkVt: [''],
+      namNhap: [''],
       tinhtrangId: [''],
       soLuongTonKho: [''],
       ngayNhapDay: [''],
@@ -118,7 +132,6 @@ export class ThemMoiKhoComponent implements OnInit {
   }
 
 
-
   async loaiVTHHGetAll() {
     try {
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
@@ -126,8 +139,7 @@ export class ThemMoiKhoComponent implements OnInit {
           hangHoa.data.forEach((item) => {
             if (item.cap === "1" && item.ma != '01') {
               this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, item];
-            }
-            else {
+            } else {
               this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, ...item.child];
             }
           })
@@ -140,11 +152,11 @@ export class ThemMoiKhoComponent implements OnInit {
   }
 
   async loadTinhTrangLoKho() {
-      this.listTinhTrang = [];
-      let res = await this.danhMucService.danhMucChungGetAll('CL_KHO');
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.listTinhTrang = res.data;
-      }
+    this.listTinhTrang = [];
+    let res = await this.danhMucService.danhMucChungGetAll('CL_KHO');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listTinhTrang = res.data;
+    }
   }
 
   async ngOnInit() {
@@ -197,21 +209,27 @@ export class ThemMoiKhoComponent implements OnInit {
       return;
     }
     let body = this.formKho.value;
-    body.nganKhoId = this.formKho.value.maCha;
+    body.ngankhoId = this.formKho.value.maCha;
     body.fileDinhkems = this.listFileDinhKem;
-    this.khoService.createKho('ngan-lo',body).then((res: OldResponseData) => {
+    this.khoService.createKho('ngan-lo', body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        let bodyDvi = this.formDvi.value;
+        bodyDvi.maDviCha = this.formKho.value.maCha;
+        bodyDvi.tenDvi = this.formKho.value.tenNganlo;
+        bodyDvi.maDvi = this.formKho.value.maNganlo;
+        this.donviService.create(bodyDvi).then((res: OldResponseData) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }
+        })
         this.modal.close(true);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }).catch((e) => {
       console.error('error: ', e);
-      this.notification.error(
-        MESSAGE.ERROR,
-        e.error.errors[0].defaultMessage,
-      );
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      ;
     });
   }
 
@@ -223,7 +241,7 @@ export class ThemMoiKhoComponent implements OnInit {
     let body = this.formKho.value;
     body.nhakhoId = this.formKho.value.maCha;
     body.fileDinhkems = this.listFileDinhKem;
-    this.khoService.createKho('ngan-kho',body).then((res: OldResponseData) => {
+    this.khoService.createKho('ngan-kho', body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
         this.modal.close(true);
@@ -233,9 +251,30 @@ export class ThemMoiKhoComponent implements OnInit {
     }).catch((e) => {
       console.error('error: ', e);
       this.notification.error(
-        MESSAGE.ERROR,
-        e.error.errors[0].defaultMessage,
+        MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR
       );
     });
+  }
+
+  saveKho(level?) {
+    switch (level) {
+      case 4: {
+        this.saveNganLo();
+        break
+      }
+      case 3 : {
+        this.saveNganKho();
+        break
+      }
+    }
+  }
+
+  resetForm() {
+    this.formKho.reset();
+    this.formKho.clearValidators();
+  }
+
+  changeLoKho() {
+
   }
 }

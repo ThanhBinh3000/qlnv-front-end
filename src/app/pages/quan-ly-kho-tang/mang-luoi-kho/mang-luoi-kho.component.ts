@@ -169,6 +169,14 @@ export class MangLuoiKhoComponent implements OnInit {
     }
   }
 
+  checkStatusSurplus() {
+    let check = false;
+    if ((this.levelNode == 7 && !this.detailDonVi.value.tongTichLuongDsd)  || (this.levelNode == 6 && this.detailDonVi.value.coLoKho == '01' )) {
+      check = true
+    }
+    return check;
+  }
+
   async getDetailMlkByKey(dataNode) {
     if (dataNode) {
       let body = {
