@@ -1,6 +1,6 @@
 import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
@@ -13,7 +13,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { BienBanGuiHangService } from 'src/app/services/bienBanGuiHang.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { HoSoKyThuatService } from 'src/app/services/hoSoKyThuat.service';
+import { HoSoKyThuatService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoKyThuat.service';
 import { QuanLyBienBanGiaoNhanService } from 'src/app/services/quanLyBienBanGiaoNhan.service';
 import { QuanLyBienBanKetThucNhapKhoService } from 'src/app/services/quanLyBienBanKetThucNhapKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
@@ -22,11 +22,11 @@ import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/comm
 import { Globals } from 'src/app/shared/globals';
 import { BienBanGiaoNhan, ChiTietBienBanGiaoNhan } from './../../../../../../models/BienBanGiaoNhan';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import {BaseComponent} from "../../../../../../components/base/base.component";
+import { BaseComponent } from "../../../../../../components/base/base.component";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {ChiTiet} from "../../../../../../models/BienBanGuiHang";
+import { ChiTiet } from "../../../../../../models/BienBanGuiHang";
 @Component({
   selector: 'app-thong-tin-bien-ban-giao-nhan',
   templateUrl: './thong-tin-bien-ban-giao-nhan.component.html',
@@ -100,12 +100,12 @@ export class ThongTinBienBanGiaoNhanComponent extends BaseComponent implements O
     this.formData = this.fb.group({
       nam: [dayjs().get('year')],
       tenDvi: ['',],
-      maQhns: ['', ],
+      maQhns: ['',],
       ngayNhapKho: ['', [Validators.required]],
       ngayHd: ['', [Validators.required]],
       soQdGiaoNvNh: ['',],
       soPhieuNhapKhoTamGui: ['',],
-      soHd: ['', ],
+      soHd: ['',],
       maDiemKho: ['', [Validators.required]],
       tenDiemKho: ['', [Validators.required]],
       maNhaKho: ['', [Validators.required]],

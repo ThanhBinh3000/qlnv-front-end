@@ -191,11 +191,11 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       if (this.thongTinCuc.maDvi && this.thongTinCuc.soLuong) {
         let dataDvi = this.listCuc.filter(d => d.maDvi == this.thongTinCuc.maDvi)
         this.thongTinCuc.tenDvi = dataDvi[0].tenDvi;
+        this.thongTinCuc.children = [];
         this.dataTable = [...this.dataTable, this.thongTinCuc];
         let soLuong: number = 0;
         this.dataTable.forEach(item => {
-          soLuong = soLuong + item.soLuong,
-            item.children = [];
+          soLuong = soLuong + item.soLuong
         });
         this.formGoiThau.patchValue({
           soLuong: soLuong
@@ -212,10 +212,8 @@ export class DialogThemMoiGoiThauComponent implements OnInit {
       if (this.thongTinChiCuc.maDvi && this.thongTinChiCuc.soLuong) {
         let dataDvi = this.listChiCucMap[maCuc].filter(d => d.maDvi == this.thongTinChiCuc.maDvi)
         this.thongTinChiCuc.tenDvi = dataDvi[0].tenDvi;
+        this.thongTinChiCuc.children = [];
         this.dataTable[i].children = [...this.dataTable[i].children, this.thongTinChiCuc];
-        this.dataTable[i].children.forEach(item => {
-          item.children = []
-        })
         this.thongTinChiCuc = new DanhSachGoiThau();
       } else {
         this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin");
