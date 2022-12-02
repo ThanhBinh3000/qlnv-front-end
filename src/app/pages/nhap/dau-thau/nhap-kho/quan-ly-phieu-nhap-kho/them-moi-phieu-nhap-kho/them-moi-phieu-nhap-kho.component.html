@@ -59,7 +59,7 @@
                             Năm
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-select formControlName="nam" (ngModelChange)="loadSoQuyetDinh()" [nzDisabled]="true">
+                            <nz-select formControlName="nam" [nzDisabled]="true">
                                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                                 </nz-option>
                             </nz-select>
@@ -205,7 +205,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col nzSpan="4">
+                <div nz-col *ngIf="loaiVthh != '02'" nzSpan="4">
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true">
                             Số phiếu kiểm tra chất lượng
@@ -214,6 +214,16 @@
                             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogPhieuKtraCl()">
                                 <input nz-input [readonly]="true" formControlName="soPhieuKtraCl" />
                             </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col *ngIf="loaiVthh == '02'" nzSpan="4">
+                    <nz-form-item>
+                        <nz-form-label nzRequired [nzNoColon]="true">
+                            Số biên bản gửi hàng
+                        </nz-form-label>
+                        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                            <input nz-input [readonly]="true" formControlName="soBienBanGuiHang" />
                         </nz-form-control>
                     </nz-form-item>
                 </div>
@@ -280,7 +290,7 @@
                 <div nz-col nzSpan="4">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                            KTTV Bảo Quản
+                            {{ loaiVthh == '02' ? 'Thủ kho' : 'KTTV Bảo Quản' }}
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -361,10 +371,34 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col nzSpan="4">
+                <div nz-col nzSpan="4" *ngIf="loaiVthh != '02'">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
                             Số bảng kê cân hàng
+                        </nz-form-label>
+                        <nz-form-control [nzErrorTip]="error">
+                            <nz-input-group>
+                                <input nz-input formControlName="soBangKeCanHang" readonly />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="4" *ngIf="loaiVthh == '02'">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">
+                            Số bảng kê nhập vật tư
+                        </nz-form-label>
+                        <nz-form-control [nzErrorTip]="error">
+                            <nz-input-group>
+                                <input nz-input formControlName="soBangKeCanHang" readonly />
+                            </nz-input-group>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="4" *ngIf="loaiVthh == '02'">
+                    <nz-form-item>
+                        <nz-form-label [nzNoColon]="true">
+                            Số BB kết thúc nhập kho
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -409,8 +443,9 @@
                                 [nzSize]="'small'" [(ngModel)]="item.soLuongChungTu"></nz-input-number>
                         </td>
                         <td>
-                            <nz-input-number nzDisabled [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                nz-input [nzSize]="'small'" [(ngModel)]="item.soLuongThucNhap"></nz-input-number>
+                            <nz-input-number [nzDisabled]="loaiVthh != '02'" [nzFormatter]="globals.formatter"
+                                [nzParser]="globals.parser" nz-input [nzSize]="'small'"
+                                [(ngModel)]="item.soLuongThucNhap"></nz-input-number>
                         </td>
                         <td>{{item.donGia | number : '1.0-1' : 'vi_VN'}}</td>
                         <td>{{item.donGia * item.soLuongThucNhap | number : '1.0-1' : 'vi_VN' }}</td>

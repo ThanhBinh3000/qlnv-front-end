@@ -13,7 +13,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { BienBanGuiHangService } from 'src/app/services/bienBanGuiHang.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { HoSoKyThuatService } from 'src/app/services/hoSoKyThuat.service';
+import { HoSoKyThuatService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoKyThuat.service';
 import { QuanLyBienBanGiaoNhanService } from 'src/app/services/quanLyBienBanGiaoNhan.service';
 import { QuanLyBienBanKetThucNhapKhoService } from 'src/app/services/quanLyBienBanKetThucNhapKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
@@ -622,7 +622,7 @@ export class ThongTinBienBanGiaoNhanComponent implements OnInit {
       "pageSize": 1000,
       "pageNumber": 1
     }
-    let res = await this.hoSoKyThuatService.timKiem(body);
+    let res = await this.hoSoKyThuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.listBienBanHoSoKyThuat = data.content;

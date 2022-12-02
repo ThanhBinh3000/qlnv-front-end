@@ -64,8 +64,8 @@
             <th>Lô kho</th>
             <th>Số phiếu nhập kho</th>
             <th>Ngày nhập kho</th>
-            <th>Số phiếu KTCL</th>
-            <th>Ngày giám định</th>
+            <th>{{ loaiVthh == '02' ? 'Số BB gửi hàng' : 'Số phiếu KTCL' }}</th>
+            <th>{{ loaiVthh == '02' ? 'Ngày lập phiếu' : 'Ngày giám định' }}</th>
             <th>Trạng thái</th>
             <th>Hành động</th>
           </tr>
@@ -106,20 +106,21 @@
                     <td colspan="8"></td>
                     <td class="bold">{{dataPhieu.soPhieuNhapKho}}</td>
                     <td>{{dataPhieu.ngayTao}}</td>
-                    <td class="link">{{dataPhieu.phieuKiemTraCl.soPhieu}}</td>
-                    <td>{{dataPhieu.phieuKiemTraCl.ngayGdinh | date: 'dd/MM/YYYY'}}</td>
-                    <td>{{dataPhieu.tenTrangThai}}</td>
+                    <td>{{ loaiVthh == '02' ? dataPhieu.bienBanGuiHang?.soBienBanGuiHang :
+                      dataPhieu.phieuKiemTraCl?.soPhieu}}</td>
+                    <td>{{ (loaiVthh == '02' ? dataPhieu.bienBanGuiHang?.ngayTao : dataPhieu.phieuKiemTraCl?.ngayGdinh )
+                      | date: 'dd/MM/YYYY'}}</td>
+                    <td>{{ dataPhieu.tenTrangThai }}</td>
                     <td>
-                      <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XEM')"
+                      <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC "
                         (click)="redirectToChiTiet(true, dataPhieu.id)">
                         <i class="fa fa-eye"></i>
                       </a>
-                      <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_SUA')"
+                      <a *ngIf="dataPhieu.trangThai != STATUS.DA_DUYET_LDCC "
                         (click)="redirectToChiTiet(false, dataPhieu.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a
-                        *ngIf="dataPhieu.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_PNK_XOA')">
+                      <a *ngIf="dataPhieu.trangThai == STATUS.DU_THAO">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -150,7 +151,7 @@
   </div>
 </ng-container>
 <ng-container class="chi-tiet" *ngIf="isDetail">
-  <them-moi-phieu-nhap-kho [id]="selectedId" (showListEvent)="showList()" [isView]="isView" [typeVthh]="typeVthh"
+  <them-moi-phieu-nhap-kho [id]="selectedId" (showListEvent)="showList()" [isView]="isView" [loaiVthh]="loaiVthh"
     [isTatCa]="isTatCa" [idQdGiaoNvNh]="idQdGiaoNvNh">
   </them-moi-phieu-nhap-kho>
 </ng-container>

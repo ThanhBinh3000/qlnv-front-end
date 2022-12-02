@@ -12,7 +12,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { HoSoKyThuatService } from 'src/app/services/hoSoKyThuat.service';
+import { HoSoKyThuatService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoKyThuat.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 @Component({
   selector: 'app-ho-so-ky-thuat',
@@ -139,7 +139,7 @@ export class HoSoKyThuatComponent implements OnInit {
       "soBienBan": this.searchFilter.soBienBan,
       "soQdNhap": this.searchFilter.soQdNhap,
     };
-    let res = await this.hoSoKyThuatService.timKiem(body);
+    let res = await this.hoSoKyThuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -251,7 +251,7 @@ export class HoSoKyThuatComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.hoSoKyThuatService.deleteData(item.id).then((res) => {
+          this.hoSoKyThuatService.delete(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -297,7 +297,7 @@ export class HoSoKyThuatComponent implements OnInit {
           "soQdNhap": this.searchFilter.soQdNhap,
         };
         this.hoSoKyThuatService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-ho-so-ky-thuat.xlsx'),
           );
@@ -333,7 +333,7 @@ export class HoSoKyThuatComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.hoSoKyThuatService.deleteMultiple({ ids: dataDelete });
+            let res = await this.hoSoKyThuatService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
