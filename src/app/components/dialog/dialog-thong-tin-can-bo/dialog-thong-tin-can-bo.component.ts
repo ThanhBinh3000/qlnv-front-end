@@ -53,7 +53,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
       status: ['01', [Validators.required]],
       sysType: ['APP', [Validators.required]],
       dvql: [null, [Validators.required]],
-      phongBan: [null],
+      department: [null],
       ghiChu: [null]
     });
   }
@@ -75,7 +75,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
       this.getSysType(),
       this.laytatcadonvi()
     ])
-    this.bindingData(this.dataEdit)
+    await this.bindingData(this.dataEdit)
   }
 
   async laytatcadonvi() {
@@ -92,15 +92,17 @@ export class DialogThongTinCanBoComponent implements OnInit {
           };
           this.optionsDonVi.push(item);
           this.optionsPhongBan.push(item);
-          // nếu dữ liệu detail có
-          if (this.dataEdit) {
-            if (res.data[i].maDvi == this.formData.get('dvql').value) {
-              this.formData.get('dvql').setValue(res.data[i].maDvi + ' - ' + res.data[i].tenDvi)
-            }
-            if (res.data[i].maDvi == this.formData.get('phongBan').value) {
-              this.formData.get('phongBan').setValue(res.data[i].maDvi + ' - ' + res.data[i].tenDvi)
-            }
-          }
+        }
+        this.optionsDonVi = this.optionsDonVi.filter(s => s.type != 'PB');
+        this.optionsPhongBan = this.optionsPhongBan.filter(s => s.type == 'PB');
+        // nếu dữ liệu detail có
+        if (this.dataEdit.dvql && this.dataEdit.department) {
+          let dv = res.data.find(s => s.maDvi == this.formData.get('dvql').value);
+          let pb = res.data.find(s => s.maDvi == this.formData.get('department').value);
+          this.formData.patchValue({
+            dvql: dv.maDvi + " - " + dv.tenDvi,
+            department: pb.maDvi + " - " + pb.tenDvi
+          });
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -162,7 +164,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
     }
     let body = this.formData.value;
     body.dvql = this.formData.get('dvql').value.split('-')[0].trim();
-    body.phongBan = this.formData.get('phongBan').value.split('-')[0].trim();
+    body.department = this.formData.get('department').value.split('-')[0].trim();
     let res
     if (this.dataEdit != null) {
       res = await this.qlNSDService.update(body);
@@ -197,6 +199,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
       let res = await this.qlNSDService.getDetail(dataDt.id);
       const dataEdit = res.data;
       if (dataEdit) {
+        this.dataEdit = dataEdit;
         this.formData.patchValue({
           id: dataEdit.id,
           fullName: dataEdit.fullName,
@@ -208,20 +211,20 @@ export class DialogThongTinCanBoComponent implements OnInit {
           status: dataEdit.status,
           sysType: dataEdit.sysType,
           dvql: dataEdit.dvql,
-          phongBan: dataEdit.phongBan,
+          department: dataEdit.department,
           ghiChu: dataEdit.ghiChu
         })
       }
     }
-    this.laytatcadonvi();
+    await this.laytatcadonvi();
+
   }
 
   changeDvql() {
     this.formData.patchValue({
-      phongBan:''
+      department: ''
     });
     this.suggestPhongBan = [];
-    this.optionsPhongBanFilter = this.optionsPhongBan.filter(s => s.maDviCha == this.formData.get('dvql').value.split('-')[0].trim()
-      && s.type == 'PB');
+    this.optionsPhongBanFilter = this.optionsPhongBan.filter(s => s.maDviCha == this.formData.get('dvql').value.split('-')[0].trim());
   }
 }

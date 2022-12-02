@@ -1,0 +1,16 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import dayjs from 'dayjs';
+import { Observable } from 'rxjs';
+import { BaseService } from '../base.service';
+
+@Injectable({
+    providedIn: 'root',
+})
+export class KhCnQuyChuanKyThuat extends BaseService {
+
+    constructor(public httpClient: HttpClient) {
+        super(httpClient, 'ql-qc-kt', '/qlnv-hang');
+    }
+
+}

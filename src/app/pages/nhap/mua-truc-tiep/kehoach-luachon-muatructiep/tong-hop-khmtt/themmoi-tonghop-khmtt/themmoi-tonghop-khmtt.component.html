@@ -20,14 +20,15 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span></span>
-        <span>Tổng hợp đề xuất kế hoạch mua trực tiếp</span>
+        <span>Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu</span>
       </div>
     </div>
   </div>
+  <!--  Start Thông tin tổng hợp-->
   <nz-card class="mg-t-16 flex-card p-lr16">
     <form nzLayout="vertical" nz-form [formGroup]="formTraCuu">
       <div nz-row [nzGutter]="20">
-        <div nz-col [nzSpan]="3">
+        <div nz-col [nzSpan]="2">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -37,7 +38,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="3">
+        <div nz-col [nzSpan]="4">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -59,10 +60,10 @@
         </div>
         <div nz-col [nzSpan]="24" *ngIf="!formData.value.id">
           <div class="tong-hop-button group-button-search mt-16">
-            <button class="btn btn-main btn-sm waves-effect waves-light" (click)="tongHopDeXuat()"
+            <button class="btn btn-main btn-sm waves-effect waves-light" (click)="tongHopDeXuatTuCuc()"
               *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == ''">
               <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
-              <span>Tổng hợp KH mua trực tiếp</span>
+              <span>Tổng hợp đề xuất KHLCNT</span>
             </button>
           </div>
         </div>
@@ -77,26 +78,26 @@
       <div class="header-text">
         <div class="title-chi-tieu">
           <span></span>
-          <span>Thông tin tổng hợp</span>
+          <span>Thông tin chung</span>
         </div>
       </div>
     </div>
     <form nzLayout="vertical" nz-form [formGroup]="formData">
-      <div nz-row [nzGutter]="[24]">
+      <div nz-row [nzGutter]="20">
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
+            <nz-form-label nzRequired [nzNoColon]="true">
               Mã tổng hợp
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-input-number formControlName="id" [nzSize]="'small'" nzDisabled=" true">
+              <nz-input-number formControlName="id" [nzSize]="'small'" nzDisabled>
               </nz-input-number>
             </nz-form-control>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="6">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
+            <nz-form-label nzRequired [nzNoColon]="true">
               Ngày tổng hợp
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -107,7 +108,7 @@
         </div>
         <div nz-col [nzSpan]="12">
           <nz-form-item>
-            <nz-form-label [nzNoColon]="true">
+            <nz-form-label nzRequired [nzNoColon]="true">
               Nội dung tổng hợp
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
@@ -116,9 +117,14 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="6">
+        </div>
       </div>
     </form>
   </nz-card>
+  <!--  End thông tin chung-->
+
+  <!--  Start Thông tin đề xuất-->
   <nz-card class="mg-t-16 flex-card p-lr16 " *ngIf="isTongHop">
     <div class="header header-green-background mg-t-16">
       <div class="header-text">
@@ -128,37 +134,45 @@
         </div>
       </div>
     </div>
-    <nz-table class="pd-10" nzBordered [nzData]="dataTableDanhSachMTT" [nzFrontPagination]="false"
+    <nz-table class="pd-10" nzBordered [nzData]="dataTableDanhSachDX" [nzFrontPagination]="false"
       [nzShowPagination]="false">
       <thead>
         <tr>
           <th [width]="30">STT</th>
           <th>Cục DTNN KV</th>
-          <th>Số tờ trình</th>
-          <th>Ngày ký</th>
+          <th>Số KH/tờ trình</th>
+          <th>Ngày Ký</th>
           <th>Trích yếu</th>
           <th>Tên dự án</th>
           <th>Số lượng (Tấn)</th>
           <th>Tổng tiền đã bao gồm thuế (đồng)</th>
+          <th>Hành động</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let data of dataTableDanhSachMTT;let i = index" (click)="showDetail($event,data.dxuatHdr.id)">
+        <tr *ngFor="let data of dataTableDanhSachDX;let i = index" (click)="showDetail($event,data.idDxHdr)">
           <td class="text-center">{{i + 1}} </td>
-          <td>{{ data.dxuatHdr.tenDvi }}</td>
-          <td>{{ data.dxuatHdr.soDxuat }}</td>
-          <td>{{ data.dxuatHdr.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.dxuatHdr.trichYeu }}</td>
-          <td>{{ data.dxuatHdr.tenDuAn }}</td>
-          <td>{{ data.dxuatHdr.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.dxuatHdr.tongMucDt | number: '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.tenDvi }}</td>
+          <td>{{ data.soDxuat }}</td>
+          <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
+          <td>{{ data.trichYeu }}</td>
+          <td>{{ data.tenDuAn }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.soLuong * data.donGiaVat | number: '1.0-1' : 'vi_VN' }}</td>
+          <td>
+            <a (click)="showDetail($event,data.idDxHdr)">
+              <i class="fa fa-eye"></i>
+            </a>
+          </td>
         </tr>
       </tbody>
     </nz-table>
     <app-themmoi-kehoach-muatructiep *ngIf="idRowSelect" [idInput]="idRowSelect" [showFromTH]="true">
     </app-themmoi-kehoach-muatructiep>
   </nz-card>
+  <!--  End Thông tin đề xuất-->
 </div>
+
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>

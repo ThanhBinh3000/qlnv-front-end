@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NzModalRef } from 'ng-zorro-antd/modal';
+import {NzModalRef, NzModalService} from 'ng-zorro-antd/modal';
 import { DiaDiemDeHang } from 'src/app/models/DiaDiemDeHang';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
@@ -27,13 +27,15 @@ export class DialogDdiemDeHangComponent implements OnInit {
     private _modalRef: NzModalRef,
     private donviService: DonviService,
     private userService: UserService,
-    public globals: Globals
+    public globals: Globals,
+    private modal: NzModalService,
   ) { }
 
   async ngOnInit() {
     await Promise.all([
       this.userInfo = this.userService.getUserLogin(),
-      this.getListChiCuc()
+      this.getListChiCuc(),
+      this.updateEditCache()
     ])
   }
 
@@ -65,10 +67,14 @@ export class DialogDdiemDeHangComponent implements OnInit {
     });
   }
 
-  onChangeChiCuc($event) {
+  onChangeChiCuc($event, type?) {
     let dataCcuc = this.dsChiCuc.filter(item => item.maDvi == $event);
     if (dataCcuc.length > 0) {
-      this.rowItem.tenDvi = dataCcuc[0].tenDvi;
+      if (type) {
+        type.tenDvi =  dataCcuc[0].tenDvi;
+      } else {
+        this.rowItem.tenDvi = dataCcuc[0].tenDvi;
+      }
     }
   }
 
@@ -90,4 +96,39 @@ export class DialogDdiemDeHangComponent implements OnInit {
     this._modalRef.destroy();
   }
 
+  startEdit(i: number) {
+    this.editCache[i].edit = true;
+  }
+
+  deleteRow(i: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(i, 1);
+          this.updateEditCache()
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
+
+  saveEdit(index: number) {
+    Object.assign(this.dataTable[index], this.editCache[index].data);
+    this.editCache[index].edit = false;
+  }
+
+  cancelEdit(idx: number) {
+    this.editCache[idx] = {
+      data: { ...this.dataTable[idx] },
+      edit: false,
+    };
+  }
 }
