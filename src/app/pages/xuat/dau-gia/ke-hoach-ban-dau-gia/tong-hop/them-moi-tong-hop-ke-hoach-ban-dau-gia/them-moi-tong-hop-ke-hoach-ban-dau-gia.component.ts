@@ -199,7 +199,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
   }
 
   isDetailPermission() {
-    if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP")) {
+    if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_SUA") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP")) {
       return true;
     }
     return false;

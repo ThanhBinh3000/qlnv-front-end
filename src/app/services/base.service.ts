@@ -1,18 +1,20 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { OldResponseData } from '../interfaces/response';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {OldResponseData} from '../interfaces/response';
+import {Observable} from 'rxjs';
 
 export abstract class BaseService {
   table = '';
   _httpClient: HttpClient;
   GATEWAY = ''
+
   constructor(httpClient: HttpClient, tableName: string, GATEWAY: string) {
     this.table = tableName;
     this._httpClient = httpClient;
     this.GATEWAY = GATEWAY;
   }
+
   local = 'http://192.168.5.184:3333/phuong-an-gia/tong-hop/'
 
   getAll(body): Promise<OldResponseData> {
@@ -62,12 +64,12 @@ export abstract class BaseService {
 
   export(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/ket-xuat`;
-    return this._httpClient.post(url, body, { responseType: 'blob' });
+    return this._httpClient.post(url, body, {responseType: 'blob'});
   }
 
   exportReport(body: any): Observable<Blob> {
     const url = `http://192.168.5.184:3333/nhap-xuat-ton/bao-cao-chi-tiet`;
-    return this._httpClient.post(url, body, { responseType: 'blob' });
+    return this._httpClient.post(url, body, {responseType: 'blob'});
   }
 
   deleteMuti(body): Promise<OldResponseData> {

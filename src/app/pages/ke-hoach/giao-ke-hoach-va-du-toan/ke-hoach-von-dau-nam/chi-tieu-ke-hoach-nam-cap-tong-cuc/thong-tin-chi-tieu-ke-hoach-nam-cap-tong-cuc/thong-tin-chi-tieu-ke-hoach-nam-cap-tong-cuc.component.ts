@@ -2717,10 +2717,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.loadData();
   }
 
-  disableBanHanh(): boolean {
+  checkTrangThaiRecord(): boolean {
     return (
-      this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.DU_THAO ||
-      this.id === 0 || this.isViewDetail
+      this.thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV || this.thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC ||  this.thongTinChiTieuKeHoachNam.trangThai == STATUS.BAN_HANH
     );
   }
 

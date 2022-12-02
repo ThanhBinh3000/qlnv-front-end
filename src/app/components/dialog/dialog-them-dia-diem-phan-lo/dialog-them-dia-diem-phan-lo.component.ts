@@ -37,6 +37,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   listDiemKhoEdit: any[] = [];
   khoanTienDatTruoc: number;
   namKh: number;
+
   constructor(
     private _modalRef: NzModalRef,
     private fb: FormBuilder,
@@ -54,6 +55,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       id: [null],
       maDvi: [null, [Validators.required]],
       tenDvi: [null],
+      diaChi:[null],
       maNhaKho: [null],
       tenNhakho: [null],
       maDiemKho: [null],
@@ -95,10 +97,13 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
   save() {
     if (this.validateSoLuong()) {
-      let dataDiemNhap = '';
-      this.listOfData.forEach(item => {
-        dataDiemNhap += item.tenDiemKho + "(" + item.soLuong + "), "
-      })
+      let dataDiemNhap = ''; let curChiCuc = this.listChiCuc.find(x => this.formData.get('maDvi').value == x.maDvi);
+      // this.listOfData.map(s => {
+
+      //   if (curChiCuc) {
+
+      //   }
+      //
       this.formData.patchValue({
         children: this.listOfData,
         maDiemKho: this.listOfData[0].maDiemKho,
@@ -112,10 +117,10 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         maNhaKho: this.listOfData[0].maNhaKho,
         soLuongChiTieu: this.listOfData[0].soLuongChiTieu,
         soLuongKh: this.listOfData[0].soLuongKh,
-        diaDiemKho: dataDiemNhap.substring(0, dataDiemNhap.length - 2)
+        diaChi: curChiCuc.diaChi
+
       })
       this._modalRef.close(this.formData);
-      console.log(this.listOfData, 4444)
     }
   }
 
@@ -174,21 +179,28 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.listChiCuc = [];
     let body = {
       trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI
+      maDviCha: this.userInfo.MA_DVI,
+      type: [null, 'MLK']
     };
 
-    if (this.dataChiTieu) {
-      if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
-        this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
-      }
-      if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
-        this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
-      }
-    } else {
-      let res = await this.donViService.getAll(body);
-      if (res.msg === MESSAGE.SUCCESS) {
-        this.listChiCuc = res.data;
-      }
+    // if (this.dataChiTieu) {
+    //   if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+    //     this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
+    //   }
+    //   if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
+    //     this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
+    //   }
+    // } else {
+    //   let res = await this.donViService.getAll(body);
+    //   if (res.msg === MESSAGE.SUCCESS) {
+    //     this.listChiCuc = res.data;
+    //     this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
+    //   }
+    // }
+    let res = await this.donViService.getAll(body);
+    if (res.msg === MESSAGE.SUCCESS) {
+      this.listChiCuc = res.data;
+      this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
     }
   }
 
@@ -220,7 +232,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           listDiemKhoEdit: res.data.child[i],
         };
         this.listDiemKho.push(item);
-      };
+      }
+      ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     }
   }
@@ -240,7 +253,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           listNganKhoEdit: diemKho[0].listDiemKhoEdit.child[i],
         };
         this.listNhaKho.push(item);
-      };
+      }
+      ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     } else {
       let diemKho = this.listDiemKho.filter(item => item.value == this.thongtinPhanLo.maDiemKho);
@@ -256,7 +270,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           listNganKhoEdit: diemKho[0].listDiemKhoEdit.child[i],
         };
         this.listNhaKho.push(item);
-      };
+      }
+      ;
     }
   }
 
@@ -274,7 +289,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           listLoKhoEdit: nhakho[0].listNganKhoEdit.child[i],
         };
         this.listNganKho.push(item);
-      };
+      }
+      ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     } else {
       let nhakho = this.listNhaKho.filter(item => item.value == this.thongtinPhanLo.maNhaKho);
@@ -289,7 +305,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           listLoKhoEdit: nhakho[0].listNganKhoEdit.child[i],
         };
         this.listNganKho.push(item);
-      };
+      }
+      ;
     }
   }
 
@@ -305,7 +322,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           'text': nganKho[0].listLoKhoEdit.child[i].tenLokho,
         };
         this.listLoKho.push(item);
-      };
+      }
+      ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     } else {
       let nganKho = this.listNganKho.filter(item => item.value == this.thongtinPhanLo.maNganKho);
@@ -319,7 +337,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           'text': nganKho[0].listLoKhoEdit.child[i].tenNganlo,
         };
         this.listLoKho.push(item);
-      };
+      }
+      ;
     }
 
   }
@@ -398,7 +417,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         +this.thongtinPhanLo.giaKhongVat,
     });
   }
-
 
 
   editCache: { [key: string]: { edit: boolean; data: any } } = {};
