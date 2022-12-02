@@ -30,6 +30,7 @@ import {
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { HelperService } from 'src/app/services/helper.service';
 import { DatePipe } from '@angular/common';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-thong-tin-bang-ke-nhap-vat-tu',
@@ -50,6 +51,8 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
   visibleTab: boolean = false;
 
   userInfo: UserLogin;
+
+  STATUS = STATUS
 
   listSoQuyetDinh: any[] = [];
   listSoPhieuNhapKho: any[] = [];
@@ -75,6 +78,7 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
     this.formData = this.fb.group({
       id: [],
       nam: [dayjs().get('year')],
+      maDvi: [],
       tenDvi: ['',],
       maQhns: ['',],
       soBangKe: [],
@@ -108,12 +112,14 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
       tenTrangThai: ["Dự thảo"],
       lyDoTuChoi: [],
       tenNguoiTao: [],
-      tenNguoiPduyet: []
+      tenNguoiPduyet: [],
+      tenTruongPhong: []
     })
   }
 
   async ngOnInit() {
     this.spinner.show();
+    super.ngOnInit();
     try {
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
@@ -266,7 +272,12 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          soPhieuNhapKho: data.soPhieuNhapKho
+          soPhieuNhapKho: data.soPhieuNhapKho,
+          nguoiGiaoHang: data.nguoiGiaoHang,
+          cmtNguoiGiaoHang: data.cmtNguoiGiaoHang,
+          donViGiaoHang: data.donViGiaoHang,
+          diaChiNguoiGiao: data.diaChiNguoiGiao,
+          thoiGianGiaoNhan: data.thoiGianGiaoNhan
         })
       }
     });
@@ -274,14 +285,18 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
 
 
   async loadChiTiet(id) {
-    // if (id > 0) {
-    //   let res = await this.quanLyBangKeVatTuService.getDetail(id);
-    //   if (res.msg == MESSAGE.SUCCESS) {
-    //     if (res.data) {
-    //       this.detail = res.data;
-    //     }
-    //   }
-    // }
+    this.spinner.show();
+    if (id > 0) {
+      let res = await this.quanLyBangKeVatTuService.getDetail(id, true);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          const data = res.data;
+          this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.dataTable = data.children;
+        }
+      }
+    }
+    this.spinner.hide();
   }
 
   deleteRow(data: any) {
@@ -343,14 +358,20 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
-      case this.STATUS.TU_CHOI_LDCC:
-      case this.STATUS.DU_THAO: {
-        trangThai = this.STATUS.CHO_DUYET_LDCC;
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
         mess = 'Bạn có muối gửi duyệt ?'
         break;
       }
-      case this.STATUS.CHO_DUYET_LDCC: {
-        trangThai = this.STATUS.DA_DUYET_LDCC;
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.CHO_DUYET_LDCC;
+        mess = 'Bạn có chắc chắn muốn phê duyệt ?'
+        break;
+      }
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.DA_DUYET_LDCC;
         mess = 'Bạn có chắc chắn muốn phê duyệt ?'
         break;
       }
@@ -372,7 +393,7 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
           };
           let res =
             await this.quanLyBangKeVatTuService.approve(
-              body,
+              body, true
             );
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);

@@ -9,8 +9,10 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent } from 'src/app/components/base/base.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
 import { UserLogin } from 'src/app/models/userlogin';
 import { QuanLyBangKeVatTuService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyBangKeVatTu.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
@@ -28,6 +30,8 @@ export class BangKeNhapVatTuComponent extends BaseComponent implements OnInit {
     soBangKe: '',
     ngayTaoBangKe: '',
   };
+
+  STATUS = STATUS
 
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
@@ -68,21 +72,20 @@ export class BangKeNhapVatTuComponent extends BaseComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
     super();
     super.ngOnInit();
   }
 
   async ngOnInit() {
-    this.spinner.show();
+    await this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
-        // this.loadDiemKho(),
-        // this.loadNganLo(),
-        // this.search(),
+        this.search(),
       ]);
-      this.spinner.hide();
+      await this.spinner.hide();
     }
     catch (e) {
       console.log('error: ', e)
@@ -123,34 +126,51 @@ export class BangKeNhapVatTuComponent extends BaseComponent implements OnInit {
   }
 
   async search() {
-    let param = {
-      "capDvis": '3',
-      "ngayTaoBangKeDen": this.searchFilter.ngayTaoBangKe && this.searchFilter.ngayTaoBangKe.length > 1 ? dayjs(this.searchFilter.ngayTaoBangKe[1]).format('YYYY-MM-DD') : null,
-      "soQdNhap": this.searchFilter.soQuyetDinh,
-      "maDvis": [this.userInfo.MA_DVI],
-      "loaiVthh": this.isTatCa ? null : this.loaiVthh,
-      "pageSize": this.pageSize,
-      "pageNumber": this.page,
-      "soBangKe": this.searchFilter.soBangKe,
-      "ngayTaoBangKeTu": this.searchFilter.ngayTaoBangKe && this.searchFilter.ngayTaoBangKe.length > 0 ? dayjs(this.searchFilter.ngayTaoBangKe[0]).format('YYYY-MM-DD') : null,
-    }
-    let res = await this.quanLyBangKeVatTuService.search(param);
+    await this.spinner.show();
+    let body = {
+      trangThai: this.STATUS.BAN_HANH,
+      paggingReq: {
+        "limit": this.pageSize,
+        "page": this.page - 1
+      },
+      loaiVthh: this.loaiVthh
+    };
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-      this.dataTableAll = cloneDeep(this.dataTable);
+      this.convertDataTable();
       this.totalRecord = data.totalElements;
     } else {
-      this.dataTable = [];
-      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    await this.spinner.hide();
   }
+
+  convertDataTable() {
+    this.dataTable.forEach(item => {
+      if (this.userService.isChiCuc()) {
+        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      } else {
+        let data = [];
+        item.dtlList.forEach(item => {
+          data = [...data, ...item.children];
+        })
+        item.detail = {
+          children: data
+        }
+      };
+    });
+    this.dataTable.forEach(item => {
+      item.detail.children.forEach(ddNhap => {
+        ddNhap.listBangKeVt.forEach(x => {
+          x.phieuNhapKho = ddNhap.listPhieuNhapKho.filter(item => item.soPhieuNhapKho == x.soPhieuNhapKho)[0];
+        });
+      })
+    });
+    console.log(this.dataTable);
+  }
+
 
   clearFilter() {
     this.searchFilter = {
@@ -172,7 +192,7 @@ export class BangKeNhapVatTuComponent extends BaseComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyBangKeVatTuService.delete(item.id).then((res) => {
+          this.quanLyBangKeVatTuService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,

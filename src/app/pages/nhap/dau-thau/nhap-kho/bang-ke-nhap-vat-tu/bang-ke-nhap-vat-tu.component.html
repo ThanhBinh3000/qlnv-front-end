@@ -66,10 +66,11 @@
             <th>Nhà kho</th>
             <th>Ngăn kho</th>
             <th>Lô kho</th>
+            <th>Số bảng kê nhập vật tư</th>
             <th>Số phiếu nhập kho</th>
             <th>Ngày nhập kho</th>
-            <th>{{ loaiVthh == '02' ? 'Số BB gửi hàng' : 'Số phiếu KTCL' }}</th>
-            <th>{{ loaiVthh == '02' ? 'Ngày lập phiếu' : 'Ngày giám định' }}</th>
+            <th>Số BB lấy mẫu/BG mẫu</th>
+            <th>Số BB gửi hàng</th>
             <th>Trạng thái</th>
             <th>Hành động</th>
           </tr>
@@ -83,7 +84,7 @@
               <td class="link bold">{{ item.soQd }}</td>
               <td class="bold">{{ item.namNhap }}</td>
               <td class="bold">{{ item.tgianNkho }}</td>
-              <td colspan="9"></td>
+              <td colspan="10"></td>
               <td>
                 <a (click)="redirectToChiTiet(false, 0,item.id)">
                   <i class="fa fa-plus"></i>
@@ -104,16 +105,15 @@
                   <td colspan="7"></td>
                 </tr>
                 <ng-container *ngIf="expandSet2.has(y)">
-                  <tr class="level-3" *ngFor="let dataPhieu of dataDdiem.listPhieuNhapKho">
+                  <tr class="level-3" *ngFor="let dataPhieu of dataDdiem.listBangKeVt">
                     <td></td>
                     <td></td>
                     <td colspan="8"></td>
-                    <td class="bold">{{dataPhieu.soPhieuNhapKho}}</td>
-                    <td>{{dataPhieu.ngayTao}}</td>
-                    <td>{{ loaiVthh == '02' ? dataPhieu.bienBanGuiHang?.soBienBanGuiHang :
-                      dataPhieu.phieuKiemTraCl?.soPhieu}}</td>
-                    <td>{{ (loaiVthh == '02' ? dataPhieu.bienBanGuiHang?.ngayTao : dataPhieu.phieuKiemTraCl?.ngayGdinh )
-                      | date: 'dd/MM/YYYY'}}</td>
+                    <td>{{ dataPhieu.soBangKe }}</td>
+                    <td>{{ dataPhieu.soPhieuNhapKho }}</td>
+                    <td>{{ dataPhieu.phieuNhapKho.ngayNhapKho | date : 'dd/MM/yyyy' }}</td>
+                    <td>{{ dataDdiem.bienBanLayMau.soBienBan }}</td>
+                    <td>{{ dataDdiem.bienBanGuiHang.soBienBanGuiHang }}</td>
                     <td>{{ dataPhieu.tenTrangThai }}</td>
                     <td>
                       <a *ngIf="dataPhieu.trangThai == STATUS.DA_DUYET_LDCC "
@@ -124,7 +124,7 @@
                         (click)="redirectToChiTiet(false, dataPhieu.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a *ngIf="dataPhieu.trangThai == STATUS.DU_THAO">
+                      <a *ngIf="dataPhieu.trangThai == STATUS.DU_THAO" (click)="xoaItem(dataPhieu)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
