@@ -6,12 +6,14 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { BaseComponent } from 'src/app/components/base/base.component';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
+import { BaseService } from 'src/app/services/base.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { HoSoKyThuatService } from 'src/app/services/hoSoKyThuat.service';
+import { HoSoKyThuatService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoKyThuat.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
@@ -20,8 +22,8 @@ import { Globals } from 'src/app/shared/globals';
   templateUrl: './ho-so-ky-thuat.component.html',
   styleUrls: ['./ho-so-ky-thuat.component.scss']
 })
-export class HoSoKyThuatComponent implements OnInit {
-  @Input() typeVthh: string;
+export class HoSoKyThuatComponent extends BaseComponent implements OnInit {
+  @Input() loaiVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
 
@@ -76,14 +78,14 @@ export class HoSoKyThuatComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-  ) { }
+  ) {
+    super()
+    super.ngOnInit();
+  }
 
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (!this.typeVthh || this.typeVthh == '') {
-        this.isTatCa = true;
-      }
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
@@ -129,19 +131,15 @@ export class HoSoKyThuatComponent implements OnInit {
   }
 
   async search() {
+    await this.spinner.show();
     let body = {
-      "capDvis": '3',
-      "maDvi": this.userInfo.MA_DVI,
-      "maVatTu": this.searchFilter.maVatTu,
-      "maVatTuCha": this.searchFilter.maVatTuCha,
-      "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1 ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD') : null,
-      "ngayKiemTraTuNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 0 ? dayjs(this.searchFilter.ngayTongHop[0]).format('YYYY-MM-DD') : null,
-      "pageSize": this.pageSize,
-      "pageNumber": this.page,
-      "soBienBan": this.searchFilter.soBienBan,
-      "soQdNhap": this.searchFilter.soQdNhap,
+      paggingReq: {
+        "limit": this.pageSize,
+        "page": this.page - 1
+      },
+      loaiVthh: this.loaiVthh
     };
-    let res = await this.hoSoKyThuatService.timKiem(body);
+    let res = await this.hoSoKyThuatService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -155,10 +153,11 @@ export class HoSoKyThuatComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    await this.spinner.hide();
   }
 
   selectHangHoa() {
-    let data = this.typeVthh;
+    let data = this.loaiVthh;
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,
@@ -253,7 +252,7 @@ export class HoSoKyThuatComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.hoSoKyThuatService.deleteData(item.id).then((res) => {
+          this.hoSoKyThuatService.delete(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -299,7 +298,7 @@ export class HoSoKyThuatComponent implements OnInit {
           "soQdNhap": this.searchFilter.soQdNhap,
         };
         this.hoSoKyThuatService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-ho-so-ky-thuat.xlsx'),
           );
@@ -335,7 +334,7 @@ export class HoSoKyThuatComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.hoSoKyThuatService.deleteMultiple({ ids: dataDelete });
+            let res = await this.hoSoKyThuatService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

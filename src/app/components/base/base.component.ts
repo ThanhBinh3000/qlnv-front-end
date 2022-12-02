@@ -16,7 +16,9 @@ export class BaseComponent implements OnInit {
   STATUS = STATUS
   formData: FormGroup
   constructor(
-  ) { }
+  ) {
+    this.ngOnInit();
+  }
 
   ngOnInit(): void {
     for (let i = -3; i < 23; i++) {
