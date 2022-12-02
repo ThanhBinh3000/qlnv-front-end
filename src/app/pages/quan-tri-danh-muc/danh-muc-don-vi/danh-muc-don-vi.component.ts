@@ -11,6 +11,8 @@ import {LOAI_DON_VI, TrangThaiHoatDong} from 'src/app/constants/status';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NewDonViComponent} from './new-don-vi/new-don-vi.component';
 import {NgxSpinnerService} from 'ngx-spinner';
+import {UserLogin} from "../../../models/userlogin";
+import {UserService} from "../../../services/user.service";
 
 
 @Component({
@@ -34,6 +36,7 @@ export class DanhMucDonViComponent implements OnInit {
   detailDonVi: FormGroup;
   levelNode: number = 0;
   isEditData: boolean = false;
+  userInfo : UserLogin
 
   constructor(
     private router: Router,
@@ -43,6 +46,7 @@ export class DanhMucDonViComponent implements OnInit {
     private helperService: HelperService,
     private _modalService: NzModalService,
     private spinner: NgxSpinnerService,
+    public userService : UserService
   ) {
     this.detailDonVi = this.formBuilder.group({
       id: [''],
@@ -61,6 +65,7 @@ export class DanhMucDonViComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
+    this.userInfo = this.userService.getUserLogin();
     await Promise.all([
       this.layTatCaDonViTheoTree()
     ]);
