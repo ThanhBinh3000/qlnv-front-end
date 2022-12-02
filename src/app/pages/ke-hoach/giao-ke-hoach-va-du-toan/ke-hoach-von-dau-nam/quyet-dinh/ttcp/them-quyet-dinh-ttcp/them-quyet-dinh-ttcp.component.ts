@@ -104,7 +104,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         for (let item of data.listChiTangToanBoNganh) {
           var obj = {
             "stt": item.stt,
-            "maCha": item.maBn == '01' ? item.maBn : null,
+            "maCha": item.maBn == 'BTC' ? item.maBn : null,
             "maBn": item.maBn,
             "tenBn": item.tenBn,
             "isSum": false,
@@ -335,6 +335,7 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
         dataEdit: data,
         isView: isView,
         nam: this.formData.get('namQd').value,
+        dataToanBn: this.dataTableAllBn
       },
     });
     modalQD.afterClose.subscribe((data) => {

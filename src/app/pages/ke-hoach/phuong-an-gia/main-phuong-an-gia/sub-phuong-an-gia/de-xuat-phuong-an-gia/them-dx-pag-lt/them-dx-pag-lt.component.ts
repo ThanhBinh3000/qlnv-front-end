@@ -738,6 +738,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     let arr = this.listQdCtKh.filter(item => item.soQd == event)
     if (arr) {
       this.detailNhaphang = arr[0]
+      this.formData.patchValue({
+        soLuong : this.detailNhaphang.soLuong
+      })
     }
   }
 }
