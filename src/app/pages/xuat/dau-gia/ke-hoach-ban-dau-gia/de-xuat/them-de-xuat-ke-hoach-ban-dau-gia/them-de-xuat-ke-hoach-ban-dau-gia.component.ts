@@ -135,12 +135,13 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       tgianDkienTu: [null],
       tgianDkienDen: [null],
       loaiHdong: [null, [Validators.required]],
-      tgianKyHdong: [null, [Validators.required]],
       tgianTtoan: [null, [Validators.required]],
       tgianGnhan: [null],
       thongBaoKh: [null, [Validators.required]],
       khoanTienDatTruoc: [null],
       tongSoLuong: [null],
+      tongTienKdienDonGia: [null],
+      tongTienDatTruocDonGia: [null],
       tongTienKdiem: [null],
       tongTienDatTruoc: [null],
       ghiChu: [null],
@@ -157,11 +158,11 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       slHdDaKy: [null],
       ldoTuChoi: [null],
       ngayKy: [null],
-      tgianKyHdongGhiChu: [null],
       tgianTtoanGhiChu: [null],
       tgianGnhanGhiChu: [null],
       pthucTtoan: [null, [Validators.required]],
       pthucGnhan: [null],
+
     });
   }
 
@@ -192,7 +193,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
     if (resNx.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNx = resNx.data.filter(item => item.phanLoai == 'V');
+      this.listLoaiHinhNx = resNx.data.filter(item => item.phanLoai == 'X');
     }
     // kiểu nhập xuất
     this.listKieuNx = [];

@@ -55,11 +55,12 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       id: [null],
       maDvi: [null, [Validators.required]],
       tenDvi: [null],
-      diaChi:[null],
+      diaChi: [null],
+      maDiemKho: [null],
+      diaDiemKho: [null],
+      tenDiemKho: [null],
       maNhaKho: [null],
       tenNhakho: [null],
-      maDiemKho: [null],
-      tenDiemKho: [null],
       maNganKho: [null],
       tenNganKho: [null],
       maLoKho: [null],
@@ -69,16 +70,17 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       cloaiVthh: [null],
       tenCloaiVthh: [null],
       maDviTsan: [null],
+      duDau: [null],
       soLuong: [null],
-      dviTinh: [null],
       giaKhongVat: [null],
       giaKhoiDiem: [null],
+      donGiaVat: [null],
+      giaKhoiDiemDduyet: [null],
       tienDatTruoc: [null],
+      tienDatTruocDduyet: [null],
       soLuongChiTieu: [null],
       soLuongKh: [null],
-      duDau: [null],
-      diaDiemKho: [null],
-      giaDuocDuyet: [null],
+      dviTinh: [null],
       children: [null],
     });
   }
@@ -391,6 +393,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
   validateSoLuong(isAdd?) {
     const soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKh
+    const soLuong1 = this.thongtinPhanLo.duDau
+    console.log(soLuong1, 99999)
     let soLuong = 0
     if (isAdd) {
       soLuong += this.thongtinPhanLo.soLuong;
@@ -401,9 +405,15 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     if (soLuong > soLuongConLai) {
       this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu ")
       return false
+    }
+    if (soLuong > soLuong1) {
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá Tồn kho ")
+      return false
+
     } else {
       return true;
     }
+
   }
 
   clearDiemKho() {
