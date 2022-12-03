@@ -55,6 +55,7 @@ export class DanhMucDonViComponent implements OnInit {
       maDvi: [''],
       tenVietTat: [''],
       diaChi: [''],
+      capDvi: [''],
       fax: [''],
       sdt: [''],
       trangThai: [''],
@@ -119,6 +120,7 @@ export class DanhMucDonViComponent implements OnInit {
             tenVietTat: res.data.tenVietTat,
             tenDvi: res.data.tenDvi,
             maDvi: res.data.maDvi,
+            capDvi: res.data.capDvi,
             diaChi: res.data.diaChi,
             sdt: res.data.sdt,
             fax: res.data.fax,
@@ -144,10 +146,11 @@ export class DanhMucDonViComponent implements OnInit {
     if (this.detailDonVi.invalid) {
       return;
     }
+    console.log("TYPEEEEEEEEEEEE: " + this.detailDonVi.value.type);
     let body = {
       ...this.detailDonVi.value,
       trangThai: this.detailDonVi.value.trangThai ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG,
-      type: this.detailDonVi.value.type ? LOAI_DON_VI.PB : LOAI_DON_VI.MLK
+      type: this.detailDonVi.value.type ? this.detailDonVi.value.type : (this.detailDonVi.value.capDvi > 2 ? LOAI_DON_VI.MLK : null)
     };
     this._modalService.confirm({
       nzClosable: false,
