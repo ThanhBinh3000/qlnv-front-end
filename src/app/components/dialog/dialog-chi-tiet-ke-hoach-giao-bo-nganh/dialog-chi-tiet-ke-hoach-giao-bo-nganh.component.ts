@@ -151,13 +151,13 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     } else {
       this.errorBn = false;
     }
-
-    if (!this.keHoach.tongTien) {
-      this.errorTt = true;
-      return false;
-    } else {
-      this.errorTt = false;
-    }
+    //
+    // if (!this.keHoach.tongTien) {
+    //   this.errorTt = true;
+    //   return false;
+    // } else {
+    //   this.errorTt = false;
+    // }
     return true;
   }
 

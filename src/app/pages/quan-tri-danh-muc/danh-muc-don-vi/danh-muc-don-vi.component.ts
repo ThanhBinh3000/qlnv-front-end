@@ -146,11 +146,10 @@ export class DanhMucDonViComponent implements OnInit {
     if (this.detailDonVi.invalid) {
       return;
     }
-    console.log("TYPEEEEEEEEEEEE: " + this.detailDonVi.value.type);
     let body = {
       ...this.detailDonVi.value,
       trangThai: this.detailDonVi.value.trangThai ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG,
-      type: this.detailDonVi.value.type ? this.detailDonVi.value.type : (this.detailDonVi.value.capDvi > 2 ? LOAI_DON_VI.MLK : null)
+      type: this.detailDonVi.value.type ? LOAI_DON_VI.PB  : (this.detailDonVi.value.capDvi > 2 ? LOAI_DON_VI.MLK : null)
     };
     this._modalService.confirm({
       nzClosable: false,
