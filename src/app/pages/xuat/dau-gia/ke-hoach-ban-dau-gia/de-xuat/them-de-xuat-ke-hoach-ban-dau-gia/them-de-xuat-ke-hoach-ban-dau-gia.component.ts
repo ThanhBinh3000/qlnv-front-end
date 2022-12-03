@@ -176,7 +176,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       });
     }
     if (this.idInput > 0) {
-      await this.getDetail(this.idInput);
+      // await this.getDetail(this.idInput);
     } else {
       this.initForm();
     }
@@ -358,6 +358,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       } else {
         this.listOfData = [...this.listOfData, res.value];
       }
+      console.log(this.listOfData, 77777)
       let tongSoLuong: number = 0;
       let tongTienKdiem: number = 0;
       let tongTienKdienDonGia: number = 0;
@@ -663,11 +664,9 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    await this.spinner.show();
     if (changes) {
       await this.getDetail(this.idInput);
     };
-    await this.spinner.hide();
   }
 
   isDisbleForm(): boolean {
