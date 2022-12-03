@@ -110,6 +110,9 @@ export class DanhSachPhanLo {
     soLuongChiTieu: number;
     soLuongKh: number;
     dviTinh: string;
+    tongSoLuong: number;
+    tongTienDatTruoc: number;
+    tongTienDatTruocDd: number;
     idVirtual?: number;
     isEdit: boolean;
     children?: DanhSachPhanLo[];
