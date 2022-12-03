@@ -2,40 +2,40 @@
   <div nz-row [nzGutter]="24">
     <div nz-col [nzSpan]="12">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true"> Mã lô kho </nz-form-label>
+        <nz-form-label  [nzNoColon]="true"> Mã lô kho </nz-form-label>
         <nz-form-control [nzErrorTip]="error">
           <nz-input-group>
-            <input nz-input [readonly]="true" formControlName="maNganLo" >
+            <input nz-input [readonly]="true" formControlName="maNganlo" >
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
     </div>
       <div nz-col [nzSpan]="12">
         <nz-form-item>
-          <nz-form-label nzRequired>Tên lô kho</nz-form-label>
+          <nz-form-label >Tên lô kho</nz-form-label>
           <nz-form-control>
             <nz-input-group>
-              <input nz-input formControlName="tenNganLo" [readonly]="true"/>
+              <input nz-input formControlName="tenNganlo" [readonly]="true"/>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col [nzSpan]="12">
         <nz-form-item>
-          <nz-form-label nzRequired>Tích lượng đã sử dụng (tấn kho) - LT</nz-form-label>
+          <nz-form-label nzRequired>Tích lượng đã sử dụng - LT</nz-form-label>
           <nz-form-control>
-            <nz-input-group>
-              <input nz-input formControlName="tichLuongDaSdLt"/>
+            <nz-input-group [nzAddOnAfter]="dvi">
+              <nz-input-number  formControlName="tichLuongDaSdLt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
       </div>
       <div nz-col [nzSpan]="12">
         <nz-form-item>
-          <nz-form-label nzRequired>Tích lượng đã sử dụng (tấn kho) - VT</nz-form-label>
+          <nz-form-label nzRequired>Tích lượng đã sử dụng - VT</nz-form-label>
           <nz-form-control>
-            <nz-input-group>
-              <input nz-input formControlName="tichLuongDaSdVt"/>
+            <nz-input-group [nzAddOnAfter]="dvi">
+              <nz-input-number  formControlName="tichLuongDaSdVt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -45,7 +45,7 @@
           <nz-form-label nzRequired>Thể tích đã sử dụng - LT</nz-form-label>
           <nz-form-control>
             <nz-input-group [nzAddOnAfter]="m3">
-              <input nz-input formControlName="theTichDaSdLt">
+              <nz-input-number  formControlName="theTichDaSdLt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -55,7 +55,7 @@
           <nz-form-label nzRequired>Thể tích đã sử dụng - VT</nz-form-label>
           <nz-form-control>
             <nz-input-group  [nzAddOnAfter]="m3">
-              <input  formControlName="theTichDaSdVt" nz-input>
+              <nz-input-number  formControlName="theTichDaSdVt" [nzSize]="'small'" nz-input [nzMin]="0"></nz-input-number>
             </nz-input-group>
           </nz-form-control>
         </nz-form-item>
@@ -64,8 +64,8 @@
         <nz-form-item>
           <nz-form-label nzRequired>Loại hàng hóa</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="loaiVthh">
-              <nz-option></nz-option>
+            <nz-select formControlName="loaiVthh" (ngModelChange)="onChangeLoaiVthh($event)">
+              <nz-option *ngFor="let item of listVthh" [nzLabel]="item.giaTri" [nzValue]="item.ma"></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -74,8 +74,8 @@
         <nz-form-item>
           <nz-form-label nzRequired>Chủng loại hàng hóa</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="cloaiVthh">
-              <nz-option></nz-option>
+            <nz-select formControlName="cloaiVthh" (ngModelChange)="onChangCloaiVthh($event)">
+              <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten" [nzValue]="item.ma" ></nz-option>
             </nz-select>
           </nz-form-control>
         </nz-form-item>
@@ -102,17 +102,19 @@
       </div>
     <div nz-col [nzSpan]="6">
       <nz-form-item>
-        <nz-form-label nzRequired>Thời điểm nhập kho</nz-form-label>
+        <nz-form-label >Thời điểm nhập kho (năm)</nz-form-label>
         <nz-form-control>
-          <nz-date-picker formControlName="ngayNhapKho"></nz-date-picker>
+          <nz-select formControlName="namNhap">
+            <nz-option *ngFor="let item of dsNam" [nzLabel]="item" [nzValue]="item"></nz-option>
+          </nz-select>
         </nz-form-control>
       </nz-form-item>
     </div>
       <div nz-col [nzSpan]="6">
         <nz-form-item>
-          <nz-form-label nzRequired>Ngày nhập đầy cuối cùng</nz-form-label>
+          <nz-form-label > Ngày nhập đầy cuối cùng </nz-form-label>
           <nz-form-control>
-            <nz-date-picker formControlName="ngayNhapCuoi"></nz-date-picker>
+            <nz-date-picker [nzDisabled]="true" formControlName="ngayNhapCuoi"></nz-date-picker>
           </nz-form-control>
         </nz-form-item>
       </div>

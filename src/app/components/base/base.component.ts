@@ -17,7 +17,6 @@ export class BaseComponent implements OnInit {
   formData: FormGroup
   constructor(
   ) {
-    this.ngOnInit();
   }
 
   ngOnInit(): void {

@@ -473,7 +473,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
         }
         if (this.formData.value.loaiGia == "LG04") {
           if (this.formData.value.giaDeNghi < this.detailNhaphang.donGiaVat && this.formData.value.loaiGia == 'LG04') {
-            this.notification.error(MESSAGE.ERROR, "Sai!!!")
+            this.notification.error(MESSAGE.ERROR, "Đơn giá VAT không được ít hơn so với quyết định giao kế hoạch mua bán!!!!")
             this.spinner.hide();
             return;
           }
@@ -738,6 +738,9 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     let arr = this.listQdCtKh.filter(item => item.soQd == event)
     if (arr) {
       this.detailNhaphang = arr[0]
+      this.formData.patchValue({
+        soLuong : this.detailNhaphang.soLuong
+      })
     }
   }
 }

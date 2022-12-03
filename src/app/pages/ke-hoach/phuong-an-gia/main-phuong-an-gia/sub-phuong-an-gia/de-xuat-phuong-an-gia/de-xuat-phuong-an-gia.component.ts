@@ -101,7 +101,7 @@ export class DeXuatPhuongAnGiaComponent implements OnInit {
 
   checkRole(trangThai) {
     let check = true;
-    if (this.userService.isTongCuc() && trangThai == STATUS.DU_THAO || this.userService.isTongCuc() && trangThai == STATUS.TU_CHOI_LDC || this.userService.isTongCuc() && trangThai == STATUS.TU_CHOI_TP) {
+    if ((this.userService.isTongCuc() && trangThai == STATUS.DU_THAO || this.userService.isTongCuc() && trangThai == STATUS.TU_CHOI_LDC || this.userService.isTongCuc() && trangThai == STATUS.TU_CHOI_TP) && this.pagType == 'LT') {
       check = false;
     }
     return check;
