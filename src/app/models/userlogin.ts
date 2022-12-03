@@ -11,7 +11,8 @@ export class UserLogin {
   MA_TR: string;
   DON_VI: any;
   TEN_DAY_DU: any;
-  TEN_PHONG_BAN: string
+  TEN_PHONG_BAN: string;
+  MA_PHONG_BAN: string;
   constructor(initObj: any, dvql: any) {
     if (initObj) {
       for (var key in initObj) {
