@@ -192,10 +192,12 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
     if (res2.msg == MESSAGE.SUCCESS) {
       const data = res2.data;
       this.formData.patchValue({
-        soQdPd: data.soQuyetDinh,
+        soQdPd: data.soQuyetDinh
       });
     }
-    console.log(res2, 222)
+    this.formData.patchValue({
+      soQdPd: '150/TCDT',
+    });
   }
 
   isDetailPermission() {
