@@ -114,7 +114,7 @@
               [nzShowPagination]="false">
       <thead>
       <tr>
-        <th class="text-center" style="width: 5%;">STT</th>
+        <th class="text-center" style="width: 5%;">STT111</th>
         <th class="text-center" style="width: 75%;">Bộ</th>
         <th class="text-center" style="width: 15%;">Kế hoạch năm {{formData.value.namQd}}</th>
       </tr>
@@ -130,8 +130,7 @@
         <td *ngIf="data.maCha">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - {{ data.tenBn }}</td>
         <td *ngIf="!data.maCha"> {{ data.tenBn }}</td>
         <td *ngIf="!data.isSum" class="text-right">
-          <input currencyMask (ngModelChange)="onInputNumberBNChange()" [(ngModel)]="data.tongSo" [options]="options"/>
-          <!--          <input (input)="onInputNumberBNChange()" type="number" nz-input [(ngModel)]="data.tongSo"  />-->
+          <input currencyMask (change)="onInputNumberBNChange()"  (keypress)="onInputNumberBNChange()" (keydown)="onInputNumberBNChange()" (keyup)="onInputNumberBNChange()" [(ngModel)]="data.tongSo" [options]="options"/>
         </td>
         <td *ngIf="data.isSum" class="text-right">{{totalBtcKh  | number : '1.0-1' : 'vi_VN'}}</td>
       </tr>
