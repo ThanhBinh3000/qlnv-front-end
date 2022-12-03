@@ -123,12 +123,11 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         maNhaKho: this.listOfData[0].maNhaKho,
         soLuongChiTieu: this.listOfData[0].soLuongChiTieu,
         soLuongKh: this.listOfData[0].soLuongKh,
-        diaChi: curChiCuc.diaChi
+        diaDiemKho: this.listOfData[0].diaDiemKho
 
       })
       this._modalRef.close(this.formData);
     }
-    console.log(this.listOfData, 9999)
   }
 
 
