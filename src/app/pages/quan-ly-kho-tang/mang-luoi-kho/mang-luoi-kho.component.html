@@ -966,8 +966,8 @@
                     <nz-form-item>
                       <nz-form-label >Tổng thể tích thiết kế - LT</nz-form-label>
                       <nz-form-control>
-                        <nz-input-group [nzAddOnAfter]="theTich">
-                          <input nz-input />
+                        <nz-input-group  [nzAddOnAfter]="theTich">
+                          <input nz-input [readOnly]="!isEditData" />
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -977,7 +977,7 @@
                       <nz-form-label >Tổng thể tích thiết kế - VT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
-                          <input nz-input />
+                          <input nz-input [readOnly]="!isEditData" />
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -987,7 +987,7 @@
                       <nz-form-label >Tổng thế tích đã sử dụng - LT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
-                          <input nz-input/>
+                          <input nz-input [readOnly]="!isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -997,7 +997,7 @@
                       <nz-form-label >Tổng thế tích đã sử dụng - VT</nz-form-label>
                       <nz-form-control>
                         <nz-input-group [nzAddOnAfter]="theTich">
-                          <input nz-input/>
+                          <input nz-input [readOnly]="!isEditData"/>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
