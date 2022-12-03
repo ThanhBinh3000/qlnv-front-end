@@ -475,10 +475,10 @@
             <tr>
               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
               <td colspan="7">{{item.tenDvi}}</td>
-              <td>{{item.tongSoLuong}}</td>
+              <td>{{item.tongSoLuong | number : '1.0-1' : 'vi_VN' }}</td>
               <td colspan="5"></td>
-              <td>{{item.tongTienDatTruoc}}</td>
-              <td>{{item.tongTienDatTruocDd}}</td>
+              <td>{{item.tongTienDatTruoc | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{item.tongTienDatTruocDd | number : '1.0-1' : 'vi_VN' }}</td>
               <td></td>
 
             </tr>

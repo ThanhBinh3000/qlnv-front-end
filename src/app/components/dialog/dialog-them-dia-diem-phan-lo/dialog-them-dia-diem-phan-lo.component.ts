@@ -474,8 +474,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
 
-
-
   calculatorGiaKhoiDiem() {
     this.formData.patchValue({
       giaKhoiDiem:
@@ -559,7 +557,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         return prev;
       }, 0);
       this.formData.get('soLuong').setValue(sum);
-      this.calculatorGiaKhoiDiem();
+      // this.calculatorGiaKhoiDiem();
       return sum;
     }
   }
@@ -571,7 +569,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         return prev;
       }, 0);
       this.formData.get('duDau').setValue(sum);
-      this.calculatorGiaKhoiDiem();
+      // this.calculatorGiaKhoiDiem();
       return sum;
     }
   }
@@ -583,7 +581,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         return prev;
       }, 0);
       this.formData.get('tienDatTruocDduyet').setValue(sum);
-      this.calculatorGiaKhoiDiem();
+      // this.calculatorGiaKhoiDiem();
       return sum;
     }
   }
