@@ -96,7 +96,7 @@ export class DialogThongTinCanBoComponent implements OnInit {
         this.optionsDonVi = this.optionsDonVi.filter(s => s.type != 'PB');
         this.optionsPhongBan = this.optionsPhongBan.filter(s => s.type == 'PB');
         // nếu dữ liệu detail có
-        if (this.dataEdit.dvql && this.dataEdit.department) {
+        if (this.dataEdit?.dvql && this.dataEdit?.department) {
           let dv = res.data.find(s => s.maDvi == this.formData.get('dvql').value);
           let pb = res.data.find(s => s.maDvi == this.formData.get('department').value);
           this.formData.patchValue({
