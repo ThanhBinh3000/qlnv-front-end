@@ -398,6 +398,10 @@ export class BieuMau18Component implements OnInit {
             }
         })
     }
+    checkEdit(stt: string) {
+        const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
+        return lstTemp.every(e => !e.stt.startsWith(stt));
+    }
 
     doPrint() {
         const WindowPrt = window.open(
