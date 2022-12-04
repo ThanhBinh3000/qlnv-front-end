@@ -36,7 +36,7 @@
       <div class="title-chi-tieu">
         <span
           [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC ? 'status-xanh' : 'status-do' ">{{formData.value.tenTrangThai}}</span>
-        <span class="title-form">Biên bản nhập đầy kho</span>
+        <span class="title-form">{{ loaiVthh == '02' ? 'Biên bản kết thúc nhập kho' : 'Biên bản nhập đầy kho' }}</span>
       </div>
     </div>
   </div>
@@ -62,7 +62,7 @@
               Năm
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="nam" (ngModelChange)="loadSoQuyetDinh()" [nzDisabled]="true">
+              <nz-select formControlName="nam" [nzDisabled]="true">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>

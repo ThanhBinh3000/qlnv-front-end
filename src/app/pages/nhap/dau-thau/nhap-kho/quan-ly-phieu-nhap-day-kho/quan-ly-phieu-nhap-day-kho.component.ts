@@ -7,7 +7,7 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
+import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapDayKho.service';
 import * as dayjs from 'dayjs';
 import { LOAI_HANG_DTQG, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -344,7 +344,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
           "str": null,
           "trangThai": null
         }
-        this.quanLyPhieuNhapDayKhoService.exportList(body)
+        this.quanLyPhieuNhapDayKhoService.export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-phieu-nhap-day-kho.xlsx'),
           );
@@ -380,7 +380,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyPhieuNhapDayKhoService.deleteMultiple({ ids: dataDelete });
+            let res = await this.quanLyPhieuNhapDayKhoService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
