@@ -25,7 +25,7 @@ import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-ha
   styleUrls: ['./quan-ly-phieu-nhap-day-kho.component.scss'],
 })
 export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
 
   searchFilter = {
     soQd: '',
@@ -45,7 +45,6 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   listNganKho: any[] = [];
   listNganLo: any[] = [];
 
-  loaiVthh: string;
   loaiStr: string;
   maVthh: string;
   idVthh: number;
@@ -95,9 +94,6 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (!this.typeVthh || this.typeVthh == '') {
-        this.isTatCa = true;
-      }
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
         this.search(),
@@ -151,6 +147,7 @@ export class QuanLyPhieuNhapDayKhoComponent implements OnInit {
         "limit": this.pageSize,
         "page": this.page - 1
       },
+      loaiVthh: this.loaiVthh
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

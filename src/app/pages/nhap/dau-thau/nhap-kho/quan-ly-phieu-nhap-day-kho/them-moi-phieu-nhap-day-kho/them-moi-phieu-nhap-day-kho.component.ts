@@ -37,7 +37,7 @@ import { HelperService } from 'src/app/services/helper.service';
 export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
   @Input() isTatCa: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -45,8 +45,6 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
   userInfo: UserLogin;
   detail: any = {};
 
-  loaiVthh: string;
-  loaiStr: string;
   maVthh: string;
   routerVthh: string;
 
@@ -123,6 +121,8 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
+      bienBanChuanBiKho: [''],
+      bienBanLayMau: [''],
       tenNguoiTao: [''],
       tenNguoiPduyet: [''],
       tenKeToan: [],
@@ -142,7 +142,6 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
       super.ngOnInit();
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
-        this.loadSoQuyetDinh(),
       ]);
       if (this.id > 0) {
         this.loadPhieuNhapDayKho();
@@ -166,14 +165,15 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
       maQhns: this.userInfo.DON_VI.maQhns,
       trangThai: STATUS.DU_THAO,
       tenTrangThai: 'Dự thảo',
-      tenNguoiTao: this.userInfo.sub
+      tenNguoiTao: this.userInfo.TEN_DAY_DU
     });
   }
 
   async loadSoQuyetDinh() {
+    this.spinner.show();
     let body = {
       "maDvi": this.userInfo.MA_DVI,
-      "maVthh": this.typeVthh,
+      "loaiVthh": this.loaiVthh,
       "paggingReq": {
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
@@ -188,9 +188,11 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    this.spinner.hide();
   }
 
   async openDialogSoQd() {
+    await this.loadSoQuyetDinh();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
       nzContent: DialogTableSelectionComponent,
@@ -258,14 +260,25 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
 
   bindingDataDdNhap(data, isDetail?: boolean) {
     if (!isDetail) {
-      this.dataTable = data.listPhieuKtraCl;
-      this.dataTable.forEach(item => {
-        item.soPhieuNhapKho = item.phieuNhapKho?.soPhieuNhapKho;
-        item.soPhieuKtraCl = item.soPhieu;
-        item.soBangKe = item.phieuNhapKho?.bangKeCanHang?.soBangKe;
-        item.ngayNhap = item.phieuNhapKho?.ngayTao;
-        item.soLuong = item.soLuongNhapKho;
-      })
+      if (this.loaiVthh.startsWith('02')) {
+        this.dataTable = data.listBangKeVt;
+        this.dataTable.forEach(item => {
+          let itemPnk = data.listPhieuNhapKho.filter(x => x.soPhieuNhapKho == item.soPhieuNhapKho)[0];
+          item.soPhieuNhapKho = item.soPhieuNhapKho;
+          item.soBangKe = item.soBangKe;
+          item.ngayNhap = itemPnk.ngayTao;
+          item.soLuong = itemPnk.soLuongNhapKho;
+        })
+      } else {
+        this.dataTable = data.listPhieuKtraCl;
+        this.dataTable.forEach(item => {
+          item.soPhieuNhapKho = item.phieuNhapKho?.soPhieuNhapKho;
+          item.soPhieuKtraCl = item.soPhieu;
+          item.soBangKe = item.phieuNhapKho?.bangKeCanHang?.soBangKe;
+          item.ngayNhap = item.phieuNhapKho?.ngayTao;
+          item.soLuong = item.soLuongNhapKho;
+        })
+      }
       let dataFirst = new Date();
       this.dataTable.forEach(item => {
         let dataCompare = new Date(item.ngayNhap);
@@ -288,8 +301,10 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
       tenNganKho: data.tenNganKho,
       maLoKho: data.maLoKho,
       tenLoKho: data.tenLoKho,
-      soLuongNhapKho: data.soLuong * 1000,
-      soLuong: data.soLuong
+      soLuongNhapKho: this.loaiVthh == '02' ? data.soLuong : data.soLuong * 1000,
+      soLuong: data.soLuong,
+      bienBanChuanBiKho: data.bienBanChuanBiKho?.soBienBan,
+      bienBanLayMau: data.bienBanLayMau?.soBienBan
     });
   }
 
