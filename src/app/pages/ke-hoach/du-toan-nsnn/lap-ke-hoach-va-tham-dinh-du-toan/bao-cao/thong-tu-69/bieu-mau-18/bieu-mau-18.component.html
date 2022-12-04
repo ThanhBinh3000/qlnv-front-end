@@ -104,7 +104,7 @@
                         <td>{{displayValue(data.ncauChiChiaRaChiCs3)}}</td>
                         <td>{{displayValue(data.ncauChiChiaRaChiMoi3)}}</td>
                         <td [hidden]="status">
-                            <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                            <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </td>
                     </ng-container>
                     <ng-template #editTemplate>
