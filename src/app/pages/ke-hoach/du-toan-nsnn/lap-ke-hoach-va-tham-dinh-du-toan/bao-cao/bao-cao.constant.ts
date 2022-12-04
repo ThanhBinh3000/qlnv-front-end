@@ -43,7 +43,7 @@ export const PHU_LUC = [
         status: false,
     },
     {
-        id: 'pl08',
+        id: 'plda',
         tenDm: 'Phương án phân bổ kế hoạch vốn đầu tư công nguồn NSNN',
         tenPl: 'Phụ lục dự án',
         status: false,

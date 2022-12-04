@@ -19,6 +19,25 @@ import { Globals } from 'src/app/shared/globals';
 import { LTD, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { PHU_LUC } from './bao-cao.constant';
+import { PhuLuc01Component } from './phu-luc/phu-luc-01/phu-luc-01.component';
+import { PhuLuc02Component } from './phu-luc/phu-luc-02/phu-luc-02.component';
+import { PhuLuc03Component } from './phu-luc/phu-luc-03/phu-luc-03.component';
+import { PhuLuc04Component } from './phu-luc/phu-luc-04/phu-luc-04.component';
+import { PhuLuc05Component } from './phu-luc/phu-luc-05/phu-luc-05.component';
+import { PhuLuc06Component } from './phu-luc/phu-luc-06/phu-luc-06.component';
+import { PhuLuc07Component } from './phu-luc/phu-luc-07/phu-luc-07.component';
+import { PhuLucDuAnComponent } from './phu-luc/phu-luc-du-an/phu-luc-du-an.component';
+import { BieuMau131Component } from './thong-tu-342/bieu-mau-13-1/bieu-mau-13-1.component';
+import { BieuMau1310Component } from './thong-tu-342/bieu-mau-13-10/bieu-mau-13-10.component';
+import { BieuMau133Component } from './thong-tu-342/bieu-mau-13-3/bieu-mau-13-3.component';
+import { BieuMau138Component } from './thong-tu-342/bieu-mau-13-8/bieu-mau-13-8.component';
+import { BieuMau140Component } from './thong-tu-342/bieu-mau-14-0/bieu-mau-14-0.component';
+import { BieuMau151Component } from './thong-tu-342/bieu-mau-15-1/bieu-mau-15-1.component';
+import { BieuMau152Component } from './thong-tu-342/bieu-mau-15-2/bieu-mau-15-2.component';
+import { BieuMau13Component } from './thong-tu-69/bieu-mau-13/bieu-mau-13.component';
+import { BieuMau14Component } from './thong-tu-69/bieu-mau-14/bieu-mau-14.component';
+import { BieuMau16Component } from './thong-tu-69/bieu-mau-16/bieu-mau-16.component';
+import { BieuMau17Component } from './thong-tu-69/bieu-mau-17/bieu-mau-17.component';
 import { BieuMau18Component } from './thong-tu-69/bieu-mau-18/bieu-mau-18.component';
 
 export class ItemCongVan {
@@ -745,6 +764,66 @@ export class BaoCaoComponent implements OnInit {
         //const nzContent = BieuMau18Component;
         let nzContent: ComponentType<any>;
         switch (formDetail.maBieuMau) {
+            //phu luc
+            case 'pl01':
+                nzContent = PhuLuc01Component;
+                break;
+            case 'pl02':
+                nzContent = PhuLuc02Component;
+                break;
+            case 'pl03':
+                nzContent = PhuLuc03Component;
+                break;
+            case 'pl04':
+                nzContent = PhuLuc04Component;
+                break;
+            case 'pl05':
+                nzContent = PhuLuc05Component;
+                break;
+            case 'pl06':
+                nzContent = PhuLuc06Component;
+                break;
+            case 'pl07':
+                nzContent = PhuLuc07Component;
+                break;
+            case 'plda':
+                nzContent = PhuLucDuAnComponent;
+                break;
+            //thong tu 342
+            case 'TT342_13.1':
+                nzContent = BieuMau131Component;
+                break;
+            case 'TT342_13.3':
+                nzContent = BieuMau133Component;
+                break;
+            case 'TT342_13.8':
+                nzContent = BieuMau138Component;
+                break;
+            case 'TT342_13.10':
+                nzContent = BieuMau1310Component;
+                break;
+            case 'TT342_14':
+                nzContent = BieuMau140Component;
+                break;
+            case 'TT342_15.1':
+                nzContent = BieuMau151Component;
+                break;
+            case 'TT342_15.2':
+                nzContent = BieuMau152Component;
+                break;
+            // thong tu 69
+            case 'TT69_13':
+                nzContent = BieuMau13Component;
+                break;
+            case 'TT69_14':
+                nzContent = BieuMau14Component;
+                break;
+            case 'TT69_16':
+                nzContent = BieuMau16Component;
+                break;
+            case 'TT69_17':
+                nzContent = BieuMau17Component;
+                break;
             case 'TT69_18':
                 nzContent = BieuMau18Component;
                 break;
