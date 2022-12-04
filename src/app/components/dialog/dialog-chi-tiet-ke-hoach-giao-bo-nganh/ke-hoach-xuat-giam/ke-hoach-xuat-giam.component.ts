@@ -13,6 +13,7 @@ import {MESSAGE} from 'src/app/constants/message';
 export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   @Input() maBoNganh: string;
   @Input() tab: string;
+  @Input() tabRadio: string;
   @Input()
   dsHangHoa = [];
   @Input()
@@ -36,13 +37,13 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
 
   tongSoVT: number = 0;
   tongSoLT: number = 0;
-  tongSoBnKhac: number = 0;
 
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
   dsDonViTinh = [];
   dsKeHoachNam = [];
+  listTongGiaTriBnKhac: { [key: string]: { tongSo: any } } = {};
 
   constructor(
     private modal: NzModalService,
@@ -61,8 +62,8 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
       if (item.maBn == '01' && !item.isSum && item.stt == 3) {
         this.tongSoVT = item.tongSo;
       }
-      if (item.maBn == this.maBoNganh && !item.isSum) {
-        this.tongSoBnKhac = item.tongSo;
+      if (!item.isSum) {
+        this.listTongGiaTriBnKhac[item.maBn] = {tongSo : item.tongSo};
       }
     }
   }
