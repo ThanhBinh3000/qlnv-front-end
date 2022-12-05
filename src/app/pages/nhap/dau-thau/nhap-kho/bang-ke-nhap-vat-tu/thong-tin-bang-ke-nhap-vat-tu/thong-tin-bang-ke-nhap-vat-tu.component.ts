@@ -373,7 +373,7 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
         mess = 'Bạn có muối gửi duyệt ?'
         break;
       }
-      case STATUS.TU_CHOI_TBP_KTBQ: {
+      case STATUS.CHO_DUYET_TBP_KTBQ: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         mess = 'Bạn có chắc chắn muốn phê duyệt ?'
         break;
