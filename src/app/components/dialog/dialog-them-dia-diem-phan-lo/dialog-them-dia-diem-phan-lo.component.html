@@ -36,11 +36,11 @@
         </div>
         <div nz-col [nzSpan]="5">
             <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Tổng SL xuất bán đề xuất </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán đề xuất </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                     <nz-input-number [nzDisabled]="true" formControlName="soLuongKh" [nzMin]="1"
                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                        (input)="calculatorGiaKhoiDiem()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </nz-form-control>
             </nz-form-item>
