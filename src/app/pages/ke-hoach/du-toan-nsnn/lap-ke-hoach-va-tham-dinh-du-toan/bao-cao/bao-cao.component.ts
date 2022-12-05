@@ -835,6 +835,7 @@ export class BaoCaoComponent implements OnInit {
         const modalAppendix = this.modal.create({
             nzTitle: formDetail.tenDm,
             nzContent: nzContent,
+            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
             nzMaskClosable: false,
             nzClosable: false,
             nzWidth: '80%',
@@ -847,48 +848,6 @@ export class BaoCaoComponent implements OnInit {
             if (res) {
             }
         });
-    }
-
-    newTab(id: string): void {
-        // const index: number = this.tabs.findIndex(e => e.id === id);
-        // if (index != -1) {
-        //     this.selectedIndex = index + 1;
-        // } else {
-        //     const item = this.lstLapThamDinhs.find(e => e.maBieuMau == id);
-        //     this.tabData = {
-        //         ...item,
-        //         namHienHanh: this.namHienHanh,
-        //         trangThaiBaoCao: this.trangThaiBaoCao,
-        //         statusBtnOk: this.okStatus,
-        //         statusBtnFinish: this.finishStatus,
-        //         statusBtnPrint: this.printStatus,
-        //         status: this.status,
-        //     }
-        //     this.tabs = [];
-        //     this.tabs.push(PHU_LUC.find(e => e.id === id));
-        //     this.selectedIndex = this.tabs.length + 1;
-        // }
-    }
-
-    getNewData(obj: any) {
-        // const index = this.lstLapThamDinhs.findIndex(e => e.maBieuMau == this.tabs[0].id);
-        // if (obj?.trangThai == '-1') {
-        //     this.getDetailReport();
-        //     this.tabData = {
-        //         ...this.lstLapThamDinhs[index],
-        //         namHienHanh: this.namHienHanh,
-        //         trangThaiBaoCao: this.trangThaiBaoCao,
-        //         statusBtnOk: this.okStatus,
-        //         statusBtnFinish: this.finishStatus,
-        //         status: this.status,
-        //     }
-        //     this.tabs = [];
-        //     this.tabs.push(PHU_LUC.find(e => e.id == this.lstLapThamDinhs[index].maBieuMau));
-        //     this.selectedIndex = this.tabs.length + 1;
-        // } else {
-        //     this.lstLapThamDinhs[index].trangThai = obj?.trangThai;
-        //     this.lstLapThamDinhs[index].lyDoTuChoi = obj?.lyDoTuChoi;
-        // }
     }
 
     xemSoKiemTra() {
