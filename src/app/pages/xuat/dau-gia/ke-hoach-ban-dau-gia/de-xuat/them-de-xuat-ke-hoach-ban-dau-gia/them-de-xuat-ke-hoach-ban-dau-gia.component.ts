@@ -358,7 +358,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       } else {
         this.listOfData = [...this.listOfData, res.value];
       }
-      console.log(this.listOfData, 77777)
       let tongSoLuong: number = 0;
       let tongTienKdiem: number = 0;
       let tongTienKdienDonGia: number = 0;
