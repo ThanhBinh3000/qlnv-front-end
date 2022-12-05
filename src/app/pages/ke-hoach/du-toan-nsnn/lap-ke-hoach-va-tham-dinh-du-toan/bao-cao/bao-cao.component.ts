@@ -756,6 +756,8 @@ export class BaoCaoComponent implements OnInit {
     viewAppendix(formDetail: ItemData) {
         const dataInfo = {
             ...formDetail,
+            maDvi: this.baoCao.maDvi,
+            namBcao: this.baoCao.namBcao,
             statusBtnOk: this.okStatus,
             statusBtnFinish: this.finishStatus,
             statusBtnPrint: this.printStatus,

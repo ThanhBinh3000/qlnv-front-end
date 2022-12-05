@@ -344,14 +344,6 @@ export class BieuMau18Component implements OnInit {
         this.editCache[id].data.ncauChiTongSo = sumNumber([this.editCache[id].data.ncauChiTrongDoChiCs, this.editCache[id].data.ncauChiTrongDoChiMoi]);
     }
 
-    getLowStatus(str: string) {
-        const index: number = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == str);
-        if (index == -1) {
-            return false;
-        }
-        return true;
-    }
-
     sum(stt: string) {
         stt = this.getHead(stt);
         while (stt != '0') {
@@ -398,6 +390,7 @@ export class BieuMau18Component implements OnInit {
             }
         })
     }
+
     checkEdit(stt: string) {
         const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
         return lstTemp.every(e => !e.stt.startsWith(stt));
