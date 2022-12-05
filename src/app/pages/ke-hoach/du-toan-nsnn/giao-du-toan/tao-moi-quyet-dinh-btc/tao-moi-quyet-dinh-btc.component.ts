@@ -51,7 +51,7 @@ export class ItemCongVan {
 
 export class TaoMoiQuyetDinhBtcComponent implements OnInit {
   @Input() data;
-  @Input() isStatus;
+  // @Input() isStatus;
   @Output() dataChange = new EventEmitter();
 
   id: string;
@@ -63,9 +63,9 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
   maPa: string;
   maPaCha: string;
   lstDvi: any[] = [];                                         //danh sach don vi da duoc chon
-  namPa: number;
+  namPa: any;
   soQd: ItemCongVan = new ItemCongVan();
-  trangThaiBanGhi = '1';
+  isStatus: any;
   newDate = new Date();
   maDviTien: string;
   thuyetMinh: string;
@@ -129,7 +129,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
       const id = file?.lastModified.toString();
-      this.lstFiles.push({ id: id, fileName: file?.name });
+      this.lstFiles.push({ id: id, fileName: file?.name, fileUrl: file?.url, fileSize: file?.size });
       this.listFile.push(file);
     });
     this.fileList = [];
@@ -191,6 +191,8 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
   async initialization() {
     this.id = this.data?.id;
     this.userInfo = this.userService.getUserLogin();
+    console.log(this.userInfo);
+
     this.maDonViTao = this.userInfo?.MA_DVI;
     await this.danhMuc.dMDonVi().toPromise().then(
       data => {
@@ -207,7 +209,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     if (this.id) {
       await this.getDetailReport();
     } else {
-      this.trangThaiBanGhi = '1';
+      this.isStatus = this.data.isStatus;
       this.maDonViTao = this.userInfo?.MA_DVI;
       this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
@@ -234,14 +236,14 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       this.spinner.hide()
     }
     this.getStatusButton();
-    // const capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
-    // if (capDvi != Utils.TONG_CUC) {
-    //   this.statusBtnSave = true;
-    //   this.statusBtnNew = true;
-    //   this.statusBtnCopy = true;
-    //   this.statusBtnPrint = true;
-    //   this.status = true;
-    // }
+    const capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
+    if (capDvi != Utils.TONG_CUC) {
+      this.statusBtnSave = true;
+      this.statusBtnNew = true;
+      this.statusBtnCopy = true;
+      this.statusBtnPrint = true;
+      this.status = true;
+    }
     this.spinner.hide();
   };
 
@@ -253,7 +255,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     }
     const checkChirld = this.maDonViTao == this.userInfo?.MA_DVI;
 
-    this.statusBtnSave = !(Utils.statusSave.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(GDT.EDIT_REPORT_BTC) && checkChirld);
+    this.statusBtnSave = !(Utils.statusSave.includes(this.isStatus) && this.userService.isAccessPermisson(GDT.EDIT_REPORT_BTC) && checkChirld);
 
     if (this.id) {
       this.statusBtnSave = true;
@@ -270,10 +272,10 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
         this.statusBtnEdit = false;
       }
     }
-    // this.statusBtnCopy = utils.getRoleCopy(this.trangThaiBanGhi, checkChirld, this.userInfo?.roles[0]?.code);
+    // this.statusBtnCopy = utils.getRoleCopy(this.isStatus, checkChirld, this.userInfo?.roles[0]?.code);
 
-    this.statusBtnCopy = !(Utils.statusCopy.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(GDT.COPY_REPORT_PA_PBDT) && checkChirld);
-    this.statusBtnPrint = !(Utils.statusPrint.includes(this.trangThaiBanGhi) && this.userService.isAccessPermisson(GDT.PRINT_REPORT_PA_PBDT) && checkChirld);
+    this.statusBtnCopy = !(Utils.statusCopy.includes(this.isStatus) && this.userService.isAccessPermisson(GDT.COPY_REPORT_PA_PBDT) && checkChirld);
+    this.statusBtnPrint = !(Utils.statusPrint.includes(this.isStatus) && this.userService.isAccessPermisson(GDT.PRINT_REPORT_PA_PBDT) && checkChirld);
 
     if (this.userInfo.sub == "lanhdaotc" || this.userInfo.sub == "truongbophantc") {
       this.statusBtnSave = true;
@@ -304,7 +306,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
           //   item.nguonKhac = divMoney(item.nguonKhac, this.maDviTien);
           // })
           this.namPa = data.data.namPa;
-          this.trangThaiBanGhi = data.data.trangThai;
+          this.isStatus = data.data.trangThai;
           this.maPa = data.data.maPa;
           this.maDonViTao = data.data.maDvi;
           this.thuyetMinh = data.data.thuyetMinh;
@@ -460,7 +462,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       maPa: this.maPa,
       namPa: this.namPa,
       maPhanGiao: '1',
-      trangThai: this.trangThaiBanGhi,
+      trangThai: this.isStatus,
       thuyetMinh: this.thuyetMinh,
       soQd: this.soQd,
     }));
@@ -496,7 +498,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
-            this.getDetailReport();
+            // this.getDetailReport();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -512,7 +514,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
             this.id = data.data.id;
-            this.getDetailReport();
+            // this.getDetailReport();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -617,7 +619,6 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       if (loaiPa === 2) {
         this.dataChange.emit(request2);
         return
-        return
       }
     }
   };
@@ -679,7 +680,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       maPa: maBcaoNew,
       namPa: response.namBcao,
       maPhanGiao: '1',
-      trangThai: this.trangThaiBanGhi,
+      trangThai: this.isStatus,
       thuyetMinh: this.thuyetMinh,
       soQd: this.soQd,
     };

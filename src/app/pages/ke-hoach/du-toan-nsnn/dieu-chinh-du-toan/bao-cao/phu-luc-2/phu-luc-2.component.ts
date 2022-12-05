@@ -20,7 +20,8 @@ export class ItemData {
   level: number;
   maNdung: string;
   maDviTinh: number;
-  maVtu: string
+  maVtu: string;
+  loaiDmuc: string;
 
   thienSluongKhoachDgiao: number;
   thienSluongTteThien: number;
@@ -70,6 +71,7 @@ export class PhuLuc2Component implements OnInit {
     maNdung: "",
     maDviTinh: null,
     maVtu: "",
+    loaiDmuc: "",
     thienSluongKhoachDgiao: null,
     thienSluongTteThien: null,
     thienSluongUocThien: null,
@@ -87,6 +89,7 @@ export class PhuLuc2Component implements OnInit {
     maNdung: "",
     maDviTinh: null,
     maVtu: "",
+    loaiDmuc: "",
     thienSluongKhoachDgiao: null,
     thienSluongTteThien: null,
     thienSluongUocThien: null,
@@ -123,7 +126,8 @@ export class PhuLuc2Component implements OnInit {
       maCha: 0,
       level: 0,
       maVtu: "1000",
-      maDviTinh: ""
+      maDviTinh: "",
+      loaiDmuc: "nhap"
     },
   ]
 
@@ -134,7 +138,8 @@ export class PhuLuc2Component implements OnInit {
       maCha: 0,
       level: 0,
       maVtu: "2000",
-      maDviTinh: ""
+      maDviTinh: "",
+      loaiDmuc: "xuat"
     },
   ]
 
@@ -166,6 +171,8 @@ export class PhuLuc2Component implements OnInit {
     this.maDviTao = this.data?.maDviTao;
     await this.getDinhMucPL2N();
     await this.getDinhMucPL2X();
+    await this.getListVtu()
+    await this.addListVatTu()
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
@@ -189,7 +196,6 @@ export class PhuLuc2Component implements OnInit {
     this.data?.lstCtietDchinh.forEach(item => {
       item.thienThanhTien = item.thienCong * item.thienDinhMuc
     });
-
     if (this.lstCtietBcao.length > 0) {
       if (!this.lstCtietBcao[0].stt) {
         this.sortWithoutIndex();
@@ -225,8 +231,7 @@ export class PhuLuc2Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
-    await this.getListVtu()
-    await this.addListVatTu()
+
     this.tinhToan();
     this.getStatusButton();
     this.spinner.hide();
@@ -273,6 +278,7 @@ export class PhuLuc2Component implements OnInit {
         maDviTinh: vtu.maDviTinh,
         maCha: '1000',
         level: Number(vtu.cap),
+        loaiDmuc: "nhap"
       });
 
       vtu?.child.forEach(vtuCon => {
@@ -284,6 +290,7 @@ export class PhuLuc2Component implements OnInit {
           maDviTinh: vtuCon.maDviTinh,
           maCha: maCha,
           level: Number(vtuCon.cap),
+          loaiDmuc: "nhap"
         })
 
         vtuCon?.child.forEach(vtuConn => {
@@ -295,6 +302,7 @@ export class PhuLuc2Component implements OnInit {
             maDviTinh: vtuConn.maDviTinh,
             maCha: maCha,
             level: Number(vtuConn.cap),
+            loaiDmuc: "nhap"
           })
         })
       })
@@ -309,6 +317,7 @@ export class PhuLuc2Component implements OnInit {
         maDviTinh: vtu.maDviTinh,
         maCha: '2000',
         level: Number(vtu.cap),
+        loaiDmuc: "xuat"
       });
 
       vtu?.child.forEach(vtuCon => {
@@ -320,6 +329,7 @@ export class PhuLuc2Component implements OnInit {
           maDviTinh: vtuCon.maDviTinh,
           maCha: maCha,
           level: Number(vtuCon.cap),
+          loaiDmuc: "xuat"
         })
 
         vtuCon?.child.forEach(vtuConn => {
@@ -331,6 +341,7 @@ export class PhuLuc2Component implements OnInit {
             maDviTinh: vtuConn.maDviTinh,
             maCha: maCha,
             level: Number(vtuConn.cap),
+            loaiDmuc: "xuat"
           })
         })
       })
@@ -339,9 +350,12 @@ export class PhuLuc2Component implements OnInit {
     this.listVatTuXuat = this.listVatTuXuat.concat(mangGop34)
     this.listVatTuFull = this.listVatTuNhap.concat(this.listVatTuXuat)
     // gan lai noi dung
+    this.listVatTuFull.forEach(item => {
+      if (item.level.length == 2) {
+        item.level = item.level.slice(0, -1)
+      }
+    })
     this.noiDungs = this.listVatTuFull;
-    console.log(this.noiDungs);
-
   }
 
   async getDinhMucPL2N() {
@@ -457,8 +471,6 @@ export class PhuLuc2Component implements OnInit {
       trangThai: trangThai,
       maLoai: this.data?.maLoai,
     };
-    console.log(request);
-
 
     this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
       async data => {
@@ -639,13 +651,13 @@ export class PhuLuc2Component implements OnInit {
     this.replaceIndex(lstIndex, 1);
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
-      if (itm.cloaiVthh == initItem.maVtu) {
+      if (itm.cloaiVthh == initItem.maVtu && initItem.loaiDmuc == "nhap") {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
-      if (itm.cloaiVthh == initItem.maVtu) {
+      if (itm.cloaiVthh == initItem.maVtu && initItem.loaiDmuc == "xuat") {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
@@ -705,13 +717,13 @@ export class PhuLuc2Component implements OnInit {
 
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
-      if (itm.cloaiVthh == initItem.maVtu) {
+      if (itm.cloaiVthh == initItem.maVtu && initItem.loaiDmuc == "nhap") {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
-      if (itm.cloaiVthh == initItem.maVtu) {
+      if (itm.cloaiVthh == initItem.maVtu && initItem.loaiDmuc == "xuat") {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
@@ -876,13 +888,13 @@ export class PhuLuc2Component implements OnInit {
   addFirst(initItem: ItemData) {
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
-      if (itm.cloaiVthh == initItem.maVtu) {
+      if (itm.cloaiVthh == initItem.maVtu && initItem.loaiDmuc == "nhap") {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
-      if (itm.cloaiVthh == initItem.maVtu) {
+      if (itm.cloaiVthh == initItem.maVtu && initItem.loaiDmuc == "xuat") {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
@@ -983,10 +995,12 @@ export class PhuLuc2Component implements OnInit {
   addLine(id: any) {
     const maNdung: any = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
     const maVtu: any = this.lstCtietBcao.find(e => e.id == id)?.maVtu;
+    const loaiDmuc: any = this.lstCtietBcao.find(e => e.id == id)?.loaiDmuc;
     const obj = {
       maKhoanMuc: maNdung,
       lstKhoanMuc: this.noiDungs,
       maVtu: maVtu,
+      loaiDmuc: loaiDmuc
     }
 
     const modalIn = this.modal.create({
@@ -1008,7 +1022,8 @@ export class PhuLuc2Component implements OnInit {
             ...this.initItem,
             maNdung: res.maKhoanMuc,
             level: this.noiDungs.find(e => e.id == maNdung)?.level,
-            maVtu: res.maVtu,
+            maVtu: res.maKhoanMuc,
+            loaiDmuc: res.loaiDmuc,
           };
           if (this.lstCtietBcao.length == 0) {
             this.addFirst(data);
@@ -1025,6 +1040,7 @@ export class PhuLuc2Component implements OnInit {
               level: item.level,
               maDviTinh: item.maDviTinh,
               maVtu: item.maVtu,
+              loaiDmuc: item.loaiDmuc,
             };
             this.addLow(id, data);
           }

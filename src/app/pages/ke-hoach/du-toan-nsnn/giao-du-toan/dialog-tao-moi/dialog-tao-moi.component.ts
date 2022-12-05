@@ -30,7 +30,7 @@ export class DialogTaoMoiComponent implements OnInit {
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    this.response.maDvi = this.userInfo?.MA_DVI;
+    // this.response.maDvi = this.userInfo?.MA_DVI;
   };
 
   async handleOk() {
@@ -42,7 +42,13 @@ export class DialogTaoMoiComponent implements OnInit {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
-    this._modalRef.close(this.response);
+    let data: any = {
+      isStatus: "1",
+      namPa: this.response.namPa
+    }
+    this._modalRef.close(
+      data
+    );
   };
 
   handleCancel() {
