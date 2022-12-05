@@ -8,9 +8,9 @@
 <div>
   <nz-form-label [nzNoColon]="true" nzFor="gia-tri" *ngIf="tab == 'MT'">Tổng giá trị (Triệu đồng):
     &nbsp;<span *ngIf="maBoNganh == '01' && tabRadio =='BTC'"
-      class="text-primary"> {{tongSoVT | number : '1.0-1' : 'vi_VN'}}</span>
+                class="text-primary"> {{tongSoVT | number : '1.0-1' : 'vi_VN'}}</span>
     <span *ngIf="tabRadio !='BTC'"
-          class="text-primary"> {{listTongGiaTriBnKhac[maBoNganh].tongSo | number : '1.0-1' : 'vi_VN'}}</span>
+          class="text-primary"> {{maBoNganh == '01' ? 0 : listTongGiaTriBnKhac[maBoNganh].tongSo | number : '1.0-1' : 'vi_VN'}}</span>
   </nz-form-label>
   <nz-form-label [nzNoColon]="true" nzFor="gia-tri" *ngIf="tab !== 'MT' && tab !== 'LPDH'">Tổng giá trị (Triệu đồng):
     &nbsp;
@@ -18,7 +18,7 @@
                      style="text-align: left;" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                      [nzParser]="globals.parserInput" [nzMin]="0">
     </nz-input-number>
-<!--    <span class="error-text" *ngIf="true">{{globals.prop.REQUIRED}}</span>-->
+    <!--    <span class="error-text" *ngIf="true">{{globals.prop.REQUIRED}}</span>-->
   </nz-form-label>
 </div>
 <nz-table #editRowTable [nzData]="dataTable">
