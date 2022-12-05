@@ -13,6 +13,8 @@ export class DialogThemKhoanMucComponent implements OnInit {
     lstKhoanMuc: any[] = [];
     lstParent: any[] = [];
     lstChild: any[] = [];
+    maVtu: any;
+    loaiDmuc: any;
 
     constructor(
         private _modalRef: NzModalRef,
@@ -29,6 +31,8 @@ export class DialogThemKhoanMucComponent implements OnInit {
         this.lstKhoanMuc = this.obj.lstKhoanMuc;
         if (!this.maKhoanMuc) {
             this.maKhoanMuc = this.lstKhoanMuc.find(e => e.level == 0).maVtu;
+            this.loaiDmuc = this.lstKhoanMuc.find(e => e.level == 0).loaiDmuc;
+            // this.maVtu = this.lstKhoanMuc.find(e => e.level == 0).maVtu;
             this.lstParent = this.lstKhoanMuc.filter(e => e.level == 0);
         } else {
             var idCha: number = this.lstKhoanMuc.find(e => e.id == this.maKhoanMuc).maCha;
@@ -44,6 +48,8 @@ export class DialogThemKhoanMucComponent implements OnInit {
     handleOk() {
         let data: any = {
             maKhoanMuc: this.maKhoanMuc,
+            maVtu: this.maKhoanMuc,
+            loaiDmuc: this.loaiDmuc,
             lstKhoanMuc: this.lstChild.filter(e => e.status == true),
         }
         this._modalRef.close(data);

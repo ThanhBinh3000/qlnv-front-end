@@ -231,7 +231,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
   async initialization() {
     this.spinner.show();
     // lấy id bản ghi từ router
-    this.id = this.routerActive.snapshot.paramMap.get('id');
+    this.id = this.data.id;
 
     // lấy mã đơn vị tạo PA
     this.maDonViTao = this.userInfo?.MA_DVI;
@@ -279,20 +279,32 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
       this.lstDvi = this.donVis.filter(e => e?.maDviCha === this.maDonViTao);
       this.maDviTien = '1'
       // lấy dữ liệu từ PA cha qua dataSource
-      await this.dataSource.currentData.subscribe(obj => {
-        if (obj) {
-          this.listIdFilesDelete = obj?.listIdDeleteFiles;
-          this.lstCtietBcao = obj?.lstCtiets;
-          this.maDvi = obj?.maDvi;
-          this.maPaCha = obj?.maPaCha;
-          this.maPa = obj?.maPa;
-          this.maDviTien = obj?.maDviTien;
-          this.idPaBTC = obj?.idPaBTC;
-          this.namPa = obj?.namPa;
-          this.trangThaiBanGhi = obj?.trangThai;
-          this.updateEditCache();
-        }
-      });
+      // await this.dataSource.currentData.subscribe(obj => {
+      //   if (obj) {
+      //     this.listIdFilesDelete = obj?.listIdDeleteFiles;
+      //     this.lstCtietBcao = obj?.lstCtiets;
+      //     this.maDvi = obj?.maDvi;
+      //     this.maPaCha = obj?.maPaCha;
+      //     this.maPa = obj?.maPa;
+      //     this.maDviTien = obj?.maDviTien;
+      //     this.idPaBTC = obj?.idPaBTC;
+      //     this.namPa = obj?.namPa;
+      //     this.trangThaiBanGhi = obj?.trangThai;
+      //     this.updateEditCache();
+      //   }
+      // });
+      debugger
+      this.listIdFilesDelete = this.data?.listIdDeleteFiles;
+      this.lstCtietBcao = this.data?.lstCtiets;
+      this.maDvi = this.data?.maDvi;
+      this.maPaCha = this.data?.maPaCha;
+      this.maPa = this.data?.maPa;
+      this.maDviTien = this.data?.maDviTien;
+      this.idPaBTC = this.data?.idPaBTC;
+      this.namPa = this.data?.namPa;
+      this.trangThaiBanGhi = this.data?.trangThai;
+      this.updateEditCache();
+
       if (!this.maPa) {
         this.location.back();
       }

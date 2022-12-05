@@ -6,7 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+// import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -15,6 +16,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, NOT_OK, OK } from "src/app/Utility/utils";
 import * as uuid from "uuid";
+import { DialogThemKhoanMucComponent } from '../../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { LINH_VUC } from './phu-luc6.constant';
 
 export class ItemData {
@@ -24,6 +26,9 @@ export class ItemData {
   level: number;
   loaiMatHang: number;
   maDviTinh: number;
+  maVtu: string;
+  loaiDmuc: string;
+
   slHangTte: number;
   kphiDmuc: number;
   kphiTtien: number;
@@ -50,7 +55,8 @@ export class PhuLuc6Component implements OnInit {
   @Output() dataChange = new EventEmitter();
   //danh muc
   donVis: any = [];
-  lstMatHang: any[] = LINH_VUC;
+  // lstMatHang: any[] = LINH_VUC;
+  lstMatHang: any[] = [];
   donViTinhs: any[] = [];
   lstCtietBcao: ItemData[] = [];
   donViTiens: any[] = DON_VI_TIEN;
@@ -69,6 +75,8 @@ export class PhuLuc6Component implements OnInit {
     id: null,
     stt: "0",
     level: 0,
+    maVtu: "",
+    loaiDmuc: "",
     loaiMatHang: 0,
     maDviTinh: null,
     slHangTte: null,
@@ -91,6 +99,8 @@ export class PhuLuc6Component implements OnInit {
     stt: "0",
     level: 0,
     idDm: null,
+    maVtu: "",
+    loaiDmuc: "",
     loaiMatHang: 0,
     maDviTinh: null,
     slHangTte: null,
@@ -115,6 +125,44 @@ export class PhuLuc6Component implements OnInit {
   dsDinhMucN: any[] = [];
   dsDinhMucX: any[] = [];
   maDviTao!: string;
+  listVatTu: any[] = [];
+  listVatTuFull: any[] = [];
+
+  listVatTuNhap: any[] = [
+    {
+      id: "1000",
+      tenDm: "Nhập",
+      maCha: "111",
+      level: 1,
+      maVtu: "1000",
+      maDviTinh: "",
+      loaiDmuc: "nhap"
+    },
+  ]
+
+  listVatTuXuat: any[] = [
+    {
+      id: "2000",
+      tenDm: "Xuất bán",
+      maCha: "111",
+      level: 1,
+      maVtu: "2000",
+      maDviTinh: "",
+      loaiDmuc: "xuat"
+    },
+  ]
+
+  listVatTuVTCT: any[] = [
+    {
+      id: "3000",
+      tenDm: "VTCT",
+      maCha: "111",
+      level: 1,
+      maVtu: "3000",
+      maDviTinh: "",
+      loaiDmuc: ""
+    },
+  ]
 
   allChecked = false;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -156,6 +204,8 @@ export class PhuLuc6Component implements OnInit {
     this.maDviTao = this.data?.maDviTao;
     await this.getDinhMucPL6N();
     await this.getDinhMucPL6X();
+    await this.getListVtu()
+    await this.addListVatTu()
     this.data?.lstCtietDchinh.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
@@ -211,10 +261,212 @@ export class PhuLuc6Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+
+
     this.changeNam();
+    this.tinhToan();
     this.getStatusButton();
 
     this.spinner.hide();
+  }
+
+  async getListVtu() {
+    //lay danh sach vat tu
+    await this.danhMucService.dMVatTu().toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.listVatTu = res.data;
+
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+  };
+
+
+  async addListVatTu() {
+    const lstVtuCon1 = []
+    const lstVtuCon2 = []
+
+    const lstVtuCon3 = []
+    const lstVtuCon4 = []
+
+    const lstVtuCon5 = []
+    const lstVtuCon6 = []
+
+    this.listVatTu.forEach(vtu => {
+      this.listVatTuNhap.push({
+        id: vtu.ma,
+        maVtu: vtu.ma,
+        tenDm: vtu.ten,
+        maDviTinh: vtu.maDviTinh,
+        maCha: '1000',
+        level: Number(vtu.cap) + 1,
+        loaiDmuc: "nhap"
+      });
+
+      vtu?.child.forEach(vtuCon => {
+        const maCha = vtuCon?.ma.slice(0, -2)
+        lstVtuCon1.push({
+          id: vtuCon.ma,
+          maVtu: vtuCon.ma,
+          tenDm: vtuCon.ten,
+          maDviTinh: vtuCon.maDviTinh,
+          maCha: maCha,
+          level: Number(vtuCon.cap) + 1,
+          loaiDmuc: "nhap"
+        })
+
+        vtuCon?.child.forEach(vtuConn => {
+          const maCha = vtuConn?.ma.slice(0, -2)
+          lstVtuCon2.push({
+            id: vtuConn.ma,
+            maVtu: vtuConn.ma,
+            tenDm: vtuConn.ten,
+            maDviTinh: vtuConn.maDviTinh,
+            maCha: maCha,
+            level: Number(vtuConn.cap) + 1,
+            loaiDmuc: "nhap"
+          })
+        })
+      })
+    })
+    const mangGop12 = lstVtuCon1.concat(lstVtuCon2)
+    this.listVatTuNhap = this.listVatTuNhap.concat(mangGop12)
+
+    // lst xuat
+    this.listVatTu.forEach(vtu => {
+      this.listVatTuXuat.push({
+        id: vtu.ma + 1,
+        maVtu: vtu.ma,
+        tenDm: vtu.ten,
+        maDviTinh: vtu.maDviTinh,
+        maCha: '2000',
+        level: Number(vtu.cap) + 1,
+        loaiDmuc: "xuat"
+      });
+
+      vtu?.child.forEach(vtuCon => {
+        const maCha = vtuCon?.ma.slice(0, -2) + 1
+        lstVtuCon3.push({
+          id: vtuCon.ma + 1,
+          maVtu: vtuCon.ma,
+          tenDm: vtuCon.ten,
+          maDviTinh: vtuCon.maDviTinh,
+          maCha: maCha,
+          level: Number(vtuCon.cap) + 1,
+          loaiDmuc: "xuat"
+        })
+
+        vtuCon?.child.forEach(vtuConn => {
+          const maCha = vtuConn?.ma.slice(0, -2) + 1
+          lstVtuCon4.push({
+            id: vtuConn.ma + 1,
+            maVtu: vtuConn.ma,
+            tenDm: vtuConn.ten,
+            maDviTinh: vtuConn.maDviTinh,
+            maCha: maCha,
+            level: Number(vtuConn.cap) + 1,
+            loaiDmuc: "xuat"
+          })
+        })
+      })
+    })
+
+    const mangGop34 = lstVtuCon3.concat(lstVtuCon4)
+    this.listVatTuXuat = this.listVatTuXuat.concat(mangGop34)
+
+    // lst VTCT
+    this.listVatTu.forEach(vtu => {
+      this.listVatTuVTCT.push({
+        id: vtu.ma + 2,
+        maVtu: vtu.ma,
+        tenDm: vtu.ten,
+        maDviTinh: vtu.maDviTinh,
+        maCha: '3000',
+        level: Number(vtu.cap) + 1,
+        loaiDmuc: "",
+      });
+
+      vtu?.child.forEach(vtuCon => {
+        const maCha = vtuCon?.ma.slice(0, -2) + 2
+        lstVtuCon5.push({
+          id: vtuCon.ma + 2,
+          maVtu: vtuCon.ma,
+          tenDm: vtuCon.ten,
+          maDviTinh: vtuCon.maDviTinh,
+          maCha: maCha,
+          level: Number(vtuCon.cap) + 1,
+          loaiDmuc: "",
+        })
+
+        vtuCon?.child.forEach(vtuConn => {
+          const maCha = vtuConn?.ma.slice(0, -2) + 2
+          lstVtuCon6.push({
+            id: vtuConn.ma + 2,
+            maVtu: vtuConn.ma,
+            tenDm: vtuConn.ten,
+            maDviTinh: vtuConn.maDviTinh,
+            maCha: maCha,
+            level: Number(vtuConn.cap) + 1,
+            loaiDmuc: "",
+          })
+        })
+      })
+    })
+
+    const mangGop56 = lstVtuCon5.concat(lstVtuCon6)
+    this.listVatTuVTCT = this.listVatTuVTCT.concat(mangGop56)
+
+
+
+    this.listVatTuFull = this.listVatTuNhap.concat(this.listVatTuXuat)
+    this.listVatTuFull = this.listVatTuFull.concat(this.listVatTuVTCT)
+    this.listVatTuFull.push(
+      {
+        id: "111",
+        tenDm: "Tổng cộng năm",
+        maCha: 0,
+        level: 0,
+        maVtu: "800",
+      },
+      {
+        id: "2",
+        tenDm: "Thiếu năm chuyển sang",
+        maCha: 0,
+        level: 0,
+        maVtu: "107",
+      },
+      {
+        id: "21",
+        tenDm: "VTCT Thiếu năm chuyển sang",
+        idCha: "2",
+        level: 1,
+        maVtu: "108",
+      },
+      {
+        id: "22",
+        tenDm: "Nhập thiếu chuyển sang",
+        idCha: "2",
+        level: 1,
+        maVtu: "109",
+      },
+      {
+        id: "23",
+        tenDm: "Xuất thiếu chuyển sang",
+        idCha: "2",
+        level: 1,
+        maVtu: "120",
+      },
+    )
+    this.listVatTuFull.forEach(item => {
+      if (item.level.length == 2) {
+        item.level = item.level.slice(0, -1)
+      }
+    })
+    // gan lai noi dung
+    this.lstMatHang = this.listVatTuFull;
   }
 
   getDinhMucPL6N() {
@@ -529,13 +781,13 @@ export class PhuLuc6Component implements OnInit {
     this.replaceIndex(lstIndex, 1);
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
-      if (itm.id == initItem.idDm) {
+      if (itm.cloaiVthh == initItem.maVtu && initItem.loaiDmuc == "nhap") {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
-      if (itm.id == initItem.idDm) {
+      if (itm.cloaiVthh == initItem.maVtu && initItem.loaiDmuc == "xuat") {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
@@ -595,13 +847,13 @@ export class PhuLuc6Component implements OnInit {
 
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
-      if (itm.id == initItem.idDm) {
+      if (itm.cloaiVthh == initItem.maVtu && initItem.loaiDmuc == "nhap") {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
-      if (itm.id == initItem.idDm) {
+      if (itm.cloaiVthh == initItem.maVtu && initItem.loaiDmuc == "xuat") {
         //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
         dm = itm.tongDmuc;
       }
@@ -776,14 +1028,12 @@ export class PhuLuc6Component implements OnInit {
   addFirst(initItem: ItemData) {
     let dm: number;
     this.dsDinhMucN.forEach(itm => {
-      if (itm.id == initItem.idDm) {
-        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+      if (itm.cloaiVthh == initItem.maVtu && initItem.loaiDmuc == "nhap") {
         dm = itm.tongDmuc;
       }
     })
     this.dsDinhMucX.forEach(itm => {
-      if (itm.id == initItem.idDm) {
-        //  dm = (parseInt(itm.nvuCmon, 10) + parseInt(itm.cucDhanh, 10) + parseInt(itm.ttoanCnhan, 10))
+      if (itm.cloaiVthh == initItem.maVtu && initItem.loaiDmuc == "xuat") {
         dm = itm.tongDmuc;
       }
     })
@@ -852,7 +1102,7 @@ export class PhuLuc6Component implements OnInit {
   }
 
   getIdCha(maKM: any) {
-    return this.lstMatHang.find(e => e.id == maKM)?.idCha;
+    return this.lstMatHang.find(e => e.id == maKM)?.maCha;
   }
 
   sortWithoutIndex() {
@@ -882,9 +1132,13 @@ export class PhuLuc6Component implements OnInit {
 
   addLine(id: any) {
     const loaiMatHang: any = this.lstCtietBcao.find(e => e.id == id)?.loaiMatHang;
+    const maVtu: any = this.lstCtietBcao.find(e => e.id == id)?.maVtu;
+    const loaiDmuc: any = this.lstCtietBcao.find(e => e.id == id)?.loaiDmuc;
     const obj = {
       maKhoanMuc: loaiMatHang,
       lstKhoanMuc: this.lstMatHang,
+      maVtu: maVtu,
+      loaiDmuc: loaiDmuc
     }
 
     const modalIn = this.modal.create({
@@ -906,6 +1160,8 @@ export class PhuLuc6Component implements OnInit {
             ...this.initItem,
             loaiMatHang: res.maKhoanMuc,
             level: this.lstMatHang.find(e => e.id == loaiMatHang)?.level,
+            maVtu: res.maVtu,
+            loaiDmuc: res.loaiDmuc,
           };
           if (this.lstCtietBcao.length == 0) {
             this.addFirst(data);
@@ -921,11 +1177,13 @@ export class PhuLuc6Component implements OnInit {
               loaiMatHang: item.id,
               level: item.level,
               maDviTinh: item.maDviTinh,
-              idDm: item.idDm
+              maVtu: item.maVtu,
+              loaiDmuc: item.loaiDmuc,
             };
             this.addLow(id, data);
           }
         })
+        this.tinhToan();
         this.updateEditCache();
       }
     });
@@ -1108,4 +1366,17 @@ export class PhuLuc6Component implements OnInit {
   getMoneyUnit() {
     return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }
+
+  async tinhToan() {
+    this.lstCtietBcao.forEach(item => {
+      if (item.kphiDmuc) {
+        item.kphiTtien = item.slHangTte * item.kphiDmuc;
+        item.chenhLech = item.kphiTtien - item.cphiTcong;
+      } else {
+        item.kphiDmuc = 0;
+        item.kphiTtien = item.slHangTte * item.kphiDmuc;
+        item.chenhLech = item.kphiTtien - item.cphiTcong;
+      }
+    })
+  };
 }
