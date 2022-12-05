@@ -99,8 +99,7 @@
                         <td>
                             <nz-select nzShowSearch nzAllowClear
                                 [class]="editCache[data.id].data.danhMuc ?'' : 'input-error-validate' "
-                                nzPlaceHolder="Chọn loại mặt hàng" [(ngModel)]="editCache[data.id].data.danhMuc"
-                                (ngModelChange)="changeModelDanhMuc(editCache[data.id].data.danhMuc)">
+                                nzPlaceHolder="Chọn loại mặt hàng" [(ngModel)]="editCache[data.id].data.danhMuc">
                                 <nz-option *ngFor="let item of linhVucChis" [nzValue]="item.id" [nzLabel]="item.tenDm">
                                 </nz-option>
                             </nz-select>
