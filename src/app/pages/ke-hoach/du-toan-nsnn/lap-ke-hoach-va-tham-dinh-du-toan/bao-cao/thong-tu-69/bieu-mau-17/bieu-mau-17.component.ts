@@ -226,24 +226,24 @@ export class BieuMau17Component implements OnInit {
         const chiSo: string[] = str.split('.');
         const n: number = chiSo.length - 1;
         let k: number = parseInt(chiSo[n], 10);
+        // if (n == 0) {
+        //     for (let i = 0; i < this.soLaMa.length; i++) {
+        //         while (k >= this.soLaMa[i].gTri) {
+        //             xau += this.soLaMa[i].kyTu;
+        //             k -= this.soLaMa[i].gTri;
+        //         }
+        //     }
+        // }
         if (n == 0) {
-            for (let i = 0; i < this.soLaMa.length; i++) {
-                while (k >= this.soLaMa[i].gTri) {
-                    xau += this.soLaMa[i].kyTu;
-                    k -= this.soLaMa[i].gTri;
-                }
-            }
-        }
-        if (n == 1) {
             xau = chiSo[n];
         }
-        if (n == 2) {
-            xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-        }
-        if (n == 3) {
+        // if (n == 2) {
+        //     xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+        // }
+        if (n == 1) {
             xau = String.fromCharCode(k + 96);
         }
-        if (n == 4) {
+        if (n == 2) {
             xau = "-";
         }
         return xau;
@@ -289,10 +289,10 @@ export class BieuMau17Component implements OnInit {
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         const indexP = this.lstCtietBcao.findIndex(e => e.stt == this.getHead(this.lstCtietBcao[index].stt));
         const indexC = this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(this.lstCtietBcao[index].stt) && this.getTail(e.stt) != this.getTail(this.lstCtietBcao[index].stt));
-        this.lstCtietBcao[indexC].thNamHienHanhN1 = sumNumber[this.lstCtietBcao[indexP].thNamHienHanhN1, -this.lstCtietBcao[index].thNamHienHanhN1];
-        this.lstCtietBcao[indexC].ncauNamDtoanN = sumNumber[this.lstCtietBcao[indexP].ncauNamDtoanN, -this.lstCtietBcao[index].ncauNamDtoanN];
-        this.lstCtietBcao[indexC].ncauNamN1 = sumNumber[this.lstCtietBcao[indexP].ncauNamN1, -this.lstCtietBcao[index].ncauNamN1];
-        this.lstCtietBcao[indexC].ncauNamN2 = sumNumber[this.lstCtietBcao[indexP].ncauNamN2, -this.lstCtietBcao[index].ncauNamN2];
+        this.lstCtietBcao[indexC].thNamHienHanhN1 = (!this.lstCtietBcao[indexP].thNamHienHanhN1 ? 0 : this.lstCtietBcao[indexP].thNamHienHanhN1) - this.lstCtietBcao[index].thNamHienHanhN1;
+        this.lstCtietBcao[indexC].ncauNamDtoanN = (!this.lstCtietBcao[indexP].ncauNamDtoanN ? 0 : this.lstCtietBcao[indexP].ncauNamDtoanN) - this.lstCtietBcao[index].ncauNamDtoanN;
+        this.lstCtietBcao[indexC].ncauNamN1 = (!this.lstCtietBcao[indexP].ncauNamN1 ? 0 : this.lstCtietBcao[indexP].ncauNamN1) - this.lstCtietBcao[index].ncauNamN1;
+        this.lstCtietBcao[indexC].ncauNamN2 = (!this.lstCtietBcao[indexP].ncauNamN2 ? 0 : this.lstCtietBcao[indexP].ncauNamN2) - this.lstCtietBcao[index].ncauNamN2;
         this.getInTotal();
         this.updateEditCache();
     }
