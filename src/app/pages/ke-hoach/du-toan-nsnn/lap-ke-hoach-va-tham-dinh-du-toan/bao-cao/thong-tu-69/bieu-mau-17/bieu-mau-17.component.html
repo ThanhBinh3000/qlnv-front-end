@@ -17,16 +17,16 @@
                 </ng-template>
             </div>
         </div>
-        <nz-table nzBordered class="table__body">
+        <nz-table nzBordered class="table__body" [nzScroll]="{y:'450px'}">
             <thead>
                 <tr>
-                    <th class="text-center">STT</th>
-                    <th>Lĩnh vực/Nội dung chi</th>
+                    <th class="text-center" nzWidth="100px">STT</th>
+                    <th nzWidth="300px">Lĩnh vực/Nội dung chi</th>
                     <th>Thực hiện năm hiện hành {{namBcao -1}}</th>
                     <th>Nhu cầu dự toán năm {{namBcao}}</th>
                     <th>Nhu cầu năm {{namBcao + 1}}</th>
                     <th>Nhu cầu năm {{namBcao + 2}}</th>
-                    <th [hidden]="status"></th>
+                    <th nzWidth="50px" [hidden]="status"></th>
                 </tr>
                 <tr>
                     <th></th>
@@ -74,7 +74,7 @@
                         <td>{{displayValue(data.ncauNamN1)}}</td>
                         <td>{{displayValue(data.ncauNamN2)}}</td>
                         <td [hidden]="status">
-                            <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                            <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </td>
                     </ng-container>
                     <ng-template #editTemplate>
