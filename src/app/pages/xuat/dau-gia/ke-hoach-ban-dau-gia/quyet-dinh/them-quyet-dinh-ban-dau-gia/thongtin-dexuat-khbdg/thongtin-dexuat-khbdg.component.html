@@ -211,7 +211,7 @@
   </div>
 </div>
 <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-  <nz-table [nzData]="listDataGroup" class="nowrap" nzBordered>
+  <nz-table [nzData]="listOfData" class="nowrap" nzBordered>
     <thead>
       <tr>
         <th style="width: 2%;">STT</th>
@@ -230,7 +230,7 @@
       </tr>
     </thead>
     <tbody>
-      <ng-container *ngFor="let item of listDataGroup , let i = index">
+      <ng-container *ngFor="let item of listOfData , let i = index">
         <tr>
           <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
           <td colspan="6">{{item.tenDvi}}</td>
@@ -242,21 +242,21 @@
           <td *ngIf="!isView"></td>
         </tr>
         <ng-container *ngIf="expandSet.has(i)">
-          <tr *ngFor="let dtGoiThau of item.dataChild, let y = index">
+          <tr *ngFor="let phanLo of listOfData, let y = index">
             <td></td>
             <td></td>
-            <td>{{dtGoiThau.diaDiemKho}}</td>
-            <td>{{dtGoiThau.tenNhakho}}</td>
-            <td>{{dtGoiThau.tenNganKho}}</td>
-            <td>{{dtGoiThau.tenLoKho}}</td>
-            <td>{{dtGoiThau.soDviTsan}}</td>
-            <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-            <td>{{dtGoiThau.dviTinh }}</td>
-            <td>{{dtGoiThau.giaKhongVat }}</td>
-            <td>{{dtGoiThau.giaKhoiDiem }}</td>
-            <td>{{dtGoiThau.tienDatTruoc }}</td>
+            <td>{{phanLo.tenDiemKho}}</td>
+            <td>{{phanLo.tenNhakho}}</td>
+            <td>{{phanLo.tenNganKho}}</td>
+            <td>{{phanLo.tenLoKho}}</td>
+            <td>{{phanLo.soDviTsan}}</td>
+            <td>{{phanLo.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+            <td>{{phanLo.dviTinh }}</td>
+            <td>{{phanLo.giaKhongVat }}</td>
+            <td>{{phanLo.giaKhoiDiem }}</td>
+            <td>{{phanLo.tienDatTruoc }}</td>
             <td *ngIf="!isView">
-              <a (click)="themMoiBangPhanLoTaiSan(dtGoiThau,dtGoiThau.idx)">
+              <a (click)="themMoiBangPhanLoTaiSan(phanLo,phanLo.idx)">
                 <i class="fa fa-pencil"></i>
               </a>
             </td>

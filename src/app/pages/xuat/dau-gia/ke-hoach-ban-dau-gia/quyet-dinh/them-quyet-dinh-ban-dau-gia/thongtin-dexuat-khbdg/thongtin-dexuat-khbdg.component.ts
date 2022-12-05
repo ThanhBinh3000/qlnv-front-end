@@ -47,7 +47,6 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
       id: [],
       maDvi: [''],
       tenDvi: [''],
-      loaiHdong: [null,],
       tgianKyHdong: [null,],
       tgianKyHdongGhiChu: [null,],
       tgianTtoan: [null,],
@@ -102,7 +101,7 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
           // }
         }
         this.helperService.setIndexArray(this.listOfData);
-        this.convertListData();
+
       } else {
         this.formData.reset();
         // this.formData.patchValue({
@@ -113,10 +112,7 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
     await this.spinner.hide()
   }
 
-  convertListData() {
-    this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
-      .value()
-  }
+
 
   async ngOnInit() {
     await this.spinner.show()
@@ -135,12 +131,16 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
   }
 
   themMoiBangPhanLoTaiSan(data?: DanhSachPhanLo, index?: number) {
-    if (!this.formData.get('loaiVthh').value) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
-      return;
-    }
+    // if (!this.formData.get('loaiVthh').value) {
+    //   this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
+    //   return;
+    // }
+    // if (!this.formData.get('khoanTienDatTruoc').value) {
+    //   this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn khoản tiền đặt trước');
+    //   return;
+    // }
     const modalGT = this.modal.create({
-      nzTitle: 'Thêm địa điểm nhập kho',
+      nzTitle: 'Thêm địa điểm giao nhận hàng',
       nzContent: DialogThemDiaDiemPhanLoComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -149,9 +149,9 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
       nzComponentParams: {
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
-        loaiVthh: this.formData.get('loaiVthh').value,
         khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
         namKh: this.formData.get('namKh').value,
+        // donGiaVat: this.donGiaVat,
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -165,16 +165,22 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
       }
       let tongSoLuong: number = 0;
       let tongTienKdiem: number = 0;
+      let tongTienKdienDonGia: number = 0;
       let tongTienDatTruoc: number = 0;
+      let tongTienDatTruocDonGia: number = 0;
       this.listOfData.forEach((item) => {
         tongSoLuong = tongSoLuong + item.soLuong;
         tongTienKdiem = tongTienKdiem + item.giaKhoiDiem;
-        tongTienDatTruoc = tongTienDatTruoc + item.soLuong * item.giaKhongVat / 10
+        tongTienKdienDonGia = tongTienKdienDonGia + item.giaKhoiDiemDduyet;
+        tongTienDatTruoc = tongTienDatTruoc + item.tienDatTruoc;
+        tongTienDatTruocDonGia = tongTienDatTruocDonGia + item.tienDatTruocDduyet;
       });
       this.formData.patchValue({
         tongSoLuong: tongSoLuong,
         tongTienKdiem: tongTienKdiem,
+        tongTienKdienDonGia: tongTienKdienDonGia,
         tongTienDatTruoc: tongTienDatTruoc,
+        tongTienDatTruocDonGia: tongTienDatTruocDonGia,
       });
     });
   }
