@@ -35,7 +35,7 @@ export class ThongTinChungComponent extends BaseComponent implements OnInit {
 
   listTrangThai: any[] = [
     { ma: STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: STATUS.DA_DUYET, giaTri: 'Đã duyệt' },
+    // { ma: STATUS.DA_DUYET, giaTri: 'Đã duyệt' },
     { ma: STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
     { ma: STATUS.DA_NGHIEM_THU, giaTri: 'Đã nghiệm thu' }
   ];

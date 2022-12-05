@@ -103,6 +103,7 @@ export class QuanLyBangKeCanHangComponent extends BaseComponent implements OnIni
         "limit": this.pageSize,
         "page": this.page - 1
       },
+      loaiVthh: this.typeVthh
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

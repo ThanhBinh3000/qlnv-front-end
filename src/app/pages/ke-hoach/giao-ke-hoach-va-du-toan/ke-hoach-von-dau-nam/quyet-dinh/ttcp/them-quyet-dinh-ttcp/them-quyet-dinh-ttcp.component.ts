@@ -179,7 +179,6 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   onInputNumberBNChange() {
     let total = 0;
     let totalBtc = 0;
-    console.log(this.dataTableAllBn);
     this.dataTableAllBn.forEach(function (item) {
       if (item.maBn == '01') {
         totalBtc = totalBtc + Number(item.tongSo);

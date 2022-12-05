@@ -79,7 +79,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
 
   listTrangThai: any[] = [
     { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
-    { ma: this.STATUS.DA_DUYET, giaTri: 'Đã duyệt' },
+    // { ma: this.STATUS.DA_DUYET, giaTri: 'Đã duyệt' },
     { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
     { ma: this.STATUS.DA_NGHIEM_THU, giaTri: 'Đã nghiệm thu' }
   ];
