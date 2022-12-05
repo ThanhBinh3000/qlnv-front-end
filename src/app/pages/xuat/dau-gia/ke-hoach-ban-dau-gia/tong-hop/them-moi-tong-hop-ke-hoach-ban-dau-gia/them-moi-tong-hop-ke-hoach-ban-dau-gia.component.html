@@ -186,9 +186,9 @@
                     <th>Số kế hoạch</th>
                     <th>Ngày ký</th>
                     <th>Trích yếu</th>
-                    <th>Số lượng đơn vị tài sản</th>
-                    <th>Giá khởi điểm</th>
-                    <th>Khoản tiền đặt trước</th>
+                    <th>SL đơn vị tài sản</th>
+                    <th>Giá khởi điểm theo đơn giá được duyệt (đ)</th>
+                    <th>Khoản tiền đặt trước theo đơn giá được duyệt (đ)</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -200,8 +200,8 @@
                     <td>{{ data.ngayTao | date: 'dd/MM/YYYY'}}</td>
                     <td>{{ data.trichYeu}}</td>
                     <td>{{ data.soDviTsan}}</td>
-                    <td>{{ data.tongTienKdiem }}</td>
-                    <td>{{ data.tongTienDatTruoc | number: '1.0-1' : 'vi_VN' }}</td>
+                    <td>{{ data.tongTienKdienDonGia | number: '1.0-1' : 'vi_VN' }}</td>
+                    <td>{{ data.tongTienDatTruocDonGia | number: '1.0-1' : 'vi_VN' }}</td>
                     <td>
                         <a (click)="showDetail($event,data.idDxHdr)">
                             <i class="fa fa-eye"></i>

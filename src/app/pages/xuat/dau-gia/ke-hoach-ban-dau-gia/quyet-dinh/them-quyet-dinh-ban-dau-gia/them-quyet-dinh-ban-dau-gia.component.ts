@@ -374,18 +374,10 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
       this.formData.patchValue({
         soQdPd: data.soQdPd?.split("/")[0],
       });
-      let giaKhoiDiem = 0;
-      let tienDatTruoc = 0;
       if (data.loaiVthh.startsWith("02")) {
         this.danhsachDx = data.children;
         this.danhsachDx.forEach(element => {
-          tienDatTruoc += element.soLuong * element.giaKhongVat / 10;
-          giaKhoiDiem += element.soLuong * element.giaKhongVat;
         });
-        this.formData.patchValue({
-          giaKhoiDiem: giaKhoiDiem,
-          tienDatTruoc: tienDatTruoc
-        })
       } else {
         this.danhsachDx = data.children;
         this.danhsachDxCache = cloneDeep(this.danhsachDx);

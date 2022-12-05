@@ -11,6 +11,7 @@ import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gi
 import { DialogThemDiaDiemPhanLoComponent } from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
 import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-thongtin-dexuat-khbdg',
@@ -47,27 +48,26 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
       id: [],
       maDvi: [''],
       tenDvi: [''],
-      tgianKyHdong: [null,],
-      tgianKyHdongGhiChu: [null,],
+      tgianBdauTchuc: [],
+      tgianDkienTu: [null,],
+      tgianDkienDen: [null,],
       tgianTtoan: [null,],
       tgianTtoanGhiChu: [null,],
       pthucTtoan: [null,],
       tgianGnhan: [null,],
       tgianGnhanGhiChu: [null,],
-      khoanTienDatTruoc: [null,],
-      tongSoLuong: [null,],
-      tongTienKdiem: [null,],
-      tongTienDatTruoc: [null,],
-      diaChi: [],
       pthucGnhan: [null,],
       thongBaoKh: [null,],
-      namKh: [,],
+      khoanTienDatTruoc: [null,],
+      tongSoLuong: [null,],
+      tongTienKdienDonGia: [null,],
+      tongTienDatTruocDonGia: [null,],
+      diaChi: [],
+      namKh: [dayjs().get('year'),],
       soDxuat: [null,],
       trichYeu: [null],
       ldoTuchoi: [],
-      tgianDkienDen: [null,],
-      tgianDkienTu: [null,],
-      tgianBdauTchuc: [],
+
     });
   }
 
@@ -80,45 +80,27 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
           tgianBdauTchuc: [res.data?.tgianDkienTu, res.data?.tgianDkienTu],
         });
         if (this.isTongHop) {
-          this.listOfData = this.dataInput.dsGoiThau;
+          this.listOfData = this.dataInput.children ? this.dataInput.children : this.dataInput.dsGoiThau;
         } else {
           this.listOfData = this.dataInput.dsPhanLoList ? this.dataInput.dsPhanLoList : this.dataInput.dsGoiThau;
         }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
-          // let soLuong = res.data.tongMucDt / res.data.donGiaVat / 1000;
-          this.formData.patchValue({
-            // soLuong: soLuong,
-            // tongMucDt: soLuong * res.data.donGiaVat * 1000
-          });
-          // if (!this.isCache) {
-          //   if (this.dataInput.soLuong) {
-          //     this.formData.patchValue({
-          //       soLuong: this.dataInput.soLuong,
-          //       tongMucDt: this.dataInput.soLuong * this.dataInput.donGiaVat * 1000
-          //     })
-          //   }
-          // }
         }
         this.helperService.setIndexArray(this.listOfData);
 
       } else {
         this.formData.reset();
-        // this.formData.patchValue({
-        //   vat: 5
-        // });
       }
     }
     await this.spinner.hide()
   }
 
 
-
   async ngOnInit() {
     await this.spinner.show()
     await this.spinner.hide()
   }
-
 
 
   expandSet = new Set<number>();
@@ -130,15 +112,8 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
     }
   }
 
-  themMoiBangPhanLoTaiSan(data?: DanhSachPhanLo, index?: number) {
-    // if (!this.formData.get('loaiVthh').value) {
-    //   this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
-    //   return;
-    // }
-    // if (!this.formData.get('khoanTienDatTruoc').value) {
-    //   this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn khoản tiền đặt trước');
-    //   return;
-    // }
+  themMoiBangPhanLoTaiSan(data?: any, index?: number) {
+    console.log(data, 454545)
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm giao nhận hàng',
       nzContent: DialogThemDiaDiemPhanLoComponent,
@@ -148,10 +123,6 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
-        dataChiTieu: this.dataChiTieu,
-        khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
-        namKh: this.formData.get('namKh').value,
-        // donGiaVat: this.donGiaVat,
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -168,6 +139,7 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
       let tongTienKdienDonGia: number = 0;
       let tongTienDatTruoc: number = 0;
       let tongTienDatTruocDonGia: number = 0;
+      let soLuong: number = 0;
       this.listOfData.forEach((item) => {
         tongSoLuong = tongSoLuong + item.soLuong;
         tongTienKdiem = tongTienKdiem + item.giaKhoiDiem;
@@ -182,6 +154,8 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
         tongTienDatTruoc: tongTienDatTruoc,
         tongTienDatTruocDonGia: tongTienDatTruocDonGia,
       });
+      this.soLuongChange.emit(soLuong);
+      this.helperService.setIndexArray(this.listOfData);
     });
   }
 }
