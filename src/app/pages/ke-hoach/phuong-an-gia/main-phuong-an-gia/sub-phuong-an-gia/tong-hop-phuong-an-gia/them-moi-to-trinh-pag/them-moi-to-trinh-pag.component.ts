@@ -133,7 +133,7 @@ export class ThemMoiToTrinhPagComponent implements OnInit {
       tenCloaiVthh: data.tenCloaiVthh,
       loaiGia: data.loaiGia,
       trangThaiTt: data.trangThaiTt,
-      tenTrangThaiTt: data.tenTrangThaiTt,
+      tenTrangThaiTt: data.tenTrangThaiTt ? data.tenTrangThaiTt : 'Dự thảo' ,
       ttLyDoTuChoi: data.ttLyDoTuChoi,
       giaKsTt: giaKsTt,
       giaKsTtVat: giaKsTtVat,

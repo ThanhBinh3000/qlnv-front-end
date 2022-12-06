@@ -12,10 +12,14 @@ import {MESSAGE} from 'src/app/constants/message';
 })
 export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   @Input() maBoNganh: string;
+  @Input() tab: string;
+  @Input() tabRadio: string;
   @Input()
   dsHangHoa = [];
   @Input()
   dataTable = [];
+  @Input()
+  dataToanBn = [];
   @Input()
   tabName: String;
   @Input() namHienTai: number;
@@ -31,11 +35,15 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   @Input()
   isView: boolean = false;
 
+  tongSoVT: number = 0;
+  tongSoLT: number = 0;
+
   rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   dsChungLoaiHangHoa = [];
   dsDonViTinh = [];
   dsKeHoachNam = [];
+  listTongGiaTriBnKhac: { [key: string]: { tongSo: any } } = {};
 
   constructor(
     private modal: NzModalService,
@@ -47,6 +55,17 @@ export class KeHoachXuatGiamComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.updateEditCache()
     this.emitDataTable();
+    for (let item of this.dataToanBn) {
+      if (item.maBn == '01' && !item.isSum && item.stt == 2) {
+        this.tongSoLT = item.tongSo;
+      }
+      if (item.maBn == '01' && !item.isSum && item.stt == 3) {
+        this.tongSoVT = item.tongSo;
+      }
+      if (!item.isSum) {
+        this.listTongGiaTriBnKhac[item.maBn] = {tongSo : item.tongSo};
+      }
+    }
   }
 
   initData() {

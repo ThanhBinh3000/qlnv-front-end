@@ -192,14 +192,16 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
     if (res2.msg == MESSAGE.SUCCESS) {
       const data = res2.data;
       this.formData.patchValue({
-        soQdPd: data.soQuyetDinh,
+        soQdPd: data.soQuyetDinh
       });
     }
-    console.log(res2, 222)
+    this.formData.patchValue({
+      soQdPd: '150/TCDT',
+    });
   }
 
   isDetailPermission() {
-    if (this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_SUA") && this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP")) {
+    if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_SUA") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP")) {
       return true;
     }
     return false;

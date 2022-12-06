@@ -119,7 +119,7 @@
               </nz-form-item>
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="8" nzLg="8">
-              <nz-form-item>
+              <nz-form-item *ngIf="detailDonVi.value.capDvi != 1 &&  detailDonVi.value.capDvi != 0">
                 <nz-form-label></nz-form-label>
                 <label nz-checkbox [nzDisabled]="!isEditData" formControlName="type">Là phòng ban</label>
               </nz-form-item>

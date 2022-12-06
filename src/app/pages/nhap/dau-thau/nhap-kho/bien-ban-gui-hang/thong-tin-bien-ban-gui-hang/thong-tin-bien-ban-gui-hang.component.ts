@@ -188,6 +188,10 @@ export class ThongTinBienBanGuiHangComponent extends BaseComponent implements On
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.dataTable = data.children;
+          await this.bindingDataQd(data.idQdGiaoNvNh);
+          let ddNhap = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
+          this.bindingDataDdNhap(ddNhap);
         }
       }
     }
@@ -233,44 +237,41 @@ export class ThongTinBienBanGuiHangComponent extends BaseComponent implements On
   }
 
   pheDuyet() {
-    // let trangThai = this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC;
-    // if (this.bienBanGuiHang.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC) {
-    //   trangThai = this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC;
-    // }
-    // this.modal.confirm({
-    //   nzClosable: false,
-    //   nzTitle: 'Xác nhận',
-    //   nzContent: 'Bạn có chắc chắn muốn phê duyệt?',
-    //   nzOkText: 'Đồng ý',
-    //   nzCancelText: 'Không',
-    //   nzOkDanger: true,
-    //   nzWidth: 310,
-    //   nzOnOk: async () => {
-    //     this.spinner.show();
-    //     try {
-    //       let body = {
-    //         id: this.id,
-    //         lyDoTuChoi: null,
-    //         trangThai: trangThai,
-    //       };
-    //       let res =
-    //         await this.bienBanGuiHangService.updateStatus(
-    //           body,
-    //         );
-    //       if (res.msg == MESSAGE.SUCCESS) {
-    //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-    //         this.back();
-    //       } else {
-    //         this.notification.error(MESSAGE.ERROR, res.msg);
-    //       }
-    //       this.spinner.hide();
-    //     } catch (e) {
-    //       console.log('error: ', e);
-    //       this.spinner.hide();
-    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //     }
-    //   },
-    // });
+    let trangThai = this.STATUS.DA_HOAN_THANH;
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn cập nhật hoàn thành?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            lyDoTuChoi: null,
+            trangThai: trangThai,
+          };
+          let res =
+            await this.bienBanGuiHangService.approve(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.back();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
   }
 
   tuChoi() {

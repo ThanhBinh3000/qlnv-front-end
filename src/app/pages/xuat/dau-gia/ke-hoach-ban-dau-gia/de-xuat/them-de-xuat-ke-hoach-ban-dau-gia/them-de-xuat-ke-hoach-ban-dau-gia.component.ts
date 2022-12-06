@@ -91,7 +91,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       giaTri: 'Chuyển khoản',
     },
   ];
-  giaChuaVat: number = 0;
+  donGiaVat: number = 0;
 
   constructor(
     private modal: NzModalService,
@@ -114,34 +114,38 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     super();
     this.formData = this.fb.group({
       id: [],
-      maDvi: ['', [Validators.required]],
+      maDvi: [''],
       tenDvi: ['', [Validators.required]],
       loaiHinhNx: ['', [Validators.required]],
       kieuNx: [''],
       diaChi: [],
       namKh: [dayjs().get('year'), [Validators.required]],
-      soDxuat: [null],
+      soDxuat: ['', [Validators.required]],
       trichYeu: [, [Validators.required]],
-      ngayTao: [dayjs().format('YYYY-MM-DD')],
+      ngayTao: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       ngayPduyet: [],
       soQdCtieu: [, [Validators.required]],
-      loaiVthh: [, [Validators.required]],
+      loaiVthh: [,],
       tenLoaiVthh: [, [Validators.required]],
-      cloaiVthh: [, [Validators.required]],
+      cloaiVthh: [,],
       tenCloaiVthh: [, [Validators.required]],
       moTaHangHoa: [, [Validators.required]],
       tchuanCluong: [null],
-      thoiGianDuKien: [null],
-      tgianDkienTu: [null],
-      tgianDkienDen: [null],
-      loaiHdong: [null, [Validators.required]],
-      tgianKyHdong: [null, [Validators.required]],
-      tgianTtoan: [null, [Validators.required]],
-      tgianGnhan: [null],
-      thongBaoKh: [null, [Validators.required]],
-      khoanTienDatTruoc: [null],
+      thoiGianDuKien: [, [Validators.required]],
+      tgianDkienTu: [,],
+      tgianDkienDen: [,],
+      tgianTtoan: [, [Validators.required]],
+      tgianTtoanGhiChu: [null],
+      pthucTtoan: [, [Validators.required]],
+      tgianGnhan: [, [Validators.required]],
+      tgianGnhanGhiChu: [null],
+      pthucGnhan: [, [Validators.required]],
+      thongBaoKh: [, [Validators.required]],
+      khoanTienDatTruoc: [, [Validators.required]],
       tongSoLuong: [null],
       tongTienKdiem: [null],
+      tongTienKdienDonGia: [null],
+      tongTienDatTruocDonGia: [null],
       tongTienDatTruoc: [null],
       ghiChu: [null],
       trangThai: [STATUS.DU_THAO],
@@ -157,11 +161,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       slHdDaKy: [null],
       ldoTuChoi: [null],
       ngayKy: [null],
-      tgianKyHdongGhiChu: [null],
-      tgianTtoanGhiChu: [null],
-      tgianGnhanGhiChu: [null],
-      pthucTtoan: [null, [Validators.required]],
-      pthucGnhan: [null],
+
     });
   }
 
@@ -176,7 +176,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       });
     }
     if (this.idInput > 0) {
-      await this.getDetail(this.idInput);
+      // await this.getDetail(this.idInput);
     } else {
       this.initForm();
     }
@@ -192,7 +192,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     this.listLoaiHinhNx = [];
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
     if (resNx.msg == MESSAGE.SUCCESS) {
-      this.listLoaiHinhNx = resNx.data.filter(item => item.phanLoai == 'N');
+      this.listLoaiHinhNx = resNx.data.filter(item => item.phanLoai == 'X');
     }
     // kiểu nhập xuất
     this.listKieuNx = [];
@@ -297,18 +297,18 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
           let res = await this.dmTieuChuanService.getDetailByMaHh(
             this.formData.get('cloaiVthh').value,
           );
-          // let bodyPag = {
-          //   namKeHoach: this.formData.value.namKh,
-          //   loaiVthh: this.formData.value.loaiVthh,
-          //   cloaiVthh: this.formData.value.cloaiVthh,
-          //   trangThai: STATUS.BAN_HANH,
-          //   maDvi: this.formData.value.maDvi
-          // }
-          // let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
-          // if (pag.msg == MESSAGE.SUCCESS) {
-          //   const data = pag.data;
-          //   this.giaChuaVat = data.giaQd
-          // }
+          let bodyPag = {
+            namKeHoach: this.formData.value.namKh,
+            loaiVthh: this.formData.value.loaiVthh,
+            cloaiVthh: this.formData.value.cloaiVthh,
+            trangThai: STATUS.BAN_HANH,
+            maDvi: this.formData.value.maDvi
+          }
+          let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+          if (pag.msg == MESSAGE.SUCCESS) {
+            const data = pag.data;
+            this.donGiaVat = data.giaQdVat
+          }
           if (res.statusCode == API_STATUS_CODE.SUCCESS) {
             this.formData.patchValue({
               tchuanCluong: res.data ? res.data.tenQchuan : null,
@@ -329,6 +329,10 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
       return;
     }
+    if (!this.formData.get('khoanTienDatTruoc').value) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn khoản tiền đặt trước');
+      return;
+    }
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm giao nhận hàng',
       nzContent: DialogThemDiaDiemPhanLoComponent,
@@ -342,6 +346,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
         loaiVthh: this.formData.get('loaiVthh').value,
         khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
         namKh: this.formData.get('namKh').value,
+        donGiaVat: this.donGiaVat,
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -353,18 +358,25 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       } else {
         this.listOfData = [...this.listOfData, res.value];
       }
+      console.log(this.listOfData, 77777)
       let tongSoLuong: number = 0;
       let tongTienKdiem: number = 0;
+      let tongTienKdienDonGia: number = 0;
       let tongTienDatTruoc: number = 0;
+      let tongTienDatTruocDonGia: number = 0;
       this.listOfData.forEach((item) => {
         tongSoLuong = tongSoLuong + item.soLuong;
         tongTienKdiem = tongTienKdiem + item.giaKhoiDiem;
-        tongTienDatTruoc = tongTienDatTruoc + item.soLuong * item.giaKhongVat / 10
+        tongTienKdienDonGia = tongTienKdienDonGia + item.giaKhoiDiemDduyet;
+        tongTienDatTruoc = tongTienDatTruoc + item.tienDatTruoc;
+        tongTienDatTruocDonGia = tongTienDatTruocDonGia + item.tienDatTruocDduyet;
       });
       this.formData.patchValue({
         tongSoLuong: tongSoLuong,
         tongTienKdiem: tongTienKdiem,
+        tongTienKdienDonGia: tongTienKdienDonGia,
         tongTienDatTruoc: tongTienDatTruoc,
+        tongTienDatTruocDonGia: tongTienDatTruocDonGia,
       });
     });
   }
@@ -652,11 +664,9 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    await this.spinner.show();
     if (changes) {
       await this.getDetail(this.idInput);
     };
-    await this.spinner.hide();
   }
 
   isDisbleForm(): boolean {

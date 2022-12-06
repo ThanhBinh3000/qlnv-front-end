@@ -38,33 +38,6 @@ export class XayDungPhuongAnComponent implements OnInit {
   ) {
   }
 
-  tmpData: any = {
-    "error": true,
-    "total": 3,
-    "data": [
-      {
-        "name": "mot",
-        "error": [
-          "sai ten", "sai so luong"
-        ],
-        "errorLabel": ["input1"]
-      },
-      {
-        "name": "hai",
-        "error": [],
-        "errorLabel": []
-      },
-      {
-        "name": "ba",
-        "error": [
-          "sai tuoi"
-        ],
-        "errorLabel": [
-          "input1"
-        ]
-      }
-    ]
-  }
   @Input()
   loaiVthh: string;
   @Input()
@@ -486,13 +459,10 @@ export class XayDungPhuongAnComponent implements OnInit {
   }
 
   isOwner(maDvi: any) {
-    return this.userInfo.MA_DVI == maDvi;
+    return this.userInfo.MA_PHONG_BAN == maDvi;
   }
 
-  checkValidInput(index: number, input1: string) {
-    console.log(this.tmpData.data[index], 222222222);
-    let isValid = this.tmpData.data[index].errorLabel.includes(input1);
-    console.log(isValid, 1829)
-
+  isBelong(maDvi: any) {
+    return this.userInfo.MA_DVI == maDvi;
   }
 }

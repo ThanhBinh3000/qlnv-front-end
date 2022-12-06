@@ -54,22 +54,25 @@
         Đơn vị: kg
     </span>
 </div>
-<nz-table #groupingTable #editRowTable nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
-    [nzShowPagination]="false" id="table-them-thong-tin-goi-thau">
+<nz-table [nzScroll]="{ x: '1700px' }" #groupingTable #editRowTable nzBordered [nzData]="listOfData"
+    [nzFrontPagination]="false" [nzShowPagination]="false" id="table-them-thong-tin-goi-thau">
     <thead>
         <tr>
-            <th width="200px" class="text-center">Điểm kho</th>
-            <th width="120px" class="text-center">Nhà kho</th>
-            <th width="120px" class="text-center">Ngăn kho</th>
-            <th width="120px" class="text-center">Lô Kho</th>
-            <th width="120px" class="text-center">Chủng loại hành hóa</th>
-            <th width="120px" class="text-center">Mã đơn vị tài sản</th>
-            <th width="120px" class="text-center">Tồn kho</th>
-            <th width="120px" class="text-center">SL xuất bán (KH)</th>
-            <th width="120px" class="text-center">Đơn giá đề xuất không VAT(đ/kg)</th>
-            <th width="120px" class="text-center">Giá khởi điểm (đồng)</th>
-            <th width="120px" class="text-center">Đơn giá được duyệt</th>
-            <th width="80px" class="text-center">Hành động</th>
+            <th class="text-center">Điểm kho</th>
+            <th class="text-center">Nhà kho</th>
+            <th class="text-center">Ngăn kho</th>
+            <th class="text-center">Lô Kho</th>
+            <th class="text-center">Chủng loại hành hóa</th>
+            <th class="text-center">Mã đơn vị tài sản</th>
+            <th class="text-center">Tồn kho</th>
+            <th class="text-center">SL xuất bán đề xuất</th>
+            <th class="text-center">Đơn giá đề xuất (đ/kg)</th>
+            <th class="text-center">Giá khởi điểm đề xuất (đồng)</th>
+            <th class="text-center">Đơn giá được duyệt VAT (đ/kg)</th>
+            <th class="text-center">Đơn giá khởi điểm được duyệt (đ)</th>
+            <th class="text-center">Số tiền đặt trước đề xuất (đ)</th>
+            <th class="text-center">Số tiền đặt trước được duyệt (đ)</th>
+            <th class="text-center">Hành động</th>
         </tr>
     </thead>
     <tbody>
@@ -112,7 +115,10 @@
                 </nz-input-number>
             </td>
             <td>{{thongtinPhanLo.giaKhoiDiem}}</td>
-            <td>{{thongtinPhanLo.giaDuocDuyet}}</td>
+            <td>{{thongtinPhanLo.donGiaVat}}</td>
+            <td>{{thongtinPhanLo.giaKhoiDiemDduyet}}</td>
+            <td>{{thongtinPhanLo.tienDatTruoc}}</td>
+            <td>{{thongtinPhanLo.tienDatTruocDduyet}}</td>
             <td class="text-center">
                 <a (click)="addDiemKho()">
                     <i class="icon htvbdh_dau-cong xanhla"></i>
@@ -134,7 +140,10 @@
                 <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{ data.giaKhongVat | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{ data.giaKhoiDiem | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{ data.giaDuocDuyet | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.giaKhoiDiemDduyet | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.tienDatTruoc | number : '1.0-1' : 'vi_VN'}}</td>
+                <td>{{ data.tienDatTruocDduyet | number : '1.0-1' : 'vi_VN'}}</td>
                 <td class="text-center">
                     <a (click)="startEdit(i)">
                         <i class="fa fa-pencil"></i>
@@ -189,7 +198,10 @@
                     </nz-input-number>
                 </td>
                 <td>{{thongtinPhanLo.giaKhoiDiem}}</td>
-                <td>{{thongtinPhanLo.giaDuocDuyet}}</td>
+                <td>{{thongtinPhanLo.donGiaVat}}</td>
+                <td>{{thongtinPhanLo.giaKhoiDiemDduyet}}</td>
+                <td>{{thongtinPhanLo.tienDatTruoc}}</td>
+                <td>{{thongtinPhanLo.tienDatTruocDduyet}}</td>
                 <td class="text-center">
                     <a (click)="saveEdit(i)" class="save">
                         <i class="icon htvbdh_tcdt_save"></i>
@@ -206,11 +218,11 @@
             </td>
             <td class="background-last-row text-left"> {{ calcTong() | number : '1.0-1' : 'vi_VN' }}
             </td>
-            <td>
+            <td colspan="5">
             </td>
             <td class="background-last-row text-left"> {{ calcGiaKhoiDiem() | number : '1.0-1' : 'vi_VN' }}
             </td>
-            <td colspan="2">
+            <td>
             </td>
         </tr>
     </tbody>
@@ -225,8 +237,7 @@
                 <i aria-hidden="true" class="fa fa-sign-out"></i>
                 Hủy
             </button>
-            <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()"
-                [disabled]="!isValid">
+            <button class="btn btn-outline-grey btn-sm waves-effect waves-light active" (click)="save()">
                 <i aria-hidden="true" class="fa fa-save"></i>
                 Lưu
             </button>

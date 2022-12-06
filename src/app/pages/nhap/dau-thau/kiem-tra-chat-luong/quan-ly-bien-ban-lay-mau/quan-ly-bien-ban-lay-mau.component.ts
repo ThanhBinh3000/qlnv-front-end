@@ -133,7 +133,7 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
   async search() {
     await this.spinner.show();
     let body = {
-      "paggingReq": {
+      paggingReq: {
         "limit": this.pageSize,
         "page": this.page - 1
       },
@@ -144,25 +144,42 @@ export class QuanLyBienBanLayMauComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.dataTable.forEach(item => {
-        if (this.userService.isChiCuc()) {
-          item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
-        } else {
-          let data = [];
-          item.dtlList.forEach(item => {
-            data = [...data, ...item.listBienBanLayMau];
-          })
-          item.detail = {
-            listBienBanLayMau: data
-          }
-        };
-      });
+      this.convertDataTable();
+      // this.dataTable.forEach(item => {
+      //   if (this.userService.isChiCuc()) {
+      //     item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      //   } else {
+      //     let data = [];
+      //     item.dtlList.forEach(item => {
+      //       data = [...data, ...item.listBienBanLayMau];
+      //     })
+      //     item.detail = {
+      //       listBienBanLayMau: data
+      //     }
+      //   };
+      // });
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     await this.spinner.hide();
+  }
+
+  convertDataTable() {
+    this.dataTable.forEach(item => {
+      if (this.userService.isChiCuc()) {
+        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      } else {
+        let data = [];
+        item.dtlList.forEach(item => {
+          data = [...data, ...item.children];
+        })
+        item.detail = {
+          children: data
+        }
+      };
+    });
   }
 
   async changePageIndex(event) {
