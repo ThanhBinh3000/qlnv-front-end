@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import { BaoCaoModule } from './bao-cao/bao-cao.module';
+import { DialogThemKhoanMucComponent } from './bao-cao/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DanhSachBaoCaoTuDonViCapDuoiComponent } from './danh-sach-bao-cao-tu-don-vi-cap-duoi/danh-sach-bao-cao-tu-don-vi-cap-duoi.component';
 import { DanhSachBaoCaoComponent } from './danh-sach-bao-cao/danh-sach-bao-cao.component';
 import { DanhSachPhuongAnGiaoSktTranChiComponent } from './danh-sach-phuong-an-giao-skt-tran-chi/danh-sach-phuong-an-giao-skt-tran-chi.component';
@@ -30,6 +31,7 @@ import { TongHopBaoCaoTuDonViCapDuoiComponent } from './tong-hop-bao-cao-tu-don-
         SoKiemTraTranChiComponent,
         DialogTaoMoiComponent,
         DialogThemMoiQdCvComponent,
+        DialogThemKhoanMucComponent,
     ],
     imports: [
         CommonModule,
@@ -42,6 +44,7 @@ import { TongHopBaoCaoTuDonViCapDuoiComponent } from './tong-hop-bao-cao-tu-don-
         DanhSachBaoCaoComponent,
         DanhSachBaoCaoTuDonViCapDuoiComponent,
         TongHopBaoCaoTuDonViCapDuoiComponent,
+
     ]
 })
 export class LapKeHoachVaThamDinhDuToanModule { }
