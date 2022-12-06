@@ -137,7 +137,7 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="4">
+    <div nz-col [nzSpan]="5">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> % Khoản tiền đặt trước </nz-form-label>
         <nz-form-control [nzErrorTip]="error">
@@ -150,27 +150,27 @@
         </nz-form-control>
       </nz-form-item>
     </div>
-    <div nz-col [nzSpan]="6">
+    <div nz-col [nzSpan]="5">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán đề xuất </nz-form-label>
+        <nz-form-label [nzNoColon]="true"> Tổng SL xuất bán đề xuất </nz-form-label>
         <nz-form-control nz-col [nzSpan]="24">
-          <span class="text-green" nzDisabled>{{formData.value.tongSoLuong}} Tấn</span>
+          <span class="text-green" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}} Tấn</span>
         </nz-form-control>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="7">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Tổng tiền giá khởi điểm theo đơn giá được duyệt </nz-form-label>
+        <nz-form-label [nzNoColon]="true"> Tổng tiền giá KĐ theo ĐG được duyệt </nz-form-label>
         <nz-form-control nz-col [nzSpan]="24">
-          <span class="text-green" nzDisabled>{{formData.value.tongTienKdienDonGia|number: '1.0-1'}} (vnd)</span>
+          <span class="text-green" nzDisabled>{{formData.value.tongTienKdienDonGia |number: '1.0-1'}} (vnd)</span>
         </nz-form-control>
       </nz-form-item>
     </div>
     <div nz-col [nzSpan]="7">
       <nz-form-item>
-        <nz-form-label [nzNoColon]="true"> Tổng khoản tiền đặt trước theo đơn giá được duyệt </nz-form-label>
+        <nz-form-label [nzNoColon]="true"> Tổng khoản tiền ĐT theo ĐG được duyệt </nz-form-label>
         <nz-form-control nz-col [nzSpan]="24">
-          <span class="text-green" nzDisabled>{{formData.value.tongTienDatTruocDonGia|number: '1.0-1'}} (vnd)</span>
+          <span class="text-green" nzDisabled>{{formData.value.tongTienDatTruocDonGia |number: '1.0-1'}} (vnd)</span>
         </nz-form-control>
       </nz-form-item>
     </div>

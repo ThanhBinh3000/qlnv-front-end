@@ -231,7 +231,7 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
-    if (this.formData.value.soQd) {
+    if (this.formData.value.soQdPd) {
       body.soQdPd = this.formData.value.soQdPd + "/" + this.maQd;
     }
     body.dsDeXuat = this.danhsachDx;
