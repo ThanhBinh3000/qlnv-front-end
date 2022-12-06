@@ -465,8 +465,8 @@
               <th>Ngày duyệt KH</th>
               <th>Trích yếu</th>
               <th>Số ĐV tài sản</th>
-              <th>Số lượng xuất bán</th>
-              <th>Khoản tiền đặt trước(đ)</th>
+              <th>Tổng SL xuất bán (kg)</th>
+              <th>Tổng khoản tiền đặt trước theo đơn giá được duyệt(đ)</th>
             </tr>
           </thead>
           <tbody>
@@ -480,7 +480,7 @@
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.soDviTsan }}</td>
               <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
-              <td>{{ data.tongTienDatTruoc | number: '1.0-1' }}</td>
+              <td>{{ data.tongTienDatTruocDonGia | number: '1.0-1' }}</td>
             </tr>
           </tbody>
         </nz-table>
