@@ -70,31 +70,60 @@ export class MangLuoiKhoComponent implements OnInit {
   ) {
     this.detailDonVi = this.formBuilder.group({
       id: [''],
-      tenDvi: ['', Validators.required],
-      maDvi: [''],
+      maCha: [null],
+      maCuc: [],
+      tenCuc: [],
+      maChiCuc: [],
+      soChiCuc: [],
+      nganKhoId: [''],
       diaChi: [''],
+      tenChiCuc: [''],
+      tenNganlo: [''],
+      maNganlo: [''],
+      ngankhoId: [''],
+      tenDiemkho: [''],
+      maDiemkho: [''],
+      diemkhoId: [''],
+      tenNhakho: [''],
+      maNhakho: [''],
+      tenNgankho: [''],
+      maNgankho: [''],
+      loaikhoId: [''],
+      nhakhoId: [''],
+      loaiVthh: [''],
+      cloaiVthh: [''],
+      trangThai: [true],
+      diaDiem: [''],
+      type: [true],
+      coLoKho: [false],
+      ghiChu: [''],
+      nhiemVu: [''],
+      tichLuongTkLt: [''],
+      tichLuongTkVt: [''],
+      tichLuongSdLt: [''],
+      tichLuongSdVt: [''],
+      theTichSdLt: [''],
+      theTichSdVt: [''],
       namSuDung: [''],
       dienTichDat: [''],
-      loaikhoId: [''],
-      tongTichLuongTkLt: [''],
-      tongTichLuongTkVt: [''],
-      tongTichLuongDsd: [''],
-
-      tichLuongThietKe: [''],
-      tichLuongChua: [''],
-      tichLuongKd: [''],
-
-      tongTichLuongKdLt: [''],
-      tongTichLuongKdVt: [''],
-
-      soLuongChiCuc: [''],
-      soLuongDiemKho: [''],
-      soLuongNhaKho: [''],
-      soLuongNganKho: [''],
-      soLuongLoKho: [''],
-      trangThai: [''],
-      coLoKho: [''],
-      thuKho: ['']
+      tichLuongKdLt: [''],
+      tichLuongKdVt: [''],
+      theTichKdLt: [''],
+      theTichKdVt: [''],
+      theTichTk: [''],
+      theTichTkLt: [''],
+      theTichTkVt: [''],
+      namNhap: [''],
+      tinhtrangId: [''],
+      chatluongId: [''],
+      soLuongTonKho: [''],
+      ngayNhapDay: [''],
+      dviTinh: [''],
+      soDiemKho: [''],
+      soNhaKho: [''],
+      soNganKho: [''],
+      soLoKho: [''],
+      tenThuKho: [''],
     })
   }
 
@@ -355,12 +384,12 @@ export class MangLuoiKhoComponent implements OnInit {
       nzFooter: null,
       nzStyle: { top: '50px' },
       nzComponentParams: {
-        detail : this.detailDonVi.value
+        detail : this.detailDonVi.value,
+        levelNode : this.levelNode
       },
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
-
       }
     });
   }

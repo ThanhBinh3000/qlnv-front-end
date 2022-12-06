@@ -110,26 +110,28 @@ export class ThemMoiKhoComponent implements OnInit {
       tichLuongKdVt: [''],
       theTichKdLt: [''],
       theTichKdVt: [''],
+      theTichTk: [''],
       theTichTkLt: [''],
       theTichTkVt: [''],
       namNhap: [''],
       tinhtrangId: [''],
+      chatluongId: [''],
       soLuongTonKho: [''],
       ngayNhapDay: [''],
-      donViTinh: ['']
+      dviTinh: [''],
+      soDiemKho: [''],
+      soNhaKho: [''],
+      soNganKho: [''],
+      soLoKho: [''],
+      tenThuKho: [''],
     })
     this.formKho.controls['maCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
       if (node) {
         this.levelNode = node.level + 1
       }
+      this.setValidators();
     });
-  }
-
-  loadDetailParent(node) {
-    switch (node.level) {
-
-    }
   }
 
 
@@ -205,8 +207,10 @@ export class ThemMoiKhoComponent implements OnInit {
   }
 
   saveNganLo() {
+    this.spinner.show()
     this.helperService.markFormGroupTouched(this.formKho);
     if (this.formKho.invalid) {
+      this.spinner.hide()
       return;
     }
     let body = this.formKho.value;
@@ -232,6 +236,7 @@ export class ThemMoiKhoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       ;
     });
+    this.spinner.hide()
   }
 
   saveNganKho() {
@@ -258,21 +263,20 @@ export class ThemMoiKhoComponent implements OnInit {
   }
 
   saveKho(level?) {
-    switch (level) {
-      case 4: {
-        this.saveNganLo();
-        break
-      }
-      case 3 : {
-        this.saveNganKho();
-        break
-      }
+    this.helperService.markFormGroupTouched(this.formKho);
+    if (this.formKho.invalid) {
+      return;
     }
-  }
-
-  resetForm() {
-    this.formKho.reset();
-    this.formKho.clearValidators();
+    // switch (level) {
+    //   case 4: {
+    //     this.saveNganLo();
+    //     break
+    //   }
+    //   case 3 : {
+    //     this.saveNganKho();
+    //     break
+    //   }
+    // }
   }
 
   changeLoKho() {
@@ -280,6 +284,54 @@ export class ThemMoiKhoComponent implements OnInit {
       this.checkLoKho = true;
     }else {
       this.checkLoKho = false;
+    }
+  }
+
+   async setValidators() {
+    this.formKho.clearValidators();
+    switch (this.levelNode) {
+      case 1 : {
+        this.formKho.controls['maDiemkho'].setValidators([Validators.required])
+        this.formKho.controls['tenDiemkho'].setValidators([Validators.required])
+        this.formKho.controls['diaChi'].setValidators([Validators.required])
+        this.formKho.controls['moTa'].setValidators([Validators.required])
+        break;
+      }
+      case 2 : {
+        this.formKho.controls['maNhakho'].setValidators([Validators.required])
+        this.formKho.controls['tenNhakho'].setValidators([Validators.required])
+        this.formKho.controls['namSuDung'].setValidators([Validators.required])
+        this.formKho.controls['loaikhoId'].setValidators([Validators.required])
+        this.formKho.controls['soNganKho'].setValidators([Validators.required])
+        this.formKho.controls['dienTichDat'].setValidators([Validators.required])
+        this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
+        this.formKho.controls['chatluongId'].setValidators([Validators.required])
+        break;
+      }
+      case 3 : {
+        this.formKho.controls['maNgankho'].setValidators([Validators.required])
+        this.formKho.controls['tenNgankho'].setValidators([Validators.required])
+        this.formKho.controls['dienTichDat'].setValidators([Validators.required])
+        this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
+        this.formKho.controls['coLoKho'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkLt'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkVt'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongSdLt'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongSdVt'].setValidators([Validators.required])
+        this.formKho.controls['nhiemVu'].setValidators([Validators.required])
+        this.formKho.controls['ghiChu'].setValidators([Validators.required])
+        break;
+      }
+      case 4 : {
+        this.formKho.controls['maNganlo'].setValidators([Validators.required])
+        this.formKho.controls['tenNganlo'].setValidators([Validators.required])
+        this.formKho.controls['namSuDung'].setValidators([Validators.required])
+        this.formKho.controls['dienTichDat'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkLt'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkVt'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkVt'].setValidators([Validators.required])
+        break;
+      }
     }
   }
 }

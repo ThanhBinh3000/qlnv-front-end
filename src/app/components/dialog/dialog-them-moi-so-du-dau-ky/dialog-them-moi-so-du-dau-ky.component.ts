@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NzModalRef} from "ng-zorro-antd/modal";
+import {NzModalRef, NzModalService} from "ng-zorro-antd/modal";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Globals} from "../../../shared/globals";
@@ -10,6 +10,7 @@ import {MESSAGE} from "../../../constants/message";
 import {DanhMucService} from "../../../services/danhmuc.service";
 import {API_STATUS_CODE} from "../../../constants/config";
 import * as dayjs from "dayjs";
+import {OldResponseData} from "../../../interfaces/response";
 
 @Component({
   selector: 'app-dialog-them-moi-so-du-dau-ky',
@@ -20,6 +21,7 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
   m3: string = 'm3';
   formData: FormGroup;
   detail: any;
+  levelNode: any;
   listVthh: any[] = [];
   listCloaiVthh: any[] = [];
   dsNam: any[] = [];
@@ -33,21 +35,22 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     private fb: FormBuilder,
     private spinner: NgxSpinnerService,
     public globals: Globals,
-    private helperService: HelperService
+    private helperService: HelperService,
+    private modal: NzModalRef,
   ) {
     this.formData = this.fb.group({
       maNganlo: [],
       tenNganlo: [],
-      tichLuongDaSdLt: ['', Validators.required],
-      tichLuongDaSdVt: ['', Validators.required],
-      theTichDaSdVt: ['', Validators.required],
-      theTichDaSdLt: ['', Validators.required],
+      tichLuongSdLt: ['', Validators.required],
+      tichLuongSdVt: ['', Validators.required],
+      theTichSdVt: ['', Validators.required],
+      theTichSdLt: ['', Validators.required],
       namNhap: ['', Validators.required],
-      ngayNhapCuoi: [''],
+      ngayNhapDay: [''],
       loaiVthh: ['', Validators.required],
       cloaiVthh: ['', Validators.required],
-      soLuongTonKho: ['', Validators.required],
-      donViTinh: ['']
+      slTon: ['', Validators.required],
+      dviTinh: ['']
     })
   }
 
@@ -76,11 +79,34 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
   }
 
 
-  save() {
+  save(type) {
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       return;
     }
+    let body = this.detail
+    body.tichLuongSdLt = this.formData.value.tichLuongSdLt
+    body.tichLuongSdVt = this.formData.value.tichLuongSdVt
+    body.theTichSdLt = this.formData.value.theTichSdLt
+    body.theTichSdVt = this.formData.value.theTichSdVt
+    body.loaiVthh = this.formData.value.loaiVthh
+    body.cloaiVthh = this.formData.value.cloaiVthh
+    body.slTon = this.formData.value.slTon
+    body.dviTinh = this.formData.value.dviTinh
+    body.namNhap = this.formData.value.namNhap
+    this.khoService.updateKho(type, body).then((res: OldResponseData) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        this.modal.close(true);
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }).catch((e) => {
+      console.error('error: ', e);
+      this.notification.error(
+        MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR
+      );
+    });
   }
 
   handleCancel() {
@@ -113,7 +139,7 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     let res = await this.danhMucService.getDetail(event);
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
-        donViTinh: res.data ? res.data.maDviTinh : null
+        dviTinh: res.data ? res.data.maDviTinh : null
       })
     }
   }
