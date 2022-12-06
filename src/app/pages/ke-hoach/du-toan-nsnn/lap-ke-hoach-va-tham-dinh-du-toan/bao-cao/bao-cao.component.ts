@@ -121,6 +121,7 @@ export class BaoCaoComponent implements OnInit {
     printStatus = true;                         // trang thai print
     okStatus = true;                            // trang thai ok/ not ok
     finishStatus = true;                        // trang thai hoan tat nhap lieu
+    viewAppraisalValue = true;
     isDataAvailable = false;
     //phan tab
     tabSelected: string;
@@ -337,6 +338,7 @@ export class BaoCaoComponent implements OnInit {
             this.status = true;
         }
 
+        this.viewAppraisalValue = Utils.statusAppraisal.includes(this.baoCao.trangThai);
         this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && checkSave && isChild;
         this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && checkSunmit && isChild && !(!this.baoCao.id);
         this.passStatus = Utils.statusDuyet.includes(this.baoCao.trangThai) && checkPass && isChild;
@@ -762,6 +764,8 @@ export class BaoCaoComponent implements OnInit {
             statusBtnFinish: this.finishStatus,
             statusBtnPrint: this.printStatus,
             status: this.status,
+            viewAppraisalValue: this.viewAppraisalValue,
+            editAppraisalValue: this.acceptStatus,
         }
         //const nzContent = BieuMau18Component;
         let nzContent: ComponentType<any>;
