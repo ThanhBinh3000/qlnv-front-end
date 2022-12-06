@@ -1000,19 +1000,64 @@
                     <ng-template #editTemplateNhap>
                       <td></td>
                       <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <td>{{dataVatTuNhapEdit[i].dsVatTu[i1].maHang}}</td>
+                      <td>{{dataVatTuNhapEdit[i].dsVatTu[i1].kyHieu}}</td>
+                      <td>
+                        <nz-form-control nzErrorTip="Vui lòng nhập tên hàng">
+                          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                                          class="search__input autocomplete__input donvi__input w-300">
+                            <input placeholder="Chọn tên" nz-input (input)="onInputTenHang($event)"
+                                   [nzAutocomplete]="autoVatTuNhapEdit"
+                                   class="" [(ngModel)]="dataVatTuNhapEdit[i].dsVatTu[i1].tenVatTuCha"
+                            />
+                          </nz-input-group>
+                          <ng-template #suffixIcon>
+                            <i nz-icon nzType="search"></i>
+                          </ng-template>
+                          <nz-autocomplete #autoVatTuNhapEdit>
+                            <nz-auto-option *ngFor="let vatTuCha of dataVatTuChaShow" [nzValue]="vatTuCha.ten"
+                                            (click)="selectTenHangEditNew(i,i1,vatTuCha,'nhap')">
+                              {{ vatTuCha.ten }}
+                            </nz-auto-option>
+                          </nz-autocomplete>
+                        </nz-form-control>
+                      </td>
+                      <td>
+                        <nz-form-control nzErrorTip="Vui lòng nhập chủng loại hàng">
+                          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                                          class="search__input autocomplete__input donvi__input w-300">
+                            <input nz-input (input)="onInputChungLoaiHang($event)"
+                                   [nzAutocomplete]="autoChungLoaiHangNhapEdit"
+                                   class=""
+                                   [(ngModel)]="dataVatTuNhapEdit[i].dsVatTu[i1].tenVatTu"
+                                   [disabled]="dataVatTuConClone.length == 0"
+                                   [placeholder]="dataVatTuConClone.length == 0 ? 'Không có chủng loại hàng' : 'Chọn chủng loại hàng'"/>
+                          </nz-input-group>
+                          <ng-template #suffixIcon>
+                            <i nz-icon nzType="search"></i>
+                          </ng-template>
+                          <nz-autocomplete #autoChungLoaiHangNhapEdit>
+                            <nz-auto-option *ngFor="let vatTuCon of dataVatTuConEditNhapShow[i]"
+                                            [nzValue]="vatTuCon.ten"
+                                            (click)="selectChungLoaiHangEditNew(i,i1,vatTuCon,'nhap')">
+                              {{ vatTuCon.ten }}
+                            </nz-auto-option>
+                          </nz-autocomplete>
+                        </nz-form-control>
+                      </td>
+                      <td>{{dataVatTuNhapEdit[i].dsVatTu[i1].donViTinh}}</td>
+                      <td>{{+dataVatTuNhapEdit[i].dsVatTu[i1].soLuongChuyenSang + +dataVatTuNhapEdit[i].dsVatTu[i1].soLuongNhap|number: '1.0-1'}}</td>
                       <td>
                         <nz-input-number [nzMin]=0 nzSize="small"
-                                         [(ngModel)]="dataVatTuNhapEdit[i].dsVatTu[i1].soLuongNhap"></nz-input-number>
+                                         [(ngModel)]="dataVatTuNhapEdit[i].dsVatTu[i1].soLuongChuyenSang"
+                                         [nzFormatter]="globals.formatter"
+                                         [nzParser]="globals.parser"></nz-input-number>
                       </td>
                       <td>
                         <nz-input-number [nzMin]=0 nzSize="small"
-                                         [(ngModel)]="dataVatTuNhapEdit[i].dsVatTu[i1].soLuongChuyenSang"></nz-input-number>
+                                         [(ngModel)]="dataVatTuNhapEdit[i].dsVatTu[i1].soLuongNhap"
+                                         [nzFormatter]="globals.formatter"
+                                         [nzParser]="globals.parser"></nz-input-number>
                       </td>
                       <td>
                         <a (click)="luuSuaVatTu(i,i1,'nhap')" class="save">
@@ -1169,10 +1214,10 @@
                       <td>{{r.soLuongChuyenSang}}</td>
                       <td>{{r.soLuongNhap}}</td>
                       <td>
-                        <a (click)="suaVatTu(i,i1,'nhap')">
+                        <a (click)="suaVatTu(i,i1,'xuat')">
                           <i class="fa fa-pencil"></i>
                         </a>
-                        <a (click)="xoaVatTu(i,i1,'nhap')">
+                        <a (click)="xoaVatTu(i,i1,'xuat')">
                           <i class="fa fa-trash-o do"></i>
                         </a>
                       </td>
@@ -1180,25 +1225,66 @@
                     <ng-template #editTemplateXuat>
                       <td></td>
                       <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
+                      <td>{{dataVatTuXuatEdit[i].dsVatTu[i1].maHang}}</td>
+                      <td>{{dataVatTuXuatEdit[i].dsVatTu[i1].kyHieu}}</td>
                       <td>
-                        <nz-input-number [nzMin]=0 nzSize="small"
-                                         [(ngModel)]="dataVatTuXuatEdit[i].dsVatTu[i1].soLuongNhap"></nz-input-number>
+                        <nz-form-control nzErrorTip="Vui lòng nhập tên hàng">
+                          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                                          class="search__input autocomplete__input donvi__input w-300">
+                            <input placeholder="Chọn tên" nz-input (input)="onInputTenHang($event)"
+                                   [nzAutocomplete]="autoVatTuXuatEdit"
+                                   class="" [(ngModel)]="dataVatTuXuatEdit[i].dsVatTu[i1].tenVatTuCha"
+                            />
+                          </nz-input-group>
+                          <ng-template #suffixIcon>
+                            <i nz-icon nzType="search"></i>
+                          </ng-template>
+                          <nz-autocomplete #autoVatTuXuatEdit>
+                            <nz-auto-option *ngFor="let vatTuCha of dataVatTuChaShow" [nzValue]="vatTuCha.ten"
+                                            (click)="selectTenHangEditNew(i,i1,vatTuCha,'nhap')">
+                              {{ vatTuCha.ten }}
+                            </nz-auto-option>
+                          </nz-autocomplete>
+                        </nz-form-control>
                       </td>
+                      <td>
+                        <nz-form-control nzErrorTip="Vui lòng nhập chủng loại hàng">
+                          <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
+                                          class="search__input autocomplete__input donvi__input w-300">
+                            <input nz-input (input)="onInputChungLoaiHang($event)"
+                                   [nzAutocomplete]="autoChungLoaiHangXuatEdit"
+                                   class=""
+                                   [(ngModel)]="dataVatTuXuatEdit[i].dsVatTu[i1].tenVatTu"
+                                   [disabled]="dataVatTuConClone.length == 0"
+                                   [placeholder]="dataVatTuConClone.length == 0 ? 'Không có chủng loại hàng' : 'Chọn chủng loại hàng'"/>
+                          </nz-input-group>
+                          <ng-template #suffixIcon>
+                            <i nz-icon nzType="search"></i>
+                          </ng-template>
+                          <nz-autocomplete #autoChungLoaiHangXuatEdit>
+                            <nz-auto-option *ngFor="let vatTuCon of dataVatTuConEditXuatShow[i]"
+                                            [nzValue]="vatTuCon.ten"
+                                            (click)="selectChungLoaiHangEditNew(i,i1,vatTuCon,'xuat')">
+                              {{ vatTuCon.ten }}
+                            </nz-auto-option>
+                          </nz-autocomplete>
+                        </nz-form-control>
+                      </td>
+                      <td>{{dataVatTuXuatEdit[i].dsVatTu[i1].donViTinh}}</td>
+                      <td>{{+dataVatTuXuatEdit[i].dsVatTu[i1].soLuongChuyenSang + +dataVatTuXuatEdit[i].dsVatTu[i1].soLuongNhap|number: '1.0-1'}}</td>
                       <td>
                         <nz-input-number [nzMin]=0 nzSize="small"
                                          [(ngModel)]="dataVatTuXuatEdit[i].dsVatTu[i1].soLuongChuyenSang"></nz-input-number>
                       </td>
                       <td>
-                        <a (click)="luuSuaVatTu(i,i1,'nhap')" class="save">
+                        <nz-input-number [nzMin]=0 nzSize="small"
+                                         [(ngModel)]="dataVatTuXuatEdit[i].dsVatTu[i1].soLuongNhap"></nz-input-number>
+                      </td>
+                      <td>
+                        <a (click)="luuSuaVatTu(i,i1,'xuat')" class="save">
                           <i class="fa fa-save"></i>
                         </a>
-                        <a (click)="huySuaVatTu(i,i1,'nhap')">
+                        <a (click)="huySuaVatTu(i,i1,'xuat')">
                           <i class="fa fa-times do"></i>
                         </a>
                       </td>

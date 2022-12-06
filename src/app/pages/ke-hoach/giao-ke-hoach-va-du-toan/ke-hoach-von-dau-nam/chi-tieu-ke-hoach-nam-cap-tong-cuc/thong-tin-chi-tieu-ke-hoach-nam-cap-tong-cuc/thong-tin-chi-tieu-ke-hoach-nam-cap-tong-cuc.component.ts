@@ -141,6 +141,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   keHoachVatTuXuatCreate: KeHoachVatTuCustom = new KeHoachVatTuCustom();
   dataVatTuNhapEdit: Array<KeHoachVatTuCustom> = [];
   dataVatTuXuatEdit: Array<KeHoachVatTuCustom> = [];
+  dataVatTuConEditNhapShow: any[] = []
+  dataVatTuConEditXuatShow: any[] = []
+
   //
 
   constructor(
@@ -2964,6 +2967,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       }
       this.dataVatTuConClone = vatTu.child;
       this.dataVatTuConShow = this.dataVatTuConClone;
+      this.keHoachVatTuNhapCreate.dsVatTu[0].tenVatTu = '';
+      this.keHoachVatTuNhapCreate.dsVatTu[0].maVatTu = '';
       this.keHoachVatTuNhapCreate.dsVatTu[0].kyHieu = vatTu.kyHieu;
       this.keHoachVatTuNhapCreate.dsVatTu[0].maHang = vatTu.maHang;
       this.keHoachVatTuNhapCreate.dsVatTu[0].donViTinh = vatTu.donViTinh;
@@ -2984,6 +2989,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
+
   selectChungLoaiHangNew(chungLoaiHang, type) {
     if (type == 'nhap') {
       if (this.keHoachVatTuNhapCreate.maDvi) {
@@ -3003,6 +3009,57 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.keHoachVatTuXuatCreate.dsVatTu[0].maVatTu = chungLoaiHang.maHang;
       this.keHoachVatTuXuatCreate.dsVatTu[0].kyHieu = chungLoaiHang.kyHieu;
       this.keHoachVatTuXuatCreate.dsVatTu[0].vatTuId = chungLoaiHang.id;
+    }
+  }
+
+  selectTenHangEditNew(index, index1, vatTu, type) {
+    if (type == 'nhap') {
+      this.dataVatTuConClone = vatTu.child;
+      this.dataVatTuConEditNhapShow[index] = this.dataVatTuConClone;
+      this.dataVatTuNhapEdit[index].dsVatTu[index1].tenVatTu ='';
+      this.dataVatTuNhapEdit[index].dsVatTu[index1].maVatTu = '';
+      this.dataVatTuNhapEdit[index].dsVatTu[index1].kyHieu = vatTu.kyHieu;
+      this.dataVatTuNhapEdit[index].dsVatTu[index1].maHang = vatTu.maHang;
+      this.dataVatTuNhapEdit[index].dsVatTu[index1].donViTinh = vatTu.donViTinh;
+      this.dataVatTuNhapEdit[index].dsVatTu[index1].maVatTuCha = vatTu.maHang;
+      this.dataVatTuNhapEdit[index].dsVatTu[index1].vatTuChaId = vatTu.id;
+    } else if (type == 'xuat') {
+      if (this.keHoachVatTuXuatCreate.maDvi) {
+        this.isAddVatTu = true;
+        //this.getTonKhoDauNam();
+      }
+      this.dataVatTuConClone = vatTu.child;
+      this.dataVatTuConEditXuatShow[index] = this.dataVatTuConClone;
+      this.dataVatTuXuatEdit[index].dsVatTu[index1].tenVatTu ='';
+      this.dataVatTuXuatEdit[index].dsVatTu[index1].maVatTu = '';
+      this.dataVatTuXuatEdit[index].dsVatTu[index1].kyHieu = vatTu.kyHieu;
+      this.dataVatTuXuatEdit[index].dsVatTu[index1].maHang = vatTu.maHang;
+      this.dataVatTuXuatEdit[index].dsVatTu[index1].donViTinh = vatTu.donViTinh;
+      this.dataVatTuXuatEdit[index].dsVatTu[index1].maVatTuCha = vatTu.maHang;
+      this.dataVatTuXuatEdit[index].dsVatTu[index1].vatTuChaId = vatTu.id;
+    }
+  }
+
+
+  selectChungLoaiHangEditNew(index, index1, chungLoaiHang, type) {
+    if (type == 'nhap') {
+      if (this.keHoachVatTuNhapCreate.maDvi) {
+        this.isAddVatTu = true;
+      }
+      this.dataVatTuNhapEdit[index].dsVatTu[index1].donViTinh = chungLoaiHang.donViTinh;
+      this.dataVatTuNhapEdit[index].dsVatTu[index1].maHang = chungLoaiHang.maHang;
+      this.dataVatTuNhapEdit[index].dsVatTu[index1].maVatTu = chungLoaiHang.maHang;
+      this.dataVatTuNhapEdit[index].dsVatTu[index1].kyHieu = chungLoaiHang.kyHieu;
+      this.dataVatTuNhapEdit[index].dsVatTu[index1].vatTuId = chungLoaiHang.id;
+    } else if (type == 'xuat') {
+      if (this.keHoachVatTuXuatCreate.maDvi) {
+        this.isAddVatTu = true;
+      }
+      this.dataVatTuXuatEdit[index].dsVatTu[index1].donViTinh = chungLoaiHang.donViTinh;
+      this.dataVatTuXuatEdit[index].dsVatTu[index1].maHang = chungLoaiHang.maHang;
+      this.dataVatTuXuatEdit[index].dsVatTu[index1].maVatTu = chungLoaiHang.maHang;
+      this.dataVatTuXuatEdit[index].dsVatTu[index1].kyHieu = chungLoaiHang.kyHieu;
+      this.dataVatTuXuatEdit[index].dsVatTu[index1].vatTuId = chungLoaiHang.id;
     }
   }
 
@@ -3049,5 +3106,4 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   //
-
 }
