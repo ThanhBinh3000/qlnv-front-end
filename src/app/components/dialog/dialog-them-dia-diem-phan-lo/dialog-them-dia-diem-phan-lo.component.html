@@ -16,7 +16,7 @@
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">SL xuất theo chỉ tiêu KH giao đầu năm</nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                    <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1"
+                    <nz-input-number [nzDisabled]="true" formControlName="soLuongChiTieu" [nzMin]="1"
                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                         (input)="calculatorGiaKhoiDiem()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
@@ -27,7 +27,7 @@
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true">Tổng SL xuất bán theo KH đã được duyệt </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                    <nz-input-number [nzDisabled]="true" formControlName="soLuongChiTieu" [nzMin]="1"
+                    <nz-input-number [nzDisabled]="true" formControlName="soLuongKh" [nzMin]="1"
                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                         (input)="calculatorGiaKhoiDiem()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
@@ -38,7 +38,7 @@
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán đề xuất </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                    <nz-input-number [nzDisabled]="true" formControlName="soLuongKh" [nzMin]="1"
+                    <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1"
                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
