@@ -389,10 +389,10 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   addDiemKho() {
-    if (!this.thongtinPhanLo.tenCloaiVthh) {
-      this.notification.error(MESSAGE.ERROR, 'Không tìm thấy loại hàng hóa trong kho.');
-      return;
-    }
+    // if (!this.thongtinPhanLo.tenCloaiVthh) {
+    //   this.notification.error(MESSAGE.ERROR, 'Không tìm thấy loại hàng hóa trong kho.');
+    //   return;
+    // }
     if (this.thongtinPhanLo.maDiemKho && this.thongtinPhanLo.soLuong && this.validateSoLuong(true)) {
       this.thongtinPhanLo.maDvi = this.formData.get('maDvi').value;
       this.thongtinPhanLo.donGiaVat = this.formData.get('donGiaVat').value;
