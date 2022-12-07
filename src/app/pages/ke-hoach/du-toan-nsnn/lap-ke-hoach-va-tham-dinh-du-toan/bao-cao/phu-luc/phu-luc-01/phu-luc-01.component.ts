@@ -10,6 +10,7 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
+import { DialogAddVatTuComponent } from './dialog-add-vat-tu/dialog-add-vat-tu.component';
 // import { DANH_MUC } from './bieu-mau-18.constant';
 
 export class ItemData {
@@ -186,7 +187,6 @@ export class PhuLuc01Component implements OnInit {
                     maDviTinh: vtuCon.maDviTinh,
                     maCha: maCha,
                     level: Number(vtuCon.cap),
-                    loaiDmuc: "nhap"
                 })
 
                 vtuCon?.child.forEach(vtuConn => {
@@ -198,58 +198,57 @@ export class PhuLuc01Component implements OnInit {
                         maDviTinh: vtuConn.maDviTinh,
                         maCha: maCha,
                         level: Number(vtuConn.cap),
-                        loaiDmuc: "nhap"
                     })
                 })
             })
         })
         const mangGop12 = lstVtuCon1.concat(lstVtuCon2)
-        this.listVatTuNhap = this.listVatTuNhap.concat(mangGop12)
+        this.listVatTuFull = this.listVatTuNhap.concat(mangGop12)
         // this.listVatTuNhap = lstVtuCon2
 
-        this.listVatTu.forEach(vtu => {
-            // this.listVatTuXuat.push({
-            //     id: vtu.ma + 1,
-            //     maVtu: vtu.ma,
-            //     tenDm: vtu.ten,
-            //     maDviTinh: vtu.maDviTinh,
-            //     maCha: '2000',
-            //     level: Number(vtu.cap),
-            //     loaiDmuc: "xuat"
-            // });
+        // this.listVatTu.forEach(vtu => {
+        //     // this.listVatTuXuat.push({
+        //     //     id: vtu.ma + 1,
+        //     //     maVtu: vtu.ma,
+        //     //     tenDm: vtu.ten,
+        //     //     maDviTinh: vtu.maDviTinh,
+        //     //     maCha: '2000',
+        //     //     level: Number(vtu.cap),
+        //     //     loaiDmuc: "xuat"
+        //     // });
 
-            vtu?.child.forEach(vtuCon => {
-                const maCha = vtuCon?.ma.slice(0, -2) + 1
-                lstVtuCon3.push({
-                    id: vtuCon.ma + 1,
-                    maVtu: vtuCon.ma,
-                    tenDm: vtuCon.ten,
-                    maDviTinh: vtuCon.maDviTinh,
-                    maCha: maCha,
-                    level: Number(vtuCon.cap),
-                    loaiDmuc: "xuat"
-                })
+        //     vtu?.child.forEach(vtuCon => {
+        //         const maCha = vtuCon?.ma.slice(0, -2) + 1
+        //         lstVtuCon3.push({
+        //             id: vtuCon.ma + 1,
+        //             maVtu: vtuCon.ma,
+        //             tenDm: vtuCon.ten,
+        //             maDviTinh: vtuCon.maDviTinh,
+        //             maCha: maCha,
+        //             level: Number(vtuCon.cap),
+        //             loaiDmuc: "xuat"
+        //         })
 
-                vtuCon?.child.forEach(vtuConn => {
-                    const maCha = vtuConn?.ma.slice(0, -2) + 1
-                    lstVtuCon4.push({
-                        id: vtuConn.ma + 1,
-                        maVtu: vtuConn.ma,
-                        tenDm: vtuConn.ten,
-                        maDviTinh: vtuConn.maDviTinh,
-                        maCha: maCha,
-                        level: Number(vtuConn.cap),
-                        loaiDmuc: "xuat"
-                    })
-                })
-            })
-        })
-        const mangGop34 = lstVtuCon3.concat(lstVtuCon4)
-        this.listVatTuXuat = this.listVatTuXuat.concat(mangGop34)
+        //         vtuCon?.child.forEach(vtuConn => {
+        //             const maCha = vtuConn?.ma.slice(0, -2) + 1
+        //             lstVtuCon4.push({
+        //                 id: vtuConn.ma + 1,
+        //                 maVtu: vtuConn.ma,
+        //                 tenDm: vtuConn.ten,
+        //                 maDviTinh: vtuConn.maDviTinh,
+        //                 maCha: maCha,
+        //                 level: Number(vtuConn.cap),
+        //                 loaiDmuc: "xuat"
+        //             })
+        //         })
+        //     })
+        // })
+        // const mangGop34 = lstVtuCon3.concat(lstVtuCon4)
+        // this.listVatTuXuat = this.listVatTuXuat.concat(mangGop34)
 
-        // this.listVatTuXuat = lstVtuCon4
+        // // this.listVatTuXuat = lstVtuCon4
 
-        this.listVatTuFull = this.listVatTuNhap.concat(this.listVatTuXuat)
+        // this.listVatTuFull = this.listVatTuNhap.concat(this.listVatTuXuat)
         // gan lai noi dung
         this.listVatTuFull.forEach(item => {
             if (item.level.length == 2) {
@@ -660,6 +659,87 @@ export class PhuLuc01Component implements OnInit {
             this.allChecked = true;
         }
     }
+
+    addNewReport(id: any) {
+        const obj = {
+            listVatTu: this.listVatTuFull,
+        }
+
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Thêm danh mục',
+            nzContent: DialogAddVatTuComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                obj: obj,
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                console.log(res.loaiDinhMuc);
+                if (res?.loaiDinhMuc == "01") {
+                    const dvTinh = this.listVatTuFull.find(v => v.maVtu == res.maVatTu)?.maDviTinh
+                    // const danhMuc = res.maVatTu
+                    const dinhMuc = this.dsDinhMucN.find(v => v.cloaiVthh == res.maVatTu)?.tongDmuc
+                    let danhMuc = this.dsDinhMucN.find(v => v.cloaiVthh == res.maVatTu)?.tenDinhMuc
+                    if (!danhMuc) {
+                        danhMuc = this.listVatTuFull.find(v => v.maVtu == res.maVatTu)?.tenVtu
+                    }
+                    const item: ItemData = {
+                        id: uuid.v4(),
+                        stt: "0",
+                        danhMuc: danhMuc,
+                        dinhMuc: dinhMuc,
+                        dvTinh: dvTinh,
+                        khvonphiLapThamDinhCtietId: "",
+                        soLuong: 0,
+                        soLuongTd: 0,
+                        thanhTien: 0,
+                        thanhTienTd: 0,
+                        checked: false,
+                    };
+
+                    this.lstCtietBcao.splice(id, 0, item);
+                    this.editCache[item.id] = {
+                        edit: true,
+                        data: { ...item }
+                    };
+                    console.log(this.editCache[item.id]);
+
+                }
+                if (res.loaiDinhMuc == "02") {
+                    const dvTinh = this.listVatTuFull.find(v => v.maVtu == res.maVatTu)?.maDviTinh
+                    // const danhMuc = res.maVatTu
+                    const dinhMuc = this.dsDinhMucX.find(v => v.cloaiVthh == res.maVatTu)?.tongDmuc
+                    let danhMuc = this.dsDinhMucX.find(v => v.cloaiVthh == res.maVatTu)?.tenDinhMuc
+                    if (!danhMuc) {
+                        danhMuc = this.listVatTuFull.find(v => v.maVtu == res.maVatTu)?.tenVtu
+                    }
+                    const item: ItemData = {
+                        id: uuid.v4(),
+                        stt: "0",
+                        danhMuc: danhMuc,
+                        dinhMuc: dinhMuc,
+                        dvTinh: dvTinh,
+                        khvonphiLapThamDinhCtietId: "",
+                        soLuong: 0,
+                        soLuongTd: 0,
+                        thanhTien: 0,
+                        thanhTienTd: 0,
+                        checked: false,
+                    };
+
+                    this.lstCtietBcao.splice(id, 0, item);
+                    this.editCache[item.id] = {
+                        edit: true,
+                        data: { ...item }
+                    };
+                }
+            }
+        });
+    };
 
 
 }

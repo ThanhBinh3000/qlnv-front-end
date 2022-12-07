@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { ComponentsModule } from 'src/app/components/components.module';
 import { BaoCaoComponent } from './bao-cao.component';
+import { DialogAddVatTuComponent } from './phu-luc/phu-luc-01/dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { PhuLuc01Component } from './phu-luc/phu-luc-01/phu-luc-01.component';
 import { PhuLuc02Component } from './phu-luc/phu-luc-02/phu-luc-02.component';
 import { PhuLuc03Component } from './phu-luc/phu-luc-03/phu-luc-03.component';
@@ -50,6 +51,7 @@ import { BieuMau18Component } from './thong-tu-69/bieu-mau-18/bieu-mau-18.compon
         PhuLuc06Component,
         PhuLuc07Component,
         PhuLucDuAnComponent,
+        DialogAddVatTuComponent,
     ],
     imports: [CommonModule, ComponentsModule],
     exports: [BaoCaoComponent],

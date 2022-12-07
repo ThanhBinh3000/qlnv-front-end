@@ -23,7 +23,7 @@
                     <span>Xóa</span>
                 </button>
                 <ng-container *ngIf="lstCtietBcao.length == 0">
-                    <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
+                    <button type="button" class="btn btn-main" (click)="addNewReport(null)" [hidden]="status">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Thêm</span>
                     </button>
@@ -63,11 +63,7 @@
                             {{i + 1}}
                         </td>
                         <td>
-                            <div *ngFor="let item of linhVucChis">
-                                <div *ngIf="item.id == data.danhMuc">
-                                    {{item.tenDm}}
-                                </div>
-                            </div>
+                            {{data.danhMuc}}
                         </td>
                         <td>{{data.dvTinh}}</td>
                         <td>{{data.dinhMuc}}</td>
@@ -83,7 +79,7 @@
                             <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </td>
                         <td [hidden]="status">
-                            <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
+                            <i class="fa fa-plus" (click)="addNewReport(i + 1)"></i>
                         </td>
 
 
@@ -97,12 +93,7 @@
                             {{i + 1}}
                         </td>
                         <td>
-                            <nz-select nzShowSearch nzAllowClear
-                                [class]="editCache[data.id].data.danhMuc ?'' : 'input-error-validate' "
-                                nzPlaceHolder="Chọn loại mặt hàng" [(ngModel)]="editCache[data.id].data.danhMuc">
-                                <nz-option *ngFor="let item of linhVucChis" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                                </nz-option>
-                            </nz-select>
+                            {{editCache[data.id].data.danhMuc}}
                         </td>
                         <td>
                             <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.dvTinh" />
@@ -139,7 +130,7 @@
                         </td>
 
                         <td [hidden]="status">
-                            <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
+                            <i class="fa fa-plus" (click)="addNewReport(i + 1)"></i>
                         </td>
 
 
