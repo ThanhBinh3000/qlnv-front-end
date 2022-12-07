@@ -43,10 +43,10 @@
           </th>
           <th rowspan="3" class="text-center" nzWidth="100px">STT</th>
           <th rowspan="3" nzWidth="300px">LĨNH VỰC / TÊN ĐƠN VỊ</th>
-          <th colspan="7" nzWidth="150px">Thực hiện năm...(năm trước)</th>
-          <th colspan="6" nzWidth="150px">Dự toán năm....(năm hiện hành)</th>
-          <th colspan="7" nzWidth="150px">Ước thực hiện năm....(năm hiện hành)</th>
-          <th colspan="6" nzWidth="150px">Dự toán năm....(năm kế hoạch)</th>
+          <th colspan="7" nzWidth="150px">Thực hiện năm {{namTruoc}} (năm trước)</th>
+          <th colspan="6" nzWidth="150px">Dự toán năm {{namBaoCao}} (năm hiện hành)</th>
+          <th colspan="7" nzWidth="150px">Ước thực hiện năm {{namBaoCao}} (năm hiện hành)</th>
+          <th colspan="6" nzWidth="150px">Dự toán năm {{namKeHoach}} (năm kế hoạch)</th>
           <th rowspan="4" [hidden]="status"></th>
         </tr>
         <tr>
@@ -130,28 +130,84 @@
               <!-- </div>
               </div> -->
             </td>
-            <td>{{displayValue(data.thienTsoBcTqGiao)}}</td>
-            <td>{{displayValue(data.thienTsoBcTdiem)}}</td>
-            <td>{{displayValue(data.thienQlPcap)}}</td>
-            <td>{{displayValue(data.thienLuongBac)}}</td>
-            <td>{{displayValue(data.thienPcapLuong)}}</td>
-            <td>{{displayValue(data.thienDgopLuong)}}</td>
-            <td>{{displayValue(data.dtoanTsoBcheTqGiao)}}</td>
-            <td>{{displayValue(data.dtoanQluongPcap)}}</td>
-            <td>{{displayValue(data.dtoanLuongBac)}}</td>
-            <td>{{displayValue(data.dtoanPcapLuong)}}</td>
-            <td>{{displayValue(data.dtoanDgopLuong)}}</td>
-            <td>{{displayValue(data.uocThTsoBcTqGiao)}}</td>
-            <td>{{displayValue(data.uocThTsoBcTdiem)}}</td>
-            <td>{{displayValue(data.uocThQlPcap)}}</td>
-            <td>{{displayValue(data.uocThLuongBac)}}</td>
-            <td>{{displayValue(data.uocThPCapLuong)}}</td>
-            <td>{{displayValue(data.uocThDgopLuong)}}</td>
-            <td>{{displayValue(data.namKhTsoBcTqGiao)}}</td>
-            <td>{{displayValue(data.namKhQlPcap)}}</td>
-            <td>{{displayValue(data.namKhLuongBac)}}</td>
-            <td>{{displayValue(data.namKhPcapLuong)}}</td>
-            <td>{{displayValue(data.namKhDgopLuong)}}</td>
+            <td>
+              {{displayValue(data.thienTsoBcTqGiao)}}
+            </td>
+            <td>
+              {{displayValue(data.thienTsoBcTdiem)}}
+            </td>
+            <td>
+              {{displayValue(data.thienQlPcap)}}
+            </td>
+            <td>
+              {{displayValue(data.thienLuongBac)}}
+            </td>
+            <td>
+              {{displayValue(data.thienPcapLuong)}}
+            </td>
+            <td>
+              {{displayValue(data.thienDgopLuong)}}
+            </td>
+            <td>
+              {{displayValue(data.thienKhac)}}
+            </td>
+            <td>
+              {{displayValue(data.dtoanTsoBcheTqGiao)}}
+            </td>
+            <td>
+              {{displayValue(data.dtoanQluongPcap)}}
+            </td>
+            <td>
+              {{displayValue(data.dtoanLuongBac)}}
+            </td>
+            <td>
+              {{displayValue(data.dtoanPcapLuong)}}
+            </td>
+            <td>
+              {{displayValue(data.dtoanDgopLuong)}}
+            </td>
+            <td>
+              {{displayValue(data.dtoanKhac)}}
+            </td>
+            <td>
+              {{displayValue(data.uocThTsoBcTqGiao)}}
+            </td>
+            <td>
+              {{displayValue(data.uocThTsoBcTdiem)}}
+            </td>
+            <td>
+              {{displayValue(data.uocThQlPcap)}}
+            </td>
+            <td>
+              {{displayValue(data.uocThLuongBac)}}
+            </td>
+            <td>
+              {{displayValue(data.uocThPCapLuong)}}
+            </td>
+            <td>
+              {{displayValue(data.uocThDgopLuong)}}
+            </td>
+            <td>
+              {{displayValue(data.uocThKhac)}}
+            </td>
+            <td>
+              {{displayValue(data.namKhTsoBcTqGiao)}}
+            </td>
+            <td>
+              {{displayValue(data.namKhQlPcap)}}
+            </td>
+            <td>
+              {{displayValue(data.namKhLuongBac)}}
+            </td>
+            <td>
+              {{displayValue(data.namKhPcapLuong)}}
+            </td>
+            <td>
+              {{displayValue(data.namKhDgopLuong)}}
+            </td>
+            <td>
+              {{displayValue(data.namKhKhac)}}
+            </td>
             <td [hidden]="status">
               <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
             </td>
@@ -275,11 +331,6 @@
             <td>
               {{displayValue(editCache[data.id].data.namKhQlPcap)}}
             </td>
-            <!-- <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.namKhQlPcap"
-                (ngModelChange)="changeModel(data.id)">
-              </fm-input-number>
-            </td> -->
             <td>
               <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.namKhLuongBac"
                 (ngModelChange)="changeModel(data.id)">
@@ -313,8 +364,6 @@
           <td></td>
           <td>Tổng Số</td>
           <td></td>
-          <!-- <td></td> -->
-          <!-- <td></td> -->
           <td>{{displayValue(total.thienTsoBcTqGiao)}}</td>
           <td>{{displayValue(total.thienTsoBcTdiem)}}</td>
           <td>{{displayValue(total.thienQlPcap)}}</td>
