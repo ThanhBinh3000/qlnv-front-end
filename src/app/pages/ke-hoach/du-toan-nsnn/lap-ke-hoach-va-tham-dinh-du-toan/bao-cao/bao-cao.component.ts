@@ -279,6 +279,7 @@ export class BaoCaoComponent implements OnInit {
                         tenPl: item.tenPl,
                         tenDm: item.tenDm,
                         trangThai: '3',
+                        lstCtietLapThamDinhs: [],
                     })
                 })
                 this.lstPhuLuc = this.baoCao.lstLapThamDinhs.filter(e => e.maBieuMau.startsWith('pl'));
