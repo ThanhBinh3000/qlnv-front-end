@@ -49,6 +49,36 @@ export const PHU_LUC = [
         status: false,
     },
     {
+        id: 'pl_bh_hang',
+        tenDm: 'Danh mục, giá trị hàng DTQG tham gia bảo hiểm',
+        tenPl: 'Bảo hiểm hàng',
+        status: false,
+    },
+    {
+        id: 'pl_bh_kho',
+        tenDm: 'Danh mục, giá trị kho DTQG tham gia bảo hiểm',
+        tenPl: 'Bảo hiểm hàng',
+        status: false,
+    },
+    {
+        id: 'pl_bh_duoi',
+        tenDm: 'Danh mục, giá trị hàng, kho (dưới 5000 M3) DTQG tham gia bảo hiểm',
+        tenPl: 'Bảo hiểm',
+        status: false,
+    },
+    {
+        id: 'pl_bh_tren',
+        tenDm: 'Danh mục, giá trị hàng, kho (trên 5000 M3) DTQG tham gia bảo hiểm',
+        tenPl: 'Bảo hiểm',
+        status: false,
+    },
+    {
+        id: 'pl_bh',
+        tenDm: 'Danh mục, giá trị hàng, kho DTQG tham gia bảo hiểm',
+        tenPl: 'Bảo hiểm',
+        status: false,
+    },
+    {
         id: 'TT342_13.1',
         tenDm: 'Cơ sở tính chi sự nghiệp giáo dục - đào tạo và dạy nghề',
         tenPl: 'Biểu mẫu 13.1',
