@@ -54,6 +54,9 @@ export class PhuLuc03Component implements OnInit {
     allChecked = false;
 
     tongSo: number;
+    tongSoTd: number;
+    checkViewTD: boolean;
+    checkEditTD: boolean;
 
     initItem: ItemData = {
 
@@ -99,6 +102,8 @@ export class PhuLuc03Component implements OnInit {
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.checkEditTD = this.dataInfo?.editAppraisalValue;
+        this.checkViewTD = this.dataInfo?.viewAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -459,6 +464,7 @@ export class PhuLuc03Component implements OnInit {
                         ...this.initItem,
                         matHang: res.maKhoanMuc,
                         level: this.lstVatTuFull.find(e => e.id == loaiMatHang)?.level,
+                        dviTinh: this.lstVatTuFull.find(e => e.id == loaiMatHang)?.maDviTinh
                     };
                     if (this.lstCtietBcao.length == 0) {
                         this.addFirst(data);
@@ -636,14 +642,14 @@ export class PhuLuc03Component implements OnInit {
 
     tinhTong() {
         this.tongSo = 0;
+        this.tongSoTd = 0;
         this.lstCtietBcao.forEach(item => {
             this.tongSo += item.thanhTien;
+            this.tongSoTd += item.thanhTienTd;
         })
     }
 
     changeModel(id: string): void {
-        console.log(this.editCache[id].data.slBaoQuanNamN1);
-        console.log(this.editCache[id].data.dinhMuc)
         this.editCache[id].data.thanhTien = mulNumber(this.editCache[id].data.dinhMuc, this.editCache[id].data.slBaoQuanNamN1);
         this.editCache[id].data.thanhTienTd = mulNumber(this.editCache[id].data.dinhMuc, this.editCache[id].data.slBaoQuanNamN1Td);
 
