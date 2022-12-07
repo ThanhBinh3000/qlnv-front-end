@@ -2,17 +2,26 @@ import { Validators } from "@angular/forms";
 
 
 export class DanhSachMuaTrucTiep {
+  id: number;
   maDvi: string;
   tenDvi: string;
   maDiemKho: string;
   tenDiemKho: string;
   diaDiemNhap: string;
-  donGia: number;
-  goiThau: string;
-  id: number;
+  donGiaVat: number;
   soLuong: number;
-  soLuongTheoChiTieu: number;
-  thanhTien: string;
+  donGia: number;
+  thanhTien: number;
+  tenGoiThau: string;
+  soLuongChiTieu: number;
+  soLuongKhDd: number;
+  tongThanhTienVat: number;
+  tongSoLuong: number;
+  tongThanhTien: number;
+  thanhTienVat: number;
+  tongDonGia: number;
+  loaiVthh: string;
+  cloaiVthh: string;
   idVirtual?: number;
   isEdit: boolean;
   children?: DanhSachMuaTrucTiep[];

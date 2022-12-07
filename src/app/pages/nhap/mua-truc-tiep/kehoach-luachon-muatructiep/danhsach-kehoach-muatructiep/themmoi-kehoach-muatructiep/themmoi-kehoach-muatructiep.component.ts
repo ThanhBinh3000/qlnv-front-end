@@ -1,40 +1,40 @@
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {saveAs} from 'file-saver';
-import {chain} from 'lodash';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {MESSAGE} from 'src/app/constants/message';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { saveAs } from 'file-saver';
+import { chain } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
 import {
   CanCuXacDinh,
   FileDinhKem,
 } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {UploadFileService} from 'src/app/services/uploaFile.service';
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import * as dayjs from 'dayjs';
-import {Globals} from 'src/app/shared/globals';
-import {API_STATUS_CODE} from 'src/app/constants/config';
-import {UserLogin} from 'src/app/models/userlogin';
-import {UserService} from 'src/app/services/user.service';
-import {UploadComponent} from 'src/app/components/dialog/dialog-upload/upload.component';
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {HelperService} from 'src/app/services/helper.service';
+import { Globals } from 'src/app/shared/globals';
+import { API_STATUS_CODE } from 'src/app/constants/config';
+import { UserLogin } from 'src/app/models/userlogin';
+import { UserService } from 'src/app/services/user.service';
+import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { HelperService } from 'src/app/services/helper.service';
 import {
   DialogDanhSachHangHoaComponent
 } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import {
   DialogThemMoiGoiThauComponent
 } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
-import {DanhMucTieuChuanService} from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import {STATUS} from "../../../../../../constants/status";
-import {BaseComponent} from "../../../../../../components/base/base.component";
-import {DatePipe} from "@angular/common";
-import {QuyetDinhGiaTCDTNNService} from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import {DanhSachMuaTrucTiepService} from 'src/app/services/danh-sach-mua-truc-tiep.service';
-import {DanhSachMuaTrucTiep} from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
+import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import { STATUS } from "../../../../../../constants/status";
+import { BaseComponent } from "../../../../../../components/base/base.component";
+import { DatePipe } from "@angular/common";
+import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
+import { DanhSachMuaTrucTiep } from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
 import {
   DialogThemMoiKeHoachMuaTrucTiepComponent
 } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
@@ -57,7 +57,7 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
   showListEvent = new EventEmitter<any>();
 
   editCache: { [key: string]: { edit: boolean; data: DanhSachMuaTrucTiep } } = {};
-
+  donGiaVat: number = 0;
   formData: FormGroup;
   listOfData: any[] = [];
   fileDinhKem: any[] = [];
@@ -110,41 +110,39 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
     super();
     this.formData = this.fb.group({
       id: [],
+      maDvi: ['', [Validators.required]],
+      tenDvi: ['', [Validators.required]],
+      loaiHinhNx: ['', [Validators.required]],
+      kieuNx: ['', [Validators.required]],
+      diaChiDvi: [],
+      namKh: [dayjs().get('year'), [Validators.required]],
       soDxuat: [null],
+      trichYeu: [null],
+      ngayTao: [dayjs().format('YYYY-MM-DD')],
+      ngayPduyet: [],
+      tenDuAn: [null, [Validators.required]],
+      soQd: [, [Validators.required]],
       loaiVthh: [, [Validators.required]],
       tenLoaiVthh: [, [Validators.required]],
       cloaiVthh: [, [Validators.required]],
       tenCloaiVthh: [, [Validators.required]],
       moTaHangHoa: [, [Validators.required]],
-      soQd: [, [Validators.required]],
-      trichYeu: [null],
-      maDvi: ['', [Validators.required]],
-      tenDvi: ['', [Validators.required]],
+      ptMua: [null, [Validators.required]],
+      tchuanCluong: [null],
+      giaMua: [null, [Validators.required]],
+      thueGtgt: ['5'],
+      tgianMkho: [null, [Validators.required]],
+      tgianKthuc: [null, [Validators.required]],
+      ghiChu: [null],
+      tongMucDt: [null, [Validators.required]],
+      tongSoLuong: [''],
+      nguonVon: ['NGV01', [Validators.required]],
       trangThai: ['00'],
       tenTrangThai: ['Dự Thảo'],
       ldoTuchoi: [],
-      ngayKy: [],
-      namKh: [dayjs().get('year'), [Validators.required]],
-      ghiChu: [null],
-      tenDuAn: [null, [Validators.required]],
-      tongMucDt: [null, [Validators.required]],
-      tchuanCluong: [null],
-      nguonVon: ['NGV01', [Validators.required]],
-      tgianMkho: [null, [Validators.required]],
-      tgianKthuc: [null, [Validators.required]],
-      diaChiDvi: [],
-      loaiHinhNx: ['', [Validators.required]],
-      kieuNx: ['', [Validators.required]],
-      donGiaVat: ['', [Validators.required]],
-      ptMua: [null, [Validators.required]],
-      giaMua: [null, [Validators.required]],
-      giaChuaThue: [null, [Validators.required]],
-      thueGtgt: ['5'],
-      tongSoLuong: [''],
-      ngayTao: [dayjs().format('YYYY-MM-DD')],
-      ngayPduyet: [],
       maThop: [''],
-      noiDungTh: ['']
+      noiDungTh: [''],
+
     });
   }
 
@@ -286,11 +284,10 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
             maDvi: this.formData.value.maDvi
           }
           let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+          console.log(pag, 33333)
           if (pag.msg == MESSAGE.SUCCESS) {
             const data = pag.data;
-            this.formData.patchValue({
-              donGiaVat: data.giaQdVat
-            })
+            this.donGiaVat = data.giaQdVat
             if (!data.giaQdVat) {
               this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
             }
@@ -321,13 +318,13 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1200px',
+      nzWidth: '2000px',
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
-        donGia: this.formData.value.donGiaVat
+        donGiaVat: this.donGiaVat
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -423,37 +420,12 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
       this.formData.controls["cloaiVthh"].clearValidators();
       this.formData.controls["tenCloaiVthh"].clearValidators();
       this.formData.controls["moTaHangHoa"].clearValidators();
-      this.formData.controls["donGiaVat"].clearValidators();
-      // this.formData.controls["tgianMkho"].clearValidators();
-      // this.formData.controls["tgianKthuc"].setValidators([Validators.required]);
     } else {
       this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
       this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
-      this.formData.controls["donGiaVat"].setValidators([Validators.required]);
-      // this.formData.controls["tgianMkho"].setValidators([Validators.required]);
-      // this.formData.controls["tgianKthuc"].clearValidators();
     }
   }
-
-  // validateSave() {
-  //   let pipe = new DatePipe('en-US');
-  //   let tgianBdauTchuc = new Date(pipe.transform(this.formData.value.tgianBdauTchuc, 'yyyy-MM-dd') + " 23:59:59");
-  //   let tgianMthau = new Date(this.formData.value.tgianMthau)
-  //   let tgianDthau = new Date(this.formData.value.tgianDthau)
-  //   let tgianMkho = new Date(pipe.transform(this.formData.value.tgianMkho, 'yyyy-MM-dd') + " 00:00:00");
-  //   if (tgianBdauTchuc >= tgianMthau) {
-  //     this.notification.error(MESSAGE.ERROR, "Thời gian bắt đầu tổ chức không được vượt quá thời gian mở thầu")
-  //     return false
-  //   } else if (tgianMthau >= tgianDthau) {
-  //     this.notification.error(MESSAGE.ERROR, "Thời gian mở thầu không được vượt quá thời gian đóng thầu")
-  //     return false
-  //   } else if (tgianDthau >= tgianMkho) {
-  //     this.notification.error(MESSAGE.ERROR, "Thời gian đóng thầu không được vượt quá thời gian nhập hàng")
-  //     return false
-  //   }
-  //   return true;
-  // }
 
   async getDataChiTieu() {
     let res2 =
@@ -721,7 +693,7 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
   cancelEditCoSo(id: number): void {
     const index = this.canCuKhacList.findIndex((item) => item.id === id);
     this.editCoSoCache[id] = {
-      data: {...this.canCuKhacList[index]},
+      data: { ...this.canCuKhacList[index] },
       edit: false,
     };
   }
@@ -736,7 +708,7 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
       this.canCuKhacList.forEach((item) => {
         this.editCoSoCache[item.id] = {
           edit: false,
-          data: {...item},
+          data: { ...item },
         };
       });
     }
@@ -791,8 +763,9 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
 
   convertListData() {
     this.helperService.setIndexArray(this.listOfData);
-    this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({tenDvi: key, dataChild: value}))
+    this.listDataGroup = chain(this.listOfData).groupBy('tenDvi').map((value, key) => ({ tenDvi: key, dataChild: value }))
       .value()
+
   }
 
   expandSet = new Set<number>();
