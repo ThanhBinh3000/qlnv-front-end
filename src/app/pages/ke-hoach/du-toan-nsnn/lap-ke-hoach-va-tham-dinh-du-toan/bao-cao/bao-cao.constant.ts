@@ -36,12 +36,12 @@ export const PHU_LUC = [
         tenPl: 'Phụ lục 6',
         status: false,
     },
-    {
-        id: 'pl07',
-        tenDm: 'Thuyết minh chi các đề tài, dự án nghiên cứu khoa học',
-        tenPl: 'Phụ lục 7',
-        status: false,
-    },
+    // {
+    //     id: 'pl07',
+    //     tenDm: 'Thuyết minh chi các đề tài, dự án nghiên cứu khoa học',
+    //     tenPl: 'Phụ lục 7',
+    //     status: false,
+    // },
     {
         id: 'plda',
         tenDm: 'Phương án phân bổ kế hoạch vốn đầu tư công nguồn NSNN',
@@ -60,18 +60,18 @@ export const PHU_LUC = [
         tenPl: 'Bảo hiểm kho',
         status: false,
     },
-    {
-        id: 'pl_bh_duoi',
-        tenDm: 'Danh mục, giá trị hàng, kho (dưới 5000 M3) DTQG tham gia bảo hiểm',
-        tenPl: 'Bảo hiểm',
-        status: false,
-    },
-    {
-        id: 'pl_bh_tren',
-        tenDm: 'Danh mục, giá trị hàng, kho (trên 5000 M3) DTQG tham gia bảo hiểm',
-        tenPl: 'Bảo hiểm',
-        status: false,
-    },
+    // {
+    //     id: 'pl_bh_duoi',
+    //     tenDm: 'Danh mục, giá trị hàng, kho (dưới 5000 M3) DTQG tham gia bảo hiểm',
+    //     tenPl: 'Bảo hiểm',
+    //     status: false,
+    // },
+    // {
+    //     id: 'pl_bh_tren',
+    //     tenDm: 'Danh mục, giá trị hàng, kho (trên 5000 M3) DTQG tham gia bảo hiểm',
+    //     tenPl: 'Bảo hiểm',
+    //     status: false,
+    // },
     {
         id: 'pl_bh',
         tenDm: 'Danh mục, giá trị hàng, kho DTQG tham gia bảo hiểm',

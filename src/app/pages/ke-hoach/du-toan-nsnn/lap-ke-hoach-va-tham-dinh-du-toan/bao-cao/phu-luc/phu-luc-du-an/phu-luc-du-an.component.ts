@@ -321,7 +321,7 @@ export class PhuLucDuAnComponent implements OnInit {
 
     // start edit
     startEdit(id: string): void {
-        if (this.lstCtietBcao.every(e => this.editCache[e.id].edit = false)) {
+        if (this.lstCtietBcao.every(e => !this.editCache[e.id].edit)) {
             this.editCache[id].edit = true;
         } else {
             this.notification.warning(MESSAGE.WARNING, 'Vui lòng lưu bản ghi đang sửa trước khi thực hiện thao tác');
@@ -427,6 +427,7 @@ export class PhuLucDuAnComponent implements OnInit {
                 id: data.id,
                 stt: data.stt,
                 maDanhMucDa: data.maDanhMucDa,
+                tenDanhMuc: data.tenDanhMuc,
                 level: data.level,
             }
             this.lstCtietBcao.forEach(item => {
