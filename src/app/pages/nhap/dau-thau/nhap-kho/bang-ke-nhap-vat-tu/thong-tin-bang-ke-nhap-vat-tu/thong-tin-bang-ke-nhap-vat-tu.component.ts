@@ -428,7 +428,7 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
         break;
       }
       case STATUS.CHO_DUYET_LDCC: {
-        trangThai = STATUS.DA_DUYET_LDCC;
+        trangThai = STATUS.TU_CHOI_LDCC;
         break;
       }
     }

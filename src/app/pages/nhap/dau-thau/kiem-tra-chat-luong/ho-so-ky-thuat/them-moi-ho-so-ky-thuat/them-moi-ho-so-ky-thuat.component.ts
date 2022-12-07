@@ -27,7 +27,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { PAGE_SIZE_DEFAULT } from '../../../../../../constants/config';
 import { HelperService } from '../../../../../../services/helper.service';
 import { DatePipe } from '@angular/common';
-import { STATUS } from 'src/app/constants/status';
+import { LOAI_BIEN_BAN, STATUS } from 'src/app/constants/status';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { QuanLyBienBanLayMauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanLayMau.service';
 
@@ -43,6 +43,10 @@ export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit
   @Input() loaiVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
+
+  isBienBan: boolean = false;
+  idBienBan: number;
+  loaiBienBan: string;
 
   @ViewChild('endDatePicker') endDatePicker!: NzDatePickerComponent;
   isVisibleChangeTab$ = new Subject();
@@ -71,14 +75,39 @@ export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit
 
   STATUS = STATUS;
   dataTable: any[] = [];
+  dataTableBienBan: any[] = [
+    {
+      id: null,
+      tenBb: "Biên bản kiểm tra ngoại quan",
+      trangThai: "00",
+      tenTrangThai: "Dự Thảo",
+      fileDinhKems: "",
+      loai: LOAI_BIEN_BAN.BB_KTRA_NGOAI_QUAN,
+    },
+    {
+      id: null,
+      tenBb: "Biên bản kiểm tra vận hành",
+      trangThai: "00",
+      tenTrangThai: "Dự Thảo",
+      fileDinhKems: "",
+      loai: LOAI_BIEN_BAN.BB_KTRA_VAN_HANH
+    },
+    {
+      id: null,
+      tenBb: "Biên bản kiểm tra hồ sơ kỹ thuật",
+      trangThai: "00",
+      tenTrangThai: "Dự Thảo",
+      fileDinhKems: "",
+      loai: LOAI_BIEN_BAN.BB_KTRA_HOSO_KYTHUAT
+    }
+  ];
+
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private modal: NzModalService,
     public userService: UserService,
     private hoSoKyThuatService: HoSoKyThuatService,
-    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    private quanLyBienBanBanGiaoService: QuanLyBienBanBanGiaoService,
     public globals: Globals,
     private fb: FormBuilder,
     private helperService: HelperService,
@@ -102,8 +131,6 @@ export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit
       tenTrangThai: [],
     });
   }
-
-
 
   async ngOnInit() {
     this.spinner.show();
@@ -148,6 +175,7 @@ export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit
       trangThai: "00",
       tenTrangThai: "Dự Thảo"
     });
+
   }
 
   quayLai() {
@@ -323,6 +351,16 @@ export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit
         }
       },
     });
+  }
+
+  redirectToBienBan(isView: boolean, data: any) {
+    this.idBienBan = data.id;
+    this.loaiBienBan = data.loai;
+    this.isBienBan = true;
+  }
+
+  async backMain() {
+    this.isBienBan = false;
   }
 
 }

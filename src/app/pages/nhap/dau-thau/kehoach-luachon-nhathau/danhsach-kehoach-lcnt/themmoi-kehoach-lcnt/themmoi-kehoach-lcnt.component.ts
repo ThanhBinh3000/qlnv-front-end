@@ -725,6 +725,10 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
               body.trangThai = STATUS.TU_CHOI_LDC;
               break;
             }
+            case STATUS.CHO_DUYET_LDV: {
+              body.trangThai = STATUS.TU_CHOI_LDV;
+              break;
+            }
           }
           const res = await this.dauThauService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
