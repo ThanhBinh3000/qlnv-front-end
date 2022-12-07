@@ -24,6 +24,7 @@ import { STATUS } from 'src/app/constants/status';
 import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -59,7 +60,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
   userInfo: UserLogin;
   dataDeXuat: any[] = [];
   mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
-
+  datePipe = new DatePipe('en-US');
   constructor(
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
@@ -155,8 +156,8 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
       }
       let body = this.formTraCuu.value;
       if (body.ngayPduyet) {
-        body.ngayDuyetTu = body.ngayPduyet[0];
-        body.ngayDuyetDen = body.ngayPduyet[1];
+        body.ngayDuyetTu = this.datePipe.transform(body.ngayPduyet[0], 'yyyy-MM-dd');
+        body.ngayDuyetDen = this.datePipe.transform(body.ngayPduyet[1], 'yyyy-MM-dd');
       }
       delete body.ngayDx;
       let res = await this.tongHopDeXuatKeHoachBanDauGiaService.tonghop(body);

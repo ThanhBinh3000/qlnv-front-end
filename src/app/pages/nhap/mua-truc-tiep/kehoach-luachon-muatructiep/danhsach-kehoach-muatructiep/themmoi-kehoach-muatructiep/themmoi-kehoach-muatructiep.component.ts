@@ -57,7 +57,6 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
   showListEvent = new EventEmitter<any>();
 
   editCache: { [key: string]: { edit: boolean; data: DanhSachMuaTrucTiep } } = {};
-  donGiaVat: number = 0;
   formData: FormGroup;
   listOfData: any[] = [];
   fileDinhKem: any[] = [];
@@ -136,13 +135,15 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
       ghiChu: [null],
       tongMucDt: [null, [Validators.required]],
       tongSoLuong: [''],
+      tongTienVat: [''],
       nguonVon: ['NGV01', [Validators.required]],
       trangThai: ['00'],
       tenTrangThai: ['Dự Thảo'],
       ldoTuchoi: [],
       maThop: [''],
       noiDungTh: [''],
-
+      donGiaVat: [''],
+      donGia: [''],
     });
   }
 
@@ -287,7 +288,9 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
           console.log(pag, 33333)
           if (pag.msg == MESSAGE.SUCCESS) {
             const data = pag.data;
-            this.donGiaVat = data.giaQdVat
+            this.formData.patchValue({
+              donGiaVat: data.giaQdVat
+            })
             if (!data.giaQdVat) {
               this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
             }
@@ -324,7 +327,7 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
-        donGiaVat: this.donGiaVat
+        donGiaVat: this.formData.value.donGiaVat
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -336,17 +339,25 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
       } else {
         this.listOfData = [...this.listOfData, res.value];
       }
+      let tongTienVat: number = 0;
       let tongMucDt: number = 0;
       let tongSoLuong: number = 0;
+      let donGia: number = 0;
       this.listOfData.forEach((item) => {
+        tongTienVat = tongTienVat + item.thanhTienVat;
         tongMucDt = tongMucDt + item.soLuong * item.donGia * 1000;
         tongSoLuong = tongSoLuong + item.soLuong;
+        donGia = +item.donGia;
       });
+      console.log(tongTienVat, 66666)
       this.formData.patchValue({
         tongMucDt: tongMucDt,
         tongSoLuong: tongSoLuong,
+        tongTienVat: tongTienVat,
+        donGia: donGia,
       });
       this.convertListData();
+      console.log(donGia, 11111)
     });
 
   }
