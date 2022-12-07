@@ -128,12 +128,6 @@
                 [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"></textarea>
             </nz-form-control>
           </nz-form-item>
-          <!-- <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> giá mua </nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-                <textarea rows="3" class="search__input" nz-input formControlName="giaMua"></textarea>
-            </nz-form-control>
-        </nz-form-item> -->
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
@@ -184,11 +178,11 @@
               <td>{{ data.tenDvi }}</td>
               <td>{{ data.diaChiDvi }}</td>
               <td>{{ data.soDxuat }}</td>
-              <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.tenDuAn }}</td>
-              <td>{{ data.soLuong | number: '1.0-1' }}</td>
-              <td>{{ data.soLuong * data.donGiaVat * 1000 | number: '1.0-1' }}</td>
+              <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
+              <td>{{ data.tongTienVat| number: '1.0-1' }}</td>
             </tr>
           </tbody>
         </nz-table>
