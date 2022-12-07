@@ -19,6 +19,9 @@ import { Globals } from 'src/app/shared/globals';
 import { LTD, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { PHU_LUC } from './bao-cao.constant';
+import { BaoHiemHangComponent } from './phu-luc/bao-hiem-hang/bao-hiem-hang.component';
+import { BaoHiemKhoComponent } from './phu-luc/bao-hiem-kho/bao-hiem-kho.component';
+import { BaoHiemComponent } from './phu-luc/bao-hiem/bao-hiem.component';
 import { PhuLuc01Component } from './phu-luc/phu-luc-01/phu-luc-01.component';
 import { PhuLuc02Component } from './phu-luc/phu-luc-02/phu-luc-02.component';
 import { PhuLuc03Component } from './phu-luc/phu-luc-03/phu-luc-03.component';
@@ -56,7 +59,7 @@ export class ItemData {
     lyDoTuChoi: string;
     thuyetMinh: string;
     nguoiBcao: string;
-    lstCtietBcaos: any[];
+    lstCtietLapThamDinhs: any[];
 }
 export class BaoCao {
     id: string;
@@ -795,6 +798,21 @@ export class BaoCaoComponent implements OnInit {
             case 'plda':
                 nzContent = PhuLucDuAnComponent;
                 break;
+            case 'pl_bh_hang':
+                nzContent = BaoHiemHangComponent;
+                break;
+            case 'pl_bh_kho':
+                nzContent = BaoHiemKhoComponent;
+                break;
+            case 'pl_bh_duoi':
+                nzContent = BaoHiemComponent;
+                break;
+            case 'pl_bh_tren':
+                nzContent = BaoHiemComponent;
+                break;
+            case 'pl_bh':
+                nzContent = BaoHiemComponent;
+                break;
             //thong tu 342
             case 'TT342_13.1':
                 nzContent = BieuMau131Component;
@@ -852,6 +870,10 @@ export class BaoCaoComponent implements OnInit {
             if (res) {
             }
         });
+    }
+
+    saveAppendix(formDetail: ItemData) {
+
     }
 
     xemSoKiemTra() {
