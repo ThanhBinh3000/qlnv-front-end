@@ -132,10 +132,10 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
         ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
         : null,
       ngayDuyetTu: this.searchFilter.ngayPduyet
-        ? dayjs(this.searchFilter.ngayTao[0]).format('YYYY-MM-DD')
+        ? dayjs(this.searchFilter.ngayPduyet[0]).format('YYYY-MM-DD')
         : null,
       ngayDuyetDen: this.searchFilter.ngayPduyet
-        ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
+        ? dayjs(this.searchFilter.ngayPduyet[1]).format('YYYY-MM-DD')
         : null,
       soDxuat: this.searchFilter.soDxuat,
       loaiVthh: this.searchFilter.loaiVthh,
@@ -271,10 +271,10 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
             ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
             : null,
           ngayDuyetTu: this.searchFilter.ngayPduyet
-            ? dayjs(this.searchFilter.ngayTao[0]).format('YYYY-MM-DD')
+            ? dayjs(this.searchFilter.ngayPduyet[0]).format('YYYY-MM-DD')
             : null,
           ngayDuyetDen: this.searchFilter.ngayPduyet
-            ? dayjs(this.searchFilter.ngayTao[1]).format('YYYY-MM-DD')
+            ? dayjs(this.searchFilter.ngayPduyet[1]).format('YYYY-MM-DD')
             : null,
           soDxuat: this.searchFilter.soDxuat,
           loaiVthh: this.searchFilter.loaiVthh,
