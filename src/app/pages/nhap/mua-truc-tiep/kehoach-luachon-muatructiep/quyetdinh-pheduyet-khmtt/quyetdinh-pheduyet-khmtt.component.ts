@@ -192,7 +192,7 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI
     };
     let res = await this.quyetDinhPheDuyetKeHoachMTTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

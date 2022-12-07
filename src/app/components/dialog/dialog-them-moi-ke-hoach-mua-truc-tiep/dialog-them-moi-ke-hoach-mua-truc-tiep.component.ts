@@ -157,6 +157,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       let res = await this.donViService.getAll(body);
       if (res.msg === MESSAGE.SUCCESS) {
         this.listChiCuc = res.data;
+        this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
       }
     }
   }
