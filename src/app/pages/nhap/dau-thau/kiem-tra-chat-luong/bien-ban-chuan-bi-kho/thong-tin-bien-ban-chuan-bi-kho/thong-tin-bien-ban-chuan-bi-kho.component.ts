@@ -1,36 +1,36 @@
-import {cloneDeep} from 'lodash';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
+import { cloneDeep } from 'lodash';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {BienBanChuanBiKho, ChiTietBienBanChuanBiKho} from 'src/app/models/BienBanChuanBiKho';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DonviService} from 'src/app/services/donvi.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { BienBanChuanBiKho, ChiTietBienBanChuanBiKho } from 'src/app/models/BienBanChuanBiKho';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DonviService } from 'src/app/services/donvi.service';
 import {
   QuanLyBienBanChuanBiKhoService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanChuanBiKho.service';
 import {
   QuyetDinhGiaoNhapHangService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import {ThongTinHopDongService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
-import {TinhTrangKhoHienThoiService} from 'src/app/services/tinhTrangKhoHienThoi.service';
-import {UserService} from 'src/app/services/user.service';
-import {convertTienTobangChu, thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
-import {Globals} from 'src/app/shared/globals';
-import {BaseComponent} from 'src/app/components/base/base.component';
+import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { UserService } from 'src/app/services/user.service';
+import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
+import { BaseComponent } from 'src/app/components/base/base.component';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import {
   QuanLyPhieuKiemTraChatLuongHangService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
-import {HelperService} from 'src/app/services/helper.service';
+import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-chuan-bi-kho',
@@ -242,7 +242,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
 
   async bindingDataDdNhap(data) {
     if (data) {
-      let soLuongNhap = await this.quanLyPhieuKiemTraChatLuongHangService.getSoLuongNhap({"idDdiemGiaoNvNh": data.id});
+      let soLuongNhap = await this.quanLyPhieuKiemTraChatLuongHangService.getSoLuongNhap({ "idDdiemGiaoNvNh": data.id });
       this.formData.patchValue({
         idDdiemGiaoNvNh: data.id,
         maDiemKho: data.maDiemKho,
@@ -638,7 +638,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
   calcTongCong(): string {
     const tong = this.dsChiTietChuanBiKhoClone.length > 0 ?
       this.dsChiTietChuanBiKhoClone.reduce((total, currentValue) =>
-          total + currentValue.thanhTienTrongNam
+        total + currentValue.thanhTienTrongNam
         , 0) : 0
     this.formData.patchValue({
       tongSo: tong
