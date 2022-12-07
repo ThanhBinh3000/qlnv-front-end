@@ -26,7 +26,7 @@
                     <th colspan="2" nzWidth="150px"> Năm {{namBaoCao}}</th>
                     <th rowspan="2" nzWidth="150px">Dự kiến năm {{namKeHoach}}</th>
                     <th rowspan="2" nzWidth="150px">Thêm (Giá trị thẩm định)</th>
-                    <th rowspan="3" colspan="2" nzWidth="220px" [hidden]="status"></th>
+                    <th rowspan="3" nzWidth="220px" [hidden]="status"></th>
                 </tr>
                 <tr>
                     <th>Dự toán</th>
@@ -50,7 +50,6 @@
                     <th>{{tongSo4}}</th>
                     <th>{{tongSo5}}</th>
                     <th nzWidth="220px"></th>
-                    <th nzWidth="220px"></th>
                 </tr>
             </thead>
             <tbody>
@@ -60,34 +59,28 @@
                             {{getChiMuc(data.stt)}}
                         </td>
                         <td>
-                            <div *ngFor="let item of chiTieus">
-                                <div *ngIf="item.ma == data.maNdung">
-                                    {{item.giaTri}}
-                                </div>
-                            </div>
+                            {{data.tenDmuc}}
                         </td>
                         <td>{{data.thienNtruoc}}</td>
                         <td>{{data.namDtoan}}</td>
                         <td>{{data.namUocThien}}</td>
                         <td>{{displayValue(data.namKh)}}</td>
                         <td>{{displayValue(data.giaTriThamDinh)}}</td>
-                        <td [hidden]="status" nzWidth="220px">
-                            <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-                        </td>
-                        <td [hidden]="status" nzWidth="220px">
-                            <i class="fa fa-plus"></i>
+                        <td [hidden]="status">
+                            <i *ngIf="checkEdit(data.id)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </td>
                     </ng-container>
                     <ng-template #editTemplate>
                         <td class="text-center">
                             {{getChiMuc(editCache[data.id].data.stt)}}
                         </td>
-                        <td>
-                            <div *ngFor="let item of chiTieus">
-                                <div *ngIf="item.ma == data.maNdung">
-                                    {{item.giaTri}}
-                                </div>
-                            </div>
+                        <td *ngIf="!checkEditChild">
+
+                            {{editCache[data.id].data.tenDmuc}}
+                        </td>
+                        <td *ngIf="checkEditChild">
+                            <input nz-input class="search__input" type="text"
+                                [(ngModel)]="editCache[data.id].data.tenDmuc" />
                         </td>
                         <td>
                             <fm-input-number nz-input class="search__input"
@@ -115,9 +108,9 @@
                                 (nzOnConfirm)="cancelEdit(data.id)" class="save">
                                 Hủy
                             </a>
-                        </td>
-                        <td>
-                            <i class="fa fa-plus"></i>
+                            <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+                            <i *ngIf="checkDelete(data.maNdung)" class="fa fa-trash-o do"
+                                (click)="deleteLine(data.stt)"></i>
                         </td>
                     </ng-template>
                 </tr>
