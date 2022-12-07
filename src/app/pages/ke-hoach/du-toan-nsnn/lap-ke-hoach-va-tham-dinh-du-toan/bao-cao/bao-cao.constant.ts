@@ -57,7 +57,7 @@ export const PHU_LUC = [
     {
         id: 'pl_bh_kho',
         tenDm: 'Danh mục, giá trị kho DTQG tham gia bảo hiểm',
-        tenPl: 'Bảo hiểm hàng',
+        tenPl: 'Bảo hiểm kho',
         status: false,
     },
     {
