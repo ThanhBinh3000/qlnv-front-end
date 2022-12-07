@@ -283,7 +283,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: this.userService.isCuc() ? bodyParamLT : bodyParamVatTu
+      nzComponentParams: this.userService.isTongCuc() ? bodyParamLT : bodyParamVatTu
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
