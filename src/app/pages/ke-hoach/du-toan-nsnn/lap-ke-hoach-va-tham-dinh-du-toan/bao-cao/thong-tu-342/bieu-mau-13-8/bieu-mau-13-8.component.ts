@@ -14,6 +14,7 @@ export class ItemData {
     id: string;
     stt: string;
     maNdung: string;
+    tenNdung: string;
     level: number;
     thienNtruoc: number;
     namDtoan: number;
@@ -21,6 +22,7 @@ export class ItemData {
     namKh: number;
     giaTriThamDinh: number;
     ghiChu: string;
+    lstCtiet: ItemData[];
 }
 
 @Component({
