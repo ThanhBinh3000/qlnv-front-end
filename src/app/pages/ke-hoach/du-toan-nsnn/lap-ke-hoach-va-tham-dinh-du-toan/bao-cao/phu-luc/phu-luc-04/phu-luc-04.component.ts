@@ -78,6 +78,58 @@ export class PhuLuc04Component implements OnInit {
     //nho dem
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 
+    soLuongA = 0;
+    soLuongTdA = 0;
+    tongMucDuToanA = 0;
+    tongMucDuToanTdA = 0;
+    duToanDaBoTriNamN2A = 0;
+    duToanNamN1DmdtA = 0;
+    duToanNamN1UocThA = 0;
+    duToanKhNamNCbDauTuA = 0;
+    duToanKhNamNThDauTuA = 0;
+    duToanKhNamNCbDauTuTdA = 0;
+    duToanKhNamNThDauTuTdA = 0;
+    duToanNamTiepTheoN1CbDauTuA = 0;
+    duToanNamTiepTheoN1ThDauTuA = 0;
+    duToanNamTiepTheoN2CbDauTuA = 0;
+    duToanNamTiepTheoN2ThDauTuA = 0;
+    cacNamTiepTheoA = 0;
+
+    soLuongB = 0;
+    soLuongTdB = 0;
+    tongMucDuToanB = 0;
+    tongMucDuToanTdB = 0;
+    duToanDaBoTriNamN2B = 0;
+    duToanNamN1DmdtB = 0;
+    duToanNamN1UocThB = 0;
+    duToanKhNamNCbDauTuB = 0;
+    duToanKhNamNThDauTuB = 0;
+    duToanKhNamNCbDauTuTdB = 0;
+    duToanKhNamNThDauTuTdB = 0;
+    duToanNamTiepTheoN1CbDauTuB = 0;
+    duToanNamTiepTheoN1ThDauTuB = 0;
+    duToanNamTiepTheoN2CbDauTuB = 0;
+    duToanNamTiepTheoN2ThDauTuB = 0;
+    cacNamTiepTheoB = 0;
+
+    soLuongAB = 0;
+    soLuongTdAB = 0;
+    tongMucDuToanAB = 0;
+    tongMucDuToanTdAB = 0;
+    duToanDaBoTriNamN2AB = 0;
+    duToanNamN1DmdtAB = 0;
+    duToanNamN1UocThAB = 0;
+    duToanKhNamNCbDauTuAB = 0;
+    duToanKhNamNThDauTuAB = 0;
+    duToanKhNamNCbDauTuTdAB = 0;
+    duToanKhNamNThDauTuTdAB = 0;
+    duToanNamTiepTheoN1CbDauTuAB = 0;
+    duToanNamTiepTheoN1ThDauTuAB = 0;
+    duToanNamTiepTheoN2CbDauTuAB = 0;
+    duToanNamTiepTheoN2ThDauTuAB = 0;
+    cacNamTiepTheoAB = 0;
+
+
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
@@ -103,38 +155,18 @@ export class PhuLuc04Component implements OnInit {
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.namHienHanh = this.dataInfo?.namBcao;
-        // this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
-        //     this.lstCtietBcao.push({
-        //         ...item,
-        //     })
-        // })
-
-        this.formDetail?.lstCtietBcaos.forEach(item => {
-            const id = parseInt(item.header, 10) - 21;
-            this.lstCtietBcao[id].data.push({
-                ...item,
+        this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
+            this.idPhuLuc.forEach(id => {
+                const idpl = Number(id)
+                this.lstCtietBcao[idpl].data.push({
+                    ...item,
+                })
             })
         })
-        // if (this.lstCtietBcao.length == 0) {
-        //     this.linhVucChis.forEach(e => {
-        //         this.lstCtietBcao.push({
-        //             ...new ItemData(),
-        //             id: uuid.v4() + 'FE',
-        //             stt: e.ma,
-        //             matHang: e.ma,
-        //         })
-        //     })
-        // } else if (!this.lstCtietBcao[0]?.stt) {
-        //     this.lstCtietBcao.forEach(item => {
-        //         item.stt = item.matHang;
-        //     })
-        // }
         this.idPhuLuc.forEach(id => {
             const idpl = Number(id)
-            // this.changeModel(id);
+            this.changeModel(id);
             this.updateEditCache(idpl);
-            // this.sortByIndex(id);
-            // this.getTotal();
         })
         this.getStatusButton();
         this.spinner.hide();
@@ -150,7 +182,7 @@ export class PhuLuc04Component implements OnInit {
 
     addLine(id: string, idAppendix: number) {
         const item: ItemData = {
-            id: uuid.v4(),
+            id: uuid.v4() + 'FE',
             stt: "0",
             header: idAppendix,
             khvonphiLapThamDinhCtietId: "",
@@ -207,29 +239,37 @@ export class PhuLuc04Component implements OnInit {
     // luu
     async save(trangThai: string) {
         let checkSaveEdit;
-        //check xem tat ca cac dong du lieu da luu chua?
-        //chua luu thi bao loi, luu roi thi cho di
-        // this.lstCtietBcao.forEach(element => {
-        //     if (this.editCache[element.id].edit === true) {
-        //         checkSaveEdit = false
-        //     }
-        // });
+        this.idPhuLuc.forEach(id => {
+            const idpl = Number(id)
+            this.lstCtietBcao[idpl].data.forEach(item => {
+                if (this.editCache[item.id].edit === true) {
+                    checkSaveEdit = false
+                }
+            })
+        })
         if (checkSaveEdit == false) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTSAVE);
             return;
         }
         //tinh lai don vi tien va kiem tra gioi han cua chung
         const lstCtietBcaoTemp: ItemData[] = [];
+        this.idPhuLuc.forEach(id => {
+            const idpl = Number(id)
+            this.lstCtietBcao[idpl].data.forEach(item => {
+                lstCtietBcaoTemp.push({
+                    ...item,
+                })
+            })
+        })
+
         let checkMoneyRange = true;
-        // this.lstCtietBcao.forEach(item => {
-        //     // if (item.ncauChiTongSo > MONEY_LIMIT) {
-        //     //     checkMoneyRange = false;
-        //     //     return;
-        //     // }
-        //     lstCtietBcaoTemp.push({
-        //         ...item,
-        //     })
-        // })
+        lstCtietBcaoTemp.forEach(item => {
+            if (item.tongMucDuToan > MONEY_LIMIT || item.tongMucDuToanTd > MONEY_LIMIT
+            ) {
+                checkMoneyRange = false;
+                return;
+            }
+        })
 
         if (!checkMoneyRange) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.MONEYRANGE);
@@ -243,27 +283,35 @@ export class PhuLuc04Component implements OnInit {
             }
         })
 
-        const request = JSON.parse(JSON.stringify(this.formDetail));
-        request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
+        // const request = JSON.parse(JSON.stringify(this.formDetail));
+        console.log(this.formDetail);
+
+        const request = JSON.parse(JSON.stringify(this?.formDetail));
+        request.lstCtietLapThamDinhs = JSON.parse(JSON.stringify(lstCtietBcaoTemp));
+
         request.trangThai = trangThai;
+        request.thuyetMinh = this.thuyetMinh;
+        console.log(request);
+
 
         this.spinner.show();
-        this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
-            async data => {
-                if (data.statusCode == 0) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                    this.formDetail = data.data;
-                    this._modalRef.close(this.formDetail);
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
+        // this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
+        //     async data => {
+        //         if (data.statusCode == 0) {
+        //             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+        //             this.formDetail = data.data;
+        //             this._modalRef.close(this.formDetail);
+        //         } else {
+        //             this.notification.error(MESSAGE.ERROR, data?.msg);
+        //         }
+        //     },
+        //     err => {
+        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        //     },
+        // );
         this.spinner.hide();
     }
+
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
@@ -377,157 +425,127 @@ export class PhuLuc04Component implements OnInit {
         };
     }
 
-    // luu thay doi
-    // saveEdit(id: string): void {
-    //     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
-    //     Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
-    //     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-    //     this.sum(this.lstCtietBcao[index].stt);
-    //     this.updateEditCache();
-    // }
-
     saveEdit(id: string, idAppendix: string) {
-        this.editCache[id].data.checked = this.lstCtietBcao[idAppendix].data.find(item => item.id == id).checked; // set checked editCache = checked danhSachChiTietbaoCao
-        const index = this.lstCtietBcao[idAppendix].data.findIndex(item => item.id == id); // lay vi tri hang minh sua
-        Object.assign(this.lstCtietBcao[idAppendix].data[index], this.editCache[id].data); // set lai data cua danhSachChiTietbaoCao[index] = this.editCache[id].data
-        this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-        //tinh toan lai trung binh cho vat tu muc cao nhat
-        // const maVtu = this.lstCtietBcao[idAppendix].data[index].maVtu;
-        // this.setAverageValue(maVtu, idAppendix);
         const idApend = Number(idAppendix)
+        this.editCache[id].data.checked = this.lstCtietBcao[idApend].data.find(item => item.id == id).checked; // set checked editCache = checked danhSachChiTietbaoCao
+        const index = this.lstCtietBcao[idApend].data.findIndex(item => item.id == id); // lay vi tri hang minh sua
+        Object.assign(this.lstCtietBcao[idApend].data[index], this.editCache[id].data); // set lai data cua danhSachChiTietbaoCao[index] = this.editCache[id].data
+        this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.updateEditCache(idApend);
         this.changeModel(idAppendix);
     }
 
-    // sortByIndex(idAppendix: number) {
-    //     // this.setLevel();
-    //     this.lstCtietBcao[idAppendix].data.sort((item1, item2) => {
-    //         if (item1.maVtu > item2.maVtu) {
-    //             return 1;
-    //         }
-    //         if (item1.maVtu < item2.maVtu) {
-    //             return -1;
-    //         }
-    //         if (item1.maVtuCha > item2.maVtuCha) {
-    //             return 1;
-    //         } else {
-    //             return -1;
-    //         }
-    //     })
-    // }
-
-    // setLevel() {
-    //     this.lstCtietBcao.forEach(item => {
-    //         const str: string[] = item.matHang.split('.');
-    //         item.level = str.length - 2;
-    //     })
-    // }
-    // async changeModel(idAppendix: number) {
-    //     this.total[idAppendix] = new ItemData();
-    //     this.lstCtietBcao[idAppendix].data.forEach(item => {
-    //         if (item.maVtuCha == 0) {
-    //             this.total[idAppendix].thTtien = sumNumber([this.total[idAppendix].thTtien, item.thTtien]);
-    //         }
-    //     })
-    //     this.tongDvTc = sumNumber([this.total[0].thTtien, this.total[1].thTtien]);
-    // }
+    deleteAllChecked() {
+        this.idPhuLuc.forEach(id => {
+            const idpl = Number(id);
+            this.lstCtietBcao[idpl].data = this.lstCtietBcao[idpl].data.filter(e => e.checked == false);
+            this.changeModel(id);
+        });
+    }
 
     async changeModel(idAppendix: string) {
-        this.total[idAppendix] = new ItemData();
-        this.lstCtietBcao[idAppendix].data.forEach(item => {
+        const idAppend = Number(idAppendix);
+        this.total[idAppend] = new ItemData();
+        this.lstCtietBcao[idAppend].data.forEach(item => {
+            this.total[idAppend].soLuong = sumNumber([this.total[idAppend].soLuong, item.soLuong])
+            this.total[idAppend].soLuongTd = sumNumber([this.total[idAppend].soLuongTd, item.soLuongTd])
+            this.total[idAppend].tongMucDuToan = sumNumber([this.total[idAppend].tongMucDuToan, item.tongMucDuToan])
+            this.total[idAppend].tongMucDuToanTd = sumNumber([this.total[idAppend].tongMucDuToanTd, item.tongMucDuToanTd])
+            this.total[idAppend].duToanDaBoTriNamN2 = sumNumber([this.total[idAppend].duToanDaBoTriNamN2, item.duToanDaBoTriNamN2])
+            this.total[idAppend].duToanNamN1Dmdt = sumNumber([this.total[idAppend].duToanNamN1Dmdt, item.duToanNamN1Dmdt])
+            this.total[idAppend].duToanNamN1UocTh = sumNumber([this.total[idAppend].duToanNamN1UocTh, item.duToanNamN1UocTh])
+            this.total[idAppend].duToanKhNamNCbDauTu = sumNumber([this.total[idAppend].duToanKhNamNCbDauTu, item.duToanKhNamNCbDauTu])
+            this.total[idAppend].duToanKhNamNThDauTu = sumNumber([this.total[idAppend].duToanKhNamNThDauTu, item.duToanKhNamNThDauTu])
+            this.total[idAppend].duToanKhNamNCbDauTuTd = sumNumber([this.total[idAppend].duToanKhNamNCbDauTuTd, item.duToanKhNamNCbDauTuTd])
+            this.total[idAppend].duToanKhNamNThDauTuTd = sumNumber([this.total[idAppend].duToanKhNamNThDauTuTd, item.duToanKhNamNThDauTuTd])
+            this.total[idAppend].duToanNamTiepTheoN1CbDauTu = sumNumber([this.total[idAppend].duToanNamTiepTheoN1CbDauTu, item.duToanNamTiepTheoN1CbDauTu])
+            this.total[idAppend].duToanNamTiepTheoN1ThDauTu = sumNumber([this.total[idAppend].duToanNamTiepTheoN1ThDauTu, item.duToanNamTiepTheoN1ThDauTu])
+            this.total[idAppend].duToanNamTiepTheoN2CbDauTu = sumNumber([this.total[idAppend].duToanNamTiepTheoN2CbDauTu, item.duToanNamTiepTheoN2CbDauTu])
+            this.total[idAppend].duToanNamTiepTheoN2ThDauTu = sumNumber([this.total[idAppend].duToanNamTiepTheoN2ThDauTu, item.duToanNamTiepTheoN2ThDauTu])
+            this.total[idAppend].cacNamTiepTheo = sumNumber([this.total[idAppend].cacNamTiepTheo, item.cacNamTiepTheo])
+        });
 
-            this.editCache[idAppendix].data.tongMucDuToan = sumNumber([
-                this.editCache[idAppendix].data.duToanDaBoTriNamN2,
-                this.editCache[idAppendix].data.duToanNamN1Dmdt,
-                this.editCache[idAppendix].data.duToanKhNamNCbDauTu,
-                this.editCache[idAppendix].data.duToanKhNamNThDauTu,
-                this.editCache[idAppendix].data.duToanNamTiepTheoN1CbDauTu,
-                this.editCache[idAppendix].data.duToanNamTiepTheoN1ThDauTu,
-                this.editCache[idAppendix].data.duToanNamTiepTheoN2CbDauTu,
-                this.editCache[idAppendix].data.duToanNamTiepTheoN2ThDauTu,
-                this.editCache[idAppendix].data.cacNamTiepTheo,
-            ]);
-            this.editCache[idAppendix].data.tongMucDuToanTd = sumNumber([
-                this.editCache[idAppendix].data.duToanDaBoTriNamN2,
-                this.editCache[idAppendix].data.duToanNamN1Dmdt,
-                this.editCache[idAppendix].data.duToanKhNamNCbDauTuTd,
-                this.editCache[idAppendix].data.duToanKhNamNThDauTuTd,
-                this.editCache[idAppendix].data.duToanNamTiepTheoN1CbDauTu,
-                this.editCache[idAppendix].data.duToanNamTiepTheoN1ThDauTu,
-                this.editCache[idAppendix].data.duToanNamTiepTheoN2CbDauTu,
-                this.editCache[idAppendix].data.duToanNamTiepTheoN2ThDauTu,
-                this.editCache[idAppendix].data.cacNamTiepTheo,
-            ]);
+        this.soLuongA = sumNumber([this.total[0].soLuong, this.total[1]?.soLuong, this.total[2]?.soLuong, this.total[3]?.soLuong])
+        this.soLuongTdA = sumNumber([this.total[0]?.soLuongTd, this.total[1]?.soLuongTd, this.total[2]?.soLuongTd, this.total[3]?.soLuongTd])
+        this.tongMucDuToanA = sumNumber([this.total[0]?.tongMucDuToan, this.total[1]?.tongMucDuToan, this.total[2]?.tongMucDuToan, this.total[3]?.tongMucDuToan])
+        this.tongMucDuToanTdA = sumNumber([this.total[0]?.tongMucDuToanTd, this.total[1]?.tongMucDuToanTd, this.total[2]?.tongMucDuToanTd, this.total[3]?.tongMucDuToanTd])
+        this.duToanDaBoTriNamN2A = sumNumber([this.total[0]?.duToanDaBoTriNamN2, this.total[1]?.duToanDaBoTriNamN2, this.total[2]?.duToanDaBoTriNamN2, this.total[3]?.duToanDaBoTriNamN2])
+        this.duToanNamN1DmdtA = sumNumber([this.total[0]?.duToanNamN1Dmdt, this.total[1]?.duToanNamN1Dmdt, this.total[2]?.duToanNamN1Dmdt, this.total[3]?.duToanNamN1Dmdt])
+        this.duToanNamN1UocThA = sumNumber([this.total[0]?.duToanNamN1UocTh, this.total[1]?.duToanNamN1UocTh, this.total[2]?.duToanNamN1UocTh, this.total[3]?.duToanNamN1UocTh])
+        this.duToanKhNamNCbDauTuA = sumNumber([this.total[0]?.duToanKhNamNCbDauTu, this.total[1]?.duToanKhNamNCbDauTu, this.total[2]?.duToanKhNamNCbDauTu, this.total[3]?.duToanKhNamNCbDauTu])
+        this.duToanKhNamNThDauTuA = sumNumber([this.total[0]?.duToanKhNamNThDauTu, this.total[1]?.duToanKhNamNThDauTu, this.total[2]?.duToanKhNamNThDauTu, this.total[3]?.duToanKhNamNThDauTu])
+        this.duToanKhNamNCbDauTuTdA = sumNumber([this.total[0]?.duToanKhNamNCbDauTuTd, this.total[1]?.duToanKhNamNCbDauTuTd, this.total[2]?.duToanKhNamNCbDauTuTd, this.total[3]?.duToanKhNamNCbDauTuTd])
+        this.duToanKhNamNThDauTuTdA = sumNumber([this.total[0]?.duToanKhNamNThDauTuTd, this.total[1]?.duToanKhNamNThDauTuTd, this.total[2]?.duToanKhNamNThDauTuTd, this.total[3]?.duToanKhNamNThDauTuTd])
+        this.duToanNamTiepTheoN1CbDauTuA = sumNumber([this.total[0]?.duToanNamTiepTheoN1CbDauTu, this.total[1]?.duToanNamTiepTheoN1CbDauTu, this.total[2]?.duToanNamTiepTheoN1CbDauTu, this.total[3]?.duToanNamTiepTheoN1CbDauTu])
+        this.duToanNamTiepTheoN1ThDauTuA = sumNumber([this.total[0]?.duToanNamTiepTheoN1ThDauTu, this.total[1]?.duToanNamTiepTheoN1ThDauTu, this.total[2]?.duToanNamTiepTheoN1ThDauTu, this.total[3]?.duToanNamTiepTheoN1ThDauTu])
+        this.duToanNamTiepTheoN2CbDauTuA = sumNumber([this.total[0]?.duToanNamTiepTheoN2CbDauTu, this.total[1]?.duToanNamTiepTheoN2CbDauTu, this.total[2]?.duToanNamTiepTheoN2CbDauTu, this.total[3]?.duToanNamTiepTheoN2CbDauTu])
+        this.duToanNamTiepTheoN2ThDauTuA = sumNumber([this.total[0]?.duToanNamTiepTheoN2ThDauTu, this.total[1]?.duToanNamTiepTheoN2ThDauTu, this.total[2]?.duToanNamTiepTheoN2ThDauTu, this.total[3]?.duToanNamTiepTheoN2ThDauTu])
+        this.cacNamTiepTheoA = sumNumber([this.total[0]?.cacNamTiepTheo, this.total[1]?.cacNamTiepTheo, this.total[2]?.cacNamTiepTheo, this.total[3]?.cacNamTiepTheo])
 
-        })
+        this.soLuongB = sumNumber([this.total[4]?.soLuong, this.total[5]?.soLuong, this.total[6]?.soLuong, this.total[7]?.soLuong])
+        this.soLuongTdB = sumNumber([this.total[4]?.soLuongTd, this.total[5]?.soLuongTd, this.total[6]?.soLuongTd, this.total[7]?.soLuongTd])
+        this.tongMucDuToanB = sumNumber([this.total[4]?.tongMucDuToan, this.total[5]?.tongMucDuToan, this.total[6]?.tongMucDuToan, this.total[7]?.tongMucDuToan])
+        this.tongMucDuToanTdB = sumNumber([this.total[4]?.tongMucDuToanTd, this.total[5]?.tongMucDuToanTd, this.total[6]?.tongMucDuToanTd, this.total[7]?.tongMucDuToanTd])
+        this.duToanDaBoTriNamN2B = sumNumber([this.total[4]?.duToanDaBoTriNamN2, this.total[5]?.duToanDaBoTriNamN2, this.total[6]?.duToanDaBoTriNamN2, this.total[7]?.duToanDaBoTriNamN2])
+        this.duToanNamN1DmdtB = sumNumber([this.total[4]?.duToanNamN1Dmdt, this.total[5]?.duToanNamN1Dmdt, this.total[6]?.duToanNamN1Dmdt, this.total[7]?.duToanNamN1Dmdt])
+        this.duToanNamN1UocThB = sumNumber([this.total[4]?.duToanNamN1UocTh, this.total[5]?.duToanNamN1UocTh, this.total[6]?.duToanNamN1UocTh, this.total[7]?.duToanNamN1UocTh])
+        this.duToanKhNamNCbDauTuB = sumNumber([this.total[4]?.duToanKhNamNCbDauTu, this.total[5]?.duToanKhNamNCbDauTu, this.total[6]?.duToanKhNamNCbDauTu, this.total[7]?.duToanKhNamNCbDauTu])
+        this.duToanKhNamNThDauTuB = sumNumber([this.total[4]?.duToanKhNamNThDauTu, this.total[5]?.duToanKhNamNThDauTu, this.total[6]?.duToanKhNamNThDauTu, this.total[7]?.duToanKhNamNThDauTu])
+        this.duToanKhNamNCbDauTuTdB = sumNumber([this.total[4]?.duToanKhNamNCbDauTuTd, this.total[5]?.duToanKhNamNCbDauTuTd, this.total[6]?.duToanKhNamNCbDauTuTd, this.total[7]?.duToanKhNamNCbDauTuTd])
+        this.duToanKhNamNThDauTuTdB = sumNumber([this.total[4]?.duToanKhNamNThDauTuTd, this.total[5]?.duToanKhNamNThDauTuTd, this.total[6]?.duToanKhNamNThDauTuTd, this.total[7]?.duToanKhNamNThDauTuTd])
+        this.duToanNamTiepTheoN1CbDauTuB = sumNumber([this.total[4]?.duToanNamTiepTheoN1CbDauTu, this.total[5]?.duToanNamTiepTheoN1CbDauTu, this.total[6]?.duToanNamTiepTheoN1CbDauTu, this.total[7]?.duToanNamTiepTheoN1CbDauTu])
+        this.duToanNamTiepTheoN1ThDauTuB = sumNumber([this.total[4]?.duToanNamTiepTheoN1ThDauTu, this.total[5]?.duToanNamTiepTheoN1ThDauTu, this.total[6]?.duToanNamTiepTheoN1ThDauTu, this.total[7]?.duToanNamTiepTheoN1ThDauTu])
+        this.duToanNamTiepTheoN2CbDauTuB = sumNumber([this.total[4]?.duToanNamTiepTheoN2CbDauTu, this.total[5]?.duToanNamTiepTheoN2CbDauTu, this.total[6]?.duToanNamTiepTheoN2CbDauTu, this.total[7]?.duToanNamTiepTheoN2CbDauTu])
+        this.duToanNamTiepTheoN2ThDauTuB = sumNumber([this.total[4]?.duToanNamTiepTheoN2ThDauTu, this.total[5]?.duToanNamTiepTheoN2ThDauTu, this.total[6]?.duToanNamTiepTheoN2ThDauTu, this.total[7]?.duToanNamTiepTheoN2ThDauTu])
+        this.cacNamTiepTheoB = sumNumber([this.total[4]?.cacNamTiepTheo, this.total[5]?.cacNamTiepTheo, this.total[6]?.cacNamTiepTheo, this.total[7]?.cacNamTiepTheo])
+        // this.tongDvTc = sumNumber([this.total[0].thTtien, this.total[1].thTtien]);
+
+        this.soLuongAB = sumNumber([this.soLuongA, this.soLuongB])
+        this.soLuongTdAB = sumNumber([this.soLuongTdA, this.soLuongTdB])
+        this.tongMucDuToanAB = sumNumber([this.tongMucDuToanA, this.tongMucDuToanB])
+        this.tongMucDuToanTdAB = sumNumber([this.tongMucDuToanTdA, this.tongMucDuToanTdB])
+        this.duToanDaBoTriNamN2AB = sumNumber([this.duToanDaBoTriNamN2A, this.duToanDaBoTriNamN2B])
+        this.duToanNamN1DmdtAB = sumNumber([this.duToanNamN1DmdtA, this.duToanNamN1DmdtB])
+        this.duToanNamN1UocThAB = sumNumber([this.duToanNamN1UocThA, this.duToanNamN1UocThB])
+        this.duToanKhNamNCbDauTuAB = sumNumber([this.duToanKhNamNCbDauTuA, this.duToanKhNamNCbDauTuB])
+        this.duToanKhNamNThDauTuAB = sumNumber([this.duToanKhNamNThDauTuA, this.duToanKhNamNThDauTuB])
+        this.duToanKhNamNCbDauTuTdAB = sumNumber([this.duToanKhNamNCbDauTuTdA, this.duToanKhNamNCbDauTuTdB])
+        this.duToanKhNamNThDauTuTdAB = sumNumber([this.duToanKhNamNThDauTuTdA, this.duToanKhNamNThDauTuTdB])
+        this.duToanNamTiepTheoN1CbDauTuAB = sumNumber([this.duToanNamTiepTheoN1CbDauTuA, this.duToanNamTiepTheoN1CbDauTuB])
+        this.duToanNamTiepTheoN1ThDauTuAB = sumNumber([this.duToanNamTiepTheoN1ThDauTuA, this.duToanNamTiepTheoN1ThDauTuB])
+        this.duToanNamTiepTheoN2CbDauTuAB = sumNumber([this.duToanNamTiepTheoN2CbDauTuA, this.duToanNamTiepTheoN2CbDauTuB])
+        this.duToanNamTiepTheoN2ThDauTuAB = sumNumber([this.duToanNamTiepTheoN2ThDauTuA, this.duToanNamTiepTheoN2ThDauTuB])
+        this.cacNamTiepTheoAB = sumNumber([this.cacNamTiepTheoA, this.cacNamTiepTheoB])
 
     }
 
-    // sum(stt: string) {
-    //     stt = this.getHead(stt);
-    //     while (stt != '0') {
-    //         const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-    //         const data = this.lstCtietBcao[index];
-    //         this.lstCtietBcao[index] = {
-    //             ...new ItemData(),
-    //             id: data.id,
-    //             stt: data.stt,
-    //             matHang: data.matHang,
-    //             level: data.level,
-    //         }
-    //         this.lstCtietBcao.forEach(item => {
-    //             if (this.getHead(item.stt) == stt) {
-    //                 this.lstCtietBcao[index].soLuong = sumNumber([this.lstCtietBcao[index].soLuong, item.soLuong])
-    //                 this.lstCtietBcao[index].soLuongTd = sumNumber([this.lstCtietBcao[index].soLuongTd, item.soLuongTd])
-    //                 this.lstCtietBcao[index].tongMucDuToan = sumNumber([this.lstCtietBcao[index].tongMucDuToan, item.tongMucDuToan])
-    //                 this.lstCtietBcao[index].tongMucDuToanTd = sumNumber([this.lstCtietBcao[index].tongMucDuToanTd, item.tongMucDuToanTd])
-    //                 this.lstCtietBcao[index].duToanDaBoTriNamN2 = sumNumber([this.lstCtietBcao[index].duToanDaBoTriNamN2, item.duToanDaBoTriNamN2])
-    //                 this.lstCtietBcao[index].duToanNamN1Dmdt = sumNumber([this.lstCtietBcao[index].duToanNamN1Dmdt, item.duToanNamN1Dmdt])
-    //                 this.lstCtietBcao[index].duToanNamN1UocTh = sumNumber([this.lstCtietBcao[index].duToanNamN1UocTh, item.duToanNamN1UocTh])
-    //                 this.lstCtietBcao[index].duToanKhNamNCbDauTu = sumNumber([this.lstCtietBcao[index].duToanKhNamNCbDauTu, item.duToanKhNamNCbDauTu])
-    //                 this.lstCtietBcao[index].duToanKhNamNThDauTu = sumNumber([this.lstCtietBcao[index].duToanKhNamNThDauTu, item.duToanKhNamNThDauTu])
-    //                 this.lstCtietBcao[index].duToanKhNamNCbDauTuTd = sumNumber([this.lstCtietBcao[index].duToanKhNamNCbDauTuTd, item.duToanKhNamNCbDauTuTd])
-    //                 this.lstCtietBcao[index].duToanKhNamNThDauTuTd = sumNumber([this.lstCtietBcao[index].duToanKhNamNThDauTuTd, item.duToanKhNamNThDauTuTd])
-    //                 this.lstCtietBcao[index].duToanNamTiepTheoN1CbDauTu = sumNumber([this.lstCtietBcao[index].duToanNamTiepTheoN1CbDauTu, item.duToanNamTiepTheoN1CbDauTu])
-    //                 this.lstCtietBcao[index].duToanNamTiepTheoN1ThDauTu = sumNumber([this.lstCtietBcao[index].duToanNamTiepTheoN1ThDauTu, item.duToanNamTiepTheoN1ThDauTu])
-    //                 this.lstCtietBcao[index].duToanNamTiepTheoN2CbDauTu = sumNumber([this.lstCtietBcao[index].duToanNamTiepTheoN2CbDauTu, item.duToanNamTiepTheoN2CbDauTu])
-    //                 this.lstCtietBcao[index].duToanNamTiepTheoN2ThDauTu = sumNumber([this.lstCtietBcao[index].duToanNamTiepTheoN2ThDauTu, item.duToanNamTiepTheoN2ThDauTu])
-    //                 this.lstCtietBcao[index].cacNamTiepTheo = sumNumber([this.lstCtietBcao[index].cacNamTiepTheo, item.cacNamTiepTheo])
-    //             }
-    //         })
-    //         stt = this.getHead(stt);
-    //     }
-    //     this.getTotal();
-    // }
+    changeModel01(id: string) {
+        //tinh toan tong so
+        this.editCache[id].data.tongMucDuToan = sumNumber([
+            this.editCache[id].data.duToanDaBoTriNamN2,
+            this.editCache[id].data.duToanNamN1Dmdt,
+            this.editCache[id].data.duToanKhNamNCbDauTu,
+            this.editCache[id].data.duToanKhNamNThDauTu,
+            this.editCache[id].data.duToanNamTiepTheoN1CbDauTu,
+            this.editCache[id].data.duToanNamTiepTheoN1ThDauTu,
+            this.editCache[id].data.duToanNamTiepTheoN2CbDauTu,
+            this.editCache[id].data.duToanNamTiepTheoN2ThDauTu,
+            this.editCache[id].data.cacNamTiepTheo,
+        ]);
+        this.editCache[id].data.tongMucDuToanTd = sumNumber([
+            this.editCache[id].data.duToanDaBoTriNamN2,
+            this.editCache[id].data.duToanNamN1Dmdt,
+            this.editCache[id].data.duToanKhNamNCbDauTuTd,
+            this.editCache[id].data.duToanKhNamNThDauTuTd,
+            this.editCache[id].data.duToanNamTiepTheoN1CbDauTu,
+            this.editCache[id].data.duToanNamTiepTheoN1ThDauTu,
+            this.editCache[id].data.duToanNamTiepTheoN2CbDauTu,
+            this.editCache[id].data.duToanNamTiepTheoN2ThDauTu,
+            this.editCache[id].data.cacNamTiepTheo,
+        ]);
 
-    // getTotal() {
-    //     this.total = new ItemData();
-    //     this.lstCtietBcao.forEach(item => {
-    //         if (item.level == 0) {
-    //             this.total.soLuong = sumNumber([this.total.soLuong, item.soLuong])
-    //             this.total.soLuongTd = sumNumber([this.total.soLuongTd, item.soLuongTd])
-    //             this.total.tongMucDuToan = sumNumber([this.total.tongMucDuToan, item.tongMucDuToan])
-    //             this.total.tongMucDuToanTd = sumNumber([this.total.tongMucDuToanTd, item.tongMucDuToanTd])
-    //             this.total.duToanDaBoTriNamN2 = sumNumber([this.total.duToanDaBoTriNamN2, item.duToanDaBoTriNamN2])
-    //             this.total.duToanNamN1Dmdt = sumNumber([this.total.duToanNamN1Dmdt, item.duToanNamN1Dmdt])
-    //             this.total.duToanNamN1UocTh = sumNumber([this.total.duToanNamN1UocTh, item.duToanNamN1UocTh])
-    //             this.total.duToanKhNamNCbDauTu = sumNumber([this.total.duToanKhNamNCbDauTu, item.duToanKhNamNCbDauTu])
-    //             this.total.duToanKhNamNThDauTu = sumNumber([this.total.duToanKhNamNThDauTu, item.duToanKhNamNThDauTu])
-    //             this.total.duToanKhNamNCbDauTuTd = sumNumber([this.total.duToanKhNamNCbDauTuTd, item.duToanKhNamNCbDauTuTd])
-    //             this.total.duToanKhNamNThDauTuTd = sumNumber([this.total.duToanKhNamNThDauTuTd, item.duToanKhNamNThDauTuTd])
-    //             this.total.duToanNamTiepTheoN1CbDauTu = sumNumber([this.total.duToanNamTiepTheoN1CbDauTu, item.duToanNamTiepTheoN1CbDauTu])
-    //             this.total.duToanNamTiepTheoN1ThDauTu = sumNumber([this.total.duToanNamTiepTheoN1ThDauTu, item.duToanNamTiepTheoN1ThDauTu])
-    //             this.total.duToanNamTiepTheoN2CbDauTu = sumNumber([this.total.duToanNamTiepTheoN2CbDauTu, item.duToanNamTiepTheoN2CbDauTu])
-    //             this.total.duToanNamTiepTheoN2ThDauTu = sumNumber([this.total.duToanNamTiepTheoN2ThDauTu, item.duToanNamTiepTheoN2ThDauTu])
-    //             this.total.cacNamTiepTheo = sumNumber([this.total.cacNamTiepTheo, item.cacNamTiepTheo])
-    //         }
-    //     })
-    // }
+    }
 
-    // checkEdit(stt: string) {
-    //     const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-    //     return lstTemp.every(e => !e.stt.startsWith(stt));
-    // }
 
     doPrint() {
         const WindowPrt = window.open(

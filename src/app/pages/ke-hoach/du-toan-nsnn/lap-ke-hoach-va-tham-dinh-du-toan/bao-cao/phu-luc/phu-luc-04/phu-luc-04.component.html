@@ -16,6 +16,18 @@
                     </nz-select>
                 </ng-template>
             </div>
+            <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
+                <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
+                    <i class="fa fa-trash-o"></i>
+                    <span>Xóa</span>
+                </button>
+                <!-- <ng-container *ngIf="lstCtietBcao.length == 0">
+                    <button type="button" class="btn btn-main" (click)="addNewReport(null)" [hidden]="status">
+                        <i class="icon htvbdh_dau-cong"></i>
+                        <span>Thêm</span>
+                    </button>
+                </ng-container> -->
+            </div>
         </div>
         <nz-table nzBordered class="table__body">
             <thead>
@@ -80,176 +92,46 @@
                 <tr>
                     <td></td>
                     <td>Tổng cộng A + B</td>
-                    <td>{{total.soLuong}}</td>
-                    <td>{{total.soLuongTd}}</td>
-                    <td>{{displayValue(total.tongMucDuToan)}}</td>
-                    <td>{{displayValue(total.tongMucDuToanTd)}}</td>
-                    <td>{{displayValue(total.duToanDaBoTriNamN2)}}</td>
-                    <td>{{displayValue(total.duToanNamN1Dmdt)}}</td>
-                    <td>{{displayValue(total.duToanNamN1UocTh)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1ThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2ThDauTu)}}</td>
-                    <td>{{displayValue(total.cacNamTiepTheo)}}</td>
+                    <td>{{soLuongAB}}</td>
+                    <td>{{soLuongTdAB}}</td>
+                    <td>{{displayValue(tongMucDuToanAB)}}</td>
+                    <td>{{displayValue(tongMucDuToanTdAB)}}</td>
+                    <td>{{displayValue(duToanDaBoTriNamN2AB)}}</td>
+                    <td>{{displayValue(duToanNamN1DmdtAB)}}</td>
+                    <td>{{displayValue(duToanNamN1UocThAB)}}</td>
+                    <td>{{displayValue(duToanKhNamNCbDauTuAB)}}</td>
+                    <td>{{displayValue(duToanKhNamNThDauTuAB)}}</td>
+                    <td>{{displayValue(duToanKhNamNCbDauTuTdAB)}}</td>
+                    <td>{{displayValue(duToanKhNamNThDauTuTdAB)}}</td>
+                    <td>{{displayValue(duToanNamTiepTheoN1CbDauTuAB)}}</td>
+                    <td>{{displayValue(duToanNamTiepTheoN1ThDauTuAB)}}</td>
+                    <td>{{displayValue(duToanNamTiepTheoN2CbDauTuAB)}}</td>
+                    <td>{{displayValue(duToanNamTiepTheoN2ThDauTuAB)}}</td>
+                    <td>{{displayValue(cacNamTiepTheoAB)}}</td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                 </tr>
-                <!-- <tr *ngFor="let data of lstCtietBcao; let i = index">
-                    <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                        <td class="text-center">
-                            {{i+1}}
-                        </td>
-                        <td>
-                            {{data.matHang}}
-                        </td>
-                        <td>{{data.soLuong}}</td>
-                        <td>{{data.soLuongTd}}</td>
-                        <td>{{data.tongMucDuToan}}</td>
-                        <td>{{data.tongMucDuToanTd}}</td>
-                        <td>{{data.duToanDaBoTriNamN2}}</td>
-                        <td>{{data.duToanNamN1Dmdt}}</td>
-                        <td>{{data.duToanNamN1UocTh}}</td>
-                        <td>{{data.duToanKhNamNCbDauTu}}</td>
-                        <td>{{data.duToanKhNamNThDauTu}}</td>
-                        <td>{{data.duToanKhNamNCbDauTuTd}}</td>
-                        <td>{{data.duToanKhNamNThDauTuTd}}</td>
-                        <td>{{data.duToanNamTiepTheoN1CbDauTu}}</td>
-                        <td>{{data.duToanNamTiepTheoN1ThDauTu}}</td>
-                        <td>{{data.duToanNamTiepTheoN2CbDauTu}}</td>
-                        <td>{{data.duToanNamTiepTheoN2ThDauTu}}</td>
-                        <td>{{data.cacNamTiepTheo}}</td>
-                        <td [hidden]="status">
-                            <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-                        </td>
-                    </ng-container>
-                    <ng-template #editTemplate>
-                        <td class="text-center">
-                            {{getChiMuc(editCache[data.id].data.stt)}}
-                        </td>
-                        <td>
-                            <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.matHang" />
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.soLuong">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.soLuongTd">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.tongMucDuToan)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.tongMucDuToanTd)}}
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.duToanDaBoTriNamN2"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.duToanNamN1Dmdt"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.duToanNamN1UocTh"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.cacNamTiepTheo"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td [hidden]="status">
-                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'1')"></i>
-                        </td>
-                        <td>
-                            <a (click)="saveEdit(data.id ,'1')" class="save" style="margin-right:15px">Lưu</a>
-                        </td>
-                        <td>
-                            <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này ?"
-                                (nzOnConfirm)="cancelEdit(data.id,1)" class="save">Hủy</a>
-                        </td>
-                        <td [hidden]="status">
-                            <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                (ngModelChange)="updateChecked(data.id,1)"></label>
-                        </td>
-                    <td>{{total.soLuong}}</td>
-                    <td>{{total.soLuongTd}}</td>
-                    <td>{{displayValue(total.tongMucDuToan)}}</td>
-                    <td>{{displayValue(total.tongMucDuToanTd)}}</td>
-                    <td>{{displayValue(total.duToanDaBoTriNamN2)}}</td>
-                    <td>{{displayValue(total.duToanNamN1Dmdt)}}</td>
-                    <td>{{displayValue(total.duToanNamN1UocTh)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1ThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2ThDauTu)}}</td>
-                    <td>{{displayValue(total.cacNamTiepTheo)}}</td>
+                <tr>
+                    <td>A</td>
+                    <td>KẾ HOẠCH, DMDT ĐÃ ĐƯỢC PHÊ DUYỆT NĂM THỰC HIỆN, TIẾP TỤC THỰC HIỆN NĂM KẾ </td>
+                    <td>{{soLuongA}}</td>
+                    <td>{{soLuongTdA}}</td>
+                    <td>{{displayValue(tongMucDuToanA)}}</td>
+                    <td>{{displayValue(tongMucDuToanTdA)}}</td>
+                    <td>{{displayValue(duToanDaBoTriNamN2A)}}</td>
+                    <td>{{displayValue(duToanNamN1DmdtA)}}</td>
+                    <td>{{displayValue(duToanNamN1UocThA)}}</td>
+                    <td>{{displayValue(duToanKhNamNCbDauTuA)}}</td>
+                    <td>{{displayValue(duToanKhNamNThDauTuA)}}</td>
+                    <td>{{displayValue(duToanKhNamNCbDauTuTdA)}}</td>
+                    <td>{{displayValue(duToanKhNamNThDauTuTdA)}}</td>
+                    <td>{{displayValue(duToanNamTiepTheoN1CbDauTuA)}}</td>
+                    <td>{{displayValue(duToanNamTiepTheoN1ThDauTuA)}}</td>
+                    <td>{{displayValue(duToanNamTiepTheoN2CbDauTuA)}}</td>
+                    <td>{{displayValue(duToanNamTiepTheoN2ThDauTuA)}}</td>
+                    <td>{{displayValue(cacNamTiepTheoA)}}</td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
@@ -260,22 +142,22 @@
                 <tr>
                     <td>I</td>
                     <td>Dự án CNTT</td>
-                    <td>{{total.soLuong}}</td>
-                    <td>{{total.soLuongTd}}</td>
-                    <td>{{displayValue(total.tongMucDuToan)}}</td>
-                    <td>{{displayValue(total.tongMucDuToanTd)}}</td>
-                    <td>{{displayValue(total.duToanDaBoTriNamN2)}}</td>
-                    <td>{{displayValue(total.duToanNamN1Dmdt)}}</td>
-                    <td>{{displayValue(total.duToanNamN1UocTh)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1ThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2ThDauTu)}}</td>
-                    <td>{{displayValue(total.cacNamTiepTheo)}}</td>
+                    <td>{{total[0].soLuong}}</td>
+                    <td>{{total[0].soLuongTd}}</td>
+                    <td>{{displayValue(total[0].tongMucDuToan)}}</td>
+                    <td>{{displayValue(total[0].tongMucDuToanTd)}}</td>
+                    <td>{{displayValue(total[0].duToanDaBoTriNamN2)}}</td>
+                    <td>{{displayValue(total[0].duToanNamN1Dmdt)}}</td>
+                    <td>{{displayValue(total[0].duToanNamN1UocTh)}}</td>
+                    <td>{{displayValue(total[0].duToanKhNamNCbDauTu)}}</td>
+                    <td>{{displayValue(total[0].duToanKhNamNThDauTu)}}</td>
+                    <td>{{displayValue(total[0].duToanKhNamNCbDauTuTd)}}</td>
+                    <td>{{displayValue(total[0].duToanKhNamNThDauTuTd)}}</td>
+                    <td>{{displayValue(total[0].duToanNamTiepTheoN1CbDauTu)}}</td>
+                    <td>{{displayValue(total[0].duToanNamTiepTheoN1ThDauTu)}}</td>
+                    <td>{{displayValue(total[0].duToanNamTiepTheoN2CbDauTu)}}</td>
+                    <td>{{displayValue(total[0].duToanNamTiepTheoN2ThDauTu)}}</td>
+                    <td>{{displayValue(total[0].cacNamTiepTheo)}}</td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <!-- <td nzWidth="2.5%" [hidden]="status"></td> -->
@@ -324,7 +206,7 @@
                     </ng-container>
                     <ng-template #editTemplate>
                         <td class="text-center">
-                            {{getChiMuc(editCache[data.id].data.stt)}}
+                            {{i + 1}}
                         </td>
                         <td>
                             <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.matHang" />
@@ -346,86 +228,86 @@
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanDaBoTriNamN2"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.duToanNamN1Dmdt"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamN1UocTh"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.cacNamTiepTheo"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td [hidden]="status">
-                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'1')"></i>
+                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'0')"></i>
                         </td>
                         <td>
-                            <a (click)="saveEdit(data.id ,'1')" class="save" style="margin-right:15px">Lưu</a>
+                            <a (click)="saveEdit(data.id ,'0')" class="save" style="margin-right:15px">Lưu</a>
                         </td>
                         <td>
                             <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này ?"
-                                (nzOnConfirm)="cancelEdit(data.id,1)" class="save">Hủy</a>
+                                (nzOnConfirm)="cancelEdit(data.id,0)" class="save">Hủy</a>
                         </td>
                         <td [hidden]="status">
                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                (ngModelChange)="updateChecked(data.id,1)"></label>
+                                (ngModelChange)="updateChecked(data.id,0)"></label>
                         </td>
                     </ng-template>
                 </tr>
@@ -434,22 +316,22 @@
                 <tr>
                     <td>II</td>
                     <td>Thuê dịch vụ CNTT</td>
-                    <td>{{total.soLuong}}</td>
-                    <td>{{total.soLuongTd}}</td>
-                    <td>{{displayValue(total.tongMucDuToan)}}</td>
-                    <td>{{displayValue(total.tongMucDuToanTd)}}</td>
-                    <td>{{displayValue(total.duToanDaBoTriNamN2)}}</td>
-                    <td>{{displayValue(total.duToanNamN1Dmdt)}}</td>
-                    <td>{{displayValue(total.duToanNamN1UocTh)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1ThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2ThDauTu)}}</td>
-                    <td>{{displayValue(total.cacNamTiepTheo)}}</td>
+                    <td>{{total[1].soLuong}}</td>
+                    <td>{{total[1].soLuongTd}}</td>
+                    <td>{{displayValue(total[1].tongMucDuToan)}}</td>
+                    <td>{{displayValue(total[1].tongMucDuToanTd)}}</td>
+                    <td>{{displayValue(total[1].duToanDaBoTriNamN2)}}</td>
+                    <td>{{displayValue(total[1].duToanNamN1Dmdt)}}</td>
+                    <td>{{displayValue(total[1].duToanNamN1UocTh)}}</td>
+                    <td>{{displayValue(total[1].duToanKhNamNCbDauTu)}}</td>
+                    <td>{{displayValue(total[1].duToanKhNamNThDauTu)}}</td>
+                    <td>{{displayValue(total[1].duToanKhNamNCbDauTuTd)}}</td>
+                    <td>{{displayValue(total[1].duToanKhNamNThDauTuTd)}}</td>
+                    <td>{{displayValue(total[1].duToanNamTiepTheoN1CbDauTu)}}</td>
+                    <td>{{displayValue(total[1].duToanNamTiepTheoN1ThDauTu)}}</td>
+                    <td>{{displayValue(total[1].duToanNamTiepTheoN2CbDauTu)}}</td>
+                    <td>{{displayValue(total[1].duToanNamTiepTheoN2ThDauTu)}}</td>
+                    <td>{{displayValue(total[1].cacNamTiepTheo)}}</td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <!-- <td nzWidth="2.5%" [hidden]="status"></td> -->
@@ -498,7 +380,7 @@
                     </ng-container>
                     <ng-template #editTemplate>
                         <td class="text-center">
-                            {{getChiMuc(editCache[data.id].data.stt)}}
+                            {{i + 1}}
                         </td>
                         <td>
                             <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.matHang" />
@@ -520,71 +402,71 @@
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanDaBoTriNamN2"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.duToanNamN1Dmdt"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamN1UocTh"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.cacNamTiepTheo"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td [hidden]="status">
@@ -608,22 +490,22 @@
                 <tr>
                     <td>III</td>
                     <td>Nhiệm vụ lập đề cương và dự toán chi tiết</td>
-                    <td>{{total.soLuong}}</td>
-                    <td>{{total.soLuongTd}}</td>
-                    <td>{{displayValue(total.tongMucDuToan)}}</td>
-                    <td>{{displayValue(total.tongMucDuToanTd)}}</td>
-                    <td>{{displayValue(total.duToanDaBoTriNamN2)}}</td>
-                    <td>{{displayValue(total.duToanNamN1Dmdt)}}</td>
-                    <td>{{displayValue(total.duToanNamN1UocTh)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1ThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2ThDauTu)}}</td>
-                    <td>{{displayValue(total.cacNamTiepTheo)}}</td>
+                    <td>{{total[2].soLuong}}</td>
+                    <td>{{total[2].soLuongTd}}</td>
+                    <td>{{displayValue(total[2].tongMucDuToan)}}</td>
+                    <td>{{displayValue(total[2].tongMucDuToanTd)}}</td>
+                    <td>{{displayValue(total[2].duToanDaBoTriNamN2)}}</td>
+                    <td>{{displayValue(total[2].duToanNamN1Dmdt)}}</td>
+                    <td>{{displayValue(total[2].duToanNamN1UocTh)}}</td>
+                    <td>{{displayValue(total[2].duToanKhNamNCbDauTu)}}</td>
+                    <td>{{displayValue(total[2].duToanKhNamNThDauTu)}}</td>
+                    <td>{{displayValue(total[2].duToanKhNamNCbDauTuTd)}}</td>
+                    <td>{{displayValue(total[2].duToanKhNamNThDauTuTd)}}</td>
+                    <td>{{displayValue(total[2].duToanNamTiepTheoN1CbDauTu)}}</td>
+                    <td>{{displayValue(total[2].duToanNamTiepTheoN1ThDauTu)}}</td>
+                    <td>{{displayValue(total[2].duToanNamTiepTheoN2CbDauTu)}}</td>
+                    <td>{{displayValue(total[2].duToanNamTiepTheoN2ThDauTu)}}</td>
+                    <td>{{displayValue(total[2].cacNamTiepTheo)}}</td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <!-- <td nzWidth="2.5%" [hidden]="status"></td> -->
@@ -672,7 +554,7 @@
                     </ng-container>
                     <ng-template #editTemplate>
                         <td class="text-center">
-                            {{getChiMuc(editCache[data.id].data.stt)}}
+                            {{i + 1}}
                         </td>
                         <td>
                             <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.matHang" />
@@ -694,86 +576,86 @@
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanDaBoTriNamN2"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.duToanNamN1Dmdt"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamN1UocTh"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.cacNamTiepTheo"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td [hidden]="status">
-                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'1')"></i>
+                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'2')"></i>
                         </td>
                         <td>
-                            <a (click)="saveEdit(data.id ,'1')" class="save" style="margin-right:15px">Lưu</a>
+                            <a (click)="saveEdit(data.id ,'2')" class="save" style="margin-right:15px">Lưu</a>
                         </td>
                         <td>
                             <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này ?"
-                                (nzOnConfirm)="cancelEdit(data.id,1)" class="save">Hủy</a>
+                                (nzOnConfirm)="cancelEdit(data.id,2)" class="save">Hủy</a>
                         </td>
                         <td [hidden]="status">
                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                (ngModelChange)="updateChecked(data.id,1)"></label>
+                                (ngModelChange)="updateChecked(data.id,2)"></label>
                         </td>
                     </ng-template>
                 </tr>
@@ -782,22 +664,22 @@
                 <tr>
                     <td>IV</td>
                     <td>Nhiệm vụ không lập đề cương và dự toán chi tiết</td>
-                    <td>{{total.soLuong}}</td>
-                    <td>{{total.soLuongTd}}</td>
-                    <td>{{displayValue(total.tongMucDuToan)}}</td>
-                    <td>{{displayValue(total.tongMucDuToanTd)}}</td>
-                    <td>{{displayValue(total.duToanDaBoTriNamN2)}}</td>
-                    <td>{{displayValue(total.duToanNamN1Dmdt)}}</td>
-                    <td>{{displayValue(total.duToanNamN1UocTh)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1ThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2ThDauTu)}}</td>
-                    <td>{{displayValue(total.cacNamTiepTheo)}}</td>
+                    <td>{{total[3].soLuong}}</td>
+                    <td>{{total[3].soLuongTd}}</td>
+                    <td>{{displayValue(total[3].tongMucDuToan)}}</td>
+                    <td>{{displayValue(total[3].tongMucDuToanTd)}}</td>
+                    <td>{{displayValue(total[3].duToanDaBoTriNamN2)}}</td>
+                    <td>{{displayValue(total[3].duToanNamN1Dmdt)}}</td>
+                    <td>{{displayValue(total[3].duToanNamN1UocTh)}}</td>
+                    <td>{{displayValue(total[3].duToanKhNamNCbDauTu)}}</td>
+                    <td>{{displayValue(total[3].duToanKhNamNThDauTu)}}</td>
+                    <td>{{displayValue(total[3].duToanKhNamNCbDauTuTd)}}</td>
+                    <td>{{displayValue(total[3].duToanKhNamNThDauTuTd)}}</td>
+                    <td>{{displayValue(total[3].duToanNamTiepTheoN1CbDauTu)}}</td>
+                    <td>{{displayValue(total[3].duToanNamTiepTheoN1ThDauTu)}}</td>
+                    <td>{{displayValue(total[3].duToanNamTiepTheoN2CbDauTu)}}</td>
+                    <td>{{displayValue(total[3].duToanNamTiepTheoN2ThDauTu)}}</td>
+                    <td>{{displayValue(total[3].cacNamTiepTheo)}}</td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <!-- <td nzWidth="2.5%" [hidden]="status"></td> -->
@@ -846,7 +728,7 @@
                     </ng-container>
                     <ng-template #editTemplate>
                         <td class="text-center">
-                            {{getChiMuc(editCache[data.id].data.stt)}}
+                            {{i + 1}}
                         </td>
                         <td>
                             <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.matHang" />
@@ -868,86 +750,86 @@
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanDaBoTriNamN2"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.duToanNamN1Dmdt"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamN1UocTh"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.cacNamTiepTheo"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td [hidden]="status">
-                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'1')"></i>
+                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'3')"></i>
                         </td>
                         <td>
-                            <a (click)="saveEdit(data.id ,'1')" class="save" style="margin-right:15px">Lưu</a>
+                            <a (click)="saveEdit(data.id ,'3')" class="save" style="margin-right:15px">Lưu</a>
                         </td>
                         <td>
                             <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này ?"
-                                (nzOnConfirm)="cancelEdit(data.id,1)" class="save">Hủy</a>
+                                (nzOnConfirm)="cancelEdit(data.id,3)" class="save">Hủy</a>
                         </td>
                         <td [hidden]="status">
                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                (ngModelChange)="updateChecked(data.id,1)"></label>
+                                (ngModelChange)="updateChecked(data.id,3)"></label>
                         </td>
                     </ng-template>
                 </tr>
@@ -956,22 +838,22 @@
                 <tr>
                     <td>B</td>
                     <td>CÁC NỘI DUNG MỚI</td>
-                    <td>{{total.soLuong}}</td>
-                    <td>{{total.soLuongTd}}</td>
-                    <td>{{displayValue(total.tongMucDuToan)}}</td>
-                    <td>{{displayValue(total.tongMucDuToanTd)}}</td>
-                    <td>{{displayValue(total.duToanDaBoTriNamN2)}}</td>
-                    <td>{{displayValue(total.duToanNamN1Dmdt)}}</td>
-                    <td>{{displayValue(total.duToanNamN1UocTh)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1ThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2ThDauTu)}}</td>
-                    <td>{{displayValue(total.cacNamTiepTheo)}}</td>
+                    <td>{{soLuongB}}</td>
+                    <td>{{soLuongTdB}}</td>
+                    <td>{{displayValue(tongMucDuToanB)}}</td>
+                    <td>{{displayValue(tongMucDuToanTdB)}}</td>
+                    <td>{{displayValue(duToanDaBoTriNamN2B)}}</td>
+                    <td>{{displayValue(duToanNamN1DmdtB)}}</td>
+                    <td>{{displayValue(duToanNamN1UocThB)}}</td>
+                    <td>{{displayValue(duToanKhNamNCbDauTuB)}}</td>
+                    <td>{{displayValue(duToanKhNamNThDauTuB)}}</td>
+                    <td>{{displayValue(duToanKhNamNCbDauTuTdB)}}</td>
+                    <td>{{displayValue(duToanKhNamNThDauTuTdB)}}</td>
+                    <td>{{displayValue(duToanNamTiepTheoN1CbDauTuB)}}</td>
+                    <td>{{displayValue(duToanNamTiepTheoN1ThDauTuB)}}</td>
+                    <td>{{displayValue(duToanNamTiepTheoN2CbDauTuB)}}</td>
+                    <td>{{displayValue(duToanNamTiepTheoN2ThDauTuB)}}</td>
+                    <td>{{displayValue(cacNamTiepTheoB)}}</td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
@@ -981,22 +863,22 @@
                 <tr>
                     <td>I</td>
                     <td>Dự án CNTT</td>
-                    <td>{{total.soLuong}}</td>
-                    <td>{{total.soLuongTd}}</td>
-                    <td>{{displayValue(total.tongMucDuToan)}}</td>
-                    <td>{{displayValue(total.tongMucDuToanTd)}}</td>
-                    <td>{{displayValue(total.duToanDaBoTriNamN2)}}</td>
-                    <td>{{displayValue(total.duToanNamN1Dmdt)}}</td>
-                    <td>{{displayValue(total.duToanNamN1UocTh)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1ThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2ThDauTu)}}</td>
-                    <td>{{displayValue(total.cacNamTiepTheo)}}</td>
+                    <td>{{total[4].soLuong}}</td>
+                    <td>{{total[4].soLuongTd}}</td>
+                    <td>{{displayValue(total[4].tongMucDuToan)}}</td>
+                    <td>{{displayValue(total[4].tongMucDuToanTd)}}</td>
+                    <td>{{displayValue(total[4].duToanDaBoTriNamN2)}}</td>
+                    <td>{{displayValue(total[4].duToanNamN1Dmdt)}}</td>
+                    <td>{{displayValue(total[4].duToanNamN1UocTh)}}</td>
+                    <td>{{displayValue(total[4].duToanKhNamNCbDauTu)}}</td>
+                    <td>{{displayValue(total[4].duToanKhNamNThDauTu)}}</td>
+                    <td>{{displayValue(total[4].duToanKhNamNCbDauTuTd)}}</td>
+                    <td>{{displayValue(total[4].duToanKhNamNThDauTuTd)}}</td>
+                    <td>{{displayValue(total[4].duToanNamTiepTheoN1CbDauTu)}}</td>
+                    <td>{{displayValue(total[4].duToanNamTiepTheoN1ThDauTu)}}</td>
+                    <td>{{displayValue(total[4].duToanNamTiepTheoN2CbDauTu)}}</td>
+                    <td>{{displayValue(total[4].duToanNamTiepTheoN2ThDauTu)}}</td>
+                    <td>{{displayValue(total[4].cacNamTiepTheo)}}</td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <!-- <td nzWidth="2.5%" [hidden]="status"></td> -->
@@ -1008,7 +890,7 @@
                 <tr *ngFor="let data of lstCtietBcao[4].data; let i = index">
                     <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                         <td class="text-center">
-                            {{i+1}}
+                            {{i + 1}}
                         </td>
                         <td>
                             {{data.matHang}}
@@ -1045,7 +927,7 @@
                     </ng-container>
                     <ng-template #editTemplate>
                         <td class="text-center">
-                            {{getChiMuc(editCache[data.id].data.stt)}}
+                            {{i + 1}}
                         </td>
                         <td>
                             <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.matHang" />
@@ -1067,86 +949,86 @@
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanDaBoTriNamN2"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.duToanNamN1Dmdt"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamN1UocTh"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.cacNamTiepTheo"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td [hidden]="status">
-                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'1')"></i>
+                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'4')"></i>
                         </td>
                         <td>
-                            <a (click)="saveEdit(data.id ,'1')" class="save" style="margin-right:15px">Lưu</a>
+                            <a (click)="saveEdit(data.id ,'4')" class="save" style="margin-right:15px">Lưu</a>
                         </td>
                         <td>
                             <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này ?"
-                                (nzOnConfirm)="cancelEdit(data.id,1)" class="save">Hủy</a>
+                                (nzOnConfirm)="cancelEdit(data.id,4)" class="save">Hủy</a>
                         </td>
                         <td [hidden]="status">
                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                (ngModelChange)="updateChecked(data.id,1)"></label>
+                                (ngModelChange)="updateChecked(data.id,4)"></label>
                         </td>
                     </ng-template>
                 </tr>
@@ -1154,22 +1036,22 @@
                 <tr>
                     <td>II</td>
                     <td>Thuê dịch vụ CNTT</td>
-                    <td>{{total.soLuong}}</td>
-                    <td>{{total.soLuongTd}}</td>
-                    <td>{{displayValue(total.tongMucDuToan)}}</td>
-                    <td>{{displayValue(total.tongMucDuToanTd)}}</td>
-                    <td>{{displayValue(total.duToanDaBoTriNamN2)}}</td>
-                    <td>{{displayValue(total.duToanNamN1Dmdt)}}</td>
-                    <td>{{displayValue(total.duToanNamN1UocTh)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1ThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2ThDauTu)}}</td>
-                    <td>{{displayValue(total.cacNamTiepTheo)}}</td>
+                    <td>{{total[5].soLuong}}</td>
+                    <td>{{total[5].soLuongTd}}</td>
+                    <td>{{displayValue(total[5].tongMucDuToan)}}</td>
+                    <td>{{displayValue(total[5].tongMucDuToanTd)}}</td>
+                    <td>{{displayValue(total[5].duToanDaBoTriNamN2)}}</td>
+                    <td>{{displayValue(total[5].duToanNamN1Dmdt)}}</td>
+                    <td>{{displayValue(total[5].duToanNamN1UocTh)}}</td>
+                    <td>{{displayValue(total[5].duToanKhNamNCbDauTu)}}</td>
+                    <td>{{displayValue(total[5].duToanKhNamNThDauTu)}}</td>
+                    <td>{{displayValue(total[5].duToanKhNamNCbDauTuTd)}}</td>
+                    <td>{{displayValue(total[5].duToanKhNamNThDauTuTd)}}</td>
+                    <td>{{displayValue(total[5].duToanNamTiepTheoN1CbDauTu)}}</td>
+                    <td>{{displayValue(total[5].duToanNamTiepTheoN1ThDauTu)}}</td>
+                    <td>{{displayValue(total[5].duToanNamTiepTheoN2CbDauTu)}}</td>
+                    <td>{{displayValue(total[5].duToanNamTiepTheoN2ThDauTu)}}</td>
+                    <td>{{displayValue(total[5].cacNamTiepTheo)}}</td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <!-- <td nzWidth="2.5%" [hidden]="status"></td> -->
@@ -1218,7 +1100,7 @@
                     </ng-container>
                     <ng-template #editTemplate>
                         <td class="text-center">
-                            {{getChiMuc(editCache[data.id].data.stt)}}
+                            {{i + 1}}
                         </td>
                         <td>
                             <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.matHang" />
@@ -1240,86 +1122,86 @@
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanDaBoTriNamN2"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.duToanNamN1Dmdt"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamN1UocTh"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.cacNamTiepTheo"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td [hidden]="status">
-                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'1')"></i>
+                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'5')"></i>
                         </td>
                         <td>
-                            <a (click)="saveEdit(data.id ,'1')" class="save" style="margin-right:15px">Lưu</a>
+                            <a (click)="saveEdit(data.id ,'5')" class="save" style="margin-right:15px">Lưu</a>
                         </td>
                         <td>
                             <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này ?"
-                                (nzOnConfirm)="cancelEdit(data.id,1)" class="save">Hủy</a>
+                                (nzOnConfirm)="cancelEdit(data.id,5)" class="save">Hủy</a>
                         </td>
                         <td [hidden]="status">
                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                (ngModelChange)="updateChecked(data.id,1)"></label>
+                                (ngModelChange)="updateChecked(data.id,5)"></label>
                         </td>
                     </ng-template>
                 </tr>
@@ -1327,22 +1209,22 @@
                 <tr>
                     <td>III</td>
                     <td>Nhiệm vụ lập đề cương và dự toán chi tiết</td>
-                    <td>{{total.soLuong}}</td>
-                    <td>{{total.soLuongTd}}</td>
-                    <td>{{displayValue(total.tongMucDuToan)}}</td>
-                    <td>{{displayValue(total.tongMucDuToanTd)}}</td>
-                    <td>{{displayValue(total.duToanDaBoTriNamN2)}}</td>
-                    <td>{{displayValue(total.duToanNamN1Dmdt)}}</td>
-                    <td>{{displayValue(total.duToanNamN1UocTh)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1ThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2ThDauTu)}}</td>
-                    <td>{{displayValue(total.cacNamTiepTheo)}}</td>
+                    <td>{{total[6].soLuong}}</td>
+                    <td>{{total[6].soLuongTd}}</td>
+                    <td>{{displayValue(total[6].tongMucDuToan)}}</td>
+                    <td>{{displayValue(total[6].tongMucDuToanTd)}}</td>
+                    <td>{{displayValue(total[6].duToanDaBoTriNamN2)}}</td>
+                    <td>{{displayValue(total[6].duToanNamN1Dmdt)}}</td>
+                    <td>{{displayValue(total[6].duToanNamN1UocTh)}}</td>
+                    <td>{{displayValue(total[6].duToanKhNamNCbDauTu)}}</td>
+                    <td>{{displayValue(total[6].duToanKhNamNThDauTu)}}</td>
+                    <td>{{displayValue(total[6].duToanKhNamNCbDauTuTd)}}</td>
+                    <td>{{displayValue(total[6].duToanKhNamNThDauTuTd)}}</td>
+                    <td>{{displayValue(total[6].duToanNamTiepTheoN1CbDauTu)}}</td>
+                    <td>{{displayValue(total[6].duToanNamTiepTheoN1ThDauTu)}}</td>
+                    <td>{{displayValue(total[6].duToanNamTiepTheoN2CbDauTu)}}</td>
+                    <td>{{displayValue(total[6].duToanNamTiepTheoN2ThDauTu)}}</td>
+                    <td>{{displayValue(total[6].cacNamTiepTheo)}}</td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <!-- <td nzWidth="2.5%" [hidden]="status"></td> -->
@@ -1391,7 +1273,7 @@
                     </ng-container>
                     <ng-template #editTemplate>
                         <td class="text-center">
-                            {{getChiMuc(editCache[data.id].data.stt)}}
+                            {{i + 1}}
                         </td>
                         <td>
                             <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.matHang" />
@@ -1413,86 +1295,86 @@
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanDaBoTriNamN2"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.duToanNamN1Dmdt"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamN1UocTh"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.cacNamTiepTheo"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td [hidden]="status">
-                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'1')"></i>
+                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'6')"></i>
                         </td>
                         <td>
-                            <a (click)="saveEdit(data.id ,'1')" class="save" style="margin-right:15px">Lưu</a>
+                            <a (click)="saveEdit(data.id ,'6')" class="save" style="margin-right:15px">Lưu</a>
                         </td>
                         <td>
                             <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này ?"
-                                (nzOnConfirm)="cancelEdit(data.id,1)" class="save">Hủy</a>
+                                (nzOnConfirm)="cancelEdit(data.id,6)" class="save">Hủy</a>
                         </td>
                         <td [hidden]="status">
                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                (ngModelChange)="updateChecked(data.id,1)"></label>
+                                (ngModelChange)="updateChecked(data.id,6)"></label>
                         </td>
                     </ng-template>
                 </tr>
@@ -1500,22 +1382,22 @@
                 <tr>
                     <td>IV</td>
                     <td>Nhiệm vụ không lập đề cương và dự toán chi tiết</td>
-                    <td>{{total.soLuong}}</td>
-                    <td>{{total.soLuongTd}}</td>
-                    <td>{{displayValue(total.tongMucDuToan)}}</td>
-                    <td>{{displayValue(total.tongMucDuToanTd)}}</td>
-                    <td>{{displayValue(total.duToanDaBoTriNamN2)}}</td>
-                    <td>{{displayValue(total.duToanNamN1Dmdt)}}</td>
-                    <td>{{displayValue(total.duToanNamN1UocTh)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNCbDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanKhNamNThDauTuTd)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN1ThDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2CbDauTu)}}</td>
-                    <td>{{displayValue(total.duToanNamTiepTheoN2ThDauTu)}}</td>
-                    <td>{{displayValue(total.cacNamTiepTheo)}}</td>
+                    <td>{{total[7].soLuong}}</td>
+                    <td>{{total[7].soLuongTd}}</td>
+                    <td>{{displayValue(total[7].tongMucDuToan)}}</td>
+                    <td>{{displayValue(total[7].tongMucDuToanTd)}}</td>
+                    <td>{{displayValue(total[7].duToanDaBoTriNamN2)}}</td>
+                    <td>{{displayValue(total[7].duToanNamN1Dmdt)}}</td>
+                    <td>{{displayValue(total[7].duToanNamN1UocTh)}}</td>
+                    <td>{{displayValue(total[7].duToanKhNamNCbDauTu)}}</td>
+                    <td>{{displayValue(total[7].duToanKhNamNThDauTu)}}</td>
+                    <td>{{displayValue(total[7].duToanKhNamNCbDauTuTd)}}</td>
+                    <td>{{displayValue(total[7].duToanKhNamNThDauTuTd)}}</td>
+                    <td>{{displayValue(total[7].duToanNamTiepTheoN1CbDauTu)}}</td>
+                    <td>{{displayValue(total[7].duToanNamTiepTheoN1ThDauTu)}}</td>
+                    <td>{{displayValue(total[7].duToanNamTiepTheoN2CbDauTu)}}</td>
+                    <td>{{displayValue(total[7].duToanNamTiepTheoN2ThDauTu)}}</td>
+                    <td>{{displayValue(total[7].cacNamTiepTheo)}}</td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <td nzWidth="2.5%" [hidden]="status"></td>
                     <!-- <td nzWidth="2.5%" [hidden]="status"></td> -->
@@ -1564,7 +1446,7 @@
                     </ng-container>
                     <ng-template #editTemplate>
                         <td class="text-center">
-                            {{getChiMuc(editCache[data.id].data.stt)}}
+                            {{i + 1}}
                         </td>
                         <td>
                             <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.matHang" />
@@ -1586,90 +1468,89 @@
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanDaBoTriNamN2"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.duToanNamN1Dmdt"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamN1UocTh"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTuTd"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN1ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2CbDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
                                 [(ngModel)]="editCache[data.id].data.duToanNamTiepTheoN2ThDauTu"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.cacNamTiepTheo"
-                                (ngModelChange)="changeModel(data.id)">
+                                (ngModelChange)="changeModel01(data.id)">
                             </fm-input-number>
                         </td>
                         <td [hidden]="status">
-                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'1')"></i>
+                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id ,'7')"></i>
                         </td>
                         <td>
-                            <a (click)="saveEdit(data.id ,'1')" class="save" style="margin-right:15px">Lưu</a>
+                            <a (click)="saveEdit(data.id ,'7')" class="save" style="margin-right:15px">Lưu</a>
                         </td>
                         <td>
                             <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này ?"
-                                (nzOnConfirm)="cancelEdit(data.id,1)" class="save">Hủy</a>
+                                (nzOnConfirm)="cancelEdit(data.id,7)" class="save">Hủy</a>
                         </td>
                         <td [hidden]="status">
                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                (ngModelChange)="updateChecked(data.id,1)"></label>
+                                (ngModelChange)="updateChecked(data.id,7)"></label>
                         </td>
                     </ng-template>
                 </tr>
-
         </nz-table>
     </div>
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
