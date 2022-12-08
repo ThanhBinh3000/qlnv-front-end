@@ -8,6 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
+import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { GDT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, Utils } from 'src/app/Utility/utils';
@@ -80,6 +81,7 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
   roleUser: string;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private giaoDuToanChiService: GiaoDuToanChiService,
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
@@ -174,7 +176,7 @@ export class TimKiemGiaoDuToanChiNSNNCuaCacDonViComponent implements OnInit {
     searchFilterTemp.maDviNhan = this.searchFilter.maDviNhan;
     searchFilterTemp.trangThaiGiaos = ['0', '1', '2']
     this.spinner.show();
-    await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
+    await this.giaoDuToanChiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;

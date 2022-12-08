@@ -10,6 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { GDT, Utils } from 'src/app/Utility/utils';
@@ -87,6 +88,7 @@ export class NhapThongTinQdGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent implem
     private router: Router,
     private routerActive: ActivatedRoute,
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private giaoDuToanChiService: GiaoDuToanChiService,
     private danhMuc: DanhMucHDVService,
     private datePipe: DatePipe,
     private sanitizer: DomSanitizer,
@@ -128,7 +130,7 @@ export class NhapThongTinQdGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent implem
   }
 
   async getPhuongAn() {
-    await this.quanLyVonPhiService.timKiemMaPaGiaoNSNN().toPromise().then(
+    await this.giaoDuToanChiService.timKiemMaPaGiaoNSNN().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.lstMa = data.data
@@ -266,7 +268,7 @@ export class NhapThongTinQdGiaoDieuChinhDuToanChiNSNNChoCacDonViComponent implem
       return;
     }
     if (!this.id) {
-      this.quanLyVonPhiService.themMoiQdCvGiaoNSNN(request).toPromise().then(async data => {
+      this.giaoDuToanChiService.themMoiQdCvGiaoNSNN(request).toPromise().then(async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           this.xemphuongan()
