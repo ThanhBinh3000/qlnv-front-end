@@ -17,6 +17,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { displayNumber, divMoney, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, NOT_OK, OK } from "src/app/Utility/utils";
 import { LINH_VUC } from './phu-luc7.constant';
 import { DialogThemKhoanMucComponent } from '../../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 
 export class ItemData {
 
@@ -118,6 +119,7 @@ export class PhuLuc7Component implements OnInit {
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private dieuChinhService: DieuChinhService,
     private datePipe: DatePipe,
     private sanitizer: DomSanitizer,
     private userService: UserService,
@@ -456,7 +458,7 @@ export class PhuLuc7Component implements OnInit {
       trangThai: trangThai,
       maLoai: this.data?.maLoai,
     };
-    this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
+    this.dieuChinhService.updatePLDieuChinh(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -510,7 +512,7 @@ export class PhuLuc7Component implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
+      await this.dieuChinhService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();

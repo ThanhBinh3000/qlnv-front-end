@@ -366,7 +366,9 @@ export class PhuLuc01Component implements OnInit {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                     this.formDetail = data.data;
-                    this._modalRef.close(this.formDetail);
+                    this._modalRef.close({
+                        formDetail: this.formDetail,
+                    });
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -399,7 +401,9 @@ export class PhuLuc01Component implements OnInit {
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                 }
-                this._modalRef.close(this.formDetail);
+                this._modalRef.close({
+                    formDetail: this.formDetail,
+                });
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }

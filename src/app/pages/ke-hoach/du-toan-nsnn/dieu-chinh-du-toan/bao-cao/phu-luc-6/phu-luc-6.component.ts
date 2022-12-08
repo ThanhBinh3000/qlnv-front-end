@@ -12,6 +12,7 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, NOT_OK, OK } from "src/app/Utility/utils";
@@ -174,6 +175,7 @@ export class PhuLuc6Component implements OnInit {
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private dieuChinhService: DieuChinhService,
     private datePipe: DatePipe,
     private sanitizer: DomSanitizer,
     private userService: UserService,
@@ -602,7 +604,7 @@ export class PhuLuc6Component implements OnInit {
       trangThai: trangThai,
       maLoai: this.data?.maLoai,
     };
-    this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
+    this.dieuChinhService.updatePLDieuChinh(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -656,7 +658,7 @@ export class PhuLuc6Component implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
+      await this.dieuChinhService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();

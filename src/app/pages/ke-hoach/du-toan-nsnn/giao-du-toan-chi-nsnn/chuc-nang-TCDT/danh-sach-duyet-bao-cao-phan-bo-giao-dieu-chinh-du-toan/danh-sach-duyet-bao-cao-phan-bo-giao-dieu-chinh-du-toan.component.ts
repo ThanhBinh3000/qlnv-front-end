@@ -8,6 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
+import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { GDT, ROLE_CAN_BO, Utils } from 'src/app/Utility/utils';
@@ -82,6 +83,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
   isCanbotc: boolean;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private giaoDuToanChiService: GiaoDuToanChiService,
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
@@ -176,7 +178,7 @@ export class DanhSachDuyetBaoCaoPhanBoGiaoDieuChinhDuToanComponent implements On
 
 
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');
-    await this.quanLyVonPhiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
+    await this.giaoDuToanChiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.danhSachBaoCao = data.data.content;

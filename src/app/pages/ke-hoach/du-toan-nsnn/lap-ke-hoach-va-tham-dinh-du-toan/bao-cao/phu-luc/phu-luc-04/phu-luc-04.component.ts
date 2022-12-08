@@ -295,20 +295,22 @@ export class PhuLuc04Component implements OnInit {
 
 
         this.spinner.show();
-        // this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
-        //     async data => {
-        //         if (data.statusCode == 0) {
-        //             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        //             this.formDetail = data.data;
-        //             this._modalRef.close(this.formDetail);
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, data?.msg);
-        //         }
-        //     },
-        //     err => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //     },
-        // );
+        this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
+            async data => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                    this.formDetail = data.data;
+                    this._modalRef.close({
+                        formDetail: this.formDetail,
+                    });
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
         this.spinner.hide();
     }
 
@@ -334,7 +336,9 @@ export class PhuLuc04Component implements OnInit {
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                 }
-                this._modalRef.close(this.formDetail);
+                this._modalRef.close({
+                    formDetail: this.formDetail,
+                });
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
