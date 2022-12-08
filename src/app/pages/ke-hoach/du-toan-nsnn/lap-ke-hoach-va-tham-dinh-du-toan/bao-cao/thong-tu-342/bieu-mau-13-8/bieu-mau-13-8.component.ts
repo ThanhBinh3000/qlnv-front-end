@@ -8,7 +8,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { DANH_MUC } from './bieu-mau-13-8.constant';
+import { DANH_MUC_138 } from './bieu-mau-13-8.constant';
 
 export class ItemData {
     id: string;
@@ -39,7 +39,7 @@ export class BieuMau138Component implements OnInit {
     thuyetMinh: string;
     namBcao: number;
     //danh muc
-    noiDungs: any[] = DANH_MUC;
+    noiDungs: any[] = DANH_MUC_138;
     soLaMa: any[] = LA_MA;
     lstCtietBcao: ItemData[] = [];
     donViTiens: any[] = DON_VI_TIEN;

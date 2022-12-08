@@ -63,11 +63,7 @@
                             {{getChiMuc(data.stt)}}
                         </td>
                         <td>
-                            <div *ngFor="let item of linhVucs">
-                                <div *ngIf="item.ma == data.maLvucNdChi">
-                                    {{item.giaTri}}
-                                </div>
-                            </div>
+                            {{data.tenLvucNdChi}}
                         </td>
                         <td>{{displayValue(data.thNamHienHanhN1)}}</td>
                         <td>{{displayValue(data.ncauNamDtoanN)}}</td>
@@ -82,11 +78,7 @@
                             {{getChiMuc(editCache[data.id].data.stt)}}
                         </td>
                         <td>
-                            <div *ngFor="let item of linhVucs">
-                                <div *ngIf="item.ma == data.maLvucNdChi">
-                                    {{item.giaTri}}
-                                </div>
-                            </div>
+                            {{editCache[data.id].data.tenLvucNdChi}}
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.thNamHienHanhN1"
