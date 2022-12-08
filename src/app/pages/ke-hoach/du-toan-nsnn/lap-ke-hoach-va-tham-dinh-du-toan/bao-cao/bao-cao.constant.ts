@@ -122,6 +122,12 @@ export const PHU_LUC = [
         status: false,
     },
     {
+        id: 'TT342_16',
+        tenDm: 'Cơ sở tính chi mua hàng dự trữ quốc gia',
+        tenPl: 'Biểu mẫu 16',
+        status: false,
+    },
+    {
         id: 'TT69_13',
         tenDm: 'Tổng hợp nhu cầu chi ngân sách nhà nước giai đoạn 03 năm',
         tenPl: 'Biểu mẫu 13',

@@ -22,6 +22,7 @@ import { BieuMau138Component } from './thong-tu-342/bieu-mau-13-8/bieu-mau-13-8.
 import { BieuMau140Component } from './thong-tu-342/bieu-mau-14-0/bieu-mau-14-0.component';
 import { BieuMau151Component } from './thong-tu-342/bieu-mau-15-1/bieu-mau-15-1.component';
 import { BieuMau152Component } from './thong-tu-342/bieu-mau-15-2/bieu-mau-15-2.component';
+import { BieuMau160Component } from './thong-tu-342/bieu-mau-16-0/bieu-mau-16-0.component';
 import { BieuMau13Component } from './thong-tu-69/bieu-mau-13/bieu-mau-13.component';
 import { BieuMau14Component } from './thong-tu-69/bieu-mau-14/bieu-mau-14.component';
 import { BieuMau16Component } from './thong-tu-69/bieu-mau-16/bieu-mau-16.component';
@@ -45,6 +46,7 @@ import { BieuMau18Component } from './thong-tu-69/bieu-mau-18/bieu-mau-18.compon
         BieuMau140Component,
         BieuMau151Component,
         BieuMau152Component,
+        BieuMau160Component,
         // //phu luc
         PhuLuc01Component,
         PhuLuc02Component,

@@ -126,47 +126,51 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let data of lstPhuLuc; let i = index">
-                                    <td>{{ i + 1 }}</td>
-                                    <td>{{data.tenPl}}</td>
-                                    <td>{{data.tenDm}}</td>
-                                    <td>
-                                        {{getStatusAppendixName(data.trangThai)}}
-                                        <ng-container *ngIf="data.trangThai == '0'">
-                                            <br>
-                                            Lý do: {{data.lyDoTuChoi}}
-                                        </ng-container>
-                                    </td>
-                                    <td>
-                                        <ng-container
-                                            *ngIf="userInfo?.sub == baoCao.nguoiTao && !status && data?.id?.length==38 ;else templateNguoiBcao ">
-                                            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cán bộ thực hiện"
-                                                [(ngModel)]="data.nguoiBcao"
-                                                [class]="data.nguoiBcao ?'' : 'input-error-validate'">
-                                                <nz-option *ngFor="let item of canBos" [nzValue]="item.username"
-                                                    [nzLabel]="item.username">
-                                                </nz-option>
-                                            </nz-select>
-                                        </ng-container>
-                                        <ng-template #templateNguoiBcao>
-                                            <div *ngFor="let item of canBos">
-                                                <div *ngIf="item.username == data.nguoiBcao">
-                                                    {{item.username}}
+                                <tr *ngFor="let data of baoCao.lstLapThamDinhs; let i = index">
+                                    <ng-container *ngIf="data.maBieuMau.startsWith('pl')">
+                                        <td>{{ i + 1 }}</td>
+                                        <td>{{data.tenPl}}</td>
+                                        <td>{{data.tenDm}}</td>
+                                        <td>
+                                            {{getStatusAppendixName(data.trangThai)}}
+                                            <ng-container *ngIf="data.trangThai == '0'">
+                                                <br>
+                                                Lý do: {{data.lyDoTuChoi}}
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="userInfo?.sub == baoCao.nguoiTao && !status && data?.id?.length==38 ;else templateNguoiBcao ">
+                                                <nz-select nzShowSearch nzAllowClear
+                                                    nzPlaceHolder="Chọn cán bộ thực hiện" [(ngModel)]="data.nguoiBcao"
+                                                    [class]="data.nguoiBcao ?'' : 'input-error-validate'">
+                                                    <nz-option *ngFor="let item of canBos" [nzValue]="item.username"
+                                                        [nzLabel]="item.username">
+                                                    </nz-option>
+                                                </nz-select>
+                                            </ng-container>
+                                            <ng-template #templateNguoiBcao>
+                                                <div *ngFor="let item of canBos">
+                                                    <div *ngIf="item.username == data.nguoiBcao">
+                                                        {{item.username}}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </ng-template>
-                                    </td>
-                                    <td>
-                                        <a>
-                                            <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
-                                        </a>
-                                        <a *ngIf="!status && userInfo?.sub == data.nguoiBcao && baoCao.id">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                        <a *ngIf="!status" (click)="deleteAppendix(data.id)">
-                                            <i class="fa fa-trash-o do"></i>
-                                        </a>
-                                    </td>
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="baoCao.id">
+                                                <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
+                                                    <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
+                                                </a>
+                                                <a *ngIf="status || (userInfo?.sub != data.nguoiBcao)">
+                                                    <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
+                                                </a>
+                                            </ng-container>
+                                            <a *ngIf="!status && (userInfo?.sub == baoCao.nguoiTao)">
+                                                <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
+                                            </a>
+                                        </td>
+                                    </ng-container>
                                 </tr>
                             </tbody>
                         </nz-table>
@@ -184,47 +188,51 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let data of lstTt342; let i = index">
-                                    <td>{{ i + 1 }}</td>
-                                    <td>{{data.tenPl}}</td>
-                                    <td>{{data.tenDm}}</td>
-                                    <td>
-                                        {{getStatusAppendixName(data.trangThai)}}
-                                        <ng-container *ngIf="data.trangThai == '0'">
-                                            <br>
-                                            Lý do: {{data.lyDoTuChoi}}
-                                        </ng-container>
-                                    </td>
-                                    <td>
-                                        <ng-container
-                                            *ngIf="userInfo?.sub == baoCao.nguoiTao && !status && data?.id?.length==38 ;else templateNguoiBcao ">
-                                            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cán bộ thực hiện"
-                                                [(ngModel)]="data.nguoiBcao"
-                                                [class]="data.nguoiBcao ?'' : 'input-error-validate'">
-                                                <nz-option *ngFor="let item of canBos" [nzValue]="item.username"
-                                                    [nzLabel]="item.username">
-                                                </nz-option>
-                                            </nz-select>
-                                        </ng-container>
-                                        <ng-template #templateNguoiBcao>
-                                            <div *ngFor="let item of canBos">
-                                                <div *ngIf="item.username == data.nguoiBcao">
-                                                    {{item.username}}
+                                <tr *ngFor="let data of baoCao.lstLapThamDinhs; let i = index">
+                                    <ng-container *ngIf="data.maBieuMau.startsWith('TT342')">
+                                        <td>{{ i + 1 }}</td>
+                                        <td>{{data.tenPl}}</td>
+                                        <td>{{data.tenDm}}</td>
+                                        <td>
+                                            {{getStatusAppendixName(data.trangThai)}}
+                                            <ng-container *ngIf="data.trangThai == '0'">
+                                                <br>
+                                                Lý do: {{data.lyDoTuChoi}}
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="userInfo?.sub == baoCao.nguoiTao && !status && data?.id?.length==38 ;else templateNguoiBcao ">
+                                                <nz-select nzShowSearch nzAllowClear
+                                                    nzPlaceHolder="Chọn cán bộ thực hiện" [(ngModel)]="data.nguoiBcao"
+                                                    [class]="data.nguoiBcao ?'' : 'input-error-validate'">
+                                                    <nz-option *ngFor="let item of canBos" [nzValue]="item.username"
+                                                        [nzLabel]="item.username">
+                                                    </nz-option>
+                                                </nz-select>
+                                            </ng-container>
+                                            <ng-template #templateNguoiBcao>
+                                                <div *ngFor="let item of canBos">
+                                                    <div *ngIf="item.username == data.nguoiBcao">
+                                                        {{item.username}}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </ng-template>
-                                    </td>
-                                    <td>
-                                        <a>
-                                            <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
-                                        </a>
-                                        <a *ngIf="!status && userInfo?.sub == data.nguoiBcao && baoCao.id">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                        <a *ngIf="!status" (click)="deleteAppendix(data.id)">
-                                            <i class="fa fa-trash-o do"></i>
-                                        </a>
-                                    </td>
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="baoCao.id">
+                                                <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
+                                                    <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
+                                                </a>
+                                                <a *ngIf="status || (userInfo?.sub != data.nguoiBcao)">
+                                                    <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
+                                                </a>
+                                            </ng-container>
+                                            <a *ngIf="!status && (userInfo?.sub == baoCao.nguoiTao)">
+                                                <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
+                                            </a>
+                                        </td>
+                                    </ng-container>
                                 </tr>
                             </tbody>
                         </nz-table>
@@ -242,47 +250,51 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let data of lstTt69; let i = index">
-                                    <td>{{ i + 1 }}</td>
-                                    <td>{{data.tenPl}}</td>
-                                    <td>{{data.tenDm}}</td>
-                                    <td>
-                                        {{getStatusAppendixName(data.trangThai)}}
-                                        <ng-container *ngIf="data.trangThai == '0'">
-                                            <br>
-                                            Lý do: {{data.lyDoTuChoi}}
-                                        </ng-container>
-                                    </td>
-                                    <td>
-                                        <ng-container
-                                            *ngIf="userInfo?.sub == baoCao.nguoiTao && !status && data?.id?.length==38 ;else templateNguoiBcao ">
-                                            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn cán bộ thực hiện"
-                                                [(ngModel)]="data.nguoiBcao"
-                                                [class]="data.nguoiBcao ?'' : 'input-error-validate'">
-                                                <nz-option *ngFor="let item of canBos" [nzValue]="item.username"
-                                                    [nzLabel]="item.username">
-                                                </nz-option>
-                                            </nz-select>
-                                        </ng-container>
-                                        <ng-template #templateNguoiBcao>
-                                            <div *ngFor="let item of canBos">
-                                                <div *ngIf="item.username == data.nguoiBcao">
-                                                    {{item.username}}
+                                <tr *ngFor="let data of baoCao.lstLapThamDinhs; let i = index">
+                                    <ng-container *ngIf="data.maBieuMau.startsWith('TT69')">
+                                        <td>{{ i + 1 }}</td>
+                                        <td>{{data.tenPl}}</td>
+                                        <td>{{data.tenDm}}</td>
+                                        <td>
+                                            {{getStatusAppendixName(data.trangThai)}}
+                                            <ng-container *ngIf="data.trangThai == '0'">
+                                                <br>
+                                                Lý do: {{data.lyDoTuChoi}}
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <ng-container
+                                                *ngIf="userInfo?.sub == baoCao.nguoiTao && !status && data?.id?.length==38 ;else templateNguoiBcao ">
+                                                <nz-select nzShowSearch nzAllowClear
+                                                    nzPlaceHolder="Chọn cán bộ thực hiện" [(ngModel)]="data.nguoiBcao"
+                                                    [class]="data.nguoiBcao ?'' : 'input-error-validate'">
+                                                    <nz-option *ngFor="let item of canBos" [nzValue]="item.username"
+                                                        [nzLabel]="item.username">
+                                                    </nz-option>
+                                                </nz-select>
+                                            </ng-container>
+                                            <ng-template #templateNguoiBcao>
+                                                <div *ngFor="let item of canBos">
+                                                    <div *ngIf="item.username == data.nguoiBcao">
+                                                        {{item.username}}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </ng-template>
-                                    </td>
-                                    <td>
-                                        <a>
-                                            <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
-                                        </a>
-                                        <a *ngIf="!status && userInfo?.sub == data.nguoiBcao && baoCao.id">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                        <a *ngIf="!status" (click)="deleteAppendix(data.id)">
-                                            <i class="fa fa-trash-o do"></i>
-                                        </a>
-                                    </td>
+                                            </ng-template>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="baoCao.id">
+                                                <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
+                                                    <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
+                                                </a>
+                                                <a *ngIf="status || (userInfo?.sub != data.nguoiBcao)">
+                                                    <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
+                                                </a>
+                                            </ng-container>
+                                            <a *ngIf="!status && (userInfo?.sub == baoCao.nguoiTao)">
+                                                <i class="fa fa-trash-o do" (click)="deleteAppendix(data.id)"></i>
+                                            </a>
+                                        </td>
+                                    </ng-container>
                                 </tr>
                             </tbody>
                         </nz-table>
@@ -296,7 +308,7 @@
                     </ng-template>
                 </nz-tabset>
                 <nz-tabset class="tab__container">
-                    <nz-tab *ngIf="baoCao.lstBcaoDviTrucThuocs.length > 0"
+                    <nz-tab *ngIf="baoCao.lstBcaoDviTrucThuocs && baoCao.lstBcaoDviTrucThuocs.length > 0"
                         [nzTitle]="'Danh sách báo cáo từ các đơn vị trực thuộc'">
                         <nz-table #basicTable class="nowrap">
                             <thead>
