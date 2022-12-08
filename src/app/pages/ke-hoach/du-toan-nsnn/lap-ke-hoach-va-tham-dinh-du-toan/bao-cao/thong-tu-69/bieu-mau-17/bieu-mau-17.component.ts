@@ -96,6 +96,15 @@ export class BieuMau17Component implements OnInit {
             })
         }
         this.sortByIndex();
+        if (this.dataInfo?.extraData) {
+            this.dataInfo.extraData.forEach(item => {
+                const index = this.lstCtietBcao.findIndex(e => e.maLvucNdChi == item.maNdung);
+                this.lstCtietBcao[index].thNamHienHanhN1 = item.thNamHienHanhN1;
+                this.lstCtietBcao[index].ncauNamDtoanN = item.ncauChiN;
+                this.lstCtietBcao[index].ncauNamN1 = item.ncauChiN1;
+                this.lstCtietBcao[index].ncauNamN2 = item.ncauChiN2;
+            })
+        }
         this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
