@@ -707,7 +707,7 @@ export class BaoCaoComponent implements OnInit {
                             id: uuid.v4() + 'FE',
                             maBieuMau: item.id,
                             tenPl: item.tenPl,
-                            temDm: item.temDm,
+                            temDm: item.tenDm,
                             trangThai: '3',
                         }
                         this.baoCao.lstLapThamDinhs.push(newItem);
