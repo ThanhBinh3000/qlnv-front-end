@@ -55,7 +55,8 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
     soQd: '',
     tenloaiVthh: '',
     tenCloaiVthh: '',
-    soLuong: '',
+    tongSoLuong: '',
+    soQdPdkqMtt: '',
     tenTrangThai: '',
     maThop: '',
   };
@@ -367,7 +368,8 @@ export class DanhsachKehoachMuatructiepComponent implements OnInit {
       soQd: '',
       tenloaiVthh: '',
       tenCloaiVthh: '',
-      soLuong: '',
+      soQdPdkqMtt: '',
+      tongSoLuong: '',
       tenTrangThai: '',
       maThop: '',
     }

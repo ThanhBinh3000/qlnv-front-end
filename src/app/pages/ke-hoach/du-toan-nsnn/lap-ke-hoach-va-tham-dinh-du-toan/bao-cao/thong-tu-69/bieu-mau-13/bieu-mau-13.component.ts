@@ -102,6 +102,11 @@ export class BieuMau13Component implements OnInit {
             })
         }
         this.sortByIndex();
+        if (this.dataInfo?.extraData) {
+            const indDa = this.lstCtietBcao.findIndex(e => e.maNdung == '0.1.1.1');
+            this.lstCtietBcao[indDa].ncauChiN = this.dataInfo.extraData?.nhucauDan;
+            this.sum(this.lstCtietBcao[indDa].stt);
+        }
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
