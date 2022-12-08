@@ -16,6 +16,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
+import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
@@ -149,6 +150,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     private notification: NzNotificationService,
     private danhMuc: DanhMucHDVService,
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private giaoDuToanChiService: GiaoDuToanChiService,
     private datePipe: DatePipe,
     private dataSource: DataService,
     private modal: NzModalService,
@@ -254,7 +256,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
       }
     );
 
-    await this.quanLyVonPhiService.maPhuongAnGiao('1').toPromise().then(
+    await this.giaoDuToanChiService.maPhuongAnGiao('1').toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           this.maGiao = res.data;
@@ -359,7 +361,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
   async getDetailReport() {
     this.spinner.show()
     // call api lấy dữ liệu
-    await this.quanLyVonPhiService.QDGiaoChiTiet(this.id, this.maLoai).toPromise().then(
+    await this.giaoDuToanChiService.QDGiaoChiTiet(this.id, this.maLoai).toPromise().then(
       (data) => {
         if (data.statusCode === 0) {
           this.id = data.data.id;
@@ -453,7 +455,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
 
   async doCopy(response) {
     let maBcaoNew: string;
-    await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+    await this.giaoDuToanChiService.maPhuongAnGiao(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           maBcaoNew = res.data;
@@ -516,7 +518,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
       tongHopTuIds: tongHopTuIds,
     };
 
-    this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+    this.giaoDuToanChiService.giaoDuToan(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);
@@ -709,7 +711,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     // }
     this.spinner.show();
     if (!this.id) {
-      this.quanLyVonPhiService.giaoDuToan(request1).toPromise().then(
+      this.giaoDuToanChiService.giaoDuToan(request1).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             const capDviUser = this.donVis.find(e => e.maDvi == this.userInfo?.dvql)?.capDvi;
@@ -734,7 +736,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
+      this.giaoDuToanChiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -837,7 +839,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     }
 
     this.spinner.show();
-    await this.quanLyVonPhiService.tongHopGiaoDuToan(request).toPromise().then(
+    await this.giaoDuToanChiService.tongHopGiaoDuToan(request).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           const modalCopy = this.modal.create({
@@ -950,7 +952,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
         maLoai: this.maLoai,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
+      await this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           this.trangThaiBanGhi = mcn;
           this.getStatusButton();
@@ -1521,7 +1523,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
         });
       }
     }
-    this.quanLyVonPhiService.giaoSoTranChiGiaoDuToan(lstGiao).toPromise().then(
+    this.giaoDuToanChiService.giaoSoTranChiGiaoDuToan(lstGiao).toPromise().then(
       data => {
         if (data.statusCode == 0) {
           if (maDviNhan) {
@@ -1782,7 +1784,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
       }
     ))
 
-    this.quanLyVonPhiService.themMoiQdCvGiaoNSNN(request).toPromise().then(async data => {
+    this.giaoDuToanChiService.themMoiQdCvGiaoNSNN(request).toPromise().then(async data => {
       if (data.statusCode == 0) {
         this.notification.success(MESSAGE.SUCCESS, 'Xóa thành công');
         this.getStatusButton();

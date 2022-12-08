@@ -218,7 +218,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
 
       this.namPa = this.data?.namPa;
 
-      this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+      this.giaoDuToanChiService.maPhuongAnGiao(this.maLoai).toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
             this.maPa = res.data;
@@ -293,7 +293,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
 
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet(this.id, this.maLoai).toPromise().then(
+    await this.giaoDuToanChiService.QDGiaoChiTiet(this.id, this.maLoai).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.id = data.data.id;
@@ -493,7 +493,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     }
     this.spinner.show();
     if (!this.id) {
-      this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+      this.giaoDuToanChiService.giaoDuToan(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -509,7 +509,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       );
     }
     else {
-      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
+      this.giaoDuToanChiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -539,7 +539,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     const listCtietDvi: any[] = [];
     const maPaCha = this.maPa
     let maPa
-    await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+    await this.giaoDuToanChiService.maPhuongAnGiao(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           maPa = res.data;
@@ -647,7 +647,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
 
   async doCopy(response: any) {
     let maBcaoNew: string;
-    await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+    await this.giaoDuToanChiService.maPhuongAnGiao(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           maBcaoNew = res.data;
@@ -685,7 +685,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       soQd: this.soQd,
     };
 
-    this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+    this.giaoDuToanChiService.giaoDuToan(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);

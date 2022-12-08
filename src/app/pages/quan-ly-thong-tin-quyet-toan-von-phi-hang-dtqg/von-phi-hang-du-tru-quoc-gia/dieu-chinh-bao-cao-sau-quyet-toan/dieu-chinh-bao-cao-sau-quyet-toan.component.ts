@@ -14,6 +14,7 @@ import { Utils } from 'src/app/Utility/utils';
 import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
 import { QTVP } from './../../../../Utility/utils';
+import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetToanVonPhi.service';
 
 // import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 // trang thai ban ghi
@@ -111,6 +112,7 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
   isStatus: string;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private quyetToanVonPhiService: QuyetToanVonPhiService,
     private router: Router,
     private datePipe: DatePipe,
     private notification: NzNotificationService,
@@ -182,7 +184,7 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     } else {
       searchFilterTemp.trangThais = [this.trangThai];
     }
-    await this.quanLyVonPhiService.timBaoCaoQuyetToanVonPhi(searchFilterTemp).toPromise().then(
+    await this.quyetToanVonPhiService.timBaoCaoQuyetToanVonPhi(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           // this.danhSachBaoCao = data.data.content;
@@ -314,7 +316,7 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
             })
           }
         }
-        this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(request).toPromise().then(
+        this.quyetToanVonPhiService.xoaBaoCaoLapQuyetToan(request).toPromise().then(
           data => {
             if (data.statusCode == 0) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
