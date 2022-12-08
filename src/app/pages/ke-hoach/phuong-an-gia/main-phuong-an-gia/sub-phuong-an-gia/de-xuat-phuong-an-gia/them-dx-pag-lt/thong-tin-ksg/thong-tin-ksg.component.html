@@ -15,26 +15,26 @@
         <tr>
             <th class="text-center"> </th>
             <th *ngIf="!isTableKetQua">
-                <input type="text" [(ngModel)]="rowItem.tenDviThamDinh" nz-input />
+                <input [readonly]="isView" type="text" [(ngModel)]="rowItem.tenDviThamDinh" nz-input />
             </th>
           <th *ngIf="isTableKetQua">
-            <input type="text" [(ngModel)]="rowItem.tenDviBaoGia" nz-input />
+            <input [readonly]="isView" type="text" [(ngModel)]="rowItem.tenDviBaoGia" nz-input />
           </th>
             <th *ngIf="isTableKetQua">
-                <input type="text" [(ngModel)]="rowItem.cloaiVthh" nz-input />
+                <input [readonly]="isView" type="text" [(ngModel)]="rowItem.cloaiVthh" nz-input />
             </th>
             <th>
-                <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.donGia" [nzFormatter]="globals.formatter"
+                <nz-input-number [nzDisabled]="isView" [nzSize]="'small'" [(ngModel)]="rowItem.donGia" [nzFormatter]="globals.formatter"
                     [nzParser]="globals.parser">
                 </nz-input-number>
             </th>
             <th>
-                <nz-input-number disabled [nzSize]="'small'" [(ngModel)]=" rowItem.donGia + rowItem.donGia * vat" [nzFormatter]="globals.formatter"
+                <nz-input-number  disabled [nzSize]="'small'" [(ngModel)]=" rowItem.donGia + rowItem.donGia * vat" [nzFormatter]="globals.formatter"
                     [nzParser]="globals.parser">
                 </nz-input-number>
             </th>
             <th *ngIf="isTableKetQua">
-                <input type="text" [(ngModel)]="rowItem.thoiHanBaoGia" nz-input />
+                <input [readonly]="isView" type="text" [(ngModel)]="rowItem.thoiHanBaoGia" nz-input />
             </th>
             <th>
                 <nz-form-control>
@@ -49,13 +49,13 @@
             </th>
 
             <th *ngIf="isTableKetQua">
-                <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input />
+                <input [readonly]="isView" type="text" [(ngModel)]="rowItem.ghiChu" nz-input />
             </th>
             <th style="text-align: center">
-                <a>
+                <a *ngIf="!isView">
                     <i class="icon htvbdh_dau-cong" (click)="themDataTable()"></i>
                 </a>
-                <a>
+                <a *ngIf="! isView">
                     <i class="icon  htvbdh_nhap-lai1 "></i>
                 </a>
             </th>

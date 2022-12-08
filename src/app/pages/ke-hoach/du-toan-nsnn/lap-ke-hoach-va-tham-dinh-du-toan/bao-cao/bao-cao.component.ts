@@ -37,6 +37,7 @@ import { BieuMau138Component } from './thong-tu-342/bieu-mau-13-8/bieu-mau-13-8.
 import { BieuMau140Component } from './thong-tu-342/bieu-mau-14-0/bieu-mau-14-0.component';
 import { BieuMau151Component } from './thong-tu-342/bieu-mau-15-1/bieu-mau-15-1.component';
 import { BieuMau152Component } from './thong-tu-342/bieu-mau-15-2/bieu-mau-15-2.component';
+import { BieuMau160Component } from './thong-tu-342/bieu-mau-16-0/bieu-mau-16-0.component';
 import { BieuMau13Component } from './thong-tu-69/bieu-mau-13/bieu-mau-13.component';
 import { BieuMau14Component } from './thong-tu-69/bieu-mau-14/bieu-mau-14.component';
 import { BieuMau16Component } from './thong-tu-69/bieu-mau-16/bieu-mau-16.component';
@@ -99,9 +100,6 @@ export class BaoCaoComponent implements OnInit {
     userInfo: any;
     //thong tin chung bao cao
     baoCao: BaoCao = new BaoCao();
-    lstPhuLuc: ItemData[] = [];
-    lstTt342: ItemData[] = [];
-    lstTt69: ItemData[] = [];
     //danh muc
     listAppendix: any[] = PHU_LUC;
     childUnit: any[] = [];              // danh muc don vi con cua don vi tao bao cao
@@ -282,9 +280,6 @@ export class BaoCaoComponent implements OnInit {
                         lstCtietLapThamDinhs: [],
                     })
                 })
-                this.lstPhuLuc = this.baoCao.lstLapThamDinhs.filter(e => e.maBieuMau.startsWith('pl'));
-                this.lstTt342 = this.baoCao.lstLapThamDinhs.filter(e => e.maBieuMau.startsWith('TT342'));
-                this.lstTt69 = this.baoCao.lstLapThamDinhs.filter(e => e.maBieuMau.startsWith('TT69'));
             }
         }
 
@@ -325,7 +320,7 @@ export class BaoCaoComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        const isSynthetic = this.baoCao.lstBcaoDviTrucThuocs.length != 0;
+        const isSynthetic = this.baoCao.lstBcaoDviTrucThuocs && this.baoCao.lstBcaoDviTrucThuocs.length != 0;
         const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
         const isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
         //kiem tra quyen cua cac user
@@ -478,9 +473,6 @@ export class BaoCaoComponent implements OnInit {
                         item.tenDm = appendix.tenDm;
                     })
                     this.listFile = [];
-                    this.lstPhuLuc = this.baoCao.lstLapThamDinhs.filter(e => e.maBieuMau.startsWith('pl'));
-                    this.lstTt342 = this.baoCao.lstLapThamDinhs.filter(e => e.maBieuMau.startsWith('TT342'));
-                    this.lstTt69 = this.baoCao.lstLapThamDinhs.filter(e => e.maBieuMau.startsWith('TT69'));
                     this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -586,11 +578,7 @@ export class BaoCaoComponent implements OnInit {
     // luu
     async save() {
         //kiem tra cac bao cao da duoc giao xuong chua
-        let checkSave = true;
-        checkSave = this.lstPhuLuc.every(e => e.nguoiBcao) && checkSave;
-        checkSave = this.lstTt342.every(e => e.nguoiBcao) && checkSave;
-        checkSave = this.lstTt69.every(e => e.nguoiBcao) && checkSave;
-        if (!checkSave) {
+        if (!this.baoCao.lstLapThamDinhs.every(e => e.nguoiBcao)) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
@@ -605,7 +593,6 @@ export class BaoCaoComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        this.baoCao.lstLapThamDinhs = this.lstPhuLuc.concat(this.lstTt342, this.lstTt69);
         const baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
         this.baoCao.lstBcaoDviTrucThuocs.forEach(item => {
             baoCaoTemp.tongHopTuIds.push(item.id);
@@ -693,17 +680,17 @@ export class BaoCaoComponent implements OnInit {
         switch (this.selectedIndex) {
             case 0:
                 danhMuc = this.listAppendix.filter(e => e.id.startsWith('pl'));
-                danhSach = danhMuc.filter(item => this.lstPhuLuc.findIndex(e => e.maBieuMau == item.id) == -1);
+                danhSach = danhMuc.filter(item => this.baoCao.lstLapThamDinhs.findIndex(e => e.maBieuMau == item.id) == -1);
                 title = 'Danh sách phụ lục';
                 break;
             case 1:
                 danhMuc = this.listAppendix.filter(e => e.id.startsWith('TT342'));
-                danhSach = danhMuc.filter(item => this.lstTt342.findIndex(e => e.maBieuMau == item.id) == -1);
+                danhSach = danhMuc.filter(item => this.baoCao.lstLapThamDinhs.findIndex(e => e.maBieuMau == item.id) == -1);
                 title = 'Danh sách biểu mẫu';
                 break;
             case 2:
                 danhMuc = this.listAppendix.filter(e => e.id.startsWith('TT69'));
-                danhSach = danhMuc.filter(item => this.lstTt69.findIndex(e => e.maBieuMau == item.id) == -1);
+                danhSach = danhMuc.filter(item => this.baoCao.lstLapThamDinhs.findIndex(e => e.maBieuMau == item.id) == -1);
                 title = 'Danh sách biểu mẫu';
                 break;
             default:
@@ -733,19 +720,7 @@ export class BaoCaoComponent implements OnInit {
                             temDm: item.temDm,
                             trangThai: '3',
                         }
-                        switch (this.selectedIndex) {
-                            case 0:
-                                this.lstPhuLuc.push(newItem);
-                                break;
-                            case 1:
-                                this.lstTt342.push(newItem);
-                                break;
-                            case 2:
-                                this.lstTt69.push(newItem);
-                                break;
-                            default:
-                                break;
-                        }
+                        this.baoCao.lstLapThamDinhs.push(newItem);
                     }
                 })
             }
@@ -754,20 +729,18 @@ export class BaoCaoComponent implements OnInit {
 
     //xoa bieu mau
     deleteAppendix(id: string) {
-        this.lstPhuLuc = this.lstPhuLuc.filter(item => item.id != id);
-        this.lstTt342 = this.lstTt342.filter(item => item.id != id);
-        this.lstTt69 = this.lstTt69.filter(item => item.id != id);
+        this.baoCao.lstLapThamDinhs = this.baoCao.lstLapThamDinhs.filter(item => item.id != id);
     }
 
     viewAppendix(formDetail: ItemData) {
         const dataInfo = {
-            ...formDetail,
+            data: formDetail,
             maDvi: this.baoCao.maDvi,
             namBcao: this.baoCao.namBcao,
             statusBtnOk: this.okStatus,
             statusBtnFinish: this.finishStatus,
             statusBtnPrint: this.printStatus,
-            status: this.status,
+            status: this.status || !(this.userInfo?.sub == formDetail.nguoiBcao),
             viewAppraisalValue: this.viewAppraisalValue,
             editAppraisalValue: this.acceptStatus,
         }
@@ -836,6 +809,9 @@ export class BaoCaoComponent implements OnInit {
             case 'TT342_15.2':
                 nzContent = BieuMau152Component;
                 break;
+            case 'TT342_16':
+                nzContent = BieuMau160Component;
+                break;
             // thong tu 69
             case 'TT69_13':
                 nzContent = BieuMau13Component;
@@ -869,12 +845,33 @@ export class BaoCaoComponent implements OnInit {
         });
         modalAppendix.afterClose.toPromise().then(async (res) => {
             if (res) {
+                //gan lai thong tin sau khi bieu mau duoc luu
+                const index = this.baoCao.lstLapThamDinhs.findIndex(e => e.maBieuMau == res.formDetail.maBieuMau);
+                this.baoCao.lstLapThamDinhs[index] = res.formDetail;
+                //thuc hien tinh toan cac gia tri lien ket giua cac man hinh
+                switch (res.formDetail.maBieuMau) {
+                    case '':
+                        break;
+                    default:
+                        break;
+                }
             }
         });
     }
 
     saveAppendix(formDetail: ItemData) {
-
+        this.lapThamDinhService.updateLapThamDinh(formDetail).toPromise().then(
+            async data => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
     }
 
     xemSoKiemTra() {

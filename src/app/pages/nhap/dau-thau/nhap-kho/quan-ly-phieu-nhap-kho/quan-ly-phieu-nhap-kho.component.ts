@@ -29,7 +29,7 @@ import { STATUS } from "../../../../../constants/status";
   styleUrls: ['./quan-ly-phieu-nhap-kho.component.scss'],
 })
 export class QuanLyPhieuNhapKhoComponent implements OnInit {
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
 
   searchFilter = {
     soPhieu: '',
@@ -86,9 +86,6 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      if (!this.typeVthh || this.typeVthh == '') {
-        this.isTatCa = true;
-      }
       await Promise.all([
         this.search(),
       ]);
@@ -203,6 +200,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
         "limit": this.pageSize,
         "page": this.page - 1
       },
+      loaiVthh: this.loaiVthh
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -237,6 +235,7 @@ export class QuanLyPhieuNhapKhoComponent implements OnInit {
       item.detail.children.forEach(ddNhap => {
         ddNhap.listPhieuNhapKho.forEach(x => {
           x.phieuKiemTraCl = ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
+          x.bienBanGuiHang = ddNhap.bienBanGuiHang
         });
       })
     });

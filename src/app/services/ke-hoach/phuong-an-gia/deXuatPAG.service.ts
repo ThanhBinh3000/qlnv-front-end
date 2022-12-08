@@ -15,8 +15,13 @@ export class DeXuatPAGService extends BaseService {
   }
 
 
-  loadQdGiaoKhMuaBan(body) {
+  loadQdGiaoKhLcnt(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/ds-qd-khlcnt`
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
+
+  loadQdGiaoKhBdg(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phuong-an-gia/ds-qd-khbdg`
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 

@@ -15,7 +15,7 @@ import { PhuongPhapLayMau } from 'src/app/models/PhuongPhapLayMau';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuanLyBienBanLayMauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanLayMau.service';
-import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/quanLyPhieuNhapDayKho.service';
+import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapDayKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import { UserService } from 'src/app/services/user.service';
@@ -113,6 +113,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
+      idDdiemGiaoNvNh: [''],
       maDiemKho: ['', [Validators.required]],
       tenDiemKho: ['', [Validators.required]],
       maNhaKho: ['', [Validators.required]],
@@ -136,7 +137,9 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
       ppLayMau: [''],
       chiTieuKiemTra: ['', [Validators.required]],
       ketQuaNiemPhong: [''],
-      tenNguoiTao: ['']
+      tenNguoiTao: [''],
+      soBbGuiHang: [''],
+      idBbGuiHang: [''],
     });
   }
 
@@ -205,6 +208,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
 
   async save(isGuiDuyet?: boolean) {
     this.spinner.show();
+    this.setValidator();
     this.helperService.markFormGroupTouched(this.formData);
     if (!this.formData.valid) {
       this.spinner.hide();
@@ -237,6 +241,20 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
       this.spinner.hide();
+    }
+  }
+
+  setValidator() {
+    if (this.loaiVthh.startsWith('02')) {
+      this.formData.controls['soBbNhapDayKho'].clearValidators();
+      this.formData.controls['idBbNhapDayKho'].clearValidators();
+      this.formData.controls['soBbGuiHang'].setValidators([Validators.required]);
+      this.formData.controls['idBbGuiHang'].setValidators([Validators.required]);
+    } else {
+      this.formData.controls['soBbNhapDayKho'].setValidators([Validators.required]);
+      this.formData.controls['idBbNhapDayKho'].setValidators([Validators.required]);
+      this.formData.controls['soBbGuiHang'].clearValidators();
+      this.formData.controls['idBbGuiHang'].clearValidators();
     }
   }
 
@@ -441,7 +459,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     let dataChiCuc = data.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
     if (dataChiCuc) {
       if (this.loaiVthh.startsWith('02')) {
-        this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
+        this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanGuiHang));
       } else {
         this.listDiaDiemNhap = dataChiCuc.children.filter(item => !isEmpty(item.bienBanNhapDayKho) && isEmpty(item.bienBanLayMau));
       }
@@ -477,7 +495,9 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
           maLoKho: data.maLoKho,
           tenLoKho: data.tenLoKho,
           soBbNhapDayKho: data.bienBanNhapDayKho?.soBienBanNhapDayKho,
-          idBbNhapDayKho: data.bienBanNhapDayKho?.id
+          idBbNhapDayKho: data.bienBanNhapDayKho?.id,
+          soBbGuiHang: data.bienBanGuiHang?.soBienBanGuiHang,
+          idBbGuiHang: data.bienBanGuiHang?.id
         });
       }
     });

@@ -7,16 +7,24 @@ export class DanhSachMuaTrucTiep {
   tenDvi: string;
   maDiemKho: string;
   tenDiemKho: string;
-  diaDiemKho: string;
-  idDxKhmtt?: number;
-  soLuongCtieu: number;
-  soLuongKhDd: number;
-  soLuongDxmtt: number;
+  diaDiemNhap: string;
   donGiaVat: number;
+  soLuong: number;
+  donGia: number;
   thanhTien: number;
+  tenGoiThau: string;
+  soLuongChiTieu: number;
+  soLuongKhDd: number;
+  tongThanhTienVat: number;
+  tongSoLuong: number;
+  tongThanhTien: number;
+  thanhTienVat: number;
+  tongDonGia: number;
+  loaiVthh: string;
+  cloaiVthh: string;
   idVirtual?: number;
   isEdit: boolean;
-  ccFileDinhkems?: DanhSachMuaTrucTiep[];
+  children?: DanhSachMuaTrucTiep[];
   level?: number;
   expand?: boolean;
   parent?: DanhSachMuaTrucTiep
@@ -41,8 +49,8 @@ export class CanCuXacDinh {
   tenTlieu: string;
   taiLieu: any;
   moTa: string;
-  fileDinhkems: Array<FileDinhKem>;
-  ccFileDinhKems: Array<FileDinhKem>;
+  fileDinhKems: Array<FileDinhKem>;
+  children: Array<FileDinhKem>;
 }
 
 export class ChiTietThongTinChaoGia {

@@ -160,7 +160,7 @@ export class ThongtinDieuchinhComponent implements OnInit {
       nzComponentParams: {
         dataEdit: data,
         loaiVthh: this.formData.get('loaiVthh').value,
-        donGiaVat: this.formData.value.giaCoThue
+        donGiaVat: this.formData.value.donGiaVat
       },
     });
     modalGT.afterClose.subscribe((res) => {

@@ -12,16 +12,24 @@ import { BienBanChuanBiKho, ChiTietBienBanChuanBiKho } from 'src/app/models/Bien
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyBienBanChuanBiKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanChuanBiKho.service';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
+import {
+  QuanLyBienBanChuanBiKhoService
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanChuanBiKho.service';
+import {
+  QuyetDinhGiaoNhapHangService
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { BaseComponent } from 'src/app/components/base/base.component';
-import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
+import {
+  DialogTableSelectionComponent
+} from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import {
+  QuanLyPhieuKiemTraChatLuongHangService
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import { HelperService } from 'src/app/services/helper.service';
 
 @Component({
@@ -138,9 +146,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      await Promise.all([
-
-      ]);
+      await Promise.all([]);
       if (this.id) {
         await this.loadChiTiet(this.id);
       } else {
@@ -548,6 +554,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
   newObjectChiTietChuanBiKho() {
     this.chiTietChuanBiKhoCreate = new ChiTietBienBanChuanBiKho();
   }
+
   addChiTiet() {
     if (!this.chiTietChuanBiKhoCreate.noiDung) {
       return;
@@ -569,6 +576,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
     this.newObjectChiTietChuanBiKho();
     this.dsChiTietChuanBiKhoClone = cloneDeep(this.bienBanChuanBiKho.chiTiets);
   }
+
   deleteData(id: number) {
     this.modal.confirm({
       nzClosable: false,
@@ -589,9 +597,11 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
       },
     });
   }
+
   startEdit(index: number) {
     this.dsChiTietChuanBiKhoClone[index].isEdit = true;
   }
+
   saveEdit(i: number) {
     this.dsChiTietChuanBiKhoClone[i].isEdit = false;
     Object.assign(
@@ -599,10 +609,12 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
       this.dsChiTietChuanBiKhoClone[i],
     );
   }
+
   cancelEdit(index: number) {
     this.dsChiTietChuanBiKhoClone = cloneDeep(this.bienBanChuanBiKho.chiTiets);
     this.dsChiTietChuanBiKhoClone[index].isEdit = false;
   }
+
   calcChiPhiTrongNam(): string {
     this.chiTietChuanBiKhoCreate.thanhTienTrongNam = +this.chiTietChuanBiKhoCreate.soLuongTrongNam
       * +this.chiTietChuanBiKhoCreate.donGiaTrongNam;
@@ -610,6 +622,7 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
       ? Intl.NumberFormat('en-US').format(this.chiTietChuanBiKhoCreate.thanhTienTrongNam)
       : '0';
   }
+
   calcTongGiaTri(): string {
     if (!this.chiTietChuanBiKhoCreate.thanhTienQt) {
       this.chiTietChuanBiKhoCreate.thanhTienQt = 0;

@@ -8,8 +8,6 @@ import { BienBanGiaoNhanComponent } from './bien-ban-giao-nhan/bien-ban-giao-nha
 import { ThongTinBienBanGiaoNhanComponent } from './bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan/thong-tin-bien-ban-giao-nhan.component';
 import { BienBanGuiHangComponent } from './bien-ban-gui-hang/bien-ban-gui-hang.component';
 import { ThongTinBienBanGuiHangComponent } from './bien-ban-gui-hang/thong-tin-bien-ban-gui-hang/thong-tin-bien-ban-gui-hang.component';
-import { BienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/bien-ban-ket-thuc-nhap-kho.component';
-import { ThongTinBienBanKetThucNhapKhoComponent } from './bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho/thong-tin-bien-ban-ket-thuc-nhap-kho.component';
 import { ChucNangNhapKhoComponent } from './chuc-nang-nhap-kho/chuc-nang-nhap-kho.component';
 import { NhapKhoComponent } from './nhap-kho.component';
 import { PhieuNhapKhoTamGuiComponent } from './phieu-nhap-kho-tam-gui/phieu-nhap-kho-tam-gui.component';
@@ -37,8 +35,6 @@ import { ThemMoiPhieuNhapKhoComponent } from './quan-ly-phieu-nhap-kho/them-moi-
     ThongTinBienBanGiaoNhanComponent,
     BienBanGuiHangComponent,
     ThongTinBienBanGuiHangComponent,
-    BienBanKetThucNhapKhoComponent,
-    ThongTinBienBanKetThucNhapKhoComponent,
     PhieuNhapKhoTamGuiComponent,
     ThongTinPhieuNhapKhoTamGuiComponent,
   ],
@@ -56,7 +52,6 @@ import { ThemMoiPhieuNhapKhoComponent } from './quan-ly-phieu-nhap-kho/them-moi-
     BangKeNhapVatTuComponent,
     BienBanGiaoNhanComponent,
     BienBanGuiHangComponent,
-    BienBanKetThucNhapKhoComponent,
     PhieuNhapKhoTamGuiComponent,
   ]
 })

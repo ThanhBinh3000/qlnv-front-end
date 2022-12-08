@@ -46,7 +46,9 @@ export enum STATUS {
   DANG_THUC_HIEN = '44',
   DA_HOAN_THANH = '45',
   DA_NGHIEM_THU = '46',
-  DA_DUYET = '48'
+  CHO_DUYET_TBP_KTBQ = '47',
+  TU_CHOI_TBP_KTBQ = '48',
+  DAOTAO_CB_VU = '49'
 }
 
 export enum LoaiTaiLieu {
@@ -70,4 +72,10 @@ export enum TrangThaiHoatDong {
 export enum LOAI_DON_VI {
   MLK = "MLK",
   PB = "PB"
+}
+
+export enum LOAI_BIEN_BAN {
+  BB_KTRA_NGOAI_QUAN = "ngoaiQuan",
+  BB_KTRA_VAN_HANH = "vanHanh",
+  BB_KTRA_HOSO_KYTHUAT = "hoSoKyThuat",
 }

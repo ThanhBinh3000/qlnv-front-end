@@ -73,10 +73,12 @@
             <th rowspan="3">Trạng thái</th>
             <th rowspan="3" *ngIf="userService.isTongCuc()">Hành động</th>
           </tr>
+        </thead>
+        <tbody>
           <tr>
-            <th></th>
-            <th></th>
-            <th>
+            <td></td>
+            <td></td>
+            <td>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.qdPheDuyetKhbdg"
                   (input)="filterInTable('qdPheDuyetKhbdg',filterTable.qdPheDuyetKhbdg)" />
@@ -84,8 +86,8 @@
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
-            </th>
-            <th>
+            </td>
+            <td>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maThongBao"
                   (input)="filterInTable('maThongBao',filterTable.maThongBao)" />
@@ -93,8 +95,8 @@
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
-            </th>
-            <th>
+            </td>
+            <td>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.thoiGianToChucDauGiaTuNgay"
                   (input)="filterInTable('thoiGianToChucDauGiaTuNgay',filterTable.thoiGianToChucDauGiaTuNgay)" />
@@ -102,8 +104,8 @@
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
-            </th>
-            <th>
+            </td>
+            <td>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
                   (input)="filterInTable('trichYeu',filterTable.trichYeu)" />
@@ -111,14 +113,14 @@
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
-            </th>
-            <th>
+            </td>
+            <td>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.hinhThucDauGia"
                   (input)="filterInTable('hinhThucDauGia',filterTable.hinhThucDauGia)" />
               </nz-input-group>
-            </th>
-            <th>
+            </td>
+            <td>
               <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.hinhThucDauGia"
                   (input)="filterInTable('hinhThucDauGia',filterTable.hinhThucDauGia)" />
@@ -126,29 +128,28 @@
               <ng-template #suffixTemplateInfo>
                 <i nz-icon nzType="search"></i>
               </ng-template>
-            </th>
-            <th></th>
+            </td>
+            <td></td>
           </tr>
-        </thead>
-        <tbody>
           <tr *ngFor="let data of basicTable.data; let i = index">
             <td width="45px">
               <label nz-checkbox></label>
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-            <td>{{ data.soDxuat }}</td>
-            <td>{{ data.namKhoach }}</td>
-            <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.soQd }}</td>
+            <td>{{ data.maDeTai }}</td>
+            <td>{{ data.tenDeTai }}</td>
+            <td>{{ data.capDeTai }}</td>
+            <td>{{ data.tuNam }}</td>
+            <td>{{ data.denNam }}</td>
+            <td>{{ data.tenTrangThai }}</td>
             <td *ngIf="userService.isTongCuc()">
-              <a>
+              <a (click)="redirectToChiTiet(true,data.id)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a>
+              <a (click)="redirectToChiTiet(false,data.id)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a>
+              <a (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

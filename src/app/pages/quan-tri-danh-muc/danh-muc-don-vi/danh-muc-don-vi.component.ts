@@ -1,18 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { NzFormatEmitEvent, NzTreeComponent } from 'ng-zorro-antd/tree';
-import { DonviService } from 'src/app/services/donvi.service';
-import { ResponseData, OldResponseData } from 'src/app/interfaces/response';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { HelperService } from 'src/app/services/helper.service';
-import { NzTreeSelectComponent } from 'ng-zorro-antd/tree-select';
-import { LOAI_DON_VI, TrangThaiHoatDong } from 'src/app/constants/status';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NewDonViComponent } from './new-don-vi/new-don-vi.component';
-import { NgxSpinnerService } from 'ngx-spinner';
-
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {DonviService} from 'src/app/services/donvi.service';
+import {OldResponseData} from 'src/app/interfaces/response';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {HelperService} from 'src/app/services/helper.service';
+import {NzTreeSelectComponent} from 'ng-zorro-antd/tree-select';
+import {LOAI_DON_VI, TrangThaiHoatDong} from 'src/app/constants/status';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NewDonViComponent} from './new-don-vi/new-don-vi.component';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {UserLogin} from "../../../models/userlogin";
+import {UserService} from "../../../services/user.service";
 
 
 @Component({
@@ -36,6 +36,7 @@ export class DanhMucDonViComponent implements OnInit {
   detailDonVi: FormGroup;
   levelNode: number = 0;
   isEditData: boolean = false;
+  userInfo : UserLogin
 
   constructor(
     private router: Router,
@@ -45,6 +46,7 @@ export class DanhMucDonViComponent implements OnInit {
     private helperService: HelperService,
     private _modalService: NzModalService,
     private spinner: NgxSpinnerService,
+    public userService : UserService
   ) {
     this.detailDonVi = this.formBuilder.group({
       id: [''],
@@ -53,6 +55,7 @@ export class DanhMucDonViComponent implements OnInit {
       maDvi: [''],
       tenVietTat: [''],
       diaChi: [''],
+      capDvi: [''],
       fax: [''],
       sdt: [''],
       trangThai: [''],
@@ -63,6 +66,7 @@ export class DanhMucDonViComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
+    this.userInfo = this.userService.getUserLogin();
     await Promise.all([
       this.layTatCaDonViTheoTree()
     ]);
@@ -103,6 +107,7 @@ export class DanhMucDonViComponent implements OnInit {
   }
 
   showDetailDonVi(id?: any) {
+    this.spinner.show();
     if (id) {
       this.donviService.getDetail(id).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
@@ -115,18 +120,21 @@ export class DanhMucDonViComponent implements OnInit {
             tenVietTat: res.data.tenVietTat,
             tenDvi: res.data.tenDvi,
             maDvi: res.data.maDvi,
+            capDvi: res.data.capDvi,
             diaChi: res.data.diaChi,
             sdt: res.data.sdt,
             fax: res.data.fax,
             trangThai: res.data.trangThai == TrangThaiHoatDong.HOAT_DONG,
             type: res.data.type == LOAI_DON_VI.PB,
             ghiChu: res.data.ghiChu,
+            vaiTro: res.data.vaiTro,
           })
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
         }
       })
     }
+    this.spinner.hide();
   }
 
   showEdit(editData: boolean) {
@@ -141,7 +149,7 @@ export class DanhMucDonViComponent implements OnInit {
     let body = {
       ...this.detailDonVi.value,
       trangThai: this.detailDonVi.value.trangThai ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG,
-      type: this.detailDonVi.value.type ? LOAI_DON_VI.PB : null
+      type: this.detailDonVi.value.type ? LOAI_DON_VI.PB  : (this.detailDonVi.value.capDvi > 2 ? LOAI_DON_VI.MLK : null)
     };
     this._modalService.confirm({
       nzClosable: false,

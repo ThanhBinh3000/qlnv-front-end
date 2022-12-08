@@ -159,14 +159,6 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
         }
       };
     });
-    // this.dataTable.forEach(item => {
-    //   item.detail.children.forEach(ddNhap => {
-    //     ddNhap.listPhieuNhapKho.forEach(x => {
-    //       x.phieuKiemTraCl = ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
-    //     });
-    //   })
-    // });
-    console.log(this.dataTable);
   }
 
   async changePageIndex(event) {
@@ -220,7 +212,7 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.bienBanGuiHangService.delete(item.id).then((res) => {
+          this.bienBanGuiHangService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -241,7 +233,7 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
     });
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
@@ -368,6 +360,15 @@ export class BienBanGuiHangComponent extends BaseComponent implements OnInit {
 
   print() {
 
+  }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
   }
 
 }

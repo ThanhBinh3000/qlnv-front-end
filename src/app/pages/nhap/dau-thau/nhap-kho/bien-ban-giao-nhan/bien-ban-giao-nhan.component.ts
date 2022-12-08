@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -6,11 +7,13 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { BaseComponent } from 'src/app/components/base/base.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { BienBanKetThucNhapKho } from 'src/app/models/BienBanKetThucNhapKho';
 import { UserLogin } from 'src/app/models/userlogin';
-import { QuanLyBienBanGiaoNhanService } from 'src/app/services/quanLyBienBanGiaoNhan.service';
+import { QuanLyBienBanGiaoNhanService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyBienBanGiaoNhan.service';
+import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { QuanLyBienBanKetThucNhapKhoService } from 'src/app/services/quanLyBienBanKetThucNhapKho.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
@@ -20,8 +23,8 @@ import { Globals } from 'src/app/shared/globals';
   templateUrl: './bien-ban-giao-nhan.component.html',
   styleUrls: ['./bien-ban-giao-nhan.component.scss']
 })
-export class BienBanGiaoNhanComponent implements OnInit {
-  @Input() typeVthh: string;
+export class BienBanGiaoNhanComponent extends BaseComponent implements OnInit {
+  @Input() loaiVthh: string;
   searchFilter = {
     soBienBan: '',
     ngayHopDong: '',
@@ -37,7 +40,6 @@ export class BienBanGiaoNhanComponent implements OnInit {
   listNganKho: any[] = [];
   listNganLo: any[] = [];
 
-  loaiVthh: string;
   loaiStr: string;
   maVthh: string;
   idVthh: number;
@@ -77,7 +79,11 @@ export class BienBanGiaoNhanComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-  ) { }
+    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
+  ) {
+    super()
+    super.ngOnInit();
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -127,39 +133,26 @@ export class BienBanGiaoNhanComponent implements OnInit {
   }
 
   async search() {
-    let param =
-    {
-      "capDvis": '3',
-      "ngayHopDongTu": this.searchFilter.ngayHopDong && this.searchFilter.ngayHopDong.length > 1
-        ? dayjs(this.searchFilter.ngayHopDong[0]).format('YYYY-MM-DD')
-        : null,
-      "ngayHopDongDen": this.searchFilter.ngayHopDong && this.searchFilter.ngayHopDong.length > 0
-        ? dayjs(this.searchFilter.ngayHopDong[1]).format('YYYY-MM-DD')
-        : null,
-      "pageSize": this.pageSize,
-      "pageNumber": this.page,
-      "soBienBan": this.searchFilter.soBienBan,
-      "nam": this.searchFilter.nam,
-      "soHopDong": this.searchFilter.soHopDong,
-      "soQdNhap": this.searchFilter.soQuyetDinhNhap
-    }
-    let res = await this.quanLyBienBanBanGiaoNhanService.timKiem(param);
+    await this.spinner.show();
+    let body = {
+      trangThai: this.STATUS.BAN_HANH,
+      paggingReq: {
+        "limit": this.pageSize,
+        "page": this.page - 1
+      },
+      loaiVthh: this.loaiVthh
+    };
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-      this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
-      this.dataTable = [];
-      this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
+    await this.spinner.hide();
   }
+
 
   clearFilter() {
     this.searchFilter = {
@@ -187,7 +180,7 @@ export class BienBanGiaoNhanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyBienBanBanGiaoNhanService.deleteData(item.id).then((res) => {
+          this.quanLyBienBanBanGiaoNhanService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -291,7 +284,7 @@ export class BienBanGiaoNhanComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(id: number, isView?: boolean) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
@@ -318,7 +311,7 @@ export class BienBanGiaoNhanComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyBienBanBanGiaoNhanService.deleteMultiple({ ids: dataDelete });
+            let res = await this.quanLyBienBanBanGiaoNhanService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               this.allChecked = false;
@@ -359,7 +352,7 @@ export class BienBanGiaoNhanComponent implements OnInit {
           "soQdNhap": this.searchFilter.soQuyetDinhNhap
         };
         this.quanLyBienBanBanGiaoNhanService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-bien-ban-giao-nhan.xlsx'),
           );
@@ -407,6 +400,22 @@ export class BienBanGiaoNhanComponent implements OnInit {
       ngayKy: '',
       nam: '',
       soQuyetDinhNhap: ''
+    }
+  }
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+  expandSet2 = new Set<number>();
+  onExpandChange2(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet2.add(id);
+    } else {
+      this.expandSet2.delete(id);
     }
   }
 }

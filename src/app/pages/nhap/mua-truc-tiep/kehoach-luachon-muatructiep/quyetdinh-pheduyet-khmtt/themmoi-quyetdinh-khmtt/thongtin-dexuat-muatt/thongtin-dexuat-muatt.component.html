@@ -10,7 +10,7 @@
 <!--START NỘI DUNG-->
 <form nzLayout="vertical" nz-form [formGroup]="formData">
     <div nz-row [nzGutter]="[24]">
-        <div nz-col [nzSpan]=6>
+        <div nz-col [nzSpan]="6">
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
@@ -68,8 +68,8 @@
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfter="đ/kg">
-                        <nz-input-number formControlName="giaChuaThue" nz-input [nzMin]="1"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                        <nz-input-number formControlName="donGia" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
+                            [nzStep]="1" [nzSize]="'small'"
                             [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
                         </nz-input-number>
                     </nz-input-group>
@@ -79,31 +79,26 @@
         <div nz-col [nzSpan]="10">
             <nz-form-item>
                 <nz-form-label [nzNoColon]="true"></nz-form-label>
-                <input class="text-green" [ngModel]="convertTienTobangChu(formData.value.giaChuaThue)" nz-input readonly
+                <input class="text-green" [ngModel]="convertTienTobangChu(formData.value.donGia)" nz-input readonly
                     [ngModelOptions]="{standalone: true}" />
             </nz-form-item>
         </div>
         <div nz-col [nzSpan]="7">
             <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> %Thuế GTGT
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfter="%">
-                        <nz-input-number formControlName="thueGtgt" nz-input [nzMin]="1"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
-                        </nz-input-number>
-                    </nz-input-group>
+                <nz-form-label [nzNoColon]="true"> %Thuế GTGT </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                    <span class="text-green">{{formData.value.thueGtgt|number: '1.0-1'}}</span>
                 </nz-form-control>
             </nz-form-item>
         </div>
+
         <div nz-col [nzSpan]="7">
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Giá đã có thuế
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                     <nz-input-group nzAddOnAfter="đ/kg">
-                        <nz-input-number formControlName="giaCoThue" nz-input [nzMin]="1"
+                        <nz-input-number formControlName="donGiaVat" nz-input [nzMin]="1"
                             [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
                             [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
                         </nz-input-number>
@@ -114,7 +109,7 @@
         <div nz-col [nzSpan]="10">
             <nz-form-item>
                 <nz-form-label [nzNoColon]="true"></nz-form-label>
-                <input class="text-green" [ngModel]="convertTienTobangChu(formData.value.giaCoThue)" nz-input readonly
+                <input class="text-green" [ngModel]="convertTienTobangChu(formData.value.donGiaVat)" nz-input readonly
                     [ngModelOptions]="{standalone: true}" />
             </nz-form-item>
         </div>
@@ -174,13 +169,9 @@
         </div>
         <div nz-col [nzSpan]="12">
             <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL đề xuất mua trực tiếp </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfter="đ">
-                        <nz-input-number class="text-right" nz-input formControlName="tongSoLuong" [nzSize]="'small'"
-                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nzDisabled>
-                        </nz-input-number>
-                    </nz-input-group>
+                <nz-form-label [nzNoColon]="true"> Tổng SL đề xuất mua trực tiếp </nz-form-label>
+                <nz-form-control nz-col [nzSpan]="24">
+                    <span class="text-green">{{formData.value.tongSoLuong}} (tấn)</span>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -197,6 +188,7 @@
         </div>
     </div>
 </form>
+
 <!--END NỘI DUNG-->
 
 <!--START TABLE-->
@@ -205,7 +197,7 @@
         <div class="title-chi-tieu">
             <span>
             </span>
-            <span> Số lượng, Địa điểm </span>
+            <span> Số lượng địa điểm </span>
         </div>
     </div>
 </div>
@@ -217,9 +209,8 @@
                 <th>Chi cục</th>
                 <th>SL theo chỉ tiêu kế hoạch năm</th>
                 <th>SL theo kế hoạch năm đã được duyệt</th>
-                <th>SL đề xuất mua trực tiếp (Kg)</th>
-                <!--      <th >Đơn giá đã bao gồm VAT (đồng/kg)</th>-->
-                <th>Thành tiền (đồng)</th>
+                <th>Số lượng (Tấn)</th>
+                <th>Thành tiền (giá gói thầu) (đ)</th>
                 <th *ngIf="!isView"></th>
             </tr>
         </thead>
@@ -236,12 +227,12 @@
                     <tr *ngFor="let dtGoiThau of item.dataChild, let y = index">
                         <td></td>
                         <td></td>
-                        <td>{{dtGoiThau.soLuongCtieu | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td>{{dtGoiThau.soLuongKhDd | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td>{{dtGoiThau.soLuongDxmtt | number : '1.0-1' : 'vi_VN'}}</td>
-                        <td>{{dtGoiThau.soLuongDxmtt * dtGoiThau.donGiaVat * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
+                        <td>{{dtGoiThau.soLuongChiTieu}}</td>
+                        <td>{{dtGoiThau.soLuongKhDd}}</td>
+                        <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+                        <td>{{dtGoiThau.thanhTien | number: '1.0-1' : 'vi_VN'}}</td>
                         <td *ngIf="!isView">
-                            <a (click)="themMoiGoiThau(dtGoiThau,dtGoiThau.idx)">
+                            <a (click)="themMoiSoLuongDiaDiem(dtGoiThau,dtGoiThau.idx)">
                                 <i class="fa fa-pencil"></i>
                             </a>
                         </td>
