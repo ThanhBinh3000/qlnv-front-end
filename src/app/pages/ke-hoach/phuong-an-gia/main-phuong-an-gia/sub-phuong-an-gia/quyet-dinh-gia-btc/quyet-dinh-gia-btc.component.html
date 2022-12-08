@@ -85,10 +85,10 @@
                 [nzIndeterminate]="indeterminate"></label>
             </th>
             <th class="text-center" style="width: 2%;">STT</th>
+            <th class="text-center" style="width: 9%;">Năm kế hoạch</th>
             <th class="text-center" style="width: 9%;">Số quyết định</th>
             <th class="text-center" style="width: 9%;">Ngày ký</th>
             <th class="text-center" style="width: 25%;">Trích yếu</th>
-            <th class="text-center" style="width: 9%;">Năm kế hoạch</th>
             <th class="text-center" style="width: 8%;">Loại giá</th>
             <th class="text-center" style="width: 8%;">Loại hàng hóa</th>
             <th class="text-center" style="width: 9%;">Trạng thái</th>
@@ -97,6 +97,12 @@
           <tr class="header-row search">
             <th></th>
             <th></th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
+                       (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small" />
+              </nz-input-group>
+            </th>
             <th>
               <nz-input-group >
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
@@ -118,12 +124,7 @@
                   (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
               </nz-input-group>
             </th>
-            <th>
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
-                  (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small" />
-              </nz-input-group>
-            </th>
+
             <th>
               <nz-input-group >
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh"
@@ -152,10 +153,10 @@
                 [nzDisabled]="data.trangThai != '00'"></label>
             </th>
             <td class="text-center">{{(page - 1) * pageSize + idx + 1}}</td>
+            <td>{{ data.namKeHoach }}</td>
             <td>{{ data.soQd }}</td>
             <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
-            <td>{{ data.namKeHoach }}</td>
             <td>{{ data.tenLoaiGia }}</td>
             <td>{{ data.tenLoaiVthh }}</td>
             <td>{{ data.tenTrangThai }}</td>

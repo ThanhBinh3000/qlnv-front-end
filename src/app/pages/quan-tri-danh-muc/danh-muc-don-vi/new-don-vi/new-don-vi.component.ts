@@ -79,7 +79,7 @@ export class NewDonViComponent implements OnInit {
     let body = this.formDonVi.value;
     body.trangThai = this.formDonVi.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
     if (this.levelNode == 2) {
-      body.type = this.formDonVi.get('type').value ? LOAI_DON_VI.PB : null;
+      body.type = this.formDonVi.get('type').value ? LOAI_DON_VI.PB : LOAI_DON_VI.MLK;
     }
     if (this.levelNode > 2) {
       body.type = LOAI_DON_VI.PB

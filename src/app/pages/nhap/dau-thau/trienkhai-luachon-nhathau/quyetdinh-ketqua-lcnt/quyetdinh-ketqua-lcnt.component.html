@@ -170,8 +170,7 @@
                 (click)="redirectToChiTiet(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_QDKQLCNT_SUA')"
-                (click)="redirectToChiTiet(data.id)">
+              <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectToChiTiet(data.id)">
                 <i class="fa fa-pencil"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_TCKHMTT_LT_QDKQCG_XOA')"

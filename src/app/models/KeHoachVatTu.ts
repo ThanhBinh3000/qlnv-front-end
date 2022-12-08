@@ -1,4 +1,5 @@
-import { ItemDetail } from './itemDetail';
+import {ItemDetail} from './itemDetail';
+
 export class KeHoachVatTu {
   id: number;
   donViId: number;
@@ -84,5 +85,40 @@ export class VatTuThietBi {
 
     this.tdcCacNamTruoc = cacNamTruoc;
     this.tdcCacNamTruoc[0] = new CacNamTruoc();
+  }
+}
+
+export class KeHoachVatTuCustom {
+  id: number;
+  sttDonVi: number;
+  donViId: number;
+  maDvi: string;
+  tenDvi: string;
+  dsVatTu: Array<VatTuCustom> = new Array<VatTuCustom>();
+
+  constructor(dsVatTu: Array<VatTuCustom> = []) {
+    this.dsVatTu = dsVatTu;
+    this.dsVatTu[0] = new VatTuCustom();
+  }
+}
+
+export class VatTuCustom {
+  id: number;
+  maHang: string;
+  kyHieu: string;
+  maVatTu: string;
+  maVatTuCha: string;
+  soLuongChuyenSang: number;
+  soLuongNhap: number;
+  donViTinh: string;
+  loai: string;
+  stt: number;
+  tenVatTu: string;
+  tenVatTuCha: string;
+  vatTuChaId: number;
+  vatTuId: number;
+  isEdit: boolean = false;
+
+  constructor() {
   }
 }

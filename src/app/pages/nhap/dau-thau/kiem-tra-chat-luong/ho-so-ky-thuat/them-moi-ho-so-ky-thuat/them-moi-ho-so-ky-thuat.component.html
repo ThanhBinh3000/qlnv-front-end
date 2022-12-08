@@ -1,37 +1,38 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
-    <div class="btn-group">
-        <a type="button" class="btn btn-sub">
-            <i class="fa fa-arrow-left"></i>
-            <span>Quay lại</span>
-        </a>
-        <button type="button" class="btn btn-sub">
-            <i class="icon htvbdh_tcdt_print"></i>
-            <span>In</span>
-        </button>
-        <button type="button" class="btn btn-sub" *ngIf="!isDisableField() && !isView">
-            <i class="icon htvbdh_tcdt_guiduyet"></i>
-            <span>Lưu và gửi duyệt</span>
-        </button>
-        <button type="button" class="btn btn-sub" *ngIf="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC
-        && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_VT_HSKT_DUYET')" (click)="pheDuyet()">
-            <i class="icon htvbdh_tcdt_pheduyet"></i>
-            <span>Duyệt</span>
-        </button>
-        <a type="button" class="btn btn-sub"
-            *ngIf="detail.trangThai == globals.prop.NHAP_CHO_DUYET_TP || detail.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CHI_CUC"
-            (click)="tuChoi()">
-            <i class="icon htvbdh_tcdt_tuchoi do"></i>
-            <span>Từ chối</span>
-        </a>
-        <button type="button" class="btn btn-sub" *ngIf="!isDisableField() && !isView">
-            <i class="icon  htvbdh_tcdt_save"></i>
-            <span>Lưu</span>
-        </button>
-    </div>
-</nz-affix>
+<ng-container *ngIf="!isBienBan">
+    <nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+        <div class="btn-group">
+            <button type="button" class="btn btn-sub" (click)="quayLai()">
+                <i class="fa fa-arrow-left"></i>
+                <span>Quay lại</span>
+            </button>
 
-<div class="bg-trang">
-    <nz-card nzTitle="" class="flex-card p-lr16">
+            <button type="button" class="btn btn-sub do"
+                *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC"
+                (click)="tuChoi()">
+                <i class="icon htvbdh_tcdt_tuchoi do"></i>
+                <span>Từ chối</span>
+            </button>
+            <button class="btn btn-sub xanh-nhat"
+                *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC"
+                (click)="pheDuyet()">
+                <i class="icon htvbdh_tcdt_pheduyet "></i>
+                <span>Duyệt</span>
+            </button>
+            <button type="button" class="btn btn-sub xanh-nhat"
+                *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) "
+                (click)="save(true)">
+                <i class="icon htvbdh_tcdt_guiduyet"></i>
+                <span>Lưu và gửi duyệt</span>
+            </button>
+            <button type="button" class="btn btn-sub xanh"
+                *ngIf="( formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) "
+                (click)="save(false)">
+                <i class="icon  htvbdh_tcdt_save"></i>
+                <span>Lưu</span>
+            </button>
+        </div>
+    </nz-affix>
+    <div class="bg-trang">
         <div class="header header-green-background">
             <div class="header-text">
                 <div class="title-chi-tieu">
@@ -59,14 +60,25 @@
             </div>
             <form nzLayout="vertical" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="[24]">
+                    <div nz-col nzSpan="2">
+                        <nz-form-item class="form-item">
+                            <nz-form-label [nzNoColon]="true" nzRequired>
+                                Năm
+                            </nz-form-label>
+                            <nz-form-control [nzErrorTip]="error">
+                                <nz-select formControlName="nam" nzDisabled>
+                                    <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                                    </nz-option>
+                                </nz-select>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
                     <div nz-col [nzSpan]="4">
                         <nz-form-item>
                             <nz-form-label nzRequired [nzNoColon]="true">Số hồ sơ kỹ thuật</nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group>
-                                    <nz-input-number formControlName="id" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                                        [nzSize]="'small'" nz-input nzDisabled>
-                                    </nz-input-number>
+                                    <input nz-input readonly formControlName="soHoSoKyThuat" />
                                 </nz-input-group>
                             </nz-form-control>
                         </nz-form-item>
@@ -76,10 +88,9 @@
                             <nz-form-label nzRequired [nzNoColon]="true"> Số biên bàn lấy mẫu/Bàn giao mẫu
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
-                                <nz-select formControlName="soBienBan">
-                                    <nz-option [nzValue]="" [nzLabel]="">
-                                    </nz-option>
-                                </nz-select>
+                                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogBbLayMau()">
+                                    <input [readonly]="true" nz-input formControlName="soBbLayMau" readonly />
+                                </nz-input-group>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -88,7 +99,7 @@
                             <nz-form-label nzRequired [nzNoColon]="true"> Số QĐ giao nhiệm vụ nhập hàng
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
-                                <input nz-input readonly formControlName="soQdNv" />
+                                <input nz-input readonly formControlName="soQdGiaoNvNh" />
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -118,16 +129,6 @@
                             </nz-form-control>
                         </nz-form-item>
                     </div>
-                    <div nz-col [nzSpan]="2">
-                        <nz-form-item>
-                            <nz-form-label nzRequired [nzNoColon]="true">Trạng thái</nz-form-label>
-                            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                                <nz-select formControlName="tenTrangThai" [nzDisabled]="true">
-                                    <nz-option [nzValue]="" [nzLabel]=""></nz-option>
-                                </nz-select>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
                 </div>
             </form>
         </nz-card>
@@ -141,7 +142,7 @@
                 </div>
             </div>
         </div>
-        <nz-table [nzData]="" class="nowrap pd-10" nzBordered>
+        <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
             <thead>
                 <tr>
                     <th width="50px" class="text-center">STT</th>
@@ -187,49 +188,27 @@
                 </tr>
             </thead>
             <tbody>
-
-                <ng-container>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td class="text-right">
-                            <a>
-                                <i class="icon htvbdh_tcdt_import"></i>
-                            </a>
-                            <a>
-                                <i class="fa fa-pencil"></i>
-                            </a>
-
-                            <a>
-                                <i class="fa fa-trash-o do"></i>
-                            </a>
-
-
-                        </td>
-                    </tr>
-                </ng-container>
+                <tr *ngFor="let item of dataTable">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right">
+                        <a>
+                            <i class="icon htvbdh_tcdt_import"></i>
+                        </a>
+                        <a>
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                        <a>
+                            <i class="fa fa-trash-o do"></i>
+                        </a>
+                    </td>
+                </tr>
             </tbody>
         </nz-table>
-        <div class="tab-content tab-menu" id="myTabContent">
-            <div class="tab-pane fade show active justify-content-between">
-                <div class="trai">
-                </div>
-                <div class="canphai">
-                    <!-- begin phân trang  -->
-                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
-                        nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate">
-                        <ng-template #rangeTemplate let-range="range" let-total>
-                            {{ range[0] }}-{{ range[1] }} of {{ total }} items
-                        </ng-template>
-                    </nz-pagination>
-                    <!-- end phân trang  -->
-                </div>
-            </div>
-        </div>
 
         <div class="header header-green-background mg-t-16">
             <div class="header-text">
@@ -239,7 +218,7 @@
                 </div>
             </div>
         </div>
-        <nz-table [nzData]="" class="nowrap pd-10" nzBordered>
+        <nz-table [nzData]="dataTableBienBan" class="nowrap pd-10" nzBordered>
             <thead>
                 <tr>
                     <th width="50px" class="text-center">STT</th>
@@ -251,44 +230,26 @@
 
             </thead>
             <tbody>
-
-                <ng-container>
-                    <tr>
-                        <td></td>
-                        <td>Tên biên bản</td>
-                        <td>Dự thảo</td>
-                        <td>File đính kèm</td>
-                        <td class="text-right">
-                            <a>
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                            <a>
-                                <i class="fa fa-trash-o do"></i>
-                            </a>
-                        </td>
-                    </tr>
-                </ng-container>
+                <tr *ngFor="let item of dataTableBienBan, let i = index ">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item.tenBb }}</td>
+                    <td>{{ item.tenTrangThai }}</td>
+                    <td>{{ item.fileDinhKems }}</td>
+                    <td class="text-center">
+                        <a *ngIf="formData.value.id > 0" (click)="redirectToBienBan(false,item)">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </td>
+                </tr>
             </tbody>
         </nz-table>
-        <div class="tab-content tab-menu" id="myTabContent">
-            <div class="tab-pane fade show active justify-content-between">
-                <div class="trai">
-                </div>
-                <div class="canphai">
-                    <!-- begin phân trang  -->
-                    <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord"
-                        nzShowSizeChanger [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate">
-                        <ng-template #rangeTemplate let-range="range" let-total>
-                            {{ range[0] }}-{{ range[1] }} of {{ total }} items
-                        </ng-template>
-                    </nz-pagination>
-                    <!-- end phân trang  -->
-                </div>
-            </div>
-        </div>
-    </nz-card>
-
-    <ng-template #error let-control>
-        <app-template-error #error [control]="control"></app-template-error>
-    </ng-template>
-</div>
+        <ng-template #error let-control>
+            <app-template-error #error [control]="control"></app-template-error>
+        </ng-template>
+    </div>
+</ng-container>
+<ng-container *ngIf="isBienBan">
+    <app-thong-tin-ho-so-ky-thuat [id]="idBienBan" [loai]="loaiBienBan" [idHoSoKyThuat]="id"
+        (showListEvent)="backMain()" [isView]="isView" [loaiVthh]="loaiVthh">
+    </app-thong-tin-ho-so-ky-thuat>
+</ng-container>

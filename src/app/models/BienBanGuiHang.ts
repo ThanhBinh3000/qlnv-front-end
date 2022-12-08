@@ -42,4 +42,5 @@ export class ChiTiet {
     loaiBen: string;
     stt: string;
     idVirtual: number;
+    loaiDaiDien: string;
 }

@@ -14,7 +14,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
-import { HoSoKyThuatService } from 'src/app/services/hoSoKyThuat.service';
+import { HoSoKyThuatService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoKyThuat.service';
 import { QuanLyBienBanBanGiaoService } from 'src/app/services/quanLyBienBanBanGiao.service';
 import { QuanLyNghiemThuKeLotService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
@@ -286,7 +286,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
 
   async loadChiTiet(id) {
     if (id > 0) {
-      let res = await this.hoSoKyThuatService.loadChiTiet(id);
+      let res = await this.hoSoKyThuatService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
 
@@ -334,7 +334,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
             trangThai: '04',
           };
           let res =
-            await this.hoSoKyThuatService.updateStatus(
+            await this.hoSoKyThuatService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -371,7 +371,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
             trangThai: '01',
           };
           let res =
-            await this.hoSoKyThuatService.updateStatus(
+            await this.hoSoKyThuatService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -408,7 +408,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
             trangThai: '02',
           };
           let res =
-            await this.hoSoKyThuatService.updateStatus(
+            await this.hoSoKyThuatService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -447,7 +447,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
             trangThai: '03',
           };
           let res =
-            await this.hoSoKyThuatService.updateStatus(
+            await this.hoSoKyThuatService.approve(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -515,7 +515,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
         "vbtlCanBoSung": null
       }
       if (this.id > 0) {
-        let res = await this.hoSoKyThuatService.sua(
+        let res = await this.hoSoKyThuatService.update(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {
@@ -530,7 +530,7 @@ export class ThongTinHoSoKyThuatComponent implements OnInit {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
-        let res = await this.hoSoKyThuatService.them(
+        let res = await this.hoSoKyThuatService.create(
           body,
         );
         if (res.msg == MESSAGE.SUCCESS) {

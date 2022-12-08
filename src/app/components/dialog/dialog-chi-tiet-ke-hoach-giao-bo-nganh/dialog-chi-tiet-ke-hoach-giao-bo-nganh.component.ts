@@ -40,6 +40,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
   dsBoNganh: any[];
   dsHangHoa: any[] = [];
   dataEdit: any;
+  dataToanBn: any;
   radioData: any;
   radioValue: any;
   errorInputRequired: string = 'Dữ liệu không được để trống.';
@@ -140,6 +141,7 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     }
     if (this.validateData()) {
       this._modalRef.close(this.keHoach);
+      console.log(this.keHoach);
     }
   }
 
@@ -150,13 +152,13 @@ export class DialogChiTietKeHoachGiaoBoNganhComponent implements OnInit {
     } else {
       this.errorBn = false;
     }
-
-    if (!this.keHoach.tongTien) {
-      this.errorTt = true;
-      return false;
-    } else {
-      this.errorTt = false;
-    }
+    //
+    // if (!this.keHoach.tongTien) {
+    //   this.errorTt = true;
+    //   return false;
+    // } else {
+    //   this.errorTt = false;
+    // }
     return true;
   }
 

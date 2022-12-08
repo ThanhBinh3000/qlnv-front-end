@@ -15,8 +15,7 @@
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
       <span>Từ chối</span>
     </button>
-    <button class="btn btn-sub xanh-nhat"
-      *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBLMBGM_DUYET')"
+    <button class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC"
       (click)="pheDuyet()">
       <i class="icon htvbdh_tcdt_pheduyet "></i>
       <span>Duyệt</span>
@@ -248,7 +247,7 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Số biên bản gửi hàng</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="soBbNhapDayKho" readonly />
+              <input nz-input formControlName="soBbGuiHang" readonly />
             </nz-form-control>
           </nz-form-item>
         </div>

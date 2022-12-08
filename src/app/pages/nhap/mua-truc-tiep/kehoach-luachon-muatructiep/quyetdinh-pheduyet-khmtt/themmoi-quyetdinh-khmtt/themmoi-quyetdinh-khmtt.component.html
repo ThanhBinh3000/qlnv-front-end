@@ -5,14 +5,13 @@
       <span>Quay lại</span>
     </button>
     <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && formData.value.loaiVthh.startsWith('02') && isDetailPermission()"
+      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && isDetailPermission()"
       type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO && !formData.value.loaiVthh.startsWith('02'))  && userService.isTongCuc()"
-      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
+    <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO )  && userService.isTongCuc()" type="button"
+      class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
@@ -51,20 +50,11 @@
     nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
-    <div class="header header-green-background mg-t-10">
-      <div class="header-text">
-        <div class="title-chi-tieu">
-          <span>
-          </span>
-          <span> THÔNG TIN QUYẾT ĐỊNH </span>
-        </div>
-      </div>
-    </div>
     <form nz-form nzLayout="vertical" [formGroup]="formData">
       <div nz-row [nzGutter]="[20]">
         <div nz-col nzSpan="2">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
+            <nz-form-label [nzNoColon]="true"> Năm kế hoạch
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
               <nz-select formControlName="namKh" nzAllowClear (ngModelChange)="listDsTongHopToTrinh()"
@@ -79,8 +69,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Số quyết định </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="/{{maQd}}">
-                <nz-input-number formControlName="soQdPduyet" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                  [nzSize]="'small'"
+                <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'"
                   [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
                 </nz-input-number>
               </nz-input-group>
@@ -89,9 +78,9 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký quyết định </nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Ngày ký quyết định </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"
+              <nz-date-picker formControlName="ngayQd" nzFormat="dd/MM/yyyy"
                 [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
               </nz-date-picker>
             </nz-form-control>
@@ -99,7 +88,7 @@
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
+            <nz-form-label [nzNoColon]="true"> Ngày hiệu lực </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy"
                 [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
@@ -111,11 +100,11 @@
           <nz-radio-group
             [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"
             nzSize="small" class="rdo-input" formControlName="phanLoai">
-            <nz-form-item>
+            <nz-form-item *ngIf="loaiVthh != '02'">
               <label nz-radio nzValue="TH">Chọn mã tổng hợp</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTh()">
-                  <input [readonly]="true" nz-input formControlName="idThop" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="idThHdr" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -123,7 +112,7 @@
               <label nz-radio nzValue="TTr">Chọn số đề xuất/ tờ trình</label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogTr()">
-                  <input [readonly]="true" nz-input formControlName="soDxuat" readonly="true" />
+                  <input [readonly]="true" nz-input formControlName="soTrHdr" readonly="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -135,8 +124,8 @@
               Trích yếu
             </nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="trichYeu"
-                [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''" />
+              <textarea rows="3" nz-input formControlName="trichYeu"
+                [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -150,6 +139,7 @@
             </div>
           </nz-form-item>
         </div>
+
       </div>
     </form>
   </nz-card>
@@ -157,20 +147,16 @@
 
   <!--  Start THÔNG TIN QUYẾT ĐỊNH PHÊ DUYỆT KHLCNT-->
   <nz-card class="mg-t-16 flex-card p-lr16">
-    <ng-container *ngIf="!formData.value.loaiVthh.startsWith('02')">
-      <div class="header header-green-background mg-t-10">
-        <div class="header-text">
-          <div class="title-chi-tieu">
-            <span>
-            </span>
-            <span> THÔNG TIN ĐỀ XUẤT CỦA CÁC CỤC DTNN KV </span>
-          </div>
+    <div class="header header-green-background mg-t-10">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span>
+          </span>
+          <span> THÔNG TIN ĐỀ XUẤT CỦA CÁC CỤC DTNN KV </span>
         </div>
       </div>
-      <form nz-form nzLayout="vertical" [formGroup]="formData">
-      </form>
-    </ng-container>
-    <ng-container *ngIf="!formData.value.loaiVthh.startsWith('02')">
+    </div>
+    <ng-container>
       <nz-card class="mg-t-10 flex-card p-lr16 card-table">
         <nz-table class="pd-10" nzBordered [nzData]="danhsachDx" [nzFrontPagination]="false" [nzShowPagination]="false">
           <thead>
@@ -192,34 +178,34 @@
               <td>{{ data.tenDvi }}</td>
               <td>{{ data.diaChiDvi }}</td>
               <td>{{ data.soDxuat }}</td>
-              <td>{{ data.ngayKy == null ? data.ngayPduyet: data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.tenDuAn }}</td>
               <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
-              <td>{{ data.tongSoLuong * data.giaCoThue * 1000 | number: '1.0-1' }}</td>
+              <td>{{ data.tongTienVat| number: '1.0-1' }}</td>
             </tr>
           </tbody>
         </nz-table>
       </nz-card>
-      <div nz-row [nzGutter]="[20]">
-        <div nz-col [nzSpan]="12">
-          <nz-card class="mg-t-10 flex-card p-lr16 ">
-            <app-thongtin-dexuat-muatt [title]="'Nội dung đề xuất của Cục DTNN KV'" [dataInput]="dataInputCache"
-              [isView]="true" [isCache]="true" [isTongHop]="isTongHop">
-            </app-thongtin-dexuat-muatt>
-          </nz-card>
-        </div>
-        <div nz-col [nzSpan]="12">
-          <nz-card class="mg-t-10 flex-card p-lr16 ">
-            <app-thongtin-dexuat-muatt [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput"
-              [isView]="formData.value.trangThai == STATUS.BAN_HANH" [isTongHop]="isTongHop"
-              (soLuongChange)="setNewSoLuong($event)">
-            </app-thongtin-dexuat-muatt>
-          </nz-card>
-        </div>
-      </div>
     </ng-container>
   </nz-card>
+  <div nz-row [nzGutter]="[20]">
+    <div nz-col [nzSpan]="12">
+      <nz-card class="mg-t-10 flex-card p-lr16 ">
+        <app-thongtin-dexuat-muatt [title]="'Nội dung đề xuất của Cục DTNN KV'" [dataInput]="dataInputCache"
+          [isView]="true" [isCache]="true" [isTongHop]="isTongHop">
+        </app-thongtin-dexuat-muatt>
+      </nz-card>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <nz-card class="mg-t-10 flex-card p-lr16 ">
+        <app-thongtin-dexuat-muatt [title]="'Quyết định của TCDTNN'" [dataInput]="dataInput"
+          [isView]="formData.value.trangThai == STATUS.BAN_HANH" [isTongHop]="isTongHop"
+          (soLuongChange)="setNewSoLuong($event)">
+        </app-thongtin-dexuat-muatt>
+      </nz-card>
+    </div>
+  </div>
   <!--  END THÔNG TIN QUYẾT ĐỊNH PHÊ DUYỆT KHLCNT-->
 </div>
 <ng-template #error let-control>

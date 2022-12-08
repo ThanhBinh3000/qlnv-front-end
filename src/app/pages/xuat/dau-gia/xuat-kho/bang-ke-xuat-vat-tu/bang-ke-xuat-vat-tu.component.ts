@@ -8,7 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { QuanLyBangKeVatTuService } from 'src/app/services/quanLyBangKeVatTu.service';
+import { QuanLyBangKeVatTuService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyBangKeVatTu.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { FormGroup, FormBuilder } from '@angular/forms';
@@ -130,7 +130,7 @@ export class BangKeXuatVatTuComponent implements OnInit {
       "soBangKe": this.formSearch.value.soBangKe,
       "ngayTaoBangKeTu": this.formSearch.value.ngayTaoBangKe && this.formSearch.value.ngayTaoBangKe.length > 0 ? dayjs(this.formSearch.value.ngayTaoBangKe[0]).format('YYYY-MM-DD') : null,
     }
-    let res = await this.quanLyBangKeVatTuService.timKiem(param);
+    let res = await this.quanLyBangKeVatTuService.search(param);
     console.log(res.data.content);
 
     if (res.msg == MESSAGE.SUCCESS) {
@@ -178,7 +178,7 @@ export class BangKeXuatVatTuComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyBangKeVatTuService.xoa(item.id).then((res) => {
+          this.quanLyBangKeVatTuService.delete(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -252,7 +252,7 @@ export class BangKeXuatVatTuComponent implements OnInit {
           "ngayTaoBangKeTu": this.formSearch.value.ngayTaoBangKe && this.formSearch.value.ngayTaoBangKe.length > 0 ? dayjs(this.formSearch.value.ngayTaoBangKe[0]).format('YYYY-MM-DD') : null,
         }
         this.quanLyBangKeVatTuService
-          .exportList(body)
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-bang-ke-vat-tu.xlsx'),
           );
@@ -288,7 +288,7 @@ export class BangKeXuatVatTuComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyBangKeVatTuService.deleteMultiple({ ids: dataDelete });
+            let res = await this.quanLyBangKeVatTuService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

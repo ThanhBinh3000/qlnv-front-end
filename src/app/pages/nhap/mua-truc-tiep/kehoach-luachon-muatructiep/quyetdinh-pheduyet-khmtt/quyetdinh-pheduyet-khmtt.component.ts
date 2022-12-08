@@ -9,15 +9,13 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import { LEVEL, LIST_VAT_TU_HANG_HOA, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { QuyetDinhPheDuyetKeHoachLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai, convertVthhToId } from 'src/app/shared/commonFunction';
+import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
-import { ItemDetail } from 'src/app/models/itemDetail';
 import { STATUS } from 'src/app/constants/status';
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 
@@ -31,23 +29,19 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
   @Input() loaiVthh: string;
   yearNow = dayjs().get('year');
   searchFilter = {
-    namKh: dayjs().get('year'),
-    soQdPduyet: null,
-    trichYeu: null,
-    ngayKy: null,
+    soQd: null,
     loaiVthh: null,
-    ngayKyQdTu: null,
-    ngayKyQdDen: null,
-    soGthau: null,
-    tongTien: null,
-    ngayHluc: null,
+    ngayQd: null,
+    namKh: dayjs().get('year'),
+    trichYeu: null,
+
   };
   filterTable: any = {
-    soQdPduyet: '',
-    ngayKy: '',
+    soQd: '',
+    ngayQd: '',
     trichYeu: '',
-    soDxuat: '',
-    idThop: '',
+    soTrHdr: '',
+    idThHdr: '',
     namKh: '',
     pthucMuatt: '',
     tenTrangThai: '',
@@ -60,14 +54,10 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
   listNam: any[] = [];
   startValue: Date | null = null;
   endValue: Date | null = null;
-  //phê duyệt
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   dataTable: any[] = [];
-  //chưa phê quyệt
-  totalRecordNo: number = 0;
-  dataTableNo: any[] = [];
 
   tabSelected: string = 'quyet-dinh';
   isVisibleChangeTab$ = new Subject();
@@ -79,8 +69,6 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
 
   lastBreadcrumb: string;
   userInfo: UserLogin;
-
-  // selectedTab: string = 'phe-duyet';
 
   constructor(
     private router: Router,
@@ -97,7 +85,7 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XEM")) {
+      if (!this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_QDLCNT") || !this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_QDLCNT_XEM")) {
         window.location.href = '/error/401'
       }
       this.userInfo = this.userService.getUserLogin();
@@ -122,7 +110,7 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
 
 
   insert() {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_QDLCNT_THEM")) {
       return;
     }
     this.isDetail = true;
@@ -130,7 +118,7 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
   }
 
   detail(data?) {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_SUA")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_QDLCNT_SUA")) {
       return;
     }
     this.isDetail = true;
@@ -138,7 +126,7 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
   }
 
   delete(data?) {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_QDLCNT_XOA")) {
       return;
     }
     this.modal.confirm({
@@ -178,11 +166,10 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
-    this.searchFilter.soQdPduyet = null;
+    this.searchFilter.soQd = null;
     this.searchFilter.trichYeu = null;
-    this.searchFilter.ngayKy = null;
-    this.searchFilter.soGthau = null;
-    this.searchFilter.tongTien = null;
+    this.searchFilter.ngayQd = null;
+
     this.search();
 
   }
@@ -190,28 +177,22 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
   async search() {
     this.dataTable = [];
     let body = {
-      ngayKyQdTu: this.searchFilter.ngayKy
-        ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
+      ngayQdTu: this.searchFilter.ngayQd
+        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
         : null,
-      ngayKyQdDen: this.searchFilter.ngayKy
-        ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
+      ngayQdDen: this.searchFilter.ngayQd
+        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
         : null,
-      ngayCgiaTu: this.searchFilter.ngayHluc
-        ? dayjs(this.searchFilter.ngayHluc[0]).format('YYYY-MM-DD')
-        : null,
-      ngayCgiadDen: this.searchFilter.ngayHluc
-        ? dayjs(this.searchFilter.ngayHluc[1]).format('YYYY-MM-DD')
-        : null,
-      loaiVthh: this.searchFilter.loaiVthh,
+      loaiVthh: this.loaiVthh,
       namKh: this.searchFilter.namKh,
       trichYeu: this.searchFilter.trichYeu,
-      soQdPduyet: this.searchFilter.soQdPduyet,
+      soQd: this.searchFilter.soQd,
       lastest: 0,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      // maDvi : this.userInfo.MA_DVI
+      maDvi: this.userInfo.MA_DVI
     };
     let res = await this.quyetDinhPheDuyetKeHoachMTTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -268,23 +249,24 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
   }
 
   exportData() {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_EXP")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_QDLCNT_EXP")) {
       return;
     }
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
         let body = {
-          ngayKyQdTu: this.searchFilter.ngayKy
-            ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
+          ngayQdTu: this.searchFilter.ngayQd
+            ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
             : null,
-          ngayKyQdDen: this.searchFilter.ngayKy
-            ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
+          ngayQdDen: this.searchFilter.ngayQd
+            ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
             : null,
           loaiVthh: this.searchFilter.loaiVthh,
           namKh: this.searchFilter.namKh,
           trichYeu: this.searchFilter.trichYeu,
-          soQdPduyet: this.searchFilter.soQdPduyet,
+          soQd: this.searchFilter.soQd,
+
           lastest: 0,
         };
         this.quyetDinhPheDuyetKeHoachMTTService
@@ -304,7 +286,7 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
   }
 
   deleteSelect() {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_XOA")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_QDLCNT_XOA")) {
       return;
     }
     let dataDelete = [];
@@ -368,11 +350,11 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQdPduyet: '',
-      ngayKy: '',
+      soQd: '',
+      ngayQd: '',
       trichYeu: '',
-      soDxuat: '',
-      idThop: '',
+      soTrHdr: '',
+      idThHdr: '',
       namKh: '',
       pthucMuatt: '',
       tenTrangThai: '',
