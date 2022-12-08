@@ -14,53 +14,21 @@ import * as uuid from 'uuid';
 export class ItemData {
     id: any;
     stt: string;
-    donVi: string;
-    dtTsoNguoiLv: string;
-    dtTongQlPcap: number;
-    dtQlPcapTso: number;
-    dtQlPcapLuongBac: number;
-    dtQlPcapPcapLuong: number;
-    dtQlPcapDgopLuong: number;
-    dtQlPcapHdLd: number;
-    dtKphiNsnn: number;
-    dtKphiSnDvu: number;
-    dtKphiPhiDlai: number;
-    dtKphiHphap: number;
-    uocThTsoNguoiLv: number;
-    uocThTsoBcTdiem: number;
-    uocThTsoVcCc: number;
-    uocThTongQlPcap: number;
-    uocThQlPcapTso: number;
-    uocThQlPcapLuongBac: number;
-    uocThQlPcapPcapLuong: number;
-    uocThQlPcapDgopLuong: number;
-    uocThQlPcapHdLd: number;
-    uocThKphiNsnn: number;
-    uocThKphiSnDvu: number;
-    uocThKphiPhiDlai: number;
-    uocThKphiHphap: number;
-    namKhTsoNguoiLv: number;
-    namKhTongQlPcap: number;
-    namKhQlPcapTso: number;
-    namKhQlPcapLuongBac: number;
-    namKhQlPcapPcapLuong: number;
-    namKhQlPcapDgopLuong: number;
-    namKhQlPcapHdLd: number;
-    namKhKphiNsnn: number;
-    namKhKphiSnDvu: number;
-    namKhKphiPhiDlai: number;
-    namKhKphiHphap: number;
-    tddtTsoNguoiLv: number;
-    tddtTongQlPcap: number;
-    tddtQlPcapTso: number;
-    tddtQlPcapLuongBac: number;
-    tddtQlPcapPcapLuong: number;
-    tddtQlPcapDgopLuong: number;
-    tddtQlPcapHdLd: number;
-    tddtKphiNsnn: number;
-    tddtKphiSnDvu: number;
-    tddtKphiPhiDlai: number;
-    tddtKphiHphap: number;
+    maDvi: string;
+    diaChiKho: string;
+    tenNhaKho: string;
+    khoiTichKhoDuoiM3: number;
+    khoiTichKhoTuM3: number;
+    slNhaKhoDuoi: number;
+    slNhaKhoTu: number;
+    slNhaKhoTong: number;
+    duoiGtConLai: number;
+    duoiHetKhauHao: number;
+    duoiTongGtKho: number;
+    tuGtConLai: number;
+    tuHetKhauHao: number;
+    tuTongGtKho: number;
+    tong: number;
     level: any;
     checked: boolean;
 }
@@ -83,8 +51,8 @@ export class BaoHiemKhoComponent implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
-    listVattu: any[] = [];
-    lstVatTuFull = [];
+    listDanhMucKho: any[] = [];
+    listDanhSachCuc: any[] = [];
     isDataAvailable = false;
     dsDinhMuc: any[] = [];
     maDviTao: any;
@@ -95,53 +63,8 @@ export class BaoHiemKhoComponent implements OnInit {
     namTruoc: string;
     namKeHoach: string;
 
-    //bien tinh tong
-    tongSo1: number;
-    tongSo2: number;
-    tongSo3: number;
-    tongSo4: number;
-    tongSo5: number;
-    tongSo6: number;
-    tongSo7: number;
-    tongSo8: number;
-    tongSo9: number;
-    tongSo10: number;
-    tongSo11: number;
-    tongSo12: number;
-    tongSo13: number;
-    tongSo14: number;
-    tongSo15: number;
-    tongSo16: number;
-    tongSo17: number;
-    tongSo18: number;
-    tongSo19: number;
-    tongSo20: number;
-    tongSo21: number;
-    tongSo22: number;
-    tongSo23: number;
-    tongSo24: number;
-    tongSo25: number;
-    tongSo26: number;
-    tongSo27: number;
-    tongSo28: number;
-    tongSo29: number;
-    tongSo30: number;
-    tongSo31: number;
-    tongSo32: number;
-    tongSo33: number;
-    tongSo34: number;
-    tongSo35: number;
-    tongSo36: number;
-    tongSo37: number;
-    tongSo38: number;
-    tongSo39: number;
-    tongSo40: number;
-    tongSo41: number;
-    tongSo42: number;
-    tongSo43: number;
-    tongSo44: number;
-    tongSo45: number;
-    tongSo46: number;
+
+
 
 
     checkViewTD: boolean;
@@ -187,76 +110,24 @@ export class BaoHiemKhoComponent implements OnInit {
                 ...item,
             })
         })
-        await this.getDinhMuc();
-        await this.danhMucService.dMVatTu().toPromise().then(res => {
+
+        await this.quanLyVonPhiService.dmKho(this.maDviTao).toPromise().then(res => {
             if (res.statusCode == 0) {
-                this.listVattu = res.data;
+                this.listDanhMucKho = res.data;
             } else {
                 this.notification.error(MESSAGE.ERROR, res?.msg);
             }
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        await this.addVatTu();
+
+
+
         this.updateEditCache();
         this.getStatusButton();
 
         this.spinner.hide();
     }
-
-    async getDinhMuc() {
-        const request = {
-            loaiDinhMuc: '03',
-            maDvi: this.maDviTao,
-        }
-        this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
-            res => {
-                if (res.statusCode == 0) {
-                    this.dsDinhMuc = res.data;
-                    this.dsDinhMuc.forEach(item => {
-                        if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = Math.round(divNumber(item.tongDmuc, 1000));
-                        }
-                    })
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        )
-    }
-
-
-    async addVatTu() {
-
-        const vatTuTemp = []
-        this.listVattu.forEach(vatTu => {
-            if (vatTu.child) {
-                vatTu.child.forEach(vatTuCon => {
-                    vatTuTemp.push({
-                        id: vatTuCon.ma,
-                        tenDm: vatTuCon.ten,
-                        tenTaiSan: vatTuCon.ma,
-                        dviTinh: vatTuCon.maDviTinh,
-                        maCha: "0",
-                        level: 0,
-                    })
-                })
-            }
-        })
-
-        this.lstVatTuFull = vatTuTemp;
-    }
-
-
-
-
-
-
-
-
 
 
     // luu
@@ -308,7 +179,9 @@ export class BaoHiemKhoComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                     this.formDetail = data.data;
-                    this._modalRef.close(this.formDetail);
+                    this._modalRef.close({
+                        formDetail: this.formDetail,
+                    });
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
@@ -341,7 +214,9 @@ export class BaoHiemKhoComponent implements OnInit {
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
                 }
-                this._modalRef.close(this.formDetail);
+                this._modalRef.close({
+                    formDetail: this.formDetail,
+                });
             } else {
                 this.notification.error(MESSAGE.ERROR, data?.msg);
             }
@@ -450,53 +325,21 @@ export class BaoHiemKhoComponent implements OnInit {
 
             id: uuid.v4() + 'FE',
             stt: '',
-            donVi: '',
-            dtTsoNguoiLv: '',
-            dtTongQlPcap: 0,
-            dtQlPcapTso: 0,
-            dtQlPcapLuongBac: 0,
-            dtQlPcapPcapLuong: 0,
-            dtQlPcapDgopLuong: 0,
-            dtQlPcapHdLd: 0,
-            dtKphiNsnn: 0,
-            dtKphiSnDvu: 0,
-            dtKphiPhiDlai: 0,
-            dtKphiHphap: 0,
-            uocThTsoNguoiLv: 0,
-            uocThTsoBcTdiem: 0,
-            uocThTsoVcCc: 0,
-            uocThTongQlPcap: 0,
-            uocThQlPcapTso: 0,
-            uocThQlPcapLuongBac: 0,
-            uocThQlPcapPcapLuong: 0,
-            uocThQlPcapDgopLuong: 0,
-            uocThQlPcapHdLd: 0,
-            uocThKphiNsnn: 0,
-            uocThKphiSnDvu: 0,
-            uocThKphiPhiDlai: 0,
-            uocThKphiHphap: 0,
-            namKhTsoNguoiLv: 0,
-            namKhTongQlPcap: 0,
-            namKhQlPcapTso: 0,
-            namKhQlPcapLuongBac: 0,
-            namKhQlPcapPcapLuong: 0,
-            namKhQlPcapDgopLuong: 0,
-            namKhQlPcapHdLd: 0,
-            namKhKphiNsnn: 0,
-            namKhKphiSnDvu: 0,
-            namKhKphiPhiDlai: 0,
-            namKhKphiHphap: 0,
-            tddtTsoNguoiLv: 0,
-            tddtTongQlPcap: 0,
-            tddtQlPcapTso: 0,
-            tddtQlPcapLuongBac: 0,
-            tddtQlPcapPcapLuong: 0,
-            tddtQlPcapDgopLuong: 0,
-            tddtQlPcapHdLd: 0,
-            tddtKphiNsnn: 0,
-            tddtKphiSnDvu: 0,
-            tddtKphiPhiDlai: 0,
-            tddtKphiHphap: 0,
+            maDvi: '',
+            diaChiKho: '',
+            tenNhaKho: '',
+            khoiTichKhoDuoiM3: 0,
+            khoiTichKhoTuM3: 0,
+            slNhaKhoDuoi: 0,
+            slNhaKhoTu: 0,
+            slNhaKhoTong: 0,
+            duoiGtConLai: 0,
+            duoiHetKhauHao: 0,
+            duoiTongGtKho: 0,
+            tuGtConLai: 0,
+            tuHetKhauHao: 0,
+            tuTongGtKho: 0,
+            tong: 0,
             level: '',
             checked: false,
         }
@@ -516,99 +359,9 @@ export class BaoHiemKhoComponent implements OnInit {
 
 
     tinhTong() {
-        this.tongSo1 = 0;
-        this.tongSo2 = 0;
-        this.tongSo3 = 0;
-        this.tongSo4 = 0;
-        this.tongSo5 = 0;
-        this.tongSo6 = 0;
-        this.tongSo7 = 0;
-        this.tongSo8 = 0;
-        this.tongSo9 = 0;
-        this.tongSo10 = 0;
-        this.tongSo11 = 0;
-        this.tongSo12 = 0;
-        this.tongSo13 = 0;
-        this.tongSo14 = 0;
-        this.tongSo15 = 0;
-        this.tongSo16 = 0;
-        this.tongSo17 = 0;
-        this.tongSo18 = 0;
-        this.tongSo19 = 0;
-        this.tongSo20 = 0;
-        this.tongSo21 = 0;
-        this.tongSo22 = 0;
-        this.tongSo23 = 0;
-        this.tongSo24 = 0;
-        this.tongSo25 = 0;
-        this.tongSo26 = 0;
-        this.tongSo27 = 0;
-        this.tongSo28 = 0;
-        this.tongSo29 = 0;
-        this.tongSo30 = 0;
-        this.tongSo31 = 0;
-        this.tongSo32 = 0;
-        this.tongSo33 = 0;
-        this.tongSo34 = 0;
-        this.tongSo35 = 0;
-        this.tongSo36 = 0;
-        this.tongSo37 = 0;
-        this.tongSo38 = 0;
-        this.tongSo39 = 0;
-        this.tongSo40 = 0;
-        this.tongSo41 = 0;
-        this.tongSo42 = 0;
-        this.tongSo43 = 0;
-        this.tongSo44 = 0;
-        this.tongSo45 = 0;
-        this.tongSo46 = 0;
+
         this.lstCtietBcao.forEach(item => {
-            this.tongSo1 += Number(item.dtTsoNguoiLv);
-            this.tongSo2 += item.dtTongQlPcap;
-            this.tongSo3 += item.dtQlPcapTso;
-            this.tongSo4 += item.dtQlPcapLuongBac;
-            this.tongSo5 += item.dtQlPcapPcapLuong;
-            this.tongSo6 += item.dtQlPcapDgopLuong;
-            this.tongSo7 += item.dtQlPcapHdLd;
-            this.tongSo8 += item.dtKphiNsnn;
-            this.tongSo9 += item.dtKphiSnDvu;
-            this.tongSo10 += item.dtKphiPhiDlai;
-            this.tongSo11 += item.dtKphiHphap;
-            this.tongSo12 += item.uocThTsoNguoiLv;
-            this.tongSo13 += item.uocThTsoBcTdiem;
-            this.tongSo14 += item.uocThTsoVcCc;
-            this.tongSo15 += item.uocThTongQlPcap;
-            this.tongSo16 += item.uocThQlPcapTso;
-            this.tongSo17 += item.uocThQlPcapLuongBac;
-            this.tongSo18 += item.uocThQlPcapPcapLuong;
-            this.tongSo19 += item.uocThQlPcapDgopLuong;
-            this.tongSo20 += item.uocThQlPcapHdLd;
-            this.tongSo21 += item.uocThKphiNsnn;
-            this.tongSo22 += item.uocThKphiSnDvu;
-            this.tongSo23 += item.uocThKphiPhiDlai;
-            this.tongSo24 += item.uocThKphiHphap;;
-            this.tongSo25 += item.namKhTsoNguoiLv;
-            this.tongSo26 += item.namKhTongQlPcap;
-            this.tongSo27 += item.namKhQlPcapTso;
-            this.tongSo28 += item.namKhQlPcapLuongBac;
-            this.tongSo29 += item.namKhQlPcapPcapLuong;
-            this.tongSo30 += item.namKhQlPcapDgopLuong;
-            this.tongSo31 += item.namKhQlPcapHdLd;
-            this.tongSo32 += item.namKhKphiNsnn;
-            this.tongSo33 += item.namKhKphiSnDvu;
-            this.tongSo34 += item.namKhKphiPhiDlai;
-            this.tongSo35 += item.namKhKphiHphap;
-            this.tongSo36 += item.tddtTsoNguoiLv;
-            this.tongSo37 += item.tddtTongQlPcap;
-            this.tongSo38 += item.tddtQlPcapTso;
-            this.tongSo39 += item.tddtQlPcapLuongBac;
-            this.tongSo40 += item.tddtQlPcapPcapLuong;
-            this.tongSo41 += item.tddtQlPcapDgopLuong;
-            this.tongSo42 += item.tddtQlPcapHdLd;
-            this.tongSo43 += item.tddtKphiNsnn;
-            this.tongSo44 += item.tddtKphiSnDvu;
-            this.tongSo45 += item.tddtKphiPhiDlai;
-            this.tongSo46 += item.tddtKphiHphap;
+
         })
     }
 
