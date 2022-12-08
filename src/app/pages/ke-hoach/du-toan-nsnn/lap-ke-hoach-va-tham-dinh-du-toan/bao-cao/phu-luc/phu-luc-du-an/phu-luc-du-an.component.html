@@ -110,6 +110,41 @@
                     <th nzWidth="2.5%" [hidden]="status"></th>
                     <th nzWidth="2.5%" [hidden]="status"></th>
                 </tr>
+                <tr>
+                    <th></th>
+                    <th>TỔNG SỐ</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>{{displayValue(total.tmdtTongSo)}}</th>
+                    <th>{{displayValue(total.tmdtNstw)}}</th>
+                    <th>{{displayValue(total.keHoachTongSo)}}</th>
+                    <th>{{displayValue(total.keHoachNstw)}}</th>
+                    <th>{{displayValue(total.uocGiaiNganDauNamTong)}}</th>
+                    <th>{{displayValue(total.uocGiaiNganDauNamNstw)}}</th>
+                    <th>{{displayValue(total.uocGiaiNganCaNamTong)}}</th>
+                    <th>{{displayValue(total.uocGiaiNganCaNamNstw)}}</th>
+                    <th>{{displayValue(total.daBoTriVonTongSo)}}</th>
+                    <th>{{displayValue(total.daBoTriVonNstw)}}</th>
+                    <th>{{displayValue(total.trungHanVonN2N2TongSo)}}</th>
+                    <th>{{displayValue(total.trungHanVonN2N2ThuHoi)}}</th>
+                    <th>{{displayValue(total.trungHanVonN2N2Xdcb)}}</th>
+                    <th>{{displayValue(total.trungHanVonN2N2Cbi)}}</th>
+                    <th>{{displayValue(total.trungHanVonN2N1TongSo)}}</th>
+                    <th>{{displayValue(total.trungHanVonN2N1ThuHoi)}}</th>
+                    <th>{{displayValue(total.trungHanVonN2N1Xdcb)}}</th>
+                    <th>{{displayValue(total.trungHanVonN2N1Cbi)}}</th>
+                    <th>{{displayValue(total.khTongSoNamN)}}</th>
+                    <th>{{displayValue(total.khNstwTongSoNamN)}}</th>
+                    <th>{{displayValue(total.khNstwThuHoiNamN)}}</th>
+                    <th>{{displayValue(total.khNstwThanhToanNamN)}}</th>
+                    <th>{{displayValue(total.khNstwChuanBiNamN)}}</th>
+                    <th></th>
+                    <th nzWidth="2.5%" [hidden]="status"></th>
+                    <th nzWidth="2.5%" [hidden]="status"></th>
+                </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let data of lstCtietBcao; let i = index">
@@ -312,27 +347,6 @@
                         </td>
                     </ng-template>
                 </tr>
-                <!-- <tr>
-                    <td></td>
-                    <td>Tổng cộng</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>{{displayValue(total.ncauChiTongSo)}}</td>
-                    <td>{{displayValue(total.ncauChiTrongDoChiCs)}}</td>
-                    <td>{{displayValue(total.ncauChiTrongDoChiMoi)}}</td>
-                    <td>{{displayValue(total.ncauChiChiaRaDtuPtrien)}}</td>
-                    <td>{{displayValue(total.ncauChiChiaRaChiCs1)}}</td>
-                    <td>{{displayValue(total.ncauChiChiaRaChiMoi1)}}</td>
-                    <td>{{displayValue(total.ncauChiChiaRaChiTx)}}</td>
-                    <td>{{displayValue(total.ncauChiChiaRaChiCs2)}}</td>
-                    <td>{{displayValue(total.ncauChiChiaRaChiMoi2)}}</td>
-                    <td>{{displayValue(total.ncauChiChiaRaChiDtqg)}}</td>
-                    <td>{{displayValue(total.ncauChiChiaRaChiCs3)}}</td>
-                    <td>{{displayValue(total.ncauChiChiaRaChiMoi3)}}</td>
-                    <td [hidden]="status"></td>
-                </tr> -->
             </tbody>
         </nz-table>
     </div>

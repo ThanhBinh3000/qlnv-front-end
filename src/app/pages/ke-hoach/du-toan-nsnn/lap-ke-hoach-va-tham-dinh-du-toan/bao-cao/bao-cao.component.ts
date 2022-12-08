@@ -16,7 +16,7 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { LTD, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { LTD, sumNumber, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { PHU_LUC } from './bao-cao.constant';
 import { BaoHiemHangComponent } from './phu-luc/bao-hiem-hang/bao-hiem-hang.component';
@@ -707,7 +707,7 @@ export class BaoCaoComponent implements OnInit {
                             id: uuid.v4() + 'FE',
                             maBieuMau: item.id,
                             tenPl: item.tenPl,
-                            temDm: item.temDm,
+                            temDm: item.tenDm,
                             trangThai: '3',
                         }
                         this.baoCao.lstLapThamDinhs.push(newItem);
@@ -725,6 +725,7 @@ export class BaoCaoComponent implements OnInit {
     viewAppendix(formDetail: ItemData) {
         const dataInfo = {
             data: formDetail,
+            extraData: null,
             maDvi: this.baoCao.maDvi,
             namBcao: this.baoCao.namBcao,
             statusBtnOk: this.okStatus,
@@ -734,6 +735,7 @@ export class BaoCaoComponent implements OnInit {
             viewAppraisalValue: this.viewAppraisalValue,
             editAppraisalValue: this.acceptStatus,
         }
+        dataInfo.data.maDviTien = '1';
         //const nzContent = BieuMau18Component;
         let nzContent: ComponentType<any>;
         switch (formDetail.maBieuMau) {
@@ -796,15 +798,60 @@ export class BaoCaoComponent implements OnInit {
             // thong tu 69
             case 'TT69_13':
                 nzContent = BieuMau13Component;
+                if (formDetail.trangThai == '3' || formDetail.trangThai == '4' || formDetail.trangThai == '5') {
+                    dataInfo.extraData = {
+                        nhucauDan: 0,
+                    }
+                    //thong tin phu luc du an
+                    const dataDa = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'plda');
+                    dataDa.lstCtietLapThamDinhs.forEach(e => {
+                        const level = e.stt.split('.').length - 2;
+                        if (level == 0) {
+                            dataInfo.extraData.nhucauDan = sumNumber([dataInfo.extraData.nhucauDan, e.khTongSoNamN])
+                        }
+                    })
+                    //bieu mau 13.1
+                    //bieu mau 13.3
+                    //bieu mau 13.8
+                    //bieu mau 13.10
+                    //bieu mau 14
+                    //bieu mau 16
+                }
                 break;
             case 'TT69_14':
                 nzContent = BieuMau14Component;
                 break;
             case 'TT69_16':
                 nzContent = BieuMau16Component;
+                //bieu mau 13
+                dataInfo.extraData = [];
+                const dataChiNs = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT69_13');
+                dataChiNs.lstCtietLapThamDinhs.forEach(item => {
+                    if (item.maNdung.startsWith('0.1.2') && item.maNdung != '0.1.2') {
+                        dataInfo.extraData.push({
+                            ...item,
+                            maNdung: '0.' + item.maNdung.substring(item.maNdung.lastIndexOf('.') + 1, item.maNdung.length),
+                        })
+                    }
+                })
                 break;
             case 'TT69_17':
                 nzContent = BieuMau17Component;
+                //bieu mau 16
+                dataInfo.extraData = [];
+                const dataCtx = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT69_16');
+                dataCtx.lstCtietLapThamDinhs.forEach(item => {
+                    const level = item.stt.split('.').length - 2;
+                    if (level == 0) {
+                        dataInfo.extraData.push({
+                            maNdung: item.maNdung,
+                            thNamHienHanhN1: item.thNamHienHanhN1,
+                            ncauChiN: item.ncauChiN,
+                            ncauChiN1: item.ncauChiN1,
+                            ncauChiN2: item.ncauChiN2,
+                        });
+                    }
+                })
                 break;
             case 'TT69_18':
                 nzContent = BieuMau18Component;
@@ -829,13 +876,8 @@ export class BaoCaoComponent implements OnInit {
                 //gan lai thong tin sau khi bieu mau duoc luu
                 const index = this.baoCao.lstLapThamDinhs.findIndex(e => e.maBieuMau == res.formDetail.maBieuMau);
                 this.baoCao.lstLapThamDinhs[index] = res.formDetail;
-                //thuc hien tinh toan cac gia tri lien ket giua cac man hinh
-                switch (res.formDetail.maBieuMau) {
-                    case '':
-                        break;
-                    default:
-                        break;
-                }
+                this.baoCao.lstLapThamDinhs[index].tenPl = formDetail.tenPl;
+                this.baoCao.lstLapThamDinhs[index].tenDm = formDetail.tenDm;
             }
         });
     }
