@@ -162,7 +162,8 @@
                                                 <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
                                                     <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
                                                 </a>
-                                                <a *ngIf="status || (userInfo?.sub != data.nguoiBcao)">
+                                                <a
+                                                    *ngIf="(status || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao">
                                                     <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
                                                 </a>
                                             </ng-container>
@@ -224,7 +225,8 @@
                                                 <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
                                                     <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
                                                 </a>
-                                                <a *ngIf="status || (userInfo?.sub != data.nguoiBcao)">
+                                                <a
+                                                    *ngIf="(status || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao">
                                                     <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
                                                 </a>
                                             </ng-container>
@@ -286,7 +288,8 @@
                                                 <a *ngIf="!status && (userInfo?.sub == data.nguoiBcao)">
                                                     <i class="fa fa-pencil" (click)="viewAppendix(data)"></i>
                                                 </a>
-                                                <a *ngIf="status || (userInfo?.sub != data.nguoiBcao)">
+                                                <a
+                                                    *ngIf="(status || userInfo?.sub != data.nguoiBcao) && data.nguoiBcao">
                                                     <i class="fa fa-eye" (click)="viewAppendix(data)"></i>
                                                 </a>
                                             </ng-container>

@@ -15,6 +15,7 @@ export class ItemData {
     stt!: string;
     level: number;
     maNdung: string;
+    tenNdung: string;
     thNamHienHanhN1: number;
     ncauNamDtoanN: number;
     ncauNamN1: number;
@@ -84,6 +85,7 @@ export class BieuMau14Component implements OnInit {
                     id: uuid.v4() + 'FE',
                     stt: e.ma,
                     maNdung: e.ma,
+                    tenNdung: e.giaTri,
                 })
             })
         } else if (!this.lstCtietBcao[0]?.stt) {
@@ -339,6 +341,7 @@ export class BieuMau14Component implements OnInit {
                 id: data.id,
                 stt: data.stt,
                 maNdung: data.maNdung,
+                tenNdung: data.tenNdung,
                 level: data.level,
             }
             this.lstCtietBcao.forEach(item => {

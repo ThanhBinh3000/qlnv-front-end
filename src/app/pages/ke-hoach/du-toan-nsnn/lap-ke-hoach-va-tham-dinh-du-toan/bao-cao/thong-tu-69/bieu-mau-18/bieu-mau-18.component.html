@@ -81,11 +81,7 @@
                             {{getChiMuc(data.stt)}}
                         </td>
                         <td>
-                            <div *ngFor="let item of linhVucChis">
-                                <div *ngIf="item.ma == data.maLvuc">
-                                    {{item.giaTri}}
-                                </div>
-                            </div>
+                            {{data.tenLvuc}}
                         </td>
                         <td>{{data.mtieuNvu}}</td>
                         <td>{{data.csPhapLyThien}}</td>
@@ -112,11 +108,7 @@
                             {{getChiMuc(editCache[data.id].data.stt)}}
                         </td>
                         <td>
-                            <div *ngFor="let item of linhVucChis">
-                                <div *ngIf="item.ma == data.maLvuc">
-                                    {{item.giaTri}}
-                                </div>
-                            </div>
+                            {{editCache[data.id].data.tenLvuc}}
                         </td>
                         <td>
                             <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.mtieuNvu" />

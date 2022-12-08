@@ -24,6 +24,12 @@ export class QuanLyVonPhiService extends BaseService {
     )
   }
 
+  dmKho(maDvi: string): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + '/qlnv-category/dmuc-donvi/danh-sach/dm-kho/MLK/' + maDvi
+    )
+  }
+
   timBaoCaoQuyetToanVonPhi(request: any): Observable<any> {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/quyet-toan/danh-sach',
@@ -686,4 +692,5 @@ export class QuanLyVonPhiService extends BaseService {
       , request
     );
   }
+
 }

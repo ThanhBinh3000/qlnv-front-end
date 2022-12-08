@@ -15,6 +15,7 @@ export class ItemData {
     stt: string;
     level: number;
     maLvucNdChi: string;
+    tenLvucNdChi: string;
     thNamHienHanhN1: number;
     ncauNamDtoanN: number;
     ncauNamN1: number;
@@ -86,6 +87,7 @@ export class BieuMau17Component implements OnInit {
                     id: uuid.v4() + 'FE',
                     stt: e.ma,
                     maLvucNdChi: e.ma,
+                    tenLvucNdChi: e.giaTri,
                 })
             })
         } else if (!this.lstCtietBcao[0]?.stt) {

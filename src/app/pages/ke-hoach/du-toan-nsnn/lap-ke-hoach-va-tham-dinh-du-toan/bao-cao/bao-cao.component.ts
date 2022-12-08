@@ -501,60 +501,50 @@ export class BaoCaoComponent implements OnInit {
 
     // chuc nang check role
     async onSubmit(mcn: string, lyDoTuChoi: string) {
-        // if (mcn == Utils.TT_BC_2) {
-        //     if (!this.congVan) {
-        //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
-        //         return;
-        //     }
-        //     let check = true;
-        //     this.lstLapThamDinhs.forEach(item => {
-        //         if (item.trangThai != '5') {
-        //             check = false;
-        //         }
-        //     })
-        //     if (!check) {
-        //         this.notification.warning(MESSAGE.ERROR, MESSAGE.FINISH_FORM);
-        //         return;
-        //     }
-        // } else {
-        //     let check = true;
-        //     if (mcn == Utils.TT_BC_4 || mcn == Utils.TT_BC_7 || mcn == Utils.TT_BC_9) {
-        //         this.lstLapThamDinhs.forEach(item => {
-        //             if (item.trangThai == '2') {
-        //                 check = false;
-        //             }
-        //         })
-        //     }
-        //     if (!check) {
-        //         this.notification.warning(MESSAGE.ERROR, MESSAGE.RATE_FORM);
-        //         return;
-        //     }
-        // }
-        // const requestGroupButtons = {
-        //     id: this.id,
-        //     maChucNang: mcn,
-        //     lyDoTuChoi: lyDoTuChoi,
-        // };
-        // await this.lapThamDinhService.approveThamDinh(requestGroupButtons).toPromise().then(async (data) => {
-        //     if (data.statusCode == 0) {
-        //         this.trangThaiBaoCao = mcn;
-        //         this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
-        //         this.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
-        //         this.ngayPheDuyet = this.datePipe.transform(data.data.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-        //         this.ngayTraKq = this.datePipe.transform(data.data.ngayTraKq, Utils.FORMAT_DATE_STR);
-        //         this.getStatusButton();
-        //         if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
-        //             this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-        //         } else {
-        //             this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-        //         }
-        //         this.tabs = [];
-        //     } else {
-        //         this.notification.error(MESSAGE.ERROR, data?.msg);
-        //     }
-        // }, err => {
-        //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        // });
+        if (mcn == Utils.TT_BC_2) {
+            if (!this.baoCao.congVan) {
+                this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.DOCUMENTARY);
+                return;
+            }
+            if (!this.baoCao.lstLapThamDinhs.every(e => e.trangThai == '5')) {
+                this.notification.warning(MESSAGE.ERROR, MESSAGE.FINISH_FORM);
+                return;
+            }
+        } else {
+            let check = true;
+            if (mcn == Utils.TT_BC_4 || mcn == Utils.TT_BC_7 || mcn == Utils.TT_BC_9) {
+                this.baoCao.lstLapThamDinhs.forEach(item => {
+                    if (item.trangThai == '2') {
+                        check = false;
+                    }
+                })
+            }
+            if (!check) {
+                this.notification.warning(MESSAGE.ERROR, MESSAGE.RATE_FORM);
+                return;
+            }
+        }
+        const requestGroupButtons = {
+            id: this.baoCao.id,
+            maChucNang: mcn,
+            lyDoTuChoi: lyDoTuChoi,
+        };
+        await this.lapThamDinhService.approveThamDinh(requestGroupButtons).toPromise().then(async (data) => {
+            if (data.statusCode == 0) {
+                this.baoCao.trangThai = mcn;
+                this.getStatusButton();
+                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+                } else {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+                }
+                this.tabs = [];
+            } else {
+                this.notification.error(MESSAGE.ERROR, data?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        });
     }
 
     //show popup tu choi
@@ -766,9 +756,6 @@ export class BaoCaoComponent implements OnInit {
             case 'pl06':
                 nzContent = PhuLuc06Component;
                 break;
-            case 'pl07':
-                nzContent = PhuLuc07Component;
-                break;
             case 'plda':
                 nzContent = PhuLucDuAnComponent;
                 break;
@@ -777,12 +764,6 @@ export class BaoCaoComponent implements OnInit {
                 break;
             case 'pl_bh_kho':
                 nzContent = BaoHiemKhoComponent;
-                break;
-            case 'pl_bh_duoi':
-                nzContent = BaoHiemComponent;
-                break;
-            case 'pl_bh_tren':
-                nzContent = BaoHiemComponent;
                 break;
             case 'pl_bh':
                 nzContent = BaoHiemComponent;
