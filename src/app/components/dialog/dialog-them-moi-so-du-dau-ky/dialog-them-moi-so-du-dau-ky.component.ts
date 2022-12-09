@@ -39,8 +39,8 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
     private modal: NzModalRef,
   ) {
     this.formData = this.fb.group({
-      maNganlo: [],
-      tenNganlo: [],
+      maDvi: [],
+      tenDvi: [],
       tichLuongSdLt: ['', Validators.required],
       tichLuongSdVt: ['', Validators.required],
       theTichSdVt: ['', Validators.required],
@@ -72,8 +72,8 @@ export class DialogThemMoiSoDuDauKyComponent implements OnInit {
   async getDetail() {
     if (this.detail) {
       this.formData.patchValue({
-        maNganlo: this.detail.maDvi ? this.detail.maDvi : null,
-        tenNganlo: this.detail.tenDvi ? this.detail.tenDvi : null,
+        maDvi: this.levelNode == 6 ? this.detail.maNgankho : this.detail.maNganlo,
+        tenDvi: this.levelNode == 6 ? this.detail.tenNgankho : this.detail.tenNganlo,
       })
     }
   }

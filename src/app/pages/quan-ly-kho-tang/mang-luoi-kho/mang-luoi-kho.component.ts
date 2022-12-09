@@ -104,7 +104,7 @@ export class MangLuoiKhoComponent implements OnInit {
       tichLuongSdVt: [''],
       theTichSdLt: [''],
       theTichSdVt: [''],
-      namSuDung: [''],
+      namSudung: [''],
       dienTichDat: [''],
       tichLuongKdLt: [''],
       tichLuongKdVt: [''],
@@ -124,6 +124,8 @@ export class MangLuoiKhoComponent implements OnInit {
       soNganKho: [''],
       soLoKho: [''],
       tenThuKho: [''],
+      slTon: [''],
+      ngayNhapCuoi: [''],
     })
   }
 
@@ -177,7 +179,7 @@ export class MangLuoiKhoComponent implements OnInit {
    */
 
   async layTatCaDonViTheoTree(id?) {
-      await this.donviService.layTatCaByMaDvi(LOAI_DON_VI.MLK, this.userInfo.MA_DVI).then((res: OldResponseData) => {
+      await this.donviService.layTatCaDviDmKho(LOAI_DON_VI.MLK, this.userInfo.MA_DVI).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           if (res && res.data) {
             this.nodes = res.data
@@ -193,6 +195,7 @@ export class MangLuoiKhoComponent implements OnInit {
   // parentNodeSelected: any = [];
   theTich : string = 'm³';
   nzClickNodeTree(event: any): void {
+    this.detailDonVi.reset();
     if (event.keys.length > 0) {
       this.isEditData = true;
       this.nodeSelected = event.node.origin;
@@ -218,6 +221,7 @@ export class MangLuoiKhoComponent implements OnInit {
       await this.mangLuoiKhoService.getDetailByMa(body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           const dataNodeRes = res.data.object;
+          console.log(dataNodeRes)
           this.bindingDataDetail(dataNodeRes);
           this.showDetailDonVi(dataNode.origin.id)
         } else {
@@ -229,17 +233,9 @@ export class MangLuoiKhoComponent implements OnInit {
 
   bindingDataDetail(dataNode) {
     this.convertDataChild(dataNode);
-    // this.detailDonVi.patchValue({
-    //   dienTichDat: dataNode.dienTichDat,
-    //   tichLuongThietKe: dataNode.tichLuongThietKe,
-    //   tichLuongChua: dataNode.tichLuongChua,
-    //   tichLuongKd: dataNode.tichLuongKhaDung,
-    //   soLuongChiCuc: dataNode.soLuongChiCuc,
-    //   soLuongDiemKho: dataNode.soLuongDiemKho,
-    //   soLuongNhaKho: dataNode.soLuongNhaKho,
-    //   soLuongNganKho: dataNode.soLuongNganKho,
-    //   soLuongNganLo: dataNode.soLuongNganLo,
-    // });
+    this.detailDonVi.patchValue({
+      id : dataNode.id ? dataNode.id : null
+    });
   }
 
   convertDataChild(dataNode) {
@@ -270,20 +266,16 @@ export class MangLuoiKhoComponent implements OnInit {
       this.donviService.getDetail(id).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           this.nodeDetail = res.data;
-          // gán giá trị vào form
-          this.detailDonVi.patchValue({
-            tenDvi: this.nodeDetail.tenDvi,
-            maDvi:this.nodeDetail.maDvi,
-            trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
-            diaChi: this.nodeDetail.diaChi,
-            loaikhoId : this.nodeDetail.loaikhoId
-          });
+          if (this.nodeDetail) {
+            this.patchValueFormData(this.levelNode);
+          }
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
         }
       })
     }
   }
+
 
   showEdit(editData: boolean) {
     this.isEditData = editData
@@ -390,6 +382,7 @@ export class MangLuoiKhoComponent implements OnInit {
     });
     modalQD.afterClose.subscribe((data) => {
       if (data) {
+
       }
     });
   }
@@ -400,4 +393,70 @@ export class MangLuoiKhoComponent implements OnInit {
       this.checkLoKho = false;
     }
   }
+
+  patchValueFormData(level) {
+    switch (level) {
+      case "2" : {
+        this.detailDonVi.patchValue({
+          tenCuc: this.nodeDetail.tenDvi,
+          maCuc:this.nodeDetail.maDvi,
+          ghiChu:this.nodeDetail.ghiChu,
+          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
+          diaChi: this.nodeDetail.diaChi,
+          soChiCuc: this.nodeDetail.child ? this.nodeDetail.child.length : null
+        });
+        break;
+      }
+      case "3" : {
+        this.detailDonVi.patchValue({
+          tenChiCuc: this.nodeDetail.tenDvi,
+          maChiCuc:this.nodeDetail.maDvi,
+          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
+          diaChi: this.nodeDetail.diaChi,
+        });
+        break;
+      }
+      case "4" : {
+        this.detailDonVi.patchValue({
+          tenDiemkho: this.nodeDetail.tenDvi,
+          maDiemkho:this.nodeDetail.maDvi,
+          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
+          diaChi: this.nodeDetail.diaChi,
+          loaikhoId : this.nodeDetail.loaikhoId
+        });
+        break;
+      }
+      case "5" : {
+        this.detailDonVi.patchValue({
+          tenNhakho: this.nodeDetail.tenDvi,
+          maNhakho:this.nodeDetail.maDvi,
+          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
+          diaChi: this.nodeDetail.diaChi,
+          loaikhoId : this.nodeDetail.loaikhoId
+        });
+        break;
+      }
+      case "6" : {
+        this.detailDonVi.patchValue({
+          tenNgankho: this.nodeDetail.tenDvi,
+          maNgankho:this.nodeDetail.maDvi,
+          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
+          diaChi: this.nodeDetail.diaChi,
+          loaikhoId : this.nodeDetail.loaikhoId
+        });
+        break;
+      }
+      case "7" : {
+        this.detailDonVi.patchValue({
+          tenNganlo: this.nodeDetail.tenDvi,
+          maNganlo:this.nodeDetail.maDvi,
+          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
+          diaChi: this.nodeDetail.diaChi,
+          loaikhoId : this.nodeDetail.loaikhoId
+        });
+        break;
+      }
+    }
+  }
+
 }
