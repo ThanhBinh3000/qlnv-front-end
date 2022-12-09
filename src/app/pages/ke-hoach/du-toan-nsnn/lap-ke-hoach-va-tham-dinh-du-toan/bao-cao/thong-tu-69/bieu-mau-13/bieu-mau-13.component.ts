@@ -106,6 +106,14 @@ export class BieuMau13Component implements OnInit {
             const indDa = this.lstCtietBcao.findIndex(e => e.maNdung == '0.1.1.1');
             this.lstCtietBcao[indDa].ncauChiN = this.dataInfo.extraData?.nhucauDan;
             this.sum(this.lstCtietBcao[indDa].stt);
+            this.dataInfo.extraData?.lstBieuMau.forEach(item => {
+                const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
+                this.lstCtietBcao[index].namHienHanhDtoan = item.namHienHanhDtoan;
+                this.lstCtietBcao[index].namHienHanhUocThien = item.namHienHanhUocThien;
+                this.lstCtietBcao[index].ncauChiN = item.ncauChiN;
+                this.lstCtietBcao[index].ssanhNcauNVoiN1 = divNumber(item.ncauChiN, item.namHienHanhUocThien);
+                this.sum(this.lstCtietBcao[index].stt);
+            })
         }
         this.updateEditCache();
         this.getStatusButton();
@@ -282,6 +290,13 @@ export class BieuMau13Component implements OnInit {
     // start edit
     startEdit(id: string): void {
         this.editCache[id].edit = true;
+    }
+
+    isEdit(stt: string) {
+        if (stt.startsWith('0.1.2') || stt == '0.1.3') {
+            return false;
+        }
+        return true;
     }
 
     // huy thay doi
