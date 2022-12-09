@@ -47,8 +47,6 @@ export class ThemMoiKhoComponent implements OnInit {
   dsLoaiHangHoa: any[] = [];
   listTinhTrang: any[] = [];
   listFileDinhKem: any[] = [];
-  checkLoKho: boolean = true;
-
   constructor(
     private fb: FormBuilder,
     private notification: NzNotificationService,
@@ -75,12 +73,12 @@ export class ThemMoiKhoComponent implements OnInit {
     })
     this.formKho = this.fb.group({
       maCha: [null],
-      nganKhoId: [''],
+      ngankhoId: [''],
+      tongkhoId: [''],
       diaChi: [''],
       tenChiCuc: [''],
       tenNganlo: [''],
       maNganlo: [''],
-      ngankhoId: [''],
       tenDiemkho: [''],
       maDiemkho: [''],
       diemkhoId: [''],
@@ -104,32 +102,34 @@ export class ThemMoiKhoComponent implements OnInit {
       tichLuongSdVt: [''],
       theTichSdLt: [''],
       theTichSdVt: [''],
-      namSuDung: [''],
+      namSudung: [''],
       dienTichDat: [''],
       tichLuongKdLt: [''],
       tichLuongKdVt: [''],
       theTichKdLt: [''],
       theTichKdVt: [''],
+      theTichTk: [''],
       theTichTkLt: [''],
       theTichTkVt: [''],
       namNhap: [''],
       tinhtrangId: [''],
-      soLuongTonKho: [''],
+      chatluongId: [''],
+      slTon: [''],
       ngayNhapDay: [''],
-      donViTinh: ['']
+      dviTinh: [''],
+      soDiemKho: [''],
+      soNhaKho: [''],
+      soNganKho: [''],
+      soLoKho: [''],
+      tenThuKho: [''],
     })
     this.formKho.controls['maCha'].valueChanges.subscribe(value => {
       let node = this.treeSelect.getTreeNodeByKey(value);
       if (node) {
         this.levelNode = node.level + 1
       }
+      this.setValidators();
     });
-  }
-
-  loadDetailParent(node) {
-    switch (node.level) {
-
-    }
   }
 
 
@@ -205,20 +205,22 @@ export class ThemMoiKhoComponent implements OnInit {
   }
 
   saveNganLo() {
+    this.spinner.show()
     this.helperService.markFormGroupTouched(this.formKho);
     if (this.formKho.invalid) {
+      this.spinner.hide()
       return;
     }
-    let body = this.formKho.value;
-    body.ngankhoId = this.formKho.value.maCha;
-    body.fileDinhkems = this.listFileDinhKem;
-    this.khoService.createKho('ngan-lo', body).then((res: OldResponseData) => {
+    let bodyDvi = this.formDvi.value;
+    bodyDvi.maDviCha = this.formKho.value.maCha;
+    bodyDvi.tenDvi = this.formKho.value.tenNganlo;
+    bodyDvi.maDvi = this.formKho.value.maNganlo;
+    this.donviService.create(bodyDvi).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
-        let bodyDvi = this.formDvi.value;
-        bodyDvi.maDviCha = this.formKho.value.maCha;
-        bodyDvi.tenDvi = this.formKho.value.tenNganlo;
-        bodyDvi.maDvi = this.formKho.value.maNganlo;
-        this.donviService.create(bodyDvi).then((res: OldResponseData) => {
+        let body = this.formKho.value;
+        body.ngankhoId = this.formKho.value.maCha;
+        body.fileDinhkems = this.listFileDinhKem;
+        this.khoService.createKho('ngan-lo', body).then((res: OldResponseData) => {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           }
@@ -232,29 +234,107 @@ export class ThemMoiKhoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       ;
     });
+    this.spinner.hide()
   }
 
   saveNganKho() {
+    this.spinner.show()
     this.helperService.markFormGroupTouched(this.formKho);
     if (this.formKho.invalid) {
+      this.spinner.hide()
       return;
     }
-    let body = this.formKho.value;
-    body.nhakhoId = this.formKho.value.maCha;
-    body.fileDinhkems = this.listFileDinhKem;
-    this.khoService.createKho('ngan-kho', body).then((res: OldResponseData) => {
+    let bodyDvi = this.formDvi.value;
+    bodyDvi.maDviCha = this.formKho.value.maCha;
+    bodyDvi.tenDvi = this.formKho.value.tenNgankho;
+    bodyDvi.maDvi = this.formKho.value.maNgankho;
+    this.donviService.create(bodyDvi).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+        let body = this.formKho.value;
+        body.nhakhoId = this.formKho.value.maCha;
+        body.fileDinhkems = this.listFileDinhKem;
+        this.khoService.createKho('ngan-kho', body).then((res: OldResponseData) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }
+        })
         this.modal.close(true);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }).catch((e) => {
       console.error('error: ', e);
-      this.notification.error(
-        MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR
-      );
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      ;
     });
+    this.spinner.hide()
+  }
+
+  saveNhaKho() {
+    this.spinner.show()
+    this.helperService.markFormGroupTouched(this.formKho);
+    if (this.formKho.invalid) {
+      this.spinner.hide()
+      return;
+    }
+    let bodyDvi = this.formDvi.value;
+    bodyDvi.maDviCha = this.formKho.value.maCha;
+    bodyDvi.tenDvi = this.formKho.value.tenNhakho;
+    bodyDvi.maDvi = this.formKho.value.maNhakho;
+    this.donviService.create(bodyDvi).then((res: OldResponseData) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        let body = this.formKho.value;
+        body.diemkhoId = this.formKho.value.maCha;
+        body.fileDinhkems = this.listFileDinhKem;
+        this.khoService.createKho('nha-kho', body).then((res: OldResponseData) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }
+        })
+        this.modal.close(true);
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }).catch((e) => {
+      console.error('error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      ;
+    });
+    this.spinner.hide()
+  }
+
+  saveDiemKho() {
+    this.spinner.show()
+    this.helperService.markFormGroupTouched(this.formKho);
+    if (this.formKho.invalid) {
+      this.spinner.hide();
+      return;
+    }
+    let bodyDvi = this.formDvi.value;
+    bodyDvi.maDviCha = this.formKho.value.maCha;
+    bodyDvi.tenDvi = this.formKho.value.tenDiemkho;
+    bodyDvi.maDvi = this.formKho.value.maDiemkho;
+    bodyDvi.diaChi = this.formKho.value.diaChi;
+    this.donviService.create(bodyDvi).then((res: OldResponseData) => {
+      if (res.msg == MESSAGE.SUCCESS) {
+        let body = this.formKho.value;
+        body.tongkhoId = this.formKho.value.maCha;
+        body.fileDinhkems = this.listFileDinhKem;
+        this.khoService.createKho('diem-kho', body).then((res: OldResponseData) => {
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          }
+        })
+        this.modal.close(true);
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }).catch((e) => {
+      console.error('error: ', e);
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      ;
+    });
+    this.spinner.hide()
   }
 
   saveKho(level?) {
@@ -267,19 +347,61 @@ export class ThemMoiKhoComponent implements OnInit {
         this.saveNganKho();
         break
       }
+      case 2 : {
+        this.saveNhaKho();
+        break
+      }
+      case 1 : {
+        this.saveDiemKho();
+        break
+      }
     }
   }
 
-  resetForm() {
-    this.formKho.reset();
-    this.formKho.clearValidators();
-  }
-
-  changeLoKho() {
-    if (this.formKho.value.coLoKho) {
-      this.checkLoKho = true;
-    }else {
-      this.checkLoKho = false;
+   async setValidators() {
+    await this.formKho.clearValidators();
+    switch (this.levelNode) {
+      case 1 : {
+        this.formKho.controls['maDiemkho'].setValidators([Validators.required])
+        this.formKho.controls['tenDiemkho'].setValidators([Validators.required])
+        this.formKho.controls['diaChi'].setValidators([Validators.required])
+        this.formKho.controls['ghiChu'].setValidators([Validators.required])
+        break;
+      }
+      case 2 : {
+        this.formKho.controls['maNhakho'].setValidators([Validators.required])
+        this.formKho.controls['tenNhakho'].setValidators([Validators.required])
+        this.formKho.controls['namSudung'].setValidators([Validators.required])
+        this.formKho.controls['soNganKho'].setValidators([Validators.required])
+        this.formKho.controls['dienTichDat'].setValidators([Validators.required])
+        this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
+        this.formKho.controls['chatluongId'].setValidators([Validators.required])
+        break;
+      }
+      case 3 : {
+        this.formKho.controls['maNgankho'].setValidators([Validators.required])
+        this.formKho.controls['tenNgankho'].setValidators([Validators.required])
+        this.formKho.controls['dienTichDat'].setValidators([Validators.required])
+        this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
+        this.formKho.controls['coLoKho'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkLt'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkVt'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongSdLt'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongSdVt'].setValidators([Validators.required])
+        this.formKho.controls['nhiemVu'].setValidators([Validators.required])
+        this.formKho.controls['ghiChu'].setValidators([Validators.required])
+        break;
+      }
+      case 4 : {
+        this.formKho.controls['maNganlo'].setValidators([Validators.required])
+        this.formKho.controls['tenNganlo'].setValidators([Validators.required])
+        this.formKho.controls['namSudung'].setValidators([Validators.required])
+        this.formKho.controls['dienTichDat'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkLt'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkVt'].setValidators([Validators.required])
+        this.formKho.controls['tichLuongTkVt'].setValidators([Validators.required])
+        break;
+      }
     }
   }
 }
