@@ -1,20 +1,20 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import {cloneDeep} from 'lodash';
-import {NzDatePickerComponent} from 'ng-zorro-antd/date-picker';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {Subject} from 'rxjs';
+import { cloneDeep } from 'lodash';
+import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Subject } from 'rxjs';
 import {
   DialogDanhSachHangHoaComponent
 } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {DonviService} from 'src/app/services/donvi.service';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { DonviService } from 'src/app/services/donvi.service';
 import {
   QuanLyBangKeVatTuService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyBangKeVatTu.service';
@@ -24,23 +24,23 @@ import {
 import {
   QuanLyPhieuNhapKhoService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapKho.service';
-import {QuanLyPhieuSoKhoService} from 'src/app/services/quanLySoKho.service';
+import { QuanLyPhieuSoKhoService } from 'src/app/services/quanLySoKho.service';
 import {
   QuyetDinhGiaoNhapHangService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import {ThongTinHopDongService} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
-import {TinhTrangKhoHienThoiService} from 'src/app/services/tinhTrangKhoHienThoi.service';
-import {UserService} from 'src/app/services/user.service';
-import {convertTienTobangChu, thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
-import {Globals} from 'src/app/shared/globals';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {BaseComponent} from "../../../../../../components/base/base.component";
+import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
+import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
+import { UserService } from 'src/app/services/user.service';
+import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { BaseComponent } from "../../../../../../components/base/base.component";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import {HelperService} from 'src/app/services/helper.service';
-import {DatePipe} from '@angular/common';
-import {STATUS} from 'src/app/constants/status';
+import { HelperService } from 'src/app/services/helper.service';
+import { DatePipe } from '@angular/common';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
   selector: 'app-thong-tin-bang-ke-nhap-vat-tu',
@@ -366,14 +366,14 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
     let trangThai = ''
     let mess = ''
     switch (this.formData.get('trangThai').value) {
-      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_TBP_KTBQ:
       case STATUS.TU_CHOI_LDC:
       case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TP;
+        trangThai = STATUS.CHO_DUYET_TBP_KTBQ;
         mess = 'Bạn có muối gửi duyệt ?'
         break;
       }
-      case STATUS.CHO_DUYET_TP: {
+      case STATUS.CHO_DUYET_TBP_KTBQ: {
         trangThai = STATUS.CHO_DUYET_LDCC;
         mess = 'Bạn có chắc chắn muốn phê duyệt ?'
         break;
@@ -421,6 +421,17 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
 
 
   tuChoi() {
+    let trangThai
+    switch (this.formData.get('trangThai').value) {
+      case STATUS.CHO_DUYET_TBP_KTBQ: {
+        trangThai = STATUS.TU_CHOI_TBP_KTBQ;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.TU_CHOI_LDCC;
+        break;
+      }
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -437,11 +448,11 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
+            trangThai: trangThai
           };
           let res =
             await this.quanLyBangKeVatTuService.approve(
-              body,
+              body
             );
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);

@@ -283,7 +283,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: this.userService.isCuc() ? bodyParamLT : bodyParamVatTu
+      nzComponentParams: this.userService.isTongCuc() ? bodyParamLT : bodyParamVatTu
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
@@ -358,7 +358,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       } else {
         this.listOfData = [...this.listOfData, res.value];
       }
-      console.log(this.listOfData, 77777)
       let tongSoLuong: number = 0;
       let tongTienKdiem: number = 0;
       let tongTienKdienDonGia: number = 0;

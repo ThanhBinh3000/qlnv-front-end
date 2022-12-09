@@ -1,4 +1,4 @@
-<div class="header header-green-background" *ngIf="maBoNganh == '01' && tab =='MT'">
+<div class="header header-green-background" *ngIf="tabRadio =='BTC' && tab =='MT'">
   <div class="header-text">
     <div class="title-chi-tieu">
       <span>Kế hoạch mua tăng vật tư</span>
@@ -6,9 +6,20 @@
   </div>
 </div>
 <div>
-  <nz-form-label [nzNoColon]="true" nzFor="gia-tri" *ngIf="tab == 'MT'">Tổng giá trị (Triệu đồng): &nbsp;<span
-    class="text-primary canphai"> {{tongSoBnKhac | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
-
+  <nz-form-label [nzNoColon]="true" nzFor="gia-tri" *ngIf="tab == 'MT'">Tổng giá trị (Triệu đồng):
+    &nbsp;<span *ngIf="maBoNganh == '01' && tabRadio =='BTC'"
+                class="text-primary"> {{tongSoVT | number : '1.0-1' : 'vi_VN'}}</span>
+    <span *ngIf="tabRadio !='BTC'"
+          class="text-primary"> {{maBoNganh == '01' ? 0 : listTongGiaTriBnKhac[maBoNganh].tongSo | number : '1.0-1' : 'vi_VN'}}</span>
+  </nz-form-label>
+  <nz-form-label [nzNoColon]="true" nzFor="gia-tri" *ngIf="tab !== 'MT' && tab !== 'LPDH'">Tổng giá trị (Triệu đồng):
+    &nbsp;
+    <nz-input-number [nzDisabled]="isView" [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()"
+                     style="text-align: left;" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                     [nzParser]="globals.parserInput" [nzMin]="0">
+    </nz-input-number>
+    <!--    <span class="error-text" *ngIf="true">{{globals.prop.REQUIRED}}</span>-->
+  </nz-form-label>
 </div>
 <nz-table #editRowTable [nzData]="dataTable">
   <thead>
@@ -121,27 +132,29 @@
     </ng-template>
   </tr>
   </tbody>
-  <tfoot>
-  <tr *ngIf="tabName != 'LuanPhien'">
-    <td style="text-align: right; font-weight: 700" colspan="4">Tổng giá trị (Triệu đồng)</td>
-    <td>
-      <nz-input-number [nzDisabled]="isView" [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()"
-                       style="text-align: left;" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                       [nzParser]="globals.parserInput" [nzMin]="0">
-      </nz-input-number>
-    </td>
-    <td></td>
-  </tr>
-  </tfoot>
+  <!--  <tfoot>-->
+  <!--  <tr *ngIf="tabName != 'LuanPhien'">-->
+  <!--    <td style="text-align: right; font-weight: 700" colspan="4">Tổng giá trị (Triệu đồng)</td>-->
+  <!--    <td>-->
+  <!--      <nz-input-number [nzDisabled]="isView" [(ngModel)]="tongGtri" (ngModelChange)="onChangeTongGtri()"-->
+  <!--                       style="text-align: left;" [nzSize]="'small'" [nzFormatter]="globals.formatter"-->
+  <!--                       [nzParser]="globals.parserInput" [nzMin]="0">-->
+  <!--      </nz-input-number>-->
+  <!--    </td>-->
+  <!--    <td></td>-->
+  <!--  </tr>-->
+  <!--  </tfoot>-->
 </nz-table>
-<div class="header header-green-background"  *ngIf="maBoNganh == '01'  && tab =='MT'" >
-  <div class="header-text">
-    <div class="title-chi-tieu">
-      <span>Kế hoạch mua tăng lương thực</span>
+<div *ngIf="tabRadio =='BTC'  && tab =='MT'">
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span>Kế hoạch mua tăng lương thực</span>
+      </div>
     </div>
   </div>
+  <nz-form-item nz-col nzSpan="8" class="form-item">
+    <nz-form-label [nzNoColon]="true" nzFor="gia-tri">Tổng giá trị (Triệu đồng): &nbsp;<span
+      class="text-primary"> {{tongSoLT | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
+  </nz-form-item>
 </div>
-<nz-form-item nz-col nzSpan="8" class="form-item" *ngIf="maBoNganh == '01' && tab =='MT'" >
-  <nz-form-label [nzNoColon]="true" nzFor="gia-tri">Tổng giá trị (Triệu đồng): &nbsp;<span
-    class="text-primary"> {{tongSoLT | number : '1.0-1' : 'vi_VN'}}</span></nz-form-label>
-</nz-form-item>

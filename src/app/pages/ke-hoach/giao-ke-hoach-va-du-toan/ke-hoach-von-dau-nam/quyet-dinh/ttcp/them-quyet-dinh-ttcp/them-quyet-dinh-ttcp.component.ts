@@ -40,7 +40,15 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
   dataTableAllBn: any[] = [];
   totalBnKh: number = 0;
   totalBtcKh: number = 0;
-  options = {allowZero: true,allowNegative:true,precision:0, prefix: '', thousands: '.', decimal: ',', inputMode: CurrencyMaskInputMode.FINANCIAL}
+  options = {
+    allowZero: true,
+    allowNegative: true,
+    precision: 0,
+    prefix: '',
+    thousands: '.',
+    decimal: ',',
+    inputMode: CurrencyMaskInputMode.FINANCIAL
+  }
 
   constructor(
     private readonly fb: FormBuilder,

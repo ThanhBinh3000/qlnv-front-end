@@ -30,7 +30,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   selectedChiCuc: boolean = false;
   isValid: boolean = false;
   userInfo: UserLogin;
-  donGia: number = 0;
+  donGiaVat: number = 0;
 
 
   constructor(
@@ -48,15 +48,24 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       id: [null],
       maDvi: [null, [Validators.required]],
       tenDvi: [null],
-      donGia: [0, [Validators.required]],
-      soLuongKhDd: [null],
-      soLuongChiTieu: [null],
-      soLuong: [null, [Validators.required]],
-      thanhTien: [null],
-      bangChu: [null],
-      children: [null],
+      maDiemKho: [null],
+      tenDiemKho: [null],
       diaDiemNhap: [null],
-      donGiaTamTinhL: [null]
+      donGiaVat: [null],
+      soLuong: [null],
+      donGia: [null],
+      thanhTien: [],
+      tenGoiThau: [null],
+      soLuongChiTieu: [null],
+      soLuongKhDd: [null],
+      tongThanhTienVat: [null],
+      tongSoLuong: [null],
+      tongThanhTien: [null],
+      thanhTienVat: [null],
+      tongDonGia: [null],
+      loaiVthh: [null],
+      cloaiVthh: [null],
+      children: [null],
     });
   }
 
@@ -77,9 +86,15 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       })
       this.formData.patchValue({
         children: this.listOfData,
+        tongThanhTien: this.listOfData[0].tongThanhTien,
+        tongSoLuong: this.listOfData[0].tongSoLuong,
+        tongDonGia: this.listOfData[0].tongDonGia,
+        soLuongChiTieu: this.listOfData[0].soLuongChiTieu,
+        soLuongKhDd: this.listOfData[0].soLuongKhDd,
         diaDiemNhap: dataDiemNhap.substring(0, dataDiemNhap.length - 2)
       })
       this._modalRef.close(this.formData);
+      console.log(this.formData, 888)
     }
   }
 
@@ -99,18 +114,27 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         soLuongNhap: this.dataEdit.soLuongChiTieu
       }]
       this.formData.patchValue({
+        tenGoiThau: this.dataEdit.tenGoiThau,
         maDvi: this.dataEdit.maDvi,
         tenDvi: this.dataEdit.tenDvi,
-        soLuong: this.dataEdit.soLuong,
+        soLuongKhDd: this.dataEdit.soLuongKhDd,
         donGia: this.dataEdit.donGia,
+        donGiaVat: this.dataEdit.donGiaVat,
+        tongSoLuong: this.dataEdit.tongSoLuong,
+        tongThanhTien: this.dataEdit.tongThanhTien,
+        tongThanhTienVat: this.dataEdit.tongThanhTienVat,
+        tenCcuc: this.dataEdit.tenCcuc,
+        soLuong: this.dataEdit.soLuong,
+
         thanhTien: this.dataEdit.thanhTien,
       })
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
     } else {
       this.formData.patchValue({
-        donGia: this.donGia,
+        donGiaVat: this.donGiaVat,
       })
+
     }
     this.checkDisabledSave();
   }
@@ -130,10 +154,11 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
       }
     } else {
-      // let res = await this.donViService.getAll(body);
-      // if (res.msg === MESSAGE.SUCCESS) {
-      //   this.listChiCuc = res.data;
-      // }
+      let res = await this.donViService.getAll(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        this.listChiCuc = res.data;
+        this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
+      }
     }
   }
 
@@ -188,9 +213,25 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   addDiemKho() {
     if (this.thongtinMuaTrucTiep.maDiemKho && this.thongtinMuaTrucTiep.soLuong && this.validateSoLuong(true)) {
       this.thongtinMuaTrucTiep.donGia = this.formData.get('donGia').value;
+      this.thongtinMuaTrucTiep.donGiaVat = this.donGiaVat;
+      this.thongtinMuaTrucTiep.soLuongChiTieu = this.formData.get('soLuongChiTieu').value;
+      this.thongtinMuaTrucTiep.soLuongKhDd = this.formData.get('soLuongKhDd').value;
+      this.thongtinMuaTrucTiep.tenGoiThau = this.formData.get('tenGoiThau').value;
       this.thongtinMuaTrucTiep.idVirtual = new Date().getTime();
       this.thongtinMuaTrucTiep.maDvi = this.formData.get('maDvi').value;
+      this.calculatorThanhTien()
+      this.thongtinMuaTrucTiep.thanhTien = this.formData.get('thanhTien').value;
+      this.calculatorThanhTienDaDuyet()
+      this.thongtinMuaTrucTiep.thanhTienVat = this.formData.get('thanhTienVat').value;
       this.listOfData = [...this.listOfData, this.thongtinMuaTrucTiep];
+      this.calculatorTongSoLuongDxMuaTt()
+      this.thongtinMuaTrucTiep.tongSoLuong = this.formData.get('tongSoLuong').value;
+      this.calculatorTongTienDx()
+      this.thongtinMuaTrucTiep.tongThanhTien = this.formData.get('tongThanhTien').value;
+      this.calculatorTongTienDxVat()
+      this.thongtinMuaTrucTiep.tongThanhTienVat = this.formData.get('tongThanhTienVat').value;
+      this.calculatorTongDonGia()
+      this.thongtinMuaTrucTiep.tongDonGia = this.formData.get('tongDonGia').value;
       this.updateEditCache();
       this.thongtinMuaTrucTiep = new DanhSachMuaTrucTiep();
       this.disableChiCuc();
@@ -224,13 +265,66 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   calculatorThanhTien() {
     this.formData.patchValue({
       thanhTien:
-        +this.formData.get('soLuong').value *
+        +this.thongtinMuaTrucTiep.soLuong *
         +this.formData.get('donGia').value * 1000,
     });
+  }
+
+  calculatorThanhTienDaDuyet() {
     this.formData.patchValue({
-      bangChu: VNnum2words(+this.formData.get('thanhTien').value),
+      thanhTienVat:
+        +this.thongtinMuaTrucTiep.soLuong *
+        +this.donGiaVat * 1000,
     });
   }
+
+  calculatorTongSoLuongDxMuaTt() {
+    if (this.listOfData) {
+      const sum = this.listOfData.reduce((prev, cur) => {
+        prev += cur.soLuong;
+        return prev;
+      }, 0);
+      this.formData.get('tongSoLuong').setValue(sum);
+      return sum;
+    }
+  }
+
+  calculatorTongTienDx() {
+    if (this.listOfData) {
+      const sum = this.listOfData.reduce((prev, cur) => {
+        prev += cur.thanhTien;
+        return prev;
+      }, 0);
+      this.formData.get('tongThanhTien').setValue(sum);
+      return sum;
+    }
+  }
+
+  calculatorTongTienDxVat() {
+    if (this.listOfData) {
+      const sum = this.listOfData.reduce((prev, cur) => {
+        prev += cur.thanhTienVat;
+        return prev;
+      }, 0);
+      this.formData.get('tongThanhTienVat').setValue(sum);
+      return sum;
+    }
+  }
+
+  calculatorTongDonGia() {
+    if (this.listOfData) {
+      const sum = this.listOfData.reduce((prev, cur) => {
+        prev += cur.donGia;
+        return prev;
+      }, 0);
+      this.formData.get('donGia').setValue(sum);
+      return sum;
+    }
+  }
+
+
+
+
 
   editCache: { [key: string]: { edit: boolean; data: any } } = {};
 
@@ -280,7 +374,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         return prev;
       }, 0);
       this.formData.get('soLuong').setValue(sum);
-      this.calculatorThanhTien();
+
       return sum;
     }
   }

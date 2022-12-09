@@ -110,25 +110,29 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
       //   }
       //
+      console.log(this.listOfData, 7777)
       this.formData.patchValue({
         children: this.listOfData,
         maDiemKho: this.listOfData[0].maDiemKho,
+        tenDiemKho: this.listOfData[0].tenDiemKho,
+        maNhaKho: this.listOfData[0].maNhaKho,
+        tenNhaKho: this.listOfData[0].tenNhaKho,
         maNganKho: this.listOfData[0].maNganKho,
+        tenNganKho: this.listOfData[0].tenNganKho,
         maLoKho: this.listOfData[0].maLoKho,
+        tenLoKho: this.listOfData[0].tenLoKho,
         loaiVthh: this.listOfData[0].loaiVthh,
         cloaiVthh: this.listOfData[0].cloaiVthh,
         maDviTsan: this.listOfData[0].maDviTsan,
         giaKhongVat: this.listOfData[0].giaKhongVat,
         tienDatTruoc: this.listOfData[0].tienDatTruoc,
-        maNhaKho: this.listOfData[0].maNhaKho,
         soLuongChiTieu: this.listOfData[0].soLuongChiTieu,
         soLuongKh: this.listOfData[0].soLuongKh,
-        diaChi: curChiCuc.diaChi
+        diaDiemKho: this.listOfData[0].diaDiemKho
 
       })
       this._modalRef.close(this.formData);
     }
-    console.log(this.listOfData, 9999)
   }
 
 
@@ -177,6 +181,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       })
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
+      console.log(this.listOfData, 3424)
     } else {
       this.formData.patchValue({
         donGiaVat: this.donGiaVat,
@@ -220,18 +225,18 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
   async changeChiCuc(event) {
     let body = {
-      namKh: 2022,
+      year: 2022,
       loaiVthh: this.loaiVthh,
       maDvi: event
     }
-    let soLuongDaLenKh = await this.deXuatKhBanDauGiaService.search(body);
+    let soLuongDaLenKh = await this.deXuatKhBanDauGiaService.getSoLuongAdded(body);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
         tenDvi: res.data.tenTongKho,
-        // soLuongKh: soLuongDaLenKh.data,
+        soLuongKh: soLuongDaLenKh.data,
         soLuongChiTieu: chiCuc.soLuongNhap
       })
       for (let i = 0; i < res.data?.child.length; i++) {
@@ -384,11 +389,14 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   addDiemKho() {
+    // if (!this.thongtinPhanLo.tenCloaiVthh) {
+    //   this.notification.error(MESSAGE.ERROR, 'Không tìm thấy loại hàng hóa trong kho.');
+    //   return;
+    // }
     if (this.thongtinPhanLo.maDiemKho && this.thongtinPhanLo.soLuong && this.validateSoLuong(true)) {
       this.thongtinPhanLo.maDvi = this.formData.get('maDvi').value;
       this.thongtinPhanLo.donGiaVat = this.formData.get('donGiaVat').value;
       this.thongtinPhanLo.soLuongChiTieu = this.formData.get('soLuongChiTieu').value;
-      this.thongtinPhanLo.soLuongKh = this.formData.get('soLuongKh').value;
       this.calculatorGiaKhoiDiem();
       this.thongtinPhanLo.giaKhoiDiem = this.formData.get('giaKhoiDiem').value;
       this.calculatorGiaKhoiDiemDuocDuyet();
@@ -423,11 +431,11 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       soLuong += item.soLuong
     })
     if (soLuong > soLuongConLai) {
-      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá chỉ tiêu ")
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá số lượng chỉ tiêu ")
       return false
     }
     if (soLuong > soLuong1) {
-      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá Tồn kho ")
+      this.notification.error(MESSAGE.ERROR, "Số lượng đã vượt quá số lượng tồn kho ")
       return false
 
     } else {
@@ -493,16 +501,16 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   calculatorTienDatTruocDonGia() {
     this.formData.patchValue({
       tienDatTruoc:
-        +this.khoanTienDatTruoc *
-        +this.thongtinPhanLo.giaKhongVat,
+        (+this.thongtinPhanLo.giaKhoiDiem *
+          +this.khoanTienDatTruoc) / 100
     });
   }
 
   calculatorTienDatTruocDuocDuyet() {
     this.formData.patchValue({
       tienDatTruocDduyet:
-        +this.khoanTienDatTruoc *
-        +this.thongtinPhanLo.giaKhoiDiemDduyet,
+        (+this.khoanTienDatTruoc *
+          +this.thongtinPhanLo.giaKhoiDiemDduyet) / 100
     });
   }
 

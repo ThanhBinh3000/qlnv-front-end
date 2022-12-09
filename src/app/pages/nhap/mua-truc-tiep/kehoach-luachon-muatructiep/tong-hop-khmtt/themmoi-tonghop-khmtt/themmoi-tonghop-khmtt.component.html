@@ -20,7 +20,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span></span>
-        <span>Tổng hợp đề xuất kế hoạch lựa chọn nhà thầu</span>
+        <span>Tổng hợp đề xuất kế hoạch mua trực tiếp</span>
       </div>
     </div>
   </div>
@@ -157,8 +157,8 @@
           <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenDuAn }}</td>
-          <td>{{ data.soLuong }}</td>
-          <td>{{ data.soLuong * data.donGiaVat | number: '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.tongTienVat| number: '1.0-1' : 'vi_VN' }}</td>
           <td>
             <a (click)="showDetail($event,data.idDxHdr)">
               <i class="fa fa-eye"></i>

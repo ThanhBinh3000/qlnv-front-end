@@ -4,14 +4,9 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && isDetailPermission()"
-      type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
-      <i class="icon htvbdh_tcdt_guiduyet"></i>
-      <span>Lưu và gửi duyệt</span>
-    </button>
-    <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO )  && userService.isTongCuc()" type="button"
-      class="btn btn-sub xanh-nhat" (click)="save(true)">
+
+    <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO ) " type="button" class="btn btn-sub xanh-nhat"
+      (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
@@ -20,15 +15,8 @@
       <i class="icon htvbdh_tcdt_tuchoi "></i>
       <span>Từ chối</span>
     </button>
-    <button
-      *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV || formData.value.trangThai == STATUS.DA_DUYET_LDV) && userService.isTongCuc()"
-      type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
-      <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span> {{ formData.value.trangThai == STATUS.CHO_DUYET_LDV ? 'Duyệt' : 'Ban hành'}} </span>
-    </button>
-    <button
-      *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV )  && isDetailPermission()"
-      type="button" class="btn btn-main" (click)="save()">
+    <button *ngIf="formData.value.trangThai == STATUS.DU_THAO  && isDetailPermission()" type="button"
+      class="btn btn-main" (click)="save()">
       <i class="icon htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -128,12 +116,6 @@
                 [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''"></textarea>
             </nz-form-control>
           </nz-form-item>
-          <!-- <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> giá mua </nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-                <textarea rows="3" class="search__input" nz-input formControlName="giaMua"></textarea>
-            </nz-form-control>
-        </nz-form-item> -->
         </div>
         <div nz-col [nzSpan]="24">
           <nz-form-item>
@@ -184,11 +166,11 @@
               <td>{{ data.tenDvi }}</td>
               <td>{{ data.diaChiDvi }}</td>
               <td>{{ data.soDxuat }}</td>
-              <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.trichYeu }}</td>
               <td>{{ data.tenDuAn }}</td>
-              <td>{{ data.soLuong | number: '1.0-1' }}</td>
-              <td>{{ data.soLuong * data.donGiaVat * 1000 | number: '1.0-1' }}</td>
+              <td>{{ data.tongSoLuong | number: '1.0-1' }}</td>
+              <td>{{ data.tongTienVat| number: '1.0-1' }}</td>
             </tr>
           </tbody>
         </nz-table>
