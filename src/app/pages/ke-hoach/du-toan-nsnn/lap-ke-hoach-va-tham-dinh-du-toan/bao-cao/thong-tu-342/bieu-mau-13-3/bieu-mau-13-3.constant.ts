@@ -80,8 +80,28 @@ export const DANH_MUC = [
     giaTri: 'Nhiệm vụ chuyển tiếp',
   },
   {
+    id: 1012,
+    ma: '0.3.1.1',
+    giaTri: 'Chương trình … (Tên Chương trình)',
+  },
+  {
+    id: 1013,
+    ma: '0.3.1.2',
+    giaTri: 'Các đề án/dự án/đề tài cấp Bộ/tỉnh',
+  },
+  {
     id: 1016,
     ma: '0.3.2',
     giaTri: 'Nhiệm vụ mở mới',
+  },
+  {
+    id: 1017,
+    ma: '0.3.2.1',
+    giaTri: 'Chương trình … (Tên Chương trình)',
+  },
+  {
+    id: 1018,
+    ma: '0.3.2.2',
+    giaTri: 'Các đề án/dự án/đề tài cấp Bộ/tỉnh',
   },
 ]
