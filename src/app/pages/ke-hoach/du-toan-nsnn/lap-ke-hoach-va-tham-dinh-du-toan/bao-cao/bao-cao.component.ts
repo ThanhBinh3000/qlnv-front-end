@@ -702,13 +702,14 @@ export class BaoCaoComponent implements OnInit {
             if (res) {
                 res.forEach(item => {
                     if (item.status) {
-                        const newItem = {
+                        const newItem: ItemData = {
                             ... new ItemData(),
                             id: uuid.v4() + 'FE',
                             maBieuMau: item.id,
                             tenPl: item.tenPl,
-                            temDm: item.tenDm,
+                            tenDm: item.tenDm,
                             trangThai: '3',
+                            lstCtietLapThamDinhs: [],
                         }
                         this.baoCao.lstLapThamDinhs.push(newItem);
                     }
