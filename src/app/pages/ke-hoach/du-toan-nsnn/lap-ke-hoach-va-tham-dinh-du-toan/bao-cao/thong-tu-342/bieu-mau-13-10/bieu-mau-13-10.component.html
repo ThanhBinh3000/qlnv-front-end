@@ -23,10 +23,11 @@
           <th rowspan="2" class="text-center" nzWidth="100px">STT</th>
           <th rowspan="2" nzWidth="300px">NỘI DUNG</th>
           <th rowspan="2" nzWidth="150px">Ước thực hiện năm {{namTruoc}} (năm trước)</th>
-          <th colspan="3" nzWidth="150px">Năm {{namBaoCao}} (năm hiện hành)</th>
+          <th colspan="3" nzWidth="150px">Năm {{namBcao}} (năm hiện hành)</th>
           <th colspan="3" nzWidth="150px">Kế hoạch năm {{namKeHoach}} (năm kế hoạch)</th>
-          <th colspan="3" nzWidth="150px">Kế hoạch năm {{namKeHoach}} (năm kế hoạch)</th>
-          <th rowspan="3" [hidden]="status"></th>
+          <th *ngIf="checkViewTD" colspan="3" nzWidth="150px">Kế hoạch năm {{namKeHoach}} (năm kế hoạch)</th>
+          <th rowspan="4" [hidden]="status"></th>
+          <th rowspan="4" [hidden]="status"></th>
         </tr>
         <tr>
           <th>Số đối tượng</th>
@@ -35,9 +36,9 @@
           <th>Số đối tượng</th>
           <th>Mức trợ cấp/ Mức chi</th>
           <th>Dự toán năm {{namKeHoach}} (năm kế hoạch)</th>
-          <th>Số đối tượng</th>
-          <th>Mức trợ cấp/ Mức chi</th>
-          <th>Dự toán năm {{namKeHoach}} (năm kế hoạch)</th>
+          <th *ngIf="checkViewTD">Số đối tượng</th>
+          <th *ngIf="checkViewTD">Mức trợ cấp/ Mức chi</th>
+          <th *ngIf="checkViewTD">Dự toán năm {{namKeHoach}} (năm kế hoạch)</th>
         </tr>
         <tr>
           <th class="text-center">A</th>
@@ -49,9 +50,9 @@
           <th class="text-center">5</th>
           <th class="text-center">6</th>
           <th class="text-center">7</th>
-          <th class="text-center">5</th>
-          <th class="text-center">6</th>
-          <th class="text-center">7</th>
+          <th *ngIf="checkViewTD" class="text-center" [hidden]="status">5A</th>
+          <th *ngIf="checkViewTD" class="text-center" [hidden]="status">6A</th>
+          <th *ngIf="checkViewTD" class="text-center" [hidden]="status">7A</th>
           <!-- <th nzWidth="2.5%" [hidden]="status"></th> -->
         </tr>
         <tr>
@@ -64,10 +65,9 @@
           <th></th>
           <th></th>
           <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
+          <th *ngIf="checkViewTD"></th>
+          <th *ngIf="checkViewTD"></th>
+          <th *ngIf="checkViewTD"></th>
         </tr>
       </thead>
       <tbody>
@@ -77,24 +77,47 @@
               {{getChiMuc(data.stt)}}
             </td>
             <td>
-              <div *ngFor="let item of linhVucChis">
-                <div *ngIf="item.ma == data.maLvuc">
-                  {{item.giaTri}}
-                </div>
-              </div>
+              {{data.tenNdung}}
             </td>
-            <td>{{data.mtieuNvu}}</td>
-            <td>{{data.csPhapLyThien}}</td>
-            <td>{{data.hdongChuYeu}}</td>
-            <td>{{data.nguonKphi}}</td>
-            <td>{{displayValue(data.ncauChiTongSo)}}</td>
-            <td>{{displayValue(data.ncauChiTrongDoChiCs)}}</td>
-            <td>{{displayValue(data.ncauChiTrongDoChiMoi)}}</td>
-            <td>{{displayValue(data.ncauChiChiaRaDtuPtrien)}}</td>
-            <td>{{displayValue(data.ncauChiChiaRaChiCs1)}}</td>
-            <td>{{displayValue(data.ncauChiChiaRaChiMoi1)}}</td>
+            <td>{{displayValue(data.uocThien)}}</td>
+            <td>{{displayValue(data.namSoDtuong)}}</td>
+            <td>{{displayValue(data.namDtoanGiao)}}</td>
+            <td>{{displayValue(data.namUocThien)}}</td>
+            <td>{{displayValue(data.khSoDtuong)}}</td>
+            <td>{{displayValue(data.khMucTcap)}}</td>
+            <td>{{displayValue(data.khDtoanNam)}}</td>
+            <td *ngIf="checkViewTD">
+              <ng-container *ngIf="checkEditTD; else viewTd">
+                {{displayValue(data.gtriTdinhSoDtuong)}}
+              </ng-container>
+              <ng-template #viewTd>
+                {{displayValue(data.gtriTdinhSoDtuong)}}
+              </ng-template>
+            </td>
+            <td *ngIf="checkViewTD">
+              <ng-container *ngIf="checkEditTD; else viewTd">
+                {{displayValue(data.gtriTdinhMucTcap)}}
+              </ng-container>
+              <ng-template #viewTd>
+                {{displayValue(data.gtriTdinhMucTcap)}}
+              </ng-template>
+              {{displayValue(data.gtriTdinhMucTcap)}}
+            </td>
+            <td *ngIf="checkViewTD">
+              <ng-container *ngIf="checkEditTD; else viewTd">
+                {{displayValue(data.gtriTdinhDtoanNam)}}
+              </ng-container>
+              <ng-template #viewTd>
+                {{displayValue(data.gtriTdinhDtoanNam)}}
+              </ng-template>
+              {{displayValue(data.gtriTdinhDtoanNam)}}
+            </td>
             <td [hidden]="status">
               <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+            </td>
+            <td [hidden]="status">
+              <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+              <i *ngIf="checkDelete(data.maNdung)" class="fa fa-trash-o do" (click)="deleteLine(data.stt)"></i>
             </td>
           </ng-container>
           <ng-template #editTemplate>
@@ -102,72 +125,109 @@
               {{getChiMuc(editCache[data.id].data.stt)}}
             </td>
             <td>
-              <div *ngFor="let item of linhVucChis">
-                <div *ngIf="item.ma == data.maLvuc">
-                  {{item.giaTri}}
-                </div>
-              </div>
+              <ng-container *ngIf="data.maNdung; else editName">
+                {{editCache[data.id].data.tenNdung}}
+              </ng-container>
+              <ng-template #editName>
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenNdung" />
+              </ng-template>
             </td>
             <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.mtieuNvu" />
-            </td>
-            <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.csPhapLyThien" />
-            </td>
-            <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.hdongChuYeu" />
-            </td>
-            <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.nguonKphi" />
-            </td>
-            <td>
-              {{displayValue(editCache[data.id].data.ncauChiTongSo)}}
-            </td>
-            <td>
-              {{displayValue(editCache[data.id].data.ncauChiTrongDoChiCs)}}
-            </td>
-            <td>
-              {{displayValue(editCache[data.id].data.ncauChiTrongDoChiMoi)}}
-            </td>
-            <td>
-              {{displayValue(editCache[data.id].data.ncauChiChiaRaDtuPtrien)}}
-            </td>
-            <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiCs1"
-                (ngModelChange)="changeModel(data.id)">
+              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.uocThien">
               </fm-input-number>
             </td>
             <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi1"
-                (ngModelChange)="changeModel(data.id)">
+              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.namSoDtuong">
               </fm-input-number>
             </td>
             <td>
-              {{displayValue(editCache[data.id].data.ncauChiChiaRaChiTx)}}
+              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.namDtoanGiao">
+              </fm-input-number>
             </td>
             <td>
-              <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-              <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                (nzOnConfirm)="cancelEdit(data.id)" class="save">
-                Hủy
-              </a>
+              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.namUocThien">
+              </fm-input-number>
             </td>
+            <td>
+              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.khSoDtuong">
+              </fm-input-number>
+            </td>
+            <td>
+              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.khMucTcap">
+              </fm-input-number>
+            </td>
+            <td>
+              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.khDtoanNam">
+              </fm-input-number>
+            </td>
+            <td *ngIf="checkViewTD">
+              <ng-container *ngIf="checkEditTD; else viewTD">
+                <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.gtriTdinhSoDtuong"
+                  (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+              </ng-container>
+              <ng-template #viewTD>
+            <td>{{displayValue(editCache[data.id].data.gtriTdinhSoDtuong)}}</td>
+          </ng-template>
+          </td>
+          <td *ngIf="checkViewTD">
+            <ng-container *ngIf="checkEditTD; else viewTD">
+              <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.gtriTdinhMucTcap"
+                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+            </ng-container>
+            <ng-template #viewTD>
+          <td>{{displayValue(editCache[data.id].data.gtriTdinhMucTcap)}}</td>
+          </ng-template>
+          </td>
+          <td *ngIf="checkViewTD">
+            <ng-container *ngIf="checkEditTD; else viewTD">
+              <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.gtriTdinhDtoanNam"
+                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+            </ng-container>
+            <ng-template #viewTD>
+          <td>{{displayValue(editCache[data.id].data.gtriTdinhDtoanNam)}}</td>
+          </ng-template>
+          </td>
+          <!-- <td>
+              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.gtriTdinhSoDtuong">
+              </fm-input-number>
+            </td> -->
+          <!-- <td>
+            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.gtriTdinhMucTcap">
+            </fm-input-number>
+          </td>
+          <td>
+            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.gtriTdinhDtoanNam">
+            </fm-input-number>
+          </td> -->
+          <td>
+            <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+            <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
+              class="save">
+              Hủy
+            </a>
+          </td>
+          <td>
+            <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+            <i *ngIf="checkDelete(data.maNdung)" class="fa fa-trash-o do" (click)="deleteLine(data.stt)"></i>
+          </td>
           </ng-template>
         </tr>
 
         <tr>
           <td></td>
           <td>Tổng cộng</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>{{displayValue(total.ncauChiTongSo)}}</td>
-          <td>{{displayValue(total.ncauChiTrongDoChiCs)}}</td>
-          <td>{{displayValue(total.ncauChiTrongDoChiMoi)}}</td>
-          <td>{{displayValue(total.ncauChiChiaRaDtuPtrien)}}</td>
-          <td>{{displayValue(total.ncauChiChiaRaChiCs1)}}</td>
-          <td>{{displayValue(total.ncauChiChiaRaChiMoi1)}}</td>
+          <!-- <td></td> -->
+          <td>{{displayValue(total.uocThien)}}</td>
+          <td>{{displayValue(total.namSoDtuong)}}</td>
+          <td>{{displayValue(total.namDtoanGiao)}}</td>
+          <td>{{displayValue(total.namUocThien)}}</td>
+          <td>{{displayValue(total.khSoDtuong)}}</td>
+          <td>{{displayValue(total.khMucTcap)}}</td>
+          <td>{{displayValue(total.khDtoanNam)}}</td>
+          <td *ngIf="checkViewTD">{{displayValue(total.gtriTdinhSoDtuong)}}</td>
+          <td *ngIf="checkViewTD">{{displayValue(total.gtriTdinhMucTcap)}}</td>
+          <td *ngIf="checkViewTD">{{displayValue(total.gtriTdinhDtoanNam)}}</td>
+          <td [hidden]="status"></td>
           <td [hidden]="status"></td>
         </tr>
       </tbody>
