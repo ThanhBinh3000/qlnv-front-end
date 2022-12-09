@@ -93,30 +93,37 @@
                         <td>
                             {{editCache[data.id].data.tenNdung}}
                         </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.namHienHanhDtoan"
-                                (ngModelChange)="changeModel(data.id)"
-                                [class]="editCache[data.id].data.namHienHanhDtoan || editCache[data.id].data.namHienHanhDtoan === 0 ? '' : 'input-error-validate'">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.namHienHanhUocThien"
-                                (ngModelChange)="changeModel(data.id)"
-                                [class]="editCache[data.id].data.namHienHanhUocThien || editCache[data.id].data.namHienHanhUocThien === 0 ? '' : 'input-error-validate'">
-                            </fm-input-number>
-                        </td>
+                        <ng-container *ngIf="!isEdit(data.stt); else edit">
+                            <td>
+                                {{displayValue(editCache[data.id].data.namHienHanhDtoan)}}
+                            </td>
+                            <td>
+                                {{displayValue(editCache[data.id].data.namHienHanhUocThien)}}
+                            </td>
+                        </ng-container>
+                        <ng-template #edit>
+                            <td>
+                                <fm-input-number class="search__input"
+                                    [(ngModel)]="editCache[data.id].data.namHienHanhDtoan"
+                                    (ngModelChange)="changeModel(data.id)"
+                                    [class]="editCache[data.id].data.namHienHanhDtoan || editCache[data.id].data.namHienHanhDtoan === 0 ? '' : 'input-error-validate'">
+                                </fm-input-number>
+                            </td>
+                            <td>
+                                <fm-input-number class="search__input"
+                                    [(ngModel)]="editCache[data.id].data.namHienHanhUocThien"
+                                    (ngModelChange)="changeModel(data.id)"
+                                    [class]="editCache[data.id].data.namHienHanhUocThien || editCache[data.id].data.namHienHanhUocThien === 0 ? '' : 'input-error-validate'">
+                                </fm-input-number>
+                            </td>
+                        </ng-template>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.tranChiN"
                                 (ngModelChange)="changeModel(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
-                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.ncauChiN"
-                                (ngModelChange)="changeModel(data.id)"
-                                [class]="editCache[data.id].data.ncauChiN || editCache[data.id].data.ncauChiN === 0 ? '' : 'input-error-validate'">
-                            </fm-input-number>
+                            {{displayValue(editCache[data.id].data.ncauChiN)}}
                         </td>
                         <td>
                             {{displayValue(editCache[data.id].data.clechTranChiVsNcauChiN)}}

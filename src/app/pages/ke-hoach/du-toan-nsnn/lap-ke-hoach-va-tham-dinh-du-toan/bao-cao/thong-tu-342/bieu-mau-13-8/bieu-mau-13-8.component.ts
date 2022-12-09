@@ -245,7 +245,7 @@ export class BieuMau138Component implements OnInit {
             xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
         }
         if (n == 3) {
-            xau = String.fromCharCode(k + 96);
+            xau = '';
         }
         if (n == 4) {
             xau = "-";
