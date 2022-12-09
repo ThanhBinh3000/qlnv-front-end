@@ -389,7 +389,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
       for (const item of this.danhsachDxCache) {
         await this.danhSachMuaTrucTiepService.getDetail(item.idDxHdr).then((res) => {
           if (res.msg == MESSAGE.SUCCESS) {
-            item.dsGoiThau = res.data.dsSlddDtlList;
+            item.dsSlddDtlList = res.data.dsSlddDtlList;
           }
         })
       }
@@ -433,10 +433,6 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           tchuanCluong: data.tchuanCluong,
-          loaiHdong: data.loaiHdong,
-          pthucLcnt: data.pthucLcnt,
-          hthucLcnt: data.hthucLcnt,
-          nguonVon: data.nguonVon,
           soQdCc: data.soQdCc,
           idThHdr: event,
           idTrHdr: null,
@@ -446,7 +442,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
         for (const item of this.danhsachDx) {
           await this.danhSachMuaTrucTiepService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
-              item.dsGoiThau = res.data.dsSlddDtlList;
+              item.dsSlddDtlList = res.data.dsSlddDtlList;
             }
           })
         };
@@ -525,6 +521,13 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
           tenCloaiVthh: data.tenCloaiVthh,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
+          moTaHangHoa: data.moTaHangHoa,
+          ptMua: data.ptMua,
+          giaMua: data.giaMua,
+          donGia: data.donGia,
+          donGiaVat: data.donGiaVat,
+          tgianMkho: data.tgianMkho,
+          tgianKthuc: data.tgianKthuc,
           tchuanCluong: data.tchuanCluong,
           trichYeu: dataRes.trichYeu,
           tenDvi: data.tenDvi,
