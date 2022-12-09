@@ -145,13 +145,9 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       trangThai: "01",
       maDviCha: this.userInfo.MA_DVI
     };
-
     if (this.dataChiTieu) {
-      if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
+      if (this.loaiVthh === LOAI_HANG_DTQG.THOC) {
         this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
-      }
-      if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
-        this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
       }
     } else {
       let res = await this.donViService.getAll(body);
@@ -175,6 +171,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     let soLuongDaLenKh = await this.danhSachMuaTrucTiepService.getSoLuongAdded(body);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
+    console.log(res, 1111)
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
