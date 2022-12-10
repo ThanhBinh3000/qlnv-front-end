@@ -47,9 +47,6 @@ export class DanhMucHangHoaComponent implements OnInit {
   listPpLayMau: any[] = [];
   listOfOption: Array<{ maDvi: string; tenDvi: string }> = [];
   listOfTagOption: any[] = [];
-  listTenDviQly: any[] = [];
-  listDvqlReq: Array<{ maDvi: string; tenDvi: string }> = [];
-
 
   constructor(
     private router: Router,
@@ -177,12 +174,6 @@ export class DanhMucHangHoaComponent implements OnInit {
     let res = await this.dmHangService.layTatCaDviQly();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDviQly = res.data;
-      if (this.listDviQly) {
-        for (let x = 0; x < this.listDviQly.length; x++) {
-          this.listOfOption.push({maDvi: this.listDviQly[x].tenDvi, tenDvi: this.listDviQly[x].tenDvi})
-          this.listTenDviQly.push(this.listDviQly[x].tenDvi)
-        }
-      }
     }
   }
 
@@ -226,12 +217,7 @@ export class DanhMucHangHoaComponent implements OnInit {
           if (this.nodeDetail.maDviTinh) {
             dviTinh = this.listDviTinh.filter(item => item.giaTri == this.nodeDetail.maDviTinh);
           }
-          this.listOfTagOption = [];
-          if (this.nodeDetail.dmHangDvqls) {
-            this.nodeDetail.dmHangDvqls.forEach(item => {
-              this.listOfTagOption.push(item.tenDvi)
-            })
-          }
+          this.listOfTagOption = ['0101','05']
           let detaiParent = this.nodeDetail.detailParent;
           this.detailHangHoa.patchValue({
             maCha: detaiParent ? detaiParent.ma : null,
@@ -311,15 +297,7 @@ export class DanhMucHangHoaComponent implements OnInit {
     }
     let dviTinh = this.listDviTinh.filter(item => item.ma == this.detailHangHoa.value.maDviTinh)
     let body = this.detailHangHoa.value;
-    if (this.listOfTagOption && this.listOfOption) {
-      this.listOfTagOption.forEach(item => {
-        let index = this.listTenDviQly.indexOf(item);
-        if (index && index > -1) {
-          this.listDvqlReq.push({maDvi: this.listDviQly[index].maDvi, tenDvi: this.listDviQly[index].tenDvi});
-        }
-      })
-    }
-    body.dmHangDvqls = this.listDvqlReq;
+    body.dmHangDvqls =[]
     body.trangThai = this.detailHangHoa.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
     body.maDviTinh = dviTinh[0].giaTri
     body.loaiHinhBq = this.listLhbq.filter(item => item.checked === true)

@@ -31,6 +31,7 @@
           <th colspan="3" rowspan="2">Kinh phí được phê duyệt</th>
           <th colspan="10">Kinh phí thực hiện</th>
           <th rowspan="5" [hidden]="status"></th>
+          <th rowspan="5" [hidden]="status"></th>
         </tr>
         <tr>
           <th colspan="4">Năm {{namBcao}} (năm hiện hành)</th>
@@ -75,7 +76,6 @@
           <th class="text-center">14=15+16</th>
           <th class="text-center">15</th>
           <th class="text-center">16</th>
-          <!-- <th nzWidth="2.5%" [hidden]="status"></th> -->
         </tr>
       </thead>
       <tbody>
@@ -85,13 +85,8 @@
               {{getChiMuc(data.stt)}}
             </td>
             <td>
-              <div *ngFor="let item of duAns">
-                <div *ngIf="item.ma == data.maDtaiDan">
-                  {{item.giaTri}}
-                </div>
-              </div>
+              {{data.tenDan}}
             </td>
-            <!-- <td>{{data.maDtaiDan}}</td> -->
             <td>{{data.coQuanCtri}}</td>
             <td>{{data.tgianThien}}</td>
             <td>{{data.qdinhPduyet}}</td>
@@ -120,15 +115,13 @@
             <td class="text-center">
               {{getChiMuc(editCache[data.id].data.stt)}}
             </td>
-            <!-- <td>
-              <div *ngFor="let item of duAns">
-                <div *ngIf="item.ma == data.maDtaiDan">
-                  {{item.giaTri}}
-                </div>
-              </div>
-            </td> -->
             <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.maDtaiDan" />
+              <ng-container *ngIf="data.maDtaiDan; else editName">
+                {{editCache[data.id].data.tenDan}}
+              </ng-container>
+              <ng-template #editName>
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenDan" />
+              </ng-template>
             </td>
             <td>
               <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.coQuanCtri" />
@@ -140,16 +133,25 @@
               <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.qdinhPduyet" />
             </td>
             <td>
-              {{displayValue(editCache[data.id].data.kphiPduyetNsnn)}}
+              {{displayValue(editCache[data.id].data.kphiPduyetTso)}}
             </td>
             <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.kphiPduyetNkhac" />
+              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kphiPduyetNsnn"
+                (ngModelChange)="changeModel(data.id)">
+              </fm-input-number>
             </td>
             <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.kphiThienNamTso" />
+              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kphiPduyetNkhac"
+                (ngModelChange)="changeModel(data.id)">
+              </fm-input-number>
             </td>
             <td>
-              {{displayValue(editCache[data.id].data.kphiThienNamNsnnDtoan)}}
+              {{displayValue(editCache[data.id].data.kphiThienNamTso)}}
+            </td>
+            <td>
+              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kphiThienNamNsnnDtoan"
+                (ngModelChange)="changeModel(data.id)">
+              </fm-input-number>
             </td>
             <td>
               <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kphiThienNamNsnnUth"
@@ -157,13 +159,7 @@
               </fm-input-number>
             </td>
             <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kphiThienNamKphiThien"
-                (ngModelChange)="changeModel(data.id)">
-              </fm-input-number>
-            </td>
-            <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kphiThienNamKphiThien"
-                (ngModelChange)="changeModel(data.id)">
+              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kphiThienNamKphiThien">
               </fm-input-number>
             </td>
             <td>
@@ -224,6 +220,7 @@
           <td>{{displayValue(total.kphiThienDtoanTso)}}</td>
           <td>{{displayValue(total.kphiThienDtoanNsnn)}}</td>
           <td>{{displayValue(total.kphiThienDtoanNkhac)}}</td>
+          <td [hidden]="status"></td>
           <td [hidden]="status"></td>
         </tr>
       </tbody>
