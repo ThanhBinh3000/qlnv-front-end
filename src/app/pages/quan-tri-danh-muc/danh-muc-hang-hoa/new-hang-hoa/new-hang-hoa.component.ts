@@ -56,7 +56,7 @@ export class NewHangHoaComponent implements OnInit {
       loaiHang: [''],
       trangThai: [true],
       kyHieu: [''],
-      maDviTinh: ['', Validators.required],
+      maDviTinh: [''],
     })
   }
 

@@ -66,7 +66,7 @@ export class DanhMucHangHoaComponent implements OnInit {
       maCha: [''],
       tenHhCha: ['',],
       tenHangHoa: ['',],
-      maDviTinh: ['', Validators.required],
+      maDviTinh: [''],
       tchuanCluong: ['',],
       thoiHanLk: ['',],
       loaiHang: [''],
@@ -306,7 +306,7 @@ export class DanhMucHangHoaComponent implements OnInit {
     let body = this.detailHangHoa.value;
     body.dmHangDvqls = this.listOfOption.filter((x) => this.listOfTagOption.includes(x.maDvi))
     body.trangThai = this.detailHangHoa.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
-    body.maDviTinh = dviTinh[0].giaTri
+    body.maDviTinh = dviTinh && dviTinh[0] ? dviTinh[0].giaTri : null
     body.loaiHinhBq = this.listLhbq.filter(item => item.checked === true)
     body.phuongPhapBq = this.listPpbq.filter(item => item.checked === true)
     body.hinhThucBq = this.listHtbq.filter(item => item.checked === true)
