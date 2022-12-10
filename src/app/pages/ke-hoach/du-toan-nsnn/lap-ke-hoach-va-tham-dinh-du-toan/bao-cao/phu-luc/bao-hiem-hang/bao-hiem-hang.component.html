@@ -1,5 +1,35 @@
 <div class="modal-content">
     <div id="tablePrint">
+        <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
+            <div nz-col [nzSpan]="2">
+                Đơn vị:
+            </div>
+            <div nz-col [nzSpan]="2">
+                <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+                    <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+                </ng-container>
+                <ng-template #editMoney>
+                    <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                        (ngModelChange)="editMoneyUnit=false">
+                        <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                        </nz-option>
+                    </nz-select>
+                </ng-template>
+            </div>
+
+            <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
+                <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
+                    <i class="fa fa-trash-o"></i>
+                    <span>Xóa</span>
+                </button>
+                <ng-container *ngIf="lstCtietBcao.length == 0">
+                    <button type="button" class="btn btn-main" (click)="addNewReport(null)" [hidden]="status">
+                        <i class="icon htvbdh_dau-cong"></i>
+                        <span>Thêm</span>
+                    </button>
+                </ng-container>
+            </div>
+        </div>
         <nz-table nzBordered class="table__body">
             <thead>
                 <tr>
@@ -18,19 +48,6 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td>Tổng cộng</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td [hidden]="status"></td>
-                    <td [hidden]="status"></td>
-                    <td [hidden]="status"></td>
-                    <td [hidden]="status"></td>
-                </tr>
                 <tr *ngFor="let data of lstCtietBcao; let i = index">
                     <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
                         <td [hidden]="status">
@@ -38,36 +55,31 @@
                                 (ngModelChange)="updateSingleChecked()"></label>
                         </td>
                         <td class="text-center">
-                            {{getChiMuc(data.stt)}}
+                            {{i + 1}}
                         </td>
                         <td>
-                            <div *ngFor="let item of linhVucChis">
-                                <div *ngIf="item.ma == data.maLvuc">
-                                    {{item.giaTri}}
+                            <div *ngFor="let item of listDiemKho">
+                                <div *ngIf="item.id == data.maKho">
+                                    {{item.tenDvi}}
                                 </div>
                             </div>
                         </td>
-                        <td>{{data.mtieuNvu}}</td>
-                        <td>{{data.csPhapLyThien}}</td>
-                        <td>{{data.hdongChuYeu}}</td>
-                        <td>{{data.nguonKphi}}</td>
-                        <td>{{displayValue(data.ncauChiTongSo)}}</td>
-                        <td>{{displayValue(data.ncauChiTrongDoChiCs)}}</td>
-                        <td>{{displayValue(data.ncauChiTrongDoChiMoi)}}</td>
-                        <td>{{displayValue(data.ncauChiChiaRaDtuPtrien)}}</td>
-                        <td>{{displayValue(data.ncauChiChiaRaChiCs1)}}</td>
-                        <td>{{displayValue(data.ncauChiChiaRaChiMoi1)}}</td>
-                        <td>{{displayValue(data.ncauChiChiaRaChiTx)}}</td>
-                        <td>{{displayValue(data.ncauChiChiaRaChiCs2)}}</td>
-                        <td>{{displayValue(data.ncauChiChiaRaChiMoi2)}}</td>
-                        <td>{{displayValue(data.ncauChiChiaRaChiDtqg)}}</td>
-                        <td>{{displayValue(data.ncauChiChiaRaChiCs3)}}</td>
-                        <td>{{displayValue(data.ncauChiChiaRaChiMoi3)}}</td>
+                        <td>
+                            <div *ngFor="let item of listKhoFull">
+                                <div *ngIf="item.id == data.tenNhaKho">
+                                    {{item.tenDvi}}
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{data.khoiTich}}</td>
+                        <td>{{data.tenHang}}</td>
+                        <td>{{data.soLuong}}</td>
+                        <td>{{displayValue(data.giaTri)}}</td>
                         <td [hidden]="status">
                             <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                         </td>
                         <td [hidden]="status">
-                            <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                            <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </td>
                         <td [hidden]="status">
                             <i class="fa fa-plus" (click)="addNewReport(i + 1)"></i>
@@ -79,78 +91,38 @@
                                 (ngModelChange)="updateSingleChecked()"></label>
                         </td>
                         <td class="text-center">
-                            {{getChiMuc(editCache[data.id].data.stt)}}
+                            {{i + 1}}
                         </td>
                         <td>
-                            <div *ngFor="let item of linhVucChis">
-                                <div *ngIf="item.ma == data.maLvuc">
-                                    {{item.giaTri}}
-                                </div>
-                            </div>
+                            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn địa phương"
+                                [(ngModel)]="editCache[data.id].data.maKho"
+                                (ngModelChange)="changeDiemKho(editCache[data.id].data.maKho, editCache[data.id].data.id)">
+                                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.id" [nzLabel]="item.tenDvi">
+                                </nz-option>
+                            </nz-select>
                         </td>
                         <td>
-                            <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.mtieuNvu" />
+                            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn địa phương"
+                                [(ngModel)]="editCache[data.id].data.tenNhaKho">
+                                <nz-option *ngFor="let item of listKho" [nzValue]="item.id" [nzLabel]="item.tenDviKho">
+                                </nz-option>
+                            </nz-select>
                         </td>
                         <td>
-                            <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.csPhapLyThien" />
-                        </td>
-                        <td>
-                            <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.hdongChuYeu" />
-                        </td>
-                        <td>
-                            <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.nguonKphi" />
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.ncauChiTongSo)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.ncauChiTrongDoChiCs)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.ncauChiTrongDoChiMoi)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.ncauChiChiaRaDtuPtrien)}}
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiCs1"
+                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.khoiTich"
                                 (ngModelChange)="changeModel(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi1"
+                            <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenHang" />
+                        </td>
+                        <td>
+                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.soLuong"
                                 (ngModelChange)="changeModel(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
-                            {{displayValue(editCache[data.id].data.ncauChiChiaRaChiTx)}}
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiCs2"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi2"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.ncauChiChiaRaChiDtqg)}}
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiCs3"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi3"
+                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaTri"
                                 (ngModelChange)="changeModel(data.id)">
                             </fm-input-number>
                         </td>
@@ -168,6 +140,20 @@
                             <i class="fa fa-plus" (click)="addNewReport(i + 1)"></i>
                         </td>
                     </ng-template>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Tổng cộng</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{displayValue(total.giaTri)}}</td>
+                    <td [hidden]="status"></td>
+                    <td [hidden]="status"></td>
+                    <td [hidden]="status"></td>
+                    <td [hidden]="status"></td>
                 </tr>
 
             </tbody>
