@@ -211,7 +211,7 @@ export class NewHangHoaComponent implements OnInit {
     let dviTinh =  this.listDviTinh.filter(item => item.ma == this.formHangHoa.value.maDviTinh)
     let body = this.formHangHoa.value;
     body.dmHangDvqls = this.listOfTagOption;
-    body.maDviTinh = dviTinh[0].giaTri
+    body.maDviTinh = dviTinh && dviTinh[0] ? dviTinh[0].giaTri : null
     if ( this.formHangHoa.value.maCha) {
       body.ma = this.formHangHoa.value.maCha + this.formHangHoa.value.ma
     } else {
