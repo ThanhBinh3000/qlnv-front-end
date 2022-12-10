@@ -70,6 +70,7 @@ export class BaoHiemKhoComponent implements OnInit {
 
     checkViewTD: boolean;
     checkEditTD: boolean;
+    checkAddNewRow: boolean = false;
 
     tongSo1: number;
     tongSo2: number;
@@ -132,7 +133,7 @@ export class BaoHiemKhoComponent implements OnInit {
 
 
         this.userInfo = this.userService.getUserLogin().DON_VI;
-        console.log(this.userInfo);
+
         const reqGetDonViCon = {
             maDviCha: this.maDviTao,
             trangThai: '01',
@@ -144,6 +145,7 @@ export class BaoHiemKhoComponent implements OnInit {
 
                     tenDvi: this.userInfo.tenDvi,
                     maDvi: this.maDviTao,
+                    capDvi: this.userInfo.capDvi
                 }
                 if (this.userInfo.capDvi != "3") {
                     this.listDanhSachCuc = res.data;
@@ -193,8 +195,7 @@ export class BaoHiemKhoComponent implements OnInit {
 
             })
         }
-        console.log(this.listDanhMucKho);
-        console.log(this.listDanhSachCuc);
+
         this.updateEditCache();
         this.getStatusButton();
 
@@ -301,11 +302,13 @@ export class BaoHiemKhoComponent implements OnInit {
     // luu thay doi
     saveEdit(id: string): void {
 
+
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.tinhTong();
         this.updateEditCache();
+        this.checkAddNewRow = false;
     }
     // huy thay doi
     cancelEdit(id: string): void {
@@ -365,10 +368,7 @@ export class BaoHiemKhoComponent implements OnInit {
     // start edit
     startEdit(id: string): void {
         this.editCache[id].edit = true;
-
-        this.selectDonvi(this.editCache[id].data.maDvi);
-        this.selectDiadiem(this.editCache[id].data.diaChiKho);
-
+        this.checkAddNewRow = true;
     }
 
     // click o checkbox single
@@ -453,6 +453,7 @@ export class BaoHiemKhoComponent implements OnInit {
             edit: true,
             data: { ...item }
         };
+        this.checkAddNewRow = true;
     }
 
 
@@ -505,6 +506,7 @@ export class BaoHiemKhoComponent implements OnInit {
 
 
     async selectDonvi(idDonvi: any) {
+        console.log(idDonvi);
         await this.quanLyVonPhiService.dmKho(idDonvi).toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.listDanhMucKho = res.data;
@@ -514,16 +516,18 @@ export class BaoHiemKhoComponent implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-
-        var diaDiem;
-        if (this.userInfo.capDvi == "3") {
+        console.log(this.listDanhMucKho);
+        console.log(this.listDanhSachCuc);
+        let diaDiem;
+        let capDonVi = this.listDanhSachCuc.find(e => e.maDvi === idDonvi).capDvi;
+        if (capDonVi == "3") {
             diaDiem = this.listDanhMucKho.find(ts => ts.maDvi === idDonvi);
         } else {
             diaDiem = this.listDanhMucKho.find(ts => ts.maDviCha === idDonvi);
         }
-
+        console.log(diaDiem);
         this.listDanhMucKho = diaDiem?.children;
-        console.log(this.listDanhMucKho);
+
     }
 
 
