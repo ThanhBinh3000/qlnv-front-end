@@ -117,7 +117,7 @@ export const PHU_LUC = [
     },
     {
         id: 'TT69_14',
-        tenDm: 'Tông hợp nhu cầu chi đầu tư phát triển giai đoạn 03 năm',
+        tenDm: 'Tổng hợp nhu cầu chi đầu tư phát triển giai đoạn 03 năm',
         tenPl: 'Biểu mẫu 14',
         status: false,
     },
