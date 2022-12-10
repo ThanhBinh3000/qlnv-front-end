@@ -47,6 +47,7 @@ export class DanhMucHangHoaComponent implements OnInit {
   listPpLayMau: any[] = [];
   listOfOption: Array<{ maDvi: string; tenDvi: string }> = [];
   listOfTagOption: any[] = [];
+  listDvqlReq: any[] = [];
 
   constructor(
     private router: Router,
@@ -68,7 +69,7 @@ export class DanhMucHangHoaComponent implements OnInit {
       maDviTinh: ['', Validators.required],
       tchuanCluong: ['',],
       thoiHanLk: ['',],
-      loaiHang: ['', Validators.required],
+      loaiHang: [''],
       kyHieu: ['',],
       ma: ['', Validators.required],
       ghiChu: ['',],
@@ -170,10 +171,10 @@ export class DanhMucHangHoaComponent implements OnInit {
   }
 
   async loadListDviQly() {
-    this.listDviQly = [];
+    this.listOfOption = [];
     let res = await this.dmHangService.layTatCaDviQly();
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listDviQly = res.data;
+      this.listOfOption = res.data;
     }
   }
 
@@ -217,7 +218,12 @@ export class DanhMucHangHoaComponent implements OnInit {
           if (this.nodeDetail.maDviTinh) {
             dviTinh = this.listDviTinh.filter(item => item.giaTri == this.nodeDetail.maDviTinh);
           }
-          this.listOfTagOption = ['0101','05']
+          this.listOfTagOption = []
+          if (this.nodeDetail.dmHangDvqls) {
+            this.nodeDetail.dmHangDvqls.forEach(item => {
+              this.listOfTagOption.push(item.maDvi)
+            })
+          }
           let detaiParent = this.nodeDetail.detailParent;
           this.detailHangHoa.patchValue({
             maCha: detaiParent ? detaiParent.ma : null,
@@ -290,6 +296,7 @@ export class DanhMucHangHoaComponent implements OnInit {
     this.isEditData = editData
   }
 
+
   update() {
     this.helperService.markFormGroupTouched(this.detailHangHoa);
     if (this.detailHangHoa.invalid) {
@@ -297,7 +304,7 @@ export class DanhMucHangHoaComponent implements OnInit {
     }
     let dviTinh = this.listDviTinh.filter(item => item.ma == this.detailHangHoa.value.maDviTinh)
     let body = this.detailHangHoa.value;
-    body.dmHangDvqls =[]
+    body.dmHangDvqls = this.listOfOption.filter((x) => this.listOfTagOption.includes(x.maDvi))
     body.trangThai = this.detailHangHoa.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
     body.maDviTinh = dviTinh[0].giaTri
     body.loaiHinhBq = this.listLhbq.filter(item => item.checked === true)
