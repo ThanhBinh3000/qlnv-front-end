@@ -424,21 +424,21 @@ export class PhuLuc03Component implements OnInit {
     }
 
     deleteLine(id: any) {
-        const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+        const index: number = this.lstCtietBcao.findIndex(e => e.stt === id); // vi tri hien tai
         const nho: string = this.lstCtietBcao[index].stt;
-        // const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
-        // const stt: string = this.lstCtietBcao[index].stt;
+        const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+        const stt: string = this.lstCtietBcao[index].stt;
         //xóa phần tử và con của nó
         this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
         //update lại số thức tự cho các phần tử cần thiết
-        // const lstIndex: number[] = [];
-        // for (let i = this.lstCtietBcao.length - 1; i >= index; i--) {
-        //     if (this.getHead(this.lstCtietBcao[i].stt) == head) {
-        //         lstIndex.push(i);
-        //     }
-        // }
+        const lstIndex: number[] = [];
+        for (let i = this.lstCtietBcao.length - 1; i >= index; i--) {
+            if (this.getHead(this.lstCtietBcao[i].stt) == head) {
+                lstIndex.push(i);
+            }
+        }
 
-        // this.replaceIndex(lstIndex, -1);
+        this.replaceIndex(lstIndex, -1);
         this.updateEditCache();
     }
     // them dong moi

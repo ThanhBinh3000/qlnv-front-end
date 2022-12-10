@@ -8,6 +8,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
 import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 
@@ -53,22 +54,39 @@ export class BaoHiemKhoComponent implements OnInit {
     statusBtnOk: boolean;
     listDanhMucKho: any[] = [];
     listDanhSachCuc: any[] = [];
+    listDiemKho: any[] = [];
+    listDiemKhoFull: any[] = [];
     isDataAvailable = false;
     dsDinhMuc: any[] = [];
     maDviTao: any;
     soLaMa: any[] = LA_MA;
     allChecked = false;
+    userInfo: any;
+    tenDviLogin: any;
 
     namBaoCao: string;
     namTruoc: string;
     namKeHoach: string;
 
-
-
-
-
     checkViewTD: boolean;
     checkEditTD: boolean;
+    checkAddNewRow: boolean = false;
+
+    tongSo1: number;
+    tongSo2: number;
+    tongSo3: number;
+    tongSo4: number;
+    tongSo5: number;
+    tongSo6: number;
+    tongSo7: number;
+    tongSo8: number;
+    tongSo9: number;
+    tongSo10: number;
+    tongSo11: number;
+    tongSo12: number;
+
+    tongSoNhaKhoDuoi5000: number;
+    tongSoNhaKhoTren5000: number;
     //nho dem
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 
@@ -80,6 +98,7 @@ export class BaoHiemKhoComponent implements OnInit {
         private modal: NzModalService,
         private danhMucService: DanhMucHDVService,
         private quanLyVonPhiService: QuanLyVonPhiService,
+        private userService: UserService,
     ) {
     }
 
@@ -105,15 +124,35 @@ export class BaoHiemKhoComponent implements OnInit {
         // this.checkViewTD = this.dataInfo?.viewAppraisalValue;
         this.checkEditTD = false;
         this.checkViewTD = true;
+
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
             })
         })
 
-        await this.quanLyVonPhiService.dmKho(this.maDviTao).toPromise().then(res => {
+
+        this.userInfo = this.userService.getUserLogin().DON_VI;
+
+        const reqGetDonViCon = {
+            maDviCha: this.maDviTao,
+            trangThai: '01',
+        }
+
+        await this.quanLyVonPhiService.dmDviCon(reqGetDonViCon).toPromise().then(res => {
             if (res.statusCode == 0) {
-                this.listDanhMucKho = res.data;
+                const donViLogin = {
+
+                    tenDvi: this.userInfo.tenDvi,
+                    maDvi: this.maDviTao,
+                    capDvi: this.userInfo.capDvi
+                }
+                if (this.userInfo.capDvi != "3") {
+                    this.listDanhSachCuc = res.data;
+                }
+                this.listDanhSachCuc.push(donViLogin);
+
+
             } else {
                 this.notification.error(MESSAGE.ERROR, res?.msg);
             }
@@ -121,7 +160,41 @@ export class BaoHiemKhoComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
 
+        // await this.quanLyVonPhiService.dmKho(this.maDviTao).toPromise().then(res => {
+        //     if (res.statusCode == 0) {
+        //         this.listDanhMucKho = res.data;
+        //     } else {
+        //         this.notification.error(MESSAGE.ERROR, res?.msg);
+        //     }
+        // }, err => {
+        //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        // })
+        if (this.lstCtietBcao.length == 0) {
 
+            this.lstCtietBcao.push({
+                ...new ItemData(),
+                id: uuid.v4() + 'FE',
+                stt: "0.1",
+                maDvi: this.maDviTao,
+                diaChiKho: null,
+                tenNhaKho: null,
+                khoiTichKhoDuoiM3: null,
+                khoiTichKhoTuM3: null,
+                slNhaKhoDuoi: null,
+                slNhaKhoTu: null,
+                slNhaKhoTong: null,
+                duoiGtConLai: null,
+                duoiHetKhauHao: null,
+                duoiTongGtKho: null,
+                tuGtConLai: null,
+                tuHetKhauHao: null,
+                tuTongGtKho: null,
+                tong: null,
+                level: null,
+                checked: false,
+
+            })
+        }
 
         this.updateEditCache();
         this.getStatusButton();
@@ -229,11 +302,13 @@ export class BaoHiemKhoComponent implements OnInit {
     // luu thay doi
     saveEdit(id: string): void {
 
+
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         this.tinhTong();
         this.updateEditCache();
+        this.checkAddNewRow = false;
     }
     // huy thay doi
     cancelEdit(id: string): void {
@@ -267,13 +342,33 @@ export class BaoHiemKhoComponent implements OnInit {
     }
 
     checkEdit(stt: string) {
-        const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
-        return lstTemp.every(e => !e.stt.startsWith(stt));
+        // const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
+        // return lstTemp.every(e => !e.stt.startsWith(stt));
+        if (stt.length != 3) {
+            return true;
+        }
+        return false;
     }
 
+    //check row
+    checkAdd(data: ItemData) {
+        if (data.stt.length == 3) {
+            return true;
+        }
+        return false;
+    }
+
+
+    checkDelete(maDa: string) {
+        if (maDa.length != 3) {
+            return true;
+        }
+        return false;
+    }
     // start edit
     startEdit(id: string): void {
         this.editCache[id].edit = true;
+        this.checkAddNewRow = true;
     }
 
     // click o checkbox single
@@ -319,12 +414,20 @@ export class BaoHiemKhoComponent implements OnInit {
         this.updateEditCache();
     }
     // them dong moi
-    addLine(id: number): void {
+    addLine(stt: any): void {
 
+        let index = -1;
+        for (let i = this.lstCtietBcao.length - 1; i >= 0; i--) {
+            if (this.lstCtietBcao[i].stt.startsWith(stt)) {
+                index = i;
+                break;
+            }
+        }
+        const tail = stt == this.lstCtietBcao[index]?.stt ? '1' : (this.getTail(this.lstCtietBcao[index]?.stt) + 1).toString();
         const item: ItemData = {
-
+            ...new ItemData,
             id: uuid.v4() + 'FE',
-            stt: '',
+            stt: stt + '.' + tail,
             maDvi: '',
             diaChiKho: '',
             tenNhaKho: '',
@@ -343,34 +446,156 @@ export class BaoHiemKhoComponent implements OnInit {
             level: '',
             checked: false,
         }
-
-        this.lstCtietBcao.splice(id, 0, item);
+        const str: string[] = item.stt.split('.');
+        item.level = str.length - 2;
+        this.lstCtietBcao.splice(index + 1, 0, item);
         this.editCache[item.id] = {
             edit: true,
             data: { ...item }
         };
+        this.checkAddNewRow = true;
     }
 
-    selectTaisan(idTaiSan: any, idRow: any) {
-        // const taiSan = this.lstVatTuFull.find(ts => ts.id === idTaiSan);
-        // this.editCache[idRow].data.dviTinh = taiSan.dviTinh;
+
+    getChiMuc(str: string): string {
+        str = str.substring(str.indexOf('.') + 1, str.length);
+        let xau = "";
+        const chiSo: string[] = str.split('.');
+        const n: number = chiSo.length - 1;
+        let k: number = parseInt(chiSo[n], 10);
+        if (n == 0) {
+            for (let i = 0; i < this.soLaMa.length; i++) {
+                while (k >= this.soLaMa[i].gTri) {
+                    xau += this.soLaMa[i].kyTu;
+                    k -= this.soLaMa[i].gTri;
+                }
+            }
+        }
+        if (n == 1) {
+            xau = chiSo[n];
+        }
+        // if (n == 2) {
+        //     xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
+        // }
+        if (n == 2) {
+            xau = "";
+            // xau = String.fromCharCode(k + 96);
+        }
+        // if (n == 4) {
+        //     xau = "-";
+        // }
+        return xau;
+    }
+
+    setLevel() {
+        this.lstCtietBcao.forEach(item => {
+            const str: string[] = item.stt.split('.');
+            item.level = str.length - 2;
+        })
+    }
+
+    // lấy phần đuôi của stt
+    getTail(str: string): number {
+        return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
+    }
+
+    // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
+    getHead(str: string): string {
+        return str.substring(0, str.lastIndexOf('.'));
+    }
+
+
+    async selectDonvi(idDonvi: any) {
+        console.log(idDonvi);
+        await this.quanLyVonPhiService.dmKho(idDonvi).toPromise().then(res => {
+            if (res.statusCode == 0) {
+                this.listDanhMucKho = res.data;
+            } else {
+                this.notification.error(MESSAGE.ERROR, res?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
+        console.log(this.listDanhMucKho);
+        console.log(this.listDanhSachCuc);
+        let diaDiem;
+        let capDonVi = this.listDanhSachCuc.find(e => e.maDvi === idDonvi).capDvi;
+        if (capDonVi == "3") {
+            diaDiem = this.listDanhMucKho.find(ts => ts.maDvi === idDonvi);
+        } else {
+            diaDiem = this.listDanhMucKho.find(ts => ts.maDviCha === idDonvi);
+        }
+        console.log(diaDiem);
+        this.listDanhMucKho = diaDiem?.children;
+
+    }
+
+
+    selectDiadiem(idDiadiem: any) {
+
+        const nhaKho = this.listDanhMucKho.find(ts => ts.maDvi === idDiadiem);
+        this.listDiemKho = nhaKho?.children;
+
+        for (let i = 0; i < this.listDiemKho.length; i++) {
+            var index = this.listDiemKhoFull.findIndex(item => item.maDvi == this.listDiemKho[i].maDvi)
+            if (index == -1 || this.listDiemKhoFull.length == 0) {
+                this.listDiemKhoFull.push(this.listDiemKho[i]);
+            }
+
+        }
     }
 
 
 
     tinhTong() {
-
+        this.tongSo1 = 0;
+        this.tongSo2 = 0;
+        this.tongSo3 = 0;
+        this.tongSo4 = 0;
+        this.tongSo5 = 0;
+        this.tongSo6 = 0;
+        this.tongSo7 = 0;
+        this.tongSo8 = 0;
+        this.tongSo9 = 0;
+        this.tongSo10 = 0;
+        this.tongSo11 = 0;
+        this.tongSo12 = 0;
+        this.tongSoNhaKhoDuoi5000 = 0;
+        this.tongSoNhaKhoTren5000 = 0;
         this.lstCtietBcao.forEach(item => {
+            this.tongSo1 += item.khoiTichKhoDuoiM3;
+            this.tongSo2 += item.khoiTichKhoTuM3;
+            this.tongSo3 += item.slNhaKhoDuoi;
+            this.tongSo4 += item.slNhaKhoTu;
+            this.tongSo5 += item.slNhaKhoTong;
+            this.tongSo6 += item.duoiGtConLai;
+            this.tongSo7 += item.duoiHetKhauHao;
+            this.tongSo8 += item.duoiTongGtKho;
+            this.tongSo9 += item.tuGtConLai;
+            this.tongSo10 += item.tuHetKhauHao;
+            this.tongSo11 += item.tuTongGtKho;
+            this.tongSo12 += item.tong;
+            if (item.stt.length != 3) {
+                if (item.slNhaKhoDuoi != 0 && item.slNhaKhoDuoi < 5000) {
+                    this.tongSoNhaKhoDuoi5000++;
+                }
+                if (item.slNhaKhoTu >= 5000) {
+                    this.tongSoNhaKhoTren5000++;
+                }
+            }
 
         })
+        this.lstCtietBcao[0].slNhaKhoDuoi = this.tongSoNhaKhoDuoi5000;
+        this.lstCtietBcao[0].slNhaKhoTu = this.tongSoNhaKhoTren5000;
+        this.lstCtietBcao[0].slNhaKhoTong = this.tongSoNhaKhoDuoi5000 + this.tongSoNhaKhoTren5000;
     }
 
     changeModel(id: string): void {
 
-        // this.editCache[id].data.ncauTbiNamNTtien = mulNumber(this.editCache[id].data.donGiaTdTheoQd, this.editCache[id].data.ncauTbiNamNSluong);
-        // this.editCache[id].data.ncauTbiNamN1Ttien = mulNumber(this.editCache[id].data.donGiaTdTheoQd, this.editCache[id].data.ncauTbiNamN1Sluong);
-        // this.editCache[id].data.ncauTbiNamN2Ttien = mulNumber(this.editCache[id].data.donGiaTdTheoQd, this.editCache[id].data.ncauTbiNamN2Sluong);
-        // this.editCache[id].data.ncauTbiNamNTtienTd = mulNumber(this.editCache[id].data.donGiaTdTheoQd, this.editCache[id].data.ncauTbiNamNSluongTd);
+        this.editCache[id].data.slNhaKhoTong = this.editCache[id].data.slNhaKhoDuoi + this.editCache[id].data.slNhaKhoTu;
+        this.editCache[id].data.duoiTongGtKho = this.editCache[id].data.duoiGtConLai + this.editCache[id].data.duoiHetKhauHao;
+        this.editCache[id].data.tuTongGtKho = this.editCache[id].data.tuGtConLai + this.editCache[id].data.tuHetKhauHao;
+        this.editCache[id].data.tong = this.editCache[id].data.duoiTongGtKho + this.editCache[id].data.tuTongGtKho;
     }
 
 
