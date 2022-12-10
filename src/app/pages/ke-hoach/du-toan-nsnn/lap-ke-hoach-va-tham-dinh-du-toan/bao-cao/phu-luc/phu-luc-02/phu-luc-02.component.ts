@@ -425,16 +425,15 @@ export class PhuLuc02Component implements OnInit {
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {
-          // this.lstCtietBcao[index].uocThien = sumNumber([this.lstCtietBcao[index].uocThien, item.uocThien])
-          // this.lstCtietBcao[index].namSoDtuong = sumNumber([this.lstCtietBcao[index].namSoDtuong, item.namSoDtuong])
-          // this.lstCtietBcao[index].namDtoanGiao = sumNumber([this.lstCtietBcao[index].namDtoanGiao, item.namDtoanGiao])
-          // this.lstCtietBcao[index].namUocThien = sumNumber([this.lstCtietBcao[index].namUocThien, item.namUocThien])
-          // this.lstCtietBcao[index].khSoDtuong = sumNumber([this.lstCtietBcao[index].khSoDtuong, item.khSoDtuong])
-          // this.lstCtietBcao[index].khMucTcap = sumNumber([this.lstCtietBcao[index].khMucTcap, item.khMucTcap])
-          // this.lstCtietBcao[index].khDtoanNam = sumNumber([this.lstCtietBcao[index].khDtoanNam, item.khDtoanNam])
-          // this.lstCtietBcao[index].gtriTdinhSoDtuong = sumNumber([this.lstCtietBcao[index].gtriTdinhSoDtuong, item.gtriTdinhSoDtuong])
-          // this.lstCtietBcao[index].gtriTdinhMucTcap = sumNumber([this.lstCtietBcao[index].gtriTdinhMucTcap, item.gtriTdinhMucTcap])
-          // this.lstCtietBcao[index].gtriTdinhDtoanNam = sumNumber([this.lstCtietBcao[index].gtriTdinhDtoanNam, item.gtriTdinhDtoanNam])
+          this.lstCtietBcao[index].thNamTruoc = sumNumber([this.lstCtietBcao[index].thNamTruoc, item.thNamTruoc])
+          this.lstCtietBcao[index].namDtoan = sumNumber([this.lstCtietBcao[index].namDtoan, item.namDtoan])
+          this.lstCtietBcao[index].namUocTh = sumNumber([this.lstCtietBcao[index].namUocTh, item.namUocTh])
+          this.lstCtietBcao[index].sluongTaiKho = sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
+          this.lstCtietBcao[index].dmucTaiKho = sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
+          this.lstCtietBcao[index].ttienTaiKho = sumNumber([this.lstCtietBcao[index].ttienTaiKho, item.ttienTaiKho])
+          this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])
+          this.lstCtietBcao[index].ttienNgoaiKho = sumNumber([this.lstCtietBcao[index].ttienNgoaiKho, item.ttienNgoaiKho])
+          this.lstCtietBcao[index].tongCong = sumNumber([this.lstCtietBcao[index].tongCong, item.tongCong])
         }
       })
       stt = this.getHead(stt);
@@ -446,9 +445,15 @@ export class PhuLuc02Component implements OnInit {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
       if (item.level == 0) {
-        // this.total.namDtoanGiao = sumNumber([this.total.namDtoanGiao, item.namDtoanGiao]);
-        // this.total.namUocThien = sumNumber([this.total.namUocThien, item.namUocThien]);
-        // this.total.khDtoanNam = sumNumber([this.total.khDtoanNam, item.khDtoanNam]);
+        this.total.thNamTruoc = sumNumber([this.total.thNamTruoc, item.thNamTruoc]);
+        this.total.namDtoan = sumNumber([this.total.namDtoan, item.namDtoan]);
+        this.total.namUocTh = sumNumber([this.total.namUocTh, item.namUocTh]);
+        this.total.sluongTaiKho = sumNumber([this.total.sluongTaiKho, item.sluongTaiKho]);
+        this.total.dmucTaiKho = sumNumber([this.total.dmucTaiKho, item.dmucTaiKho]);
+        this.total.ttienTaiKho = sumNumber([this.total.ttienTaiKho, item.ttienTaiKho]);
+        this.total.binhQuanNgoaiKho = sumNumber([this.total.binhQuanNgoaiKho, item.binhQuanNgoaiKho]);
+        this.total.ttienNgoaiKho = sumNumber([this.total.ttienNgoaiKho, item.ttienNgoaiKho]);
+        this.total.tongCong = sumNumber([this.total.tongCong, item.tongCong]);
       }
     })
   }

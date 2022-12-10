@@ -93,16 +93,16 @@
               <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.dviTinh" />
             </td>
             <td>
-              <fm-input-number nz-input class="search__input"
-                [(ngModel)]="editCache[data.id].data.thNamTruoc"></fm-input-number>
+              <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.thNamTruoc">
+              </fm-input-number>
             </td>
             <td>
-              <fm-input-number nz-input class="search__input"
-                [(ngModel)]="editCache[data.id].data.namDtoan"></fm-input-number>
+              <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.namDtoan">
+              </fm-input-number>
             </td>
             <td>
-              <fm-input-number nz-input class="search__input"
-                [(ngModel)]="editCache[data.id].data.namUocTh"></fm-input-number>
+              <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.namUocTh">
+              </fm-input-number>
             </td>
             <td>
               <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.sluongTaiKho"
@@ -137,6 +137,22 @@
               <i *ngIf="checkDelete(data.maDanhMuc)" class="fa fa-trash-o do" (click)="deleteLine(data.stt)"></i>
             </td>
           </ng-template>
+        </tr>
+        <tr>
+          <td></td>
+          <td>Tổng cộng</td>
+          <td></td>
+          <td>{{displayValue(total.thNamTruoc)}}</td>
+          <td>{{displayValue(total.namDtoan)}}</td>
+          <td>{{displayValue(total.namUocTh)}}</td>
+          <td>{{displayValue(total.sluongTaiKho)}}</td>
+          <td>{{displayValue(total.dmucTaiKho)}}</td>
+          <td>{{displayValue(total.ttienTaiKho)}}</td>
+          <td>{{displayValue(total.binhQuanNgoaiKho)}}</td>
+          <td>{{displayValue(total.ttienNgoaiKho)}}</td>
+          <td>{{displayValue(total.tongCong)}}</td>
+          <td [hidden]="status"></td>
+          <td [hidden]="status"></td>
         </tr>
       </tbody>
     </nz-table>
