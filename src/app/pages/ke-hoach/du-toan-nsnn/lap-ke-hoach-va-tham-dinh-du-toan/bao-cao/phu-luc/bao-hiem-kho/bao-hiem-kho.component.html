@@ -140,7 +140,12 @@
                             <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </td>
                         <td [hidden]="status">
-                            <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+                            <ng-container *ngIf="!checkAddNewRow; else addNewRow">
+                                <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+                            </ng-container>
+                            <ng-template #addNewRow>
+
+                            </ng-template>
                         </td>
 
                     </ng-container>
@@ -238,7 +243,12 @@
                         </td>
 
                         <td [hidden]="status">
-                            <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+                            <ng-container *ngIf="!checkAddNewRow; else addNewRow">
+                                <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+                            </ng-container>
+                            <ng-template #addNewRow>
+
+                            </ng-template>
                         </td>
 
 
