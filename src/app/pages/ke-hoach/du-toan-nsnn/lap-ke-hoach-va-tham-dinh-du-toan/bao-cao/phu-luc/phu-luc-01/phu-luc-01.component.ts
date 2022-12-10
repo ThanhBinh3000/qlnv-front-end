@@ -689,7 +689,8 @@ export class PhuLuc01Component implements OnInit {
                     const dinhMuc = this.dsDinhMucN.find(v => v.cloaiVthh == res.maVatTu)?.tongDmuc
                     let danhMuc = this.dsDinhMucN.find(v => v.cloaiVthh == res.maVatTu)?.tenDinhMuc
                     if (!danhMuc) {
-                        danhMuc = this.listVatTuFull.find(v => v.maVtu == res.maVatTu)?.tenVtu
+                        // danhMuc = this.listVatTuFull.find(v => v.maVtu == res.maVatTu)?.tenVtu;
+                        return
                     }
                     const item: ItemData = {
                         id: uuid.v4(),
