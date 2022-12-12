@@ -26,7 +26,7 @@
                     <th colspan="2" nzWidth="150px"> Năm {{namBaoCao}}</th>
                     <th rowspan="2" nzWidth="150px">Dự kiến năm {{namKeHoach}}</th>
                     <th rowspan="2" nzWidth="150px">Thêm (Giá trị thẩm định)</th>
-                    <th rowspan="3" nzWidth="220px" [hidden]="status"></th>
+                    <th rowspan="3" nzWidth="220px" colspan="3" [hidden]="status"></th>
                 </tr>
                 <tr>
                     <th>Dự toán</th>
@@ -50,6 +50,8 @@
                     <th>{{tongSo4}}</th>
                     <th>{{tongSo5}}</th>
                     <th nzWidth="220px"></th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -67,8 +69,13 @@
                         <td>{{displayValue(data.namKh)}}</td>
                         <td>{{displayValue(data.giaTriThamDinh)}}</td>
                         <td [hidden]="status">
-                            <i *ngIf="checkEdit(data.id)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                            <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </td>
+                        <td></td>
+                        <td>
+                            <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+                        </td>
+
                     </ng-container>
                     <ng-template #editTemplate>
                         <td class="text-center">
@@ -102,13 +109,20 @@
                             <fm-input-number nz-input class="search__input"
                                 [(ngModel)]="editCache[data.id].data.giaTriThamDinh"></fm-input-number>
                         </td>
-                        <td nzWidth="220px">
+                        <td>
+
+                        </td>
+                        <td nzWidth="220px" class="text-center">
+
                             <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                             <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                 (nzOnConfirm)="cancelEdit(data.id)" class="save">
                                 Hủy
                             </a>
                             <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+
+                        </td>
+                        <td>
                             <i *ngIf="checkDelete(data.maNdung)" class="fa fa-trash-o do"
                                 (click)="deleteLine(data.stt)"></i>
                         </td>

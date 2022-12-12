@@ -160,15 +160,15 @@ export class BaoHiemKhoComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
 
-        // await this.quanLyVonPhiService.dmKho(this.maDviTao).toPromise().then(res => {
-        //     if (res.statusCode == 0) {
-        //         this.listDanhMucKho = res.data;
-        //     } else {
-        //         this.notification.error(MESSAGE.ERROR, res?.msg);
-        //     }
-        // }, err => {
-        //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        // })
+        await this.quanLyVonPhiService.dmKho(this.maDviTao).toPromise().then(res => {
+            if (res.statusCode == 0) {
+                this.listDanhMucKho = res.data;
+            } else {
+                this.notification.error(MESSAGE.ERROR, res?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
         if (this.lstCtietBcao.length == 0) {
 
             this.lstCtietBcao.push({
@@ -506,7 +506,6 @@ export class BaoHiemKhoComponent implements OnInit {
 
 
     async selectDonvi(idDonvi: any) {
-        console.log(idDonvi);
         await this.quanLyVonPhiService.dmKho(idDonvi).toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.listDanhMucKho = res.data;
@@ -516,8 +515,7 @@ export class BaoHiemKhoComponent implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-        console.log(this.listDanhMucKho);
-        console.log(this.listDanhSachCuc);
+
         let diaDiem;
         let capDonVi = this.listDanhSachCuc.find(e => e.maDvi === idDonvi).capDvi;
         if (capDonVi == "3") {
@@ -525,7 +523,7 @@ export class BaoHiemKhoComponent implements OnInit {
         } else {
             diaDiem = this.listDanhMucKho.find(ts => ts.maDviCha === idDonvi);
         }
-        console.log(diaDiem);
+
         this.listDanhMucKho = diaDiem?.children;
 
     }
