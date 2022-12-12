@@ -205,7 +205,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
           this.listQdCtKh = arr;
         }
       } else {
-        this.notification.error(MESSAGE.ERROR, 'Không tìm thấy kế hoạch bán đầu giá năm' + dayjs().get('year'))
+        this.notification.error(MESSAGE.ERROR, 'Không tìm thấy kế hoạch bán đầu giá năm ' + dayjs().get('year'))
         return;
       }
     }
@@ -248,7 +248,6 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       })
       await this.loadDsQdPduyetKhlcnt();
       await this.loadDsQdPduyetKhBdg();
-      await this.loadDetailNh(data.qdCtKhNam ? data.qdCtKhNam : null)
       this.dataTableCanCuXdg = data.canCuPhapLy;
       this.dsDiaDiemDeHang = data.diaDiemDeHangs;
       this.dataTableKsGia = data.ketQuaKhaoSatGiaThiTruong;
@@ -739,7 +738,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
     if (arr) {
       this.detailNhaphang = arr[0]
       this.formData.patchValue({
-        soLuong : this.detailNhaphang.soLuong
+        soLuong : this.detailNhaphang && this.detailNhaphang.soLuong ? this.detailNhaphang.soLuong : 0
       })
     }
   }
