@@ -104,8 +104,17 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
-      soQdCc: [''],
       tchuanCluong: [''],
+      tgianDkienTu: [''],
+      tgianDkienDen: [''],
+      tgianTtoan: [''],
+      tgianTtoanGhiChu: [''],
+      pthucTtoan: [''],
+      tgianGnhan: [''],
+      tgianGnhanGhiChu: [''],
+      pthucGnhan: [''],
+      thongBaoKh: [''],
+      soQdCc: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       soDviTsan: [''],
@@ -384,7 +393,7 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
         for (const item of this.danhsachDxCache) {
           await this.deXuatKhBanDauGiaService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
-              item.dsGoiThau = res.data.dsPhanLoList;
+              item.dsPhanLoList = res.data.dsPhanLoList;
             }
           })
         }
@@ -430,7 +439,6 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           tchuanCluong: data.tchuanCluong,
-          loaiHdong: data.loaiHdong,
           soQdCc: data.soQdPd,
           idThHdr: event,
           idTrHdr: null,
@@ -440,7 +448,7 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
         for (const item of this.danhsachDx) {
           await this.deXuatKhBanDauGiaService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
-              item.dsGoiThau = res.data.dsPhanLoList;
+              item.dsPhanLoList = res.data.dsPhanLoList;
             }
           })
         };
@@ -520,8 +528,16 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           tchuanCluong: data.tchuanCluong,
-          loaiHdong: data.loaiHdong,
           moTaHangHoa: data.moTaHangHoa,
+          tgianDkienTu: data.tgianDkienTu,
+          tgianDkienDen: data.tgianDkienDen,
+          tgianTtoan: data.tgianTtoan,
+          tgianTtoanGhiChu: data.tgianTtoanGhiChu,
+          pthucTtoan: data.pthucTtoan,
+          tgianGnhan: data.tgianGnhan,
+          tgianGnhanGhiChu: data.tgianGnhanGhiChu,
+          pthucGnhan: data.pthucGnhan,
+          thongBaoKh: data.thongBaoKh,
           soQdCc: data.soQdCtieu,
           trichYeu: dataRes.trichYeu,
           tenDvi: data.tenDvi,
