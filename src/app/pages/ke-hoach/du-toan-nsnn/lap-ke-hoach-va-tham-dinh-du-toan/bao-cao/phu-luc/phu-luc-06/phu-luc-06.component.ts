@@ -39,6 +39,7 @@ export class PhuLuc06Component implements OnInit {
 
 
     donViTiens: any[] = DON_VI_TIEN;
+    namBaoCao: number;
     editMoneyUnit = false;
     maDviTien: string = '1';
     lstCtietBcao: ItemData[] = [];
@@ -54,6 +55,8 @@ export class PhuLuc06Component implements OnInit {
     maDviTao: any;
     soLaMa: any[] = LA_MA;
     allChecked = false;
+
+
 
     tongSoThanhTien1: number;
     tongSoThanhTien2: number;
@@ -88,13 +91,12 @@ export class PhuLuc06Component implements OnInit {
         this.spinner.show();
         this.formDetail = this.dataInfo?.data;
         this.maDviTao = this.dataInfo?.maDvi;
+        this.namBaoCao = this.dataInfo?.namBcao;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
-        // this.checkEditTD = this.dataInfo?.editAppraisalValue;
-        // this.checkViewTD = this.dataInfo?.viewAppraisalValue;
-        this.checkEditTD = false;
-        this.checkViewTD = true;
+        this.checkEditTD = this.dataInfo?.editAppraisalValue;
+        this.checkViewTD = this.dataInfo?.viewAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
