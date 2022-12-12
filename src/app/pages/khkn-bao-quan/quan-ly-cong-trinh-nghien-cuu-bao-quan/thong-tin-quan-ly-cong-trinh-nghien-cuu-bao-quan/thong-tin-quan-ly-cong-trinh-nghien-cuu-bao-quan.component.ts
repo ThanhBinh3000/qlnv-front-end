@@ -10,7 +10,7 @@ import { Globals } from 'src/app/shared/globals';
 import { NghiemThuThanhLyComponent } from './nghiem-thu-thanh-ly/nghiem-thu-thanh-ly.component';
 import { ThongTinChungComponent } from './thong-tin-chung/thong-tin-chung.component';
 import { TienDoThucHienComponent } from './tien-do-thuc-hien/tien-do-thuc-hien.component';
-
+import * as dayjs from 'dayjs';
 @Component({
   selector: 'app-thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan',
   templateUrl: './thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan.component.html',
@@ -39,7 +39,8 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
   dataTable: any[] = []
   listCapDt: any[] = []
   rowItem: any = {};
-
+  listNguonVon: any[] = [];
+  fileDinhKem: any[] = [];
   constructor(
     private fb: FormBuilder,
     private danhMucService: DanhMucService,
@@ -55,12 +56,17 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
       maDeTai: ['', [Validators.required]],
       tenDeTai: ['', [Validators.required]],
       capDeTai: ['', [Validators.required]],
-      tuNam: ['', [Validators.required]],
-      denNam: ['', [Validators.required]],
-      chuNhiem: [''],
-      chucVu: [],
-      email: [null,],
+      ngayKy: ['', [Validators.required]],
+      ngayKyTu: [],
+      ngayKyDen: [],
+      chuNhiem: ['', [Validators.required]],
+      chucVu: ['', [Validators.required]],
+      email: [null],
       sdt: [null],
+      dviPhoiHop: ['', [Validators.required]],
+      dviChuTri: ['', [Validators.required]],
+      nguonVon: ['', [Validators.required]],
+      soQdPd: [''],
       suCanThiet: [null],
       mucTieu: [null],
       phamVi: [null],
@@ -105,6 +111,10 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, data);
+      this.formData.patchValue({
+        ngayKy: data.ngayKyTu && data.ngayKyDen ? [data.ngayKyTu, data.ngayKyDen] : null
+      })
+      this.fileDinhKem = data.fileDinhKems;
       this.dataTableTienDo = data.tienDoThucHien;
       this.dataTable = data.children;
     }
@@ -123,6 +133,11 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
     if (res.msg == MESSAGE.SUCCESS) {
       this.listCapDt = res.data;
     }
+    this.listNguonVon = [];
+    let resNv = await this.danhMucService.danhMucChungGetAll('NGUON_VON');
+    if (resNv.msg == MESSAGE.SUCCESS) {
+      this.listNguonVon = resNv.data;
+    }
   }
 
   selectTab(tab: number) {
@@ -139,8 +154,20 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
       return;
     }
     let body = this.formData.value;
+
     body.tienDoThucHien = this.dataTableTienDo;
     body.children = this.dataTable;
+    body.ngayKyDen = this.formData.get('ngayKy').value
+      ? dayjs(this.formData.get('ngayKy').value[0]).format(
+        'YYYY-MM-DD',
+      )
+      : null,
+      body.ngayKyTu = this.formData.get('ngayKy').value
+        ? dayjs(this.formData.get('ngayKy').value[1]).format(
+          'YYYY-MM-DD',
+        )
+        : null,
+      body.fileDinhKemReq = this.fileDinhKem;
     console.log(body);
     let res = null;
     if (this.formData.get('id').value) {
