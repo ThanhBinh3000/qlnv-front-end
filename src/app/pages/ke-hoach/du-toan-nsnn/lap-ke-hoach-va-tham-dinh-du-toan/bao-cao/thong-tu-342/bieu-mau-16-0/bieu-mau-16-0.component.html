@@ -73,6 +73,7 @@
                     <th>9</th>
                     <th>8A</th>
                     <th>9A</th>
+                    <th>9A</th>
                     <th colSpan="4"></th>
                 </tr>
             </thead>
@@ -80,6 +81,7 @@
                 <tr>
                     <td></td>
                     <td>Tổng cộng</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -102,11 +104,13 @@
                         <td class="text-center">
                             {{i + 1}}
                         </td>
-                        <div *ngFor="let item of linhVucChis">
-                            <div *ngIf="item.id == data.matHang">
-                                {{item.tenDm}}
+                        <td>
+                            <div *ngFor="let item of linhVucChis">
+                                <div *ngIf="item.id == data.matHang">
+                                    {{item.tenDm}}
+                                </div>
                             </div>
-                        </div>
+                        </td>
                         <td>{{data.maDviTinh}}</td>
                         <td>{{data.khSluong}}</td>
                         <td>{{displayValue(data.khTtien)}}</td>
@@ -138,8 +142,9 @@
                             {{i + 1}}
                         </td>
                         <td>
-                            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn vật tư" [(ngModel)]="data.matHang"
-                                (ngModelChange)="changeMatHang(data.matHang, data.id)">
+                            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn vật tư"
+                                [(ngModel)]="editCache[data.id].data.matHang"
+                                (ngModelChange)="changeMatHang(editCache[data.id].data.matHang, editCache[data.id].data.id)">
                                 <nz-option *ngFor="let item of linhVucChis" [nzValue]="item.id" [nzLabel]="item.tenDm">
                                 </nz-option>
                             </nz-select>
