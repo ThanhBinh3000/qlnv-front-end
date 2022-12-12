@@ -46,6 +46,7 @@ export class TongHopKhmttComponent implements OnInit {
   searchFilter = {
     namKh: dayjs().get('year'),
     ngayThop: '',
+    ngayQd: '',
     loaiVthh: '',
     tenLoaiVthh: '',
     cloaiVthh: '',
@@ -110,6 +111,12 @@ export class TongHopKhmttComponent implements OnInit {
         : null,
       ngayThopDen: this.searchFilter.ngayThop
         ? dayjs(this.searchFilter.ngayThop[1]).format('YYYY-MM-DD')
+        : null,
+      ngayKyQdTu: this.searchFilter.ngayThop
+        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
+        : null,
+      ngayKyQdDen: this.searchFilter.ngayThop
+        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
         : null,
       paggingReq: {
         limit: this.pageSize,
@@ -190,7 +197,7 @@ export class TongHopKhmttComponent implements OnInit {
   }
 
   selectHangHoa() {
-    // let data = this.loaiVthh;
+    let data = this.loaiVthh;
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,
@@ -198,7 +205,9 @@ export class TongHopKhmttComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        data: data
+      },
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
@@ -305,11 +314,13 @@ export class TongHopKhmttComponent implements OnInit {
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
     this.searchFilter.tenLoaiVthh = null;
+    this.searchFilter.loaiVthh = null;
     this.searchFilter.tenCloaiVthh = null;
+    this.searchFilter.cloaiVthh = null;
     this.searchFilter.noiDung = null;
     this.searchFilter.ngayThop = null;
     this.search();
-    console.log(this.searchFilter);
+
   }
 
   xoaItem(item: any) {

@@ -32,7 +32,7 @@
         </div>
         <div nz-col nzSpan="3">
           <label class="search__label">Ngày ký QĐ</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayThop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
       </div>
       <div class="cangiua group-button-search">
@@ -61,7 +61,7 @@
         <button type="button" class="btn btn-main" (click)="themMoi()"
           *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP') && loaiVthh != '02'">
           <i class="icon htvbdh_dau-cong"></i>
-          <span>Tổng hợp</span>
+          <span>Tổng hợp KH mua trực tiếp</span>
         </button>
       </div>
     </div>
@@ -165,7 +165,7 @@
                 *ngIf=" ( data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="( data.trangThai == STATUS.CHUA_TAO_QD) && (userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_SUA'))"
+              <a *ngIf="( data.trangThai == STATUS.CHUA_TAO_QD ) && (userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_SUA'))"
                 (click)="redirectToChiTiet(false, data.id)">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>
