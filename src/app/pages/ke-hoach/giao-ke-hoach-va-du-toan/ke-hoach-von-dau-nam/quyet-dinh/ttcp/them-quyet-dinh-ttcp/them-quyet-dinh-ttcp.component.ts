@@ -47,6 +47,8 @@ export class ThemQuyetDinhTtcpComponent implements OnInit {
     prefix: '',
     thousands: '.',
     decimal: ',',
+    align: "right",
+    nullable: false,
     inputMode: CurrencyMaskInputMode.FINANCIAL
   }
 
