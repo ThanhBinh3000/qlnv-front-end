@@ -22,7 +22,6 @@ export class ItemData {
     namKh: number;
     giaTriThamDinh: number;
     ghiChu: string;
-    lstCtiet: ItemData[];
 }
 
 @Component({
@@ -87,11 +86,33 @@ export class BieuMau138Component implements OnInit {
                     id: uuid.v4() + 'FE',
                     stt: e.ma,
                     maNdung: e.ma,
+                    tenNdung: e.giaTri,
                 })
             })
         } else if (!this.lstCtietBcao[0]?.stt) {
             this.lstCtietBcao.forEach(item => {
                 item.stt = item.maNdung;
+            })
+        }
+        if (this.dataInfo?.extraData) {
+            this.dataInfo.extraData.forEach(item => {
+                if (item.maNdung) {
+                    const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
+                    this.lstCtietBcao[index].namKh = item.namKh;
+                    this.lstCtietBcao[index].giaTriThamDinh = item.giaTriThamDinh;
+                } else {
+                    this.lstCtietBcao.push({
+                        ...new ItemData(),
+                        id: uuid.v4(),
+                        stt: item.stt,
+                        tenNdung: item.tenNdung,
+                        thienNtruoc: item.thienNtruoc,
+                        namDtoan: item.namDtoan,
+                        namUocThien: item.namUocThien,
+                        namKh: item.namKh,
+                        giaTriThamDinh: item.giaTriThamDinh,
+                    })
+                }
             })
         }
         this.sortByIndex();
@@ -358,6 +379,9 @@ export class BieuMau138Component implements OnInit {
     }
 
     checkEdit(stt: string) {
+        if (stt.startsWith('0.1.1.1') || stt.startsWith('0.1.1.2') || stt.startsWith('0.1.1.3')) {
+            return false;
+        }
         const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
         return lstTemp.every(e => !e.stt.startsWith(stt));
     }
