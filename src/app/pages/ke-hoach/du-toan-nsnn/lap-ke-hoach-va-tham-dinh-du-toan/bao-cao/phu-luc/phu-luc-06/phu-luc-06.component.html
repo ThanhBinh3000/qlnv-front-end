@@ -16,7 +16,8 @@
                     </nz-select>
                 </ng-template>
             </div>
-            <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
+            <div nz-col class="gutter-row canphai phai" [nzSpan]="21"
+                style="display:flex; justify-content: end; margin-left: 170px;">
                 <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
                     <i class="fa fa-trash-o"></i>
                     <span>Xóa</span>
@@ -41,11 +42,11 @@
                         149/QĐ-TCDT)</th>
                     <th rowspan="2" nzWidth="150px">Đơn vị tính</th>
                     <th rowspan="2" nzWidth="150px">Đơn giá tối đa (trđ) theo QĐ 149/QĐ-TCDT</th>
-                    <th colspan="2" nzWidth="150px">Nhu cầu trang bị trong năm n</th>
-                    <th *ngIf="checkViewTD" colspan="2" nzWidth="150px">Nhu cầu trang bị trong năm n</th>
-                    <th colspan="2" nzWidth="150px">Nhu cầu trang bị trong năm n+1</th>
-                    <th colspan="2" nzWidth="150px">Nhu cầu trang bị trong năm n+2</th>
-                    <th rowspan="4" nzWidth="100px" colspan="3" [hidden]="status"></th>
+                    <th colspan="2" nzWidth="150px">Nhu cầu trang bị trong năm {{namBaoCao}}</th>
+                    <th *ngIf="checkViewTD" colspan="2" nzWidth="150px">Nhu cầu trang bị trong năm {{namBaoCao}}</th>
+                    <th colspan="2" nzWidth="150px">Nhu cầu trang bị trong năm {{namBaoCao+1}}</th>
+                    <th colspan="2" nzWidth="150px">Nhu cầu trang bị trong năm {{namBaoCao+2}}</th>
+                    <th rowspan="3" nzWidth="100px" colspan="3" [hidden]="status"></th>
                 </tr>
                 <tr>
                     <th>Số lượng</th>
@@ -86,6 +87,9 @@
                     <th>{{displayValue(tongSoThanhTien3)}}</th>
                     <th></th>
                     <th>{{displayValue(tongSoThanhTien4)}}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>

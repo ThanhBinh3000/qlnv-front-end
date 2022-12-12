@@ -8,20 +8,28 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber } from 'src/app/Utility/utils';
+import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber, sumNumber } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { DialogThemKhoanMucComponent } from '../../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 
 export class ItemData {
     id: any;
-    khVpLapTdinhCtietId: String;
-    matHang: String;
-    dviTinh: String;
-    dinhMuc: number;
-    slBaoQuanNamN1: number;
-    thanhTien: number;
-    slBaoQuanNamN1Td: number;
-    thanhTienTd: number;
+    khVpLapTdinhCtietId: string;
+    matHang: string;
+    tenMatHang: string;
+    dviTinh: string;
+    thucHienNamTruoc: number;
+    dtoanNamHtai: number;
+    uocThNamHtai: number;
+    dmucNamDtoan: number;
+    sluongNamDtoan: number;
+    ttienNamDtoan: number;
+    sluongNamN1Td: number;
+    ttienNamN1Td: number;
+    sluongGiaoDtoan: number;
+    ttienGiaoDtoan: number;
+    sluongDchinhDtoan: number;
+    ttienDchinhDtoan: number;
     stt: string;
     level: any;
     checked: boolean;
@@ -58,17 +66,28 @@ export class PhuLuc03Component implements OnInit {
     checkViewTD: boolean;
     checkEditTD: boolean;
 
+    namBaoCao: number;
+
     initItem: ItemData = {
+
 
         id: null,
         khVpLapTdinhCtietId: '',
         matHang: '',
+        tenMatHang: '',
         dviTinh: '',
-        dinhMuc: null,
-        slBaoQuanNamN1: null,
-        thanhTien: null,
-        slBaoQuanNamN1Td: null,
-        thanhTienTd: null,
+        thucHienNamTruoc: null,
+        dtoanNamHtai: null,
+        uocThNamHtai: null,
+        dmucNamDtoan: null,
+        sluongNamDtoan: null,
+        ttienNamDtoan: null,
+        sluongNamN1Td: null,
+        ttienNamN1Td: null,
+        sluongGiaoDtoan: null,
+        ttienGiaoDtoan: null,
+        sluongDchinhDtoan: null,
+        ttienDchinhDtoan: null,
         stt: '0',
         level: null,
         checked: false,
@@ -101,6 +120,7 @@ export class PhuLuc03Component implements OnInit {
         this.maDviTao = this.dataInfo?.maDvi;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
+        this.namBaoCao = this.dataInfo?.namBcao;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.checkEditTD = this.dataInfo?.editAppraisalValue;
         this.checkViewTD = this.dataInfo?.viewAppraisalValue;
@@ -272,7 +292,7 @@ export class PhuLuc03Component implements OnInit {
         const lstCtietBcaoTemp: ItemData[] = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            if (item.thanhTien > MONEY_LIMIT) {
+            if (item.ttienNamDtoan > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
@@ -355,7 +375,8 @@ export class PhuLuc03Component implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-        this.tinhTong();
+        // this.tinhTong();
+        this.sum(this.lstCtietBcao[index].stt);
         this.updateEditCache();
     }
     // huy thay doi
@@ -468,7 +489,8 @@ export class PhuLuc03Component implements OnInit {
                         ...this.initItem,
                         matHang: res.maKhoanMuc,
                         level: this.lstVatTuFull.find(e => e.id == loaiMatHang)?.level,
-                        dviTinh: this.lstVatTuFull.find(e => e.id == loaiMatHang)?.maDviTinh
+                        dviTinh: this.lstVatTuFull.find(e => e.id == loaiMatHang)?.maDviTinh,
+                        tenMatHang: this.lstVatTuFull.find(e => e.id == loaiMatHang)?.tenDm
                     };
                     if (this.lstCtietBcao.length == 0) {
                         this.addFirst(data);
@@ -492,13 +514,14 @@ export class PhuLuc03Component implements OnInit {
                 this.updateEditCache();
             }
         });
+        console.log(this.lstCtietBcao);
     }
 
     genderDinhMuc() {
         this.lstCtietBcao.forEach(item => {
             this.dsDinhMuc.forEach(itemDm => {
                 if (item.matHang == itemDm.id) {
-                    item.dinhMuc = itemDm.tongDmuc
+                    item.dmucNamDtoan = itemDm.tongDmuc
                 }
             })
         })
@@ -515,7 +538,7 @@ export class PhuLuc03Component implements OnInit {
             const item: ItemData = {
                 ...initItem,
                 stt: "0.1",
-                dinhMuc: dm != 0 ? dm : null,
+                dmucNamDtoan: dm != 0 ? dm : null,
             }
             this.lstCtietBcao.push(item);
             this.editCache[item.id] = {
@@ -528,7 +551,7 @@ export class PhuLuc03Component implements OnInit {
                 level: 0,
                 id: uuid.v4() + 'FE',
                 stt: "0.1",
-                dinhMuc: dm != 0 ? dm : null,
+                dmucNamDtoan: dm != 0 ? dm : null,
             }
             this.lstCtietBcao.push(item);
 
@@ -564,7 +587,7 @@ export class PhuLuc03Component implements OnInit {
             const item: ItemData = {
                 ...initItem,
                 stt: head + "." + (tail + 1).toString(),
-                dinhMuc: dm != 0 ? dm : null,
+                dmucNamDtoan: dm != 0 ? dm : null,
             }
             this.lstCtietBcao.splice(ind + 1, 0, item);
             this.editCache[item.id] = {
@@ -576,7 +599,7 @@ export class PhuLuc03Component implements OnInit {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: head + "." + (tail + 1).toString(),
-                dinhMuc: dm,
+                dmucNamDtoan: dm,
             }
             this.lstCtietBcao.splice(ind + 1, 0, item);
             this.editCache[item.id] = {
@@ -616,7 +639,7 @@ export class PhuLuc03Component implements OnInit {
             const item: ItemData = {
                 ...initItem,
                 stt: stt,
-                dinhMuc: dm != 0 ? dm : null,
+                dmucNamDtoan: dm != 0 ? dm : null,
             }
             this.lstCtietBcao.splice(index + 1, 0, item);
             this.editCache[item.id] = {
@@ -632,7 +655,7 @@ export class PhuLuc03Component implements OnInit {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: stt,
-                dinhMuc: dm != 0 ? dm : null,
+                dmucNamDtoan: dm != 0 ? dm : null,
             }
             this.lstCtietBcao.splice(index + 1, 0, item);
 
@@ -644,18 +667,63 @@ export class PhuLuc03Component implements OnInit {
 
     }
 
+    sum(stt: string) {
+        stt = this.getHead(stt);
+        while (stt != '0') {
+            const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+            const data = this.lstCtietBcao[index];
+            this.lstCtietBcao[index] = {
+                ...new ItemData(),
+                id: data.id,
+                stt: data.stt,
+                tenMatHang: data.tenMatHang,
+                level: data.level,
+            }
+            this.lstCtietBcao.forEach(item => {
+                if (this.getHead(item.stt) == stt) {
+                    this.lstCtietBcao[index].ttienNamDtoan = sumNumber([this.lstCtietBcao[index].ttienNamDtoan, item.ttienNamDtoan]);
+                    this.lstCtietBcao[index].ttienNamN1Td = sumNumber([this.lstCtietBcao[index].ttienNamN1Td, item.ttienNamN1Td]);
+                    //     this.lstCtietBcao[index].keHoachTongSo = sumNumber([this.lstCtietBcao[index].keHoachTongSo, item.keHoachTongSo]);
+                    //     this.lstCtietBcao[index].keHoachNstw = sumNumber([this.lstCtietBcao[index].keHoachNstw, item.keHoachNstw]);
+                    //     this.lstCtietBcao[index].uocGiaiNganDauNamTong = sumNumber([this.lstCtietBcao[index].uocGiaiNganDauNamTong, item.uocGiaiNganDauNamTong]);
+                    //     this.lstCtietBcao[index].uocGiaiNganDauNamNstw = sumNumber([this.lstCtietBcao[index].uocGiaiNganDauNamNstw, item.uocGiaiNganDauNamNstw]);
+                    //     this.lstCtietBcao[index].uocGiaiNganCaNamTong = sumNumber([this.lstCtietBcao[index].uocGiaiNganCaNamTong, item.uocGiaiNganCaNamTong]);
+                    //     this.lstCtietBcao[index].uocGiaiNganCaNamNstw = sumNumber([this.lstCtietBcao[index].uocGiaiNganCaNamNstw, item.uocGiaiNganCaNamNstw]);
+                    //     this.lstCtietBcao[index].daBoTriVonTongSo = sumNumber([this.lstCtietBcao[index].daBoTriVonTongSo, item.daBoTriVonTongSo]);
+                    //     this.lstCtietBcao[index].daBoTriVonNstw = sumNumber([this.lstCtietBcao[index].daBoTriVonNstw, item.daBoTriVonNstw]);
+                    //     this.lstCtietBcao[index].trungHanVonN2N2TongSo = sumNumber([this.lstCtietBcao[index].trungHanVonN2N2TongSo, item.trungHanVonN2N2TongSo]);
+                    //     this.lstCtietBcao[index].trungHanVonN2N2ThuHoi = sumNumber([this.lstCtietBcao[index].trungHanVonN2N2ThuHoi, item.trungHanVonN2N2ThuHoi]);
+                    //     this.lstCtietBcao[index].trungHanVonN2N2Xdcb = sumNumber([this.lstCtietBcao[index].trungHanVonN2N2Xdcb, item.trungHanVonN2N2Xdcb]);
+                    //     this.lstCtietBcao[index].trungHanVonN2N2Cbi = sumNumber([this.lstCtietBcao[index].trungHanVonN2N2Cbi, item.trungHanVonN2N2Cbi]);
+                    //     this.lstCtietBcao[index].trungHanVonN2N1TongSo = sumNumber([this.lstCtietBcao[index].trungHanVonN2N1TongSo, item.trungHanVonN2N1TongSo]);
+                    //     this.lstCtietBcao[index].trungHanVonN2N1ThuHoi = sumNumber([this.lstCtietBcao[index].trungHanVonN2N1ThuHoi, item.trungHanVonN2N1ThuHoi]);
+                    //     this.lstCtietBcao[index].trungHanVonN2N1Xdcb = sumNumber([this.lstCtietBcao[index].trungHanVonN2N1Xdcb, item.trungHanVonN2N1Xdcb]);
+                    //     this.lstCtietBcao[index].trungHanVonN2N1Cbi = sumNumber([this.lstCtietBcao[index].trungHanVonN2N1Cbi, item.trungHanVonN2N1Cbi]);
+                    //     this.lstCtietBcao[index].khTongSoNamN = sumNumber([this.lstCtietBcao[index].khTongSoNamN, item.khTongSoNamN]);
+                    //     this.lstCtietBcao[index].khNstwTongSoNamN = sumNumber([this.lstCtietBcao[index].khNstwTongSoNamN, item.khNstwTongSoNamN]);
+                    //     this.lstCtietBcao[index].khNstwThuHoiNamN = sumNumber([this.lstCtietBcao[index].khNstwThuHoiNamN, item.khNstwThuHoiNamN]);
+                    //     this.lstCtietBcao[index].khNstwThanhToanNamN = sumNumber([this.lstCtietBcao[index].khNstwThanhToanNamN, item.khNstwThanhToanNamN]);
+                    //     this.lstCtietBcao[index].khNstwChuanBiNamN = sumNumber([this.lstCtietBcao[index].khNstwChuanBiNamN, item.khNstwChuanBiNamN]);
+                }
+            })
+            stt = this.getHead(stt);
+        }
+        // this.getTotal();
+        this.tinhTong();
+    }
     tinhTong() {
         this.tongSo = 0;
         this.tongSoTd = 0;
         this.lstCtietBcao.forEach(item => {
-            this.tongSo += item.thanhTien;
-            this.tongSoTd += item.thanhTienTd;
+            this.tongSo += item.ttienNamDtoan;
+            this.tongSoTd += item.ttienNamN1Td;
         })
+
     }
 
     changeModel(id: string): void {
-        this.editCache[id].data.thanhTien = mulNumber(this.editCache[id].data.dinhMuc, this.editCache[id].data.slBaoQuanNamN1);
-        this.editCache[id].data.thanhTienTd = mulNumber(this.editCache[id].data.dinhMuc, this.editCache[id].data.slBaoQuanNamN1Td);
+        this.editCache[id].data.ttienNamDtoan = mulNumber(this.editCache[id].data.dmucNamDtoan, this.editCache[id].data.sluongNamDtoan);
+        this.editCache[id].data.ttienNamN1Td = mulNumber(this.editCache[id].data.dmucNamDtoan, this.editCache[id].data.sluongNamN1Td);
 
     }
     //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
