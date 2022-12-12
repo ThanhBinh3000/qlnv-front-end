@@ -43,23 +43,19 @@
             <div class="buttons">
                 <ng-container
                     *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA') || userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA')">
-                    <button type="button" class="btn btn-do" (click)="deleteSelect()"
-                        *ngIf="loaiVthh == null || (userService.isTongCuc() && loaiVthh == '02') || (userService.isCuc() && loaiVthh != '02')">
+                    <button type="button" class="btn btn-do" (click)="deleteSelect()" *ngIf="userService.isCuc()">
                         <i class="fa fa-trash-o do"></i>
                         <span>Xóa</span>
                     </button>
                 </ng-container>
-                <button type="button" class="btn btn-sub" (click)="exportData()"
-                    *ngIf="loaiVthh === '02' ? userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_EXP') : userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_EXP')">
+                <button type="button" class="btn btn-sub" (click)="exportData()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
                 <ng-container
                     *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM') || userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM')">
-                    <button
-                        *ngIf="loaiVthh == null || (userService.isTongCuc() && loaiVthh == '02') || (userService.isCuc() && loaiVthh != '02')"
-                        type="button" class="btn btn-main" (click)="themMoi()">
-                        <i class="icon htvbdh_dau-cong"></i>
+                    <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isCuc()">
+                        <i class=" icon htvbdh_dau-cong"></i>
                         <span>Thêm</span>
                     </button>
                 </ng-container>

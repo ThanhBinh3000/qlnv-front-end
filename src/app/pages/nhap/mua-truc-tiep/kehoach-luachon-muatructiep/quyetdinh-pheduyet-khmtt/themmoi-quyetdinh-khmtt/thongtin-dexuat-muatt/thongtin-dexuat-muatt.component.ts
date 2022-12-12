@@ -57,7 +57,7 @@ export class ThongtinDexuatMuattComponent implements OnInit, OnChanges {
       ptMua: [,],
       tchuanCluong: [null],
       giaMua: [,],
-      giaChuaThue: [,],
+      donGia: [,],
       thueGtgt: [5],
       donGiaVat: [''],
       tgianMkho: [null,],
@@ -72,7 +72,6 @@ export class ThongtinDexuatMuattComponent implements OnInit, OnChanges {
       ngayPduyet: [],
       soQd: [,],
       soLuong: [],
-
       ldoTuchoi: [],
     });
   }
@@ -83,9 +82,9 @@ export class ThongtinDexuatMuattComponent implements OnInit, OnChanges {
       if (this.dataInput) {
         let res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.idDxHdr);
         if (this.isTongHop) {
-          this.listOfData = this.dataInput.dsGoiThau;
+          this.listOfData = this.dataInput.children ? this.dataInput.children : this.dataInput.dsSlddDtlList;
         } else {
-          this.listOfData = this.dataInput.dsSlddDtlList ? this.dataInput.dsSlddDtlList : this.dataInput.dsGoiThau;
+          this.listOfData = this.dataInput.dsSlddDtlList ? this.dataInput.dsSlddDtlList : this.dataInput.children;
         }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
@@ -151,7 +150,7 @@ export class ThongtinDexuatMuattComponent implements OnInit, OnChanges {
       nzContent: DialogThemMoiKeHoachMuaTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1200px',
+      nzWidth: '2000px',
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,

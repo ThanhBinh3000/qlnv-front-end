@@ -283,7 +283,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: this.userService.isCuc() ? bodyParamLT : bodyParamVatTu
+      nzComponentParams: this.userService.isTongCuc() ? bodyParamLT : bodyParamVatTu
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
@@ -364,7 +364,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       let tongTienDatTruoc: number = 0;
       let tongTienDatTruocDonGia: number = 0;
       this.listOfData.forEach((item) => {
-        tongSoLuong = tongSoLuong + item.soLuong;
+        tongSoLuong = (tongSoLuong + item.soLuong) / 1000;
         tongTienKdiem = tongTienKdiem + item.giaKhoiDiem;
         tongTienKdienDonGia = tongTienKdienDonGia + item.giaKhoiDiemDduyet;
         tongTienDatTruoc = tongTienDatTruoc + item.tienDatTruoc;
@@ -485,7 +485,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
   }
 
   async guiDuyet() {
-    this.userService.isTongCuc() ? await this.guiDuyetTongCuc() : await this.guiDuyetCuc()
+    this.loaiVthhInput == '02' ? await this.guiDuyetTongCuc() : await this.guiDuyetCuc()
   }
 
   async guiDuyetTongCuc() {

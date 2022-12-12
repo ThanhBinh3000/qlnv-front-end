@@ -1,4 +1,4 @@
-import { KeHoachVatTu } from './KeHoachVatTu';
+import {KeHoachVatTu, KeHoachVatTuCustom} from './KeHoachVatTu';
 import { KeHoachMuoi } from './KeHoachMuoi';
 import { KeHoachLuongThuc } from './KeHoachLuongThuc';
 import { FileDinhKem } from './FileDinhKem';
@@ -14,6 +14,8 @@ export class ThongTinChiTieuKeHoachNam {
   khLuongThuc: Array<KeHoachLuongThuc> = [];
   khMuoiDuTru: Array<KeHoachMuoi> = [];
   khVatTu: Array<KeHoachVatTu> = [];
+  khVatTuNhap: Array<any> = [];
+  khVatTuXuat: Array<any> = [];
   ghiChu: string;
   khMuoi: Array<KeHoachMuoi> = [];
   canCu: string;
