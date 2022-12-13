@@ -54,6 +54,7 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
 
   ngOnInit() {
     this.loadDsNam();
+    this.search();
   }
 
   clearFilter() {

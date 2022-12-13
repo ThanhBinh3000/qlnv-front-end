@@ -1,5 +1,5 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from 'src/app/services/user.service';
 import {Globals} from 'src/app/shared/globals';
 import {cloneDeep} from 'lodash';
@@ -13,6 +13,8 @@ import {MESSAGE} from "../../../../constants/message";
 import {DonviService} from "../../../../services/donvi.service";
 import {ThongTinKhaoSatGia} from "../../../../models/DeXuatPhuongAnGia";
 import {NzModalService} from "ng-zorro-antd/modal";
+import {HelperService} from "../../../../services/helper.service";
+import {QuyetToanVonPhiService} from "../../../../services/ke-hoach/von-phi/quyetToanVonPhi.service";
 
 @Component({
   selector: 'app-them-moi-von-phi-hang-cua-bo-nganh',
@@ -26,6 +28,8 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   page: number = 1;
   dsNam: any[] = [];
+  @Input()
+  idInput: number;
   dataTableAll: any[] = [];
   dsQtNsChiTw: any[] = [];
   dsQtNsKpChiNvDtqg: any[] = [];
@@ -57,12 +61,14 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
     private spinner: NgxSpinnerService,
     public userService: UserService,
     private donviService: DonviService,
+    private vonPhiService: QuyetToanVonPhiService,
     public modal: NzModalService,
+    private helperService: HelperService,
+    private notification: NzNotificationService,
   ) {
     this.formData = this.fb.group({
-      namQuyetToan: [dayjs().get('year')],
-      ngayCapNhap: [[]],
-      ngayNhap: ['',],
+      namQuyetToan: [dayjs().get('year'), [Validators.required]],
+      ngayNhap: ['', [Validators.required]],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo']
     });
@@ -77,14 +83,48 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
     this.showListEvent.emit();
   }
 
-  save(isGuiDuyet?) {
+  async save(isGuiDuyet?) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.notification.error(MESSAGE.ERROR, 'Vui lòng điền đủ thông tin');
+      return;
+    }
     let body = {
+      "id": null,
       "namQt": this.formData.value.namQuyetToan,
-      "ngayNhap": this.formData.value.ngayNhap,
-      "dsQtNsChiTw" : this.dsQtNsChiTw,
-      "dsQtNsKpChiNvDtqg" : this.dsQtNsKpChiNvDtqg,
-      "taiLieuDinhKems" : this.taiLieuDinhKemList
+      "trangThai": this.formData.value.trangThai,
+      "ngayNhap": this.formData.get("ngayNhap").value ? dayjs(this.formData.get("ngayNhap").value).format("YYYY-MM-DD") : null,
+      "dsQtNsChiTw": this.dsQtNsChiTw,
+      "dsQtNsKpChiNvDtqg": this.dsQtNsKpChiNvDtqg,
+      "taiLieuDinhKems": this.taiLieuDinhKemList
     };
+    this.spinner.show();
+    try {
+      if (this.idInput > 0) {
+        body.id = this.idInput;
+        let res = await this.vonPhiService.update(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          console.log(res.data)
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      } else {
+        let res = await this.vonPhiService.create(body);
+        if (res.msg == MESSAGE.SUCCESS) {
+          console.log(res.data)
+        } else {
+          this.notification.error(MESSAGE.ERROR, res.msg);
+        }
+      }
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(
+        MESSAGE.ERROR,
+        e?.error?.message ?? MESSAGE.SYSTEM_ERROR,
+      );
+    }
     console.log(body);
   }
 
