@@ -65,6 +65,9 @@ export class PhuLuc05Component implements OnInit {
   // check tham dinh
   checkViewTD: boolean;
   checkEditTD: boolean;
+  namTruoc: string;
+  namDtoanOne: string;
+  namDtoanTwo: string;
   //nho dem
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 
@@ -88,6 +91,9 @@ export class PhuLuc05Component implements OnInit {
     this.spinner.show();
     this.formDetail = this.dataInfo?.data;
     this.namBcao = this.dataInfo?.namBcao;
+    this.namTruoc = (Number(this.namBcao) - 1).toString();
+    this.namDtoanOne = (Number(this.namBcao) + 1).toString();
+    this.namDtoanTwo = (Number(this.namBcao) + 2).toString();
     this.thuyetMinh = this.formDetail?.thuyetMinh;
     this.status = this.dataInfo?.status;
     this.checkEditTD = this.dataInfo?.editAppraisalValue;
@@ -127,24 +133,40 @@ export class PhuLuc05Component implements OnInit {
   getName(level: number, ma: string) {
     const type = this.getTail(ma);
     let str = '';
-    // if (level == 1) {
-    //   switch (type) {
-    //     case 1:
-    //       str = (this.namBcao - 1).toString();
-    //       break;
-    //     case 2:
-    //       str = this.namBcao.toString();
-    //       break;
-    //     case 3:
-    //       str = this.namBcao.toString();
-    //       break;
-    //     case 4:
-    //       str = (this.namBcao - 2).toString() + '-' + (this.namBcao + 2).toString();
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // }
+    console.log(level)
+    if (level == 1) {
+      switch (type) {
+        case 1:
+          str = (this.namBcao - 1).toString();
+          break;
+        case 2:
+          str = (this.namBcao - 1).toString();
+          break;
+        case 3:
+          str = this.namBcao.toString();
+          break;
+        case 4:
+          str = (this.namBcao + 1).toString();
+          break;
+        case 5:
+          str = (this.namBcao + 2).toString();
+          break;
+        default:
+          break;
+      }
+    }
+    if (level == 2) {
+      switch (type) {
+        case 1:
+          str = ('31/12/' + (this.namBcao - 2).toString());
+          break;
+        case 2:
+          str = (this.namBcao - 1).toString();
+          break;
+        default:
+          break;
+      }
+    }
     return str;
   }
 
@@ -456,7 +478,7 @@ export class PhuLuc05Component implements OnInit {
   }
 
   checkEdit(stt: string) {
-    const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt && e.stt == '0.1.1');
+    const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
     return lstTemp.every(e => !e.stt.startsWith(stt));
   }
 
