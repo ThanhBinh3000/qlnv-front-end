@@ -718,6 +718,29 @@ export class BaoCaoComponent implements OnInit {
         });
     }
 
+    getIndex(maBieuMau: string) {
+        let header = '';
+        if (maBieuMau.startsWith('pl')) {
+            header = 'pl';
+        };
+        if (maBieuMau.startsWith('TT342')) {
+            header = 'TT342';
+        };
+        if (maBieuMau.startsWith('TT69')) {
+            header = 'TT69';
+        };
+        let index = 0;
+        for (let i = 0; i < this.baoCao.lstLapThamDinhs.length; i++) {
+            if (this.baoCao.lstLapThamDinhs[i].maBieuMau.startsWith(header)) {
+                index += 1;
+            }
+            if (this.baoCao.lstLapThamDinhs[i].maBieuMau == maBieuMau) {
+                break;
+            }
+        }
+        return index;
+    }
+
     //xoa bieu mau
     deleteAppendix(id: string) {
         this.baoCao.lstLapThamDinhs = this.baoCao.lstLapThamDinhs.filter(item => item.id != id);

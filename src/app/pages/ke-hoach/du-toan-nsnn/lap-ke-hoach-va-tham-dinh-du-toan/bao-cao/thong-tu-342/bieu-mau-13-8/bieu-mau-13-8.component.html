@@ -25,7 +25,7 @@
                     <th rowspan="2">Thực hiện năm {{namBcao -1}} <br /> (năm trước)</th>
                     <th colspan="2">Năm {{namBcao}} (năm hiện hành)</th>
                     <th rowspan="2">Dự toán năm {{namBcao + 1}}</th>
-                    <th rowspan="2">Giá trị thẩm định</th>
+                    <th rowspan="2" *ngIf="viewAppraisalValue">Giá trị thẩm định</th>
                     <th rowspan="2">Ghi chú</th>
                     <th rowspan="2" [hidden]="status"></th>
                 </tr>
@@ -40,7 +40,7 @@
                     <th>2</th>
                     <th>3</th>
                     <th>4</th>
-                    <th>4A</th>
+                    <th *ngIf="viewAppraisalValue">4A</th>
                     <th>5</th>
                     <th [hidden]="status"></th>
                 </tr>
@@ -52,13 +52,13 @@
                             {{getChiMuc(data.stt)}}
                         </td>
                         <td>
-                            {{data.tenNdung}}
+                            {{data.tenDmuc}}
                         </td>
                         <td>{{ displayValue(data.thienNtruoc) }}</td>
                         <td>{{ displayValue(data.namDtoan) }}</td>
                         <td>{{ displayValue(data.namUocThien) }}</td>
                         <td>{{ displayValue(data.namKh) }}</td>
-                        <td>{{ displayValue(data.giaTriThamDinh) }}</td>
+                        <td *ngIf="viewAppraisalValue">{{ displayValue(data.giaTriThamDinh) }}</td>
                         <td>{{ data.ghiChu }}</td>
                         <td [hidden]="status">
                             <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -69,7 +69,7 @@
                             {{getChiMuc(editCache[data.id].data.stt)}}
                         </td>
                         <td>
-                            {{data.tenNdung}}
+                            {{editCache[data.id].data.tenDmuc}}
                         </td>
                         <td>
                             <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.thienNtruoc">
@@ -88,17 +88,22 @@
                                 <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.namKh">
                                 </fm-input-number>
                             </td>
-                            <td>
-                                <fm-input-number class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.giaTriThamDinh">
-                                </fm-input-number>
+                            <td *ngIf="viewAppraisalValue">
+                                <ng-container *ngIf="editAppraisalValue; else AV">
+                                    <fm-input-number class="search__input"
+                                        [(ngModel)]="editCache[data.id].data.giaTriThamDinh">
+                                    </fm-input-number>
+                                </ng-container>
+                                <ng-template #AV>
+                                    {{editCache[data.id].data.giaTriThamDinh}}
+                                </ng-template>
                             </td>
                         </ng-container>
                         <ng-template #editNamKh>
                             <td>
                                 {{editCache[data.id].data.namKh}}
                             </td>
-                            <td>
+                            <td *ngIf="viewAppraisalValue">
                                 {{editCache[data.id].data.giaTriThamDinh}}
                             </td>
                         </ng-template>
