@@ -122,6 +122,10 @@ export class BaoHiemHangComponent implements OnInit {
         })
         console.log(this.listDiemKho);
         this.listDiemKho.forEach(item => {
+            this.listKhoFull.push(item)
+            item.children.forEach(itmCon => {
+                this.listKhoFull.push(itmCon)
+            })
         })
 
     }
@@ -152,7 +156,7 @@ export class BaoHiemHangComponent implements OnInit {
         // }
 
         const maKhoNum = Number(maKho)
-        const nhaKho = this.listDiemKho.find(itm => itm.id == maKhoNum).children;
+        const nhaKho = this.listDiemKho.find(itm => itm.id == maKhoNum)?.children;
 
         nhaKho.forEach(itemChild => {
             itemChild.id = `${itemChild.id}`
