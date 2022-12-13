@@ -235,9 +235,18 @@
                     <td>{{ item.tenBb }}</td>
                     <td>{{ item.tenTrangThai }}</td>
                     <td>{{ item.fileDinhKems }}</td>
-                    <td class="text-center">
-                        <a *ngIf="formData.value.id > 0" (click)="redirectToBienBan(false,item)">
+                    <td class="text-left">
+                        <a *ngIf="formData.value.id > 0 && item.id && item.trangThai == STATUS.DA_KY "
+                            (click)="redirectToBienBan(false,item)">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                        <a *ngIf="formData.value.id > 0 && item.trangThai != STATUS.DA_KY"
+                            (click)="redirectToBienBan(false,item)">
                             <i class="fa fa-pencil"></i>
+                        </a>
+                        <a *ngIf="formData.value.id > 0 && item.id && item.trangThai == STATUS.DU_THAO "
+                            (click)="redirectToBienBan(false,item)">
+                            <i class="fa fa-trash do"></i>
                         </a>
                     </td>
                 </tr>

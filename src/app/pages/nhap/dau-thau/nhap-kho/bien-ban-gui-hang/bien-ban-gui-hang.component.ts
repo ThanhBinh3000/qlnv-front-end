@@ -9,7 +9,7 @@ import { BaseComponent } from 'src/app/components/base/base.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { BienBanGuiHangService } from 'src/app/services/bienBanGuiHang.service';
+import { BienBanGuiHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/bienBanGuiHang.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';

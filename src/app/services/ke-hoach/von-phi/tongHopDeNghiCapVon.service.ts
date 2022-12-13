@@ -36,13 +36,11 @@ export class TongHopDeNghiCapVonService extends BaseService {
 
   loadChiTiet(id: number): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/tong-hop-de-nghi-cap-von/${id}`;
-    // const url_ = `http://localhost:3333/tong-hop-de-nghi-cap-von/${id}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 
   them(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/tong-hop-de-nghi-cap-von`;
-    // const url = `http://localhost:3333/tong-hop-de-nghi-cap-von`;
     return this.httpClient.post(url, body).toPromise();
   }
 

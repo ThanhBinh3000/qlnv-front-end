@@ -1,10 +1,13 @@
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { PAGE_SIZE_DEFAULT } from './../../../../../constants/config';
-import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserService } from 'src/app/services/user.service';
 import { BaseComponent } from 'src/app/components/base/base.component';
+import { TienDoThucHien } from 'src/app/models/KhoaHocCongNgheBaoQuan';
+import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
 @Component({
   selector: 'app-tien-do-thuc-hien',
   templateUrl: './tien-do-thuc-hien.component.html',
@@ -27,36 +30,125 @@ export class TienDoThucHienComponent extends BaseComponent implements OnInit {
     { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
     { ma: this.STATUS.DA_HOAN_THANH, giaTri: 'Đã hoàn thành' },
   ];
-
+  hasError: boolean = false;
   dataTable: any[] = []
-  rowItem: any = {};
+  rowItem: TienDoThucHien = new TienDoThucHien;
+  dataEdit: { [key: string]: { edit: boolean; data: TienDoThucHien } } = {};
   constructor(
     private spinner: NgxSpinnerService,
     public userService: UserService,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private modal: NzModalService,
   ) {
     super();
     super.ngOnInit();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    this.updateEditCache();
+    this.emitDataTable();
+  }
+
   ngOnInit() {
-    this.dataTable = this.dataTableTienDo;
+    // this.dataTable = this.dataTableTienDo;
+    // console.log(this.dataTable, "huhu");
   }
 
   selectTab() {
 
   }
 
-  addRow() {
-    let trangThai = this.listTrangThai.filter(item => item.ma == this.rowItem.trangThai)[0];
-    this.rowItem.tenTrangThai = trangThai.giaTri;
-    this.dataTable = [...this.dataTable, this.rowItem];
-    this.rowItem = {};
-    this.dataTableTienDoChange.emit(this.dataTable);
+  themMoiItem() {
+
+
+    if (!this.dataTable) {
+      this.dataTable = [];
+    }
+    this.sortTableId();
+    let item = cloneDeep(this.rowItem);
+    item.stt = this.dataTable.length + 1;
+    item.edit = false;
+    this.dataTable = [
+      ...this.dataTable,
+      item,
+    ]
+
+    this.rowItem = new TienDoThucHien();
+    this.updateEditCache();
+    this.emitDataTable();
+  }
+  onChangeTrangThai(trangThai, typeData?) {
+    const tt = this.listTrangThai.filter(d => d.ma == trangThai)
+    if (typeData) {
+      if (tt.length > 0) {
+        typeData.tenTrangThaiTd = tt[0].giaTri;
+      }
+    }
+    if (tt.length > 0) {
+      this.rowItem.tenTrangThaiTd = tt[0].giaTri;
+    }
   }
 
-  clearData() {
+  sortTableId() {
+    this.dataTable.forEach((lt, i) => {
+      lt.stt = i + 1;
+    });
+  }
+  editItem(index: number): void {
+    this.dataEdit[index].edit = true;
+  }
+  updateEditCache(): void {
+    if (this.dataTable) {
+      this.dataTable.forEach((item, index) => {
+        this.dataEdit[index] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
+  }
+  huyEdit(id: number): void {
+    const index = this.dataTable.findIndex((item) => item.idVirtual == id);
+    this.dataEdit[id] = {
+      data: { ...this.dataTable[index] },
+      edit: false,
+    };
+  }
+  luuEdit(index: number): void {
+    this.hasError = (false);
+    Object.assign(this.dataTable[index], this.dataEdit[index].data);
+    this.emitDataTable();
+    this.dataEdit[index].edit = false;
+  }
 
+
+
+  xoaItem(index: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable.splice(index, 1);
+          this.updateEditCache();
+          this.emitDataTable();
+          this.dataTable;
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
+  clearData() {
+    this.rowItem = new TienDoThucHien();
+  }
+  emitDataTable() {
+    this.dataTableTienDoChange.emit(this.dataTable)
   }
 
 

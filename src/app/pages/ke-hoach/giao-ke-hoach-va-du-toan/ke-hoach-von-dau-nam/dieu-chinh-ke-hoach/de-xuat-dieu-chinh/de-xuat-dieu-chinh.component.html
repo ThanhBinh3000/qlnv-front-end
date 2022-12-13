@@ -173,7 +173,7 @@
                   (click)="redirectToChiTiet(true, data.id)">
                   <i class="icon htvbdh_eye"></i>
                 </a>
-                <a *ngIf="(userService.isCuc() && (data.trangThai == globals.prop.DU_THAO || data.trangThai == globals.prop.TU_CHOI))
+                <a *ngIf="(userService.isCuc() && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC))
                 && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_THEM')"
                   (click)="redirectToChiTiet(false, data.id)">
                   <i class="fa fa-pencil"></i>

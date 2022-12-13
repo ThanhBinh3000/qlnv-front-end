@@ -338,7 +338,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       nzContent: DialogThemDiaDiemPhanLoComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '2000px',
+      nzWidth: '3000px',
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
