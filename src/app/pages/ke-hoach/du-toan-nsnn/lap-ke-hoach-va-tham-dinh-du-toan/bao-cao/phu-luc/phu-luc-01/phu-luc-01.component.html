@@ -17,7 +17,8 @@
                     </nz-select>
                 </ng-template>
             </div>
-            <div nz-col class="gutter-row canphai phai" [nzSpan]="21"
+            <div nz-col [nzSpan]="18"></div>
+            <div nz-col class="gutter-row canphai phai" [nzSpan]="2"
                 style="display:flex; justify-content: end; margin-left: 170px;">
                 <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
                     <i class="fa fa-trash-o"></i>
@@ -56,24 +57,6 @@
                     <th *ngIf="checkViewTD" nzWidth="150px">Số lượng</th>
                     <th *ngIf="checkViewTD" nzWidth="150px">Thành tiền (triệu đồng)</th>
                 </tr>
-                <!-- <tr>
-                    <th></th>
-                    <th class="text-center">A</th>
-                    <th>B</th>
-                    <th>C</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>1</th>
-                    <th>2</th>
-                    <th>3=1x2</th>
-                    <th *ngIf="checkViewTD">2A</th>
-                    <th *ngIf="checkViewTD">3A=2Ax1</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr> -->
-
             </thead>
             <tbody>
                 <tr *ngFor="let data of lstCtietBcao; let i = index">
@@ -116,7 +99,7 @@
                         </ng-template>
                         </td>
                         <td [hidden]="status">
-                            <i class="fa fa-trash-o do" (click)="deleteLine(data.stt)"></i>
+                            <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                         </td>
                         <td [hidden]="status">
                             <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -159,9 +142,6 @@
                         </td>
                         <td>
                             {{editCache[data.id].data.dmucNamDtoan}}
-                            <!-- <fm-input-number nz-input class="search__input"
-                                [(ngModel)]="editCache[data.id].data.dinhMuc"
-                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number> -->
                         </td>
                         <td>
                             <fm-input-number nz-input class="search__input"
@@ -190,7 +170,7 @@
                     </ng-template>
                     </td>
                     <td [hidden]="status">
-                        <i class="fa fa-trash-o do" (click)="deleteLine(data.stt)"></i>
+                        <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                     </td>
 
                     <td>
