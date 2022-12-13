@@ -34,7 +34,9 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
   totalRecord: number = 10;
   STATUS = STATUS;
   isAdddsQtNsChiTw: boolean = false;
+  isAdddsQtNsKpChiNvDtqg: boolean = false;
   dataQtNsChiTwEdit: { [key: string]: { edit: boolean; data: KeHoachVonPhiBNCT } } = {};
+  dataQtNsKpChiNvDtqgEdit: { [key: string]: { edit: boolean; data: KeHoachVonPhiBNCT } } = {};
   rowItemQtNsChiTw: KeHoachVonPhiBNCT = new KeHoachVonPhiBNCT();
   rowItemQtNsKpChiNvDtqg: KeHoachVonPhiBNCT = new KeHoachVonPhiBNCT();
   taiLieuDinhKemList: any[] = [];
@@ -76,13 +78,24 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
   }
 
   save(isGuiDuyet?) {
-
+    let body = {
+      "namQt": this.formData.value.namQuyetToan,
+      "ngayNhap": this.formData.value.ngayNhap,
+      "dsQtNsChiTw" : this.dsQtNsChiTw,
+      "dsQtNsKpChiNvDtqg" : this.dsQtNsKpChiNvDtqg,
+      "taiLieuDinhKems" : this.taiLieuDinhKemList
+    };
+    console.log(body);
   }
 
   changeBN() {
     if (this.rowItemQtNsChiTw.maBoNganh) {
       this.isAdddsQtNsChiTw = true;
       this.rowItemQtNsChiTw.tenBoNganh = this.listBoNganh.find(item => item.key == this.rowItemQtNsChiTw.maBoNganh).title;
+    }
+    if (this.rowItemQtNsKpChiNvDtqg.maBoNganh) {
+      this.isAdddsQtNsKpChiNvDtqg = true;
+      this.rowItemQtNsKpChiNvDtqg.tenBoNganh = this.listBoNganh.find(item => item.key == this.rowItemQtNsKpChiNvDtqg.maBoNganh).title;
     }
   }
 
@@ -93,6 +106,15 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
     this.dsQtNsChiTw = [...this.dsQtNsChiTw, this.rowItemQtNsChiTw];
     this.rowItemQtNsChiTw = new KeHoachVonPhiBNCT();
     this.updateEditQtNsChiTwCache();
+  }
+
+  addQtNsKpChiNvDtqg() {
+    if (!this.isAdddsQtNsKpChiNvDtqg) {
+      return;
+    }
+    this.dsQtNsKpChiNvDtqg = [...this.dsQtNsKpChiNvDtqg, this.rowItemQtNsKpChiNvDtqg];
+    this.rowItemQtNsKpChiNvDtqg = new KeHoachVonPhiBNCT();
+    this.updateEditQtNsKpChiNvDtqgCache();
   }
 
   updateEditQtNsChiTwCache(): void {
@@ -106,8 +128,23 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
     }
   }
 
+  updateEditQtNsKpChiNvDtqgCache(): void {
+    if (this.dsQtNsKpChiNvDtqg) {
+      this.dsQtNsKpChiNvDtqg.forEach((item, index) => {
+        this.dataQtNsKpChiNvDtqgEdit[index] = {
+          edit: false,
+          data: {...item},
+        };
+      });
+    }
+  }
+
   editQtNsChiTw(index) {
     this.dataQtNsChiTwEdit[index].edit = true;
+  }
+
+  editQtNsKpChiNvDtqg(index) {
+    this.dataQtNsKpChiNvDtqgEdit[index].edit = true;
   }
 
   deleteQtNsChiTw(index) {
@@ -130,9 +167,34 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
     });
   }
 
+  deleteQtNsKpChiNvDtqg(index) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dsQtNsKpChiNvDtqg.splice(index, 1);
+          this.updateEditQtNsKpChiNvDtqgCache();
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
+  }
+
   saveEditQtNsChiTw(idx) {
     Object.assign(this.dsQtNsChiTw[idx], this.dataQtNsChiTwEdit[idx].data);
     this.dataQtNsChiTwEdit[idx].edit = false;
+  }
+
+  saveEditQtNsKpChiNvDtqg(idx) {
+    Object.assign(this.dsQtNsKpChiNvDtqg[idx], this.dataQtNsKpChiNvDtqgEdit[idx].data);
+    this.dataQtNsKpChiNvDtqgEdit[idx].edit = false;
   }
 
   cancelEditQtNsChiTw(idx) {
@@ -142,9 +204,21 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
     };
   }
 
+  cancelEditQtNsKpChiNvDtqg(idx) {
+    this.dataQtNsKpChiNvDtqgEdit[idx] = {
+      data: {...this.dsQtNsKpChiNvDtqg[idx]},
+      edit: false
+    };
+  }
+
   refreshQtNsChiTw() {
     this.rowItemQtNsChiTw = new KeHoachVonPhiBNCT();
     this.isAdddsQtNsChiTw = false;
+  }
+
+  refreshQtNsKpChiNvDtqg() {
+    this.rowItemQtNsKpChiNvDtqg = new KeHoachVonPhiBNCT();
+    this.isAdddsQtNsKpChiNvDtqg = false;
   }
 
   async loadBoNganh() {

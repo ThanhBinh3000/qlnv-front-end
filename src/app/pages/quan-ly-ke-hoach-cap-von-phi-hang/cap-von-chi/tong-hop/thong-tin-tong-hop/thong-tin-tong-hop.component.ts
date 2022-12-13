@@ -145,7 +145,6 @@ export class ThongTinTonghopComponent implements OnInit {
         this.isTonghop = true
         let data = res.data
         if (data) {
-          console.log(data);
           this.detail = res.data;
           this.detail.trangThai = data.trangThai;
           this.detail.tenTrangThai = data.tenTrangThai;
