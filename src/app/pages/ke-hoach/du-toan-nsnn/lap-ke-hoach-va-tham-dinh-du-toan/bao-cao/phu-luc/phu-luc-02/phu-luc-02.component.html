@@ -87,7 +87,12 @@
               {{getChiMuc(data.stt)}}
             </td>
             <td>
-              {{data.tenDanhMuc}}
+              <ng-container *ngIf="data.maDanhMuc; else editName">
+                {{editCache[data.id].data.tenDanhMuc}}
+              </ng-container>
+              <ng-template #editName>
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenDanhMuc" />
+              </ng-template>
             </td>
             <td>
               <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.dviTinh" />
