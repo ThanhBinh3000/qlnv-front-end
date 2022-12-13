@@ -49,11 +49,11 @@
           <th nzWidth="150px" rowspan="2">Giá trị công trình (= Tổng mức đầu tư TMDT)</th>
           <th colspan="2">Quyết định phê duyệt Báo cáo Kinh tế kỹ thuật hoặc<br> Khái toán Tổng mức đầu tư</th>
           <th colspan="2">Quyết định phê duyệt quyết toán công trình hoàn thành</th>
-          <th rowspan="2">Lũy kế vấp vốn đến (năm hiện hành)</th>
-          <th rowspan="2">Kế hoạnh vốn năm (dự toán)</th>
-          <th *ngIf="checkViewTD" rowspan="2">Kế hoạnh vốn năm (dự toán)</th>
-          <th rowspan="2">Kế hoạch năm (dự toán + 1)</th>
-          <th rowspan="2">Kế hoạch năm (dự toán + 2)</th>
+          <th rowspan="2">Lũy kế vấp vốn đến {{namTruoc}}</th>
+          <th rowspan="2">Kế hoạnh vốn năm {{namBcao}}</th>
+          <th *ngIf="checkViewTD" rowspan="2">Kế hoạnh vốn năm {{namBcao}}</th>
+          <th rowspan="2">Kế hoạch năm {{namDtoanOne}}</th>
+          <th rowspan="2">Kế hoạch năm {{namDtoanTwo}}</th>
           <th rowspan="2">Ghi chú</th>
           <th rowspan="4" [hidden]="status"></th>
           <th rowspan="4" [hidden]="status"></th>
