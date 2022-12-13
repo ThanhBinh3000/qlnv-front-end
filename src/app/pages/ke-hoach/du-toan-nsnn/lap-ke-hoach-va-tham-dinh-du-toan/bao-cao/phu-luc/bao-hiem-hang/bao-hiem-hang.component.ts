@@ -84,11 +84,11 @@ export class BaoHiemHangComponent implements OnInit {
         await this.getDmKho();
         console.log(this.listDanhMucKho);
         await this.addListKho();
-        // this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
-        //     this.lstCtietBcao.push({
-        //         ...item,
-        //     })
-        // })
+        this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
+            this.lstCtietBcao.push({
+                ...item,
+            })
+        })
         // if (this.lstCtietBcao.length == 0) {
         //     this.linhVucChis.forEach(e => {
         //         this.lstCtietBcao.push({
@@ -121,35 +121,44 @@ export class BaoHiemHangComponent implements OnInit {
             })
         })
         console.log(this.listDiemKho);
+        this.listDiemKho.forEach(item => {
+        })
 
     }
 
     changeDiemKho(maKho: any, id: any) {
+        // const maKhoNum = Number(maKho)
+        // const nhaKho = this.listDiemKho.find(itm => itm.id == maKhoNum).children;
+        // this.listKho = []
+        // // this.lstCtietBcao[index].tenNhaKho = null
+        // // this.editCache[id].data.tenNhaKho = null
+        // nhaKho.forEach(itemChild => {
+        //     this.listKho.push(
+        //         {
+        //             id: `${itemChild.id}`,
+        //             tenDviKho: itemChild.tenDvi,
+        //         }
+        //     )
+        // })
+
+        // for (let i = 0; i < nhaKho.length; i++) {
+        //     let index = this.listKhoFull.findIndex(item => item.maDvi == nhaKho[i].maDvi)
+        //     if (index == -1 || this.listKhoFull.length == 0) {
+        //         this.listKhoFull.push({
+        //             ...nhaKho[i],
+        //             id: `${nhaKho[i].id}`,
+        //         });
+        //     }
+        // }
+
         const maKhoNum = Number(maKho)
         const nhaKho = this.listDiemKho.find(itm => itm.id == maKhoNum).children;
-        this.listKho = []
-        // this.lstCtietBcao[index].tenNhaKho = null
-        // this.editCache[id].data.tenNhaKho = null
+
         nhaKho.forEach(itemChild => {
-            this.listKho.push(
-                {
-                    id: `${itemChild.id}`,
-                    tenDviKho: itemChild.tenDvi,
-                }
-            )
+            itemChild.id = `${itemChild.id}`
         })
-
-
-        for (let i = 0; i < nhaKho.length; i++) {
-            let index = this.listKhoFull.findIndex(item => item.maDvi == nhaKho[i].maDvi)
-            if (index == -1 || this.listKhoFull.length == 0) {
-                this.listKhoFull.push({
-                    ...nhaKho[i],
-                    id: `${nhaKho[i].id}`,
-                });
-            }
-
-        }
+        console.log(nhaKho);
+        this.listKho = nhaKho
 
     };
 
@@ -246,7 +255,9 @@ export class BaoHiemHangComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                     this.formDetail = data.data;
-                    this._modalRef.close(this.formDetail);
+                    this._modalRef.close({
+                        formDetail: this.formDetail,
+                    });
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
