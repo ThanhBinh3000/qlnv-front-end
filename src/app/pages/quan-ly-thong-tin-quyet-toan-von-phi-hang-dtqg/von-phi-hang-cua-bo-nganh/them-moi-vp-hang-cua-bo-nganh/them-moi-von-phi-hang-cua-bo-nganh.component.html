@@ -53,6 +53,10 @@
         </div>
       </div>
     </form>
+    <ng-template #error let-control>
+      <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+      </ng-container>
+    </ng-template>
   </nz-card>
   <div class="header header-green-background mt-3">
     <div class="header-text">
@@ -393,7 +397,8 @@
           </th>
           <th
             class="text-center">{{rowItemQtNsKpChiNvDtqg.soDtDauNam + rowItemQtNsKpChiNvDtqg.soDtBsTrongNam + rowItemQtNsKpChiNvDtqg.soDuDtNamTruoc + rowItemQtNsKpChiNvDtqg.soTuNamTruoc | number}}</th>
-          <th class="text-center">{{rowItemQtNsKpChiNvDtqg.soDtDauNam + rowItemQtNsKpChiNvDtqg.soDtBsTrongNam  | number}}</th>
+          <th
+            class="text-center">{{rowItemQtNsKpChiNvDtqg.soDtDauNam + rowItemQtNsKpChiNvDtqg.soDtBsTrongNam  | number}}</th>
           <th class="text-center">
             <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soDtDauNam"
                              [nzFormatter]="globals.formatter"
@@ -421,19 +426,22 @@
           <th
             class="text-center">{{rowItemQtNsKpChiNvDtqg.soDuDtNamTruoc + rowItemQtNsKpChiNvDtqg.soTuNamTruoc  | number}}</th>
           <th class="text-center">
-            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soDnQt" [nzFormatter]="globals.formatter"
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soDnQt"
+                             [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser">
             </nz-input-number>
           </th>
           <th class="text-center">
-            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soTdQt" [nzFormatter]="globals.formatter"
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soTdQt"
+                             [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser">
             </nz-input-number>
           </th>
           <th
             class="text-center">{{(rowItemQtNsKpChiNvDtqg.soDtDauNam + rowItemQtNsKpChiNvDtqg.soDtBsTrongNam + rowItemQtNsKpChiNvDtqg.soDuDtNamTruoc + rowItemQtNsKpChiNvDtqg.soTuNamTruoc) - rowItemQtNsKpChiNvDtqg.soTdQt | number}}</th>
           <th class="text-center">
-            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soHuyDt" [nzFormatter]="globals.formatter"
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soHuyDt"
+                             [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser">
             </nz-input-number>
           </th>

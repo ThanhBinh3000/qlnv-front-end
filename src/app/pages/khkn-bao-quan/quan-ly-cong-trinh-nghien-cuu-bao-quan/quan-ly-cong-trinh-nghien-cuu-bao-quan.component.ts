@@ -160,17 +160,21 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
         tenDeTai: this.searchFilter.tenDeTai,
         capDeTai: this.searchFilter.capDeTai,
         trangThai: this.searchFilter.trangThai,
+        tuNam: this.searchFilter.nam
+          ? dayjs(this.searchFilter.nam[0]).format('YYYY')
+          : null,
+        denNam: this.searchFilter.nam
+          ? dayjs(this.searchFilter.nam[1]).format('YYYY')
+          : null,
         paggingReq: {
           limit: this.pageSize,
           page: this.page - 1,
         }
       };
       let res = await this.khCnCongTrinhNghienCuu.search(body);
-      console.log(res, "conmemay1213");
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.dataTable = data.content;
-        console.log(this.dataTable, "conmemay1");
         if (this.dataTable && this.dataTable.length > 0) {
           this.dataTable.forEach((item) => {
             item.checked = false;
@@ -184,7 +188,6 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
-      console.log(this.dataTable, "conmemay");
     } catch (e) {
       console.log(e)
       this.spinner.hide();
