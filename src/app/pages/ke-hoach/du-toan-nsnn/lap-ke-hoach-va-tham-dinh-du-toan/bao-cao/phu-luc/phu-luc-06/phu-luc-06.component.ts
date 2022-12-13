@@ -45,6 +45,7 @@ export class PhuLuc06Component implements OnInit {
     lstCtietBcao: ItemData[] = [];
     formDetail: any;
     thuyetMinh: string;
+    listIdDelete: string;
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
@@ -290,7 +291,20 @@ export class PhuLuc06Component implements OnInit {
         this.tinhTong();
     }
 
+    deleteSelected() {
+        // add list delete id
+        this.lstCtietBcao.filter(item => {
+            if (item.checked == true && typeof item.id == "number") {
+                this.listIdDelete += item.id + ","
+            }
+        })
+        // delete object have checked = true
+        this.lstCtietBcao = this.lstCtietBcao.filter(item => item.checked != true)
+        this.allChecked = false;
+    }
+
     deleteAllChecked() {
+        console.log(this.lstCtietBcao);
         const lstId: any[] = [];
         this.lstCtietBcao.forEach(item => {
             if (item.checked) {
@@ -347,20 +361,45 @@ export class PhuLuc06Component implements OnInit {
     deleteLine(id: any) {
         const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
         const nho: string = this.lstCtietBcao[index].stt;
-        // const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
-        // const stt: string = this.lstCtietBcao[index].stt;
+        const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+        const stt: string = this.lstCtietBcao[index].stt;
         //xóa phần tử và con của nó
         this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
         //update lại số thức tự cho các phần tử cần thiết
-        // const lstIndex: number[] = [];
-        // for (let i = this.lstCtietBcao.length - 1; i >= index; i--) {
-        //     if (this.getHead(this.lstCtietBcao[i].stt) == head) {
-        //         lstIndex.push(i);
-        //     }
-        // }
+        const lstIndex: number[] = [];
+        for (let i = this.lstCtietBcao.length - 1; i >= index; i--) {
+            if (this.getHead(this.lstCtietBcao[i].stt) == head) {
+                lstIndex.push(i);
+            }
+        }
 
-        // this.replaceIndex(lstIndex, -1);
+        this.replaceIndex(lstIndex, -1);
         this.updateEditCache();
+    }
+
+    // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
+    getHead(str: string): string {
+        return str.substring(0, str.lastIndexOf('.'));
+    }
+
+    // lấy phần đuôi của stt
+    getTail(str: string): number {
+        return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
+    }
+
+    //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
+    replaceIndex(lstIndex: number[], heSo: number) {
+        if (heSo == -1) {
+            lstIndex.reverse();
+        }
+        //thay doi lai stt cac vi tri vua tim duoc
+        lstIndex.forEach(item => {
+            const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
+            const nho = this.lstCtietBcao[item].stt;
+            this.lstCtietBcao.forEach(item => {
+                item.stt = item.stt.replace(nho, str);
+            })
+        })
     }
     // them dong moi
     addLine(id: number): void {
