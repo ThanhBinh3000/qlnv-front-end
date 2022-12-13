@@ -9,7 +9,7 @@ import { DialogThemDanhMucDungChungComponent } from 'src/app/components/dialog/d
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { BienBanGuiHangService } from 'src/app/services/bienBanGuiHang.service';
+import { BienBanGuiHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/bienBanGuiHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { DanhMucDungChungService } from "../../../services/danh-muc-dung-chung.service";
@@ -368,17 +368,17 @@ export class DanhMucDungChungComponent implements OnInit {
 
   them(data?: any, isView?: boolean) {
     let modalTuChoi = this.modal.create({
-        nzTitle: "Thông tin danh mục dùng chung",
-        nzContent: DialogThemDanhMucDungChungComponent,
-        nzMaskClosable: false,
-        nzClosable: false,
-        nzWidth: '1000px',
-        nzFooter: null,
-        nzClassName: 'themdmdungchung',
-        nzComponentParams: {
-          dataEdit: data,
-          isView: isView,
-        },
+      nzTitle: "Thông tin danh mục dùng chung",
+      nzContent: DialogThemDanhMucDungChungComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '1000px',
+      nzFooter: null,
+      nzClassName: 'themdmdungchung',
+      nzComponentParams: {
+        dataEdit: data,
+        isView: isView,
+      },
     });
     modalTuChoi.afterClose.subscribe((data) => {
       this.search();
