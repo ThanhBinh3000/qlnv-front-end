@@ -77,7 +77,7 @@
               {{getChiMuc(data.stt)}}
             </td>
             <td>
-              {{data.tenNdung}}
+              {{data.tenDmuc}}
             </td>
             <td>{{displayValue(data.uocThien)}}</td>
             <td>{{displayValue(data.namSoDtuong)}}</td>
@@ -126,10 +126,10 @@
             </td>
             <td>
               <ng-container *ngIf="data.maNdung; else editName">
-                {{editCache[data.id].data.tenNdung}}
+                {{editCache[data.id].data.tenDmuc}}
               </ng-container>
               <ng-template #editName>
-                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenNdung" />
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenDmuc" />
               </ng-template>
             </td>
             <td>

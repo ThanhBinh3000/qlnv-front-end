@@ -273,12 +273,10 @@ export class BieuMau140Component implements OnInit {
             edit: false,
             data: { ...item }
         };
-        this.lstCtietBcao.forEach(item => {
-            if (item.level == 2 && item.stt.includes("0.2.3.")) {
-                item.stt = "";
-            }
-        })
+
         this.updateEditCache();
+        // this.checkEdit();
+        console.log(this.lstCtietBcao);
     }
 
     //xóa dòng
@@ -376,10 +374,16 @@ export class BieuMau140Component implements OnInit {
         // }
 
         if (n == 2) {
-            xau = String.fromCharCode(k + 96);
+            if (str.startsWith("2.3.")) {
+                xau = "";
+            } else {
+                xau = String.fromCharCode(k + 96);
+            }
+
         }
         if (n == 3) {
-            xau = "";
+
+
         }
         return xau;
     }
@@ -559,9 +563,19 @@ export class BieuMau140Component implements OnInit {
 
 
 
-    checkEdit(id: string) {
-        const lstTemp = this.lstCtietBcao.filter(e => e.id !== id);
-        return lstTemp.every(e => !e.stt.startsWith(id));
+    checkEdit(stt: string): boolean {
+        let check: boolean;
+
+        if (stt.startsWith("0.2.3.")) {
+            check = true;
+
+        } else {
+            check = false;
+        }
+
+
+
+        return check;
     }
 
     doPrint() {

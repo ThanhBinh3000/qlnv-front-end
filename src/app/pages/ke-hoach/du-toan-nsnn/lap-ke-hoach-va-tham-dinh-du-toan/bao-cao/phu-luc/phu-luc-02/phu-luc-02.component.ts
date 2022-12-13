@@ -122,24 +122,24 @@ export class PhuLuc02Component implements OnInit {
   getName(level: number, ma: string) {
     const type = this.getTail(ma);
     let str = '';
-    if (level == 1) {
-      switch (type) {
-        case 1:
-          str = (this.namBcao - 1).toString();
-          break;
-        case 2:
-          str = this.namBcao.toString();
-          break;
-        case 3:
-          str = this.namBcao.toString();
-          break;
-        case 4:
-          str = (this.namBcao - 2).toString() + '-' + (this.namBcao + 2).toString();
-          break;
-        default:
-          break;
-      }
-    }
+    // if (level == 1) {
+    //   switch (type) {
+    //     case 1:
+    //       str = (this.namBcao - 1).toString();
+    //       break;
+    //     case 2:
+    //       str = this.namBcao.toString();
+    //       break;
+    //     case 3:
+    //       str = this.namBcao.toString();
+    //       break;
+    //     case 4:
+    //       str = (this.namBcao - 2).toString() + '-' + (this.namBcao + 2).toString();
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // }
     return str;
   }
 

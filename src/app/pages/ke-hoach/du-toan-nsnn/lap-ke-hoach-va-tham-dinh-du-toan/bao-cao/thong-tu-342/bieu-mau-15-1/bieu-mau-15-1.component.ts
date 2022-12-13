@@ -313,7 +313,6 @@ export class BieuMau151Component implements OnInit {
 
   // luu thay doi
   saveEdit(id: string): void {
-    debugger
     const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT

@@ -102,7 +102,7 @@
                             {{getChiMuc(data.stt)}}
                         </td>
                         <td>
-                            {{data.tenMatHang}}
+                            {{data.tenNoiDung}}
                         </td>
                         <td>{{data.soLuong}}</td>
                         <td *ngIf="checkViewTD">{{data.soLuongTd}}</td>
@@ -125,7 +125,7 @@
                         </td>
                         <td [hidden]="status">
                             <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
-                            <i *ngIf="checkDelete(data.matHang)" class="fa fa-trash-o do"
+                            <i *ngIf="checkDelete(data.noiDung)" class="fa fa-trash-o do"
                                 (click)="deleteLine(data.stt)"></i>
                         </td>
                     </ng-container>
@@ -134,12 +134,12 @@
                             {{getChiMuc(editCache[data.id].data.stt)}}
                         </td>
                         <td>
-                            <ng-container *ngIf="data.matHang; else editName">
-                                {{editCache[data.id].data.tenMatHang}}
+                            <ng-container *ngIf="data.noiDung; else editName">
+                                {{editCache[data.id].data.tenNoiDung}}
                             </ng-container>
                             <ng-template #editName>
                                 <input nz-input class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.tenMatHang" />
+                                    [(ngModel)]="editCache[data.id].data.tenNoiDung" />
                             </ng-template>
                         </td>
                         <td>
@@ -245,7 +245,7 @@
                     </td>
                     <td>
                         <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
-                        <i *ngIf="checkDelete(data.matHang)" class="fa fa-trash-o do"
+                        <i *ngIf="checkDelete(data.noiDung)" class="fa fa-trash-o do"
                             (click)="deleteLine(data.stt)"></i>
                     </td>
                     </ng-template>
