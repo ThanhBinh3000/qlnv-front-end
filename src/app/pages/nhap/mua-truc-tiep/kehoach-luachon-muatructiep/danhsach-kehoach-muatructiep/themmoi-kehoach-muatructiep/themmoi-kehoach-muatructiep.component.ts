@@ -291,9 +291,9 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
             this.formData.patchValue({
               donGiaVat: data.giaQdVat
             })
-            if (!data.giaQdVat) {
-              this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
-            }
+            // if (!data.giaQdVat) {
+            //   this.notification.error(MESSAGE.ERROR, "Chủng loại hàng hóa đang chưa có giá, xin vui lòng thêm phương án giá!")
+            // }
           }
           if (res.statusCode == API_STATUS_CODE.SUCCESS) {
             this.formData.patchValue({
