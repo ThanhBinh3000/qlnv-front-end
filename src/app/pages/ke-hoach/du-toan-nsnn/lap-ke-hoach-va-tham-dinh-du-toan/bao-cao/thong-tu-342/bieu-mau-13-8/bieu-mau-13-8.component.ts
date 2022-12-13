@@ -14,7 +14,7 @@ export class ItemData {
     id: string;
     stt: string;
     maNdung: string;
-    tenNdung: string;
+    tenDmuc: string;
     level: number;
     thienNtruoc: number;
     namDtoan: number;
@@ -46,6 +46,8 @@ export class BieuMau138Component implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    viewAppraisalValue: boolean;
+    editAppraisalValue: boolean;
     editMoneyUnit = false;
     isDataAvailable = false;
     //nho dem
@@ -74,6 +76,8 @@ export class BieuMau138Component implements OnInit {
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
+        this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -86,7 +90,7 @@ export class BieuMau138Component implements OnInit {
                     id: uuid.v4() + 'FE',
                     stt: e.ma,
                     maNdung: e.ma,
-                    tenNdung: e.giaTri,
+                    tenDmuc: e.giaTri,
                 })
             })
         } else if (!this.lstCtietBcao[0]?.stt) {
@@ -105,7 +109,7 @@ export class BieuMau138Component implements OnInit {
                         ...new ItemData(),
                         id: uuid.v4(),
                         stt: item.stt,
-                        tenNdung: item.tenNdung,
+                        tenDmuc: item.tenNdung,
                         thienNtruoc: item.thienNtruoc,
                         namDtoan: item.namDtoan,
                         namUocThien: item.namUocThien,

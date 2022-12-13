@@ -128,7 +128,7 @@
                             <tbody>
                                 <tr *ngFor="let data of baoCao.lstLapThamDinhs; let i = index">
                                     <ng-container *ngIf="data.maBieuMau.startsWith('pl')">
-                                        <td>{{ i + 1 }}</td>
+                                        <td>{{ getIndex(data.maBieuMau) }}</td>
                                         <td>{{data.tenPl}}</td>
                                         <td>{{data.tenDm}}</td>
                                         <td>
@@ -191,7 +191,7 @@
                             <tbody>
                                 <tr *ngFor="let data of baoCao.lstLapThamDinhs; let i = index">
                                     <ng-container *ngIf="data.maBieuMau.startsWith('TT342')">
-                                        <td>{{ i + 1 }}</td>
+                                        <td>{{ getIndex(data.maBieuMau) }}</td>
                                         <td>{{data.tenPl}}</td>
                                         <td>{{data.tenDm}}</td>
                                         <td>
@@ -254,7 +254,7 @@
                             <tbody>
                                 <tr *ngFor="let data of baoCao.lstLapThamDinhs; let i = index">
                                     <ng-container *ngIf="data.maBieuMau.startsWith('TT69')">
-                                        <td>{{ i + 1 }}</td>
+                                        <td>{{ getIndex(data.maBieuMau) }}</td>
                                         <td>{{data.tenPl}}</td>
                                         <td>{{data.tenDm}}</td>
                                         <td>
