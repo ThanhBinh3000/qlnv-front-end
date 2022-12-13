@@ -267,43 +267,45 @@
                             </fm-input-number>
                         </td>
                         <td>
+                            {{displayValue(editCache[data.id].data.trungHanVonN2N2TongSo)}
+                        </td>
+                        <td>
                             <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N2TongSo">
+                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N2ThuHoi"
+                                (ngModelChange)="changeModel(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N2ThuHoi">
+                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N2Xdcb"
+                                (ngModelChange)="changeModel(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N2Xdcb">
+                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N2Cbi"
+                                (ngModelChange)="changeModel(data.id)">
+                            </fm-input-number>
+                        </td>
+                        <td>
+                            {{displayValue(editCache[data.id].data.trungHanVonN2N1TongSo)}}
+                        </td>
+                        <td>
+                            <fm-input-number class="search__input"
+                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N1ThuHoi"
+                                (ngModelChange)="changeModel(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N2Cbi">
+                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N1Xdcb"
+                                (ngModelChange)="changeModel(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N1TongSo">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N1ThuHoi">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N1Xdcb">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N1Cbi">
+                                [(ngModel)]="editCache[data.id].data.trungHanVonN2N1Cbi"
+                                (ngModelChange)="changeModel(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
@@ -311,23 +313,24 @@
                             </fm-input-number>
                         </td>
                         <td>
+                            {{displayValue(editCache[data.id].data.khNstwTongSoNamN)}}
+                        </td>
+                        <td>
                             <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.khNstwTongSoNamN">
+                                [(ngModel)]="editCache[data.id].data.khNstwThuHoiNamN"
+                                (ngModelChange)="changeModel(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.khNstwThuHoiNamN">
+                                [(ngModel)]="editCache[data.id].data.khNstwThanhToanNamN"
+                                (ngModelChange)="changeModel(data.id)">
                             </fm-input-number>
                         </td>
                         <td>
                             <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.khNstwThanhToanNamN">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.khNstwChuanBiNamN">
+                                [(ngModel)]="editCache[data.id].data.khNstwChuanBiNamN"
+                                (ngModelChange)="changeModel(data.id)">
                             </fm-input-number>
                         </td>
                         <td>

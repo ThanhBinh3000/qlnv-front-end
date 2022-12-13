@@ -611,14 +611,12 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
     };
 
     if (loaiPa) {
-      if (loaiPa === 1) {
+      if (loaiPa == 1) {
         this.dataChange.emit(request1);
-        return
       }
 
-      if (loaiPa === 2) {
+      if (loaiPa == 2) {
         this.dataChange.emit(request2);
-        return
       }
     }
   };
