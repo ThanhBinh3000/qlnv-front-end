@@ -1,6 +1,6 @@
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { PAGE_SIZE_DEFAULT } from './../../../../../constants/config';
-import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output, SimpleChanges } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserService } from 'src/app/services/user.service';
@@ -44,8 +44,14 @@ export class TienDoThucHienComponent extends BaseComponent implements OnInit {
     super.ngOnInit();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    this.updateEditCache();
+    this.emitDataTable();
+  }
+
   ngOnInit() {
-    this.dataTable = this.dataTableTienDo;
+    // this.dataTable = this.dataTableTienDo;
+    // console.log(this.dataTable, "huhu");
   }
 
   selectTab() {
@@ -69,6 +75,7 @@ export class TienDoThucHienComponent extends BaseComponent implements OnInit {
 
     this.rowItem = new TienDoThucHien();
     this.updateEditCache();
+    this.emitDataTable();
   }
   onChangeTrangThai(trangThai, typeData?) {
     const tt = this.listTrangThai.filter(d => d.ma == trangThai)
@@ -110,6 +117,7 @@ export class TienDoThucHienComponent extends BaseComponent implements OnInit {
   luuEdit(index: number): void {
     this.hasError = (false);
     Object.assign(this.dataTable[index], this.dataEdit[index].data);
+    this.emitDataTable();
     this.dataEdit[index].edit = false;
   }
 
@@ -128,6 +136,7 @@ export class TienDoThucHienComponent extends BaseComponent implements OnInit {
         try {
           this.dataTable.splice(index, 1);
           this.updateEditCache();
+          this.emitDataTable();
           this.dataTable;
         } catch (e) {
           console.log('error', e);
@@ -138,6 +147,10 @@ export class TienDoThucHienComponent extends BaseComponent implements OnInit {
   clearData() {
     this.rowItem = new TienDoThucHien();
   }
+  emitDataTable() {
+    this.dataTableTienDoChange.emit(this.dataTable)
+  }
+
 
 
 }
