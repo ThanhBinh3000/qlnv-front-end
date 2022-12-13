@@ -47,7 +47,6 @@ export class DeNghiCapVonBoNganhService extends BaseService {
 
   loadThTCDT(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-von-bo-nganh/tong-hop/TCDT`;
-    // const url = `http://localhost:3333/de-nghi-cap-von-bo-nganh/tong-hop/TCDT`;
     return this.httpClient.post(url, body).toPromise();
   }
 

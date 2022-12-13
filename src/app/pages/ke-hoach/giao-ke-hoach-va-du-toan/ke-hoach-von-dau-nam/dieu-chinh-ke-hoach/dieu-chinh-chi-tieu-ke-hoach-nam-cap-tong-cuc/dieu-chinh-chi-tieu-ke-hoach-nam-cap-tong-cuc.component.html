@@ -80,7 +80,7 @@
                 <th width="175px">Số VB đề xuất điều chỉnh</th>
                 <th width="175px">Loại hàng hóa</th>
                 <th width="175px">Trạng thái</th>
-                <th width="130px" class="text-right"></th>
+                <th width="130px" class="text-right">Hành động</th>
               </tr>
               </thead>
               <tbody>
@@ -159,16 +159,15 @@
                 <td>{{ data.loaiHangHoa }}</td>
                 <td class="text-center">{{ data.trangThaiDuyet }}</td>
                 <td>
-                  <a *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_XEM')"
-                     (click)="redirectToChiTiet(true, data.id)">
+                  <a (click)="redirectToChiTiet(true, data.id)">
                     <i class="fa fa-eye"></i>
                   </a>
-                  <a (click)="redirectToChiTiet(false, data.id)" *ngIf="(data.trangThai == '00' || data.trangThai == '03') && userService.isTongCuc()
-                      && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_THEM')">
+                  <a (click)="redirectToChiTiet(false, data.id)" *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.CHO_DUYET_LDC) && userService.isTongCuc()
+                      ">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <a
-                    *ngIf="(data.trangThai == '00' && userService.isTongCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_XOA')"
+                    *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isTongCuc()) "
                     (click)="xoaItem(data)">
                     <i class="fa fa-trash-o do"></i>
                   </a>

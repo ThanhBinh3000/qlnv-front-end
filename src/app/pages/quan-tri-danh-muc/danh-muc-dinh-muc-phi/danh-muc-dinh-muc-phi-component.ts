@@ -1,24 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { saveAs } from 'file-saver';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { DonviService } from 'src/app/services/donvi.service';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { HelperService } from 'src/app/services/helper.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {Component, OnInit} from '@angular/core';
+import {saveAs} from 'file-saver';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {DonviService} from 'src/app/services/donvi.service';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {HelperService} from 'src/app/services/helper.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {DanhMucService} from "../../../services/danhmuc.service";
 import {
   DialogDanhSachHangHoaComponent
 } from "../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
 import {PAGE_SIZE_DEFAULT} from "../../../constants/config";
 import {UserLogin} from "../../../models/userlogin";
-import { cloneDeep } from 'lodash';
+import {cloneDeep} from 'lodash';
 import {DanhMucDinhMucService} from "../../../services/danh-muc-dinh-muc.service";
 import {DanhMucMucPhi} from "../../../models/DeXuatKeHoachuaChonNhaThau";
 import {Globals} from "../../../shared/globals";
-
 
 
 @Component({
@@ -31,6 +30,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
   formDataChinhSua: FormGroup;
   listVthh: any[] = [];
   listDinhMuc: any[] = [];
+  listDviTinh: any[] = [];
   listLhbq: any[] = [];
   listHtBq: any[] = [];
   dataTable: any[] = [];
@@ -52,7 +52,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
     tenDinhMuc: '',
     str: "",
     tenCloaiVthh: "",
-    tenVthh:  ""
+    tenVthh: ""
   };
 
   constructor(
@@ -67,7 +67,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private fb: FormBuilder,
     private notificationService: NzNotificationService,
-    private globals : Globals
+    private globals: Globals
   ) {
     this.formData = this.fb.group({
       id: [null],
@@ -78,6 +78,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       loaiHinhBq: [null, [Validators.required]],
       loaiVthh: [null, [Validators.required]],
       tenVthh: [null],
+      dviTinh: [null],
       maDinhMuc: [null, [Validators.required]],
       tenDinhMuc: [null, [Validators.required]],
       trangThai: [null, [Validators.required]]
@@ -97,13 +98,15 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
     })
   }
 
-   ngOnInit() {
-     this.search();
-     this.loadDsVthh();
-     this.getListDinhMuc();
-     this.getListLhbq();
-     this.getListHtbq();
+  ngOnInit() {
+    this.search();
+    this.loadDsVthh();
+    this.getListDinhMuc();
+    this.getListLhbq();
+    this.getListHtbq();
+    this.getListDviTinh();
   }
+
   async loadDsVthh() {
     this.listVthh = [];
     let res = await this.danhMucService.danhMucChungGetAll('LOAI_HHOA');
@@ -119,6 +122,16 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       this.listDinhMuc = res.data;
     }
   }
+
+
+  async getListDviTinh() {
+    this.listDinhMuc = [];
+    let res = await this.danhMucService.danhMucChungGetAll('DON_VI_TINH');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDviTinh = res.data;
+    }
+  }
+
   async getListLhbq() {
     this.listLhbq = [];
     let res = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
@@ -126,6 +139,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       this.listLhbq = res.data;
     }
   }
+
   async getListHtbq() {
     this.listHtBq = [];
     let res = await this.danhMucService.danhMucChungGetAll('HINH_THUC_BAO_QUAN');
@@ -139,7 +153,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         }
         this.dataEdit[index].data.tenLoaiVthh = item.tenLoaiVthh
         this.dataEdit[index].data.tencLoaiVthh = item.tencLoaiVthh
@@ -161,7 +175,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
     });
     modal.afterClose.subscribe(async (data) => {
       if (data) {
-        this.bindingDataHangHoa(data, type , i);
+        this.bindingDataHangHoa(data, type, i);
       }
     });
   }
@@ -205,27 +219,28 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
     if (idInput && data) {
       this.formDataChinhSua.patchValue({
         id: idInput,
-        cloaiVthh: data.cloaiVthh ,
+        cloaiVthh: data.cloaiVthh,
         tenCloaiVthh: data.tencLoaiVthh,
         hinhThucBq: data.hinhThucBq,
         loaiDinhMuc: data.loaiDinhMuc,
-        loaiHinhBq:data.loaiHinhBq,
+        loaiHinhBq: data.loaiHinhBq,
         loaiVthh: data.loaiVthh,
         tenVthh: data.tenLoaiVthh,
-        maDinhMuc:data.maDinhMuc,
-        tenDinhMuc:data.tenDinhMuc,
+        maDinhMuc: data.maDinhMuc,
+        tenDinhMuc: data.tenDinhMuc,
+        dviTinh: data.dviTinh,
       })
       this.helperService.markFormGroupTouched(this.formDataChinhSua);
       if (this.formDataChinhSua.invalid) {
         return;
       }
-    } else  {
+    } else {
       this.helperService.markFormGroupTouched(this.formData);
+      console.log(this.formDataChinhSua.invalid);
       if (this.formData.invalid) {
         return;
       }
     }
-
     let body = this.formData.value
     let res
     if (idInput) {
@@ -250,7 +265,8 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
-    }
+  }
+
   clearFilter() {
     this.searchFilter = {
       cloaiVthh: '',
@@ -262,14 +278,14 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       tenDinhMuc: '',
       str: "",
       tenCloaiVthh: "",
-      tenVthh:  ""
+      tenVthh: ""
     };
     this.search();
   }
 
   huyEdit(idx: number): void {
     this.dataEdit[idx] = {
-      data: { ...this.dataTable[idx] },
+      data: {...this.dataTable[idx]},
       edit: false,
     };
   }
@@ -310,7 +326,6 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
   }
 
 
-
   xoa() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
@@ -332,7 +347,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.danhMucDinhMucService.deleteMuti({ ids: dataDelete });
+            let res = await this.danhMucDinhMucService.deleteMuti({ids: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -348,8 +363,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
           }
         },
       });
-    }
-    else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
@@ -379,8 +393,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
             await this.search();
             this.spinner.hide();
           });
-        }
-        catch (e) {
+        } catch (e) {
           console.log('error: ', e)
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -390,14 +403,12 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
   }
 
 
-
-
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-            item.checked = true;
+          item.checked = true;
         });
       }
     } else {
@@ -422,7 +433,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
   }
 
 
-  async bindingDataHangHoa(data, type , i?) {
+  async bindingDataHangHoa(data, type, i?) {
     if (data.loaiHang == "M" || data.loaiHang == "LT") {
       if (type == "save") {
         this.formData.patchValue({
@@ -475,8 +486,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }

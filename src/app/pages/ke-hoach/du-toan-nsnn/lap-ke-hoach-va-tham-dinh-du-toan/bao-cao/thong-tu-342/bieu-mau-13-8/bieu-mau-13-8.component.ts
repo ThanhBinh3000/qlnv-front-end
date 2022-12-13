@@ -117,6 +117,7 @@ export class BieuMau138Component implements OnInit {
                         giaTriThamDinh: item.giaTriThamDinh,
                     })
                 }
+                this.sum(item.stt);
             })
         }
         this.sortByIndex();
@@ -367,6 +368,7 @@ export class BieuMau138Component implements OnInit {
                 id: data.id,
                 stt: data.stt,
                 maNdung: data.maNdung,
+                tenDmuc: data.tenDmuc,
                 level: data.level,
             }
             this.lstCtietBcao.forEach(item => {
