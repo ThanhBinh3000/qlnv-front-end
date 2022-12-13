@@ -67,9 +67,10 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
   dataTable: any[] = [];
   dataTableAll: any[] = [];
   listHangHoa: any[] = [];
-  listLoaiDinhMuc: any[] =[];
+  listLoaiDinhMuc: any[] = [];
   listLoaiBaoQuan: any[] = [];
   listTrangThai: any[] = [{"ma": "00", "giaTri": "Không hoạt động"}, {"ma": "01", "giaTri": "Hoạt động"}];
+  listDonVi: any[] = []
   listDmDinhMuc: any[] = [];
 
   rowItem: DinhMucPhiNxBq = new DinhMucPhiNxBq();
@@ -119,6 +120,7 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
       await this.getAllLoaiDinhMuc();
       await this.loaiVTHHGetAll();
       await this.loadDmDinhMuc();
+      await this.loadDonVi();
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -126,6 +128,16 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
+
+  async loadDonVi() {
+    const res = await this.donViService.layDonViCon();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDonVi = res.data.filter(item => item.type !== 'PB');
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
   async loadDmDinhMuc() {
     let body = {
       paggingReq: {
@@ -135,7 +147,7 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
     };
     let res = await this.danhMucDinhMucService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      if(res.data && res.data.content && res.data.content.length > 0){
+      if (res.data && res.data.content && res.data.content.length > 0) {
         for (let item of res.data.content) {
           this.listDmDinhMuc.push(item);
         }
@@ -143,8 +155,8 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    console.log(this.listDmDinhMuc);
   }
+
   async loaiVTHHGetAll() {
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
@@ -160,46 +172,45 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
   async getAllLoaiDinhMuc() {
     let resLoaiDinhMuc = await this.danhMucService.danhMucChungGetAll('LOAI_DINH_MUC');
     if (resLoaiDinhMuc.msg == MESSAGE.SUCCESS) {
-        this.listLoaiDinhMuc = resLoaiDinhMuc.data;
+      this.listLoaiDinhMuc = resLoaiDinhMuc.data;
     }
     let resLoaiHinhBaoQuan = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_BAO_QUAN');
     if (resLoaiHinhBaoQuan.msg == MESSAGE.SUCCESS) {
       this.listLoaiBaoQuan = resLoaiHinhBaoQuan.data;
     }
-   }
+  }
 
   changeDm(attr): void {
     let item;
     if (attr == 'ma') {
-      item = this.listDmDinhMuc.filter(item => item.maDinhMuc ==  this.rowItem.maDinhMuc)[0];
+      item = this.listDmDinhMuc.filter(item => item.maDinhMuc == this.rowItem.maDinhMuc)[0];
     } else {
       item = this.listDmDinhMuc.filter(item => item.tenDinhMuc == this.rowItem.tenDinhMuc)[0];
     }
     if (item) {
-      this.rowItem.tenDinhMuc = item.tenDinhMuc ?  item.tenDinhMuc.toString() : null;
-      this.rowItem.maDinhMuc = item.maDinhMuc ?  item.maDinhMuc.toString() : null;
-      this.rowItem.donViTinh = item.dviTinh ?  item.dviTinh.toString() : null;
+      this.rowItem.tenDinhMuc = item.tenDinhMuc ? item.tenDinhMuc.toString() : null;
+      this.rowItem.maDinhMuc = item.maDinhMuc ? item.maDinhMuc.toString() : null;
+      this.rowItem.donViTinh = item.dviTinh ? item.dviTinh.toString() : null;
       this.rowItem.loaiDinhMuc = item.loaiDinhMuc ? item.loaiDinhMuc.toString() : null;
       this.rowItem.loaiBaoQuan = item.loaiHinhBq ? item.loaiHinhBq.toString() : null;
-      this.rowItem.htBaoQuan = item.hinhThucBq ?  item.hinhThucBq.toString() : null;
-      this.rowItem.loaiVthh =  item.loaiVthh ? item.loaiVthh.toString() : null;
-      this.rowItem.cloaiVthh = item.cloaiVthh ?  item.cloaiVthh.toString() : null;
-    }else{
-      this.rowItem.tenDinhMuc =   null;
-      this.rowItem.maDinhMuc =  null;
-      this.rowItem.donViTinh =   null;
-      this.rowItem.loaiDinhMuc =  null;
+      this.rowItem.htBaoQuan = item.hinhThucBq ? item.hinhThucBq.toString() : null;
+      this.rowItem.loaiVthh = item.loaiVthh ? item.loaiVthh.toString() : null;
+      this.rowItem.cloaiVthh = item.cloaiVthh ? item.cloaiVthh.toString() : null;
+    } else {
+      this.rowItem.tenDinhMuc = null;
+      this.rowItem.maDinhMuc = null;
+      this.rowItem.donViTinh = null;
+      this.rowItem.loaiDinhMuc = null;
       this.rowItem.loaiBaoQuan = null;
-      this.rowItem.htBaoQuan =  null;
-      this.rowItem.loaiVthh =  null;
-      this.rowItem.cloaiVthh =   null;
+      this.rowItem.htBaoQuan = null;
+      this.rowItem.loaiVthh = null;
+      this.rowItem.cloaiVthh = null;
     }
   }
 
   async saveDinhMuc(id: number) {
     this.spinner.show();
     let res
-
     if (id > 0) {
       let msgRequired = '';
       //validator
@@ -217,6 +228,7 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
         this.spinner.hide();
         return;
       }
+      this.dataEdit[id].data.apDungTaiCuc = this.dataEdit[id].data.apDungTaiCuc ? this.dataEdit[id].data.apDungTaiCuc.toString() : null;
       res = await this.qlDinhMucPhiService.update(this.dataEdit[id].data);
     } else {
       let msgRequired = '';
@@ -235,6 +247,7 @@ export class DinhMucPhiBaoQuanComponent implements OnInit {
         this.spinner.hide();
         return;
       }
+      this.rowItem.apDungTaiCuc = this.rowItem.apDungTaiCuc ? this.rowItem.apDungTaiCuc.toString() : null;
       res = await this.qlDinhMucPhiService.create(this.rowItem);
     }
     if (res.msg == MESSAGE.SUCCESS) {

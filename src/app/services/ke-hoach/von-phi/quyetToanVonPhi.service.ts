@@ -8,7 +8,7 @@ import { BaseService } from '../../base.service';
 export class QuyetToanVonPhiService extends BaseService {
   gateway: string = '/qlnv-khoach'
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'phuong-an-gia/dx-pag', '/qlnv-khoach')
+    super(httpClient, 'von-phi-hang/von-phi-bo-nganh', '/qlnv-khoach')
 
   }
 

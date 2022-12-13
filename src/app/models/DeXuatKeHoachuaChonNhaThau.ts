@@ -158,6 +158,7 @@ export class DanhMucMucPhi {
   hinhThucBq: string
   loaiDinhMuc: string
   loaiHinhBq: string
+  dviTinh:string
   loaiVthh: string
   tenLoaiVthh: string
   maDinhMuc: string
