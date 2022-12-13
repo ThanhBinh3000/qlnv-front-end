@@ -518,11 +518,16 @@ export class PhuLuc03Component implements OnInit {
 
     genderDinhMuc() {
         this.lstCtietBcao.forEach(item => {
+
             this.dsDinhMuc.forEach(itemDm => {
+
                 if (item.matHang == itemDm.id) {
                     item.dmucNamDtoan = itemDm.tongDmuc
+
                 }
             })
+            const tenDanhMuc = this.lstVatTuFull.find(itm => itm.id == item.matHang).tenDm;
+            item.tenMatHang = tenDanhMuc;
         })
     }
     //thêm phần tử đầu tiên khi bảng rỗng
