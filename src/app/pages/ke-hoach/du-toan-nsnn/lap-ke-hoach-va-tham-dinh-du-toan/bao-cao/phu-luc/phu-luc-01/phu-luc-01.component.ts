@@ -186,7 +186,7 @@ export class PhuLuc01Component implements OnInit {
                     this.dsDinhMucN = res.data;
                     this.dsDinhMucN.forEach(item => {
                         if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = divNumber(item.tongDmuc, 1000);
+                            item.tongDmuc = Math.round(divNumber(item.tongDmuc, 1000));
                         }
                     })
                 } else {
@@ -209,7 +209,7 @@ export class PhuLuc01Component implements OnInit {
                     this.dsDinhMucX = res.data;
                     this.dsDinhMucX.forEach(item => {
                         if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = divNumber(item.tongDmuc, 1000);
+                            item.tongDmuc = Math.round(divNumber(item.tongDmuc, 1000));
                         }
                     })
                 } else {
@@ -431,7 +431,6 @@ export class PhuLuc01Component implements OnInit {
 
     // luu thay doi
     saveEdit(id: string): void {
-        debugger
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
@@ -587,6 +586,8 @@ export class PhuLuc01Component implements OnInit {
                     item.dmucNamDtoan = itemDm.tongDmuc
                 }
             })
+            const tenDanhMuc = this.lstVatTuFull.find(itm => itm.id == item.danhMuc).tenDm;
+            item.tenDanhMuc = tenDanhMuc; 
         })
     }
     //thêm phần tử đầu tiên khi bảng rỗng

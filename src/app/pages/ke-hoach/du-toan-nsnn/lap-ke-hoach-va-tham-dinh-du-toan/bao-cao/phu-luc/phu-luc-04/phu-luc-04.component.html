@@ -157,10 +157,10 @@
                     </ng-template>
                     </td>
                     <td>
-                        {{editCache[data.id].data.tongMucDuToan}}
+                        {{displayValue(editCache[data.id].data.tongMucDuToan)}}
                     </td>
                     <td *ngIf="checkViewTD">
-                        {{editCache[data.id].data.tongMucDuToanTd}}
+                        {{displayValue(editCache[data.id].data.tongMucDuToanTd)}}
                     </td>
                     <td>
                         <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.duToanDaBoTriNamN2"
