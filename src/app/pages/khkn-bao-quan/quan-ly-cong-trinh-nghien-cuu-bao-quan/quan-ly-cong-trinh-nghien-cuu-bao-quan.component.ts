@@ -12,7 +12,6 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { ThongBaoDauGiaTaiSanService } from 'src/app/services/thongBaoDauGiaTaiSan.service';
 import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { KhCnCongTrinhNghienCuu } from 'src/app/services/kh-cn-bao-quan/khCnCongTrinhNghienCuu';
@@ -27,13 +26,21 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
   qdTCDT: string = MESSAGE.QD_TCDT;
 
   searchFilter = {
-    namKeHoach: '',
-    maVatTuCha: '',
-    maDvis: '',
-    soQuyetDinhPheDuyetKHBDG: '',
-    maThongBaoBDG: '',
-    trichYeu: '',
-    ngayToChuc: '',
+    maDeTai: '',
+    tenDeTai: '',
+    capDeTai: '',
+    trangThai: '',
+    nam: '',
+
+  };
+
+  filterTable: any = {
+    maDeTai: '',
+    tenDeTai: '',
+    capDeTai: '',
+    tuNam: '',
+    denNam: '',
+    tenTrangThai: '',
   };
 
   optionsDonVi: any[] = [];
@@ -61,16 +68,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
 
-  filterTable: any = {
-    qdPheDuyetKhbdg: '',
-    maThongBao: '',
-    thoiGianToChucDauGiaTuNgay: '',
-    trichYeu: '',
-    hinhThucDauGia: '',
-    phuongThucDauGia: '',
-    loaiHangHoa: '',
-    namKeHoach: '',
-  };
+
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -79,7 +77,6 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     private router: Router,
     private modal: NzModalService,
     public userService: UserService,
-    private thongBanDauGiaTaiSanService: ThongBaoDauGiaTaiSanService,
     public globals: Globals,
     private danhMucService: DanhMucService,
     private khCnCongTrinhNghienCuu: KhCnCongTrinhNghienCuu,
@@ -156,31 +153,57 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
   }
 
   async search() {
-    let body = {
-      maDeTai: this.searchFilter.maThongBaoBDG,
-      tenDeTai: this.searchFilter.maVatTuCha,
-      capDeTai: this.searchFilter.namKeHoach,
-      trangThai: this.searchFilter.trichYeu,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page - 1,
-      },
-    };
-    let res = await this.khCnCongTrinhNghienCuu.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.dataTable = data.content;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
+    this.spinner.show();
+    try {
+      let body = {
+        maDeTai: this.searchFilter.maDeTai,
+        tenDeTai: this.searchFilter.tenDeTai,
+        capDeTai: this.searchFilter.capDeTai,
+        trangThai: this.searchFilter.trangThai,
+        paggingReq: {
+          limit: this.pageSize,
+          page: this.page - 1,
+        }
+      };
+      let res = await this.khCnCongTrinhNghienCuu.search(body);
+      console.log(res, "conmemay1213");
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+        console.log(this.dataTable, "conmemay1");
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+          });
+        }
+        this.dataTableAll = cloneDeep(this.dataTable);
+        this.totalRecord = data.totalElements;
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
-      this.dataTableAll = cloneDeep(this.dataTable);
-      this.totalRecord = data.totalElements;
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      this.spinner.hide();
+      console.log(this.dataTable, "conmemay");
+    } catch (e) {
+      console.log(e)
+      this.spinner.hide();
     }
+
   }
+
+  async clearFilter() {
+    this.searchFilter = {
+      maDeTai: '',
+      tenDeTai: '',
+      capDeTai: '',
+      trangThai: '',
+      nam: '',
+
+    };
+    this.search();
+  }
+
 
   async changePageIndex(event) {
     this.spinner.show();
@@ -208,18 +231,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     }
   }
 
-  clearFilter() {
-    this.searchFilter = {
-      namKeHoach: '',
-      maVatTuCha: '',
-      maDvis: '',
-      soQuyetDinhPheDuyetKHBDG: '',
-      maThongBaoBDG: '',
-      trichYeu: '',
-      ngayToChuc: '',
-    };
-    this.search();
-  }
+
 
   convertTrangThai(status: string) {
     return convertTrangThai(status);
@@ -269,27 +281,20 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     await this.search();
   }
 
-  export() {
+  exportData() {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
         let body = {
-          "maThongBaoBDG": this.searchFilter.maThongBaoBDG && this.searchFilter.maThongBaoBDG != "" ? this.searchFilter.maThongBaoBDG : null,
-          "maVatTuCha": this.searchFilter.maVatTuCha && this.searchFilter.maVatTuCha != "" ? this.searchFilter.maVatTuCha : null,
-          "namKeHoach": this.searchFilter.namKeHoach && this.searchFilter.namKeHoach != "" ? this.searchFilter.namKeHoach : null,
-          "ngayToChucBDGDenNgay": this.searchFilter.ngayToChuc && this.searchFilter.ngayToChuc.length > 0
-            ? dayjs(this.searchFilter.ngayToChuc[1]).format('YYYY-MM-DD')
-            : null,
-          "ngayToChucBDGTuNgay": this.searchFilter.ngayToChuc && this.searchFilter.ngayToChuc.length > 0
-            ? dayjs(this.searchFilter.ngayToChuc[0]).format('YYYY-MM-DD')
-            : null,
-          "soQuyetDinhPheDuyetKHBDG": this.searchFilter.soQuyetDinhPheDuyetKHBDG && this.searchFilter.soQuyetDinhPheDuyetKHBDG != "" ? this.searchFilter.soQuyetDinhPheDuyetKHBDG : null,
-          "trichYeu": this.searchFilter.trichYeu && this.searchFilter.trichYeu != "" ? this.searchFilter.trichYeu : null,
+          maDeTai: this.searchFilter.maDeTai,
+          tenDeTai: this.searchFilter.tenDeTai,
+          capDeTai: this.searchFilter.capDeTai,
+          trangThai: this.searchFilter.trangThai,
         };
-        this.thongBanDauGiaTaiSanService
-          .exportList(body)
+        this.khCnCongTrinhNghienCuu
+          .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-thong-bao-ban-dau-gia-tai-san.xlsx'),
+            saveAs(blob, 'danh-sach-cong-trinh-nghien-cuu.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -301,6 +306,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
+
 
   deleteSelect() {
     let dataDelete = [];
@@ -323,7 +329,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.thongBanDauGiaTaiSanService.deleteMultiple({ ids: dataDelete });
+            let res = await this.khCnCongTrinhNghienCuu.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

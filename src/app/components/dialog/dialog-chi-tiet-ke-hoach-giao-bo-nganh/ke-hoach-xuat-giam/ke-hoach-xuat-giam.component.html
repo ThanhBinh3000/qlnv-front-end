@@ -21,7 +21,7 @@
     <!--    <span class="error-text" *ngIf="true">{{globals.prop.REQUIRED}}</span>-->
   </nz-form-label>
 </div>
-<nz-table #editRowTable [nzData]="dataTable">
+<nz-table #editRowTable [nzData]="dataTable" [nzScroll]="{ x: '1000px' }">
   <thead>
   <tr>
     <th class="text-center" style="width: 5%;">STT</th>

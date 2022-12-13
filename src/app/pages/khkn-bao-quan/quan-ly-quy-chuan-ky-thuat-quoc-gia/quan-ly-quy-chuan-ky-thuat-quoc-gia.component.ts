@@ -2,21 +2,18 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { saveAs } from 'file-saver';
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep, isEmpty, chain } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogChiTietGiaoDichHangTrongKhoComponent } from 'src/app/components/dialog/dialog-chi-tiet-giao-dich-hang-trong-kho/dialog-chi-tiet-giao-dich-hang-trong-kho.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
-import { TreeTableService } from 'src/app/services/tree-table.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { DANH_MUC_LEVEL } from '../../luu-kho/luu-kho.constant';
 import dayjs from "dayjs";
 import { KhCnQuyChuanKyThuat } from './../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import { DialogDanhSachHangHoaComponent } from './../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
@@ -32,6 +29,10 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
   qdTCDT: string = MESSAGE.QD_TCDT;
   userInfo: UserLogin;
   detail: any = {};
+  dataTest: any = {};
+  dsCha: any = {};
+  dsCon: any = {};
+
 
   formData: FormGroup;
 
@@ -54,6 +55,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
     apDungTai: '',
     tenLoaiVthh: '',
     tenCloaiVthh: '',
+    listTenLoaiVthh: '',
     ngayKy: '',
     ngayHieuLuc: '',
     tenTrangThai: '',
@@ -246,7 +248,6 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
           page: this.page - 1,
         }
       };
-      console.log(body, 'body')
       let res = await this.khCnQuyChuanKyThuat.search(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
@@ -304,7 +305,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
-  
+
   clearFilterTable() {
     this.filterTable = {
       soVanBan: '',
@@ -313,6 +314,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
       apDungTai: '',
       tenLoaiVthh: '',
       tenCloaiVthh: '',
+      listTenLoaiVthh: '',
       ngayKy: '',
       ngayHieuLuc: '',
       tenTrangThai: '',
@@ -432,31 +434,32 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
 
   exportData() {
     if (this.totalRecord > 0) {
-      this.spinner.show()
+      this.spinner.show();
       try {
         let body = {
-          "loaiHH": this.formData.value.idLoaiHH,
-          "chungLoaiHH": this.formData.value.idChungLoaiHH,
-          "tuNgay": '',
-          "denNgay": '',
-          "maCuc": this.formData.value.idCuc,
-          "maChiCuc": this.formData.value.idChiCuc,
-          "maDiemKho": this.formData.value.idDiemKho,
-          "maNhaKho": this.formData.value.idNhaKho,
-          "maNganKho": this.formData.value.idNganKho,
-          "maLokho": this.formData.value.idLoKho,
-          "paggingReq": {
-            "limit": this.pageSize,
-            "page": this.page - 1,
-          }
-        }
-        if (this.formData.value.ngay != null) {
-          body.tuNgay = this.formData.value.ngay[0]
-          body.denNgay = this.formData.value.ngay[1]
-        }
-        this.quanLyHangTrongKhoService.exportList(body).subscribe((blob) => {
-          saveAs(blob, 'danh-sach-hang-trong-kho.xlsx')
-        });
+          soVanBan: this.searchFilter.soVanBan,
+          soHieuQuyChuan: this.searchFilter.soHieuQuyChuan,
+          loaiVthh: this.searchFilter.loaiVthh,
+          cloaiVthh: this.searchFilter.cloaiVthh,
+          ngayKyTu: this.searchFilter.ngayKy
+            ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
+            : null,
+          ngayKyDen: this.searchFilter.ngayKy
+            ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
+            : null,
+          ngayHieuLucTu: this.searchFilter.ngayHieuLuc
+            ? dayjs(this.searchFilter.ngayHieuLuc[0]).format('YYYY-MM-DD')
+            : null,
+          ngayHieuLucDen: this.searchFilter.ngayHieuLuc
+            ? dayjs(this.searchFilter.ngayHieuLuc[1]).format('YYYY-MM-DD')
+            : null,
+          trichYeu: this.searchFilter.trichYeu,
+        };
+        this.khCnQuyChuanKyThuat
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach-quy-chuan-quoc-gia.xlsx'),
+          );
         this.spinner.hide();
       } catch (e) {
         console.log('error: ', e);
@@ -464,12 +467,21 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY)
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
+
 
   updateSingleChecked() {
 
   }
 
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
 }
