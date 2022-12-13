@@ -171,6 +171,7 @@ export class BaoHiemKhoComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
 
+        console.log(this.listDanhMucKho);
         if (this.lstCtietBcao.length == 0) {
 
             this.lstCtietBcao.push({
@@ -197,14 +198,13 @@ export class BaoHiemKhoComponent implements OnInit {
 
             })
         } else {
-            this.lstCtietBcao.forEach(e => {
-                this.selectDonvi(e.maDvi);
-                this.selectDiadiem(e.diaChiKho)
-            })
+            this.sortByIndex();
+            // this.lstCtietBcao.forEach(e => {
+            //     this.selectDonvi(e.maDvi);
+            //     this.selectDiadiem(e.diaChiKho)
+            // })
         }
         console.log(this.lstCtietBcao);
-        console.log(this.listDanhMucKho)
-        console.log(this.listDanhSachCuc);
         this.updateEditCache();
         this.getStatusButton();
 
@@ -465,6 +465,35 @@ export class BaoHiemKhoComponent implements OnInit {
         this.checkAddNewRow = true;
     }
 
+    sortByIndex() {
+        this.setLevel();
+        this.lstCtietBcao.sort((item1, item2) => {
+            if (item1.level > item2.level) {
+                return 1;
+            }
+            if (item1.level < item2.level) {
+                return -1;
+            }
+            if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
+                return -1;
+            }
+            if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
+                return 1;
+            }
+            return 0;
+        });
+        const lstTemp: ItemData[] = [];
+        this.lstCtietBcao.forEach(item => {
+            const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+            if (index == -1) {
+                lstTemp.splice(0, 0, item);
+            } else {
+                lstTemp.splice(index + 1, 0, item);
+            }
+        })
+
+        this.lstCtietBcao = lstTemp;
+    }
 
     getChiMuc(str: string): string {
         str = str.substring(str.indexOf('.') + 1, str.length);
@@ -515,41 +544,26 @@ export class BaoHiemKhoComponent implements OnInit {
 
 
     async selectDonvi(idDonvi: any) {
-        let diaDiem;
-        let stt = this.lstCtietBcao.find(e => e.maDvi === idDonvi)?.stt;
-        if (stt == undefined || stt.length != 3) {
-            if (stt == undefined) {
-                await this.quanLyVonPhiService.dmKho(idDonvi).toPromise().then(res => {
-                    if (res.statusCode == 0) {
-                        this.listDanhMucKho = res.data;
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, res?.msg);
-                    }
-                }, err => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                })
-            }
-            let capDonVi = this.listDanhSachCuc.find(e => e.maDvi === idDonvi)?.capDvi;
-            if (capDonVi == "3") {
-                diaDiem = this.listDanhMucKho.find(ts => ts.maDvi === idDonvi);
-            } else {
-                diaDiem = this.listDanhMucKho.find(ts => ts.maDviCha === idDonvi);
-            }
 
-            this.listDanhMucKho = diaDiem?.children;
-            console.log(this.listDanhMucKho);
-            for (let i = 0; i < this.listDanhMucKho.length; i++) {
-                var checkIndex = this.listDiemKhoFull.findIndex(item => item.maDvi == this.listDanhMucKho[i].diaChiKho)
-                if (checkIndex == -1 || this.listDiemKhoFull.length == 0) {
-                    this.listDiemKhoFull.push(this.listDanhMucKho[i])
-                }
-            }
+        let diaDiem;
+        let capDonVi = this.listDanhSachCuc.find(e => e.maDvi === idDonvi)?.capDvi;
+
+        if (capDonVi == "3") {
+            diaDiem = this.listDanhMucKho.find(ts => ts.maDvi === idDonvi);
+        } else {
+            diaDiem = this.listDanhMucKho.find(ts => ts.maDviCha === idDonvi);
         }
+
+        this.listDanhMucKho = diaDiem?.children;
+
+
+
+
     }
 
 
     selectDiadiem(idDiadiem: any) {
-        if (idDiadiem != null) {
+        if (idDiadiem != null && this.listDanhMucKho != undefined) {
             const nhaKho = this.listDanhMucKho.find(ts => ts?.maDvi === idDiadiem);
 
             if (nhaKho != undefined) {
@@ -567,6 +581,23 @@ export class BaoHiemKhoComponent implements OnInit {
             return
         }
 
+    }
+
+    async getDiaChiKho(id: string) {
+        let nameKho = '';
+        let diaDiem;
+        let idDonVi = this.lstCtietBcao.find(item => item.id == id)?.maDvi;
+
+        let capDonVi = this.listDanhSachCuc.find(e => e.maDvi === idDonVi)?.capDvi;
+        if (capDonVi == "3") {
+            diaDiem = this.listDanhMucKho.find(ts => ts.maDvi === idDonVi);
+        } else {
+            diaDiem = this.listDanhMucKho.find(ts => ts.maDviCha === idDonVi);
+        }
+
+        // nameKho =  diaDiem?.children.find( e => e.maDvi == idDonVi.diaChiKho);
+
+        return ''
     }
 
 
