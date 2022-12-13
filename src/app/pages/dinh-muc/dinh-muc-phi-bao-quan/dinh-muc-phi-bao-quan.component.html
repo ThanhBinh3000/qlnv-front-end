@@ -61,7 +61,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3>QUẢN LÝ ĐỊNH MỨC </h3>
+      <h3>QUẢN LÝ ĐỊNH MỨC</h3>
       <div class="buttons">
         <button type="button" (click)="deleteSelect()" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do"></i>
@@ -132,13 +132,15 @@
             </nz-select>
           </th>
           <th>
-            <nz-select [(ngModel)]="rowItem.apDungTaiCuc" [nzDisabled]="isView" nzAllowClear="true">
-              <nz-option *ngFor="let p of listLoaiDinhMuc" [nzValue]="p.ma" [nzLabel]="p.ten">
-              </nz-option>
-              <ng-template #error let-control>
-                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                </ng-container>
-              </ng-template>
+            <nz-select
+              nzMode="multiple"
+              style="width:200px"
+              nzPlaceHolder="Chọn đơn vị áp dụng"
+              nzAllowClear
+              [(ngModel)]=rowItem.apDungTaiCuc
+            >
+              <nz-option *ngFor="let option of listDonVi" [nzValue]="option.maDvi"
+                         [nzLabel]="option.tenDvi"></nz-option>
             </nz-select>
           </th>
           <th>
@@ -305,51 +307,62 @@
             </td>
             <td>
               <input type="text" [disabled]="true"
-                     [(ngModel)]="dataEdit[data.id].data.nvChuyenMonTc + dataEdit[data.id].data.ttCaNhanTc + dataEdit[data.id].data.tcDieuHanhTc" nz-input/>
+                     [(ngModel)]="dataEdit[data.id].data.nvChuyenMonTc + dataEdit[data.id].data.ttCaNhanTc + dataEdit[data.id].data.tcDieuHanhTc"
+                     nz-input/>
             </td>
             <td>
-              <input type="text" [disabled]="true" [(ngModel)]="dataEdit[data.id].data.nvChuyenMonTc + dataEdit[data.id].data.ttCaNhanTc " nz-input/>
+              <input type="text" [disabled]="true"
+                     [(ngModel)]="dataEdit[data.id].data.nvChuyenMonTc + dataEdit[data.id].data.ttCaNhanTc " nz-input/>
             </td>
             <td>
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[data.id].data.nvChuyenMonTc" [nzFormatter]="globals.formatter"
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[data.id].data.nvChuyenMonTc"
+                               [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
             <td>
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[data.id].data.ttCaNhanTc" [nzFormatter]="globals.formatter"
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[data.id].data.ttCaNhanTc"
+                               [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
             <td>
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[data.id].data.tcDieuHanhTc" [nzFormatter]="globals.formatter"
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[data.id].data.tcDieuHanhTc"
+                               [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
             <td>
               <input type="text" [disabled]="true"
-                     [(ngModel)]="dataEdit[data.id].data.nvChuyenMonKv + dataEdit[data.id].data.ttCaNhanKv + dataEdit[data.id].data.tcDieuHanhKv " nz-input/>
+                     [(ngModel)]="dataEdit[data.id].data.nvChuyenMonKv + dataEdit[data.id].data.ttCaNhanKv + dataEdit[data.id].data.tcDieuHanhKv "
+                     nz-input/>
             </td>
             <td>
-              <input type="text" [disabled]="true" [(ngModel)]="dataEdit[data.id].data.nvChuyenMonKv + dataEdit[data.id].data.ttCaNhanKv " nz-input/>
+              <input type="text" [disabled]="true"
+                     [(ngModel)]="dataEdit[data.id].data.nvChuyenMonKv + dataEdit[data.id].data.ttCaNhanKv " nz-input/>
             </td>
             <td>
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[data.id].data.nvChuyenMonKv" [nzFormatter]="globals.formatter"
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[data.id].data.nvChuyenMonKv"
+                               [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
             <td>
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[data.id].data.ttCaNhanKv" [nzFormatter]="globals.formatter"
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[data.id].data.ttCaNhanKv"
+                               [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
             <td>
-              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[data.id].data.tcDieuHanhKv" [nzFormatter]="globals.formatter"
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataEdit[data.id].data.tcDieuHanhKv"
+                               [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
             <td>
               <nz-form-control [nzErrorTip]="error">
-                <nz-date-picker [(ngModel)]="dataEdit[data.id].data.ngayHieuLuc" nzFormat="dd/MM/yyyy" id="ngay-hieu-luc-edit"
+                <nz-date-picker [(ngModel)]="dataEdit[data.id].data.ngayHieuLuc" nzFormat="dd/MM/yyyy"
+                                id="ngay-hieu-luc-edit"
                                 class="search__input">
                 </nz-date-picker>
                 <ng-template #error let-control>
