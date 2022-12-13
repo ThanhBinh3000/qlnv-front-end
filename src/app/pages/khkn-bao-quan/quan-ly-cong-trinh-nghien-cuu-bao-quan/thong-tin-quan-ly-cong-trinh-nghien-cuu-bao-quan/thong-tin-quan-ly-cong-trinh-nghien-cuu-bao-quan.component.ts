@@ -136,7 +136,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
   }
 
   async initForm() {
-    this.formData.patchValue({ "id": "", "nam": 2022, "maDeTai": "123", "tenDeTai": "123", "capDeTai": "01", "ngayKy": ["2022-12-13T07:01:30.514Z", "2023-01-23T07:01:30.514Z"], "ngayKyTu": "2023-01-23", "ngayKyDen": "2022-12-13", "chuNhiem": "123", "chucVu": "123", "email": null, "sdt": "123", "dviPhoiHop": "123", "dviChuTri": "123", "nguonVon": "NGV01", "soQdPd": "", "suCanThiet": "123", "mucTieu": "123", "phamVi": "123", "trangThai": "00", "tenTrangThai": "Dự Thảo", "tongChiPhi": 123, "phuongPhap": "123", "noiDung": "123", "ngayNghiemThu": "2022-12-13T07:02:44.889Z", "diaDiem": "123", "danhGia": "123", "tongDiem": 123, "xepLoai": "123", "tienDoThucHien": [], "children": [{ "noiDung": "1123", "sanPham": "123", "nguoiThucHien": "123", "stt": 2, "edit": false }], "fileDinhKemReq": [] })
     this.formData.patchValue({
       trangThai: "00",
       tenTrangThai: "Dự Thảo"
