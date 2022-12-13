@@ -901,6 +901,20 @@ export class BaoCaoComponent implements OnInit {
                     giaTriThamDinh: td6,
                 })
                 //phu luc bao hiem
+                const data7 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh').lstCtietLapThamDinhs;
+                let tong7 = 0;
+                data7.forEach(item => {
+                    const level = item.stt.split('.').length - 2;
+                    if (level == 0) {
+                        tong7 += item.gtTong;
+                    }
+                })
+                dataInfo.extraData.push({
+                    stt: '0.1.5',
+                    maNdung: '0.1.5',
+                    namKh: tong7,
+                    giaTriThamDinh: null,
+                })
                 break;
             case 'TT342_13.10':
                 nzContent = BieuMau1310Component;
