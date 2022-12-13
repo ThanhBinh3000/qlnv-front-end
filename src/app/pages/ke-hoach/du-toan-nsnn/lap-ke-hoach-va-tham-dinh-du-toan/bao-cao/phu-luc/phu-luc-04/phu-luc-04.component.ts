@@ -14,8 +14,8 @@ export class ItemData {
     id: string;
     stt: string;
     level: number;
-    matHang: string;
-    tenMatHang: string;
+    noiDung: string;
+    tenNoiDung: string;
     soLuong: number;
     soLuongTd: number;
     tongMucDuToan: number;
@@ -101,14 +101,14 @@ export class PhuLuc04Component implements OnInit {
                     ...new ItemData(),
                     id: uuid.v4() + 'FE',
                     stt: e.ma,
-                    tenMatHang: e.giaTri,
-                    matHang: e.ma,
+                    tenNoiDung: e.giaTri,
+                    noiDung: e.ma,
                 })
             })
             this.setLevel();
         } else if (!this.lstCtietBcao[0]?.stt) {
             this.lstCtietBcao.forEach(item => {
-                item.stt = item.matHang;
+                item.stt = item.noiDung;
             })
         }
         this.sortByIndex();
@@ -424,8 +424,8 @@ export class PhuLuc04Component implements OnInit {
                 ...new ItemData(),
                 id: data.id,
                 stt: data.stt,
-                matHang: data.matHang,
-                tenMatHang: data.tenMatHang,
+                noiDung: data.noiDung,
+                tenNoiDung: data.tenNoiDung,
                 level: data.level,
             }
             this.lstCtietBcao.forEach(item => {
@@ -483,7 +483,7 @@ export class PhuLuc04Component implements OnInit {
     }
 
     checkAdd(data: ItemData) {
-        if (data.stt == '0.3' || (data.level == 1 && data.matHang)) {
+        if (data.stt == '0.3' || (data.level == 1 && data.noiDung)) {
             return true;
         }
         return false;

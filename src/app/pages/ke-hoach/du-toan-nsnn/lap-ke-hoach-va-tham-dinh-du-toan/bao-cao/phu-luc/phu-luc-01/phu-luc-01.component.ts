@@ -15,22 +15,6 @@ import { DialogThemKhoanMucComponent } from '../../dialog-them-khoan-muc/dialog-
 export class ItemData {
     id: any;
     khvonphiLapThamDinhCtietId: string;
-    // matHang: string;
-    // tenMatHang: string;
-    // dviTinh: string;
-    // thucHienNamTruoc: number;
-    // dtoanNamHtai: number;
-    // uocThNamHtai: number;
-    // dmucNamDtoan: number;
-    // sluongNamDtoan: number;
-    // ttienNamDtoan: number;
-    // sluongNamN1Td: number;
-    // ttienNamN1Td: number;
-    // sluongGiaoDtoan: number;
-    // ttienGiaoDtoan: number;
-    // sluongDchinhDtoan: number;
-    // ttienDchinhDtoan: number;
-
     danhMuc: string;
     tenDanhMuc: string;
     dviTinh: string;
@@ -88,8 +72,6 @@ export class PhuLuc01Component implements OnInit {
     namBaoCao: number;
 
     initItem: ItemData = {
-
-
         id: null,
         khvonphiLapThamDinhCtietId: '',
         danhMuc: "",
@@ -281,9 +263,6 @@ export class PhuLuc01Component implements OnInit {
                 level: 1,
             })
         })
-        console.log(this.lstVatTuFull);
-
-
     }
 
 
@@ -317,6 +296,7 @@ export class PhuLuc01Component implements OnInit {
                 lstTemp.splice(index + 1, 0, item);
             }
         })
+        
 
         this.lstCtietBcao = lstTemp;
     }
@@ -451,12 +431,12 @@ export class PhuLuc01Component implements OnInit {
 
     // luu thay doi
     saveEdit(id: string): void {
+        debugger
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-        // this.tinhTong();
-        this.sum(this.lstCtietBcao[index].stt);
         this.updateEditCache();
+        this.sum(this.lstCtietBcao[index].stt);
     }
     // huy thay doi
     cancelEdit(id: string): void {
@@ -524,7 +504,7 @@ export class PhuLuc01Component implements OnInit {
     }
 
     deleteLine(id: any) {
-        const index: number = this.lstCtietBcao.findIndex(e => e.stt === id); // vi tri hien tai
+        const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
         const nho: string = this.lstCtietBcao[index].stt;
         const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
         const stt: string = this.lstCtietBcao[index].stt;
@@ -593,7 +573,6 @@ export class PhuLuc01Component implements OnInit {
                 this.updateEditCache();
             }
         });
-        console.log(this.lstCtietBcao);
     }
 
     genderDinhMuc() {
@@ -762,6 +741,7 @@ export class PhuLuc01Component implements OnInit {
                 stt: data.stt,
                 tenDanhMuc: data.tenDanhMuc,
                 level: data.level,
+                danhMuc: data.danhMuc,
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
