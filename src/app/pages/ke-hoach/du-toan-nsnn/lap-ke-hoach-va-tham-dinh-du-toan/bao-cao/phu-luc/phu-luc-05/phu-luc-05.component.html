@@ -51,7 +51,7 @@
           <th colspan="2">Quyết định phê duyệt quyết toán công trình hoàn thành</th>
           <th rowspan="2">Lũy kế vấp vốn đến (năm hiện hành)</th>
           <th rowspan="2">Kế hoạnh vốn năm (dự toán)</th>
-          <th rowspan="2">Kế hoạnh vốn năm (dự toán)</th>
+          <th *ngIf="checkViewTD" rowspan="2">Kế hoạnh vốn năm (dự toán)</th>
           <th rowspan="2">Kế hoạch năm (dự toán + 1)</th>
           <th rowspan="2">Kế hoạch năm (dự toán + 2)</th>
           <th rowspan="2">Ghi chú</th>
@@ -81,7 +81,7 @@
           <th>8</th>
           <th>9</th>
           <th>10</th>
-          <th>10A</th>
+          <th *ngIf="checkViewTD">10A</th>
           <th>11</th>
           <th>12</th>
           <th>13</th>
@@ -104,7 +104,15 @@
           <th></th>
           <th>{{displayValue(total.luyKeVapVon)}}</th>
           <th>{{displayValue(total.keHoachVon)}}</th>
-          <th>{{displayValue(total.keHoachVonTd)}}</th>
+          <td *ngIf="checkViewTD">
+            <ng-container *ngIf="checkEditTD; else viewTd">
+              {{displayValue(total.keHoachVonTd)}}
+            </ng-container>
+            <ng-template #viewTd>
+          <td>{{displayValue(total.keHoachVonTd)}}</td>
+          </ng-template>
+          </td>
+          <!-- <th>{{displayValue(total.keHoachVonTd)}}</th> -->
           <th>{{displayValue(total.keHoachNamDtN1)}}</th>
           <th>{{displayValue(total.keHoachNamDtN2)}}</th>
           <th></th>
@@ -138,7 +146,15 @@
             <td>{{displayValue(data.qdPdQtoanGtriQtoan)}}</td>
             <td>{{displayValue(data.luyKeVapVon)}}</td>
             <td>{{displayValue(data.keHoachVon)}}</td>
+            <td *ngIf="checkViewTD">
+              <ng-container *ngIf="checkEditTD; else viewTd">
+                {{displayValue(data.keHoachVonTd)}}
+              </ng-container>
+              <ng-template #viewTd>
             <td>{{displayValue(data.keHoachVonTd)}}</td>
+            </ng-template>
+            </td>
+            <!-- <td>{{displayValue(data.keHoachVonTd)}}</td> -->
             <td>{{displayValue(data.keHoachNamDtN1)}}</td>
             <td>{{displayValue(data.keHoachNamDtN2)}}</td>
             <td>{{data.ghiChu}}</td>
@@ -206,32 +222,37 @@
               <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachVon">
               </fm-input-number>
             </td>
-            <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachVonTd">
-              </fm-input-number>
-            </td>
-            <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachNamDtN1">
-              </fm-input-number>
-            </td>
-            <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachNamDtN2">
-              </fm-input-number>
-            </td>
-            <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
-            </td>
-            <td>
-              <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-              <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                (nzOnConfirm)="cancelEdit(data.id)" class="save">
-                Hủy
-              </a>
-            </td>
-            <td>
-              <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
-              <i *ngIf="checkDelete(data.maCongTrinh)" class="fa fa-trash-o do" (click)="deleteLine(data.stt)"></i>
-            </td>
+            <td *ngIf="checkViewTD">
+              <ng-container *ngIf="checkEditTD; else viewTD">
+                <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.keHoachVonTd">
+                </fm-input-number>
+              </ng-container>
+              <ng-template #viewTD>
+            <td>{{displayValue(editCache[data.id].data.keHoachVonTd)}}</td>
+          </ng-template>
+          </td>
+          <td>
+            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachNamDtN1">
+            </fm-input-number>
+          </td>
+          <td>
+            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachNamDtN2">
+            </fm-input-number>
+          </td>
+          <td>
+            <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
+          </td>
+          <td>
+            <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+            <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
+              class="save">
+              Hủy
+            </a>
+          </td>
+          <td>
+            <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+            <i *ngIf="checkDelete(data.maCongTrinh)" class="fa fa-trash-o do" (click)="deleteLine(data.stt)"></i>
+          </td>
           </ng-template>
         </tr>
       </tbody>

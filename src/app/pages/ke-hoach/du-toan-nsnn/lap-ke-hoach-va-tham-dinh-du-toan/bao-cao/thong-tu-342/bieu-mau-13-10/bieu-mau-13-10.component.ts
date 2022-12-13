@@ -16,7 +16,7 @@ export class ItemData {
   stt: string;
   level: number;
   maNdung: string;
-  tenNdung: string;
+  tenDmuc: string;
   uocThien: number;
   namSoDtuong: number;
   namDtoanGiao: number;
@@ -98,13 +98,13 @@ export class BieuMau1310Component implements OnInit {
           ...new ItemData(),
           id: uuid.v4() + 'FE',
           stt: e.ma,
-          tenNdung: e.giaTri,
+          tenDmuc: e.giaTri,
           maNdung: e.ma,
         })
       })
       this.setLevel();
       this.lstCtietBcao.forEach(item => {
-        item.tenNdung += this.getName(item.level, item.maNdung);
+        item.tenDmuc += this.getName(item.level, item.maNdung);
       })
     } else if (!this.lstCtietBcao[0]?.stt) {
       this.lstCtietBcao.forEach(item => {
@@ -121,24 +121,24 @@ export class BieuMau1310Component implements OnInit {
   getName(level: number, ma: string) {
     const type = this.getTail(ma);
     let str = '';
-    if (level == 1) {
-      switch (type) {
-        case 1:
-          str = (this.namBcao - 1).toString();
-          break;
-        case 2:
-          str = this.namBcao.toString();
-          break;
-        case 3:
-          str = this.namBcao.toString();
-          break;
-        case 4:
-          str = (this.namBcao - 2).toString() + '-' + (this.namBcao + 2).toString();
-          break;
-        default:
-          break;
-      }
-    }
+    // if (level == 1) {
+    //   switch (type) {
+    //     case 1:
+    //       str = (this.namBcao - 1).toString();
+    //       break;
+    //     case 2:
+    //       str = this.namBcao.toString();
+    //       break;
+    //     case 3:
+    //       str = this.namBcao.toString();
+    //       break;
+    //     case 4:
+    //       str = (this.namBcao - 2).toString() + '-' + (this.namBcao + 2).toString();
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // }
     return str;
   }
 
@@ -422,7 +422,7 @@ export class BieuMau1310Component implements OnInit {
         id: data.id,
         stt: data.stt,
         maNdung: data.maNdung,
-        tenNdung: data.tenNdung,
+        tenDmuc: data.tenDmuc,
         level: data.level,
       }
       this.lstCtietBcao.forEach(item => {
