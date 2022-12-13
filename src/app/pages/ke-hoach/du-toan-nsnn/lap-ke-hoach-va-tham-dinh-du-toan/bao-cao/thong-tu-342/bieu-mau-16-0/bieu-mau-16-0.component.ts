@@ -178,8 +178,12 @@ export class BieuMau160Component implements OnInit {
     }
 
     changeMatHang(matHang: any, id: any) {
+        const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         const donViTinh = this.linhVucChis.find(vtu => vtu.id == matHang)?.maDviTinh;
-        this.editCache[id].data.maDviTinh = donViTinh
+        this.editCache[id].data.maDviTinh = donViTinh;
+        this.lstCtietBcao[index].maDviTinh = donViTinh;
+        console.log(this.lstCtietBcao);
+
     }
 
     updateSingleChecked(): void {
@@ -229,6 +233,8 @@ export class BieuMau160Component implements OnInit {
             edit: true,
             data: { ...item }
         };
+        console.log(this.lstCtietBcao);
+
     }
 
     updateAllChecked(): void {
@@ -448,6 +454,8 @@ export class BieuMau160Component implements OnInit {
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
         // this.sum(this.lstCtietBcao[index].stt);
         this.updateEditCache();
+        console.log(this.lstCtietBcao);
+
     }
 
     changeModel(id: string): void {
