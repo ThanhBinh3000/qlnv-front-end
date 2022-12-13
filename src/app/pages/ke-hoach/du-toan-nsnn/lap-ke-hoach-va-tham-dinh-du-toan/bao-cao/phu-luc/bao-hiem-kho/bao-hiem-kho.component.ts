@@ -134,7 +134,6 @@ export class BaoHiemKhoComponent implements OnInit {
 
 
         this.userInfo = this.userService.getUserLogin().DON_VI;
-
         const reqGetDonViCon = {
             maDviCha: this.maDviTao,
             trangThai: '01',
@@ -163,7 +162,15 @@ export class BaoHiemKhoComponent implements OnInit {
 
         await this.quanLyVonPhiService.dmKho(this.maDviTao).toPromise().then(res => {
             if (res.statusCode == 0) {
-                this.listDanhMucKho = res.data;
+
+                if (this.userInfo.capDvi == "3") {
+
+                    this.listDanhMucKho = res.data;
+                    this.listDanhMucKho = this.listDanhMucKho[0].children;
+
+                } else {
+                    this.listDanhMucKho = res.data;
+                }
             } else {
                 this.notification.error(MESSAGE.ERROR, res?.msg);
             }
@@ -171,7 +178,6 @@ export class BaoHiemKhoComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
 
-        console.log(this.listDanhMucKho);
         if (this.lstCtietBcao.length == 0) {
 
             this.lstCtietBcao.push({
@@ -204,7 +210,7 @@ export class BaoHiemKhoComponent implements OnInit {
             //     this.selectDiadiem(e.diaChiKho)
             // })
         }
-        console.log(this.lstCtietBcao);
+
         this.updateEditCache();
         this.getStatusButton();
 
@@ -547,15 +553,29 @@ export class BaoHiemKhoComponent implements OnInit {
 
         let diaDiem;
         let capDonVi = this.listDanhSachCuc.find(e => e.maDvi === idDonvi)?.capDvi;
-
+        await this.quanLyVonPhiService.dmKho(idDonvi).toPromise().then(res => {
+            if (res.statusCode == 0) {
+                this.listDanhMucKho = res.data;
+            } else {
+                this.notification.error(MESSAGE.ERROR, res?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
         if (capDonVi == "3") {
+
             diaDiem = this.listDanhMucKho.find(ts => ts.maDvi === idDonvi);
         } else {
             diaDiem = this.listDanhMucKho.find(ts => ts.maDviCha === idDonvi);
         }
 
         this.listDanhMucKho = diaDiem?.children;
-
+        for (let i = 0; i < diaDiem?.children.length; i++) {
+            var index = this.listDanhMucKhoFull.findIndex(item => item.maDviCha === idDonvi);
+            if (this.listDanhMucKhoFull.length == 0 || index == -1) {
+                this.listDanhMucKhoFull.push(diaDiem?.children[i]);
+            }
+        }
 
 
 
@@ -564,12 +584,12 @@ export class BaoHiemKhoComponent implements OnInit {
 
     selectDiadiem(idDiadiem: any) {
         if (idDiadiem != null && this.listDanhMucKho != undefined) {
-            const nhaKho = this.listDanhMucKho.find(ts => ts?.maDvi === idDiadiem);
+            const nhaKho = this.listDanhMucKho.find(ts => ts?.tenDvi === idDiadiem);
 
             if (nhaKho != undefined) {
                 this.listDiemKho = nhaKho?.children;
                 for (let i = 0; i < this.listDiemKho.length; i++) {
-                    var index = this.listDiemKhoFull.findIndex(item => item.maDvi == this.listDiemKho[i].maDvi)
+                    var index = this.listDiemKhoFull.findIndex(item => item.maDvi == this.listDiemKho[i].tenDvi)
                     if (index == -1 || this.listDiemKhoFull.length == 0) {
                         this.listDiemKhoFull.push(this.listDiemKho[i]);
                     }
