@@ -377,19 +377,210 @@
           <th class="text-center">(14)</th>
           <th class="text-center"></th>
         </tr>
+        <tr>
+          <th class="text-center"></th>
+          <th class="text-center"></th>
+          <th class="text-center">
+            <nz-select [(ngModel)]="rowItemQtNsKpChiNvDtqg.maBoNganh" (ngModelChange)="changeBN()"
+                       nzAllowClear="true">
+              <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.key" [nzLabel]="p.title">
+              </nz-option>
+              <ng-template #error let-control>
+                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                </ng-container>
+              </ng-template>
+            </nz-select>
+          </th>
+          <th
+            class="text-center">{{rowItemQtNsKpChiNvDtqg.soDtDauNam + rowItemQtNsKpChiNvDtqg.soDtBsTrongNam + rowItemQtNsKpChiNvDtqg.soDuDtNamTruoc + rowItemQtNsKpChiNvDtqg.soTuNamTruoc | number}}</th>
+          <th class="text-center">{{rowItemQtNsKpChiNvDtqg.soDtDauNam + rowItemQtNsKpChiNvDtqg.soDtBsTrongNam  | number}}</th>
+          <th class="text-center">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soDtDauNam"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </th>
+          <th class="text-center">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soDtBsTrongNam"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </th>
+          <th class="text-center">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soDuDtNamTruoc"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </th>
+          <th class="text-center">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soTuNamTruoc"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </th>
+          <th
+            class="text-center">{{rowItemQtNsKpChiNvDtqg.soDuDtNamTruoc + rowItemQtNsKpChiNvDtqg.soTuNamTruoc  | number}}</th>
+          <th class="text-center">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soDnQt" [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </th>
+          <th class="text-center">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soTdQt" [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </th>
+          <th
+            class="text-center">{{(rowItemQtNsKpChiNvDtqg.soDtDauNam + rowItemQtNsKpChiNvDtqg.soDtBsTrongNam + rowItemQtNsKpChiNvDtqg.soDuDtNamTruoc + rowItemQtNsKpChiNvDtqg.soTuNamTruoc) - rowItemQtNsKpChiNvDtqg.soTdQt | number}}</th>
+          <th class="text-center">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soHuyDt" [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </th>
+          <th class="text-center">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soTuPhaiNop"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </th>
+          <th class="text-center">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soDuNamSau"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </th>
+          <th class="text-center">
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soTuNamSau"
+                             [nzFormatter]="globals.formatter"
+                             [nzParser]="globals.parser">
+            </nz-input-number>
+          </th>
+          <th class="text-center">
+            <a (click)="addQtNsKpChiNvDtqg()" [ngClass]="{'isDisabled': !isAdddsQtNsKpChiNvDtqg}">
+              <i class="icon htvbdh_dau-cong"></i>
+            </a>
+            <a (click)="refreshQtNsKpChiNvDtqg()">
+              <i class="fa fa-refresh"></i>
+            </a>
+          </th>
+        </tr>
         </thead>
         <tbody>
         <tr *ngFor="let data of dsQtNsKpChiNvDtqg ;let i = index">
-          <td class="text-center">{{i + 1}} </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <ng-container
+            *ngIf="(dataQtNsKpChiNvDtqgEdit && dataQtNsKpChiNvDtqgEdit[i] && !dataQtNsKpChiNvDtqgEdit[i].edit) ; else editTemplate ">
+            <td></td>
+            <td class="text-center">{{i + 1}} </td>
+            <td>{{data.tenBoNganh}}</td>
+            <td>{{data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc | number}}</td>
+            <td>{{data.soDtDauNam + data.soDtBsTrongNam  | number}}</td>
+            <td>{{data.soDtDauNam  | number}}</td>
+            <td>{{data.soDtBsTrongNam  | number}}</td>
+            <td>{{data.soDuDtNamTruoc  | number}}</td>
+            <td>{{data.soTuNamTruoc  | number}}</td>
+            <td>{{data.soDuDtNamTruoc + data.soTuNamTruoc  | number}}</td>
+            <td>{{data.soDnQt  | number}}</td>
+            <td>{{data.soTdQt  | number}}</td>
+            <td>{{(data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc) - data.soTdQt | number}}</td>
+            <td>{{data.soHuyDt  | number}}</td>
+            <td>{{data.soTuPhaiNop | number}}</td>
+            <td>{{data.soDuNamSau | number}}</td>
+            <td>{{data.soTuNamSau | number}}</td>
+            <td class="text-center">
+              <a (click)="editQtNsKpChiNvDtqg(i)">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a (click)="deleteQtNsKpChiNvDtqg(i)">
+                <i class="fa fa-trash-o do"></i>
+              </a>
+            </td>
+          </ng-container>
+          <ng-template #editTemplate>
+            <td></td>
+            <td class="text-center">{{i + 1}} </td>
+            <td>
+              <nz-select [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.maBoNganh" (ngModelChange)="changeBN()"
+                         nzAllowClear="true">
+                <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.key" [nzLabel]="p.title">
+                </nz-option>
+                <ng-template #error let-control>
+                  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+                  </ng-container>
+                </ng-template>
+              </nz-select>
+            </td>
+            <td>{{dataQtNsKpChiNvDtqgEdit[i].data.soDtDauNam + dataQtNsKpChiNvDtqgEdit[i].data.soDtBsTrongNam + dataQtNsKpChiNvDtqgEdit[i].data.soDuDtNamTruoc + dataQtNsKpChiNvDtqgEdit[i].data.soTuNamTruoc | number}}</td>
+            <td>{{dataQtNsKpChiNvDtqgEdit[i].data.soDtDauNam + dataQtNsKpChiNvDtqgEdit[i].data.soDtBsTrongNam  | number}}</td>
+            <td>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soDtDauNam"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soDtBsTrongNam"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soDuDtNamTruoc"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soTuNamTruoc"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </td>
+            <td>{{dataQtNsKpChiNvDtqgEdit[i].data.soDuDtNamTruoc + dataQtNsKpChiNvDtqgEdit[i].data.soTuNamTruoc  | number}}</td>
+            <td>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soDnQt"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soTdQt"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </td>
+            <td>{{(dataQtNsKpChiNvDtqgEdit[i].data.soDtDauNam + dataQtNsKpChiNvDtqgEdit[i].data.soDtBsTrongNam + dataQtNsKpChiNvDtqgEdit[i].data.soDuDtNamTruoc + dataQtNsKpChiNvDtqgEdit[i].data.soTuNamTruoc) - dataQtNsKpChiNvDtqgEdit[i].data.soTdQt | number}}</td>
+            <td>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soHuyDt"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soTuPhaiNop"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soDuNamSau"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </td>
+            <td>
+              <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soTuNamSau"
+                               [nzFormatter]="globals.formatter"
+                               [nzParser]="globals.parser">
+              </nz-input-number>
+            </td>
+            <td class="text-center">
+              <a (click)="saveEditQtNsKpChiNvDtqg(i)" class="save">
+                <i class="fa fa-save"></i>
+              </a>
+              <a (click)="cancelEditQtNsKpChiNvDtqg(i)">
+                <i class="fa fa-ban do"></i> </a>
+            </td>
+          </ng-template>
         </tr>
         </tbody>
       </nz-table>
