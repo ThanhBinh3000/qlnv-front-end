@@ -13,6 +13,7 @@ import { HelperService } from 'src/app/services/helper.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-dialog-them-moi-ke-hoach-mua-truc-tiep',
@@ -35,6 +36,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
 
   constructor(
     private _modalRef: NzModalRef,
+    private spinner: NgxSpinnerService,
     private fb: FormBuilder,
     public globals: Globals,
     private userService: UserService,
@@ -53,9 +55,9 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       diaDiemNhap: [null],
       donGiaVat: [null],
       soLuong: [null],
-      donGia: [null],
+      donGia: [null, [Validators.required]],
       thanhTien: [],
-      tenGoiThau: [null],
+      tenGoiThau: [null, [Validators.required]],
       soLuongChiTieu: [null],
       soLuongKhDd: [null],
       tongThanhTienVat: [null],
@@ -207,7 +209,12 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     }
   }
 
-  addDiemKho() {
+  async addDiemKho() {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      await this.spinner.hide();
+      return;
+    }
     if (this.thongtinMuaTrucTiep.maDiemKho && this.thongtinMuaTrucTiep.soLuong && this.validateSoLuong(true)) {
       this.thongtinMuaTrucTiep.donGia = this.formData.get('donGia').value;
       this.thongtinMuaTrucTiep.donGiaVat = this.donGiaVat;

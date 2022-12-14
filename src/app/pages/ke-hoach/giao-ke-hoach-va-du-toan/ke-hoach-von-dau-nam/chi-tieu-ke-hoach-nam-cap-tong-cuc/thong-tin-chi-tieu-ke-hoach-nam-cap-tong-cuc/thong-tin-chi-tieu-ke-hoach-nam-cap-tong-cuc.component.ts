@@ -1547,10 +1547,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     trangThai = STATUS.CHO_DUYET_TP
                     break;
                   }
-                  // case STATUS.TU_CHOI_LDC: {
-                  //   trangThai = STATUS.CHO_DUYET_LDC
-                  //   break;
-                  // }
+                  case STATUS.TU_CHOI_LDC: {
+                    trangThai = STATUS.CHO_DUYET_LDC
+                    break;
+                  }
                 }
               }
               let body = {
@@ -3016,7 +3016,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     if (type == 'nhap') {
       this.dataVatTuConClone = vatTu.child;
       this.dataVatTuConEditNhapShow[index] = this.dataVatTuConClone;
-      this.dataVatTuNhapEdit[index].dsVatTu[index1].tenVatTu ='';
+      this.dataVatTuNhapEdit[index].dsVatTu[index1].tenVatTu = '';
       this.dataVatTuNhapEdit[index].dsVatTu[index1].maVatTu = '';
       this.dataVatTuNhapEdit[index].dsVatTu[index1].kyHieu = vatTu.kyHieu;
       this.dataVatTuNhapEdit[index].dsVatTu[index1].maHang = vatTu.maHang;
@@ -3030,7 +3030,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       }
       this.dataVatTuConClone = vatTu.child;
       this.dataVatTuConEditXuatShow[index] = this.dataVatTuConClone;
-      this.dataVatTuXuatEdit[index].dsVatTu[index1].tenVatTu ='';
+      this.dataVatTuXuatEdit[index].dsVatTu[index1].tenVatTu = '';
       this.dataVatTuXuatEdit[index].dsVatTu[index1].maVatTu = '';
       this.dataVatTuXuatEdit[index].dsVatTu[index1].kyHieu = vatTu.kyHieu;
       this.dataVatTuXuatEdit[index].dsVatTu[index1].maHang = vatTu.maHang;
