@@ -151,3 +151,12 @@
 .ant-input-number {
     min-width: 100px !important;
 }
+
+.money-input {
+    min-width: 100px !important;
+    //border: 1px;
+}
+
+.money-input:focus {
+    border: 1px solid !important;
+}
