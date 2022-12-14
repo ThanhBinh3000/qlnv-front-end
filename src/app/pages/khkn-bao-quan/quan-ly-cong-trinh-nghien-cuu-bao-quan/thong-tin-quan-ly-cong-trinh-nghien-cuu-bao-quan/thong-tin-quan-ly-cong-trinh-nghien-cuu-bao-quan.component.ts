@@ -230,7 +230,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
     this.emitDataTable();
   }
   onChangeTrangThai(trangThai, typeData?) {
-    const tt = this.listTrangThai.filter(d => d.ma == trangThai)
+    const tt = this.listTrangThai1.filter(d => d.ma == trangThai)
     if (typeData) {
       if (tt.length > 0) {
         typeData.tenTrangThaiTd = tt[0].giaTri;
