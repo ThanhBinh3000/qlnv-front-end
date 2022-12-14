@@ -35,7 +35,6 @@ export class DuLieuTongHopTcdtComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log('haaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
   }
 
 
