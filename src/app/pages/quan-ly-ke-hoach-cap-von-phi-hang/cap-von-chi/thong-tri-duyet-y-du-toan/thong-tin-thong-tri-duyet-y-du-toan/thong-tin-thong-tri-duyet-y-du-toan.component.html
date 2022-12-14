@@ -75,7 +75,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">Mã tổng hợp</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="soDnCapVon" [nzDisabled]="isView">
+              <nz-select formControlName="soDnCapVon" [nzDisabled]="isView" (ngModelChange)="changeMaTongHop()" nzAllowClear>
                 <nz-option *ngFor="let p of listTongHop" [nzValue]="p.id" [nzLabel]="p.maTongHop"></nz-option>
               </nz-select>
             </nz-form-control>

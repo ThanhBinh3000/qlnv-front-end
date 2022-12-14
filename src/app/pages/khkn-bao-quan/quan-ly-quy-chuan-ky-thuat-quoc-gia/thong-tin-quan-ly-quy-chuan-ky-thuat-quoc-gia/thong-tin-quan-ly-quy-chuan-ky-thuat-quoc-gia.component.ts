@@ -135,6 +135,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.listOfTagOptions = data.loaiVthh.split(',');
+        this.changeListOfTagOptions(data.loaiVthh);
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.dataTable = data.tieuChuanKyThuat;
         this.dataTable.forEach((item, index) => {
