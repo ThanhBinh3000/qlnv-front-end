@@ -305,6 +305,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
           this.detail.trangThai = data.trangThai
           this.detail.tenTrangThai = data.tenTrangThai;
           this.ct1s = data.ct1List;
+          this.rowEdit.ct2s = data.ct1List[0].ct2List;
           this.sortTableId('ct1s');
         }
       }
@@ -320,7 +321,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       });
     }
     else if (type === 'ct2s') {
-      this.rowEdit.ct2List.forEach((lt, i) => {
+      this.rowEdit.ct2List?.forEach((lt, i) => {
         lt.stt = i + 1;
       });
     }
@@ -422,6 +423,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
         ...this.rowEdit.ct2s,
         item,
       ]
+      this.ct1s[0].ct2List = this.rowEdit.ct2s
     }
     this.clearItemRow(type);
   }

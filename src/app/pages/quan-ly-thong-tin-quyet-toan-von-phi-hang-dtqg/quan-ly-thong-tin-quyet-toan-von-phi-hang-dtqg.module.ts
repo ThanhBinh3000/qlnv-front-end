@@ -6,14 +6,17 @@ import { MainModule } from 'src/app/layout/main/main.module';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
 import { QuanLyThongTinQuyetToanVonPhiHangDtqgComponent } from './quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.component';
 import { QuanLyThongTinQuyetToanVonPhiHangDtqgRoutingModule } from './quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg-routing.module';
+import { TonghopPheduyetComponent } from './tonghop-pheduyet/tonghop-pheduyet.component';
+import {TonghopPheduyetModule} from "./tonghop-pheduyet/tonghop-pheduyet.module";
 @NgModule({
-  declarations: [QuanLyThongTinQuyetToanVonPhiHangDtqgComponent],
+  declarations: [QuanLyThongTinQuyetToanVonPhiHangDtqgComponent,TonghopPheduyetComponent],
   imports: [
     CommonModule,
     QuanLyThongTinQuyetToanVonPhiHangDtqgRoutingModule,
     ComponentsModule,
     MainModule,
     NzAffixModule,
+    TonghopPheduyetModule,
   ],
 })
 export class QuanLyThongTinQuyetToanVonPhiHangDtqgModule {}
