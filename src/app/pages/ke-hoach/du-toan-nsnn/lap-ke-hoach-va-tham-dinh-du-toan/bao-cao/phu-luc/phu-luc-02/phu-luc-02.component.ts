@@ -459,8 +459,8 @@ export class PhuLuc02Component implements OnInit {
           this.lstCtietBcao[index].sluongTaiKho = sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
           this.lstCtietBcao[index].dmucTaiKho = sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
           this.lstCtietBcao[index].ttienTaiKho = sumNumber([this.lstCtietBcao[index].ttienTaiKho, item.ttienTaiKho])
-          this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])
           this.lstCtietBcao[index].ttienNgoaiKho = sumNumber([this.lstCtietBcao[index].ttienNgoaiKho, item.ttienNgoaiKho])
+          this.lstCtietBcao[index].binhQuanNgoaiKho = this.lstCtietBcao[index].ttienNgoaiKho / this.lstCtietBcao[index].sluongTaiKho
           this.lstCtietBcao[index].tongCong = sumNumber([this.lstCtietBcao[index].tongCong, item.tongCong])
         }
       })
@@ -479,9 +479,9 @@ export class PhuLuc02Component implements OnInit {
         this.total.sluongTaiKho = sumNumber([this.total.sluongTaiKho, item.sluongTaiKho]);
         this.total.dmucTaiKho = sumNumber([this.total.dmucTaiKho, item.dmucTaiKho]);
         this.total.ttienTaiKho = sumNumber([this.total.ttienTaiKho, item.ttienTaiKho]);
-        this.total.binhQuanNgoaiKho = sumNumber([this.total.binhQuanNgoaiKho, item.binhQuanNgoaiKho]);
         this.total.ttienNgoaiKho = sumNumber([this.total.ttienNgoaiKho, item.ttienNgoaiKho]);
         this.total.tongCong = sumNumber([this.total.tongCong, item.tongCong]);
+        this.total.binhQuanNgoaiKho = divNumber(this.total.ttienNgoaiKho, this.total.sluongTaiKho);
       }
     })
   }
