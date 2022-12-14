@@ -9,6 +9,7 @@ import { QuanLyThongTinQuyetToanVonPhiHangDtqgRoutingModule } from './quan-ly-th
 import { TonghopPheduyetComponent } from './tonghop-pheduyet/tonghop-pheduyet.component';
 import { DuLieuTongHopTcdtComponent } from './tonghop-pheduyet/du-lieu-tong-hop-tcdt/du-lieu-tong-hop-tcdt.component';
 import { QdPdQuyetToanBtcComponent } from './tonghop-pheduyet/qd-pd-quyet-toan-btc/qd-pd-quyet-toan-btc.component';
+import {TonghopPheduyetModule} from "./tonghop-pheduyet/tonghop-pheduyet.module";
 @NgModule({
   declarations: [QuanLyThongTinQuyetToanVonPhiHangDtqgComponent, TonghopPheduyetComponent, DuLieuTongHopTcdtComponent, QdPdQuyetToanBtcComponent],
   imports: [
@@ -17,6 +18,7 @@ import { QdPdQuyetToanBtcComponent } from './tonghop-pheduyet/qd-pd-quyet-toan-b
     ComponentsModule,
     MainModule,
     NzAffixModule,
+    TonghopPheduyetModule,
   ],
 })
 export class QuanLyThongTinQuyetToanVonPhiHangDtqgModule {}
