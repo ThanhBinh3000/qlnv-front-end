@@ -14,7 +14,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {MangLuoiKhoService} from 'src/app/services/quan-ly-kho-tang/mangLuoiKho.service';
 import {Globals} from 'src/app/shared/globals';
-import dayjs from 'dayjs';
+import dayjs  from 'dayjs';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {NewDonViComponent} from "../../quan-tri-danh-muc/danh-muc-don-vi/new-don-vi/new-don-vi.component";
 import {ThemMoiKhoComponent} from "./them-moi-kho/them-moi-kho.component";
@@ -117,7 +117,6 @@ export class MangLuoiKhoComponent implements OnInit {
       tinhtrangId: [''],
       chatluongId: [''],
       soLuongTonKho: [''],
-      ngayNhapDay: [''],
       dviTinh: [''],
       soDiemKho: [''],
       soNhaKho: [''],
@@ -125,7 +124,7 @@ export class MangLuoiKhoComponent implements OnInit {
       soLoKho: [''],
       tenThuKho: [''],
       slTon: [''],
-      ngayNhapCuoi: [''],
+      ngayNhapDay: [''],
     })
   }
 
@@ -142,9 +141,18 @@ export class MangLuoiKhoComponent implements OnInit {
       this.layTatCaDonViTheoTree(),
       this.getListLoaiKho(),
       this.getListClKho(),
-      this.getListTtKho()
+      this.getListTtKho(),
+      this.loadTinhTrangLoKho()
     ]);
     this.spinner.hide();
+  }
+
+  async loadTinhTrangLoKho() {
+    this.listTinhTrang = [];
+    let res = await this.danhMucService.danhMucChungGetAll('CL_KHO');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listTinhTrang = res.data;
+    }
   }
 
   listLoaiKho: any[] = []
@@ -197,7 +205,7 @@ export class MangLuoiKhoComponent implements OnInit {
 
   // parentNodeSelected: any = [];
   theTich: string = 'm³';
-
+  listTinhTrang: any[] = [];
   nzClickNodeTree(event: any): void {
     this.detailDonVi.reset();
     if (event.keys.length > 0) {
@@ -235,14 +243,27 @@ export class MangLuoiKhoComponent implements OnInit {
   }
 
   bindingDataDetail(dataNode) {
-    this.convertDataChild(dataNode);
-    this.detailDonVi.patchValue({
-      id: dataNode && dataNode.id ? dataNode.id : null,
-      tichLuongTkLt: dataNode.tichLuongTkLt,
-      tichLuongTkVt: dataNode.tichLuongTkVt,
-      theTichTkLt: dataNode.theTichTkLt,
-      theTichTkVt: dataNode.theTichTkVt,
-    });
+    if (this.levelNode != 1) {
+      this.convertDataChild(dataNode);
+      this.detailDonVi.patchValue({
+        id: dataNode && dataNode.id ? dataNode.id : null,
+        tichLuongTkLt: dataNode.tichLuongTkLt,
+        tichLuongTkVt: dataNode.tichLuongTkVt,
+        theTichTkLt: dataNode.theTichTkLt,
+        theTichTkVt: dataNode.theTichTkVt,
+        ghiChu: dataNode.ghiChu? dataNode.ghiChu : null,
+        nhiemVu : dataNode.nhiemVu ? dataNode.nhiemVu : null,
+        namSudung : dataNode.namSudung ? dataNode.namSudung :  null,
+        tinhtrangId : dataNode.tinhtrangId ? dataNode.tinhtrangId : null,
+        dienTichDat : dataNode.dienTichDat ? dataNode.dienTichDat : null,
+        loaiVthh : dataNode.loaiVthh ? dataNode.loaiVthh  :null,
+        cloaiVthh : dataNode.cloaiVthh ? dataNode.cloaiVthh  :null,
+        slTon : dataNode.slTon ? dataNode.slTon  :null,
+        dviTinh : dataNode.dviTinh ? dataNode.dviTinh  :null,
+        ngayNhapDay : dataNode.ngayNhapDay ? dataNode.ngayNhapDay  :null,
+      });
+    }
+      this.fileDinhKems = dataNode.fileDinhkems ? dataNode.fileDinhKems : null
   }
 
   convertDataChild(dataNode) {

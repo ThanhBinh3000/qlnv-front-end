@@ -249,9 +249,10 @@
                 <nz-form-item>
                   <nz-form-label nzRequired>Loại kho</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group>
-                      <input formControlName="loaikhoId" nz-input/>
-                    </nz-input-group>
+                    <nz-select  formControlName="loaikhoId">
+                      <nz-option *ngFor="let item of listLoaiKho" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                      </nz-option>
+                    </nz-select>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -488,9 +489,10 @@
             <nz-form-item>
               <nz-form-label nzRequired>Loại kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-group>
-                  <input [readonly]="true" formControlName="loaikhoId" nz-input/>
-                </nz-input-group>
+                <nz-select  formControlName="loaikhoId">
+                  <nz-option *ngFor="let item of listLoaiKho" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                  </nz-option>
+                </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -786,8 +788,9 @@
             <nz-form-item>
               <nz-form-label nzRequired>Loại kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select [nzDisabled]="true" formControlName="loaikhoId">
-                  <nz-option></nz-option>
+                <nz-select  formControlName="loaikhoId">
+                  <nz-option *ngFor="let item of listLoaiKho" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                  </nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>

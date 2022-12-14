@@ -47,7 +47,7 @@ export class ThemMoiKhoComponent implements OnInit {
   dsLoaiHangHoa: any[] = [];
   listTinhTrang: any[] = [];
   listFileDinhKem: any[] = [];
-
+  listLoaiKho: any[] = [];
   constructor(
     private fb: FormBuilder,
     private notification: NzNotificationService,
@@ -166,6 +166,13 @@ export class ThemMoiKhoComponent implements OnInit {
     }
   }
 
+  async loadListLoaiKho() {
+    this.listLoaiKho = [];
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_KHO');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiKho = res.data;
+    }
+  }
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -173,7 +180,8 @@ export class ThemMoiKhoComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin(),
         this.loaiVTHHGetAll(),
         this.loadDsDvi(),
-        this.loadTinhTrangLoKho()
+        this.loadTinhTrangLoKho(),
+        this.loadListLoaiKho(),
       ]);
       this.spinner.hide();
     } catch (e) {

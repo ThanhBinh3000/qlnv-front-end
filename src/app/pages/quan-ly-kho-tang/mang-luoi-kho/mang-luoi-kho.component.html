@@ -155,7 +155,8 @@
                       <nz-form-label>Tổng tích lượng thiết kế - LT</nz-form-label>
                       <nz-form-control >
                         <nz-input-group [nzAddOnAfter]="dvi">
-                          <input nz-input [readonly]="true" formControlName="tichLuongTkLt"/>
+                          <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                           formControlName="tichLuongTkLt"></nz-input-number>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -165,7 +166,8 @@
                       <nz-form-label>Tổng tích lượng thiết kế - VT</nz-form-label>
                       <nz-form-control >
                         <nz-input-group [nzAddOnAfter]="dvi">
-                          <input nz-input [readonly]="true" formControlName="tichLuongTkVt"/>
+                          <nz-input-number [nzDisabled]="isEditData" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                                           formControlName="tichLuongTkVt"></nz-input-number>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -581,8 +583,9 @@
                           <nz-form-label >Loại kho</nz-form-label>
                           <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
-                              <nz-select formControlName="loaikhoId" [nzDisabled]="isEditData">
-                                <nz-option ></nz-option>
+                              <nz-select  formControlName="loaikhoId" [nzDisabled]="isEditData">
+                                <nz-option *ngFor="let item of listLoaiKho" [nzValue]="item.ma" [nzLabel]="item.giaTri" >
+                                </nz-option>
                               </nz-select>
                             </nz-input-group>
                           </nz-form-control>
@@ -652,9 +655,10 @@
                     <nz-form-item>
                       <nz-form-label >Tình trạng kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group>
-                          <input  formControlName="tinhtrangId"[readonly]="isEditData" nz-input />
-                        </nz-input-group>
+                        <nz-select  formControlName="tinhtrangId" [nzDisabled]="isEditData">
+                          <nz-option *ngFor="let item of listTinhTrang" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                          </nz-option>
+                        </nz-select>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -817,9 +821,10 @@
                     <nz-form-item>
                       <nz-form-label >Loại kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group>
-                          <input formControlName="loaikhoId" [readonly]="true" nz-input/>
-                        </nz-input-group>
+                        <nz-select  formControlName="loaikhoId" [nzDisabled]="isEditData">
+                          <nz-option *ngFor="let item of listLoaiKho" [nzValue]="item.ma" [nzLabel]="item.giaTri" >
+                          </nz-option>
+                        </nz-select>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -887,9 +892,10 @@
                     <nz-form-item>
                       <nz-form-label >Tình trạng ngăn kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group>
-                          <input formControlName="tinhtrangId" nz-input [readonly]="true"/>
-                        </nz-input-group>
+                        <nz-select  formControlName="tinhtrangId" [nzDisabled]="isEditData">
+                          <nz-option *ngFor="let item of listTinhTrang" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                          </nz-option>
+                        </nz-select>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -1085,7 +1091,7 @@
                       <nz-form-label >Ngày nhập đầy</nz-form-label>
                       <nz-form-control>
                         <nz-input-group >
-                          <nz-date-picker formControlName="ngayNhapCuoi" [nzDisabled]="isEditData"  nzFormat="dd/MM/yyyy"  [nzDisabled]="true"></nz-date-picker>
+                          <nz-date-picker formControlName="ngayNhapDay" [nzDisabled]="isEditData"  nzFormat="dd/MM/yyyy"  [nzDisabled]="true"></nz-date-picker>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -1152,9 +1158,10 @@
                     <nz-form-item>
                       <nz-form-label >Loại kho</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group >
-                          <input nz-input formControlName="loaikhoId" [readonly]="true" />
-                        </nz-input-group>
+                        <nz-select  formControlName="loaikhoId" [nzDisabled]="isEditData">
+                          <nz-option *ngFor="let item of listLoaiKho" [nzValue]="item.ma" [nzLabel]="item.giaTri" >
+                          </nz-option>
+                        </nz-select>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -1213,7 +1220,7 @@
                       <nz-form-label >Diện tích sử dụng (m2)</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
-                          <input nz-input  formControlName="dienTichDat" [readOnly]="isEditData" />
+                          <nz-input-number nz-input  formControlName="dienTichDat" [nzDisabled]="isEditData"></nz-input-number>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
@@ -1399,9 +1406,10 @@
                     <nz-form-item>
                       <nz-form-label > Tình trạng lô kho </nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
-                        <nz-input-group>
-                          <input formControlName="tinhtrangId" type="text" [readOnly]="true" nz-input>
-                        </nz-input-group>
+                        <nz-select formControlName="tinhtrangId" [nzDisabled]="isEditData">
+                          <nz-option *ngFor="let item of listTinhTrang" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                          </nz-option>
+                        </nz-select>
                       </nz-form-control>
                     </nz-form-item>
                   </div>
@@ -1410,7 +1418,7 @@
                       <nz-form-label >Ngày nhập đầy</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group>
-                          <nz-date-picker formControlName="ngayNhapCuoi" [nzDisabled]="true"  nzFormat="dd/MM/yyyy"></nz-date-picker>
+                          <nz-date-picker formControlName="ngayNhapDay" [nzDisabled]="true"  nzFormat="dd/MM/yyyy"></nz-date-picker>
                         </nz-input-group>
                       </nz-form-control>
                     </nz-form-item>
