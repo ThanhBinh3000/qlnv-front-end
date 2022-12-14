@@ -4,8 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 @Component({
   selector: 'app-tong-hop-va-phe-duyet',
-  templateUrl: 'tong-hop-va-phe-duyet.html',
-  styleUrls: [],
+  templateUrl: './tong-hop-va-phe-duyet.html',
+  styleUrls: [''],
 })
 export class TongHopVaPheDuyetComponent implements OnInit {
   isVisibleChangeTab$ = new Subject();
@@ -16,9 +16,6 @@ export class TongHopVaPheDuyetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.isVisibleChangeTab$.subscribe((value: boolean) => {
-    //   this.visibleTab = value;
-    // });
     console.log('jaaaaaaaaaaaa');
   }
   tabSelected: number = 0;
