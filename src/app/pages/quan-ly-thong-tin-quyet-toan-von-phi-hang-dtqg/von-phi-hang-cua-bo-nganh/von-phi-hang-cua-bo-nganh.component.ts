@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
 import {MESSAGE} from "../../../constants/message";
-import { cloneDeep } from 'lodash';
+import {cloneDeep} from 'lodash';
 import {NgxSpinnerService} from "ngx-spinner";
 import {PAGE_SIZE_DEFAULT} from "../../../constants/config";
 import * as dayjs from "dayjs";
@@ -23,6 +23,8 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
   dataTableAll: any[] = [];
   allChecked = false;
   totalRecord: number = 10;
+  selectedId: number = 0;
+  isDetail: boolean = false;
   setOfCheckedId = new Set<number>();
   pageSize: number = PAGE_SIZE_DEFAULT;
   indeterminate = false;
@@ -34,35 +36,40 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
     trangThai: '',
     trangThaiPdBtc: '',
   };
+
   constructor(
     private readonly fb: FormBuilder,
     private notification: NzNotificationService,
     public globals: Globals,
-    private vonPhiService:QuyetToanVonPhiService,
+    private vonPhiService: QuyetToanVonPhiService,
     private spinner: NgxSpinnerService,
     public userService: UserService
   ) {
     this.formData = this.fb.group({
       namQuyetToan: [null],
-      ngayCapNhap: [[]],
+      ngayCapNhat: [[]],
       ngayNhap: [[]],
-
     });
   }
+
   ngOnInit() {
     this.loadDsNam();
+    this.search();
   }
 
   clearFilter() {
     this.formData.reset();
     this.search();
   }
+
   loadDsNam() {
     let thisYear = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
       this.dsNam.push((thisYear + i).toString());
     }
   }
+
+
   async search() {
     this.spinner.show();
     let body = this.formData.value;
@@ -116,6 +123,7 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
       }
     }
   }
+
   filterInTable(key: string, value: string) {
     if (value && value != '') {
       this.dataTable = [];
@@ -128,9 +136,44 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
+  }
+
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+      await this.search();
+      this.spinner.hide();
+    } catch (e) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changePageSize(event) {
+    this.spinner.show();
+    try {
+      this.pageSize = event;
+      await this.search();
+      this.spinner.hide();
+    } catch (e) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  themMoi() {
+    // if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_QDLCNT_THEM")) {
+    //   return;
+    // }
+    this.isDetail = true;
+    this.selectedId = null;
+  }
+  showList() {
+    this.isDetail = false;
+    this.search();
   }
 }

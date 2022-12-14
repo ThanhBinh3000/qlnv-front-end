@@ -77,12 +77,12 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
       if (this.dataInput) {
         let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
         this.formData.patchValue({
-          tgianBdauTchuc: [res.data?.tgianDkienTu, res.data?.tgianDkienTu],
+          tgianBdauTchuc: [res.data?.tgianDkienTu, res.data?.tgianDkienDen],
         });
         if (this.isTongHop) {
-          this.listOfData = this.dataInput.children ? this.dataInput.children : this.dataInput.dsGoiThau;
+          this.listOfData = this.dataInput.children ? this.dataInput.children : this.dataInput.dsPhanLoList;
         } else {
-          this.listOfData = this.dataInput.dsPhanLoList ? this.dataInput.dsPhanLoList : this.dataInput.dsGoiThau;
+          this.listOfData = this.dataInput.dsPhanLoList ? this.dataInput.dsPhanLoList : this.dataInput.children;
         }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data);

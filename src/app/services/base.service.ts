@@ -15,8 +15,6 @@ export abstract class BaseService {
     this.GATEWAY = GATEWAY;
   }
 
-  local = 'http://192.168.5.184:3333/phuong-an-gia/tong-hop/'
-
   getAll(body): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tat-ca`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
@@ -44,6 +42,7 @@ export abstract class BaseService {
 
   getDetail(id): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet/${id}`;
+    // const url = `http://localhost:3333/giao-chi-tieu-von-dau-nam/quyet-dinh/ttcp/chi-tiet/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
 
@@ -54,6 +53,7 @@ export abstract class BaseService {
 
   search(body) {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
+    // const url = `http://localhost:3333/dx-kh/nhap-xuat/tra-cuu`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 

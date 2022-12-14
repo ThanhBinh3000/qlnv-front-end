@@ -338,7 +338,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       nzContent: DialogThemDiaDiemPhanLoComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '2000px',
+      nzWidth: '3000px',
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
@@ -364,7 +364,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       let tongTienDatTruoc: number = 0;
       let tongTienDatTruocDonGia: number = 0;
       this.listOfData.forEach((item) => {
-        tongSoLuong = tongSoLuong + item.soLuong;
+        tongSoLuong = (tongSoLuong + item.soLuong) / 1000;
         tongTienKdiem = tongTienKdiem + item.giaKhoiDiem;
         tongTienKdienDonGia = tongTienKdienDonGia + item.giaKhoiDiemDduyet;
         tongTienDatTruoc = tongTienDatTruoc + item.tienDatTruoc;
@@ -485,7 +485,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
   }
 
   async guiDuyet() {
-    this.userService.isTongCuc() ? await this.guiDuyetTongCuc() : await this.guiDuyetCuc()
+    this.loaiVthhInput == '02' ? await this.guiDuyetTongCuc() : await this.guiDuyetCuc()
   }
 
   async guiDuyetTongCuc() {

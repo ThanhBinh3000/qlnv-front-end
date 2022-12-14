@@ -15,6 +15,7 @@ import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quy
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-dieu-chinh-chi-tieu-ke-hoach-nam-cap-tong-cuc',
@@ -46,7 +47,7 @@ export class DieuChinhChiTieuKeHoachNamComponent implements OnInit {
 
   ngayKy: any;
   ngayKyDc: any;
-
+  STATUS  = STATUS;
   listNam: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;

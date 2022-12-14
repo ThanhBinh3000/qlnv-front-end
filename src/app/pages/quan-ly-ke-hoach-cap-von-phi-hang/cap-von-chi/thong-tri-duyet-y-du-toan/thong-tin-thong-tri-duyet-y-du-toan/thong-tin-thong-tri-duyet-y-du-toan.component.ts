@@ -27,6 +27,7 @@ import { ThongTriDuyetYCapVonService } from 'src/app/services/ke-hoach/von-phi/t
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {TongHopDeNghiCapVonService} from "../../../../../services/ke-hoach/von-phi/tongHopDeNghiCapVon.service";
 
 @Component({
   selector: 'app-thong-tin-thong-tri-duyet-y-du-toan',
@@ -68,6 +69,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   listLoaiHopDong: any[] = [];
   dsBoNganh: any[] = [];
   listDeNghi: any[] = [];
+  listTongHop: any[] = [];
 
   rowItem: any = {};
   chiTietList: any[] = [];
@@ -85,6 +87,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private helperService: HelperService,
     private deNghiCapPhiBoNganhService: DeNghiCapVonBoNganhService,
+    private tongHopDeNghiCapVonService: TongHopDeNghiCapVonService,
   ) {
   }
 
@@ -107,6 +110,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     await Promise.all([
       this.getListBoNganh(),
       this.getListDeNghi(),
+      this.getListTongHop(),
     ]);
     this.spinner.hide();
   }
@@ -222,6 +226,17 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     let res = await this.deNghiCapPhiBoNganhService.timKiem(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDeNghi = res.data.content;
+    }
+  }
+  async getListTongHop() {
+    this.listTongHop = [];
+    let body = {
+      pageNumber: 1,
+      pageSize: 1000,
+    }
+    let res = await this.tongHopDeNghiCapVonService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listTongHop = res.data.content;
     }
   }
 

@@ -128,8 +128,8 @@
                         </th>
                         <th>
                             <nz-input-group [nzSuffix]="suffixTemplateInfo123">
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
-                                    (input)="filterInTable('ngayKy',filterTable.ngayKy)" size="small" />
+                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKyQd"
+                                    (input)="filterInTable('ngayKyQd',filterTable.ngayKyQd)" size="small" />
                             </nz-input-group>
                             <ng-template #suffixTemplateInfo123>
                                 <i nz-icon nzType="calendar"></i>
@@ -203,7 +203,7 @@
                         <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.soQdPd}}</td>
-                        <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+                        <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
                         <td>{{ data.trichYeu }}</td>
                         <td>{{ data.tenLoaiVthh }}</td>
                         <td>{{ data.tenCloaiVthh }}</td>

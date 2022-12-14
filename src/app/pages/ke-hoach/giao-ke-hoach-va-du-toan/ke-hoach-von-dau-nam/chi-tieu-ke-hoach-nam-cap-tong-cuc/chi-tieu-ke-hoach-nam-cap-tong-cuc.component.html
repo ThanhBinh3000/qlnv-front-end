@@ -219,7 +219,7 @@
                     <i class="icon htvbdh_eye"></i>
                   </a>
                   <a (click)="redirectThongTinChiTieuKeHoachNam(data.id)"
-                     *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LDC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP)
+                     *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || data.trangThai == globals.prop.NHAP_TU_CHOI_TP)
                         && !userService.isTongCuc() && !userService.isChiCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')">
                     <i class="fa fa-pencil"></i>
                   </a>
