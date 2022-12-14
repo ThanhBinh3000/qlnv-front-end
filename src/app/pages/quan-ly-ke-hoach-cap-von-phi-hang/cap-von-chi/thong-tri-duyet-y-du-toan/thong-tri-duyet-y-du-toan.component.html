@@ -130,11 +130,18 @@
               <a *ngIf="data.trangThai != STATUS.DU_THAO && data.trangThai != STATUS.TU_CHOI_LDV" (click)="detail(data, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai== STATUS.DU_THAO  || data.trangThai== STATUS.TU_CHOI_LDV) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_THONGTRI_SUA')"
+             <!-- <a *ngIf="(data.trangThai== STATUS.DU_THAO  || data.trangThai== STATUS.TU_CHOI_LDV) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_THONGTRI_SUA')"
                 (click)="detail(data, false)">
                 <i class="fa fa-pencil"></i>
               </a>
               <a *ngIf="(data.trangThai== STATUS.DU_THAO  || data.trangThai== STATUS.TU_CHOI_LDV) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_VONCHIDTQG_THONGTRI_XOA')" (click)="xoaItem(data)">
+                <i class="fa fa-trash-o do"></i>
+              </a>-->
+               <a *ngIf="(data.trangThai== STATUS.DU_THAO  || data.trangThai== STATUS.TU_CHOI_LDV) && userService.isTongCuc()"
+                (click)="detail(data, false)">
+                <i class="fa fa-pencil"></i>
+              </a>
+              <a *ngIf="(data.trangThai== STATUS.DU_THAO  || data.trangThai== STATUS.TU_CHOI_LDV) && userService.isTongCuc()" (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

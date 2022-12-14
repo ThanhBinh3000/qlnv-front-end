@@ -77,6 +77,8 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
   isTatCa: boolean = false;
   yearNow: number = 0;
   listNam: any[] = [];
+
+  listOfOption: any = [];
   constructor(
     private fb: FormBuilder,
     private donviService: DonviService,
@@ -108,9 +110,8 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-
+      await this.loadLoaiHangHoa();
       await this.search();
-      await this.loaiVTHHGetAll();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -119,28 +120,22 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
     }
   }
 
-  async loaiVTHHGetAll() {
-    try {
-      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
-        if (hangHoa.msg == MESSAGE.SUCCESS) {
-          hangHoa.data.forEach((item) => {
-            if (item.cap === "1" && item.ma !== '01' && item.ma === this.maLoaiVthh) {
-              this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, item];
-            }
-            else {
-              if (item.child && item.child.length > 0) {
-                item.child.forEach((itemHH) => {
-                  if (itemHH.ma === this.maLoaiVthh) { this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, itemHH]; }
-                });
-              }
-            }
-          })
-        }
+  loadLoaiHangHoa() {
+
+    let ds = [];
+    let dsCon = [];
+    let listLoaiVthh = this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+      hangHoa.data.forEach(element => {
+        ds = [...ds, element.children]
+      });
+      ds = ds.flat();
+      this.listOfOption = ds;
+      ds.forEach(e => {
+        dsCon = [...dsCon, e.children]
       })
-    } catch (error) {
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
+      dsCon = dsCon.flat();
+
+    });
   }
 
   async onChangeLoaiHH(id: number) {

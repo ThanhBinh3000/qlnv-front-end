@@ -20,15 +20,20 @@
           <div nz-col nzSpan="3">
             <nz-form-label nzFor="cap-de-tai"> Cấp đề tài </nz-form-label>
             <nz-form-control>
-              <input class="search__input" placeholder="Nhập Số hiệu quy chuẩn" nz-input
-                [(ngModel)]="searchFilter.capDeTai" [ngModelOptions]="{standalone: true}" />
+              <nz-select [(ngModel)]="searchFilter.capDeTai" [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="onChangeCapDeTai($event)">
+                <nz-option *ngFor="let item of listCapDt" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </div>
           <div nz-col nzSpan="3">
             <nz-form-label nzFor="trang-thai"> Trạng thái </nz-form-label>
             <nz-form-control>
-              <input class="search__input" placeholder="Nhập Số hiệu quy chuẩn" nz-input
-                [(ngModel)]="searchFilter.trangThai" [ngModelOptions]="{standalone: true}" />
+              <nz-select [(ngModel)]="searchFilter.trangThai" [ngModelOptions]="{standalone: true}">
+                <nz-option *ngFor="let item of listTrangThai" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </div>
           <div nz-col nzSpan="3">
@@ -150,7 +155,7 @@
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.maDeTai }}</td>
             <td>{{ data.tenDeTai }}</td>
-            <td>{{ data.capDeTai }}</td>
+            <td>{{ data.tenCapDt }}</td>
             <td>{{ data.ngayKyTu }}</td>
             <td>{{ data.ngayKyDen }}</td>
             <td>{{ data.tenTrangThai }}</td>
