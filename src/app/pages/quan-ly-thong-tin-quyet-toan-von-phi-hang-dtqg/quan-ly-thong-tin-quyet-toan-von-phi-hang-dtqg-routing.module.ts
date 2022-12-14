@@ -36,8 +36,8 @@ const routes: Routes = [
       {
         path: 'tong-hop-va-phe-duyet',
         loadChildren: () =>
-          import('./tong-hop-va-phe-duyet/tong-hop-va-phe-duyet.module').then(
-            (m) => m.TongHopVaPheDuyetModule,
+          import('./tonghop-pheduyet/tonghop-pheduyet.module').then(
+            (m) => m.TonghopPheduyetModule,
           )
       },
     ],
