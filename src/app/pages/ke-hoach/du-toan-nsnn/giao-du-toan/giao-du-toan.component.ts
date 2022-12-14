@@ -8,7 +8,6 @@ import { TAB_LIST } from './giao-du-toan.constant';
   styleUrls: ['./giao-du-toan.component.scss']
 })
 export class GiaoDuToanComponent implements OnInit {
-
   tabSelected: string;
   data: any;
   tabList: any[] = TAB_LIST;

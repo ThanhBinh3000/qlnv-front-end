@@ -6,6 +6,7 @@ import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { NOT_OK, OK } from 'src/app/Utility/utils';
 @Component({
@@ -45,7 +46,12 @@ export class PhuLuc5Component implements OnInit {
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
       const id = file?.lastModified.toString();
-      this.lstFiles.push({ id: id, fileName: file?.name });
+      this.lstFiles.push({
+        id: id,
+        fileName: file?.name,
+        fileSize: file?.size,
+        fileUrl: file?.url
+      });
       this.listFile.push(file);
     });
     this.fileList = [];
@@ -54,6 +60,7 @@ export class PhuLuc5Component implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private dieuChinhService: DieuChinhService,
     private notification: NzNotificationService,
     private modal: NzModalService,
   ) {
@@ -182,7 +189,7 @@ export class PhuLuc5Component implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
+      await this.dieuChinhService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();
@@ -245,7 +252,7 @@ export class PhuLuc5Component implements OnInit {
     };
 
 
-    await this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
+    await this.dieuChinhService.updatePLDieuChinh(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -254,7 +261,7 @@ export class PhuLuc5Component implements OnInit {
           //   lyDoTuChoi: null,
           // };
           this.dataChange.emit(data.data);
-          // this.listFile = []; 
+          this.listFile = [];
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }

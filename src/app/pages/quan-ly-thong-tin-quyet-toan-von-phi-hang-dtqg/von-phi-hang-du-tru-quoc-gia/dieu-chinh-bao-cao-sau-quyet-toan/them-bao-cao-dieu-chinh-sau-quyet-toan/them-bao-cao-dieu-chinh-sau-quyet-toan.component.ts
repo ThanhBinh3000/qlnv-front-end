@@ -12,6 +12,7 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetToanVonPhi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
@@ -190,6 +191,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private quyetToanVonPhiService: QuyetToanVonPhiService,
     private danhMucService: DanhMucHDVService,
     private spinner: NgxSpinnerService,
     private userService: UserService,
@@ -267,7 +269,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
       const res = {
         namQtoan: this.data.namQtoan
       };
-      await this.quanLyVonPhiService.CtietBcaoQuyetToanNam(res).toPromise().then(
+      await this.quyetToanVonPhiService.CtietBcaoQuyetToanNam(res).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.lstCtietBcao = data.data.lstCtiet;
@@ -294,7 +296,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
       this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
       this.namQtoan = this.data?.namQtoan;
 
-      await this.quanLyVonPhiService.sinhMaBaoCaoQuyetToan(this.maPhanBcaoCDieuChinh).toPromise().then(
+      await this.quyetToanVonPhiService.sinhMaBaoCaoQuyetToan(this.maPhanBcaoCDieuChinh).toPromise().then(
         (data) => {
           if (data.statusCode == 0) {
             this.maBcao = data.data;
@@ -358,7 +360,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.approveQuyetToan(requestGroupButtons).toPromise().then(async (data) => {
+      await this.quyetToanVonPhiService.approveQuyetToan(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           this.isStatus = mcn;
           this.ngayTrinh = this.datePipe.transform(data.data.ngayTrinh, Utils.FORMAT_DATE_STR);
@@ -409,7 +411,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
-    await this.quanLyVonPhiService.CtietBcaoQuyetToan(this.idInput).toPromise().then(
+    await this.quyetToanVonPhiService.CtietBcaoQuyetToan(this.idInput).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.idInput = data.data.id;
@@ -565,7 +567,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
     // call service them moi
     this.spinner.show();
     if (this.idInput == null) {
-      this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
+      this.quyetToanVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -581,7 +583,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
         },
       );
     } else {
-      this.quanLyVonPhiService.updateBaoCaoQuyetToan(request).toPromise().then(
+      this.quyetToanVonPhiService.updateBaoCaoQuyetToan(request).toPromise().then(
         async data => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -759,7 +761,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
 
   async doCopy(response: any) {
     let maBcaoNew: string;
-    await this.quanLyVonPhiService.sinhMaBaoCaoQuyetToan(this.maPhanBcaoCDieuChinh).toPromise().then(
+    await this.quyetToanVonPhiService.sinhMaBaoCaoQuyetToan(this.maPhanBcaoCDieuChinh).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           maBcaoNew = data.data;
@@ -794,7 +796,7 @@ export class ThemBaoCaoDieuChinhSauQuyetToanComponent implements OnInit {
       maPhanBcao: this.maPhanBcao,
     };
 
-    this.quanLyVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
+    this.quyetToanVonPhiService.trinhDuyetServiceQuyetToan(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);

@@ -6,15 +6,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+// import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, NOT_OK, OK } from "src/app/Utility/utils";
 import * as uuid from "uuid";
+import { DialogThemKhoanMucComponent } from '../../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { LINH_VUC } from './phu-luc4.constant';
 
 export class ItemData {
@@ -49,11 +51,14 @@ export class PhuLuc4Component implements OnInit {
   @Output() dataChange = new EventEmitter();
   //danh muc
   donVis: any = [];
-  lstMatHang: any[] = LINH_VUC;
+  // lstMatHang: any[] = LINH_VUC;
+  lstMatHang: any[] = [];
   donViTinhs: any[] = [];
   lstCtietBcao: ItemData[] = [];
   donViTiens: any[] = DON_VI_TIEN;
   soLaMa: any[] = LA_MA;
+  listVatTu: any[] = [];
+  listVatTuFull: any[] = [];
 
   //thong tin chung
   id: any;
@@ -120,6 +125,7 @@ export class PhuLuc4Component implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private dieuChinhService: DieuChinhService,
     private danhMucService: DanhMucHDVService,
     private notification: NzNotificationService,
     private modal: NzModalService,
@@ -150,6 +156,16 @@ export class PhuLuc4Component implements OnInit {
         ...item,
       })
     })
+    await this.getDinhMucPL4();
+    this.data?.lstCtietDchinh.forEach(item => {
+      this.dsDinhMuc.forEach(itm => {
+        if (itm.id = item.maNdung) {
+          item.dinhMuc = itm.thienDinhMuc
+        }
+      })
+    })
+    await this.getListVtu();
+    await this.addVatTu();
     if (this.lstCtietBcao.length > 0) {
       if (!this.lstCtietBcao[0].stt) {
         this.sortWithoutIndex();
@@ -159,14 +175,7 @@ export class PhuLuc4Component implements OnInit {
     }
     this.getTotal();
     this.updateEditCache();
-    await this.getDinhMucPL4();
-    this.data?.lstCtietDchinh.forEach(item => {
-      this.dsDinhMuc.forEach(itm => {
-        if (itm.id = item.maNdung) {
-          item.dinhMuc = itm.thienDinhMuc
-        }
-      })
-    })
+
     //lay danh sach danh muc don vi
     await this.danhMucService.dMDonVi().toPromise().then(
       (data) => {
@@ -193,9 +202,68 @@ export class PhuLuc4Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
+
+    await this.genderDinhMuc()
+    this.tinhToan();
     this.getStatusButton();
 
     this.spinner.hide();
+  }
+
+  // =====================
+
+  tinhToan() {
+    this.lstCtietBcao.forEach(item => {
+      item.thanhTien = item.slBquanTcong * item.dinhMuc
+    })
+  }
+
+  async getListVtu() {
+    //lay danh sach vat tu
+    await this.danhMucService.dMVatTu().toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.listVatTu = res.data;
+
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+  };
+
+  addVatTu() {
+    console.log(this.listVatTu);
+    const vatTuTemp = []
+    this.listVatTu.forEach(vatTu => {
+      if (vatTu.child) {
+        vatTu.child.forEach(vatTuCon => {
+          vatTuTemp.push({
+            id: vatTuCon.ma,
+            tenDm: vatTuCon.ten,
+            maVtu: vatTuCon.ma,
+            maDviTinh: vatTuCon.maDviTinh,
+            maCha: "0",
+            level: 0,
+          })
+        })
+      }
+    })
+    console.log("vatTuTemp: ", vatTuTemp);
+    this.lstMatHang = vatTuTemp;
+
+    console.log("this.dsDinhMuc:", this.dsDinhMuc);
+    this.dsDinhMuc.forEach(itmDm => {
+      this.lstMatHang.push({
+        id: itmDm.id,
+        tenDm: itmDm.tenDinhMuc,
+        maVtu: itmDm.id,
+        maDviTinh: itmDm.donViTinh,
+        maCha: itmDm.cloaiVthh,
+        level: 1,
+      })
+    })
+    console.log(this.lstMatHang);
   }
 
   getDinhMucPL4() {
@@ -286,7 +354,8 @@ export class PhuLuc4Component implements OnInit {
       trangThai: trangThai,
       maLoai: this.data?.maLoai,
     };
-    this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
+    // console.log(request);
+    this.dieuChinhService.updatePLDieuChinh(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -339,7 +408,7 @@ export class PhuLuc4Component implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
+      await this.dieuChinhService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();
@@ -827,10 +896,21 @@ export class PhuLuc4Component implements OnInit {
             this.addLow(id, data);
           }
         })
+        this.genderDinhMuc();
         this.updateEditCache();
       }
     });
 
+  }
+
+  genderDinhMuc() {
+    this.lstCtietBcao.forEach(item => {
+      this.dsDinhMuc.forEach(itemDm => {
+        if (item.loaiMatHang == itemDm.id) {
+          item.dinhMuc = itemDm.tongDmuc
+        }
+      })
+    })
   }
 
   getLowStatus(str: string) {
