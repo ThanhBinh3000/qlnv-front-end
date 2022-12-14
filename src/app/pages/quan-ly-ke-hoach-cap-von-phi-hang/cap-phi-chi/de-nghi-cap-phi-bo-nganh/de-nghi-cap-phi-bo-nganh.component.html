@@ -130,11 +130,19 @@
                             <a *ngIf="!data.trangThaiId==globals.prop.NHAP_DU_THAO" (click)="viewDetail(data, true)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="(data.trangThaiId==globals.prop.NHAP_DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_DEXUAT_SUA')"
+                            <!--<a *ngIf="(data.trangThaiId==globals.prop.NHAP_DU_THAO) && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_DEXUAT_SUA')"
                                 (click)="viewDetail(data, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <a *ngIf="data.trangThaiId==globals.prop.NHAP_DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_DEXUAT_XOA')"
+                                (click)="xoaItem(data)">
+                                <i class="fa fa-trash-o do"></i>
+                            </a>-->
+                          <a *ngIf="(data.trangThaiId==globals.prop.NHAP_DU_THAO) && userService.isTongCuc()"
+                                (click)="viewDetail(data, false)">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <a *ngIf="data.trangThaiId==globals.prop.NHAP_DU_THAO && userService.isTongCuc()"
                                 (click)="xoaItem(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
