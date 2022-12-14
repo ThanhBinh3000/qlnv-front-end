@@ -79,7 +79,6 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
     this.loadDsNam();
     this.loadBoNganh();
     this.getDataDetail(this.idInput);
-    console.log("hahaha:"+this.isView);
   }
 
   quayLai() {
@@ -88,6 +87,7 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
 
   async getDataDetail(id) {
     if (id > 0) {
+      this.spinner.show();
       let res = await this.vonPhiService.getDetail(id);
       const data = res.data;
       if (res.msg == MESSAGE.SUCCESS) {
@@ -103,6 +103,7 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
         this.taiLieuDinhKemList = data.taiLieuDinhKems;
         this.updateEditQtNsKpChiNvDtqgCache();
         this.updateEditQtNsChiTwCache();
+        this.spinner.hide();
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
@@ -294,6 +295,13 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.listBoNganh = res.data.filter(item => item.key != '01');
     }
+  }
+  sumCT1(key) {
+    return this.dsQtNsChiTw.reduce((a, b) => a + (b[key] || 0), 0);
+  }
+
+  sumCT2(key) {
+    return this.dsQtNsKpChiNvDtqg.reduce((a, b) => a + (b[key] || 0), 0);
   }
 
   loadDsNam() {
