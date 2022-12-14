@@ -87,11 +87,28 @@
               {{getChiMuc(data.stt)}}
             </td>
             <td>
-              <ng-container *ngIf="data.maDanhMuc; else editName">
+              <!-- <ng-container *ngIf="data.maDanhMuc; else editName">
                 {{editCache[data.id].data.tenDanhMuc}}
               </ng-container>
               <ng-template #editName>
                 <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenDanhMuc" />
+              </ng-template> -->
+              <ng-container *ngIf="data.stt == '0.1' || data.stt == '0,2' ; else editSelectVatTu">
+                <ng-container *ngIf="data.maDanhMuc; else editName">
+                  {{editCache[data.id].data.tenDanhMuc}}
+                </ng-container>
+                <ng-template #editName>
+                  <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenDanhMuc" />
+                </ng-template>
+              </ng-container>
+              <ng-template #editSelectVatTu>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại vật tư hàng hóa"
+                  [(ngModel)]="editCache[data.id].data.maDanhMuc"
+                  [class]="editCache[data.id].data.maDanhMuc ?'' : 'input-error-validate'"
+                  (ngModelChange)="changeVatTu(editCache[data.id].data.maDanhMuc,editCache[data.id].data.id)">
+                  <nz-option *ngFor="let item of listVatTu" [nzValue]="item.id" [nzLabel]="item.ten">
+                  </nz-option>
+                </nz-select>
               </ng-template>
             </td>
             <td>

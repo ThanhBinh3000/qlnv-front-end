@@ -74,7 +74,7 @@
                         <td>{{data.namUocThien}}</td>
                         <td>{{displayValue(data.namKh)}}</td>
                         <td>{{displayValue(data.giaTriThamDinh)}}</td>
-                        <td [hidden]="status" nzWidth="220px">
+                        <td [hidden]="status" nzWidth="220px" class="text-center">
                             <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </td>
                     </ng-container>
@@ -113,7 +113,7 @@
                             <fm-input-number nz-input class="search__input"
                                 [(ngModel)]="editCache[data.id].data.giaTriThamDinh"></fm-input-number>
                         </td>
-                        <td nzWidth="220px">
+                        <td nzWidth="220px" class="text-center">
                             <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                             <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                 (nzOnConfirm)="cancelEdit(data.id)" class="save">
