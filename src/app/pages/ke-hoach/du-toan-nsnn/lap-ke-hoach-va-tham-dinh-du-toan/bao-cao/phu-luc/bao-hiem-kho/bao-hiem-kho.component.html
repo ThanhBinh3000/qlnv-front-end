@@ -171,7 +171,7 @@
                             <td>
                                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn địa điểm"
                                     [(ngModel)]="editCache[data.id].data.diaChiKho"
-                                    (ngModelChange)="selectDiadiem(editCache[data.id].data.diaChiKho)"
+                                    (ngModelChange)="selectDiadiem(editCache[data.id].data.diaChiKho,editCache[data.id].data.id)"
                                     [class]="editCache[data.id].data.diaChiKho ?'' : 'input-error-validate'">
                                     <nz-option *ngFor="let item of listDanhMucKho" [nzValue]="item.tenDvi"
                                         [nzLabel]="item.tenDvi">
@@ -181,6 +181,7 @@
                             <td>
                                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nhà kho"
                                     [(ngModel)]="editCache[data.id].data.tenNhaKho"
+                                    (ngModelChange)="getmaNhaKho(editCache[data.id].data.tenNhaKho,editCache[data.id].data.id)"
                                     [class]="editCache[data.id].data.tenNhaKho ?'' : 'input-error-validate'">
                                     <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.tenDvi"
                                         [nzLabel]="item.tenDvi">
@@ -196,14 +197,14 @@
                                     [(ngModel)]="editCache[data.id].data.khoiTichKhoTuM3"></fm-input-number>
                             </td>
                             <td>
-                                <fm-input-number nz-input class="search__input"
+                                <!-- <fm-input-number nz-input class="search__input"
                                     [(ngModel)]="editCache[data.id].data.slNhaKhoDuoi"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number> -->
                             </td>
                             <td>
-                                <fm-input-number nz-input class="search__input"
+                                <!-- <fm-input-number nz-input class="search__input"
                                     [(ngModel)]="editCache[data.id].data.slNhaKhoTu"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number> -->
                             </td>
                             <td>
                                 {{displayValue(editCache[data.id].data.slNhaKhoTong)}}
