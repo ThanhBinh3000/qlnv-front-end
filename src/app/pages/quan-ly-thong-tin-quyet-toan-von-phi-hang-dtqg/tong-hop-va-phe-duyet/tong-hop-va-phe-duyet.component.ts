@@ -16,7 +16,6 @@ export class TongHopVaPheDuyetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('jaaaaaaaaaaaa');
   }
   tabSelected: number = 0;
   selectTab(tab: number) {
