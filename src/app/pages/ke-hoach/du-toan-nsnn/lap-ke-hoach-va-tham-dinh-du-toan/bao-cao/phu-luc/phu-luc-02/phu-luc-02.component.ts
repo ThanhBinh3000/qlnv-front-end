@@ -10,6 +10,7 @@ import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumbe
 import * as uuid from "uuid";
 import { DANH_MUC } from './phu-luc-02.constant';
 import { UserService } from 'src/app/services/user.service';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 
 export class ItemData {
   id: string;
@@ -60,13 +61,19 @@ export class PhuLuc02Component implements OnInit {
   checkEditTD: boolean;
   //nho dem
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-
+  listVatTu: any[] = [];
+  listVatTu1: any[] = [];
+  luongThuc: any[] = [];
+  lstVatTuFull: any[] = [];
+  vatTu: any[] = [];
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
     private lapThamDinhService: LapThamDinhService,
     private notification: NzNotificationService,
     private modal: NzModalService,
+    private danhMucService: DanhMucHDVService,
+
   ) {
   }
 
@@ -112,6 +119,25 @@ export class PhuLuc02Component implements OnInit {
         item.stt = item.maDanhMuc;
       })
     }
+
+    await this.danhMucService.dMVatTu().toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.listVatTu1 = res.data;
+        this.listVatTu1.forEach(item => {
+          if (item.key == "01") {
+            this.luongThuc = item.child
+          }
+          if (item.key == "02") {
+            this.vatTu = item.child
+          }
+        })
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+    await this.addVatTu();
     this.sortByIndex();
     this.getTotal();
     this.updateEditCache();
@@ -119,27 +145,25 @@ export class PhuLuc02Component implements OnInit {
     this.spinner.hide();
   }
 
+  async addVatTu() {
+
+    const vatTuTemp = []
+    this.listVatTu1.forEach(vatTu => {
+      if (vatTu.child) {
+        vatTu.child.forEach(vatTuCon => {
+          vatTuTemp.push({
+            ...vatTuCon
+          })
+        })
+      }
+    })
+
+    this.lstVatTuFull = vatTuTemp;
+
+  }
   getName(level: number, ma: string) {
     const type = this.getTail(ma);
     let str = '';
-    // if (level == 1) {
-    //   switch (type) {
-    //     case 1:
-    //       str = (this.namBcao - 1).toString();
-    //       break;
-    //     case 2:
-    //       str = this.namBcao.toString();
-    //       break;
-    //     case 3:
-    //       str = this.namBcao.toString();
-    //       break;
-    //     case 4:
-    //       str = (this.namBcao - 2).toString() + '-' + (this.namBcao + 2).toString();
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // }
     return str;
   }
 
@@ -169,10 +193,6 @@ export class PhuLuc02Component implements OnInit {
     const lstCtietBcaoTemp: ItemData[] = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      // if (item.ncauChiTongSo > MONEY_LIMIT) {
-      //     checkMoneyRange = false;
-      //     return;
-      // }
       lstCtietBcaoTemp.push({
         ...item,
       })
@@ -193,7 +213,6 @@ export class PhuLuc02Component implements OnInit {
     const request = JSON.parse(JSON.stringify(this.formDetail));
     request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
     request.trangThai = trangThai;
-
     this.spinner.show();
     this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
       async data => {
@@ -342,6 +361,10 @@ export class PhuLuc02Component implements OnInit {
     this.updateEditCache();
   }
 
+  changeVatTu(maDanhMuc: any, id: any) {
+    this.editCache[id].data.tenDanhMuc = this.lstVatTuFull.find(vt => vt.id === maDanhMuc)?.ten;
+  }
+
   sortByIndex() {
     this.setLevel();
     this.lstCtietBcao.sort((item1, item2) => {
@@ -380,6 +403,12 @@ export class PhuLuc02Component implements OnInit {
   }
 
   addLine(stt: string) {
+    if (stt == '0.1') {
+      this.listVatTu = this.luongThuc;
+    }
+    if (stt == '0.2') {
+      this.listVatTu = this.vatTu;
+    }
     let index = -1;
     for (let i = this.lstCtietBcao.length - 1; i >= 0; i--) {
       if (this.lstCtietBcao[i].stt.startsWith(stt)) {
@@ -412,7 +441,6 @@ export class PhuLuc02Component implements OnInit {
   sum(stt: string) {
     stt = this.getHead(stt);
     const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-    console.log(index)
     const data = this.lstCtietBcao[index];
     while (stt != '0') {
       this.lstCtietBcao[index] = {
