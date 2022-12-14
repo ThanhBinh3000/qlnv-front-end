@@ -23,6 +23,7 @@ import {QuyetToanVonPhiService} from "../../../../services/ke-hoach/von-phi/quye
 })
 export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
   formData: FormGroup;
+  @Input('isView') isView: boolean = false;
   dataTable: any[] = [];
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -77,11 +78,37 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
   ngOnInit() {
     this.loadDsNam();
     this.loadBoNganh();
+    this.getDataDetail(this.idInput);
+    console.log("hahaha:"+this.isView);
   }
 
   quayLai() {
     this.showListEvent.emit();
   }
+
+  async getDataDetail(id) {
+    if (id > 0) {
+      let res = await this.vonPhiService.getDetail(id);
+      const data = res.data;
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.formData.patchValue({
+          id: data.id,
+          namQuyetToan: data.namQt,
+          ngayNhap: data.ngayNhap,
+          tenTrangThai: data.tenTrangThai,
+          trangThai: data.trangThai
+        });
+        this.dsQtNsChiTw = data.dsQtNsChiTw;
+        this.dsQtNsKpChiNvDtqg = data.dsQtNsKpChiNvDtqg;
+        this.taiLieuDinhKemList = data.taiLieuDinhKems;
+        this.updateEditQtNsKpChiNvDtqgCache();
+        this.updateEditQtNsChiTwCache();
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+
 
   async save(isGuiDuyet?) {
     this.helperService.markFormGroupTouched(this.formData);
@@ -104,14 +131,14 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
         body.id = this.idInput;
         let res = await this.vonPhiService.update(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          console.log(res.data)
+          this.quayLai();
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
         let res = await this.vonPhiService.create(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          console.log(res.data)
+          this.quayLai();
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -131,11 +158,11 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
   changeBN() {
     if (this.rowItemQtNsChiTw.maBoNganh) {
       this.isAdddsQtNsChiTw = true;
-      this.rowItemQtNsChiTw.tenBoNganh = this.listBoNganh.find(item => item.key == this.rowItemQtNsChiTw.maBoNganh).title;
+      this.rowItemQtNsChiTw.tenBoNganh = this.listBoNganh.find(item => item.code == this.rowItemQtNsChiTw.maBoNganh).title;
     }
     if (this.rowItemQtNsKpChiNvDtqg.maBoNganh) {
       this.isAdddsQtNsKpChiNvDtqg = true;
-      this.rowItemQtNsKpChiNvDtqg.tenBoNganh = this.listBoNganh.find(item => item.key == this.rowItemQtNsKpChiNvDtqg.maBoNganh).title;
+      this.rowItemQtNsKpChiNvDtqg.tenBoNganh = this.listBoNganh.find(item => item.code == this.rowItemQtNsKpChiNvDtqg.maBoNganh).title;
     }
   }
 

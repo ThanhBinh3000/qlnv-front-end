@@ -17,11 +17,11 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
+      <button *ngIf="!isView" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button
+      <button *ngIf="!isView"
         type="button" class="btn btn-main ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -36,7 +36,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Năm quyết toán
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="namQuyetToan" nzAllowClear>
+              <nz-select [nzDisabled]="isView" formControlName="namQuyetToan" nzAllowClear>
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -46,7 +46,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày nhập</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayNhap" nzFormat="dd/MM/yyyy">
+              <nz-date-picker [nzDisabled]="isView"  formControlName="ngayNhap" nzFormat="dd/MM/yyyy">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -121,7 +121,7 @@
           <th class="text-center">
             <nz-select [(ngModel)]="rowItemQtNsChiTw.maBoNganh" (ngModelChange)="changeBN()"
                        nzAllowClear="true">
-              <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.key" [nzLabel]="p.title">
+              <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.code" [nzLabel]="p.title">
               </nz-option>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -194,10 +194,10 @@
             </nz-input-number>
           </th>
           <th class="text-center">
-            <a (click)="addQtNsChiTw()" [ngClass]="{'isDisabled': !isAdddsQtNsChiTw}">
+            <a  *ngIf="!isView" (click)="addQtNsChiTw()" [ngClass]="{'isDisabled': !isAdddsQtNsChiTw}">
               <i class="icon htvbdh_dau-cong"></i>
             </a>
-            <a (click)="refreshQtNsChiTw()">
+            <a  *ngIf="!isView" (click)="refreshQtNsChiTw()">
               <i class="fa fa-refresh"></i>
             </a>
           </th>
@@ -225,10 +225,10 @@
             <td>{{data.soDuNamSau | number}}</td>
             <td>{{data.soTuNamSau | number}}</td>
             <td class="text-center">
-              <a (click)="editQtNsChiTw(i)">
+              <a *ngIf="!isView" (click)="editQtNsChiTw(i)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="deleteQtNsChiTw(i)">
+              <a *ngIf="!isView" (click)="deleteQtNsChiTw(i)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
@@ -239,7 +239,7 @@
             <td>
               <nz-select [(ngModel)]="dataQtNsChiTwEdit[i].data.maBoNganh" (ngModelChange)="changeBN()"
                          nzAllowClear="true">
-                <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.key" [nzLabel]="p.title">
+                <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.code" [nzLabel]="p.title">
                 </nz-option>
                 <ng-template #error let-control>
                   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -387,7 +387,7 @@
           <th class="text-center">
             <nz-select [(ngModel)]="rowItemQtNsKpChiNvDtqg.maBoNganh" (ngModelChange)="changeBN()"
                        nzAllowClear="true">
-              <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.key" [nzLabel]="p.title">
+              <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.code" [nzLabel]="p.title">
               </nz-option>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -464,10 +464,10 @@
             </nz-input-number>
           </th>
           <th class="text-center">
-            <a (click)="addQtNsKpChiNvDtqg()" [ngClass]="{'isDisabled': !isAdddsQtNsKpChiNvDtqg}">
+            <a  *ngIf="!isView" (click)="addQtNsKpChiNvDtqg()" [ngClass]="{'isDisabled': !isAdddsQtNsKpChiNvDtqg}">
               <i class="icon htvbdh_dau-cong"></i>
             </a>
-            <a (click)="refreshQtNsKpChiNvDtqg()">
+            <a  *ngIf="!isView" (click)="refreshQtNsKpChiNvDtqg()">
               <i class="fa fa-refresh"></i>
             </a>
           </th>
@@ -495,10 +495,10 @@
             <td>{{data.soDuNamSau | number}}</td>
             <td>{{data.soTuNamSau | number}}</td>
             <td class="text-center">
-              <a (click)="editQtNsKpChiNvDtqg(i)">
+              <a *ngIf="!isView" (click)="editQtNsKpChiNvDtqg(i)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="deleteQtNsKpChiNvDtqg(i)">
+              <a  *ngIf="!isView" (click)="deleteQtNsKpChiNvDtqg(i)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
@@ -509,7 +509,7 @@
             <td>
               <nz-select [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.maBoNganh" (ngModelChange)="changeBN()"
                          nzAllowClear="true">
-                <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.key" [nzLabel]="p.title">
+                <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.code" [nzLabel]="p.title">
                 </nz-option>
                 <ng-template #error let-control>
                   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
