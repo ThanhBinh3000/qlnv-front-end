@@ -344,7 +344,7 @@ export class BieuMau131Component implements OnInit {
 
     setLevel() {
         this.lstCtietBcao.forEach(item => {
-            const str: string[] = item.maNdung.split('.');
+            const str: string[] = item.stt.split('.');
             item.level = str.length - 2;
         })
     }

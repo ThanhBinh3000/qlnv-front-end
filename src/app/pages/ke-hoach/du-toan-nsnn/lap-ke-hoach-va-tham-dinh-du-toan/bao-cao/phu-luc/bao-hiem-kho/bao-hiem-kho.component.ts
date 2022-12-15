@@ -208,7 +208,12 @@ export class BaoHiemKhoComponent implements OnInit {
 
             })
         } else {
-            this.sortByIndex();
+            if (!this.lstCtietBcao[0].stt) {
+                this.sortWithoutIndex
+            } else {
+
+                this.sortByIndex();
+            }
             // this.lstCtietBcao.forEach(e => {
             //     this.selectDonvi(e.maDvi);
             //     this.selectDiadiem(e.diaChiKho)
@@ -219,6 +224,138 @@ export class BaoHiemKhoComponent implements OnInit {
         this.getStatusButton();
 
         this.spinner.hide();
+    }
+    sortWithoutIndex() {
+        this.setDetail();
+        let level = 0;
+        let lstCtietBcaoTemp: ItemData[] = this.lstCtietBcao;
+        this.lstCtietBcao = [];
+
+        const data: ItemData = lstCtietBcaoTemp.find(e => e.level == 0);
+        if (data) {
+            this.addFirst(data);
+        }
+
+        lstCtietBcaoTemp = lstCtietBcaoTemp.filter(e => e?.id != data?.id);
+        let lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
+        while (lstTemp.length != 0 || level == 0) {
+            lstTemp.forEach(item => {
+                const idCha = this.getIdCha(Number(item.maDvi));
+                let index: number = this.lstCtietBcao.findIndex(e => Number(e.maDvi) === idCha);
+                if (index != -1) {
+                    this.addLow(this.lstCtietBcao[index].id, item);
+                } else {
+                    index = this.lstCtietBcao.findIndex(e => this.getIdCha(Number(e.maDvi)) === idCha);
+                    this.addSame(this.lstCtietBcao[index].id, item);
+                }
+            })
+            level += 1;
+            lstTemp = lstCtietBcaoTemp.filter(e => e.level == level);
+        }
+    }
+
+    setDetail() {
+        this.lstCtietBcao.forEach(item => {
+            item.level = this.listDanhSachCuc.find(e => e.id == item.maDvi)?.level;
+        })
+    }
+
+    addFirst(initItem: ItemData) {
+        if (initItem?.id) {
+            const item: ItemData = {
+                ...initItem,
+                stt: "0.1",
+            }
+            this.lstCtietBcao.push(item);
+            this.editCache[item.id] = {
+                edit: false,
+                data: { ...item }
+            };
+        } else {
+            const item: ItemData = {
+                ...initItem,
+                level: 0,
+                id: uuid.v4() + 'FE',
+                stt: "0.1",
+            }
+            this.lstCtietBcao.push(item);
+
+            this.editCache[item.id] = {
+                edit: true,
+                data: { ...item }
+            };
+        }
+    }
+
+    addLow(id: any, initItem: ItemData) {
+        const data: ItemData = this.lstCtietBcao.find(e => e.id === id);
+        let index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+        let stt: string;
+        if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == data.stt) == -1) {
+            stt = data.stt + '.1';
+        } else {
+            index = this.findVt(data.stt);
+            for (let i = this.lstCtietBcao.length - 1; i >= 0; i--) {
+                if (this.getHead(this.lstCtietBcao[i].stt) == data.stt) {
+                    stt = data.stt + '.' + (this.getTail(this.lstCtietBcao[i].stt) + 1).toString();
+                    break;
+                }
+            }
+        }
+    }
+    addSame(id: any, initItem: ItemData) {
+        const index: number = this.lstCtietBcao.findIndex(e => e.id === id); // vi tri hien tai
+        const head: string = this.getHead(this.lstCtietBcao[index].stt); // lay phan dau cua so tt
+        const tail: number = this.getTail(this.lstCtietBcao[index].stt); // lay phan duoi cua so tt
+        const ind: number = this.findVt(this.lstCtietBcao[index].stt); // vi tri can duoc them
+        // tim cac vi tri can thay doi lai stt
+        let lstIndex: number[];
+        for (let i = this.lstCtietBcao.length - 1; i > ind; i--) {
+            if (this.getHead(this.lstCtietBcao[i].stt) == head) {
+                lstIndex.push(i);
+            }
+        }
+        this.replaceIndex(lstIndex, 1);
+        // them moi phan tu
+        if (initItem?.id) {
+            const item: ItemData = {
+                ...initItem,
+                stt: head + "." + (tail + 1).toString(),
+            }
+            this.lstCtietBcao.splice(ind + 1, 0, item);
+            this.editCache[item.id] = {
+                edit: false,
+                data: { ...item }
+            };
+        } else {
+            const item: ItemData = {
+                ...initItem,
+                id: uuid.v4() + "FE",
+                stt: head + "." + (tail + 1).toString(),
+            }
+            this.lstCtietBcao.splice(ind + 1, 0, item);
+            this.editCache[item.id] = {
+                edit: true,
+                data: { ...item }
+            };
+        }
+    }
+
+    replaceIndex(lstIndex: number[] = [], heSo: number) {
+        if (heSo == -1) {
+            lstIndex.reverse();
+        }
+        //thay doi lai stt cac vi tri vua tim duoc
+        lstIndex.forEach(item => {
+            const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
+            const nho = this.lstCtietBcao[item].stt;
+            this.lstCtietBcao.forEach(item => {
+                item.stt = item.stt.replace(nho, str);
+            })
+        })
+    }
+    getIdCha(maKM: any) {
+        return this.listDanhSachCuc.find(e => e.id == maKM)?.idCha;
     }
 
 
