@@ -146,7 +146,7 @@ export class PhuLuc01Component implements OnInit {
         // this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
-
+        this.tinhTong();
         this.spinner.hide();
     }
 
@@ -304,7 +304,7 @@ export class PhuLuc01Component implements OnInit {
 
     setLevel() {
         this.lstCtietBcao.forEach(item => {
-            const str: string[] = item.danhMuc.split('.');
+            const str: string[] = item.stt.split('.');
             item.level = str.length - 2;
         })
     }
@@ -516,7 +516,7 @@ export class PhuLuc01Component implements OnInit {
                 lstIndex.push(i);
             }
         }
-
+        this.tinhTong();
         this.replaceIndex(lstIndex, -1);
         this.updateEditCache();
     }
