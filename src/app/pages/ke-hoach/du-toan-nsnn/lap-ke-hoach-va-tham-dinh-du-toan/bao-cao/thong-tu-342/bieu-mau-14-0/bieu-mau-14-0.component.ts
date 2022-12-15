@@ -105,14 +105,11 @@ export class BieuMau140Component implements OnInit {
                     checked: false,
                 })
             })
-        } else if (!this.lstCtietBcao[0]?.stt) {
-            this.lstCtietBcao.forEach(item => {
-                item.stt = item.maNdung;
-            })
         }
 
+
         this.sortByIndex();
-        if (this.dataInfo?.extraData) {
+        if (this.dataInfo?.extraData && this.dataInfo?.extraData.length > 0) {
             this.dataInfo.extraData.forEach(item => {
                 const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
                 this.lstCtietBcao[index].thienNtruoc = item.thienNtruoc;
@@ -524,7 +521,7 @@ export class BieuMau140Component implements OnInit {
 
     setLevel() {
         this.lstCtietBcao.forEach(item => {
-            const str: string[] = item.maNdung.split('.');
+            const str: string[] = item.stt.split('.');
             item.level = str.length - 2;
         })
     }
