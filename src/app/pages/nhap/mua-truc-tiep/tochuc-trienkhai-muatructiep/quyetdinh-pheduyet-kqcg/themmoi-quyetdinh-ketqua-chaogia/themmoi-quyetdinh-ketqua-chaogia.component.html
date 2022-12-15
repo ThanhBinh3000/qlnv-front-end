@@ -4,22 +4,10 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button
-      *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) && userService.isCuc()"
-      type="button" class="btn btn-sub do" (click)="tuChoi()">
-      <i class="icon htvbdh_tcdt_tuchoi"></i>
-      <span>Từ chối</span>
-    </button>
-    <button
-      *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC) && userService.isCuc() "
-      type="button" class="btn btn-sub xanh-nhat" (click)="guiDuyet()">
-      <i class="icon htvbdh_tcdt_pheduyet"></i>
-      <span>Duyệt</span>
-    </button>
     <button *ngIf="formData.value.trangThai == STATUS.DU_THAO && !isViewDetail" type="button"
       class="btn btn-sub xanh-nhat" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
-      <span>Lưu và gửi duyệt</span>
+      <span>Ban hành</span>
     </button>
     <button *ngIf="formData.value.trangThai == STATUS.DU_THAO " type="
           button" class="btn btn-main" (click)="save()">
@@ -32,17 +20,13 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do' ">
+        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'status-xanh' : 'status-do' ">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>Quyết định phê duyệt kết quả chào giá</span>
+        <span> QUYẾT ĐỊNH PHÊ DUYỆT KẾT QUẢ CHÀO GIÁ </span>
       </div>
     </div>
   </div>
-  <nz-alert class="mg-t-10"
-    *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP " nzShowIcon
-    nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.ldoTuchoi}}">
-  </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16 ">
     <div class="header header-green-background mg-t-16">
       <div class="header-text">
@@ -61,8 +45,7 @@
               Năm kế hoạch
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select [nzDisabled]="formData.value.trangThai !== '00'" formControlName="namKh" nzAllowClear
-                (ngModelChange)="getListQdPdKhMtt()">
+              <nz-select [nzDisabled]="formData.value.trangThai !== '00'" formControlName="namKh" nzAllowClear>
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
@@ -76,9 +59,8 @@
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-input-group nzAddOnAfter="{{maQd}}">
-                <nz-input-number formControlName="soQdPdCg" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
-                  [nzSize]="'small'"
-                  [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                <nz-input-number formControlName="soQd" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'"
+                  [nzDisabled]="disableForm()">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -89,7 +71,7 @@
             <nz-form-label [nzNoColon]="true"> Ngày ký quyết định
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-date-picker class="search__input" formControlName="ngayKy" nzFormat="dd/MM/yyyy" nzDisabled>
+              <nz-date-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy" [nzDisabled]="disableForm()">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -99,8 +81,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày hiệu lực
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-date-picker class="search__input" formControlName="ngayHluc" nzFormat="dd/MM/yyyy"
-                [nzDisabled]="disableForm()">
+              <nz-date-picker formControlName="ngayHluc" nzFormat="dd/MM/yyyy" [nzDisabled]="disableForm()">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -110,17 +91,18 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ thông tin chào giá
             </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdKhMtt()">
+              <nz-input-group nzAddOnAfterIcon="folder-open"
+                (click)="formData.value.trangThai == STATUS.BAN_HANH ? '' : openDialogSoQdKhlcnt()">
                 <input nz-input [readonly]="true" formControlName="soQdPdKh" />
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="24">
+        <div nz-col [nzSpan]="8">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Trích yếu </nz-form-label>
             <nz-form-control>
-              <textarea nz-input [rows]="3" formControlName="trichYeu" [readonly]="disableForm()"></textarea>
+              <input nz-input formControlName="trichYeu" [readonly]="disableForm()" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -137,9 +119,31 @@
       </div>
     </form>
   </nz-card>
-  <app-themmoi-chaogia-uyquyen-muale *ngIf="formData.value.soQdPdKh " [isShowFromKq]="true"
-    [idInput]="formData.value.idQdPdKh" [selectedData]="formData.value.trangThaiTkhai">
+  <app-themmoi-chaogia-uyquyen-muale *ngIf="formData.value.soQdPdKh" [isShowFromKq]="true"
+    [idInput]="formData.value.idQdPdKhDtl" [loaiVthh]="loaiVthh">
   </app-themmoi-chaogia-uyquyen-muale>
+  <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="24">
+        <nz-form-item>
+          <nz-form-label [nzNoColon]="true"> File đính kèm quyết định đã ký </nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <div class="list-file">
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input />
+              </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <div class="icon-file-dinh-kem">
+                  <i class="icon htvbdh_tcdt_tep"></i>
+                  <input class="input-file" (change)="getNameFile($event)" type="file" />
+                </div>
+              </ng-template>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
 </div>
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>

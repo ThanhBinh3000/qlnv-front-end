@@ -50,7 +50,7 @@
     </div>
     <div nz-col [nzSpan]="6" *ngIf="isView">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true">Thời hạn thanh toán(ngày) </nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true">Thời hạn thanh toán (ngày) </nz-form-label>
         <nz-form-control nz-col [nzErrorTip]="error">
           <nz-input-number formControlName="tgianTtoan" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
             [nzStep]="1" [nzSize]="'small'"
@@ -90,7 +90,7 @@
     </div>
     <div nz-col [nzSpan]="6" *ngIf="isView">
       <nz-form-item>
-        <nz-form-label nzRequired [nzNoColon]="true">Thời hạn giao nhận(ngày) </nz-form-label>
+        <nz-form-label nzRequired [nzNoColon]="true">Thời hạn giao nhận (ngày) </nz-form-label>
         <nz-form-control nz-col [nzErrorTip]="error">
           <nz-input-number formControlName="tgianGnhan" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
             [nzStep]="1" [nzSize]="'small'"
@@ -204,7 +204,7 @@
         <th>Đơn giá được duyệt VAT (đ/kg)</th>
         <th>Giá khởi điểm (đ)</th>
         <th>Số tiền đặt trước (đ)</th>
-        <th *ngIf="!isView"></th>
+        <th *ngIf="!isView">Hành động</th>
       </tr>
     </thead>
     <tbody>
