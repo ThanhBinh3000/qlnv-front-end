@@ -102,21 +102,22 @@ export class BieuMau140Component implements OnInit {
                     stt: e.ma,
                     maNdung: e.ma,
                     tenDmuc: e.giaTri,
-                    thienNtruoc: null,
-                    namDtoan: null,
-                    namUocThien: null,
-                    namKh: null,
-                    giaTriThamDinh: null,
                     checked: false,
                 })
             })
-        } else if (!this.lstCtietBcao[0]?.stt) {
-            this.lstCtietBcao.forEach(item => {
-                item.stt = item.maNdung;
-            })
         }
 
-        // this.sortByIndex();
+
+        this.sortByIndex();
+        if (this.dataInfo?.extraData && this.dataInfo?.extraData.length > 0) {
+            this.dataInfo.extraData.forEach(item => {
+                const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
+                this.lstCtietBcao[index].thienNtruoc = item.thienNtruoc;
+                this.lstCtietBcao[index].namDtoan = item.namDtoan;
+                this.lstCtietBcao[index].namUocThien = item.namUocThien;
+                this.lstCtietBcao[index].namKh = item.namKh;
+            })
+        }
         // this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
@@ -520,7 +521,7 @@ export class BieuMau140Component implements OnInit {
 
     setLevel() {
         this.lstCtietBcao.forEach(item => {
-            const str: string[] = item.maNdung.split('.');
+            const str: string[] = item.stt.split('.');
             item.level = str.length - 2;
         })
     }
