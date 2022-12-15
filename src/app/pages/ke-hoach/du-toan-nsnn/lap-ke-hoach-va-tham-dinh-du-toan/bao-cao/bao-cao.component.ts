@@ -825,41 +825,31 @@ export class BaoCaoComponent implements OnInit {
                 dataInfo.extraData = [];
                 //phu luc bao hiem hang 
                 const dataBaoHiemHang = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh_hang').lstCtietLapThamDinhs;
-                
+
                 dataBaoHiemHang.forEach(item => {
-                    // const level = item.stt.split('.').length - 2;
-                    // if (level == 0) {
-                    //     dataInfo.extraData.push({
-                    //         stt: '0.1.1.1.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
-                    //         tenNdung: item.tenMatHang,
-                    //         thienNtruoc: item.thucHienNamTruoc,
-                    //         namDtoan: item.dtoanNamHtai,
-                    //         namUocThien: item.uocThNamHtai,
-                    //         namKh: item.ttienNamDtoan,
-                    //         giaTriThamDinh: item.sluongNamN1Td,
-                    //     })
-                    // }
-                    const loaiHang = this.lstVatTuFull.find(v => v.ma = item.maHang)?.loaiHang;
-                    const tenHang = this.lstVatTuFull.find(v => v.ma = item.maHang)?.ten;
-                    if(  loaiHang == "LT"){
+                    const loaiHang = this.lstVatTuFull.find(v => v.ten == item.tenHang)?.loaiHang;
+                    const tenHang = this.lstVatTuFull.find(v => v.ten == item.tenHang)?.ten;
+                    const maDviTinh = this.lstVatTuFull.find(v => v.ten == item.tenHang)?.maDviTinh;
+                    if (loaiHang == "LT") {
                         let tongSoLuongTu = 0
                         let tongSoLuongDuoi = 0
                         let tongGiaTriTu = 0
                         let tongGiaTriDuoi = 0
-                        if(item.khoiTich >= 5000){
+                        if (item.khoiTich >= 5000) {
                             tongSoLuongTu += item.soLuong;
                             tongGiaTriTu += item.giaTri
                         }
-                        if(item.khoiTich < 5000){
+                        if (item.khoiTich < 5000) {
                             tongSoLuongDuoi += item.soLuong;
                             tongGiaTriDuoi += item.giaTri
                         }
-                        if(dataInfo.extraData.length==0){
+
+                        if (dataInfo.extraData.length == 0) {
                             dataInfo.extraData.push({
                                 stt: '0.2.1.1',
                                 maVtu: item.maHang,
-                                tenVtu: '',
-                                maDviTinh: "tấn",
+                                tenVtu: item.tenHang,
+                                maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,
                                 slDuoiM3: tongSoLuongDuoi,
                                 slTong: tongSoLuongTu + tongSoLuongDuoi,
@@ -868,13 +858,14 @@ export class BaoCaoComponent implements OnInit {
                                 gtTong: tongGiaTriTu + tongGiaTriDuoi,
                                 level: "2",
                             })
-                        }else{
-                            let stt = dataInfo.extraData[dataInfo.extraData.length-1].stt
+                        } else {
+                            let stt = dataInfo.extraData[dataInfo.extraData.length - 1]?.stt;
+                            let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
                             dataInfo.extraData.push({
-                                stt: '0.2.1.' + stt.substring(stt.lastIndexOf('.') + 1, stt.length),
+                                stt: '0.2.1.' + sttObj,
                                 maVtu: item.maHang,
-                                tenVtu: '',
-                                maDviTinh: "tấn",
+                                tenVtu: item.tenHang,
+                                maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,
                                 slDuoiM3: tongSoLuongDuoi,
                                 slTong: tongSoLuongTu + tongSoLuongDuoi,
@@ -884,19 +875,17 @@ export class BaoCaoComponent implements OnInit {
                                 level: "2",
                             })
                         }
-                        
-
                     }
-                    if(loaiHang == "M"){
+                    if (loaiHang == "M") {
                         let tongSoLuongTu = 0
                         let tongSoLuongDuoi = 0
                         let tongGiaTriTu = 0
                         let tongGiaTriDuoi = 0
-                        if(item.khoiTich >= 5000){
+                        if (item.khoiTich >= 5000) {
                             tongSoLuongTu += item.soLuong;
                             tongGiaTriTu += item.giaTri
                         }
-                        if(item.khoiTich < 5000){
+                        if (item.khoiTich < 5000) {
                             tongSoLuongDuoi += item.soLuong;
                             tongGiaTriDuoi += item.giaTri
                         }
@@ -914,60 +903,102 @@ export class BaoCaoComponent implements OnInit {
                             level: "2",
                         })
                     }
-                    if( loaiHang == "VT" && tenHang.includes('cứu sinh')){
+                    let checkCS = tenHang.includes("cứu sinh")
+                    if (checkCS && loaiHang == "VT") {
                         let tongSoLuongTu = 0
                         let tongSoLuongDuoi = 0
                         let tongGiaTriTu = 0
                         let tongGiaTriDuoi = 0
-                        if(item.khoiTich >= 5000){
+                        let stt = '0.2.2.1.1';
+                        if (item.khoiTich >= 5000) {
                             tongSoLuongTu += item.soLuong;
                             tongGiaTriTu += item.giaTri
                         }
-                        if(item.khoiTich < 5000){
+                        if (item.khoiTich < 5000) {
                             tongSoLuongDuoi += item.soLuong;
                             tongGiaTriDuoi += item.giaTri
                         }
-                        dataInfo.extraData.push({
-                            stt: '0.2.2.1.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
-                            maVtu: item.maHang,
-                            tenVtu: '',
-                            maDviTinh: '',
-                            slTuM3: tongSoLuongTu,
-                            slDuoiM3: tongSoLuongDuoi,
-                            slTong: tongSoLuongTu + tongSoLuongDuoi,
-                            gtTuM3: tongGiaTriTu,
-                            gtDuoiM3: tongGiaTriDuoi,
-                            gtTong: tongGiaTriTu + tongGiaTriDuoi,
-                            level: "3",
-                        })
-                    }else{
+
+                        if (dataInfo.extraData[dataInfo.extraData.length - 1]?.stt !== stt) {
+                            dataInfo.extraData.push({
+                                stt: '0.2.2.1.1',
+                                maVtu: item.maHang,
+                                tenVtu: item.tenHang,
+                                maDviTinh: maDviTinh,
+                                slTuM3: tongSoLuongTu,
+                                slDuoiM3: tongSoLuongDuoi,
+                                slTong: tongSoLuongTu + tongSoLuongDuoi,
+                                gtTuM3: tongGiaTriTu,
+                                gtDuoiM3: tongGiaTriDuoi,
+                                gtTong: tongGiaTriTu + tongGiaTriDuoi,
+                                level: "3",
+                            })
+                        } else {
+                            let stt = dataInfo.extraData[dataInfo.extraData.length - 1]?.stt;
+                            let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
+                            dataInfo.extraData.push({
+                                stt: '0.2.2.1.' + sttObj,
+                                maVtu: item.maHang,
+                                tenVtu: item.tenHang,
+                                maDviTinh: maDviTinh,
+                                slTuM3: tongSoLuongTu,
+                                slDuoiM3: tongSoLuongDuoi,
+                                slTong: tongSoLuongTu + tongSoLuongDuoi,
+                                gtTuM3: tongGiaTriTu,
+                                gtDuoiM3: tongGiaTriDuoi,
+                                gtTong: tongGiaTriTu + tongGiaTriDuoi,
+                                level: "3",
+                            })
+                        }
+
+                    } else if (loaiHang == "VT" && !item.tenHang.includes('cứu sinh')) {
                         let tongSoLuongTu = 0
                         let tongSoLuongDuoi = 0
                         let tongGiaTriTu = 0
                         let tongGiaTriDuoi = 0
-                        if(item.khoiTich >= 5000){
+                        let stt = '0.2.2.2.1';
+                        if (item.khoiTich >= 5000) {
                             tongSoLuongTu += item.soLuong;
                             tongGiaTriTu += item.giaTri
                         }
-                        if(item.khoiTich < 5000){
+                        if (item.khoiTich < 5000) {
                             tongSoLuongDuoi += item.soLuong;
                             tongGiaTriDuoi += item.giaTri
                         }
-                        dataInfo.extraData.push({
-                            stt: '0.2.2.2.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
-                            maVtu: item.maHang,
-                            tenVtu: '',
-                            maDviTinh: '',
-                            slTuM3: tongSoLuongTu,
-                            slDuoiM3: tongSoLuongDuoi,
-                            slTong: tongSoLuongTu + tongSoLuongDuoi,
-                            gtTuM3: tongGiaTriTu,
-                            gtDuoiM3: tongGiaTriDuoi,
-                            gtTong: tongGiaTriTu + tongGiaTriDuoi,
-                            level: "3",
-                        })
+
+                        if (dataInfo.extraData[dataInfo.extraData.length - 1]?.stt !== stt) {
+                            dataInfo.extraData.push({
+                                stt: '0.2.2.2.1',
+                                maVtu: item.maHang,
+                                tenVtu: item.tenHang,
+                                maDviTinh: maDviTinh,
+                                slTuM3: tongSoLuongTu,
+                                slDuoiM3: tongSoLuongDuoi,
+                                slTong: tongSoLuongTu + tongSoLuongDuoi,
+                                gtTuM3: tongGiaTriTu,
+                                gtDuoiM3: tongGiaTriDuoi,
+                                gtTong: tongGiaTriTu + tongGiaTriDuoi,
+                                level: "3",
+                            })
+                        } else {
+                            let stt = dataInfo.extraData[dataInfo.extraData.length - 1]?.stt;
+                            let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
+                            dataInfo.extraData.push({
+                                stt: '0.2.2.2.' + sttObj,
+                                maVtu: item.maHang,
+                                tenVtu: item.tenHang,
+                                maDviTinh: maDviTinh,
+                                slTuM3: tongSoLuongTu,
+                                slDuoiM3: tongSoLuongDuoi,
+                                slTong: tongSoLuongTu + tongSoLuongDuoi,
+                                gtTuM3: tongGiaTriTu,
+                                gtDuoiM3: tongGiaTriDuoi,
+                                gtTong: tongGiaTriTu + tongGiaTriDuoi,
+                                level: "3",
+                            })
+                        }
                     }
-                    
+
 
                 })
 

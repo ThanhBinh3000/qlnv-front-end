@@ -20,6 +20,7 @@ export class ItemData {
     tenNhaKho: string;
     khoiTich: number;
     tenHang: string;
+    maHang: string;
     soLuong: number;
     giaTri: number;
     checked: boolean;
@@ -118,6 +119,7 @@ export class BaoHiemHangComponent implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
+        await this.addVatTu()
         this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
@@ -143,6 +145,11 @@ export class BaoHiemHangComponent implements OnInit {
         })
 
     }
+
+
+    changeVatTu(maDanhMuc: any, id: any) {
+        this.editCache[id].data.tenHang = this.lstVatTuFull.find(vt => vt.ma === maDanhMuc)?.ten;
+      }
 
     changeDiemKho(maKho: any, id: any) {
         // const maKhoNum = Number(maKho)
@@ -217,6 +224,7 @@ export class BaoHiemHangComponent implements OnInit {
         //xóa phần tử và con của nó
         this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
         // this.replaceIndex(lstIndex, -1);
+        this.getTotal();
         this.updateEditCache();
     }
 
@@ -420,7 +428,8 @@ export class BaoHiemHangComponent implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-        this.sum(this.lstCtietBcao[index].stt);
+        // this.sum(this.lstCtietBcao[index].stt);
+        this.getTotal();
         this.updateEditCache();
     }
 
@@ -559,6 +568,7 @@ export class BaoHiemHangComponent implements OnInit {
             tenNhaKho: "",
             khoiTich: 0,
             tenHang: "",
+            maHang: "",
             soLuong: 0,
             giaTri: 0,
             checked: false,

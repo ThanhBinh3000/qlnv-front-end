@@ -89,6 +89,13 @@ export class BaoHiemComponent implements OnInit {
                     stt: e.ma,
                     tenVtu: e.giaTri,
                     maVtu: e.ma,
+                    maDviTinh: "",
+                    slTuM3: 0,
+                    slDuoiM3: 0,
+                    slTong: 0,
+                    gtTuM3: 0,
+                    gtDuoiM3: 0,
+                    gtTong: 0,
                 })
             })
             this.setLevel();
@@ -304,7 +311,7 @@ export class BaoHiemComponent implements OnInit {
         }
         if (n == 3) {
             // xau = String.fromCharCode(k + 96);
-            xau = ""
+            xau = "-"
         }
         if (n == 4) {
             xau = "-";
