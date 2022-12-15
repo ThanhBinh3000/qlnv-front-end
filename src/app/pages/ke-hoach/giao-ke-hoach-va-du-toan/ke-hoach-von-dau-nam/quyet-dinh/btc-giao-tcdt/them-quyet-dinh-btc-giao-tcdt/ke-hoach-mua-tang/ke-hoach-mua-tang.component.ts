@@ -49,7 +49,6 @@ export class KeHoachMuaTangComponent implements OnInit, OnChanges {
   editItem(index: number): void {
     this.dataEdit[index].edit = true;
     this.onChangeLoaiVthh(this.dataEdit[index].data.loaiVthh, 'edit', index);
-    console.log(this.dataEdit[index].data, "huhu");
   }
 
 

@@ -718,6 +718,7 @@ export class BaoCaoComponent implements OnInit {
         const modalIn = this.modal.create({
             nzTitle: title,
             nzContent: DialogChonThemBieuMauComponent,
+            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
             nzMaskClosable: false,
             nzClosable: false,
             nzWidth: '600px',

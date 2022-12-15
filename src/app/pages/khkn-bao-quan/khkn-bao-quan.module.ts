@@ -8,6 +8,7 @@ import { QuanLyCongTrinhNghienCuuBaoQuanComponent } from './quan-ly-cong-trinh-n
 import { ThongTinQuanLyCongTrinhNghienCuuModule } from './quan-ly-cong-trinh-nghien-cuu-bao-quan/thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan/thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan.module';
 import { QuanLyQuyChuanKyThuatQuocGiaComponent } from './quan-ly-quy-chuan-ky-thuat-quoc-gia/quan-ly-quy-chuan-ky-thuat-quoc-gia.component';
 import { ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent } from './quan-ly-quy-chuan-ky-thuat-quoc-gia/thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia/thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia.component';
+import { TieuChuanKyThuatComponent } from './quan-ly-quy-chuan-ky-thuat-quoc-gia/thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia/tieu-chuan-ky-thuat/tieu-chuan-ky-thuat.component';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import { ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent } from './quan-ly-quy-chu
         QuanLyCongTrinhNghienCuuBaoQuanComponent,
         QuanLyQuyChuanKyThuatQuocGiaComponent,
         ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent,
+        TieuChuanKyThuatComponent,
     ],
     imports: [CommonModule, KhknBaoQuanRoutingModule, ComponentsModule, MainModule, ThongTinQuanLyCongTrinhNghienCuuModule],
 })

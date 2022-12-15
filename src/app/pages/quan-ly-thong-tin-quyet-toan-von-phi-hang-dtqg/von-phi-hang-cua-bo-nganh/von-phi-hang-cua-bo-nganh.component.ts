@@ -1,14 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
 import {MESSAGE} from "../../../constants/message";
-import { cloneDeep } from 'lodash';
+import {cloneDeep} from 'lodash';
+import {saveAs} from 'file-saver';
 import {NgxSpinnerService} from "ngx-spinner";
 import {PAGE_SIZE_DEFAULT} from "../../../constants/config";
 import * as dayjs from "dayjs";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {QuyetToanVonPhiService} from "../../../services/ke-hoach/von-phi/quyetToanVonPhi.service";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {STATUS} from "../../../constants/status";
 
 @Component({
   selector: 'app-von-phi-hang-cua-bo-nganh',
@@ -22,7 +25,12 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
   dsNam: string[] = [];
   dataTableAll: any[] = [];
   allChecked = false;
+  idSelected: number = 0;
+  isViewDetail: boolean = false;
+  STATUS = STATUS;
   totalRecord: number = 10;
+  selectedId: number = 0;
+  isDetail: boolean = false;
   setOfCheckedId = new Set<number>();
   pageSize: number = PAGE_SIZE_DEFAULT;
   indeterminate = false;
@@ -34,35 +42,41 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
     trangThai: '',
     trangThaiPdBtc: '',
   };
+
   constructor(
     private readonly fb: FormBuilder,
     private notification: NzNotificationService,
     public globals: Globals,
-    private vonPhiService:QuyetToanVonPhiService,
+    private vonPhiService: QuyetToanVonPhiService,
     private spinner: NgxSpinnerService,
-    public userService: UserService
+    public userService: UserService,
+    private modal: NzModalService,
   ) {
     this.formData = this.fb.group({
-      namQuyetToan: [null],
-      ngayCapNhap: [[]],
+      namQt: [null],
+      ngayCapNhat: [[]],
       ngayNhap: [[]],
-
     });
   }
+
   ngOnInit() {
     this.loadDsNam();
+    this.search();
   }
 
   clearFilter() {
     this.formData.reset();
     this.search();
   }
+
   loadDsNam() {
     let thisYear = dayjs().get('year');
     for (let i = -3; i < 23; i++) {
       this.dsNam.push((thisYear + i).toString());
     }
   }
+
+
   async search() {
     this.spinner.show();
     let body = this.formData.value;
@@ -116,6 +130,46 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
       }
     }
   }
+
+  viewDetail(id: number, isViewDetail: boolean) {
+    this.idSelected = id;
+    this.isViewDetail = isViewDetail;
+    this.isDetail = true;
+  }
+
+  xoaItem(item: any) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          this.vonPhiService.delete({id: item.id}).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
   filterInTable(key: string, value: string) {
     if (value && value != '') {
       this.dataTable = [];
@@ -128,9 +182,118 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
+  }
+
+  async changePageIndex(event) {
+    this.spinner.show();
+    try {
+      this.page = event;
+      await this.search();
+      this.spinner.hide();
+    } catch (e) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  async changePageSize(event) {
+    this.spinner.show();
+    try {
+      this.pageSize = event;
+      await this.search();
+      this.spinner.hide();
+    } catch (e) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  themMoi() {
+    this.isDetail = true;
+    this.idSelected = null;
+  }
+
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.tuNgay = body.ngayCapNhat[0];
+        body.denNgay = body.ngayCapNhat[1];
+        this.vonPhiService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'de-xuat-phuong-an-gia.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
+
+  xoa() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.vonPhiService.deleteMuti({ids: dataDelete});
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  showList() {
+    this.isDetail = false;
+    this.search();
   }
 }

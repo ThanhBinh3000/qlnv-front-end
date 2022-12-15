@@ -1,72 +1,72 @@
 <ng-container *ngIf="!isDetail">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
-      <div class="search__body" nz-row [nzGutter]="[20]">
-        <div nz-col nzSpan="3">
-          <nz-form-label nzFor="loai-hang-hoa">Số văn bản</nz-form-label>
-          <nz-form-control>
-            <input class="search__input" [(ngModel)]="searchFilter.soVanBan" placeholder="Nhập Số văn bản" nz-input />
-          </nz-form-control>
-        </div>
+      <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+        <div class="search__body" nz-row [nzGutter]="[20]">
+          <div nz-col nzSpan="3">
+            <nz-form-item class="form-item">
+              <nz-form-label nzFor="so-van-ban">Số văn bản</nz-form-label>
+              <nz-form-control>
+                <input class="search__input" [(ngModel)]="searchFilter.soVanBan" placeholder="Nhập Số văn bản" nz-input
+                  [ngModelOptions]="{standalone: true}" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
 
-        <div nz-col nzSpan="3">
-          <nz-form-label nzFor="loai-hang-hoa">Số hiệu quy chuẩn</nz-form-label>
-          <nz-form-control>
-            <input class="search__input" placeholder="Nhập Số hiệu quy chuẩn" nz-input
-              [(ngModel)]="searchFilter.soHieuQuyChuan" />
-          </nz-form-control>
-        </div>
+          <div nz-col nzSpan="3">
+            <nz-form-label nzFor="so-hieu-quy-chuan">Số hiệu quy chuẩn, tiêu chuẩn</nz-form-label>
+            <nz-form-control>
+              <input class="search__input" placeholder="Nhập Số hiệu quy chuẩn" nz-input
+                [(ngModel)]="searchFilter.soHieuQuyChuan" [ngModelOptions]="{standalone: true}" />
+            </nz-form-control>
+          </div>
 
-        <div nz-col nzSpan="4">
-          <nz-form-label nzFor="loai-hang-hoa">Loại hàng hóa</nz-form-label>
-          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenLoaiVthh"
-              readonly="true" />
-          </nz-input-group>
-        </div>
+          <div nz-col nzSpan="3">
+            <nz-form-label nzFor="loai-hang-hoa">Loại hàng hóa</nz-form-label>
+            <nz-form-control>
+              <nz-select nzPlaceHolder="" [(ngModel)]="searchFilter.loaiVthh" [ngModelOptions]="{standalone: true}">
+                <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.title" [nzValue]="option.key">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
 
-        <div nz-col nzSpan="4">
-          <nz-form-label nzFor="loai-hang-hoa">Chủng loại hàng hóa</nz-form-label>
-          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenCloaiVthh"
-              readonly="true" />
-          </nz-input-group>
-        </div>
+          <div nz-col nzSpan="3">
+            <nz-form-label nzFor="ap-dung-tai">Áp dụng tại</nz-form-label>
+            <nz-form-control>
+              <nz-select [(ngModel)]="searchFilter.apDungTai" [ngModelOptions]="{standalone: true}">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
 
-        <div nz-col nzSpan="3">
-          <nz-form-label nzFor="diem-kho">Áp dụng tại</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="idDiemKho" id="diem-kho">
-              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-            </nz-select>
-          </nz-form-control>
-        </div>
+          <div nz-col nzSpan="3">
+            <nz-form-label nzFor="ngay-ky">Ngày ký</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker [(ngModel)]="searchFilter.ngayKy" nzFormat="dd/MM/yyyy" id="ngay" class="search__input"
+                [ngModelOptions]="{standalone: true}">
+              </nz-range-picker>
+            </nz-form-control>
+          </div>
 
-        <div nz-col nzSpan="3">
-          <nz-form-label nzFor="ngay">Ngày ký</nz-form-label>
-          <nz-form-control>
-            <nz-range-picker [(ngModel)]="searchFilter.ngayKy" nzFormat="dd/MM/yyyy" id="ngay" class="search__input">
-            </nz-range-picker>
-          </nz-form-control>
-        </div>
+          <div nz-col nzSpan="3">
+            <nz-form-label nzFor="ngay-quyet-dinh">Ngày hiệu lực</nz-form-label>
+            <nz-form-control>
+              <nz-range-picker [(ngModel)]="searchFilter.ngayHieuLuc" nzFormat="dd/MM/yyyy" id="ngay"
+                [ngModelOptions]="{standalone: true}" class="search__input">
+              </nz-range-picker>
+            </nz-form-control>
+          </div>
 
-        <div nz-col nzSpan="3">
-          <nz-form-label nzFor="ngay">Ngày quyết định</nz-form-label>
-          <nz-form-control>
-            <nz-range-picker [(ngModel)]="searchFilter.ngayHieuLuc" nzFormat="dd/MM/yyyy" id="ngay"
-              class="search__input">
-            </nz-range-picker>
-          </nz-form-control>
+          <div nz-col nzSpan="3">
+            <nz-form-label nzFor="tric-yeu">Trích yếu</nz-form-label>
+            <nz-form-control>
+              <input class="search__input" placeholder="Nhập Trích yếu" nz-input [(ngModel)]="searchFilter.trichYeu"
+                [ngModelOptions]="{standalone: true}" />
+            </nz-form-control>
+          </div>
         </div>
-
-        <div nz-col nzSpan="24">
-          <nz-form-label nzFor="loai-hang-hoa">Trích yếu</nz-form-label>
-          <nz-form-control>
-            <input class="search__input" placeholder="Nhập Trích yếu" nz-input [(ngModel)]="searchFilter.trichYeu" />
-          </nz-form-control>
-        </div>
-      </div>
-
+      </form>
       <div class="cangiua group-button-search">
         <button nz-button class="search__button--clear" (click)="clearFilter()">
           <i class="icon  htvbdh_nhap-lai1"></i>
@@ -103,12 +103,12 @@
         <thead>
           <tr>
             <th class="text-center">STT</th>
+            <!-- <th></th> -->
             <th>Số văn bản</th>
             <th>Số văn bản thay thế</th>
             <th>Số hiệu quy chuẩn</th>
             <th>Áp dụng tại</th>
             <th>Loại hàng hóa</th>
-            <th>Chủng loại hàng hóa</th>
             <th>Ngày quyết định</th>
             <th>Ngày hiệu lực</th>
             <th>Trạng thái</th>
@@ -117,6 +117,7 @@
           </tr>
           <tr>
             <th></th>
+            <!-- <th></th> -->
             <th class="text-center" width="350px">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" placeholder="Tìm kiếm" nz-input [(ngModel)]="filterTable.soVanBan"
@@ -126,55 +127,49 @@
             <th>
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soVanBanThayThe"
-                (input)="filterInTable('soVanBanThayThe',filterTable.soVanBanThayThe)" />
+                  (input)="filterInTable('soVanBanThayThe',filterTable.soVanBanThayThe)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soHieuQuyChuan" 
-                (input)="filterInTable('soHieuQuyChuan',filterTable.soHieuQuyChuan)"/>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soHieuQuyChuan"
+                  (input)="filterInTable('soHieuQuyChuan',filterTable.soHieuQuyChuan)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.apDungTai" 
-                (input)="filterInTable('apDungTai',filterTable.apDungTai)"/>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.apDungTai"
+                  (input)="filterInTable('apDungTai',filterTable.apDungTai)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenLoaiVthh" 
-                (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)"/>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.listTenLoaiVthh"
+                  (input)="filterInTable('listTenLoaiVthh',filterTable.listTenLoaiVthh)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenCloaiVthh" 
-                (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)"/>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
+                  (input)="filterInTable('ngayKy',filterTable.ngayKy)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy" 
-                (input)="filterInTable('ngayKy',filterTable.ngayKy)"/>
-              </nz-input-group>
-            </th>
-            <th>
-              <nz-input-group [nzSuffix]="suffixIconSearch">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayHieuLuc" 
-                (input)="filterInTable('ngayHieuLuc',filterTable.ngayHieuLuc)"/>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayHieuLuc"
+                  (input)="filterInTable('ngayHieuLuc',filterTable.ngayHieuLuc)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
+                  (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
               </nz-input-group>
             </th>
             <th>
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThaiHl"
-                (input)="filterInTable('tenTrangThaiHl',filterTable.tenTrangThaiHl)" />
+                  (input)="filterInTable('tenTrangThaiHl',filterTable.tenTrangThaiHl)" />
               </nz-input-group>
             </th>
             <ng-template #suffixIconSearch>
@@ -183,34 +178,50 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let data of basicTable.data; let i = index">
-            <!--<th width="45px">
-            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                  ></label>
-          </th>-->
-            <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-            <td>{{ data.soVanBan }}</td>
-            <td>{{ data.soVanBanThayThe}}</td>
-            <td>{{ data.soHieuQuyChuan}}</td>
-            <td>{{ data.apDungTai }}</td>
-            <td>{{ data.tenLoaiVthh }}</td>
-            <td>{{ data.tenCloaiVthh }}</td>
-            <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.tenTrangThai }}</td>
-            <td>{{ data.tenTrangThaiHl }}</td>
-            <td class="text-left" *ngIf="userService.isTongCuc()">
-              <a (click)="redirectToChiTiet(true,data.id)">
-                <i class="fa fa-eye"></i>
-              </a>
-              <a (click)="redirectToChiTiet(false,data.id)">
-                <i class="fa fa-pencil"></i>
-              </a>
-              <a (click)="xoaItem(data)">
-                <i class="fa fa-trash-o do"></i>
-              </a>
-            </td>
-          </tr>
+          <ng-container *ngFor="let data of basicTable.data; let i = index">
+            <tr>
+              <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+              <!-- <td [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id, $event)"></td> -->
+              <td>{{ data.soVanBan }}</td>
+              <td>{{ data.soVanBanThayThe}}</td>
+              <td>{{ data.soHieuQuyChuan}}</td>
+              <td>{{ data.apDungTai }}</td>
+              <td>{{ data.listTenLoaiVthh }}</td>
+              <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.tenTrangThai }}</td>
+              <td>{{ data.trangThaiHl }}</td>
+              <td class="text-left">
+                <a (click)="redirectToChiTiet(true,data.id)" *ngIf="userService.isTongCuc()&&data.trangThai !== '00'">
+                  <i class="fa fa-eye"></i>
+                </a>
+                <a (click)="redirectToChiTiet(false,data.id)"
+                  *ngIf="(data.trangThai == '00' && userService.isTongCuc())">
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <a (click)="xoaItem(data)" *ngIf="(data.trangThai == '00' && userService.isTongCuc())">
+                  <i class="fa fa-trash-o do"></i>
+                </a>
+              </td>
+            </tr>
+            <!-- <ng-container *ngIf="expandSet.has(data.id)">
+              <ng-container>
+                <tr class="level-2">
+                  <td></td>
+                  <td></td>
+                  <td>{{ data.soVanBan}}</td>
+                  <td>{{ data.soVanBanThayThe}}</td>
+                  <td>{{ data.soHieuQuyChuan}}</td>
+                  <td>{{ data.apDungTai }}</td>
+                  <td>{{ data.listTenLoaiVthh }}</td>
+                  <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+                  <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
+                  <td>{{ data.tenTrangThai }}</td>
+                  <td>{{ data.trangThaiHl }}</td>
+                </tr>
+              </ng-container> -->
+            <!-- </ng-container> -->
+          </ng-container>
         </tbody>
       </nz-table>
       <div class="tab-content tab-menu" id="myTabContent">

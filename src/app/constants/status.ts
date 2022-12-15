@@ -75,7 +75,7 @@ export enum LOAI_DON_VI {
 }
 
 export enum LOAI_BIEN_BAN {
-  BB_KTRA_NGOAI_QUAN = "ngoaiQuan",
-  BB_KTRA_VAN_HANH = "vanHanh",
-  BB_KTRA_HOSO_KYTHUAT = "hoSoKyThuat",
+  BB_KTRA_NGOAI_QUAN = "BBKTNQ",
+  BB_KTRA_VAN_HANH = "BBKTVH",
+  BB_KTRA_HOSO_KYTHUAT = "BBKTHSKT",
 }
