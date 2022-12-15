@@ -448,9 +448,16 @@ export class BieuMau1310Component implements OnInit {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
       if (item.level == 0) {
+        this.total.uocThien = sumNumber([this.total.uocThien, item.uocThien]);
+        this.total.namSoDtuong = sumNumber([this.total.namSoDtuong, item.namSoDtuong]);
         this.total.namDtoanGiao = sumNumber([this.total.namDtoanGiao, item.namDtoanGiao]);
         this.total.namUocThien = sumNumber([this.total.namUocThien, item.namUocThien]);
+        this.total.khSoDtuong = sumNumber([this.total.khSoDtuong, item.khSoDtuong]);
+        this.total.khMucTcap = sumNumber([this.total.khMucTcap, item.khMucTcap]);
         this.total.khDtoanNam = sumNumber([this.total.khDtoanNam, item.khDtoanNam]);
+        this.total.gtriTdinhSoDtuong = sumNumber([this.total.gtriTdinhSoDtuong, item.gtriTdinhSoDtuong]);
+        this.total.gtriTdinhMucTcap = sumNumber([this.total.gtriTdinhMucTcap, item.gtriTdinhMucTcap]);
+        this.total.gtriTdinhDtoanNam = sumNumber([this.total.gtriTdinhDtoanNam, item.gtriTdinhDtoanNam]);
       }
     })
   }
