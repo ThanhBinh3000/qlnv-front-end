@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
@@ -57,12 +58,16 @@ export class BaoHiemHangComponent implements OnInit {
     listIdDelete = "";
     allChecked = false;
     maDviTao!: any;
+
+    listVattu: any[] = [];
+    lstVatTuFull: any[] = [];
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
         private quanLyVonPhiService: QuanLyVonPhiService,
         private notification: NzNotificationService,
+        private danhMucService: DanhMucHDVService,
         private modal: NzModalService,
     ) {
     }
@@ -104,6 +109,15 @@ export class BaoHiemHangComponent implements OnInit {
         //     })
         // }
         // this.sortByIndex();
+        await this.danhMucService.dMVatTu().toPromise().then(res => {
+            if (res.statusCode == 0) {
+                this.listVattu = res.data;
+            } else {
+                this.notification.error(MESSAGE.ERROR, res?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
         this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
@@ -165,6 +179,22 @@ export class BaoHiemHangComponent implements OnInit {
         this.listKho = nhaKho
 
     };
+
+    async addVatTu() {
+
+        const vatTuTemp = []
+        this.listVattu.forEach(vatTu => {
+            if (vatTu.child) {
+                vatTu.child.forEach(vatTuCon => {
+                    vatTuTemp.push({
+                        ...vatTuCon,
+                    })
+                })
+            }
+        })
+
+        this.lstVatTuFull = vatTuTemp;
+    }
 
     deleteAllChecked() {
         const lstId: any[] = [];

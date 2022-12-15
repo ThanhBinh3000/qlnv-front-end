@@ -14,7 +14,6 @@ export class ItemData {
     id: string;
     stt: string;
     level: number;
-    khvonphiLapThamDinhCtietId: string;
     maVtu: string;
     tenVtu: string;
     maDviTinh: string;
@@ -100,6 +99,32 @@ export class BaoHiemComponent implements OnInit {
             this.lstCtietBcao.forEach(item => {
                 item.stt = item.maVtu;
             })
+        }
+        if (this.dataInfo?.extraData) {
+            this.dataInfo.extraData.forEach(item => {
+                // if (item.maVtu) {
+                //     const index = this.lstCtietBcao.findIndex(e => e.maVtu == item.maNdung);
+                //     this.lstCtietBcao[index].namKh = item.namKh;
+                //     this.lstCtietBcao[index].giaTriThamDinh = item.giaTriThamDinh;
+                // } else {
+                    this.lstCtietBcao.push({
+                        ...new ItemData(),
+                        id: uuid.v4(),
+                        stt: item.stt,
+                        level: item.level,
+                        maVtu: item.maVtu,
+                        tenVtu: item.tenVtu,
+                        maDviTinh: item.maDviTinh,
+                        slTuM3: item.slTuM3,
+                        slDuoiM3: item.slDuoiM3,
+                        slTong: item.slTong,
+                        gtTuM3: item.gtTuM3,
+                        gtDuoiM3: item.gtDuoiM3,
+                        gtTong: item.gtTong,
+                    })
+                // }
+            })
+            console.log(this.dataInfo);
         }
         this.sortByIndex();
         this.getTotal();

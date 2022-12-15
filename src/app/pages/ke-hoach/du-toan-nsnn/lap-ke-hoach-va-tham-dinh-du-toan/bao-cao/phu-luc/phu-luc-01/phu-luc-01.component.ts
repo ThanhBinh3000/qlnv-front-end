@@ -186,7 +186,7 @@ export class PhuLuc01Component implements OnInit {
                     this.dsDinhMucN = res.data;
                     this.dsDinhMucN.forEach(item => {
                         if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = Math.round(divNumber(item.tongDmuc, 1000));
+                            item.tongDmuc = divNumber(item.tongDmuc, 1000);
                         }
                     })
                 } else {
@@ -209,7 +209,7 @@ export class PhuLuc01Component implements OnInit {
                     this.dsDinhMucX = res.data;
                     this.dsDinhMucX.forEach(item => {
                         if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = Math.round(divNumber(item.tongDmuc, 1000));
+                            item.tongDmuc = divNumber(item.tongDmuc, 1000);
                         }
                     })
                 } else {
