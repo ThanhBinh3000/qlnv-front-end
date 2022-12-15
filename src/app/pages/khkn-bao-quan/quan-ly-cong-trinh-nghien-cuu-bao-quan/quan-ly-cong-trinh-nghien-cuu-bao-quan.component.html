@@ -161,15 +161,13 @@
             <td>{{ data.ngayKyDen }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="redirectToChiTiet(true,data.id)"
-                *ngIf="userService.isTongCuc()&&data.trangThai == STATUS.DA_NGHIEM_THU">
+              <a (click)="redirectToChiTiet(true,data.id)" *ngIf="data.trangThai == STATUS.DA_NGHIEM_THU">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="redirectToChiTiet(false,data.id)"
-                *ngIf="(data.trangThai !== STATUS.DA_NGHIEM_THU && userService.isTongCuc())">
+              <a (click)="redirectToChiTiet(false,data.id)" *ngIf="(data.trangThai !== STATUS.DA_NGHIEM_THU)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data)" *ngIf="(data.trangThai !== STATUS.DA_NGHIEM_THU && userService.isTongCuc())">
+              <a (click)="xoaItem(data)" *ngIf="(data.trangThai !== STATUS.DA_NGHIEM_THUs)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
