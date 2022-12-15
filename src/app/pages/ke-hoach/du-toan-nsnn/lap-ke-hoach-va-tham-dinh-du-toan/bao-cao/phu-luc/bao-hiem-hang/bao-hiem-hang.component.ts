@@ -5,6 +5,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
@@ -19,6 +20,7 @@ export class ItemData {
     tenNhaKho: string;
     khoiTich: number;
     tenHang: string;
+    maHang: string;
     soLuong: number;
     giaTri: number;
     checked: boolean;
@@ -57,12 +59,16 @@ export class BaoHiemHangComponent implements OnInit {
     listIdDelete = "";
     allChecked = false;
     maDviTao!: any;
+
+    listVattu: any[] = [];
+    lstVatTuFull: any[] = [];
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
         private quanLyVonPhiService: QuanLyVonPhiService,
         private notification: NzNotificationService,
+        private danhMucService: DanhMucHDVService,
         private modal: NzModalService,
     ) {
     }
@@ -104,6 +110,16 @@ export class BaoHiemHangComponent implements OnInit {
         //     })
         // }
         // this.sortByIndex();
+        await this.danhMucService.dMVatTu().toPromise().then(res => {
+            if (res.statusCode == 0) {
+                this.listVattu = res.data;
+            } else {
+                this.notification.error(MESSAGE.ERROR, res?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
+        await this.addVatTu()
         this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
@@ -129,6 +145,11 @@ export class BaoHiemHangComponent implements OnInit {
         })
 
     }
+
+
+    changeVatTu(maDanhMuc: any, id: any) {
+        this.editCache[id].data.tenHang = this.lstVatTuFull.find(vt => vt.ma === maDanhMuc)?.ten;
+      }
 
     changeDiemKho(maKho: any, id: any) {
         // const maKhoNum = Number(maKho)
@@ -166,6 +187,22 @@ export class BaoHiemHangComponent implements OnInit {
 
     };
 
+    async addVatTu() {
+
+        const vatTuTemp = []
+        this.listVattu.forEach(vatTu => {
+            if (vatTu.child) {
+                vatTu.child.forEach(vatTuCon => {
+                    vatTuTemp.push({
+                        ...vatTuCon,
+                    })
+                })
+            }
+        })
+
+        this.lstVatTuFull = vatTuTemp;
+    }
+
     deleteAllChecked() {
         const lstId: any[] = [];
         this.lstCtietBcao.forEach(item => {
@@ -187,6 +224,7 @@ export class BaoHiemHangComponent implements OnInit {
         //xóa phần tử và con của nó
         this.lstCtietBcao = this.lstCtietBcao.filter(e => !e.stt.startsWith(nho));
         // this.replaceIndex(lstIndex, -1);
+        this.getTotal();
         this.updateEditCache();
     }
 
@@ -390,7 +428,8 @@ export class BaoHiemHangComponent implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-        this.sum(this.lstCtietBcao[index].stt);
+        // this.sum(this.lstCtietBcao[index].stt);
+        this.getTotal();
         this.updateEditCache();
     }
 
@@ -529,6 +568,7 @@ export class BaoHiemHangComponent implements OnInit {
             tenNhaKho: "",
             khoiTich: 0,
             tenHang: "",
+            maHang: "",
             soLuong: 0,
             giaTri: 0,
             checked: false,
