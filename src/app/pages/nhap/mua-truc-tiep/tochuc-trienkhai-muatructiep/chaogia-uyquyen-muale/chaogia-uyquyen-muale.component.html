@@ -9,15 +9,15 @@
           </nz-select>
         </div>
         <div nz-col nzSpan="5">
-          <label class="search__label">Ngày nhận chào giá</label>
+          <label class="search__label">Ngày nhận chào giá/Ngày ủy quyền</label>
           <nz-range-picker [(ngModel)]="searchFilter.ngayHluc" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
         <div nz-col nzSpan="5">
-          <label class="search__label">Tên công ty</label>
+          <label class="search__label">Tên công ty chào giá</label>
           <input class="search__input" nz-input [(ngModel)]="searchFilter.canhanTochuc" />
         </div>
         <div nz-col nzSpan="5">
-          <label class="search__label">Tên chi cục ủy quyền</label>
+          <label class="search__label">Tên chi cục được ủy quyền</label>
           <input class="search__input" nz-input [(ngModel)]="searchFilter.tenDvi" />
         </div>
 
@@ -53,7 +53,8 @@
             </th>
             <th width="30px">STT</th>
             <th>Số QĐ phê duyệt Kh mua trực tiếp</th>
-            <th>Đơn vị</th>
+            <th *ngIf="userService.isTongCuc()">Đơn vị</th>
+            <th *ngIf="userService.isTongCuc()">Năm kế hoạch</th>
             <th>Phương thức mua trực tiếp</th>
             <th>Ngày nhận chào giá/Ngày ủy quyền</th>
             <th>Số QĐ PDKQ chào giá</th>
@@ -71,10 +72,16 @@
                   (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
               </nz-input-group>
             </th>
-            <th>
+            <th *ngIf="userService.isTongCuc()">
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
                   (input)="filterInTable('tenDvi',filterTable.tenDvi)" size="small" />
+              </nz-input-group>
+            </th>
+            <th *ngIf="userService.isTongCuc()">
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKh"
+                  (input)="filterInTable('namKh',filterTable.namKh)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -127,7 +134,8 @@
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.hhQdPheduyetKhMttHdr ? data.hhQdPheduyetKhMttHdr.soQd : data.soQd}}</td>
-            <td>{{ data.tenDvi}}</td>
+            <td *ngIf="userService.isTongCuc()">{{ data.tenDvi}}</td>
+            <td *ngIf="userService.isTongCuc()">{{ data.namKh}}</td>
             <td>{{ data.hhQdPheduyetKhMttHdr ? data.hhQdPheduyetKhMttHdr.pthucMuatt : data.pthucMuatt }}</td>
             <td>{{ data.hhQdPheduyetKhMttHdr ? data.hhQdPheduyetKhMttHdr.ngayHluc : data.ngayHluc | date: 'dd/MM/YYYY'}}
             </td>

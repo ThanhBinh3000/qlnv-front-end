@@ -61,6 +61,7 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
   filterTable: any = {
     soQd: '',
     tenDvi: '',
+    namKh: '',
     pthucMuatt: '',
     ngayHluc: '',
     soQdPdKqCg: '',
@@ -325,6 +326,7 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
     this.filterTable = {
       soQd: '',
       tenDvi: '',
+      namKh: '',
       pthucMuatt: '',
       ngayHluc: '',
       soQdPdKqCg: '',
