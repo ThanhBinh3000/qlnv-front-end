@@ -35,7 +35,8 @@
             <nz-form-label nzFor="ap-dung-tai">Áp dụng tại</nz-form-label>
             <nz-form-control>
               <nz-select [(ngModel)]="searchFilter.apDungTai" [ngModelOptions]="{standalone: true}">
-                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option *ngFor="let option of dsBoNganh" [nzLabel]="option.title" [nzValue]="option.key">
+                </nz-option>
               </nz-select>
             </nz-form-control>
           </div>
@@ -185,7 +186,7 @@
               <td>{{ data.soVanBan }}</td>
               <td>{{ data.soVanBanThayThe}}</td>
               <td>{{ data.soHieuQuyChuan}}</td>
-              <td>{{ data.apDungTai }}</td>
+              <td>{{ data.boNganhAd }}</td>
               <td>{{ data.listTenLoaiVthh }}</td>
               <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>

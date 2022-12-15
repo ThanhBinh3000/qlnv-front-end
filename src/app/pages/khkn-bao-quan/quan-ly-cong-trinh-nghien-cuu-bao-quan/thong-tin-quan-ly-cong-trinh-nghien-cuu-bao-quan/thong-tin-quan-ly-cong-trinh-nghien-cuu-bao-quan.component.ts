@@ -7,11 +7,8 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { KhCnCongTrinhNghienCuu } from 'src/app/services/kh-cn-bao-quan/khCnCongTrinhNghienCuu';
 import { Globals } from 'src/app/shared/globals';
-import { NghiemThuThanhLyComponent } from './nghiem-thu-thanh-ly/nghiem-thu-thanh-ly.component';
-import { ThongTinChungComponent } from './thong-tin-chung/thong-tin-chung.component';
-import { TienDoThucHienComponent } from './tien-do-thuc-hien/tien-do-thuc-hien.component';
 import * as dayjs from 'dayjs';
-import { TienDoThucHien } from 'src/app/models/KhoaHocCongNgheBaoQuan';
+import { NghiemThuThanhLy, TienDoThucHien } from 'src/app/models/KhoaHocCongNgheBaoQuan';
 import { UserService } from 'src/app/services/user.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { cloneDeep } from 'lodash';
@@ -34,9 +31,9 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
 
   dataTable1: any[] = []
   listCapDt: any[] = []
-  rowItem1: any = {};
   listNguonVon: any[] = [];
   fileDinhKem: any[] = [];
+  fileDinhKem1: any[] = [];
 
   listTrangThai1: any[] = [
     { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
@@ -47,6 +44,9 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
   dataTable: any[] = []
   rowItem: TienDoThucHien = new TienDoThucHien;
   dataEdit: { [key: string]: { edit: boolean; data: TienDoThucHien } } = {};
+
+  rowItem1: NghiemThuThanhLy = new NghiemThuThanhLy;
+  dataEdit1: { [key: string]: { edit: boolean; data: NghiemThuThanhLy } } = {};
   constructor(
     private fb: FormBuilder,
     private modal: NzModalService,
@@ -124,7 +124,14 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
         ngayKy: data.ngayKyTu && data.ngayKyDen ? [data.ngayKyTu, data.ngayKyDen] : null
       })
       this.fileDinhKem = data.fileDinhKems;
+      this.fileDinhKem1 = data.fileDinhKems1;
       this.dataTable = data.tienDoThucHien;
+      this.dataTable.forEach(item => {
+        const tt = this.listTrangThai1.filter(d => d.ma == item.trangThaiTd)
+        if (tt.length > 0) {
+          item.tenTrangThaiTd = tt[0].giaTri;
+        }
+      })
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
@@ -132,6 +139,12 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
         };
       });
       this.dataTable1 = data.children;
+      this.dataTable1.forEach((item, index) => {
+        this.dataEdit1[index] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
     }
   }
 
@@ -176,13 +189,14 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
       ? dayjs(this.formData.get('ngayKy').value[0]).format(
         'YYYY-MM-DD',
       )
-      : null,
-      body.ngayKyTu = this.formData.get('ngayKy').value
-        ? dayjs(this.formData.get('ngayKy').value[1]).format(
-          'YYYY-MM-DD',
-        )
-        : null,
-      body.fileDinhKemReq = this.fileDinhKem;
+      : null;
+    body.ngayKyTu = this.formData.get('ngayKy').value
+      ? dayjs(this.formData.get('ngayKy').value[1]).format(
+        'YYYY-MM-DD',
+      )
+      : null;
+    body.fileDinhKemReq = this.fileDinhKem;
+    body.fileDinhKemReq1 = this.fileDinhKem1;
     console.log(body);
     let res = null;
     if (this.formData.get('id').value) {
@@ -203,10 +217,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
     }
   }
 
-  addRow() {
-    this.dataTable1 = [...this.dataTable1, this.rowItem1];
-    this.rowItem1 = {}
-  }
 
 
   // tiến độ thực hiện
@@ -216,18 +226,22 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
     if (!this.dataTable) {
       this.dataTable = [];
     }
-    this.sortTableId();
-    let item = cloneDeep(this.rowItem);
-    item.stt = this.dataTable.length + 1;
-    item.edit = false;
-    this.dataTable = [
-      ...this.dataTable,
-      item,
-    ]
+    if (this.rowItem.noiDung && this.rowItem.sanPham != null) {
+      this.sortTableId();
+      let item = cloneDeep(this.rowItem);
+      item.stt = this.dataTable.length + 1;
+      item.edit = false;
+      this.dataTable = [
+        ...this.dataTable,
+        item,
+      ]
 
-    this.rowItem = new TienDoThucHien();
-    this.updateEditCache();
-    this.emitDataTable();
+      this.rowItem = new TienDoThucHien();
+      this.updateEditCache();
+      this.emitDataTable();
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
+    }
   }
   onChangeTrangThai(trangThai, typeData?) {
     const tt = this.listTrangThai1.filter(d => d.ma == trangThai)
@@ -301,6 +315,84 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
   }
   emitDataTable() {
 
+  }
+
+  //Nghiệm thu
+  themMoiItem1() {
+
+
+    if (!this.dataTable1) {
+      this.dataTable1 = [];
+    }
+    if (this.rowItem1.hoTen && this.rowItem1.donVi != null) {
+      this.sortTableId1();
+      let item = cloneDeep(this.rowItem1);
+      item.stt = this.dataTable1.length + 1;
+      item.edit = false;
+      this.dataTable1 = [
+        ...this.dataTable1,
+        item,
+      ]
+
+      this.rowItem1 = new NghiemThuThanhLy();
+      this.updateEditCache1();
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
+    }
+  }
+
+  sortTableId1() {
+    this.dataTable1.forEach((lt, i) => {
+      lt.stt = i + 1;
+    });
+  }
+  editItem1(index: number): void {
+    this.dataEdit1[index].edit = true;
+  }
+  updateEditCache1(): void {
+    if (this.dataTable1) {
+      this.dataTable1.forEach((item, index) => {
+        this.dataEdit1[index] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
+  }
+  huyEdit1(id: number): void {
+    const index = this.dataTable1.findIndex((item) => item.idVirtual == id);
+    this.dataEdit1[id] = {
+      data: { ...this.dataTable1[index] },
+      edit: false,
+    };
+  }
+  luuEdit1(index: number): void {
+    this.hasError = (false);
+    Object.assign(this.dataTable1[index], this.dataEdit1[index].data);
+    this.dataEdit1[index].edit = false;
+  }
+
+
+
+  xoaItem1(index: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.dataTable1.splice(index, 1);
+          this.updateEditCache1();
+          this.dataTable1;
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 
 

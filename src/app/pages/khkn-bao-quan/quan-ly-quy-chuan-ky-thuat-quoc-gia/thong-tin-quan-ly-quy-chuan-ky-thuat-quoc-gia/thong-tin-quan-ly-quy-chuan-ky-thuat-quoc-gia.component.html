@@ -50,7 +50,11 @@
                 Số văn bản
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input nz-input placeholder="Số văn bản tự sinh" formControlName="soVanBan" readonly />
+                <nz-input-group nzAddOnAfter="{{maVb}}" id="so-qd">
+                  <nz-input-number [nzDisabled]="isView" type="text" nz-input formControlName="soVanBan" [nzMin]="1"
+                    [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
+                  </nz-input-number>
+                </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -106,7 +110,7 @@
               <nz-form-label [nzNoColon]="true">
                 Văn bản thay thế (nếu có)
               </nz-form-label>
-              <nz-select [(ngModel)]="listVanBanId" (ngModelChange)="changeListVanBan()"
+              <nz-select nzAllowClear nzShowSearch [(ngModel)]="listVanBanId" (ngModelChange)="changeListVanBan()"
                 [ngModelOptions]="{standalone: true}">
                 <nz-option nzValue="{{item.id}}" nzLabel="{{item.soVanBan}}" *ngFor="let item of listVanBan">
                 </nz-option>
@@ -123,7 +127,8 @@
               </nz-form-label>
               <nz-select nzMode="tags" nzPlaceHolder="" [(ngModel)]="listOfTagOptions"
                 (ngModelChange)="changeListOfTagOptions($event)" [ngModelOptions]="{standalone: true}">
-                <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.title" [nzValue]="option.key">
+                <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.tenHangHoa"
+                  [nzValue]="option.maHangHoa">
                 </nz-option>
               </nz-select>
             </nz-form-item>
@@ -269,7 +274,7 @@
                   <i class="fa fa-plus"></i>
                 </a>
                 <a (click)="clearData()">
-                  <i class="fa fa-trash-o do"></i>
+                  <i class="fa fa-refresh"></i>
                 </a>
               </td>
             </tr>

@@ -115,6 +115,7 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
       pthucGnhan: [''],
       thongBaoKh: [''],
       soQdCc: [''],
+      diaChi: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       soDviTsan: [''],
@@ -437,6 +438,7 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           loaiVthh: data.loaiVthh,
+
           tenLoaiVthh: data.tenLoaiVthh,
           tchuanCluong: data.tchuanCluong,
           soQdCc: data.soQdPd,
@@ -541,6 +543,7 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
           soQdCc: data.soQdCtieu,
           trichYeu: dataRes.trichYeu,
           tenDvi: data.tenDvi,
+          diaChi: data.diaChi,
           maDvi: data.maDvi,
           idThHdr: null,
           soTrHdr: dataRes.soDxuat,

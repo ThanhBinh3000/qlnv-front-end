@@ -471,7 +471,7 @@
                 <td>{{phanLo.tenNganKho}}</td>
                 <td>{{phanLo.tenLoKho}}</td>
                 <td>{{phanLo.maDviTsan}}</td>
-                <td>{{phanLo.duDau}}</td>
+                <td>{{phanLo.duDau | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{phanLo.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                 <td>{{phanLo.dviTinh}}</td>
                 <td>{{phanLo.giaKhongVat | number : '1.0-1' : 'vi_VN' }}</td>
@@ -516,7 +516,7 @@
               <th style="width: 2%">STT</th>
               <th style="width: 40%">Tên chi cục</th>
               <th style="width: 40%">Địa chỉ</th>
-              <th style="width: 10%">Số lượng</th>
+              <th style="width: 10%">Số lượng (Kg)</th>
             </tr>
           </thead>
           <tbody>
@@ -524,12 +524,12 @@
               <td>{{i + 1}}</td>
               <td>{{ item.tenDvi }}</td>
               <td>{{ item.diaDiemKho }}</td>
-              <td>{{ item.soLuong }}</td>
+              <td>{{ item.tongSoLuong | number : '1.0-1' : 'vi_VN'}}</td>
             </tr>
             <tr *ngIf="listOfData.length > 0">
               <td></td>
               <td colspan="2">Cộng</td>
-              <td>{{formData.get("tongSoLuong").value}}</td>
+              <td>{{calcTongSoLuong() | number : '1.0-1' : 'vi_VN'}}</td>
             </tr>
           </tbody>
         </nz-table>
