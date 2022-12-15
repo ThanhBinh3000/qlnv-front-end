@@ -142,7 +142,6 @@ export class BieuMau151Component implements OnInit {
 
   // luu
   async save(trangThai: string) {
-    console.log(this.lstCtietBcao)
     let checkSaveEdit;
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
