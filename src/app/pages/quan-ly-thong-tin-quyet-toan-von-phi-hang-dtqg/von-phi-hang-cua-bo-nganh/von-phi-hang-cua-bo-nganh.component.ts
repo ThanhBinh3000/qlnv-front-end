@@ -56,6 +56,7 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
       namQt: [null],
       ngayCapNhat: [[]],
       ngayNhap: [[]],
+      loai: '00',
     });
   }
 
@@ -88,6 +89,7 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
       body.ngayCapNhatTu = body.ngayCapNhat[0];
       body.ngayCapNhatDen = body.ngayCapNhat[1];
     }
+    body.loai = '00';
     body.paggingReq = {
       limit: this.pageSize,
       page: this.page - 1,
