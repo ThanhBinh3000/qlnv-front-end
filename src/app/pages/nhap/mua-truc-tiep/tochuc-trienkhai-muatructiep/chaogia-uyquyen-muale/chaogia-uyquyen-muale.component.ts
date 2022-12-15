@@ -10,54 +10,60 @@ import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
 import { STATUS } from 'src/app/constants/status';
+import { QuyetDinhPheDuyetKeHoachLCNTService } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service";
+import {
+  ThongTinDauThauService
+} from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 import { TongHopDeXuatKHMTTService } from 'src/app/services/tong-hop-de-xuat-khmtt.service';
+import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { ChaogiaUyquyenMualeService } from 'src/app/services/chaogia-uyquyen-muale.service';
+
 @Component({
   selector: 'app-chaogia-uyquyen-muale',
   templateUrl: './chaogia-uyquyen-muale.component.html',
   styleUrls: ['./chaogia-uyquyen-muale.component.scss']
 })
 export class ChaogiaUyquyenMualeComponent implements OnInit {
-
+  @Input() loaiVthh: String;
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private tongHopDeXuatKHMTTService: TongHopDeXuatKHMTTService,
+    private danhSachMuaTrucTiepService: DanhSachMuaTrucTiepService,
     private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
-    private danhSachMuaTrucTiep: DanhSachDauThauService,
     private modal: NzModalService,
     public userService: UserService,
     private helperService: HelperService,
   ) {
 
   }
-  @Input()
-  loaiVthh: string;
   searchValue = '';
   visibleTab: boolean = false;
   listNam: any[] = [];
   yearNow: number = 0;
   STATUS = STATUS
+
   searchFilter = {
     namKh: dayjs().get('year'),
     ngayHluc: '',
     canhanTochuc: '',
-    loaiVthh: '',
+    tenDvi: '',
     maDvi: '',
-    trangThai: STATUS.BAN_HANH,
+
   };
 
   filterTable: any = {
-    soQdPduyet: '',
+    soQd: '',
     tenDvi: '',
-    namKh: '',
     pthucMuatt: '',
     ngayHluc: '',
+    soQdPdKqCg: '',
     tenLoaiVthh: '',
     tenCloaiVthh: '',
     tenTrangThaiTkhai: '',
@@ -71,20 +77,19 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
-  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
   lastBreadcrumb: string;
   userInfo: UserLogin;
   datePickerConfig = DATEPICKER_CONFIG;
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
-  selectedData: any;
+
   async ngOnInit() {
     await this.spinner.show();
     this.listVthh = LIST_VAT_TU_HANG_HOA;
     try {
       this.userInfo = this.userService.getUserLogin();
-      this.getTitleVthh();
+
       this.yearNow = dayjs().get('year');
       for (let i = -3; i < 23; i++) {
         this.listNam.push({
@@ -102,11 +107,6 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
     }
   }
 
-  getTitleVthh() {
-    let loatVthh = this.router.url.split('/')[4]
-    this.searchFilter.loaiVthh = convertVthhToId(loatVthh);
-  }
-
   async search() {
     this.dataTable = [];
     let body = {
@@ -116,15 +116,16 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
       ngayCgiadDen: this.searchFilter.ngayHluc
         ? dayjs(this.searchFilter.ngayHluc[1]).format('YYYY-MM-DD')
         : null,
-      loaiVthh: this.searchFilter.loaiVthh,
+      loaiVthh: this.loaiVthh,
       namKh: this.searchFilter.namKh,
+      tenDvi: this.searchFilter.tenDvi,
       canhanTochuc: this.searchFilter.canhanTochuc,
-      trangThai: this.searchFilter.trangThai,
+      lastest: 1,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
     };
     let res = await this.chaogiaUyquyenMualeService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -146,7 +147,7 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
 
   searchDanhSachDauThau(body, trangThai) {
     body.trangThai = trangThai
-    return this.danhSachMuaTrucTiep.search(body);
+    return this.danhSachMuaTrucTiepService.search(body);
   }
 
   async changePageIndex(event) {
@@ -174,10 +175,9 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(selectedData: any) {
-    this.selectedId = selectedData.id;
+  redirectToChiTiet(data) {
+    this.selectedId = data.id;
     this.isDetail = true;
-    this.selectedData = selectedData;
   }
 
   async showList() {
@@ -190,7 +190,8 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
     this.searchFilter.canhanTochuc = null;
     this.searchFilter.ngayHluc = null;
     this.searchFilter.maDvi = null;
-    this.searchFilter.loaiVthh = null;
+
+    this.searchFilter.tenDvi = null;
     this.search();
   }
 
@@ -246,10 +247,10 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
           ngayCgiadDen: this.searchFilter.ngayHluc
             ? dayjs(this.searchFilter.ngayHluc[1]).format('YYYY-MM-DD')
             : null,
-          loaiVthh: this.searchFilter.loaiVthh,
+          tenDvi: this.searchFilter.tenDvi,
           namKh: this.searchFilter.namKh,
-          canhanTochuc: this.searchFilter.canhanTochuc,
           maDvi: this.userInfo.MA_DVI,
+          canhanTochuc: this.searchFilter.canhanTochuc,
         }
         this.chaogiaUyquyenMualeService
           .export(body)
@@ -322,11 +323,11 @@ export class ChaogiaUyquyenMualeComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQdPduyet: '',
+      soQd: '',
       tenDvi: '',
-      namKh: '',
       pthucMuatt: '',
       ngayHluc: '',
+      soQdPdKqCg: '',
       tenLoaiVthh: '',
       tenCloaiVthh: '',
       tenTrangThaiTkhai: '',

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
@@ -9,7 +9,7 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai, convertTrangThaiGt, convertVthhToId } from 'src/app/shared/commonFunction';
+import { convertTrangThai, convertTrangThaiGt } from 'src/app/shared/commonFunction';
 import { saveAs } from 'file-saver';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { STATUS } from 'src/app/constants/status';
@@ -21,6 +21,8 @@ import { QuyetDinhPheDuyetKetQuaChaoGiaMTTService } from 'src/app/services/quyet
   styleUrls: ['./quyetdinh-pheduyet-kqcg.component.scss']
 })
 export class QuyetdinhPheduyetKqcgComponent implements OnInit {
+
+  @Input() loaiVthh: String
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -30,7 +32,6 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
     private danhMucService: DanhMucService
   ) {
-
   }
   listNam: any[] = [];
   yearNow: number = 0;
@@ -38,13 +39,12 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
   searchFilter = {
     namKh: dayjs().get('year'),
     ngayKy: '',
-    maDvi: '',
     tenDvi: '',
   };
 
   filterTable: any = {
-    soQdPdCg: '',
-    ngayKy: '',
+    soQd: '',
+    ngayTao: '',
     tenDvi: '',
     soQdPdKh: '',
     tenLoaiVthh: '',
@@ -67,6 +67,7 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   STATUS = STATUS;
+
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -112,23 +113,16 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
-
       },
       namKh: this.searchFilter.namKh,
-      maDvi: this.userInfo.MA_DVI,
       tenDvi: this.searchFilter.tenDvi,
+      maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
     };
     let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
       this.totalRecord = data.totalElements;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.statusConvert = this.convertTrangThai(item.trangThai);
-          item.statusGT = this.statusGoiThau(item.statusGthau);
-        });
-      }
       this.dataTableAll = cloneDeep(this.dataTable);
     } else {
       this.dataTable = [];
@@ -136,7 +130,6 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
-
 
   redirectToChiTiet(id: number, isView?: boolean) {
     this.selectedId = id;
@@ -151,9 +144,9 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter.namKh = dayjs().get('year');
-    this.searchFilter.tenDvi = null;
     this.searchFilter.ngayKy = null;
-    this.searchFilter.maDvi = null;
+    this.searchFilter.tenDvi = null;
+
     this.search();
   }
 
@@ -215,7 +208,8 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
           ngayCgiaDen: this.searchFilter.ngayKy
             ? dayjs(this.searchFilter.ngayKy[1]).format('YYYY-MM-DD')
             : null,
-          namKh: this.searchFilter.namKh
+          namKh: this.searchFilter.namKh,
+          tenDvi: this.searchFilter.tenDvi,
         };
         this.quyetDinhPheDuyetKetQuaChaoGiaMTTService
           .export(body)
@@ -254,7 +248,7 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.deleteMuti({ ids: dataDelete });
+            let res = await this.quyetDinhPheDuyetKetQuaChaoGiaMTTService.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -356,8 +350,8 @@ export class QuyetdinhPheduyetKqcgComponent implements OnInit {
 
   clearFilterTable() {
     this.filterTable = {
-      soQdPdCg: '',
-      ngayKy: '',
+      soQd: '',
+      ngayTao: '',
       tenDvi: '',
       soQdPdKh: '',
       tenLoaiVthh: '',
