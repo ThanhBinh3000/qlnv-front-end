@@ -807,7 +807,7 @@ export class BaoCaoComponent implements OnInit {
                 if (formDetail.trangThai == '3' || formDetail.trangThai == '4' || formDetail.trangThai == '5') {
                     dataInfo.extraData = [];
                     //phu luc 3
-                    const data1 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl03').lstCtietLapThamDinhs;
+                    const data1 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl03')?.lstCtietLapThamDinhs;
                     data1.forEach(item => {
                         const level = item.stt.split('.').length - 2;
                         if (level == 0) {
@@ -823,7 +823,7 @@ export class BaoCaoComponent implements OnInit {
                         }
                     })
                     //phu luc 1
-                    const data2 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl02').lstCtietLapThamDinhs;
+                    const data2 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl02')?.lstCtietLapThamDinhs;
                     data2.forEach(item => {
                         const level = item.stt.split('.').length - 2;
                         if (level == 1) {
@@ -839,7 +839,7 @@ export class BaoCaoComponent implements OnInit {
                         }
                     })
                     //phu luc 2
-                    const data3 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl02').lstCtietLapThamDinhs;
+                    const data3 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl02')?.lstCtietLapThamDinhs;
                     data3.forEach(item => {
                         const level = item.stt.split('.').length - 2;
                         if (level == 0) {
@@ -855,7 +855,7 @@ export class BaoCaoComponent implements OnInit {
                         }
                     })
                     //phu luc 4
-                    const data4 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl04').lstCtietLapThamDinhs;
+                    const data4 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl04')?.lstCtietLapThamDinhs;
                     let tong4 = 0;
                     let td4 = 0;
                     data4.forEach(item => {
@@ -872,7 +872,7 @@ export class BaoCaoComponent implements OnInit {
                         giaTriThamDinh: td4,
                     })
                     //phu luc 5
-                    const data5 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl05').lstCtietLapThamDinhs;
+                    const data5 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl05')?.lstCtietLapThamDinhs;
                     let tong5 = 0;
                     let td5 = 0;
                     data5.forEach(item => {
@@ -889,7 +889,7 @@ export class BaoCaoComponent implements OnInit {
                         giaTriThamDinh: td5,
                     })
                     //phu luc 6
-                    const data6 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl06').lstCtietLapThamDinhs;
+                    const data6 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl06')?.lstCtietLapThamDinhs;
                     let tong6 = 0;
                     let td6 = 0;
                     data6.forEach(item => {
@@ -903,7 +903,7 @@ export class BaoCaoComponent implements OnInit {
                         giaTriThamDinh: td6,
                     })
                     //phu luc bao hiem
-                    const data7 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh').lstCtietLapThamDinhs;
+                    const data7 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh')?.lstCtietLapThamDinhs;
                     let tong7 = 0;
                     data7.forEach(item => {
                         const level = item.stt.split('.').length - 2;
@@ -927,7 +927,7 @@ export class BaoCaoComponent implements OnInit {
                 //bieu mau 15.1
                 if (formDetail.trangThai == '3' || formDetail.trangThai == '4' || formDetail.trangThai == '5') {
                     dataInfo.extraData = [];
-                    const data = this.baoCao.lstLapThamDinhs.find(item => item.maBieuMau == 'TT342_15.1').lstCtietLapThamDinhs;
+                    const data151 = this.baoCao.lstLapThamDinhs.find(item => item.maBieuMau == 'TT342_15.1')?.lstCtietLapThamDinhs;
                     const duocGiao = {
                         maNdung: '0.1.1',
                         thienNtruoc: 0,
@@ -949,7 +949,7 @@ export class BaoCaoComponent implements OnInit {
                         namUocThien: 0,
                         namKh: 0,
                     }
-                    data.forEach(item => {
+                    data151?.forEach(item => {
                         duocGiao.thienNtruoc += item.thienTsoBcTqGiao ? item.thienTsoBcTqGiao : 0;
                         duocGiao.namDtoan += item.dtoanTsoBcheTqGiao ? item.dtoanTsoBcheTqGiao : 0;
                         duocGiao.namUocThien += item.uocThTsoBcTqGiao ? item.uocThTsoBcTqGiao : 0;
@@ -986,7 +986,7 @@ export class BaoCaoComponent implements OnInit {
                         lstBieuMau: [],
                     }
                     //thong tin phu luc du an
-                    const dataDa = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'plda').lstCtietLapThamDinhs;
+                    const dataDa = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'plda')?.lstCtietLapThamDinhs;
                     dataDa.forEach(e => {
                         const level = e.stt.split('.').length - 2;
                         if (level == 0) {
@@ -1000,7 +1000,7 @@ export class BaoCaoComponent implements OnInit {
                         namHienHanhUocThien: 0,
                         ncauChiN: 0,
                     }
-                    const data131 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.1').lstCtietLapThamDinhs;
+                    const data131 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.1')?.lstCtietLapThamDinhs;
                     data131.forEach(item => {
                         const level = item.stt.split('.').length - 2;
                         if (level == 0) {
@@ -1017,7 +1017,7 @@ export class BaoCaoComponent implements OnInit {
                         namHienHanhUocThien: 0,
                         ncauChiN: 0,
                     }
-                    const data133 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.3').lstCtietLapThamDinhs;
+                    const data133 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.3')?.lstCtietLapThamDinhs;
                     data133.forEach(item => {
                         const level = item.stt.split('.').length - 2;
                         if (level == 0) {
@@ -1034,7 +1034,7 @@ export class BaoCaoComponent implements OnInit {
                         namHienHanhUocThien: 0,
                         ncauChiN: 0,
                     }
-                    const data138 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.8').lstCtietLapThamDinhs;
+                    const data138 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.8')?.lstCtietLapThamDinhs;
                     data138.forEach(item => {
                         const level = item.stt.split('.').length - 2;
                         if (level == 0) {
@@ -1051,7 +1051,7 @@ export class BaoCaoComponent implements OnInit {
                         namHienHanhUocThien: 0,
                         ncauChiN: 0,
                     }
-                    const data1310 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.10').lstCtietLapThamDinhs;
+                    const data1310 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.10')?.lstCtietLapThamDinhs;
                     data1310.forEach(item => {
                         const level = item.stt.split('.').length - 2;
                         if (level == 0) {
@@ -1068,7 +1068,7 @@ export class BaoCaoComponent implements OnInit {
                         namHienHanhUocThien: 0,
                         ncauChiN: 0,
                     }
-                    const data14 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_14').lstCtietLapThamDinhs;
+                    const data14 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_14')?.lstCtietLapThamDinhs;
                     const dataTemp = data14.find(e => e.maNdung == '0.2');
                     if (dataTemp) {
                         temp5.namHienHanhDtoan = dataTemp.namDtoan;
@@ -1083,7 +1083,7 @@ export class BaoCaoComponent implements OnInit {
                         namHienHanhUocThien: 0,
                         ncauChiN: 0,
                     }
-                    const data16 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_16').lstCtietLapThamDinhs;
+                    const data16 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_16')?.lstCtietLapThamDinhs;
                     data16.forEach(item => {
                         temp6.namHienHanhDtoan = sumNumber([temp6.namHienHanhDtoan, item.khTtien]);
                         temp6.namHienHanhUocThien = sumNumber([temp6.namHienHanhUocThien, item.uocThTtien]);
@@ -1100,7 +1100,7 @@ export class BaoCaoComponent implements OnInit {
                 //bieu mau 13
                 dataInfo.extraData = [];
                 const dataChiNs = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT69_13');
-                dataChiNs.lstCtietLapThamDinhs.forEach(item => {
+                dataChiNs?.lstCtietLapThamDinhs.forEach(item => {
                     if (item.maNdung.startsWith('0.1.2') && item.maNdung != '0.1.2') {
                         dataInfo.extraData.push({
                             ...item,
@@ -1114,7 +1114,7 @@ export class BaoCaoComponent implements OnInit {
                 //bieu mau 16
                 dataInfo.extraData = [];
                 const dataCtx = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT69_16');
-                dataCtx.lstCtietLapThamDinhs.forEach(item => {
+                dataCtx?.lstCtietLapThamDinhs.forEach(item => {
                     const level = item.stt.split('.').length - 2;
                     if (level == 0) {
                         dataInfo.extraData.push({
