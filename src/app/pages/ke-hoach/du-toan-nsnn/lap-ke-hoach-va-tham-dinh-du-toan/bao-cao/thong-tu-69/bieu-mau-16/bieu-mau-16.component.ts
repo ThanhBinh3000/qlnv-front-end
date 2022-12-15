@@ -96,13 +96,9 @@ export class BieuMau16Component implements OnInit {
                     tenNdung: e.giaTri,
                 })
             })
-        } else if (!this.lstCtietBcao[0]?.stt) {
-            this.lstCtietBcao.forEach(item => {
-                item.stt = item.maNdung;
-            })
         }
         this.sortByIndex();
-        if (this.dataInfo?.extraData) {
+        if (this.dataInfo?.extraData && this.dataInfo?.extraData.length > 0) {
             this.dataInfo.extraData.forEach(item => {
                 const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
                 this.lstCtietBcao[index].thNamHienHanhN1 = item.namHienHanhUocThien;
