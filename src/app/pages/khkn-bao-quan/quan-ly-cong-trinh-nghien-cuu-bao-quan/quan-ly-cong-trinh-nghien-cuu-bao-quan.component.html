@@ -13,22 +13,27 @@
           <div nz-col nzSpan="3">
             <nz-form-label nzFor="ten-de-tai"> Tên đề tài</nz-form-label>
             <nz-form-control>
-              <input class="search__input" placeholder="Nhập Số hiệu quy chuẩn" nz-input
-                [(ngModel)]="searchFilter.tenDeTai" [ngModelOptions]="{standalone: true}" />
+              <input class="search__input" placeholder="Nhập tên đề tài" nz-input [(ngModel)]="searchFilter.tenDeTai"
+                [ngModelOptions]="{standalone: true}" />
             </nz-form-control>
           </div>
           <div nz-col nzSpan="3">
             <nz-form-label nzFor="cap-de-tai"> Cấp đề tài </nz-form-label>
             <nz-form-control>
-              <input class="search__input" placeholder="Nhập Số hiệu quy chuẩn" nz-input
-                [(ngModel)]="searchFilter.capDeTai" [ngModelOptions]="{standalone: true}" />
+              <nz-select [(ngModel)]="searchFilter.capDeTai" [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="onChangeCapDeTai($event)">
+                <nz-option *ngFor="let item of listCapDt" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </div>
           <div nz-col nzSpan="3">
             <nz-form-label nzFor="trang-thai"> Trạng thái </nz-form-label>
             <nz-form-control>
-              <input class="search__input" placeholder="Nhập Số hiệu quy chuẩn" nz-input
-                [(ngModel)]="searchFilter.trangThai" [ngModelOptions]="{standalone: true}" />
+              <nz-select [(ngModel)]="searchFilter.trangThai" [ngModelOptions]="{standalone: true}">
+                <nz-option *ngFor="let item of listTrangThai" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                </nz-option>
+              </nz-select>
             </nz-form-control>
           </div>
           <div nz-col nzSpan="3">
@@ -145,23 +150,26 @@
           </tr>
           <tr *ngFor="let data of basicTable.data; let i = index">
             <td width="45px">
-              <label nz-checkbox></label>
+              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                [nzDisabled]="data.trangThai == STATUS.DA_NGHIEM_THU"></label>
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.maDeTai }}</td>
             <td>{{ data.tenDeTai }}</td>
-            <td>{{ data.capDeTai }}</td>
+            <td>{{ data.tenCapDt }}</td>
             <td>{{ data.ngayKyTu }}</td>
             <td>{{ data.ngayKyDen }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="redirectToChiTiet(true,data.id)" *ngIf="userService.isTongCuc()&&data.trangThai !== '00'">
+              <a (click)="redirectToChiTiet(true,data.id)"
+                *ngIf="userService.isTongCuc()&&data.trangThai == STATUS.DA_NGHIEM_THU">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="redirectToChiTiet(false,data.id)" *ngIf="(data.trangThai == '00' && userService.isTongCuc())">
+              <a (click)="redirectToChiTiet(false,data.id)"
+                *ngIf="(data.trangThai !== STATUS.DA_NGHIEM_THU && userService.isTongCuc())">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="xoaItem(data)" *ngIf="(data.trangThai == '00' && userService.isTongCuc())">
+              <a (click)="xoaItem(data)" *ngIf="(data.trangThai !== STATUS.DA_NGHIEM_THU && userService.isTongCuc())">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

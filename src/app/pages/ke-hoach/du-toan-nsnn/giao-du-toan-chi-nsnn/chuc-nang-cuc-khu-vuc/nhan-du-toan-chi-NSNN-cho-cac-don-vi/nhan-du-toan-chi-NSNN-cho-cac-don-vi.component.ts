@@ -9,6 +9,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
+import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { displayNumber, DON_VI_TIEN, exchangeMoney, GDT, LA_MA, Utils } from 'src/app/Utility/utils';
@@ -86,6 +87,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
   constructor(
     private userService: UserService,
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private giaoDuToanChiService: GiaoDuToanChiService,
     private spinner: NgxSpinnerService,
     private routerActive: ActivatedRoute,
     private datepipe: DatePipe,
@@ -164,7 +166,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet(this.id, "1").toPromise().then(
+    await this.giaoDuToanChiService.QDGiaoChiTiet(this.id, "1").toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.lstCtietBcao = data.data.lstCtiets;
@@ -294,7 +296,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
   checkAddReport() {
     return this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT);
   }
-  checkTiepNhan(){
+  checkTiepNhan() {
     return this.userService.isAccessPermisson(GDT.NHAN_PA_PBDT)
   }
   // luu
@@ -306,7 +308,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
       maLoai: "1"
     };
     this.spinner.show();
-    this.quanLyVonPhiService.trinhDuyetPhuongAnGiao(request).toPromise().then(
+    this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(request).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -327,7 +329,7 @@ export class NhanDuToanChiNSNNChoCacDonViComponent implements OnInit {
     const listCtietDvi: any[] = [];
     const maPaCha = this.maPa
     let maPa
-    await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+    await this.giaoDuToanChiService.maPhuongAnGiao(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           maPa = res.data;

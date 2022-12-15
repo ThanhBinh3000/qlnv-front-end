@@ -57,6 +57,7 @@ export class LapThamDinhService extends BaseService {
     trinhDuyetService(request: any): Observable<any> {
         return this.httpClient.post(
             this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/them-moi',
+            // 'http://192.168.1.108:30101/lap-tham-dinh/them-moi',
             request,
         );
     }

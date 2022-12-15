@@ -1,33 +1,35 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { UserLogin } from "../../../../../../../models/userlogin";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { NgxSpinnerService } from "ngx-spinner";
-import { UserService } from "../../../../../../../services/user.service";
-import { Globals } from "../../../../../../../shared/globals";
-import { HelperService } from "../../../../../../../services/helper.service";
-import { DeXuatPAGService } from "../../../../../../../services/ke-hoach/phuong-an-gia/deXuatPAG.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { DanhMucService } from "../../../../../../../services/danhmuc.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {UserLogin} from "../../../../../../../models/userlogin";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {NgxSpinnerService} from "ngx-spinner";
+import {UserService} from "../../../../../../../services/user.service";
+import {Globals} from "../../../../../../../shared/globals";
+import {HelperService} from "../../../../../../../services/helper.service";
+import {DeXuatPAGService} from "../../../../../../../services/ke-hoach/phuong-an-gia/deXuatPAG.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
 import dayjs from "dayjs";
-import { API_STATUS_CODE, LIST_VAT_TU_HANG_HOA, TYPE_PAG } from "../../../../../../../constants/config";
-import { MESSAGE } from "../../../../../../../constants/message";
-import { DanhMucTieuChuanService } from "../../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
-import { UploadFileService } from "../../../../../../../services/uploaFile.service";
-import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
-import { QuyetDinhPheDuyetKeHoachLCNTService } from "../../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service";
-import { saveAs } from 'file-saver';
+import {API_STATUS_CODE, LIST_VAT_TU_HANG_HOA, TYPE_PAG} from "../../../../../../../constants/config";
+import {MESSAGE} from "../../../../../../../constants/message";
+import {DanhMucTieuChuanService} from "../../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
+import {UploadFileService} from "../../../../../../../services/uploaFile.service";
+import {ChiTieuKeHoachNamCapTongCucService} from "../../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
+import {
+  QuyetDinhPheDuyetKeHoachLCNTService
+} from "../../../../../../../services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/quyetDinhPheDuyetKeHoachLCNT.service";
+import {saveAs} from 'file-saver';
 import {
   CanCuXacDinhPag,
   PhuongPhapXacDinhGia,
   ThongTinChungPag,
   ThongTinKhaoSatGia
 } from "../../../../../../../models/DeXuatPhuongAnGia";
-import { FileDinhKem } from "../../../../../../../models/FileDinhKem";
-import { STATUS } from "../../../../../../../constants/status";
-import { DialogTuChoiComponent } from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import { ThongTinQuyetDinh } from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
-
+import {FileDinhKem} from "../../../../../../../models/FileDinhKem";
+import {STATUS} from "../../../../../../../constants/status";
+import {DialogTuChoiComponent} from "../../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {ThongTinQuyetDinh} from "../../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import { uniqBy } from 'lodash';
 @Component({
   selector: 'app-them-moi-de-xuat-pag',
   templateUrl: './them-dx-pag-vt.html',
@@ -103,7 +105,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         soCanCu: [null],
         maPphapXdg: [null, [Validators.required]],
         loaiHangXdg: [],
-        vat:  [10]
+        vat: [10]
       }
     );
     this.STATUS = STATUS
@@ -158,6 +160,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.formData.get('tchuanCluong').setValue(res.data.tenQchuan)
     }
   }
+
   async tuChoi() {
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
@@ -245,7 +248,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         this.pagTtChungs.forEach((item, index) => {
           this.dataEdit[index] = {
             edit: false,
-            data: { ...item },
+            data: {...item},
           };
         });
       }
@@ -255,7 +258,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         this.dataTableCanCuXdg.forEach((item, index) => {
           this.dataEditCc[index] = {
             edit: false,
-            data: { ...item },
+            data: {...item},
           };
         });
       }
@@ -265,7 +268,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
         this.pagPpXacDinhGias.forEach((item, index) => {
           this.dataEditPp[index] = {
             edit: false,
-            data: { ...item },
+            data: {...item},
           };
         });
       }
@@ -420,6 +423,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
         this.listCloaiVthh = res.data;
+        this.loadDsQdPduyetKhlcnt();
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -553,7 +557,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   cancelEdit(index: number) {
     this.dataEdit[index] = {
-      data: { ...this.pagPpXacDinhGias[index] },
+      data: {...this.pagPpXacDinhGias[index]},
       edit: false,
     };
   }
@@ -579,28 +583,37 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
     if (this.type == 'GCT') {
       let body = {
         namKhoach: this.formData.value.namKeHoach,
+        namKeHoach: this.formData.value.namKeHoach,
         maDvi: this.userInfo.MA_DVI,
-        loaiVthh : this.formData.value.loaiVthh,
-        trangThai : STATUS.BAN_HANH
+        loaiVthh: this.formData.value.loaiVthh,
+        trangThai: STATUS.BAN_HANH
       };
       let res = await this.giaDeXuatGiaService.loadQdGiaoKhLcnt(body);
       if (res.msg == MESSAGE.SUCCESS) {
-        let arr  = res.data;
+        let arr = res.data;
         if (arr) {
-          this.listQdCtKh = arr;
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, 'Không tồn tại quyết định giao chỉ tiêu kế hoạch năm!')
-          return;
+          this.listQdCtKh = uniqBy(arr,'id');
         }
+      } else {
+        this.notification.error(MESSAGE.ERROR, 'Không tồn tại quyết định giao chỉ tiêu kế hoạch năm!')
+        return;
       }
     }
+  }
 
 
   async save(isGuiDuyet?) {
     this.spinner.show();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
+      let invalid = [];
+      let controls = this.formData.controls;
+      for (const name in controls) {
+        if (controls[name].invalid) {
+          invalid.push(name);
+        }
+      }
+      console.log(invalid, 'invalid');
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
@@ -656,7 +669,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
 
   onChangePp() {
     if (this.formData.value.loaiHangXdg == 'XDG_LH02') {
-     this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.giaVonNk - this.rowItemPpxdg.chiPhiPhanBo
+      this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.giaVonNk - this.rowItemPpxdg.chiPhiPhanBo
     } else {
       this.rowItemPpxdg.tongChiPhi = this.rowItemPpxdg.chiPhiChung + this.rowItemPpxdg.giaVonNk
     }

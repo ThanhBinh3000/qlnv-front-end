@@ -6,28 +6,29 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {CurrencyMaskInputMode} from 'ngx-currency'
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import {
   DiaDiemGiaoNhan, PhanLoTaiSan
 } from 'src/app/models/KeHoachBanDauGia';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { DeNghiCapVonBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
-import { ThongTriDuyetYCapVonService } from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapVon.service';
-import { UserService } from 'src/app/services/user.service';
-import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {HelperService} from 'src/app/services/helper.service';
+import {DeNghiCapVonBoNganhService} from 'src/app/services/ke-hoach/von-phi/deNghiCapVanBoNganh.service';
+import {ThongTriDuyetYCapVonService} from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapVon.service';
+import {UserService} from 'src/app/services/user.service';
+import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
 import {TongHopDeNghiCapVonService} from "../../../../../services/ke-hoach/von-phi/tongHopDeNghiCapVon.service";
+import {includes} from 'lodash';
 
 @Component({
   selector: 'app-thong-tin-thong-tri-duyet-y-du-toan',
@@ -44,7 +45,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   @Input() id: number;
   formData: FormGroup;
   cacheData: any[] = [];
-  options = { prefix: '', thousands: '.', decimal: ',', inputMode: CurrencyMaskInputMode.NATURAL }
+  options = {prefix: '', thousands: '.', decimal: ',', inputMode: CurrencyMaskInputMode.NATURAL}
   fileDinhKem: Array<FileDinhKem> = [];
   userLogin: UserLogin;
   listChiCuc: any[] = [];
@@ -68,6 +69,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   maKeHoach: string;
   listLoaiHopDong: any[] = [];
   dsBoNganh: any[] = [];
+  dsBoNganhFix: any[] = [];
   listDeNghi: any[] = [];
   listTongHop: any[] = [];
 
@@ -209,6 +211,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       return true;
     }
   }
+
   totalTable(data) {
     if (data && data.length > 0) {
       let sum = data.map((item) => item.soTien).reduce((prev, next) => Number(prev) + Number(next));
@@ -217,6 +220,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       return 0
     }
   }
+
   async getListDeNghi() {
     this.listDeNghi = [];
     let body = {
@@ -228,6 +232,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       this.listDeNghi = res.data.content;
     }
   }
+
   async getListTongHop() {
     this.listTongHop = [];
     let body = {
@@ -245,6 +250,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data;
+      this.dsBoNganhFix = res.data;
     }
   }
 
@@ -474,6 +480,21 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   xoaItem(idx: number) {
     if (this.chiTietList.length > 0) {
       this.chiTietList.splice(idx, 1);
+    }
+  }
+
+  async changeMaTongHop() {
+    let selected = this.formData.get('soDnCapVon').value;
+    this.dsBoNganh = [];
+    this.formData.patchValue({
+      maDvi: null
+    })
+    if (selected) {
+      let res = await this.tongHopDeNghiCapVonService.loadChiTiet(this.formData.get('soDnCapVon').value);
+      if (res.msg == MESSAGE.SUCCESS && res.data) {
+        let map = res.data.ct1s.map(s => s.tenBoNganh);
+        this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.giaTri))
+      }
     }
   }
 }

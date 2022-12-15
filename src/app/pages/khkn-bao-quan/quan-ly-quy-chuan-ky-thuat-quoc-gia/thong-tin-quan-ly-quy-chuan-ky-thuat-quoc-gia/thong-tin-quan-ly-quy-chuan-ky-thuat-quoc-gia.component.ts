@@ -135,6 +135,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.listOfTagOptions = data.loaiVthh.split(',');
+        this.changeListOfTagOptions(data.loaiVthh);
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.dataTable = data.tieuChuanKyThuat;
         this.dataTable.forEach((item, index) => {
@@ -146,9 +147,9 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
         this.taiLieuDinhKemList = data.fileDinhKems;
       }
     } else {
-      let id = await this.userService.getId("KHCN_QUY_CHUAN_QG_HDR_SEQ")
+      // let id = await this.userService.getId("KHCN_QUY_CHUAN_QG_HDR_SEQ")
       this.formData.patchValue({
-        soVanBan: id + this.maVb,
+        // soVanBan: id + this.maVb,
         tenDvi: this.userInfo.TEN_DVI,
         maDvi: this.userInfo.MA_DVI,
         diaChiDvi: this.userInfo.DON_VI.diaChi,
