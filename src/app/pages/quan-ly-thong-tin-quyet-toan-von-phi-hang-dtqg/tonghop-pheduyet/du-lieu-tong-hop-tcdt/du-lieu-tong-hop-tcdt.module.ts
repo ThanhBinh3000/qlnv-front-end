@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
 import {DuLieuTongHopTcdtComponent} from "./du-lieu-tong-hop-tcdt.component";
+import { ThongTinDuLieuTongHopTcdtComponent } from './thong-tin-du-lieu-tong-hop-tcdt/thong-tin-du-lieu-tong-hop-tcdt.component';
 
 @NgModule({
   imports: [
@@ -12,6 +13,7 @@ import {DuLieuTongHopTcdtComponent} from "./du-lieu-tong-hop-tcdt.component";
   ],
   declarations: [
     DuLieuTongHopTcdtComponent,
+    ThongTinDuLieuTongHopTcdtComponent,
   ],
   exports: [
     DuLieuTongHopTcdtComponent,

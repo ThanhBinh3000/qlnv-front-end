@@ -9,14 +9,17 @@ import {
 
 
 @NgModule({
-  declarations: [
-    VonPhiHangCuaBoNganhComponent,
-    ThemMoiVonPhiHangCuaBoNganhComponent
-  ],
-  imports: [
-    CommonModule,
-    VonPhiHangCuaBoNganhRoutingModule,
-    ComponentsModule,
-  ],
+    declarations: [
+        VonPhiHangCuaBoNganhComponent,
+        ThemMoiVonPhiHangCuaBoNganhComponent
+    ],
+    imports: [
+        CommonModule,
+        VonPhiHangCuaBoNganhRoutingModule,
+        ComponentsModule,
+    ],
+    exports: [
+        ThemMoiVonPhiHangCuaBoNganhComponent
+    ]
 })
 export class VonPhiHangCuaBoNganhModule { }

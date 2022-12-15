@@ -20,7 +20,6 @@ export class TonghopPheduyetComponent implements OnInit {
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });
-    console.log('HAAAAAAAAAAAAAAAAAAA');
   }
 
   tabSelected: number = 0;

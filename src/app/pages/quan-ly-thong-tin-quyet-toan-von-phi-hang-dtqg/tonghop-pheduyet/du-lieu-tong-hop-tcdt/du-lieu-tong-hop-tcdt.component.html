@@ -17,7 +17,7 @@
           <nz-form-item class="form-item">
             <nz-form-label>Số tờ trình</nz-form-label>
             <nz-form-control>
-              <input nz-input formControlName="soToTrinhDx"/>
+              <input nz-input formControlName="soToTrinh"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -155,7 +155,7 @@
     </div>
   </nz-card>
 </div>
-<!--<div *ngIf="isDetail" class="chi-tiet">-->
-<!--  <app-them-moi-von-phi-hang-cua-bo-nganh [isView]="isViewDetail" [idInput]="idSelected" (showListEvent)="showList()">-->
-<!--  </app-them-moi-von-phi-hang-cua-bo-nganh>-->
-<!--</div>-->
+<div *ngIf="isDetail" class="chi-tiet">
+  <app-thong-tin-du-lieu-tong-hop-tcdt >
+  </app-thong-tin-du-lieu-tong-hop-tcdt>
+</div>
