@@ -466,14 +466,14 @@ export class BaoHiemComponent implements OnInit {
     getTotal() {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
-            if (item.level == 0) {
+            // if (item.level == 0) {
                 this.total.slTuM3 = sumNumber([this.total.slTuM3, item.slTuM3]);
                 this.total.slDuoiM3 = sumNumber([this.total.slDuoiM3, item.slDuoiM3]);
                 this.total.slTong = sumNumber([this.total.slTong, item.slTong]);
                 this.total.gtTuM3 = sumNumber([this.total.gtTuM3, item.gtTuM3]);
                 this.total.gtDuoiM3 = sumNumber([this.total.gtDuoiM3, item.gtDuoiM3]);
                 this.total.gtTong = sumNumber([this.total.gtTong, item.gtTong]);
-            }
+            // }
         })
     }
 
