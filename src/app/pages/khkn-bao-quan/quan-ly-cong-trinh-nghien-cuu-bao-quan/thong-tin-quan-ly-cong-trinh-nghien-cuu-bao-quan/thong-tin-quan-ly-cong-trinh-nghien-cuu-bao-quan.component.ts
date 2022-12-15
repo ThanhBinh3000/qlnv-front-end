@@ -33,6 +33,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
   listCapDt: any[] = []
   listNguonVon: any[] = [];
   fileDinhKem: any[] = [];
+  fileDinhKem1: any[] = [];
 
   listTrangThai1: any[] = [
     { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
@@ -123,6 +124,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
         ngayKy: data.ngayKyTu && data.ngayKyDen ? [data.ngayKyTu, data.ngayKyDen] : null
       })
       this.fileDinhKem = data.fileDinhKems;
+      this.fileDinhKem1 = data.fileDinhKems1;
       this.dataTable = data.tienDoThucHien;
       this.dataTable.forEach(item => {
         const tt = this.listTrangThai1.filter(d => d.ma == item.trangThaiTd)
@@ -187,13 +189,14 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
       ? dayjs(this.formData.get('ngayKy').value[0]).format(
         'YYYY-MM-DD',
       )
-      : null,
-      body.ngayKyTu = this.formData.get('ngayKy').value
-        ? dayjs(this.formData.get('ngayKy').value[1]).format(
-          'YYYY-MM-DD',
-        )
-        : null,
-      body.fileDinhKemReq = this.fileDinhKem;
+      : null;
+    body.ngayKyTu = this.formData.get('ngayKy').value
+      ? dayjs(this.formData.get('ngayKy').value[1]).format(
+        'YYYY-MM-DD',
+      )
+      : null;
+    body.fileDinhKemReq = this.fileDinhKem;
+    body.fileDinhKemReq1 = this.fileDinhKem1;
     console.log(body);
     let res = null;
     if (this.formData.get('id').value) {
@@ -223,18 +226,22 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
     if (!this.dataTable) {
       this.dataTable = [];
     }
-    this.sortTableId();
-    let item = cloneDeep(this.rowItem);
-    item.stt = this.dataTable.length + 1;
-    item.edit = false;
-    this.dataTable = [
-      ...this.dataTable,
-      item,
-    ]
+    if (this.rowItem.noiDung && this.rowItem.sanPham != null) {
+      this.sortTableId();
+      let item = cloneDeep(this.rowItem);
+      item.stt = this.dataTable.length + 1;
+      item.edit = false;
+      this.dataTable = [
+        ...this.dataTable,
+        item,
+      ]
 
-    this.rowItem = new TienDoThucHien();
-    this.updateEditCache();
-    this.emitDataTable();
+      this.rowItem = new TienDoThucHien();
+      this.updateEditCache();
+      this.emitDataTable();
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
+    }
   }
   onChangeTrangThai(trangThai, typeData?) {
     const tt = this.listTrangThai1.filter(d => d.ma == trangThai)
@@ -317,17 +324,21 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
     if (!this.dataTable1) {
       this.dataTable1 = [];
     }
-    this.sortTableId1();
-    let item = cloneDeep(this.rowItem1);
-    item.stt = this.dataTable1.length + 1;
-    item.edit = false;
-    this.dataTable1 = [
-      ...this.dataTable1,
-      item,
-    ]
+    if (this.rowItem1.hoTen && this.rowItem1.donVi != null) {
+      this.sortTableId1();
+      let item = cloneDeep(this.rowItem1);
+      item.stt = this.dataTable1.length + 1;
+      item.edit = false;
+      this.dataTable1 = [
+        ...this.dataTable1,
+        item,
+      ]
 
-    this.rowItem1 = new NghiemThuThanhLy();
-    this.updateEditCache1();
+      this.rowItem1 = new NghiemThuThanhLy();
+      this.updateEditCache1();
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
+    }
   }
 
   sortTableId1() {
