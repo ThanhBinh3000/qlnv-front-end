@@ -30,7 +30,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
   selectedChiCuc: boolean = false;
   isValid: boolean = false;
   userInfo: UserLogin;
-  donGia: number = 0;
+  donGiaVat: number = 0;
 
   constructor(
     private _modalRef: NzModalRef,
@@ -49,7 +49,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       tenDvi: [null],
       goiThau: [null, [Validators.required]],
       tenCcuc: [null],
-      donGia: [0, [Validators.required]],
+      donGiaVat: [0, [Validators.required]],
       soLuongDaMua: [null],
       soLuongChiTieu: [null],
       soLuong: [null, [Validators.required]],
@@ -92,7 +92,6 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.thongtinDauThau = new DanhSachGoiThau();
     this.loadDonVi();
     if (this.dataEdit) {
-      console.log(this.dataEdit);
       this.listChiCuc = [{
         maDvi: this.dataEdit.maDvi,
         tenDonVi: this.dataEdit.tenDvi,
@@ -104,14 +103,15 @@ export class DialogThemMoiVatTuComponent implements OnInit {
         goiThau: this.dataEdit.goiThau,
         tenCcuc: this.dataEdit.tenCcuc,
         soLuong: this.dataEdit.soLuong,
-        donGia: this.dataEdit.donGia,
+        donGiaVat: this.dataEdit.donGiaVat,
         thanhTien: this.dataEdit.thanhTien,
       })
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
     } else {
+      console.log(this.donGiaVat);
       this.formData.patchValue({
-        donGia: this.donGia,
+        donGiaVat: this.donGiaVat,
       })
     }
     this.checkDisabledSave();
@@ -189,7 +189,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
 
   addDiemKho() {
     if (this.thongtinDauThau.maDiemKho && this.thongtinDauThau.soLuong && this.validateSoLuong(true)) {
-      this.thongtinDauThau.donGia = this.formData.get('donGia').value;
+      this.thongtinDauThau.donGiaVat = this.formData.get('donGiaVat').value;
       this.thongtinDauThau.goiThau = this.formData.get('goiThau').value;
       this.thongtinDauThau.idVirtual = new Date().getTime();
       this.thongtinDauThau.maDvi = this.formData.get('maDvi').value;
@@ -228,7 +228,7 @@ export class DialogThemMoiVatTuComponent implements OnInit {
     this.formData.patchValue({
       thanhTien:
         +this.formData.get('soLuong').value *
-        +this.formData.get('donGia').value * 1000,
+        +this.formData.get('donGiaVat').value * 1000,
     });
     this.formData.patchValue({
       bangChu: VNnum2words(+this.formData.get('thanhTien').value),
