@@ -341,6 +341,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
+        console.log(item.checked, "hh");
         if (item.checked) {
           dataDelete.push(item.id);
         }
@@ -358,7 +359,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.khCnCongTrinhNghienCuu.deleteMuti({ ids: dataDelete });
+            let res = await this.khCnCongTrinhNghienCuu.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

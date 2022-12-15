@@ -56,7 +56,7 @@
     <div nz-col [nzSpan]="6">
       <nz-form-item>
         <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá gồm thuế (đồng/kg) </nz-form-label>
-        <nz-input-number formControlName="donGia" [nzSize]="'small'" nzDisabled (input)="calculatorThanhTien()"
+        <nz-input-number formControlName="donGiaVat" [nzSize]="'small'" nzDisabled (input)="calculatorThanhTien()"
           [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
         </nz-input-number>
       </nz-form-item>

@@ -1,28 +1,26 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {cloneDeep} from 'lodash';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {KeHoachVonPhiBNCT} from "../../../../../models/KeHoachVonPhiBNCT";
+import {Globals} from "../../../../../shared/globals";
 import {NgxSpinnerService} from "ngx-spinner";
-import * as dayjs from "dayjs";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {STATUS} from 'src/app/constants/status';
-import {DinhMucPhiNxBq} from "../../../../models/DinhMucPhi";
-import {KeHoachVonPhiBNCT} from "../../../../models/KeHoachVonPhiBNCT";
-import {MESSAGE} from "../../../../constants/message";
-import {DonviService} from "../../../../services/donvi.service";
-import {ThongTinKhaoSatGia} from "../../../../models/DeXuatPhuongAnGia";
+import {UserService} from "../../../../../services/user.service";
+import {DonviService} from "../../../../../services/donvi.service";
+import {QuyetToanVonPhiService} from "../../../../../services/ke-hoach/von-phi/quyetToanVonPhi.service";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {HelperService} from "../../../../services/helper.service";
-import {QuyetToanVonPhiService} from "../../../../services/ke-hoach/von-phi/quyetToanVonPhi.service";
-import {DialogTuChoiComponent} from "../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {HelperService} from "../../../../../services/helper.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import * as dayjs from "dayjs";
+import {MESSAGE} from "../../../../../constants/message";
+import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
-  selector: 'app-them-moi-von-phi-hang-cua-bo-nganh',
-  templateUrl: './them-moi-von-phi-hang-cua-bo-nganh.component.html',
-  styleUrls: ['./them-moi-von-phi-hang-cua-bo-nganh.component.scss']
+  selector: 'app-thong-tin-du-lieu-tong-hop-tcdt',
+  templateUrl: './thong-tin-du-lieu-tong-hop-tcdt.component.html',
+  styleUrls: ['./thong-tin-du-lieu-tong-hop-tcdt.component.scss']
 })
-export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
+export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
+
   formData: FormGroup;
   @Input('isView') isView: boolean = false;
   dataTable: any[] = [];
