@@ -27,3 +27,9 @@ export class TienDoThucHien {
     trangThaiTd: string;
     tenTrangThaiTd: string;
 }
+export class NghiemThuThanhLy {
+    id: number;
+    idHdr: number;
+    hoTen: string;
+    donVi: string;
+}
