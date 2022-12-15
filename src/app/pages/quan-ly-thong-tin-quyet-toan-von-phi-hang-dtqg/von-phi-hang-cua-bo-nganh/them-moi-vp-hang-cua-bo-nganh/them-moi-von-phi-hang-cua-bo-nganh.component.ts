@@ -15,6 +15,7 @@ import {ThongTinKhaoSatGia} from "../../../../models/DeXuatPhuongAnGia";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../services/helper.service";
 import {QuyetToanVonPhiService} from "../../../../services/ke-hoach/von-phi/quyetToanVonPhi.service";
+import {DialogTuChoiComponent} from "../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: 'app-them-moi-von-phi-hang-cua-bo-nganh',
@@ -124,7 +125,8 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
       "ngayNhap": this.formData.get("ngayNhap").value ? dayjs(this.formData.get("ngayNhap").value).format("YYYY-MM-DD") : null,
       "dsQtNsChiTw": this.dsQtNsChiTw,
       "dsQtNsKpChiNvDtqg": this.dsQtNsKpChiNvDtqg,
-      "taiLieuDinhKems": this.taiLieuDinhKemList
+      "taiLieuDinhKems": this.taiLieuDinhKemList,
+      "loai": "00"
     };
     this.spinner.show();
     try {
@@ -132,14 +134,20 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
         body.id = this.idInput;
         let res = await this.vonPhiService.update(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          this.quayLai();
+          if (isGuiDuyet) {
+            this.pheDuyet();
+          } else
+            this.quayLai();
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       } else {
         let res = await this.vonPhiService.create(body);
         if (res.msg == MESSAGE.SUCCESS) {
-          this.quayLai();
+          if (isGuiDuyet) {
+            this.pheDuyet(res.data.id);
+          } else
+            this.quayLai();
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
@@ -296,6 +304,92 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
       this.listBoNganh = res.data.filter(item => item.key != '01');
     }
   }
+
+
+  pheDuyet(id?) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn gửi phê duyệt?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 310,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let trangThai;
+          switch (this.formData.value.trangThai) {
+            case STATUS.DU_THAO: {
+              trangThai = STATUS.CHO_DUYET_LDV;
+              break;
+            }
+            case STATUS.CHO_DUYET_LDV: {
+              trangThai = STATUS.DA_DUYET_LDV;
+              break;
+            }
+            case STATUS.TU_CHOI_LDV: {
+              trangThai = STATUS.CHO_DUYET_LDV;
+              break;
+            }
+          }
+          let body = {
+            id: id ? id : this.idInput,
+            trangThai: trangThai,
+          };
+          const res = await this.vonPhiService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+            this.quayLai();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
+    });
+  }
+
+  tuChoi() {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            lyDo: text,
+            trangThai: STATUS.TU_CHOI_LDV,
+          };
+          const res = await this.vonPhiService.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
+            this.quayLai()
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
+    });
+  }
+
   sumCT1(key) {
     return this.dsQtNsChiTw.reduce((a, b) => a + (b[key] || 0), 0);
   }
