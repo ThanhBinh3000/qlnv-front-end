@@ -1,9 +1,9 @@
 export const DANH_MUC = [
-    {
-        id: 1000,
-        ma: '0.1',
-        giaTri: 'Kho Hàng DTQG',
-    },
+    // {
+    //     id: 1000,
+    //     ma: '0.1',
+    //     giaTri: 'Kho Hàng DTQG',
+    // },
     // {
     //     id: 1001,
     //     ma: '0.1.1',
@@ -34,16 +34,16 @@ export const DANH_MUC = [
         ma: '0.2.1',
         giaTri: 'Lương thực DTQG',
     },
-    {
-        id: 1006,
-        ma: '0.2.1.1',
-        giaTri: 'Thóc',
-    },
-    {
-        id: 1006,
-        ma: '0.2.1.2',
-        giaTri: 'Gạo',
-    },
+    // {
+    //     id: 1006,
+    //     ma: '0.2.1.1',
+    //     giaTri: 'Thóc',
+    // },
+    // {
+    //     id: 1006,
+    //     ma: '0.2.1.2',
+    //     giaTri: 'Gạo',
+    // },
     {
         id: 1007,
         ma: '0.2.2',
@@ -59,11 +59,11 @@ export const DANH_MUC = [
         ma: '0.2.2.2',
         giaTri: 'Nhóm mặt hàng(xuồng cao tốc, thiết bị chữa cháy rừng, máy phát điện, kim khí, thiết bị khoan cắt, thiết bị phóng dây cứu hộ, thiết bị tìm kiếm nạn nhân bằng hình ảnh và âm thanh)'
     },
-    {
-        id: 1008,
-        ma: '0.2.3',
-        giaTri: 'Muối',
-    },
+    // {
+    //     id: 1008,
+    //     ma: '0.2.3',
+    //     giaTri: 'Muối',
+    // },
     // {
     //     id: 1009,
     //     ma: '0.2.4',
