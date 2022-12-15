@@ -14,6 +14,7 @@ export class ItemData {
   id: string;
   stt: string;
   maLvuc: string;
+  tenDmuc: string;
   thienTsoBcTdiem: number;
   thienTsoBcTqGiao: number;
   thienQlPcap: number;
@@ -138,8 +139,10 @@ export class BieuMau151Component implements OnInit {
     }
   }
 
+
   // luu
   async save(trangThai: string) {
+    console.log(this.lstCtietBcao)
     let checkSaveEdit;
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
@@ -187,7 +190,9 @@ export class BieuMau151Component implements OnInit {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
           this.formDetail = data.data;
-          this._modalRef.close(this.formDetail);
+          this._modalRef.close({
+            formDetail: this.formDetail,
+          });
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -338,36 +343,6 @@ export class BieuMau151Component implements OnInit {
     return true;
   }
 
-  // sum(stt: string) {
-  //   stt = this.getHead(stt);
-  //   while (stt != '0') {
-  //     const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-  //     const data = this.lstCtietBcao[index];
-  //     this.lstCtietBcao[index] = {
-  //       ...new ItemData(),
-  //       id: data.id,
-  //       stt: data.stt,
-  //       maLvuc: data.maLvuc,
-  //       // level: data.level,
-  //     }
-  //     this.lstCtietBcao.forEach(item => {
-  //       if (this.getHead(item.stt) == stt) {
-  //         this.lstCtietBcao[index].thienTsoBcTqGiao = sumNumber([this.lstCtietBcao[index].thienTsoBcTqGiao, item.thienTsoBcTqGiao]);
-  //         this.lstCtietBcao[index].ncauChiTrongDoChiCs = sumNumber([this.lstCtietBcao[index].ncauChiTrongDoChiCs, item.ncauChiTrongDoChiCs]);
-  //         this.lstCtietBcao[index].ncauChiTrongDoChiMoi = sumNumber([this.lstCtietBcao[index].ncauChiTrongDoChiMoi, item.ncauChiTrongDoChiMoi]);
-  //         this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien, item.ncauChiChiaRaDtuPtrien]);
-  //         this.lstCtietBcao[index].ncauChiChiaRaChiCs1 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiCs1, item.ncauChiChiaRaChiCs1]);
-  //         this.lstCtietBcao[index].ncauChiChiaRaChiMoi1 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiMoi1, item.ncauChiChiaRaChiMoi1]);
-  //         this.lstCtietBcao[index].ncauChiChiaRaChiTx = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiTx, item.ncauChiChiaRaChiTx]);
-  //         this.lstCtietBcao[index].ncauChiChiaRaChiCs2 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiCs2, item.ncauChiChiaRaChiCs2]);
-  //         this.lstCtietBcao[index].ncauChiChiaRaChiMoi2 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiMoi2, item.ncauChiChiaRaChiMoi2]);
-  //       }
-  //     })
-  //     stt = this.getHead(stt);
-  //   }
-  //   this.getTotal();
-  // }
-
   getTotal() {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
@@ -442,6 +417,7 @@ export class BieuMau151Component implements OnInit {
       id: uuid.v4(),
       stt: '',
       maLvuc: '',
+      tenDmuc: '',
       thienTsoBcTqGiao: null,
       thienTsoBcTdiem: null,
       thienQlPcap: null,
@@ -468,11 +444,6 @@ export class BieuMau151Component implements OnInit {
       namKhPcapLuong: null,
       namKhDgopLuong: null,
       namKhKhac: null,
-      // gtriTdinhTsoBcTqGiao: null,
-      // gtriTdinhQlPcap: null,
-      // gtriTdinhLuongBac: null,
-      // gtriTdinhPcapLuong: null,
-      // gtriTdinhDgopLuong: null,
       checked: false,
     };
 
@@ -495,6 +466,7 @@ export class BieuMau151Component implements OnInit {
         checked: false
       }));
     }
+    this.getTotal();
   }
 
   // check tung dong
@@ -504,6 +476,7 @@ export class BieuMau151Component implements OnInit {
     } else if (this.lstCtietBcao.every(item => item.checked)) {
       this.allChecked = true;
     }
+    this.getTotal();
   }
 
   // xoa 1 dong
@@ -512,8 +485,7 @@ export class BieuMau151Component implements OnInit {
     const nho: string = this.lstCtietBcao[index].stt;
     //xóa phần tử và con của nó
     this.lstCtietBcao = this.lstCtietBcao.filter(e => e.id !== id);
-    // this.replaceIndex(lstIndex, -1);
-    // this.updateEditCache();
+    this.getTotal()
   }
 
   // xoa het
@@ -532,6 +504,7 @@ export class BieuMau151Component implements OnInit {
     //     this.deleteLine(item);
     //   }
     // })
+    this.getTotal();
   }
 
   // xoa theo id
@@ -540,6 +513,13 @@ export class BieuMau151Component implements OnInit {
     if (typeof id == "number") {
       this.listIdDelete += id + ","
     }
+  }
+
+  checkDelete(maDa: string) {
+    if (!maDa) {
+      return true;
+    }
+    return false;
   }
 
 }

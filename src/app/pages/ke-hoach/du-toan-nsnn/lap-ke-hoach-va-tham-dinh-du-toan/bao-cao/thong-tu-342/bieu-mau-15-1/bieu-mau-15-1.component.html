@@ -16,18 +16,13 @@
           </nz-select>
         </ng-template>
       </div>
-      <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
+      <div nz-col [nzSpan]="16"></div>
+      <div nz-col [nzSpan]="4" class="gutter-row canphai phai" style="display:flex; justify-content: end;">
         <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
           <i class="fa fa-trash-o"></i>
           <span>Xóa</span>
         </button>
-        <!-- <ng-container *ngIf="lstCtietBcao.length == 0">
-          <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
-            <i class="icon htvbdh_dau-cong"></i>
-            <span>Thêm</span>
-          </button>
-        </ng-container> -->
-        <ng-container>
+        <ng-container *ngIf="lstCtietBcao.length == 0">
           <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
@@ -126,7 +121,7 @@
             <td>
               <!-- <div *ngFor="let item of linhVucChis">
                 <div *ngIf="item.ma == data.maLvuc"> -->
-              {{data.maLvuc}}
+              {{data.tenDmuc}}
               <!-- </div>
               </div> -->
             </td>
@@ -208,8 +203,10 @@
             <td>
               {{displayValue(data.namKhKhac)}}
             </td>
-            <td [hidden]="status">
+            <td [hidden]="status" class="d-flex h-auto">
               <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+              <i *ngIf="checkDelete(data.maLvuc)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+              <i class="fa fa-plus" (click)="addLine(null)"></i>
             </td>
           </ng-container>
           <ng-template #editTemplate>
@@ -227,7 +224,7 @@
               </div>
             </td> -->
             <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.maLvuc" />
+              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenDmuc" />
             </td>
             <td>
               <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.thienTsoBcTqGiao"
