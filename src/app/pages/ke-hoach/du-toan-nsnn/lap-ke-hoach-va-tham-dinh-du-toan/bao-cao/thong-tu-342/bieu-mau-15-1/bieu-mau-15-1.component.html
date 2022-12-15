@@ -204,8 +204,8 @@
               {{displayValue(data.namKhKhac)}}
             </td>
             <td [hidden]="status" class="d-flex h-auto">
-              <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-              <i *ngIf="checkDelete(data.maLvuc)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+              <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+              <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
               <i class="fa fa-plus" (click)="addLine(null)"></i>
             </td>
           </ng-container>
