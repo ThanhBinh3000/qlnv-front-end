@@ -127,7 +127,7 @@
                                 <i class="fa fa-trash-o do" (click)="deleteById(data.id)"></i>
                             </td>
                             <td [hidden]="status">
-                                <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                             </td>
                             <td [hidden]="status">
                                 <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
