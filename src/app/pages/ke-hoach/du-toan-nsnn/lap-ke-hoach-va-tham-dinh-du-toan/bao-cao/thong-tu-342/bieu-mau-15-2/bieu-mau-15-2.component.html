@@ -22,14 +22,14 @@
                 <tr>
                     <th rowspan="4" class="text-center" nzWidth="100px">STT</th>
                     <th rowspan="4" nzWidth="300px">Tên đơn vị</th>
-                    <th colspan="11" nzWidth="300px">Dự toán năm {{namBaoCao}}</th>
-                    <th colspan="13" nzWidth="400px">Ước thực hiện năm {{namBaoCao}}</th>
-                    <th colspan="11" nzWidth="300px">Dự toán năm {{namKeHoach}}</th>
+                    <th colspan="11" nzWidth="200px">Dự toán năm {{namBaoCao}}</th>
+                    <th colspan="13" nzWidth="300px">Ước thực hiện năm {{namBaoCao}}</th>
+                    <th colspan="11" nzWidth="200px">Dự toán năm {{namKeHoach}}</th>
                     <th rowspan="4" nzWidth="100px" colspan="3" [hidden]="status"></th>
                 </tr>
                 <tr>
-                    <th rowspan="3">Tổng số người làm việc được cấp có thẩm quyền giao (Người)</th>
-                    <th rowspan="3">Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương</th>
+                    <th rowspan="3">Tổng số người làm việc được<br> cấp có thẩm quyền giao (Người)</th>
+                    <th rowspan="3">Tổng quỹ lương, phụ cấp <br> và các khoản đóng góp theo lương</th>
                     <th colspan="5">Trong đó</th>
                     <th colspan="4">Nguồn kinh phí bảo đảm</th>
                     <th rowspan="3">Tổng số người làm việc <br> được cấp có thẩm quyền giao (Người)</th>
@@ -87,7 +87,7 @@
                     <th>Các khoản đóng góp theo lương</th>
                 </tr>
                 <tr>
-                    <th>A</th>
+                    <th class="text-center">A</th>
                     <th>B</th>
                     <th>1</th>
                     <th>2=3+7</th>
@@ -131,41 +131,41 @@
                 <tr>
                     <th></th>
                     <th>Tổng Cộng</th>
-                    <th>{{tongSo1}}</th>
-                    <th>{{tongSo2}}</th>
-                    <th>{{tongSo3}}</th>
-                    <th>{{tongSo4}}</th>
-                    <th>{{tongSo5}}</th>
-                    <th>{{tongSo6}}</th>
-                    <th>{{tongSo7}}</th>
-                    <th>{{tongSo8}}</th>
-                    <th>{{tongSo9}}</th>
-                    <th>{{tongSo10}}</th>
-                    <th>{{tongSo11}}</th>
-                    <th>{{tongSo12}}</th>
-                    <th>{{tongSo13}}</th>
-                    <th>{{tongSo14}}</th>
-                    <th>{{tongSo15}}</th>
-                    <th>{{tongSo16}}</th>
-                    <th>{{tongSo17}}</th>
-                    <th>{{tongSo18}}</th>
-                    <th>{{tongSo19}}</th>
-                    <th>{{tongSo20}}</th>
-                    <th>{{tongSo21}}</th>
-                    <th>{{tongSo22}}</th>
-                    <th>{{tongSo23}}</th>
-                    <th>{{tongSo24}}</th>
-                    <th>{{tongSo25}}</th>
-                    <th>{{tongSo26}}</th>
-                    <th>{{tongSo27}}</th>
-                    <th>{{tongSo28}}</th>
-                    <th>{{tongSo29}}</th>
-                    <th>{{tongSo30}}</th>
-                    <th>{{tongSo31}}</th>
-                    <th>{{tongSo32}}</th>
-                    <th>{{tongSo33}}</th>
-                    <th>{{tongSo34}}</th>
-                    <th>{{tongSo35}}</th>
+                    <th>{{displayValue(total.dtTsoNguoiLv)}}</th>
+                    <th>{{displayValue(total.dtTongQlPcap)}}</th>
+                    <th>{{displayValue(total.dtQlPcapTso)}}</th>
+                    <th>{{displayValue(total.dtQlPcapLuongBac)}}</th>
+                    <th>{{displayValue(total.dtQlPcapPcapLuong)}}</th>
+                    <th>{{displayValue(total.dtQlPcapDgopLuong)}}</th>
+                    <th>{{displayValue(total.dtQlPcapHdLd)}}</th>
+                    <th>{{displayValue(total.dtKphiNsnn)}}</th>
+                    <th>{{displayValue(total.dtKphiSnDvu)}}</th>
+                    <th>{{displayValue(total.dtKphiPhiDlai)}}</th>
+                    <th>{{displayValue(total.dtKphiHphap)}}</th>
+                    <th>{{displayValue(total.uocThTsoNguoiLv)}}</th>
+                    <th>{{displayValue(total.uocThTsoBcTdiem)}}</th>
+                    <th>{{displayValue(total.uocThTsoVcCc)}}</th>
+                    <th>{{displayValue(total.uocThTongQlPcap)}}</th>
+                    <th>{{displayValue(total.uocThQlPcapTso)}}</th>
+                    <th>{{displayValue(total.uocThQlPcapLuongBac)}}</th>
+                    <th>{{displayValue(total.uocThQlPcapPcapLuong)}}</th>
+                    <th>{{displayValue(total.uocThQlPcapDgopLuong)}}</th>
+                    <th>{{displayValue(total.uocThQlPcapHdLd)}}</th>
+                    <th>{{displayValue(total.uocThKphiNsnn)}}</th>
+                    <th>{{displayValue(total.uocThKphiSnDvu)}}</th>
+                    <th>{{displayValue(total.uocThKphiPhiDlai)}}</th>
+                    <th>{{displayValue(total.uocThKphiHphap)}}</th>
+                    <th>{{displayValue(total.namKhTsoNguoiLv)}}</th>
+                    <th>{{displayValue(total.namKhTongQlPcap)}}</th>
+                    <th>{{displayValue(total.namKhQlPcapTso)}}</th>
+                    <th>{{displayValue(total.namKhQlPcapLuongBac)}}</th>
+                    <th>{{displayValue(total.namKhQlPcapPcapLuong)}}</th>
+                    <th>{{displayValue(total.namKhQlPcapDgopLuong)}}</th>
+                    <th>{{displayValue(total.namKhQlPcapHdLd)}}</th>
+                    <th>{{displayValue(total.namKhKphiNsnn)}}</th>
+                    <th>{{displayValue(total.namKhKphiSnDvu)}}</th>
+                    <th>{{displayValue(total.namKhKphiPhiDlai)}}</th>
+                    <th>{{displayValue(total.namKhKphiHphap)}}</th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -222,7 +222,7 @@
                                 (click)="deleteLine(data.stt)"></i>
                         </td>
                         <td [hidden]="status">
-                            <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                            <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </td>
                         <td [hidden]="status">
                             <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
