@@ -35,6 +35,8 @@ import { STATUS } from "../../../../../../constants/status";
 import { BaseComponent } from "../../../../../../components/base/base.component";
 import { DatePipe } from "@angular/common";
 import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 
 @Component({
@@ -100,21 +102,16 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   constructor(
-    private modal: NzModalService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private danhMucService: DanhMucService,
     private dauThauService: DanhSachDauThauService,
-    private spinner: NgxSpinnerService,
     private uploadFileService: UploadFileService,
-    private notification: NzNotificationService,
-    private fb: FormBuilder,
-    public globals: Globals,
-    public userService: UserService,
-    private helperService: HelperService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private dmTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
   ) {
-    super();
+    super(httpClient, storageService, dauThauService);
     this.formData = this.fb.group({
       id: [],
       maDvi: ['', [Validators.required]],
@@ -223,7 +220,6 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   }
 
   onChangeLhNx($event) {
-    console.log($event);
     let dataNx = this.listLoaiHinhNx.filter(item => item.ma == $event);
     if (dataNx.length > 0) {
       this.formData.patchValue({
@@ -302,6 +298,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       onlyVatTu: true
     }
     let bodyParamLT = {
+      data,
       onlyLuongThuc: true
     }
     const modalTuChoi = this.modal.create({
@@ -418,7 +415,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
-        donGia: this.formData.value.donGiaVat
+        donGiaVat: this.formData.value.donGiaVat
       },
     });
     modalGT.afterClose.subscribe((res) => {
@@ -432,7 +429,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
       }
       let tongMucDt: number = 0;
       this.listOfData.forEach((item) => {
-        tongMucDt = tongMucDt + item.soLuong * item.donGia * 1000;
+        tongMucDt = tongMucDt + item.soLuong * item.donGiaVat * 1000;
       });
       this.formData.patchValue({
         tongMucDt: tongMucDt,
@@ -544,6 +541,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   }
 
   async getDataChiTieu() {
+    console.log(this.userInfo.MA_DVI);
     let res2 =
       await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
         +this.formData.get('namKhoach').value,
@@ -554,9 +552,11 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
         soQd: this.dataChiTieu.soQuyetDinh
       });
     }
-    this.formData.patchValue({
-      soQd: '150/TCDT',
-    });
+    if (this.loaiVthhInput.startsWith('02')) {
+      this.formData.patchValue({
+        soQd: '150/TCDT',
+      });
+    }
   }
 
   convertTienTobangChu(tien: number): string {

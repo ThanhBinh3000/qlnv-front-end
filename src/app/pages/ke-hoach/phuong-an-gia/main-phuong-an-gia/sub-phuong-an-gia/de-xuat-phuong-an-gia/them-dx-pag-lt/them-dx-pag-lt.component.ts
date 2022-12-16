@@ -457,7 +457,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    if (this.detailNhaphang) {
+    /*if (this.detailNhaphang) {
       if (this.detailNhaphang.donGiaVat == 0) {
         this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đơn giá VAT ở quyết định giao kế hoạch mua bán")
         this.spinner.hide();
@@ -478,7 +478,7 @@ export class ThemDeXuatPagLuongThucComponent implements OnInit {
           }
         }
       }
-    }
+    }*/
 
     let body = this.formData.value;
     if (body.soDeXuat) {

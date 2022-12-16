@@ -3,7 +3,7 @@
     <nz-card class="mt16 flex-card p-lr16">
       <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
         <div class="search__body" nz-row [nzGutter]="[20]">
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="3">
             <nz-form-item class="form-item">
               <nz-form-label nzFor="so-van-ban">Số văn bản</nz-form-label>
               <nz-form-control>
@@ -13,24 +13,35 @@
             </nz-form-item>
           </div>
 
-          <div nz-col nzSpan="4">
-            <nz-form-label nzFor="so-hieu-quy-chuan">Số hiệu quy chuẩn</nz-form-label>
+          <div nz-col nzSpan="3">
+            <nz-form-label nzFor="so-hieu-quy-chuan">Số hiệu quy chuẩn, tiêu chuẩn</nz-form-label>
             <nz-form-control>
               <input class="search__input" placeholder="Nhập Số hiệu quy chuẩn" nz-input
                 [(ngModel)]="searchFilter.soHieuQuyChuan" [ngModelOptions]="{standalone: true}" />
             </nz-form-control>
           </div>
 
-          <div nz-col nzSpan="4">
-            <nz-form-label nzFor="ap-dung-tai">Áp dụng tại</nz-form-label>
+          <div nz-col nzSpan="3">
+            <nz-form-label nzFor="loai-hang-hoa">Loại hàng hóa</nz-form-label>
             <nz-form-control>
-              <nz-select [(ngModel)]="searchFilter.apDungTai" [ngModelOptions]="{standalone: true}">
-                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+              <nz-select nzPlaceHolder="" [(ngModel)]="searchFilter.loaiVthh" [ngModelOptions]="{standalone: true}">
+                <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.title" [nzValue]="option.key">
+                </nz-option>
               </nz-select>
             </nz-form-control>
           </div>
 
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="3">
+            <nz-form-label nzFor="ap-dung-tai">Áp dụng tại</nz-form-label>
+            <nz-form-control>
+              <nz-select [(ngModel)]="searchFilter.apDungTai" [ngModelOptions]="{standalone: true}">
+                <nz-option *ngFor="let option of dsBoNganh" [nzLabel]="option.title" [nzValue]="option.key">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </div>
+
+          <div nz-col nzSpan="3">
             <nz-form-label nzFor="ngay-ky">Ngày ký</nz-form-label>
             <nz-form-control>
               <nz-range-picker [(ngModel)]="searchFilter.ngayKy" nzFormat="dd/MM/yyyy" id="ngay" class="search__input"
@@ -39,8 +50,8 @@
             </nz-form-control>
           </div>
 
-          <div nz-col nzSpan="4">
-            <nz-form-label nzFor="ngay-quyet-dinh">Ngày quyết định</nz-form-label>
+          <div nz-col nzSpan="3">
+            <nz-form-label nzFor="ngay-quyet-dinh">Ngày hiệu lực</nz-form-label>
             <nz-form-control>
               <nz-range-picker [(ngModel)]="searchFilter.ngayHieuLuc" nzFormat="dd/MM/yyyy" id="ngay"
                 [ngModelOptions]="{standalone: true}" class="search__input">
@@ -48,7 +59,7 @@
             </nz-form-control>
           </div>
 
-          <div nz-col nzSpan="4">
+          <div nz-col nzSpan="3">
             <nz-form-label nzFor="tric-yeu">Trích yếu</nz-form-label>
             <nz-form-control>
               <input class="search__input" placeholder="Nhập Trích yếu" nz-input [(ngModel)]="searchFilter.trichYeu"
@@ -93,7 +104,7 @@
         <thead>
           <tr>
             <th class="text-center">STT</th>
-            <th></th>
+            <!-- <th></th> -->
             <th>Số văn bản</th>
             <th>Số văn bản thay thế</th>
             <th>Số hiệu quy chuẩn</th>
@@ -107,7 +118,7 @@
           </tr>
           <tr>
             <th></th>
-            <th></th>
+            <!-- <th></th> -->
             <th class="text-center" width="350px">
               <nz-input-group [nzSuffix]="suffixIconSearch">
                 <input type="text" placeholder="Tìm kiếm" nz-input [(ngModel)]="filterTable.soVanBan"
@@ -171,30 +182,29 @@
           <ng-container *ngFor="let data of basicTable.data; let i = index">
             <tr>
               <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
-              <td [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id, $event)"></td>
+              <!-- <td [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id, $event)"></td> -->
               <td>{{ data.soVanBan }}</td>
               <td>{{ data.soVanBanThayThe}}</td>
               <td>{{ data.soHieuQuyChuan}}</td>
-              <td>{{ data.apDungTai }}</td>
+              <td>{{ data.boNganhAd }}</td>
               <td>{{ data.listTenLoaiVthh }}</td>
               <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
               <td>{{ data.tenTrangThai }}</td>
               <td>{{ data.trangThaiHl }}</td>
               <td class="text-left">
-                <a (click)="redirectToChiTiet(true,data.id)" *ngIf="userService.isTongCuc()&&data.trangThai !== '00'">
+                <a (click)="redirectToChiTiet(true,data.id)" *ngIf="data.trangThai !== '00'">
                   <i class="fa fa-eye"></i>
                 </a>
-                <a (click)="redirectToChiTiet(false,data.id)"
-                  *ngIf="(data.trangThai == '00' && userService.isTongCuc())">
+                <a (click)="redirectToChiTiet(false,data.id)" *ngIf="(data.trangThai == '00' )">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a (click)="xoaItem(data)" *ngIf="(data.trangThai == '00' && userService.isTongCuc())">
+                <a (click)="xoaItem(data)" *ngIf="(data.trangThai == '00')">
                   <i class="fa fa-trash-o do"></i>
                 </a>
               </td>
             </tr>
-            <ng-container *ngIf="expandSet.has(data.id)">
+            <!-- <ng-container *ngIf="expandSet.has(data.id)">
               <ng-container>
                 <tr class="level-2">
                   <td></td>
@@ -209,8 +219,8 @@
                   <td>{{ data.tenTrangThai }}</td>
                   <td>{{ data.trangThaiHl }}</td>
                 </tr>
-              </ng-container>
-            </ng-container>
+              </ng-container> -->
+            <!-- </ng-container> -->
           </ng-container>
         </tbody>
       </nz-table>

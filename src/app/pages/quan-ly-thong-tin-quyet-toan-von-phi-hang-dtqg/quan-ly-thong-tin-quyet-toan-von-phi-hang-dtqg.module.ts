@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ComponentsModule } from 'src/app/components/components.module';
 import { MainModule } from 'src/app/layout/main/main.module';
 import { NzAffixModule } from 'ng-zorro-antd/affix';
@@ -13,7 +12,7 @@ import { QuanLyThongTinQuyetToanVonPhiHangDtqgRoutingModule } from './quan-ly-th
     QuanLyThongTinQuyetToanVonPhiHangDtqgRoutingModule,
     ComponentsModule,
     MainModule,
-    NzAffixModule,
+    NzAffixModule
   ],
 })
 export class QuanLyThongTinQuyetToanVonPhiHangDtqgModule {}

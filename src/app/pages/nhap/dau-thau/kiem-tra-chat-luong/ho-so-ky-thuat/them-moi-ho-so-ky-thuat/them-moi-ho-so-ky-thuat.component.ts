@@ -30,6 +30,8 @@ import { DatePipe } from '@angular/common';
 import { LOAI_BIEN_BAN, STATUS } from 'src/app/constants/status';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { QuanLyBienBanLayMauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanLayMau.service';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-them-moi-ho-so-ky-thuat',
@@ -103,17 +105,13 @@ export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit
   ];
 
   constructor(
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     public userService: UserService,
     private hoSoKyThuatService: HoSoKyThuatService,
-    public globals: Globals,
-    private fb: FormBuilder,
-    private helperService: HelperService,
     private bienBanLayMauService: QuanLyBienBanLayMauService
   ) {
-    super();
+    super(httpClient, storageService, hoSoKyThuatService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],
@@ -136,16 +134,11 @@ export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      await Promise.all([
-        // this.loadBanGiaoMau(),
-        // this.loadSoQuyetDinh(),
-      ]);
       if (this.id) {
         await this.loadChiTiet(this.id);
       } else {
         this.initForm();
       }
-
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -160,6 +153,18 @@ export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, data);
+        if (data.listHoSoBienBan) {
+          this.dataTableBienBan.forEach(item => {
+            let bb = data.listHoSoBienBan.filter(x => x.loaiBb == item.loai);
+            console.log(data.listHoSoBienBan, bb);
+            if (bb.length > 0) {
+              item.id = bb[0].id
+              item.trangThai = bb[0].trangThai
+              item.tenTrangThai = bb[0].tenTrangThai
+            }
+          });
+          console.log(this.dataTableBienBan);
+        }
       }
     }
   }
@@ -361,6 +366,7 @@ export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit
 
   async backMain() {
     this.isBienBan = false;
+    this.ngOnInit();
   }
 
 }

@@ -190,4 +190,62 @@ export class GiaoDuToanChiService extends BaseService {
       'http://192.168.1.101:30101/giao_du_toan/trang-thai',
       request);
   };
+
+  //search list phan bo du toan giao chi nsnn
+  timDanhSachPhanBo(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/danh-sach-phan-bo',
+      // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach-phan-bo',
+      request,
+    );
+  }
+
+  // call api nút chức năng giao dự toán chi NSNN
+  approveGiao(request: any): Observable<any> {
+    return this.httpClient.put(
+      // 'http://192.168.1.110:8094/lap-tham-dinh-du-toan/chuc-nang',
+      // 'http://192.168.1.125:8094/lap-tham-dinh-du-toan/chuc-nang',
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh-du-toan/chuc-nang',
+      "http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chuc-nang",
+      request,
+    );
+  }
+  //tim kiem giao danh sách nội dung khoản mục
+  timDanhSachBCGiaoBTCPD(): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/danh-sach-noi-dung-khoan-muc'
+      // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach-noi-dung-khoan-muc'
+    )
+  }
+  //tim kiem giao danh sách nội dung khoản mục
+  timDanhSachBCGiaoBTCPD1(): Observable<any> {
+    return this.httpClient.get(
+      // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach-noi-dung-khoan-muc',
+      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach-noi-dung-khoan-muc',
+
+    )
+  }
+
+  // tim kiem danh sach quyet dinh giao phan bo du toan 3.2.6
+  timKiemGiaoPhanBo(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/qd-giao-phan-bo-dtoan/danh-sach',
+      // 'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach',
+      request,
+    );
+  }
+  // tim kiem danh sach quyet dinh giao phan bo du toan 3.2.6
+  timKiemGiaoPhanBo1(request: any): Observable<any> {
+    return this.httpClient.post(
+      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/danh-sach',
+      request,
+    );
+  }
+
+  // call api chi tiết báo cáo
+  chiTietPhanBo(id: any): Observable<any> {
+    return this.httpClient.get(
+      'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
+    );
+  }
 }

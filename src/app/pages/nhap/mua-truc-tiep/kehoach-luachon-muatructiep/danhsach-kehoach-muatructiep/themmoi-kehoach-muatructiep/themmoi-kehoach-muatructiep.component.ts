@@ -46,7 +46,7 @@ import {
   styleUrls: ['./themmoi-kehoach-muatructiep.component.scss']
 })
 
-export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements OnInit, OnChanges {
+export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
   @Input()
   loaiVthhInput: string;
   @Input()
@@ -106,7 +106,6 @@ export class ThemmoiKehoachMuatructiepComponent extends BaseComponent implements
     private dmTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
   ) {
-    super();
     this.formData = this.fb.group({
       id: [],
       maDvi: ['', [Validators.required]],

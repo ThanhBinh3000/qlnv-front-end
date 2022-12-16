@@ -56,7 +56,7 @@
   </nz-card>
 
   <div class="group-button">
-    <h3 class="text-uppercase">DANH SÁCH QUYẾT ĐỊNH CỦA BỘ TÀI CHÍNH</h3>
+    <h3 class="text-uppercase">DANH SÁCH PHÂN BỔ DỰ TOÁN</h3>
     <div class="buttons">
       <button *ngIf="statusDelete" type="button" class="btn btn-do" (click)="deleteReport('')">
         <i class="fa fa-trash-o do"></i>
@@ -64,7 +64,7 @@
       </button>
       <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
         <i class="icon htvbdh_tcdt_tao-qd"></i>
-        <span>Thêm</span>
+        <span>Thêm QĐ/CV</span>
       </button>
     </div>
   </div>
@@ -116,21 +116,21 @@
           <th>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.maLoaiDan"
               (ngModelChange)="filterInTable('maLoaiDan',filterTable.maLoaiDan, false)">
-              <nz-option *ngFor="let item of loaiDuAns" [nzValue]="item.id" [nzLabel]="item.ten">
+              <nz-option *ngFor="let item of loaiDuAns" [nzValue]="item.id" [nzLabel]="item.tenDm">
               </nz-option>
             </nz-select>
           </th>
           <th>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThaiGiao"
               (ngModelChange)="filterInTable('trangThaiGiao',filterTable.trangThaiGiao, false)">
-              <nz-option *ngFor="let item of trangThaiGiaos" [nzValue]="item.id" [nzLabel]="item.ten">
+              <nz-option *ngFor="let item of trangThaiGiaos" [nzValue]="item.id" [nzLabel]="item.tenDm">
               </nz-option>
             </nz-select>
           </th>
           <th>
             <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
               (ngModelChange)="filterInTable('trangThai',filterTable.trangThai, false)">
-              <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.ten">
+              <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
               </nz-option>
             </nz-select>
           </th>
@@ -147,9 +147,7 @@
             {{ (i + 1) + (pages.page - 1)*pages.size }}
           </td>
           <td>
-            <a (click)="xemChiTiet(data.id, data.maLoaiDan)" style="color: #1890ff;">
-              {{ data.maPa}}
-            </a>
+            {{ data.maPa}}
           </td>
           <td>
             {{data.ngayTao}}
@@ -175,7 +173,7 @@
               {{data.lyDoTuChoi}}</ng-template>
           </td>
           <td class="text-left">
-            <a (click)="viewDetail(data)">
+            <a (click)="xemChiTiet(data.id, data.maLoaiDan)">
               <i class="fa fa-eye"></i>
             </a>
             <a *ngIf="data.isDelete" (click)="deleteReport(data.id)">

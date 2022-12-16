@@ -9,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { BienBanGuiHang, ChiTiet } from 'src/app/models/BienBanGuiHang';
 import { QuyetDinhNhapXuat } from 'src/app/models/QuyetDinhNhapXuat';
 import { UserLogin } from 'src/app/models/userlogin';
-import { BienBanGuiHangService } from 'src/app/services/bienBanGuiHang.service';
+import { BienBanGuiHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/bienBanGuiHang.service';
 import { PhieuNhapKhoTamGuiService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/phieuNhapKhoTamGui.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
@@ -25,6 +25,8 @@ import { BaseComponent } from 'src/app/components/base/base.component';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { isEmpty } from 'lodash';
 import { HelperService } from 'src/app/services/helper.service';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-gui-hang',
@@ -57,19 +59,12 @@ export class ThongTinBienBanGuiHangComponent extends BaseComponent implements On
   listDiaDiemNhap: any[] = [];
   dataTable: any[] = [];
   constructor(
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
-    public userService: UserService,
-    private phieuNhapKhoTamGuiService: PhieuNhapKhoTamGuiService,
-    public globals: Globals,
-    private thongTinHopDongService: ThongTinHopDongService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private bienBanGuiHangService: BienBanGuiHangService,
-    private fb: FormBuilder,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    private helperService: HelperService
   ) {
-    super();
+    super(httpClient, storageService, bienBanGuiHangService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],

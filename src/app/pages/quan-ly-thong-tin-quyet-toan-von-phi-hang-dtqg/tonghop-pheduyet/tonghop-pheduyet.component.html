@@ -1,0 +1,21 @@
+<nz-affix  class="level0">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab(0)">
+      Dữ liệu tổng hợp của TCDT
+    </li>
+    <li nz-menu-item (click)="selectTab(1)">
+      Quyết định phê duyệt quyết toán của BTC
+    </li>
+  </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+  <div class="contentDetail">
+    <ng-container *ngIf="tabSelected == 0">
+      <app-du-lieu-tong-hop-tcdt></app-du-lieu-tong-hop-tcdt>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 1">
+      <app-qd-pheduyet-quyet-toan-btc></app-qd-pheduyet-quyet-toan-btc>
+    </ng-container>
+  </div>
+</div>
+

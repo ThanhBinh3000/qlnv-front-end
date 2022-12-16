@@ -70,7 +70,7 @@
         <div nz-col nzSpan="6">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">
-              Ngày ký
+              Thời gian thực hiện
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy">
@@ -237,7 +237,7 @@
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
-              Căn cứ pháp lý
+              Tài liệu đính kèm
             </nz-form-label>
             <div class="list-file">
               <file-list [data]="fileDinhKem"></file-list>
@@ -254,7 +254,138 @@
         </div>
       </div>
     </div>
-    <app-tien-do-thuc-hien #tienDo [(dataTableTienDo)]="dataTableTienDo"></app-tien-do-thuc-hien>
+    <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+      <nz-table class="nowrap" [nzData]="dataTable" nzBordered>
+        <thead>
+          <tr>
+            <th rowspan="3">STT</th>
+            <th rowspan="3">Nội dung</th>
+            <th rowspan="3">Sản phẩm</th>
+            <th rowspan="3">Từ ngày</th>
+            <th rowspan="3">Đến ngày</th>
+            <th rowspan="3">Người thực hiện</th>
+            <th rowspan="3">Trạng thái</th>
+            <th rowspan="3" *ngIf="userService.isTongCuc()">Hành động</th>
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td>
+              <nz-input-group>
+                <input nz-input [(ngModel)]="rowItem.noiDung" />
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <input nz-input [(ngModel)]="rowItem.sanPham" />
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nz-input [(ngModel)]="rowItem.tuNgay">
+                </nz-date-picker>
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <nz-date-picker nzFormat="dd/MM/yyyy" nz-input [(ngModel)]="rowItem.denNgay">
+                </nz-date-picker>
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <input nz-input [(ngModel)]="rowItem.nguoiThucHien" />
+              </nz-input-group>
+            </td>
+            <td>
+              <nz-input-group>
+                <nz-select [(ngModel)]="rowItem.trangThaiTd" (ngModelChange)="onChangeTrangThai($event)"
+                  [nzShowArrow]="false">
+                  <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of listTrangThai1">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </td>
+            <td *ngIf="userService.isTongCuc()">
+              <a (click)="themMoiItem()">
+                <i class="icon htvbdh_dau-cong"></i>
+              </a>
+              <a (click)="clearData()">
+                <i class="fa fa-refresh"></i>
+              </a>
+            </td>
+          </tr>
+          <tr *ngFor="let data of dataTable; let idx = index">
+            <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
+              <td>{{ idx + 1 }}</td>
+              <td>{{ data.noiDung }}</td>
+              <td>{{ data.sanPham }}</td>
+              <td>{{ data.tuNgay | date : 'dd/MM/yyyy' }}</td>
+              <td>{{ data.denNgay | date : 'dd/MM/yyyy' }}</td>
+              <td>{{ data.nguoiThucHien }}</td>
+              <td>{{ data.tenTrangThaiTd }}</td>
+              <td>
+                <a (click)="editItem(idx)">
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <a (click)="xoaItem(idx)">
+                  <i class="fa fa-trash-o do"></i>
+                </a>
+              </td>
+            </ng-container>
+            <ng-template #editTemplate>
+              <td></td>
+              <td>
+                <nz-input-group>
+                  <input nz-input [(ngModel)]="dataEdit[idx].data.noiDung" />
+                </nz-input-group>
+              </td>
+              <td>
+                <nz-input-group>
+                  <input nz-input [(ngModel)]="dataEdit[idx].data.sanPham" />
+                </nz-input-group>
+              </td>
+              <td>
+                <nz-input-group>
+                  <nz-date-picker nzFormat="dd/MM/yyyy" nz-input [(ngModel)]="dataEdit[idx].data.tuNgay">
+                  </nz-date-picker>
+                </nz-input-group>
+              </td>
+              <td>
+                <nz-input-group>
+                  <nz-date-picker nzFormat="dd/MM/yyyy" nz-input [(ngModel)]="dataEdit[idx].data.denNgay">
+                  </nz-date-picker>
+                </nz-input-group>
+              </td>
+              <td>
+                <nz-input-group>
+                  <input nz-input [(ngModel)]="dataEdit[idx].data.nguoiThucHien" />
+                </nz-input-group>
+              </td>
+              <td>
+                <nz-input-group>
+                  <nz-select [nzShowArrow]="false" [(ngModel)]="dataEdit[idx].data.trangThaiTd"
+                    (ngModelChange)="onChangeTrangThai($event,dataEdit[idx].data)">
+                    <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of listTrangThai1">
+                    </nz-option>
+                  </nz-select>
+                </nz-input-group>
+              </td>
+              <td class="text-center">
+                <a (click)="luuEdit(idx)" class="save">
+                  <i class="fa fa-save"></i>
+                </a>
+                <a (click)="huyEdit(idx)">
+                  <i class="fa fa-ban do"></i> </a>
+              </td>
+            </ng-template>
+          </tr>
+
+        </tbody>
+      </nz-table>
+    </nz-card>
     <div class="header header-green-background mg-t-16">
       <div class="header-text">
         <div class="title-chi-tieu">
@@ -288,50 +419,96 @@
         </div>
       </div>
     </form>
-    <div nz-row [nzGutter]="[18, 6]">
+    <div>
       <div nz-col nzSpan="24">
         <h3 class="mt-16">Thành viên hội đồng</h3>
       </div>
-      <div nz-col nzSpan="5">
-        <nz-form-item>
-          <nz-form-label nz-col nzSpan="24" [nzNoColon]="true">
-            Họ và tên
-          </nz-form-label>
-          <nz-form-control [nzErrorTip]="error">
-            <input nz-input [(ngModel)]="rowItem.hoVaTen" />
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-      <div nz-col nzSpan="5">
-        <nz-form-item>
-          <nz-form-label nz-col nzSpan="24" [nzNoColon]="true">
-            Đơn vị
-          </nz-form-label>
-          <input nz-input [(ngModel)]="rowItem.donVi" />
-        </nz-form-item>
-      </div>
-      <div nz-col nzSpan="2">
-        <nz-form-label [nzNoColon]="true" nz-col nzSpan="24" class="label-empty">
-        </nz-form-label>
-        <div class="btn-plus" (click)="addRow()">
-          <i class="icon htvbdh_dau-cong"></i>
-        </div>
-      </div>
-      <div nz-col nzSpan="24" *ngFor="let item of dataTable">
-        <div nz-col nzSpan="5">
-          <nz-form-label nz-col nzSpan="24" [nzNoColon]="true">
-            {{item.hoVaTen}}
-          </nz-form-label>
-        </div>
-        <div nz-col nzSpan="5">
-          <nz-form-label nz-col nzSpan="24" [nzNoColon]="true">
-            {{item.donVi}}
-          </nz-form-label>
-        </div>
-      </div>
+      <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <nz-table #basicTable class="nowrap mt-16 flex-card p-lr16" [nzData]="dataTable1" [nzFrontPagination]="false"
+          [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th nzWidth="20px">STT</th>
+              <th>Họ tên</th>
+              <th>Đơn vị</th>
+              <th nzWidth="50px" *ngIf="userService.isTongCuc()">Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td>
+                <nz-input-group>
+                  <input nz-input [(ngModel)]="rowItem1.hoTen" [ngModelOptions]="{standalone: true}" />
+                </nz-input-group>
+              </td>
+              <td>
+                <nz-input-group>
+                  <input nz-input [(ngModel)]="rowItem1.donVi" [ngModelOptions]="{standalone: true}" />
+                </nz-input-group>
+              </td>
+              <td>
+                <a (click)="themMoiItem1()">
+                  <i class="fa fa-plus"></i>
+                </a>
+                <a (click)="clearData()">
+                  <i class="fa fa-refresh"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+          <tbody>
+            <tr *ngFor="let data1 of dataTable1; let idx = index">
+              <ng-container *ngIf="!dataEdit1[idx].edit; else editTemplate">
+                <td>{{ idx + 1 }}</td>
+                <td>{{ data1.hoTen }}</td>
+                <td>{{ data1.donVi }}</td>
+                <td>
+                  <a (click)="editItem1(idx)">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a (click)="xoaItem1(idx)">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
+              </ng-container>
+              <ng-template #editTemplate>
+                <td></td>
+                <td>
+                  <nz-input-group>
+                    <input nz-input [(ngModel)]="dataEdit1[idx].data.hoTen" [ngModelOptions]="{standalone: true}" />
+                  </nz-input-group>
+                </td>
+                <td>
+                  <nz-input-group>
+                    <input nz-input [(ngModel)]="dataEdit1[idx].data.donVi" [ngModelOptions]="{standalone: true}" />
+                  </nz-input-group>
+                </td>
+                <td class="text-center">
+                  <a (click)="luuEdit1(idx)" class="save">
+                    <i class="fa fa-save"></i>
+                  </a>
+                  <a (click)="huyEdit1(idx)">
+                    <i class="fa fa-ban do"></i> </a>
+                </td>
+              </ng-template>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-card>
     </div>
     <form nzLayout="vertical" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="[18, 6]">
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              File đính kèm
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [data]="fileDinhKem1"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
         <div nz-col nzSpan="24">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true">

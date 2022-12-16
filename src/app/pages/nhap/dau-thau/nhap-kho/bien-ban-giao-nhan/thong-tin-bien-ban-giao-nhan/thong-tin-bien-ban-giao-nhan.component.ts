@@ -11,7 +11,7 @@ import { Subject } from 'rxjs';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { BienBanGuiHangService } from 'src/app/services/bienBanGuiHang.service';
+import { BienBanGuiHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/bienBanGuiHang.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HoSoKyThuatService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoKyThuat.service';
 import { QuanLyBienBanGiaoNhanService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyBienBanGiaoNhan.service';
@@ -29,6 +29,8 @@ import {
 import { ChiTiet } from "../../../../../../models/BienBanGuiHang";
 import { isEmpty } from "lodash";
 import { HelperService } from 'src/app/services/helper.service';
+import { StorageService } from 'src/app/services/storage.service';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-thong-tin-bien-ban-giao-nhan',
   templateUrl: './thong-tin-bien-ban-giao-nhan.component.html',
@@ -80,22 +82,12 @@ export class ThongTinBienBanGiaoNhanComponent extends BaseComponent implements O
   benGiao: ChiTiet = new ChiTiet();
 
   constructor(
-    private spinner: NgxSpinnerService,
-    private donViService: DonviService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
-    public userService: UserService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    public globals: Globals,
-    private fb: FormBuilder,
-    private quanLyPhieuKetThucNhapKhoService: QuanLyBienBanKetThucNhapKhoService,
-    private bienBanGuiHangService: BienBanGuiHangService,
     private quanLyBienBanBanGiaoNhanService: QuanLyBienBanGiaoNhanService,
-    private hoSoKyThuatService: HoSoKyThuatService,
-    private thongTinHopDongService: ThongTinHopDongService,
-    private helperService: HelperService
   ) {
-    super();
+    super(httpClient, storageService, quanLyBienBanBanGiaoNhanService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],

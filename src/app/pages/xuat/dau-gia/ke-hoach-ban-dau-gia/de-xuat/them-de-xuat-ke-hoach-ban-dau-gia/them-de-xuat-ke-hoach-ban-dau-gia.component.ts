@@ -41,7 +41,7 @@ import {
   templateUrl: './them-de-xuat-ke-hoach-ban-dau-gia.component.html',
   styleUrls: ['./them-de-xuat-ke-hoach-ban-dau-gia.component.scss']
 })
-export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implements OnInit, OnChanges {
+export class ThemDeXuatKeHoachBanDauGiaComponent implements OnInit, OnChanges {
   @Input()
   loaiVthhInput: string;
   @Input()
@@ -110,8 +110,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     private dmTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
-
-    super();
     this.formData = this.fb.group({
       id: [],
       maDvi: [''],

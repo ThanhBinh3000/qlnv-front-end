@@ -175,8 +175,8 @@
               duyệt kế hoạch mua/bán
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="qdCtKhNam">
-                <nz-option *ngFor="let item of listQdCtKh" [nzLabel]="item.soQd" [nzValue]="item.id" ></nz-option>
+              <nz-select [nzDisabled]="isView" formControlName="qdCtKhNam">
+                <nz-option *ngFor="let item of listQdCtKh" [nzLabel]="item.soQd" [nzValue]="item.soQd" ></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -196,10 +196,10 @@
               <th style="width: 7%;">Số lượng</th>
               <th style="width: 7%;">Đơn vị tính</th>
               <th style="width: 7%;" *ngIf="type=='GCT'">Đơn giá tối đa của BTC chưa VAT(đồng)</th>
-              <th style="width: 25%;" *ngIf="type=='GMTDBTT'">Đơn giá đề nghị chưa VAT (đồng)</th>
-              <th style="width: 7%;" *ngIf="type=='GCT'">Đơn giá tối đa của BTC chưa VAT(đồng)</th>
-              <th style="width: 25%;" *ngIf="type=='GMTDBTT'">Đơn giá đề nghị có VAT (đồng)</th>
-              <th style="width: 4%;"></th>
+              <th style="width: 24%;" *ngIf="type=='GMTDBTT'">Đơn giá đề nghị chưa VAT (đồng)</th>
+              <th style="width: 7%;" *ngIf="type=='GCT'">Đơn giá tối đa của BTC có VAT(đồng)</th>
+              <th style="width: 24%;" *ngIf="type=='GMTDBTT'">Đơn giá đề nghị có VAT (đồng)</th>
+              <th style="width: 6%;"></th>
             </tr>
           </thead>
           <tbody>

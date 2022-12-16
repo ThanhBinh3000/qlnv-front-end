@@ -53,10 +53,10 @@ export class NewHangHoaComponent implements OnInit {
       ma: ['', Validators.required],
       ten: ['', Validators.required],
       ghiChu: [''],
-      loaiHang: ['', Validators.required],
+      loaiHang: [''],
       trangThai: [true],
       kyHieu: [''],
-      maDviTinh: ['', Validators.required],
+      maDviTinh: [''],
     })
   }
 
@@ -211,8 +211,12 @@ export class NewHangHoaComponent implements OnInit {
     let dviTinh =  this.listDviTinh.filter(item => item.ma == this.formHangHoa.value.maDviTinh)
     let body = this.formHangHoa.value;
     body.dmHangDvqls = this.listOfTagOption;
-    body.maDviTinh = dviTinh[0].giaTri
-    body.ma = this.formHangHoa.value.maCha ? this.formHangHoa.value.maCha : ''  + this.formHangHoa.value.ma
+    body.maDviTinh = dviTinh && dviTinh[0] ? dviTinh[0].giaTri : null
+    if ( this.formHangHoa.value.maCha) {
+      body.ma = this.formHangHoa.value.maCha + this.formHangHoa.value.ma
+    } else {
+      body.ma =  this.formHangHoa.value.ma
+    }
     body.trangThai = this.formHangHoa.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
     body.loaiHinhBq = this.listLhbq.filter(item => item.checked === true)
     body.phuongPhapBq = this.listPpbq.filter(item => item.checked === true)
@@ -225,6 +229,7 @@ export class NewHangHoaComponent implements OnInit {
         this.modal.close(true);
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
+        this.spinner.hide()
       }
     }).catch((e) => {
       console.log('error: ', e);

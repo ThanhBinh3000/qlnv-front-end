@@ -15,6 +15,7 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { KhCnCongTrinhNghienCuu } from 'src/app/services/kh-cn-bao-quan/khCnCongTrinhNghienCuu';
+import { STATUS } from 'src/app/constants/status';
 @Component({
   selector: 'app-quan-ly-cong-trinh-nghien-cuu-bao-quan',
   templateUrl: './quan-ly-cong-trinh-nghien-cuu-bao-quan.component.html',
@@ -42,7 +43,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     denNam: '',
     tenTrangThai: '',
   };
-
+  listCapDt: any[] = []
   optionsDonVi: any[] = [];
   options: any[] = [];
   inputDonVi: string = '';
@@ -67,8 +68,13 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
-
-
+  tenCapDt: any[] = [];
+  STATUS = STATUS
+  listTrangThai: any[] = [
+    { ma: this.STATUS.DU_THAO, giaTri: 'Dự thảo' },
+    { ma: this.STATUS.DANG_THUC_HIEN, giaTri: 'Đang thực hiện' },
+    { ma: this.STATUS.DA_NGHIEM_THU, giaTri: 'Đã nghiệm thu' }
+  ];
 
   constructor(
     private spinner: NgxSpinnerService,
@@ -99,8 +105,10 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
+      await this.getListCapDt();
       await this.search();
       await this.loaiVTHHGetAll();
+
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -119,6 +127,19 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
         this.listHangHoa = res.data?.filter(x => x.ma == this.typeVthh);
       };
     }
+  }
+  async getListCapDt() {
+    this.listCapDt = [];
+    let res = await this.danhMucService.danhMucChungGetAll('CAP_DE_TAI');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listCapDt = res.data;
+    }
+  }
+  onChangeCapDeTai(capDetai) {
+    // const tt = this.listCapDt.filter(s => s.ma == capDetai);
+    // if (tt.length > 0) {
+    //   this.tenCapDt = tt[0].giaTri;
+    // }
   }
 
   updateAllChecked(): void {
@@ -160,20 +181,29 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
         tenDeTai: this.searchFilter.tenDeTai,
         capDeTai: this.searchFilter.capDeTai,
         trangThai: this.searchFilter.trangThai,
+        tuNam: this.searchFilter.nam
+          ? dayjs(this.searchFilter.nam[0]).format('YYYY')
+          : null,
+        denNam: this.searchFilter.nam
+          ? dayjs(this.searchFilter.nam[1]).format('YYYY')
+          : null,
         paggingReq: {
           limit: this.pageSize,
           page: this.page - 1,
         }
       };
       let res = await this.khCnCongTrinhNghienCuu.search(body);
-      console.log(res, "conmemay1213");
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         this.dataTable = data.content;
-        console.log(this.dataTable, "conmemay1");
         if (this.dataTable && this.dataTable.length > 0) {
           this.dataTable.forEach((item) => {
             item.checked = false;
+            const tt = this.listCapDt.find(s => s.ma == item.capDeTai);
+            if (tt) {
+              this.tenCapDt = tt.giaTri;
+              Object.assign(item, { tenCapDt: this.tenCapDt })
+            }
           });
         }
         this.dataTableAll = cloneDeep(this.dataTable);
@@ -184,7 +214,6 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
       this.spinner.hide();
-      console.log(this.dataTable, "conmemay");
     } catch (e) {
       console.log(e)
       this.spinner.hide();
@@ -312,6 +341,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
+        console.log(item.checked, "hh");
         if (item.checked) {
           dataDelete.push(item.id);
         }
@@ -329,7 +359,7 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.khCnCongTrinhNghienCuu.deleteMuti({ ids: dataDelete });
+            let res = await this.khCnCongTrinhNghienCuu.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

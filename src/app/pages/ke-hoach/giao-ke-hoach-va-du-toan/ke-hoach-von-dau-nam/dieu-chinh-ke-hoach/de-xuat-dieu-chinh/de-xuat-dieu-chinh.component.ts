@@ -14,6 +14,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-de-xuat-dieu-chinh',
@@ -33,6 +34,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
   startValue: Date | null = null;
   endValue: Date | null = null;
   startValueDc: Date | null = null;
+  STATUS = STATUS;
   endValueDc: Date | null = null;
   ngayKy: any;
   ngayKyDC: any;

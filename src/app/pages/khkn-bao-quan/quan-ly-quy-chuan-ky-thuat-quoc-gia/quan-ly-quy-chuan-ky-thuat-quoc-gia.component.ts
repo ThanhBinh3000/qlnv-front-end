@@ -77,6 +77,10 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
   isTatCa: boolean = false;
   yearNow: number = 0;
   listNam: any[] = [];
+  dsBoNganh: any[] = [];
+  boNganhAd: any[] = [];
+
+  listOfOption: any = [];
   constructor(
     private fb: FormBuilder,
     private donviService: DonviService,
@@ -108,9 +112,9 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
           text: this.yearNow - i,
         });
       }
-
+      await this.loadLoaiHangHoa();
+      await this.getListBoNganh();
       await this.search();
-      await this.loaiVTHHGetAll();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -119,30 +123,24 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
     }
   }
 
-  async loaiVTHHGetAll() {
+  async loadLoaiHangHoa() {
+    let ds = [];
     try {
-      await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
+      let hangHoa = await this.danhMucService.loadDanhMucHangHoa().toPromise();
+      if (hangHoa) {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
-          hangHoa.data.forEach((item) => {
-            if (item.cap === "1" && item.ma !== '01' && item.ma === this.maLoaiVthh) {
-              this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, item];
-            }
-            else {
-              if (item.child && item.child.length > 0) {
-                item.child.forEach((itemHH) => {
-                  if (itemHH.ma === this.maLoaiVthh) { this.dsLoaiHangHoa = [...this.dsLoaiHangHoa, itemHH]; }
-                });
-              }
-            }
-          })
+          hangHoa.data.forEach(element => {
+            ds = [...ds, element.children];
+            ds = ds.flat();
+            this.listOfOption = ds;
+          });
         }
-      })
+      }
     } catch (error) {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
   async onChangeLoaiHH(id: number) {
     if (id && id > 0) {
       let loaiHangHoa = this.dsLoaiHangHoa.filter(item => item.ma === id)
@@ -152,6 +150,16 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
     }
   }
 
+
+  async getListBoNganh() {
+    this.dsBoNganh = [];
+    let res = await this.donviService.layTatCaDonViByLevel(0);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsBoNganh = res.data.filter(s => s.tenDvi);
+      let boTaiChinh = res.data.find(s => s.code === 'BTC');
+      Object.assign(this.dsBoNganh, boTaiChinh)
+    }
+  }
 
   async initData() {
     this.userInfo = this.userService.getUserLogin();
@@ -166,61 +174,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
     this.isView = isView;
   }
 
-  selectHangHoa() {
-    // let data = this.loaiVthh;
-    const modalTuChoi = this.modal.create({
-      nzTitle: 'Danh sách hàng hóa',
-      nzContent: DialogDanhSachHangHoaComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '900px',
-      nzFooter: null,
-      nzComponentParams: {},
-    });
-    modalTuChoi.afterClose.subscribe(async (data) => {
-      if (data) {
-        this.bindingDataHangHoa(data);
-      }
-    });
-  }
 
-  async bindingDataHangHoa(data) {
-    if (data.loaiHang == "M" || data.loaiHang == "LT") {
-
-      this.searchFilter.cloaiVthh = data.ma
-      this.searchFilter.tenCloaiVthh = data.ten
-      this.searchFilter.loaiVthh = data.parent.ma
-      this.searchFilter.tenLoaiVthh = data.parent.ten
-      // this.searchFilter.patchValue({
-      //   maVtu: null,
-      //   tenVtu: null,
-
-      // })
-    }
-    // if (data.loaiHang == "VT") {
-    //   if (data.cap == "3") {
-    //     cloaiVthh = data
-    //     this.formTraCuu.patchValue({
-    //       maVtu: data.ma,
-    //       tenVtu: data.ten,
-    //       cloaiVthh: data.parent.ma,
-    //       tenCloaiVthh: data.parent.ten,
-    //       loaiVthh: data.parent.parent.ma,
-    //       tenVthh: data.parent.parent.ten
-    //     })
-    //   }
-    //   if (data.cap == "2") {
-    //     this.formTraCuu.patchValue({
-    //       maVtu: null,
-    //       tenVtu: null,
-    //       cloaiVthh: data.ma,
-    //       tenCloaiVthh: data.ten,
-    //       loaiVthh: data.parent.ma,
-    //       tenVthh: data.parent.ten
-    //     })
-    //   }
-    // }
-  }
 
   async search() {
     this.spinner.show();
@@ -229,6 +183,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
         soVanBan: this.searchFilter.soVanBan,
         soHieuQuyChuan: this.searchFilter.soHieuQuyChuan,
         loaiVthh: this.searchFilter.loaiVthh,
+        apDungTai: this.searchFilter.apDungTai,
         cloaiVthh: this.searchFilter.cloaiVthh,
         ngayKyTu: this.searchFilter.ngayKy
           ? dayjs(this.searchFilter.ngayKy[0]).format('YYYY-MM-DD')
@@ -255,6 +210,13 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
         if (this.dataTable && this.dataTable.length > 0) {
           this.dataTable.forEach((item) => {
             item.checked = false;
+            const tt = this.dsBoNganh.find(s =>
+              s.key === item.apDungTai,
+            );
+            if (tt) {
+              this.boNganhAd = tt.tenDvi;
+              Object.assign(item, { boNganhAd: this.boNganhAd })
+            }
           });
         }
         this.dataTableAll = cloneDeep(this.dataTable);

@@ -1,3 +1,4 @@
+import { CurrencyMaskInputMode } from "ngx-currency";
 
 
 export class Utils {
@@ -85,6 +86,7 @@ export class Utils {
   public static statusOK = [Utils.TT_BC_2, Utils.TT_BC_4, Utils.TT_BC_6, Utils.TT_BC_7];
   //export
   public static statusExport = [Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_9];
+  public static statusAppraisal = [Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9];
 
   // lay ten trang thai theo ma trang thai
   public getStatusName(id: string) {
@@ -439,19 +441,44 @@ export const QTVP = {
   EXPORT_REPORT: 'QTOANVONPHI_XUAT_BC',
 };
 
+//chuan hoa cho nhap so lieu tien
+export const AMOUNT = {
+  allowZero: true,
+  allowNegative: false,
+  precision: 2,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "left",
+  nullable: true,
+  inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
+export const QUATITY = {
+  allowZero: true,
+  allowNegative: false,
+  precision: 0,
+  prefix: '',
+  thousands: '.',
+  decimal: ',',
+  align: "left",
+  nullable: true,
+  inputMode: CurrencyMaskInputMode.NATURAL,
+}
+
 // loai bao cao quy trinh thuc hien du toan chi
 export const LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI = [
   {
     id: '526',
     tenDm: 'Báo cáo giải ngân định kỳ tháng'
   },
-  {
-    id: '527',
-    tenDm: 'Báo cáo giải ngân cả năm'
-  },
+  // {
+  //   id: '527',
+  //   tenDm: 'Báo cáo giải ngân cả năm'
+  // },
   {
     id: '528',
-    tenDm: 'Báo cáo chỉnh lý năm'
+    tenDm: 'Báo cáo giải ngân cả năm'
   },
 ]
 

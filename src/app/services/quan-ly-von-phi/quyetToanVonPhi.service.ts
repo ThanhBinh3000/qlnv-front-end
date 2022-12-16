@@ -1,0 +1,159 @@
+import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { BaseService } from '../base.service';
+
+
+@Injectable({
+  providedIn: 'root',
+})
+export class QuyetToanVonPhiService extends BaseService {
+  constructor(public httpClient: HttpClient) {
+    super(httpClient, 'quanLyVonPhi', '');
+  }
+
+  urlDefault = environment.SERVICE_API;
+
+  timBaoCaoQuyetToanVonPhi(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/quyet-toan/danh-sach',
+      // 'http://192.168.1.111:8094/lap-tham-dinh/danh-sach',
+      request,
+    );
+  }
+  //search list bao cao
+  timBaoCaoQuyetToanVonPhi1(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/danh-sach',
+      'http://192.168.1.105:8094/quyet-toan/danh-sach',
+      request,
+    );
+  }
+
+  // call api chi tiết báo cáo quyết toán vốn, phí hàng DTQG
+  CtietBcaoQuyetToan(id: any): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + '/qlnv-khoachphi/quyet-toan/chi-tiet/' + id,
+      // 'http://192.168.1.105:8094/quyet-toan/chi-tiet/' + id ,
+    );
+  }
+
+  // call api chi tiết báo cáo quyết toán vốn, phí hàng DTQG theo năm
+  CtietBcaoQuyetToanNam(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/quyet-toan/tra-cuu',
+      // 'http://192.168.1.105:8094/quyet-toan/tra-cuu' ,
+      request,
+    );
+  }
+  // call api chi tiết báo cáo quyết toán vốn, phí hàng DTQG theo năm
+  CtietBcaoQuyetToanNam1(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/tra-cuu',
+      'http://192.168.1.100:30101/quyet-toan/tra-cuu',
+      request,
+    );
+  }
+
+  // call api chi tiết báo cáo quyết toán vốn, phí hàng DTQG
+  CtietBcaoQuyetToan1(id: any): Observable<any> {
+    return this.httpClient.get(
+      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/chi-tiet/' + id ,
+      'http://192.168.1.105:8094/quyet-toan/chi-tiet/' + id,
+    );
+  }
+
+  //sinh ma bao cao quyet toan
+  sinhMaBaoCaoQuyetToan(maPhanBcao: any): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + '/qlnv-khoachphi/quyet-toan/sinh-ma?maPhanBcao=' + maPhanBcao,
+    );
+  }
+
+  sinhMaBaoCaoQuyetToan1(maPhanBcao: any): Observable<any> {
+    return this.httpClient.get(
+      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/sinh-ma?maPhanBcao=' + maPhanBcao,
+      'http://192.168.1.105:8094/quyet-toan/sinh-ma?maPhanBcao=' + maPhanBcao,
+    );
+  }
+
+
+
+  // Trình duyệt quyết toán vốn, phí hàng DTQG
+  trinhDuyetServiceQuyetToan(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/quyet-toan/them-moi',
+      request,
+    );
+  }
+
+  // Trình duyệt quyết toán vốn, phí hàng DTQG 1
+  trinhDuyetServiceQuyetToan1(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/them-moi',
+      'http://192.168.1.101:30101/quyet-toan/them-moi',
+      request,
+    );
+  }
+
+  // update báo cáo quyết toán vốn, phí hàng DTQG
+  updateBaoCaoQuyetToan(request: any): Observable<any> {
+    return this.httpClient.put(
+      this.urlDefault + '/qlnv-khoachphi/quyet-toan/cap-nhat',
+      // 'http://192.168.1.111:8094/lap-tham-dinh/cap-nhat',
+      request,
+    );
+  }
+
+  // update báo cáo quyết toán vốn, phí hàng DTQG
+  updateBaoCaoQuyetToan1(request: any): Observable<any> {
+    return this.httpClient.put(
+      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/cap-nhat',
+      'http://192.168.1.101:30101/quyet-toan/cap-nhat',
+      request,
+    );
+  }
+  // call api nút chức năng
+  approveQuyetToan(request: any): Observable<any> {
+    return this.httpClient.put(
+      this.urlDefault + '/qlnv-khoachphi/quyet-toan/trang-thai',
+      request,
+    );
+  }
+
+  // call api nút chức năng
+  approveQuyetToan1(request: any): Observable<any> {
+    return this.httpClient.put(
+      // this.urlDefault + '/qlnv-khoachphi/quyet-toan/trang-thai',
+      'http://192.168.1.105:8094/quyet-toan/trang-thai',
+      request,
+    );
+  }
+
+  //xóa báo cáo nút xóa Báo cáo quyết toán
+  xoaBaoCaoLapQuyetToan(request: any): Observable<any> {
+    return this.httpClient.post(
+      // 'http://192.168.1.105:8094/quyet-toan/xoa/',
+      this.urlDefault + '/qlnv-khoachphi/quyet-toan/xoa',
+      request
+    );
+  }
+  //xóa báo cáo nút xóa Báo cáo quyết toán
+  xoaBaoCaoLapQuyetToan1(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/xoa',
+      'http://192.168.1.105:8094/quyet-toan/xoa',
+      request
+    );
+  }
+
+  checkNamTaoMoiQuyetToan(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/quyet-toan/validate',
+      request
+    );
+  }
+
+}
+
