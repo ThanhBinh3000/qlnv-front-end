@@ -119,6 +119,7 @@ export class BieuMau140Component implements OnInit {
             })
         }
         // this.getTotal();
+        this.sum();
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();

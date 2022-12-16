@@ -15,6 +15,7 @@ export class ItemData {
     id: any;
     stt: string;
     tenTaiSan: string;
+    maTaiSan: string;
     dviTinh: any;
     donGiaTdTheoQd: number;
     ncauTbiNamNSluong: number;
@@ -115,6 +116,7 @@ export class PhuLuc06Component implements OnInit {
         })
         await this.addVatTu();
         this.updateEditCache();
+        this.tinhTong();
         this.getStatusButton();
 
         this.spinner.hide();
@@ -131,7 +133,7 @@ export class PhuLuc06Component implements OnInit {
                     this.dsDinhMuc = res.data;
                     this.dsDinhMuc.forEach(item => {
                         if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = Math.round(divNumber(item.tongDmuc, 1000));
+                            item.tongDmuc = divNumber(item.tongDmuc, 1000);
                         }
                     })
                 } else {
@@ -409,6 +411,7 @@ export class PhuLuc06Component implements OnInit {
             id: uuid.v4() + 'FE',
             stt: '',
             tenTaiSan: '',
+            maTaiSan: '',
             dviTinh: '',
             donGiaTdTheoQd: 0,
             ncauTbiNamNSluong: 0,
@@ -433,6 +436,7 @@ export class PhuLuc06Component implements OnInit {
     selectTaisan(idTaiSan: any, idRow: any) {
         const taiSan = this.lstVatTuFull.find(ts => ts.id === idTaiSan);
         this.editCache[idRow].data.dviTinh = taiSan.dviTinh;
+        this.editCache[idRow].data.tenTaiSan = taiSan.tenDm;
     }
 
 

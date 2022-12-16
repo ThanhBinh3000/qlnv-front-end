@@ -61,7 +61,10 @@ export class PhuLuc03Component implements OnInit {
     soLaMa: any[] = LA_MA;
     allChecked = false;
 
-    tongSo: number;
+    tongSoTHNT: number;
+    tongSoDT: number;
+    tongSoUTH: number;
+    tongSoTT: number;
     tongSoTd: number;
     checkViewTD: boolean;
     checkEditTD: boolean;
@@ -704,16 +707,24 @@ export class PhuLuc03Component implements OnInit {
     }
     tinhTong() {
         if (this.lstCtietBcao.length != 0) {
-            this.tongSo = 0;
+            this.tongSoTHNT = 0;
+            this.tongSoDT = 0;
+            this.tongSoUTH = 0;
+            this.tongSoTT = 0;
             this.tongSoTd = 0;
             for (let index = 1; index < this.lstCtietBcao.length; index++) {
-
-                this.tongSo += this.lstCtietBcao[index].ttienNamDtoan;
+                this.tongSoTHNT += this.lstCtietBcao[index].thucHienNamTruoc;
+                this.tongSoDT += this.lstCtietBcao[index].dtoanNamHtai;
+                this.tongSoTT += this.lstCtietBcao[index].ttienNamDtoan;
+                this.tongSoUTH += this.lstCtietBcao[index].uocThNamHtai;
                 this.tongSoTd += this.lstCtietBcao[index].ttienNamN1Td;
             }
 
         } else {
-            this.tongSo = null;
+            this.tongSoTHNT = null;
+            this.tongSoDT = null;
+            this.tongSoUTH = null;
+            this.tongSoTT = null;
             this.tongSoTd = null;
         }
 

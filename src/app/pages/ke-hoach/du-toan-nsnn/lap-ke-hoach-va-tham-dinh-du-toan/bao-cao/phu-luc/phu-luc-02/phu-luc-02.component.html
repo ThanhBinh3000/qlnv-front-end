@@ -27,7 +27,7 @@
             <th rowspan="3" nzWidth="150px">Thực hiện năm trước</th>
             <th colspan="2" nzWidth="150px">Năm {{namBcao}} (năm hiện hành)</th>
             <th colspan="6" nzWidth="150px">Năm dự toán</th>
-            <th rowspan="4" [hidden]="status"></th>
+            <th rowspan="4" colspan="2" [hidden]="status"></th>
           </tr>
           <tr>
             <th nzWidth="100px" rowspan="2">Dự toán</th>
@@ -56,6 +56,22 @@
             <th>4=5/1</th>
             <th>5</th>
             <th>6=5+3</th>
+          </tr>
+          <tr>
+            <th></th>
+            <th>Tổng cộng</th>
+            <th></th>
+            <th>{{displayValue(total.thNamTruoc)}}</th>
+            <th>{{displayValue(total.namDtoan)}}</th>
+            <th>{{displayValue(total.namUocTh)}}</th>
+            <th>{{displayValue(total.sluongTaiKho)}}</th>
+            <th>{{displayValue(total.dmucTaiKho)}}</th>
+            <th>{{displayValue(total.ttienTaiKho)}}</th>
+            <th>{{displayValue(total.binhQuanNgoaiKho)}}</th>
+            <th>{{displayValue(total.ttienNgoaiKho)}}</th>
+            <th>{{displayValue(total.tongCong)}}</th>
+            <th [hidden]="status"></th>
+            <th [hidden]="status"></th>
           </tr>
         </thead>
         <tbody>
@@ -160,22 +176,6 @@
                 <i *ngIf="checkDelete(data.maDanhMuc)" class="fa fa-trash-o do" (click)="deleteLine(data.stt)"></i>
               </td>
             </ng-template>
-          </tr>
-          <tr>
-            <td></td>
-            <td>Tổng cộng</td>
-            <td></td>
-            <td>{{displayValue(total.thNamTruoc)}}</td>
-            <td>{{displayValue(total.namDtoan)}}</td>
-            <td>{{displayValue(total.namUocTh)}}</td>
-            <td>{{displayValue(total.sluongTaiKho)}}</td>
-            <td>{{displayValue(total.dmucTaiKho)}}</td>
-            <td>{{displayValue(total.ttienTaiKho)}}</td>
-            <td>{{displayValue(total.binhQuanNgoaiKho)}}</td>
-            <td>{{displayValue(total.ttienNgoaiKho)}}</td>
-            <td>{{displayValue(total.tongCong)}}</td>
-            <td [hidden]="status"></td>
-            <td [hidden]="status"></td>
           </tr>
         </tbody>
       </nz-table>
