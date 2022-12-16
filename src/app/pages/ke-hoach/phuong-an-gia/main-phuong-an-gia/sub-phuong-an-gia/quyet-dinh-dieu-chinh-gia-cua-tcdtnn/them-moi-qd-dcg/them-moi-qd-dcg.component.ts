@@ -23,7 +23,7 @@ import { STATUS } from 'src/app/constants/status';
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-them-moi-qd-dcg',
@@ -50,11 +50,12 @@ export class ThemMoiQdDcgComponent implements OnInit {
   listThongTinGia: any[] = [];
   detail: any;
   radioValue: string;
-   dsToTrinhDeXuat: any[] = [];
+  dsToTrinhDeXuat: any[] = [];
   dsLoaiGia: any = [];
-   dsVthh: any[] = [];
-   dsClVthh: any[] = [];
-   thueVat: any;
+  dsVthh: any[] = [];
+  dsClVthh: any[] = [];
+  thueVat: any;
+  fileDinhKem: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -255,7 +256,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
                 this.dsClVthh = res.data;
               }
             }
-            if(this.dsClVthh) {
+            if (this.dsClVthh) {
               this.listThongTinGia.forEach(item => {
                 let resCl = this.dsClVthh.find(cl => cl.ma == item.cloaiVthh)
                 if (resCl) {
@@ -379,13 +380,14 @@ export class ThemMoiQdDcgComponent implements OnInit {
       }
     }
     this.listThongTinGia.forEach(item => {
-        item.donGia = item.giaDn,
+      item.donGia = item.giaDn,
         item.donGiaVat = item.giaDnVat,
         item.donGiaBtc = item.giaQd,
         item.donGiaVatBtc = item.giaQdVat
     })
     body.thongTinGias = this.listThongTinGia;
     body.soQd = body.soQd + this.maQd
+    body.fileDinhKemReq = this.fileDinhKem;
     let res
     if (this.idInput > 0) {
       res = await this.quyetDinhDieuChinhGiaTCDTNNService.update(body);
@@ -430,7 +432,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
-        soQd: data.soQd.split("/")[0],
+        soQd: data.soQd ? data.soQd.split("/")[0] : '',
         soToTrinhDx: data.soToTrinhDx,
         soQdgTcdtnn: data.soQdgTcdtnn,
         ngayKy: data.ngayKy,
@@ -449,6 +451,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
         tenLoaiGia: data.tenLoaiGia
       })
       this.detail = data;
+      this.fileDinhKem = data.fileDinhKems;
     }
   }
 
@@ -459,9 +462,11 @@ export class ThemMoiQdDcgComponent implements OnInit {
   async loadTiLeThue() {
     let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.thueVat = res.data[0].giaTri;
-    } else {
-      this.thueVat = 10;
+      if (this.loaiVthh == 'LT') {
+        this.thueVat = res.data[0].giaTri;
+      } else {
+        this.thueVat = 10/100;
+      }
     }
   }
 

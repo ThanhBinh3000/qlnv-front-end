@@ -56,8 +56,9 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
   maQd: string;
   dataTable: any[] = [];
   isErrorUnique = false;
-  thueVat: number;
+  thueVat: number = 10/100;
   radioValue: string;
+  fileDinhKem: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -91,7 +92,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       }
     );
   }
-  setValidator(isGuiDuyet){
+  setValidator(isGuiDuyet) {
     if (isGuiDuyet) {
       this.formData.controls["namKeHoach"].setValidators([Validators.required]);
       this.formData.controls["soQd"].setValidators([Validators.required]);
@@ -114,7 +115,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       this.loadDsVthh(),
       this.loadToTrinhDeXuat(),
       this.maQd = "/QĐ-BTC",
-      this.loadTiLeThue(),
+      // this.loadTiLeThue(),
     ]);
     this.getDataDetail(this.idInput),
       this.spinner.hide();
@@ -128,7 +129,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
-        soQd: data.soQd.split("/")[0],
+        soQd: data.soQd ? data.soQd.split("/")[0] : '',
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
         ngayKy: data.ngayKy,
@@ -140,6 +141,7 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
         ghiChu: data.ghiChu,
         soToTrinh: data.soToTrinh
       });
+      this.fileDinhKem = data.fileDinhKems;
     }
   }
 
@@ -170,14 +172,14 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
     }
   }
 
-  async loadTiLeThue() {
-    let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.thueVat = res.data[0].giaTri;
-    } else {
-      this.thueVat = 10;
-    }
-  }
+  // async loadTiLeThue() {
+  //   let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.thueVat = res.data[0].giaTri;
+  //   } else {
+  //     this.thueVat = 10;
+  //   }
+  // }
 
   openFile(event) {
     // if (!this.isView) {
@@ -264,11 +266,12 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    let err =false;
-      let body = this.formData.value;
-      body.soQd = body.soQd ?  body.soQd + this.maQd : "";
-      body.pagType = this.pagType;
-      body.thongTinGia = this.arrThongTinGia
+    let err = false;
+    let body = this.formData.value;
+    body.soQd = body.soQd ? body.soQd + this.maQd : "";
+    body.pagType = this.pagType;
+    body.thongTinGia = this.arrThongTinGia
+    body.fileDinhKemReq = this.fileDinhKem;
     if (this.arrThongTinGia) {
       this.arrThongTinGia.forEach(item => {
         item.giaQdBtc = item.giaQd,
@@ -281,14 +284,14 @@ export class ThemQuyetDinhGiaBtcVtComponent implements OnInit {
           item.donGiaVatBtc = item.giaQdVat
       })
       this.arrThongTinGia.forEach(item => {
-        if (body.loaiGia == 'LG01' && (item.giaQd >item.giaDn || item.giaQdVat > item.giaDnVat)) {
+        if (body.loaiGia == 'LG01' && (item.giaQd > item.giaDn || item.giaQdVat > item.giaDnVat)) {
           this.notification.error(MESSAGE.ERROR, 'Giá quyết định lớn hơn giá mua tối đa');
           item.giaQd = 0;
           item.giaQdVat = 0;
           err = true;
         }
         //gia ban toi thieu
-        if (body.loaiGia == 'LG02' && (item.giaQd <item.giaDn || item.giaQdVat < item.giaDnVat)) {
+        if (body.loaiGia == 'LG02' && (item.giaQd < item.giaDn || item.giaQdVat < item.giaDnVat)) {
           this.notification.error(MESSAGE.ERROR, 'Giá quyết định nhỏ hơn giá bán tối thiểu');
           item.giaQd = 0;
           item.giaQdVat = 0;
