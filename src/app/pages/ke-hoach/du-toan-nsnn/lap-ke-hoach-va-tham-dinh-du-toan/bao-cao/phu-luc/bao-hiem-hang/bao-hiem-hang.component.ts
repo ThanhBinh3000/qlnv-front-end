@@ -87,8 +87,7 @@ export class BaoHiemHangComponent implements OnInit {
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.maDviTao = this.dataInfo?.maDvi;
-        await this.getDmKho();
-        console.log(this.listDanhMucKho);
+        await this.getDmKho(); 
         await this.addListKho();
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
@@ -136,7 +135,6 @@ export class BaoHiemHangComponent implements OnInit {
                 })
             })
         })
-        console.log(this.listDiemKho);
         this.listDiemKho.forEach(item => {
             this.listKhoFull.push(item)
             item.children.forEach(itmCon => {
@@ -182,7 +180,6 @@ export class BaoHiemHangComponent implements OnInit {
         nhaKho.forEach(itemChild => {
             itemChild.id = `${itemChild.id}`
         })
-        console.log(nhaKho);
         this.listKho = nhaKho
 
     };

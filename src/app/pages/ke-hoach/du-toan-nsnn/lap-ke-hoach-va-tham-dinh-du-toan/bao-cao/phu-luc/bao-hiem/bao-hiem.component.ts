@@ -98,25 +98,11 @@ export class BaoHiemComponent implements OnInit {
                     gtTong: 0,
                 })
             })
-            this.setLevel();
-            // this.lstCtietBcao.forEach(item => {
-            //     item.tenVtu += this.getName(item.level, item.maVtu);
-            // })
-        } else if (!this.lstCtietBcao[0]?.stt) {
-            this.lstCtietBcao.forEach(item => {
-                item.stt = item.maVtu;
-            })
-        }
-        if (this.dataInfo?.extraData) {
-            this.dataInfo.extraData.forEach(item => {
-                // if (item.maVtu) {
-                //     const index = this.lstCtietBcao.findIndex(e => e.maVtu == item.maNdung);
-                //     this.lstCtietBcao[index].namKh = item.namKh;
-                //     this.lstCtietBcao[index].giaTriThamDinh = item.giaTriThamDinh;
-                // } else {
+            if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
+                this.dataInfo.extraData.forEach(item => {
                     this.lstCtietBcao.push({
                         ...new ItemData(),
-                        id: uuid.v4(),
+                        id: uuid.v4() + 'FE',
                         stt: item.stt,
                         level: item.level,
                         maVtu: item.maVtu,
@@ -129,9 +115,16 @@ export class BaoHiemComponent implements OnInit {
                         gtDuoiM3: item.gtDuoiM3,
                         gtTong: item.gtTong,
                     })
-                // }
+                })
+            }
+            this.setLevel();
+            // this.lstCtietBcao.forEach(item => {
+            //     item.tenVtu += this.getName(item.level, item.maVtu);
+            // })
+        } else if (!this.lstCtietBcao[0]?.stt) {
+            this.lstCtietBcao.forEach(item => {
+                item.stt = item.maVtu;
             })
-            console.log(this.dataInfo);
         }
         this.sortByIndex();
         this.getTotal();
@@ -428,11 +421,8 @@ export class BaoHiemComponent implements OnInit {
 
 
     changeModel(id: string): void {
-        // this.editCache[id].data.ncauChiChiaRaDtuPtrien = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiMoi1]);
-        // this.editCache[id].data.ncauChiChiaRaChiTx = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs2, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
-        // this.editCache[id].data.ncauChiTrongDoChiCs = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiCs2]);
-        // this.editCache[id].data.ncauChiTrongDoChiMoi = sumNumber([this.editCache[id].data.ncauChiChiaRaChiMoi1, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
-        // this.editCache[id].data.ncauChiTongSo = sumNumber([this.editCache[id].data.ncauChiTrongDoChiCs, this.editCache[id].data.ncauChiTrongDoChiMoi]);
+        this.editCache[id].data.slTong = sumNumber([this.editCache[id].data.slTuM3, this.editCache[id].data.slDuoiM3]);
+        this.editCache[id].data.gtTong = sumNumber([this.editCache[id].data.gtTuM3, this.editCache[id].data.gtDuoiM3]);
     }
 
     sum(stt: string) {
@@ -455,7 +445,7 @@ export class BaoHiemComponent implements OnInit {
                     this.lstCtietBcao[index].slTong = sumNumber([this.lstCtietBcao[index].slTong, item.slTong]);
                     this.lstCtietBcao[index].gtTuM3 = sumNumber([this.lstCtietBcao[index].gtTuM3, item.gtTuM3]);
                     this.lstCtietBcao[index].gtDuoiM3 = sumNumber([this.lstCtietBcao[index].gtDuoiM3, item.gtDuoiM3]);
-                    this.lstCtietBcao[index].gtTong = sumNumber([this.lstCtietBcao[index].gtTong, item.gtTong]);
+                    this.lstCtietBcao[index].gtTong = sumNumber([this.lstCtietBcao[index].gtTuM3, this.lstCtietBcao[index].gtDuoiM3]);
                 }
             })
             stt = this.getHead(stt);
@@ -466,14 +456,16 @@ export class BaoHiemComponent implements OnInit {
     getTotal() {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
-            // if (item.level == 0) {
-                this.total.slTuM3 = sumNumber([this.total.slTuM3, item.slTuM3]);
-                this.total.slDuoiM3 = sumNumber([this.total.slDuoiM3, item.slDuoiM3]);
-                this.total.slTong = sumNumber([this.total.slTong, item.slTong]);
+            if (item.level == 1) {
                 this.total.gtTuM3 = sumNumber([this.total.gtTuM3, item.gtTuM3]);
                 this.total.gtDuoiM3 = sumNumber([this.total.gtDuoiM3, item.gtDuoiM3]);
-                this.total.gtTong = sumNumber([this.total.gtTong, item.gtTong]);
-            // }
+                this.total.gtTong = sumNumber([this.total.gtTuM3, this.total.gtDuoiM3]);
+            }
+            if (item.level == 0) {
+                this.total.gtTuM3 = sumNumber([this.total.gtTuM3, item.gtTuM3]);
+                this.total.gtDuoiM3 = sumNumber([this.total.gtDuoiM3, item.gtDuoiM3]);
+                this.total.gtTong = sumNumber([this.total.gtTuM3, this.total.gtDuoiM3]);
+            }
         })
     }
 
