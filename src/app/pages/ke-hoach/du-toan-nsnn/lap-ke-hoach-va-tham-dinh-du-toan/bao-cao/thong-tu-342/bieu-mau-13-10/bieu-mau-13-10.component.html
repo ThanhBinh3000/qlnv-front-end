@@ -57,17 +57,17 @@
         </tr>
         <tr>
           <th></th>
-          <th>TỔNG SỐ (1+2+3+4+5+6)</th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th *ngIf="checkViewTD"></th>
-          <th *ngIf="checkViewTD"></th>
-          <th *ngIf="checkViewTD"></th>
+          <th>Tổng cộng</th>
+          <th>{{displayValue(total.uocThien)}}</th>
+          <th>{{displayValue(total.namSoDtuong)}}</th>
+          <th>{{displayValue(total.namDtoanGiao)}}</th>
+          <th>{{displayValue(total.namUocThien)}}</th>
+          <th>{{displayValue(total.khSoDtuong)}}</th>
+          <th>{{displayValue(total.khMucTcap)}}</th>
+          <th>{{displayValue(total.khDtoanNam)}}</th>
+          <th *ngIf="checkViewTD">{{displayValue(total.gtriTdinhSoDtuong)}}</th>
+          <th *ngIf="checkViewTD">{{displayValue(total.gtriTdinhMucTcap)}}</th>
+          <th *ngIf="checkViewTD">{{displayValue(total.gtriTdinhDtoanNam)}}</th>
         </tr>
       </thead>
       <tbody>
@@ -211,24 +211,6 @@
             <i *ngIf="checkDelete(data.maNdung)" class="fa fa-trash-o do" (click)="deleteLine(data.stt)"></i>
           </td>
           </ng-template>
-        </tr>
-
-        <tr>
-          <td></td>
-          <td>Tổng cộng</td>
-          <!-- <td></td> -->
-          <td>{{displayValue(total.uocThien)}}</td>
-          <td>{{displayValue(total.namSoDtuong)}}</td>
-          <td>{{displayValue(total.namDtoanGiao)}}</td>
-          <td>{{displayValue(total.namUocThien)}}</td>
-          <td>{{displayValue(total.khSoDtuong)}}</td>
-          <td>{{displayValue(total.khMucTcap)}}</td>
-          <td>{{displayValue(total.khDtoanNam)}}</td>
-          <td *ngIf="checkViewTD">{{displayValue(total.gtriTdinhSoDtuong)}}</td>
-          <td *ngIf="checkViewTD">{{displayValue(total.gtriTdinhMucTcap)}}</td>
-          <td *ngIf="checkViewTD">{{displayValue(total.gtriTdinhDtoanNam)}}</td>
-          <td [hidden]="status"></td>
-          <td [hidden]="status"></td>
         </tr>
       </tbody>
     </nz-table>

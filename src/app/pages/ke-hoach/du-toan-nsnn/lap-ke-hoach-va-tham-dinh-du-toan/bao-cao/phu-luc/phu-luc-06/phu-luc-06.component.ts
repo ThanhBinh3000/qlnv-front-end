@@ -115,6 +115,7 @@ export class PhuLuc06Component implements OnInit {
         })
         await this.addVatTu();
         this.updateEditCache();
+        this.tinhTong();
         this.getStatusButton();
 
         this.spinner.hide();
@@ -131,7 +132,7 @@ export class PhuLuc06Component implements OnInit {
                     this.dsDinhMuc = res.data;
                     this.dsDinhMuc.forEach(item => {
                         if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = Math.round(divNumber(item.tongDmuc, 1000));
+                            item.tongDmuc = divNumber(item.tongDmuc, 1000);
                         }
                     })
                 } else {

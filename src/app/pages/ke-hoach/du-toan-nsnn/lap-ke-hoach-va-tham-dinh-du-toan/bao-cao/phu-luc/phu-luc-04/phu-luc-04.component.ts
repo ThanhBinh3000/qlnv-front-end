@@ -84,7 +84,7 @@ export class PhuLuc04Component implements OnInit {
     async initialization() {
         this.spinner.show();
         this.formDetail = this.dataInfo?.data;
-        this.namBcao = this.dataInfo?.namBcao;
+        this.namBcao = this.dataInfo?.namBcao + 1;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
