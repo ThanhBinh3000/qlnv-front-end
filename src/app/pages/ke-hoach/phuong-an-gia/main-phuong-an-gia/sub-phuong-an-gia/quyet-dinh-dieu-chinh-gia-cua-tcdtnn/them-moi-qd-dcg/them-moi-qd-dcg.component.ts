@@ -430,7 +430,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
-        soQd: data.soQd.split("/")[0],
+        soQd: data.soQd ? data.soQd.split("/")[0] : '',
         soToTrinhDx: data.soToTrinhDx,
         soQdgTcdtnn: data.soQdgTcdtnn,
         ngayKy: data.ngayKy,

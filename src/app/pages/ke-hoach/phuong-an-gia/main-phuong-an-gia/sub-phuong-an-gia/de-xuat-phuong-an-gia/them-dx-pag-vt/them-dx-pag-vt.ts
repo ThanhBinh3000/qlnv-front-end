@@ -307,7 +307,7 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
-        soDeXuat: data.soDeXuat.split("/")[0],
+        soDeXuat: data.soDeXuat? data.soDeXuat.split("/")[0] : '',
         loaiVthh: data.loaiVthh,
         ngayKy: data.ngayKy,
         nguoiKy: data.nguoiKy,
