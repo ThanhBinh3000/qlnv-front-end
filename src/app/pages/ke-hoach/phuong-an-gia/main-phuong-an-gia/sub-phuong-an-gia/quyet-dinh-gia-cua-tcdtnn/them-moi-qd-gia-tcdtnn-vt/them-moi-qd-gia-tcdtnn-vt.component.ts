@@ -48,7 +48,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
   maQd: string;
   dataTable: any[] = [];
   isErrorUnique = false;
-  thueVat: number;
+  thueVat: number = 10/100;
   radioValue: string;
 
   constructor(
@@ -94,7 +94,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       this.loadDsVthh(),
       this.loadToTrinhDeXuat(),
       this.maQd = "/QĐ-TCDT",
-      this.loadTiLeThue()
+      // this.loadTiLeThue()
     ]);
     await  this.getDataDetail(this.idInput)
     this.spinner.hide();
@@ -107,7 +107,7 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
-        soQd: data.soQd.split("/")[0],
+        soQd: data.soQd ? data.soQd.split("/")[0] : '',
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
         ngayKy: data.ngayKy,
@@ -138,14 +138,14 @@ export class ThemMoiQdGiaTcdtnnVtComponent implements OnInit {
     }
   }
 
-  async loadTiLeThue() {
-    let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
-    if (res.msg == MESSAGE.SUCCESS) {
-      this.thueVat = res.data[0].giaTri;
-    } else {
-      this.thueVat = 10;
-    }
-  }
+  // async loadTiLeThue() {
+  //   let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.thueVat = res.data[0].giaTri;
+  //   } else {
+  //     this.thueVat = 10;
+  //   }
+  // }
 
   quayLai() {
     this.onClose.emit();

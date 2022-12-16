@@ -430,7 +430,7 @@ export class ThemMoiQdDcgComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
-        soQd: data.soQd.split("/")[0],
+        soQd: data.soQd ? data.soQd.split("/")[0] : '',
         soToTrinhDx: data.soToTrinhDx,
         soQdgTcdtnn: data.soQdgTcdtnn,
         ngayKy: data.ngayKy,
@@ -459,9 +459,11 @@ export class ThemMoiQdDcgComponent implements OnInit {
   async loadTiLeThue() {
     let res = await this.danhMucService.danhMucChungGetAll("THUE_VAT");
     if (res.msg == MESSAGE.SUCCESS) {
-      this.thueVat = res.data[0].giaTri;
-    } else {
-      this.thueVat = 10;
+      if (this.loaiVthh == 'LT') {
+        this.thueVat = res.data[0].giaTri;
+      } else {
+        this.thueVat = 10/100;
+      }
     }
   }
 
