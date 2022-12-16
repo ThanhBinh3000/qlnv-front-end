@@ -48,6 +48,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
   isTongHop: boolean = false;
   isMain: boolean = true;
   listCucSelected: any[] = [];
+  fileDinhKem: any[] = [];
   STATUS: any
   constructor(
     private readonly fb: FormBuilder,
@@ -134,6 +135,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
         loaiGia: data.loaiGia
       });
       this.bindingDataTongHop(res.data, null)
+      this.fileDinhKem = data.fileDinhKems;
     }
   }
 
@@ -181,6 +183,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
       return;
     }
     let body = this.formData.value;
+    body.fileDinhKemReq = this.fileDinhKem;
     body.type = this.type;
     let res = await this.tongHopPhuongAnGiaService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -244,7 +247,7 @@ export class ThemTongHopPhuongAnGiaComponent implements OnInit {
     }
     body.type = this.type;
     delete body.ngayDx;
-    let res = await this.tongHopPhuongAnGiaService.tongHop(body );
+    let res = await this.tongHopPhuongAnGiaService.tongHop(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.isTongHop = true;
       this.bindingDataTongHop(res.data, body);

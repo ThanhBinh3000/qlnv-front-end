@@ -125,6 +125,16 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Tài liệu đính kèm
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [data]="fileDinhKem"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">Loại hàng hóa
@@ -183,35 +193,35 @@
       </thead>
       <tbody>
         <tr *ngFor="let data of listThongTinGia; let idx = index">
-            <td class="text-center">{{ idx + 1 }}</td>
-            <td>{{ data.tenDvi }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.giaDn }}</td>
-            <td>{{ data.giaDnVat }}</td>
-            <td>
-              <nz-input-group>
-                <nz-input-number nz-input [ngModelOptions]="{standalone: true}" [disabled]="isView"
-                  [(ngModel)]="listThongTinGia[idx].giaQd" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,0)">
-                </nz-input-number>
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <nz-input-number nz-input [ngModelOptions]="{standalone: true}" [disabled]="isView"
-                  [(ngModel)]="listThongTinGia[idx].giaQdVat" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,1)">
-                </nz-input-number>
-              </nz-input-group>
-            </td>
-            <td *ngIf="!isView" style="text-align: left; white-space: nowrap;">
-              <!--  <a>
+          <td class="text-center">{{ idx + 1 }}</td>
+          <td>{{ data.tenDvi }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.giaDn }}</td>
+          <td>{{ data.giaDnVat }}</td>
+          <td>
+            <nz-input-group>
+              <nz-input-number nz-input [ngModelOptions]="{standalone: true}" [disabled]="isView"
+                [(ngModel)]="listThongTinGia[idx].giaQd" [nzMin]="0" [nzFormatter]="globals.formatter"
+                [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,0)">
+              </nz-input-number>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <nz-input-number nz-input [ngModelOptions]="{standalone: true}" [disabled]="isView"
+                [(ngModel)]="listThongTinGia[idx].giaQdVat" [nzMin]="0" [nzFormatter]="globals.formatter"
+                [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,1)">
+              </nz-input-number>
+            </nz-input-group>
+          </td>
+          <td *ngIf="!isView" style="text-align: left; white-space: nowrap;">
+            <!--  <a>
               <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
             </a>-->
-              <a>
-                <i class="fa fa-trash-o do" (click)="deleteItem(idx)"></i>
-              </a>
-            </td>
+            <a>
+              <i class="fa fa-trash-o do" (click)="deleteItem(idx)"></i>
+            </a>
+          </td>
         </tr>
       </tbody>
     </nz-table>
@@ -364,6 +374,16 @@
             </nz-form-control>
           </nz-form-item>
         </div>
+        <div nz-col nzSpan="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Tài liệu đính kèm
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [data]="fileDinhKem"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
       </div>
     </form>
   </nz-card>
@@ -388,34 +408,34 @@
       </thead>
       <tbody>
         <tr *ngFor="let data of listThongTinGia; let idx = index">
-            <td class="text-center">{{ idx + 1 }}</td>
-            <td>{{ data.cloaiVthh }}</td>
-            <td>{{ data.tieuChuanCl }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.donViTinh }}</td>
-            <td>{{ data.giaDn }}</td>
-            <td>{{ data.giaDnVat }}</td>
-            <td>
-              <nz-input-group>
-                <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
-                  [(ngModel)]="listThongTinGia[idx].giaQd" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,0)">
-                </nz-input-number>
-              </nz-input-group>
-            </td>
-            <td>
-              <nz-input-group>
-                <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
-                  [(ngModel)]="listThongTinGia[idx].giaQdVat" [nzMin]="0" [nzFormatter]="globals.formatter"
-                  [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,1)">
-                </nz-input-number>
-              </nz-input-group>
-            </td>
-            <td *ngIf="!isView" style="text-align: left; white-space: nowrap;">
-              <a>
-                <i class="fa fa-trash-o do" (click)="deleteItem(idx)"></i>
-              </a>
-            </td>
+          <td class="text-center">{{ idx + 1 }}</td>
+          <td>{{ data.cloaiVthh }}</td>
+          <td>{{ data.tieuChuanCl }}</td>
+          <td>{{ data.soLuong }}</td>
+          <td>{{ data.donViTinh }}</td>
+          <td>{{ data.giaDn }}</td>
+          <td>{{ data.giaDnVat }}</td>
+          <td>
+            <nz-input-group>
+              <nz-input-number nz-input [ngModelOptions]="{standalone: true}" [(ngModel)]="listThongTinGia[idx].giaQd"
+                [nzMin]="0" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                (nzBlur)="calculateVAT(idx,0)">
+              </nz-input-number>
+            </nz-input-group>
+          </td>
+          <td>
+            <nz-input-group>
+              <nz-input-number nz-input [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="listThongTinGia[idx].giaQdVat" [nzMin]="0" [nzFormatter]="globals.formatter"
+                [nzParser]="globals.parser" (nzBlur)="calculateVAT(idx,1)">
+              </nz-input-number>
+            </nz-input-group>
+          </td>
+          <td *ngIf="!isView" style="text-align: left; white-space: nowrap;">
+            <a>
+              <i class="fa fa-trash-o do" (click)="deleteItem(idx)"></i>
+            </a>
+          </td>
         </tr>
       </tbody>
     </nz-table>
