@@ -46,12 +46,10 @@
 
   <div class="group-button">
     <h3 class="text-uppercase">Danh sách vốn, phí hàng của Bộ, Ngành</h3>
-    <div class="buttons">
-      <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
-        <i class="fa fa-trash-o do"></i>
-        <span>Xoá</span>
-      </button>
-    </div>
+    <button type="button" (click)="exportData()" class="btn btn-sub">
+      <i class="icon htvbdh_chuyen-xu-ly"></i>
+      <span>Xuất file</span>
+    </button>
   </div>
 
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -131,9 +129,9 @@
           <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="viewDetail(data.id, false)">
             <i class="fa fa-pencil"></i>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="xoaItem(data)">
-            <i class="fa fa-trash-o do"></i>
-          </a>
+          <!--          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="xoaItem(data)">-->
+          <!--            <i class="fa fa-trash-o do"></i>-->
+          <!--          </a>-->
         </td>
       </tr>
       </tbody>
@@ -156,6 +154,6 @@
   </nz-card>
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
-  <app-thong-tin-du-lieu-tong-hop-tcdt >
+  <app-thong-tin-du-lieu-tong-hop-tcdt [isView]="isViewDetail" [idInput]="idSelected" (showListEvent)="showList()">
   </app-thong-tin-du-lieu-tong-hop-tcdt>
 </div>

@@ -5,7 +5,7 @@
         <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span class="text-uppercase">Dữ liệu tổng hợp của TCDT</span>
+        <span class="text-uppercase">Quyết định phê duyệt quyết toán của BTC</span>
       </div>
     </div>
     <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV " nzShowIcon nzType="error"

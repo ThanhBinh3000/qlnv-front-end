@@ -12,14 +12,14 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import * as dayjs from "dayjs";
 import {MESSAGE} from "../../../../../constants/message";
 import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import {STATUS} from 'src/app/constants/status';
+import { STATUS } from 'src/app/constants/status';
 
 @Component({
-  selector: 'app-thong-tin-du-lieu-tong-hop-tcdt',
-  templateUrl: './thong-tin-du-lieu-tong-hop-tcdt.component.html',
-  styleUrls: ['./thong-tin-du-lieu-tong-hop-tcdt.component.scss']
+  selector: 'app-thong-tin-qd-pheduyet-quyet-toan-btc',
+  templateUrl: './thong-tin-qd-pheduyet-quyet-toan-btc.component.html',
+  styleUrls: ['./thong-tin-qd-pheduyet-quyet-toan-btc.component.scss']
 })
-export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
+export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
 
   formData: FormGroup;
   @Input('isView') isView: boolean = false;
