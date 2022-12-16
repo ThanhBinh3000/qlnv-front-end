@@ -80,44 +80,50 @@ export class Base2Component implements OnInit {
   // SEARCH
   async search() {
     this.spinner.show();
-    let body = this.formData.value
-    body.paggingReq = {
-      limit: this.pageSize,
-      page: this.page - 1
-    }
-    let res = await this.service.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.dataTable = data.content;
-      this.totalRecord = data.totalElements;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
+    try {
+      let body = this.formData.value
+      body.paggingReq = {
+        limit: this.pageSize,
+        page: this.page - 1
       }
-      this.dataTableAll = cloneDeep(this.dataTable);
-    } else {
-      this.dataTable = [];
-      this.totalRecord = 0;
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      let res = await this.service.search(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        this.dataTable = data.content;
+        this.totalRecord = data.totalElements;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach((item) => {
+            item.checked = false;
+          });
+        }
+        this.dataTableAll = cloneDeep(this.dataTable);
+      } else {
+        this.dataTable = [];
+        this.totalRecord = 0;
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+      this.spinner.hide();
+    } catch (e) {
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    } finally {
+      this.spinner.hide();
     }
-    this.spinner.hide();
   }
 
   clearForm() {
     this.formData.reset();
+    this.search();
   }
 
   async changePageIndex(event) {
-    this.spinner.show();
-    try {
-      this.page = event;
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
+    this.page = event;
+    await this.search();
+  }
+
+  async changePageSize(event) {
+    this.pageSize = event;
+    await this.search();
   }
 
   filterInTable(key: string, value: string) {
@@ -169,17 +175,6 @@ export class Base2Component implements OnInit {
     }
   }
 
-  async changePageSize(event) {
-    this.spinner.show();
-    try {
-      this.pageSize = event;
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
 
   // DELETE 1 item table
   delete(item: any) {
