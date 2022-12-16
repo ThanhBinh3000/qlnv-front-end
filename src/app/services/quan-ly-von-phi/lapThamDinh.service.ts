@@ -74,6 +74,7 @@ export class LapThamDinhService extends BaseService {
     updateLapThamDinh(request: any): Observable<any> {
         return this.httpClient.put(
             this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/chi-tiet/cap-nhat',
+            // 'http://192.168.1.111:30101/lap-tham-dinh/chi-tiet/cap-nhat',
             request,
         );
     }
@@ -174,6 +175,7 @@ export class LapThamDinhService extends BaseService {
     tongHop(request: any): Observable<any> {
         return this.httpClient.post(
             this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/tong-hop',
+            // 'http://192.168.1.111:30101/lap-tham-dinh/tong-hop',
             request,
         );
     }

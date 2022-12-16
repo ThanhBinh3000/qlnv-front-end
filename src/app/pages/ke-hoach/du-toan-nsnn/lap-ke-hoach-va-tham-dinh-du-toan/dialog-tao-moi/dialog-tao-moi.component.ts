@@ -81,10 +81,6 @@ export class DialogTaoMoiComponent implements OnInit {
                         item.maDviTien = '1';
                         item.trangThai = '3';
                     })
-                    this.response.lstDviTrucThuoc.forEach(item => {
-                        item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
-                        item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
-                    })
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
