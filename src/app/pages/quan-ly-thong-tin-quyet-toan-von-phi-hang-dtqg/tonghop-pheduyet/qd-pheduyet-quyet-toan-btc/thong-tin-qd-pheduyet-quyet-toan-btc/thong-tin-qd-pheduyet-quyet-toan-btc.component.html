@@ -2,37 +2,23 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-          {{ formData.value.tenTrangThai }}
+        <span
+          [ngClass]="formData.value.tenTrangThaiBtc == STATUS.DADUYET_BTC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+          {{ formData.value.tenTrangThaiBtc }}
         </span>
         <span class="text-uppercase">Quyết định phê duyệt quyết toán của BTC</span>
       </div>
     </div>
-    <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV " nzShowIcon nzType="error"
-              nzMessage="Lý do từ chối"
-              nzDescription="{{formData.value.lyDoTuChoi}}">
-    </nz-alert>
+<!--    <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV " nzShowIcon nzType="error"-->
+<!--              nzMessage="Lý do từ chối"-->
+<!--              nzDescription="{{formData.value.lyDoTuChoi}}">-->
+<!--    </nz-alert>-->
     <div class="btn-group">
       <button type="button" class="btn btn-sub" (click)="quayLai()">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button"
-              class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span>Lưu và gửi duyệt</span>
-      </button>
-      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc()" type="button"
-              class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span>Duyệt</span>
-      </button>
-      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc()" type="button"
-              class="btn btn-sub do ml-2" (click)="tuChoi()">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Từ chối</span>
-      </button>
-      <button *ngIf="!isView"
+      <button *ngIf="!isView && dataDetail.trangThaiBtc == STATUS.CHODUYET_BTC"
               type="button" class="btn btn-main ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -62,17 +48,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="4">
-          <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Ngày tổng hợp</nz-form-label>
-            <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzDisabled]="true" formControlName="ngayTongHop" nzFormat="dd/MM/yyyy">
-              </nz-date-picker>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-      </div>
-      <div nz-row [nzGutter]="[20]">
         <div nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số tờ trình BTC
@@ -82,6 +57,37 @@
                 <input type="text" [readonly]="isView" nz-input formControlName="soToTrinh"/>
               </nz-input-group>
             </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngày tổng hợp</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-date-picker [nzDisabled]="true" formControlName="ngayTongHop" nzFormat="dd/MM/yyyy">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="2">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Trạng thái
+            </nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <nz-select [nzDisabled]="isView" formControlName="trangThaiBtc" nzAllowClear>
+                <nz-option *ngFor="let p of dsTrangThaiBtc" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="[20]">
+        <div nz-col nzSpan="20">
+          <nz-form-item nz-col nzSpan="24" class="form-item">
+            <nz-form-label [nzNoColon]="true" class="label-color-kh">Tài liệu đính kèm
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [data]="taiLieuDinhKemList" [isViewDetail]="isView"></file-list>
+            </div>
           </nz-form-item>
         </div>
       </div>
@@ -687,17 +693,7 @@
       </nz-table>
     </nz-card>
   </ng-container>
-  <!--  <nz-card class="mg-t-10 flex-card p-lr16 card-table">-->
-  <!--    <div nz-col [nzSpan]="24">-->
-  <!--      <nz-form-item nz-col nzSpan="24" class="form-item">-->
-  <!--        <nz-form-label [nzNoColon]="true" class="label-color-kh">Tài liệu đính kèm-->
-  <!--        </nz-form-label>-->
-  <!--        <div class="list-file">-->
-  <!--          <file-list [data]="taiLieuDinhKemList" [isViewDetail]="false"></file-list>-->
-  <!--        </div>-->
-  <!--      </nz-form-item>-->
-  <!--    </div>-->
-  <!--  </nz-card>-->
+
 </div>
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>

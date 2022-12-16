@@ -12,7 +12,7 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import * as dayjs from "dayjs";
 import {MESSAGE} from "../../../../../constants/message";
 import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import { STATUS } from 'src/app/constants/status';
+import {STATUS} from 'src/app/constants/status';
 
 @Component({
   selector: 'app-thong-tin-qd-pheduyet-quyet-toan-btc',
@@ -28,6 +28,10 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   page: number = 1;
   dsNam: any[] = [];
+  dsTrangThaiBtc = [{"value": STATUS.CHODUYET_BTC, "text": "Chờ duyệt BTC"}, {
+    "value": STATUS.TUCHOI_BTC,
+    "text": "Từ chối BTC"
+  }, {"value": STATUS.DADUYET_BTC, "text": "Đã duyệt BTC"}];
   @Input()
   idInput: number;
   dataTableAll: any[] = [];
@@ -44,6 +48,7 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
   rowItemQtNsChiTw: KeHoachVonPhiBNCT = new KeHoachVonPhiBNCT();
   rowItemQtNsKpChiNvDtqg: KeHoachVonPhiBNCT = new KeHoachVonPhiBNCT();
   taiLieuDinhKemList: any[] = [];
+  dataDetail: any = {};
   setOfCheckedId = new Set<number>();
   indeterminate = false;
   filterTable: any = {
@@ -71,7 +76,9 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
       namQuyetToan: [dayjs().get('year'), [Validators.required]],
       ngayNhap: ['', [Validators.required]],
       trangThai: ['00'],
+      trangThaiBtc: ['49'],
       tenTrangThai: ['Dự thảo'],
+      tenTrangThaiBtc: ['Chờ duyệt-BTC'],
       soToTrinh: [null, [Validators.required]],
       ngayTongHop: ['', [Validators.required]],
     });
@@ -93,6 +100,7 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
       let res = await this.vonPhiService.getDetail(id);
       const data = res.data;
       if (res.msg == MESSAGE.SUCCESS) {
+        this.dataDetail = data;
         this.formData.patchValue({
           id: data.id,
           namQuyetToan: data.namQt,
@@ -100,6 +108,7 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
           ngayTongHop: data.ngayTao,
           tenTrangThai: data.tenTrangThai,
           trangThai: data.trangThai,
+          trangThaiBtc: data.trangThaiBtc,
           soToTrinh: data.soToTrinh
         });
         this.dsQtNsChiTw = data.dsQtNsChiTw;
@@ -125,11 +134,12 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
       "id": null,
       "namQt": this.formData.value.namQuyetToan,
       "trangThai": this.formData.value.trangThai,
+      "trangThaiBtc": this.formData.value.trangThaiBtc,
       "ngayNhap": this.formData.get("ngayNhap").value ? dayjs(this.formData.get("ngayNhap").value).format("YYYY-MM-DD") : null,
       "dsQtNsChiTw": this.dsQtNsChiTw,
       "dsQtNsKpChiNvDtqg": this.dsQtNsKpChiNvDtqg,
       "taiLieuDinhKems": this.taiLieuDinhKemList,
-      "loai": "01",
+      "loai": "02",
       "soToTrinh": this.formData.value.soToTrinh,
     };
     this.spinner.show();
@@ -374,8 +384,8 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            lyDo: text,
-            trangThai: STATUS.TU_CHOI_LDV,
+            lyDoTuChoi: text,
+            trangThai: STATUS.TU_CHOI_LDTC,
           };
           const res = await this.vonPhiService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {

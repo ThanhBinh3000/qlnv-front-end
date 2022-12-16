@@ -45,7 +45,7 @@
   </nz-card>
 
   <div class="group-button">
-    <h3 class="text-uppercase">Danh sách vốn, phí hàng của Bộ, Ngành</h3>
+    <h3 class="text-uppercase">Danh sách quyết định phê duyệt quyết toán của BTC</h3>
     <button type="button" (click)="exportData()" class="btn btn-sub">
       <i class="icon htvbdh_chuyen-xu-ly"></i>
       <span>Xuất file</span>
@@ -66,7 +66,6 @@
         <th class="text-center">Năm quyết toán</th>
         <th class="text-center">Ngày tổng hợp</th>
         <th class="text-center">Số tờ trình gửi BTC</th>
-        <th class="text-center">Trạng thái</th>
         <th class="text-center">Trạng thái phê duyệt của BTC</th>
         <th class="text-center">Hành động</th>
       </tr>
@@ -120,13 +119,12 @@
         <td>{{ data.namQt }}</td>
         <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
         <td>{{ data.soToTrinh }}</td>
-        <td>{{ data.tenTrangThai }}</td>
         <td>{{ data.tenTrangThaiBtc }}</td>
         <td class="text-center">
           <a (click)="viewDetail(data.id, true)">
             <i class="fa fa-eye"></i>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="viewDetail(data.id, false)">
+          <a *ngIf="data.trangThaiBtc == STATUS.CHODUYET_BTC" (click)="viewDetail(data.id, false)">
             <i class="fa fa-pencil"></i>
           </a>
           <!--          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="xoaItem(data)">-->

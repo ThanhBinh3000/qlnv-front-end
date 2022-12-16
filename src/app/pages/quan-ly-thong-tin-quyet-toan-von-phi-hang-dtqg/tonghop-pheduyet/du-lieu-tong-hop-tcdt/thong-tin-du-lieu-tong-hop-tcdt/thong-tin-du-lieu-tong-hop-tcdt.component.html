@@ -71,8 +71,6 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-      </div>
-      <div nz-row [nzGutter]="[20]">
         <div nz-col nzSpan="3">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số tờ trình BTC
@@ -82,6 +80,17 @@
                 <input type="text" [readonly]="isView" nz-input formControlName="soToTrinh"/>
               </nz-input-group>
             </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="[20]">
+        <div nz-col nzSpan="20">
+          <nz-form-item nz-col nzSpan="24" class="form-item">
+            <nz-form-label [nzNoColon]="true" class="label-color-kh">File tờ trình gửi BTC
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [data]="taiLieuDinhKemList" [isViewDetail]="isView"></file-list>
+            </div>
           </nz-form-item>
         </div>
       </div>

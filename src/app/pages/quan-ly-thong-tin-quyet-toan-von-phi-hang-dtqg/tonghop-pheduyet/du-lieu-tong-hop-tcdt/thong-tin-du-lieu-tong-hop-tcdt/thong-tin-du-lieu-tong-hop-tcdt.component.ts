@@ -100,7 +100,8 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
           ngayTongHop: data.ngayTao,
           tenTrangThai: data.tenTrangThai,
           trangThai: data.trangThai,
-          soToTrinh: data.soToTrinh
+          soToTrinh: data.soToTrinh,
+          lyDoTuChoi: data.lyDoTuChoi,
         });
         this.dsQtNsChiTw = data.dsQtNsChiTw;
         this.dsQtNsKpChiNvDtqg = data.dsQtNsKpChiNvDtqg;
@@ -325,15 +326,11 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
           let trangThai;
           switch (this.formData.value.trangThai) {
             case STATUS.DU_THAO: {
-              trangThai = STATUS.CHO_DUYET_LDV;
+              trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.CHO_DUYET_LDV: {
-              trangThai = STATUS.DA_DUYET_LDV;
-              break;
-            }
-            case STATUS.TU_CHOI_LDV: {
-              trangThai = STATUS.CHO_DUYET_LDV;
+            case STATUS.CHO_DUYET_LDTC: {
+              trangThai = STATUS.DA_DUYET_LDTC;
               break;
             }
           }
@@ -374,8 +371,8 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            lyDo: text,
-            trangThai: STATUS.TU_CHOI_LDV,
+            lyDoTuChoi: text,
+            trangThai: STATUS.TU_CHOI_LDTC,
           };
           const res = await this.vonPhiService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
