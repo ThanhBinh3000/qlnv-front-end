@@ -12,6 +12,8 @@ import { NghiemThuThanhLy, TienDoThucHien } from 'src/app/models/KhoaHocCongNghe
 import { UserService } from 'src/app/services/user.service';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { cloneDeep } from 'lodash';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 @Component({
   selector: 'app-thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan',
   templateUrl: './thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan.component.html',
@@ -47,16 +49,12 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
   rowItem1: NghiemThuThanhLy = new NghiemThuThanhLy;
   dataEdit1: { [key: string]: { edit: boolean; data: NghiemThuThanhLy } } = {};
   constructor(
-    private fb: FormBuilder,
-    private modal: NzModalService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private danhMucService: DanhMucService,
-    private helperService: HelperService,
-    public globals: Globals,
     private khCnCongTrinhNghienCuu: KhCnCongTrinhNghienCuu,
-    private notification: NzNotificationService,
-    public userService: UserService,
   ) {
-    super();
+    super(httpClient, storageService, khCnCongTrinhNghienCuu);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [''],

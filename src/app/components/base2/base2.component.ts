@@ -1,31 +1,29 @@
-import { Component, OnInit } from '@angular/core';
-import dayjs from "dayjs";
-import { UserLogin } from "../../models/userlogin";
-import { UserService } from "../../services/user.service";
-import { STATUS } from "../../constants/status";
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import dayjs from 'dayjs';
+import { NzSingletonService } from 'ng-zorro-antd/core/services';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
+import { STATUS } from 'src/app/constants/status';
+import { UserLogin } from 'src/app/models/userlogin';
 import { BaseService } from 'src/app/services/base.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { StorageService } from 'src/app/services/storage.service';
+import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
-import { HelperService } from 'src/app/services/helper.service';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
-import { Injector, TemplateRef } from '@angular/core';
-import { Overlay } from '@angular/cdk/overlay';
-import { NzSingletonService } from 'ng-zorro-antd/core/services';
-
+import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
 
 @Component({
-  selector: 'app-base',
-  templateUrl: './base.component.html',
+  selector: 'app-base2',
+  templateUrl: './base2.component.html',
 })
-export class BaseComponent implements OnInit {
+export class Base2Component implements OnInit {
   // User Info 
   userInfo: UserLogin;
 
@@ -44,30 +42,28 @@ export class BaseComponent implements OnInit {
   indeterminate = false;
 
   // Service 
-  spinner: NgxSpinnerService;
   modal: NzModalService
   filterTable: any = {}
   fb: FormBuilder = new FormBuilder();
-
   globals: Globals = new Globals();
   helperService: HelperService
   userService: UserService
-  notification: NzNotificationService;
-
-  _httpClient: HttpClient;
-  _nzSingletonService: NzSingletonService = new NzSingletonService();
+  spinner: NgxSpinnerService
+  notification: NzNotificationService
 
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private service: BaseService,
   ) {
-    this.spinner = new NgxSpinnerService();
-    this.helperService = new HelperService(httpClient, this.notification);
+    this.notification = notification
+    this.spinner = spinner;
+    this.modal = modal
+    this.helperService = new HelperService(httpClient, notification);
     this.userService = new UserService(httpClient, storageService);
-  }
-
-  ngOnInit(): void {
     this.userInfo = this.userService.getUserLogin();
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
@@ -77,9 +73,12 @@ export class BaseComponent implements OnInit {
     }
   }
 
+  ngOnInit(): void {
+
+  }
+
   // SEARCH
   async search() {
-    console.log(this.notification);
     this.spinner.show();
     let body = this.formData.value
     body.paggingReq = {
@@ -102,7 +101,7 @@ export class BaseComponent implements OnInit {
       this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
-    // this.spinner.hide();
+    this.spinner.hide();
   }
 
   clearForm() {
@@ -279,40 +278,68 @@ export class BaseComponent implements OnInit {
   // Save 
   async createUpdate(body) {
     this.spinner.show();
-    this.helperService.markFormGroupTouched(this.formData);
-    if (this.formData.invalid) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-      return;
-    }
-    let res = null;
-    if (body.id && body.id > 0) {
-      res = await this.service.update(body);
-    } else {
-      res = await this.service.create(body);
-    }
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (body.id && body.id > 0) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        this.spinner.hide();
-        return res.data;
-      } else {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        this.spinner.hide();
-        return res.data;
+    try {
+      this.helperService.markFormGroupTouched(this.formData);
+      if (this.formData.invalid) {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+        return;
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
+      let res = null;
+      if (body.id && body.id > 0) {
+        res = await this.service.update(body);
+      } else {
+        res = await this.service.create(body);
+      }
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (body.id && body.id > 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          this.spinner.hide();
+          return res.data;
+        } else {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+          this.spinner.hide();
+          return res.data;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.spinner.hide();
+        return null;
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e);
       this.spinner.hide();
-      return null;
+    } finally {
+      this.spinner.hide();
     }
+
   }
 
-  async detail() {
+  async detail(id) {
+    this.spinner.show();
+    try {
+      let res = await this.service.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          const data = res.data;
+          this.helperService.bidingDataInFormGroup(this.formData, data);
+          return data;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.spinner.hide();
+        return null;
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e);
+      this.spinner.hide();
+    } finally {
+      this.spinner.hide();
+    }
 
   }
 
   // Approve
-  async approve(id: number, trangThai: string, msg: string,) {
+  async approve(id: number, trangThai: string, msg: string) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -325,8 +352,8 @@ export class BaseComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            "id": id,
-            "trangThai": trangThai
+            id: id,
+            trangThai: trangThai,
           }
           let res = await this.service.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -342,8 +369,51 @@ export class BaseComponent implements OnInit {
           console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
         }
       },
     });
   }
+
+  async reject(id: number, trangThai: string) {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Từ chối',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.spinner.show();
+        try {
+          let body = {
+            id: id,
+            lyDo: text,
+            trangThai: trangThai,
+          };
+          const res = await this.service.approve(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
+            this.spinner.hide();
+            return true;
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+            this.spinner.hide();
+            return false;
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
+        }
+      }
+    });
+  }
+
 }

@@ -35,6 +35,8 @@ import { STATUS } from "../../../../../../constants/status";
 import { BaseComponent } from "../../../../../../components/base/base.component";
 import { DatePipe } from "@angular/common";
 import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 
 @Component({
@@ -100,21 +102,16 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   constructor(
-    private modal: NzModalService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private danhMucService: DanhMucService,
     private dauThauService: DanhSachDauThauService,
-    private spinner: NgxSpinnerService,
     private uploadFileService: UploadFileService,
-    private notification: NzNotificationService,
-    private fb: FormBuilder,
-    public globals: Globals,
-    public userService: UserService,
-    private helperService: HelperService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private dmTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
   ) {
-    super();
+    super(httpClient, storageService, dauThauService);
     this.formData = this.fb.group({
       id: [],
       maDvi: ['', [Validators.required]],

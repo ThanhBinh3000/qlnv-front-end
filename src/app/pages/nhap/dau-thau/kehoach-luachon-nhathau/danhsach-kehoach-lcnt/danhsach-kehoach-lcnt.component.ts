@@ -68,6 +68,7 @@ export class DanhsachKehoachLcntComponent implements OnInit {
   indeterminate = false;
 
   async ngOnInit() {
+    console.log(this.spinner);
     try {
       if (this.loaiVthh === "02") {
         if (!this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT") || !this.userService.isAccessPermisson("NHDTQG_PTDT_KHLCNT_VT_DEXUAT_XEM")) {

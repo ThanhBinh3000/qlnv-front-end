@@ -28,6 +28,8 @@ import {
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { STATUS } from "../../../../../../constants/status";
 import { HelperService } from 'src/app/services/helper.service';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'them-moi-phieu-nhap-day-kho',
@@ -70,22 +72,15 @@ export class ThemMoiPhieuNhapDayKhoComponent extends BaseComponent implements On
   detailGiaoNhap: any = {};
   bbNghiemThuBaoQuans: any[] = [];
   constructor(
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     public userService: UserService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
-    private donViService: DonviService,
-    public globals: Globals,
     private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    private thongTinHopDongService: ThongTinHopDongService,
-    private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
-    private fb: FormBuilder,
-    private helperService: HelperService
   ) {
-    super();
+    super(httpClient, storageService, quanLyPhieuNhapDayKhoService);
     this.formData = this.fb.group({
       id: [],
       nam: [dayjs().get('year')],
