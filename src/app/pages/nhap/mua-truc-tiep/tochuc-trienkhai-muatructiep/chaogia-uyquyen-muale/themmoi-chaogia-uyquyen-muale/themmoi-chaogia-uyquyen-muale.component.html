@@ -149,147 +149,145 @@
 
     <!-- START DANH SÁCH CÁC GÓI THẦU -->
     <nz-card class="mg-t-16 flex-card p-lr16 ">
-        <nz-card class="mg-t-16 flex-card p-lr16">
-            <div class="buttons">
-                <button
-                    *ngIf="idChaoGia > 0 && !isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT && checkRoleData()"
-                    class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
-                    <i class="icon htvbdh_tcdt_save"></i>
-                    <span>Lưu</span>
-                </button>
-            </div>
-            <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-                <nz-table nzBordered class="nowrap" [nzData]="listNthauNopHs" [nzFrontPagination]="false"
-                    [nzShowPagination]="false">
-                    <thead>
-                        <tr>
-                            <th class="text-center" style="width: 5%;">STT</th>
-                            <th style="width: 10%;">Tên cá nhân/tổ chức</th>
-                            <th style="width: 5%;">MST</th>
-                            <th style="width: 8%;">Địa chỉ</th>
-                            <th style="width: 8%;">Số điện thoại</th>
-                            <th style="width: 10%;">Ngày chào giá</th>
-                            <th style="width: 5%;">Số lượng (Kg)</th>
-                            <th style="width: 15%;">Đơn giá chưa bao gồm thuế(đ)</th>
-                            <th style="width: 5%;">Thuế GTGT</th>
-                            <th style="width: 10%;">Thành tiền(đ)</th>
-                            <th style="width: 20%;">File đính kèm</th>
-                            <th style="width: 10%;">Lựa chọn</th>
+        <div class="buttons">
+            <button
+                *ngIf="idChaoGia > 0 && !isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT && checkRoleData()"
+                class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
+                <i class="icon htvbdh_tcdt_save"></i>
+                <span>Lưu</span>
+            </button>
+        </div>
+        <nz-card class="mg-t-16 flex-card p-lr16 table-card">
+            <nz-table nzBordered class="nowrap" [nzData]="listNthauNopHs" [nzFrontPagination]="false"
+                [nzShowPagination]="false">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 5%;">STT</th>
+                        <th style="width: 10%;">Tên cá nhân/tổ chức</th>
+                        <th style="width: 5%;">MST</th>
+                        <th style="width: 8%;">Địa chỉ</th>
+                        <th style="width: 8%;">Số điện thoại</th>
+                        <th style="width: 10%;">Ngày chào giá</th>
+                        <th style="width: 5%;">Số lượng (Kg)</th>
+                        <th style="width: 15%;">Đơn giá chưa bao gồm thuế(đ)</th>
+                        <th style="width: 5%;">Thuế GTGT</th>
+                        <th style="width: 10%;">Thành tiền(đ)</th>
+                        <th style="width: 20%;">File đính kèm</th>
+                        <th style="width: 10%;">Lựa chọn</th>
 
-                            <th *ngIf="!isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT"
-                                width="30px">Thao tác</th>
-                        </tr>
-                        <tr
-                            *ngIf="!isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT && checkRoleData()">
-                            <th></th>
-                            <th><input nz-input [(ngModel)]="itemRow.canhanTochuc" /></th>
-                            <th><input nz-input [(ngModel)]="itemRow.mst" /></th>
-                            <th><input nz-input [(ngModel)]="itemRow.diaChi" /></th>
-                            <th><input nz-input [(ngModel)]="itemRow.sdt" /></th>
-                            <th>
-                                <nz-input-group>
-                                    <nz-date-picker [(ngModel)]="itemRow.ngayChaoGia" nzFormat="dd/MM/yyyy">
-                                    </nz-date-picker>
-                                </nz-input-group>
-                            </th>
-                            <th>
-                                <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="itemRow.soLuong"
-                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
-                            </th>
-                            <th>
-                                <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="itemRow.donGia"
-                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
-                            </th>
-                            <th>
-                                <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="itemRow.thueGtgt"
-                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
-                            </th>
-                            <th>{{ itemRow.soLuong * itemRow.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</th>
-                            <th>
+                        <th *ngIf="!isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT"
+                            width="30px">Thao tác</th>
+                    </tr>
+                    <tr
+                        *ngIf="!isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT && checkRoleData()">
+                        <th></th>
+                        <th><input nz-input [(ngModel)]="itemRow.canhanTochuc" /></th>
+                        <th><input nz-input [(ngModel)]="itemRow.mst" /></th>
+                        <th><input nz-input [(ngModel)]="itemRow.diaChi" /></th>
+                        <th><input nz-input [(ngModel)]="itemRow.sdt" /></th>
+                        <th>
+                            <nz-input-group>
+                                <nz-date-picker [(ngModel)]="itemRow.ngayChaoGia" nzFormat="dd/MM/yyyy">
+                                </nz-date-picker>
+                            </nz-input-group>
+                        </th>
+                        <th>
+                            <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="itemRow.soLuong"
+                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                        </th>
+                        <th>
+                            <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="itemRow.donGia"
+                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                        </th>
+                        <th>
+                            <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="itemRow.thueGtgt"
+                                [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                        </th>
+                        <th>{{ itemRow.soLuong * itemRow.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</th>
+                        <th>
 
-                            </th>
-                            <th>
-                                <label nz-checkbox [(ngModel)]="itemRow.luaChon"></label>
-                            </th>
-                            <th *ngIf="!isShowFromKq">
-                                <a (click)="addRow()" [class.disabled]="!itemRow">
-                                    <i class="fa fa-plus"></i>
+                        </th>
+                        <th>
+                            <label nz-checkbox [(ngModel)]="itemRow.luaChon"></label>
+                        </th>
+                        <th *ngIf="!isShowFromKq">
+                            <a (click)="addRow()" [class.disabled]="!itemRow">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                            <a (click)="clearItemRow()">
+                                <i class="fa fa-trash-o do"></i>
+                            </a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of listNthauNopHs, let i = index">
+                        <ng-container *ngIf="!data.edit; else editTemplate">
+                            <td class="text-center">{{i+1}}</td>
+                            <td>{{ data.canhanTochuc }}</td>
+                            <td>{{ data.mst }}</td>
+                            <td>{{ data.diaChi }}</td>
+                            <td>{{ data.sdt }}</td>
+                            <td>{{ data.ngayChaoGia }}</td>
+                            <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td>{{ data.thueGtgt }}</td>
+                            <td>{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td></td>
+                            <td>{{ data.luaChon }}</td>
+                            <td *ngIf="!isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT && checkRoleData()"
+                                class="text-center">
+                                <a (click)="startEdit(i)">
+                                    <i class=" fa fa-pencil"></i>
                                 </a>
-                                <a (click)="clearItemRow()">
+                                <a (click)="deleteRow(i)">
                                     <i class="fa fa-trash-o do"></i>
                                 </a>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let data of listNthauNopHs, let i = index">
-                            <ng-container *ngIf="!data.edit; else editTemplate">
-                                <td class="text-center">{{i+1}}</td>
-                                <td>{{ data.canhanTochuc }}</td>
-                                <td>{{ data.mst }}</td>
-                                <td>{{ data.diaChi }}</td>
-                                <td>{{ data.sdt }}</td>
-                                <td>{{ data.ngayChaoGia }}</td>
-                                <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-                                <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
-                                <td>{{ data.thueGtgt }}</td>
-                                <td>{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
-                                <td></td>
-                                <td>{{ data.luaChon }}</td>
-                                <td *ngIf="!isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT && checkRoleData()"
-                                    class="text-center">
-                                    <a (click)="startEdit(i)">
-                                        <i class=" fa fa-pencil"></i>
-                                    </a>
-                                    <a (click)="deleteRow(i)">
-                                        <i class="fa fa-trash-o do"></i>
-                                    </a>
-                                </td>
-                            </ng-container>
-                            <ng-template #editTemplate>
-                                <td class="text-center">{{i+1}}</td>
-                                <td><input type="text" nz-input [(ngModel)]="itemRowUpdate.canhanTochuc" /></td>
-                                <td><input nz-input [(ngModel)]="itemRowUpdate.mst" /></td>
-                                <td><input nz-input [(ngModel)]="itemRowUpdate.diaChi" /></td>
-                                <td><input nz-input [(ngModel)]="itemRowUpdate.sdt" /></td>
-                                <td>
-                                    <nz-input-group>
-                                        <nz-date-picker [(ngModel)]="itemRowUpdate.ngayChaoGia" nzFormat="dd/MM/yyyy">
-                                        </nz-date-picker>
-                                    </nz-input-group>
-                                </td>
+                            </td>
+                        </ng-container>
+                        <ng-template #editTemplate>
+                            <td class="text-center">{{i+1}}</td>
+                            <td><input type="text" nz-input [(ngModel)]="itemRowUpdate.canhanTochuc" /></td>
+                            <td><input nz-input [(ngModel)]="itemRowUpdate.mst" /></td>
+                            <td><input nz-input [(ngModel)]="itemRowUpdate.diaChi" /></td>
+                            <td><input nz-input [(ngModel)]="itemRowUpdate.sdt" /></td>
+                            <td>
+                                <nz-input-group>
+                                    <nz-date-picker [(ngModel)]="itemRowUpdate.ngayChaoGia" nzFormat="dd/MM/yyyy">
+                                    </nz-date-picker>
+                                </nz-input-group>
+                            </td>
 
-                                <td>{{ itemRowUpdate.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-                                <td>
-                                    <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.donGia"
-                                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
-                                </td>
-                                <td>
-                                    <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.thueGtgt"
-                                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
-                                </td>
-                                <td>{{ itemRowUpdate.soLuong * itemRowUpdate.donGia * 1000 | number : '1.0-1' : 'vi_VN'
-                                    }}</td>
-                                <td>
-                                <td></td>
-                                <td>
-                                </td>
-                                <th><input nz-input [(ngModel)]="itemRowUpdate.luaChon" /></th>
-                                <td class="text-center">
-                                    <a *ngIf="formData.value.trangThaiTkhai == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiTkhai == STATUS.DANG_CAP_NHAT"
-                                        (click)="saveEdit(itemRowUpdate,i)" class="save">
-                                        <i class="icon htvbdh_tcdt_save"></i>
-                                    </a>
-                                    <a *ngIf="formData.value.trangThaiTkhai == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiTkhai == STATUS.DANG_CAP_NHAT"
-                                        (click)="cancelEdit(i)">
-                                        <i class="fa fa-ban do"></i>
-                                    </a>
-                                </td>
-                            </ng-template>
-                        </tr>
-                    </tbody>
-                </nz-table>
-            </nz-card>
+                            <td>{{ itemRowUpdate.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td>
+                                <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.donGia"
+                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                            </td>
+                            <td>
+                                <nz-input-number nz-input [nzSize]="'small'" [(ngModel)]="itemRowUpdate.thueGtgt"
+                                    [nzFormatter]="globals.formatter" [nzParser]="globals.parser"></nz-input-number>
+                            </td>
+                            <td>{{ itemRowUpdate.soLuong * itemRowUpdate.donGia * 1000 | number : '1.0-1' : 'vi_VN'
+                                }}</td>
+                            <td>
+                            <td></td>
+                            <td>
+                            </td>
+                            <th><input nz-input [(ngModel)]="itemRowUpdate.luaChon" /></th>
+                            <td class="text-center">
+                                <a *ngIf="formData.value.trangThaiTkhai == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiTkhai == STATUS.DANG_CAP_NHAT"
+                                    (click)="saveEdit(itemRowUpdate,i)" class="save">
+                                    <i class="icon htvbdh_tcdt_save"></i>
+                                </a>
+                                <a *ngIf="formData.value.trangThaiTkhai == STATUS.CHUA_CAP_NHAT || formData.value.trangThaiTkhai == STATUS.DANG_CAP_NHAT"
+                                    (click)="cancelEdit(i)">
+                                    <i class="fa fa-ban do"></i>
+                                </a>
+                            </td>
+                        </ng-template>
+                    </tr>
+                </tbody>
+            </nz-table>
         </nz-card>
     </nz-card>
     <!-- END DANH SÁCH CÁC GÓI THẦU -->

@@ -333,7 +333,7 @@ export class DeXuatComponent implements OnInit {
         this.deXuatKhBanDauGiaService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-tong-hop-ke-hoach-bdg.xlsx'),
+            saveAs(blob, 'danh-sach-de-xuat-ke-hoach-ban-dau-gia.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
