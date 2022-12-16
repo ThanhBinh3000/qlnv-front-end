@@ -14,7 +14,6 @@ export class ItemData {
     id: string;
     stt: string;
     level: number;
-    khvonphiLapThamDinhCtietId: string;
     maVtu: string;
     tenVtu: string;
     maDviTinh: string;
@@ -90,6 +89,13 @@ export class BaoHiemComponent implements OnInit {
                     stt: e.ma,
                     tenVtu: e.giaTri,
                     maVtu: e.ma,
+                    maDviTinh: "",
+                    slTuM3: 0,
+                    slDuoiM3: 0,
+                    slTong: 0,
+                    gtTuM3: 0,
+                    gtDuoiM3: 0,
+                    gtTong: 0,
                 })
             })
             this.setLevel();
@@ -100,6 +106,32 @@ export class BaoHiemComponent implements OnInit {
             this.lstCtietBcao.forEach(item => {
                 item.stt = item.maVtu;
             })
+        }
+        if (this.dataInfo?.extraData) {
+            this.dataInfo.extraData.forEach(item => {
+                // if (item.maVtu) {
+                //     const index = this.lstCtietBcao.findIndex(e => e.maVtu == item.maNdung);
+                //     this.lstCtietBcao[index].namKh = item.namKh;
+                //     this.lstCtietBcao[index].giaTriThamDinh = item.giaTriThamDinh;
+                // } else {
+                    this.lstCtietBcao.push({
+                        ...new ItemData(),
+                        id: uuid.v4(),
+                        stt: item.stt,
+                        level: item.level,
+                        maVtu: item.maVtu,
+                        tenVtu: item.tenVtu,
+                        maDviTinh: item.maDviTinh,
+                        slTuM3: item.slTuM3,
+                        slDuoiM3: item.slDuoiM3,
+                        slTong: item.slTong,
+                        gtTuM3: item.gtTuM3,
+                        gtDuoiM3: item.gtDuoiM3,
+                        gtTong: item.gtTong,
+                    })
+                // }
+            })
+            console.log(this.dataInfo);
         }
         this.sortByIndex();
         this.getTotal();
@@ -279,7 +311,7 @@ export class BaoHiemComponent implements OnInit {
         }
         if (n == 3) {
             // xau = String.fromCharCode(k + 96);
-            xau = ""
+            xau = "-"
         }
         if (n == 4) {
             xau = "-";
@@ -434,14 +466,14 @@ export class BaoHiemComponent implements OnInit {
     getTotal() {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
-            if (item.level == 0) {
+            // if (item.level == 0) {
                 this.total.slTuM3 = sumNumber([this.total.slTuM3, item.slTuM3]);
                 this.total.slDuoiM3 = sumNumber([this.total.slDuoiM3, item.slDuoiM3]);
                 this.total.slTong = sumNumber([this.total.slTong, item.slTong]);
                 this.total.gtTuM3 = sumNumber([this.total.gtTuM3, item.gtTuM3]);
                 this.total.gtDuoiM3 = sumNumber([this.total.gtDuoiM3, item.gtDuoiM3]);
                 this.total.gtTong = sumNumber([this.total.gtTong, item.gtTong]);
-            }
+            // }
         })
     }
 
