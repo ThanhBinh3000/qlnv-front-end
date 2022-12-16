@@ -11,6 +11,9 @@
         <li nz-menu-item (click)="selectTab('giaodutoan')" [nzSelected]="tabSelected == 'giaodutoan'">
             Giao dự toán chi NSNN
         </li>
+        <!-- <li nz-menu-item (click)="selectTab('giaodutoan1')" [nzSelected]="tabSelected == 'giaodutoan1'">
+            Giao dự toán chi NSNN 1
+        </li> -->
 
     </ul>
 </nz-affix>
@@ -26,5 +29,8 @@
         <ng-container *ngIf="tabSelected == 'giaodutoan'">
             <app-giao-du-toan-chi-nsnn></app-giao-du-toan-chi-nsnn>
         </ng-container>
+        <!-- <ng-container *ngIf="tabSelected == 'giaodutoan1'">
+            <app-giao-du-toan></app-giao-du-toan>
+        </ng-container> -->
     </div>
 </div>

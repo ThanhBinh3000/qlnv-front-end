@@ -10,6 +10,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { GDT, Utils } from 'src/app/Utility/utils';
@@ -72,7 +73,12 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
       const id = file?.lastModified.toString();
-      this.lstFiles.push({ id: id, fileName: file?.name });
+      this.lstFiles.push({
+        id: id,
+        fileName: file?.name,
+        fileSize: file?.size,
+        fileUrl: file?.url
+      });
       this.listFile.push(file);
     });
     this.fileList = [];
@@ -82,6 +88,7 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
     private router: Router,
     private routerActive: ActivatedRoute,
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private giaoDuToanChiService: GiaoDuToanChiService,
     private danhMuc: DanhMucHDVService,
     private datePipe: DatePipe,
     private sanitizer: DomSanitizer,
@@ -101,7 +108,7 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
 
     this.ngayTao = this.datePipe.transform(this.newDate, Utils.FORMAT_DATE_STR);
     this.namGiao = this.newDate.getFullYear();
-    this.quanLyVonPhiService.maPhuongAnGiao('1').toPromise().then(
+    this.giaoDuToanChiService.maPhuongAnGiao('1').toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           this.maGiao = res.data;
@@ -135,7 +142,7 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
   }
 
   async getPhuongAn() {
-    await this.quanLyVonPhiService.timKiemMaPaGiaoNSNN().toPromise().then(
+    await this.giaoDuToanChiService.timKiemMaPaGiaoNSNN().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           this.lstMa = data.data
@@ -271,7 +278,7 @@ export class NhapThongTinQuyetToanGiaoDuToanChiNSNNChoCacDonViComponent implemen
       return;
     }
     if (!this.id) {
-      this.quanLyVonPhiService.themMoiQdCvGiaoNSNN(request).toPromise().then(async data => {
+      this.giaoDuToanChiService.themMoiQdCvGiaoNSNN(request).toPromise().then(async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
           this.xemphuongan()

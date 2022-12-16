@@ -249,9 +249,10 @@
                 <nz-form-item>
                   <nz-form-label nzRequired>Loại kho</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group>
-                      <input formControlName="loaikhoId" nz-input/>
-                    </nz-input-group>
+                    <nz-select  formControlName="loaikhoId">
+                      <nz-option *ngFor="let item of listLoaiKho" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                      </nz-option>
+                    </nz-select>
                   </nz-form-control>
                 </nz-form-item>
               </div>
@@ -311,7 +312,7 @@
               <nz-form-label nzRequired>Địa điểm</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
-                  <input nz-input formControlName="diaDiem" [readOnly]="true"/>
+                  <input nz-input formControlName="diaChi" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -438,6 +439,8 @@
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="6">
+          </div>
+          <div nz-col [nzSpan]="24">
             <nz-form-item>
               <nz-form-label nzRequired>Sơ đồ nhà kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
@@ -486,9 +489,10 @@
             <nz-form-item>
               <nz-form-label nzRequired>Loại kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-input-group>
-                  <input [readonly]="true" formControlName="loaikhoId" nz-input/>
-                </nz-input-group>
+                <nz-select  formControlName="loaikhoId">
+                  <nz-option *ngFor="let item of listLoaiKho" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                  </nz-option>
+                </nz-select>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -547,7 +551,7 @@
               <nz-form-label nzRequired>Địa điểm</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
-                  <input formControlName="diaDiem" nz-input [readonly]="true"/>
+                  <input formControlName="diaChi" nz-input [readonly]="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -595,20 +599,20 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired>Tổng tích lượng đã SD - LT</nz-form-label>
+              <nz-form-label >Tổng tích lượng đã SD - LT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group [nzAddOnAfter]="dvi">
-                  <input formControlName="tichLuongSdLt" nz-input/>
+                  <input formControlName="tichLuongSdLt" nz-input [readonly]="true"/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired>Tổng tích lượng đã SD - VT</nz-form-label>
+              <nz-form-label >Tổng tích lượng đã SD - VT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group [nzAddOnAfter]="dvi">
-                  <input formControlName="tichLuongSdVt" nz-input/>
+                  <input formControlName="tichLuongSdVt" [readonly]="true" nz-input/>
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -635,7 +639,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label>Tổng thể tích thiết kế - LT</nz-form-label>
+              <nz-form-label nzRequired>Tổng thể tích thiết kế - LT</nz-form-label>
               <nz-form-control>
                 <nz-input-group [nzAddOnAfter]="theTich">
                   <input nz-input formControlName="theTichTkLt"/>
@@ -645,7 +649,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label>Tổng thể tích thiết kế - VT</nz-form-label>
+              <nz-form-label nzRequired>Tổng thể tích thiết kế - VT</nz-form-label>
               <nz-form-control>
                 <nz-input-group [nzAddOnAfter]="theTich">
                   <input nz-input formControlName="theTichTkVt"/>
@@ -655,10 +659,11 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label>Tổng thế tích đã sử dụng - LT</nz-form-label>
+              <nz-form-label nzRequired>Tổng thế tích đã sử dụng - LT</nz-form-label>
               <nz-form-control>
                 <nz-input-group [nzAddOnAfter]="theTich">
-                  <input nz-input formControlName="theTichSdLt"/>
+                  <input nz-input formControlName="theTichSdLt" [readonly]="true"
+                  />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -668,7 +673,8 @@
               <nz-form-label>Tổng thế tích đã sử dụng - VT</nz-form-label>
               <nz-form-control>
                 <nz-input-group [nzAddOnAfter]="theTich">
-                  <input nz-input formControlName="theTichSdVt"/>
+                  <input nz-input formControlName="theTichSdVt" [readonly]="true"
+                  />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -763,7 +769,7 @@
               <nz-form-label nzRequired>Địa điểm</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
-                  <input formControlName="diaDiem" nz-input [readonly]="true"/>
+                  <input formControlName="diaChi" nz-input [readonly]="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -782,8 +788,9 @@
             <nz-form-item>
               <nz-form-label nzRequired>Loại kho</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select [nzDisabled]="true" formControlName="loaikhoId">
-                  <nz-option></nz-option>
+                <nz-select  formControlName="loaikhoId">
+                  <nz-option *ngFor="let item of listLoaiKho" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                  </nz-option>
                 </nz-select>
               </nz-form-control>
             </nz-form-item>
@@ -907,10 +914,21 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired>Thể tích thiết kế</nz-form-label>
+              <nz-form-label nzRequired>Thể tích thiết kế - LT</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group [nzAddOnAfter]="theTich">
-                  <nz-input-number formControlName="theTichTk" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                  <nz-input-number formControlName="theTichTkLt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                   [nzParser]="globals.parser"></nz-input-number>
+                </nz-input-group>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="4">
+            <nz-form-item>
+              <nz-form-label nzRequired>Thể tích thiết kế - LT</nz-form-label>
+              <nz-form-control [nzErrorTip]="error">
+                <nz-input-group [nzAddOnAfter]="theTich">
+                  <nz-input-number formControlName="theTichTkVt" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                    [nzParser]="globals.parser"></nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -1032,7 +1050,7 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col [nzSpan]="12"></div>
+          <div nz-col [nzSpan]="8"></div>
           <div nz-col [nzSpan]="12">
             <nz-form-item>
               <nz-form-label nzRequired>Nhiệm vụ</nz-form-label>

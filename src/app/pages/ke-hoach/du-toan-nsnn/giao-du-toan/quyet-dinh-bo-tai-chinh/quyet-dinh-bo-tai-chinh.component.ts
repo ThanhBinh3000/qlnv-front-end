@@ -78,7 +78,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
   clearFilter() {
     this.searchFilter.namPa = null;
     this.searchFilter.ngayTaoTu = null;
-    this.searchFilter.ngayTaoTu = null;
+    this.searchFilter.ngayTaoDen = null;
     this.searchFilter.maPa = null;
     this.search();
   };
@@ -107,7 +107,7 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
         page: this.pages.page,
       },
       trangThais: trangThais,
-      trangThaiGiaos: [],
+      trangThaiGiaos: ["0", "1", "2"],
     };
     this.spinner.show();
     //let latest_date =this.datepipe.transform(this.tuNgay, 'yyyy-MM-dd');

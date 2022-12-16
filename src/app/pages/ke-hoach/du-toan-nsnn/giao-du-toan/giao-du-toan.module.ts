@@ -5,6 +5,7 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
 import { BaoCaoTuDonViCapDuoiModule } from './bao-cao-tu-don-vi-cap-duoi/bao-cao-tu-don-vi-cap-duoi.module';
 import { DanhSachDuToanGiaoTuCapTrenComponent } from './danh-sach-du-toan-giao-tu-cap-tren/danh-sach-du-toan-giao-tu-cap-tren.component';
 import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component';
+import { DialogThemThongTinQuyetToanComponent } from './dialog-them-thong-tin-quyet-toan/dialog-them-thong-tin-quyet-toan.component';
 import { DuToanGiaoTuCapTrenComponent } from './du-toan-giao-tu-cap-tren/du-toan-giao-tu-cap-tren.component';
 import { GiaoDuToanComponent } from './giao-du-toan.component';
 import { PhanBoDuToanComponent } from './phan-bo-du-toan/phan-bo-du-toan.component';
@@ -24,6 +25,7 @@ import { TaoMoiQuyetDinhBtcComponent } from './tao-moi-quyet-dinh-btc/tao-moi-qu
     TaoMoiGiaoDieuChinhDuToanComponent,
     TaoMoiGiaoDuToanComponent,
     DanhSachDuToanGiaoTuCapTrenComponent,
+    DialogThemThongTinQuyetToanComponent,
   ],
   imports: [
     CommonModule,
@@ -40,7 +42,8 @@ import { TaoMoiQuyetDinhBtcComponent } from './tao-moi-quyet-dinh-btc/tao-moi-qu
     TaoMoiQuyetDinhBtcComponent,
     TaoMoiGiaoDieuChinhDuToanComponent,
     TaoMoiGiaoDuToanComponent,
-    DanhSachDuToanGiaoTuCapTrenComponent
+    DanhSachDuToanGiaoTuCapTrenComponent,
+    DialogThemThongTinQuyetToanComponent
   ],
 })
 export class GiaoDuToanModule { }

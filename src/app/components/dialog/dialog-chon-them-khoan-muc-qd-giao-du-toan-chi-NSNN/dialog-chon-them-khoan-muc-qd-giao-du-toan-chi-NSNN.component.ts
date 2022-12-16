@@ -3,7 +3,8 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
-import { QuanLyVonPhiService} from 'src/app/services/quanLyVonPhi.service'
+import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service'
 
 @Component({
   selector: 'dialog-chon-them-khoan-muc',
@@ -11,7 +12,7 @@ import { QuanLyVonPhiService} from 'src/app/services/quanLyVonPhi.service'
   styleUrls: ['./dialog-chon-them-khoan-muc-qd-giao-du-toan-chi-NSNN.component.scss'],
 })
 export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnInit {
-  @Input() danhSachKhoanMuc:any;
+  @Input() danhSachKhoanMuc: any;
   khoanMucs: any = [];
 
   searchFilter = {
@@ -23,6 +24,7 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
     private danhMucService: DanhMucHDVService,
     private notification: NzNotificationService,
     private QuanLyVonPhiService: QuanLyVonPhiService,
+    private GiaoDuToanChiService: GiaoDuToanChiService,
   ) { }
 
   async ngOnInit() {
@@ -42,18 +44,18 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
     );
   }
 
-  timKiemKhoanMuc(){
+  timKiemKhoanMuc() {
     let requestReport = {
       id: this.searchFilter.khoanMuc,
     };
 
-    this.QuanLyVonPhiService.timDanhSachBCGiaoBTCPD().toPromise().then(
+    this.GiaoDuToanChiService.timDanhSachBCGiaoBTCPD().toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
           var tempArr = data.data;
           tempArr.shift()
-          if(tempArr){
-            tempArr.forEach(e =>{
+          if (tempArr) {
+            tempArr.forEach(e => {
               this.danhSachKhoanMuc.push(e);
             })
           }
@@ -69,8 +71,8 @@ export class DialogChonThemKhoanMucQlGiaoDuToanChiNSNNComponent implements OnIni
   }
 
   handleOk() {
-    let req ={
-      danhSachKhoanMuc : this.danhSachKhoanMuc,
+    let req = {
+      danhSachKhoanMuc: this.danhSachKhoanMuc,
       id: this.searchFilter.khoanMuc
     }
     this._modalRef.close(req);

@@ -15,6 +15,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
+import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { displayNumber, DON_VI_TIEN, exchangeMoney, GDT, LA_MA, MONEY_LIMIT, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
@@ -125,7 +126,12 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   handleUpload(): void {
     this.fileList.forEach((file: any) => {
       const id = file?.lastModified.toString();
-      this.lstFiles.push({ id: id, fileName: file?.name });
+      this.lstFiles.push({
+        id: id,
+        fileName: file?.name,
+        fileSize: file?.size,
+        fileUrl: file?.url
+      });
       this.listFile.push(file);
     });
     this.fileList = [];
@@ -144,6 +150,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private giaoDuToanChiService: GiaoDuToanChiService,
     private danhMuc: DanhMucHDVService,
     private spinner: NgxSpinnerService,
     private routerActive: ActivatedRoute,
@@ -189,7 +196,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       await this.dataSource.currentData.subscribe(obj => {
         this.namPa = obj?.namPa;
       })
-      this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+      this.giaoDuToanChiService.maPhuongAnGiao(this.maLoai).toPromise().then(
         (res) => {
           if (res.statusCode == 0) {
             this.maPa = res.data;
@@ -338,7 +345,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
   // call chi tiet bao cao
   async getDetailReport() {
     this.spinner.show();
-    await this.quanLyVonPhiService.QDGiaoChiTiet(this.id, this.maLoai).toPromise().then(
+    await this.giaoDuToanChiService.QDGiaoChiTiet(this.id, this.maLoai).toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
           this.id = data.data.id;
@@ -389,7 +396,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
+      await this.giaoDuToanChiService.trinhDuyetPhuongAnGiao(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           this.trangThaiBanGhi = mcn;
           this.getStatusButton();
@@ -506,7 +513,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     // gui du lieu trinh duyet len server
     const request = JSON.parse(JSON.stringify({
       id: this.id,
-      fileDinhKems: this.lstFiles,
+      fileDinhKems: listFile,
       listIdFiles: this.listIdFilesDelete,
       lstCtiets: lstCtietBcaoTemp,
       maDvi: this.maDonViTao,
@@ -546,7 +553,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     }
     this.spinner.show();
     if (!this.id) {
-      this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+      this.giaoDuToanChiService.giaoDuToan(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -569,7 +576,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       );
     }
     else {
-      this.quanLyVonPhiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
+      this.giaoDuToanChiService.updateLapThamDinhGiaoDuToan(request).toPromise().then(
         async (data) => {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -1004,7 +1011,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
     const listCtietDvi: any[] = [];
     const maPaCha = this.maPa
     let maPa
-    await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+    await this.giaoDuToanChiService.maPhuongAnGiao(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           maPa = res.data;
@@ -1169,7 +1176,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
 
   async doCopy(response: any) {
     let maBcaoNew: string;
-    await this.quanLyVonPhiService.maPhuongAnGiao(this.maLoai).toPromise().then(
+    await this.giaoDuToanChiService.maPhuongAnGiao(this.maLoai).toPromise().then(
       (res) => {
         if (res.statusCode == 0) {
           maBcaoNew = res.data;
@@ -1207,7 +1214,7 @@ export class NhapQuyetDinhGiaoDuToanChiNSNNComponent implements OnInit {
       soQd: this.soQd,
     };
 
-    this.quanLyVonPhiService.giaoDuToan(request).toPromise().then(
+    this.giaoDuToanChiService.giaoDuToan(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.COPY_SUCCESS);

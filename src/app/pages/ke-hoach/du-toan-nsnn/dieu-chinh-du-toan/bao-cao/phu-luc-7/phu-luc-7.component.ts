@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+// import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -16,6 +16,8 @@ import * as uuid from "uuid";
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { displayNumber, divMoney, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulMoney, NOT_OK, OK } from "src/app/Utility/utils";
 import { LINH_VUC } from './phu-luc7.constant';
+import { DialogThemKhoanMucComponent } from '../../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+import { DieuChinhService } from 'src/app/services/quan-ly-von-phi/dieuChinhDuToan.service';
 
 export class ItemData {
 
@@ -48,7 +50,7 @@ export class PhuLuc7Component implements OnInit {
   @Output() dataChange = new EventEmitter();
   //danh muc
   donVis: any = [];
-  lstMatHang: any[] = LINH_VUC;
+  lstMatHang: any[] = [];
   donViTinhs: any[] = [];
   lstCtietBcao: ItemData[] = [];
   donViTiens: any[] = DON_VI_TIEN;
@@ -107,6 +109,7 @@ export class PhuLuc7Component implements OnInit {
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
   dsDinhMuc: any[] = [];
+  listVatTu: any[] = [];
 
   allChecked = false;
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
@@ -116,6 +119,7 @@ export class PhuLuc7Component implements OnInit {
     private routerActive: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private dieuChinhService: DieuChinhService,
     private datePipe: DatePipe,
     private sanitizer: DomSanitizer,
     private userService: UserService,
@@ -150,7 +154,8 @@ export class PhuLuc7Component implements OnInit {
         ...item,
       })
     })
-
+    await this.getListVtu();
+    await this.addVatTu();
     if (this.lstCtietBcao.length > 0) {
       if (!this.lstCtietBcao[0].stt) {
         this.sortWithoutIndex();
@@ -226,11 +231,123 @@ export class PhuLuc7Component implements OnInit {
         trangThai: "01",
       },
     ]
+
+
+    this.genderDinhMuc();
+    this.tinhToan();
     this.changeNam()
     this.getStatusButton();
 
     this.spinner.hide();
   };
+
+
+  // ================
+
+
+
+  genderDinhMuc() {
+    this.lstCtietBcao.forEach(item => {
+      this.dsDinhMuc.forEach(itemDm => {
+        if (item.loaiMatHang == itemDm.id) {
+          item.kphiBqDmuc = itemDm.tongDmuc
+        }
+      })
+    })
+  }
+
+  tinhToan() {
+    this.lstCtietBcao.forEach(item => {
+      item.kphiBqTtien = item.slHangTte * item.kphiBqDmuc
+    })
+  }
+
+  async getListVtu() {
+    //lay danh sach vat tu
+    await this.danhMucService.dMVatTu().toPromise().then(res => {
+      if (res.statusCode == 0) {
+        this.listVatTu = res.data;
+
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+  };
+  addVatTu() {
+    console.log(this.listVatTu);
+    const vatTuTemp = []
+    this.listVatTu.forEach(vatTu => {
+      if (vatTu.child) {
+        vatTu.child.forEach(vatTuCon => {
+          vatTuTemp.push({
+            id: vatTuCon.ma,
+            tenDm: vatTuCon.ten,
+            maVtu: vatTuCon.ma,
+            maDviTinh: vatTuCon.maDviTinh,
+            maCha: "1",
+            level: 1,
+          })
+        })
+      }
+    })
+    vatTuTemp.push(
+      {
+        id: "1",
+        tenDm: "Cộng",
+        maCha: "0",
+        level: 0,
+        maVtu: "1",
+        maDviTinh: "",
+      },
+      {
+        id: "2",
+        tenDm: "Thiếu năm chuyển sang",
+        maCha: "0",
+        level: 0,
+      },
+      {
+        id: "21",
+        tenDm: "VTCT thiếu năm chuyển sang",
+        maCha: "2",
+        level: 1,
+        maVtu: "21",
+        maDviTinh: "",
+      },
+      {
+        id: "22",
+        tenDm: "Nhập thiếu chuyển sang",
+        maCha: "2",
+        level: 1,
+        maVtu: "22",
+        maDviTinh: "",
+      },
+      {
+        id: "23",
+        tenDm: "Xuất thiếu chuyển sang",
+        maCha: "2",
+        level: 1,
+        maVtu: "23",
+        maDviTinh: "",
+      },
+    )
+    console.log("vatTuTemp: ", vatTuTemp);
+    this.lstMatHang = vatTuTemp;
+
+    console.log("this.dsDinhMuc:", this.dsDinhMuc);
+    this.dsDinhMuc.forEach(itmDm => {
+      this.lstMatHang.push({
+        id: itmDm.id,
+        tenDm: itmDm.tenDinhMuc,
+        maVtu: itmDm.id,
+        maDviTinh: itmDm.donViTinh,
+        maCha: itmDm.cloaiVthh,
+        level: 2,
+      })
+    })
+    console.log(this.lstMatHang);
+  }
 
   getDinhMucPL7() {
     const request = {
@@ -341,7 +458,7 @@ export class PhuLuc7Component implements OnInit {
       trangThai: trangThai,
       maLoai: this.data?.maLoai,
     };
-    this.quanLyVonPhiService.updatePLDieuChinh(request).toPromise().then(
+    this.dieuChinhService.updatePLDieuChinh(request).toPromise().then(
       async data => {
         if (data.statusCode == 0) {
           this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -395,7 +512,7 @@ export class PhuLuc7Component implements OnInit {
         lyDoTuChoi: lyDoTuChoi,
       };
       this.spinner.show();
-      await this.quanLyVonPhiService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
+      await this.dieuChinhService.approveDieuChinhPheDuyet(requestGroupButtons).toPromise().then(async (data) => {
         if (data.statusCode == 0) {
           this.trangThaiPhuLuc = mcn;
           this.getStatusButton();

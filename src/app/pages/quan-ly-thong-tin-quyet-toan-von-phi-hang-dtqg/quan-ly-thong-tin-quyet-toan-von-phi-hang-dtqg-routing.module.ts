@@ -33,6 +33,13 @@ const routes: Routes = [
             (m) => m.VonPhiHangCuaBoNganhModule,
           )
       },
+      {
+        path: 'tong-hop-va-phe-duyet',
+        loadChildren: () =>
+          import('./tonghop-pheduyet/tonghop-pheduyet.module').then(
+            (m) => m.TonghopPheduyetModule,
+          )
+      },
     ],
   },
 ];

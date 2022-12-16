@@ -17,12 +17,23 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
+      <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button"
+              class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button
-        type="button" class="btn btn-main ml-2" (click)="save()">
+      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()" type="button"
+              class="btn btn-sub xanh-nhat ml-2" (click)="pheDuyet()">
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
+        <span>Duyệt</span>
+      </button>
+      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()" type="button"
+              class="btn btn-sub do ml-2" (click)="tuChoi()">
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Từ chối</span>
+      </button>
+      <button *ngIf="!isView"
+              type="button" class="btn btn-main ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -36,7 +47,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Năm quyết toán
             </nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-select formControlName="namQuyetToan" nzAllowClear>
+              <nz-select [nzDisabled]="isView" formControlName="namQuyetToan" nzAllowClear>
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -46,13 +57,17 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Ngày nhập</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayNhap" nzFormat="dd/MM/yyyy">
+              <nz-date-picker [nzDisabled]="isView" formControlName="ngayNhap" nzFormat="dd/MM/yyyy">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
       </div>
     </form>
+    <ng-template #error let-control>
+      <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+      </ng-container>
+    </ng-template>
   </nz-card>
   <div class="header header-green-background mt-3">
     <div class="header-text">
@@ -117,7 +132,7 @@
           <th class="text-center">
             <nz-select [(ngModel)]="rowItemQtNsChiTw.maBoNganh" (ngModelChange)="changeBN()"
                        nzAllowClear="true">
-              <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.key" [nzLabel]="p.title">
+              <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.code" [nzLabel]="p.title">
               </nz-option>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -190,10 +205,10 @@
             </nz-input-number>
           </th>
           <th class="text-center">
-            <a (click)="addQtNsChiTw()" [ngClass]="{'isDisabled': !isAdddsQtNsChiTw}">
+            <a *ngIf="!isView" (click)="addQtNsChiTw()" [ngClass]="{'isDisabled': !isAdddsQtNsChiTw}">
               <i class="icon htvbdh_dau-cong"></i>
             </a>
-            <a (click)="refreshQtNsChiTw()">
+            <a *ngIf="!isView" (click)="refreshQtNsChiTw()">
               <i class="fa fa-refresh"></i>
             </a>
           </th>
@@ -206,25 +221,27 @@
             <td></td>
             <td class="text-center">{{i + 1}} </td>
             <td>{{data.tenBoNganh}}</td>
-            <td>{{data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc | number}}</td>
-            <td>{{data.soDtDauNam + data.soDtBsTrongNam  | number}}</td>
-            <td>{{data.soDtDauNam  | number}}</td>
-            <td>{{data.soDtBsTrongNam  | number}}</td>
-            <td>{{data.soDuDtNamTruoc  | number}}</td>
-            <td>{{data.soTuNamTruoc  | number}}</td>
-            <td>{{data.soDuDtNamTruoc + data.soTuNamTruoc  | number}}</td>
-            <td>{{data.soDnQt  | number}}</td>
-            <td>{{data.soTdQt  | number}}</td>
-            <td>{{(data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc) - data.soTdQt | number}}</td>
-            <td>{{data.soHuyDt  | number}}</td>
-            <td>{{data.soTuPhaiNop | number}}</td>
-            <td>{{data.soDuNamSau | number}}</td>
-            <td>{{data.soTuNamSau | number}}</td>
+            <td
+              class="text-right">{{data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc | number}}</td>
+            <td class="text-right">{{data.soDtDauNam + data.soDtBsTrongNam  | number}}</td>
+            <td class="text-right">{{data.soDtDauNam  | number}}</td>
+            <td class="text-right">{{data.soDtBsTrongNam  | number}}</td>
+            <td class="text-right">{{data.soDuDtNamTruoc  | number}}</td>
+            <td class="text-right">{{data.soTuNamTruoc  | number}}</td>
+            <td class="text-right">{{data.soDuDtNamTruoc + data.soTuNamTruoc  | number}}</td>
+            <td class="text-right">{{data.soDnQt  | number}}</td>
+            <td class="text-right">{{data.soTdQt  | number}}</td>
+            <td
+              class="text-right">{{(data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc) - data.soTdQt | number}}</td>
+            <td class="text-right">{{data.soHuyDt  | number}}</td>
+            <td class="text-right">{{data.soTuPhaiNop | number}}</td>
+            <td class="text-right">{{data.soDuNamSau | number}}</td>
+            <td class="text-right">{{data.soTuNamSau | number}}</td>
             <td class="text-center">
-              <a (click)="editQtNsChiTw(i)">
+              <a *ngIf="!isView" (click)="editQtNsChiTw(i)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="deleteQtNsChiTw(i)">
+              <a *ngIf="!isView" (click)="deleteQtNsChiTw(i)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
@@ -235,7 +252,7 @@
             <td>
               <nz-select [(ngModel)]="dataQtNsChiTwEdit[i].data.maBoNganh" (ngModelChange)="changeBN()"
                          nzAllowClear="true">
-                <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.key" [nzLabel]="p.title">
+                <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.code" [nzLabel]="p.title">
                 </nz-option>
                 <ng-template #error let-control>
                   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -243,65 +260,69 @@
                 </ng-template>
               </nz-select>
             </td>
-            <td>{{dataQtNsChiTwEdit[i].data.soDtDauNam + dataQtNsChiTwEdit[i].data.soDtBsTrongNam + dataQtNsChiTwEdit[i].data.soDuDtNamTruoc + dataQtNsChiTwEdit[i].data.soTuNamTruoc | number}}</td>
-            <td>{{dataQtNsChiTwEdit[i].data.soDtDauNam + dataQtNsChiTwEdit[i].data.soDtBsTrongNam  | number}}</td>
-            <td>
+            <td
+              class="text-right">{{dataQtNsChiTwEdit[i].data.soDtDauNam + dataQtNsChiTwEdit[i].data.soDtBsTrongNam + dataQtNsChiTwEdit[i].data.soDuDtNamTruoc + dataQtNsChiTwEdit[i].data.soTuNamTruoc | number}}</td>
+            <td
+              class="text-right">{{dataQtNsChiTwEdit[i].data.soDtDauNam + dataQtNsChiTwEdit[i].data.soDtBsTrongNam  | number}}</td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsChiTwEdit[i].data.soDtDauNam"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsChiTwEdit[i].data.soDtBsTrongNam"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsChiTwEdit[i].data.soDuDtNamTruoc"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsChiTwEdit[i].data.soTuNamTruoc"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>{{dataQtNsChiTwEdit[i].data.soDuDtNamTruoc + dataQtNsChiTwEdit[i].data.soTuNamTruoc  | number}}</td>
-            <td>
+            <td
+              class="text-right">{{dataQtNsChiTwEdit[i].data.soDuDtNamTruoc + dataQtNsChiTwEdit[i].data.soTuNamTruoc  | number}}</td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsChiTwEdit[i].data.soDnQt"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsChiTwEdit[i].data.soTdQt"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>{{(dataQtNsChiTwEdit[i].data.soDtDauNam + dataQtNsChiTwEdit[i].data.soDtBsTrongNam + dataQtNsChiTwEdit[i].data.soDuDtNamTruoc + dataQtNsChiTwEdit[i].data.soTuNamTruoc) - dataQtNsChiTwEdit[i].data.soTdQt | number}}</td>
-            <td>
+            <td
+              class="text-right">{{(dataQtNsChiTwEdit[i].data.soDtDauNam + dataQtNsChiTwEdit[i].data.soDtBsTrongNam + dataQtNsChiTwEdit[i].data.soDuDtNamTruoc + dataQtNsChiTwEdit[i].data.soTuNamTruoc) - dataQtNsChiTwEdit[i].data.soTdQt | number}}</td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsChiTwEdit[i].data.soHuyDt"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsChiTwEdit[i].data.soTuPhaiNop"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsChiTwEdit[i].data.soDuNamSau"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsChiTwEdit[i].data.soTuNamSau"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
@@ -317,6 +338,30 @@
           </ng-template>
         </tr>
         </tbody>
+        <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="text-right font-weight-bold">Tổng</td>
+          <td
+            class="text-right font-weight-bold">{{sumCT1('soDtDauNam') + sumCT1('soDtBsTrongNam') + sumCT1('soDuDtNamTruoc') + sumCT1('soTuNamTruoc') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT1('soDtDauNam') + sumCT1('soDtBsTrongNam') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT1('soDtDauNam') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT1('soDtBsTrongNam') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT1('soDuDtNamTruoc') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT1('soTuNamTruoc') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT1('soDuDtNamTruoc') + sumCT1('soTuNamTruoc') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT1('soDnQt') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT1('soTdQt') | number}}</td>
+          <td
+            class="text-right font-weight-bold">{{((sumCT1('soDtDauNam') + sumCT1('soDtBsTrongNam') + sumCT1('soDuDtNamTruoc') + sumCT1('soTuNamTruoc')) - (sumCT1('soTdQt'))) | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT1('soHuyDt') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT1('soTuPhaiNop') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT1('soDuNamSau') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT1('soTuNamSau') | number}}</td>
+          <td class="text-right font-weight-bold"></td>
+        </tr>
+        </tfoot>
       </nz-table>
     </nz-card>
   </ng-container>
@@ -383,7 +428,7 @@
           <th class="text-center">
             <nz-select [(ngModel)]="rowItemQtNsKpChiNvDtqg.maBoNganh" (ngModelChange)="changeBN()"
                        nzAllowClear="true">
-              <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.key" [nzLabel]="p.title">
+              <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.code" [nzLabel]="p.title">
               </nz-option>
               <ng-template #error let-control>
                 <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -393,7 +438,8 @@
           </th>
           <th
             class="text-center">{{rowItemQtNsKpChiNvDtqg.soDtDauNam + rowItemQtNsKpChiNvDtqg.soDtBsTrongNam + rowItemQtNsKpChiNvDtqg.soDuDtNamTruoc + rowItemQtNsKpChiNvDtqg.soTuNamTruoc | number}}</th>
-          <th class="text-center">{{rowItemQtNsKpChiNvDtqg.soDtDauNam + rowItemQtNsKpChiNvDtqg.soDtBsTrongNam  | number}}</th>
+          <th
+            class="text-center">{{rowItemQtNsKpChiNvDtqg.soDtDauNam + rowItemQtNsKpChiNvDtqg.soDtBsTrongNam  | number}}</th>
           <th class="text-center">
             <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soDtDauNam"
                              [nzFormatter]="globals.formatter"
@@ -421,19 +467,22 @@
           <th
             class="text-center">{{rowItemQtNsKpChiNvDtqg.soDuDtNamTruoc + rowItemQtNsKpChiNvDtqg.soTuNamTruoc  | number}}</th>
           <th class="text-center">
-            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soDnQt" [nzFormatter]="globals.formatter"
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soDnQt"
+                             [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser">
             </nz-input-number>
           </th>
           <th class="text-center">
-            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soTdQt" [nzFormatter]="globals.formatter"
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soTdQt"
+                             [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser">
             </nz-input-number>
           </th>
           <th
             class="text-center">{{(rowItemQtNsKpChiNvDtqg.soDtDauNam + rowItemQtNsKpChiNvDtqg.soDtBsTrongNam + rowItemQtNsKpChiNvDtqg.soDuDtNamTruoc + rowItemQtNsKpChiNvDtqg.soTuNamTruoc) - rowItemQtNsKpChiNvDtqg.soTdQt | number}}</th>
           <th class="text-center">
-            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soHuyDt" [nzFormatter]="globals.formatter"
+            <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItemQtNsKpChiNvDtqg.soHuyDt"
+                             [nzFormatter]="globals.formatter"
                              [nzParser]="globals.parser">
             </nz-input-number>
           </th>
@@ -456,10 +505,10 @@
             </nz-input-number>
           </th>
           <th class="text-center">
-            <a (click)="addQtNsKpChiNvDtqg()" [ngClass]="{'isDisabled': !isAdddsQtNsKpChiNvDtqg}">
+            <a *ngIf="!isView" (click)="addQtNsKpChiNvDtqg()" [ngClass]="{'isDisabled': !isAdddsQtNsKpChiNvDtqg}">
               <i class="icon htvbdh_dau-cong"></i>
             </a>
-            <a (click)="refreshQtNsKpChiNvDtqg()">
+            <a *ngIf="!isView" (click)="refreshQtNsKpChiNvDtqg()">
               <i class="fa fa-refresh"></i>
             </a>
           </th>
@@ -472,25 +521,27 @@
             <td></td>
             <td class="text-center">{{i + 1}} </td>
             <td>{{data.tenBoNganh}}</td>
-            <td>{{data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc | number}}</td>
-            <td>{{data.soDtDauNam + data.soDtBsTrongNam  | number}}</td>
-            <td>{{data.soDtDauNam  | number}}</td>
-            <td>{{data.soDtBsTrongNam  | number}}</td>
-            <td>{{data.soDuDtNamTruoc  | number}}</td>
-            <td>{{data.soTuNamTruoc  | number}}</td>
-            <td>{{data.soDuDtNamTruoc + data.soTuNamTruoc  | number}}</td>
-            <td>{{data.soDnQt  | number}}</td>
-            <td>{{data.soTdQt  | number}}</td>
-            <td>{{(data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc) - data.soTdQt | number}}</td>
-            <td>{{data.soHuyDt  | number}}</td>
-            <td>{{data.soTuPhaiNop | number}}</td>
-            <td>{{data.soDuNamSau | number}}</td>
-            <td>{{data.soTuNamSau | number}}</td>
+            <td
+              class="text-right">{{data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc | number}}</td>
+            <td class="text-right">{{data.soDtDauNam + data.soDtBsTrongNam  | number}}</td>
+            <td class="text-right">{{data.soDtDauNam  | number}}</td>
+            <td class="text-right">{{data.soDtBsTrongNam  | number}}</td>
+            <td class="text-right">{{data.soDuDtNamTruoc  | number}}</td>
+            <td class="text-right">{{data.soTuNamTruoc  | number}}</td>
+            <td class="text-right">{{data.soDuDtNamTruoc + data.soTuNamTruoc  | number}}</td>
+            <td class="text-right">{{data.soDnQt  | number}}</td>
+            <td class="text-right">{{data.soTdQt  | number}}</td>
+            <td
+              class="text-right">{{(data.soDtDauNam + data.soDtBsTrongNam + data.soDuDtNamTruoc + data.soTuNamTruoc) - data.soTdQt | number}}</td>
+            <td class="text-right">{{data.soHuyDt  | number}}</td>
+            <td class="text-right">{{data.soTuPhaiNop | number}}</td>
+            <td class="text-right">{{data.soDuNamSau | number}}</td>
+            <td class="text-right">{{data.soTuNamSau | number}}</td>
             <td class="text-center">
-              <a (click)="editQtNsKpChiNvDtqg(i)">
+              <a *ngIf="!isView" (click)="editQtNsKpChiNvDtqg(i)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="deleteQtNsKpChiNvDtqg(i)">
+              <a *ngIf="!isView" (click)="deleteQtNsKpChiNvDtqg(i)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
@@ -501,7 +552,7 @@
             <td>
               <nz-select [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.maBoNganh" (ngModelChange)="changeBN()"
                          nzAllowClear="true">
-                <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.key" [nzLabel]="p.title">
+                <nz-option *ngFor="let p of listBoNganh" [nzValue]="p.code" [nzLabel]="p.title">
                 </nz-option>
                 <ng-template #error let-control>
                   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -509,65 +560,69 @@
                 </ng-template>
               </nz-select>
             </td>
-            <td>{{dataQtNsKpChiNvDtqgEdit[i].data.soDtDauNam + dataQtNsKpChiNvDtqgEdit[i].data.soDtBsTrongNam + dataQtNsKpChiNvDtqgEdit[i].data.soDuDtNamTruoc + dataQtNsKpChiNvDtqgEdit[i].data.soTuNamTruoc | number}}</td>
-            <td>{{dataQtNsKpChiNvDtqgEdit[i].data.soDtDauNam + dataQtNsKpChiNvDtqgEdit[i].data.soDtBsTrongNam  | number}}</td>
-            <td>
+            <td
+              class="text-right">{{dataQtNsKpChiNvDtqgEdit[i].data.soDtDauNam + dataQtNsKpChiNvDtqgEdit[i].data.soDtBsTrongNam + dataQtNsKpChiNvDtqgEdit[i].data.soDuDtNamTruoc + dataQtNsKpChiNvDtqgEdit[i].data.soTuNamTruoc | number}}</td>
+            <td
+              class="text-right">{{dataQtNsKpChiNvDtqgEdit[i].data.soDtDauNam + dataQtNsKpChiNvDtqgEdit[i].data.soDtBsTrongNam  | number}}</td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soDtDauNam"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soDtBsTrongNam"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soDuDtNamTruoc"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soTuNamTruoc"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>{{dataQtNsKpChiNvDtqgEdit[i].data.soDuDtNamTruoc + dataQtNsKpChiNvDtqgEdit[i].data.soTuNamTruoc  | number}}</td>
-            <td>
+            <td
+              class="text-right">{{dataQtNsKpChiNvDtqgEdit[i].data.soDuDtNamTruoc + dataQtNsKpChiNvDtqgEdit[i].data.soTuNamTruoc  | number}}</td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soDnQt"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soTdQt"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>{{(dataQtNsKpChiNvDtqgEdit[i].data.soDtDauNam + dataQtNsKpChiNvDtqgEdit[i].data.soDtBsTrongNam + dataQtNsKpChiNvDtqgEdit[i].data.soDuDtNamTruoc + dataQtNsKpChiNvDtqgEdit[i].data.soTuNamTruoc) - dataQtNsKpChiNvDtqgEdit[i].data.soTdQt | number}}</td>
-            <td>
+            <td
+              class="text-right">{{(dataQtNsKpChiNvDtqgEdit[i].data.soDtDauNam + dataQtNsKpChiNvDtqgEdit[i].data.soDtBsTrongNam + dataQtNsKpChiNvDtqgEdit[i].data.soDuDtNamTruoc + dataQtNsKpChiNvDtqgEdit[i].data.soTuNamTruoc) - dataQtNsKpChiNvDtqgEdit[i].data.soTdQt | number}}</td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soHuyDt"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soTuPhaiNop"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soDuNamSau"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
               </nz-input-number>
             </td>
-            <td>
+            <td class="text-right">
               <nz-input-number [nzSize]="'small'" [(ngModel)]="dataQtNsKpChiNvDtqgEdit[i].data.soTuNamSau"
                                [nzFormatter]="globals.formatter"
                                [nzParser]="globals.parser">
@@ -583,6 +638,30 @@
           </ng-template>
         </tr>
         </tbody>
+        <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="text-right font-weight-bold">Tổng</td>
+          <td
+            class="text-right font-weight-bold">{{sumCT2('soDtDauNam') + sumCT2('soDtBsTrongNam') + sumCT2('soDuDtNamTruoc') + sumCT2('soTuNamTruoc') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT2('soDtDauNam') + sumCT2('soDtBsTrongNam') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT2('soDtDauNam') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT2('soDtBsTrongNam') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT2('soDuDtNamTruoc') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT2('soTuNamTruoc') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT2('soDuDtNamTruoc') + sumCT2('soTuNamTruoc') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT2('soDnQt') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT2('soTdQt') | number}}</td>
+          <td
+            class="text-right font-weight-bold">{{((sumCT2('soDtDauNam') + sumCT2('soDtBsTrongNam') + sumCT2('soDuDtNamTruoc') + sumCT2('soTuNamTruoc')) - (sumCT2('soTdQt'))) | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT2('soHuyDt') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT2('soTuPhaiNop') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT2('soDuNamSau') | number}}</td>
+          <td class="text-right font-weight-bold">{{sumCT2('soTuNamSau') | number}}</td>
+          <td class="text-right font-weight-bold"></td>
+        </tr>
+        </tfoot>
       </nz-table>
     </nz-card>
   </ng-container>

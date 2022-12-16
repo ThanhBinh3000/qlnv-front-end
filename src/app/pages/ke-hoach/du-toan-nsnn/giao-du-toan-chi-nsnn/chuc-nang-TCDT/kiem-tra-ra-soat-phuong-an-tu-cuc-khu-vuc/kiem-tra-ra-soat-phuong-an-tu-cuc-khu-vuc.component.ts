@@ -6,6 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DataService } from 'src/app/services/data.service';
+import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { Utils } from 'src/app/Utility/utils';
 import { GIAO_DU_TOAN, MAIN_ROUTE_DU_TOAN, MAIN_ROUTE_KE_HOACH } from '../../giao-du-toan-chi-nsnn.constant';
@@ -74,6 +75,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
 
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
+    private giaoDuToanChiService: GiaoDuToanChiService,
     private danhMuc: DanhMucHDVService,
     private router: Router,
     private datePipe: DatePipe,
@@ -121,7 +123,7 @@ export class KiemTraRaSoatPhuongAnTuCucKhuVucComponent implements OnInit {
     } else {
       this.searchFilter.trangThais = ['1', '2']
     }
-    await this.quanLyVonPhiService.timBaoCaoGiao(this.searchFilter).toPromise().then(res => {
+    await this.giaoDuToanChiService.timBaoCaoGiao(this.searchFilter).toPromise().then(res => {
       if (res.statusCode == 0) {
         console.log(res);
         this.listBcaoKqua = res.data.content;
