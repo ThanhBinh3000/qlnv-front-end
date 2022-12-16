@@ -336,7 +336,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent implements OnInit, OnChanges {
       nzContent: DialogThemDiaDiemPhanLoComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '3000px',
+      nzWidth: '2500px',
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
