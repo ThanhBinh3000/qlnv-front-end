@@ -613,7 +613,6 @@ export class ThemMoiDeXuatPagComponent implements OnInit {
           invalid.push(name);
         }
       }
-      console.log(invalid, 'invalid');
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
