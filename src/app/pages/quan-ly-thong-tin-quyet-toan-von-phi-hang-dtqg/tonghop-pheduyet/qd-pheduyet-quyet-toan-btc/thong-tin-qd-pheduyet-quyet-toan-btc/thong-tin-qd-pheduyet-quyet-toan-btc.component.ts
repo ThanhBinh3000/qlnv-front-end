@@ -1,28 +1,26 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {UserService} from 'src/app/services/user.service';
-import {Globals} from 'src/app/shared/globals';
-import {cloneDeep} from 'lodash';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {KeHoachVonPhiBNCT} from "../../../../../models/KeHoachVonPhiBNCT";
+import {Globals} from "../../../../../shared/globals";
 import {NgxSpinnerService} from "ngx-spinner";
-import * as dayjs from "dayjs";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {STATUS} from 'src/app/constants/status';
-import {DinhMucPhiNxBq} from "../../../../models/DinhMucPhi";
-import {KeHoachVonPhiBNCT} from "../../../../models/KeHoachVonPhiBNCT";
-import {MESSAGE} from "../../../../constants/message";
-import {DonviService} from "../../../../services/donvi.service";
-import {ThongTinKhaoSatGia} from "../../../../models/DeXuatPhuongAnGia";
+import {UserService} from "../../../../../services/user.service";
+import {DonviService} from "../../../../../services/donvi.service";
+import {QuyetToanVonPhiService} from "../../../../../services/ke-hoach/von-phi/quyetToanVonPhi.service";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {HelperService} from "../../../../services/helper.service";
-import {QuyetToanVonPhiService} from "../../../../services/ke-hoach/von-phi/quyetToanVonPhi.service";
-import {DialogTuChoiComponent} from "../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {HelperService} from "../../../../../services/helper.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import * as dayjs from "dayjs";
+import {MESSAGE} from "../../../../../constants/message";
+import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {STATUS} from 'src/app/constants/status';
 
 @Component({
-  selector: 'app-them-moi-von-phi-hang-cua-bo-nganh',
-  templateUrl: './them-moi-von-phi-hang-cua-bo-nganh.component.html',
-  styleUrls: ['./them-moi-von-phi-hang-cua-bo-nganh.component.scss']
+  selector: 'app-thong-tin-qd-pheduyet-quyet-toan-btc',
+  templateUrl: './thong-tin-qd-pheduyet-quyet-toan-btc.component.html',
+  styleUrls: ['./thong-tin-qd-pheduyet-quyet-toan-btc.component.scss']
 })
-export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
+export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
+
   formData: FormGroup;
   @Input('isView') isView: boolean = false;
   dataTable: any[] = [];
@@ -30,6 +28,10 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   page: number = 1;
   dsNam: any[] = [];
+  dsTrangThaiBtc = [{"value": STATUS.CHODUYET_BTC, "text": "Chờ duyệt BTC"}, {
+    "value": STATUS.TUCHOI_BTC,
+    "text": "Từ chối BTC"
+  }, {"value": STATUS.DADUYET_BTC, "text": "Đã duyệt BTC"}];
   @Input()
   idInput: number;
   dataTableAll: any[] = [];
@@ -46,6 +48,7 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
   rowItemQtNsChiTw: KeHoachVonPhiBNCT = new KeHoachVonPhiBNCT();
   rowItemQtNsKpChiNvDtqg: KeHoachVonPhiBNCT = new KeHoachVonPhiBNCT();
   taiLieuDinhKemList: any[] = [];
+  dataDetail: any = {};
   setOfCheckedId = new Set<number>();
   indeterminate = false;
   filterTable: any = {
@@ -69,11 +72,15 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
     private notification: NzNotificationService,
   ) {
     this.formData = this.fb.group({
+      id: [null],
       namQuyetToan: [dayjs().get('year'), [Validators.required]],
       ngayNhap: ['', [Validators.required]],
       trangThai: ['00'],
+      trangThaiBtc: ['49'],
       tenTrangThai: ['Dự thảo'],
-      lyDoTuChoi: [null]
+      tenTrangThaiBtc: ['Chờ duyệt-BTC'],
+      soToTrinh: [null, [Validators.required]],
+      ngayTongHop: ['', [Validators.required]],
     });
   }
 
@@ -93,13 +100,16 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
       let res = await this.vonPhiService.getDetail(id);
       const data = res.data;
       if (res.msg == MESSAGE.SUCCESS) {
+        this.dataDetail = data;
         this.formData.patchValue({
           id: data.id,
           namQuyetToan: data.namQt,
-          lyDoTuChoi: data.lyDoTuChoi,
           ngayNhap: data.ngayNhap,
+          ngayTongHop: data.ngayTao,
           tenTrangThai: data.tenTrangThai,
-          trangThai: data.trangThai
+          trangThai: data.trangThai,
+          trangThaiBtc: data.trangThaiBtc,
+          soToTrinh: data.soToTrinh
         });
         this.dsQtNsChiTw = data.dsQtNsChiTw;
         this.dsQtNsKpChiNvDtqg = data.dsQtNsKpChiNvDtqg;
@@ -124,11 +134,13 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
       "id": null,
       "namQt": this.formData.value.namQuyetToan,
       "trangThai": this.formData.value.trangThai,
+      "trangThaiBtc": this.formData.value.trangThaiBtc,
       "ngayNhap": this.formData.get("ngayNhap").value ? dayjs(this.formData.get("ngayNhap").value).format("YYYY-MM-DD") : null,
       "dsQtNsChiTw": this.dsQtNsChiTw,
       "dsQtNsKpChiNvDtqg": this.dsQtNsKpChiNvDtqg,
       "taiLieuDinhKems": this.taiLieuDinhKemList,
-      "loai": "00"
+      "loai": "02",
+      "soToTrinh": this.formData.value.soToTrinh,
     };
     this.spinner.show();
     try {
@@ -373,7 +385,7 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
           let body = {
             id: this.idInput,
             lyDoTuChoi: text,
-            trangThai: STATUS.TU_CHOI_LDV,
+            trangThai: STATUS.TU_CHOI_LDTC,
           };
           const res = await this.vonPhiService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
