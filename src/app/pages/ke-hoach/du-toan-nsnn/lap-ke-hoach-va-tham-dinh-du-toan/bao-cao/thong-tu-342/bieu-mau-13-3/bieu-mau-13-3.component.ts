@@ -865,7 +865,7 @@ export class BieuMau133Component implements OnInit {
   // }
   changeModel(id: string): void {
     this.editCache[id].data.kphiPduyetTso = sumNumber([this.editCache[id].data.kphiPduyetNsnn, this.editCache[id].data.kphiPduyetNkhac]);
-    this.editCache[id].data.kphiThienNamTso = sumNumber([this.editCache[id].data.kphiThienNamNsnnDtoan, this.editCache[id].data.kphiThienNamNsnnUth]);
+    this.editCache[id].data.kphiThienNamTso = sumNumber([this.editCache[id].data.kphiThienNamNsnnUth, this.editCache[id].data.kphiThienNamKphiThien]);
     this.editCache[id].data.kphiThienLkeTso = sumNumber([this.editCache[id].data.kphiThienLkeNsnn, this.editCache[id].data.kphiThienLkeNkhac]);
     this.editCache[id].data.kphiThienDtoanTso = sumNumber([this.editCache[id].data.kphiThienDtoanNsnn, this.editCache[id].data.kphiThienDtoanNkhac]);
   }
