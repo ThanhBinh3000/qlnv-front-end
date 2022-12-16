@@ -15,6 +15,7 @@ export class ItemData {
     id: any;
     stt: string;
     tenTaiSan: string;
+    maTaiSan: string;
     dviTinh: any;
     donGiaTdTheoQd: number;
     ncauTbiNamNSluong: number;
@@ -410,6 +411,7 @@ export class PhuLuc06Component implements OnInit {
             id: uuid.v4() + 'FE',
             stt: '',
             tenTaiSan: '',
+            maTaiSan: '',
             dviTinh: '',
             donGiaTdTheoQd: 0,
             ncauTbiNamNSluong: 0,
@@ -434,6 +436,7 @@ export class PhuLuc06Component implements OnInit {
     selectTaisan(idTaiSan: any, idRow: any) {
         const taiSan = this.lstVatTuFull.find(ts => ts.id === idTaiSan);
         this.editCache[idRow].data.dviTinh = taiSan.dviTinh;
+        this.editCache[idRow].data.tenTaiSan = taiSan.tenDm;
     }
 
 

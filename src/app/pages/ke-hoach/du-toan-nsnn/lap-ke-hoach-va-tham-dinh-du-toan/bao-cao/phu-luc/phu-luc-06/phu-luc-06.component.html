@@ -62,7 +62,7 @@
                     </tr>
                     <tr>
                         <th></th>
-                        <th>1</th>
+                        <th class="text-center">1</th>
                         <th>2</th>
                         <th>3</th>
                         <th>4</th>
@@ -105,11 +105,12 @@
                                 {{i+1}}
                             </td>
                             <td>
-                                <div *ngFor="let item of lstVatTuFull">
+                                {{data.tenTaiSan}}
+                                <!-- <div *ngFor="let item of lstVatTuFull">
                                     <div *ngIf="item.tenTaiSan == data.tenTaiSan">
                                         {{item.tenDm}}
                                     </div>
-                                </div>
+                                </div> -->
                             </td>
                             <td>
                                 {{data.dviTinh}}
@@ -144,9 +145,9 @@
                             </td>
                             <td>
                                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại tài sản"
-                                    [(ngModel)]="editCache[data.id].data.tenTaiSan"
+                                    [(ngModel)]="editCache[data.id].data.maTaiSan"
                                     (ngModelChange)="selectTaisan(editCache[data.id].data.tenTaiSan,data.id)"
-                                    [class]="editCache[data.id].data.tenTaiSan ?'' : 'input-error-validate'">
+                                    [class]="editCache[data.id].data.maTaiSan ?'' : 'input-error-validate'">
                                     <nz-option *ngFor="let item of lstVatTuFull" [nzValue]="item.id"
                                         [nzLabel]="item.tenDm">
                                     </nz-option>
