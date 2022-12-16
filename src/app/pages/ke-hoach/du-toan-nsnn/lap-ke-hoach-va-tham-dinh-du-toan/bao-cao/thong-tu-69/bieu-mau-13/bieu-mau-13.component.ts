@@ -96,10 +96,6 @@ export class BieuMau13Component implements OnInit {
                     tenNdung: e.giaTri,
                 })
             })
-        } else if (!this.lstCtietBcao[0]?.stt) {
-            this.lstCtietBcao.forEach(item => {
-                item.stt = item.maNdung;
-            })
         }
         this.sortByIndex();
         if (this.dataInfo?.extraData) {

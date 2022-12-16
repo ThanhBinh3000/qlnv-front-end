@@ -90,13 +90,9 @@ export class BieuMau17Component implements OnInit {
                     tenLvucNdChi: e.giaTri,
                 })
             })
-        } else if (!this.lstCtietBcao[0]?.stt) {
-            this.lstCtietBcao.forEach(item => {
-                item.stt = item.maLvucNdChi;
-            })
         }
         this.sortByIndex();
-        if (this.dataInfo?.extraData) {
+        if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
             this.dataInfo.extraData.forEach(item => {
                 const index = this.lstCtietBcao.findIndex(e => e.maLvucNdChi == item.maNdung);
                 this.lstCtietBcao[index].thNamHienHanhN1 = item.thNamHienHanhN1;

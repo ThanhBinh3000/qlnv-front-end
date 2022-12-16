@@ -674,13 +674,13 @@ export class ThemDeXuatKeHoachBanDauGiaComponent implements OnInit, OnChanges {
     }
   }
 
-  // changeThoiGianDuKien() {
-  //   let value = this.formData.get('thoiGianDuKien').value;
-  //   if (value) {
-  //     this.formData.patchValue({
-  //       tgianDkienTu: value[0],
-  //       tgianDkienDen: value[1],
-  //     })
-  //   }
-  // }
+  calcTongSoLuong() {
+    if (this.listOfData) {
+      const sum = this.listOfData.reduce((prev, cur) => {
+        prev += cur.tongSoLuong;
+        return prev;
+      }, 0);
+      return sum;
+    }
+  }
 }

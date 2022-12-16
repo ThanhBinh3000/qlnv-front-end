@@ -20,8 +20,8 @@ import {
 import {
   TongHopPhuongAnGiaService
 } from "../../../../../../../services/ke-hoach/phuong-an-gia/tong-hop-phuong-an-gia.service";
-import {DANH_MUC_LEVEL} from "../../../../../../luu-kho/luu-kho.constant";
-import {DonviService} from "../../../../../../../services/donvi.service";
+import { DANH_MUC_LEVEL } from "../../../../../../luu-kho/luu-kho.constant";
+import { DonviService } from "../../../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-them-moi-qd-gia-tcdtnn-lt',
@@ -61,7 +61,8 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
   isErrorUnique = false;
   thueVat: number;
   radioValue: string;
-   dsDonVi: any[] = [];
+  dsDonVi: any[] = [];
+  fileDinhKem: any[] = [];
 
   constructor(
     private readonly fb: FormBuilder,
@@ -101,7 +102,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin()
     await this.loadDsDonVi()
-      await Promise.all([
+    await Promise.all([
       this.loadDsNam(),
       this.loadDsLoaiGia(),
       this.loadDsVthh(),
@@ -121,7 +122,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
-        soQd: data.soQd.split("/")[0],
+        soQd: data.soQd ? data.soQd.split("/")[0] : '',
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
         ngayKy: data.ngayKy,
@@ -134,9 +135,10 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
         soToTrinh: data.soToTrinh
       });
       this.arrThongTinGia = data.thongTinGiaLt
+      this.fileDinhKem = data.fileDinhKems;
       if (this.arrThongTinGia) {
         this.arrThongTinGia.forEach(item => {
-          let dataFind =  this.dsDonVi.find(data => data.maDvi == item.maDvi)
+          let dataFind = this.dsDonVi.find(data => data.maDvi == item.maDvi)
           item.tenDvi = dataFind.tenDvi
         })
       }
@@ -144,13 +146,13 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
   }
 
   async loadDsDonVi() {
-      const body = {
-        maDviCha: this.userInfo.MA_DVI,
-        trangThai: '01',
-      };
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
 
-      const dsTong = await this.donViService.layDonViTheoCapDo(body);
-      this.dsDonVi = dsTong[DANH_MUC_LEVEL.CUC];
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
+    this.dsDonVi = dsTong[DANH_MUC_LEVEL.CUC];
   }
 
   loadDsNam() {
@@ -229,26 +231,27 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-      let body = this.formData.value;
-      body.soQd = body.soQd + this.maQd;
-      body.pagType = this.pagType;
-      body.thongTinGiaLt = this.arrThongTinGia;
-      let res;
+    let body = this.formData.value;
+    body.soQd = body.soQd + this.maQd;
+    body.pagType = this.pagType;
+    body.thongTinGiaLt = this.arrThongTinGia;
+    body.fileDinhKemReq = this.fileDinhKem;
+    let res;
+    if (this.idInput > 0) {
+      res = await this.quyetDinhGiaTCDTNNService.update(body);
+    } else {
+      res = await this.quyetDinhGiaTCDTNNService.create(body);
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
       if (this.idInput > 0) {
-        res = await this.quyetDinhGiaTCDTNNService.update(body);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
       } else {
-        res = await this.quyetDinhGiaTCDTNNService.create(body);
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
       }
-      if (res.msg == MESSAGE.SUCCESS) {
-        if (this.idInput > 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-        }
-        this.quayLai();
-      } else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
+      this.quayLai();
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
     this.spinner.hide();
   }
 

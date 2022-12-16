@@ -94,17 +94,26 @@ export class BieuMau131Component implements OnInit {
                     id: uuid.v4() + 'FE',
                     stt: e.ma,
                     maNdung: e.ma,
+                    maDviTinh: null,
+                    thienNtruoc: null,
+                    namDtoan: null,
+                    namUocThien: null,
+                    namKh: null,
+                    giaTriThamDinh: null
                 })
             })
         } else if (!this.lstCtietBcao[0]?.stt) {
             this.lstCtietBcao.forEach(item => {
                 item.stt = item.maNdung;
             })
+
         }
+
         this.sortByIndex();
         // this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
+        this.sum();
         this.spinner.hide();
     }
 
@@ -335,7 +344,7 @@ export class BieuMau131Component implements OnInit {
 
     setLevel() {
         this.lstCtietBcao.forEach(item => {
-            const str: string[] = item.maNdung.split('.');
+            const str: string[] = item.stt.split('.');
             item.level = str.length - 2;
         })
     }

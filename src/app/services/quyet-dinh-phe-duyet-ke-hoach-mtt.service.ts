@@ -23,4 +23,9 @@ export class QuyetDinhPheDuyetKeHoachMTTService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/mua-truc-tiep/qd-pd-mtt/ket-xuat`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
+
+  getDetailDtlCuc(id: number): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/chi-tiet-ke-hoach/${id}`
+    return this.httpClient.get<any>(url).toPromise();
+  }
 }
