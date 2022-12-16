@@ -255,7 +255,7 @@ export class MangLuoiKhoComponent implements OnInit {
 
   checkStatusSurplus() {
     let check = false;
-    if ((this.levelNode == 7 && !this.detailDonVi.value.tongTichLuongDsd) || (this.levelNode == 6 && !this.detailDonVi.value.coLoKho && !this.detailDonVi.value.tongTichLuongDsd)) {
+    if ((this.levelNode == 7 && !this.detailDonVi.value.loaiVthh) || (this.levelNode == 6 && !this.detailDonVi.value.coLoKho && !this.detailDonVi.value.loaiVthh)) {
       check = true
     }
     return check;
@@ -303,6 +303,7 @@ export class MangLuoiKhoComponent implements OnInit {
         dviTinh : dataNode.dviTinh ? dataNode.dviTinh  :null,
         ngayNhapDay : dataNode.ngayNhapDay ? dataNode.ngayNhapDay  :null,
         loaikhoId : dataNode.loaikhoId ? dataNode.loaikhoId  :null,
+        coLoKho : dataNode.coLoKho && dataNode.coLoKho == '01' ? true : false
       });
       this.fileDinhKems = dataNode.fileDinhkems ? dataNode.fileDinhkems : null
     }
@@ -319,11 +320,12 @@ export class MangLuoiKhoComponent implements OnInit {
       dataNode.child.forEach(element => {
         let dataChild = {
           tenDvi: null,
-          tichLuongThietKe: 2,
-          tichLuongChuaLt: 3,
-          tichLuongChuaVt: 4,
-          tichLuongKdLt: 5,
-          tichLuongKdVt: 6
+          tichLuongTkLt: 2,
+          tichLuongTkVt: 3,
+          tichLuongSdLt: 4,
+          tichLuongSdVt: 5,
+          tichLuongKdLt: 6,
+          tichLuongKdVt: 7
         }
         dataChild.tenDvi = element.tenTongKho ?? element.tenDiemkho ?? element.tenNhakho ?? element.tenNgankho ?? element.tenNganlo
         this.dataTable = [...this.dataTable, dataChild]

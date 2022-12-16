@@ -1059,7 +1059,7 @@
                       <nz-form-label >Chủng loại hàng hóa</nz-form-label>
                       <nz-form-control>
                         <nz-input-group  >
-                          <nz-select formControlName="cloaiVthh" (ngModelChange)="onChangCloaiVthh($event)">
+                          <nz-select [nzDisabled]="isEditData"  formControlName="cloaiVthh" (ngModelChange)="onChangCloaiVthh($event)">
                             <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten" [nzValue]="item.ma" ></nz-option>
                           </nz-select>
                         </nz-input-group>
@@ -1379,7 +1379,7 @@
                       <nz-form-label >Chủng loại hàng hóa</nz-form-label>
                       <nz-form-control [nzErrorTip]="error">
                         <nz-input-group >
-                          <nz-select formControlName="cloaiVthh" (ngModelChange)="onChangCloaiVthh($event)">
+                          <nz-select [nzDisabled]="isEditData" formControlName="cloaiVthh" (ngModelChange)="onChangCloaiVthh($event)">
                             <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten" [nzValue]="item.ma" ></nz-option>
                           </nz-select>
                         </nz-input-group>
@@ -1496,7 +1496,7 @@
                 <tr *ngFor="let data of dataTable; let idx = index">
                   <td class="text-center">{{ idx + 1 }}</td>
                   <td>{{ data.tenDvi }}</td>
-                  <td>{{ data.tichLuongThietKe | number : '1.0-1' : 'vi_VN' }}</td>
+                  <td>{{ data.tichLuongTKLt | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{ data.tichLuongChuaLt + data.tichLuongChuaVt | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{ data.tichLuongChuaLt | number : '1.0-1' : 'vi_VN' }}</td>
                   <td>{{ data.tichLuongChuaVt | number : '1.0-1' : 'vi_VN' }}</td>
