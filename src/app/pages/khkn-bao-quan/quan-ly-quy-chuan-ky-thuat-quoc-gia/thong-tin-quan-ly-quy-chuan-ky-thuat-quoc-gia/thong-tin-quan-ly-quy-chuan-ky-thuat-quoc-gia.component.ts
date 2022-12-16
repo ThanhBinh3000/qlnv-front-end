@@ -62,8 +62,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
   constructor(
     private httpClient: HttpClient,
     private storageService: StorageService,
-    private fb: FormBuilder,
-    private modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
