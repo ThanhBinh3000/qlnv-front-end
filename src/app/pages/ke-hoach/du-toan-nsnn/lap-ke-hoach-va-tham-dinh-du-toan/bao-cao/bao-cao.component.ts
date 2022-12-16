@@ -846,7 +846,7 @@ export class BaoCaoComponent implements OnInit {
                         if (dataInfo.extraData.length == 0) {
                             dataInfo.extraData.push({
                                 stt: '0.2.1.1',
-                                maVtu: item.maHang,
+                                maVtu: '0.2.1.1',
                                 tenVtu: item.tenHang,
                                 maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,
@@ -862,7 +862,7 @@ export class BaoCaoComponent implements OnInit {
                             let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
                             dataInfo.extraData.push({
                                 stt: '0.2.1.' + sttObj,
-                                maVtu: item.maHang,
+                                maVtu: '0.2.1.' + sttObj,
                                 tenVtu: item.tenHang,
                                 maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,
@@ -890,7 +890,7 @@ export class BaoCaoComponent implements OnInit {
                         }
                         dataInfo.extraData.push({
                             stt: '0.2.3',
-                            maVtu: item.maHang,
+                            maVtu: '0.2.3',
                             tenVtu: 'Muối',
                             maDviTinh: "kg",
                             slTuM3: tongSoLuongTu,
@@ -921,7 +921,7 @@ export class BaoCaoComponent implements OnInit {
                         if (dataInfo.extraData[dataInfo.extraData.length - 1]?.stt !== stt) {
                             dataInfo.extraData.push({
                                 stt: '0.2.2.1.1',
-                                maVtu: item.maHang,
+                                maVtu: '0.2.2.1.1',
                                 tenVtu: item.tenHang,
                                 maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,
@@ -937,7 +937,7 @@ export class BaoCaoComponent implements OnInit {
                             let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
                             dataInfo.extraData.push({
                                 stt: '0.2.2.1.' + sttObj,
-                                maVtu: item.maHang,
+                                maVtu: '0.2.2.1.' + sttObj,
                                 tenVtu: item.tenHang,
                                 maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,
@@ -968,7 +968,7 @@ export class BaoCaoComponent implements OnInit {
                         if (dataInfo.extraData[dataInfo.extraData.length - 1]?.stt !== stt) {
                             dataInfo.extraData.push({
                                 stt: '0.2.2.2.1',
-                                maVtu: item.maHang,
+                                maVtu: '0.2.2.2.1',
                                 tenVtu: item.tenHang,
                                 maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,
@@ -984,7 +984,7 @@ export class BaoCaoComponent implements OnInit {
                             let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
                             dataInfo.extraData.push({
                                 stt: '0.2.2.2.' + sttObj,
-                                maVtu: item.maHang,
+                                maVtu: '0.2.2.2.' + sttObj,
                                 tenVtu: item.tenHang,
                                 maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,

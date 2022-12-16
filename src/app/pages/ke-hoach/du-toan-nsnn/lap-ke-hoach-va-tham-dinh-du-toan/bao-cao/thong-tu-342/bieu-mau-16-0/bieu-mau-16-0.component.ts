@@ -178,8 +178,6 @@ export class BieuMau160Component implements OnInit {
             }
         })
         this.linhVucChis = this.listVatTuFull;
-        console.log(this.linhVucChis);
-
     }
 
     changeMatHang(matHang: any, id: any) {
@@ -187,8 +185,6 @@ export class BieuMau160Component implements OnInit {
         const donViTinh = this.linhVucChis.find(vtu => vtu.id == matHang)?.maDviTinh;
         this.editCache[id].data.maDviTinh = donViTinh;
         this.lstCtietBcao[index].maDviTinh = donViTinh;
-        console.log(this.lstCtietBcao);
-
     }
 
     updateSingleChecked(): void {
