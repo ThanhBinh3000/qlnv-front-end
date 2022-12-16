@@ -106,23 +106,25 @@
                             <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.maDviTinh" />
                         </td>
                         <td>
-                            <fm-input-number nz-input class="search__input"
-                                [(ngModel)]="editCache[data.id].data.slTuM3"></fm-input-number>
+                            <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.slTuM3"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
                         </td>
                         <td>
                             <fm-input-number nz-input class="search__input"
-                                [(ngModel)]="editCache[data.id].data.slDuoiM3"></fm-input-number>
+                                [(ngModel)]="editCache[data.id].data.slDuoiM3"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
                         </td>
                         <td>
                             {{editCache[data.id].data.slTong}}
                         </td>
                         <td>
-                            <fm-input-number nz-input class="search__input"
-                                [(ngModel)]="editCache[data.id].data.gtTuM3"></fm-input-number>
+                            <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.gtTuM3"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
                         </td>
                         <td>
-                            <fm-input-number nz-input class="search__input"
-                                [(ngModel)]="editCache[data.id].data.gtDuoiM3"></fm-input-number>
+                            <fm-input-number nz-input class=" search__input"
+                                [(ngModel)]="editCache[data.id].data.gtDuoiM3"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
                         </td>
                         <td>
                             {{editCache[data.id].data.gtTong}}

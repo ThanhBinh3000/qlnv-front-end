@@ -78,6 +78,14 @@ export class LapThamDinhService extends BaseService {
             request,
         );
     }
+    // upload list
+    updateLapThamDinh1(request: any): Observable<any> {
+        return this.httpClient.put(
+            // this.urlDefault + '/qlnv-khoachphi/lap-tham-dinh/chi-tiet/cap-nhat',
+            'http://192.168.1.107:30101/lap-tham-dinh/chi-tiet/cap-nhat',
+            request,
+        );
+    }
 
     // call api nút chức năng
     approveCtietThamDinh(request: any): Observable<any> {

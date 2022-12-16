@@ -48,7 +48,7 @@
                         <th rowSpan="2">Tổng mức dự trữ theo quyết định của cấp có thẩm quyền</th>
                         <th colSpan="2">Kế hoạch năm {{namKhoach}}</th>
                         <th colSpan="2" *ngIf="checkViewTD">Kế hoạch năm {{namKhoach}} (Thẩm định)</th>
-                        <th nzWidth="2.5%" colSpan="4"></th>
+                        <th nzWidth="2.5%" colSpan="4" [hidden]="status"></th>
                     </tr>
                     <tr>
                         <th>Số lượng</th>
@@ -59,10 +59,9 @@
                         <th>Thành tiền(Triệu đồng)</th>
                         <th *ngIf="checkViewTD">Số lượng</th>
                         <th *ngIf="checkViewTD">Thành tiền(Triệu đồng)</th>
-                        <th colSpan="4"></th>
+                        <th colSpan="4" [hidden]="status"></th>
                     </tr>
                     <tr>
-                        <th></th>
                         <th>A</th>
                         <th>B</th>
                         <th>1</th>
@@ -76,7 +75,7 @@
                         <th>9</th>
                         <th *ngIf="checkViewTD">8A</th>
                         <th *ngIf="checkViewTD">9A</th>
-                        <th colSpan="4"></th>
+                        <th colSpan="4" [hidden]="status"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,7 +83,6 @@
                         <td></td>
                         <td></td>
                         <td>Tổng cộng</td>
-                        <td></td>
                         <td>{{total.khSluong}}</td>
                         <td>{{total.khTtien}}</td>
                         <td>{{total.uocThSluong}}</td>
@@ -95,7 +93,7 @@
                         <td>{{total.namKhTtien}}</td>
                         <td *ngIf="checkViewTD">{{total.tdinhSluong}}</td>
                         <td *ngIf="checkViewTD">{{total.tdinhTtien}}</td>
-                        <td colSpan="4"></td>
+                        <td colSpan="4" [hidden]="status"></td>
                     </tr>
                     <tr *ngFor="let data of lstCtietBcao; let i = index">
                         <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">

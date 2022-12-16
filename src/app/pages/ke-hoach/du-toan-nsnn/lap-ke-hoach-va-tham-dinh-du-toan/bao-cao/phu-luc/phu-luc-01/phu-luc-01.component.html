@@ -39,7 +39,7 @@
                             </label>
                         </th>
                         <th rowspan="2" class="text-center" nzWidth="50px">STT</th>
-                        <th rowspan="2" nzWidth="300px">DANH MỤC</th>
+                        <th rowspan="2" nzWidth="300px">DANH MụC</th>
                         <th rowspan="2" nzWidth="150px">Đơn vị tính</th>
                         <th rowspan="2" nzWidth="150px">Thực hiện năm trước</th>
                         <th colspan="2">Năm {{namBaoCao}}</th>
@@ -172,7 +172,7 @@
                             <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                         </td>
 
-                        <td>
+                        <td [hidden]="status">
                             <a class="save" (click)="saveEdit(editCache[data.id].data.id)"
                                 style="margin-right:15px">Lưu</a>
                             <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
@@ -195,13 +195,12 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                         <td>{{displayValue(tongSo)}}</td>
                         <td *ngIf="checkViewTD"></td>
                         <td *ngIf="checkViewTD">{{displayValue(tongSoTd)}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td [hidden]="status"></td>
+                        <td [hidden]="status"></td>
+                        <td [hidden]="status"></td>
                     </tr>
                 </tbody>
             </nz-table>
