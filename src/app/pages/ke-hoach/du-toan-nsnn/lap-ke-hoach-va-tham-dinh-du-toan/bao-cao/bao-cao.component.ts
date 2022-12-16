@@ -294,7 +294,6 @@ export class BaoCaoComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
         await this.addVatTu();
-        console.log(this.lstVatTuFull);
 
         this.getStatusButton();
         this.spinner.hide();
