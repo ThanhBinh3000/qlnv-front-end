@@ -133,7 +133,6 @@ export class PhuLuc05Component implements OnInit {
   getName(level: number, ma: string) {
     const type = this.getTail(ma);
     let str = '';
-    console.log(level)
     if (level == 1) {
       switch (type) {
         case 1:
