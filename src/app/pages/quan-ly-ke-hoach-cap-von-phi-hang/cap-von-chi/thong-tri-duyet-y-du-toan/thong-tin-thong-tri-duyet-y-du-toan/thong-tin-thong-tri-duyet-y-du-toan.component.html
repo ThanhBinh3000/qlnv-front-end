@@ -85,8 +85,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="maDvi" [nzDisabled]="isView">
-                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
+              <nz-select formControlName="dviThongTri" [nzDisabled]="isView" (ngModelChange)="changeDonVi()">
+                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.code" [nzLabel]="p.tenDvi"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -112,6 +112,34 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Khoản </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <input nz-input formControlName="khoan" [readonly]="isView" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true">Đơn vị thụ hưởng</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-select formControlName="dviThuHuong" [nzDisabled]="isView" (ngModelChange)="changeDonViThuHuong()" nzAllowClear>
+                <nz-option *ngFor="let p of listDviThuHuong" [nzValue]="p.id" [nzLabel]="p.dvCungCapHang"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Số tài khoản</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <input nz-input formControlName="dviThuHuongStk" [readonly]="isView"/>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="8">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Tại ngân hàng / kho bạc</nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <input nz-input formControlName="dviThuHuongNganHang" [readonly]="isView"/>
             </nz-form-control>
           </nz-form-item>
         </div>
