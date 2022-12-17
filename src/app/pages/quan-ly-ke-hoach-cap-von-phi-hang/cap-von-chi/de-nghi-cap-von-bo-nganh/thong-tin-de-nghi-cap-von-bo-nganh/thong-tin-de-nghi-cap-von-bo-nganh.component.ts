@@ -80,9 +80,9 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   dsBoNganh: any[] = [];
   maxYeuCauCapThem: number = 2;
   chiTietList: any[] = [];
-  preFixSoDn:string = "KH";
+  preFixSoDn: string = "KH";
   titleSoDeNghi: string;
-
+  hangHoaAll: any[];
   rowItem: IDeNghiCapVon = {
     donViTinh: null,
     dvCungCapHang: null,
@@ -166,7 +166,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
       // không lấy bộ tài chính
-      this.dsBoNganh = res.data.filter(item => item.maDvi  !== '01')
+      this.dsBoNganh = res.data.filter(item => item.maDvi !== '01')
     }
   }
 
@@ -196,12 +196,24 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     }
   }
 
-  changeBoNganh() {
+  async changeBoNganh() {
+    this.rowItem.tenVatTuCha = null;
+    this.rowItem.maVatTuCha = null;
     let bnObject = this.dsBoNganh.find(item => item.code == this.formData.value.boNganh);
     this.titleSoDeNghi = this.preFixSoDn;
     if (bnObject) {
       this.titleSoDeNghi = "/" + bnObject.code + "-" + this.preFixSoDn;
     }
+    let hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
+      "maDvi": bnObject.maDvi
+    }).toPromise();
+    if (hangHoa) {
+      if (hangHoa.msg == MESSAGE.SUCCESS) {
+        this.hangHoaAll = hangHoa.data;
+        this.listLoaiHangHoa = this.hangHoaAll.filter(element => element.maHangHoa.length == 4)
+      }
+    }
+
   }
 
   back() {
@@ -234,7 +246,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
   }
 
   async changeLoaiHangHoa() {
-    let loaiHangHoa = this.listLoaiHangHoa.filter(x => {
+    /*let loaiHangHoa = this.listLoaiHangHoa.filter(x => {
       return x.ma === this.rowItem.maVatTuCha;
     });
     if (loaiHangHoa && loaiHangHoa.length > 0) {
@@ -243,20 +255,26 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       }
       this.rowItem.tenVatTuCha = loaiHangHoa[0].ten;
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
-    }
-
+    }*/
+    this.rowItem.tenVatTu = null;
+    this.rowItem.maVatTu = null;
+    this.listChungLoaiHangHoa = this.hangHoaAll.filter(element => element.maHangHoa.length > 4 &&
+      element.maHangHoa.substring(0, 4) == this.rowItem.maVatTuCha)
+    this.rowItem.tenVatTu = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTuCha).tenHangHoa;
+    this.rowItem.donViTinh = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTuCha).maDviTinh;
   }
 
   changeChungLoaiHangHoa() {
-    let chungLoaiHangHoa = this.listChungLoaiHangHoa.filter(x => {
+    /*let chungLoaiHangHoa = this.listChungLoaiHangHoa.filter(x => {
       return x.ma === this.rowItem.maVatTu;
     });
 
     if (chungLoaiHangHoa && chungLoaiHangHoa.length > 0) {
       this.rowItem.tenVatTu = chungLoaiHangHoa[0].ten;
       this.rowItem.donViTinh = chungLoaiHangHoa[0].maDviTinh;
-    }
-
+    }*/
+    this.rowItem.tenVatTuCha = this.listChungLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTu).tenHangHoa;
+    //this.rowItem.donViTinh = this.listChungLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTu).maDviTinh;
   }
 
   changeThanhTien() {
@@ -288,6 +306,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     let isValid = true;
     for (let key in this.rowItem) {
       if (this.rowItem[key] === null) {
+        console.log(key,12839218)
         isValid = false;
       }
     }
