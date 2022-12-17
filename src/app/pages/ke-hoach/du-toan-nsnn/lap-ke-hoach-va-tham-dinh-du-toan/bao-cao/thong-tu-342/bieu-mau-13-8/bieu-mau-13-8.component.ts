@@ -95,6 +95,7 @@ export class BieuMau138Component implements OnInit {
             })
         }
         if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
+            this.lstCtietBcao = this.lstCtietBcao.filter(e => e.maNdung);
             this.dataInfo.extraData.forEach(item => {
                 if (item.maNdung) {
                     const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
@@ -169,6 +170,12 @@ export class BieuMau138Component implements OnInit {
                 item.id = null;
             }
         })
+
+        if (!this.viewAppraisalValue) {
+            lstCtietBcaoTemp.forEach(item => {
+                item.giaTriThamDinh = item.namKh;
+            })
+        }
 
         const request = JSON.parse(JSON.stringify(this.formDetail));
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;

@@ -27,7 +27,7 @@
                     <th rowspan="2">Dự toán năm {{namBcao + 1}}</th>
                     <th rowspan="2" *ngIf="viewAppraisalValue">Giá trị thẩm định</th>
                     <th rowspan="2">Ghi chú</th>
-                    <th rowspan="2" [hidden]="status"></th>
+                    <th rowspan="2" [hidden]="status && !viewAppraisalValue"></th>
                 </tr>
                 <tr>
                     <th>Dự toán</th>
@@ -42,7 +42,7 @@
                     <th>4</th>
                     <th *ngIf="viewAppraisalValue">4A</th>
                     <th>5</th>
-                    <th [hidden]="status"></th>
+                    <th [hidden]="status && !viewAppraisalValue"></th>
                 </tr>
             </thead>
             <tbody>
@@ -60,7 +60,7 @@
                         <td>{{ displayValue(data.namKh) }}</td>
                         <td *ngIf="viewAppraisalValue">{{ displayValue(data.giaTriThamDinh) }}</td>
                         <td>{{ data.ghiChu }}</td>
-                        <td [hidden]="status">
+                        <td [hidden]="status && !viewAppraisalValue">
                             <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </td>
                     </ng-container>
@@ -71,40 +71,50 @@
                         <td>
                             {{editCache[data.id].data.tenDmuc}}
                         </td>
-                        <td>
-                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.thienNtruoc">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.namDtoan">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.namUocThien">
-                            </fm-input-number>
-                        </td>
-                        <ng-container *ngIf="data.stt == '0.1.6'; else editNamKh">
+                        <ng-container *ngIf="editAppraisalValue; else editAppraisal">
+                            <td>{{ displayValue(editCache[data.id].data.thienNtruoc) }}</td>
+                            <td>{{ displayValue(editCache[data.id].data.namDtoan) }}</td>
+                            <td>{{ displayValue(editCache[data.id].data.namUocThien) }}</td>
+                            <td>{{ displayValue(editCache[data.id].data.namKh) }}</td>
                             <td>
-                                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.namKh">
-                                </fm-input-number>
-                            </td>
-                            <td *ngIf="viewAppraisalValue">
-                                <ng-container *ngIf="editAppraisalValue; else AV">
+                                <ng-container *ngIf="data.stt == '0.1.6'; else showAv1">
                                     <fm-input-number class="search__input"
                                         [(ngModel)]="editCache[data.id].data.giaTriThamDinh">
                                     </fm-input-number>
                                 </ng-container>
-                                <ng-template #AV>
+                                <ng-template #showAv1>
                                     {{editCache[data.id].data.giaTriThamDinh}}
                                 </ng-template>
                             </td>
                         </ng-container>
-                        <ng-template #editNamKh>
+                        <ng-template #editAppraisal>
                             <td>
-                                {{editCache[data.id].data.namKh}}
+                                <fm-input-number class="search__input"
+                                    [(ngModel)]="editCache[data.id].data.thienNtruoc">
+                                </fm-input-number>
+                            </td>
+                            <td>
+                                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.namDtoan">
+                                </fm-input-number>
+                            </td>
+                            <td>
+                                <fm-input-number class="search__input"
+                                    [(ngModel)]="editCache[data.id].data.namUocThien">
+                                </fm-input-number>
+                            </td>
+                            <td>
+                                <ng-container *ngIf="data.stt == '0.1.6'; else showAv2">
+                                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.namKh">
+                                    </fm-input-number>
+                                </ng-container>
+                                <ng-template #showAv2>
+                                    {{editCache[data.id].data.namKh}}
+                                </ng-template>
                             </td>
                             <td *ngIf="viewAppraisalValue">
-                                {{editCache[data.id].data.giaTriThamDinh}}
+                                <fm-input-number class="search__input"
+                                    [(ngModel)]="editCache[data.id].data.giaTriThamDinh">
+                                </fm-input-number>
                             </td>
                         </ng-template>
                         <td>

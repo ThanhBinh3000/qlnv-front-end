@@ -1073,7 +1073,7 @@ export class BaoCaoComponent implements OnInit {
                                 namDtoan: item.dtoanNamHtai,
                                 namUocThien: item.uocThNamHtai,
                                 namKh: item.ttienNamDtoan,
-                                giaTriThamDinh: item.sluongNamN1Td,
+                                giaTriThamDinh: item.ttienNamN1Td,
                             })
                         }
                     })
