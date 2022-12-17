@@ -40,6 +40,7 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
   listBoNganh: any[] = [];
   allChecked = false;
   totalRecord: number = 10;
+  trangThaiEditDetail = false;
   STATUS = STATUS;
   isAdddsQtNsChiTw: boolean = false;
   isAdddsQtNsKpChiNvDtqg: boolean = false;
@@ -198,6 +199,14 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
     this.updateEditQtNsChiTwCache();
   }
 
+  changeTrangThaiBtc() {
+    if (this.formData.value.trangThaiBtc == STATUS.DADUYET_BTC) {
+      this.trangThaiEditDetail = true;
+    } else {
+      this.trangThaiEditDetail = false;
+    }
+  }
+
   addQtNsKpChiNvDtqg() {
     if (!this.isAdddsQtNsKpChiNvDtqg) {
       return;
@@ -315,7 +324,7 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
     this.listBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listBoNganh = res.data.filter(item => item.key != '01');
+      this.listBoNganh = res.data;
     }
   }
 

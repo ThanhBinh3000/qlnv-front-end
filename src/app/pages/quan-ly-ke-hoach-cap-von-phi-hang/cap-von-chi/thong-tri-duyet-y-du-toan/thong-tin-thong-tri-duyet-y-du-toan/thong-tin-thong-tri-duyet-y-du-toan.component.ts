@@ -247,7 +247,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
 
   async getListBoNganh() {
     this.dsBoNganh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data;
       this.dsBoNganhFix = res.data;
@@ -493,7 +493,10 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       let res = await this.tongHopDeNghiCapVonService.loadChiTiet(this.formData.get('soDnCapVon').value);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
         let map = res.data.ct1s.map(s => s.tenBoNganh);
-        this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.giaTri))
+        if (map.includes('Tổng cục Dự Trữ')) {
+          map.push('Bộ Tài chính');
+        }
+        this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.tenDvi))
       }
     }
   }
