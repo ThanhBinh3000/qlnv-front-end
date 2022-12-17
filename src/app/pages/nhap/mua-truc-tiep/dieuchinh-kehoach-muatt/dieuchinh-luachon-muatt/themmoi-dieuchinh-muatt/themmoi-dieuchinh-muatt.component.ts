@@ -119,9 +119,9 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         });
       }
       await Promise.all([
-        this.nguonVonGetAll(),
-        this.getDetail(),
-        this.getQdGocList(),
+        await this.nguonVonGetAll(),
+        await this.getDetail(),
+        await this.getQdGocList(),
       ]);
 
       this.spinner.hide();
@@ -226,6 +226,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
+      maDvi: null
     }
     let res = await this.quyetDinhPheDuyetKeHoachMTTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {

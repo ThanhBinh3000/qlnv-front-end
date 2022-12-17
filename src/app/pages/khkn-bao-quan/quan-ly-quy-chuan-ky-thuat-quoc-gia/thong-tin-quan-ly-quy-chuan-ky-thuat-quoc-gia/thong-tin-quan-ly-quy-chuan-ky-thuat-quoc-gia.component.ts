@@ -22,6 +22,7 @@ import { QuyChunKyThuatQuocGia } from 'src/app/models/KhoaHocCongNgheBaoQuan';
 import { LoginComponent } from './../../../login/login.component';
 import { filter } from 'rxjs/operators';
 import { DonviService } from 'src/app/services/donvi.service';
+import { createLogErrorHandler } from '@angular/compiler-cli/ngcc/src/execution/tasks/completion';
 
 
 @Component({
@@ -89,7 +90,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
       taiLieuDinhKemList: [null,],
       maDvi: [''],
       ldoTuChoi: [''],
-      apDungCloaiVthh: [''],
+      apDungCloaiVthh: [false],
       listTenLoaiVthh: ['']
     });
   }
@@ -394,17 +395,14 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
   }
 
   onChangeLoaiVthh() {
-    if (this.formData.value.apDungCloaiVthh) {
-      this.formData.value.apDungCloaiVthh = false
-    } else {
-      this.formData.value.apDungCloaiVthh = true
-    }
   }
   onChangeChiTieuCha() {
     if (this.rowItem.chiTieuCha) {
       this.rowItem.chiTieuCha = true
+      console.log(33);
     } else {
       this.rowItem.chiTieuCha = false
+      console.log(44);
     }
   }
   clearData() {
