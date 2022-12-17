@@ -6,7 +6,7 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, sumNumber } from "src/app/Utility/utils";
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { DANH_MUC } from './phu-luc-04.constant';
 
@@ -60,8 +60,8 @@ export class PhuLuc04Component implements OnInit {
     editMoneyUnit = false;
     isDataAvailable = false;
 
-    checkViewTD: boolean;
-    checkEditTD: boolean;
+    viewAppraisalValue: boolean;
+    editAppraisalValue: boolean;
     //nho dem
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 
@@ -88,8 +88,8 @@ export class PhuLuc04Component implements OnInit {
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
-        this.checkViewTD = this.dataInfo?.viewAppraisalValue;
-        this.checkEditTD = this.dataInfo?.editAppraisalValue;
+        this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
+        this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -144,10 +144,10 @@ export class PhuLuc04Component implements OnInit {
         const lstCtietBcaoTemp: ItemData[] = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            // if (item.ncauChiTongSo > MONEY_LIMIT) {
-            //     checkMoneyRange = false;
-            //     return;
-            // }
+            if (item.tongMucDuToan > MONEY_LIMIT || item.tongMucDuToanTd > MONEY_LIMIT) {
+                checkMoneyRange = false;
+                return;
+            }
             lstCtietBcaoTemp.push({
                 ...item,
             })
@@ -164,6 +164,15 @@ export class PhuLuc04Component implements OnInit {
                 item.id = null;
             }
         })
+
+        if (!this.viewAppraisalValue) {
+            lstCtietBcaoTemp?.forEach(item => {
+                item.soLuongTd = item.soLuong;
+                item.tongMucDuToanTd = item.tongMucDuToan;
+                item.duToanKhNamNCbDauTuTd = item.duToanKhNamNCbDauTu;
+                item.duToanKhNamNThDauTuTd = item.duToanKhNamNThDauTu;
+            })
+        }
 
         const request = JSON.parse(JSON.stringify(this.formDetail));
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
@@ -247,20 +256,9 @@ export class PhuLuc04Component implements OnInit {
         const chiSo: string[] = str.split('.');
         const n: number = chiSo.length - 1;
         let k: number = parseInt(chiSo[n], 10);
-        // if (n == 0) {
-        //     for (let i = 0; i < this.soLaMa.length; i++) {
-        //         while (k >= this.soLaMa[i].gTri) {
-        //             xau += this.soLaMa[i].kyTu;
-        //             k -= this.soLaMa[i].gTri;
-        //         }
-        //     }
-        // }
         if (n == 0) {
             xau = String.fromCharCode(k + 96).toUpperCase();
         }
-        // if (n == 1) {
-        //     xau = '(' + chiSo[n] + ')';
-        // }
         if (n == 1) {
             for (let i = 0; i < this.soLaMa.length; i++) {
                 while (k >= this.soLaMa[i].gTri) {
@@ -272,19 +270,14 @@ export class PhuLuc04Component implements OnInit {
         if (n == 2) {
             xau = chiSo[n];
         }
-        // if (n == 3) {
-        //     xau = String.fromCharCode(k + 96);
-        // }
-
-        // if (n == 4) {
-        //     xau = "-";
-        // }
         return xau;
     }
+
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
     getHead(str: string): string {
         return str.substring(0, str.lastIndexOf('.'));
     }
+
     // lấy phần đuôi của stt
     getTail(str: string): number {
         return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
@@ -329,6 +322,7 @@ export class PhuLuc04Component implements OnInit {
         this.updateEditCache();
     }
 
+    // sep so thu tu theo index
     sortByIndex() {
         this.setLevel();
         this.lstCtietBcao.sort((item1, item2) => {
@@ -488,6 +482,7 @@ export class PhuLuc04Component implements OnInit {
         }
         return false;
     }
+
     checkDelete(maDa: string) {
         if (!maDa) {
             return true;
@@ -509,21 +504,7 @@ export class PhuLuc04Component implements OnInit {
         this.updateEditCache();
     }
 
-    //thay thế các stt khi danh sách được cập nhật, heSo=1 tức là tăng stt lên 1, heso=-1 là giảm stt đi 1
-    replaceIndex(lstIndex: number[], heSo: number) {
-        if (heSo == -1) {
-            lstIndex.reverse();
-        }
-        //thay doi lai stt cac vi tri vua tim duoc
-        lstIndex.forEach(item => {
-            const str = this.getHead(this.lstCtietBcao[item].stt) + "." + (this.getTail(this.lstCtietBcao[item].stt) + heSo).toString();
-            const nho = this.lstCtietBcao[item].stt;
-            this.lstCtietBcao.forEach(item => {
-                item.stt = item.stt.replace(nho, str);
-            })
-        })
-    }
-
+    // ham in
     doPrint() {
         const WindowPrt = window.open(
             '',
@@ -542,15 +523,23 @@ export class PhuLuc04Component implements OnInit {
         WindowPrt.close();
     }
 
+    // hien thi so thap phan tien 
     displayValue(num: number): string {
         num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
 
+    // hien thi so thap phan so 
+    displayNumber(num: number): string {
+        return displayNumber(num);
+    }
+
+    // ten don vi tien
     getMoneyUnit() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
 
+    // dong dialog
     handleCancel() {
         this._modalRef.close();
     }
