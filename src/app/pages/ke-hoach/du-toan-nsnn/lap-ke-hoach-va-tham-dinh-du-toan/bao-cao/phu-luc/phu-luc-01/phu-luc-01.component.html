@@ -41,13 +41,13 @@
                         <th rowspan="2" class="text-center" nzWidth="50px">STT</th>
                         <th rowspan="2" nzWidth="300px">DANH MỤC</th>
                         <th rowspan="2" nzWidth="150px">Đơn vị tính</th>
-                        <th rowspan="2" nzWidth="150px">Thực hiện năm trước</th>
+                        <th rowspan="2">Thực hiện năm trước</th>
                         <th colspan="2">Năm {{namBaoCao}}</th>
                         <th colspan="3">Năm dự toán {{namBaoCao+1}}</th>
                         <th *ngIf="viewAppraisalValue" colspan="2">Thẩm Định</th>
-                        <th nzWidth="100px" rowspan="2" [hidden]="status && !editAppraisalValue"></th>
-                        <th nzWidth="100px" rowspan="2" [hidden]="status && !editAppraisalValue"></th>
-                        <th nzWidth="100px" rowspan="2" [hidden]="status && !editAppraisalValue"></th>
+                        <th nzWidth="50px" rowspan="2" [hidden]="status"></th>
+                        <th nzWidth="50px" rowspan="2" [hidden]="status && !editAppraisalValue"></th>
+                        <th nzWidth="50px" rowspan="2" [hidden]="status"></th>
                     </tr>
                     <tr>
                         <th>Dự toán</th>
@@ -70,11 +70,12 @@
                                 {{getChiMuc(data.stt)}}
                             </td>
                             <td>
-                                <div *ngFor="let item of lstVatTuFull">
+                                {{data.tenDanhMuc}}
+                                <!-- <div *ngFor="let item of lstVatTuFull">
                                     <div *ngIf="item.matHang == data.danhMuc">
                                         {{item.tenDm}}
                                     </div>
-                                </div>
+                                </div> -->
                             </td>
                             <td>{{data.dviTinh}}</td>
                             <td>{{displayValue(data.thienNamTruoc)}}</td>
@@ -89,13 +90,13 @@
                             <td *ngIf="viewAppraisalValue">
                                 {{displayValue(data.ttienTd)}}
                             </td>
-                            <td [hidden]="status && !editAppraisalValue">
+                            <td [hidden]="status">
                                 <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                             </td>
                             <td [hidden]="status && !editAppraisalValue">
                                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                             </td>
-                            <td [hidden]="status && !editAppraisalValue">
+                            <td [hidden]="status">
                                 <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                             </td>
 
@@ -109,11 +110,12 @@
                                 {{getChiMuc(editCache[data.id].data.stt)}}
                             </td>
                             <td>
-                                <div *ngFor="let item of lstVatTuFull">
+                                {{editCache[data.id].data.tenDanhMuc}}
+                                <!-- <div *ngFor="let item of lstVatTuFull">
                                     <div *ngIf="item.matHang == editCache[data.id].data.danhMuc">
                                         {{item.tenDm}}
                                     </div>
-                                </div>
+                                </div> -->
                             </td>
                             <td>
                                 {{editCache[data.id].data.dviTinh}}
@@ -127,9 +129,9 @@
                                 <td>{{displayValue(data.ttienNamDtoan)}}</td>
                                 <td>
                                     <fm-input-number nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.sluongTd"></fm-input-number>
+                                        [(ngModel)]="editCache[data.id].data.sluongTd"
+                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
                                 </td>
-                                <td>{{displayValue(data.ttienTd)}}</td>
                             </ng-container>
                             <ng-template #editAppraisal>
                                 <td>
@@ -160,12 +162,11 @@
                                         [(ngModel)]="editCache[data.id].data.sluongTd"
                                         (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
                                 </td>
-                                <td *ngIf="viewAppraisalValue">
-                                    <input nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.ttienTd" />
-                                </td>
                             </ng-template>
-                            <td [hidden]="status && !editAppraisalValue">
+                            <td *ngIf="viewAppraisalValue">
+                                {{displayValue(editCache[data.id].data.ttienTd)}}
+                            </td>
+                            <td [hidden]="status">
                                 <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                             </td>
                             <td [hidden]="status && !editAppraisalValue">
@@ -175,13 +176,13 @@
                                     (nzOnConfirm)="cancelEdit(editCache[data.id].data.id)" class="save">Hủy</a>
                             </td>
 
-                            <td [hidden]="status && !editAppraisalValue">
+                            <td [hidden]="status">
                                 <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                             </td>
                         </ng-template>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td [hidden]="status"></td>
                         <td></td>
                         <td>Tổng Cộng</td>
                         <td></td>
@@ -193,9 +194,9 @@
                         <td>{{displayValue(tongSo)}}</td>
                         <td *ngIf="viewAppraisalValue"></td>
                         <td *ngIf="viewAppraisalValue">{{displayValue(tongSoTd)}}</td>
+                        <td [hidden]="status"></td>
                         <td [hidden]="status && !editAppraisalValue"></td>
-                        <td [hidden]="status && !editAppraisalValue"></td>
-                        <td [hidden]="status && !editAppraisalValue"></td>
+                        <td [hidden]="status"></td>
                     </tr>
                 </tbody>
             </nz-table>
