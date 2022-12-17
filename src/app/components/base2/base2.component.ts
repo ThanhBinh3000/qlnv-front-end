@@ -126,6 +126,34 @@ export class Base2Component implements OnInit {
     await this.search();
   }
 
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
+  expandSet2 = new Set<number>();
+  onExpandChange2(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet2.add(id);
+    } else {
+      this.expandSet2.delete(id);
+    }
+  }
+
+
+  expandSet3 = new Set<number>();
+  onExpandChange3(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet3.add(id);
+    } else {
+      this.expandSet3.delete(id);
+    }
+  }
+
   filterInTable(key: string, value: string) {
     if (value && value != '') {
       this.dataTable = [];
@@ -354,11 +382,10 @@ export class Base2Component implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             this.spinner.hide();
-            return true;
+            this.detail(id);
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             this.spinner.hide();
-            return false;
           }
         } catch (e) {
           console.log('error: ', e);
@@ -387,18 +414,17 @@ export class Base2Component implements OnInit {
         try {
           let body = {
             id: id,
-            lyDo: text,
+            lyDoTuChoi: text,
             trangThai: trangThai,
           };
           const res = await this.service.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.spinner.hide();
-            return true;
+            this.detail(id);
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             this.spinner.hide();
-            return false;
           }
         } catch (e) {
           console.log('error: ', e);

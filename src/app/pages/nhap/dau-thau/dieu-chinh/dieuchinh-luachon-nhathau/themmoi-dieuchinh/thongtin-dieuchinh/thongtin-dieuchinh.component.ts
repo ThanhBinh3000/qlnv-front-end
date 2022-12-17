@@ -105,7 +105,6 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        console.log(this.dataInput);
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
         this.dataTable = this.dataInput.children;
         let tongMucDt = 0;
