@@ -40,6 +40,7 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
   listBoNganh: any[] = [];
   allChecked = false;
   totalRecord: number = 10;
+  trangThaiEditDetail = false;
   STATUS = STATUS;
   isAdddsQtNsChiTw: boolean = false;
   isAdddsQtNsKpChiNvDtqg: boolean = false;
@@ -196,6 +197,14 @@ export class ThongTinQdPheduyetQuyetToanBtcComponent implements OnInit {
     this.dsQtNsChiTw = [...this.dsQtNsChiTw, this.rowItemQtNsChiTw];
     this.rowItemQtNsChiTw = new KeHoachVonPhiBNCT();
     this.updateEditQtNsChiTwCache();
+  }
+
+  changeTrangThaiBtc() {
+    if (this.formData.value.trangThaiBtc == STATUS.DADUYET_BTC) {
+      this.trangThaiEditDetail = true;
+    } else {
+      this.trangThaiEditDetail = false;
+    }
   }
 
   addQtNsKpChiNvDtqg() {
