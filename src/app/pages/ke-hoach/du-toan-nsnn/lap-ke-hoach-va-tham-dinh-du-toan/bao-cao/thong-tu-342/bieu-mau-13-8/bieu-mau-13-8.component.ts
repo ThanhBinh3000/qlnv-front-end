@@ -95,6 +95,7 @@ export class BieuMau138Component implements OnInit {
             })
         }
         if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
+            debugger
             this.lstCtietBcao = this.lstCtietBcao.filter(e => e.maNdung);
             this.dataInfo.extraData.forEach(item => {
                 if (item.maNdung) {

@@ -23,15 +23,14 @@
                     <th rowspan="2" class="text-center" nzWidth="100px">STT</th>
                     <th rowspan="2" nzWidth="300px">Nội dung</th>
                     <th rowspan="2" nzWidth="150px">Số lượng</th>
-                    <th rowspan="2" nzWidth="150px" *ngIf="viewAppraisalValue">Số lượng</th>
+                    <th rowspan="2" nzWidth="150px" *ngIf="viewAppraisalValue">Số lượng (thẩm định)</th>
                     <th rowspan="2" nzWidth="150px">Tổng mức dự toán</th>
-                    <th rowspan="2" nzWidth="150px" *ngIf="viewAppraisalValue">Tổng mức dự toán</th>
+                    <th rowspan="2" nzWidth="150px" *ngIf="viewAppraisalValue">Tổng mức dự toán (thẩm định)</th>
                     <th rowspan="2" nzWidth="150px">Dự toán đã được bố trí đến hết năm {{namBcao - 2}}</th>
                     <th colspan="2" nzWidth="150px">Dự toán năm thực hiện ({{namBcao -1 }})</th>
                     <th colspan="2" nzWidth="150px">Dự toán năm kế hoạch {{namBcao}}</th>
                     <th colspan="2" nzWidth="150px" *ngIf="viewAppraisalValue">Dự toán năm kế hoạch {{namBcao}}
-                        (thẩm
-                        định)
+                        (thẩm định)
                     </th>
                     <th colspan="2" nzWidth="150px">Dự toán năm tiếp theo {{namBcao + 1}}</th>
                     <th colspan="2" nzWidth="150px">Dự toán năm tiếp theo {{namBcao + 2}}</th>
@@ -134,17 +133,11 @@
                         <td class="text-center">
                             {{getChiMuc(editCache[data.id].data.stt)}}
                         </td>
-                        <td>
-                            <ng-container *ngIf="data.noiDung; else editName">
-                                {{editCache[data.id].data.tenNoiDung}}
-                            </ng-container>
-                            <ng-template #editName>
-                                <input nz-input class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.tenNoiDung" />
-                            </ng-template>
-                        </td>
 
                         <ng-container *ngIf="editAppraisalValue ; else editAppraisal">
+                            <td>
+                                {{editCache[data.id].data.tenNoiDung}}
+                            </td>
                             <td>{{displayNumber(data.soLuong)}}</td>
                             <td>
                                 <fm-input-number nz-input class="search__input"
@@ -177,6 +170,15 @@
                         </ng-container>
 
                         <ng-template #editAppraisal>
+                            <td>
+                                <ng-container *ngIf="data.noiDung; else editName">
+                                    {{editCache[data.id].data.tenNoiDung}}
+                                </ng-container>
+                                <ng-template #editName>
+                                    <input nz-input class="search__input"
+                                        [(ngModel)]="editCache[data.id].data.tenNoiDung" />
+                                </ng-template>
+                            </td>
                             <td>
                                 <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.soLuong">
                                 </fm-input-number>
@@ -296,15 +298,15 @@
                 <i nz-icon nzType="printer" nzTheme="outline"></i>
                 <span>In</span>
             </button>
-            <button type="button" class="btn btn-main" (click)="save('5')" [hidden]="statusBtnFinish">
+            <button type="button" class="btn btn-main" (click)="save('5', null)" [hidden]="statusBtnFinish">
                 <i nz-icon nzType="check" nzTheme="outline"></i>
                 <span>Hoàn tất nhập liệu</span>
             </button>
-            <button type="button" class="btn btn-main" (click)="save('4')" [hidden]="statusBtnFinish">
+            <button type="button" class="btn btn-main" (click)="save('4', null)" [hidden]="statusBtnFinish">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
             </button>
-            <button type="button" class="btn btn-main" (click)="onSubmit('1', null)" [hidden]="statusBtnOk">
+            <button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="statusBtnOk">
                 <i nz-icon nzType="check" nzTheme="outline"></i>
                 <span>OK</span>
             </button>
