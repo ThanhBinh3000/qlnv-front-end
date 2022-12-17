@@ -25,6 +25,8 @@ import { BaseComponent } from 'src/app/components/base/base.component';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { HelperService } from 'src/app/services/helper.service';
 import { DatePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-thong-tin-phieu-nhap-kho-tam-gui',
@@ -67,21 +69,12 @@ export class ThongTinPhieuNhapKhoTamGuiComponent extends BaseComponent implement
   dataTable: any[] = [];
 
   constructor(
-    private spinner: NgxSpinnerService,
-    private donViService: DonviService,
-    private danhMucService: DanhMucService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
-    public userService: UserService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private phieuNhapKhoTamGuiService: PhieuNhapKhoTamGuiService,
-    private thongTinHopDongService: ThongTinHopDongService,
-    public globals: Globals,
-    private fb: FormBuilder,
-    private helperService: HelperService
   ) {
-    super();
+    super(httpClient, storageService, quyetDinhGiaoNhapHangService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],

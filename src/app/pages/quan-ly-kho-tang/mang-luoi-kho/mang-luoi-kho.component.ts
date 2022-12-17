@@ -41,6 +41,9 @@ export class MangLuoiKhoComponent implements OnInit {
   userInfo: UserLogin
   keySelected: any;
   res: any
+
+  listVthh: any[] = [];
+  listCloaiVthh: any[] = [];
   nodes: any = [];
   nodeDetail: any;
   defaultExpandedKeys: any = [];
@@ -139,6 +142,7 @@ export class MangLuoiKhoComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     await Promise.all([
       this.layTatCaDonViTheoTree(),
+      this.getAllLoaiVthh(),
       this.getListLoaiKho(),
       this.getListClKho(),
       this.getListTtKho(),
@@ -216,9 +220,42 @@ export class MangLuoiKhoComponent implements OnInit {
     }
   }
 
+  async getAllLoaiVthh() {
+    let res = await this.danhMucService.danhMucChungGetAll('LOAI_HHOA');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listVthh = res.data;
+    }
+  }
+
+  async onChangeLoaiVthh(event) {
+    if (event) {
+      let body = {
+        "str": event
+      };
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha(body);
+      this.listCloaiVthh = [];
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listCloaiVthh = res.data;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+
+  async onChangCloaiVthh(event) {
+    let res = await this.danhMucService.getDetail(event);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.detailDonVi.patchValue({
+        dviTinh: res.data ? res.data.maDviTinh : null
+      })
+    }
+  }
+
   checkStatusSurplus() {
     let check = false;
-    if ((this.levelNode == 7 && !this.detailDonVi.value.tongTichLuongDsd) || (this.levelNode == 6 && !this.detailDonVi.value.coLoKho && !this.detailDonVi.value.tongTichLuongDsd)) {
+    if ((this.levelNode == 7 && !this.detailDonVi.value.loaiVthh) || (this.levelNode == 6 && !this.detailDonVi.value.coLoKho && !this.detailDonVi.value.loaiVthh)) {
       check = true
     }
     return check;
@@ -251,6 +288,10 @@ export class MangLuoiKhoComponent implements OnInit {
         tichLuongTkVt: dataNode.tichLuongTkVt,
         theTichTkLt: dataNode.theTichTkLt,
         theTichTkVt: dataNode.theTichTkVt,
+        tichLuongSdLt : dataNode.tichLuongSdLt,
+        tichLuongSdVt : dataNode.tichLuongSdVt,
+        theTichSdLt : dataNode.theTichSdLt,
+        theTichSdVt : dataNode.theTichSdVt,
         ghiChu: dataNode.ghiChu? dataNode.ghiChu : null,
         nhiemVu : dataNode.nhiemVu ? dataNode.nhiemVu : null,
         namSudung : dataNode.namSudung ? dataNode.namSudung :  null,
@@ -261,9 +302,11 @@ export class MangLuoiKhoComponent implements OnInit {
         slTon : dataNode.slTon ? dataNode.slTon  :null,
         dviTinh : dataNode.dviTinh ? dataNode.dviTinh  :null,
         ngayNhapDay : dataNode.ngayNhapDay ? dataNode.ngayNhapDay  :null,
+        loaikhoId : dataNode.loaikhoId ? dataNode.loaikhoId  :null,
+        coLoKho : dataNode.coLoKho && dataNode.coLoKho == '01' ? true : false
       });
+      this.fileDinhKems = dataNode.fileDinhkems ? dataNode.fileDinhkems : null
     }
-      this.fileDinhKems = dataNode.fileDinhkems ? dataNode.fileDinhKems : null
   }
 
   convertDataChild(dataNode) {
@@ -277,11 +320,12 @@ export class MangLuoiKhoComponent implements OnInit {
       dataNode.child.forEach(element => {
         let dataChild = {
           tenDvi: null,
-          tichLuongThietKe: 2,
-          tichLuongChuaLt: 3,
-          tichLuongChuaVt: 4,
-          tichLuongKdLt: 5,
-          tichLuongKdVt: 6
+          tichLuongTkLt: 2,
+          tichLuongTkVt: 3,
+          tichLuongSdLt: 4,
+          tichLuongSdVt: 5,
+          tichLuongKdLt: 6,
+          tichLuongKdVt: 7
         }
         dataChild.tenDvi = element.tenTongKho ?? element.tenDiemkho ?? element.tenNhakho ?? element.tenNgankho ?? element.tenNganlo
         this.dataTable = [...this.dataTable, dataChild]

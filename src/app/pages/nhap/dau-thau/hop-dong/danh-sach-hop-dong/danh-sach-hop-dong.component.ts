@@ -20,6 +20,8 @@ import {
 import { QuyetDinhPheDuyetKetQuaLCNTService } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
 import { STATUS } from "../../../../../constants/status";
 import { BaseComponent } from 'src/app/components/base/base.component';
+import { StorageService } from 'src/app/services/storage.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -69,19 +71,14 @@ export class DanhSachHopDongComponent extends BaseComponent implements OnInit {
   };
 
   constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     public userService: UserService,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
     private donViService: DonviService,
     private thongTinHopDong: ThongTinHopDongService,
-    public globals: Globals,
-    private thongTinDauThauService: ThongTinDauThauService,
     private quyetDinhPheDuyetKetQuaLCNTService: QuyetDinhPheDuyetKetQuaLCNTService
   ) {
-    super();
+    super(httpClient, storageService, thongTinHopDong);
   }
 
   async ngOnInit() {

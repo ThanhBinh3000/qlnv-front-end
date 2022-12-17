@@ -25,61 +25,52 @@
                     <th colspan="11" nzWidth="300px">Dự toán năm {{namBaoCao}}</th>
                     <th colspan="13" nzWidth="400px">Ước thực hiện năm {{namBaoCao}}</th>
                     <th colspan="11" nzWidth="300px">Dự toán năm {{namKeHoach}}</th>
-                    <th *ngIf="checkViewTD" colspan="11" nzWidth="300px">Dự toán năm {{namKeHoach}}</th>
-                    <th rowspan="4" nzWidth="100px" colspan="2" [hidden]="status"></th>
+                    <th rowspan="4" nzWidth="100px" colspan="3" [hidden]="status"></th>
                 </tr>
                 <tr>
                     <th rowspan="3">Tổng số người làm việc được cấp có thẩm quyền giao (Người)</th>
                     <th rowspan="3">Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương</th>
                     <th colspan="5">Trong đó</th>
                     <th colspan="4">Nguồn kinh phí bảo đảm</th>
-                    <th rowspan="3">Tổng số người làm việc được cấp có thẩm quyền giao (Người)</th>
-                    <th rowspan="3">Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương</th>
+                    <th rowspan="3">Tổng số người làm việc <br> được cấp có thẩm quyền giao (Người)</th>
+                    <th rowspan="3">Tổng số người làm việc <br>được cấp có thẩm quyền giao <br> có mặt tại thời điểm
+                        31/12 (Người)</th>
                     <th rowspan="3">Trong đó: Tổng số viên chức, công chức (Người)</th>
-                    <th rowspan="3">Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương theo số người làm việc có
-                        mặt tại thời điểm 31/12</th>
+                    <th rowspan="3">Tổng quỹ lương, phụ cấp <br> và các khoản đóng góp theo lương theo số người<br> làm
+                        việc có mặt tại thời điểm 31/12</th>
                     <th colspan="5">Trong đó</th>
                     <th colspan="4">Nguồn kinh phí bảo đảm</th>
-                    <th rowspan="3">Tổng số người làm việc được cấp có thẩm quyền giao (Người)</th>
-                    <th rowspan="3">Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương</th>
+                    <th rowspan="3">Tổng số người làm việc<br> được cấp có thẩm quyền giao (Người)</th>
+                    <th rowspan="3">Tổng quỹ lương, phụ cấp <br> và các khoản đóng góp theo lương</th>
                     <th colspan="5">Trong đó</th>
                     <th colspan="4">Nguồn kinh phí bảo đảm</th>
-                    <th *ngIf="checkViewTD" rowspan="3">Tổng số người làm việc được cấp có thẩm quyền giao (Người)</th>
-                    <th *ngIf="checkViewTD" rowspan="3">Tổng quỹ lương, phụ cấp và các khoản đóng góp theo lương</th>
-                    <th *ngIf="checkViewTD" colspan="5">Trong đó</th>
-                    <th *ngIf="checkViewTD" colspan="4">Nguồn kinh phí bảo đảm</th>
                     <!-- <th *ngIf="checkViewTD">Số lượng</th>
                     <th *ngIf="checkViewTD">Thành tiền</th> -->
                 </tr>
                 <tr>
-                    <th colspan="4">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế được giao</th>
-                    <th rowspan="2">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của hợp đồng lao động</th>
+                    <th colspan="4">Quỹ lương, phụ cấp và các khoản đóng góp<br> theo lương của biên chế được giao</th>
+                    <th rowspan="2">Quỹ lương, phụ cấp và các khoản đóng góp<br> theo lương của hợp đồng lao động</th>
                     <th rowspan="2">Nguồn NSNN</th>
                     <th rowspan="2">Nguồn thu sự nghiệp, dịch vụ</th>
                     <th rowspan="2">Nguồn phí được để lại</th>
                     <th rowspan="2">Nguồn thu hợp pháp khác</th>
-                    <th colspan="4">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của số biên chế thực có mặt thời
+                    <th colspan="4">Quỹ lương, phụ cấp và các khoản đóng góp<br> theo lương của số biên chế thực có mặt
+                        thời
                         điểm 31/12</th>
-                    <th rowspan="2">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của hợp đồng lao động có mặt tại
+                    <th rowspan="2">Quỹ lương, phụ cấp và các khoản đóng góp<br> theo lương của hợp đồng lao động <br>
+                        có
+                        mặt tại
                         thời điểm 31/12</th>
                     <th rowspan="2">Nguồn NSNN</th>
                     <th rowspan="2">Nguồn thu sự nghiệp, dịch vụ</th>
                     <th rowspan="2">Nguồn phí được để lại</th>
                     <th rowspan="2">Nguồn thu hợp pháp khác</th>
-                    <th colspan="4">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế</th>
-                    <th rowspan="2">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của Hợp đồng lao động</th>
+                    <th colspan="4">Quỹ lương, phụ cấp và các khoản đóng góp<br> theo lương của biên chế</th>
+                    <th rowspan="2">Quỹ lương, phụ cấp và các khoản đóng góp<br> theo lương của Hợp đồng lao động</th>
                     <th rowspan="2">Nguồn NSNN</th>
                     <th rowspan="2">Nguồn thu sự nghiệp, dịch vụ</th>
                     <th rowspan="2">Nguồn phí được để lại</th>
                     <th rowspan="2">Nguồn thu hợp pháp khác</th>
-                    <th *ngIf="checkViewTD" colspan="4">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của biên chế
-                    </th>
-                    <th *ngIf="checkViewTD" rowspan="2">Quỹ lương, phụ cấp và các khoản đóng góp theo lương của Hợp đồng
-                        lao động</th>
-                    <th *ngIf="checkViewTD" rowspan="2">Nguồn NSNN</th>
-                    <th *ngIf="checkViewTD" rowspan="2">Nguồn thu sự nghiệp, dịch vụ</th>
-                    <th *ngIf="checkViewTD" rowspan="2">Nguồn phí được để lại</th>
-                    <th *ngIf="checkViewTD" rowspan="2">Nguồn thu hợp pháp khác</th>
                 </tr>
                 <tr>
                     <th>Tổng số</th>
@@ -94,10 +85,6 @@
                     <th>Lương theo ngạch, bậc</th>
                     <th>Phụ cấp theo lương</th>
                     <th>Các khoản đóng góp theo lương</th>
-                    <th *ngIf="checkViewTD">Tổng số</th>
-                    <th *ngIf="checkViewTD">Lương theo ngạch, bậc</th>
-                    <th *ngIf="checkViewTD">Phụ cấp theo lương</th>
-                    <th *ngIf="checkViewTD">Các khoản đóng góp theo lương</th>
                 </tr>
                 <tr>
                     <th>A</th>
@@ -137,17 +124,7 @@
                     <th>33</th>
                     <th>34</th>
                     <th>35</th>
-                    <th *ngIf="checkViewTD">36</th>
-                    <th *ngIf="checkViewTD">37=38+42</th>
-                    <th *ngIf="checkViewTD">38=39+40+41</th>
-                    <th *ngIf="checkViewTD">39</th>
-                    <th *ngIf="checkViewTD">40</th>
-                    <th *ngIf="checkViewTD">41</th>
-                    <th *ngIf="checkViewTD">42</th>
-                    <th *ngIf="checkViewTD">43</th>
-                    <th *ngIf="checkViewTD">44</th>
-                    <th *ngIf="checkViewTD">45</th>
-                    <th *ngIf="checkViewTD">46</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -189,17 +166,7 @@
                     <th>{{tongSo33}}</th>
                     <th>{{tongSo34}}</th>
                     <th>{{tongSo35}}</th>
-                    <th *ngIf="checkViewTD">{{tongSo36}}</th>
-                    <th *ngIf="checkViewTD">{{tongSo37}}</th>
-                    <th *ngIf="checkViewTD">{{tongSo38}}</th>
-                    <th *ngIf="checkViewTD">{{tongSo39}}</th>
-                    <th *ngIf="checkViewTD">{{tongSo40}}</th>
-                    <th *ngIf="checkViewTD">{{tongSo41}}</th>
-                    <th *ngIf="checkViewTD">{{tongSo42}}</th>
-                    <th *ngIf="checkViewTD">{{tongSo43}}</th>
-                    <th *ngIf="checkViewTD">{{tongSo44}}</th>
-                    <th *ngIf="checkViewTD">{{tongSo45}}</th>
-                    <th *ngIf="checkViewTD">{{tongSo46}}</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -250,24 +217,16 @@
                         <td>{{displayValue(data.namKhKphiSnDvu)}}</td>
                         <td>{{displayValue(data.namKhKphiPhiDlai)}}</td>
                         <td>{{displayValue(data.namKhKphiHphap)}}</td>
-                        <td *ngIf="checkViewTD">{{displayValue(data.tddtTsoNguoiLv)}}</td>
-                        <td *ngIf="checkViewTD">{{displayValue(data.tddtTongQlPcap)}}</td>
-                        <td *ngIf="checkViewTD">{{displayValue(data.tddtQlPcapTso)}}</td>
-                        <td *ngIf="checkViewTD">{{displayValue(data.tddtQlPcapLuongBac)}}</td>
-                        <td *ngIf="checkViewTD">{{displayValue(data.tddtQlPcapPcapLuong)}}</td>
-                        <td *ngIf="checkViewTD">{{displayValue(data.tddtQlPcapDgopLuong)}}</td>
-                        <td *ngIf="checkViewTD">{{displayValue(data.tddtQlPcapHdLd)}}</td>
-                        <td *ngIf="checkViewTD">{{displayValue(data.tddtKphiNsnn)}}</td>
-                        <td *ngIf="checkViewTD">{{displayValue(data.tddtKphiSnDvu)}}</td>
-                        <td *ngIf="checkViewTD">{{displayValue(data.tddtKphiPhiDlai)}}</td>
-                        <td *ngIf="checkViewTD">{{displayValue(data.tddtKphiHphap)}}</td>
+                        <td>
+                            <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
+                                (click)="deleteLine(data.stt)"></i>
+                        </td>
                         <td [hidden]="status">
                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </td>
-                        <td>
+                        <td [hidden]="status">
                             <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
-                            <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
-                                (click)="deleteLine(data.stt)"></i>
+
                         </td>
                     </ng-container>
                     <ng-template #editTemplate>
@@ -428,104 +387,21 @@
                             <fm-input-number nz-input class="search__input"
                                 [(ngModel)]="editCache[data.id].data.namKhKphiHphap"></fm-input-number>
                         </td>
-                        <td>
-                            <fm-input-number nz-input class="search__input"
-                                [(ngModel)]="editCache[data.id].data.tddtTsoNguoiLv"></fm-input-number>
-                        </td>
-                        <td *ngIf="checkViewTD">
-                            {{displayValue(editCache[data.id].data.tddtTongQlPcap)}}
-                        </td>
-                        <td *ngIf="checkViewTD">
-                            {{displayValue(editCache[data.id].data.tddtQlPcapTso)}}
-                        </td>
-                        <td *ngIf="checkViewTD">
-                            <ng-container *ngIf="checkEditTD; else editTD1">
-                                <fm-input-number nz-input class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.tddtQlPcapLuongBac"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
-                            </ng-container>
-                            <ng-template #editTD1>
-                                {{displayValue(editCache[data.id].data.tddtQlPcapLuongBac)}}
-                            </ng-template>
-                        </td>
-                        <td *ngIf="checkViewTD">
-                            <ng-container *ngIf="checkEditTD; else editTD2">
-                                <fm-input-number nz-input class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.tddtQlPcapPcapLuong"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
-                            </ng-container>
-                            <ng-template #editTD2>
-                                {{displayValue(editCache[data.id].data.tddtQlPcapPcapLuong)}}
-                            </ng-template>
-                        </td>
-                        <td *ngIf="checkViewTD">
-                            <ng-container *ngIf="checkEditTD; else editTD3">
-                                <fm-input-number nz-input class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.tddtQlPcapDgopLuong"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
-                            </ng-container>
-                            <ng-template #editTD3>
-                                {{displayValue(editCache[data.id].data.tddtQlPcapDgopLuong)}}
-                            </ng-template>
-                        </td>
-                        <td *ngIf="checkViewTD">
-                            <ng-container *ngIf="checkEditTD; else editTD4">
-                                <fm-input-number nz-input class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.tddtQlPcapHdLd"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
-                            </ng-container>
-                            <ng-template #editTD4>
-                                {{displayValue(editCache[data.id].data.tddtQlPcapHdLd)}}
-                            </ng-template>
-                        </td>
-                        <td *ngIf="checkViewTD">
-                            <ng-container *ngIf="checkEditTD; else editTD5">
-                                <fm-input-number nz-input class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.tddtKphiNsnn"></fm-input-number>
-                            </ng-container>
-                            <ng-template #editTD5>
-                                {{displayValue(editCache[data.id].data.tddtKphiNsnn)}}
-                            </ng-template>
-                        </td>
-                        <td *ngIf="checkViewTD">
-                            <ng-container *ngIf="checkEditTD; else editTD6">
-                                <fm-input-number nz-input class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.tddtKphiSnDvu"></fm-input-number>
-                            </ng-container>
-                            <ng-template #editTD6>
-                                {{displayValue(editCache[data.id].data.tddtKphiSnDvu)}}
-                            </ng-template>
-                        </td>
-                        <td *ngIf="checkViewTD">
-                            <ng-container *ngIf="checkEditTD; else editTD7">
-                                <fm-input-number nz-input class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.tddtKphiPhiDlai"></fm-input-number>
-                            </ng-container>
-                            <ng-template #editTD7>
-                                {{displayValue(editCache[data.id].data.tddtKphiPhiDlai)}}
-                            </ng-template>
-                        </td>
-                        <td *ngIf="checkViewTD">
-                            <ng-container *ngIf="checkEditTD; else editTD8">
-                                <fm-input-number nz-input class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.tddtKphiHphap"></fm-input-number>
-                            </ng-container>
-                            <ng-template #editTD8>
-                                {{displayValue(editCache[data.id].data.tddtKphiHphap)}}
-                            </ng-template>
-                        </td>
-                        <td>
-                            <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                            <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
-                                (nzOnConfirm)="cancelEdit(data.id)" class="save">
-                                Hủy
-                            </a>
-
-                        </td>
-                        <td>
-                            <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
-                            <i *ngIf="checkDelete(data.donVi)" class="fa fa-trash-o do"
+                        <td [hidden]="status">
+                            <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
                                 (click)="deleteLine(data.stt)"></i>
+                        </td>
+                        <td [hidden]="status">
+                            <div style="display: flex; justify-content: space-around; align-items: center;">
+                                <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                                <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                                    (nzOnConfirm)="cancelEdit(data.id)" class="save">
+                                    Hủy
+                                </a>
+                            </div>
+                        </td>
+                        <td [hidden]="status">
+                            <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
                         </td>
                     </ng-template>
                 </tr>

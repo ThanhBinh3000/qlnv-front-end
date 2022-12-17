@@ -223,12 +223,12 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
       this.spinner.show();
       try {
         let body = this.formData.value;
-        body.tuNgay = body.ngayCapNhat[0];
-        body.denNgay = body.ngayCapNhat[1];
+        body.ngayNhapTu = body.ngayCapNhat[0];
+        body.ngayNhapDen = body.ngayCapNhat[1];
         this.vonPhiService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'de-xuat-phuong-an-gia.xlsx'),
+            saveAs(blob, 'von-phi-cua-bo-nganh.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {

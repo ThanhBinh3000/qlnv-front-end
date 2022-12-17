@@ -52,17 +52,6 @@ export class ItemData {
     namKhKphiSnDvu: number;
     namKhKphiPhiDlai: number;
     namKhKphiHphap: number;
-    tddtTsoNguoiLv: number;
-    tddtTongQlPcap: number;
-    tddtQlPcapTso: number;
-    tddtQlPcapLuongBac: number;
-    tddtQlPcapPcapLuong: number;
-    tddtQlPcapDgopLuong: number;
-    tddtQlPcapHdLd: number;
-    tddtKphiNsnn: number;
-    tddtKphiSnDvu: number;
-    tddtKphiPhiDlai: number;
-    tddtKphiHphap: number;
     level: any;
     checked: boolean;
 }
@@ -231,17 +220,6 @@ export class BieuMau152Component implements OnInit {
                     namKhKphiSnDvu: null,
                     namKhKphiPhiDlai: null,
                     namKhKphiHphap: null,
-                    tddtTsoNguoiLv: null,
-                    tddtTongQlPcap: null,
-                    tddtQlPcapTso: null,
-                    tddtQlPcapLuongBac: null,
-                    tddtQlPcapPcapLuong: null,
-                    tddtQlPcapDgopLuong: null,
-                    tddtQlPcapHdLd: null,
-                    tddtKphiNsnn: null,
-                    tddtKphiSnDvu: null,
-                    tddtKphiPhiDlai: null,
-                    tddtKphiHphap: null,
                     level: '',
                     checked: false,
                 })
@@ -255,7 +233,7 @@ export class BieuMau152Component implements OnInit {
                 item.stt = item.donVi;
             })
         }
-
+        this.sortByIndex();
         this.updateEditCache();
         this.getStatusButton();
 
@@ -298,7 +276,7 @@ export class BieuMau152Component implements OnInit {
                 item.dtKphiPhiDlai > MONEY_LIMIT || item.dtKphiHphap > MONEY_LIMIT || item.uocThTsoNguoiLv > MONEY_LIMIT || item.uocThTsoBcTdiem > MONEY_LIMIT || item.uocThTsoVcCc > MONEY_LIMIT || item.uocThTongQlPcap > MONEY_LIMIT ||
                 item.uocThQlPcapTso > MONEY_LIMIT || item.uocThQlPcapLuongBac > MONEY_LIMIT || item.uocThQlPcapPcapLuong > MONEY_LIMIT || item.uocThQlPcapDgopLuong > MONEY_LIMIT || item.uocThQlPcapHdLd > MONEY_LIMIT || item.uocThKphiNsnn > MONEY_LIMIT ||
                 item.uocThKphiSnDvu > MONEY_LIMIT || item.uocThKphiPhiDlai > MONEY_LIMIT || item.uocThKphiHphap > MONEY_LIMIT || item.namKhTsoNguoiLv > MONEY_LIMIT || item.namKhTongQlPcap > MONEY_LIMIT || item.namKhQlPcapTso > MONEY_LIMIT || item.namKhQlPcapLuongBac > MONEY_LIMIT ||
-                item.namKhQlPcapPcapLuong > MONEY_LIMIT || item.namKhQlPcapDgopLuong > MONEY_LIMIT || item.namKhQlPcapHdLd > MONEY_LIMIT || item.namKhKphiNsnn > MONEY_LIMIT || item.namKhKphiSnDvu > MONEY_LIMIT || item.namKhKphiPhiDlai > MONEY_LIMIT || item.namKhKphiHphap > MONEY_LIMIT || item.tddtTsoNguoiLv > MONEY_LIMIT || item.tddtTongQlPcap > MONEY_LIMIT || item.tddtQlPcapTso > MONEY_LIMIT || item.tddtQlPcapLuongBac > MONEY_LIMIT || item.tddtQlPcapPcapLuong > MONEY_LIMIT || item.tddtQlPcapDgopLuong > MONEY_LIMIT || item.tddtQlPcapHdLd > MONEY_LIMIT || item.tddtKphiNsnn > MONEY_LIMIT || item.tddtKphiSnDvu > MONEY_LIMIT || item.tddtKphiPhiDlai > MONEY_LIMIT || item.tddtKphiHphap > MONEY_LIMIT) {
+                item.namKhQlPcapPcapLuong > MONEY_LIMIT || item.namKhQlPcapDgopLuong > MONEY_LIMIT || item.namKhQlPcapHdLd > MONEY_LIMIT || item.namKhKphiNsnn > MONEY_LIMIT || item.namKhKphiSnDvu > MONEY_LIMIT || item.namKhKphiPhiDlai > MONEY_LIMIT || item.namKhKphiHphap > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
@@ -516,17 +494,6 @@ export class BieuMau152Component implements OnInit {
             namKhKphiSnDvu: null,
             namKhKphiPhiDlai: null,
             namKhKphiHphap: null,
-            tddtTsoNguoiLv: null,
-            tddtTongQlPcap: null,
-            tddtQlPcapTso: null,
-            tddtQlPcapLuongBac: null,
-            tddtQlPcapPcapLuong: null,
-            tddtQlPcapDgopLuong: null,
-            tddtQlPcapHdLd: null,
-            tddtKphiNsnn: null,
-            tddtKphiSnDvu: null,
-            tddtKphiPhiDlai: null,
-            tddtKphiHphap: null,
             level: '',
             checked: false,
         }
@@ -537,6 +504,7 @@ export class BieuMau152Component implements OnInit {
             edit: false,
             data: { ...item }
         };
+        this.sortByIndex();
     }
 
 
@@ -547,8 +515,8 @@ export class BieuMau152Component implements OnInit {
         return false;
     }
 
-    checkDelete(maDa: string) {
-        if (!maDa) {
+    checkDelete(stt: string) {
+        if (stt.length != 3) {
             return true;
         }
         return false;
@@ -582,6 +550,37 @@ export class BieuMau152Component implements OnInit {
         }
         return xau;
     }
+
+    sortByIndex() {
+        this.setLevel();
+        this.lstCtietBcao.sort((item1, item2) => {
+            if (item1.level > item2.level) {
+                return 1;
+            }
+            if (item1.level < item2.level) {
+                return -1;
+            }
+            if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
+                return -1;
+            }
+            if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
+                return 1;
+            }
+            return 0;
+        });
+        const lstTemp: ItemData[] = [];
+        this.lstCtietBcao.forEach(item => {
+            const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
+            if (index == -1) {
+                lstTemp.splice(0, 0, item);
+            } else {
+                lstTemp.splice(index + 1, 0, item);
+            }
+        })
+
+        this.lstCtietBcao = lstTemp;
+    }
+
 
     // lấy phần đuôi của stt
     getTail(str: string): number {
@@ -736,17 +735,7 @@ export class BieuMau152Component implements OnInit {
             this.tongSo33 += item.namKhKphiSnDvu;
             this.tongSo34 += item.namKhKphiPhiDlai;
             this.tongSo35 += item.namKhKphiHphap;
-            this.tongSo36 += item.tddtTsoNguoiLv;
-            this.tongSo37 += item.tddtTongQlPcap;
-            this.tongSo38 += item.tddtQlPcapTso;
-            this.tongSo39 += item.tddtQlPcapLuongBac;
-            this.tongSo40 += item.tddtQlPcapPcapLuong;
-            this.tongSo41 += item.tddtQlPcapDgopLuong;
-            this.tongSo42 += item.tddtQlPcapHdLd;
-            this.tongSo43 += item.tddtKphiNsnn;
-            this.tongSo44 += item.tddtKphiSnDvu;
-            this.tongSo45 += item.tddtKphiPhiDlai;
-            this.tongSo46 += item.tddtKphiHphap;
+
         })
     }
 
@@ -758,12 +747,10 @@ export class BieuMau152Component implements OnInit {
 
         this.editCache[id].data.namKhQlPcapTso = this.editCache[id].data.namKhQlPcapLuongBac + this.editCache[id].data.namKhQlPcapPcapLuong + this.editCache[id].data.namKhQlPcapDgopLuong;
 
-        this.editCache[id].data.tddtQlPcapTso = this.editCache[id].data.tddtQlPcapLuongBac + this.editCache[id].data.tddtQlPcapPcapLuong + this.editCache[id].data.tddtQlPcapDgopLuong;
-
         this.editCache[id].data.dtTongQlPcap = this.editCache[id].data.dtQlPcapTso + this.editCache[id].data.dtQlPcapHdLd;
         this.editCache[id].data.uocThTongQlPcap = this.editCache[id].data.uocThQlPcapTso + this.editCache[id].data.uocThQlPcapHdLd;
         this.editCache[id].data.namKhTongQlPcap = this.editCache[id].data.namKhQlPcapTso + this.editCache[id].data.namKhQlPcapHdLd;
-        this.editCache[id].data.tddtTongQlPcap = this.editCache[id].data.tddtQlPcapTso + this.editCache[id].data.tddtQlPcapHdLd;
+
     }
 
 

@@ -20,6 +20,8 @@ import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-tr
 import { ViewFlags } from '@angular/compiler/src/core';
 import { QuyChunKyThuatQuocGia } from 'src/app/models/KhoaHocCongNgheBaoQuan';
 import { LoginComponent } from './../../../login/login.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 import { filter } from 'rxjs/operators';
 import { DonviService } from 'src/app/services/donvi.service';
 import { createLogErrorHandler } from '@angular/compiler-cli/ngcc/src/execution/tasks/completion';
@@ -59,18 +61,13 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
   listVanBanId: any[] = [];
   dsBoNganh: any[] = [];
   constructor(
-    private fb: FormBuilder,
-    private modal: NzModalService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
-    private helperService: HelperService,
-    public globals: Globals,
-    private spinner: NgxSpinnerService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
-    private notification: NzNotificationService,
-    public userService: UserService,
   ) {
-    super();
+    super(httpClient, storageService, khCnQuyChuanKyThuat);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [''],

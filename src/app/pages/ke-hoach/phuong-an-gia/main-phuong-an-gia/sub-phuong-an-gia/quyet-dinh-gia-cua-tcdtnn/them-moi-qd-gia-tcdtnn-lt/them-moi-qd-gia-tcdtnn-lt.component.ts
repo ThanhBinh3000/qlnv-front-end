@@ -122,7 +122,7 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       this.formData.patchValue({
         id: data.id,
         namKeHoach: data.namKeHoach,
-        soQd: data.soQd.split("/")[0],
+        soQd: data.soQd ? data.soQd.split("/")[0] : '',
         loaiVthh: data.loaiVthh,
         cloaiVthh: data.cloaiVthh,
         ngayKy: data.ngayKy,
