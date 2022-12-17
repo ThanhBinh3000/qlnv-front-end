@@ -1059,7 +1059,8 @@ export class BaoCaoComponent implements OnInit {
                 break;
             case 'TT342_13.8':
                 nzContent = BieuMau138Component;
-                if (formDetail.trangThai == '3' || formDetail.trangThai == '4' || formDetail.trangThai == '5') {
+                if (this.baoCao.trangThai == Utils.TT_BC_1 || this.baoCao.trangThai == Utils.TT_BC_3 || this.baoCao.trangThai == Utils.TT_BC_5 ||
+                    this.baoCao.trangThai == Utils.TT_BC_7 || this.baoCao.trangThai == Utils.TT_BC_8) {
                     dataInfo.extraData = [];
                     //phu luc 3
                     const data1 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl03')?.lstCtietLapThamDinhs;
@@ -1078,10 +1079,10 @@ export class BaoCaoComponent implements OnInit {
                         }
                     })
                     //phu luc 1
-                    const data2 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl02')?.lstCtietLapThamDinhs;
+                    const data2 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl01')?.lstCtietLapThamDinhs;
                     data2?.forEach(item => {
                         const level = item.stt.split('.').length - 2;
-                        if (level == 1) {
+                        if (level == 0) {
                             dataInfo.extraData.push({
                                 stt: '0.1.1.2.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
                                 tenNdung: item.tenDanhMuc,

@@ -126,7 +126,7 @@ export class PhuLuc01Component implements OnInit {
         this.namBaoCao = this.dataInfo?.namBcao;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
-        this.editAppraisalValue = this.dataInfo?.viewAppraisalValue;
+        this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -304,7 +304,6 @@ export class PhuLuc01Component implements OnInit {
 
         this.lstCtietBcao = lstTemp;
     }
-
 
     setLevel() {
         this.lstCtietBcao.forEach(item => {

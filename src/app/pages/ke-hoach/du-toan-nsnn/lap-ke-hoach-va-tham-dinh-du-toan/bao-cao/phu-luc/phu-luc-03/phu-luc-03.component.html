@@ -69,9 +69,9 @@
                         <th>3=1x2</th>
                         <th *ngIf="checkViewTD">2A</th>
                         <th *ngIf="checkViewTD">3A=2Ax1</th>
+                        <th [hidden]="status"></th>
                         <th [hidden]="status && !checkViewTD"></th>
-                        <th [hidden]="status && !checkViewTD"></th>
-                        <th [hidden]="status && !checkViewTD"></th>
+                        <th [hidden]="status"></th>
                     </tr>
                     <tr>
                         <th [hidden]="status"></th>
@@ -86,9 +86,9 @@
                         <th>{{displayValue(total.ttienNamDtoan)}}</th>
                         <th *ngIf="checkViewTD"></th>
                         <th *ngIf="checkViewTD">{{displayValue(total.ttienNamN1Td)}}</th>
+                        <th [hidden]="status"></th>
                         <th [hidden]="status && !checkViewTD"></th>
-                        <th [hidden]="status && !checkViewTD"></th>
-                        <th [hidden]="status && !checkViewTD"></th>
+                        <th [hidden]="status"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -117,13 +117,13 @@
                             <td *ngIf="checkViewTD">
                                 {{displayValue(data.ttienNamN1Td)}}
                             </td>
-                            <td [hidden]="status && !checkViewTD">
+                            <td [hidden]="status">
                                 <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                             </td>
                             <td [hidden]="status && !checkViewTD">
                                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                             </td>
-                            <td [hidden]="status && !checkViewTD">
+                            <td [hidden]="status">
                                 <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                             </td>
                         </ng-container>
@@ -185,7 +185,7 @@
                             <td *ngIf="checkViewTD">
                                 {{displayValue(editCache[data.id].data.ttienNamN1Td)}}
                             </td>
-                            <td [hidden]="status && !checkViewTD">
+                            <td [hidden]="status">
                                 <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                             </td>
                             <td>
@@ -193,7 +193,7 @@
                                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                     (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                             </td>
-                            <td [hidden]="status && !checkViewTD">
+                            <td [hidden]="status">
                                 <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                             </td>
                         </ng-template>
