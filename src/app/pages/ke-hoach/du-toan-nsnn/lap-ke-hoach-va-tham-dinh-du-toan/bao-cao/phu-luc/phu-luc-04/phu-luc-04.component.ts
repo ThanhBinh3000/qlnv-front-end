@@ -167,6 +167,7 @@ export class PhuLuc04Component implements OnInit {
 
         if (!this.viewAppraisalValue) {
             lstCtietBcaoTemp?.forEach(item => {
+                item.soLuongTd = item.soLuong;
                 item.tongMucDuToanTd = item.tongMucDuToan;
                 item.duToanKhNamNCbDauTuTd = item.duToanKhNamNCbDauTu;
                 item.duToanKhNamNThDauTuTd = item.duToanKhNamNThDauTu;
@@ -271,10 +272,12 @@ export class PhuLuc04Component implements OnInit {
         }
         return xau;
     }
+
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
     getHead(str: string): string {
         return str.substring(0, str.lastIndexOf('.'));
     }
+
     // lấy phần đuôi của stt
     getTail(str: string): number {
         return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
@@ -520,9 +523,14 @@ export class PhuLuc04Component implements OnInit {
         WindowPrt.close();
     }
 
-    // hien thi so thap phan
+    // hien thi so thap phan tien 
     displayValue(num: number): string {
         num = exchangeMoney(num, '1', this.maDviTien);
+        return displayNumber(num);
+    }
+
+    // hien thi so thap phan so 
+    displayNumber(num: number): string {
         return displayNumber(num);
     }
 

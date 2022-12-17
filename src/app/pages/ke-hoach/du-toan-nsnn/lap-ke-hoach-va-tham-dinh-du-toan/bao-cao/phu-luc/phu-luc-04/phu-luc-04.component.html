@@ -105,8 +105,8 @@
                         <td>
                             {{data.tenNoiDung}}
                         </td>
-                        <td>{{data.soLuong}}</td>
-                        <td *ngIf="viewAppraisalValue">{{data.soLuongTd}}</td>
+                        <td>{{displayNumber(data.soLuong)}}</td>
+                        <td *ngIf="viewAppraisalValue">{{displayNumber(data.soLuongTd)}}</td>
                         <td>{{displayValue(data.tongMucDuToan)}}</td>
                         <td *ngIf="viewAppraisalValue">{{displayValue(data.tongMucDuToanTd)}}</td>
                         <td>{{displayValue(data.duToanDaBoTriNamN2)}}</td>
@@ -145,11 +145,10 @@
                         </td>
 
                         <ng-container *ngIf="editAppraisalValue ; else editAppraisal">
-                            <td>{{data.soLuong}}</td>
+                            <td>{{displayNumber(data.soLuong)}}</td>
                             <td>
                                 <fm-input-number nz-input class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.soLuongTd"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                    [(ngModel)]="editCache[data.id].data.soLuongTd"></fm-input-number>
                             </td>
                             <td>{{displayValue(data.tongMucDuToan)}}</td>
                             <td>
@@ -184,9 +183,8 @@
                             </td>
                             <td *ngIf="viewAppraisalValue">
                                 <fm-input-number nz-input class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.soLuongTd"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
-
+                                    [(ngModel)]="editCache[data.id].data.soLuongTd">
+                                </fm-input-number>
                             </td>
                             <td>
                                 {{displayValue(editCache[data.id].data.tongMucDuToan)}}
@@ -227,12 +225,14 @@
                             <td *ngIf="viewAppraisalValue">
                                 <fm-input-number nz-input class="search__input"
                                     [(ngModel)]="editCache[data.id].data.duToanKhNamNCbDauTuTd"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                    (ngModelChange)="changeModel(editCache[data.id].data.id)">
+                                </fm-input-number>
                             </td>
                             <td *ngIf="viewAppraisalValue">
                                 <fm-input-number nz-input class="search__input"
                                     [(ngModel)]="editCache[data.id].data.duToanKhNamNThDauTuTd"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                    (ngModelChange)="changeModel(editCache[data.id].data.id)">
+                                </fm-input-number>
                             </td>
                             <td>
                                 <fm-input-number class="search__input"
