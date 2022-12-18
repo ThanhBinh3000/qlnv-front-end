@@ -25,6 +25,7 @@ import { DonviService } from 'src/app/services/donvi.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
 import { ThongTriDuyetYCapPhiService } from 'src/app/services/ke-hoach/von-phi/thongTriDuyetYCapPhi.service';
+import { TongHopDeNghiCapPhiService } from 'src/app/services/ke-hoach/von-phi/tongHopDeNghiCapPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
@@ -67,8 +68,10 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   maKeHoach: string;
   listLoaiHopDong: any[] = [];
   dsBoNganh: any[] = [];
+  dsBoNganhFix: any[] = [];
   listDeNghi: any[] = [];
-
+  listTongHop: any[] = [];
+  listDviThuHuong: any[] = [];
   rowItem: any = {};
   chiTietList: any[] = [];
 
@@ -85,6 +88,8 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private helperService: HelperService,
     private deNghiCapPhiBoNganhService: DeNghiCapPhiBoNganhService,
+    private tongHopDeNghiCapPhiService: TongHopDeNghiCapPhiService,
+
   ) {
   }
 
@@ -98,16 +103,18 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
-    if (this.idInput > 0) {
-      this.loadDeXuatKHBanDauGia(this.idInput);
-    } else {
-    }
+
     this.khBanDauGia.nam = dayjs().year();
     this.initForm();
     await Promise.all([
       this.getListBoNganh(),
       this.getListDeNghi(),
+      this.getListTongHop(),
     ]);
+    if (this.idInput > 0) {
+      this.loadDeXuatKHBanDauGia(this.idInput);
+    } else {
+    }
     this.spinner.hide();
   }
 
@@ -158,7 +165,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       ],
       maDvi: [
         {
-          value: this.khBanDauGia ? this.khBanDauGia.maDvi : null,
+          value: this.userInfo.MA_DVI,
           disabled: this.isView ? true : false,
         },
         [Validators.required],
@@ -197,10 +204,27 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         },
         [Validators.required],
       ],
+      dviThuHuong: [{
+        value: this.khBanDauGia ? +this.khBanDauGia.dviThuHuong : null,
+        disabled: this.isView ? true : false,
+      }],
+      dviThuHuongStk: [{
+        value: this.khBanDauGia ? this.khBanDauGia.dviThuHuongStk : null,
+        disabled: this.isView ? true : false,
+      }],
+      dviThuHuongNganHang: [{
+        value: this.khBanDauGia ? this.khBanDauGia.dviThuHuongNganHang : null,
+        disabled: this.isView ? true : false,
+      }],
+      dviThongTri: [{
+        value: this.khBanDauGia ? this.khBanDauGia.dviThongTri : null,
+        disabled: this.isView ? true : false,
+      }, [Validators.required]],
     });
   }
 
   isDisableField() {
+    console.log(this.formData)
     if (this.khBanDauGia && (this.khBanDauGia.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_VU || this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_VU)) {
       return true;
     }
@@ -217,12 +241,24 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       this.listDeNghi = res.data.content;
     }
   }
+  async getListTongHop() {
+    this.listTongHop = [];
+    let body = {
+      pageNumber: 1,
+      pageSize: 1000,
+    }
+    let res = await this.tongHopDeNghiCapPhiService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listTongHop = res.data.content;
+    }
+  }
 
   async getListBoNganh() {
     this.dsBoNganh = [];
     let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data;
+      this.dsBoNganhFix = res.data;
     }
   }
 
@@ -243,6 +279,9 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
             this.listFileDinhKem = this.khBanDauGia.fileDinhKems;
           }
           this.initForm();
+          this.changeMaTongHop();
+          this.changeDonVi();
+
         }
       })
       .catch((e) => {
@@ -453,5 +492,47 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     if (this.chiTietList.length > 0) {
       this.chiTietList.splice(idx, 1);
     }
+  }
+  async changeMaTongHop() {
+    let selected = this.formData.get('soDnCapPhi').value;
+    this.dsBoNganh = [];
+    /*this.formData.patchValue({
+      dviThongTri: null
+    })*/
+    if (selected) {
+      let res = await this.tongHopDeNghiCapPhiService.loadChiTiet(this.formData.get('soDnCapPhi').value);
+      if (res.msg == MESSAGE.SUCCESS && res.data) {
+       /* let map = res.data.ct1s.map(s => s.tenBoNganh);
+        if (map.includes('Tổng cục Dự Trữ')) {
+          map.push('Bộ Tài chính');
+        }*/
+        this.dsBoNganh=res.data.cts;
+        // this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.tenDvi))
+
+      }
+    }
+  }
+
+  async changeDonVi() {
+    if (this.formData.value.dviThongTri) {
+      let res = await this.deNghiCapPhiBoNganhService.dsThuHuong({
+        maBoNganh: this.formData.value.dviThongTri,
+        maTh: this.formData.value.soDnCapVon
+      });
+      if (res.msg == MESSAGE.SUCCESS && res.data) {
+        this.listDviThuHuong = res.data;
+      }
+    }
+  }
+
+  async changeDonViThuHuong() {
+    let data = this.listDviThuHuong.find(s => s.id == this.formData.value.dviThuHuong);
+    if (data) {
+      this.formData.patchValue({
+        dviThuHuongStk: data.soTaiKhoan,
+        dviThuHuongNganHang: data.nganHang,
+      })
+    }
+
   }
 }
