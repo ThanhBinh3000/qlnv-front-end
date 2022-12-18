@@ -66,8 +66,9 @@
             <th width="">Số thông tri</th>
             <th width="">Năm</th>
             <th width="">Ngày lập</th>
+            <th width="">Đơn vị</th>
             <th width="">Lý do chi</th>
-            <th width="">Số đề nghị cấp vốn</th>
+            <th width="">Mã tổng hợp</th>
             <th width="">Trạng thái</th>
             <th width="90px">Hành động</th>
           </tr>
@@ -90,6 +91,12 @@
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayLap"
                   (input)="filterInTable('ngayLap',filterTable.ngayLap)" size="small" />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.lyDoChi"
+                  (input)="filterInTable('lyDoChi',filterTable.lyDoChi)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -123,6 +130,7 @@
             <td>{{ data.soThongTri }}</td>
             <td>{{ data.nam }}</td>
             <td>{{ data.ngayLap | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.tenDviThongTri }}</td>
             <td>{{ data.lyDoChi }}</td>
             <td>{{ data.soDnCapVon }}</td>
             <td>{{ data.tenTrangThai }}</td>
