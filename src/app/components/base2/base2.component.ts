@@ -24,6 +24,7 @@ import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.c
   templateUrl: './base2.component.html',
 })
 export class Base2Component implements OnInit {
+
   // User Info 
   userInfo: UserLogin;
 
@@ -40,6 +41,9 @@ export class Base2Component implements OnInit {
   totalRecord: number = 0;
   allChecked = false;
   indeterminate = false;
+
+  isDetail: boolean = false;
+  idSelected: number = 0;
 
   // Service 
   modal: NzModalService
@@ -114,6 +118,16 @@ export class Base2Component implements OnInit {
   clearForm() {
     this.formData.reset();
     this.search();
+  }
+
+  showList() {
+    this.isDetail = false;
+    this.search();
+  }
+
+  goDetail(id: number) {
+    this.idSelected = id;
+    this.isDetail = true;
   }
 
   async changePageIndex(event) {
