@@ -202,7 +202,7 @@
               <nz-form-label [nzNoColon]="true"  class="label-color-kh"> Quyết định phê
                 duyệt kế hoạch mua/bán</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="qdCtKhNam" (ngModelChange)="loadDetailNh($event)">
+                <nz-select [nzDisabled]="isView" formControlName="qdCtKhNam" (ngModelChange)="loadDetailNh($event)">
                   <nz-option *ngFor="let item of listQdCtKh" [nzLabel]="item.soQd" [nzValue]="item.soQd"></nz-option>
                 </nz-select>
               </nz-form-control>

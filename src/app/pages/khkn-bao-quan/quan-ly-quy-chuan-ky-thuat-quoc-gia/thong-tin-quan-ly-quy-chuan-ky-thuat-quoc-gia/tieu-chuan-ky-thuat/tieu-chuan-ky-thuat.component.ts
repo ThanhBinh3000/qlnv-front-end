@@ -3,6 +3,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { BaseComponent } from 'src/app/components/base/base.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-tieu-chuan-ky-thuat',
@@ -34,11 +36,11 @@ export class TieuChuanKyThuatComponent extends BaseComponent implements OnInit {
   chiTieuCha: true;
   listOfCloaiVthh: any = []
   constructor(
-    private spinner: NgxSpinnerService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     public userService: UserService,
-    private notification: NzNotificationService
   ) {
-    super();
+    super(httpClient, storageService, userService);
     super.ngOnInit();
   }
 

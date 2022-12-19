@@ -20,8 +20,8 @@
         <div class="header" *ngIf="isTongHop">
             <div class="header-text">
                 <div class="title-chi-tieu">
-                     <span
-                       [ngClass]="formData.value.trangThaiTh == STATUS.DA_TAO_TT ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+                    <span
+                        [ngClass]="formData.value.trangThaiTh == STATUS.DA_TAO_TT ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
                         {{ formData.value.tenTrangThaiTh }}
                     </span>
                     <span>TIÊU CHÍ TỔNG HỢP</span>
@@ -123,8 +123,7 @@
                                 xuất
                             </nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
-                                <nz-range-picker formControlName="ngayDx" nzFormat="dd/MM/yyyy"
-                                    class="search__input">
+                                <nz-range-picker formControlName="ngayDx" nzFormat="dd/MM/yyyy" class="search__input">
                                 </nz-range-picker>
                                 <ng-template #error let-control>
                                     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
@@ -199,6 +198,16 @@
                                         nzDisabled>
                                     </nz-input-number>
                                 </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col nzSpan="24">
+                            <nz-form-item>
+                                <nz-form-label [nzNoColon]="true">
+                                    Tài liệu đính kèm
+                                </nz-form-label>
+                                <div class="list-file">
+                                    <file-list [data]="fileDinhKem"></file-list>
+                                </div>
                             </nz-form-item>
                         </div>
                     </div>

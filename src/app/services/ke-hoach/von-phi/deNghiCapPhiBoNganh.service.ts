@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { BaseService } from '../../base.service';
+import { OldResponseData } from 'src/app/interfaces/response';
 
 @Injectable({
   providedIn: 'root',
@@ -77,5 +78,8 @@ export class DeNghiCapPhiBoNganhService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.router}/export/list`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
-
+  dsThuHuong(body) {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/de-nghi-cap-phi-bo-nganh/ds-thu-huong`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }

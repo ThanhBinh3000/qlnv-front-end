@@ -156,7 +156,8 @@ export class ThongTinTonghopComponent implements OnInit {
             "ngayTongHop": data.ngayTongHop,
             "maToTrinh": data.maToTrinh,
             "noiDung": data.noiDung,
-            nameFilePhuongAn: data.fileDinhKem.fileName
+            nameFilePhuongAn: data.fileDinhKem.fileName,
+            khDnCapVonIds:data.ct1s.map(s=>s.khDnCapVonId)
           });
           this.listFileDinhKem = [data.fileDinhKem];
           this.listThongTinChiTiet = [...data.ct1s];
@@ -172,8 +173,8 @@ export class ThongTinTonghopComponent implements OnInit {
             phuongAn.tcCapThem = pa.tcCapThem;
             phuongAnList = [...phuongAnList, phuongAn];
           });
-          this.khDnCapVonIds = res.data.cts.map(item => item.id);
-          this.formData.patchValue({khDnCapVonIds: this.khDnCapVonIds});
+        /*  this.khDnCapVonIds = res.data.cts.map(item => item.id);
+          this.formData.patchValue({khDnCapVonIds: this.khDnCapVonIds});*/
         }
       }
     }
@@ -569,7 +570,7 @@ export class ThongTinTonghopComponent implements OnInit {
     if (nguonTongHopId == 'TCDT') {
       let body = {
         nguonTongHop: nguonTongHopId,
-        nam:this.yearNow
+        nam:this.formData.get('nam').value
       };
       let res = await this.deNghiCapVonBoNganhService.loadThTCDT(body);
       //to do
@@ -582,7 +583,7 @@ export class ThongTinTonghopComponent implements OnInit {
       let body = {
         soDeNghi: null,
         maBoNganh: null,
-        nam: this.yearNow,
+        nam:this.formData.get('nam').value,
         trangThai: STATUS.HOAN_THANH_CAP_NHAT,
         type: 'TH',
         loaiTh: nguonTongHopId,

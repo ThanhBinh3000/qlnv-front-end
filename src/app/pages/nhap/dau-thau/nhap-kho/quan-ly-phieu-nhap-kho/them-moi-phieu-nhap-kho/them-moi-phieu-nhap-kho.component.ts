@@ -32,6 +32,8 @@ import { BaseComponent } from "../../../../../../components/base/base.component"
 import { isEmpty } from 'lodash';
 import { HelperService } from "../../../../../../services/helper.service";
 import { DatePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 
 
@@ -57,28 +59,13 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
   dataTable: any[] = [];
 
   constructor(
-    private spinner: NgxSpinnerService,
-    private donViService: DonviService,
-    private danhMucService: DanhMucService,
-    private notification: NzNotificationService,
-    private router: Router,
-    private routerActive: ActivatedRoute,
-    private modal: NzModalService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     public userService: UserService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
-    private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
-    public globals: Globals,
-    private uploadFileService: UploadFileService,
-    private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
-    private hoSoKyThuatService: HoSoKyThuatService,
-    private thongTinHopDongService: ThongTinHopDongService,
-    private fb: FormBuilder,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    private helperService: HelperService,
-
   ) {
-    super();
+    super(httpClient, storageService, quanLyPhieuNhapKhoService)
     this.formData = this.fb.group({
       id: [],
       nam: [dayjs().get('year')],

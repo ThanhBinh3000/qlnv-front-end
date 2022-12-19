@@ -22,6 +22,8 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { BaseComponent } from 'src/app/components/base/base.component';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapKho.service';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-them-so-kho-the-kho',
@@ -50,19 +52,14 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
   idDonViSelected = null;
 
   constructor(
-    private readonly fb: FormBuilder,
-    private notification: NzNotificationService,
-    public userService: UserService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private donviService: DonviService,
-    private spinner: NgxSpinnerService,
-    private danhMucService: DanhMucService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
-    public globals: Globals,
-    private modal: NzModalService,
     private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
   ) {
-    super();
+    super(httpClient, storageService, quanLySoKhoTheKhoService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [''],
