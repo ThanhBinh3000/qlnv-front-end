@@ -18,6 +18,11 @@ export class DanhMucService extends BaseService {
     return this.httpClient.post<any>(url, null);
   }
 
+  timKiem(body: any): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/hop-dong/tra-cuu`
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
   delete(id): Promise<OldResponseData> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xoa/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
