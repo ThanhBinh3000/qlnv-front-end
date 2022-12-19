@@ -91,18 +91,16 @@
           <!--          </nz-input-group>-->
         </th>
         <th>
-          <!--          <nz-input-group>-->
-          <!--            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"-->
-          <!--                   (input)="filterInTable('trangThai',filterTable.trangThai)" size="small"/>-->
-          <!--          </nz-input-group>-->
+          <nz-input-group>
+            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soToTrinh"
+                   (input)="filterInTable('soToTrinh',filterTable.soToTrinh)" size="small"/>
+          </nz-input-group>
         </th>
         <th>
           <!--          <nz-input-group>-->
           <!--            <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThaiPdBtc"-->
           <!--                   (input)="filterInTable('trangThaiPdBtc',filterTable.trangThaiPdBtc)" size="small"/>-->
           <!--          </nz-input-group>-->
-        </th>
-        <th>
         </th>
         <th>
         </th>
@@ -127,9 +125,6 @@
           <a *ngIf="data.trangThaiBtc == STATUS.CHODUYET_BTC" (click)="viewDetail(data.id, false)">
             <i class="fa fa-pencil"></i>
           </a>
-          <!--          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="xoaItem(data)">-->
-          <!--            <i class="fa fa-trash-o do"></i>-->
-          <!--          </a>-->
         </td>
       </tr>
       </tbody>
