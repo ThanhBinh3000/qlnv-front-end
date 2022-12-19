@@ -844,7 +844,6 @@ export class BaoCaoComponent implements OnInit {
                 dataInfo.extraData = [];
                 //phu luc bao hiem hang 
                 const dataBaoHiemHang = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh_hang').lstCtietLapThamDinhs;
-
                 dataBaoHiemHang.forEach(item => {
                     const loaiHang = this.lstVatTuFull.find(v => v.ten == item.tenHang)?.loaiHang;
                     const tenHang = this.lstVatTuFull.find(v => v.ten == item.tenHang)?.ten;
@@ -856,7 +855,7 @@ export class BaoCaoComponent implements OnInit {
                         let tongGiaTriDuoi = 0
                         if (item.khoiTich >= 5000) {
                             tongSoLuongTu += item.soLuong;
-                            tongGiaTriTu += item.giaTri
+                            tongGiaTriTu += item.giaTri;
                         }
                         if (item.khoiTich < 5000) {
                             tongSoLuongDuoi += item.soLuong;
