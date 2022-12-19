@@ -202,11 +202,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     this.spinner.show();
     if ($event) {
       let res = await this.quyetDinhPheDuyetKeHoachLCNTService.getDetail($event);
-      // let qdGoc = this.listQdGoc.filter(item => item.id == $event)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        this.dataInput = data;
-        this.dataInputCache = cloneDeep(data);
         this.formData.patchValue({
           loaiVthh: data.loaiVthh,
           cloaiVthh: data.cloaiVthh,
@@ -217,6 +214,8 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
           ngayQdGoc: data.ngayQd
         })
         if (data.loaiVthh.startsWith('02')) {
+          this.dataInput = data;
+          this.dataInputCache = cloneDeep(data);
           this.danhsachDx = data.children
         } else {
           this.danhsachDx = data.children
@@ -241,43 +240,9 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
   }
 
   async pheDuyet() {
-    let trangThai = ''
-    let mesg = ''
-    // if (this.formData.get('loaiVthh').value.startsWith("02")) {
-    //   switch (this.formData.get('trangThai').value) {
-    //     case STATUS.DU_THAO: {
-    //       trangThai = STATUS.CHO_DUYET_LDV;
-    //       mesg = 'Bạn có muốn gửi duyệt ?'
-    //       break;
-    //     }
-    //     case STATUS.TU_CHOI_LDV: {
-    //       trangThai = STATUS.CHO_DUYET_LDV;
-    //       mesg = 'Bạn có muốn gửi duyệt ?'
-    //       break;
-    //     }
-    //     case STATUS.CHO_DUYET_LDV: {
-    //       trangThai = STATUS.DA_DUYET_LDV;
-    //       mesg = 'Bạn có muốn gửi duyệt ?'
-    //       break;
-    //     }
-    //     case STATUS.DA_DUYET_LDV: {
-    //       trangThai = STATUS.BAN_HANH;
-    //       mesg = 'Văn bản sẵn sàng ban hành ?'
-    //       break;
-    //     }
-    //   }
-    // } else {
-
-    // }
-    trangThai = STATUS.BAN_HANH;
-    mesg = 'Văn bản sẵn sàng ban hành ?'
-    let result = await this.approve(this.formData.value.id, trangThai, mesg);
-    console.log(result);
-  }
-
-  async tuChoi() {
-    let res = await this.reject(this.formData.value.id, STATUS.TU_CHOI_LDC);
-    console.log(res);
+    let trangThai = STATUS.BAN_HANH;
+    let mesg = 'Văn bản sẵn sàng ban hành ?'
+    await this.approve(this.formData.value.id, trangThai, mesg);
   }
 
   quayLai() {
@@ -300,8 +265,6 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
     });
     modal.afterClose.subscribe((res) => {
       if (res) {
-        console.log(res);
-        console.log(index);
         // res.nguonVon = this.dataNguonVon.nguonVon;
         // res.tenNguonVon = this.dataNguonVon.tenNguonVon;
         // if (index >= 0) {
@@ -349,38 +312,48 @@ export class ThemMoiDieuChinhComponent extends Base2Component implements OnInit 
 
 
   setValidator() {
-    if (this.formData.get('loaiVthh').value.startsWith('02')) {
-      this.formData.controls["hthucLcnt"].clearValidators();
-      this.formData.controls["pthucLcnt"].clearValidators();
-      this.formData.controls["loaiHdong"].clearValidators();
-      this.formData.controls["nguonVon"].clearValidators();
-      this.formData.controls["tgianBdauTchuc"].clearValidators();
-      this.formData.controls["tgianDthau"].clearValidators();
-      this.formData.controls["tgianMthau"].clearValidators();
-      this.formData.controls["tgianNhang"].clearValidators();
-      this.formData.controls["cloaiVthh"].clearValidators();
-      this.formData.controls["tenCloaiVthh"].clearValidators();
-      this.formData.controls["moTaHangHoa"].clearValidators();
+    // if (this.formData.get('loaiVthh').value.startsWith('02')) {
+    //   this.formData.controls["hthucLcnt"].clearValidators();
+    //   this.formData.controls["pthucLcnt"].clearValidators();
+    //   this.formData.controls["loaiHdong"].clearValidators();
+    //   this.formData.controls["nguonVon"].clearValidators();
+    //   this.formData.controls["tgianBdauTchuc"].clearValidators();
+    //   this.formData.controls["tgianDthau"].clearValidators();
+    //   this.formData.controls["tgianMthau"].clearValidators();
+    //   this.formData.controls["tgianNhang"].clearValidators();
+    //   this.formData.controls["cloaiVthh"].clearValidators();
+    //   this.formData.controls["tenCloaiVthh"].clearValidators();
+    //   this.formData.controls["moTaHangHoa"].clearValidators();
 
-    } else {
-      this.formData.controls["hthucLcnt"].setValidators([Validators.required]);
-      this.formData.controls["pthucLcnt"].setValidators([Validators.required]);
-      this.formData.controls["loaiHdong"].setValidators([Validators.required]);
-      this.formData.controls["nguonVon"].setValidators([Validators.required]);
-      this.formData.controls["tgianBdauTchuc"].setValidators([Validators.required]);
-      this.formData.controls["tgianDthau"].setValidators([Validators.required]);
-      this.formData.controls["tgianMthau"].setValidators([Validators.required]);
-      this.formData.controls["tgianNhang"].setValidators([Validators.required]);
-      this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
-      this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
-      this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
-    }
+    // } else {
+    //   this.formData.controls["hthucLcnt"].setValidators([Validators.required]);
+    //   this.formData.controls["pthucLcnt"].setValidators([Validators.required]);
+    //   this.formData.controls["loaiHdong"].setValidators([Validators.required]);
+    //   this.formData.controls["nguonVon"].setValidators([Validators.required]);
+    //   this.formData.controls["tgianBdauTchuc"].setValidators([Validators.required]);
+    //   this.formData.controls["tgianDthau"].setValidators([Validators.required]);
+    //   this.formData.controls["tgianMthau"].setValidators([Validators.required]);
+    //   this.formData.controls["tgianNhang"].setValidators([Validators.required]);
+    //   this.formData.controls["cloaiVthh"].setValidators([Validators.required]);
+    //   this.formData.controls["tenCloaiVthh"].setValidators([Validators.required]);
+    //   this.formData.controls["moTaHangHoa"].setValidators([Validators.required]);
+    // }
   }
-
-
 
   getNameFile($event) {
 
+  }
+
+  deleteItem(index) {
+
+  }
+
+  showDetailCuc($event, data) {
+    console.log(data);
+    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+    $event.target.parentElement.classList.add('selectedRow')
+    this.dataInput = data;
+    this.dataInputCache = cloneDeep(data);
   }
 
 }
