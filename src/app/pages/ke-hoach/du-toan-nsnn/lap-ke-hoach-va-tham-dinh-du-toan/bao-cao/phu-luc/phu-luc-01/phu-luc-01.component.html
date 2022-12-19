@@ -2,29 +2,31 @@
     <div class="modal__content">
         <div id="tablePrint">
             <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                <div nz-col [nzSpan]="2">
-                    Đơn vị:
-                </div>
-                <div nz-col [nzSpan]="2">
-                    <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
-                        <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
-                    </ng-container>
-                    <ng-template #editMoney>
-                        <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-                            (ngModelChange)="editMoneyUnit=false">
-                            <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                            </nz-option>
-                        </nz-select>
-                    </ng-template>
+                <div nz-col [nzSpan]="4" style="display:flex;">
+                    <div>
+                        Đơn vị:
+                    </div>
+                    <div style="padding-left: 5px;" >
+                        <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+                            <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+                        </ng-container>
+                        <ng-template #editMoney>
+                            <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                                (ngModelChange)="editMoneyUnit=false">
+                                <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                                </nz-option>
+                            </nz-select>
+                        </ng-template>
+                    </div>
                 </div>
                 <div nz-col [nzSpan]="18"></div>
-                <div nz-col [nzSpan]="2" class="gutter-row canphai phai">
-                    <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status ">
+                <div nz-col class="gutter-row canphai phai" [nzSpan]="2" style="display:flex; justify-content: end;">
+                    <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
                         <i class="fa fa-trash-o"></i>
                         <span>Xóa</span>
                     </button>
                     <ng-container *ngIf="lstCtietBcao.length == 0">
-                        <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status ">
+                        <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>

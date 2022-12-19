@@ -94,21 +94,6 @@ export class BaoHiemHangComponent implements OnInit {
                 ...item,
             })
         })
-        // if (this.lstCtietBcao.length == 0) {
-        //     this.linhVucChis.forEach(e => {
-        //         this.lstCtietBcao.push({
-        //             ...new ItemData(),
-        //             id: uuid.v4() + 'FE',
-        //             stt: e.ma,
-        //             maLvuc: e.ma,
-        //         })
-        //     })
-        // } else if (!this.lstCtietBcao[0]?.stt) {
-        //     this.lstCtietBcao.forEach(item => {
-        //         item.stt = item.maLvuc;
-        //     })
-        // }
-        // this.sortByIndex();
         await this.danhMucService.dMVatTu().toPromise().then(res => {
             if (res.statusCode == 0) {
                 this.listVattu = res.data;
@@ -149,31 +134,7 @@ export class BaoHiemHangComponent implements OnInit {
         this.editCache[id].data.tenHang = this.lstVatTuFull.find(vt => vt.ma === maDanhMuc)?.ten;
       }
 
-    changeDiemKho(maKho: any, id: any) {
-        // const maKhoNum = Number(maKho)
-        // const nhaKho = this.listDiemKho.find(itm => itm.id == maKhoNum).children;
-        // this.listKho = []
-        // // this.lstCtietBcao[index].tenNhaKho = null
-        // // this.editCache[id].data.tenNhaKho = null
-        // nhaKho.forEach(itemChild => {
-        //     this.listKho.push(
-        //         {
-        //             id: `${itemChild.id}`,
-        //             tenDviKho: itemChild.tenDvi,
-        //         }
-        //     )
-        // })
-
-        // for (let i = 0; i < nhaKho.length; i++) {
-        //     let index = this.listKhoFull.findIndex(item => item.maDvi == nhaKho[i].maDvi)
-        //     if (index == -1 || this.listKhoFull.length == 0) {
-        //         this.listKhoFull.push({
-        //             ...nhaKho[i],
-        //             id: `${nhaKho[i].id}`,
-        //         });
-        //     }
-        // }
-
+    changeDiemKho(maKho: any) {
         const maKhoNum = Number(maKho)
         const nhaKho = this.listDiemKho.find(itm => itm.id == maKhoNum)?.children;
 
@@ -425,84 +386,15 @@ export class BaoHiemHangComponent implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-        // this.sum(this.lstCtietBcao[index].stt);
         this.getTotal();
         this.updateEditCache();
     }
 
-    // sortByIndex() {
-    //     this.setLevel();
-    //     this.lstCtietBcao.sort((item1, item2) => {
-    //         if (item1.level > item2.level) {
-    //             return 1;
-    //         }
-    //         if (item1.level < item2.level) {
-    //             return -1;
-    //         }
-    //         if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
-    //             return -1;
-    //         }
-    //         if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
-    //             return 1;
-    //         }
-    //         return 0;
-    //     });
-    //     const lstTemp: ItemData[] = [];
-    //     this.lstCtietBcao.forEach(item => {
-    //         const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
-    //         if (index == -1) {
-    //             lstTemp.splice(0, 0, item);
-    //         } else {
-    //             lstTemp.splice(index + 1, 0, item);
-    //         }
-    //     })
-
-    //     this.lstCtietBcao = lstTemp;
-    // }
-
-    // setLevel() {
-    //     this.lstCtietBcao.forEach(item => {
-    //         const str: string[] = item.maLvuc.split('.');
-    //         item.level = str.length - 2;
-    //     })
-    // }
-
-
     changeModel(id: string): void {
-        // this.editCache[id].data.ncauChiChiaRaDtuPtrien = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiMoi1]);
-        // this.editCache[id].data.ncauChiChiaRaChiTx = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs2, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
-        // this.editCache[id].data.ncauChiTrongDoChiCs = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiCs2]);
-        // this.editCache[id].data.ncauChiTrongDoChiMoi = sumNumber([this.editCache[id].data.ncauChiChiaRaChiMoi1, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
-        // this.editCache[id].data.ncauChiTongSo = sumNumber([this.editCache[id].data.ncauChiTrongDoChiCs, this.editCache[id].data.ncauChiTrongDoChiMoi]);
+        
     }
 
     sum(stt: string) {
-        // stt = this.getHead(stt);
-        // while (stt != '0') {
-        //     const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-        //     const data = this.lstCtietBcao[index];
-        //     this.lstCtietBcao[index] = {
-        //         ...new ItemData(),
-        //         id: data.id,
-        //         stt: data.stt,
-        //         maLvuc: data.maLvuc,
-        //         level: data.level,
-        //     }
-        //     this.lstCtietBcao.forEach(item => {
-        //         if (this.getHead(item.stt) == stt) {
-        //             this.lstCtietBcao[index].ncauChiTongSo = sumNumber([this.lstCtietBcao[index].ncauChiTongSo, item.ncauChiTongSo]);
-        //             this.lstCtietBcao[index].ncauChiTrongDoChiCs = sumNumber([this.lstCtietBcao[index].ncauChiTrongDoChiCs, item.ncauChiTrongDoChiCs]);
-        //             this.lstCtietBcao[index].ncauChiTrongDoChiMoi = sumNumber([this.lstCtietBcao[index].ncauChiTrongDoChiMoi, item.ncauChiTrongDoChiMoi]);
-        //             this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaDtuPtrien, item.ncauChiChiaRaDtuPtrien]);
-        //             this.lstCtietBcao[index].ncauChiChiaRaChiCs1 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiCs1, item.ncauChiChiaRaChiCs1]);
-        //             this.lstCtietBcao[index].ncauChiChiaRaChiMoi1 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiMoi1, item.ncauChiChiaRaChiMoi1]);
-        //             this.lstCtietBcao[index].ncauChiChiaRaChiTx = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiTx, item.ncauChiChiaRaChiTx]);
-        //             this.lstCtietBcao[index].ncauChiChiaRaChiCs2 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiCs2, item.ncauChiChiaRaChiCs2]);
-        //             this.lstCtietBcao[index].ncauChiChiaRaChiMoi2 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiMoi2, item.ncauChiChiaRaChiMoi2]);
-        //         }
-        //     })
-        //     stt = this.getHead(stt);
-        // }
         this.getTotal();
     }
 
@@ -539,6 +431,10 @@ export class BaoHiemHangComponent implements OnInit {
     displayValue(num: number): string {
         num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
+    }
+    
+    displayNumber(num: number): string {
+        return displayNumber(num)
     }
 
     getMoneyUnit() {
