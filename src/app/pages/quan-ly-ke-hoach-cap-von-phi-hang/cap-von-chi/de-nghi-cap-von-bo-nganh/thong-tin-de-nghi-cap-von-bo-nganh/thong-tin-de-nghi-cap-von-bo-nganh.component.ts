@@ -260,7 +260,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     this.rowItem.maVatTu = null;
     this.listChungLoaiHangHoa = this.hangHoaAll.filter(element => element.maHangHoa.length > 4 &&
       element.maHangHoa.substring(0, 4) == this.rowItem.maVatTuCha)
-    this.rowItem.tenVatTu = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTuCha).tenHangHoa;
+    this.rowItem.tenVatTuCha = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTuCha).tenHangHoa;
     this.rowItem.donViTinh = this.listLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTuCha).maDviTinh;
   }
 
@@ -273,7 +273,7 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
       this.rowItem.tenVatTu = chungLoaiHangHoa[0].ten;
       this.rowItem.donViTinh = chungLoaiHangHoa[0].maDviTinh;
     }*/
-    this.rowItem.tenVatTuCha = this.listChungLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTu).tenHangHoa;
+    this.rowItem.tenVatTu = this.listChungLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTu).tenHangHoa;
     //this.rowItem.donViTinh = this.listChungLoaiHangHoa.find(s => s.maHangHoa == this.rowItem.maVatTu).maDviTinh;
   }
 
@@ -306,7 +306,6 @@ export class ThongTinDeNghiCapVonBoNganhComponent implements OnInit {
     let isValid = true;
     for (let key in this.rowItem) {
       if (this.rowItem[key] === null) {
-        console.log(key,12839218)
         isValid = false;
       }
     }

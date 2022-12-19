@@ -178,7 +178,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   isDisableField() {
-    if (this.khBanDauGia && (this.khBanDauGia.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_VU || this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_VU)) {
+    if (this.khBanDauGia && (this.khBanDauGia.trangThai == this.globals.prop.NHAP_CHO_DUYET_LD_VU || this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_VU|| this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_TONG_CUC)) {
       return true;
     }
   }
@@ -244,7 +244,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
           this.initForm();
           this.changeMaTongHop();
           this.changeDonVi();
-          console.log(this.formData.value,1111);
+          console.log(this.formData.value, 1111);
         }
       })
       .catch((e) => {
@@ -341,6 +341,9 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
 
   pheDuyet() {
     let trangThai = this.globals.prop.NHAP_DA_DUYET_LD_VU;
+    if (this.khBanDauGia.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_VU) {
+      trangThai = this.globals.prop.NHAP_DA_DUYET_LD_TONG_CUC;
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -378,6 +381,10 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   }
 
   tuChoi() {
+    let trangThai = this.globals.prop.NHAP_TU_CHOI_LD_VU;
+    if (this.formData.value.trangThai == this.globals.prop.NHAP_DA_DUYET_LD_VU) {
+      trangThai = this.globals.prop.NHAP_TU_CHOI_LD_TONG_CUC;
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,

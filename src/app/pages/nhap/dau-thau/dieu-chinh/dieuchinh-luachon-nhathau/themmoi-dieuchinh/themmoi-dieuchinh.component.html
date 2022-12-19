@@ -4,30 +4,12 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button
-            *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isTongCuc()"
+        <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO ) && userService.isTongCuc()"
             class="btn btn-sub xanh-nhat" (click)="save(true)">
-            <i [class]="loaiVthh.startsWith('02') ? 'icon htvbdh_tcdt_guiduyet' : 'icon htvbdh_chuyenvanthu'"></i>
-            <span>{{loaiVthh.startsWith('02') ? 'Lưu và gửi duyệt' : 'Ban hành'}}</span>
-        </button>
-        <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()" type="button"
-            class="btn btn-sub do" (click)="tuChoi()">
-            <i class="icon htvbdh_tcdt_tuchoi"></i>
-            <span>Từ chối</span>
-        </button>
-        <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV  && userService.isTongCuc()" type="button"
-            class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
-            <i class="icon htvbdh_tcdt_pheduyet"></i>
-            <span>Duyệt</span>
-        </button>
-        <button *ngIf="formData.value.trangThai == STATUS.DA_DUYET_LDV && userService.isTongCuc()
-        && userService.isAccessPermisson('NHDTQG_PTDT_DCKHLCNT_BANHANH')" type="button" class="btn btn-sub xanh-nhat"
-            (click)="pheDuyet()">
-            <i class="icon htvbdh_chuyenvanthu"></i>
+            <i [class]="'icon htvbdh_chuyenvanthu'"></i>
             <span>Ban hành</span>
         </button>
-        <button
-            *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV ) && userService.isTongCuc()"
+        <button *ngIf="(formData.value.trangThai == STATUS.DU_THAO ) && userService.isTongCuc()"
             class="btn btn-main btn-sm waves-effect waves-light" (click)="save()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
@@ -191,7 +173,6 @@
 
             </div>
             <div nz-row [nzGutter]="20">
-
                 <div nz-col [nzSpan]="24">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
@@ -206,7 +187,40 @@
         </form>
     </nz-card>
 
-    <nz-card class="mt16 flex-card p-lr16">
+    <nz-card class="mg-t-10 flex-card p-lr16 table-card" *ngIf="loaiVthh != '02'">
+        <nz-table #editRowTable nzBordered [nzData]="danhsachDx" [nzFrontPagination]="false" [nzShowPagination]="false">
+            <thead>
+                <tr>
+                    <th [width]="30">STT</th>
+                    <th>Cục DTNN KV</th>
+                    <th>Số gói thầu</th>
+                    <th>Số tờ trình</th>
+                    <th>Ngày ký</th>
+                    <th>Số lượng (Tấn)</th>
+                    <th>Tổng tiền gồm thuế (đồng)</th>
+                    <th [width]="30">Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let data of danhsachDx; let i = index" class="editable-row">
+                    <td class="text-center">{{i + 1}} </td>
+                    <td>{{ data.tenDvi }}</td>
+                    <td>{{ data.soGthau }}</td>
+                    <td>{{ data.soDxuat }}</td>
+                    <td>{{ data.ngayDxuat | date: 'dd/MM/YYYY' }}</td>
+                    <td>{{ data.soLuong | number: '1.0-1' }}</td>
+                    <td>{{ data.tongTien | number: '1.0-1' }}</td>
+                    <td class="text-center">
+                        <a (click)="showDetailCuc($event,data)">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </nz-table>
+    </nz-card>
+
+    <nz-card class="mg-t-10 flex-card p-lr16">
         <div nz-row [nzGutter]="[20]">
             <div nz-col [nzSpan]="12">
                 <nz-card class="mg-t-10 flex-card p-lr16 ">
