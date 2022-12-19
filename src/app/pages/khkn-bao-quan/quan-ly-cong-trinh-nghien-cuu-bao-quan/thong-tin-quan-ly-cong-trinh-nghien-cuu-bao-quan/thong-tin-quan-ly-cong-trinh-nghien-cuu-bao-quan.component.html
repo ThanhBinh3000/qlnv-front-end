@@ -105,7 +105,7 @@
               Email
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="email" />
+              <input type="email" nz-input formControlName="email" ngModel [email]="true" />
             </nz-form-control>
           </nz-form-item>
         </div>
