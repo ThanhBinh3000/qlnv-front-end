@@ -25,6 +25,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { filter } from 'rxjs/operators';
 import { DonviService } from 'src/app/services/donvi.service';
 import { createLogErrorHandler } from '@angular/compiler-cli/ngcc/src/execution/tasks/completion';
+import { Base2Component } from './../../../../components/base2/base2.component';
 
 
 @Component({
@@ -32,7 +33,7 @@ import { createLogErrorHandler } from '@angular/compiler-cli/ngcc/src/execution/
   templateUrl: './thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia.component.html',
   styleUrls: ['./thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia.component.scss']
 })
-export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent implements OnInit, OnChanges {
+export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implements OnInit, OnChanges {
 
   @Input() id: number;
   @Input('isView') isView: boolean;
@@ -61,13 +62,16 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
   listVanBanId: any[] = [];
   dsBoNganh: any[] = [];
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
   ) {
-    super(httpClient, storageService, khCnQuyChuanKyThuat);
+    super(httpClient, storageService, notification, spinner, modal, khCnQuyChuanKyThuat);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [''],

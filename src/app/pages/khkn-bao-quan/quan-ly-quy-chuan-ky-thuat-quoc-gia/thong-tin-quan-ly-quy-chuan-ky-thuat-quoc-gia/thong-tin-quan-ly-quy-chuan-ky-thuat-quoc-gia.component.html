@@ -229,7 +229,7 @@
                     [ngModelOptions]="{standalone: true}"></label>
                 </nz-input-group>
               </td>
-              <td *ngIf="!formData.value.apDungLoaiVthh == true">
+              <td *ngIf="!formData.value.apDungCloaiVthh == true">
                 <nz-input-group>
                   <nz-select nzShowSearch nzAllowClear [(ngModel)]="rowItem.cloaiVthh"
                     (ngModelChange)="changeListOfTagOptions($event)" [ngModelOptions]="{standalone: true}">
@@ -288,7 +288,7 @@
                     <label nz-checkbox [(ngModel)]="data.chiTieuCha" [ngModelOptions]="{standalone: true}"></label>
                   </nz-input-group>
                 </td>
-                <td *ngIf="!formData.value.apDungLoaiVthh == true">{{data.tenCloaiVthh}}</td>
+                <td *ngIf="!formData.value.apDungCloaiVthh == true">{{data.tenCloaiVthh}}</td>
                 <td>{{ data.mucYeuCauNhap }}</td>
                 <td>{{ data.mucYeuCauNhapToiThieu }}</td>
                 <td>{{ data.mucYeuCauNhapToiDa }}</td>
@@ -316,7 +316,7 @@
                     <label nz-checkbox></label>
                   </nz-input-group>
                 </td>
-                <td *ngIf="!formData.value.apDungLoaiVthh == true">
+                <td *ngIf="!formData.value.apDungCloaiVthh == true">
                   <nz-input-group>
                     <nz-select nzShowSearch nzAllowClear [(ngModel)]="dataEdit[idx].data.cloaiVthh"
                       (ngModelChange)="changeListOfTagOptions($event,dataEdit[idx].data)"

@@ -10,16 +10,18 @@ import { Globals } from 'src/app/shared/globals';
 import * as dayjs from 'dayjs';
 import { NghiemThuThanhLy, TienDoThucHien } from 'src/app/models/KhoaHocCongNgheBaoQuan';
 import { UserService } from 'src/app/services/user.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { cloneDeep } from 'lodash';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Base2Component } from './../../../../components/base2/base2.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan',
   templateUrl: './thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan.component.html',
   styleUrls: ['./thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan.component.scss']
 })
-export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseComponent implements OnInit, OnChanges {
+export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Component implements OnInit, OnChanges {
 
   @Input() id: number;
   @Input() isView: boolean;
@@ -50,12 +52,15 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
   rowItem1: NghiemThuThanhLy = new NghiemThuThanhLy;
   dataEdit1: { [key: string]: { edit: boolean; data: NghiemThuThanhLy } } = {};
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private danhMucService: DanhMucService,
     private khCnCongTrinhNghienCuu: KhCnCongTrinhNghienCuu,
   ) {
-    super(httpClient, storageService, khCnCongTrinhNghienCuu);
+    super(httpClient, storageService, notification, spinner, modal, khCnCongTrinhNghienCuu);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [''],
@@ -300,7 +305,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
         try {
           this.dataTable.splice(index, 1);
           this.updateEditCache();
-          this.emitDataTable();
           this.dataTable;
         } catch (e) {
           console.log('error', e);

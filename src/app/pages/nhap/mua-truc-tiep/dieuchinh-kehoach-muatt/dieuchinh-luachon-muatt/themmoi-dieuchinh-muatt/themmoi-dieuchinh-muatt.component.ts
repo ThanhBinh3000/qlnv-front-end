@@ -225,7 +225,8 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   async getQdGocList() {
     let body = {
       trangThai: STATUS.BAN_HANH,
-      maDvi: null
+      maDvi: null,
+      lastest: 0
     };
     let res = await this.quyetDinhPheDuyetKeHoachMTTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -249,7 +250,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       nzComponentParams: {
         dataTable: this.listQdGoc,
         dataHeader: ['Số quyết định gốc', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
-        dataColumn: ['soQdPduyet', 'tenLoaiVthh', 'tenCloaiVthh']
+        dataColumn: ['soQd', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
     modalQD.afterClose.subscribe((data) => {
@@ -269,14 +270,14 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
           id: null,
           ngayKyQdGoc: data.ngayKy,
           idQdGoc: $event,
-          soQdGoc: qdGoc.length > 0 ? qdGoc[0].soQdPduyet : null,
+          soQdGoc: qdGoc.length > 0 ? qdGoc[0].soQd : null,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           moTaHangHoa: data.moTaHangHoa,
         })
-        this.danhsachDxMtt = data.hhQdPheduyetKhMttDxList;
+        this.danhsachDxMtt = data.children;
         this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
         for (let item of this.danhsachDxMtt) {
           item.id = null;
