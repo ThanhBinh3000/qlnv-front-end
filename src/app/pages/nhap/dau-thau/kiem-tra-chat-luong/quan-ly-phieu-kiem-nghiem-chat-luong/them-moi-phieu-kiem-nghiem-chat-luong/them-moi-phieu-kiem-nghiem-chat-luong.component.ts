@@ -31,6 +31,8 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { M } from '@angular/cdk/keycodes';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { StorageService } from 'src/app/services/storage.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
@@ -74,26 +76,14 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends BaseComponent impl
   listTieuChuan: any[] = [];
   isValid = false;
   constructor(
-    private spinner: NgxSpinnerService,
-    private donViService: DonviService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private phieuKiemNghiemChatLuongHangService: QuanLyPhieuKiemNghiemChatLuongHangService,
-    private notification: NzNotificationService,
-    private router: Router,
-    private modal: NzModalService,
-    public globals: Globals,
-    private routerActive: ActivatedRoute,
-    public userService: UserService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private danhMucService: DanhMucService,
-    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    private quanLyBienBanBanGiaoService: QuanLyBienBanBanGiaoService,
     private quanLyBienBanLayMauService: QuanLyBienBanLayMauService,
-    private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
-    private fb: FormBuilder,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
-    private helperService: HelperService
   ) {
-    super();
+    super(httpClient, storageService, phieuKiemNghiemChatLuongHangService);
     this.formData = this.fb.group({
       id: [],
       trangThai: [STATUS.DU_THAO],

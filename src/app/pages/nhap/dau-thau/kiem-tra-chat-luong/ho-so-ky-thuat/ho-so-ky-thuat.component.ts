@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import dayjs from 'dayjs';
@@ -14,6 +15,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { BaseService } from 'src/app/services/base.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HoSoKyThuatService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoKyThuat.service';
+import { StorageService } from 'src/app/services/storage.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
@@ -70,16 +72,11 @@ export class HoSoKyThuatComponent extends BaseComponent implements OnInit {
   };
 
   constructor(
-    private spinner: NgxSpinnerService,
-    private donViService: DonviService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private hoSoKyThuatService: HoSoKyThuatService,
-    private notification: NzNotificationService,
-    private router: Router,
-    private modal: NzModalService,
-    public userService: UserService,
-    public globals: Globals,
   ) {
-    super()
+    super(httpClient, storageService, hoSoKyThuatService);
     super.ngOnInit();
   }
 

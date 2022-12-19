@@ -110,7 +110,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
 
       //   }
       //
-      console.log(this.listOfData, 7777)
       this.formData.patchValue({
         children: this.listOfData,
         maDiemKho: this.listOfData[0].maDiemKho,
@@ -128,7 +127,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         tienDatTruoc: this.listOfData[0].tienDatTruoc,
         soLuongChiTieu: this.listOfData[0].soLuongChiTieu,
         soLuongKh: this.listOfData[0].soLuongKh,
-        diaDiemKho: this.listOfData[0].diaDiemKho
+        diaDiemKho: this.listOfData[0].diaDiemKho,
+        dviTinh: this.listOfData[0].dviTinh
 
       })
       this._modalRef.close(this.formData);
@@ -148,7 +148,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.listChiCuc = [{
         maDvi: this.dataEdit.maDvi,
         tenDonVi: this.dataEdit.tenDvi,
-        soLuongNhap: this.dataEdit.soLuongChiTieu
+        soLuongXuat: this.dataEdit.soLuongChiTieu
       }]
       this.formData.patchValue({
         maDvi: this.dataEdit.maDvi,
@@ -181,7 +181,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       })
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
-      console.log(this.listOfData, 3424)
     } else {
       this.formData.patchValue({
         donGiaVat: this.donGiaVat,
@@ -237,7 +236,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.formData.patchValue({
         tenDvi: res.data.tenTongKho,
         soLuongKh: soLuongDaLenKh.data,
-        soLuongChiTieu: chiCuc.soLuongNhap
+        soLuongChiTieu: chiCuc.soLuongXuat * 1000,
+        dviTinh: chiCuc.donViTinh
       })
       for (let i = 0; i < res.data?.child.length; i++) {
         const item = {
@@ -397,6 +397,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       this.thongtinPhanLo.maDvi = this.formData.get('maDvi').value;
       this.thongtinPhanLo.donGiaVat = this.formData.get('donGiaVat').value;
       this.thongtinPhanLo.soLuongChiTieu = this.formData.get('soLuongChiTieu').value;
+      this.thongtinPhanLo.dviTinh = this.formData.get('dviTinh').value;
       this.calculatorGiaKhoiDiem();
       this.thongtinPhanLo.giaKhoiDiem = this.formData.get('giaKhoiDiem').value;
       this.calculatorGiaKhoiDiemDuocDuyet();

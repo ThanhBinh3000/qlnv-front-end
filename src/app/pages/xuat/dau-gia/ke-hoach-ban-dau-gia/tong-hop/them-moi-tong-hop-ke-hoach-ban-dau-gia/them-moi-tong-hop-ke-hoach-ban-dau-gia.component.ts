@@ -185,6 +185,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
     }
   }
 
+
   async getDataChiTieu() {
     let res2 =
       await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
@@ -193,7 +194,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
     if (res2.msg == MESSAGE.SUCCESS) {
       const data = res2.data;
       this.formData.patchValue({
-        soQdPd: data.soQuyetDinh
+        soQdPd: data.soQuyetDinh,
       });
     }
     this.formData.patchValue({

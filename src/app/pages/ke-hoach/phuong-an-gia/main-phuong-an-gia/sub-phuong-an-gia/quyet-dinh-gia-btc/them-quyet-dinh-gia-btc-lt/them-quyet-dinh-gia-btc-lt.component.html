@@ -4,8 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" *ngIf="formData.value.trangThai == '00'"
-      (click)="save(true)">
+    <button type="button" class="btn btn-sub" *ngIf="formData.value.trangThai == '00'" (click)="save(true)">
       <i class="icon htvbdh_chuyenvanthu"></i>
       <span>Ban hành</span>
     </button>
@@ -123,14 +122,24 @@
         </div>-->
         <div nz-col [nzSpan]="24">
 
-          <nz-form-item class="form-item" >
+          <nz-form-item class="form-item">
             <nz-form-label nzRequired [nzNoColon]="true" [nzNoColon]="true" nzFor="trichYeu">Trích yếu
             </nz-form-label>
-            <nz-form-control  [nzErrorTip]="error">
+            <nz-form-control [nzErrorTip]="error">
               <textarea id="trichYeu" formControlName="trichYeu" rows="3" class="search__input" nz-input
                 [readonly]="noEdit"></textarea>
             </nz-form-control>
           </nz-form-item>
+          <div nz-col nzSpan="24">
+            <nz-form-item>
+              <nz-form-label [nzNoColon]="true">
+                Tài liệu đính kèm
+              </nz-form-label>
+              <div class="list-file">
+                <file-list [data]="fileDinhKem"></file-list>
+              </div>
+            </nz-form-item>
+          </div>
         </div>
         <div nz-col [nzSpan]="4">
           <nz-form-item class="form-item">

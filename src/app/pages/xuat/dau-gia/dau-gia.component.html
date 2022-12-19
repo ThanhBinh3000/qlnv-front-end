@@ -35,11 +35,14 @@
     <ng-container *ngIf="tabSelected == 0">
       <app-ke-hoach-ban-dau-gia></app-ke-hoach-ban-dau-gia>
     </ng-container>
-    <ng-container *ngIf="tabSelected == 1">
+    <!--<ng-container *ngIf="tabSelected == 1">
       <app-trienkhai-luachon-nhathau></app-trienkhai-luachon-nhathau>
+    </ng-container>-->
+    <ng-container *ngIf="tabSelected == 1">
+      <app-to-chuc-trien-khai></app-to-chuc-trien-khai>
     </ng-container>
     <ng-container *ngIf="tabSelected == 2">
-      <app-dieu-chinh></app-dieu-chinh>
+      <app-dieuchinh-khbdg></app-dieuchinh-khbdg>
     </ng-container>
     <ng-container *ngIf="tabSelected == 3">
       <app-hop-dong></app-hop-dong>

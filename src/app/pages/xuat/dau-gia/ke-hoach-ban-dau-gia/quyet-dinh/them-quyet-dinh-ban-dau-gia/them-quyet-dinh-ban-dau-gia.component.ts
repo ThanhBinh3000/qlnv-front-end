@@ -29,6 +29,7 @@ import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
 import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
 
 @Component({
   selector: 'app-them-quyet-dinh-ban-dau-gia',
@@ -80,6 +81,7 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
     private danhMucService: DanhMucService,
+    private uploadFileService: UploadFileService,
     private deXuatKhBanDauGiaService: DeXuatKhBanDauGiaService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
@@ -115,6 +117,7 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
       pthucGnhan: [''],
       thongBaoKh: [''],
       soQdCc: [''],
+      diaChi: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
       soDviTsan: [''],
@@ -437,6 +440,7 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
           loaiVthh: data.loaiVthh,
+
           tenLoaiVthh: data.tenLoaiVthh,
           tchuanCluong: data.tchuanCluong,
           soQdCc: data.soQdPd,
@@ -541,6 +545,7 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
           soQdCc: data.soQdCtieu,
           trichYeu: dataRes.trichYeu,
           tenDvi: data.tenDvi,
+          diaChi: data.diaChi,
           maDvi: data.maDvi,
           idThHdr: null,
           soTrHdr: dataRes.soDxuat,
@@ -636,6 +641,28 @@ export class ThemQuyetDinhBanDauGiaComponent implements OnInit {
       this.expandSet3.add(id);
     } else {
       this.expandSet3.delete(id);
+    }
+  }
+
+
+  getNameFile(event?: any, item?: FileDinhKem) {
+    const element = event.currentTarget as HTMLInputElement;
+    const fileList: FileList | null = element.files;
+    if (fileList) {
+      const itemFile = {
+        name: fileList[0].name,
+        file: event.target.files[0] as File,
+      };
+      this.uploadFileService
+        .uploadFile(itemFile.file, itemFile.name)
+        .then((resUpload) => {
+          const fileDinhKem = new FileDinhKem();
+          fileDinhKem.fileName = resUpload.filename;
+          this.formData.patchValue({
+          })
+          fileDinhKem.fileSize = resUpload.size;
+          fileDinhKem.fileUrl = resUpload.url;
+        });
     }
   }
 }

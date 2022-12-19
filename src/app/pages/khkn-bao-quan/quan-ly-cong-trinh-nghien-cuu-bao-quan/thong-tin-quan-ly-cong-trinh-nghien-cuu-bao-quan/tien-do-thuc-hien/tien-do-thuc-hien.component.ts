@@ -8,6 +8,8 @@ import { BaseComponent } from 'src/app/components/base/base.component';
 import { TienDoThucHien } from 'src/app/models/KhoaHocCongNgheBaoQuan';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
+import { StorageService } from 'src/app/services/storage.service';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-tien-do-thuc-hien',
   templateUrl: './tien-do-thuc-hien.component.html',
@@ -35,12 +37,11 @@ export class TienDoThucHienComponent extends BaseComponent implements OnInit {
   rowItem: TienDoThucHien = new TienDoThucHien;
   dataEdit: { [key: string]: { edit: boolean; data: TienDoThucHien } } = {};
   constructor(
-    private spinner: NgxSpinnerService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     public userService: UserService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
   ) {
-    super();
+    super(httpClient, storageService, userService);
     super.ngOnInit();
   }
 
