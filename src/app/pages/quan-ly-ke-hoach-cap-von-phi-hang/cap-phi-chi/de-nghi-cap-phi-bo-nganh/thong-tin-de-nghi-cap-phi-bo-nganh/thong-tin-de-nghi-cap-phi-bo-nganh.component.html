@@ -270,7 +270,7 @@
                         </tr>
                         <tr *ngFor="let data of basicTable3.data; let i = index">
                             <ng-container *ngIf="!data.edit; else editItemTemplate">
-                                <td>{{data.loaiChiPhi}}</td>
+                                <td>{{data.tenLoaiChiPhi}}</td>
                                 <td>{{data.namPhatSinh}}</td>
                                 <td>{{data.tongTien | number: '1.0-1'}}</td>
                                 <td>{{data.kinhPhiDaCap | number: '1.0-1'}}</td>

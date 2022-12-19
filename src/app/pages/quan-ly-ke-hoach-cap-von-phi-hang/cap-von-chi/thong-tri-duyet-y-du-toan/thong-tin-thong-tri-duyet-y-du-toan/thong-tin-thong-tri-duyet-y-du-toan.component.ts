@@ -72,7 +72,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   dsBoNganhFix: any[] = [];
   listDeNghi: any[] = [];
   listTongHop: any[] = [];
-
+  listDviThuHuong: any[] = [];
   rowItem: any = {};
   chiTietList: any[] = [];
 
@@ -103,10 +103,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         text: dayjs().get('year') - i,
       });
     }
-    if (this.idInput > 0) {
-      this.loadDeXuatKHBanDauGia(this.idInput);
-    } else {
-    }
+
     this.khBanDauGia.nam = dayjs().year();
     this.initForm();
     await Promise.all([
@@ -114,95 +111,69 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       this.getListDeNghi(),
       this.getListTongHop(),
     ]);
+    if (this.idInput > 0) {
+      this.loadDeXuatKHBanDauGia(this.idInput);
+    } else {
+    }
     this.spinner.hide();
   }
 
   initForm() {
     this.formData = this.fb.group({
-      id: [
-        {
-          value: this.khBanDauGia ? this.khBanDauGia.id : null,
-          disabled: this.isView ? true : false,
-        },
-        [],
-      ],
-      nam: [
-        {
-          value: this.khBanDauGia ? this.khBanDauGia.nam : null,
-          disabled: true,
-        },
-        [Validators.required],
-      ],
-      soThongTri: [
-        {
-          value: this.khBanDauGia ? this.khBanDauGia.soThongTri : null,
-          disabled: this.isView ? true : false,
-        },
-        [Validators.required],
-      ],
-      ngayLap: [
-        {
-          value: this.khBanDauGia ? this.khBanDauGia.ngayLap : null,
-          disabled: this.isView ? true : false,
-        },
-        [Validators.required],
-      ],
-      lyDoChi: [
-        {
-          value: this.khBanDauGia ? this.khBanDauGia.lyDoChi : null,
-          disabled: this.isView ? true : false,
-        },
-        [Validators.required],
-      ],
-      soDnCapVon: [
-        {
-          value: this.khBanDauGia ? this.khBanDauGia.soDnCapVon : null,
-          disabled: this.isView ? true : false,
-        },
-
-        [Validators.required],
-      ],
-      maDvi: [
-        {
-          value: this.khBanDauGia ? this.khBanDauGia.maDvi : null,
-          disabled: this.isView ? true : false,
-        },
-        [Validators.required],
-      ],
-      loai: [
-        {
-          value: this.khBanDauGia ? this.khBanDauGia.loai : null,
-          disabled: this.isView ? true : false,
-        },
-        [Validators.required],
-      ],
-      khoan: [
-        {
-          value: this.khBanDauGia
-            ? this.khBanDauGia.khoan
-            : null,
-          disabled: this.isView ? true : false,
-        },
-        [Validators.required],
-      ],
-      chuong: [
-        {
-          value: this.khBanDauGia
-            ? this.khBanDauGia.chuong
-            : null,
-          disabled: this.isView ? true : false,
-        },
-        [Validators.required],
-      ],
-      nhanXet: [
-        {
-          value: this.khBanDauGia
-            ? this.khBanDauGia.nhanXet
-            : null,
-          disabled: this.isView ? true : false,
-        },
-        [Validators.required],
-      ],
+      id: [{value: this.khBanDauGia ? this.khBanDauGia.id : null, disabled: this.isView ? true : false,}, [],],
+      nam: [{value: this.khBanDauGia ? this.khBanDauGia.nam : null, disabled: true,}, [Validators.required],],
+      soThongTri: [{
+        value: this.khBanDauGia ? this.khBanDauGia.soThongTri : null,
+        disabled: this.isView ? true : false,
+      }, [Validators.required],],
+      ngayLap: [{
+        value: this.khBanDauGia ? this.khBanDauGia.ngayLap : null,
+        disabled: this.isView ? true : false,
+      }, [Validators.required],],
+      lyDoChi: [{
+        value: this.khBanDauGia ? this.khBanDauGia.lyDoChi : null,
+        disabled: this.isView ? true : false,
+      }, [Validators.required],],
+      soDnCapVon: [{
+        value: this.khBanDauGia ? this.khBanDauGia.soDnCapVon : null,
+        disabled: this.isView ? true : false,
+      }, [Validators.required],],
+      maDvi: [{
+        value: this.userInfo.MA_DVI,
+        disabled: this.isView ? true : false,
+      }, [Validators.required],],
+      loai: [{
+        value: this.khBanDauGia ? this.khBanDauGia.loai : null,
+        disabled: this.isView ? true : false,
+      }, [Validators.required],],
+      khoan: [{
+        value: this.khBanDauGia ? this.khBanDauGia.khoan : null,
+        disabled: this.isView ? true : false,
+      }, [Validators.required],],
+      chuong: [{
+        value: this.khBanDauGia ? this.khBanDauGia.chuong : null,
+        disabled: this.isView ? true : false,
+      }, [Validators.required],],
+      nhanXet: [{
+        value: this.khBanDauGia ? this.khBanDauGia.nhanXet : null,
+        disabled: this.isView ? true : false,
+      }, [Validators.required],],
+      dviThuHuong: [{
+        value: this.khBanDauGia ? +this.khBanDauGia.dviThuHuong : null,
+        disabled: this.isView ? true : false,
+      }],
+      dviThuHuongStk: [{
+        value: this.khBanDauGia ? this.khBanDauGia.dviThuHuongStk : null,
+        disabled: this.isView ? true : false,
+      }],
+      dviThuHuongNganHang: [{
+        value: this.khBanDauGia ? this.khBanDauGia.dviThuHuongNganHang : null,
+        disabled: this.isView ? true : false,
+      }],
+      dviThongTri: [{
+        value: this.khBanDauGia ? this.khBanDauGia.dviThongTri : null,
+        disabled: this.isView ? true : false,
+      }, [Validators.required]],
     });
   }
 
@@ -271,6 +242,9 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
             this.listFileDinhKem = this.khBanDauGia.fileDinhKems;
           }
           this.initForm();
+          this.changeMaTongHop();
+          this.changeDonVi();
+          console.log(this.formData.value,1111);
         }
       })
       .catch((e) => {
@@ -486,9 +460,9 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
   async changeMaTongHop() {
     let selected = this.formData.get('soDnCapVon').value;
     this.dsBoNganh = [];
-    this.formData.patchValue({
-      maDvi: null
-    })
+    /*this.formData.patchValue({
+      dviThongTri: null
+    })*/
     if (selected) {
       let res = await this.tongHopDeNghiCapVonService.loadChiTiet(this.formData.get('soDnCapVon').value);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
@@ -499,5 +473,28 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.code))
       }
     }
+  }
+
+  async changeDonVi() {
+    if (this.formData.value.dviThongTri) {
+      let res = await this.deNghiCapPhiBoNganhService.dsThuHuong({
+        maBoNganh: this.formData.value.dviThongTri,
+        maTh: this.formData.value.soDnCapVon
+      });
+      if (res.msg == MESSAGE.SUCCESS && res.data) {
+        this.listDviThuHuong = res.data;
+      }
+    }
+  }
+
+  async changeDonViThuHuong() {
+    let data = this.listDviThuHuong.find(s => s.id == this.formData.value.dviThuHuong);
+    if (data) {
+      this.formData.patchValue({
+        dviThuHuongStk: data.soTaiKhoan,
+        dviThuHuongNganHang: data.nganHang,
+      })
+    }
+
   }
 }

@@ -139,7 +139,7 @@
                             <a (click)="detail(data, true)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_THONGTRI_SUA')" (click)="detail(data, false)">
+                            <a *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_THONGTRI_THEM')" (click)="detail(data, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <a *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isTongCuc() && userService.isAccessPermisson('VONPHIHANG_PHICHINGVU_THONGTRI_XOA')" (click)="xoaItem(data)">
