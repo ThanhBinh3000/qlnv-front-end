@@ -10,28 +10,26 @@ import { Globals } from 'src/app/shared/globals';
 })
 export class HopDongComponent implements OnInit {
   tabs: any[] = [];
+  loaiVthhSelected: string;
 
   constructor(private danhMucService: DanhMucService, public globals: Globals) {
     this.loaiVTHHGetAll();
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
   async loaiVTHHGetAll() {
     this.tabs = [
-      {
-        giaTri: 'Tất cả',
-        ma: null,
-      },
     ];
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       this.tabs = [
         ...this.tabs,
-        ...res.data.filter((item) => item.ma !== '02'),
+        ...res.data,
       ];
     }
+    this.selectTab(this.tabs[0].ma)
   }
-  loaiVthhSelected: string;
+
   selectTab(loaiVthh) {
     this.loaiVthhSelected = loaiVthh;
   }
