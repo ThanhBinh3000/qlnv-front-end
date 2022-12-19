@@ -35,12 +35,15 @@ export class DuLieuTongHopTcdtComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   indeterminate = false;
   filterTable: any = {
+    id: null,
     namQuyetToan: '',
     ngayNhap: '',
+    ngayTao: '',
     ngayCapNhat: '',
     qdCtKhNam: '',
     trangThai: '',
     trangThaiPdBtc: '',
+    soToTrinh: '',
   };
 
   constructor(
