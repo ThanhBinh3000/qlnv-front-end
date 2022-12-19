@@ -5,26 +5,19 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
 import { MESSAGE } from 'src/app/constants/message';
-import { ThongTinTongHopDeXuatLCNT } from 'src/app/models/ThongTinTongHopDeXuatLCNT';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
 import * as dayjs from 'dayjs';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { DanhSachGoiThau } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
-import { Globals } from 'src/app/shared/globals';
-import { STATUS } from 'src/app/constants/status';
 import { ChiTieuKeHoachNamCapTongCucService } from "../../../../../../services/chiTieuKeHoachNamCapTongCuc.service";
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
-import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { DatePipe } from '@angular/common';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-them-moi-tong-hop-ke-hoach-ban-dau-gia',
@@ -32,49 +25,32 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./them-moi-tong-hop-ke-hoach-ban-dau-gia.component.scss']
 })
 
-export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
+export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string
   @Input() id: number;
   @Output()
   showListEvent = new EventEmitter<any>();
 
   formTraCuu: FormGroup;
-  formData: FormGroup;
   isDetailDxCuc: boolean = false;
   dataTableDanhSachDX: any[] = [];
   danhMucDonVi: any;
-  isTongHop: boolean = false;
-  isVisibleChangeTab$ = new Subject();
-  visibleTab: boolean = false;
-  i = 0;
-  editId: string | null = null;
-  listNam: any[] = [];
-  yearNow: number = 0;
-  idDeXuat: number = 0;
-  listVthh: any[] = [];
-  idPA: number = 0;
-  selectedId: number = 0;
-  errorInputRequired: string = null;
+  isTongHop: boolean = true;
   isQuyetDinh: boolean = false;
-  STATUS = STATUS;
-  userInfo: UserLogin;
   dataDeXuat: any[] = [];
-  mapOfExpandedData2: { [maDvi: string]: DanhSachGoiThau[] } = {};
   datePipe = new DatePipe('en-US');
+
+
   constructor(
-    private modal: NzModalService,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private danhMucService: DanhMucService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
-    private userService: UserService,
-    private fb: FormBuilder,
-    private helperService: HelperService,
-    public globals: Globals,
-    private dmTieuChuanService: DanhMucTieuChuanService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService
   ) {
-
+    super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKeHoachBanDauGiaService);
     this.formTraCuu = this.fb.group(
       {
         loaiVthh: [null, [Validators.required]],
@@ -85,7 +61,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
         ngayPduyet: [null, [Validators.required]],
       }
     );
-
     this.formData = this.fb.group({
       cloaiVthh: [, [Validators.required]],
       id: [],
@@ -107,14 +82,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.userInfo = this.userService.getUserLogin();
-      for (let i = -3; i < 23; i++) {
-        this.listNam.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
-      this.errorInputRequired = MESSAGE.ERROR_NOT_EMPTY;
       await Promise.all([
         this.loadChiTiet(),
       ]);
@@ -163,6 +130,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent implements OnInit {
       let res = await this.tongHopDeXuatKeHoachBanDauGiaService.tonghop(body);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data
+        console.log(dataDetail);
         let idTh = await this.userService.getId("XH_THOP_DX_KH_BDG_SEQ");
         this.helperService.bidingDataInFormGroup(this.formData, dataDetail)
         this.formData.patchValue({
