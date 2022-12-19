@@ -466,11 +466,11 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     if (selected) {
       let res = await this.tongHopDeNghiCapVonService.loadChiTiet(this.formData.get('soDnCapVon').value);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
-        let map = res.data.ct1s.map(s => s.tenBoNganh);
-        if (map.includes('Tổng cục Dự Trữ')) {
+        let map = res.data.ct1s.map(s => s.maBn);
+        if (map.includes('BTC')) {
           map.push('Bộ Tài chính');
         }
-        this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.tenDvi))
+        this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.code))
       }
     }
   }
