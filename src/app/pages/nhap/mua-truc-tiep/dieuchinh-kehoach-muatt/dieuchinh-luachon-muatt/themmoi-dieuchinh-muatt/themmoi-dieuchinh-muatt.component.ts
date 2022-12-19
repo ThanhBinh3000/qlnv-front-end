@@ -223,11 +223,10 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   }
 
   async getQdGocList() {
-    this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
       maDvi: null
-    }
+    };
     let res = await this.quyetDinhPheDuyetKeHoachMTTService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listQdGoc = res.data.content
