@@ -306,7 +306,7 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
     this.listBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listBoNganh = res.data.filter(item => item.key != '01');
+      this.listBoNganh = res.data;
     }
   }
 

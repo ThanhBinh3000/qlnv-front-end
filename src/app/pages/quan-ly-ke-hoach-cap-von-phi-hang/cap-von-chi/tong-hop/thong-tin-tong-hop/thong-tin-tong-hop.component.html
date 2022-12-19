@@ -46,7 +46,7 @@
             <nz-form-item>
               <nz-form-label nzRequired [nzNoColon]="true"> Năm</nz-form-label>
               <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                <nz-select [nzDisabled]="true" formControlName="nam">
+                <nz-select formControlName="nam">
                   <nz-option *ngFor="let nam of listNam" [nzValue]="nam.value" [nzLabel]="nam.text"></nz-option>
                 </nz-select>
               </nz-form-control>

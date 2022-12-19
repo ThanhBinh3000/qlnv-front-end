@@ -419,11 +419,13 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
       this.sortTableId('ct2s');
       let item = cloneDeep(this.create);
       item.stt = this.rowEdit.ct2s.length + 1;
+      item.tenLoaiChiPhi=this.listLoaiChiPhi.find(s=>s.ma == item.loaiChiPhi).giaTri;
       this.rowEdit.ct2s = [
         ...this.rowEdit.ct2s,
         item,
       ]
       this.ct1s[0].ct2List = this.rowEdit.ct2s
+      this.ct1s[0].ycCapThemPhi = this.tongCapThemBang2(this.rowEdit);
     }
     this.clearItemRow(type);
   }
