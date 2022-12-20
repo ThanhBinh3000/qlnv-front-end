@@ -16,69 +16,76 @@
     </div>
 </nz-affix>
 <div *ngIf="!isDetailDxCuc && !isQuyetDinh" class="bg-trang">
-    <!-- <div class="header header-green-background ">
+    <div class="header header-green-background">
         <div class="header-text">
             <div class="title-chi-tieu">
                 <span></span>
-                <span>Tổng hợp đề xuất kế hoạch bán đấu giá</span>
+                <span>Tổng hợp kế hoạch bán đấu giá</span>
             </div>
         </div>
-    </div> -->
-    <!--  Start Thông tin tổng hợp-->
+    </div>
     <nz-card class="mg-t-16 flex-card p-lr16">
-        <form nzLayout="vertical" nz-form [formGroup]="formTraCuu">
-            <div nz-row [nzGutter]="20">
-                <div nz-col [nzSpan]="2">
-                    <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
-                        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                            <nz-select formControlName="namKh">
-                                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                            </nz-select>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="4">
-                    <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
-                        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-                                <input [readonly]="true" nz-input formControlName="tenLoaiVthh" readonly="true" />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="13">
-                    <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
-                        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-                                <input [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
-                            </nz-input-group>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="5">
-                    <nz-form-item class="form-item">
-                        <nz-form-label nzRequired [nzNoColon]="true"> Ngày phê duyệt
-                            KH bán đấu giá </nz-form-label>
-                        <nz-form-control [nzErrorTip]="error">
-                            <nz-range-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
-                            </nz-range-picker>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-col [nzSpan]="24" *ngIf="!formData.value.id">
-                    <div class="tong-hop-button group-button-search mt-16">
-                        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="tongHopDeXuatTuCuc()"
-                            *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == ''">
-                            <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
-                            <span>Tổng hợp đề xuất KHBDG</span>
-                        </button>
+        <nz-collapse nzAccordion>
+            <nz-collapse-panel [nzHeader]="'Thông tin tổng hợp'" [nzActive]="true">
+                <form nzLayout="vertical" nz-form [formGroup]="formTraCuu">
+                    <div nz-row [nzGutter]="20">
+                        <div nz-col [nzSpan]="2">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch </nz-form-label>
+                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                                    <nz-select formControlName="namKh">
+                                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value"
+                                            [nzLabel]="p.text"></nz-option>
+                                    </nz-select>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="4">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+                                        <input [readonly]="true" nz-input formControlName="tenLoaiVthh"
+                                            readonly="true" />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="13">
+                            <nz-form-item>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa</nz-form-label>
+                                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                                    <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+                                        <input [readonly]="true" nz-input formControlName="tenCloaiVthh"
+                                            readonly="true" />
+                                    </nz-input-group>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="5">
+                            <nz-form-item class="form-item">
+                                <nz-form-label nzRequired [nzNoColon]="true"> Ngày phê duyệt
+                                    KH bán đấu giá </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-range-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
+                                    </nz-range-picker>
+                                </nz-form-control>
+                            </nz-form-item>
+                        </div>
+                        <div nz-col [nzSpan]="24" *ngIf="!formData.value.id">
+                            <div class="tong-hop-button group-button-search mt-16">
+                                <button class="btn btn-main btn-sm waves-effect waves-light"
+                                    (click)="tongHopDeXuatTuCuc()"
+                                    *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == ''">
+                                    <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
+                                    <span>Tổng hợp KH bán đấu giá</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </form>
+                </form>
+            </nz-collapse-panel>
+        </nz-collapse>
     </nz-card>
     <!--  End Thông tin tổng hợp-->
 
@@ -219,6 +226,6 @@
     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-    <app-them-quyet-dinh-ban-dau-gia [id]="selectedId" [dataTongHop]="formData.value" (showListEvent)="showTongHop()">
+    <app-them-quyet-dinh-ban-dau-gia [id]="idSelected" [dataTongHop]="formData.value" (showListEvent)="showTongHop()">
     </app-them-quyet-dinh-ban-dau-gia>
 </div>

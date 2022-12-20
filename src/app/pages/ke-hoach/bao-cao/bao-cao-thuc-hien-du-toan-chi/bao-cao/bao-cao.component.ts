@@ -87,6 +87,7 @@ export class BaoCaoComponent implements OnInit {
     trangThaiPhuLuc: string;
     titleStatus: string;
     //danh muc
+    lstPhuLuc: any = PHULUCLIST;
     listIdDelete: any = [];                     // list id delete
     nguoiBcaos: any[];
     donVis: any = [];                           // danh muc don vi
@@ -204,6 +205,9 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
+        if (!this.userService.isTongCuc()) {
+            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc = '2');
+        }
 
         await this.danhMucService.dMDviCon().toPromise().then(
             (data) => {
@@ -626,8 +630,8 @@ export class BaoCaoComponent implements OnInit {
 
     // them phu luc
     addPhuLuc() {
-        PHULUCLIST.forEach(item => item.status = false);
-        const danhSach = PHULUCLIST.filter(item => this.baoCao?.lstBcaos?.findIndex(data => data.maLoai == item.maPhuLuc) == -1);
+        this.lstPhuLuc.forEach(item => item.status = false);
+        const danhSach = this.lstPhuLuc.filter(item => this.baoCao?.lstBcaos?.findIndex(data => data.maLoai == item.maPhuLuc) == -1);
 
         const modalIn = this.modal.create({
             nzTitle: 'Danh sách phụ lục',
@@ -707,6 +711,7 @@ export class BaoCaoComponent implements OnInit {
                 idBcao: this.baoCao.id,
                 statusBtnOk: this.okStatus,
                 statusBtnFinish: this.finishStatus,
+                namBcao: this.baoCao.namBcao,
                 luyKeDetail: this.luyKes.find(e => e.maLoai == maPhuLuc),
                 status: this.status,
             }
@@ -725,6 +730,7 @@ export class BaoCaoComponent implements OnInit {
                 maPhuLuc: this.tabs[0]?.maPhuLuc,
                 maLoaiBcao: this.baoCao.maLoaiBcao,
                 idBcao: this.baoCao.id,
+                namBcao: this.baoCao.namBcao,
                 trangThaiBaoCao: this.baoCao?.trangThai,
                 statusBtnOk: this.okStatus,
                 statusBtnFinish: this.finishStatus,
