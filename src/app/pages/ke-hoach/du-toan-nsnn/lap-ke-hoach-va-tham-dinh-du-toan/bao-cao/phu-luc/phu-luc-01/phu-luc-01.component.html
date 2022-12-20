@@ -25,8 +25,8 @@
                         <i class="fa fa-trash-o"></i>
                         <span>Xóa</span>
                     </button>
-                    <ng-container *ngIf="lstCtietBcao.length == 0">
-                        <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
+                    <ng-container>
+                        <button type="button" class="btn btn-main" (click)="selectGoods()" [hidden]="status">
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>
@@ -36,12 +36,12 @@
             <nz-table nzBordered class="table__body">
                 <thead>
                     <tr>
-                        <th rowspan="2" [hidden]="status" class=" text-center">
-                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
+                        <th rowspan="2" [hidden]="status" class="text-center">
+                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" style="margin-right: 0;">
                             </label>
                         </th>
                         <th rowspan="2" class="text-center" nzWidth="50px">STT</th>
-                        <th rowspan="2" nzWidth="300px">DANH MỤC</th>
+                        <th rowspan="2" nzWidth="300px" style="width: 300px;">DANH MỤC</th>
                         <th rowspan="2" nzWidth="150px">Đơn vị tính</th>
                         <th rowspan="2">Thực hiện năm trước</th>
                         <th colspan="2">Năm {{namBaoCao}}</th>
@@ -49,7 +49,6 @@
                         <th *ngIf="viewAppraisalValue" colspan="2">Thẩm Định</th>
                         <th nzWidth="50px" rowspan="2" [hidden]="status"></th>
                         <th nzWidth="50px" rowspan="2" [hidden]="status && !editAppraisalValue"></th>
-                        <th nzWidth="50px" rowspan="2" [hidden]="status"></th>
                     </tr>
                     <tr>
                         <th>Dự toán</th>
@@ -65,7 +64,7 @@
                     <tr *ngFor="let data of lstCtietBcao; let i = index">
                         <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
                             <td [hidden]="status " class="text-center">
-                                <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                                <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                     (ngModelChange)="updateSingleChecked()"></label>
                             </td>
                             <td class="text-center">
@@ -73,11 +72,6 @@
                             </td>
                             <td>
                                 {{data.tenDanhMuc}}
-                                <!-- <div *ngFor="let item of lstVatTuFull">
-                                    <div *ngIf="item.matHang == data.danhMuc">
-                                        {{item.tenDm}}
-                                    </div>
-                                </div> -->
                             </td>
                             <td>{{data.dviTinh}}</td>
                             <td>{{displayValue(data.thienNamTruoc)}}</td>
@@ -93,19 +87,16 @@
                                 {{displayValue(data.ttienTd)}}
                             </td>
                             <td [hidden]="status">
-                                <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                             </td>
                             <td [hidden]="status && !editAppraisalValue">
                                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
-                            </td>
-                            <td [hidden]="status">
-                                <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                             </td>
 
                         </ng-container>
                         <ng-template #editTemplate>
                             <td [hidden]="status" class="text-center">
-                                <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
+                                <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                     (ngModelChange)="updateSingleChecked()"></label>
                             </td>
                             <td class="text-center">
@@ -113,11 +104,6 @@
                             </td>
                             <td>
                                 {{editCache[data.id].data.tenDanhMuc}}
-                                <!-- <div *ngFor="let item of lstVatTuFull">
-                                    <div *ngIf="item.matHang == editCache[data.id].data.danhMuc">
-                                        {{item.tenDm}}
-                                    </div>
-                                </div> -->
                             </td>
                             <td>
                                 {{editCache[data.id].data.dviTinh}}
@@ -169,17 +155,13 @@
                                 {{displayValue(editCache[data.id].data.ttienTd)}}
                             </td>
                             <td [hidden]="status">
-                                <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                             </td>
                             <td [hidden]="status && !editAppraisalValue">
                                 <a class="save" (click)="saveEdit(editCache[data.id].data.id)"
                                     style="margin-right:15px">Lưu</a>
                                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                     (nzOnConfirm)="cancelEdit(editCache[data.id].data.id)" class="save">Hủy</a>
-                            </td>
-
-                            <td [hidden]="status">
-                                <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                             </td>
                         </ng-template>
                     </tr>
@@ -198,7 +180,6 @@
                         <td *ngIf="viewAppraisalValue">{{displayValue(tongSoTd)}}</td>
                         <td [hidden]="status"></td>
                         <td [hidden]="status && !editAppraisalValue"></td>
-                        <td [hidden]="status"></td>
                     </tr>
                 </tbody>
             </nz-table>

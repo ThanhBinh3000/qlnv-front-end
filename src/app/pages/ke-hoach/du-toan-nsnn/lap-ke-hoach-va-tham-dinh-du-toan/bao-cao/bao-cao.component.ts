@@ -84,7 +84,7 @@ export class BaoCao {
     thuyetMinh: string;
     fileDinhKems: any[];
     listIdDeleteFiles: string[];
-    tongHopTuIds: string[];
+    tongHopTuIds: any[];
 }
 
 @Component({
@@ -630,7 +630,11 @@ export class BaoCaoComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
             return;
         }
-        const baoCaoTemp = JSON.parse(JSON.stringify(this.baoCao));
+        const tongHopTuIds = []
+        const baoCaoTemp = JSON.parse(JSON.stringify({
+            ...this.baoCao,
+            tongHopTuIds
+        }));
         this.baoCao.lstBcaoDviTrucThuocs.forEach(item => {
             baoCaoTemp.tongHopTuIds.push(item.id);
         })

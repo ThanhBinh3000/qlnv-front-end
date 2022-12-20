@@ -92,7 +92,9 @@ export class BaoHiemKhoComponent implements OnInit {
     tongSoNhaKhoTren5000: number;
     //nho dem
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-
+    checkHideElement: boolean;
+    checkHideDuoi: boolean;
+    checkHideTu: boolean;
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
@@ -181,7 +183,6 @@ export class BaoHiemKhoComponent implements OnInit {
         })
 
         if (this.lstCtietBcao.length == 0) {
-
             this.lstCtietBcao.push({
                 ...new ItemData(),
                 id: uuid.v4() + 'FE',
@@ -207,11 +208,10 @@ export class BaoHiemKhoComponent implements OnInit {
                 checked: false,
 
             })
-        } else {
-            if (!this.lstCtietBcao[0].stt) {
-                this.sortWithoutIndex
+        } else if (this.lstCtietBcao.length > 0) {
+            if (this.lstCtietBcao[0].stt == null) {
+                this.sortWithoutIndex()
             } else {
-
                 this.sortByIndex();
             }
             // this.lstCtietBcao.forEach(e => {
@@ -222,9 +222,10 @@ export class BaoHiemKhoComponent implements OnInit {
 
         this.updateEditCache();
         this.getStatusButton();
-
+        // this.tinhTong();
         this.spinner.hide();
     }
+
     sortWithoutIndex() {
         this.setDetail();
         let level = 0;
@@ -523,8 +524,13 @@ export class BaoHiemKhoComponent implements OnInit {
     }
     // start edit
     startEdit(id: string): void {
-        this.editCache[id].edit = true;
-        this.checkAddNewRow = true;
+        if (this.lstCtietBcao.every(e => !this.editCache[e.id].edit)) {
+            this.editCache[id].edit = true;
+            this.checkAddNewRow = true;
+        } else {
+            this.notification.warning(MESSAGE.WARNING, 'Vui lòng lưu bản ghi đang sửa trước khi thực hiện thao tác');
+            return;
+        }
     }
 
     // click o checkbox single
@@ -775,19 +781,21 @@ export class BaoHiemKhoComponent implements OnInit {
         this.tongSoNhaKhoDuoi5000 = 0;
         this.tongSoNhaKhoTren5000 = 0;
         this.lstCtietBcao.forEach(item => {
-            this.tongSo1 += item.khoiTichKhoDuoiM3;
-            this.tongSo2 += item.khoiTichKhoTuM3;
-            this.tongSo3 += item.slNhaKhoDuoi;
-            this.tongSo4 += item.slNhaKhoTu;
-            this.tongSo5 += item.slNhaKhoTong;
-            this.tongSo6 += item.duoiGtConLai;
-            this.tongSo7 += item.duoiHetKhauHao;
-            this.tongSo8 += item.duoiTongGtKho;
-            this.tongSo9 += item.tuGtConLai;
-            this.tongSo10 += item.tuHetKhauHao;
-            this.tongSo11 += item.tuTongGtKho;
-            this.tongSo12 += item.tong;
-            if (item.stt.length != 3) {
+            if (item.level == 1) {
+                this.tongSo1 += item.khoiTichKhoDuoiM3;
+                this.tongSo2 += item.khoiTichKhoTuM3;
+                this.tongSo3 += item.slNhaKhoDuoi;
+                this.tongSo4 += item.slNhaKhoTu;
+                this.tongSo5 += item.slNhaKhoTong;
+                this.tongSo6 += item.duoiGtConLai;
+                this.tongSo7 += item.duoiHetKhauHao;
+                this.tongSo8 += item.duoiTongGtKho;
+                this.tongSo9 += item.tuGtConLai;
+                this.tongSo10 += item.tuHetKhauHao;
+                this.tongSo11 += item.tuTongGtKho;
+                this.tongSo12 += item.tong;
+            }
+            if (item?.stt.length != 3) {
                 if (item.khoiTichKhoDuoiM3 != 0 && item.khoiTichKhoDuoiM3 < 5000) {
                     this.tongSoNhaKhoDuoi5000++;
                 }
@@ -894,5 +902,7 @@ export class BaoHiemKhoComponent implements OnInit {
     handleCancel() {
         this._modalRef.close();
     }
+
+
 
 }

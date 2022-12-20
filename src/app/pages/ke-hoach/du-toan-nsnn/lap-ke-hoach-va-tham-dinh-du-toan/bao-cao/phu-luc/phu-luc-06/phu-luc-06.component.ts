@@ -272,7 +272,12 @@ export class PhuLuc06Component implements OnInit {
 
     // start edit
     startEdit(id: string): void {
-        this.editCache[id].edit = true;
+        if (this.lstCtietBcao.every(e => !this.editCache[e.id].edit)) {
+            this.editCache[id].edit = true;
+        } else {
+            this.notification.warning(MESSAGE.WARNING, 'Vui lòng lưu bản ghi đang sửa trước khi thực hiện thao tác');
+            return;
+        }
     }
 
     // click o checkbox single
@@ -315,6 +320,7 @@ export class PhuLuc06Component implements OnInit {
     tinhTong() {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
+            this.total.donGiaTdTheoQd = sumNumber([this.total.donGiaTdTheoQd, item.donGiaTdTheoQd]);
             this.total.ncauTbiNamNSluong = sumNumber([this.total.ncauTbiNamNSluong, item.ncauTbiNamNSluong]);
             this.total.ncauTbiNamNTtien = sumNumber([this.total.ncauTbiNamNTtien, item.ncauTbiNamNTtien]);
             this.total.ncauTbiNamNSluongTd = sumNumber([this.total.ncauTbiNamNSluongTd, item.ncauTbiNamNSluongTd]);
