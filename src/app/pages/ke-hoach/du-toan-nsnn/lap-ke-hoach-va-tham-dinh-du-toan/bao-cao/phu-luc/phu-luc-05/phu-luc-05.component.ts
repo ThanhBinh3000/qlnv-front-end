@@ -195,10 +195,10 @@ export class PhuLuc05Component implements OnInit {
     const lstCtietBcaoTemp: ItemData[] = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      // if (item.ncauChiTongSo > MONEY_LIMIT) {
-      //     checkMoneyRange = false;
-      //     return;
-      // }
+      if (item.keHoachVonTd > MONEY_LIMIT) {
+        checkMoneyRange = false;
+        return;
+      }
       lstCtietBcaoTemp.push({
         ...item,
       })
@@ -215,6 +215,12 @@ export class PhuLuc05Component implements OnInit {
         item.id = null;
       }
     })
+
+    if (!this.checkViewTD) {
+      lstCtietBcaoTemp?.forEach(item => {
+        item.keHoachVonTd = item.keHoachVon;
+      })
+    }
 
     const request = JSON.parse(JSON.stringify(this.formDetail));
     request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
