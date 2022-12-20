@@ -213,7 +213,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
     body = {
       namKh: this.formData.get('namKh').value,
       trangThaiTkhai: STATUS.HOAN_THANH_CAP_NHAT,
-      maDvi: this.userInfo.MA_DVI,
+      // maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
