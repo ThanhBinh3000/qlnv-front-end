@@ -1,7 +1,7 @@
-<ng-container *ngIf="!isDetail">
+<div *ngIf="!isDetail">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
-      <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+      <form [nzLayout]="'vertical'" nz-form>
         <div class="search__body" nz-row [nzGutter]="[20]">
           <div nz-col nzSpan="3">
             <nz-form-item class="form-item">
@@ -242,9 +242,8 @@
       </div>
     </nz-card>
   </div>
-</ng-container>
-
-<ng-container class="chi-tiet" *ngIf="isDetail">
+</div>
+<div class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia [id]="selectedId" (showListEvent)="showList()" [isView]="isView">
   </app-thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia>
-</ng-container>
+</div>

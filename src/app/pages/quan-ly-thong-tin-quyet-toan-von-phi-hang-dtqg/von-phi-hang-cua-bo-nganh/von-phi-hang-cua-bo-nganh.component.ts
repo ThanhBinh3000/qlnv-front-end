@@ -35,7 +35,7 @@ export class VonPhiHangCuaBoNganhComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   indeterminate = false;
   filterTable: any = {
-    namQuyetToan: '',
+    namQt: '',
     ngayNhap: '',
     ngayCapNhat: '',
     qdCtKhNam: '',

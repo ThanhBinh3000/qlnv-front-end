@@ -124,21 +124,18 @@ export class ThongtinDieuchinhComponent implements OnInit {
 
   async ngOnInit() {
     await this.spinner.show()
-    await this.loadDataComboBox();
+    // await this.loadDataComboBox();
     await this.spinner.hide()
   }
 
-  async loadDataComboBox() {
-    // List nguồn vốn
-    this.listNguonVon = [];
-    let resNv = await this.danhMucService.danhMucChungGetAll('NGUON_VON');
-    if (resNv.msg == MESSAGE.SUCCESS) {
-      this.listNguonVon = resNv.data;
-    }
-
-
-
-  }
+  // async loadDataComboBox() {
+  //   // List nguồn vốn
+  //   this.listNguonVon = [];
+  //   let resNv = await this.danhMucService.danhMucChungGetAll('NGUON_VON');
+  //   if (resNv.msg == MESSAGE.SUCCESS) {
+  //     this.listNguonVon = resNv.data;
+  //   }
+  // }
 
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {
