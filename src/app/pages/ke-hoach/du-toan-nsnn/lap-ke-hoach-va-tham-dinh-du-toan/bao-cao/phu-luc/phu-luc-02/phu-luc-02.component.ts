@@ -5,12 +5,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber, divNumber, mulNumber, Utils, LTD } from "src/app/Utility/utils";
+import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, mulNumber, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { DANH_MUC } from './phu-luc-02.constant';
-import { UserService } from 'src/app/services/user.service';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 
 export class ItemData {
   id: string;
@@ -65,7 +64,8 @@ export class PhuLuc02Component implements OnInit {
   listVatTu1: any[] = [];
   luongThuc: any[] = [];
   lstVatTuFull: any[] = [];
-  vatTu: any[] = [];
+  lstvatTu: any[] = [];
+  loaiHang: string
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -128,7 +128,7 @@ export class PhuLuc02Component implements OnInit {
             this.luongThuc = item.child
           }
           if (item.key == "02") {
-            this.vatTu = item.child
+            this.lstvatTu = item.child
           }
         })
       } else {
@@ -333,7 +333,13 @@ export class PhuLuc02Component implements OnInit {
   }
 
   // start edit
-  startEdit(id: string): void {
+  startEdit(data: any): void {
+    const id = data?.id;
+    if(data.stt.startsWith("0.1")){
+      this.loaiHang = "LT"
+    } else if(data.stt.startsWith("0.2")){
+      this.loaiHang = "VT"
+    }
     if (this.lstCtietBcao.every(e => !this.editCache[e.id].edit)) {
       this.editCache[id].edit = true;
     } else {
@@ -404,10 +410,12 @@ export class PhuLuc02Component implements OnInit {
 
   addLine(stt: string) {
     if (stt == '0.1') {
-      this.listVatTu = this.luongThuc;
+      // this.listVatTu = this.luongThuc;
+      this.loaiHang = "LT"
     }
     if (stt == '0.2') {
-      this.listVatTu = this.vatTu;
+      // this.listVatTu = this.vatTu;
+      this.loaiHang = "VT"
     }
     let index = -1;
     for (let i = this.lstCtietBcao.length - 1; i >= 0; i--) {
@@ -456,7 +464,6 @@ export class PhuLuc02Component implements OnInit {
           this.lstCtietBcao[index].thNamTruoc = sumNumber([this.lstCtietBcao[index].thNamTruoc, item.thNamTruoc])
           this.lstCtietBcao[index].namDtoan = sumNumber([this.lstCtietBcao[index].namDtoan, item.namDtoan])
           this.lstCtietBcao[index].namUocTh = sumNumber([this.lstCtietBcao[index].namUocTh, item.namUocTh])
-          this.lstCtietBcao[index].sluongTaiKho = sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
           this.lstCtietBcao[index].dmucTaiKho = sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
           this.lstCtietBcao[index].ttienTaiKho = sumNumber([this.lstCtietBcao[index].ttienTaiKho, item.ttienTaiKho])
           this.lstCtietBcao[index].ttienNgoaiKho = sumNumber([this.lstCtietBcao[index].ttienNgoaiKho, item.ttienNgoaiKho])
@@ -476,7 +483,6 @@ export class PhuLuc02Component implements OnInit {
         this.total.thNamTruoc = sumNumber([this.total.thNamTruoc, item.thNamTruoc]);
         this.total.namDtoan = sumNumber([this.total.namDtoan, item.namDtoan]);
         this.total.namUocTh = sumNumber([this.total.namUocTh, item.namUocTh]);
-        this.total.sluongTaiKho = sumNumber([this.total.sluongTaiKho, item.sluongTaiKho]);
         this.total.dmucTaiKho = sumNumber([this.total.dmucTaiKho, item.dmucTaiKho]);
         this.total.ttienTaiKho = sumNumber([this.total.ttienTaiKho, item.ttienTaiKho]);
         this.total.ttienNgoaiKho = sumNumber([this.total.ttienNgoaiKho, item.ttienNgoaiKho]);

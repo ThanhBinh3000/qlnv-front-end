@@ -6,7 +6,6 @@ import { BaoCaoComponent } from './bao-cao.component';
 import { BaoHiemHangComponent } from './phu-luc/bao-hiem-hang/bao-hiem-hang.component';
 import { BaoHiemKhoComponent } from './phu-luc/bao-hiem-kho/bao-hiem-kho.component';
 import { BaoHiemComponent } from './phu-luc/bao-hiem/bao-hiem.component';
-import { DialogAddVatTuComponent } from './phu-luc/phu-luc-01/dialog-add-vat-tu/dialog-add-vat-tu.component';
 import { PhuLuc01Component } from './phu-luc/phu-luc-01/phu-luc-01.component';
 import { PhuLuc02Component } from './phu-luc/phu-luc-02/phu-luc-02.component';
 import { PhuLuc03Component } from './phu-luc/phu-luc-03/phu-luc-03.component';
@@ -59,7 +58,6 @@ import { BieuMau18Component } from './thong-tu-69/bieu-mau-18/bieu-mau-18.compon
         BaoHiemHangComponent,
         BaoHiemKhoComponent,
         BaoHiemComponent,
-        DialogAddVatTuComponent,
     ],
     imports: [CommonModule, ComponentsModule],
     exports: [BaoCaoComponent],

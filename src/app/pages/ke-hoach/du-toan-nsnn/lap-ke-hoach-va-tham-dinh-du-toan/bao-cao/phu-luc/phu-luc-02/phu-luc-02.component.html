@@ -2,20 +2,22 @@
   <div class="modal__content">
     <div id="tablePrint">
       <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-        <div nz-col [nzSpan]="2">
-          Đơn vị:
-        </div>
-        <div nz-col [nzSpan]="2">
-          <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
-            <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
-          </ng-container>
-          <ng-template #editMoney>
-            <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
-              (ngModelChange)="editMoneyUnit=false">
-              <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
-              </nz-option>
-            </nz-select>
-          </ng-template>
+        <div nz-col [nzSpan]="4" style="display:flex;">
+          <div>
+            Đơn vị:
+          </div>
+          <div style="padding-left: 5px;">
+            <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+              <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
+            </ng-container>
+            <ng-template #editMoney>
+              <nz-select nzShowSearch nzPlaceHolder="Chọn đơn vị" [(ngModel)]="maDviTien"
+                (ngModelChange)="editMoneyUnit=false">
+                <nz-option *ngFor="let item of donViTiens" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                </nz-option>
+              </nz-select>
+            </ng-template>
+          </div>
         </div>
       </div>
       <nz-table nzBordered class="table__body">
@@ -64,7 +66,8 @@
             <th>{{displayValue(total.thNamTruoc)}}</th>
             <th>{{displayValue(total.namDtoan)}}</th>
             <th>{{displayValue(total.namUocTh)}}</th>
-            <th>{{displayValue(total.sluongTaiKho)}}</th>
+            <!-- <th>{{displayValue(total.sluongTaiKho)}}</th> -->
+            <th></th>
             <th>{{displayValue(total.dmucTaiKho)}}</th>
             <th>{{displayValue(total.ttienTaiKho)}}</th>
             <th>{{displayValue(total.binhQuanNgoaiKho)}}</th>
@@ -92,7 +95,7 @@
               <td>{{displayValue(data.ttienNgoaiKho)}}</td>
               <td>{{displayValue(data.tongCong)}}</td>
               <td [hidden]="status">
-                <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data)"></i>
               </td>
               <td [hidden]="status">
                 <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
@@ -104,12 +107,6 @@
                 {{getChiMuc(data.stt)}}
               </td>
               <td>
-                <!-- <ng-container *ngIf="data.maDanhMuc; else editName">
-                {{editCache[data.id].data.tenDanhMuc}}
-              </ng-container>
-              <ng-template #editName>
-                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenDanhMuc" />
-              </ng-template> -->
                 <ng-container *ngIf="data.stt == '0.1' || data.stt == '0,2' ; else editSelectVatTu">
                   <ng-container *ngIf="data.maDanhMuc; else editName">
                     {{editCache[data.id].data.tenDanhMuc}}
@@ -123,8 +120,14 @@
                     [(ngModel)]="editCache[data.id].data.maDanhMuc"
                     [class]="editCache[data.id].data.maDanhMuc ?'' : 'input-error-validate'"
                     (ngModelChange)="changeVatTu(editCache[data.id].data.maDanhMuc,editCache[data.id].data.id)">
-                    <nz-option *ngFor="let item of listVatTu" [nzValue]="item.id" [nzLabel]="item.ten">
-                    </nz-option>
+                    <ng-container *ngIf="loaiHang == 'LT'; else vatTu">
+                      <nz-option *ngFor="let item of luongThuc" [nzValue]="item.id" [nzLabel]="item.ten">
+                      </nz-option>
+                    </ng-container>
+                    <ng-template #vatTu>
+                      <nz-option *ngFor="let item of lstvatTu" [nzValue]="item.id" [nzLabel]="item.ten">
+                      </nz-option>
+                    </ng-template>
                   </nz-select>
                 </ng-template>
               </td>

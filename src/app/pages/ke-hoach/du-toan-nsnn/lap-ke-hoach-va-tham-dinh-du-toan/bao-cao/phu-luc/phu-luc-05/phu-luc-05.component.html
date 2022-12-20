@@ -33,11 +33,11 @@
           <th colspan="2">Quyết định phê duyệt quyết toán công trình hoàn thành</th>
           <th rowspan="2">Lũy kế vấp vốn đến {{namTruoc}}</th>
           <th rowspan="2">Kế hoạnh vốn năm {{namBcao}}</th>
-          <th *ngIf="checkViewTD" rowspan="2">Kế hoạnh vốn năm {{namBcao}}</th>
+          <th *ngIf="viewAppraisalValue" rowspan="2">Kế hoạnh vốn năm {{namBcao}}</th>
           <th rowspan="2">Kế hoạch năm {{namDtoanOne}}</th>
           <th rowspan="2">Kế hoạch năm {{namDtoanTwo}}</th>
           <th rowspan="2">Ghi chú</th>
-          <th rowspan="4" [hidden]="status"></th>
+          <th rowspan="4" [hidden]="status && !editAppraisalValue"></th>
           <th rowspan="4" [hidden]="status"></th>
         </tr>
         <tr>
@@ -63,7 +63,7 @@
           <th>8</th>
           <th>9</th>
           <th>10</th>
-          <th *ngIf="checkViewTD">10A</th>
+          <th *ngIf="viewAppraisalValue">10A</th>
           <th>11</th>
           <th>12</th>
           <th>13</th>
@@ -86,14 +86,9 @@
           <th></th>
           <th>{{displayValue(total.luyKeVapVon)}}</th>
           <th>{{displayValue(total.keHoachVon)}}</th>
-          <td *ngIf="checkViewTD">
-            <ng-container *ngIf="checkEditTD; else viewTd">
-              {{displayValue(total.keHoachVonTd)}}
-            </ng-container>
-            <ng-template #viewTd>
-          <td>{{displayValue(total.keHoachVonTd)}}</td>
-          </ng-template>
-          </td>
+          <th *ngIf="viewAppraisalValue">
+            {{displayValue(total.keHoachVonTd)}}
+          </th>
           <!-- <th>{{displayValue(total.keHoachVonTd)}}</th> -->
           <th>{{displayValue(total.keHoachNamDtN1)}}</th>
           <th>{{displayValue(total.keHoachNamDtN2)}}</th>
@@ -109,11 +104,6 @@
             </td>
             <td>
               {{data.tenCongTrinh}}
-              <!-- <div *ngFor="let item of linhVucChis">
-                <div *ngIf="item.ma == data.tenCongTrinh">
-                  {{item.giaTri}}
-                </div>
-              </div> -->
             </td>
             <td>{{data.cucKhuVuc}}</td>
             <td>{{data.diaDiemXd}}</td>
@@ -128,19 +118,14 @@
             <td>{{displayValue(data.qdPdQtoanGtriQtoan)}}</td>
             <td>{{displayValue(data.luyKeVapVon)}}</td>
             <td>{{displayValue(data.keHoachVon)}}</td>
-            <td *ngIf="checkViewTD">
-              <ng-container *ngIf="checkEditTD; else viewTd">
-                {{displayValue(data.keHoachVonTd)}}
-              </ng-container>
-              <ng-template #viewTd>
-            <td>{{displayValue(data.keHoachVonTd)}}</td>
-            </ng-template>
+            <td *ngIf="viewAppraisalValue">
+              {{displayValue(data.keHoachVonTd)}}
             </td>
             <!-- <td>{{displayValue(data.keHoachVonTd)}}</td> -->
             <td>{{displayValue(data.keHoachNamDtN1)}}</td>
             <td>{{displayValue(data.keHoachNamDtN2)}}</td>
             <td>{{data.ghiChu}}</td>
-            <td [hidden]="status">
+            <td [hidden]="status && !editAppraisalValue">
               <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
             </td>
             <td [hidden]="status">
@@ -152,89 +137,113 @@
             <td class="text-center">
               {{getChiMuc(editCache[data.id].data.stt)}}
             </td>
-            <td>
-              <ng-container *ngIf="data.maCongTrinh; else editName">
-                {{editCache[data.id].data.tenCongTrinh}}
-              </ng-container>
-              <ng-template #editName>
-                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenCongTrinh" />
-              </ng-template>
-            </td>
-            <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.cucKhuVuc" />
-            </td>
-            <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.diaDiemXd" />
-            </td>
-            <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.lyDo" />
-            </td>
-            <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.mucTieu" />
-            </td>
-            <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.khoiLuong" />
-            </td>
-            <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.thoiGianThucHien" />
-            </td>
-            <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaTriCongTrinh">
-              </fm-input-number>
-            </td>
-            <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.qdPdBcaoTgianBanHanh" />
-            </td>
-            <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.qdPdBcaoGtriDtoanKtoanTmdt">
-              </fm-input-number>
-            </td>
-            <td>
-              <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.qdPdQtoanTgianBanHanh" />
-            </td>
-            <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.qdPdQtoanGtriQtoan">
-              </fm-input-number>
-            </td>
-            <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.luyKeVapVon">
-              </fm-input-number>
-            </td>
-            <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachVon">
-              </fm-input-number>
-            </td>
-            <td *ngIf="checkViewTD">
-              <ng-container *ngIf="checkEditTD; else viewTD">
+
+            <ng-container *ngIf="editAppraisalValue; else editAppraisal">
+              <td>
+                {{data.tenCongTrinh}}
+              </td>
+              <td>{{data.cucKhuVuc}}</td>
+              <td>{{data.diaDiemXd}}</td>
+              <td>{{data.lyDo}}</td>
+              <td>{{data.mucTieu}}</td>
+              <td>{{data.khoiLuong}}</td>
+              <td>{{data.thoiGianThucHien}}</td>
+              <td>{{displayValue(data.giaTriCongTrinh)}}</td>
+              <td>{{(data.qdPdBcaoTgianBanHanh)}}</td>
+              <td>{{displayValue(data.qdPdBcaoGtriDtoanKtoanTmdt)}}</td>
+              <td>{{(data.qdPdQtoanTgianBanHanh)}}</td>
+              <td>{{displayValue(data.qdPdQtoanGtriQtoan)}}</td>
+              <td>{{displayValue(data.luyKeVapVon)}}</td>
+              <td>{{displayValue(data.keHoachVon)}}</td>
+              <td>
+                <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.keHoachVonTd"
+                  (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+              </td>
+              <td>{{displayValue(data.keHoachNamDtN1)}}</td>
+              <td>{{displayValue(data.keHoachNamDtN2)}}</td>
+              <td>{{data.ghiChu}}</td>
+            </ng-container>
+            
+            <ng-template #editAppraisal>
+              <td>
+                <ng-container *ngIf="data.maCongTrinh; else editName">
+                  {{editCache[data.id].data.tenCongTrinh}}
+                </ng-container>
+                <ng-template #editName>
+                  <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.tenCongTrinh" />
+                </ng-template>
+              </td>
+              <td>
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.cucKhuVuc" />
+              </td>
+              <td>
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.diaDiemXd" />
+              </td>
+              <td>
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.lyDo" />
+              </td>
+              <td>
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.mucTieu" />
+              </td>
+              <td>
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.khoiLuong" />
+              </td>
+              <td>
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.thoiGianThucHien" />
+              </td>
+              <td>
+                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaTriCongTrinh">
+                </fm-input-number>
+              </td>
+              <td>
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.qdPdBcaoTgianBanHanh" />
+              </td>
+              <td>
+                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.qdPdBcaoGtriDtoanKtoanTmdt">
+                </fm-input-number>
+              </td>
+              <td>
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.qdPdQtoanTgianBanHanh" />
+              </td>
+              <td>
+                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.qdPdQtoanGtriQtoan">
+                </fm-input-number>
+              </td>
+              <td>
+                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.luyKeVapVon">
+                </fm-input-number>
+              </td>
+              <td>
+                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachVon">
+                </fm-input-number>
+              </td>
+              <td *ngIf="viewAppraisalValue">
                 <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.keHoachVonTd">
                 </fm-input-number>
-              </ng-container>
-              <ng-template #viewTD>
-            <td>{{displayValue(editCache[data.id].data.keHoachVonTd)}}</td>
-          </ng-template>
-          </td>
-          <td>
-            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachNamDtN1">
-            </fm-input-number>
-          </td>
-          <td>
-            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachNamDtN2">
-            </fm-input-number>
-          </td>
-          <td>
-            <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
-          </td>
-          <td>
-            <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-            <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?" (nzOnConfirm)="cancelEdit(data.id)"
-              class="save">
-              Hủy
-            </a>
-          </td>
-          <td>
-            <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
-            <i *ngIf="checkDelete(data.maCongTrinh)" class="fa fa-trash-o do" (click)="deleteLine(data.stt)"></i>
-          </td>
+              </td>
+              <td>
+                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachNamDtN1">
+                </fm-input-number>
+              </td>
+              <td>
+                <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.keHoachNamDtN2">
+                </fm-input-number>
+              </td>
+              <td>
+                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.ghiChu" />
+              </td>
+            </ng-template>
+            <td [hidden]="status && !editAppraisalValue">
+              <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+              <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                (nzOnConfirm)="cancelEdit(data.id)" class="save">
+                Hủy
+              </a>
+            </td>
+            <td [hidden]="status">
+              <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+              <i *ngIf="checkDelete(data.maCongTrinh)" class="fa fa-trash-o do" (click)="deleteLine(data.stt)"></i>
+            </td>
           </ng-template>
         </tr>
       </tbody>

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -10,8 +11,6 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber, sumNumber } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { DialogThemKhoanMucComponent } from '../../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
-import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 export class ItemData {
     id: any;
     khvonphiLapThamDinhCtietId: string;
@@ -68,29 +67,7 @@ export class PhuLuc01Component implements OnInit {
     tongDmuc: number;
     editAppraisalValue: boolean;
     viewAppraisalValue: boolean;
-
     namBaoCao: number;
-
-    // initItem: ItemData = {
-    //     id: null,
-    //     khvonphiLapThamDinhCtietId: '',
-    //     danhMuc: "",
-    //     tenDanhMuc: "",
-    //     dviTinh: "",
-    //     thienNamTruoc: null,
-    //     dtoanNamHtai: null,
-    //     uocNamHtai: null,
-    //     dmucNamDtoan: null,
-    //     sluongNamDtoan: null,
-    //     ttienNamDtoan: null,
-    //     sluongTd: null,
-    //     ttienTd: null,
-    //     sluongPhanBo: null,
-    //     ttienPhanBo: null,
-    //     stt: '0',
-    //     level: null,
-    //     checked: false,
-    // };
     //nho dem
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 
@@ -154,11 +131,9 @@ export class PhuLuc01Component implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
-
-        await this.addVatTu();
         this.sortByIndex();
         this.sum1();
-        // this.tinhTong();
+        this.tinhTong();
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
@@ -213,50 +188,6 @@ export class PhuLuc01Component implements OnInit {
         )
     }
 
-
-    async addVatTu() {
-
-        const vatTuTemp = []
-        this.listVattu.forEach(vatTu => {
-            if (vatTu.child) {
-                vatTu.child.forEach(vatTuCon => {
-                    vatTuTemp.push({
-                        id: vatTuCon.ma,
-                        tenDm: vatTuCon.ten,
-                        matHang: vatTuCon.ma,
-                        maDviTinh: vatTuCon.maDviTinh,
-                        maCha: "0",
-                        level: 0,
-                    })
-                })
-            }
-        })
-
-        this.lstVatTuFull = vatTuTemp;
-
-        this.dsDinhMucX.forEach(itmDm => {
-            this.lstVatTuFull.push({
-                id: itmDm.id,
-                tenDm: itmDm.tenDinhMuc,
-                matHang: itmDm.id,
-                maDviTinh: itmDm.donViTinh,
-                maCha: itmDm.cloaiVthh,
-                level: 1,
-            })
-        })
-        this.dsDinhMucN.forEach(itmDm => {
-            this.lstVatTuFull.push({
-                id: itmDm.id,
-                tenDm: itmDm.tenDinhMuc,
-                matHang: itmDm.id,
-                maDviTinh: itmDm.donViTinh,
-                maCha: itmDm.cloaiVthh,
-                level: 1,
-            })
-        })
-    }
-
-
     setIndex() {
         const lstVtuTemp = this.lstCtietBcao.filter(e => !e.maDmuc);
         for (let i = 0; i < lstVtuTemp.length; i++) {
@@ -274,9 +205,10 @@ export class PhuLuc01Component implements OnInit {
         })
     }
 
-
-
     sortByIndex() {
+        if (this.lstCtietBcao?.length > 0 && !this.lstCtietBcao[0].stt) {
+            this.setIndex();
+        }
         this.setLevel();
         this.lstCtietBcao.sort((item1, item2) => {
             if (item1.level > item2.level) {
@@ -303,7 +235,6 @@ export class PhuLuc01Component implements OnInit {
             }
         })
 
-
         this.lstCtietBcao = lstTemp;
     }
 
@@ -312,6 +243,14 @@ export class PhuLuc01Component implements OnInit {
             const str: string[] = item.stt.split('.');
             item.level = str.length - 2;
         })
+    }
+
+    checkDelete(stt: string) {
+        const level = stt.split('.').length - 2;
+        if (level == 0) {
+            return true;
+        }
+        return false;
     }
 
     // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
@@ -439,9 +378,27 @@ export class PhuLuc01Component implements OnInit {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
         this.spinner.hide();
-    }
+    };
 
+    //show popup tu choi
+    tuChoi(mcn: string) {
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Từ chối',
+            nzContent: DialogTuChoiComponent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {},
+        });
+        modalTuChoi.afterClose.subscribe(async (text) => {
+            if (text) {
+                this.onSubmit(mcn, text);
+            }
+        });
+    };
 
+    // xoa tat ca cac dong duoc check
     deleteAllChecked() {
         const lstId: any[] = [];
         this.lstCtietBcao.forEach(item => {
@@ -456,7 +413,6 @@ export class PhuLuc01Component implements OnInit {
         })
     }
 
-
     checkEdit(stt: string) {
         const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
         return lstTemp.every(e => !e.stt.startsWith(stt));
@@ -464,7 +420,12 @@ export class PhuLuc01Component implements OnInit {
 
     // start edit
     startEdit(id: string): void {
-        this.editCache[id].edit = true;
+        if (this.lstCtietBcao.every(e => !this.editCache[e.id].edit)) {
+            this.editCache[id].edit = true;
+        } else {
+            this.notification.warning(MESSAGE.WARNING, 'Vui lòng lưu bản ghi đang sửa trước khi thực hiện thao tác');
+            return;
+        }
     }
 
     // luu thay doi
@@ -489,7 +450,7 @@ export class PhuLuc01Component implements OnInit {
 
     // click o checkbox single
     updateSingleChecked(): void {
-        if (this.lstCtietBcao.every(item => item.checked)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
+        if (this.lstCtietBcao.every(item => item.checked || item.level != 0)) {     // tat ca o checkbox deu = true thi set o checkbox all = true
             this.allChecked = true;
         } else {                                                        // o checkbox vua = false, vua = true thi set o checkbox all = indeterminate
             this.allChecked = false;
@@ -569,7 +530,7 @@ export class PhuLuc01Component implements OnInit {
                             id: uuid.v4() + 'FE',
                             stt: stt + '.' + i.toString(),
                             danhMuc: data.ma,
-                            maDmuc: lstTemp[i - 1].loaiBaoQuan,
+                            maDmuc: lstTemp[i - 1].loaiDinhMuc,
                             tenDanhMuc: lstTemp[i - 1].tenDinhMuc,
                             dviTinh: lstTemp[i - 1].donViTinh,
                             level: 1,
@@ -582,6 +543,7 @@ export class PhuLuc01Component implements OnInit {
         });
     }
 
+    // tinh tong tu cap duoi
     sum(stt: string) {
         stt = this.getHead(stt);
         while (stt != '0') {
@@ -610,7 +572,7 @@ export class PhuLuc01Component implements OnInit {
         // this.getTotal();
         this.tinhTong();
     }
-
+    // tinh tong tu cap duoi khong chuyen nstt
     sum1() {
         this.lstCtietBcao.forEach(itm => {
             let stt = this.getHead(itm.stt);
@@ -695,28 +657,6 @@ export class PhuLuc01Component implements OnInit {
         }
         return index;
     }
-
-
-
-    //show popup tu choi
-    tuChoi(mcn: string) {
-        const modalTuChoi = this.modal.create({
-            nzTitle: 'Từ chối',
-            nzContent: DialogTuChoiComponent,
-            nzMaskClosable: false,
-            nzClosable: false,
-            nzWidth: '900px',
-            nzFooter: null,
-            nzComponentParams: {},
-        });
-        modalTuChoi.afterClose.subscribe(async (text) => {
-            if (text) {
-                this.onSubmit(mcn, text);
-            }
-        });
-    }
-
-
 
     // gan editCache.data == lstCtietBcao
     updateEditCache(): void {
