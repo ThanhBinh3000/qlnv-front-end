@@ -93,6 +93,44 @@ export class BieuMau138Component implements OnInit {
           tenDmuc: e.giaTri,
         })
       })
+      if (this.lstCtietBcao.length == 0) {
+        this.noiDungs.forEach(e => {
+          this.lstCtietBcao.push({
+            ...new ItemData(),
+            id: uuid.v4() + 'FE',
+            stt: e.ma,
+            maNdung: e.ma,
+            tenDmuc: e.giaTri,
+          })
+        })
+      }
+      if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
+        this.lstCtietBcao = this.lstCtietBcao.filter(e => e.maNdung);
+        this.dataInfo.extraData.forEach(item => {
+          if (item.maNdung) {
+            const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
+            this.lstCtietBcao[index].namKh = item.namKh;
+            this.lstCtietBcao[index].giaTriThamDinh = item.giaTriThamDinh;
+          } else {
+            this.lstCtietBcao.push({
+              ...new ItemData(),
+              id: uuid.v4(),
+              stt: item.stt,
+              tenDmuc: item.tenNdung,
+              thienNtruoc: item.thienNtruoc,
+              namDtoan: item.namDtoan,
+              namUocThien: item.namUocThien,
+              namKh: item.namKh,
+              giaTriThamDinh: item.giaTriThamDinh,
+            })
+          }
+          this.sum(item.stt);
+        })
+      }
+      this.sortByIndex();
+      this.updateEditCache();
+      this.getStatusButton();
+      this.spinner.hide();
     }
     if (this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
       this.lstCtietBcao = this.lstCtietBcao.filter(e => e.maNdung);

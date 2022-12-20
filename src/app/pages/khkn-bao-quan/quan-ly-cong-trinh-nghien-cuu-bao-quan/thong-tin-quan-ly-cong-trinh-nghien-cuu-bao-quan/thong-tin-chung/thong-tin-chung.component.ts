@@ -7,6 +7,8 @@ import { STATUS } from "../../../../../constants/status";
 import { BaseComponent } from 'src/app/components/base/base.component';
 import { HelperService } from 'src/app/services/helper.service';
 import { Globals } from 'src/app/shared/globals';
+import { StorageService } from 'src/app/services/storage.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -42,12 +44,12 @@ export class ThongTinChungComponent extends BaseComponent implements OnInit {
 
 
   constructor(
-    private fb: FormBuilder,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private danhMucService: DanhMucService,
-    private helperService: HelperService,
     public globals: Globals
   ) {
-    super();
+    super(httpClient, storageService, danhMucService);
     super.ngOnInit();
     this.formData = this.fb.group({
       maDeTai: ['', [Validators.required]],

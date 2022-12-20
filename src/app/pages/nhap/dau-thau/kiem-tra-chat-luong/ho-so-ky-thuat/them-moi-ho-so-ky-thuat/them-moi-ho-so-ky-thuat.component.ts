@@ -30,6 +30,8 @@ import { DatePipe } from '@angular/common';
 import { LOAI_BIEN_BAN, STATUS } from 'src/app/constants/status';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { QuanLyBienBanLayMauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanLayMau.service';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-them-moi-ho-so-ky-thuat',
@@ -103,17 +105,13 @@ export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit
   ];
 
   constructor(
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     public userService: UserService,
     private hoSoKyThuatService: HoSoKyThuatService,
-    public globals: Globals,
-    private fb: FormBuilder,
-    private helperService: HelperService,
     private bienBanLayMauService: QuanLyBienBanLayMauService
   ) {
-    super();
+    super(httpClient, storageService, hoSoKyThuatService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],

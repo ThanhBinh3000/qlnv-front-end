@@ -72,7 +72,8 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
       namQuyetToan: [dayjs().get('year'), [Validators.required]],
       ngayNhap: ['', [Validators.required]],
       trangThai: ['00'],
-      tenTrangThai: ['Dự thảo']
+      tenTrangThai: ['Dự thảo'],
+      lyDoTuChoi: [null]
     });
   }
 
@@ -95,6 +96,7 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
         this.formData.patchValue({
           id: data.id,
           namQuyetToan: data.namQt,
+          lyDoTuChoi: data.lyDoTuChoi,
           ngayNhap: data.ngayNhap,
           tenTrangThai: data.tenTrangThai,
           trangThai: data.trangThai
@@ -301,7 +303,8 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
     this.listBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listBoNganh = res.data.filter(item => item.key != '01');
+      // this.listBoNganh = res.data.filter(item => item.key != '01');
+      this.listBoNganh = res.data;
     }
   }
 
@@ -370,7 +373,7 @@ export class ThemMoiVonPhiHangCuaBoNganhComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            lyDo: text,
+            lyDoTuChoi: text,
             trangThai: STATUS.TU_CHOI_LDV,
           };
           const res = await this.vonPhiService.approve(body);

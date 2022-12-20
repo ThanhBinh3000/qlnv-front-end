@@ -31,6 +31,8 @@ import {
   QuanLyPhieuKiemTraChatLuongHangService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import { HelperService } from 'src/app/services/helper.service';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-chuan-bi-kho',
@@ -72,23 +74,15 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
   dataTable: any[] = [];
 
   constructor(
-    private spinner: NgxSpinnerService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private notification: NzNotificationService,
-    private router: Router,
-    private modal: NzModalService,
-    private userService: UserService,
-    public globals: Globals,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private danhMucService: DanhMucService,
-    private thongTinHopDongService: ThongTinHopDongService,
     private donViService: DonviService,
-    private fb: FormBuilder,
     private bienBanChuanBiKhoService: QuanLyBienBanChuanBiKhoService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
-    private helperService: HelperService
   ) {
-    super();
+    super(httpClient, storageService, bienBanChuanBiKhoService);
     this.formData = this.fb.group(
       {
         id: [],

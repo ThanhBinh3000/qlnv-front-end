@@ -22,17 +22,21 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
   @Input() isView: boolean = false;
   @Input() isCache: boolean = false;
   @Input() isTongHop;
+  @Input()
+  listNguonVon: any[] = [];
+  @Input()
+  listPhuongThucDauThau: any[] = [];
+  @Input()
+  listHinhThucDauThau: any[] = [];
+  @Input()
+  listLoaiHopDong: any[] = [];
 
   formData: FormGroup
-  listNguonVon: any[] = [];
   listDataGroup: any[] = [];
   listOfData: any[] = [];
   dataTable: any[] = [];
 
 
-  listPhuongThucDauThau: any[] = [];
-  listHinhThucDauThau: any[] = [];
-  listLoaiHopDong: any[] = [];
   STATUS: STATUS
 
   constructor(
@@ -101,7 +105,6 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        console.log(this.dataInput);
         this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
         this.dataTable = this.dataInput.children;
         let tongMucDt = 0;
@@ -153,7 +156,7 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
 
   async ngOnInit() {
     await this.spinner.show()
-    await this.loadDataComboBox();
+    // await this.loadDataComboBox();
     await this.spinner.hide()
   }
 

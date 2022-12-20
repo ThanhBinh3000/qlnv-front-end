@@ -28,6 +28,8 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { FormBuilder, Validators } from '@angular/forms';
 import { filter } from 'rxjs/operators';
 import { HelperService } from 'src/app/services/helper.service';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
@@ -64,23 +66,14 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends BaseComponent impl
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   constructor(
-    private spinner: NgxSpinnerService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private donViService: DonviService,
     private danhMucService: DanhMucService,
-    private notification: NzNotificationService,
-    private router: Router,
-    private routerActive: ActivatedRoute,
-    private modal: NzModalService,
-    public userService: UserService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
-    private thongTinHopDongService: ThongTinHopDongService,
-    public globals: Globals,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    private fb: FormBuilder,
-    private helperService: HelperService,
   ) {
-    super();
+    super(httpClient, storageService, quanLyNghiemThuKeLotService);
     this.formData = this.fb.group(
       {
         id: [],

@@ -125,7 +125,7 @@
             <th>
               <nz-input-group>
                 <nz-select [(ngModel)]="rowItem.maVatTuCha" (ngModelChange)="changeLoaiHangHoa()">
-                  <nz-option *ngFor=" let item of listLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
+                  <nz-option *ngFor=" let item of listLoaiHangHoa" [nzValue]="item.maHangHoa" [nzLabel]="item.tenHangHoa">
                   </nz-option>
                 </nz-select>
               </nz-input-group>
@@ -133,7 +133,7 @@
             <th>
               <nz-input-group>
                 <nz-select [(ngModel)]="rowItem.maVatTu" (ngModelChange)="changeChungLoaiHangHoa()">
-                  <nz-option *ngFor=" let item of listChungLoaiHangHoa" [nzValue]="item.ma" [nzLabel]="item.ten">
+                  <nz-option *ngFor=" let item of listChungLoaiHangHoa" [nzValue]="item.maHangHoa" [nzLabel]="item.tenHangHoa">
                   </nz-option>
                 </nz-select>
               </nz-input-group>
@@ -153,7 +153,7 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input [(ngModel)]="rowItem.donViTinh" readonly />
+                <input type="text" nz-input [(ngModel)]="rowItem.donViTinh" />
               </nz-input-group>
 
             </th>

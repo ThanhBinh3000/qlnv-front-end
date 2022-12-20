@@ -28,12 +28,9 @@ export class ItemData {
     ttienTd: number;
     sluongPhanBo: number;
     ttienPhanBo: number;
-
     stt: string;
     level: any;
     checked: boolean;
-
-
 }
 
 @Component({
@@ -132,7 +129,6 @@ export class PhuLuc01Component implements OnInit {
                 ...item,
             })
         })
-        await this.getDinhMuc();
         await this.getDinhMucPL2N();
         await this.getDinhMucPL2X();
         await this.danhMucService.dMVatTu().toPromise().then(res => {
@@ -147,35 +143,11 @@ export class PhuLuc01Component implements OnInit {
 
         await this.addVatTu();
         this.sortByIndex();
-        // this.getTotal();
+        this.sum1();
+        // this.tinhTong();
         this.updateEditCache();
         this.getStatusButton();
-        this.tinhTong();
         this.spinner.hide();
-    }
-
-    async getDinhMuc() {
-        const request = {
-            loaiDinhMuc: '03',
-            maDvi: this.maDviTao,
-        }
-        this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
-            res => {
-                if (res.statusCode == 0) {
-                    this.dsDinhMuc = res.data;
-                    this.dsDinhMuc.forEach(item => {
-                        if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = Math.round(divNumber(item.tongDmuc, 1000));
-                        }
-                    })
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
-                }
-            },
-            err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        )
     }
 
     async getDinhMucPL2N() {
@@ -722,7 +694,7 @@ export class PhuLuc01Component implements OnInit {
             };
         } else {
             if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-                // this.sum(stt);
+                this.sum(stt);
                 this.updateEditCache();
             }
             const item: ItemData = {
@@ -768,6 +740,38 @@ export class PhuLuc01Component implements OnInit {
         }
         // this.getTotal();
         this.tinhTong();
+    }
+
+    sum1() {
+        this.lstCtietBcao.forEach(itm => {
+            let stt = this.getHead(itm.stt);
+            while (stt != '0') {
+                const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+                const data = this.lstCtietBcao[index];
+                this.lstCtietBcao[index] = {
+                    ...new ItemData(),
+                    id: data.id,
+                    stt: data.stt,
+                    tenDanhMuc: data.tenDanhMuc,
+                    level: data.level,
+                    danhMuc: data.danhMuc,
+                }
+                this.lstCtietBcao.forEach(item => {
+                    if (this.getHead(item.stt) == stt) {
+                        this.lstCtietBcao[index].ttienNamDtoan = sumNumber([this.lstCtietBcao[index].ttienNamDtoan, item.ttienNamDtoan]);
+                        this.lstCtietBcao[index].thienNamTruoc = sumNumber([this.lstCtietBcao[index].thienNamTruoc, item.thienNamTruoc]);
+                        this.lstCtietBcao[index].dtoanNamHtai = sumNumber([this.lstCtietBcao[index].dtoanNamHtai, item.dtoanNamHtai]);
+                        this.lstCtietBcao[index].uocNamHtai = sumNumber([this.lstCtietBcao[index].uocNamHtai, item.uocNamHtai]);
+                        this.lstCtietBcao[index].dmucNamDtoan = sumNumber([this.lstCtietBcao[index].dmucNamDtoan, item.dmucNamDtoan]);
+                        this.lstCtietBcao[index].ttienTd = sumNumber([this.lstCtietBcao[index].ttienTd, item.ttienTd]);
+                    }
+                })
+                stt = this.getHead(stt);
+            }
+            // this.getTotal();
+            this.tinhTong();
+        })
+
     }
 
     tinhTong() {

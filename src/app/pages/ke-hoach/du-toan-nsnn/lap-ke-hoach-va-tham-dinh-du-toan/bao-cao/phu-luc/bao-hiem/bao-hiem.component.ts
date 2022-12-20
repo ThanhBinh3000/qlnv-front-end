@@ -118,43 +118,17 @@ export class BaoHiemComponent implements OnInit {
                 })
             }
             this.setLevel();
-            // this.lstCtietBcao.forEach(item => {
-            //     item.tenVtu += this.getName(item.level, item.maVtu);
-            // })
         } else if (!this.lstCtietBcao[0]?.stt) {
             this.lstCtietBcao.forEach(item => {
                 item.stt = item.maVtu;
             })
         }
         this.sortByIndex();
+        this.sum1();
         this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
-    }
-
-    getName(level: number, ma: string) {
-        const type = this.getTail(ma);
-        let str = '';
-        if (level == 1) {
-            switch (type) {
-                case 1:
-                    str = (this.namBcao - 1).toString();
-                    break;
-                case 2:
-                    str = this.namBcao.toString();
-                    break;
-                case 3:
-                    str = this.namBcao.toString();
-                    break;
-                case 4:
-                    str = (this.namBcao - 2).toString() + '-' + (this.namBcao + 2).toString();
-                    break;
-                default:
-                    break;
-            }
-        }
-        return str;
     }
 
     getStatusButton() {
@@ -387,6 +361,7 @@ export class BaoHiemComponent implements OnInit {
         })
 
         this.lstCtietBcao = lstTemp;
+        this.getTotal();
     }
 
     setLevel() {
@@ -440,9 +415,6 @@ export class BaoHiemComponent implements OnInit {
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
-                    this.lstCtietBcao[index].slTuM3 = sumNumber([this.lstCtietBcao[index].slTuM3, item.slTuM3]);
-                    this.lstCtietBcao[index].slDuoiM3 = sumNumber([this.lstCtietBcao[index].slDuoiM3, item.slDuoiM3]);
-                    this.lstCtietBcao[index].slTong = sumNumber([this.lstCtietBcao[index].slTong, item.slTong]);
                     this.lstCtietBcao[index].gtTuM3 = sumNumber([this.lstCtietBcao[index].gtTuM3, item.gtTuM3]);
                     this.lstCtietBcao[index].gtDuoiM3 = sumNumber([this.lstCtietBcao[index].gtDuoiM3, item.gtDuoiM3]);
                     this.lstCtietBcao[index].gtTong = sumNumber([this.lstCtietBcao[index].gtTuM3, this.lstCtietBcao[index].gtDuoiM3]);
@@ -453,14 +425,36 @@ export class BaoHiemComponent implements OnInit {
         this.getTotal();
     }
 
+    sum1() {
+        this.lstCtietBcao.forEach(item => {
+            let stt = this.getHead(item.stt);
+            while (stt != '0') {
+                const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+                const data = this.lstCtietBcao[index];
+                this.lstCtietBcao[index] = {
+                    ...new ItemData(),
+                    id: data.id,
+                    stt: data.stt,
+                    maVtu: data.maVtu,
+                    tenVtu: data.tenVtu,
+                    level: data.level,
+                }
+                this.lstCtietBcao.forEach(item => {
+                    if (this.getHead(item.stt) == stt) {
+                        this.lstCtietBcao[index].gtTuM3 = sumNumber([this.lstCtietBcao[index].gtTuM3, item.gtTuM3]);
+                        this.lstCtietBcao[index].gtDuoiM3 = sumNumber([this.lstCtietBcao[index].gtDuoiM3, item.gtDuoiM3]);
+                        this.lstCtietBcao[index].gtTong = sumNumber([this.lstCtietBcao[index].gtTuM3, this.lstCtietBcao[index].gtDuoiM3]);
+                    }
+                })
+                stt = this.getHead(stt);
+            }
+            this.getTotal();
+        })
+    }
+
     getTotal() {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
-            if (item.level == 1) {
-                this.total.gtTuM3 = sumNumber([this.total.gtTuM3, item.gtTuM3]);
-                this.total.gtDuoiM3 = sumNumber([this.total.gtDuoiM3, item.gtDuoiM3]);
-                this.total.gtTong = sumNumber([this.total.gtTuM3, this.total.gtDuoiM3]);
-            }
             if (item.level == 0) {
                 this.total.gtTuM3 = sumNumber([this.total.gtTuM3, item.gtTuM3]);
                 this.total.gtDuoiM3 = sumNumber([this.total.gtDuoiM3, item.gtDuoiM3]);
