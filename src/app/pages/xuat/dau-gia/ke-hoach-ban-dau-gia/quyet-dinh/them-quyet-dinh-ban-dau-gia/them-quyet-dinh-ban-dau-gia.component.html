@@ -119,7 +119,7 @@
             </nz-form-item>
           </nz-radio-group>
         </div>
-        <div nz-col [nzSpan]="24">
+        <div nz-col [nzSpan]="12">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true">
               Trích yếu
@@ -127,6 +127,24 @@
             <nz-form-control>
               <input nz-input formControlName="trichYeu"
                 [readonly]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="12">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true"> File đính kèm QĐ đã ban hành </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <div class="list-file">
+                <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                  <input type="text" nz-input />
+                </nz-input-group>
+                <ng-template #suffixTemplateInfo>
+                  <div class="icon-file-dinh-kem">
+                    <i class="icon htvbdh_tcdt_tep"></i>
+                    <input class="input-file" (change)="getNameFile($event)" type="file" />
+                  </div>
+                </ng-template>
+              </div>
             </nz-form-control>
           </nz-form-item>
         </div>

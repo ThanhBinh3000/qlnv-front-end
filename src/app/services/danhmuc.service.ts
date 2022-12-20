@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { BaseService } from './base.service';
-import {OldResponseData} from "../interfaces/response";
+import { OldResponseData } from "../interfaces/response";
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +16,11 @@ export class DanhMucService extends BaseService {
   loadDanhMucHangHoa() {
     const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/danh-sach`;
     return this.httpClient.post<any>(url, null);
+  }
+
+  timKiem(body: any): Promise<any> {
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/dx-kh/hop-dong/tra-cuu`
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 
   delete(id): Promise<OldResponseData> {
@@ -118,6 +123,10 @@ export class DanhMucService extends BaseService {
   }
   getDanhMucHangDvql(body: any) {
     const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/search-all`;
+    return this.httpClient.post<any>(url, body);
+  }
+  getDanhMucHangHoaDvql(body: any) {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/search-all-ma`;
     return this.httpClient.post<any>(url, body);
   }
 }

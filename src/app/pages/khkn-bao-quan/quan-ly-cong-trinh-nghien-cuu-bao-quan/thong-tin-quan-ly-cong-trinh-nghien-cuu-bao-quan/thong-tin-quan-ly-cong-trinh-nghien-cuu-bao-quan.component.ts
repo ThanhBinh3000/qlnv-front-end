@@ -10,14 +10,18 @@ import { Globals } from 'src/app/shared/globals';
 import * as dayjs from 'dayjs';
 import { NghiemThuThanhLy, TienDoThucHien } from 'src/app/models/KhoaHocCongNgheBaoQuan';
 import { UserService } from 'src/app/services/user.service';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { cloneDeep } from 'lodash';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { Base2Component } from './../../../../components/base2/base2.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan',
   templateUrl: './thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan.component.html',
   styleUrls: ['./thong-tin-quan-ly-cong-trinh-nghien-cuu-bao-quan.component.scss']
 })
-export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseComponent implements OnInit, OnChanges {
+export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Component implements OnInit, OnChanges {
 
   @Input() id: number;
   @Input() isView: boolean;
@@ -33,6 +37,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
   listCapDt: any[] = []
   listNguonVon: any[] = [];
   fileDinhKem: any[] = [];
+  fileDinhKem1: any[] = [];
 
   listTrangThai1: any[] = [
     { ma: this.STATUS.CHUA_THUC_HIEN, giaTri: 'Chưa thực hiện' },
@@ -47,16 +52,15 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
   rowItem1: NghiemThuThanhLy = new NghiemThuThanhLy;
   dataEdit1: { [key: string]: { edit: boolean; data: NghiemThuThanhLy } } = {};
   constructor(
-    private fb: FormBuilder,
-    private modal: NzModalService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private danhMucService: DanhMucService,
-    private helperService: HelperService,
-    public globals: Globals,
     private khCnCongTrinhNghienCuu: KhCnCongTrinhNghienCuu,
-    private notification: NzNotificationService,
-    public userService: UserService,
   ) {
-    super();
+    super(httpClient, storageService, notification, spinner, modal, khCnCongTrinhNghienCuu);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [''],
@@ -123,6 +127,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
         ngayKy: data.ngayKyTu && data.ngayKyDen ? [data.ngayKyTu, data.ngayKyDen] : null
       })
       this.fileDinhKem = data.fileDinhKems;
+      this.fileDinhKem1 = data.fileDinhKems1;
       this.dataTable = data.tienDoThucHien;
       this.dataTable.forEach(item => {
         const tt = this.listTrangThai1.filter(d => d.ma == item.trangThaiTd)
@@ -187,13 +192,14 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
       ? dayjs(this.formData.get('ngayKy').value[0]).format(
         'YYYY-MM-DD',
       )
-      : null,
-      body.ngayKyTu = this.formData.get('ngayKy').value
-        ? dayjs(this.formData.get('ngayKy').value[1]).format(
-          'YYYY-MM-DD',
-        )
-        : null,
-      body.fileDinhKemReq = this.fileDinhKem;
+      : null;
+    body.ngayKyTu = this.formData.get('ngayKy').value
+      ? dayjs(this.formData.get('ngayKy').value[1]).format(
+        'YYYY-MM-DD',
+      )
+      : null;
+    body.fileDinhKemReq = this.fileDinhKem;
+    body.fileDinhKemReq1 = this.fileDinhKem1;
     console.log(body);
     let res = null;
     if (this.formData.get('id').value) {
@@ -223,18 +229,22 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
     if (!this.dataTable) {
       this.dataTable = [];
     }
-    this.sortTableId();
-    let item = cloneDeep(this.rowItem);
-    item.stt = this.dataTable.length + 1;
-    item.edit = false;
-    this.dataTable = [
-      ...this.dataTable,
-      item,
-    ]
+    if (this.rowItem.noiDung && this.rowItem.sanPham != null) {
+      this.sortTableId();
+      let item = cloneDeep(this.rowItem);
+      item.stt = this.dataTable.length + 1;
+      item.edit = false;
+      this.dataTable = [
+        ...this.dataTable,
+        item,
+      ]
 
-    this.rowItem = new TienDoThucHien();
-    this.updateEditCache();
-    this.emitDataTable();
+      this.rowItem = new TienDoThucHien();
+      this.updateEditCache();
+      this.emitDataTable();
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
+    }
   }
   onChangeTrangThai(trangThai, typeData?) {
     const tt = this.listTrangThai1.filter(d => d.ma == trangThai)
@@ -295,7 +305,6 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
         try {
           this.dataTable.splice(index, 1);
           this.updateEditCache();
-          this.emitDataTable();
           this.dataTable;
         } catch (e) {
           console.log('error', e);
@@ -317,17 +326,21 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends BaseCompon
     if (!this.dataTable1) {
       this.dataTable1 = [];
     }
-    this.sortTableId1();
-    let item = cloneDeep(this.rowItem1);
-    item.stt = this.dataTable1.length + 1;
-    item.edit = false;
-    this.dataTable1 = [
-      ...this.dataTable1,
-      item,
-    ]
+    if (this.rowItem1.hoTen && this.rowItem1.donVi != null) {
+      this.sortTableId1();
+      let item = cloneDeep(this.rowItem1);
+      item.stt = this.dataTable1.length + 1;
+      item.edit = false;
+      this.dataTable1 = [
+        ...this.dataTable1,
+        item,
+      ]
 
-    this.rowItem1 = new NghiemThuThanhLy();
-    this.updateEditCache1();
+      this.rowItem1 = new NghiemThuThanhLy();
+      this.updateEditCache1();
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng điền đầy đủ thông tin")
+    }
   }
 
   sortTableId1() {

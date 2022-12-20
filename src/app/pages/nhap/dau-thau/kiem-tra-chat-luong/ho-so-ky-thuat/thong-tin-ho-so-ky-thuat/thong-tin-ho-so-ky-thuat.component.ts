@@ -27,6 +27,8 @@ import { BienBanGuiHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { HelperService } from 'src/app/services/helper.service';
 import { HoSoBienBanService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoBienBan.service';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-thong-tin-ho-so-ky-thuat',
@@ -84,22 +86,14 @@ export class ThongTinHoSoKyThuatComponent extends BaseComponent implements OnIni
   LOAI_BIEN_BAN = LOAI_BIEN_BAN;
 
   constructor(
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
-    public userService: UserService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private hoSoKyThuatService: HoSoKyThuatService,
-    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    private thongTinHopDongService: ThongTinHopDongService,
-    private quanLyBienBanBanGiaoService: QuanLyBienBanBanGiaoService,
     private quanLyBienBanLayMauService: QuanLyBienBanLayMauService,
-    public globals: Globals,
-    private fb: FormBuilder,
     private bienBanGuiHangService: BienBanGuiHangService,
-    private helperService: HelperService,
     private hoSoBienBanService: HoSoBienBanService
   ) {
-    super();
+    super(httpClient, storageService, hoSoKyThuatService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],

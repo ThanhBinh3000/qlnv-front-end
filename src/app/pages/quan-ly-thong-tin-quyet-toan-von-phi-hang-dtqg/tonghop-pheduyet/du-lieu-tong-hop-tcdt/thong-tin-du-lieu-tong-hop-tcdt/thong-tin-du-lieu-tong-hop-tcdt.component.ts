@@ -12,7 +12,7 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import * as dayjs from "dayjs";
 import {MESSAGE} from "../../../../../constants/message";
 import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
-import { STATUS } from 'src/app/constants/status';
+import {STATUS} from 'src/app/constants/status';
 
 @Component({
   selector: 'app-thong-tin-du-lieu-tong-hop-tcdt',
@@ -67,10 +67,13 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
     private notification: NzNotificationService,
   ) {
     this.formData = this.fb.group({
+      id: [null],
       namQuyetToan: [dayjs().get('year'), [Validators.required]],
       ngayNhap: ['', [Validators.required]],
       trangThai: ['00'],
-      tenTrangThai: ['Dự thảo']
+      tenTrangThai: ['Dự thảo'],
+      soToTrinh: [null, [Validators.required]],
+      ngayTongHop: ['', [Validators.required]],
     });
   }
 
@@ -94,8 +97,11 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
           id: data.id,
           namQuyetToan: data.namQt,
           ngayNhap: data.ngayNhap,
+          ngayTongHop: data.ngayTao,
           tenTrangThai: data.tenTrangThai,
-          trangThai: data.trangThai
+          trangThai: data.trangThai,
+          soToTrinh: data.soToTrinh,
+          lyDoTuChoi: data.lyDoTuChoi,
         });
         this.dsQtNsChiTw = data.dsQtNsChiTw;
         this.dsQtNsKpChiNvDtqg = data.dsQtNsKpChiNvDtqg;
@@ -124,7 +130,8 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
       "dsQtNsChiTw": this.dsQtNsChiTw,
       "dsQtNsKpChiNvDtqg": this.dsQtNsKpChiNvDtqg,
       "taiLieuDinhKems": this.taiLieuDinhKemList,
-      "loai": "00"
+      "loai": "01",
+      "soToTrinh": this.formData.value.soToTrinh,
     };
     this.spinner.show();
     try {
@@ -299,7 +306,7 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
     this.listBoNganh = [];
     let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listBoNganh = res.data.filter(item => item.key != '01');
+      this.listBoNganh = res.data;
     }
   }
 
@@ -319,15 +326,11 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
           let trangThai;
           switch (this.formData.value.trangThai) {
             case STATUS.DU_THAO: {
-              trangThai = STATUS.CHO_DUYET_LDV;
+              trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.CHO_DUYET_LDV: {
-              trangThai = STATUS.DA_DUYET_LDV;
-              break;
-            }
-            case STATUS.TU_CHOI_LDV: {
-              trangThai = STATUS.CHO_DUYET_LDV;
+            case STATUS.CHO_DUYET_LDTC: {
+              trangThai = STATUS.DA_DUYET_LDTC;
               break;
             }
           }
@@ -368,8 +371,8 @@ export class ThongTinDuLieuTongHopTcdtComponent implements OnInit {
         try {
           let body = {
             id: this.idInput,
-            lyDo: text,
-            trangThai: STATUS.TU_CHOI_LDV,
+            lyDoTuChoi: text,
+            trangThai: STATUS.TU_CHOI_LDTC,
           };
           const res = await this.vonPhiService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {

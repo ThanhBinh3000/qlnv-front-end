@@ -17,6 +17,8 @@ import { Globals } from 'src/app/shared/globals';
 import { BaseComponent } from 'src/app/components/base/base.component';
 import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-quan-ly-phieu-kiem-nghiem-chat-luong',
@@ -85,18 +87,14 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
   indeterminate = false;
 
   constructor(
-    private spinner: NgxSpinnerService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private donViService: DonviService,
     private phieuKiemNghiemChatLuongHangService: QuanLyPhieuKiemNghiemChatLuongHangService,
-    private notification: NzNotificationService,
-    private router: Router,
-    private modal: NzModalService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    public userService: UserService,
-    public globals: Globals,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
-    super();
+    super(httpClient, storageService, phieuKiemNghiemChatLuongHangService);
   }
 
   async ngOnInit() {

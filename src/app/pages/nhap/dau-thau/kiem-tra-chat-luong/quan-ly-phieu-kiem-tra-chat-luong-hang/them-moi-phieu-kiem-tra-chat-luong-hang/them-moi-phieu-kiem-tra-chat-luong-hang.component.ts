@@ -23,6 +23,8 @@ import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMu
 import { HelperService } from 'src/app/services/helper.service';
 import { isEmpty } from 'lodash';
 import { BaseComponent } from "../../../../../../components/base/base.component";
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 
 @Component({
@@ -58,22 +60,17 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends BaseComponent imp
   listFileDinhKem: any[] = [];
 
   constructor(
-    private spinner: NgxSpinnerService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private phieuKtraCluongService: QuanLyPhieuKiemTraChatLuongHangService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
-    private userService: UserService,
-    public globals: Globals,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private danhMucService: DanhMucService,
     private thongTinHopDongService: ThongTinHopDongService,
     private donViService: DonviService,
-    private fb: FormBuilder,
     private thongTinHopDong: ThongTinHopDongService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
-    private helperService: HelperService
   ) {
-    super();
+    super(httpClient, storageService, phieuKtraCluongService);
     this.formData = this.fb.group(
       {
         id: [],

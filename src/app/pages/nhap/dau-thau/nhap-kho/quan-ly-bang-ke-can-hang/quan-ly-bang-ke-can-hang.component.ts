@@ -17,6 +17,8 @@ import { BaseComponent } from "../../../../../components/base/base.component";
 import {
   QuyetDinhGiaoNhapHangService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'quan-ly-bang-ke-can-hang',
@@ -64,17 +66,12 @@ export class QuanLyBangKeCanHangComponent extends BaseComponent implements OnIni
   };
 
   constructor(
-    private spinner: NgxSpinnerService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
-    private notification: NzNotificationService,
-    private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private router: Router,
-    private modal: NzModalService,
-    public userService: UserService,
-    public globals: Globals,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
-    super()
+    super(httpClient, storageService, quanLyBangKeCanHangService);
   }
 
   async ngOnInit() {

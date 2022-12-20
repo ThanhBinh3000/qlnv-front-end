@@ -1,4 +1,5 @@
 import { NgIf } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -15,6 +16,7 @@ import { UserLogin } from 'src/app/models/userlogin';
 import { QuanLyBienBanGiaoNhanService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyBienBanGiaoNhan.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import { QuanLyBienBanKetThucNhapKhoService } from 'src/app/services/quanLyBienBanKetThucNhapKho.service';
+import { StorageService } from 'src/app/services/storage.service';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
@@ -71,17 +73,14 @@ export class BienBanGiaoNhanComponent extends BaseComponent implements OnInit {
   dataTableAll: any[] = [];
   bienBanKetThucNhapKho: BienBanKetThucNhapKho = new BienBanKetThucNhapKho();
   constructor(
-    private spinner: NgxSpinnerService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private quanLyBienBanBanGiaoNhanService: QuanLyBienBanGiaoNhanService,
-    private notification: NzNotificationService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
-    private router: Router,
-    private modal: NzModalService,
     public userService: UserService,
-    public globals: Globals,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
-    super()
+    super(httpClient, storageService, quanLyBienBanBanGiaoNhanService);
     super.ngOnInit();
   }
 

@@ -41,7 +41,7 @@ import {
   templateUrl: './them-de-xuat-ke-hoach-ban-dau-gia.component.html',
   styleUrls: ['./them-de-xuat-ke-hoach-ban-dau-gia.component.scss']
 })
-export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implements OnInit, OnChanges {
+export class ThemDeXuatKeHoachBanDauGiaComponent implements OnInit, OnChanges {
   @Input()
   loaiVthhInput: string;
   @Input()
@@ -110,8 +110,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     private dmTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
   ) {
-
-    super();
     this.formData = this.fb.group({
       id: [],
       maDvi: [''],
@@ -338,7 +336,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
       nzContent: DialogThemDiaDiemPhanLoComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '3000px',
+      nzWidth: '2500px',
       nzFooter: null,
       nzComponentParams: {
         dataEdit: data,
@@ -380,9 +378,24 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     });
   }
 
-  deleteRow(i: number): void {
-    this.listOfData = this.listOfData.filter((d, index) => index !== i);
-    this.helperService.setIndexArray(this.listOfData);
+  deleteRow(i: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.listOfData = this.listOfData.filter((d, index) => index !== i);
+          this.helperService.setIndexArray(this.listOfData);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 
   async save(isGuiDuyet?) {
@@ -407,12 +420,12 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     if (this.formData.get('soDxuat').value) {
       body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
     }
-    body.tgianDkienDen = this.formData.get('thoiGianDuKien').value
+    body.tgianDkienTu = this.formData.get('thoiGianDuKien').value
       ? dayjs(this.formData.get('thoiGianDuKien').value[0]).format(
         'YYYY-MM-DD',
       )
       : null,
-      body.tgianDkienTu = this.formData.get('thoiGianDuKien').value
+      body.tgianDkienDen = this.formData.get('thoiGianDuKien').value
         ? dayjs(this.formData.get('thoiGianDuKien').value[1]).format(
           'YYYY-MM-DD',
         )
@@ -468,12 +481,13 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       this.formData.patchValue({
-        soQdCtieu: this.dataChiTieu.soQuyetDinh
+        soQdCtieu: res2.data.soQuyetDinh
+      });
+    } else {
+      this.formData.patchValue({
+        soQdCtieu: '150/TCDT',
       });
     }
-    this.formData.patchValue({
-      soQdCtieu: '150/TCDT',
-    });
   }
 
   convertTienTobangChu(tien: number): string {
@@ -676,13 +690,13 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends BaseComponent implement
     }
   }
 
-  // changeThoiGianDuKien() {
-  //   let value = this.formData.get('thoiGianDuKien').value;
-  //   if (value) {
-  //     this.formData.patchValue({
-  //       tgianDkienTu: value[0],
-  //       tgianDkienDen: value[1],
-  //     })
-  //   }
-  // }
+  calcTongSoLuong() {
+    if (this.listOfData) {
+      const sum = this.listOfData.reduce((prev, cur) => {
+        prev += cur.tongSoLuong;
+        return prev;
+      }, 0);
+      return sum;
+    }
+  }
 }

@@ -7,6 +7,7 @@ import {MESSAGE} from "../../../../constants/message";
 import {cloneDeep} from 'lodash';
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {Globals} from "../../../../shared/globals";
+import {saveAs} from 'file-saver';
 import {QuyetToanVonPhiService} from "../../../../services/ke-hoach/von-phi/quyetToanVonPhi.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {UserService} from "../../../../services/user.service";
@@ -34,12 +35,15 @@ export class DuLieuTongHopTcdtComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   indeterminate = false;
   filterTable: any = {
+    id: null,
     namQuyetToan: '',
     ngayNhap: '',
+    ngayTao: '',
     ngayCapNhat: '',
     qdCtKhNam: '',
     trangThai: '',
     trangThaiPdBtc: '',
+    soToTrinh: '',
   };
 
   constructor(
@@ -259,6 +263,33 @@ export class DuLieuTongHopTcdtComponent implements OnInit {
     this.idSelected = id;
     this.isViewDetail = isViewDetail;
     this.isDetail = true;
+  }
+
+  showList() {
+    this.isDetail = false;
+    this.search();
+  }
+
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.ngayTaoTu = body.ngayTongHop[0];
+        body.ngayTaoDen = body.ngayTongHop[1];
+        this.vonPhiService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'du-lieu-tong-hop-tcdt.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
   }
 
 }

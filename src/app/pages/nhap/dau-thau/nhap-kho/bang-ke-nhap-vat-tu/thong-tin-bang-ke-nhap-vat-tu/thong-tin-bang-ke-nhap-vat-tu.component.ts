@@ -41,6 +41,8 @@ import {
 import { HelperService } from 'src/app/services/helper.service';
 import { DatePipe } from '@angular/common';
 import { STATUS } from 'src/app/constants/status';
+import { HttpClient } from '@angular/common/http';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-thong-tin-bang-ke-nhap-vat-tu',
@@ -74,17 +76,12 @@ export class ThongTinBangKeNhapVatTuComponent extends BaseComponent implements O
   dataTable: any[] = [];
 
   constructor(
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private modal: NzModalService,
-    public userService: UserService,
+    private httpClient: HttpClient,
+    private storageService: StorageService,
     private quanLyBangKeVatTuService: QuanLyBangKeVatTuService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
-    public globals: Globals,
-    public fb: FormBuilder,
-    private helperService: HelperService
   ) {
-    super();
+    super(httpClient, storageService, quanLyBangKeVatTuService);
     this.formData = this.fb.group({
       id: [],
       nam: [dayjs().get('year')],
