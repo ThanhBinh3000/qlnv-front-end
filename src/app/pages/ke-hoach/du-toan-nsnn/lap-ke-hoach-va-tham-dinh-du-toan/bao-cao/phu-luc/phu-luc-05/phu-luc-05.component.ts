@@ -195,10 +195,10 @@ export class PhuLuc05Component implements OnInit {
     const lstCtietBcaoTemp: ItemData[] = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      // if (item.ncauChiTongSo > MONEY_LIMIT) {
-      //     checkMoneyRange = false;
-      //     return;
-      // }
+      if (item.keHoachVonTd > MONEY_LIMIT) {
+        checkMoneyRange = false;
+        return;
+      }
       lstCtietBcaoTemp.push({
         ...item,
       })
