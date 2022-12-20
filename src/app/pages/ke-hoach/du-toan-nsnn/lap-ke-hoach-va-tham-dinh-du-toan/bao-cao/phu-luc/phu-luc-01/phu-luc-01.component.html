@@ -26,7 +26,7 @@
                         <span>Xóa</span>
                     </button>
                     <ng-container *ngIf="lstCtietBcao.length == 0">
-                        <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
+                        <button type="button" class="btn btn-main" (click)="selectGoods()" [hidden]="status">
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>
@@ -98,9 +98,9 @@
                             <td [hidden]="status && !editAppraisalValue">
                                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                             </td>
-                            <td [hidden]="status">
-                                <i class="fa fa-plus" (click)="addLine(data.id)"></i>
-                            </td>
+                            <!-- <td [hidden]="status">
+                                <i class="fa fa-plus" (click)="selectGoods(data.id)"></i>
+                            </td> -->
 
                         </ng-container>
                         <ng-template #editTemplate>
@@ -176,10 +176,6 @@
                                     style="margin-right:15px">Lưu</a>
                                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                     (nzOnConfirm)="cancelEdit(editCache[data.id].data.id)" class="save">Hủy</a>
-                            </td>
-
-                            <td [hidden]="status">
-                                <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                             </td>
                         </ng-template>
                     </tr>
