@@ -86,8 +86,8 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.pthucMuatt"
-                  (input)="filterInTable('pthucMuatt',filterTable.pthucMuatt)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ptMua"
+                  (input)="filterInTable('ptMua',filterTable.ptMua)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -136,7 +136,7 @@
             <td>{{ data.hhQdPheduyetKhMttHdr ? data.hhQdPheduyetKhMttHdr.soQd : data.soQd}}</td>
             <td *ngIf="userService.isTongCuc()">{{ data.tenDvi}}</td>
             <td *ngIf="userService.isTongCuc()">{{ data.namKh}}</td>
-            <td>{{ data.hhQdPheduyetKhMttHdr ? data.hhQdPheduyetKhMttHdr.pthucMuatt : data.pthucMuatt }}</td>
+            <td>{{ data.ptMua }}</td>
             <td>{{ data.hhQdPheduyetKhMttHdr ? data.hhQdPheduyetKhMttHdr.ngayHluc : data.ngayHluc | date: 'dd/MM/YYYY'}}
             </td>
             <td>{{ data.hhQdPduyetKqcgHdr ? data.hhQdPduyetKqcgHdr.soQd : data.soQd }}</td>
