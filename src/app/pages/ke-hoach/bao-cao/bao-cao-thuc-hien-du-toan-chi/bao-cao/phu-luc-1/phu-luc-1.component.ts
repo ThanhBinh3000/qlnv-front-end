@@ -83,7 +83,7 @@ export class PhuLucIComponent implements OnInit {
     //thong tin chung
     idBcao: string;
     id: string;
-    namHienHanh: number;
+    namBcao: number;
     maPhuLuc: string;
     thuyetMinh: string;
     maDviTien: string;
@@ -153,7 +153,7 @@ export class PhuLucIComponent implements OnInit {
         this.maDviTien = this.data?.maDviTien ? this.data.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
         this.trangThaiPhuLuc = this.data?.trangThai;
-        this.namHienHanh = this.data?.namHienHanh;
+        this.namBcao = this.data?.namBcao;
         this.luyKeDetail = this.data?.luyKeDetail?.lstCtietBcaos;
         this.status = this.data?.status;
         this.statusEdit = this.status || this.maLoaiBcao == '527';
@@ -163,11 +163,11 @@ export class PhuLucIComponent implements OnInit {
             this.lstCtietBcao.push({
                 ...item,
                 giaiNganThangBcaoTcongTle: divNumber(item.giaiNganThangBcaoTcong, item.kphiSdungTcong),
-                giaiNganThangBcaoDtoanTle: divNumber(item.giaiNganThangBcaoDtoan, item.kphiSdungTcong),
-                giaiNganThangBcaoNguonKhacTle: divNumber(item.giaiNganThangBcaoNguonKhac, item.kphiSdungTcong),
-                giaiNganThangBcaoNguonQuyTle: divNumber(item.giaiNganThangBcaoNguonQuy, item.kphiSdungTcong),
-                giaiNganThangBcaoNsttTle: divNumber(item.giaiNganThangBcaoNstt, item.kphiSdungTcong),
-                giaiNganThangBcaoCkTle: divNumber(item.giaiNganThangBcaoCk, item.kphiSdungTcong),
+                giaiNganThangBcaoDtoanTle: divNumber(item.giaiNganThangBcaoDtoan, item.kphiSdungDtoan),
+                giaiNganThangBcaoNguonKhacTle: divNumber(item.giaiNganThangBcaoNguonKhac, item.kphiSdungNguonKhac),
+                giaiNganThangBcaoNguonQuyTle: divNumber(item.giaiNganThangBcaoNguonQuy, item.kphiSdungNguonQuy),
+                giaiNganThangBcaoNsttTle: divNumber(item.giaiNganThangBcaoNstt, item.kphiSdungNstt),
+                giaiNganThangBcaoCkTle: divNumber(item.giaiNganThangBcaoCk, item.kphiSdungCk),
                 luyKeGiaiNganTcongTle: divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong),
                 luyKeGiaiNganDtoanTle: divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan),
                 luyKeGiaiNganNguonKhacTle: divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac),
@@ -780,7 +780,7 @@ export class PhuLucIComponent implements OnInit {
     }
 
     getDeleteStatus(data: ItemData) {
-        if ((this.luyKeDetail.findIndex(e => e.maNdung == data.maNdung) != -1) || this.getLowStatus(data.stt)) {
+        if ((this.luyKeDetail.findIndex(e => e.maNdung == data.maNdung) != -1)) {
             return true;
         }
         return false;
@@ -833,11 +833,11 @@ export class PhuLucIComponent implements OnInit {
                     this.lstCtietBcao[index].luyKeGiaiNganCk = sumNumber([this.lstCtietBcao[index].luyKeGiaiNganCk, item.luyKeGiaiNganCk]);
 
                     this.lstCtietBcao[index].giaiNganThangBcaoTcongTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoTcong, this.lstCtietBcao[index].kphiSdungTcong);
-                    this.lstCtietBcao[index].giaiNganThangBcaoDtoanTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoDtoan, this.lstCtietBcao[index].kphiSdungTcong);
-                    this.lstCtietBcao[index].giaiNganThangBcaoNguonKhacTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoNguonKhac, this.lstCtietBcao[index].kphiSdungTcong);
-                    this.lstCtietBcao[index].giaiNganThangBcaoNguonQuyTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoNguonQuy, this.lstCtietBcao[index].kphiSdungTcong);
-                    this.lstCtietBcao[index].giaiNganThangBcaoNsttTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoNstt, this.lstCtietBcao[index].kphiSdungTcong);
-                    this.lstCtietBcao[index].giaiNganThangBcaoCkTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoCk, this.lstCtietBcao[index].kphiSdungTcong);
+                    this.lstCtietBcao[index].giaiNganThangBcaoDtoanTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoDtoan, this.lstCtietBcao[index].kphiSdungDtoan);
+                    this.lstCtietBcao[index].giaiNganThangBcaoNguonKhacTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoNguonKhac, this.lstCtietBcao[index].kphiSdungNguonKhac);
+                    this.lstCtietBcao[index].giaiNganThangBcaoNguonQuyTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoNguonQuy, this.lstCtietBcao[index].kphiSdungNguonQuy);
+                    this.lstCtietBcao[index].giaiNganThangBcaoNsttTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoNstt, this.lstCtietBcao[index].kphiSdungNstt);
+                    this.lstCtietBcao[index].giaiNganThangBcaoCkTle = divNumber(this.lstCtietBcao[index].giaiNganThangBcaoCk, this.lstCtietBcao[index].kphiSdungCk);
                     this.lstCtietBcao[index].luyKeGiaiNganTcongTle = divNumber(this.lstCtietBcao[index].luyKeGiaiNganTcong, this.lstCtietBcao[index].kphiSdungTcong);
                     this.lstCtietBcao[index].luyKeGiaiNganDtoanTle = divNumber(this.lstCtietBcao[index].luyKeGiaiNganDtoan, this.lstCtietBcao[index].kphiSdungDtoan);
                     this.lstCtietBcao[index].luyKeGiaiNganNguonKhacTle = divNumber(this.lstCtietBcao[index].luyKeGiaiNganNguonKhac, this.lstCtietBcao[index].kphiSdungNguonKhac);
@@ -888,11 +888,11 @@ export class PhuLucIComponent implements OnInit {
             }
         })
         this.total.giaiNganThangBcaoTcongTle = divNumber(this.total.giaiNganThangBcaoTcong, this.total.kphiSdungTcong);
-        this.total.giaiNganThangBcaoDtoanTle = divNumber(this.total.giaiNganThangBcaoDtoan, this.total.kphiSdungTcong);
-        this.total.giaiNganThangBcaoNguonKhacTle = divNumber(this.total.giaiNganThangBcaoNguonKhac, this.total.kphiSdungTcong);
-        this.total.giaiNganThangBcaoNguonQuyTle = divNumber(this.total.giaiNganThangBcaoNguonQuy, this.total.kphiSdungTcong);
-        this.total.giaiNganThangBcaoNsttTle = divNumber(this.total.giaiNganThangBcaoNstt, this.total.kphiSdungTcong);
-        this.total.giaiNganThangBcaoCkTle = divNumber(this.total.giaiNganThangBcaoCk, this.total.kphiSdungTcong);
+        this.total.giaiNganThangBcaoDtoanTle = divNumber(this.total.giaiNganThangBcaoDtoan, this.total.kphiSdungDtoan);
+        this.total.giaiNganThangBcaoNguonKhacTle = divNumber(this.total.giaiNganThangBcaoNguonKhac, this.total.kphiSdungNguonKhac);
+        this.total.giaiNganThangBcaoNguonQuyTle = divNumber(this.total.giaiNganThangBcaoNguonQuy, this.total.kphiSdungNguonQuy);
+        this.total.giaiNganThangBcaoNsttTle = divNumber(this.total.giaiNganThangBcaoNstt, this.total.kphiSdungNstt);
+        this.total.giaiNganThangBcaoCkTle = divNumber(this.total.giaiNganThangBcaoCk, this.total.kphiSdungCk);
         this.total.luyKeGiaiNganTcongTle = divNumber(this.total.luyKeGiaiNganTcong, this.total.kphiSdungTcong);
         this.total.luyKeGiaiNganDtoanTle = divNumber(this.total.luyKeGiaiNganDtoan, this.total.kphiSdungDtoan);
         this.total.luyKeGiaiNganNguonKhacTle = divNumber(this.total.luyKeGiaiNganNguonKhac, this.total.kphiSdungNguonKhac);
@@ -934,11 +934,11 @@ export class PhuLucIComponent implements OnInit {
 
         //tinh ty le
         this.editCache[id].data.giaiNganThangBcaoTcongTle = divNumber(this.editCache[id].data.giaiNganThangBcaoTcong, this.editCache[id].data.kphiSdungTcong);
-        this.editCache[id].data.giaiNganThangBcaoDtoanTle = divNumber(this.editCache[id].data.giaiNganThangBcaoDtoan, this.editCache[id].data.kphiSdungTcong);
-        this.editCache[id].data.giaiNganThangBcaoNguonKhacTle = divNumber(this.editCache[id].data.giaiNganThangBcaoNguonKhac, this.editCache[id].data.kphiSdungTcong);
-        this.editCache[id].data.giaiNganThangBcaoNguonQuyTle = divNumber(this.editCache[id].data.giaiNganThangBcaoNguonQuy, this.editCache[id].data.kphiSdungTcong);
-        this.editCache[id].data.giaiNganThangBcaoNsttTle = divNumber(this.editCache[id].data.giaiNganThangBcaoNstt, this.editCache[id].data.kphiSdungTcong);
-        this.editCache[id].data.giaiNganThangBcaoCkTle = divNumber(this.editCache[id].data.giaiNganThangBcaoCk, this.editCache[id].data.kphiSdungTcong);
+        this.editCache[id].data.giaiNganThangBcaoDtoanTle = divNumber(this.editCache[id].data.giaiNganThangBcaoDtoan, this.editCache[id].data.kphiSdungDtoan);
+        this.editCache[id].data.giaiNganThangBcaoNguonKhacTle = divNumber(this.editCache[id].data.giaiNganThangBcaoNguonKhac, this.editCache[id].data.kphiSdungNguonKhac);
+        this.editCache[id].data.giaiNganThangBcaoNguonQuyTle = divNumber(this.editCache[id].data.giaiNganThangBcaoNguonQuy, this.editCache[id].data.kphiSdungNguonQuy);
+        this.editCache[id].data.giaiNganThangBcaoNsttTle = divNumber(this.editCache[id].data.giaiNganThangBcaoNstt, this.editCache[id].data.kphiSdungNstt);
+        this.editCache[id].data.giaiNganThangBcaoCkTle = divNumber(this.editCache[id].data.giaiNganThangBcaoCk, this.editCache[id].data.kphiSdungCk);
         this.editCache[id].data.luyKeGiaiNganTcongTle = divNumber(this.editCache[id].data.luyKeGiaiNganTcong, this.editCache[id].data.kphiSdungTcong);
         this.editCache[id].data.luyKeGiaiNganDtoanTle = divNumber(this.editCache[id].data.luyKeGiaiNganDtoan, this.editCache[id].data.kphiSdungDtoan);
         this.editCache[id].data.luyKeGiaiNganNguonKhacTle = divNumber(this.editCache[id].data.luyKeGiaiNganNguonKhac, this.editCache[id].data.kphiSdungNguonKhac);
