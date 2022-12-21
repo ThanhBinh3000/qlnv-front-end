@@ -270,7 +270,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     this.formData.patchValue({
       thanhTien:
         +this.thongtinMuaTrucTiep.soLuong *
-        +this.formData.get('donGia').value * 1000,
+        +this.formData.get('donGia').value,
     });
   }
 
@@ -278,7 +278,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     this.formData.patchValue({
       thanhTienVat:
         +this.thongtinMuaTrucTiep.soLuong *
-        +this.donGiaVat * 1000,
+        +this.donGiaVat,
     });
   }
 

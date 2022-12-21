@@ -334,11 +334,9 @@
         <div nz-col nzSpan="7">
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Phương thức giao nhận </nz-form-label>
-            <nz-form-control nz-col [nzErrorTip]="error">
-              <nz-input-number formControlName="pthucGnhan" nz-input [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                [nzStep]="1" [nzSize]="'small'"
-                [nzDisabled]="formData.value.trangThai !== '00'  && formData.value.trangThai !== ''">
-              </nz-input-number>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <input placeholder="" nz-input formControlName="pthucGnhan"
+                [readonly]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== ''" />
             </nz-form-control>
           </nz-form-item>
         </div>

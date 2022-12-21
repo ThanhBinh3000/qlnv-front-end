@@ -168,7 +168,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
   }
 
   isDetailPermission() {
-    if (this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_QDLCNT_SUA") && this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_QDLCNT_THEM")) {
+    if (this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_QDLCNT_XEM")) {
       return true;
     }
     return false;
