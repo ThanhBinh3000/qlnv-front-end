@@ -220,7 +220,7 @@ export class PhuLucIIComponent implements OnInit {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                     const obj = {
                         trangThai: '-1',
-                        lyDoTuChoi: null,
+                        data: data.data,
                     };
                     this.dataChange.emit(obj);
                 } else {
@@ -718,6 +718,7 @@ export class PhuLucIIComponent implements OnInit {
                 checked: data.checked,
                 level: data.level,
                 maNdung: data.maNdung,
+                tenNdung: data.tenNdung,
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
