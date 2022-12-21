@@ -98,6 +98,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.initForm();
       await Promise.all([
         this.userInfo = this.userService.getUserLogin(),
+        console.log(this.userInfo.DON_VI.maDviCha, 123),
         this.loadDsNam(),
         this.maVb = '/QĐ-BTC',
         this.loadLoaiHangHoa(),
@@ -338,7 +339,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   async loadLoaiHangHoa() {
     try {
       let hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
-        "maDvi": this.userInfo.DON_VI.maDviCha
+        "maDvi": this.userInfo.MA_DVI.substring(0, 2)
       }).toPromise();
       if (hangHoa) {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
