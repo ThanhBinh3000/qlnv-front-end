@@ -370,30 +370,16 @@
                 <td>{{displayValue(total.khoachNamVonScl)}}</td>
                 <td>{{displayValue(total.kluongThienTso)}}</td>
                 <td>{{displayValue(total.kluongThienThangBcao)}}</td>
-                <ng-container *ngIf="maLoaiBcao != '527'; else tongLuyKeNam">
-                    <td>{{displayValue(total.giaiNganTso)}}</td>
-                    <td>{{displayValue(total.giaiNganTsoTle)}}</td>
-                    <td>{{displayValue(total.giaiNganNsnn)}}</td>
-                    <td>{{displayValue(total.giaiNganNsnnVonDt)}}</td>
-                    <td>{{displayValue(total.giaiNganNsnnVonThue)}}</td>
-                    <td>{{displayValue(total.giaiNganNsnnVonScl)}}</td>
-                    <td>{{displayValue(total.giaiNganNsnnTle)}}</td>
-                    <td>{{displayValue(total.giaiNganNsnnTleVonDt)}}</td>
-                    <td>{{displayValue(total.giaiNganNsnnTleVonThue)}}</td>
-                    <td>{{displayValue(total.giaiNganNsnnTleVonScl)}}</td>
-                </ng-container>
-                <ng-template #tongLuyKeNam>
-                    <td>{{displayValue(total.luyKeGiaiNganDauNamTso)}}</td>
-                    <td>{{displayValue(total.luyKeGiaiNganDauNamTsoTle)}}</td>
-                    <td>{{displayValue(total.luyKeGiaiNganDauNamNsnn)}}</td>
-                    <td>{{displayValue(total.luyKeGiaiNganDauNamNsnnVonDt)}}</td>
-                    <td>{{displayValue(total.luyKeGiaiNganDauNamNsnnVonThue)}}</td>
-                    <td>{{displayValue(total.luyKeGiaiNganDauNamNsnnVonScl)}}</td>
-                    <td>{{displayValue(total.luyKeGiaiNganDauNamNsnnTle)}}</td>
-                    <td>{{displayValue(total.luyKeGiaiNganDauNamNsnnTleVonDt)}}</td>
-                    <td>{{displayValue(total.luyKeGiaiNganDauNamNsnnTleVonThue)}}</td>
-                    <td>{{displayValue(total.luyKeGiaiNganDauNamNsnnTleVonScl)}}</td>
-                </ng-template>
+                <td>{{displayValue(total.giaiNganTso)}}</td>
+                <td>{{displayValue(total.giaiNganTsoTle)}}</td>
+                <td>{{displayValue(total.giaiNganNsnn)}}</td>
+                <td>{{displayValue(total.giaiNganNsnnVonDt)}}</td>
+                <td>{{displayValue(total.giaiNganNsnnVonThue)}}</td>
+                <td>{{displayValue(total.giaiNganNsnnVonScl)}}</td>
+                <td>{{displayValue(total.giaiNganNsnnTle)}}</td>
+                <td>{{displayValue(total.giaiNganNsnnTleVonDt)}}</td>
+                <td>{{displayValue(total.giaiNganNsnnTleVonThue)}}</td>
+                <td>{{displayValue(total.giaiNganNsnnTleVonScl)}}</td>
                 <td>{{displayValue(total.luyKeGiaiNganDauNamTso)}}</td>
                 <td>{{displayValue(total.luyKeGiaiNganDauNamTsoTle)}}</td>
                 <td>{{displayValue(total.luyKeGiaiNganDauNamNsnn)}}</td>
@@ -419,11 +405,7 @@
                         {{getIndex(data.stt)}}
                     </td>
                     <td nzLeft>
-                        <div *ngFor="let item of maDanFull">
-                            <div *ngIf="item.id == data.maDan">
-                                {{item.tenDm}}
-                            </div>
-                        </div>
+                        {{data.tenDan}}
                     </td>
                     <td>
                         <div *ngFor="let item of ddiemXdungs">
@@ -453,30 +435,16 @@
                     <td>{{ displayValue(data.khoachNamVonScl) }}</td>
                     <td>{{ displayValue(data.kluongThienTso) }}</td>
                     <td>{{ displayValue(data.kluongThienThangBcao) }}</td>
-                    <ng-container *ngIf="maLoaiBcao != '527'; else luyKeNam">
-                        <td>{{ displayValue(data.giaiNganTso) }}</td>
-                        <td>{{ displayValue(data.giaiNganTsoTle) }}</td>
-                        <td>{{ displayValue(data.giaiNganNsnn) }}</td>
-                        <td>{{ displayValue(data.giaiNganNsnnVonDt) }}</td>
-                        <td>{{ displayValue(data.giaiNganNsnnVonThue) }}</td>
-                        <td>{{ displayValue(data.giaiNganNsnnVonScl) }}</td>
-                        <td>{{ displayValue(data.giaiNganNsnnTle) }}</td>
-                        <td>{{ displayValue(data.giaiNganNsnnTleVonDt) }}</td>
-                        <td>{{ displayValue(data.giaiNganNsnnTleVonThue) }}</td>
-                        <td>{{ displayValue(data.giaiNganNsnnTleVonScl) }}</td>
-                    </ng-container>
-                    <ng-template #luyKeNam>
-                        <td>{{ displayValue(data.luyKeGiaiNganDauNamTso) }}</td>
-                        <td>{{ displayValue(data.luyKeGiaiNganDauNamTsoTle) }}</td>
-                        <td>{{ displayValue(data.luyKeGiaiNganDauNamNsnn) }}</td>
-                        <td>{{ displayValue(data.luyKeGiaiNganDauNamNsnnVonDt) }}</td>
-                        <td>{{ displayValue(data.luyKeGiaiNganDauNamNsnnVonThue) }}</td>
-                        <td>{{ displayValue(data.luyKeGiaiNganDauNamNsnnVonScl) }}</td>
-                        <td>{{ displayValue(data.luyKeGiaiNganDauNamNsnnTle) }}</td>
-                        <td>{{ displayValue(data.luyKeGiaiNganDauNamNsnnTleVonDt) }}</td>
-                        <td>{{ displayValue(data.luyKeGiaiNganDauNamNsnnTleVonThue) }}</td>
-                        <td>{{ displayValue(data.luyKeGiaiNganDauNamNsnnTleVonScl) }}</td>
-                    </ng-template>
+                    <td>{{ displayValue(data.giaiNganTso) }}</td>
+                    <td>{{ displayValue(data.giaiNganTsoTle) }}</td>
+                    <td>{{ displayValue(data.giaiNganNsnn) }}</td>
+                    <td>{{ displayValue(data.giaiNganNsnnVonDt) }}</td>
+                    <td>{{ displayValue(data.giaiNganNsnnVonThue) }}</td>
+                    <td>{{ displayValue(data.giaiNganNsnnVonScl) }}</td>
+                    <td>{{ displayValue(data.giaiNganNsnnTle) }}</td>
+                    <td>{{ displayValue(data.giaiNganNsnnTleVonDt) }}</td>
+                    <td>{{ displayValue(data.giaiNganNsnnTleVonThue) }}</td>
+                    <td>{{ displayValue(data.giaiNganNsnnTleVonScl) }}</td>
                     <td>{{ displayValue(data.luyKeGiaiNganDauNamTso) }}</td>
                     <td>{{ displayValue(data.luyKeGiaiNganDauNamTsoTle) }}</td>
                     <td>{{ displayValue(data.luyKeGiaiNganDauNamNsnn) }}</td>
@@ -517,11 +485,7 @@
                         {{getIndex(data.stt)}}
                     </td>
                     <td nzLeft>
-                        <div *ngFor="let item of maDanFull">
-                            <div *ngIf="item.id == data.maDan">
-                                {{item.tenDm}}
-                            </div>
-                        </div>
+                        {{editCache[data.id].data.tenDan}}
                     </td>
                     <td>
                         <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn nội dung"
@@ -629,80 +593,43 @@
                             [(ngModel)]="editCache[data.id].data.kluongThienThangBcao"
                             (ngModelChange)="changeModel(data.id)"></fm-input-number>
                     </td>
-                    <ng-container *ngIf="maLoaiBcao != '527'; else bcaoNam">
-                        <td>
-                            {{displayValue(editCache[data.id].data.giaiNganTso)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.giaiNganTsoTle)}}
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaiNganNsnn"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonDt"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonThue"
-                                (ngModelChange)="changeModel(data.id)"></fm-input-number>
-                        </td>
-                        <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonScl"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number>
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.giaiNganNsnnTle)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.giaiNganNsnnTleVonDt)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.giaiNganNsnnTleVonThue)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.giaiNganNsnnTleVonScl)}}
-                        </td>
-                    </ng-container>
-                    <ng-template #bcaoNam>
-                        <td>
-                            {{displayValue(editCache[data.id].data.luyKeGiaiNganDauNamTso)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.luyKeGiaiNganDauNamTsoTle)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.luyKeGiaiNganDauNamNsnn)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.luyKeGiaiNganDauNamNsnnVonDt)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.luyKeGiaiNganDauNamNsnnVonThue)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.luyKeGiaiNganDauNamNsnnVonScl)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.luyKeGiaiNganDauNamNsnnTle)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.luyKeGiaiNganDauNamNsnnTleVonDt)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.luyKeGiaiNganDauNamNsnnTleVonThue)}}
-                        </td>
-                        <td>
-                            {{displayValue(editCache[data.id].data.luyKeGiaiNganDauNamNsnnTleVonScl)}}
-                        </td>
-                    </ng-template>
+                    <td>
+                        {{displayValue(editCache[data.id].data.giaiNganTso)}}
+                    </td>
+                    <td>
+                        {{displayValue(editCache[data.id].data.giaiNganTsoTle)}}
+                    </td>
+                    <td>
+                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaiNganNsnn"
+                            (ngModelChange)="changeModel(data.id)">
+                        </fm-input-number>
+                    </td>
+                    <td>
+                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonDt"
+                            (ngModelChange)="changeModel(data.id)">
+                        </fm-input-number>
+                    </td>
+                    <td>
+                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonThue"
+                            (ngModelChange)="changeModel(data.id)"></fm-input-number>
+                    </td>
+                    <td>
+                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonScl"
+                            (ngModelChange)="changeModel(data.id)">
+                        </fm-input-number>
+                    </td>
+                    <td>
+                        {{displayValue(editCache[data.id].data.giaiNganNsnnTle)}}
+                    </td>
+                    <td>
+                        {{displayValue(editCache[data.id].data.giaiNganNsnnTleVonDt)}}
+                    </td>
+                    <td>
+                        {{displayValue(editCache[data.id].data.giaiNganNsnnTleVonThue)}}
+                    </td>
+                    <td>
+                        {{displayValue(editCache[data.id].data.giaiNganNsnnTleVonScl)}}
+                    </td>
                     <td>
                         {{displayValue(editCache[data.id].data.luyKeGiaiNganDauNamTso)}}
                     </td>
