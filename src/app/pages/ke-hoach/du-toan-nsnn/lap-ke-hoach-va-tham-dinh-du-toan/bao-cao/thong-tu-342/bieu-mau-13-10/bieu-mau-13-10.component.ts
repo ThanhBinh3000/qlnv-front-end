@@ -55,8 +55,8 @@ export class BieuMau1310Component implements OnInit {
   statusBtnOk: boolean;
   editMoneyUnit = false;
   isDataAvailable = false;
-  checkViewTD: boolean;
-  checkEditTD: boolean;
+  viewAppraisalValue: boolean;
+  editAppraisalValue: boolean;
   //nho dem
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
 
@@ -85,8 +85,8 @@ export class BieuMau1310Component implements OnInit {
     this.thuyetMinh = this.formDetail?.thuyetMinh;
     this.status = this.dataInfo?.status;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
-    this.checkViewTD = this.dataInfo?.viewAppraisalValue;
-    this.checkEditTD = this.dataInfo?.editAppraisalValue;
+    this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
+    this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
@@ -189,7 +189,7 @@ export class BieuMau1310Component implements OnInit {
       }
     })
 
-    if (!this.checkViewTD) {
+    if (!this.viewAppraisalValue) {
       lstCtietBcaoTemp?.forEach(item => {
         item.gtriTdinhSoDtuong = item.khSoDtuong;
         item.gtriTdinhMucTcap = item.khMucTcap;
