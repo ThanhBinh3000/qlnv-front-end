@@ -66,8 +66,8 @@ export class BieuMau160Component implements OnInit {
     namKhoach: number;
     allChecked = false;
     listIdDelete = ""
-    checkViewTD: boolean;
-    checkEditTD: boolean;
+    editAppraisalValue: boolean;
+    viewAppraisalValue: boolean;
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
@@ -94,30 +94,13 @@ export class BieuMau160Component implements OnInit {
         this.namHienHanh = Number(this.dataInfo?.namBcao) - 1;
         this.namKhoach = this.dataInfo?.namBcao;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
-        this.checkEditTD = this.dataInfo?.editAppraisalValue;
-        this.checkViewTD = this.dataInfo?.viewAppraisalValue;
+        this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
+        this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
             })
         })
-        // if (this.lstCtietBcao.length == 0) {
-        //     this.linhVucChis.forEach(e => {
-        //         this.lstCtietBcao.push({
-        //             ...new ItemData(),
-        //             id: uuid.v4() + 'FE',
-        //             stt: e.ma,
-        //             maLvuc: e.ma,
-        //             tenLvuc: e.giaTri,
-        //         })
-        //     })
-        // } else if (!this.lstCtietBcao[0]?.stt) {
-        //     this.lstCtietBcao.forEach(item => {
-        //         item.stt = item.maLvuc;
-        //     })
-        // }
-        // this.sortByIndex();
-
         await this.getListVtu()
         await this.addListVatTu()
 
@@ -178,8 +161,6 @@ export class BieuMau160Component implements OnInit {
             }
         })
         this.linhVucChis = this.listVatTuFull;
-        console.log(this.linhVucChis);
-
     }
 
     changeMatHang(matHang: any, id: any) {
@@ -187,8 +168,6 @@ export class BieuMau160Component implements OnInit {
         const donViTinh = this.linhVucChis.find(vtu => vtu.id == matHang)?.maDviTinh;
         this.editCache[id].data.maDviTinh = donViTinh;
         this.lstCtietBcao[index].maDviTinh = donViTinh;
-        console.log(this.lstCtietBcao);
-
     }
 
     updateSingleChecked(): void {
@@ -312,6 +291,13 @@ export class BieuMau160Component implements OnInit {
             }
         })
 
+        if (!this.viewAppraisalValue) {
+            lstCtietBcaoTemp?.forEach(item => {
+                item.tdinhSluong = item.namKhSluong;
+                item.tdinhTtien = item.namKhTtien;
+            })
+        }
+
         const request = JSON.parse(JSON.stringify(this.formDetail));
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
         request.trangThai = trangThai;
@@ -387,44 +373,6 @@ export class BieuMau160Component implements OnInit {
         });
     }
 
-    // chuyển đổi stt đang được mã hóa thành dạng I, II, a, b, c, ...
-    // getChiMuc(str: string): string {
-    //     str = str.substring(str.indexOf('.') + 1, str.length);
-    //     let xau = "";
-    //     const chiSo: string[] = str.split('.');
-    //     const n: number = chiSo.length - 1;
-    //     let k: number = parseInt(chiSo[n], 10);
-    //     if (n == 0) {
-    //         for (let i = 0; i < this.soLaMa.length; i++) {
-    //             while (k >= this.soLaMa[i].gTri) {
-    //                 xau += this.soLaMa[i].kyTu;
-    //                 k -= this.soLaMa[i].gTri;
-    //             }
-    //         }
-    //     }
-    //     if (n == 1) {
-    //         xau = chiSo[n];
-    //     }
-    //     if (n == 2) {
-    //         xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
-    //     }
-    //     if (n == 3) {
-    //         xau = String.fromCharCode(k + 96);
-    //     }
-    //     if (n == 4) {
-    //         xau = "-";
-    //     }
-    //     return xau;
-    // }
-    // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
-    // getHead(str: string): string {
-    //     return str.substring(0, str.lastIndexOf('.'));
-    // }
-    // // lấy phần đuôi của stt
-    // getTail(str: string): number {
-    //     return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
-    // }
-
     // gan editCache.data == lstCtietBcao
     updateEditCache(): void {
         this.lstCtietBcao.forEach(item => {
@@ -455,7 +403,7 @@ export class BieuMau160Component implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-        // this.sum(this.lstCtietBcao[index].stt);
+        this.getTotal()
         this.lstCtietBcao.forEach(item => {
             const tenDmuc = this.listVatTuFull.find(itm => itm.id == item.matHang)?.tenDm
             item.tenDmuc = tenDmuc
@@ -464,37 +412,17 @@ export class BieuMau160Component implements OnInit {
     }
 
     changeModel(id: string): void {
-        // this.editCache[id].data.ncauChiChiaRaDtuPtrien = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiMoi1]);
-        // this.editCache[id].data.ncauChiChiaRaChiTx = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs2, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
-        // this.editCache[id].data.ncauChiTrongDoChiCs = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiCs2]);
-        // this.editCache[id].data.ncauChiTrongDoChiMoi = sumNumber([this.editCache[id].data.ncauChiChiaRaChiMoi1, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
-        // this.editCache[id].data.ncauChiTongSo = sumNumber([this.editCache[id].data.ncauChiTrongDoChiCs, this.editCache[id].data.ncauChiTrongDoChiMoi]);
+
     }
+    
 
 
     getTotal() {
         this.total = new ItemData();
         this.lstCtietBcao.forEach(item => {
-
-            // this.total.ncauChiTongSo = sumNumber([this.total.ncauChiTongSo, item.ncauChiTongSo]);
-            // this.total.ncauChiTrongDoChiCs = sumNumber([this.total.ncauChiTrongDoChiCs, item.ncauChiTrongDoChiCs]);
-            // this.total.ncauChiTrongDoChiMoi = sumNumber([this.total.ncauChiTrongDoChiMoi, item.ncauChiTrongDoChiMoi]);
-            // this.total.ncauChiChiaRaDtuPtrien = sumNumber([this.total.ncauChiChiaRaDtuPtrien, item.ncauChiChiaRaDtuPtrien]);
-            // this.total.ncauChiChiaRaChiCs1 = sumNumber([this.total.ncauChiChiaRaChiCs1, item.ncauChiChiaRaChiCs1]);
-            // this.total.ncauChiChiaRaChiMoi1 = sumNumber([this.total.ncauChiChiaRaChiMoi1, item.ncauChiChiaRaChiMoi1]);
-            // this.total.ncauChiChiaRaChiTx = sumNumber([this.total.ncauChiChiaRaChiTx, item.ncauChiChiaRaChiTx]);
-            // this.total.ncauChiChiaRaChiCs2 = sumNumber([this.total.ncauChiChiaRaChiCs2, item.ncauChiChiaRaChiCs2]);
-            // this.total.ncauChiChiaRaChiMoi2 = sumNumber([this.total.ncauChiChiaRaChiMoi2, item.ncauChiChiaRaChiMoi2]);
-
-            this.total.khSluong = sumNumber([this.total.khSluong, item.khSluong])
             this.total.khTtien = sumNumber([this.total.khTtien, item.khTtien])
-            this.total.uocThSluong = sumNumber([this.total.uocThSluong, item.uocThSluong])
             this.total.uocThTtien = sumNumber([this.total.uocThTtien, item.uocThTtien])
-            this.total.tonKho = sumNumber([this.total.tonKho, item.tonKho])
-            this.total.tongMucDtru = sumNumber([this.total.tongMucDtru, item.tongMucDtru])
-            this.total.namKhSluong = sumNumber([this.total.namKhSluong, item.namKhSluong])
             this.total.namKhTtien = sumNumber([this.total.namKhTtien, item.namKhTtien])
-            this.total.tdinhSluong = sumNumber([this.total.tdinhSluong, item.tdinhSluong])
             this.total.tdinhTtien = sumNumber([this.total.tdinhTtien, item.tdinhTtien])
 
         })
@@ -525,6 +453,10 @@ export class BieuMau160Component implements OnInit {
 
     displayValue(num: number): string {
         num = exchangeMoney(num, '1', this.maDviTien);
+        return displayNumber(num);
+    }
+
+    displayNumber(num: number): string {
         return displayNumber(num);
     }
 

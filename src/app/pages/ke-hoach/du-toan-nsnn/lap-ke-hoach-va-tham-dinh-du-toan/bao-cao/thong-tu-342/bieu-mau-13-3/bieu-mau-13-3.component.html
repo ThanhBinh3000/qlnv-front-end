@@ -159,7 +159,8 @@
               </fm-input-number>
             </td>
             <td>
-              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kphiThienNamKphiThien">
+              <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kphiThienNamKphiThien"
+                (ngModelChange)="changeModel(data.id)">
               </fm-input-number>
             </td>
             <td>

@@ -86,7 +86,7 @@
                             </td>
                             <td>{{baoCao.maBcao}}</td>
                             <td>{{baoCao.namBcao}}</td>
-                            <td>{{getDateTime(baoCao.ngayTao)}}</td>
+                            <td>{{baoCao.ngayTao}}</td>
                             <td>{{baoCao.nguoiTao}}</td>
                             <td>
                                 <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
@@ -99,10 +99,10 @@
                                     <span>{{baoCao.congVan?.fileName}}</span>
                                 </div>
                             </td>
-                            <td>{{getDateTime(baoCao.ngayTrinh)}}</td>
-                            <td>{{getDateTime(baoCao.ngayDuyet)}}</td>
-                            <td>{{getDateTime(baoCao.ngayPheDuyet)}}</td>
-                            <td>{{getDateTime(baoCao.ngayTraKq)}}</td>
+                            <td>{{baoCao.ngayTrinh}}</td>
+                            <td>{{baoCao.ngayDuyet}}</td>
+                            <td>{{baoCao.ngayPheDuyet}}</td>
+                            <td>{{baoCao.ngayTraKq}}</td>
                         </tr>
                     </tbody>
                 </nz-table>
@@ -337,8 +337,8 @@
                                         {{ data.maBcao}}
                                     </td>
                                     <td>{{data.namBcao}}</td>
-                                    <td>{{getDateTime(data.ngayDuyet)}}</td>
-                                    <td>{{getDateTime(data.ngayPheDuyet)}}</td>
+                                    <td>{{data.ngayDuyet}}</td>
+                                    <td>{{data.ngayPheDuyet}}</td>
                                     <td>{{getStatusName(data.trangThai)}}</td>
                                     <td>
                                         <a (click)="viewDetail(data.id)">

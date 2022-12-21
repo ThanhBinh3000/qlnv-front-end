@@ -800,6 +800,8 @@ export class BaoHiemKhoComponent implements OnInit {
         this.lstCtietBcao[0].slNhaKhoDuoi = this.tongSoNhaKhoDuoi5000;
         this.lstCtietBcao[0].slNhaKhoTu = this.tongSoNhaKhoTren5000;
         this.lstCtietBcao[0].slNhaKhoTong = this.tongSoNhaKhoDuoi5000 + this.tongSoNhaKhoTren5000;
+        this.lstCtietBcao[0].duoiTongGtKho = this.tongSo8
+        this.lstCtietBcao[0].tuTongGtKho = this.tongSo11
     }
 
     changeModel(id: string): void {
