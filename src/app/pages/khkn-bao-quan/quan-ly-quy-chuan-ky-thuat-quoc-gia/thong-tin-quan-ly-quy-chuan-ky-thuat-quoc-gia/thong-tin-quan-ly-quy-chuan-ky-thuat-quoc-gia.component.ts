@@ -1,30 +1,19 @@
 import { cloneDeep } from 'lodash';
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges, ViewChild, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { BaseComponent } from './../../../../components/base/base.component';
 import { Validators } from '@angular/forms';
-import { HelperService } from 'src/app/services/helper.service';
 import { KhCnQuyChuanKyThuat } from './../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { STATUS } from 'src/app/constants/status';
-import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import { ViewFlags } from '@angular/compiler/src/core';
 import { QuyChunKyThuatQuocGia } from 'src/app/models/KhoaHocCongNgheBaoQuan';
-import { LoginComponent } from './../../../login/login.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { filter } from 'rxjs/operators';
 import { DonviService } from 'src/app/services/donvi.service';
-import { createLogErrorHandler } from '@angular/compiler-cli/ngcc/src/execution/tasks/completion';
 import { Base2Component } from './../../../../components/base2/base2.component';
 
 
@@ -59,7 +48,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   rowItem: QuyChunKyThuatQuocGia = new QuyChunKyThuatQuocGia;
   dataEdit: { [key: string]: { edit: boolean; data: QuyChunKyThuatQuocGia } } = {};
   listVanBan: any[] = [];
-  listVanBanId: any[] = [];
+  listVanBanId: any = [];
   dsBoNganh: any[] = [];
   constructor(
     httpClient: HttpClient,
@@ -141,6 +130,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         const data = res.data;
         this.listOfTagOptions = data.loaiVthh.split(',');
         this.changeListOfTagOptions(data.loaiVthh);
+
         let lss = []
         for (let item of this.listOfTagOptions) {
           lss = [...lss, this.listOfOption.find(s => s.maHangHoa == item)?.tenHangHoa];
@@ -150,6 +140,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         let ds = []
         ds = this.dsBoNganh.find(s => s.key == data.apDungTai)?.title;
         data.apDungTai = ds;
+        this.listVanBanId = String(data.idVanBanThayThe);
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.dataTable = data.tieuChuanKyThuat;
         this.dataTable.forEach((item, index) => {
@@ -491,10 +482,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     let res = await this.khCnQuyChuanKyThuat.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let ds1 = res.data.content;
-      // let ds = ds1.forEach(s => {
-      //   s.soVanBan
-      //   console.log(s.soVanBan, "abc");
-      // });
       this.listVanBan = ds1;
     }
   }
@@ -507,10 +494,13 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
           soVanBanThayThe: data.soVanBan,
           idVanBanThayThe: data.id,
         })
-        this.listOfTagOptions = data.loaiVthh.split(',');
-        this.listLoaiVthh = data.listTenLoaiVthh.split(',');
+        if (data.loaiVthh) {
+          this.listOfTagOptions = data.loaiVthh.split(',');
+        }
+        if (data.listTenLoaiVthh) {
+          this.listLoaiVthh = data.listTenLoaiVthh.split(',');
+        }
         this.dataTable = data.tieuChuanKyThuat;
-        this.formData.value.soVanBanThayThe = data.soVanBan;
         this.dataTable.forEach((item, index) => {
           this.dataEdit[index] = {
             edit: false,
