@@ -237,10 +237,6 @@ export class PhuLucIComponent implements OnInit {
         }
     }
 
-    getLoai(ma: number) {
-        return this.noiDungFull.find(e => e.id == ma)?.loai;
-    }
-
     // luu
     async save(trangThai: string) {
         let checkSaveEdit;
@@ -439,7 +435,6 @@ export class PhuLucIComponent implements OnInit {
             }
         }
         this.replaceIndex(lstIndex, 1);
-        const itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
         // them moi phan tu
         if (initItem.id) {
             const item: ItemData = {
@@ -456,19 +451,7 @@ export class PhuLucIComponent implements OnInit {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: head + "." + (tail + 1).toString(),
-                // luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
-                // luyKeGiaiNganDtoan: itemLine?.luyKeGiaiNganDtoan ? itemLine?.luyKeGiaiNganDtoan : 0,
-                // luyKeGiaiNganNguonKhac: itemLine?.luyKeGiaiNganNguonKhac ? itemLine?.luyKeGiaiNganNguonKhac : 0,
-                // luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
-                // luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
-                // luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
             }
-            // item.luyKeGiaiNganTcongTle = divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong);
-            // item.luyKeGiaiNganDtoanTle = divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan);
-            // item.luyKeGiaiNganNguonKhacTle = divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac);
-            // item.luyKeGiaiNganNguonQuyTle = divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy);
-            // item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
-            // item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
             this.lstCtietBcao.splice(ind + 1, 0, item);
             this.sum(item.stt);
             this.editCache[item.id] = {
@@ -503,9 +486,6 @@ export class PhuLucIComponent implements OnInit {
                 }
             }
         }
-
-        const itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
-
         // them moi phan tu
         if (initItem.id) {
             const item: ItemData = {
@@ -525,19 +505,7 @@ export class PhuLucIComponent implements OnInit {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: stt,
-                // luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
-                // luyKeGiaiNganDtoan: itemLine?.luyKeGiaiNganDtoan ? itemLine?.luyKeGiaiNganDtoan : 0,
-                // luyKeGiaiNganNguonKhac: itemLine?.luyKeGiaiNganNguonKhac ? itemLine?.luyKeGiaiNganNguonKhac : 0,
-                // luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
-                // luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
-                // luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
             }
-            // item.luyKeGiaiNganTcongTle = divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong);
-            // item.luyKeGiaiNganDtoanTle = divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan);
-            // item.luyKeGiaiNganNguonKhacTle = divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac);
-            // item.luyKeGiaiNganNguonQuyTle = divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy);
-            // item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
-            // item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
             this.lstCtietBcao.splice(index + 1, 0, item);
             this.sum(stt);
             this.updateEditCache();
@@ -677,19 +645,7 @@ export class PhuLucIComponent implements OnInit {
                 level: 0,
                 id: uuid.v4() + 'FE',
                 stt: "0.1",
-                // luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
-                // luyKeGiaiNganDtoan: itemLine?.luyKeGiaiNganDtoan ? itemLine?.luyKeGiaiNganDtoan : 0,
-                // luyKeGiaiNganNguonKhac: itemLine?.luyKeGiaiNganNguonKhac ? itemLine?.luyKeGiaiNganNguonKhac : 0,
-                // luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
-                // luyKeGiaiNganNstt: itemLine?.luyKeGiaiNganNstt ? itemLine?.luyKeGiaiNganNstt : 0,
-                // luyKeGiaiNganCk: itemLine?.luyKeGiaiNganCk ? itemLine?.luyKeGiaiNganCk : 0,
             }
-            // item.luyKeGiaiNganTcongTle = divNumber(item.luyKeGiaiNganTcong, item.kphiSdungTcong);
-            // item.luyKeGiaiNganDtoanTle = divNumber(item.luyKeGiaiNganDtoan, item.kphiSdungDtoan);
-            // item.luyKeGiaiNganNguonKhacTle = divNumber(item.luyKeGiaiNganNguonKhac, item.kphiSdungNguonKhac);
-            // item.luyKeGiaiNganNguonQuyTle = divNumber(item.luyKeGiaiNganNguonQuy, item.kphiSdungNguonQuy);
-            // item.luyKeGiaiNganNsttTle = divNumber(item.luyKeGiaiNganNstt, item.kphiSdungNstt);
-            // item.luyKeGiaiNganCkTle = divNumber(item.luyKeGiaiNganCk, item.kphiSdungCk);
             this.lstCtietBcao.push(item);
             this.getTotal();
             this.editCache[item.id] = {

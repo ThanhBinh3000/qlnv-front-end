@@ -1,27 +1,30 @@
 <ng-container *ngIf="!isDetail">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
-      <div class="search__body" nz-row [nzGutter]="24">
-        <div nz-col nzSpan="3">
-          <label class="search__label">Số hợp đồng</label>
-          <input class="search__input" nz-input [(ngModel)]="searchBody.soHd" placeholder="Số hợp đồng" />
+      <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+        <div nz-row [nzGutter]="24">
+          <div nz-col nzSpan="3">
+            <label>Số hợp đồng</label>
+            <input nz-input formControlName="soHd" placeholder="Số hợp đồng" />
+          </div>
+          <div nz-col nzSpan="4">
+            <label>Tên hợp đồng</label>
+            <input nz-input placeholder="Tên hợp đồng" formControlName="tenHd" />
+          </div>
+          <div nz-col nzSpan="12">
+            <label>Đơn vị mua</label>
+            <input nz-input placeholder="Nhà cung cấp" formControlName="nhaCungCap" />
+          </div>
+          <div nz-col nzSpan="4">
+            <label>Ngày ký</label>
+            <nz-range-picker formControlName="ngayKy" placeholder="Ngày ký" nzFormat="dd/MM/yyyy">
+            </nz-range-picker>
+          </div>
         </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Tên hợp đồng</label>
-          <input class="search__input" nz-input placeholder="Tên hợp đồng" [(ngModel)]="searchBody.tenHd" />
-        </div>
-        <div nz-col nzSpan="12">
-          <label class="search__label">Đơn vị mua</label>
-          <input class="search__input" nz-input placeholder="Nhà cung cấp" [(ngModel)]="searchBody.nhaCungCap" />
-        </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Ngày ký</label>
-          <nz-range-picker [(ngModel)]="searchBody.ngayKy" placeholder="Ngày ký" nzFormat="dd/MM/yyyy">
-          </nz-range-picker>
-        </div>
-      </div>
+      </form>
+
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearFilter()">
+        <button nz-button class="search__button--clear" (click)="clearForm()">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -35,10 +38,6 @@
     <div class="group-button">
       <h3>Danh sách hợp đồng bán hàng</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()">
-          <i class="fa fa-trash-o do"></i>
-          <span>Xóa</span>
-        </button>
         <button type="button" class="btn btn-sub" (click)="exportData()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
@@ -172,9 +171,9 @@
               <a (click)="redirectToChiTiet(true, data.id)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="xoaItem(data)" *ngIf="data.trangThai=='00'">
+              <!-- <a (click)="xoaItem(data)" *ngIf="data.trangThai=='00'">
                 <i class="fa fa-trash-o do"></i>
-              </a>
+              </a> -->
             </td>
           </tr>
         </tbody>
@@ -199,6 +198,6 @@
   </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-  <app-thong-tin [id]="selectedId" (showListEvent)="showList()" [isView]="isView" [typeVthh]="typeVthh">
+  <app-thong-tin [id]="selectedId" (showListEvent)="showList()" [isView]="isView" [typeVthh]="loaiVthh">
   </app-thong-tin>
 </ng-container>

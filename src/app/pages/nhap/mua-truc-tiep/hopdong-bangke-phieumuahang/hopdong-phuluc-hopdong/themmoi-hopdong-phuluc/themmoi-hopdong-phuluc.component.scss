@@ -1,9 +1,29 @@
+.icon-file-dinh-kem {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    .input-file {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+}
+
 .text-green {
-    color: #8BC34C;
+    color: #001CFF;
     font-weight: 500;
     font-size: 12px;
 }
 
-.PL-buttons {
-    text-align: right;
+.text-blue {
+    color: #001CFF !important;
+    font-weight: bold;
+    background-color: #ededed;
+}
+
+.bg-selected {
+    background-color: #efefef;
 }

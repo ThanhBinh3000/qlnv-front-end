@@ -368,7 +368,12 @@ export class BaoHiemHangComponent implements OnInit {
 
     // start edit
     startEdit(id: string): void {
-        this.editCache[id].edit = true;
+        if (this.lstCtietBcao.every(e => !this.editCache[e.id].edit)) {
+            this.editCache[id].edit = true;
+          } else {
+            this.notification.warning(MESSAGE.WARNING, 'Vui lòng lưu bản ghi đang sửa trước khi thực hiện thao tác');
+            return;
+          }
     }
 
     // huy thay doi

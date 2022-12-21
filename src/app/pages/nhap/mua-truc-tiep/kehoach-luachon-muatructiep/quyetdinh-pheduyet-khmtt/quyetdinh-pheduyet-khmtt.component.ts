@@ -43,7 +43,7 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
     soTrHdr: '',
     idThHdr: '',
     namKh: '',
-    pthucMuatt: '',
+    ptMua: '',
     tenTrangThai: '',
   };
   STATUS = STATUS
@@ -356,7 +356,7 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
       soTrHdr: '',
       idThHdr: '',
       namKh: '',
-      pthucMuatt: '',
+      ptMua: '',
       tenTrangThai: '',
     }
   }
