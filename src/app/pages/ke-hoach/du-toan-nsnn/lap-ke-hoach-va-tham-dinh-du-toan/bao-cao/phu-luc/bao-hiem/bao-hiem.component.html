@@ -28,8 +28,8 @@
                     <th rowspan="2" nzWidth="150px">Đơn vị tính</th>
                     <th colSpan="3" nzWidth="150px">Số lượng</th>
                     <th colSpan="3" nzWidth="150px">Giá trị(VNĐ)</th>
-                    <th rowspan="2" [hidden]="status"></th>
-                    <th rowspan="2" [hidden]="status"></th>
+                    <!-- <th rowspan="2" [hidden]="status"></th>
+                    <th rowspan="2" [hidden]="status"></th> -->
                 </tr>
                 <tr>
 
@@ -50,8 +50,8 @@
                     <th>7</th>
                     <th>8</th>
                     <th>9=7+8</th>
-                    <th nzWidth="2.5%" [hidden]="status"></th>
-                    <th nzWidth="2.5%" [hidden]="status"></th>
+                    <!-- <th nzWidth="2.5%" [hidden]="status"></th>
+                    <th nzWidth="2.5%" [hidden]="status"></th> -->
                 </tr>
                 <tr>
                     <th></th>
@@ -63,8 +63,8 @@
                     <th>{{displayValue(total.gtTuM3)}}</th>
                     <th>{{displayValue(total.gtDuoiM3)}}</th>
                     <th>{{displayValue(total.gtTong)}}</th>
-                    <th nzWidth="2.5%" [hidden]="status"></th>
-                    <th nzWidth="2.5%" [hidden]="status"></th>
+                    <!-- <th nzWidth="2.5%" [hidden]="status"></th>
+                    <th nzWidth="2.5%" [hidden]="status"></th> -->
                 </tr>
             </thead>
             <tbody>
@@ -83,14 +83,14 @@
                         <td>{{displayValue(data.gtTuM3)}}</td>
                         <td>{{displayValue(data.gtDuoiM3)}}</td>
                         <td>{{displayValue(data.gtTong)}}</td>
-                        <td [hidden]="status">
+                        <!-- <td [hidden]="status">
                             <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </td>
                         <td [hidden]="status">
                             <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
                             <i *ngIf="checkDelete(data.maVtu)" class="fa fa-trash-o do"
                                 (click)="deleteLine(data.stt)"></i>
-                        </td>
+                        </td> -->
                     </ng-container>
                     <ng-template #editTemplate>
                         <td class="text-center">
@@ -131,7 +131,7 @@
                         <td>
                             {{editCache[data.id].data.gtTong}}
                         </td>
-                        <td>
+                        <!-- <td>
                             <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                             <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                 (nzOnConfirm)="cancelEdit(data.id)" class="save">
@@ -142,7 +142,7 @@
                             <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
                             <i *ngIf="checkDelete(data.maVtu)" class="fa fa-trash-o do"
                                 (click)="deleteLine(data.stt)"></i>
-                        </td>
+                        </td> -->
                     </ng-template>
                 </tr>
             </tbody>
