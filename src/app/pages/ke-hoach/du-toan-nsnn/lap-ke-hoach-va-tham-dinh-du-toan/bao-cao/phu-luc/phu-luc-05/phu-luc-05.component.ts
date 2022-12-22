@@ -60,6 +60,7 @@ export class PhuLuc05Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  statusPrint: boolean;
   editMoneyUnit = false;
   isDataAvailable = false;
   // check tham dinh
@@ -99,6 +100,7 @@ export class PhuLuc05Component implements OnInit {
     this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
     this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+    this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
       this.lstCtietBcao.push({
         ...item,

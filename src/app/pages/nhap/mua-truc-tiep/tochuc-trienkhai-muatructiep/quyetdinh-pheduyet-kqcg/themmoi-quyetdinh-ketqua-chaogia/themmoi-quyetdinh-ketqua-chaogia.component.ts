@@ -74,6 +74,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
         trangThai: ['00'],
         tenTrangThai: ['Dự thảo'],
         idQdPdKhDtl: [''],
+
       }
     );
   }
@@ -255,7 +256,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
           tgianMkho: data.tgianMkho,
           tgianKthuc: data.tgianKthuc,
           moTaHangHoa: data.moTaHangHoa,
-
+          idQdPdKh: data.hhQdPheduyetKhMttHdr.id,
         })
       }
     });

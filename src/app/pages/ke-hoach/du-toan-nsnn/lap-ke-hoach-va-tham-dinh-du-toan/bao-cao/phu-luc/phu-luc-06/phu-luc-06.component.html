@@ -35,7 +35,8 @@
                 <thead>
                     <tr>
                         <th rowspan="2" [hidden]="status">
-                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" style="margin-right: 0;">
+                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                                style="margin-right: 0;">
                             </label>
                         </th>
                         <th rowspan="2" class="text-center" nzWidth="100px">STT</th>
@@ -245,7 +246,7 @@
     <div class="modal-footer">
         <div class="nut">
             <div class="cantrai">
-                <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+                <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
                     <i nz-icon nzType="printer" nzTheme="outline"></i>
                     <span>In</span>
                 </button>

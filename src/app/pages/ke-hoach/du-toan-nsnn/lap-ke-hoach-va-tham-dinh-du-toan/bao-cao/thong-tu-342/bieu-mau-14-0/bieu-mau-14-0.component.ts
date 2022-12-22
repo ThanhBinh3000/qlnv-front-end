@@ -45,6 +45,7 @@ export class BieuMau140Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  statusPrint: boolean;
   editMoneyUnit = false;
   isDataAvailable = false;
 
@@ -76,6 +77,7 @@ export class BieuMau140Component implements OnInit {
     this.thuyetMinh = this.formDetail?.thuyetMinh;
     this.status = this.dataInfo?.status;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+    this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
     this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -397,11 +399,11 @@ export class BieuMau140Component implements OnInit {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
       if (item.level == 0) {
-        // this.total.tmdtTongSo = sumNumber([this.total.tmdtTongSo, item.tmdtTongSo]);
-        // this.total.tmdtNstw = sumNumber([this.total.tmdtNstw, item.tmdtNstw]);
-        // this.total.keHoachTongSo = sumNumber([this.total.keHoachTongSo, item.keHoachTongSo]);
-        // this.total.keHoachNstw = sumNumber([this.total.keHoachNstw, item.keHoachNstw]);
-        // this.total.uocGiaiNganDauNamTong = sumNumber([this.total.uocGiaiNganDauNamTong, item.uocGiaiNganDauNamTong]);
+        this.total.thienNtruoc = sumNumber([this.total.thienNtruoc, item.thienNtruoc]);
+        this.total.namDtoan = sumNumber([this.total.namDtoan, item.namDtoan]);
+        this.total.namUocThien = sumNumber([this.total.namUocThien, item.namUocThien]);
+        this.total.namKh = sumNumber([this.total.namKh, item.namKh]);
+        this.total.giaTriThamDinh = sumNumber([this.total.giaTriThamDinh, item.giaTriThamDinh]);
       }
     })
   }

@@ -53,6 +53,7 @@ export class BieuMau1310Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  statusPrint: boolean;
   editMoneyUnit = false;
   isDataAvailable = false;
   viewAppraisalValue: boolean;
@@ -85,6 +86,7 @@ export class BieuMau1310Component implements OnInit {
     this.thuyetMinh = this.formDetail?.thuyetMinh;
     this.status = this.dataInfo?.status;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+    this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
     this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {

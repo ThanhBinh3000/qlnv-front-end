@@ -52,6 +52,7 @@ export class BaoHiemHangComponent implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    statusPrint: boolean;
     editMoneyUnit = false;
     isDataAvailable = false;
     //nho dem
@@ -86,6 +87,7 @@ export class BaoHiemHangComponent implements OnInit {
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.maDviTao = this.dataInfo?.maDvi;
         await this.getDmKho();
         await this.addListKho();

@@ -25,23 +25,32 @@
             <th rowspan="2" nzWidth="400px">Nội dung</th>
             <th rowspan="2" nzWidth="150px">Thực hiện năm {{namBcao - 1}}</th>
             <th colspan="2" nzWidth="150px">Năm {{namBcao}}</th>
-            <th rowspan="2" class="text-center" nzWidth="150px">Dự toán năm {{namBcao + 1}}</th>
+            <th rowspan="2" nzWidth="150px">Dự toán năm {{namBcao + 1}}</th>
             <th *ngIf="viewAppraisalValue" rowspan="2">Giá trị thẩm định</th>
             <th rowspan="3" [hidden]="status && !editAppraisalValue"></th>
             <th rowspan="3" [hidden]="status"></th>
           </tr>
           <tr>
-            <th class="text-center">Dự toán</th>
-            <th class="text-center">Ước thực hiện</th>
+            <th>Dự toán</th>
+            <th>Ước thực hiện</th>
           </tr>
           <tr>
             <th class="text-center">A</th>
-            <th class="text-center">B</th>
-            <th class="text-center">1</th>
-            <th class="text-center">2</th>
-            <th class="text-center">3</th>
-            <th class="text-center">4</th>
-            <th *ngIf="viewAppraisalValue" class="text-center">4A</th>
+            <th>B</th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th *ngIf="viewAppraisalValue">4A</th>
+          </tr>
+          <tr>
+            <th class="text-center"></th>
+            <th>TỔNG CỘNG</th>
+            <th>{{displayValue(total.thienNtruoc)}}</th>
+            <th>{{displayValue(total.namDtoan)}}</th>
+            <th>{{displayValue(total.namUocThien)}}</th>
+            <th>{{displayValue(total.namKh)}}</th>
+            <th *ngIf="viewAppraisalValue">{{displayValue(total.giaTriThamDinh)}}</th>
           </tr>
         </thead>
         <tbody>
@@ -136,7 +145,7 @@
   <div class="modal-footer">
     <div class="nut">
       <div class="cantrai">
-        <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+        <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
           <i nz-icon nzType="printer" nzTheme="outline"></i>
           <span>In</span>
         </button>

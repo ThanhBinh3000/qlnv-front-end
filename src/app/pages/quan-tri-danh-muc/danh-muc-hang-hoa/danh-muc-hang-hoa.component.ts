@@ -214,10 +214,6 @@ export class DanhMucHangHoaComponent implements OnInit {
           this.nodeDetail = res.data;
           // gán giá trị vào form
           this.levelNode = +res.data.cap;
-          let dviTinh;
-          if (this.nodeDetail.maDviTinh) {
-            dviTinh = this.listDviTinh.filter(item => item.giaTri == this.nodeDetail.maDviTinh);
-          }
           this.listOfTagOption = []
           if (this.nodeDetail.dmHangDvqls) {
             this.nodeDetail.dmHangDvqls.forEach(item => {
@@ -231,7 +227,7 @@ export class DanhMucHangHoaComponent implements OnInit {
             tenHhCha: detaiParent ? detaiParent.ten : null,
             tenHangHoa: this.nodeDetail.ten,
             dviQly: this.nodeDetail.dviQly,
-            maDviTinh: dviTinh && dviTinh[0] ? dviTinh[0].ma : null,
+            maDviTinh: this.nodeDetail.maDviTinh,
             tchuanCluong: this.nodeDetail.tchuanCluong,
             thoiHanLk: this.nodeDetail.thoiHanLk,
             loaiHang: this.nodeDetail.loaiHang,
@@ -302,11 +298,9 @@ export class DanhMucHangHoaComponent implements OnInit {
     if (this.detailHangHoa.invalid) {
       return;
     }
-    let dviTinh = this.listDviTinh.filter(item => item.ma == this.detailHangHoa.value.maDviTinh)
     let body = this.detailHangHoa.value;
     body.dmHangDvqls = this.listOfOption.filter((x) => this.listOfTagOption.includes(x.maDvi))
     body.trangThai = this.detailHangHoa.get('trangThai').value ? TrangThaiHoatDong.HOAT_DONG : TrangThaiHoatDong.KHONG_HOAT_DONG;
-    body.maDviTinh = dviTinh && dviTinh[0] ? dviTinh[0].giaTri : null
     body.loaiHinhBq = this.listLhbq.filter(item => item.checked === true)
     body.phuongPhapBq = this.listPpbq.filter(item => item.checked === true)
     body.hinhThucBq = this.listHtbq.filter(item => item.checked === true)

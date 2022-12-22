@@ -54,6 +54,7 @@ export class PhuLuc06Component implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    statusPrint: boolean;
     isDataAvailable = false;
     allChecked = false;
 
@@ -90,6 +91,7 @@ export class PhuLuc06Component implements OnInit {
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.checkEditTD = this.dataInfo?.editAppraisalValue;
         this.checkViewTD = this.dataInfo?.viewAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {

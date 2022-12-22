@@ -58,6 +58,7 @@ export class BieuMau160Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  statusPrint: boolean;
   editMoneyUnit = false;
   isDataAvailable = false;
   //nho dem
@@ -94,6 +95,7 @@ export class BieuMau160Component implements OnInit {
     this.namHienHanh = Number(this.dataInfo?.namBcao) - 1;
     this.namKhoach = this.dataInfo?.namBcao;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+    this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
     this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {

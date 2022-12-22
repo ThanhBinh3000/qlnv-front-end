@@ -185,6 +185,7 @@ export class DialogDiaDiemKhoComponent implements OnInit {
     const res = await this.donViService.getTreeAll(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data) {
+        console.log(res.data);
         this.dataTreeKho = res.data;
       }
     } else {
