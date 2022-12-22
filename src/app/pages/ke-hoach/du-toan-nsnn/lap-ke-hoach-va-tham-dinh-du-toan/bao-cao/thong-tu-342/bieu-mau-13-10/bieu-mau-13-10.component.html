@@ -25,7 +25,8 @@
           <th rowspan="2" nzWidth="150px">Ước thực hiện năm {{namTruoc}} (năm trước)</th>
           <th colspan="3" nzWidth="150px">Năm {{namBcao}} (năm hiện hành)</th>
           <th colspan="3" nzWidth="150px">Kế hoạch năm {{namKeHoach}} (năm kế hoạch)</th>
-          <th *ngIf="viewAppraisalValue" colspan="3" nzWidth="150px">Kế hoạch năm {{namKeHoach}} (năm kế hoạch)</th>
+          <th *ngIf="viewAppraisalValue" colspan="3" nzWidth="150px">Giá trị thẩm định năm {{namKeHoach}} (năm kế hoạch)
+          </th>
           <th rowspan="4" [hidden]=" status && !editAppraisalValue"></th>
           <th rowspan="4" [hidden]="status"></th>
         </tr>

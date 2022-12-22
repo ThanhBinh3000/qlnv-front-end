@@ -107,7 +107,7 @@
                   {{data.tenDanhMuc}}
                 </ng-container>
                 <ng-template #selectTenDmuc>
-                  {{data.tenMatHang}}
+                  {{data.tenDanhMuc}}
                 </ng-template>
               </td>
               <td>{{data.dviTinh}}</td>
@@ -137,7 +137,7 @@
                   {{data.tenDanhMuc}}
                 </ng-container>
                 <ng-template #selectTenDmuc>
-                  {{data.tenMatHang}}
+                  {{data.tenDanhMuc}}
                 </ng-template>
               </td>
               <td>
@@ -159,10 +159,7 @@
                 <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.sluongTaiKho"
                   (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
               </td>
-              <td>
-                <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.dmucTaiKho"
-                  (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
-              </td>
+              <td>{{displayValue(editCache[data.id].data.dmucTaiKho)}}</td>
               <td>
                 {{displayValue(editCache[data.id].data.ttienTaiKho)}}
               </td>
