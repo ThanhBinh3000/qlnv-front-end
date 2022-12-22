@@ -9,6 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
 import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber, sumNumber } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 
@@ -64,7 +65,7 @@ export class PhuLuc03Component implements OnInit {
     initItem: ItemData = new ItemData();
     //nho dem
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-
+    userInfo: any;
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
@@ -72,6 +73,7 @@ export class PhuLuc03Component implements OnInit {
         private notification: NzNotificationService,
         private modal: NzModalService,
         private quanLyVonPhiService: QuanLyVonPhiService,
+        public userService: UserService,
     ) {
     }
 
@@ -85,6 +87,7 @@ export class PhuLuc03Component implements OnInit {
 
     async initialization() {
         this.spinner.show();
+        this.userInfo = this.userService.getUserLogin();
         this.formDetail = this.dataInfo?.data;
         this.maDviTao = this.dataInfo?.maDvi;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
@@ -108,7 +111,8 @@ export class PhuLuc03Component implements OnInit {
                 item.ttienNamDtoan = mulNumber(item.dmucNamDtoan, item.sluongNamDtoan);
             }
         })
-
+        console.log(this.userInfo);
+        
         this.sortByIndex();
         this.getTotal();
         this.updateEditCache();
