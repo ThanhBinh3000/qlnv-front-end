@@ -118,7 +118,7 @@ export class QuyetdinhPheduyetKhmttComponent implements OnInit {
   }
 
   detail(data?) {
-    if (!this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_QDLCNT_SUA")) {
+    if (!this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_QDLCNT_THEM")) {
       return;
     }
     this.isDetail = true;
