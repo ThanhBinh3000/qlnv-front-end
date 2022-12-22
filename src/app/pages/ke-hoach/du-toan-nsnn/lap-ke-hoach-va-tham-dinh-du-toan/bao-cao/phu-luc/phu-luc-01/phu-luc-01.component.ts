@@ -119,8 +119,15 @@ export class PhuLuc01Component implements OnInit {
                 item.dviTinh = dinhMuc?.donViTinh;
                 item.ttienNamDtoan = mulNumber(item.dmucNamDtoan, item.sluongNamDtoan);
                 item.ttienTd = mulNumber(item.ttienTd, item.sluongTd);
+            } else {
+                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
+                // item.tenDanhMuc = dinhMuc?.tenDinhMuc;
+                item.dmucNamDtoan = dinhMuc?.tongDmuc;
+                item.dviTinh = dinhMuc?.donViTinh;
+                item.ttienNamDtoan = mulNumber(item.dmucNamDtoan, item.sluongNamDtoan);
+                item.ttienTd = mulNumber(item.ttienTd, item.sluongTd);
             }
-        })
+        }) 
 
         await this.danhMucService.dMVatTu().toPromise().then(res => {
             if (res.statusCode == 0) {
@@ -153,7 +160,6 @@ export class PhuLuc01Component implements OnInit {
                         if (!item.loaiVthh.startsWith('02')) {
                             item.tongDmuc = divNumber(item.tongDmuc, 1000);
                         }
-                        this.dsDinhMuc
                     })
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);

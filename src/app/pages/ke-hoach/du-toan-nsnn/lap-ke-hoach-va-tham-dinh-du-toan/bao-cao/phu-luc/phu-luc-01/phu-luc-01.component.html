@@ -109,12 +109,12 @@
                                 {{editCache[data.id].data.dviTinh}}
                             </td>
                             <ng-container *ngIf="editAppraisalValue; else editAppraisal">
-                                <td>{{displayValue(data.thienNamTruoc)}}</td>
-                                <td>{{displayValue(data.dtoanNamHtai)}}</td>
-                                <td>{{displayValue(data.uocNamHtai)}}</td>
-                                <td>{{displayValue(data.dmucNamDtoan)}}</td>
-                                <td>{{displayValue(data.sluongNamDtoan)}}</td>
-                                <td>{{displayValue(data.ttienNamDtoan)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.thienNamTruoc)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.dtoanNamHtai)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.uocNamHtai)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.dmucNamDtoan)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.sluongNamDtoan)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.ttienNamDtoan)}}</td>
                                 <td>
                                     <fm-input-number nz-input class="search__input"
                                         [(ngModel)]="editCache[data.id].data.sluongTd"
