@@ -208,10 +208,8 @@ export class NewHangHoaComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    let dviTinh =  this.listDviTinh.filter(item => item.ma == this.formHangHoa.value.maDviTinh)
     let body = this.formHangHoa.value;
     body.dmHangDvqls = this.listOfTagOption;
-    body.maDviTinh = dviTinh && dviTinh[0] ? dviTinh[0].giaTri : null
     if ( this.formHangHoa.value.maCha) {
       body.ma = this.formHangHoa.value.maCha + this.formHangHoa.value.ma
     } else {
@@ -243,9 +241,8 @@ export class NewHangHoaComponent implements OnInit {
     if (event.keys.length > 0) {
       let detail = event.node.origin;
       if (detail.ma) {
-        let dviTinh =  this.listDviTinh.filter(item => item.giaTri == detail.maDviTinh)
         this.formHangHoa.patchValue({
-          maDviTinh : dviTinh && dviTinh[0] ? dviTinh[0].ma : null,
+          maDviTinh : detail.maDviTinh ? detail.maDviTinh : null ,
           loaiHang : this.convertLoaiHh(detail.loaiHang)
         })
       }

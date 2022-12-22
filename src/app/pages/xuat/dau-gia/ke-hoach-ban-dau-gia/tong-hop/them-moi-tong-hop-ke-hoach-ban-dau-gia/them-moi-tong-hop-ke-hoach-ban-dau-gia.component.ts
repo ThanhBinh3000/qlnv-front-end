@@ -35,7 +35,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   isDetailDxCuc: boolean = false;
   dataTableDanhSachDX: any[] = [];
   danhMucDonVi: any;
-  isTongHop: boolean = true;
+  isTongHop: boolean = false;
   isQuyetDinh: boolean = false;
   dataDeXuat: any[] = [];
   datePipe = new DatePipe('en-US');
@@ -48,7 +48,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
-    private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, tongHopDeXuatKeHoachBanDauGiaService);
     this.formTraCuu = this.fb.group(
@@ -62,20 +61,19 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       }
     );
     this.formData = this.fb.group({
-      cloaiVthh: [, [Validators.required]],
       id: [],
+      idTh: [],
       loaiVthh: [, [Validators.required]],
+      cloaiVthh: [, [Validators.required]],
       namKh: [, [Validators.required]],
-      ngayDuyetTu: [''],
-      ngayDuyetDen: [''],
+      ngayDuyetTu: ['', [Validators.required]],
+      ngayDuyetDen: ['', [Validators.required]],
       ngayThop: [, [Validators.required]],
       noiDungThop: ['', [Validators.required]],
-      tenLoaiVthh: [''],
-      tenCloaiVthh: [''],
+      tenLoaiVthh: ['', [Validators.required]],
+      tenCloaiVthh: ['', [Validators.required]],
       trangThai: [''],
-      soQdPd: [''],
-      ngayPduyet: [''],
-      tchuanCluong: [''],
+      tenTrangThai: ['Chưa Tạo QĐ']
     })
   }
 
@@ -95,20 +93,20 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
 
   async loadChiTiet() {
     if (this.id > 0) {
-      let res = await this.tongHopDeXuatKeHoachBanDauGiaService.getDetail(this.id);
-      if (res.msg == MESSAGE.SUCCESS) {
-        const dataDetail = res.data;
-        this.dataTableDanhSachDX = dataDetail.thopDxKhBdgDtlList;
-        this.formTraCuu.patchValue({
-          ngayPduyet: [dataDetail.ngayDuyetTu, dataDetail.ngayDuyetDen],
-        });
-        this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail)
-        this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+      const data = await this.detail(this.id);
+      if (data) {
         this.isTongHop = true;
+        this.helperService.bidingDataInFormGroup(this.formTraCuu, data)
+        this.formTraCuu.patchValue({
+          ngayPduyet: [data.ngayDuyetTu, data.ngayDuyetDen],
+        });
+        this.formData.patchValue({
+          idTh: data.id
+        })
+        this.dataTableDanhSachDX = data.thopDxKhBdgDtlList;
       }
       else {
         this.isTongHop = false;
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
   }
@@ -130,15 +128,13 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
       let res = await this.tongHopDeXuatKeHoachBanDauGiaService.tonghop(body);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data
-        console.log(dataDetail);
         let idTh = await this.userService.getId("XH_THOP_DX_KH_BDG_SEQ");
-        this.helperService.bidingDataInFormGroup(this.formData, dataDetail)
+        this.helperService.bidingDataInFormGroup(this.formData, body)
         this.formData.patchValue({
-          id: idTh,
+          idTh: idTh,
           ngayThop: dayjs().format("YYYY-MM-DD"),
         })
         this.dataTableDanhSachDX = dataDetail.thopDxKhBdgDtlList;
-        await this.getDataChiTieu();
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -153,23 +149,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     }
   }
 
-
-  async getDataChiTieu() {
-    let res2 =
-      await this.chiTieuKeHoachNamCapTongCucService.loadThongTinChiTieuKeHoachCucNam(
-        +this.formTraCuu.get('namKh').value,
-      );
-    if (res2.msg == MESSAGE.SUCCESS) {
-      const data = res2.data;
-      this.formData.patchValue({
-        soQdPd: data.soQuyetDinh,
-      });
-    }
-    this.formData.patchValue({
-      soQdPd: '150/TCDT',
-    });
-  }
-
   isDetailPermission() {
     if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_SUA") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP")) {
       return true;
@@ -181,38 +160,10 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     if (!this.isDetailPermission()) {
       return;
     }
-    this.helperService.markFormGroupTouched(this.formData);
-    await this.spinner.show();
-    try {
-      if (this.formData.invalid) {
-        await this.spinner.hide();
-        return;
-      }
-      let body = this.formData.value;
-      body.ngayDuyetDen = this.formData.get('ngayPduyet').value
-        ? dayjs(this.formData.get('ngayPduyet').value[0]).format(
-          'YYYY-MM-DD',
-        )
-        : null,
-        body.ngayDuyetTu = this.formData.get('ngayPduyet').value
-          ? dayjs(this.formData.get('ngayPduyet').value[1]).format(
-            'YYYY-MM-DD',
-          )
-          : null;
-      let res = await this.tongHopDeXuatKeHoachBanDauGiaService.create(body);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.id = res.data.id;
-        await this.loadChiTiet();
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-      }
-      else {
-        this.notification.error(MESSAGE.ERROR, res.msg);
-      }
-      await this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      await this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    let body = this.formData.value;
+    let data = this.createUpdate(body)
+    if (data) {
+      this.quayLai();
     }
   }
 
