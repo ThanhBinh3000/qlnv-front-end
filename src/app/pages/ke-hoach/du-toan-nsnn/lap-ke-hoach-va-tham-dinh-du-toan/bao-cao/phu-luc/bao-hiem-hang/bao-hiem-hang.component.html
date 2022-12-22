@@ -38,7 +38,7 @@
                 <thead>
                     <tr>
                         <th rowspan="2" [hidden]="status">
-                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
+                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" style="margin-right: 0;">
                             </label>
                         </th>
                         <th>STT</th>
@@ -158,7 +158,7 @@
                         </ng-template>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td [hidden]="status"></td>
                         <td></td>
                         <td>Tổng cộng</td>
                         <td></td>

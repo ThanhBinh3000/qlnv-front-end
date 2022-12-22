@@ -189,6 +189,14 @@ export class BieuMau1310Component implements OnInit {
       }
     })
 
+    if (!this.checkViewTD) {
+      lstCtietBcaoTemp?.forEach(item => {
+        item.gtriTdinhSoDtuong = item.khSoDtuong;
+        item.gtriTdinhMucTcap = item.khMucTcap;
+        item.gtriTdinhDtoanNam = item.khDtoanNam;
+      })
+    }
+
     const request = JSON.parse(JSON.stringify(this.formDetail));
     request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
     request.trangThai = trangThai;
@@ -414,7 +422,6 @@ export class BieuMau1310Component implements OnInit {
   sum(stt: string) {
     stt = this.getHead(stt);
     const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-    console.log(index)
     const data = this.lstCtietBcao[index];
     while (stt != '0') {
       this.lstCtietBcao[index] = {

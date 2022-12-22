@@ -63,8 +63,8 @@ export class PhuLuc05Component implements OnInit {
   editMoneyUnit = false;
   isDataAvailable = false;
   // check tham dinh
-  checkViewTD: boolean;
-  checkEditTD: boolean;
+  viewAppraisalValue: boolean;
+  editAppraisalValue: boolean;
   namTruoc: string;
   namDtoanOne: string;
   namDtoanTwo: string;
@@ -96,8 +96,8 @@ export class PhuLuc05Component implements OnInit {
     this.namDtoanTwo = (Number(this.namBcao) + 2).toString();
     this.thuyetMinh = this.formDetail?.thuyetMinh;
     this.status = this.dataInfo?.status;
-    this.checkEditTD = this.dataInfo?.editAppraisalValue;
-    this.checkViewTD = this.dataInfo?.viewAppraisalValue;
+    this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
+    this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
       this.lstCtietBcao.push({
@@ -195,10 +195,10 @@ export class PhuLuc05Component implements OnInit {
     const lstCtietBcaoTemp: ItemData[] = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      // if (item.ncauChiTongSo > MONEY_LIMIT) {
-      //     checkMoneyRange = false;
-      //     return;
-      // }
+      if (item.keHoachVonTd > MONEY_LIMIT) {
+        checkMoneyRange = false;
+        return;
+      }
       lstCtietBcaoTemp.push({
         ...item,
       })
@@ -215,6 +215,12 @@ export class PhuLuc05Component implements OnInit {
         item.id = null;
       }
     })
+
+    if (!this.viewAppraisalValue) {
+      lstCtietBcaoTemp?.forEach(item => {
+          item.keHoachVonTd = item.keHoachVon;
+      })
+  }
 
     const request = JSON.parse(JSON.stringify(this.formDetail));
     request.lstCtietLapThamDinhs = lstCtietBcaoTemp;

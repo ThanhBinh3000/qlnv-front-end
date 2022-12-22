@@ -109,9 +109,11 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private dmTieuChuanService: DanhMucTieuChuanService,
-    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService
+    private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
+    _modal: NzModalService
   ) {
     super(httpClient, storageService, dauThauService);
+    super.modal = _modal;
     this.formData = this.fb.group({
       id: [],
       maDvi: ['', [Validators.required]],

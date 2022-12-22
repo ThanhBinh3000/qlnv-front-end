@@ -620,10 +620,10 @@ export class BieuMau133Component implements OnInit {
     const lstCtietLapThamDinhsTemp: ItemData[] = [];
     let checkMoneyRange = true;
     this.lstCtietLapThamDinhs.forEach(item => {
-      // if (item.ncauChiTongSo > MONEY_LIMIT) {
-      //     checkMoneyRange = false;
-      //     return;
-      // }
+      if (item.kphiPduyetTso > MONEY_LIMIT || item.kphiThienNamTso > MONEY_LIMIT || item.kphiThienLkeTso > MONEY_LIMIT || item.kphiThienDtoanTso > MONEY_LIMIT) {
+        checkMoneyRange = false;
+        return;
+      }
       lstCtietLapThamDinhsTemp.push({
         ...item,
       })
@@ -933,7 +933,7 @@ export class BieuMau133Component implements OnInit {
   }
 
   checkAdd(data: ItemData) {
-    if (data.level == 2 && data.maDtaiDan) {
+    if (data.level == 1 && data.maDtaiDan) {
       return true;
     }
     return false;

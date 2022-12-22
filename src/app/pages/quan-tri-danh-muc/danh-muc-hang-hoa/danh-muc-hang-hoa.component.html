@@ -58,7 +58,7 @@
                 <nz-form-label>Tên hàng hóa cấp trên</nz-form-label>
                 <nz-form-control>
                   <nz-input-group >
-                    <input nz-input formControlName="tenHhCha" [readonly]="!isEditData"/>
+                    <input nz-input formControlName="tenHhCha" [readonly]="true"/>
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -66,7 +66,7 @@
             <div nz-col nzXs="24" nzSm="24" nzMd="6" nzLg="6">
               <nz-form-item>
                 <nz-form-label>Mã hàng hóa cấp trên</nz-form-label>
-                <input nz-input formControlName="maCha" [readonly]="!isEditData"/>
+                <input nz-input formControlName="maCha" [readonly]="true"/>
               </nz-form-item>
             </div>
             <div nz-col nzXs="24" nzSm="24" nzMd="18" nzLg="18">
@@ -116,7 +116,7 @@
                 <nz-form-label >Đơn vị tính</nz-form-label>
                 <nz-form-control >
                   <nz-select [nzDisabled]="!isEditData" formControlName="maDviTinh"  nzAllowClear="true">
-                    <nz-option  *ngFor="let p of listDviTinh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                    <nz-option  *ngFor="let p of listDviTinh" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>

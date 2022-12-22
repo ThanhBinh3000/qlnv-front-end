@@ -217,7 +217,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
     body.fileDinhKems = this.taiLieuDinhKemList;
     body.loaiVthh = this.listOfTagOptions.join(',');
     body.listTenLoaiVthh = this.listLoaiVthh.join(',');
-    body.apDungTai = this.userInfo.DON_VI.maDviCha;
+    body.apDungTai = this.userInfo.MA_DVI.substring(0, 2);
     let res = null;
     if (this.id > 0) {
       res = await this.khCnQuyChuanKyThuat.update(body);
