@@ -1,3 +1,4 @@
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { startWith } from 'rxjs/operators';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
@@ -17,8 +18,8 @@ export class ItemData {
   id: string;
   stt: string;
   level: number;
-  matHang: string;
-  tenMatHang: string;
+  // matHang: string;
+  // tenMatHang: string;
   maDanhMuc: string;
   tenDanhMuc: string;
   dviTinh: string;
@@ -73,7 +74,7 @@ export class PhuLuc02Component implements OnInit {
   loaiHang: string;
   dsDinhMuc: any[] = [];
   allChecked = false;
-
+  maDviTao: string;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -81,6 +82,7 @@ export class PhuLuc02Component implements OnInit {
     private notification: NzNotificationService,
     private modal: NzModalService,
     private danhMucService: DanhMucHDVService,
+    private quanLyVonPhiService: QuanLyVonPhiService,
 
   ) {
   }
@@ -96,6 +98,7 @@ export class PhuLuc02Component implements OnInit {
     this.spinner.show();
     this.formDetail = this.dataInfo?.data;
     this.namBcao = this.dataInfo?.namBcao;
+    this.maDviTao = this.dataInfo?.maDvi;
     this.namTruoc = (Number(this.namBcao) - 1).toString();
     this.namKeHoach = (Number(this.namBcao) + 1).toString();
     this.thuyetMinh = this.formDetail?.thuyetMinh;
@@ -127,11 +130,47 @@ export class PhuLuc02Component implements OnInit {
         item.stt = item.maDanhMuc;
       })
     }
+
+    await this.getDinhMuc();
+    this.lstCtietBcao.forEach(item => {
+      if (!item.tenDanhMuc) {
+        const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maDanhMuc);
+        item.tenDanhMuc = dinhMuc?.tenDinhMuc;
+        item.dmucTaiKho = dinhMuc?.tongDmuc;
+        item.dviTinh = dinhMuc?.donViTinh;
+        item.ttienTaiKho = mulNumber(item.dmucTaiKho, item.sluongTaiKho);
+      }
+    })
+
     this.sortByIndex();
     this.getTotal();
     this.updateEditCache();
     this.getStatusButton();
     this.spinner.hide();
+  }
+
+  async getDinhMuc() {
+    const request = {
+      loaiDinhMuc: '02',
+      maDvi: this.maDviTao,
+    }
+    await this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+      res => {
+        if (res.statusCode == 0) {
+          this.dsDinhMuc = res.data;
+          this.dsDinhMuc.forEach(item => {
+            if (!item.loaiVthh.startsWith('02')) {
+              item.tongDmuc = divNumber(item.tongDmuc, 1000);
+            }
+          })
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    )
   }
 
   getName(level: number, ma: string) {
@@ -187,22 +226,24 @@ export class PhuLuc02Component implements OnInit {
     request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
     request.trangThai = trangThai;
     this.spinner.show();
-    this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
-      async data => {
-        if (data.statusCode == 0) {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-          this.formDetail = data.data;
-          this._modalRef.close({
-            formDetail: this.formDetail,
-          });
-        } else {
-          this.notification.error(MESSAGE.ERROR, data?.msg);
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      },
-    );
+    // this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
+    //   async data => {
+    //     if (data.statusCode == 0) {
+    //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+    //       this.formDetail = data.data;
+    //       this._modalRef.close({
+    //         formDetail: this.formDetail,
+    //       });
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, data?.msg);
+    //     }
+    //   },
+    //   err => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //   },
+    // );
+    console.log(request);
+
     this.spinner.hide();
     this.getTotal()
   }
@@ -533,7 +574,6 @@ export class PhuLuc02Component implements OnInit {
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
         if (this.lstCtietBcao.findIndex(e => e.maDanhMuc == data.ma) == -1) {
-          // debugger
           let stt: any;
           const index = this.lstCtietBcao.findIndex(e => e.maDanhMuc == '0.2');
           if (data.ma.startsWith('02')) {
@@ -544,10 +584,24 @@ export class PhuLuc02Component implements OnInit {
               id: uuid.v4() + 'FE',
               stt: stt,
               maDanhMuc: data.ma,
-              matHang: data.ma,
-              tenMatHang: data.ten,
+              // matHang: data.ma,
+              tenDanhMuc: data.ten,
               level: 1,
             })
+            const lstTemp = this.dsDinhMuc.filter(e => e.cloaiVthh == data.ma);
+            for (let i = 1; i <= lstTemp.length; i++) {
+              this.lstCtietBcao.push({
+                ...new ItemData(),
+                id: uuid.v4() + 'FE',
+                stt: stt + '.' + i.toString(),
+                // matHang: data.ma,
+                maDanhMuc: lstTemp[i - 1].loaiBaoQuan,
+                tenDanhMuc: lstTemp[i - 1].tenDinhMuc,
+                dviTinh: lstTemp[i - 1].donViTinh,
+                level: 2,
+                dmucTaiKho: lstTemp[i - 1].tongDmuc,
+              })
+            }
           } else {
             stt = '0.1.' + index.toString();
             this.lstCtietBcao.splice(index, 0, {
@@ -555,11 +609,26 @@ export class PhuLuc02Component implements OnInit {
               id: uuid.v4() + 'FE',
               stt: stt,
               maDanhMuc: data.ma,
-              matHang: data.ma,
-              tenMatHang: data.ten,
+              // matHang: data.ma,
+              tenDanhMuc: data.ten,
               level: 1,
             })
+            const lstTemp = this.dsDinhMuc.filter(e => e.cloaiVthh == data.ma);
+            for (let i = 1; i <= lstTemp.length; i++) {
+              this.lstCtietBcao.push({
+                ...new ItemData(),
+                id: uuid.v4() + 'FE',
+                stt: stt + '.' + i.toString(),
+                // matHang: data.ma,
+                maDanhMuc: lstTemp[i - 1].loaiBaoQuan,
+                tenDanhMuc: lstTemp[i - 1].tenDinhMuc,
+                dviTinh: lstTemp[i - 1].donViTinh,
+                level: 2,
+                dmucTaiKho: lstTemp[i - 1].tongDmuc,
+              })
+            }
           }
+          this.sortByIndex();
           this.updateEditCache();
         }
       }
