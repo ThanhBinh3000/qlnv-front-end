@@ -52,7 +52,7 @@ export class MangLuoiKhoComponent implements OnInit {
   defaultExpandedKeys: any = [];
   nodeSelected: any;
   detailDonVi: FormGroup;
-  levelNode: number = 1;
+  levelNode: number = 0;
   isEditData: boolean = true;
   dataTable: any[] = []
   fileDinhKems: any[] = []
@@ -204,10 +204,6 @@ export class MangLuoiKhoComponent implements OnInit {
           this.nodes = res.data
         }
         this.nodes[0].expanded = true;
-        //  lúc đầu mắc định lấy node gốc to nhất
-        this.nodeSelected = res.data[0];
-        // lấy detail đon vị hiện tại
-        this.getDetailMlkByKey(this.nodes[0])
       } else {
         this.notification.error(MESSAGE.ERROR, res.error);
       }
@@ -223,7 +219,8 @@ export class MangLuoiKhoComponent implements OnInit {
     if (event.keys.length > 0) {
       this.isEditData = true;
       this.nodeSelected = event.node.origin;
-      this.getDetailMlkByKey(event.node.origin)
+      this.levelNode = this.nodeSelected.capDvi;
+      this.getDetailMlkByKey(event.node)
     }
   }
 
@@ -271,14 +268,14 @@ export class MangLuoiKhoComponent implements OnInit {
   async getDetailMlkByKey(dataNode) {
     if (dataNode) {
       let body = {
-        maDvi: dataNode.maDvi,
+        maDvi: dataNode.origin.key,
         capDvi: this.nodeSelected.capDvi
       }
       await this.mangLuoiKhoService.getDetailByMa(body).then((res: OldResponseData) => {
         if (res.msg == MESSAGE.SUCCESS) {
           const dataNodeRes = res.data.object;
           this.bindingDataDetail(dataNodeRes);
-          this.showDetailDonVi(dataNode.id)
+          this.showDetailDonVi(dataNode.origin.id)
         } else {
           this.notification.error(MESSAGE.ERROR, res.error);
         }
@@ -512,10 +509,10 @@ export class MangLuoiKhoComponent implements OnInit {
       }
       case "4" : {
         this.detailDonVi.patchValue({
+          diaChi: this.nodeDetail.diaChi,
           tenDiemkho: this.nodeDetail.tenDvi,
           maDiemkho: this.nodeDetail.maDvi,
-          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG,
-          diaChi: this.nodeDetail.diaChi
+          trangThai: this.nodeDetail.trangThai == TrangThaiHoatDong.HOAT_DONG
         });
         break;
       }

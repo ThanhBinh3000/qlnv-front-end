@@ -395,7 +395,6 @@ export class ThemMoiKhoComponent implements OnInit {
         this.formKho.controls['soNganKho'].setValidators([Validators.required])
         this.formKho.controls['dienTichDat'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
-        this.formKho.controls['chatluongId'].setValidators([Validators.required])
         this.formKho.controls['diaChi'].setValidators([Validators.required])
         break;
       }
