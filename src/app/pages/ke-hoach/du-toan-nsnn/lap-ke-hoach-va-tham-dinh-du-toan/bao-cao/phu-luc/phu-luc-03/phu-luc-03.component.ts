@@ -111,7 +111,6 @@ export class PhuLuc03Component implements OnInit {
                 item.ttienNamDtoan = mulNumber(item.dmucNamDtoan, item.sluongNamDtoan);
             }
         })
-        console.log(this.userInfo);
         
         this.sortByIndex();
         this.getTotal();

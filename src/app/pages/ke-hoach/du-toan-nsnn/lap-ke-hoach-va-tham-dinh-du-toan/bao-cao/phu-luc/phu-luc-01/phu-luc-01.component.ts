@@ -109,7 +109,6 @@ export class PhuLuc01Component implements OnInit {
         await this.getDinhMucPL2X();
 
         this.dsDinhMuc = this.dsDinhMucN.concat(this.dsDinhMucX);
-        console.log(this.dsDinhMuc);
 
         this.lstCtietBcao.forEach(item => {
             if (!item.tenDanhMuc) {

@@ -245,7 +245,6 @@ export class PhuLuc02Component implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
-    console.log(request);
 
     this.spinner.hide();
     this.getTotal()

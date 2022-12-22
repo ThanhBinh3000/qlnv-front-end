@@ -228,7 +228,6 @@ export class BaoHiemKhoComponent implements OnInit {
                                 listDsDvi.push(child)
                             })
                         })
-                        console.log(listDsDvi);
                         this.listDanhSachCuc = listDsDvi
                     } else {
                         this.notification.error(MESSAGE.ERROR, res?.msg);
