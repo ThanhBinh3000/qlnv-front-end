@@ -1,17 +1,16 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
+import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, getName, LA_MA, MONEY_LIMIT, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
-import { NOI_DUNG_PL2 } from '../bao-cao.constant';
+import { DialogChonDanhMucComponent } from '../dialog-chon-danh-muc/dialog-chon-danh-muc.component';
+import { DANH_MUC } from './phu-luc-2.constant';
 
 
 export class ItemData {
@@ -19,7 +18,8 @@ export class ItemData {
     stt: string;
     checked: boolean;
     level: number;
-    maNdung: number;
+    maNdung: string;
+    tenNdung: string;
     dtoanSdungNamTcong: number;
     dtoanSdungNamNguonNsnn: number;
     dtoanSdungNamNguonSn: number;
@@ -51,7 +51,7 @@ export class PhuLucIIComponent implements OnInit {
     @Input() data;
     @Output() dataChange = new EventEmitter();
     //danh muc
-    noiDungs: any[] = NOI_DUNG_PL2;
+    noiDungs: any[] = [];
     lstCtietBcao: ItemData[] = [];
     donViTiens: any[] = DON_VI_TIEN;
     soLaMa: any[] = LA_MA;
@@ -60,7 +60,7 @@ export class PhuLucIIComponent implements OnInit {
     //thong tin chung
     idBcao: string;
     id: string;
-    namHienHanh: number;
+    namBcao: number;
     maPhuLuc: string;
     thuyetMinh: string;
     maDviTien: string;
@@ -101,14 +101,30 @@ export class PhuLucIIComponent implements OnInit {
         this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
         this.trangThaiPhuLuc = this.data?.trangThai;
-        this.namHienHanh = this.data?.namHienHanh;
+        this.namBcao = this.data?.namBcao;
         this.luyKeDetail = this.data?.luyKeDetail?.lstCtietBcaos;
         this.status = this.data?.status;
         this.statusBtnFinish = this.data?.statusBtnFinish;
+        //tinh toan level va ten cho danh muc
+        DANH_MUC.forEach(item => {
+            this.noiDungs.push({
+                ...item,
+                level: item.ma.split('.').length - 2,
+                giaTri: getName(this.namBcao, item.giaTri),
+            })
+        })
+        //them cac ban ghi va tinh toan lai ty le cho chung
         this.data?.lstCtietBcaos.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
-                //chua co tinh ty le
+                giaiNganThangTcongTle: divNumber(item.dtoanSdungNamTcong, item.giaiNganThangTcong),
+                giaiNganThangNguonNsnnTle: divNumber(item.dtoanSdungNamNguonNsnn, item.giaiNganThangNguonNsnn),
+                giaiNganThangNguonSnTle: divNumber(item.dtoanSdungNamNguonSn, item.giaiNganThangNguonSn),
+                giaiNganThangNguonQuyTle: divNumber(item.dtoanSdungNamNguonQuy, item.giaiNganThangNguonQuy),
+                luyKeGiaiNganTcongTle: divNumber(item.dtoanSdungNamTcong, item.luyKeGiaiNganTcong),
+                luyKeGiaiNganNguonNsnnTle: divNumber(item.dtoanSdungNamNguonNsnn, item.luyKeGiaiNganNguonNsnn),
+                luyKeGiaiNganNguonSnTle: divNumber(item.dtoanSdungNamNguonSn, item.luyKeGiaiNganNguonSn),
+                luyKeGiaiNganNguonQuyTle: divNumber(item.dtoanSdungNamNguonQuy, item.luyKeGiaiNganNguonQuy),
                 checked: false,
             })
         })
@@ -118,9 +134,27 @@ export class PhuLucIIComponent implements OnInit {
             } else {
                 this.sortByIndex();
             }
+        } else {
+            //neu co luy ke thi them vao trong list
+            this.luyKeDetail.forEach(item => {
+                this.lstCtietBcao.push({
+                    ...item,
+                    luyKeGiaiNganTcongTle: divNumber(item.dtoanSdungNamTcong, item.luyKeGiaiNganTcong),
+                    luyKeGiaiNganNguonNsnnTle: divNumber(item.dtoanSdungNamNguonNsnn, item.luyKeGiaiNganNguonNsnn),
+                    luyKeGiaiNganNguonSnTle: divNumber(item.dtoanSdungNamNguonSn, item.luyKeGiaiNganNguonSn),
+                    luyKeGiaiNganNguonQuyTle: divNumber(item.dtoanSdungNamNguonQuy, item.luyKeGiaiNganNguonQuy),
+                    checked: false,
+                    id: uuid.v4() + 'FE',
+                })
+            })
+            this.sortByIndex();
         }
-        this.updateEditCache();
 
+        this.lstCtietBcao.forEach(item => {
+            item.tenNdung = this.noiDungs.find(e => e.ma == item.maNdung)?.giaTri;
+        })
+
+        this.updateEditCache();
         this.getStatusButton();
         this.spinner.hide();
     }
@@ -131,10 +165,6 @@ export class PhuLucIIComponent implements OnInit {
         } else {
             this.statusBtnOk = true;
         }
-    }
-
-    getLoai(ma: number) {
-        return this.noiDungs.find(e => e.id == ma)?.loai;
     }
 
     // luu
@@ -154,10 +184,7 @@ export class PhuLucIIComponent implements OnInit {
         const lstCtietBcaoTemp: ItemData[] = [];
         let checkMoneyRange = true;
         this.lstCtietBcao.forEach(item => {
-            if (item.dtoanSdungNamTcong > MONEY_LIMIT || item.dtoanSdungNamNguonNsnn > MONEY_LIMIT || item.dtoanSdungNamNguonSn > MONEY_LIMIT ||
-                item.dtoanSdungNamNguonQuy > MONEY_LIMIT || item.giaiNganThangTcong > MONEY_LIMIT || item.giaiNganThangNguonNsnn > MONEY_LIMIT ||
-                item.giaiNganThangNguonSn > MONEY_LIMIT || item.giaiNganThangNguonQuy > MONEY_LIMIT || item.luyKeGiaiNganTcong > MONEY_LIMIT ||
-                item.luyKeGiaiNganNguonNsnn > MONEY_LIMIT || item.luyKeGiaiNganNguonSn > MONEY_LIMIT || item.luyKeGiaiNganNguonQuy > MONEY_LIMIT) {
+            if (item.dtoanSdungNamTcong > MONEY_LIMIT || item.giaiNganThangTcong > MONEY_LIMIT || item.luyKeGiaiNganTcong > MONEY_LIMIT) {
                 checkMoneyRange = false;
                 return;
             }
@@ -193,7 +220,7 @@ export class PhuLucIIComponent implements OnInit {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
                     const obj = {
                         trangThai: '-1',
-                        lyDoTuChoi: null,
+                        data: data.data,
                     };
                     this.dataChange.emit(obj);
                 } else {
@@ -269,6 +296,9 @@ export class PhuLucIIComponent implements OnInit {
         const n: number = chiSo.length - 1;
         let k: number = parseInt(chiSo[n], 10);
         if (n == 0) {
+            xau = String.fromCharCode(k + 64);
+        }
+        if (n == 1) {
             for (let i = 0; i < this.soLaMa.length; i++) {
                 while (k >= this.soLaMa[i].gTri) {
                     xau += this.soLaMa[i].kyTu;
@@ -276,16 +306,16 @@ export class PhuLucIIComponent implements OnInit {
                 }
             }
         }
-        if (n == 1) {
+        if (n == 2) {
             xau = chiSo[n];
         }
-        if (n == 2) {
+        if (n == 3) {
             xau = chiSo[n - 1].toString() + "." + chiSo[n].toString();
         }
-        if (n == 3) {
+        if (n == 4) {
             xau = String.fromCharCode(k + 96);
         }
-        if (n == 4) {
+        if (n == 5) {
             xau = "-";
         }
         return xau;
@@ -337,7 +367,6 @@ export class PhuLucIIComponent implements OnInit {
             }
         }
         this.replaceIndex(lstIndex, 1);
-        const itemLine = this.luyKeDetail.find(item => item.maNdung == initItem.maNdung);
         // them moi phan tu
         if (initItem.id) {
             const item: ItemData = {
@@ -354,10 +383,6 @@ export class PhuLucIIComponent implements OnInit {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: head + "." + (tail + 1).toString(),
-                luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
-                luyKeGiaiNganNguonNsnn: itemLine?.luyKeGiaiNganNguonNsnn ? itemLine?.luyKeGiaiNganNguonNsnn : 0,
-                luyKeGiaiNganNguonSn: itemLine?.luyKeGiaiNganNguonSn ? itemLine?.luyKeGiaiNganNguonSn : 0,
-                luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
             }
             this.lstCtietBcao.splice(ind + 1, 0, item);
             this.editCache[item.id] = {
@@ -407,27 +432,14 @@ export class PhuLucIIComponent implements OnInit {
                 data: { ...item }
             };
         } else {
-            if (this.lstCtietBcao.findIndex(e => this.getHead(e.stt) == this.getHead(stt)) == -1) {
-                this.sum(stt);
-                this.updateEditCache();
-            }
             const item: ItemData = {
                 ...initItem,
                 id: uuid.v4() + "FE",
                 stt: stt,
-                luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
-                luyKeGiaiNganNguonNsnn: itemLine?.luyKeGiaiNganNguonNsnn ? itemLine?.luyKeGiaiNganNguonNsnn : 0,
-                luyKeGiaiNganNguonSn: itemLine?.luyKeGiaiNganNguonSn ? itemLine?.luyKeGiaiNganNguonSn : 0,
-                luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
             }
-            //chua co tinh ty le
-
             this.lstCtietBcao.splice(index + 1, 0, item);
-
-            this.editCache[item.id] = {
-                edit: true,
-                data: { ...item }
-            };
+            this.updateEditCache();
+            this.editCache[item.id].edit = true;
         }
 
     }
@@ -560,10 +572,6 @@ export class PhuLucIIComponent implements OnInit {
                 level: 0,
                 id: uuid.v4() + 'FE',
                 stt: "0.1",
-                luyKeGiaiNganTcong: itemLine?.luyKeGiaiNganTcong ? itemLine?.luyKeGiaiNganTcong : 0,
-                luyKeGiaiNganNguonNsnn: itemLine?.luyKeGiaiNganNguonNsnn ? itemLine?.luyKeGiaiNganNguonNsnn : 0,
-                luyKeGiaiNganNguonSn: itemLine?.luyKeGiaiNganNguonSn ? itemLine?.luyKeGiaiNganNguonSn : 0,
-                luyKeGiaiNganNguonQuy: itemLine?.luyKeGiaiNganNguonQuy ? itemLine?.luyKeGiaiNganNguonQuy : 0,
             }
             this.lstCtietBcao.push(item);
 
@@ -606,7 +614,7 @@ export class PhuLucIIComponent implements OnInit {
 
     setDetail() {
         this.lstCtietBcao.forEach(item => {
-            item.level = this.noiDungs.find(e => e.id == item.maNdung)?.level;
+            item.level = item.maNdung.split('.').length - 2;
         })
     }
 
@@ -625,12 +633,11 @@ export class PhuLucIIComponent implements OnInit {
         let lstTemp: ItemData[] = lstCtietBcaoTemp.filter(e => e.level == level);
         while (lstTemp.length != 0 || level == 0) {
             lstTemp.forEach(item => {
-                const idCha = this.getIdCha(item.maNdung);
-                let index: number = this.lstCtietBcao.findIndex(e => e.maNdung === idCha);
+                let index: number = this.lstCtietBcao.findIndex(e => e.maNdung === this.getHead(item.maNdung));
                 if (index != -1) {
                     this.addLow(this.lstCtietBcao[index].id, item);
                 } else {
-                    index = this.lstCtietBcao.findIndex(e => this.getIdCha(e.maNdung) === idCha);
+                    index = this.lstCtietBcao.findIndex(e => this.getHead(e.maNdung) === this.getHead(item.maNdung));
                     this.addSame(this.lstCtietBcao[index].id, item);
                 }
             })
@@ -640,15 +647,15 @@ export class PhuLucIIComponent implements OnInit {
     }
 
     addLine(id: string) {
-        const maNdung: number = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
+        const maNdung: string = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
         const obj = {
-            maKhoanMuc: maNdung,
-            lstKhoanMuc: this.noiDungs,
+            ma: maNdung,
+            lstDanhMuc: this.noiDungs,
         }
 
         const modalIn = this.modal.create({
             nzTitle: 'Danh sách nội dung',
-            nzContent: DialogThemKhoanMucComponent,
+            nzContent: DialogChonDanhMucComponent,
             nzMaskClosable: false,
             nzClosable: false,
             nzWidth: '65%',
@@ -659,12 +666,13 @@ export class PhuLucIIComponent implements OnInit {
         });
         modalIn.afterClose.subscribe((res) => {
             if (res) {
-                const index: number = this.lstCtietBcao.findIndex(e => e.maNdung == res.maKhoanMuc);
+                const index: number = this.lstCtietBcao.findIndex(e => e.maNdung == res.ma);
                 if (index == -1) {
                     const data: ItemData = {
                         ...this.initItem,
-                        maNdung: res.maKhoanMuc,
-                        level: this.noiDungs.find(e => e.id == maNdung)?.level,
+                        maNdung: res.ma,
+                        level: this.noiDungs.find(e => e.ma == res.ma)?.level,
+                        tenNdung: this.noiDungs.find(e => e.ma == res.ma)?.giaTri,
                     };
                     if (this.lstCtietBcao.length == 0) {
                         this.addFirst(data);
@@ -672,17 +680,17 @@ export class PhuLucIIComponent implements OnInit {
                         this.addSame(id, data);
                     }
                 }
-                id = this.lstCtietBcao.find(e => e.maNdung == res.maKhoanMuc)?.id;
-                res.lstKhoanMuc.forEach(item => {
-                    if (this.lstCtietBcao.findIndex(e => e.maNdung == item.id) == -1) {
+                id = this.lstCtietBcao.find(e => e.maNdung == res.ma)?.id;
+                res.lstDanhMuc.forEach(item => {
+                    if (this.lstCtietBcao.findIndex(e => e.maNdung == item.ma) == -1) {
                         const data: ItemData = {
                             ...this.initItem,
-                            maNdung: item.id,
+                            maNdung: item.ma,
                             level: item.level,
+                            tenNdung: item.giaTri,
                         };
                         this.addLow(id, data);
                     }
-
                 })
                 this.updateEditCache();
             }
@@ -710,6 +718,7 @@ export class PhuLucIIComponent implements OnInit {
                 checked: data.checked,
                 level: data.level,
                 maNdung: data.maNdung,
+                tenNdung: data.tenNdung,
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
@@ -735,6 +744,14 @@ export class PhuLucIIComponent implements OnInit {
                     this.lstCtietBcao[index].luyKeGiaiNganNguonQuyTle = sumNumber([this.lstCtietBcao[index].luyKeGiaiNganNguonQuyTle, item.luyKeGiaiNganNguonQuyTle]);
                     // chua co tinh ty le
                 }
+                this.lstCtietBcao[index].giaiNganThangTcongTle = divNumber(this.lstCtietBcao[index].dtoanSdungNamTcong, this.lstCtietBcao[index].giaiNganThangTcong);
+                this.lstCtietBcao[index].giaiNganThangNguonNsnnTle = divNumber(this.lstCtietBcao[index].dtoanSdungNamNguonNsnn, this.lstCtietBcao[index].giaiNganThangNguonNsnn);
+                this.lstCtietBcao[index].giaiNganThangNguonSnTle = divNumber(this.lstCtietBcao[index].dtoanSdungNamNguonSn, this.lstCtietBcao[index].giaiNganThangNguonSn);
+                this.lstCtietBcao[index].giaiNganThangNguonQuyTle = divNumber(this.lstCtietBcao[index].dtoanSdungNamNguonQuy, this.lstCtietBcao[index].giaiNganThangNguonQuy);
+                this.lstCtietBcao[index].luyKeGiaiNganTcongTle = divNumber(this.lstCtietBcao[index].dtoanSdungNamTcong, this.lstCtietBcao[index].luyKeGiaiNganTcong);
+                this.lstCtietBcao[index].luyKeGiaiNganNguonNsnnTle = divNumber(this.lstCtietBcao[index].dtoanSdungNamNguonNsnn, this.lstCtietBcao[index].luyKeGiaiNganNguonNsnn);
+                this.lstCtietBcao[index].luyKeGiaiNganNguonSnTle = divNumber(this.lstCtietBcao[index].dtoanSdungNamNguonSn, this.lstCtietBcao[index].luyKeGiaiNganNguonSn);
+                this.lstCtietBcao[index].luyKeGiaiNganNguonQuyTle = divNumber(this.lstCtietBcao[index].dtoanSdungNamNguonQuy, this.lstCtietBcao[index].luyKeGiaiNganNguonQuy);
             })
             stt = this.getHead(stt);
         }
@@ -743,7 +760,7 @@ export class PhuLucIIComponent implements OnInit {
 
     changeModel(id: string) {
         const data = this.lstCtietBcao.find(e => e.id === id);
-        this.editCache[id].data.dtoanSdungNamTcong = sumNumber([this.editCache[id].data.dtoanSdungNamNguonNsnn, this.editCache[id].data.dtoanSdungNamNguonSn]);
+        this.editCache[id].data.dtoanSdungNamTcong = sumNumber([this.editCache[id].data.dtoanSdungNamNguonNsnn, this.editCache[id].data.dtoanSdungNamNguonSn, this.editCache[id].data.dtoanSdungNamNguonQuy]);
         this.editCache[id].data.giaiNganThangTcong = sumNumber([this.editCache[id].data.giaiNganThangNguonNsnn, this.editCache[id].data.giaiNganThangNguonSn, this.editCache[id].data.giaiNganThangNguonQuy]);
         this.editCache[id].data.luyKeGiaiNganTcong = sumNumber([this.editCache[id].data.luyKeGiaiNganNguonNsnn, this.editCache[id].data.luyKeGiaiNganNguonSn, this.editCache[id].data.luyKeGiaiNganNguonQuy]);
 
@@ -752,6 +769,15 @@ export class PhuLucIIComponent implements OnInit {
         this.editCache[id].data.luyKeGiaiNganNguonNsnn = sumNumber([data.luyKeGiaiNganNguonNsnn, this.editCache[id].data.giaiNganThangNguonNsnn, -data.giaiNganThangNguonNsnn]);
         this.editCache[id].data.luyKeGiaiNganNguonSn = sumNumber([data.luyKeGiaiNganNguonSn, this.editCache[id].data.giaiNganThangNguonSn, -data.giaiNganThangNguonSn]);
         this.editCache[id].data.luyKeGiaiNganNguonQuy = sumNumber([data.luyKeGiaiNganNguonQuy, this.editCache[id].data.giaiNganThangNguonQuy, -data.giaiNganThangNguonQuy]);
+        //tinh ty le
+        this.editCache[data.id].data.giaiNganThangTcongTle = divNumber(this.editCache[data.id].data.dtoanSdungNamTcong, this.editCache[data.id].data.giaiNganThangTcong);
+        this.editCache[data.id].data.giaiNganThangNguonNsnnTle = divNumber(this.editCache[data.id].data.dtoanSdungNamNguonNsnn, this.editCache[data.id].data.giaiNganThangNguonNsnn);
+        this.editCache[data.id].data.giaiNganThangNguonSnTle = divNumber(this.editCache[data.id].data.dtoanSdungNamNguonSn, this.editCache[data.id].data.giaiNganThangNguonSn);
+        this.editCache[data.id].data.giaiNganThangNguonQuyTle = divNumber(this.editCache[data.id].data.dtoanSdungNamNguonQuy, this.editCache[data.id].data.giaiNganThangNguonQuy);
+        this.editCache[data.id].data.luyKeGiaiNganTcongTle = divNumber(this.editCache[data.id].data.dtoanSdungNamTcong, this.editCache[data.id].data.luyKeGiaiNganTcong);
+        this.editCache[data.id].data.luyKeGiaiNganNguonNsnnTle = divNumber(this.editCache[data.id].data.dtoanSdungNamNguonNsnn, this.editCache[data.id].data.luyKeGiaiNganNguonNsnn);
+        this.editCache[data.id].data.luyKeGiaiNganNguonSnTle = divNumber(this.editCache[data.id].data.dtoanSdungNamNguonSn, this.editCache[data.id].data.luyKeGiaiNganNguonSn);
+        this.editCache[data.id].data.luyKeGiaiNganNguonQuyTle = divNumber(this.editCache[data.id].data.dtoanSdungNamNguonQuy, this.editCache[data.id].data.luyKeGiaiNganNguonQuy);
     }
 
     displayValue(num: number): string {

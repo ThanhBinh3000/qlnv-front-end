@@ -6,10 +6,9 @@ import { BaseService } from 'src/app/services/base.service';
     providedIn: 'root',
 })
 export class QuyetDinhPdKhBdgService extends BaseService {
-    GATEWAY = '/qlnv-hang';
 
     constructor(public httpClient: HttpClient) {
-        super(httpClient, 'ban-dau-gia/qd-pd-bdg', '');
+        super(httpClient, 'ban-dau-gia/qd-pd-bdg', '/qlnv-hang');
     }
 
 }

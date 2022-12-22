@@ -16,7 +16,7 @@ import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { BCDTC, LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { BCDTC, LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI, sumNumber, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { PHULUCLIST } from './bao-cao.constant';
 
@@ -87,6 +87,7 @@ export class BaoCaoComponent implements OnInit {
     trangThaiPhuLuc: string;
     titleStatus: string;
     //danh muc
+    lstPhuLuc: any = PHULUCLIST;
     listIdDelete: any = [];                     // list id delete
     nguoiBcaos: any[];
     donVis: any = [];                           // danh muc don vi
@@ -204,6 +205,9 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
+        if (!this.userService.isTongCuc()) {
+            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc = '2');
+        }
 
         await this.danhMucService.dMDviCon().toPromise().then(
             (data) => {
@@ -626,8 +630,8 @@ export class BaoCaoComponent implements OnInit {
 
     // them phu luc
     addPhuLuc() {
-        PHULUCLIST.forEach(item => item.status = false);
-        const danhSach = PHULUCLIST.filter(item => this.baoCao?.lstBcaos?.findIndex(data => data.maLoai == item.maPhuLuc) == -1);
+        this.lstPhuLuc.forEach(item => item.status = false);
+        const danhSach = this.lstPhuLuc.filter(item => this.baoCao?.lstBcaos?.findIndex(data => data.maLoai == item.maPhuLuc) == -1);
 
         const modalIn = this.modal.create({
             nzTitle: 'Danh sách phụ lục',
@@ -707,8 +711,63 @@ export class BaoCaoComponent implements OnInit {
                 idBcao: this.baoCao.id,
                 statusBtnOk: this.okStatus,
                 statusBtnFinish: this.finishStatus,
+                namBcao: this.baoCao.namBcao,
                 luyKeDetail: this.luyKes.find(e => e.maLoai == maPhuLuc),
                 status: this.status,
+                extraDataPL3: null,
+                extraDataPL2: null,
+            }
+            if (maPhuLuc == '1' && Utils.statusSave.includes(this.baoCao.trangThai)) {
+                //lay du lieu cua phu luc 3
+                const dataPL3 = {
+                    maNdung: '0.1.2.3.1',
+                    dtoanGiaoDtoan: 0,
+                    giaiNganThangBcaoDtoan: 0,
+                    luyKeGiaiNganDtoan: 0,
+                }
+                const dataTemp3 = this.baoCao.lstBcaos.find(e => e.maLoai == '3')?.lstCtietBcaos;
+                dataTemp3?.forEach(item => {
+                    const level = item.stt.split('.').length - 2;
+                    if (level == 0) {
+                        dataPL3.dtoanGiaoDtoan = sumNumber([dataPL3.dtoanGiaoDtoan, item.khoachNamVonScl])
+                        dataPL3.giaiNganThangBcaoDtoan = sumNumber([dataPL3.giaiNganThangBcaoDtoan, item.giaiNganNsnnVonScl])
+                        dataPL3.luyKeGiaiNganDtoan = sumNumber([dataPL3.luyKeGiaiNganDtoan, item.luyKeGiaiNganDauNamNsnnVonScl])
+                    }
+                })
+                if (dataTemp3) {
+                    this.tabData.extraDataPL3 = dataPL3;
+                }
+                //lay du lieu cua phu luc 2
+                const dataPL2 = {
+                    maNdung: '0.1.2.2',
+                    dtoanGiaoDtoan: 0,
+                    dtoanGiaoNguonKhac: 0,
+                    dtoanGiaoNguonQuy: 0,
+                    giaiNganThangBcaoDtoan: 0,
+                    giaiNganThangBcaoNguonKhac: 0,
+                    giaiNganThangBcaoNguonQuy: 0,
+                    luyKeGiaiNganDtoan: 0,
+                    luyKeGiaiNganNguonKhac: 0,
+                    luyKeGiaiNganNguonQuy: 0,
+                }
+                const dataTemp2 = this.baoCao.lstBcaos.find(e => e.maLoai == '2')?.lstCtietBcaos;
+                dataTemp2?.forEach(item => {
+                    const level = item.stt.split('.').length - 2;
+                    if (level == 0) {
+                        dataPL2.dtoanGiaoDtoan = sumNumber([dataPL2.dtoanGiaoDtoan, item.dtoanSdungNamNguonNsnn])
+                        dataPL2.dtoanGiaoNguonKhac = sumNumber([dataPL2.dtoanGiaoNguonKhac, item.dtoanSdungNamNguonSn])
+                        dataPL2.dtoanGiaoNguonQuy = sumNumber([dataPL2.dtoanGiaoNguonQuy, item.dtoanSdungNamNguonQuy])
+                        dataPL2.giaiNganThangBcaoDtoan = sumNumber([dataPL2.giaiNganThangBcaoDtoan, item.giaiNganThangNguonNsnn])
+                        dataPL2.giaiNganThangBcaoNguonKhac = sumNumber([dataPL2.giaiNganThangBcaoNguonKhac, item.giaiNganThangNguonSn])
+                        dataPL2.giaiNganThangBcaoNguonQuy = sumNumber([dataPL2.giaiNganThangBcaoNguonQuy, item.giaiNganThangNguonQuy])
+                        dataPL2.luyKeGiaiNganDtoan = sumNumber([dataPL2.luyKeGiaiNganDtoan, item.luyKeGiaiNganNguonNsnn])
+                        dataPL2.luyKeGiaiNganNguonKhac = sumNumber([dataPL2.luyKeGiaiNganNguonKhac, item.luyKeGiaiNganNguonSn])
+                        dataPL2.luyKeGiaiNganNguonQuy = sumNumber([dataPL2.luyKeGiaiNganNguonQuy, item.luyKeGiaiNganNguonQuy])
+                    }
+                })
+                if (dataTemp2) {
+                    this.tabData.extraDataPL2 = dataPL2;
+                }
             }
             this.tabs = [];
             this.tabs.push(PHULUCLIST.find(item => item.maPhuLuc == maPhuLuc));
@@ -719,25 +778,16 @@ export class BaoCaoComponent implements OnInit {
     getNewData(obj: any) {
         const index = this.baoCao.lstBcaos.findIndex(e => e.maLoai == this.tabs[0].maPhuLuc);
         if (obj?.trangThai == '-1') {
-            this.getDetailReport();
-            this.tabData = {
-                ...this.baoCao.lstBcaos[index],
-                maPhuLuc: this.tabs[0]?.maPhuLuc,
-                maLoaiBcao: this.baoCao.maLoaiBcao,
-                idBcao: this.baoCao.id,
-                trangThaiBaoCao: this.baoCao?.trangThai,
-                statusBtnOk: this.okStatus,
-                statusBtnFinish: this.finishStatus,
-                luyKeDetail: this.luyKes.find(e => e.maLoai == this.tabs[0].maPhuLuc),
-                status: this.status,
-            }
-            this.tabs = [];
-            this.tabs.push(PHULUCLIST.find(e => e.maPhuLuc == this.baoCao.lstBcaos[index].maLoai));
-            this.selectedIndex = this.tabs.length + 1;
+            const pl = PHULUCLIST.find(e => e.maPhuLuc == this.tabs[0].maPhuLuc);
+            this.baoCao.lstBcaos[index] = obj?.data;
+            this.baoCao.lstBcaos[index].tieuDe = pl.tieuDe;
+            this.baoCao.lstBcaos[index].tenPhuLuc = pl.tenPhuLuc;
         } else {
             this.baoCao.lstBcaos[index].trangThai = obj?.trangThai;
             this.baoCao.lstBcaos[index].lyDoTuChoi = obj?.lyDoTuChoi;
         }
+        this.tabs = [];
+        this.selectedIndex = 0;
     }
 
     // them file vao danh sach
