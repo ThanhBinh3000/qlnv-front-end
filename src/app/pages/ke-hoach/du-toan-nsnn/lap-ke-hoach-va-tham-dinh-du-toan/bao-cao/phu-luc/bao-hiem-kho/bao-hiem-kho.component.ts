@@ -161,7 +161,7 @@ export class BaoHiemKhoComponent implements OnInit {
                 if (this.userInfo.capDvi != "3") {
                     this.listDanhSachCuc = res.data;
                 }
-                this.listDanhSachCuc.push(donViLogin);
+                // this.listDanhSachCuc.push(donViLogin);
 
             } else {
                 this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -262,9 +262,9 @@ export class BaoHiemKhoComponent implements OnInit {
                 let indexArr = []
                 lstLv1.forEach(item => {
                     lstCon.forEach(itm => {
-                        if(itm.maDvi.startsWith(item.maDvi)){
+                        if (itm.maDvi.startsWith(item.maDvi)) {
                             indexArr.push(itm)
-                            for (let i = 1; i <= indexArr.length; i++){
+                            for (let i = 1; i <= indexArr.length; i++) {
                                 itm.stt = item.stt + "." + i;
                             }
                         }
@@ -807,6 +807,12 @@ export class BaoHiemKhoComponent implements OnInit {
         num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
+
+    displayNumber(num: number): string {
+        // num = exchangeMoney(num, '1', this.maDviTien);
+        return displayNumber(num);
+    }
+
     getMoneyUnit() {
         return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
     }
