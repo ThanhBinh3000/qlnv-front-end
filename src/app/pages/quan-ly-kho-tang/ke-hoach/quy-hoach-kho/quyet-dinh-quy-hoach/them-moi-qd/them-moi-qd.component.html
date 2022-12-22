@@ -17,16 +17,16 @@
   </div>
 </nz-affix>
 <div class="bg-trang">
-  <div class="header-detail-tab">
-    <div class="title-chi-tieu">
-      <span
-        [ngClass]="formData.value.trangThai == globals.prop.NHAP_BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
-        {{ formData.value.tenTrangThai }}
-      </span>
-      <span>QUYẾT ĐỊNH QUY HOẠCH</span>
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+                <span [ngClass]=" formData.value.trangThai == globals.prop.NHAP_BAN_HANH  ? 'status-xanh' : 'status-do' ">
+                    {{formData.value.tenTrangThai}}
+                </span>
+        <span>QUYẾT ĐỊNH QUY HOẠCH</span>
+      </div>
     </div>
   </div>
-  <br>
   <nz-card class="mt16 flex-card p-lr16">
     <div class="header-detail-tab">Thông tin chung</div>
     <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
