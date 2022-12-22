@@ -3,20 +3,19 @@
         <nz-card class="mt16 flex-card p-lr16">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
                 <div nz-row [nzGutter]="20">
-
                     <div nz-col nzSpan="2">
                         <label class="search__label"> Năm kế hoạch </label>
-                        <nz-select formData="namKh">
+                        <nz-select formControlName="namKh">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
                     </div>
                     <div nz-col nzSpan="14">
                         <label class="search__label">Nội dung tổng hợp</label>
-                        <input class="search__input" placeholder="" nz-input formData="noiDungThop" />
+                        <input class="search__input" placeholder="" nz-input formControlName="noiDungThop" />
                     </div>
                     <div nz-col nzSpan="5">
                         <label class="search__label">Ngày tổng hợp</label>
-                        <nz-range-picker formData="ngayThop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                        <nz-range-picker formControlName="ngayThop" nzFormat="dd/MM/yyyy"></nz-range-picker>
                     </div>
                 </div>
             </form>
