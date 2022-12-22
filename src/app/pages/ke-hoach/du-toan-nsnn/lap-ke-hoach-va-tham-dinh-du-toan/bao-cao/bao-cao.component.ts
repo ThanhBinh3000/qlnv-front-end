@@ -1025,9 +1025,47 @@ export class BaoCaoComponent implements OnInit {
                 })
 
                 //phu luc bao hiem kho
-                const dataBaoHiemKho = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh_kho').lstCtietLapThamDinhs;
+                let dataBaoHiemKho = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh_kho').lstCtietLapThamDinhs;
+                let lstLv1 = []
                 dataBaoHiemKho.forEach(item => {
+                    if (item.maNhaKho == null && item.diaChiKho == null && item.tenNhaKho == null) {
+                        lstLv1.push({
+                            ...item,
+                            level: "1"
+                        })
+                    }
+                })
+                for (let i = 1; i <= lstLv1.length; i++) {
+                    lstLv1.forEach(item => {
+                        item.stt = "0." + i;
+                    })
+                }
+                let lstCon = [];
+                dataBaoHiemKho.forEach(item => {
+                    if (item.maNhaKho !== null && item.diaChiKho !== null && item.tenNhaKho !== null) {
+                        lstCon.push({
+                            ...item,
+                            level: "2"
+                        })
+                    }
+                })
+                let indexArr = []
+                lstLv1.forEach(item => {
+                    lstCon.forEach(itm => {
+                        if (itm.maDvi.startsWith(item.maDvi)) {
+                            indexArr.push(itm)
+                            for (let i = 1; i <= indexArr.length; i++) {
+                                itm.stt = item.stt + "." + i;
+                            }
+                        }
+                    })
+                })
+                let a = lstLv1.concat(lstCon);
+                dataBaoHiemKho = a
+                dataBaoHiemKho.forEach(item => {
+
                     const level = item.stt.split('.').length - 2;
+
                     let tongGtTu = 0;
                     let tongDtDuoi = 0;
                     let slNhaKhoTu1 = 0;
