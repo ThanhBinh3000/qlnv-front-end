@@ -6,6 +6,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { PhuLucIComponent } from './phu-luc-1/phu-luc-1.component';
 import { PhuLucIIComponent } from './phu-luc-2/phu-luc-2.component';
 import { PhuLucIIIComponent } from './phu-luc-3/phu-luc-3.component';
+import { DialogChonDanhMucComponent } from './dialog-chon-danh-muc/dialog-chon-danh-muc.component';
 
 @NgModule({
     declarations: [
@@ -13,6 +14,7 @@ import { PhuLucIIIComponent } from './phu-luc-3/phu-luc-3.component';
         PhuLucIComponent,
         PhuLucIIComponent,
         PhuLucIIIComponent,
+        DialogChonDanhMucComponent,
     ],
     imports: [CommonModule, ComponentsModule],
     exports: [BaoCaoComponent],

@@ -1047,3 +1047,31 @@ export function numberOnly(str: string): boolean {
   return check;
 }
 
+export function getName(n: number, name: string) {
+  const lstStr: string[] = name.split('$');
+  let newName = lstStr[0];
+  for (let i = 1; i < lstStr.length; i = i + 2) {
+    let year = 0;
+    let sign = 1;
+    Array.from(lstStr[i]).forEach(item => {
+      if (item == 'n') {
+        year += sign * n;
+      };
+      if (item.charCodeAt(0) == 43) {
+        sign = 1;
+      }
+      if (item.charCodeAt(0) == 45) {
+        sign = -1;
+      }
+      if (item.charCodeAt(0) > 47 && item.charCodeAt(0) < 58) {
+        year += sign * (item.charCodeAt(0) - 48);
+      }
+    })
+    newName += year.toString();
+    if (lstStr[i + 1]) {
+      newName += lstStr[i + 1];
+    }
+  }
+  return newName;
+}
+

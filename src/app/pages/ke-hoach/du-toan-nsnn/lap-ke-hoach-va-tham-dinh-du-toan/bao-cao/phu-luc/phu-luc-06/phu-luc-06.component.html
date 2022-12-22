@@ -35,7 +35,7 @@
                 <thead>
                     <tr>
                         <th rowspan="2" [hidden]="status">
-                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
+                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" style="margin-right: 0;">
                             </label>
                         </th>
                         <th rowspan="2" class="text-center" nzWidth="100px">STT</th>
@@ -223,8 +223,6 @@
                             <td [hidden]="status">
                                 <i class="fa fa-plus" (click)="addLine(i + 1)"></i>
                             </td>
-
-
                         </ng-template>
                     </tr>
 

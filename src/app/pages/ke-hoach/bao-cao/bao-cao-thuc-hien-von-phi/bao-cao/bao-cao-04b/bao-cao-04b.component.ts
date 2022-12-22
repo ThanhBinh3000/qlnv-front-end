@@ -3,7 +3,7 @@ import * as fileSaver from 'file-saver';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogLuaChonThemDonViComponent } from 'src/app/components/dialog/dialog-lua-chon-them-don-vi/dialog-lua-chon-them-don-vi.component';
+import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { DialogThemVatTuComponent } from 'src/app/components/dialog/dialog-vat-tu/dialog-vat-tu.component';
 import { MESSAGE } from 'src/app/constants/message';
@@ -1153,54 +1153,41 @@ export class BaoCao04bComponent implements OnInit {
     }
 
     addAllCol() {
-        const lstDviChon = this.lstVatTuFull.filter(item => this.listColTemp?.findIndex(data => data.maVtu == item.id) == -1);
-        const obj = {
-            danhSachDonVi: lstDviChon,
-            multi: true,
-        }
-        const modalIn = this.modal.create({
-            nzTitle: 'Danh sách vật tư',
-            nzContent: DialogLuaChonThemDonViComponent,
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Danh sách hàng hóa',
+            nzContent: DialogDanhSachVatTuHangHoaComponent,
+            nzBodyStyle: { overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' },
             nzMaskClosable: false,
             nzClosable: false,
-            nzWidth: '65%',
+            nzWidth: '900px',
             nzFooter: null,
-            nzComponentParams: {
-                obj: obj
-            },
+            nzComponentParams: {},
         });
-        modalIn.afterClose.subscribe((res) => {
+        modalTuChoi.afterClose.subscribe(async (res) => {
             if (res) {
-                res.forEach(async item => {
-                    this.addCol(item);
+                this.lstCtietBcao.forEach(data => {
+                    const objTrongD = {
+                        id: uuid.v4() + 'FE',
+                        maVtu: res.id,
+                        loaiMatHang: 0,
+                        sl: 0,
+                    }
+                    const objLke = {
+                        id: uuid.v4() + 'FE',
+                        maVtu: res.id,
+                        loaiMatHang: 1,
+                        sl: 0,
+                    }
+                    data.listCtiet.push(objTrongD);
+                    data.listCtiet.push(objLke);
                 })
+                this.listColTemp.push({
+                    id: uuid.v4() + 'FE',
+                    maVtu: res.id,
+                    colName: res.ten,
+                });
+                this.updateEditCache();
             }
-            this.updateEditCache();
-        });
-    }
-
-    addCol(vatTu: any) {
-        this.lstCtietBcao.forEach(data => {
-            const itemLine = this.luyKes?.find(item => item.maNdungChi == data.maNdungChi)?.listCtiet;
-            const objTrongD = {
-                id: uuid.v4() + 'FE',
-                maVtu: vatTu.id,
-                loaiMatHang: 0,
-                sl: 0,
-            }
-            const objLke = {
-                id: uuid.v4() + 'FE',
-                maVtu: vatTu.id,
-                loaiMatHang: 1,
-                sl: 0,//itemLine?.find(item => item.maVtu == vatTu.id && item.loaiMatHang == '1')?.sl ? itemLine?.find(item => item.maVtu == vatTu.id && item.loaiMatHang == '1')?.sl : 0,
-            }
-            data.listCtiet.push(objTrongD);
-            data.listCtiet.push(objLke);
-        })
-        this.listColTemp.push({
-            id: uuid.v4() + 'FE',
-            maVtu: vatTu.id,
-            colName: vatTu.ten,
         });
     }
 
