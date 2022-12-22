@@ -405,6 +405,7 @@ export class BaoHiemHangComponent implements OnInit {
 
     getTotal() {
         this.total = new ItemData();
+        this.total.giaTri = 0
         this.lstCtietBcao.forEach(item => {
             this.total.giaTri = sumNumber([this.total.giaTri, item.giaTri]);
         })

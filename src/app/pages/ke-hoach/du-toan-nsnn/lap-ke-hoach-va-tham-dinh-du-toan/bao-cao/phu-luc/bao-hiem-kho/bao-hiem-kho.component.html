@@ -102,15 +102,17 @@
                         </td> -->
                             <td class="text-center">
                                 {{getChiMuc(data.stt)}}
+                                <!-- {{i + 1}} -->
                             </td>
-                            <td>
+                            <td [attr.rowspan]="data.stateSpan" *ngIf="data.stateSpan">
                                 <div *ngFor="let item of listDanhSachCuc">
                                     <div *ngIf="item.maDvi == data.maDvi">
                                         {{item.tenDvi}}
                                     </div>
                                 </div>
                             </td>
-                            <td>
+                            <td [attr.rowspan]="data.countySpan" *ngIf="data.countySpan">
+
                                 {{data.diaChiKho}}
                                 <!-- <div *ngFor="let item of listDanhMucKhoFull">
                                     <div *ngIf="item.maDvi == data.diaChiKho">
@@ -158,6 +160,7 @@
                         <ng-template #editTemplate>
                             <td class="text-center">
                                 {{getChiMuc(data.stt)}}
+                                <!-- {{i + 1}} -->
                             </td>
 
                             <td>
