@@ -33,7 +33,7 @@
     <nz-table nzBordered class="table__body">
       <thead>
         <tr>
-          <th width="45px" rowspan="4">
+          <th width="45px" rowspan="3" [hidden]="status">
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
           </th>
           <th rowspan="3" class="text-center" nzWidth="100px">STT</th>
@@ -79,6 +79,7 @@
           <th>Khác</th>
         </tr>
         <tr>
+          <th [hidden]="status"></th>
           <th class="text-center">A</th>
           <th>B</th>
           <th>1</th>
@@ -112,7 +113,7 @@
       <tbody>
         <tr *ngFor="let data of lstCtietBcao; let i = index">
           <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-            <td width="45px">
+            <td width="45px" [hidden]="status">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
             </td>
             <td class="text-center">
@@ -210,7 +211,7 @@
             </td>
           </ng-container>
           <ng-template #editTemplate>
-            <td width="45px">
+            <td width="45px" [hidden]="status">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
             </td>
             <td class="text-center">
@@ -359,8 +360,8 @@
         </tr>
         <tr>
           <td></td>
-          <td>Tổng Số</td>
           <td></td>
+          <td>Tổng Số</td>
           <td>{{displayValue(total.thienTsoBcTqGiao)}}</td>
           <td>{{displayValue(total.thienTsoBcTdiem)}}</td>
           <td>{{displayValue(total.thienQlPcap)}}</td>
