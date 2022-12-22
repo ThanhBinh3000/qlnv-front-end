@@ -115,7 +115,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         maDiemKho: this.listOfData[0].maDiemKho,
         tenDiemKho: this.listOfData[0].tenDiemKho,
         maNhaKho: this.listOfData[0].maNhaKho,
-        tenNhaKho: this.listOfData[0].tenNhaKho,
+        tenNhakho: this.listOfData[0].tenNhakho,
         maNganKho: this.listOfData[0].maNganKho,
         tenNganKho: this.listOfData[0].tenNganKho,
         maLoKho: this.listOfData[0].maLoKho,
@@ -231,6 +231,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     let soLuongDaLenKh = await this.deXuatKhBanDauGiaService.getSoLuongAdded(body);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
+    console.log(res, 88888)
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
@@ -248,7 +249,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         };
         this.listDiemKho.push(item);
       }
-      ;
+      console.log(this.listDiemKho, 9999)
+        ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     }
   }

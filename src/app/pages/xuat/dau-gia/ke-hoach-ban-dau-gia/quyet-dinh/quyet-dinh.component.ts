@@ -121,7 +121,7 @@ export class QuyetDinhComponent implements OnInit {
   }
 
   detail(data?) {
-    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_SUA")) {
+    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_THEM")) {
       return;
     }
     this.isDetail = true;

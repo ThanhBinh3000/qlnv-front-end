@@ -35,7 +35,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   isDetailDxCuc: boolean = false;
   dataTableDanhSachDX: any[] = [];
   danhMucDonVi: any;
-  isTongHop: boolean = true;
+  isTongHop: boolean = false;
   isQuyetDinh: boolean = false;
   dataDeXuat: any[] = [];
   datePipe = new DatePipe('en-US');
