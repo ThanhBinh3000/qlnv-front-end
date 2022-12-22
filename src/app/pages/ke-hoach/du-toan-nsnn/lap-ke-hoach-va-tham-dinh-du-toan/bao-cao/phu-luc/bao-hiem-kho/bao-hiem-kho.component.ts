@@ -281,7 +281,7 @@ export class BaoHiemKhoComponent implements OnInit {
             }
         }
         this.getStatusButton();
-        // this.tinhTong();
+        this.tinhTong();
         this.spinner.hide();
     }
 
@@ -330,6 +330,11 @@ export class BaoHiemKhoComponent implements OnInit {
         // replace nhung ban ghi dc them moi id thanh null
         lstCtietBcaoTemp.forEach(item => {
             if (item.id?.length == 38) {
+                item.id = null;
+            }
+        })
+        lstCtietBcaoTemp.forEach(item => {
+            if (item.id?.length == 36) {
                 item.id = null;
             }
         })

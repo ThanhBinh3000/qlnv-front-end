@@ -401,6 +401,7 @@ export class PhuLuc03Component implements OnInit {
         }
         this.replaceIndex(lstIndex, -1);
         this.sum(stt);
+        this.getTotal();
         this.updateEditCache();
     }
 

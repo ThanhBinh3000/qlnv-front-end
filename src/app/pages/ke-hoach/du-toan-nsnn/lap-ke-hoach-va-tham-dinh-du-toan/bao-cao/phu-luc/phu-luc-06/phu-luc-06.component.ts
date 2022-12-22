@@ -263,11 +263,13 @@ export class PhuLuc06Component implements OnInit {
         // delete object have checked = true
         this.lstCtietBcao = this.lstCtietBcao.filter(item => item.checked != true)
         this.allChecked = false;
+        this.tinhTong()
     }
 
     // xoa dong
     deleteById(id: string): void {
-        this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
+        this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id);
+        this.tinhTong();
     }
 
     // start edit

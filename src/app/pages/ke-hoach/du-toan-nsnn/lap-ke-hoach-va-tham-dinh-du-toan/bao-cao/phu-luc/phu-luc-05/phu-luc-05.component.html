@@ -56,7 +56,7 @@
           <th></th>
           <th></th>
           <th>4</th>
-          <th>Số</th>
+          <th></th>
           <th>5</th>
           <th>6</th>
           <th>7</th>
@@ -79,11 +79,11 @@
           <th></th>
           <th></th>
           <th></th>
+          <th>{{displayValue(total.giaTriCongTrinh)}}</th>
           <th></th>
+          <th>{{displayValue(total.qdPdBcaoGtriDtoanKtoanTmdt)}}</th>
           <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
+          <th>{{displayValue(total.qdPdQtoanGtriQtoan)}}</th>
           <th>{{displayValue(total.luyKeVapVon)}}</th>
           <th>{{displayValue(total.keHoachVon)}}</th>
           <th *ngIf="viewAppraisalValue">
@@ -163,7 +163,7 @@
               <td>{{displayValue(data.keHoachNamDtN2)}}</td>
               <td>{{data.ghiChu}}</td>
             </ng-container>
-            
+
             <ng-template #editAppraisal>
               <td>
                 <ng-container *ngIf="data.maCongTrinh; else editName">
@@ -263,15 +263,15 @@
         <i nz-icon nzType="printer" nzTheme="outline"></i>
         <span>In</span>
       </button>
-      <button type="button" class="btn btn-main" (click)="save('5')" [hidden]="statusBtnFinish">
+      <button type="button" class="btn btn-main" (click)="save('5', null)" [hidden]="statusBtnFinish">
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>Hoàn tất nhập liệu</span>
       </button>
-      <button type="button" class="btn btn-main" (click)="save('4')" [hidden]="statusBtnFinish">
+      <button type="button" class="btn btn-main" (click)="save('4', null)" [hidden]="statusBtnFinish">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
-      <button type="button" class="btn btn-main" (click)="onSubmit('1', null)" [hidden]="statusBtnOk">
+      <button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="statusBtnOk">
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>OK</span>
       </button>
