@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {PAGE_SIZE_DEFAULT} from "../../../../constants/config";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -11,7 +11,7 @@ import {UserService} from "../../../../services/user.service";
 import {NzModalService} from "ng-zorro-antd/modal";
 import * as dayjs from "dayjs";
 import {MESSAGE} from "../../../../constants/message";
-import { STATUS } from 'src/app/constants/status';
+import {STATUS} from 'src/app/constants/status';
 
 @Component({
   selector: 'app-qd-pheduyet-quyet-toan-btc',
@@ -35,9 +35,11 @@ export class QdPheduyetQuyetToanBtcComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   indeterminate = false;
   filterTable: any = {
+    id: null,
     namQuyetToan: '',
     ngayNhap: '',
     ngayCapNhat: '',
+    ngayTao: '',
     qdCtKhNam: '',
     trangThai: '',
     trangThaiPdBtc: '',

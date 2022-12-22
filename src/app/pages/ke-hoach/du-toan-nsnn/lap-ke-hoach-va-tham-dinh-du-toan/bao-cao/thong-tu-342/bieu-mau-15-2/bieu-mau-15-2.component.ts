@@ -81,7 +81,7 @@ export class BieuMau152Component implements OnInit {
     maDviTao: any;
     soLaMa: any[] = LA_MA;
     allChecked = false;
-
+    total: ItemData;
     namBaoCao: string;
     namTruoc: string;
     namKeHoach: string;
@@ -234,6 +234,7 @@ export class BieuMau152Component implements OnInit {
             })
         }
         this.sortByIndex();
+        this.getTotal();
         this.updateEditCache();
         this.getStatusButton();
 
@@ -360,7 +361,8 @@ export class BieuMau152Component implements OnInit {
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-        this.tinhTong();
+        // this.tinhTong();
+        this.sum(this.lstCtietBcao[index].stt);
         this.updateEditCache();
     }
     // huy thay doi
@@ -371,7 +373,6 @@ export class BieuMau152Component implements OnInit {
             data: { ...this.lstCtietBcao[index] },
             edit: false
         };
-        this.tinhTong();
     }
 
     deleteAllChecked() {
@@ -446,7 +447,7 @@ export class BieuMau152Component implements OnInit {
     addLine(stt: string) {
         let index = -1;
         for (let i = this.lstCtietBcao.length - 1; i >= 0; i--) {
-            if (this.lstCtietBcao[i].stt == stt) {
+            if (this.lstCtietBcao[i].stt.startsWith(stt)) {
                 index = i;
                 break;
             }
@@ -505,6 +506,7 @@ export class BieuMau152Component implements OnInit {
             data: { ...item }
         };
         this.sortByIndex();
+        console.log(this.lstCtietBcao);
     }
 
 
@@ -607,14 +609,90 @@ export class BieuMau152Component implements OnInit {
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
-
+                    this.lstCtietBcao[index].dtTsoNguoiLv = sumNumber([this.lstCtietBcao[index].dtTsoNguoiLv, item.dtTsoNguoiLv]);
+                    this.lstCtietBcao[index].dtTongQlPcap = sumNumber([this.lstCtietBcao[index].dtTongQlPcap, item.dtTongQlPcap]);
+                    this.lstCtietBcao[index].dtQlPcapTso = sumNumber([this.lstCtietBcao[index].dtQlPcapTso, item.dtQlPcapTso]);
+                    this.lstCtietBcao[index].dtQlPcapLuongBac = sumNumber([this.lstCtietBcao[index].dtQlPcapLuongBac, item.dtQlPcapLuongBac]);
+                    this.lstCtietBcao[index].dtQlPcapPcapLuong = sumNumber([this.lstCtietBcao[index].dtQlPcapPcapLuong, item.dtQlPcapPcapLuong]);
+                    this.lstCtietBcao[index].dtQlPcapDgopLuong = sumNumber([this.lstCtietBcao[index].dtQlPcapDgopLuong, item.dtQlPcapDgopLuong]);
+                    this.lstCtietBcao[index].dtQlPcapHdLd = sumNumber([this.lstCtietBcao[index].dtQlPcapHdLd, item.dtQlPcapHdLd]);
+                    this.lstCtietBcao[index].dtKphiNsnn = sumNumber([this.lstCtietBcao[index].dtKphiNsnn, item.dtKphiNsnn]);
+                    this.lstCtietBcao[index].dtKphiSnDvu = sumNumber([this.lstCtietBcao[index].dtKphiSnDvu, item.dtKphiSnDvu]);
+                    this.lstCtietBcao[index].dtKphiPhiDlai = sumNumber([this.lstCtietBcao[index].dtKphiPhiDlai, item.dtKphiPhiDlai]);
+                    this.lstCtietBcao[index].dtKphiHphap = sumNumber([this.lstCtietBcao[index].dtKphiHphap, item.dtKphiHphap]);
+                    this.lstCtietBcao[index].uocThTsoNguoiLv = sumNumber([this.lstCtietBcao[index].uocThTsoNguoiLv, item.uocThTsoNguoiLv]);
+                    this.lstCtietBcao[index].uocThTsoBcTdiem = sumNumber([this.lstCtietBcao[index].uocThTsoBcTdiem, item.uocThTsoBcTdiem]);
+                    this.lstCtietBcao[index].uocThTsoVcCc = sumNumber([this.lstCtietBcao[index].uocThTsoVcCc, item.uocThTsoVcCc]);
+                    this.lstCtietBcao[index].uocThTongQlPcap = sumNumber([this.lstCtietBcao[index].uocThTongQlPcap, item.uocThTongQlPcap]);
+                    this.lstCtietBcao[index].uocThQlPcapTso = sumNumber([this.lstCtietBcao[index].uocThQlPcapTso, item.uocThQlPcapTso]);
+                    this.lstCtietBcao[index].uocThQlPcapLuongBac = sumNumber([this.lstCtietBcao[index].uocThQlPcapLuongBac, item.uocThQlPcapLuongBac]);
+                    this.lstCtietBcao[index].uocThQlPcapPcapLuong = sumNumber([this.lstCtietBcao[index].uocThQlPcapPcapLuong, item.uocThQlPcapPcapLuong]);
+                    this.lstCtietBcao[index].uocThQlPcapDgopLuong = sumNumber([this.lstCtietBcao[index].uocThQlPcapDgopLuong, item.uocThQlPcapDgopLuong]);
+                    this.lstCtietBcao[index].uocThQlPcapHdLd = sumNumber([this.lstCtietBcao[index].uocThQlPcapHdLd, item.uocThQlPcapHdLd]);
+                    this.lstCtietBcao[index].uocThKphiNsnn = sumNumber([this.lstCtietBcao[index].uocThKphiNsnn, item.uocThKphiNsnn]);
+                    this.lstCtietBcao[index].uocThKphiSnDvu = sumNumber([this.lstCtietBcao[index].uocThKphiSnDvu, item.uocThKphiSnDvu]);
+                    this.lstCtietBcao[index].uocThKphiPhiDlai = sumNumber([this.lstCtietBcao[index].uocThKphiPhiDlai, item.uocThKphiPhiDlai]);
+                    this.lstCtietBcao[index].uocThKphiHphap = sumNumber([this.lstCtietBcao[index].uocThKphiHphap, item.uocThKphiHphap]);
+                    this.lstCtietBcao[index].namKhTsoNguoiLv = sumNumber([this.lstCtietBcao[index].namKhTsoNguoiLv, item.namKhTsoNguoiLv]);
+                    this.lstCtietBcao[index].namKhTongQlPcap = sumNumber([this.lstCtietBcao[index].namKhTongQlPcap, item.namKhTongQlPcap]);
+                    this.lstCtietBcao[index].namKhQlPcapTso = sumNumber([this.lstCtietBcao[index].namKhQlPcapTso, item.namKhQlPcapTso]);
+                    this.lstCtietBcao[index].namKhQlPcapLuongBac = sumNumber([this.lstCtietBcao[index].namKhQlPcapLuongBac, item.namKhQlPcapLuongBac]);
+                    this.lstCtietBcao[index].namKhQlPcapPcapLuong = sumNumber([this.lstCtietBcao[index].namKhQlPcapPcapLuong, item.namKhQlPcapPcapLuong]);
+                    this.lstCtietBcao[index].namKhQlPcapDgopLuong = sumNumber([this.lstCtietBcao[index].namKhQlPcapDgopLuong, item.namKhQlPcapDgopLuong]);
+                    this.lstCtietBcao[index].namKhQlPcapHdLd = sumNumber([this.lstCtietBcao[index].namKhQlPcapHdLd, item.namKhQlPcapHdLd]);
+                    this.lstCtietBcao[index].namKhKphiNsnn = sumNumber([this.lstCtietBcao[index].namKhKphiNsnn, item.namKhKphiNsnn]);
+                    this.lstCtietBcao[index].namKhKphiSnDvu = sumNumber([this.lstCtietBcao[index].namKhKphiSnDvu, item.namKhKphiSnDvu]);
+                    this.lstCtietBcao[index].namKhKphiPhiDlai = sumNumber([this.lstCtietBcao[index].namKhKphiPhiDlai, item.namKhKphiPhiDlai]);
+                    this.lstCtietBcao[index].namKhKphiHphap = sumNumber([this.lstCtietBcao[index].namKhKphiHphap, item.namKhKphiHphap]);
                 }
             })
             stt = this.getHead(stt);
         }
-
+        this.getTotal();
     }
 
+    getTotal() {
+        this.total = new ItemData();
+        this.lstCtietBcao.forEach(item => {
+            if (item.level == 0) {
+                this.total.dtTsoNguoiLv = sumNumber([this.total.dtTsoNguoiLv, item.dtTsoNguoiLv]);
+                this.total.dtTongQlPcap = sumNumber([this.total.dtTongQlPcap, item.dtTongQlPcap]);
+                this.total.dtQlPcapTso = sumNumber([this.total.dtQlPcapTso, item.dtQlPcapTso]);
+                this.total.dtQlPcapLuongBac = sumNumber([this.total.dtQlPcapLuongBac, item.dtQlPcapLuongBac]);
+                this.total.dtQlPcapPcapLuong = sumNumber([this.total.dtQlPcapPcapLuong, item.dtQlPcapPcapLuong]);
+                this.total.dtQlPcapDgopLuong = sumNumber([this.total.dtQlPcapDgopLuong, item.dtQlPcapDgopLuong]);
+                this.total.dtQlPcapHdLd = sumNumber([this.total.dtQlPcapHdLd, item.dtQlPcapHdLd]);
+                this.total.dtKphiNsnn = sumNumber([this.total.dtKphiNsnn, item.dtKphiNsnn]);
+                this.total.dtKphiSnDvu = sumNumber([this.total.dtKphiSnDvu, item.dtKphiSnDvu]);
+                this.total.dtKphiPhiDlai = sumNumber([this.total.dtKphiPhiDlai, item.dtKphiPhiDlai]);
+                this.total.dtKphiHphap = sumNumber([this.total.dtKphiHphap, item.dtKphiHphap]);
+                this.total.uocThTsoNguoiLv = sumNumber([this.total.uocThTsoNguoiLv, item.uocThTsoNguoiLv]);
+                this.total.uocThTsoBcTdiem = sumNumber([this.total.uocThTsoBcTdiem, item.uocThTsoBcTdiem]);
+                this.total.uocThTsoVcCc = sumNumber([this.total.uocThTsoVcCc, item.uocThTsoVcCc]);
+                this.total.uocThTongQlPcap = sumNumber([this.total.uocThTongQlPcap, item.uocThTongQlPcap]);
+                this.total.uocThQlPcapTso = sumNumber([this.total.uocThQlPcapTso, item.uocThQlPcapTso]);
+                this.total.uocThQlPcapLuongBac = sumNumber([this.total.uocThQlPcapLuongBac, item.uocThQlPcapLuongBac]);
+                this.total.uocThQlPcapPcapLuong = sumNumber([this.total.uocThQlPcapPcapLuong, item.uocThQlPcapPcapLuong]);
+                this.total.uocThQlPcapDgopLuong = sumNumber([this.total.uocThQlPcapDgopLuong, item.uocThQlPcapDgopLuong]);
+                this.total.uocThQlPcapHdLd = sumNumber([this.total.uocThQlPcapHdLd, item.uocThQlPcapHdLd]);
+                this.total.uocThKphiNsnn = sumNumber([this.total.uocThKphiNsnn, item.uocThKphiNsnn]);
+                this.total.uocThKphiSnDvu = sumNumber([this.total.uocThKphiSnDvu, item.uocThKphiSnDvu]);
+                this.total.uocThKphiPhiDlai = sumNumber([this.total.uocThKphiPhiDlai, item.uocThKphiPhiDlai]);
+                this.total.uocThKphiHphap = sumNumber([this.total.uocThKphiHphap, item.uocThKphiHphap]);
+                this.total.namKhTsoNguoiLv = sumNumber([this.total.namKhTsoNguoiLv, item.namKhTsoNguoiLv]);
+                this.total.namKhTongQlPcap = sumNumber([this.total.namKhTongQlPcap, item.namKhTongQlPcap]);
+                this.total.namKhQlPcapTso = sumNumber([this.total.namKhQlPcapTso, item.namKhQlPcapTso]);
+                this.total.namKhQlPcapLuongBac = sumNumber([this.total.namKhQlPcapLuongBac, item.namKhQlPcapLuongBac]);
+                this.total.namKhQlPcapPcapLuong = sumNumber([this.total.namKhQlPcapPcapLuong, item.namKhQlPcapPcapLuong]);
+                this.total.namKhQlPcapDgopLuong = sumNumber([this.total.namKhQlPcapDgopLuong, item.namKhQlPcapDgopLuong]);
+                this.total.namKhQlPcapHdLd = sumNumber([this.total.namKhQlPcapHdLd, item.namKhQlPcapHdLd]);
+                this.total.namKhKphiNsnn = sumNumber([this.total.namKhKphiNsnn, item.namKhKphiNsnn]);
+                this.total.namKhKphiSnDvu = sumNumber([this.total.namKhKphiSnDvu, item.namKhKphiSnDvu]);
+                this.total.namKhKphiPhiDlai = sumNumber([this.total.namKhKphiPhiDlai, item.namKhKphiPhiDlai]);
+                this.total.namKhKphiHphap = sumNumber([this.total.namKhKphiHphap, item.namKhKphiHphap]);
+            }
+        })
+    }
     setLevel() {
         this.lstCtietBcao.forEach(item => {
             const str: string[] = item.stt.split('.');

@@ -17,6 +17,7 @@ import { Globals } from 'src/app/shared/globals';
 import dayjs from "dayjs";
 import { KhCnQuyChuanKyThuat } from './../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import { DialogDanhSachHangHoaComponent } from './../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
+import { STATUS } from 'src/app/constants/status';
 @Component({
   selector: 'app-quan-ly-quy-chuan-ky-thuat-quoc-gia',
   templateUrl: './quan-ly-quy-chuan-ky-thuat-quoc-gia.component.html',
@@ -32,7 +33,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
   dataTest: any = {};
   dsCha: any = {};
   dsCon: any = {};
-
+  STATUS: STATUS
 
   formData: FormGroup;
 
@@ -73,14 +74,14 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
   dataTableAll: any[] = [];
   dsLoaiHangHoa: any[] = [];
   dsChungLoaiHangHoa: any[] = [];
-
   isTatCa: boolean = false;
   yearNow: number = 0;
   listNam: any[] = [];
   dsBoNganh: any[] = [];
   boNganhAd: any[] = [];
-
   listOfOption: any = [];
+  allChecked = false;
+  indeterminate = false;
   constructor(
     private fb: FormBuilder,
     private donviService: DonviService,
@@ -284,6 +285,37 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
     }
   }
 
+  updateAllChecked(): void {
+    this.indeterminate = false;
+    if (this.allChecked) {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          if (item.trangThai == this.globals.prop.NHAP_DU_THAO) {
+            item.checked = true;
+          }
+        });
+      }
+    } else {
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+    }
+  }
+
+  updateSingleChecked(): void {
+    if (this.dataTable.every(item => !item.checked)) {
+      this.allChecked = false;
+      this.indeterminate = false;
+    } else if (this.dataTable.every(item => item.checked)) {
+      this.allChecked = true;
+      this.indeterminate = false;
+    } else {
+      this.indeterminate = true;
+    }
+  }
+
   async changePageIndex(event) {
     this.spinner.show();
     try {
@@ -431,11 +463,6 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
-  }
-
-
-  updateSingleChecked() {
-
   }
 
   expandSet = new Set<number>();

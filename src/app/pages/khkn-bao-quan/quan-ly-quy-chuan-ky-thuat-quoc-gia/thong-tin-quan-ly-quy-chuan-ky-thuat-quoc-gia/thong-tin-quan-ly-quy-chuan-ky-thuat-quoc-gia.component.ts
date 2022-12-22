@@ -1,29 +1,20 @@
 import { cloneDeep } from 'lodash';
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges, ViewChild, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { BaseComponent } from './../../../../components/base/base.component';
 import { Validators } from '@angular/forms';
-import { HelperService } from 'src/app/services/helper.service';
 import { KhCnQuyChuanKyThuat } from './../../../../services/kh-cn-bao-quan/KhCnQuyChuanKyThuat';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { STATUS } from 'src/app/constants/status';
-import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import { ViewFlags } from '@angular/compiler/src/core';
 import { QuyChunKyThuatQuocGia } from 'src/app/models/KhoaHocCongNgheBaoQuan';
-import { LoginComponent } from './../../../login/login.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { filter } from 'rxjs/operators';
 import { DonviService } from 'src/app/services/donvi.service';
+import { Base2Component } from './../../../../components/base2/base2.component';
 
 
 @Component({
@@ -31,7 +22,7 @@ import { DonviService } from 'src/app/services/donvi.service';
   templateUrl: './thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia.component.html',
   styleUrls: ['./thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia.component.scss']
 })
-export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent implements OnInit, OnChanges {
+export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Component implements OnInit, OnChanges {
 
   @Input() id: number;
   @Input('isView') isView: boolean;
@@ -57,16 +48,19 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
   rowItem: QuyChunKyThuatQuocGia = new QuyChunKyThuatQuocGia;
   dataEdit: { [key: string]: { edit: boolean; data: QuyChunKyThuatQuocGia } } = {};
   listVanBan: any[] = [];
-  listVanBanId: any[] = [];
+  listVanBanId: any = [];
   dsBoNganh: any[] = [];
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
     private khCnQuyChuanKyThuat: KhCnQuyChuanKyThuat,
   ) {
-    super(httpClient, storageService, khCnQuyChuanKyThuat);
+    super(httpClient, storageService, notification, spinner, modal, khCnQuyChuanKyThuat);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [''],
@@ -86,7 +80,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
       taiLieuDinhKemList: [null,],
       maDvi: [''],
       ldoTuChoi: [''],
-      apDungCloaiVthh: [''],
+      apDungCloaiVthh: [false],
       listTenLoaiVthh: ['']
     });
   }
@@ -104,6 +98,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
       this.initForm();
       await Promise.all([
         this.userInfo = this.userService.getUserLogin(),
+        console.log(this.userInfo.DON_VI.maDviCha, 123),
         this.loadDsNam(),
         this.maVb = '/QĐ-BTC',
         this.loadLoaiHangHoa(),
@@ -136,6 +131,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
         const data = res.data;
         this.listOfTagOptions = data.loaiVthh.split(',');
         this.changeListOfTagOptions(data.loaiVthh);
+
         let lss = []
         for (let item of this.listOfTagOptions) {
           lss = [...lss, this.listOfOption.find(s => s.maHangHoa == item)?.tenHangHoa];
@@ -145,6 +141,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
         let ds = []
         ds = this.dsBoNganh.find(s => s.key == data.apDungTai)?.title;
         data.apDungTai = ds;
+        this.listVanBanId = String(data.idVanBanThayThe);
         this.helperService.bidingDataInFormGroup(this.formData, data);
         this.dataTable = data.tieuChuanKyThuat;
         this.dataTable.forEach((item, index) => {
@@ -220,7 +217,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
     body.fileDinhKems = this.taiLieuDinhKemList;
     body.loaiVthh = this.listOfTagOptions.join(',');
     body.listTenLoaiVthh = this.listLoaiVthh.join(',');
-    body.apDungTai = this.userInfo.DON_VI.maDviCha;
+    body.apDungTai = this.userInfo.MA_DVI.substring(0, 2);
     let res = null;
     if (this.id > 0) {
       res = await this.khCnQuyChuanKyThuat.update(body);
@@ -342,7 +339,7 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
   async loadLoaiHangHoa() {
     try {
       let hangHoa = await this.danhMucService.getDanhMucHangHoaDvql({
-        "maDvi": this.userInfo.DON_VI.maDviCha
+        "maDvi": this.userInfo.MA_DVI.substring(0, 2)
       }).toPromise();
       if (hangHoa) {
         if (hangHoa.msg == MESSAGE.SUCCESS) {
@@ -391,17 +388,14 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
   }
 
   onChangeLoaiVthh() {
-    if (this.formData.value.apDungCloaiVthh) {
-      this.formData.value.apDungCloaiVthh = false
-    } else {
-      this.formData.value.apDungCloaiVthh = true
-    }
   }
   onChangeChiTieuCha() {
     if (this.rowItem.chiTieuCha) {
       this.rowItem.chiTieuCha = true
+      console.log(33);
     } else {
       this.rowItem.chiTieuCha = false
+      console.log(44);
     }
   }
   clearData() {
@@ -489,10 +483,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
     let res = await this.khCnQuyChuanKyThuat.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let ds1 = res.data.content;
-      // let ds = ds1.forEach(s => {
-      //   s.soVanBan
-      //   console.log(s.soVanBan, "abc");
-      // });
       this.listVanBan = ds1;
     }
   }
@@ -505,10 +495,13 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends BaseComponent
           soVanBanThayThe: data.soVanBan,
           idVanBanThayThe: data.id,
         })
-        this.listOfTagOptions = data.loaiVthh.split(',');
-        this.listLoaiVthh = data.listTenLoaiVthh.split(',');
+        if (data.loaiVthh) {
+          this.listOfTagOptions = data.loaiVthh.split(',');
+        }
+        if (data.listTenLoaiVthh) {
+          this.listLoaiVthh = data.listTenLoaiVthh.split(',');
+        }
         this.dataTable = data.tieuChuanKyThuat;
-        this.formData.value.soVanBanThayThe = data.soVanBan;
         this.dataTable.forEach((item, index) => {
           this.dataEdit[index] = {
             edit: false,

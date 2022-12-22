@@ -1,7 +1,7 @@
-<ng-container *ngIf="!isDetail">
+<div *ngIf="!isDetail">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
-      <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+      <form [nzLayout]="'vertical'" nz-form>
         <div class="search__body" nz-row [nzGutter]="[20]">
           <div nz-col nzSpan="3">
             <nz-form-item class="form-item">
@@ -103,6 +103,10 @@
       <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
           <tr>
+            <th width="45px" rowspan="3">
+              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                [nzIndeterminate]="indeterminate"></label>
+            </th>
             <th class="text-center">STT</th>
             <!-- <th></th> -->
             <th>Số văn bản</th>
@@ -117,6 +121,7 @@
             <th>Hành động</th>
           </tr>
           <tr>
+            <th></th>
             <th></th>
             <!-- <th></th> -->
             <th class="text-center" width="350px">
@@ -181,6 +186,10 @@
         <tbody>
           <ng-container *ngFor="let data of basicTable.data; let i = index">
             <tr>
+              <td width="45px">
+                <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
+                  [nzDisabled]="data.trangThai != '00'"></label>
+              </td>
               <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
               <!-- <td [nzExpand]="expandSet.has(data.id)" (nzExpandChange)="onExpandChange(data.id, $event)"></td> -->
               <td>{{ data.soVanBan }}</td>
@@ -242,9 +251,8 @@
       </div>
     </nz-card>
   </div>
-</ng-container>
-
-<ng-container class="chi-tiet" *ngIf="isDetail">
+</div>
+<div class="chi-tiet" *ngIf="isDetail">
   <app-thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia [id]="selectedId" (showListEvent)="showList()" [isView]="isView">
   </app-thong-tin-quan-ly-quy-chuan-ky-thuat-quoc-gia>
-</ng-container>
+</div>

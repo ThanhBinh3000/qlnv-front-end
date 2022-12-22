@@ -620,10 +620,10 @@ export class BieuMau133Component implements OnInit {
     const lstCtietLapThamDinhsTemp: ItemData[] = [];
     let checkMoneyRange = true;
     this.lstCtietLapThamDinhs.forEach(item => {
-      // if (item.ncauChiTongSo > MONEY_LIMIT) {
-      //     checkMoneyRange = false;
-      //     return;
-      // }
+      if (item.kphiPduyetTso > MONEY_LIMIT || item.kphiThienNamTso > MONEY_LIMIT || item.kphiThienLkeTso > MONEY_LIMIT || item.kphiThienDtoanTso > MONEY_LIMIT) {
+        checkMoneyRange = false;
+        return;
+      }
       lstCtietLapThamDinhsTemp.push({
         ...item,
       })
@@ -865,7 +865,7 @@ export class BieuMau133Component implements OnInit {
   // }
   changeModel(id: string): void {
     this.editCache[id].data.kphiPduyetTso = sumNumber([this.editCache[id].data.kphiPduyetNsnn, this.editCache[id].data.kphiPduyetNkhac]);
-    this.editCache[id].data.kphiThienNamTso = sumNumber([this.editCache[id].data.kphiThienNamNsnnDtoan, this.editCache[id].data.kphiThienNamNsnnUth]);
+    this.editCache[id].data.kphiThienNamTso = sumNumber([this.editCache[id].data.kphiThienNamNsnnUth, this.editCache[id].data.kphiThienNamKphiThien]);
     this.editCache[id].data.kphiThienLkeTso = sumNumber([this.editCache[id].data.kphiThienLkeNsnn, this.editCache[id].data.kphiThienLkeNkhac]);
     this.editCache[id].data.kphiThienDtoanTso = sumNumber([this.editCache[id].data.kphiThienDtoanNsnn, this.editCache[id].data.kphiThienDtoanNkhac]);
   }
@@ -933,7 +933,7 @@ export class BieuMau133Component implements OnInit {
   }
 
   checkAdd(data: ItemData) {
-    if (data.level == 2 && data.maDtaiDan) {
+    if (data.level == 1 && data.maDtaiDan) {
       return true;
     }
     return false;
