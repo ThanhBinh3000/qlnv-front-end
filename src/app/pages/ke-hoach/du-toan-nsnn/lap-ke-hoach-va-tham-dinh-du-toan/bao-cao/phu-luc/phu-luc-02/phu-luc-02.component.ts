@@ -188,7 +188,7 @@ export class PhuLuc02Component implements OnInit {
   }
 
   // luu
-  async save(trangThai: string) {
+  async save(trangThai: string, lyDoTuChoi: string) {
     let checkSaveEdit;
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
@@ -224,25 +224,27 @@ export class PhuLuc02Component implements OnInit {
 
     const request = JSON.parse(JSON.stringify(this.formDetail));
     request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
+    if (lyDoTuChoi) {
+      request.lyDoTuChoi = lyDoTuChoi;
+    }
     request.trangThai = trangThai;
     this.spinner.show();
-    // this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
-    //   async data => {
-    //     if (data.statusCode == 0) {
-    //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-    //       this.formDetail = data.data;
-    //       this._modalRef.close({
-    //         formDetail: this.formDetail,
-    //       });
-    //     } else {
-    //       this.notification.error(MESSAGE.ERROR, data?.msg);
-    //     }
-    //   },
-    //   err => {
-    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //   },
-    // );
-    console.log(request);
+    this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
+      async data => {
+        if (data.statusCode == 0) {
+          this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+          this.formDetail = data.data;
+          this._modalRef.close({
+            formDetail: this.formDetail,
+          });
+        } else {
+          this.notification.error(MESSAGE.ERROR, data?.msg);
+        }
+      },
+      err => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      },
+    );
 
     this.spinner.hide();
     this.getTotal()
@@ -294,7 +296,7 @@ export class PhuLuc02Component implements OnInit {
     });
     modalTuChoi.afterClose.subscribe(async (text) => {
       if (text) {
-        this.onSubmit(mcn, text);
+        this.save(mcn, text);
       }
     });
   }
@@ -378,6 +380,7 @@ export class PhuLuc02Component implements OnInit {
     Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     this.sum(this.lstCtietBcao[index].stt);
+    this.getTotal()
     this.updateEditCache();
   }
 
@@ -429,9 +432,9 @@ export class PhuLuc02Component implements OnInit {
 
   sum(stt: string) {
     stt = this.getHead(stt);
-    const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
-    const data = this.lstCtietBcao[index];
     while (stt != '0') {
+      const index = this.lstCtietBcao.findIndex(e => e.stt == stt) ;
+      const data = this.lstCtietBcao[index];
       this.lstCtietBcao[index] = {
         ...new ItemData(),
         id: data.id,
@@ -445,7 +448,7 @@ export class PhuLuc02Component implements OnInit {
           this.lstCtietBcao[index].thNamTruoc = sumNumber([this.lstCtietBcao[index].thNamTruoc, item.thNamTruoc])
           this.lstCtietBcao[index].namDtoan = sumNumber([this.lstCtietBcao[index].namDtoan, item.namDtoan])
           this.lstCtietBcao[index].namUocTh = sumNumber([this.lstCtietBcao[index].namUocTh, item.namUocTh])
-          this.lstCtietBcao[index].sluongTaiKho = sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
+          // this.lstCtietBcao[index].sluongTaiKho = sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
           this.lstCtietBcao[index].dmucTaiKho = sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
           this.lstCtietBcao[index].ttienTaiKho = this.lstCtietBcao[index].dmucTaiKho * this.lstCtietBcao[index].sluongTaiKho
           this.lstCtietBcao[index].ttienNgoaiKho = sumNumber([this.lstCtietBcao[index].ttienNgoaiKho, item.ttienNgoaiKho])
@@ -465,7 +468,7 @@ export class PhuLuc02Component implements OnInit {
         this.total.thNamTruoc = sumNumber([this.total.thNamTruoc, item.thNamTruoc]);
         this.total.namDtoan = sumNumber([this.total.namDtoan, item.namDtoan]);
         this.total.namUocTh = sumNumber([this.total.namUocTh, item.namUocTh]);
-        this.total.sluongTaiKho = sumNumber([this.total.sluongTaiKho, item.sluongTaiKho]);
+        // this.total.sluongTaiKho = sumNumber([this.total.sluongTaiKho, item.sluongTaiKho]);
         this.total.dmucTaiKho = sumNumber([this.total.dmucTaiKho, item.dmucTaiKho]);
         this.total.ttienTaiKho = mulNumber(this.total.sluongTaiKho, this.total.dmucTaiKho);
         this.total.ttienNgoaiKho = sumNumber([this.total.ttienNgoaiKho, item.ttienNgoaiKho]);
@@ -602,6 +605,8 @@ export class PhuLuc02Component implements OnInit {
                 dmucTaiKho: lstTemp[i - 1].tongDmuc,
               })
             }
+            this.sortByIndex();
+            this.updateEditCache();
           } else {
             stt = '0.1.' + index.toString();
             this.lstCtietBcao.splice(index, 0, {
@@ -627,9 +632,10 @@ export class PhuLuc02Component implements OnInit {
                 dmucTaiKho: lstTemp[i - 1].tongDmuc,
               })
             }
+            this.sortByIndex();
+            this.updateEditCache();
           }
-          this.sortByIndex();
-          this.updateEditCache();
+
         }
       }
     });

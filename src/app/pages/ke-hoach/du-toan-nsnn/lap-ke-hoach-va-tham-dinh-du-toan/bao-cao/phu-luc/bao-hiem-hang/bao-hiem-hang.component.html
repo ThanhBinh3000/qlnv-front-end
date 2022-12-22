@@ -6,7 +6,7 @@
                     <div>
                         Đơn vị:
                     </div>
-                    <div style="padding-left: 5px;" >
+                    <div style="padding-left: 5px;">
                         <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
                             <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
                         </ng-container>
@@ -38,7 +38,8 @@
                 <thead>
                     <tr>
                         <th rowspan="2" [hidden]="status">
-                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" style="margin-right: 0;">
+                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                                style="margin-right: 0;">
                             </label>
                         </th>
                         <th>STT</th>
@@ -75,7 +76,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>{{data.khoiTich}}</td>
+                            <td>{{displayNumber(data.khoiTich)}}</td>
                             <td>{{data.tenHang}}</td>
                             <td>{{displayNumber(data.soLuong)}}</td>
                             <td>{{displayValue(data.giaTri)}}</td>
@@ -169,7 +170,7 @@
                         <td [hidden]="status"></td>
                         <td [hidden]="status"></td>
                         <td [hidden]="status"></td>
-                        
+
                     </tr>
 
                 </tbody>
@@ -190,15 +191,15 @@
                     <i nz-icon nzType="printer" nzTheme="outline"></i>
                     <span>In</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="save('5')" [hidden]="statusBtnFinish">
+                <button type="button" class="btn btn-main" (click)="save('5', null)" [hidden]="statusBtnFinish">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
                     <span>Hoàn tất nhập liệu</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="save('4')" [hidden]="statusBtnFinish">
+                <button type="button" class="btn btn-main" (click)="save('4', null)" [hidden]="statusBtnFinish">
                     <i class="icon htvbdh_tcdt_save"></i>
                     <span>Lưu</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="onSubmit('1', null)" [hidden]="statusBtnOk">
+                <button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="statusBtnOk">
                     <i nz-icon nzType="check" nzTheme="outline"></i>
                     <span>OK</span>
                 </button>
