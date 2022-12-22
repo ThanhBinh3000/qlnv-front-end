@@ -73,6 +73,7 @@ export class BaoHiemKhoComponent implements OnInit {
 
     checkViewTD: boolean;
     checkEditTD: boolean;
+    statusPrint: boolean;
     checkAddNewRow: boolean = false;
 
     tongSo1: number;
@@ -133,10 +134,11 @@ export class BaoHiemKhoComponent implements OnInit {
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
-        // this.checkEditTD = this.dataInfo?.editAppraisalValue;
-        // this.checkViewTD = this.dataInfo?.viewAppraisalValue;
-        this.checkEditTD = false;
-        this.checkViewTD = true;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
+        this.checkEditTD = this.dataInfo?.editAppraisalValue;
+        this.checkViewTD = this.dataInfo?.viewAppraisalValue;
+        // this.checkEditTD = false;
+        // this.checkViewTD = true;
 
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({

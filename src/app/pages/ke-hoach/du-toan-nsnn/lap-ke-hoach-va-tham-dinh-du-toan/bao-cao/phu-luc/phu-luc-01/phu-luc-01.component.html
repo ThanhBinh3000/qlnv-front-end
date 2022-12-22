@@ -6,7 +6,7 @@
                     <div>
                         Đơn vị:
                     </div>
-                    <div style="padding-left: 5px;" >
+                    <div style="padding-left: 5px;">
                         <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
                             <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
                         </ng-container>
@@ -37,7 +37,8 @@
                 <thead>
                     <tr>
                         <th rowspan="2" [hidden]="status" class="text-center">
-                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" style="margin-right: 0;">
+                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                                style="margin-right: 0;">
                             </label>
                         </th>
                         <th rowspan="2" class="text-center" nzWidth="50px">STT</th>
@@ -64,8 +65,8 @@
                     <tr *ngFor="let data of lstCtietBcao; let i = index">
                         <ng-container *ngIf="!editCache[data.id].edit; else editTemplate ">
                             <td [hidden]="status " class="text-center">
-                                <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                    (ngModelChange)="updateSingleChecked()"></label>
+                                <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
+                                    [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
                             </td>
                             <td class="text-center">
                                 {{getChiMuc(data.stt)}}
@@ -87,7 +88,8 @@
                                 {{displayValue(data.ttienTd)}}
                             </td>
                             <td [hidden]="status">
-                                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
+                                    (click)="deleteLine(data.id)"></i>
                             </td>
                             <td [hidden]="status && !editAppraisalValue">
                                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
@@ -96,8 +98,8 @@
                         </ng-container>
                         <ng-template #editTemplate>
                             <td [hidden]="status" class="text-center">
-                                <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
-                                    (ngModelChange)="updateSingleChecked()"></label>
+                                <label *ngIf="checkDelete(data.stt)" nz-checkbox [nzValue]="data.id"
+                                    [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
                             </td>
                             <td class="text-center">
                                 {{getChiMuc(editCache[data.id].data.stt)}}
@@ -155,7 +157,8 @@
                                 {{displayValue(editCache[data.id].data.ttienTd)}}
                             </td>
                             <td [hidden]="status">
-                                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
+                                <i *ngIf="checkDelete(data.stt)" class="fa fa-trash-o do"
+                                    (click)="deleteLine(data.id)"></i>
                             </td>
                             <td [hidden]="status && !editAppraisalValue">
                                 <a class="save" (click)="saveEdit(editCache[data.id].data.id)"
@@ -194,7 +197,7 @@
     <div class="modal-footer">
         <div class="nut">
             <div class="cantrai">
-                <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+                <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
                     <i nz-icon nzType="printer" nzTheme="outline"></i>
                     <span>In</span>
                 </button>

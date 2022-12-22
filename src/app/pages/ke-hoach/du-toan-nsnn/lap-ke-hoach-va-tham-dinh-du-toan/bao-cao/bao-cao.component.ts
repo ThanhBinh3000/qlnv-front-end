@@ -638,6 +638,10 @@ export class BaoCaoComponent implements OnInit {
         this.baoCao.lstBcaoDviTrucThuocs.forEach(item => {
             baoCaoTemp.tongHopTuIds.push(item.id);
         })
+
+        if (!baoCaoTemp.fileDinhKems) {
+            baoCaoTemp.fileDinhKems = [];
+        }
         for (const iterator of this.listFile) {
             baoCaoTemp.fileDinhKems.push(await this.uploadFile(iterator));
         }
@@ -1139,7 +1143,7 @@ export class BaoCaoComponent implements OnInit {
                     const data3 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl02')?.lstCtietLapThamDinhs;
                     data3?.forEach(item => {
                         const level = item.stt.split('.').length - 2;
-                        if (level == 0) {
+                        if (level == 1) {
                             dataInfo.extraData.push({
                                 stt: '0.1.1.3.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
                                 tenNdung: item.tenDanhMuc,

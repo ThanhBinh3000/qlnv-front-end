@@ -196,12 +196,14 @@
                             <td>
                                 <fm-input-number nz-input class="search__input"
                                     [(ngModel)]="editCache[data.id].data.khoiTichKhoDuoiM3"
-                                    [class]="editCache[data.id].data.khoiTichKhoDuoiM3 == 0 || (editCache[data.id].data.khoiTichKhoDuoiM3 < 5000) ? '' : 'input-error-validate'"></fm-input-number>
+                                    [class]="editCache[data.id].data.khoiTichKhoDuoiM3 == 0 || (editCache[data.id].data.khoiTichKhoDuoiM3 < 5000) ? '' : 'input-error-validate'">
+                                </fm-input-number>
                             </td>
                             <td>
                                 <fm-input-number nz-input class="search__input"
                                     [(ngModel)]="editCache[data.id].data.khoiTichKhoTuM3"
-                                    [class]="editCache[data.id].data.khoiTichKhoTuM3 == 0 || (editCache[data.id].data.khoiTichKhoTuM3 >= 5000) ? '' : 'input-error-validate'"></fm-input-number>
+                                    [class]="editCache[data.id].data.khoiTichKhoTuM3 == 0 || (editCache[data.id].data.khoiTichKhoTuM3 >= 5000) ? '' : 'input-error-validate'">
+                                </fm-input-number>
                             </td>
                             <td>
                             </td>
@@ -274,7 +276,7 @@
     <div class="modal-footer">
         <div class="nut">
             <div class="cantrai">
-                <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+                <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
                     <i nz-icon nzType="printer" nzTheme="outline"></i>
                     <span>In</span>
                 </button>

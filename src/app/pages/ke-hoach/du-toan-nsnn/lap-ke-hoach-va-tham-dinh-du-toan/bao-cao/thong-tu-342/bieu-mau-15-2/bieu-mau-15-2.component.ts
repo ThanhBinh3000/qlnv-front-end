@@ -74,6 +74,7 @@ export class BieuMau152Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  statusPrint: boolean;
   listDonVi: any[] = DANH_MUC;
   lstVatTuFull = [];
   isDataAvailable = false;
@@ -86,53 +87,6 @@ export class BieuMau152Component implements OnInit {
   namTruoc: string;
   namKeHoach: string;
 
-  //bien tinh tong
-  tongSo1: number;
-  tongSo2: number;
-  tongSo3: number;
-  tongSo4: number;
-  tongSo5: number;
-  tongSo6: number;
-  tongSo7: number;
-  tongSo8: number;
-  tongSo9: number;
-  tongSo10: number;
-  tongSo11: number;
-  tongSo12: number;
-  tongSo13: number;
-  tongSo14: number;
-  tongSo15: number;
-  tongSo16: number;
-  tongSo17: number;
-  tongSo18: number;
-  tongSo19: number;
-  tongSo20: number;
-  tongSo21: number;
-  tongSo22: number;
-  tongSo23: number;
-  tongSo24: number;
-  tongSo25: number;
-  tongSo26: number;
-  tongSo27: number;
-  tongSo28: number;
-  tongSo29: number;
-  tongSo30: number;
-  tongSo31: number;
-  tongSo32: number;
-  tongSo33: number;
-  tongSo34: number;
-  tongSo35: number;
-  tongSo36: number;
-  tongSo37: number;
-  tongSo38: number;
-  tongSo39: number;
-  tongSo40: number;
-  tongSo41: number;
-  tongSo42: number;
-  tongSo43: number;
-  tongSo44: number;
-  tongSo45: number;
-  tongSo46: number;
 
 
   checkViewTD: boolean;
@@ -169,6 +123,7 @@ export class BieuMau152Component implements OnInit {
     this.thuyetMinh = this.formDetail?.thuyetMinh;
     this.status = this.dataInfo?.status;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+    this.statusPrint = this.dataInfo?.statusBtnPrint;
     // this.checkEditTD = this.dataInfo?.editAppraisalValue;
     // this.checkViewTD = this.dataInfo?.viewAppraisalValue;
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -729,95 +684,6 @@ export class BieuMau152Component implements OnInit {
   selectTaisan(idTaiSan: any, idRow: any) {
     // const taiSan = this.lstVatTuFull.find(ts => ts.id === idTaiSan);
     // this.editCache[idRow].data.dviTinh = taiSan.dviTinh;
-  }
-
-
-
-  tinhTong() {
-    this.tongSo1 = 0;
-    this.tongSo2 = 0;
-    this.tongSo3 = 0;
-    this.tongSo4 = 0;
-    this.tongSo5 = 0;
-    this.tongSo6 = 0;
-    this.tongSo7 = 0;
-    this.tongSo8 = 0;
-    this.tongSo9 = 0;
-    this.tongSo10 = 0;
-    this.tongSo11 = 0;
-    this.tongSo12 = 0;
-    this.tongSo13 = 0;
-    this.tongSo14 = 0;
-    this.tongSo15 = 0;
-    this.tongSo16 = 0;
-    this.tongSo17 = 0;
-    this.tongSo18 = 0;
-    this.tongSo19 = 0;
-    this.tongSo20 = 0;
-    this.tongSo21 = 0;
-    this.tongSo22 = 0;
-    this.tongSo23 = 0;
-    this.tongSo24 = 0;
-    this.tongSo25 = 0;
-    this.tongSo26 = 0;
-    this.tongSo27 = 0;
-    this.tongSo28 = 0;
-    this.tongSo29 = 0;
-    this.tongSo30 = 0;
-    this.tongSo31 = 0;
-    this.tongSo32 = 0;
-    this.tongSo33 = 0;
-    this.tongSo34 = 0;
-    this.tongSo35 = 0;
-    this.tongSo36 = 0;
-    this.tongSo37 = 0;
-    this.tongSo38 = 0;
-    this.tongSo39 = 0;
-    this.tongSo40 = 0;
-    this.tongSo41 = 0;
-    this.tongSo42 = 0;
-    this.tongSo43 = 0;
-    this.tongSo44 = 0;
-    this.tongSo45 = 0;
-    this.tongSo46 = 0;
-    this.lstCtietBcao.forEach(item => {
-      this.tongSo1 += Number(item.dtTsoNguoiLv);
-      this.tongSo2 += item.dtTongQlPcap;
-      this.tongSo3 += item.dtQlPcapTso;
-      this.tongSo4 += item.dtQlPcapLuongBac;
-      this.tongSo5 += item.dtQlPcapPcapLuong;
-      this.tongSo6 += item.dtQlPcapDgopLuong;
-      this.tongSo7 += item.dtQlPcapHdLd;
-      this.tongSo8 += item.dtKphiNsnn;
-      this.tongSo9 += item.dtKphiSnDvu;
-      this.tongSo10 += item.dtKphiPhiDlai;
-      this.tongSo11 += item.dtKphiHphap;
-      this.tongSo12 += item.uocThTsoNguoiLv;
-      this.tongSo13 += item.uocThTsoBcTdiem;
-      this.tongSo14 += item.uocThTsoVcCc;
-      this.tongSo15 += item.uocThTongQlPcap;
-      this.tongSo16 += item.uocThQlPcapTso;
-      this.tongSo17 += item.uocThQlPcapLuongBac;
-      this.tongSo18 += item.uocThQlPcapPcapLuong;
-      this.tongSo19 += item.uocThQlPcapDgopLuong;
-      this.tongSo20 += item.uocThQlPcapHdLd;
-      this.tongSo21 += item.uocThKphiNsnn;
-      this.tongSo22 += item.uocThKphiSnDvu;
-      this.tongSo23 += item.uocThKphiPhiDlai;
-      this.tongSo24 += item.uocThKphiHphap;;
-      this.tongSo25 += item.namKhTsoNguoiLv;
-      this.tongSo26 += item.namKhTongQlPcap;
-      this.tongSo27 += item.namKhQlPcapTso;
-      this.tongSo28 += item.namKhQlPcapLuongBac;
-      this.tongSo29 += item.namKhQlPcapPcapLuong;
-      this.tongSo30 += item.namKhQlPcapDgopLuong;
-      this.tongSo31 += item.namKhQlPcapHdLd;
-      this.tongSo32 += item.namKhKphiNsnn;
-      this.tongSo33 += item.namKhKphiSnDvu;
-      this.tongSo34 += item.namKhKphiPhiDlai;
-      this.tongSo35 += item.namKhKphiHphap;
-
-    })
   }
 
   changeModel(id: string): void {

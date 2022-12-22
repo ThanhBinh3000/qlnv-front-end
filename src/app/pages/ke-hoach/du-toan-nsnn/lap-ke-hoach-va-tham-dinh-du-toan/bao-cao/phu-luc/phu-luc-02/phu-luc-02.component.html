@@ -141,7 +141,7 @@
                 </ng-template>
               </td>
               <td>
-                <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.dviTinh" />
+                {{editCache[data.id].data.dviTinh}}
               </td>
               <td>
                 <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.thNamTruoc">
@@ -198,7 +198,7 @@
   <div class="modal-footer">
     <div class="nut">
       <div class="cantrai">
-        <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+        <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
           <i nz-icon nzType="printer" nzTheme="outline"></i>
           <span>In</span>
         </button>

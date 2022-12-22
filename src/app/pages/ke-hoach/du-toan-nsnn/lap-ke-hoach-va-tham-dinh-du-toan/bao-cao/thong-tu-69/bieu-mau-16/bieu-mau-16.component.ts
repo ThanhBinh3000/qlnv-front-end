@@ -53,6 +53,7 @@ export class BieuMau16Component implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    statusPrint: boolean;
     editMoneyUnit = false;
     isDataAvailable = false;
     //nho dem
@@ -81,6 +82,7 @@ export class BieuMau16Component implements OnInit {
         this.namBcao = this.dataInfo?.namBcao;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,

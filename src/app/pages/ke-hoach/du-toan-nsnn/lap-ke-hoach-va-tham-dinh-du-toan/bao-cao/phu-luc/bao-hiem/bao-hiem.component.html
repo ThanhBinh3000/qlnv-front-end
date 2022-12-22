@@ -5,7 +5,7 @@
                 <div>
                     Đơn vị:
                 </div>
-                <div style="padding-left: 5px;" >
+                <div style="padding-left: 5px;">
                     <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
                         <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
                     </ng-container>
@@ -158,7 +158,7 @@
 <div class="modal-footer">
     <div class="nut">
         <div class="cantrai">
-            <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+            <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
                 <i nz-icon nzType="printer" nzTheme="outline"></i>
                 <span>In</span>
             </button>

@@ -57,6 +57,7 @@ export class PhuLuc03Component implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    statusPrint: boolean;
     checkViewTD: boolean;
     checkEditTD: boolean;
     isDataAvailable = false;
@@ -94,6 +95,7 @@ export class PhuLuc03Component implements OnInit {
         this.status = this.dataInfo?.status;
         this.namBcao = this.dataInfo?.namBcao;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.checkEditTD = this.dataInfo?.editAppraisalValue;
         this.checkViewTD = this.dataInfo?.viewAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -111,7 +113,7 @@ export class PhuLuc03Component implements OnInit {
                 item.ttienNamDtoan = mulNumber(item.dmucNamDtoan, item.sluongNamDtoan);
             }
         })
-        
+
         this.sortByIndex();
         this.getTotal();
         this.updateEditCache();
@@ -128,11 +130,6 @@ export class PhuLuc03Component implements OnInit {
             res => {
                 if (res.statusCode == 0) {
                     this.dsDinhMuc = res.data;
-                    this.dsDinhMuc.forEach(item => {
-                        if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = divNumber(item.tongDmuc, 1000);
-                        }
-                    })
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }

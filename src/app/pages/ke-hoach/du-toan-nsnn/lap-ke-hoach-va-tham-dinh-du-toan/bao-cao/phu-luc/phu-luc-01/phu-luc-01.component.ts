@@ -49,6 +49,7 @@ export class PhuLuc01Component implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    statusPrint: boolean;
     listVattu: any[] = [];
     lstVatTuFull = [];
     isDataAvailable = false;
@@ -98,6 +99,7 @@ export class PhuLuc01Component implements OnInit {
         this.status = this.dataInfo?.status;
         this.namBaoCao = this.dataInfo?.namBcao;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
         this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -126,7 +128,7 @@ export class PhuLuc01Component implements OnInit {
                 item.ttienNamDtoan = mulNumber(item.dmucNamDtoan, item.sluongNamDtoan);
                 item.ttienTd = mulNumber(item.ttienTd, item.sluongTd);
             }
-        }) 
+        })
 
         await this.danhMucService.dMVatTu().toPromise().then(res => {
             if (res.statusCode == 0) {
@@ -155,11 +157,6 @@ export class PhuLuc01Component implements OnInit {
             res => {
                 if (res.statusCode == 0) {
                     this.dsDinhMucN = res.data;
-                    this.dsDinhMucN.forEach(item => {
-                        if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = divNumber(item.tongDmuc, 1000);
-                        }
-                    })
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -178,11 +175,6 @@ export class PhuLuc01Component implements OnInit {
             res => {
                 if (res.statusCode == 0) {
                     this.dsDinhMucX = res.data;
-                    this.dsDinhMucX.forEach(item => {
-                        if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = divNumber(item.tongDmuc, 1000);
-                        }
-                    })
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
