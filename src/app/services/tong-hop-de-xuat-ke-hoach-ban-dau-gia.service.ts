@@ -9,7 +9,6 @@ import { BaseService } from './base.service';
 })
 export class TongHopDeXuatKeHoachBanDauGiaService extends BaseService {
 
-  GATEWAY = '/qlnv-hang';
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'ban-dau-gia/thop-kh-bdg', '/qlnv-hang');
   }
