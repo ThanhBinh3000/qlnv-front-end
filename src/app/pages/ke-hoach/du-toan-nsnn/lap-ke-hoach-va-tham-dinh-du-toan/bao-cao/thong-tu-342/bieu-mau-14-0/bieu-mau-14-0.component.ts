@@ -127,7 +127,7 @@ export class BieuMau140Component implements OnInit {
   }
 
   // luu
-  async save(trangThai: string) {
+  async save(trangThai: string, lyDoTuChoi: string) {
     let checkSaveEdit;
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
@@ -144,10 +144,10 @@ export class BieuMau140Component implements OnInit {
     const lstCtietBcaoTemp: ItemData[] = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      // if (item.ncauChiTongSo > MONEY_LIMIT) {
-      //     checkMoneyRange = false;
-      //     return;
-      // }
+      if (item.thienNtruoc > MONEY_LIMIT || item.namDtoan > MONEY_LIMIT || item.namUocThien > MONEY_LIMIT || item.namKh > MONEY_LIMIT || item.giaTriThamDinh > MONEY_LIMIT) {
+        checkMoneyRange = false;
+        return;
+      }
       lstCtietBcaoTemp.push({
         ...item,
       })
@@ -165,10 +165,19 @@ export class BieuMau140Component implements OnInit {
       }
     })
 
+    if (!this.viewAppraisalValue) {
+      lstCtietBcaoTemp?.forEach(item => {
+        item.giaTriThamDinh = item.namKh;
+      })
+    }
+
     const request = JSON.parse(JSON.stringify(this.formDetail));
     request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
     request.trangThai = trangThai;
 
+    if (lyDoTuChoi) {
+      request.lyDoTuChoi = lyDoTuChoi;
+    }
     this.spinner.show();
     this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
       async data => {
@@ -189,39 +198,6 @@ export class BieuMau140Component implements OnInit {
     this.spinner.hide();
   }
 
-  // chuc nang check role
-  async onSubmit(mcn: string, lyDoTuChoi: string) {
-    if (!this.formDetail?.id) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
-      return;
-    }
-    const requestGroupButtons = {
-      id: this.formDetail.id,
-      trangThai: mcn,
-      lyDoTuChoi: lyDoTuChoi,
-    };
-    this.spinner.show();
-    await this.lapThamDinhService.approveCtietThamDinh(requestGroupButtons).toPromise().then(async (data) => {
-      if (data.statusCode == 0) {
-        this.formDetail.trangThai = mcn;
-        this.getStatusButton();
-        if (mcn == "0") {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-        }
-        this._modalRef.close({
-          formDetail: this.formDetail,
-        });
-      } else {
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    }, err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
-  }
-
   //show popup tu choi
   tuChoi(mcn: string) {
     const modalTuChoi = this.modal.create({
@@ -235,7 +211,7 @@ export class BieuMau140Component implements OnInit {
     });
     modalTuChoi.afterClose.subscribe(async (text) => {
       if (text) {
-        this.onSubmit(mcn, text);
+        this.save(mcn, text);
       }
     });
   }

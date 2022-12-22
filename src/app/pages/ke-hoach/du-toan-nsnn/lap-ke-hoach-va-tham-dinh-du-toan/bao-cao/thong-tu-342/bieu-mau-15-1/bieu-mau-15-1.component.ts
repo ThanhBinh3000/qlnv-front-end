@@ -141,7 +141,7 @@ export class BieuMau151Component implements OnInit {
 
 
   // luu
-  async save(trangThai: string) {
+  async save(trangThai: string, lyDoTuChoi: string) {
     let checkSaveEdit;
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
@@ -182,6 +182,10 @@ export class BieuMau151Component implements OnInit {
     const request = JSON.parse(JSON.stringify(this.formDetail));
     request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
     request.trangThai = trangThai;
+
+    if (lyDoTuChoi) {
+      request.lyDoTuChoi = lyDoTuChoi;
+    }
 
     this.spinner.show();
     this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
