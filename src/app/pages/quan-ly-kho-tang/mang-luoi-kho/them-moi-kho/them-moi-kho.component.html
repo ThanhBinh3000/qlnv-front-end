@@ -66,7 +66,7 @@
           </div>
           <div nz-col [nzSpan]="4">
             <nz-form-item>
-              <nz-form-label nzRequired>Địa chỉ điểm kho</nz-form-label>
+              <nz-form-label nzRequired>Địa chỉ</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
                   <input nz-input formControlName="diaChi"/>
@@ -312,7 +312,7 @@
               <nz-form-label nzRequired>Địa điểm</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group>
-                  <input nz-input formControlName="diaChi" />
+                  <input nz-input formControlName="diaChi" [readOnly]="true" />
                 </nz-input-group>
               </nz-form-control>
             </nz-form-item>
@@ -454,7 +454,7 @@
           </div>
           <div nz-col [nzSpan]="24">
             <nz-form-item>
-              <nz-form-label nzRequired>Nhiệm vụ</nz-form-label>
+              <nz-form-label >Nhiệm vụ</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <textarea formControlName="nhiemVu" rows="3" class="search__input" nz-input
                           placeholder="Nhập text"></textarea>
@@ -714,7 +714,7 @@
           </div>
           <div nz-col [nzSpan]="12">
             <nz-form-item>
-              <nz-form-label nzRequired>Nhiệm vụ</nz-form-label>
+              <nz-form-label >Nhiệm vụ</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <textarea rows="3" formControlName="nhiemVu" class="search__input" nz-input
                           placeholder="Nhập text"></textarea>
@@ -1053,7 +1053,7 @@
           <div nz-col [nzSpan]="8"></div>
           <div nz-col [nzSpan]="12">
             <nz-form-item>
-              <nz-form-label nzRequired>Nhiệm vụ</nz-form-label>
+              <nz-form-label >Nhiệm vụ</nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <textarea rows="3" class="search__input" nz-input placeholder="Nhập text"></textarea>
               </nz-form-control>

@@ -130,9 +130,9 @@ export class ThemMoiKhoComponent implements OnInit {
         this.levelNode = node.level + 1
       }
       this.setValidators();
-      if (this.levelNode == 3 || this.levelNode == 4) {
+      if (this.levelNode != 1) {
         this.formKho.patchValue({
-          diaChi: node.origin.diaChi ? node.origin.diaChi : null
+          diaChi: this.nodeSelected ? this.nodeSelected.diaChi : null
         })
       }
     });
@@ -229,6 +229,7 @@ export class ThemMoiKhoComponent implements OnInit {
     bodyDvi.maDviCha = this.formKho.value.maCha;
     bodyDvi.tenDvi = this.formKho.value.tenNganlo;
     bodyDvi.maDvi = this.formKho.value.maNganlo;
+    bodyDvi.diaChi = this.formKho.value.diaChi;
     this.donviService.create(bodyDvi).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         let body = this.formKho.value;
@@ -264,6 +265,7 @@ export class ThemMoiKhoComponent implements OnInit {
     bodyDvi.maDviCha = this.formKho.value.maCha;
     bodyDvi.tenDvi = this.formKho.value.tenNgankho;
     bodyDvi.maDvi = this.formKho.value.maNgankho;
+    bodyDvi.diaChi = this.formKho.value.diaChi;
     this.donviService.create(bodyDvi).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         let body = this.formKho.value;
@@ -298,6 +300,7 @@ export class ThemMoiKhoComponent implements OnInit {
     bodyDvi.maDviCha = this.formKho.value.maCha;
     bodyDvi.tenDvi = this.formKho.value.tenNhakho;
     bodyDvi.maDvi = this.formKho.value.maNhakho;
+    bodyDvi.diaChi = this.formKho.value.diaChi;
     this.donviService.create(bodyDvi).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         let body = this.formKho.value;
@@ -375,8 +378,8 @@ export class ThemMoiKhoComponent implements OnInit {
     }
   }
 
-  async setValidators() {
-    await this.formKho.clearValidators();
+   setValidators() {
+    this.helperService.removeValidators(this.formKho);
     switch (this.levelNode) {
       case 1 : {
         this.formKho.controls['maDiemkho'].setValidators([Validators.required])
@@ -393,6 +396,7 @@ export class ThemMoiKhoComponent implements OnInit {
         this.formKho.controls['dienTichDat'].setValidators([Validators.required])
         this.formKho.controls['tinhtrangId'].setValidators([Validators.required])
         this.formKho.controls['chatluongId'].setValidators([Validators.required])
+        this.formKho.controls['diaChi'].setValidators([Validators.required])
         break;
       }
       case 3 : {
@@ -407,6 +411,7 @@ export class ThemMoiKhoComponent implements OnInit {
         this.formKho.controls['theTichTkLt'].setValidators([Validators.required])
         this.formKho.controls['nhiemVu'].setValidators([Validators.required])
         this.formKho.controls['ghiChu'].setValidators([Validators.required])
+        this.formKho.controls['diaChi'].setValidators([Validators.required])
         break;
       }
       case 4 : {
@@ -418,8 +423,11 @@ export class ThemMoiKhoComponent implements OnInit {
         this.formKho.controls['tichLuongTkVt'].setValidators([Validators.required])
         this.formKho.controls['theTichTkVt'].setValidators([Validators.required])
         this.formKho.controls['theTichTkLt'].setValidators([Validators.required])
+        this.formKho.controls['diaChi'].setValidators([Validators.required])
         break;
       }
     }
   }
+
+
 }
