@@ -151,7 +151,7 @@ export class BieuMau1310Component implements OnInit {
   }
 
   // luu
-  async save(trangThai: string) {
+  async save(trangThai: string, lyDoTuChoi: string) {
     let checkSaveEdit;
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
@@ -201,6 +201,10 @@ export class BieuMau1310Component implements OnInit {
     request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
     request.trangThai = trangThai;
 
+    if (lyDoTuChoi) {
+      request.lyDoTuChoi = lyDoTuChoi;
+    }
+
     this.spinner.show();
     this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
       async data => {
@@ -223,37 +227,37 @@ export class BieuMau1310Component implements OnInit {
   }
 
   // chuc nang check role
-  async onSubmit(mcn: string, lyDoTuChoi: string) {
-    if (!this.formDetail?.id) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
-      return;
-    }
-    const requestGroupButtons = {
-      id: this.formDetail.id,
-      trangThai: mcn,
-      lyDoTuChoi: lyDoTuChoi,
-    };
-    this.spinner.show();
-    await this.lapThamDinhService.approveCtietThamDinh(requestGroupButtons).toPromise().then(async (data) => {
-      if (data.statusCode == 0) {
-        this.formDetail.trangThai = mcn;
-        this.getStatusButton();
-        if (mcn == "0") {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-        }
-        this._modalRef.close({
-          formDetail: this.formDetail,
-        });
-      } else {
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    }, err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
-  }
+  // async onSubmit(mcn: string, lyDoTuChoi: string) {
+  //   if (!this.formDetail?.id) {
+  //     this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
+  //     return;
+  //   }
+  //   const requestGroupButtons = {
+  //     id: this.formDetail.id,
+  //     trangThai: mcn,
+  //     lyDoTuChoi: lyDoTuChoi,
+  //   };
+  //   this.spinner.show();
+  //   await this.lapThamDinhService.approveCtietThamDinh(requestGroupButtons).toPromise().then(async (data) => {
+  //     if (data.statusCode == 0) {
+  //       this.formDetail.trangThai = mcn;
+  //       this.getStatusButton();
+  //       if (mcn == "0") {
+  //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
+  //       } else {
+  //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
+  //       }
+  //       this._modalRef.close({
+  //         formDetail: this.formDetail,
+  //       });
+  //     } else {
+  //       this.notification.error(MESSAGE.ERROR, data?.msg);
+  //     }
+  //   }, err => {
+  //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //   });
+  //   this.spinner.hide();
+  // }
 
   //show popup tu choi
   tuChoi(mcn: string) {
@@ -268,7 +272,7 @@ export class BieuMau1310Component implements OnInit {
     });
     modalTuChoi.afterClose.subscribe(async (text) => {
       if (text) {
-        this.onSubmit(mcn, text);
+        this.save(mcn, text);
       }
     });
   }
