@@ -638,6 +638,10 @@ export class BaoCaoComponent implements OnInit {
         this.baoCao.lstBcaoDviTrucThuocs.forEach(item => {
             baoCaoTemp.tongHopTuIds.push(item.id);
         })
+
+        if (!baoCaoTemp.fileDinhKems) {
+            baoCaoTemp.fileDinhKems = [];
+        }
         for (const iterator of this.listFile) {
             baoCaoTemp.fileDinhKems.push(await this.uploadFile(iterator));
         }
@@ -1025,9 +1029,47 @@ export class BaoCaoComponent implements OnInit {
                 })
 
                 //phu luc bao hiem kho
-                const dataBaoHiemKho = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh_kho').lstCtietLapThamDinhs;
+                let dataBaoHiemKho = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh_kho').lstCtietLapThamDinhs;
+                let lstLv1 = []
                 dataBaoHiemKho.forEach(item => {
+                    if (item.maNhaKho == null && item.diaChiKho == null && item.tenNhaKho == null) {
+                        lstLv1.push({
+                            ...item,
+                            level: "1"
+                        })
+                    }
+                })
+                for (let i = 1; i <= lstLv1.length; i++) {
+                    lstLv1.forEach(item => {
+                        item.stt = "0." + i;
+                    })
+                }
+                let lstCon = [];
+                dataBaoHiemKho.forEach(item => {
+                    if (item.maNhaKho !== null && item.diaChiKho !== null && item.tenNhaKho !== null) {
+                        lstCon.push({
+                            ...item,
+                            level: "2"
+                        })
+                    }
+                })
+                let indexArr = []
+                lstLv1.forEach(item => {
+                    lstCon.forEach(itm => {
+                        if (itm.maDvi.startsWith(item.maDvi)) {
+                            indexArr.push(itm)
+                            for (let i = 1; i <= indexArr.length; i++) {
+                                itm.stt = item.stt + "." + i;
+                            }
+                        }
+                    })
+                })
+                let a = lstLv1.concat(lstCon);
+                dataBaoHiemKho = a
+                dataBaoHiemKho.forEach(item => {
+
                     const level = item.stt.split('.').length - 2;
+
                     let tongGtTu = 0;
                     let tongDtDuoi = 0;
                     let slNhaKhoTu1 = 0;
@@ -1062,120 +1104,133 @@ export class BaoCaoComponent implements OnInit {
                 break;
             case 'TT342_13.8':
                 nzContent = BieuMau138Component;
-                if (this.baoCao.trangThai == Utils.TT_BC_1 || this.baoCao.trangThai == Utils.TT_BC_3 || this.baoCao.trangThai == Utils.TT_BC_5 ||
-                    this.baoCao.trangThai == Utils.TT_BC_7 || this.baoCao.trangThai == Utils.TT_BC_8) {
+                if (Utils.statusSave.includes(this.baoCao.trangThai)) {
                     dataInfo.extraData = [];
                     //phu luc 3
-                    const data1 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl03')?.lstCtietLapThamDinhs;
-                    data1?.forEach(item => {
-                        const level = item.stt.split('.').length - 2;
-                        if (level == 0) {
-                            dataInfo.extraData.push({
-                                stt: '0.1.1.1.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
-                                tenNdung: item.tenMatHang,
-                                thienNtruoc: item.thucHienNamTruoc,
-                                namDtoan: item.dtoanNamHtai,
-                                namUocThien: item.uocThNamHtai,
-                                namKh: item.ttienNamDtoan,
-                                giaTriThamDinh: item.ttienNamN1Td,
-                            })
-                        }
-                    })
+                    const data1 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl03');
+                    if (data1.trangThai != '3') {
+                        data1?.lstCtietLapThamDinhs?.forEach(item => {
+                            const level = item.stt.split('.').length - 2;
+                            if (level == 0) {
+                                dataInfo.extraData.push({
+                                    stt: '0.1.1.1.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                                    tenNdung: item.tenMatHang,
+                                    thienNtruoc: item.thucHienNamTruoc,
+                                    namDtoan: item.dtoanNamHtai,
+                                    namUocThien: item.uocThNamHtai,
+                                    namKh: item.ttienNamDtoan,
+                                    giaTriThamDinh: item.ttienNamN1Td,
+                                })
+                            }
+                        })
+                    }
                     //phu luc 1
-                    const data2 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl01')?.lstCtietLapThamDinhs;
-                    data2?.forEach(item => {
-                        const level = item.stt.split('.').length - 2;
-                        if (level == 0) {
-                            dataInfo.extraData.push({
-                                stt: '0.1.1.2.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
-                                tenNdung: item.tenDanhMuc,
-                                thienNtruoc: item.thienNamTruoc,
-                                namDtoan: item.dtoanNamHtai,
-                                namUocThien: item.uocNamHtai,
-                                namKh: item.ttienNamDtoan,
-                                giaTriThamDinh: item.ttienTd,
-                            })
-                        }
-                    })
+                    const data2 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl01');
+                    if (data2.trangThai != '3') {
+                        data2?.lstCtietLapThamDinhs?.forEach(item => {
+                            const level = item.stt.split('.').length - 2;
+                            if (level == 0) {
+                                dataInfo.extraData.push({
+                                    stt: '0.1.1.2.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                                    tenNdung: item.tenDanhMuc,
+                                    thienNtruoc: item.thienNamTruoc,
+                                    namDtoan: item.dtoanNamHtai,
+                                    namUocThien: item.uocNamHtai,
+                                    namKh: item.ttienNamDtoan,
+                                    giaTriThamDinh: item.ttienTd,
+                                })
+                            }
+                        })
+                    }
                     //phu luc 2
-                    const data3 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl02')?.lstCtietLapThamDinhs;
-                    data3?.forEach(item => {
-                        const level = item.stt.split('.').length - 2;
-                        if (level == 0) {
-                            dataInfo.extraData.push({
-                                stt: '0.1.1.3.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
-                                tenNdung: item.tenDanhMuc,
-                                thienNtruoc: item.thNamTruoc,
-                                namDtoan: item.namDtoan,
-                                namUocThien: item.namUocTh,
-                                namKh: item.tongCong,
-                                giaTriThamDinh: null,
-                            })
-                        }
-                    })
+                    const data3 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl02');
+                    if (data3.trangThai != '3') {
+                        data3?.lstCtietLapThamDinhs?.forEach(item => {
+                            const level = item.stt.split('.').length - 2;
+                            if (level == 1) {
+                                dataInfo.extraData.push({
+                                    stt: '0.1.1.3.' + item.stt.substring(item.stt.lastIndexOf('.') + 1, item.stt.length),
+                                    tenNdung: item.tenDanhMuc,
+                                    thienNtruoc: item.thNamTruoc,
+                                    namDtoan: item.namDtoan,
+                                    namUocThien: item.namUocTh,
+                                    namKh: item.tongCong,
+                                    giaTriThamDinh: null,
+                                })
+                            }
+                        })
+                    }
                     //phu luc 4
-                    const data4 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl04')?.lstCtietLapThamDinhs;
-                    let tong4 = 0;
-                    let td4 = 0;
-                    data4?.forEach(item => {
-                        const level = item.stt.split('.').length - 2;
-                        if (level == 0) {
-                            tong4 = sumNumber([tong4, item.duToanKhNamNCbDauTu, item.duToanKhNamNThDauTu]);
-                            td4 = sumNumber([td4, item.duToanKhNamNCbDauTuTd, item.duToanKhNamNThDauTuTd]);
-                        }
-                    })
-                    dataInfo.extraData.push({
-                        stt: '0.1.2',
-                        maNdung: '0.1.2',
-                        namKh: tong4,
-                        giaTriThamDinh: td4,
-                    })
+                    const data4 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl04');
+                    if (data4.trangThai != '3') {
+                        let tong4 = 0;
+                        let td4 = 0;
+                        data4?.lstCtietLapThamDinhs?.forEach(item => {
+                            const level = item.stt.split('.').length - 2;
+                            if (level == 0) {
+                                tong4 = sumNumber([tong4, item.duToanKhNamNCbDauTu, item.duToanKhNamNThDauTu]);
+                                td4 = sumNumber([td4, item.duToanKhNamNCbDauTuTd, item.duToanKhNamNThDauTuTd]);
+                            }
+                        })
+                        dataInfo.extraData.push({
+                            stt: '0.1.2',
+                            maNdung: '0.1.2',
+                            namKh: tong4,
+                            giaTriThamDinh: td4,
+                        })
+                    }
                     //phu luc 5
-                    const data5 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl05')?.lstCtietLapThamDinhs;
-                    let tong5 = 0;
-                    let td5 = 0;
-                    data5?.forEach(item => {
-                        const level = item.stt.split('.').length - 2;
-                        if (level == 0) {
-                            tong5 += item.keHoachVon ? item.keHoachVon : 0;
-                            td5 += item.keHoachVonTd ? item.keHoachVonTd : 0;
-                        }
-                    })
-                    dataInfo.extraData.push({
-                        stt: '0.1.3',
-                        maNdung: '0.1.3',
-                        namKh: tong5,
-                        giaTriThamDinh: td5,
-                    })
+                    const data5 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl05');
+                    if (data5.trangThai != '3') {
+                        let tong5 = 0;
+                        let td5 = 0;
+                        data5?.lstCtietLapThamDinhs?.forEach(item => {
+                            const level = item.stt.split('.').length - 2;
+                            if (level == 0) {
+                                tong5 += item.keHoachVon ? item.keHoachVon : 0;
+                                td5 += item.keHoachVonTd ? item.keHoachVonTd : 0;
+                            }
+                        })
+                        dataInfo.extraData.push({
+                            stt: '0.1.3',
+                            maNdung: '0.1.3',
+                            namKh: tong5,
+                            giaTriThamDinh: td5,
+                        })
+                    }
                     //phu luc 6
-                    const data6 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl06')?.lstCtietLapThamDinhs;
-                    let tong6 = 0;
-                    let td6 = 0;
-                    data6?.forEach(item => {
-                        tong6 += item.ncauTbiNamNTtien ? item.ncauTbiNamNTtien : 0;
-                        td6 += item.ncauTbiNamNTtienTd ? item.ncauTbiNamNTtienTd : 0;
-                    })
-                    dataInfo.extraData.push({
-                        stt: '0.1.4',
-                        maNdung: '0.1.4',
-                        namKh: tong6,
-                        giaTriThamDinh: td6,
-                    })
+                    const data6 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl06');
+                    if (data6.trangThai != '3') {
+                        let tong6 = 0;
+                        let td6 = 0;
+                        data6?.lstCtietLapThamDinhs?.forEach(item => {
+                            tong6 += item.ncauTbiNamNTtien ? item.ncauTbiNamNTtien : 0;
+                            td6 += item.ncauTbiNamNTtienTd ? item.ncauTbiNamNTtienTd : 0;
+                        })
+                        dataInfo.extraData.push({
+                            stt: '0.1.4',
+                            maNdung: '0.1.4',
+                            namKh: tong6,
+                            giaTriThamDinh: td6,
+                        })
+                    }
                     //phu luc bao hiem
-                    const data7 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh')?.lstCtietLapThamDinhs;
-                    let tong7 = 0;
-                    data7?.forEach(item => {
-                        const level = item.stt.split('.').length - 2;
-                        if (level == 0) {
-                            tong7 += item.gtTong;
-                        }
-                    })
-                    dataInfo.extraData.push({
-                        stt: '0.1.5',
-                        maNdung: '0.1.5',
-                        namKh: tong7,
-                        giaTriThamDinh: null,
-                    })
+                    const data7 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh');
+                    if (data7.trangThai != '3') {
+                        let tong7 = 0;
+                        data7?.lstCtietLapThamDinhs?.forEach(item => {
+                            const level = item.stt.split('.').length - 2;
+                            if (level == 0) {
+                                tong7 += item.gtTong;
+                            }
+                        })
+                        dataInfo.extraData.push({
+                            stt: '0.1.5',
+                            maNdung: '0.1.5',
+                            namKh: tong7,
+                            giaTriThamDinh: null,
+                        })
+                    }
                 }
                 break;
             case 'TT342_13.10':
@@ -1184,47 +1239,49 @@ export class BaoCaoComponent implements OnInit {
             case 'TT342_14':
                 nzContent = BieuMau140Component;
                 //bieu mau 15.1
-                if (formDetail.trangThai == '3' || formDetail.trangThai == '4' || formDetail.trangThai == '5') {
+                if (Utils.statusSave.includes(this.baoCao.trangThai)) {
                     dataInfo.extraData = [];
-                    const data151 = this.baoCao.lstLapThamDinhs.find(item => item.maBieuMau == 'TT342_15.1')?.lstCtietLapThamDinhs;
-                    const duocGiao = {
-                        maNdung: '0.1.1',
-                        thienNtruoc: 0,
-                        namDtoan: 0,
-                        namUocThien: 0,
-                        namKh: 0,
+                    const data151 = this.baoCao.lstLapThamDinhs.find(item => item.maBieuMau == 'TT342_15.1');
+                    if (data151.trangThai != '3') {
+                        const duocGiao = {
+                            maNdung: '0.1.1',
+                            thienNtruoc: 0,
+                            namDtoan: 0,
+                            namUocThien: 0,
+                            namKh: 0,
+                        }
+                        const thucTe = {
+                            maNdung: '0.1.2',
+                            thienNtruoc: 0,
+                            namDtoan: 0,
+                            namUocThien: 0,
+                            namKh: 0,
+                        }
+                        const quyLuong = {
+                            maNdung: '0.2.1',
+                            thienNtruoc: 0,
+                            namDtoan: 0,
+                            namUocThien: 0,
+                            namKh: 0,
+                        }
+                        data151?.lstCtietLapThamDinhs?.forEach(item => {
+                            duocGiao.thienNtruoc += item.thienTsoBcTqGiao ? item.thienTsoBcTqGiao : 0;
+                            duocGiao.namDtoan += item.dtoanTsoBcheTqGiao ? item.dtoanTsoBcheTqGiao : 0;
+                            duocGiao.namUocThien += item.uocThTsoBcTqGiao ? item.uocThTsoBcTqGiao : 0;
+                            duocGiao.namKh += item.namKhTsoBcTqGiao ? item.namKhTsoBcTqGiao : 0;
+                            thucTe.thienNtruoc += item.thienTsoBcTdiem ? item.thienTsoBcTdiem : 0;
+                            thucTe.namDtoan += item.uocThTsoBcTdiem ? item.uocThTsoBcTdiem : 0;
+                            thucTe.namUocThien += item.uocThTsoBcTdiem ? item.uocThTsoBcTdiem : 0;
+                            thucTe.namKh += item.uocThTsoBcTdiem ? item.uocThTsoBcTdiem : 0;
+                            quyLuong.thienNtruoc += item.thienQlPcap ? item.thienQlPcap : 0;
+                            quyLuong.namDtoan += item.dtoanQluongPcap ? item.dtoanQluongPcap : 0;
+                            quyLuong.namUocThien += item.uocThQlPcap ? item.uocThQlPcap : 0;
+                            quyLuong.namKh += item.namKhQlPcap ? item.namKhQlPcap : 0;
+                        })
+                        dataInfo.extraData.push(duocGiao);
+                        dataInfo.extraData.push(thucTe);
+                        dataInfo.extraData.push(quyLuong);
                     }
-                    const thucTe = {
-                        maNdung: '0.1.2',
-                        thienNtruoc: 0,
-                        namDtoan: 0,
-                        namUocThien: 0,
-                        namKh: 0,
-                    }
-                    const quyLuong = {
-                        maNdung: '0.2.1',
-                        thienNtruoc: 0,
-                        namDtoan: 0,
-                        namUocThien: 0,
-                        namKh: 0,
-                    }
-                    data151?.forEach(item => {
-                        duocGiao.thienNtruoc += item.thienTsoBcTqGiao ? item.thienTsoBcTqGiao : 0;
-                        duocGiao.namDtoan += item.dtoanTsoBcheTqGiao ? item.dtoanTsoBcheTqGiao : 0;
-                        duocGiao.namUocThien += item.uocThTsoBcTqGiao ? item.uocThTsoBcTqGiao : 0;
-                        duocGiao.namKh += item.namKhTsoBcTqGiao ? item.namKhTsoBcTqGiao : 0;
-                        thucTe.thienNtruoc += item.thienTsoBcTdiem ? item.thienTsoBcTdiem : 0;
-                        thucTe.namDtoan += item.uocThTsoBcTdiem ? item.uocThTsoBcTdiem : 0;
-                        thucTe.namUocThien += item.uocThTsoBcTdiem ? item.uocThTsoBcTdiem : 0;
-                        thucTe.namKh += item.uocThTsoBcTdiem ? item.uocThTsoBcTdiem : 0;
-                        quyLuong.thienNtruoc += item.thienQlPcap ? item.thienQlPcap : 0;
-                        quyLuong.namDtoan += item.dtoanQluongPcap ? item.dtoanQluongPcap : 0;
-                        quyLuong.namUocThien += item.uocThQlPcap ? item.uocThQlPcap : 0;
-                        quyLuong.namKh += item.namKhQlPcap ? item.namKhQlPcap : 0;
-                    })
-                    dataInfo.extraData.push(duocGiao);
-                    dataInfo.extraData.push(thucTe);
-                    dataInfo.extraData.push(quyLuong);
                 }
                 break;
             case 'TT342_15.1':
@@ -1239,115 +1296,127 @@ export class BaoCaoComponent implements OnInit {
             // thong tu 69
             case 'TT69_13':
                 nzContent = BieuMau13Component;
-                dataInfo.extraData = {
-                    nhucauDan: 0,
-                    lstBieuMau: [],
-                }
-                //thong tin phu luc du an
-                const dataDa = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'plda')?.lstCtietLapThamDinhs;
-                dataDa?.forEach(e => {
-                    const level = e.stt.split('.').length - 2;
-                    if (level == 0) {
-                        dataInfo.extraData.nhucauDan = sumNumber([dataInfo.extraData.nhucauDan, e.khTongSoNamN])
+                if (Utils.statusSave.includes(this.baoCao.trangThai)) {
+                    dataInfo.extraData = {
+                        nhucauDan: 0,
+                        lstBieuMau: [],
                     }
-                })
-                //bieu mau 13.1
-                const temp1 = {
-                    maNdung: '0.1.2.1',
-                    namHienHanhDtoan: 0,
-                    namHienHanhUocThien: 0,
-                    ncauChiN: 0,
-                }
-                const data131 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.1')?.lstCtietLapThamDinhs;
-                data131?.forEach(item => {
-                    const level = item.stt.split('.').length - 2;
-                    if (level == 0) {
-                        temp1.namHienHanhDtoan = sumNumber([temp1.namHienHanhDtoan, item.namDtoan]);
-                        temp1.namHienHanhUocThien = sumNumber([temp1.namHienHanhUocThien, item.namUocThien]);
-                        temp1.ncauChiN = sumNumber([temp1.ncauChiN, item.giaTriThamDinh ? item.giaTriThamDinh : item.namKh]);
+                    //thong tin phu luc du an
+                    const dataDa = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'plda');
+                    if (dataDa.trangThai != '3') {
+                        dataDa?.lstCtietLapThamDinhs?.forEach(e => {
+                            const level = e.stt.split('.').length - 2;
+                            if (level == 0) {
+                                dataInfo.extraData.nhucauDan = sumNumber([dataInfo.extraData.nhucauDan, e.khTongSoNamN])
+                            }
+                        })
                     }
-                })
-                dataInfo.extraData.lstBieuMau.push(temp1);
-                //bieu mau 13.3
-                const temp2 = {
-                    maNdung: '0.1.2.2',
-                    namHienHanhDtoan: 0,
-                    namHienHanhUocThien: 0,
-                    ncauChiN: 0,
-                }
-                const data133 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.3')?.lstCtietLapThamDinhs;
-                data133?.forEach(item => {
-                    const level = item.stt.split('.').length - 2;
-                    if (level == 0) {
-                        temp2.namHienHanhDtoan = sumNumber([temp2.namHienHanhDtoan, item.kphiThienNamNsnnDtoan]);
-                        temp2.namHienHanhUocThien = sumNumber([temp2.namHienHanhUocThien, item.kphiThienNamNsnnUth]);
-                        temp2.ncauChiN = sumNumber([temp2.ncauChiN, item.kphiThienDtoanTso]);
+                    //bieu mau 13.1
+                    const temp1 = {
+                        maNdung: '0.1.2.1',
+                        namHienHanhDtoan: 0,
+                        namHienHanhUocThien: 0,
+                        ncauChiN: 0,
                     }
-                })
-                dataInfo.extraData.lstBieuMau.push(temp2);
-                //bieu mau 13.8
-                const temp3 = {
-                    maNdung: '0.1.2.3',
-                    namHienHanhDtoan: 0,
-                    namHienHanhUocThien: 0,
-                    ncauChiN: 0,
-                }
-                const data138 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.8')?.lstCtietLapThamDinhs;
-                data138?.forEach(item => {
-                    const level = item.stt.split('.').length - 2;
-                    if (level == 0) {
-                        temp3.namHienHanhDtoan = sumNumber([temp3.namHienHanhDtoan, item.namDtoan]);
-                        temp3.namHienHanhUocThien = sumNumber([temp3.namHienHanhUocThien, item.namUocThien]);
-                        temp3.ncauChiN = sumNumber([temp3.ncauChiN, item.giaTriThamDinh ? item.giaTriThamDinh : item.namKh]);
+                    const data131 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.1');
+                    if (data131.trangThai != '3') {
+                        data131?.lstCtietLapThamDinhs?.forEach(item => {
+                            const level = item.stt.split('.').length - 2;
+                            if (level == 0) {
+                                temp1.namHienHanhDtoan = sumNumber([temp1.namHienHanhDtoan, item.namDtoan]);
+                                temp1.namHienHanhUocThien = sumNumber([temp1.namHienHanhUocThien, item.namUocThien]);
+                                temp1.ncauChiN = sumNumber([temp1.ncauChiN, item.giaTriThamDinh ? item.giaTriThamDinh : item.namKh]);
+                            }
+                        })
+                        dataInfo.extraData.lstBieuMau.push(temp1);
                     }
-                })
-                dataInfo.extraData.lstBieuMau.push(temp3);
-                //bieu mau 13.10
-                const temp4 = {
-                    maNdung: '0.1.2.4',
-                    namHienHanhDtoan: 0,
-                    namHienHanhUocThien: 0,
-                    ncauChiN: 0,
-                }
-                const data1310 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.10')?.lstCtietLapThamDinhs;
-                data1310?.forEach(item => {
-                    const level = item.stt.split('.').length - 2;
-                    if (level == 0) {
-                        temp4.namHienHanhDtoan = sumNumber([temp4.namHienHanhDtoan, item.namDtoanGiao]);
-                        temp4.namHienHanhUocThien = sumNumber([temp4.namHienHanhUocThien, item.namUocThien]);
-                        temp4.ncauChiN = sumNumber([temp4.ncauChiN, item.gtriTdinhDtoanNam ? item.gtriTdinhDtoanNam : item.khDtoanNam]);
+                    //bieu mau 13.3
+                    const temp2 = {
+                        maNdung: '0.1.2.2',
+                        namHienHanhDtoan: 0,
+                        namHienHanhUocThien: 0,
+                        ncauChiN: 0,
                     }
-                })
-                dataInfo.extraData.lstBieuMau.push(temp4);
-                //bieu mau 14
-                const temp5 = {
-                    maNdung: '0.1.2.5',
-                    namHienHanhDtoan: 0,
-                    namHienHanhUocThien: 0,
-                    ncauChiN: 0,
+                    const data133 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.3');
+                    if (data133.trangThai != '3') {
+                        data133?.lstCtietLapThamDinhs?.forEach(item => {
+                            const level = item.stt.split('.').length - 2;
+                            if (level == 0) {
+                                temp2.namHienHanhDtoan = sumNumber([temp2.namHienHanhDtoan, item.kphiThienNamNsnnDtoan]);
+                                temp2.namHienHanhUocThien = sumNumber([temp2.namHienHanhUocThien, item.kphiThienNamNsnnUth]);
+                                temp2.ncauChiN = sumNumber([temp2.ncauChiN, item.kphiThienDtoanTso]);
+                            }
+                        })
+                        dataInfo.extraData.lstBieuMau.push(temp2);
+                    }
+                    //bieu mau 13.8
+                    const temp3 = {
+                        maNdung: '0.1.2.3',
+                        namHienHanhDtoan: 0,
+                        namHienHanhUocThien: 0,
+                        ncauChiN: 0,
+                    }
+                    const data138 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.8');
+                    if (data138.trangThai != '3') {
+                        data138?.lstCtietLapThamDinhs?.forEach(item => {
+                            const level = item.stt.split('.').length - 2;
+                            if (level == 0) {
+                                temp3.namHienHanhDtoan = sumNumber([temp3.namHienHanhDtoan, item.namDtoan]);
+                                temp3.namHienHanhUocThien = sumNumber([temp3.namHienHanhUocThien, item.namUocThien]);
+                                temp3.ncauChiN = sumNumber([temp3.ncauChiN, item.giaTriThamDinh ? item.giaTriThamDinh : item.namKh]);
+                            }
+                        })
+                        dataInfo.extraData.lstBieuMau.push(temp3);
+                    }
+                    //bieu mau 13.10
+                    const temp4 = {
+                        maNdung: '0.1.2.4',
+                        namHienHanhDtoan: 0,
+                        namHienHanhUocThien: 0,
+                        ncauChiN: 0,
+                    }
+                    const data1310 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_13.10');
+                    if (data1310.trangThai != '3') {
+                        data1310?.lstCtietLapThamDinhs?.forEach(item => {
+                            const level = item.stt.split('.').length - 2;
+                            if (level == 0) {
+                                temp4.namHienHanhDtoan = sumNumber([temp4.namHienHanhDtoan, item.namDtoanGiao]);
+                                temp4.namHienHanhUocThien = sumNumber([temp4.namHienHanhUocThien, item.namUocThien]);
+                                temp4.ncauChiN = sumNumber([temp4.ncauChiN, item.gtriTdinhDtoanNam ? item.gtriTdinhDtoanNam : item.khDtoanNam]);
+                            }
+                        })
+                        dataInfo.extraData.lstBieuMau.push(temp4);
+                    }
+                    //bieu mau 14
+                    const temp5 = {
+                        maNdung: '0.1.2.5',
+                        namHienHanhDtoan: 0,
+                        namHienHanhUocThien: 0,
+                        ncauChiN: 0,
+                    }
+                    const data14 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_14');
+                    const dataTemp = data14?.lstCtietLapThamDinhs?.find(e => e.maNdung == '0.2');
+                    if (dataTemp) {
+                        temp5.namHienHanhDtoan = dataTemp.namDtoan;
+                        temp5.namHienHanhUocThien = dataTemp.namUocThien;
+                        temp5.ncauChiN = dataTemp.giaTriThamDinh ? dataTemp.giaTriThamDinh : dataTemp.namKh;
+                    }
+                    dataInfo.extraData.lstBieuMau.push(temp5);
+                    //bieu mau 16
+                    const temp6 = {
+                        maNdung: '0.1.3',
+                        namHienHanhDtoan: 0,
+                        namHienHanhUocThien: 0,
+                        ncauChiN: 0,
+                    }
+                    const data16 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_16')?.lstCtietLapThamDinhs;
+                    data16?.forEach(item => {
+                        temp6.namHienHanhDtoan = sumNumber([temp6.namHienHanhDtoan, item.khTtien]);
+                        temp6.namHienHanhUocThien = sumNumber([temp6.namHienHanhUocThien, item.uocThTtien]);
+                        temp6.ncauChiN = sumNumber([temp6.ncauChiN, item.tdinhTtien ? item.tdinhTtien : item.namKhTtien]);
+                    })
+                    dataInfo.extraData.lstBieuMau.push(temp6);
                 }
-                const data14 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_14')?.lstCtietLapThamDinhs;
-                const dataTemp = data14?.find(e => e.maNdung == '0.2');
-                if (dataTemp) {
-                    temp5.namHienHanhDtoan = dataTemp.namDtoan;
-                    temp5.namHienHanhUocThien = dataTemp.namUocThien;
-                    temp5.ncauChiN = dataTemp.giaTriThamDinh ? dataTemp.giaTriThamDinh : dataTemp.namKh;
-                }
-                dataInfo.extraData.lstBieuMau.push(temp5);
-                //bieu mau 16
-                const temp6 = {
-                    maNdung: '0.1.3',
-                    namHienHanhDtoan: 0,
-                    namHienHanhUocThien: 0,
-                    ncauChiN: 0,
-                }
-                const data16 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT342_16')?.lstCtietLapThamDinhs;
-                data16?.forEach(item => {
-                    temp6.namHienHanhDtoan = sumNumber([temp6.namHienHanhDtoan, item.khTtien]);
-                    temp6.namHienHanhUocThien = sumNumber([temp6.namHienHanhUocThien, item.uocThTtien]);
-                    temp6.ncauChiN = sumNumber([temp6.ncauChiN, item.tdinhTtien ? item.tdinhTtien : item.namKhTtien]);
-                })
-                dataInfo.extraData.lstBieuMau.push(temp6);
                 break;
             case 'TT69_14':
                 nzContent = BieuMau14Component;
@@ -1357,32 +1426,36 @@ export class BaoCaoComponent implements OnInit {
                 //bieu mau 13
                 dataInfo.extraData = [];
                 const dataChiNs = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT69_13');
-                dataChiNs?.lstCtietLapThamDinhs.forEach(item => {
-                    if (item.maNdung.startsWith('0.1.2') && item.maNdung != '0.1.2') {
-                        dataInfo.extraData.push({
-                            ...item,
-                            maNdung: '0.' + item.maNdung.substring(item.maNdung.lastIndexOf('.') + 1, item.maNdung.length),
-                        })
-                    }
-                })
+                if (dataChiNs.trangThai != '3') {
+                    dataChiNs?.lstCtietLapThamDinhs.forEach(item => {
+                        if (item.maNdung.startsWith('0.1.2') && item.maNdung != '0.1.2') {
+                            dataInfo.extraData.push({
+                                ...item,
+                                maNdung: '0.' + item.maNdung.substring(item.maNdung.lastIndexOf('.') + 1, item.maNdung.length),
+                            })
+                        }
+                    })
+                }
                 break;
             case 'TT69_17':
                 nzContent = BieuMau17Component;
                 //bieu mau 16
                 dataInfo.extraData = [];
                 const dataCtx = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'TT69_16');
-                dataCtx?.lstCtietLapThamDinhs.forEach(item => {
-                    const level = item.stt.split('.').length - 2;
-                    if (level == 0) {
-                        dataInfo.extraData.push({
-                            maNdung: item.maNdung,
-                            thNamHienHanhN1: item.thNamHienHanhN1,
-                            ncauChiN: item.ncauChiN,
-                            ncauChiN1: item.ncauChiN1,
-                            ncauChiN2: item.ncauChiN2,
-                        });
-                    }
-                })
+                if (dataCtx.trangThai != '3') {
+                    dataCtx?.lstCtietLapThamDinhs.forEach(item => {
+                        const level = item.stt.split('.').length - 2;
+                        if (level == 0) {
+                            dataInfo.extraData.push({
+                                maNdung: item.maNdung,
+                                thNamHienHanhN1: item.thNamHienHanhN1,
+                                ncauChiN: item.ncauChiN,
+                                ncauChiN1: item.ncauChiN1,
+                                ncauChiN2: item.ncauChiN2,
+                            });
+                        }
+                    })
+                }
                 break;
             case 'TT69_18':
                 nzContent = BieuMau18Component;

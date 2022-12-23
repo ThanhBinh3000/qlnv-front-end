@@ -54,6 +54,7 @@ export class PhuLuc06Component implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    statusPrint: boolean;
     isDataAvailable = false;
     allChecked = false;
 
@@ -90,6 +91,7 @@ export class PhuLuc06Component implements OnInit {
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.checkEditTD = this.dataInfo?.editAppraisalValue;
         this.checkViewTD = this.dataInfo?.viewAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -263,11 +265,13 @@ export class PhuLuc06Component implements OnInit {
         // delete object have checked = true
         this.lstCtietBcao = this.lstCtietBcao.filter(item => item.checked != true)
         this.allChecked = false;
+        this.tinhTong()
     }
 
     // xoa dong
     deleteById(id: string): void {
-        this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
+        this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id);
+        this.tinhTong();
     }
 
     // start edit

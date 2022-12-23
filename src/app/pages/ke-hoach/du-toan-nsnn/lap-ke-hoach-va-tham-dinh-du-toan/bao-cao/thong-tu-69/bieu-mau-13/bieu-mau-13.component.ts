@@ -52,6 +52,7 @@ export class BieuMau13Component implements OnInit {
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
+    statusPrint: boolean;
     statusBtnOk: boolean;
     editMoneyUnit = false;
     isDataAvailable = false;
@@ -81,6 +82,7 @@ export class BieuMau13Component implements OnInit {
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -95,6 +97,10 @@ export class BieuMau13Component implements OnInit {
                     maNdung: e.ma,
                     tenNdung: e.giaTri,
                 })
+            })
+        } else {
+            this.lstCtietBcao.forEach(item => {
+                item.ssanhNcauNVoiN1 = divNumber(item.ncauChiN, item.namHienHanhUocThien);
             })
         }
         this.sortByIndex();
