@@ -160,4 +160,10 @@ export class QuanLyVonPhiService extends BaseService {
     return this.httpClient.get(this.urlDefault + '/qlnv-category/dmuc-donvi/chi-tiet/1');
   }
 
+  getListCategory(code: string): Observable<any> {
+    return this.httpClient.get(
+      this.urlDefault + "/qlnv-category/dmuc-chung/danh-sach/" + code,
+    );
+  }
+
 }

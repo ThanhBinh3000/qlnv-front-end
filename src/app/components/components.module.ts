@@ -163,6 +163,7 @@ import { DialogThemDiaDiemPhanLoComponent } from './dialog/dialog-them-dia-diem-
 import { DialogThemMoiSoDuDauKyComponent } from './dialog/dialog-them-moi-so-du-dau-ky/dialog-them-moi-so-du-dau-ky.component';
 import { DialogDanhSachVatTuHangHoaComponent } from './dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { Base2Component } from './base2/base2.component';
+import { DialogChonDanhMucComponent } from './dialog/dialog-chon-danh-muc/dialog-chon-danh-muc.component';
 @NgModule({
   declarations: [
     //components
@@ -275,6 +276,7 @@ import { Base2Component } from './base2/base2.component';
     DialogThemDiaDiemPhanLoComponent,
     DialogThemMoiSoDuDauKyComponent,
     DialogDanhSachVatTuHangHoaComponent,
+    DialogChonDanhMucComponent,
     Base2Component,
   ],
   imports: [
@@ -407,6 +409,7 @@ import { Base2Component } from './base2/base2.component';
     DialogThemDiaDiemPhanLoComponent,
     DialogThemMoiSoDuDauKyComponent,
     DialogDanhSachVatTuHangHoaComponent,
+    DialogChonDanhMucComponent,
     Base2Component
   ],
   schemas: [NO_ERRORS_SCHEMA],
