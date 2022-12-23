@@ -499,7 +499,6 @@ export class BaoHiemKhoComponent implements OnInit {
             this.maDviChon = this.editCache[id].data.maDvi,
                 this.maDiaChiKhoChon = this.editCache[id].data.maDiaChi,
                 this.maNhaKhoChon = this.editCache[id].data.maNhaKho,
-
                 this.checkAddNewRow = true;
         } else {
             this.notification.warning(MESSAGE.WARNING, 'Vui lòng lưu bản ghi đang sửa trước khi thực hiện thao tác');
@@ -740,8 +739,8 @@ export class BaoHiemKhoComponent implements OnInit {
         this.tongSoNhaKhoTren5000 = 0;
         this.lstCtietBcao.forEach(item => {
             if (item.level == 1) {
-                this.tongSo1 += item.khoiTichKhoDuoiM3;
-                this.tongSo2 += item.khoiTichKhoTuM3;
+                // this.tongSo1 += item.khoiTichKhoDuoiM3;
+                // this.tongSo2 += item.khoiTichKhoTuM3;
                 this.tongSo3 += item.slNhaKhoDuoi;
                 this.tongSo4 += item.slNhaKhoTu;
                 this.tongSo5 += item.slNhaKhoTong;
