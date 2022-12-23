@@ -51,6 +51,8 @@
             <th>{{displayValue(total.namUocThien)}}</th>
             <th>{{displayValue(total.namKh)}}</th>
             <th *ngIf="viewAppraisalValue">{{displayValue(total.giaTriThamDinh)}}</th>
+            <th [hidden]="status && !editAppraisalValue"></th>
+            <th [hidden]="status"></th>
           </tr>
         </thead>
         <tbody>
