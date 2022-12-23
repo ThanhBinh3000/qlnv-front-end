@@ -104,7 +104,7 @@ export class BaoHiemKhoComponent implements OnInit {
     maDiaChiKhoChon: any;
     maNhaKhoChon: any;
     lstDviFull: any[] = [];
-
+    capDvi: string;
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
@@ -149,6 +149,7 @@ export class BaoHiemKhoComponent implements OnInit {
 
 
         this.userInfo = this.userService.getUserLogin().DON_VI;
+        this.capDvi = this.userInfo?.capDvi
         const reqGetDonViCon = {
             maDviCha: this.maDviTao,
             trangThai: '01',
@@ -532,48 +533,100 @@ export class BaoHiemKhoComponent implements OnInit {
 
     // them dong moi
     addLine(data: any): void {
-        const stt = data.stt;
 
-        let index = -1;
-        for (let i = this.lstCtietBcao.length - 1; i >= 0; i--) {
-            if (this.lstCtietBcao[i]?.stt.startsWith(stt)) {
-                index = i;
-                break;
+        if (data == null) {
+            let lstLv1 = []
+            this.lstCtietBcao.forEach(item => {
+                if (item.stt.length == 3) {
+                    lstLv1.push({
+                        ...item,
+                        level: "1"
+                    })
+                }
+            })
+            let index = lstLv1.length + 1;
+            const item: ItemData = {
+                ...new ItemData,
+                id: uuid.v4() + 'FE',
+                stt: '0.' + index ,
+                maDvi: '',
+                maDiaChi: '',
+                diaChiKho: '',
+                maNhaKho: '',
+                tenNhaKho: '',
+                khoiTichKhoDuoiM3: 0,
+                khoiTichKhoTuM3: 0,
+                slNhaKhoDuoi: 0,
+                slNhaKhoTu: 0,
+                slNhaKhoTong: 0,
+                duoiGtConLai: 0,
+                duoiHetKhauHao: 0,
+                duoiTongGtKho: 0,
+                tuGtConLai: 0,
+                tuHetKhauHao: 0,
+                tuTongGtKho: 0,
+                tong: 0,
+                level: '0',
+                checked: false,
             }
+            const str: string[] = item.stt.split('.');
+            item.level = str.length - 2;
+            const lstTemp = [
+                ... this.lstCtietBcao,
+                item
+            ];
+            this.lstCtietBcao = lstTemp;
+            this.editCache[item.id] = {
+                edit: true,
+                data: { ...item }
+            };
+            this.checkAddNewRow = true;
+        } else {
+            const stt = data.stt;
+
+            let index = -1;
+            for (let i = this.lstCtietBcao.length - 1; i >= 0; i--) {
+                if (this.lstCtietBcao[i]?.stt.startsWith(stt)) {
+                    index = i;
+                    break;
+                }
+            }
+            const tail = stt == this.lstCtietBcao[index]?.stt ? '1' : (this.getTail(this.lstCtietBcao[index]?.stt) + 1).toString();
+            const item: ItemData = {
+                ...new ItemData,
+                id: uuid.v4() + 'FE',
+                stt: stt + '.' + tail,
+                maDvi: '',
+                maDiaChi: '',
+                diaChiKho: '',
+                maNhaKho: '',
+                tenNhaKho: '',
+                khoiTichKhoDuoiM3: 0,
+                khoiTichKhoTuM3: 0,
+                slNhaKhoDuoi: 0,
+                slNhaKhoTu: 0,
+                slNhaKhoTong: 0,
+                duoiGtConLai: 0,
+                duoiHetKhauHao: 0,
+                duoiTongGtKho: 0,
+                tuGtConLai: 0,
+                tuHetKhauHao: 0,
+                tuTongGtKho: 0,
+                tong: 0,
+                level: '',
+                checked: false,
+            }
+            const str: string[] = item.stt.split('.');
+            item.level = str.length - 2;
+            this.lstCtietBcao.splice(index + 1, 0, item);
+            this.editCache[item.id] = {
+                edit: true,
+                data: { ...item }
+            };
+            this.checkAddNewRow = true;
         }
-        const tail = stt == this.lstCtietBcao[index]?.stt ? '1' : (this.getTail(this.lstCtietBcao[index]?.stt) + 1).toString();
-        const item: ItemData = {
-            ...new ItemData,
-            id: uuid.v4() + 'FE',
-            stt: stt + '.' + tail,
-            maDvi: '',
-            maDiaChi: '',
-            diaChiKho: '',
-            maNhaKho: '',
-            tenNhaKho: '',
-            khoiTichKhoDuoiM3: 0,
-            khoiTichKhoTuM3: 0,
-            slNhaKhoDuoi: 0,
-            slNhaKhoTu: 0,
-            slNhaKhoTong: 0,
-            duoiGtConLai: 0,
-            duoiHetKhauHao: 0,
-            duoiTongGtKho: 0,
-            tuGtConLai: 0,
-            tuHetKhauHao: 0,
-            tuTongGtKho: 0,
-            tong: 0,
-            level: '',
-            checked: false,
-        }
-        const str: string[] = item.stt.split('.');
-        item.level = str.length - 2;
-        this.lstCtietBcao.splice(index + 1, 0, item);
-        this.editCache[item.id] = {
-            edit: true,
-            data: { ...item }
-        };
-        this.checkAddNewRow = true;
+
+
 
 
     }
