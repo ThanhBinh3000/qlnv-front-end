@@ -105,6 +105,7 @@ export class BaoHiemKhoComponent implements OnInit {
     maNhaKhoChon: any;
     lstDviFull: any[] = [];
     capDvi: string;
+    isSynthetic: boolean;
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
@@ -130,6 +131,9 @@ export class BaoHiemKhoComponent implements OnInit {
         this.formDetail = this.dataInfo?.data;
         this.maDviTao = this.dataInfo?.maDvi;
         this.namBaoCao = this.dataInfo?.namBcao;
+        this.isSynthetic = this.dataInfo?.isSynthetic;
+        console.log(this.isSynthetic);
+        
         this.namTruoc = (Number(this.namBaoCao) - 1).toString();
         this.namKeHoach = (Number(this.namBaoCao) + 1).toString();
         this.thuyetMinh = this.formDetail?.thuyetMinh;

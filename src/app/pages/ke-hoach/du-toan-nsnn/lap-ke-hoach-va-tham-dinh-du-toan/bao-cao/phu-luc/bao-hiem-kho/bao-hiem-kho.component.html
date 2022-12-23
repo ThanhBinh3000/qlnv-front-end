@@ -28,7 +28,7 @@
                         <span>Xóa</span>
                     </button> -->
                     <ng-container >
-                        <button *ngIf="userInfo.capDvi == '1'" type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
+                        <button *ngIf="userInfo.capDvi == '1' && isSynthetic" type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>

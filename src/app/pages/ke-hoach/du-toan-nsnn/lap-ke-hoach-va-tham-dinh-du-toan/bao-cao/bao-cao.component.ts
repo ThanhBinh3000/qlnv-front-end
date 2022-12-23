@@ -806,8 +806,8 @@ export class BaoCaoComponent implements OnInit {
     deleteAppendix(id: string) {
         this.baoCao.lstLapThamDinhs = this.baoCao.lstLapThamDinhs.filter(item => item.id != id);
     }
-
     viewAppendix(formDetail: ItemData) {
+        const isSynthetic = this.baoCao.lstBcaoDviTrucThuocs && this.baoCao.lstBcaoDviTrucThuocs.length != 0;
         const dataInfo = {
             data: formDetail,
             extraData: null,
@@ -819,6 +819,7 @@ export class BaoCaoComponent implements OnInit {
             status: this.status || !(this.userInfo?.sub == formDetail.nguoiBcao),
             viewAppraisalValue: this.viewAppraisalValue,
             editAppraisalValue: this.acceptStatus,
+            isSynthetic: isSynthetic
         }
         dataInfo.data.maDviTien = '1';
         //const nzContent = BieuMau18Component;
