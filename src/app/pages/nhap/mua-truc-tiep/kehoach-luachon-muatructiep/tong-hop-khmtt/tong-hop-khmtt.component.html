@@ -165,7 +165,7 @@
                 *ngIf=" ( data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="( data.trangThai == STATUS.CHUA_TAO_QD ) && (userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_SUA'))"
+              <a *ngIf="( data.trangThai == STATUS.CHUA_TAO_QD ) && (userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_THEM'))"
                 (click)="redirectToChiTiet(false, data.id)">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>

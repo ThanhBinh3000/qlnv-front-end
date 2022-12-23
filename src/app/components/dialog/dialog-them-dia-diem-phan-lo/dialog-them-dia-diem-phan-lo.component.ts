@@ -198,6 +198,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     };
 
     if (this.dataChiTieu) {
+      console.log(this.dataChiTieu);
       if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
         this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
       }

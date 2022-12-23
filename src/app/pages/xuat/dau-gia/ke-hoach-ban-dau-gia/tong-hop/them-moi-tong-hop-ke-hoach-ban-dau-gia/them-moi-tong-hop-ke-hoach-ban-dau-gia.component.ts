@@ -150,7 +150,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   }
 
   isDetailPermission() {
-    if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_SUA") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP")) {
+    if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_THEM") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP")) {
       return true;
     }
     return false;
