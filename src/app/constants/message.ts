@@ -1,4 +1,5 @@
 export const MESSAGE = {
+  ACCESS_DENIED: "Bạn không có quyền truy cập chức năng này",
   TITLE_CONFIRM_LOGOUT: 'Bạn có chắc chắn muốn đăng xuất',
   SYSTEM_ERROR: 'Lỗi hệ thống',
   FORM_REQUIRED_ERROR: "Vui lòng điền đủ thông tin",
