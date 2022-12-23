@@ -590,6 +590,21 @@ export class PhuLuc02Component implements OnInit {
 							dmucTaiKho: dm?.tongDmuc,
 							level: 1,
 						})
+						this.lstCtietBcao.forEach(e => {
+							if(e.stt.startsWith("0.2.")){
+								this.lstCtietBcao[index].dmucTaiKho = null;
+								this.lstCtietBcao[index].thNamTruoc = null;
+								this.lstCtietBcao[index].namDtoan = null;
+								this.lstCtietBcao[index].namUocTh = null;
+								this.lstCtietBcao[index].sluongTaiKho = null;
+								this.lstCtietBcao[index].dmucTaiKho = null;
+								this.lstCtietBcao[index].ttienTaiKho = null;
+								this.lstCtietBcao[index].ttienNgoaiKho = null;
+								this.lstCtietBcao[index].tongCong = null;
+								this.lstCtietBcao[index].binhQuanNgoaiKho = null;
+							}
+						})
+						this.getTotal()
 						this.updateEditCache();
 					} else {
 						stt = '0.1.' + index.toString();
@@ -603,6 +618,22 @@ export class PhuLuc02Component implements OnInit {
 							dmucTaiKho: dm?.tongDmuc,
 							level: 1,
 						})
+						const index2 = this.lstCtietBcao.findIndex(e => e.maDanhMuc == '0.1');
+						this.lstCtietBcao.forEach(e => {
+							if(e.stt.startsWith("0.1.")){
+								this.lstCtietBcao[index2].dmucTaiKho = null;
+								this.lstCtietBcao[index2].thNamTruoc = null;
+								this.lstCtietBcao[index2].namDtoan = null;
+								this.lstCtietBcao[index2].namUocTh = null;
+								this.lstCtietBcao[index2].sluongTaiKho = null;
+								this.lstCtietBcao[index2].dmucTaiKho = null;
+								this.lstCtietBcao[index2].ttienTaiKho = null;
+								this.lstCtietBcao[index2].ttienNgoaiKho = null;
+								this.lstCtietBcao[index2].tongCong = null;
+								this.lstCtietBcao[index2].binhQuanNgoaiKho = null;
+							}
+						})
+						this.getTotal()
 						this.updateEditCache();
 					}
 
