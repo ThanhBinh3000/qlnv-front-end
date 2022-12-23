@@ -119,6 +119,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
         tenTrangThaiTkhai: data.tenTrangThaiTkhai
       })
       this.listNthauNopHs = data.hhChiTietTTinChaoGiaList;
+      this.taiLieuDinhKemList = data.fileDinhkems;
       console.log(this.listNthauNopHs, 88888)
 
     } else {
@@ -146,7 +147,6 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
     let body = {
       id: this.idInput,
       trangThaiTkhai: STATUS.HOAN_THANH_CAP_NHAT,
-      loaiVthh: this.loaiVthh
     }
     let res = await this.chaogiaUyquyenMualeService.approve(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -164,6 +164,8 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
     let body = {
       idChaoGia: this.idInput,
       hhChiTietTTinChaoGiaReqs: this.listNthauNopHs,
+      ptMuaTrucTiep: this.radioValue,
+      fileDinhkems: this.taiLieuDinhKemList
     }
     let res = await this.chaogiaUyquyenMualeService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -243,14 +245,6 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
     };
   }
 
-  checkRoleData() {
-    if (this.userService.isCuc()) {
-      return true;
-    }
-    if (this.userService.isTongCuc()) {
-      return true
-    }
-  }
 
   expandSet2 = new Set<number>();
   onExpandChange2(id: number, checked: boolean): void {

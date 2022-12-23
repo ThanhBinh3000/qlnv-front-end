@@ -114,20 +114,21 @@
                     </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="24" *ngIf=" radioValue == 'UQ'">
-                    <nz-form-item nz-col class="form-item">
+                    <nz-form-item nz-col nzSpan="24" class="form-item">
                         <nz-form-label [nzNoColon]="true" class="label-color-kh"> File đính kèm QĐ ủy quyền (nếu có)
                         </nz-form-label>
                         <div class="list-file">
-                            <file-list [data]="taiLieuDinhKemList"></file-list>
+                            <file-list [data]="taiLieuDinhKemList" [isViewDetail]="false"></file-list>
                         </div>
                     </nz-form-item>
                 </div>
                 <div nz-col [nzSpan]="24" *ngIf=" radioValue == 'ML'">
-                    <nz-form-item nz-col class="form-item">
-                        <nz-form-label [nzNoColon]="true" class="label-color-kh"> File đính kèm QĐ giao chi cục mua lẻ
-                            (nếu có) </nz-form-label>
+                    <nz-form-item nz-col nzSpan="24" class="form-item">
+                        <nz-form-label [nzNoColon]="true" class="label-color-kh">File đính kèm QĐ giao chi cục mua lẻ
+                            (nếu có)
+                        </nz-form-label>
                         <div class="list-file">
-                            <file-list [data]="taiLieuDinhKemList"></file-list>
+                            <file-list [data]="taiLieuDinhKemList" [isViewDetail]="false"></file-list>
                         </div>
                     </nz-form-item>
                 </div>
@@ -151,7 +152,7 @@
     <nz-card class="mg-t-16 flex-card p-lr16 ">
         <div class="buttons">
             <button
-                *ngIf="idChaoGia > 0 && !isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT && checkRoleData()"
+                *ngIf="idChaoGia > 0 && !isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT "
                 class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
                 <i class="icon htvbdh_tcdt_save"></i>
                 <span>Lưu</span>
@@ -178,8 +179,7 @@
                         <th *ngIf="!isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT"
                             width="30px">Thao tác</th>
                     </tr>
-                    <tr
-                        *ngIf="!isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT && checkRoleData()">
+                    <tr *ngIf="!isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT ">
                         <th></th>
                         <th><input nz-input [(ngModel)]="itemRow.canhanTochuc" /></th>
                         <th><input nz-input [(ngModel)]="itemRow.mst" /></th>
@@ -235,7 +235,7 @@
                             <td>{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
                             <td></td>
                             <td>{{ data.luaChon }}</td>
-                            <td *ngIf="!isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT && checkRoleData()"
+                            <td *ngIf="!isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT "
                                 class="text-center">
                                 <a (click)="startEdit(i)">
                                     <i class=" fa fa-pencil"></i>
