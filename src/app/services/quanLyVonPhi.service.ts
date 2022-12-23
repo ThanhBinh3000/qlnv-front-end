@@ -156,4 +156,8 @@ export class QuanLyVonPhiService extends BaseService {
     );
   }
 
+  getDmucDviTrucThuocTCDT(): Observable<any> {
+    return this.httpClient.get(this.urlDefault + '/qlnv-category/dmuc-donvi/chi-tiet/1');
+  }
+
 }

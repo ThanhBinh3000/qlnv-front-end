@@ -70,6 +70,7 @@ export class PhuLucDuAnComponent implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    statusPrint: boolean;
     editMoneyUnit = false;
     isDataAvailable = false;
     //nho dem
@@ -98,6 +99,7 @@ export class PhuLucDuAnComponent implements OnInit {
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,

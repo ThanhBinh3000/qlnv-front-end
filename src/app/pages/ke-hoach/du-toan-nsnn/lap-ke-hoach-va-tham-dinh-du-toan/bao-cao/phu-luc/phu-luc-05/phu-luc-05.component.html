@@ -33,7 +33,7 @@
           <th colspan="2">Quyết định phê duyệt quyết toán công trình hoàn thành</th>
           <th rowspan="2">Lũy kế vấp vốn đến {{namTruoc}}</th>
           <th rowspan="2">Kế hoạnh vốn năm {{namBcao}}</th>
-          <th *ngIf="viewAppraisalValue" rowspan="2">Kế hoạnh vốn năm {{namBcao}}</th>
+          <th *ngIf="viewAppraisalValue" rowspan="2">Kế hoạnh vốn năm {{namBcao}} (Thẩm định)</th>
           <th rowspan="2">Kế hoạch năm {{namDtoanOne}}</th>
           <th rowspan="2">Kế hoạch năm {{namDtoanTwo}}</th>
           <th rowspan="2">Ghi chú</th>
@@ -56,7 +56,7 @@
           <th></th>
           <th></th>
           <th>4</th>
-          <th>Số</th>
+          <th></th>
           <th>5</th>
           <th>6</th>
           <th>7</th>
@@ -79,11 +79,11 @@
           <th></th>
           <th></th>
           <th></th>
+          <th>{{displayValue(total.giaTriCongTrinh)}}</th>
           <th></th>
+          <th>{{displayValue(total.qdPdBcaoGtriDtoanKtoanTmdt)}}</th>
           <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
+          <th>{{displayValue(total.qdPdQtoanGtriQtoan)}}</th>
           <th>{{displayValue(total.luyKeVapVon)}}</th>
           <th>{{displayValue(total.keHoachVon)}}</th>
           <th *ngIf="viewAppraisalValue">
@@ -163,7 +163,7 @@
               <td>{{displayValue(data.keHoachNamDtN2)}}</td>
               <td>{{data.ghiChu}}</td>
             </ng-container>
-            
+
             <ng-template #editAppraisal>
               <td>
                 <ng-container *ngIf="data.maCongTrinh; else editName">
@@ -259,19 +259,19 @@
 <div class="modal-footer">
   <div class="nut">
     <div class="cantrai">
-      <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+      <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
         <i nz-icon nzType="printer" nzTheme="outline"></i>
         <span>In</span>
       </button>
-      <button type="button" class="btn btn-main" (click)="save('5')" [hidden]="statusBtnFinish">
+      <button type="button" class="btn btn-main" (click)="save('5', null)" [hidden]="statusBtnFinish">
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>Hoàn tất nhập liệu</span>
       </button>
-      <button type="button" class="btn btn-main" (click)="save('4')" [hidden]="statusBtnFinish">
+      <button type="button" class="btn btn-main" (click)="save('4', null)" [hidden]="statusBtnFinish">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
-      <button type="button" class="btn btn-main" (click)="onSubmit('1', null)" [hidden]="statusBtnOk">
+      <button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="statusBtnOk">
         <i nz-icon nzType="check" nzTheme="outline"></i>
         <span>OK</span>
       </button>

@@ -49,6 +49,7 @@ export class PhuLuc01Component implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    statusPrint: boolean;
     listVattu: any[] = [];
     lstVatTuFull = [];
     isDataAvailable = false;
@@ -98,6 +99,7 @@ export class PhuLuc01Component implements OnInit {
         this.status = this.dataInfo?.status;
         this.namBaoCao = this.dataInfo?.namBcao;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
         this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -109,12 +111,18 @@ export class PhuLuc01Component implements OnInit {
         await this.getDinhMucPL2X();
 
         this.dsDinhMuc = this.dsDinhMucN.concat(this.dsDinhMucX);
-        console.log(this.dsDinhMuc);
 
         this.lstCtietBcao.forEach(item => {
             if (!item.tenDanhMuc) {
                 const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
                 item.tenDanhMuc = dinhMuc?.tenDinhMuc;
+                item.dmucNamDtoan = dinhMuc?.tongDmuc;
+                item.dviTinh = dinhMuc?.donViTinh;
+                item.ttienNamDtoan = mulNumber(item.dmucNamDtoan, item.sluongNamDtoan);
+                item.ttienTd = mulNumber(item.ttienTd, item.sluongTd);
+            } else {
+                const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.danhMuc && e.loaiDinhMuc == item.maDmuc);
+                // item.tenDanhMuc = dinhMuc?.tenDinhMuc;
                 item.dmucNamDtoan = dinhMuc?.tongDmuc;
                 item.dviTinh = dinhMuc?.donViTinh;
                 item.ttienNamDtoan = mulNumber(item.dmucNamDtoan, item.sluongNamDtoan);
@@ -149,12 +157,6 @@ export class PhuLuc01Component implements OnInit {
             res => {
                 if (res.statusCode == 0) {
                     this.dsDinhMucN = res.data;
-                    this.dsDinhMucN.forEach(item => {
-                        if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = divNumber(item.tongDmuc, 1000);
-                        }
-                        this.dsDinhMuc
-                    })
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -173,11 +175,6 @@ export class PhuLuc01Component implements OnInit {
             res => {
                 if (res.statusCode == 0) {
                     this.dsDinhMucX = res.data;
-                    this.dsDinhMucX.forEach(item => {
-                        if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = divNumber(item.tongDmuc, 1000);
-                        }
-                    })
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -278,7 +275,7 @@ export class PhuLuc01Component implements OnInit {
     }
 
     // luu
-    async save(trangThai: string) {
+    async save(trangThai: string, lyDoTuChoi: string) {
         let checkSaveEdit;
         //check xem tat ca cac dong du lieu da luu chua?
         //chua luu thi bao loi, luu roi thi cho di
@@ -326,7 +323,9 @@ export class PhuLuc01Component implements OnInit {
         const request = JSON.parse(JSON.stringify(this.formDetail));
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
         request.trangThai = trangThai;
-
+        if (lyDoTuChoi) {
+            request.lyDoTuChoi = lyDoTuChoi;
+        }
         this.spinner.show();
         this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
             async data => {
@@ -393,7 +392,7 @@ export class PhuLuc01Component implements OnInit {
         });
         modalTuChoi.afterClose.subscribe(async (text) => {
             if (text) {
-                this.onSubmit(mcn, text);
+                this.save(mcn, text);
             }
         });
     };

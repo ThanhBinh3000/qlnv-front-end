@@ -67,6 +67,7 @@ export class BieuMau151Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  statusPrint: boolean;
   editMoneyUnit = false;
   isDataAvailable = false;
   //nho dem
@@ -102,6 +103,7 @@ export class BieuMau151Component implements OnInit {
     this.thuyetMinh = this.formDetail?.thuyetMinh;
     this.status = this.dataInfo?.status;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+    this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
@@ -141,7 +143,7 @@ export class BieuMau151Component implements OnInit {
 
 
   // luu
-  async save(trangThai: string) {
+  async save(trangThai: string, lyDoTuChoi: string) {
     let checkSaveEdit;
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
@@ -182,6 +184,10 @@ export class BieuMau151Component implements OnInit {
     const request = JSON.parse(JSON.stringify(this.formDetail));
     request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
     request.trangThai = trangThai;
+
+    if (lyDoTuChoi) {
+      request.lyDoTuChoi = lyDoTuChoi;
+    }
 
     this.spinner.show();
     this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
@@ -409,40 +415,12 @@ export class BieuMau151Component implements OnInit {
 
   addLine(id: number): void {
     const item: ItemData = {
+      ...new ItemData(),
       id: uuid.v4(),
-      stt: '',
-      maLvuc: '',
-      tenDmuc: '',
-      thienTsoBcTqGiao: null,
-      thienTsoBcTdiem: null,
-      thienQlPcap: null,
-      thienLuongBac: null,
-      thienPcapLuong: null,
-      thienDgopLuong: null,
-      thienKhac: null,
-      dtoanTsoBcheTqGiao: null,
-      dtoanQluongPcap: null,
-      dtoanLuongBac: null,
-      dtoanPcapLuong: null,
-      dtoanDgopLuong: null,
-      dtoanKhac: null,
-      uocThTsoBcTqGiao: null,
-      uocThTsoBcTdiem: null,
-      uocThQlPcap: null,
-      uocThLuongBac: null,
-      uocThPCapLuong: null,
-      uocThDgopLuong: null,
-      uocThKhac: null,
-      namKhTsoBcTqGiao: null,
-      namKhQlPcap: null,
-      namKhLuongBac: null,
-      namKhPcapLuong: null,
-      namKhDgopLuong: null,
-      namKhKhac: null,
       checked: false,
     };
 
-    this.lstCtietBcao.splice(id, 0, item);
+    this.lstCtietBcao.splice(id + 1, 0, item);
     this.editCache[item.id] = {
       edit: true,
       data: { ...item }
