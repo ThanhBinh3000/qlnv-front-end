@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output
-} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild,} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import * as dayjs from 'dayjs';
@@ -52,7 +46,8 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
   @Input() dataTongHop: any;
   @Output()
   showListEvent = new EventEmitter<any>();
-
+  @ViewChild('bodyChiTiet')
+  bodyChiTiet: ElementRef;
   formData: FormGroup;
   formThongTinChung: FormGroup;
   selectedCanCu: any = {};
@@ -86,6 +81,7 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
   dsQdPd: any[];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
+  flagInit = false
 
   constructor(
     private router: Router,
@@ -164,7 +160,7 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
   }
 
   isDetailPermission() {
-    if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_SUA") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_THEM")) {
+    if (this.userService.isAccessPermisson("XHDTQG_PTDG_DCKHBDG_THEM")) {
       return true;
     }
     return false;
@@ -200,6 +196,7 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
       await this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+    this.flagInit = true
     await this.spinner.hide();
   }
 
@@ -252,6 +249,7 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
     try {
       await this.spinner.show();
       if (!this.isDetailPermission()) {
+        console.log('khong co quyen')
         return;
       }
       this.setValidator(isGuiDuyet)
@@ -289,7 +287,7 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     } catch (e) {
-    }finally {
+    } finally {
       await this.spinner.hide();
     }
   }
@@ -405,7 +403,8 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
       const data = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
-        soQdPd: data.soQdPd?.split("/")[0],
+        soQdDc: data.soQdDc?.split("/")[0],
+        soQdPd: +data.soQdPd,
       });
       if (data.loaiVthh.startsWith("02")) {
         this.danhsachDx = data.children;
@@ -585,6 +584,7 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
 
   async showDetail($event, index) {
     await this.spinner.show();
+    console.log(this.bodyChiTiet.nativeElement)
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     $event.target.parentElement.classList.add('selectedRow');
     this.isTongHop = this.formData.value.phanLoai == 'TH';
@@ -596,6 +596,19 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
 
   setNewSoLuong($event) {
     this.danhsachDx[this.index].soLuong = $event;
+  }
+
+  setDataTaiSan($event) {
+    if ($event) {
+      if ($event.tgianBdauTchuc) {
+        this.danhsachDx[this.index].tgianDkienTu = dayjs($event.tgianBdauTchuc[0]).format('YYYY-MM-DD');
+        this.danhsachDx[this.index].tgianDkienDen = dayjs($event.tgianBdauTchuc[1]).format('YYYY-MM-DD');
+      }
+      if ($event.dsPhanLoList) {
+        this.danhsachDx[this.index].children = $event.dsPhanLoList;
+      }
+
+    }
   }
 
   expandSet = new Set<number>();
@@ -689,7 +702,7 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
   async loadDsQdPd() {
     this.quyetDinhPdKhBdgService.search({
       trangThai: STATUS.BAN_HANH,
-      namKh:this.formData.get('namKh').value,
+      namKh: this.formData.get('namKh').value,
       lastest: 0,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
@@ -709,17 +722,180 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
   }
 
   changeQdPd(id) {
-    if (id) {
+    if (id && this.flagInit) {
       this.spinner.show();
       this.quyetDinhPdKhBdgService.getDetail(id).then(res => {
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {
-            delete res.data?.trangThai
-            delete res.data?.tenTrangThai
-            delete res.data?.id
-            delete res.data?.soQdPd
+         /*   res.data = {
+              "id": 622,
+              "namKh": 2022,
+              "maDvi": "0101",
+              "tenDvi": "Tổng cục Dự trữ Nhà nước",
+              "soQdPd": "312/QĐ-TCDT",
+              "ngayKyQd": "2022-12-19",
+              "ngayHluc": "2022-12-19",
+              "idThHdr": null,
+              "soTrHdr": "111/TTr-CDTVP",
+              "idTrHdr": 1262,
+              "trichYeu": "Test 5",
+              "loaiVthh": "0101",
+              "tenLoaiVthh": "Thóc tẻ",
+              "cloaiVthh": "010101",
+              "tenCloaiVthh": "Hạt rất dài",
+              "moTaHangHoa": "111",
+              "soQdCc": "150/TCDT",
+              "tchuanCluong": "Thông tư 87/2020/TT-BTC",
+              "tgianDkienTu": "2022-12-01",
+              "tgianDkienDen": "2023-02-07",
+              "tgianTtoan": 111,
+              "tgianTtoanGhiChu": "11",
+              "pthucTtoan": "1",
+              "tgianGnhan": 11,
+              "tgianGnhanGhiChu": "111",
+              "pthucGnhan": "11",
+              "thongBaoKh": "11",
+              "khoanTienDatTruoc": null,
+              "tongSoLuong": null,
+              "tongTienKdienDonGia": null,
+              "tongTienDatTruocDonGia": null,
+              "trangThai": "29",
+              "tenTrangThai": "Ban Hành",
+              "ngayTao": "2022-12-19",
+              "nguoiTao": "admin",
+              "ngaySua": "2022-12-19",
+              "nguoiSua": "admin",
+              "ngayGuiDuyet": null,
+              "nguoiGuiDuyet": null,
+              "soDviTsan": null,
+              "slHdDaKy": null,
+              "soQdPdKqBdg": null,
+              "ldoTuchoi": null,
+              "ngayPduyet": "19/12/2022 17:09:00",
+              "nguoiPduyet": "admin",
+              "lastest": false,
+              "phanLoai": "TTr",
+              "idGoc": null,
+              "soDxuatKhBdg": null,
+              "children": [
+                {
+                  "id": 566,
+                  "idQdHdr": 622,
+                  "idDxHdr": 1262,
+                  "maDvi": "010102",
+                  "tenDvi": "Cục DTNNKV Vĩnh Phú",
+                  "soDxuat": "111/TTr-CDTVP",
+                  "ngayTao": "2022-12-19",
+                  "ngayPduyet": "2022-12-19",
+                  "tgianDkienTu": "2022-12-01",
+                  "tgianDkienDen": "2023-02-07",
+                  "trichYeu": "Test ",
+                  "tongSoLuong": 0.011,
+                  "soDviTsan": null,
+                  "tongTienKdienDonGia": 0,
+                  "tongTienDatTruocDonGia": 0,
+                  "moTaHangHoa": "111",
+                  "diaChi": "Số 7 đường Trần Phú - phường Gia Cẩm - thành phố Việt Trì - tỉnh Phú Thọ",
+                  "soQdPdKqBdg": null,
+                  "trangThai": "33",
+                  "tenTrangThai": "Chưa cập nhật",
+                  "tgianTtoan": 111,
+                  "tgianTtoanGhiChu": "11",
+                  "pthucTtoan": "1",
+                  "tgianGnhan": 11,
+                  "tgianGnhanGhiChu": "111",
+                  "pthucGnhan": "11",
+                  "thongBaoKh": "11",
+                  "khoanTienDatTruoc": 11,
+                  "xhQdPdKhBdg": null,
+                  "xhDxKhBanDauGia": null,
+                  "children": [
+                    {
+                      "id": 606,
+                      "idQdDtl": 566,
+                      "maDvi": "01010201",
+                      "tenDvi": "Chi cục Dự trữ Nhà nước Việt Trì",
+                      "maDiemKho": "0101020101",
+                      "diaDiemKho": null,
+                      "tenDiemKho": "Điểm kho Phủ Đức",
+                      "maNhaKho": "010102010101",
+                      "tenNhakho": "Nhà kho A1",
+                      "maNganKho": "01010201010101",
+                      "tenNganKho": "Ngăn kho A1/1",
+                      "maLoKho": "0101020101010102",
+                      "tenLoKho": "Lô số 1 Ngăn kho A1/1",
+                      "loaiVthh": null,
+                      "tenLoaiVthh": null,
+                      "cloaiVthh": "010102",
+                      "tenCloaiVthh": "Hạt dài",
+                      "maDviTsan": "11",
+                      "duDau": 500000,
+                      "soLuong": 11,
+                      "giaKhongVat": 111,
+                      "giaKhoiDiem": 1221,
+                      "donGiaVat": null,
+                      "giaKhoiDiemDduyet": 0,
+                      "tienDatTruoc": 134.31,
+                      "tienDatTruocDduyet": 0,
+                      "soLuongChiTieu": 1000,
+                      "soLuongKh": null,
+                      "tongSoLuong": 11,
+                      "tongTienDatTruoc": 134.31,
+                      "tongTienDatTruocDd": 0,
+                      "dviTinh": null,
+                      "trangThai": "33",
+                      "tenTrangThai": "Chưa cập nhật",
+                      "xhQdPdKhBdgDtl": null,
+                      "xhQdPdKhBdg": null,
+                      "children": [
+                        {
+                          "id": 526,
+                          "idPhanLo": 606,
+                          "maDvi": "01010201",
+                          "tenDvi": "Chi cục Dự trữ Nhà nước Việt Trì",
+                          "maDiemKho": "0101020101",
+                          "tenDiemKho": "Điểm kho Phủ Đức",
+                          "maNhaKho": "010102010101",
+                          "tenNhakho": "Nhà kho A1",
+                          "maNganKho": "01010201010101",
+                          "tenNganKho": "Ngăn kho A1/1",
+                          "maLoKho": "0101020101010102",
+                          "tenLoKho": "Lô số 1 Ngăn kho A1/1",
+                          "loaiVthh": null,
+                          "tenLoaiVthh": null,
+                          "cloaiVthh": "010102",
+                          "tenCloaiVthh": "Hạt dài",
+                          "maDviTsan": "11",
+                          "duDau": 500000,
+                          "soLuong": 11,
+                          "giaKhongVat": 111,
+                          "giaKhoiDiem": 1221,
+                          "donGiaVat": null,
+                          "giaKhoiDiemDduyet": 0,
+                          "tienDatTruoc": 134.31,
+                          "tienDatTruocDduyet": 0,
+                          "soLuongChiTieu": null,
+                          "soLuongKh": null,
+                          "dviTinh": null,
+                          "tongSoLuong": 11,
+                          "tongTienDatTruoc": 134.31,
+                          "tongTienDatTruocDd": 0,
+                          "idQdHdr": 622
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "fileDinhKems": [],
+              "canCuPhapLy": []
+            };*/
+            delete res.data?.trangThai;
+            delete res.data?.tenTrangThai;
+            delete res.data?.id;
+            delete res.data?.soQdPd;
             this.formData.patchValue(res.data);
-            this.danhsachDx = res.data?.children;
+            this.danhsachDx = this.danhsachDxCache = res.data?.children;
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg);
@@ -728,4 +904,6 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
       })
     }
   }
+
+
 }
