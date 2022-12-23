@@ -300,7 +300,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
-    body.dsDeXuat = this.danhsachDx;
+    body.children = this.danhsachDx;
     body.fileDinhKems = this.fileDinhKem;
     let res = null;
     if (this.formData.get('id').value) {

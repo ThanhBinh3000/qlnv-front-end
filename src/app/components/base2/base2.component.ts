@@ -124,7 +124,10 @@ export class Base2Component implements OnInit {
     this.search();
   }
 
-  goDetail(id: number) {
+  goDetail(id: number, roles?: any) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     this.idSelected = id;
     this.isDetail = true;
   }
@@ -218,7 +221,10 @@ export class Base2Component implements OnInit {
 
 
   // DELETE 1 item table
-  delete(item: any) {
+  delete(item: any, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -247,7 +253,10 @@ export class Base2Component implements OnInit {
   }
 
   // DELETE 1 multi
-  deleteMulti() {
+  deleteMulti(roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach((item) => {
@@ -312,7 +321,10 @@ export class Base2Component implements OnInit {
   }
 
   // Save 
-  async createUpdate(body) {
+  async createUpdate(body, roles?: any) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     this.spinner.show();
     try {
       this.helperService.markFormGroupTouched(this.formData);
@@ -375,8 +387,10 @@ export class Base2Component implements OnInit {
   }
 
   // Approve
-  async approve(id: number, trangThai: string, msg: string) {
-    this.modal.confirm({
+  async approve(id: number, trangThai: string, msg: string, roles?: any) {
+    if (!this.checkPermission(roles)) {
+      return
+    } this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
       nzContent: msg,
@@ -411,7 +425,10 @@ export class Base2Component implements OnInit {
     });
   }
 
-  async reject(id: number, trangThai: string) {
+  async reject(id: number, trangThai: string, roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
@@ -448,6 +465,29 @@ export class Base2Component implements OnInit {
         }
       }
     });
+  }
+
+  checkPermission(roles): boolean {
+    if (roles) {
+      let type = typeof (roles);
+      if (type == 'object') {
+        console.log("objeect");
+        roles.forEach(x => {
+          if (!this.userService.isAccessPermisson(x)) {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
+            return false;
+          }
+        })
+      }
+      if (type == 'string') {
+        if (!this.userService.isAccessPermisson(roles)) {
+          this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
+          return false;
+        }
+      }
+      return true
+    }
+    return true;
   }
 
 }

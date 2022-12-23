@@ -5,6 +5,7 @@ export const CHI_TIEU_KE_HOACH_NAM = 'chi-tieu-ke-hoach-nam';
 export const GIAO_KE_HOACH_VA_DU_TOAN = 'giao-ke-hoach-va-du-toan';
 export const THONG_TIN_CHI_TIEU_KE_HOACH_NAM = 'thong-tin-chi-tieu-ke-hoach-nam';
 export const DE_XUAT_DIEU_CHINH = 'de-xuat-dieu-chinh';
+export const PHUONG_AN_GIA = 'phuong-an-gia';
 export const THONG_TIN_DE_XUAT_DIEU_CHINH = 'thong-tin-de-xuat-dieu-chinh';
 export const DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM = 'dieu-chinh-chi-tieu-ke-hoach-nam';
 export const DIEU_CHINH_THONG_TIN_CHI_TIEU_KE_HOACH_NAM = 'dieu-chinh-thong-tin-chi-tieu-ke-hoach-nam';
@@ -47,9 +48,9 @@ export const ROUTE_LIST_KE_HOACH: Array<any> = [
   {
     icon: 'htvbdh_tcdt_quanlychitieu',
     title: 'Phương án giá',
-    url: `/${MAIN_ROUTE_KE_HOACH}/${DIEU_CHINH_CHI_TIEU_KE_HOACH_NAM}`,
-    dropdown: 'dieu-chinh-chi-tieu',
-    idHover: 'giao-chi-tieu',
+    url: `/${MAIN_ROUTE_KE_HOACH}/${PHUONG_AN_GIA}`,
+    // dropdown: 'dieu-chinh-chi-tieu',
+    // idHover: 'giao-chi-tieu',
     hasTab: false,
     code: 'KHVDTNSNN_PAGIA'
   },

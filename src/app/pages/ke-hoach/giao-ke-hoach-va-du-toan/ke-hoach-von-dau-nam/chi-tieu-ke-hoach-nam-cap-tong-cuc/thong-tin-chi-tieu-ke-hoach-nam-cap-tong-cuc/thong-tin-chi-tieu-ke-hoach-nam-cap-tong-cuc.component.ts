@@ -1485,7 +1485,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       delete muoi.xuatTrongNam;
       delete muoi.id;
     });
-    console.log(this.thongTinChiTieuKeHoachNamInput.khMuoi);
     delete this.thongTinChiTieuKeHoachNamInput.khMuoiDuTru;
     //convert to flat object
     this.thongTinChiTieuKeHoachNamInput.khVatTuNhap = this.dataVatTuNhap.flatMap(s => s.dsVatTu.map(s1 => {
@@ -1548,7 +1547,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     break;
                   }
                   case STATUS.TU_CHOI_LDC: {
-                    trangThai = STATUS.CHO_DUYET_LDC
+                    trangThai = STATUS.CHO_DUYET_TP
                     break;
                   }
                 }

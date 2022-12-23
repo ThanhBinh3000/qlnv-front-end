@@ -184,7 +184,7 @@
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="loaiVthh.startsWith('02') ? ( data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT ) : ( data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT )
-                && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_SUA')"
+                && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_THEM')"
                 (click)="redirectToChiTiet(data)">
                 <i class="icon htvbdh_soanthao"></i>
               </a>

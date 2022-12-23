@@ -1,16 +1,18 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from "@angular/forms";
-import { Globals } from "../../../../../../../shared/globals";
-import { MESSAGE } from "../../../../../../../constants/message";
-import { DanhMucService } from "../../../../../../../services/danhmuc.service";
-import { chain } from 'lodash';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { HelperService } from 'src/app/services/helper.service';
-import { NzModalService } from "ng-zorro-antd/modal";
-import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
-import { DialogThemDiaDiemPhanLoComponent } from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
-import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {Globals} from "../../../../../../../shared/globals";
+import {MESSAGE} from "../../../../../../../constants/message";
+import {DanhMucService} from "../../../../../../../services/danhmuc.service";
+import {chain} from 'lodash';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {HelperService} from 'src/app/services/helper.service';
+import {NzModalService} from "ng-zorro-antd/modal";
+import {DeXuatKhBanDauGiaService} from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
+import {
+  DialogThemDiaDiemPhanLoComponent
+} from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
+import {DanhSachPhanLo} from 'src/app/models/KeHoachBanDauGia';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
 
 @Component({
@@ -22,6 +24,7 @@ export class ThongtinQdDieuchinhKhbdgComponent implements OnInit {
   @Input() title;
   @Input() dataInput;
   @Output() soLuongChange = new EventEmitter<number>();
+  @Output() dataChange = new EventEmitter<any>();
   @Input() isView;
   @Input() isCache: boolean = false;
   @Input() isTongHop;
@@ -66,7 +69,7 @@ export class ThongtinQdDieuchinhKhbdgComponent implements OnInit {
       soDxuat: [null,],
       trichYeu: [null],
       ldoTuchoi: [],
-
+      dsPhanLoList: []
     });
   }
 
@@ -74,20 +77,24 @@ export class ThongtinQdDieuchinhKhbdgComponent implements OnInit {
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
-        this.formData.patchValue({
-          tgianBdauTchuc: [res.data?.tgianDkienTu, res.data?.tgianDkienDen],
-        });
-        if (this.isTongHop) {
-          this.listOfData = this.dataInput.children ? this.dataInput.children : this.dataInput.dsPhanLoList;
+        if (this.isCache) {
+          let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.formData.patchValue(res.data);
+            this.formData.patchValue({
+              tgianBdauTchuc: [res.data?.tgianDkienTu, res.data?.tgianDkienDen],
+            });
+          }
         } else {
-          this.listOfData = this.dataInput.dsPhanLoList ? this.dataInput.dsPhanLoList : this.dataInput.children;
+          this.formData.patchValue(this.dataInput);
+          this.formData.patchValue({
+            dsPhanLoList: this.dataInput.children,
+            tgianBdauTchuc: [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen]
+          })
         }
-        if (res.msg == MESSAGE.SUCCESS) {
-          this.helperService.bidingDataInFormGroup(this.formData, res.data);
+        for (let i = 0; i < this.formData.value.dsPhanLoList.length; i++) {
+          this.expandSet.add(i);
         }
-        this.helperService.setIndexArray(this.listOfData);
-
       } else {
         this.formData.reset();
       }
@@ -97,12 +104,11 @@ export class ThongtinQdDieuchinhKhbdgComponent implements OnInit {
 
 
   async ngOnInit() {
-    await this.spinner.show()
-    await this.spinner.hide()
   }
 
 
   expandSet = new Set<number>();
+
   onExpandChange(id: number, checked: boolean): void {
     if (checked) {
       this.expandSet.add(id);
@@ -112,7 +118,6 @@ export class ThongtinQdDieuchinhKhbdgComponent implements OnInit {
   }
 
   themMoiBangPhanLoTaiSan(data?: any, index?: number) {
-    console.log(data, 454545)
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm giao nhận hàng',
       nzContent: DialogThemDiaDiemPhanLoComponent,
@@ -156,5 +161,11 @@ export class ThongtinQdDieuchinhKhbdgComponent implements OnInit {
       this.soLuongChange.emit(soLuong);
       this.helperService.setIndexArray(this.listOfData);
     });
+  }
+
+  changeFormData() {
+    if (this.formData.value.id) {
+      this.dataChange.emit(this.formData.value);
+    }
   }
 }
