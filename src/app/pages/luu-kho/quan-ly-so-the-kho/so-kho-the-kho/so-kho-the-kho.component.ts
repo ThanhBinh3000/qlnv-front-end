@@ -114,25 +114,7 @@ export class SoKhoTheKhoComponent implements OnInit {
   async initData() {
     this.userInfo = this.userService.getUserLogin();
     this.detail.maDvi = this.userInfo.MA_DVI;
-    this.detail.tenDvi = this.userInfo.TEN_DVI;
-    await this.loadDsTong();
-  }
-  async loadDsTong() {
-    const body = {
-      maDviCha: this.detail.maDvi,
-      trangThai: '01',
-    };
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
-    if (!isEmpty(dsTong)) {
-      if (this.userInfo.CAP_DVI === this.globals.prop.CUC) {
-        this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-      }
-      if (this.userInfo.CAP_DVI === this.globals.prop.CHICUC) {
-        this.dsDonVi = dsTong[DANH_MUC_LEVEL.CHI_CUC];
-        this.formData.get('maDvi').setValue(this.dsDonVi[0].tenDvi)
-        this.formData.controls['maDvi'].disable();
-      }
-    }
+    this.detail.tenDvi = this.userInfo.TEN_DVI ? this.userInfo.TEN_DVI : null;
   }
   async loaiVTHHGetAll() {
     try {
@@ -194,7 +176,7 @@ export class SoKhoTheKhoComponent implements OnInit {
   }
   loadDsNam() {
     let thisYear = dayjs().get('year');
-    for (let i = -3; i < 23; i++) {
+    for (let i = -10; i < 10; i++) {
       this.dsNam.push((thisYear - i).toString());
     }
   }
