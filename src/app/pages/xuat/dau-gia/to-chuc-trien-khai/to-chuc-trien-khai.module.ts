@@ -6,6 +6,7 @@ import { MainTochucTrienkhaiComponent } from './main-tochuc-trienkhai/main-tochu
 import { QdPdKetQuaBdgComponent } from './main-tochuc-trienkhai/qd-pd-ket-qua-bdg/qd-pd-ket-qua-bdg.component';
 import { ThongTinDauGiaComponent } from './main-tochuc-trienkhai/thong-tin-dau-gia/thong-tin-dau-gia.component';
 import { ChiTietThongTinDauGiaComponent } from './main-tochuc-trienkhai/thong-tin-dau-gia/chi-tiet-thong-tin-dau-gia/chi-tiet-thong-tin-dau-gia.component';
+import { ChiTietQdPdKetQuaBdgComponent } from './main-tochuc-trienkhai/qd-pd-ket-qua-bdg/chi-tiet-qd-pd-ket-qua-bdg/chi-tiet-qd-pd-ket-qua-bdg.component';
 
 
 @NgModule({
@@ -13,7 +14,8 @@ import { ChiTietThongTinDauGiaComponent } from './main-tochuc-trienkhai/thong-ti
     MainTochucTrienkhaiComponent,
     QdPdKetQuaBdgComponent,
     ThongTinDauGiaComponent,
-    ChiTietThongTinDauGiaComponent
+    ChiTietThongTinDauGiaComponent,
+    ChiTietQdPdKetQuaBdgComponent
   ],
   exports: [
     MainTochucTrienkhaiComponent

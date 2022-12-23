@@ -3,13 +3,11 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { Globals } from "../../../../../../../shared/globals";
 import { MESSAGE } from "../../../../../../../constants/message";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
-import { chain } from 'lodash';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
 import { NzModalService } from "ng-zorro-antd/modal";
 import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
 import { DialogThemDiaDiemPhanLoComponent } from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
-import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
 
@@ -43,7 +41,6 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
     private modal: NzModalService,
     private notification: NzNotificationService,
   ) {
-
     this.formData = this.fb.group({
       id: [],
       maDvi: [''],
