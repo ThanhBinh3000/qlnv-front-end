@@ -103,6 +103,7 @@ export class BaoHiemKhoComponent implements OnInit {
     maDviChon: any;
     maDiaChiKhoChon: any;
     maNhaKhoChon: any;
+    lstDviFull: any[] = [];
 
     constructor(
         private _modalRef: NzModalRef,
@@ -163,7 +164,7 @@ export class BaoHiemKhoComponent implements OnInit {
                 if (this.userInfo.capDvi != "3") {
                     this.listDanhSachCuc = res.data;
                 }
-                // this.listDanhSachCuc.push(donViLogin);
+                this.listDanhSachCuc.push(donViLogin);
 
             } else {
                 this.notification.error(MESSAGE.ERROR, res?.msg);
@@ -191,6 +192,41 @@ export class BaoHiemKhoComponent implements OnInit {
         })
 
         if (this.lstCtietBcao.length == 0) {
+
+            await this.quanLyVonPhiService.getDmucDviTrucThuocTCDT().toPromise().then(res => {
+                if (res.statusCode == 0) {
+                    const listDsDvi = res.data.children
+                    // this.listDanhSachCuc = res.data;
+                    // listDsDvi.forEach(item => {
+                    //     item.children.forEach(child => {
+                    //         listDsDvi.push(child)
+                    //         child.children.forEach(children => {
+                    //             listDsDvi.push(child)
+                    //         })
+                    //     })
+                    // })
+                    // this.listDanhSachCuc = listDsDvi;
+                    // =============
+                    const lstDviFullTemp = res.data;
+                    this.lstDviFull.push(res.data)
+                    lstDviFullTemp.children.forEach(item => {
+                        this.lstDviFull.push(item)
+                        item.children.forEach(child => {
+                            this.lstDviFull.push(child)
+                            child.children.forEach(children => {
+                                this.lstDviFull.push(children)
+                            })
+                        })
+                    })
+                    // console.log(this.lstDviFull);
+
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            }, err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            })
+
             this.lstCtietBcao.push({
                 ...new ItemData(),
                 id: uuid.v4() + 'FE',
@@ -220,60 +256,60 @@ export class BaoHiemKhoComponent implements OnInit {
             this.updateEditCache();
 
         } else if (this.lstCtietBcao.length > 0) {
-            if (!this.lstCtietBcao[0].stt) {
-                await this.quanLyVonPhiService.getDmucDviTrucThuocTCDT().toPromise().then(res => {
-                    if (res.statusCode == 0) {
-                        const listDsDvi = res.data.children
-                        // this.listDanhSachCuc = res.data;
-                        listDsDvi.forEach(item => {
-                            item.children.forEach(child => {
-                                listDsDvi.push(child)
+            await this.quanLyVonPhiService.getDmucDviTrucThuocTCDT().toPromise().then(res => {
+                if (res.statusCode == 0) {
+                    const listDsDvi = res.data.children
+                    // this.listDanhSachCuc = res.data;
+                    // listDsDvi.forEach(item => {
+                    //     item.children.forEach(child => {
+                    //         listDsDvi.push(child)
+                    //         child.children.forEach(children => {
+                    //             listDsDvi.push(child)
+                    //         })
+                    //     })
+                    // })
+                    // this.listDanhSachCuc = listDsDvi;
+                    // =============
+                    const lstDviFullTemp = res.data;
+                    this.lstDviFull.push(res.data)
+                    lstDviFullTemp.children.forEach(item => {
+                        this.lstDviFull.push(item)
+                        item.children.forEach(child => {
+                            this.lstDviFull.push(child)
+                            child.children.forEach(children => {
+                                this.lstDviFull.push(children)
                             })
                         })
-                        this.listDanhSachCuc = listDsDvi
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, res?.msg);
-                    }
-                }, err => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                })
+                    })
+                    // console.log(this.lstDviFull);
 
-                let lstLv1 = []
-                this.lstCtietBcao.forEach(item => {
-                    if (item.maNhaKho == null && item.diaChiKho == null && item.tenNhaKho == null) {
-                        lstLv1.push({
-                            ...item,
-                            level: "1"
-                        })
-                    }
-                })
-                for (let i = 1; i <= lstLv1.length; i++) {
-                    lstLv1.forEach(item => {
-                        item.stt = "0." + i;
-                    })
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
-                let lstCon = [];
-                this.lstCtietBcao.forEach(item => {
-                    if (item.maNhaKho !== null && item.diaChiKho !== null && item.tenNhaKho !== null) {
-                        lstCon.push({
-                            ...item,
-                            level: "2"
-                        })
-                    }
-                })
-                let indexArr = []
-                lstLv1.forEach(item => {
-                    lstCon.forEach(itm => {
-                        if (itm.maDvi.startsWith(item.maDvi)) {
-                            indexArr.push(itm)
-                            for (let i = 1; i <= indexArr.length; i++) {
-                                itm.stt = item.stt + "." + i;
-                            }
-                        }
-                    })
-                })
-                let a = lstLv1.concat(lstCon);
-                this.lstCtietBcao = a
+            }, err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            })
+            if (!this.lstCtietBcao[0].stt) {
+                // await this.quanLyVonPhiService.getDmucDviTrucThuocTCDT().toPromise().then(res => {
+                //     if (res.statusCode == 0) {
+                //         const listDsDvi = res.data.children
+                //         // this.listDanhSachCuc = res.data;
+                //         listDsDvi.forEach(item => {
+                //             item.children.forEach(child => {
+                //                 listDsDvi.push(child)
+                //             })
+                //         })
+                //         this.listDanhSachCuc = listDsDvi;
+                //         // console.log( this.listDanhSachCuc);
+
+                //     } else {
+                //         this.notification.error(MESSAGE.ERROR, res?.msg);
+                //     }
+                // }, err => {
+                //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                // })
+                this.suLySauThemTongCuc()
+
                 this.processData();
                 this.updateEditCache();
             } else {
@@ -281,10 +317,13 @@ export class BaoHiemKhoComponent implements OnInit {
                 this.updateEditCache();
             }
         }
+        this.sortByIndex();
         this.getStatusButton();
         this.tinhTong();
         this.spinner.hide();
     }
+
+
 
     setDetail() {
         this.lstCtietBcao.forEach(item => {
@@ -398,10 +437,12 @@ export class BaoHiemKhoComponent implements OnInit {
     }
 
     // luu thay doi
-    saveEdit(id: string): void {
+    async saveEdit(id: string) {
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+        // console.log(this.lstCtietBcao);
+
         this.tinhTong();
         this.updateEditCache();
         this.checkAddNewRow = false;
@@ -421,7 +462,7 @@ export class BaoHiemKhoComponent implements OnInit {
     // xoa dong
     deleteById(id: string): void {
         this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
-        this.processData()
+        // this.processData()
     }
 
     checkEdit(stt: string) {
@@ -458,7 +499,6 @@ export class BaoHiemKhoComponent implements OnInit {
             this.maDviChon = this.editCache[id].data.maDvi,
                 this.maDiaChiKhoChon = this.editCache[id].data.maDiaChi,
                 this.maNhaKhoChon = this.editCache[id].data.maNhaKho,
-
                 this.checkAddNewRow = true;
         } else {
             this.notification.warning(MESSAGE.WARNING, 'Vui lòng lưu bản ghi đang sửa trước khi thực hiện thao tác');
@@ -491,7 +531,8 @@ export class BaoHiemKhoComponent implements OnInit {
     }
 
     // them dong moi
-    addLine(stt: any): void {
+    addLine(data: any): void {
+        const stt = data.stt;
 
         let index = -1;
         for (let i = this.lstCtietBcao.length - 1; i >= 0; i--) {
@@ -533,6 +574,8 @@ export class BaoHiemKhoComponent implements OnInit {
             data: { ...item }
         };
         this.checkAddNewRow = true;
+
+
     }
 
     sortByIndex() {
@@ -634,6 +677,7 @@ export class BaoHiemKhoComponent implements OnInit {
         }
 
         this.listDanhMucKho = diaDiem?.children;
+        this.listDanhMucKhoFull = []
         for (let i = 0; i < diaDiem?.children.length; i++) {
             var index = this.listDanhMucKhoFull.findIndex(item => item.maDviCha === idDonvi);
             if (this.listDanhMucKhoFull.length == 0 || index == -1) {
@@ -695,8 +739,8 @@ export class BaoHiemKhoComponent implements OnInit {
         this.tongSoNhaKhoTren5000 = 0;
         this.lstCtietBcao.forEach(item => {
             if (item.level == 1) {
-                this.tongSo1 += item.khoiTichKhoDuoiM3;
-                this.tongSo2 += item.khoiTichKhoTuM3;
+                // this.tongSo1 += item.khoiTichKhoDuoiM3;
+                // this.tongSo2 += item.khoiTichKhoTuM3;
                 this.tongSo3 += item.slNhaKhoDuoi;
                 this.tongSo4 += item.slNhaKhoTu;
                 this.tongSo5 += item.slNhaKhoTong;
@@ -777,6 +821,7 @@ export class BaoHiemKhoComponent implements OnInit {
             };
         });
         this.processData()
+        this.sortByIndex()
     }
 
     getStatusButton() {
@@ -855,6 +900,47 @@ export class BaoHiemKhoComponent implements OnInit {
 
         this.lstCtietBcao = this.dataExt
 
+    }
+
+    async suLySauThemTongCuc() {
+        let lstLv1 = []
+        this.lstCtietBcao.forEach(item => {
+            if (item.maNhaKho == null && item.diaChiKho == null && item.tenNhaKho == null) {
+                lstLv1.push({
+                    ...item,
+                    level: "1"
+                })
+            }
+        })
+
+        let index = lstLv1.length
+
+        lstLv1.forEach(item => {
+            item.stt = "0." + index--;
+        })
+        let lstCon = [];
+        this.lstCtietBcao.forEach(item => {
+            if (item.maNhaKho !== null && item.diaChiKho !== null && item.tenNhaKho !== null) {
+                lstCon.push({
+                    ...item,
+                    level: "2"
+                })
+            }
+        })
+        let indexArr = []
+        lstLv1.forEach(item => {
+            indexArr = []
+            lstCon.forEach(itm => {
+                if (itm.maDvi.includes(item.maDvi)) {
+                    indexArr.push(itm)
+                    for (let i = 1; i <= indexArr.length; i++) {
+                        itm.stt = item.stt + "." + i;
+                    }
+                }
+            })
+        })
+        let a = lstLv1.concat(lstCon);
+        this.lstCtietBcao = a
     }
 
 }

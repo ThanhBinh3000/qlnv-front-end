@@ -105,7 +105,7 @@
                                 <!-- {{i + 1}} -->
                             </td>
                             <td [attr.rowspan]="data.stateSpan" *ngIf="data.stateSpan">
-                                <div *ngFor="let item of listDanhSachCuc">
+                                <div *ngFor="let item of lstDviFull">
                                     <div *ngIf="item.maDvi == data.maDvi">
                                         {{item.tenDvi}}
                                     </div>
@@ -149,7 +149,7 @@
                             </td>
                             <td [hidden]="status">
                                 <ng-container *ngIf="!checkAddNewRow; else addNewRow">
-                                    <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+                                    <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data)"></i>
                                 </ng-container>
                                 <ng-template #addNewRow>
 
@@ -178,7 +178,7 @@
                                     [(ngModel)]="editCache[data.id].data.diaChiKho"
                                     (ngModelChange)="selectDiadiem(editCache[data.id].data.diaChiKho,editCache[data.id].data.id)"
                                     [class]="editCache[data.id].data.diaChiKho ?'' : 'input-error-validate'">
-                                    <nz-option *ngFor="let item of listDanhMucKho" [nzValue]="item.tenDvi"
+                                    <nz-option *ngFor="let item of listDanhMucKhoFull" [nzValue]="item.tenDvi"
                                         [nzLabel]="item.tenDvi">
                                     </nz-option>
                                 </nz-select>
@@ -252,7 +252,7 @@
 
                             <td [hidden]="status">
                                 <ng-container *ngIf="!checkAddNewRow; else addNewRow">
-                                    <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
+                                    <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data)"></i>
                                 </ng-container>
                                 <ng-template #addNewRow>
 
