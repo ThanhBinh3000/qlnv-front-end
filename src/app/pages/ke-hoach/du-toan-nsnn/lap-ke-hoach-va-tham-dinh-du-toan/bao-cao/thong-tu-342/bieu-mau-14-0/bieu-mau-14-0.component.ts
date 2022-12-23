@@ -409,12 +409,18 @@ export class BieuMau140Component implements OnInit {
   }
 
   checkEdit(stt: string) {
-    if (stt.startsWith('0.1.1') || stt.startsWith('0.1.2')) {
+
+    if ((stt.startsWith('0.1.1') && this.viewAppraisalValue == false) || (stt.startsWith('0.1.2') && this.viewAppraisalValue == false)) {
       return false
     }
     const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
     return lstTemp.every(e => !e.stt.startsWith(stt));
   }
+
+  // checkEditTd(stt: string) {
+  //   const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
+  //   return lstTemp.every(e => !e.stt.startsWith(stt));
+  // }
 
   checkAdd(data: ItemData) {
     if (data.stt == '0.2.3') {
