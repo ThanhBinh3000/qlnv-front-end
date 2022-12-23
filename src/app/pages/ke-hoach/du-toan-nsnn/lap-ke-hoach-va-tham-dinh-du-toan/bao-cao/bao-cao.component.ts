@@ -284,8 +284,13 @@ export class BaoCaoComponent implements OnInit {
                 })
             } else {
                 this.baoCao.lstBcaoDviTrucThuocs.forEach(item => {
-                    item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
-                    item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                    if (item.ngayDuyet.includes("/")) {
+                        item.ngayDuyet = item.ngayDuyet;
+                        item.ngayPheDuyet = item.ngayPheDuyet;
+                    } else {
+                        item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
+                        item.ngayPheDuyet = this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR);
+                    }
                 })
                 this.baoCao.lstLapThamDinhs.forEach(item => {
                     const pl = this.listAppendix.find(e => e.id == item.maBieuMau);
