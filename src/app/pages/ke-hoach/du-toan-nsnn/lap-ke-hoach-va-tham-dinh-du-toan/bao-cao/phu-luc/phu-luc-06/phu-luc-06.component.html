@@ -35,7 +35,8 @@
                 <thead>
                     <tr>
                         <th rowspan="2" [hidden]="status">
-                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()" style="margin-right: 0;">
+                            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
+                                style="margin-right: 0;">
                             </label>
                         </th>
                         <th rowspan="2" class="text-center" nzWidth="100px">STT</th>
@@ -143,20 +144,13 @@
                             <td class="text-center">
                                 {{i+1}}
                             </td>
-                            <td>
-                                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại tài sản"
-                                    [(ngModel)]="editCache[data.id].data.maTaiSan"
-                                    (ngModelChange)="selectTaisan(editCache[data.id].data.maTaiSan,data.id)"
-                                    [class]="editCache[data.id].data.maTaiSan ?'' : 'input-error-validate'">
-                                    <nz-option *ngFor="let item of lstVatTuFull" [nzValue]="item.id"
-                                        [nzLabel]="item.tenDm">
-                                    </nz-option>
-                                </nz-select>
-                            </td>
-                            <td>
-                                {{editCache[data.id].data.dviTinh}}
-                            </td>
                             <ng-container *ngIf="checkEditTD else editAppraisal">
+                                <td>
+                                    {{data.tenTaiSan}}
+                                </td>
+                                <td>
+                                    {{data.dviTinh}}
+                                </td>
                                 <td>{{displayValue(editCache[data.id].data.donGiaTdTheoQd)}}</td>
                                 <td>{{displayValue(editCache[data.id].data.ncauTbiNamNSluong)}}</td>
                                 <td>{{displayValue(editCache[data.id].data.ncauTbiNamNTtien)}}</td>
@@ -172,6 +166,19 @@
                                 <td>{{displayValue(editCache[data.id].data.ncauTbiNamN2Ttien)}}</td>
                             </ng-container>
                             <ng-template #editAppraisal>
+                                <td>
+                                    <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại tài sản"
+                                        [(ngModel)]="editCache[data.id].data.maTaiSan"
+                                        (ngModelChange)="selectTaisan(editCache[data.id].data.maTaiSan,data.id)"
+                                        [class]="editCache[data.id].data.maTaiSan ?'' : 'input-error-validate'">
+                                        <nz-option *ngFor="let item of lstVatTuFull" [nzValue]="item.id"
+                                            [nzLabel]="item.tenDm">
+                                        </nz-option>
+                                    </nz-select>
+                                </td>
+                                <td>
+                                    {{editCache[data.id].data.dviTinh}}
+                                </td>
                                 <td>
                                     <fm-input-number nz-input class="search__input"
                                         [(ngModel)]="editCache[data.id].data.donGiaTdTheoQd"
@@ -239,7 +246,7 @@
     <div class="modal-footer">
         <div class="nut">
             <div class="cantrai">
-                <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+                <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
                     <i nz-icon nzType="printer" nzTheme="outline"></i>
                     <span>In</span>
                 </button>

@@ -9,6 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from 'src/app/services/user.service';
 import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber, sumNumber } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 
@@ -56,6 +57,7 @@ export class PhuLuc03Component implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    statusPrint: boolean;
     checkViewTD: boolean;
     checkEditTD: boolean;
     isDataAvailable = false;
@@ -64,7 +66,7 @@ export class PhuLuc03Component implements OnInit {
     initItem: ItemData = new ItemData();
     //nho dem
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-
+    userInfo: any;
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
@@ -72,6 +74,7 @@ export class PhuLuc03Component implements OnInit {
         private notification: NzNotificationService,
         private modal: NzModalService,
         private quanLyVonPhiService: QuanLyVonPhiService,
+        public userService: UserService,
     ) {
     }
 
@@ -85,12 +88,14 @@ export class PhuLuc03Component implements OnInit {
 
     async initialization() {
         this.spinner.show();
+        this.userInfo = this.userService.getUserLogin();
         this.formDetail = this.dataInfo?.data;
         this.maDviTao = this.dataInfo?.maDvi;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.namBcao = this.dataInfo?.namBcao;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.checkEditTD = this.dataInfo?.editAppraisalValue;
         this.checkViewTD = this.dataInfo?.viewAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -125,11 +130,6 @@ export class PhuLuc03Component implements OnInit {
             res => {
                 if (res.statusCode == 0) {
                     this.dsDinhMuc = res.data;
-                    this.dsDinhMuc.forEach(item => {
-                        if (!item.loaiVthh.startsWith('02')) {
-                            item.tongDmuc = divNumber(item.tongDmuc, 1000);
-                        }
-                    })
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
@@ -401,6 +401,7 @@ export class PhuLuc03Component implements OnInit {
         }
         this.replaceIndex(lstIndex, -1);
         this.sum(stt);
+        this.getTotal();
         this.updateEditCache();
     }
 

@@ -206,7 +206,7 @@ export class BaoCaoComponent implements OnInit {
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
         if (!this.userService.isTongCuc()) {
-            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc = '2');
+            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != '2');
         }
 
         await this.danhMucService.dMDviCon().toPromise().then(
@@ -249,7 +249,7 @@ export class BaoCaoComponent implements OnInit {
             if (this.data?.isSynthetic) {
                 await this.callSynthetic();
             } else {
-                PHULUCLIST.forEach(item => {
+                this.lstPhuLuc.forEach(item => {
                     this.baoCao.lstBcaos.push({
                         id: uuid.v4() + 'FE',
                         checked: false,
@@ -401,12 +401,16 @@ export class BaoCaoComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
                     this.baoCao?.lstBcaos?.forEach(item => {
-                        const index = PHULUCLIST.findIndex(data => data.maPhuLuc == item.maLoai);
+                        const index = this.lstPhuLuc.findIndex(data => data.maPhuLuc == item.maLoai);
                         if (index !== -1) {
-                            item.tieuDe = PHULUCLIST[index].tieuDe;
-                            item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
+                            item.tieuDe = this.lstPhuLuc[index].tieuDe;
+                            item.tenPhuLuc = this.lstPhuLuc[index].tenPhuLuc;
                             item.checked = false;
                         }
+                    })
+                    this.baoCao?.lstBcaoDviTrucThuocs.forEach(item => {
+                        item.ngayTrinh = this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR);
+                        item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
                     })
                     await this.getDviCon();
                     this.baoCao.ngayDuyet = this.datePipe.transform(data.data.ngayDuyet, Utils.FORMAT_DATE_STR);
@@ -617,6 +621,10 @@ export class BaoCaoComponent implements OnInit {
                             item.nguoiBcao = this.userInfo.sub;
                         }
                     })
+                    this.baoCao.lstBcaoDviTrucThuocs.forEach(item => {
+                        item.ngayTrinh = this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR);
+                        item.ngayDuyet = this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR);
+                    })
                     this.listFile = [];
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -727,7 +735,7 @@ export class BaoCaoComponent implements OnInit {
                 }
                 const dataTemp3 = this.baoCao.lstBcaos.find(e => e.maLoai == '3')?.lstCtietBcaos;
                 dataTemp3?.forEach(item => {
-                    const level = item.stt.split('.').length - 2;
+                    const level = item.maDan.split('.').length - 2;
                     if (level == 0) {
                         dataPL3.dtoanGiaoDtoan = sumNumber([dataPL3.dtoanGiaoDtoan, item.khoachNamVonScl])
                         dataPL3.giaiNganThangBcaoDtoan = sumNumber([dataPL3.giaiNganThangBcaoDtoan, item.giaiNganNsnnVonScl])
@@ -752,7 +760,7 @@ export class BaoCaoComponent implements OnInit {
                 }
                 const dataTemp2 = this.baoCao.lstBcaos.find(e => e.maLoai == '2')?.lstCtietBcaos;
                 dataTemp2?.forEach(item => {
-                    const level = item.stt.split('.').length - 2;
+                    const level = item.maNdung.split('.').length - 2;
                     if (level == 0) {
                         dataPL2.dtoanGiaoDtoan = sumNumber([dataPL2.dtoanGiaoDtoan, item.dtoanSdungNamNguonNsnn])
                         dataPL2.dtoanGiaoNguonKhac = sumNumber([dataPL2.dtoanGiaoNguonKhac, item.dtoanSdungNamNguonSn])

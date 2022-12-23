@@ -6,10 +6,6 @@ import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {
-  DieuChinhQuyetDinhPdKhlcntService
-} from "../../../../../../services/qlnv-hang/nhap-hang/dau-thau/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service";
-import {BaseService} from "../../../../../../services/base.service";
-import {
   QdPdKetQuaBanDauGiaService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/QdPdKetQuaBanDauGia";
 import dayjs from "dayjs";
@@ -31,25 +27,34 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, banDauGiaService);
     super.ngOnInit();
     this.formData = this.fb.group({
-      nam: [dayjs().get('year')],
-      soQdDc: [''],
+      namKh: [dayjs().get('year')],
+      loaiVthh: [''],
       trichYeu: [''],
-      loaiVthh: ['']
+      soQdPdKqBdg: [''],
+      ngayKy: [],
     });
     this.filterTable = {
-      soQd: '',
-      ngayQd: '',
+      soQdPdKqBdg: '',
+      ngayKy: '',
       trichYeu: '',
-      soQdGoc: '',
-      namKhoach: '',
-      tenVthh: '',
-      soGoiThau: '',
-      trangThai: '',
+      ngayTcBdg: '',
+      soQdPdKhBdg: '',
+      maTbBdg: '',
+      hinhThucDauGia: '',
+      phuongThucDauGia: '',
+      tenLoaiVthh: '',
+      namKh: '',
+      soTbDgKt: '',
+      soBbDg: '',
     };
-
   }
 
   ngOnInit(): void {
+  }
+
+  themMoi() {
+    this.isDetail = true;
+    this.idSelected = null;
   }
 
 }

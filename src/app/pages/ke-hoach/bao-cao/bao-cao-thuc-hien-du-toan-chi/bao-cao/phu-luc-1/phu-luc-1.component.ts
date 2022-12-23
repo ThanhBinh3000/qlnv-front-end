@@ -901,6 +901,13 @@ export class PhuLucIComponent implements OnInit {
     }
 
     changeData(index: number) {
+        this.lstCtietBcao[index].kphiSdungDtoan = sumNumber([this.lstCtietBcao[index].kphiChuyenSangDtoan, this.lstCtietBcao[index].dtoanGiaoDtoan]);
+        this.lstCtietBcao[index].kphiSdungNguonKhac = sumNumber([this.lstCtietBcao[index].kphiChuyenSangNguonKhac, this.lstCtietBcao[index].dtoanGiaoNguonKhac]);
+        this.lstCtietBcao[index].kphiSdungNguonQuy = sumNumber([this.lstCtietBcao[index].kphiChuyenSangNguonQuy, this.lstCtietBcao[index].dtoanGiaoNguonQuy]);
+
+        this.lstCtietBcao[index].kphiSdungTcong = sumNumber([this.lstCtietBcao[index].kphiSdungDtoan, this.lstCtietBcao[index].kphiSdungNguonKhac, this.lstCtietBcao[index].kphiSdungNguonQuy,
+        this.lstCtietBcao[index].kphiSdungNstt, this.lstCtietBcao[index].kphiSdungCk]);
+
         this.lstCtietBcao[index].dtoanGiaoTcong = sumNumber([this.lstCtietBcao[index].dtoanGiaoDtoan, this.lstCtietBcao[index].dtoanGiaoNguonKhac, this.lstCtietBcao[index].dtoanGiaoNguonQuy,
         this.lstCtietBcao[index].dtoanGiaoNstt, this.lstCtietBcao[index].dtoanGiaoCk]);
 

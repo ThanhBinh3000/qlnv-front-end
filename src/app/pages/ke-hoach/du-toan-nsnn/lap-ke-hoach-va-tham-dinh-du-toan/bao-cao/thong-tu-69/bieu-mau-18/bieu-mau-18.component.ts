@@ -58,6 +58,7 @@ export class BieuMau18Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  statusPrint: boolean;
   editMoneyUnit = false;
   isDataAvailable = false;
   //nho dem
@@ -85,6 +86,7 @@ export class BieuMau18Component implements OnInit {
     this.thuyetMinh = this.formDetail?.thuyetMinh;
     this.status = this.dataInfo?.status;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+    this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
@@ -381,6 +383,9 @@ export class BieuMau18Component implements OnInit {
           this.lstCtietBcao[index].ncauChiChiaRaChiTx = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiTx, item.ncauChiChiaRaChiTx]);
           this.lstCtietBcao[index].ncauChiChiaRaChiCs2 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiCs2, item.ncauChiChiaRaChiCs2]);
           this.lstCtietBcao[index].ncauChiChiaRaChiMoi2 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiMoi2, item.ncauChiChiaRaChiMoi2]);
+          this.lstCtietBcao[index].ncauChiChiaRaChiCs3 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiCs3, item.ncauChiChiaRaChiCs3]);
+          this.lstCtietBcao[index].ncauChiChiaRaChiMoi3 = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiMoi3, item.ncauChiChiaRaChiMoi3]);
+          this.lstCtietBcao[index].ncauChiChiaRaChiDtqg = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiDtqg, item.ncauChiChiaRaChiDtqg]);
         }
       })
       stt = this.getHead(stt);
