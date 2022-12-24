@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from 'src/app/guard/auth.guard';
-import { KeHoachComponent } from './ke-hoach.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AuthGuard} from 'src/app/guard/auth.guard';
+import {KeHoachComponent} from './ke-hoach.component';
 
 const routes: Routes = [
   {
@@ -19,7 +19,7 @@ const routes: Routes = [
         loadChildren: () =>
           import(
             '../ke-hoach/giao-ke-hoach-va-du-toan/giao-ke-hoach-va-du-toan.module'
-          ).then((m) => m.GiaoKeHoachVaDuToanModule),
+            ).then((m) => m.GiaoKeHoachVaDuToanModule),
         canActivate: [AuthGuard],
       },
       {
@@ -27,7 +27,7 @@ const routes: Routes = [
         loadChildren: () =>
           import(
             '../ke-hoach/bao-cao/bao-cao.module'
-          ).then((m) => m.BaoCaoModule),
+            ).then((m) => m.BaoCaoModule),
         canActivate: [AuthGuard],
       },
       {
@@ -35,7 +35,7 @@ const routes: Routes = [
         loadChildren: () =>
           import(
             '../ke-hoach/du-toan-nsnn/du-toan-nsnn.module'
-          ).then((m) => m.DuToanNsnnModule),
+            ).then((m) => m.DuToanNsnnModule),
         canActivate: [AuthGuard],
       },
       {
@@ -44,11 +44,11 @@ const routes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: 'dieu-chinh-chi-tieu-ke-hoach-nam',
+        path: 'phuong-an-gia',
         loadChildren: () =>
           import(
             '../ke-hoach/phuong-an-gia/phuong-an-gia.module'
-          ).then((m) => m.PhuongAnGiaModule),
+            ).then((m) => m.PhuongAnGiaModule),
         canActivate: [AuthGuard],
       },
     ],
@@ -59,4 +59,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class KeHoachRoutingModule { }
+export class KeHoachRoutingModule {
+}

@@ -1,42 +1,42 @@
 <div *ngIf="!isDetail" class="luong-thuc__danh-sach">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
-      <div nz-row [nzGutter]="20">
-        <div nz-col nzSpan="3">
-          <label class="search__label"> Năm kế hoạch </label>
-          <nz-select [(ngModel)]="searchFilter.namKh">
-            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-          </nz-select>
+      <form nzLayout="vertical" nz-form [formGroup]="formData">
+        <div nz-row [nzGutter]="20">
+          <div nz-col nzSpan="3">
+            <label class="search__label"> Năm kế hoạch </label>
+            <nz-select formControlName="namKh">
+              <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+            </nz-select>
+          </div>
+          <div nz-col nzSpan="4">
+            <label class="search__label">Loại hàng hóa</label>
+            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+              <input class="search__input" [readonly]="true" nz-input formControlName="tenVthh" readonly="true" />
+            </nz-input-group>
+          </div>
+          <div nz-col nzSpan="4">
+            <label class="search__label">Chủng loại hàng hóa</label>
+            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
+              <input class="search__input" [readonly]="true" nz-input formControlName="tenCloaiVthh" readonly="true" />
+            </nz-input-group>
+          </div>
+          <div nz-col nzSpan="7">
+            <label class="search__label">Nội dung tổng hợp</label>
+            <input class="search__input" placeholder="" nz-input formControlName="noiDung" />
+          </div>
+          <div nz-col nzSpan="3">
+            <label class="search__label">Ngày tổng hợp</label>
+            <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+          </div>
+          <div nz-col nzSpan="3">
+            <label class="search__label">Ngày ký QĐ</label>
+            <nz-range-picker formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+          </div>
         </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Loại hàng hóa</label>
-          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenVthh"
-              readonly="true" />
-          </nz-input-group>
-        </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Chủng loại hàng hóa</label>
-          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa()">
-            <input class="search__input" [readonly]="true" nz-input [(ngModel)]="searchFilter.tenCloaiVthh"
-              readonly="true" />
-          </nz-input-group>
-        </div>
-        <div nz-col nzSpan="7">
-          <label class="search__label">Nội dung tổng hợp</label>
-          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.noiDung" />
-        </div>
-        <div nz-col nzSpan="3">
-          <label class="search__label">Ngày tổng hợp</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
-        </div>
-        <div nz-col nzSpan="3">
-          <label class="search__label">Ngày ký QĐ</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
-        </div>
-      </div>
+      </form>
       <div class="cangiua group-button-search">
-        <button nz-button class="search__button--clear" (click)="clearFilter()">
+        <button nz-button class="search__button--clear" (click)="clearForm()">
           <i class="icon  htvbdh_nhap-lai1"></i>
           Xóa điều kiện
         </button>
@@ -49,8 +49,7 @@
     <div class="group-button">
       <h3> THÔNG TIN TỔNG HỢP KẾ HOẠCH LỰA CHỌN NHÀ THẦU </h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" (click)="deleteSelect()"
-          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XOA')">
+        <button type="button" class="btn btn-do" (click)="deleteMulti(['NHDTQG_PTDT_KHLCNT_TONGHOP_XOA'])">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
         </button>
@@ -58,8 +57,8 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()"
-          *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP') && loaiVthh != '02'">
+        <button type="button" class="btn btn-main" (click)="goDetail(null,'NHDTQG_PTDT_KHLCNT_TONGHOP_TONGHOP')"
+          *ngIf="loaiVthh != '02'">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Tổng hợp</span>
         </button>
@@ -190,16 +189,15 @@
             <td>{{ data.soQdPdKhlcnt }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="redirectToChiTiet(true, data.id)"
+              <a (click)="goDetail(data.id)"
                 *ngIf=" ( data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="( data.trangThai == STATUS.CHUA_TAO_QD) && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_SUA'))"
-                (click)="redirectToChiTiet(false, data.id)">
+              <a *ngIf="data.trangThai == STATUS.CHUA_TAO_QD" (click)="goDetail(data.id)">
                 <i class="icon htvbdh_tcdt_tao-qd"></i>
               </a>
               <a *ngIf="( data.trangThai== STATUS.CHUA_TAO_QD ) && (userService.isAccessPermisson('NHDTQG_PTDT_KHLCNT_TONGHOP_XOA'))"
-                (click)="xoaItem(data)">
+                (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
@@ -227,6 +225,6 @@
   </div>
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
-  <app-themmoi-tonghop-khlcnt [id]="selectedId" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  <app-themmoi-tonghop-khlcnt [id]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
   </app-themmoi-tonghop-khlcnt>
 </div>

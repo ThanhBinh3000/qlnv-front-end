@@ -801,7 +801,11 @@ export class BaoCao04bComponent implements OnInit {
                         if (this.userService.isChiCuc()) {
                             item.sl = mulNumber(sl, dm.nvChuyenMonDviTt);
                         } else {
-                            item.sl = mulNumber(sl, sumNumber([dm.nvChuyenMonDviTt, dm.nvChuyenMonVp]));
+                            if (this.data.isOffice) {
+                                item.sl = mulNumber(sl, dm.nvChuyenMonVp);
+                            } else {
+                                item.sl = mulNumber(sl, sumNumber([dm.nvChuyenMonDviTt, dm.nvChuyenMonVp]));
+                            }
                         }
                     }
                 }
@@ -820,7 +824,11 @@ export class BaoCao04bComponent implements OnInit {
                         if (this.userService.isChiCuc()) {
                             item.sl = mulNumber(sl, dm.ttCaNhanDviTt);
                         } else {
-                            item.sl = mulNumber(sl, sumNumber([dm.ttCaNhanDviTt, dm.ttCaNhanVp]));
+                            if (this.data.isOffice) {
+                                item.sl = mulNumber(sl, dm.ttCaNhanVp);
+                            } else {
+                                item.sl = mulNumber(sl, sumNumber([dm.ttCaNhanDviTt, dm.ttCaNhanVp]));
+                            }
                         }
                     }
                 }
@@ -839,7 +847,11 @@ export class BaoCao04bComponent implements OnInit {
                         if (this.userService.isChiCuc()) {
                             item.sl = mulNumber(sl, dm.dieuHanhDviTt);
                         } else {
-                            item.sl = mulNumber(sl, sumNumber([dm.dieuHanhDviTt, dm.dieuHanhVp]));
+                            if (this.data.isOffice) {
+                                item.sl = mulNumber(sl, dm.dieuHanhVp);
+                            } else {
+                                item.sl = mulNumber(sl, sumNumber([dm.dieuHanhDviTt, dm.dieuHanhVp]));
+                            }
                         }
                     }
                 }
