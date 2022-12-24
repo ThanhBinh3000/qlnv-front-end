@@ -14,7 +14,6 @@ import { MESSAGE } from 'src/app/constants/message';
   styleUrls: ['./bang-ke-can-hang.component.scss']
 })
 export class BangKeCanHangComponent extends Base2Component implements OnInit {
-  @Input() typeVthh: string;
   @Input() loaiVthh: string;
   isDetail: boolean = false;
   selectedId: number = 0;
