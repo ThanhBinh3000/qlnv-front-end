@@ -25,6 +25,9 @@ import {
 import {STATUS} from 'src/app/constants/status';
 import {cloneDeep} from 'lodash';
 import {UserLogin} from "../../../../../models/userlogin";
+import {
+  QuyetDinhDchinhKhBdgService
+} from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
 
 @Component({
   selector: 'app-qd-dieuchinh-khbdg',
@@ -94,7 +97,8 @@ export class QdDieuchinhKhbdgComponent implements OnInit {
               private notification: NzNotificationService,
               private modal: NzModalService,
               private danhMucService: DanhMucService,
-              private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
+              // private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
+              private quyetDinhDchinhKhBdgService: QuyetDinhDchinhKhBdgService,
               private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
               public userService: UserService,) {
   }
@@ -134,7 +138,7 @@ export class QdDieuchinhKhbdgComponent implements OnInit {
   }
 
   detail(data?) {
-    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_SUA")) {
+    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_THEM")) {
       return;
     }
     this.isDetail = true;
@@ -160,7 +164,7 @@ export class QdDieuchinhKhbdgComponent implements OnInit {
             "id": data.id,
             "maDvi": null
           }
-          this.quyetDinhPdKhBdgService.delete(body).then(async (res) => {
+          this.quyetDinhDchinhKhBdgService.delete(body).then(async (res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               await this.search();
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
@@ -208,7 +212,7 @@ export class QdDieuchinhKhbdgComponent implements OnInit {
       },
       maDvi: this.userService.isTongCuc() ? '' : this.userInfo.MA_DVI
     };
-    let res = await this.quyetDinhPdKhBdgService.search(body);
+    let res = await this.quyetDinhDchinhKhBdgService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -280,7 +284,7 @@ export class QdDieuchinhKhbdgComponent implements OnInit {
           soTrHdr: this.searchFilter.soTrHdr,
           lastest: 0,
         };
-        this.quyetDinhPdKhBdgService
+        this.quyetDinhDchinhKhBdgService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-quyet-dinh-phe-duyet-ke-hoach-ban-dau-gia.xlsx')
@@ -320,7 +324,7 @@ export class QdDieuchinhKhbdgComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhPdKhBdgService.deleteMuti({idList: dataDelete});
+            let res = await this.quyetDinhDchinhKhBdgService.deleteMuti({idList: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

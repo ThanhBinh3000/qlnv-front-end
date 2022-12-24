@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {UserService} from "../../../../../services/user.service";
+import { Component, Input, OnInit } from '@angular/core';
+import { UserService } from "../../../../../services/user.service";
 
 @Component({
   selector: 'app-main-kehoach-luachon-nhathau',
@@ -10,7 +10,7 @@ export class MainKehoachLuachonNhathauComponent implements OnInit {
   @Input() inputLoaiVthh: string;
 
   constructor(
-    public userService : UserService
+    public userService: UserService
   ) { }
 
   ngOnInit() {

@@ -3,6 +3,7 @@
 
   .ant-form-item {
     margin-right: 20px;
+    padding-top: 10px;
 
     &:last-child {
       margin-right: 0px;
@@ -13,6 +14,7 @@
     padding-top: 8px;
     font-size: 13px;
     font-weight: 500;
+    height: 32px;
   }
 }
 
@@ -34,5 +36,13 @@
 .list-file {
   .ant-input-affix-wrapper {
     padding: 0px 11px !important;
+  }
+}
+
+:host ::ng-deep .ant-form-vertical .ant-form-item-label {
+  line-height: 1;
+
+  label {
+    height: 32px;
   }
 }
