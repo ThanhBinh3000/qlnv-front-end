@@ -446,7 +446,7 @@ export class PhuLuc02Component implements OnInit {
 					this.lstCtietBcao[index].namDtoan = sumNumber([this.lstCtietBcao[index].namDtoan, item.namDtoan])
 					this.lstCtietBcao[index].namUocTh = sumNumber([this.lstCtietBcao[index].namUocTh, item.namUocTh])
 					// this.lstCtietBcao[index].sluongTaiKho = sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
-					this.lstCtietBcao[index].dmucTaiKho = sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
+					// this.lstCtietBcao[index].dmucTaiKho = sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
 					this.lstCtietBcao[index].ttienTaiKho = this.lstCtietBcao[index].dmucTaiKho * this.lstCtietBcao[index].sluongTaiKho
 					this.lstCtietBcao[index].ttienNgoaiKho = sumNumber([this.lstCtietBcao[index].ttienNgoaiKho, item.ttienNgoaiKho])
 					// this.lstCtietBcao[index].binhQuanNgoaiKho = this.lstCtietBcao[index].ttienNgoaiKho / this.lstCtietBcao[index].sluongTaiKho
@@ -466,7 +466,7 @@ export class PhuLuc02Component implements OnInit {
 				this.total.thNamTruoc = sumNumber([this.total.thNamTruoc, item.thNamTruoc]);
 				this.total.namDtoan = sumNumber([this.total.namDtoan, item.namDtoan]);
 				this.total.namUocTh = sumNumber([this.total.namUocTh, item.namUocTh]);
-				// this.total.sluongTaiKho = sumNumber([this.total.sluongTaiKho, item.sluongTaiKho]);
+				this.total.sluongTaiKho = sumNumber([this.total.sluongTaiKho, item.sluongTaiKho]);
 				this.total.dmucTaiKho = sumNumber([this.total.dmucTaiKho, item.dmucTaiKho]);
 				this.total.ttienTaiKho = mulNumber(this.total.sluongTaiKho, this.total.dmucTaiKho);
 				this.total.ttienNgoaiKho = sumNumber([this.total.ttienNgoaiKho, item.ttienNgoaiKho]);
