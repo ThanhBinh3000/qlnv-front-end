@@ -1,20 +1,19 @@
-
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import * as dayjs from 'dayjs';
-import { saveAs } from 'file-saver';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { LEVEL, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
+import {saveAs} from 'file-saver';
+import {cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {LEVEL, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {UserService} from 'src/app/services/user.service';
+import {convertTrangThai} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
 import {STATUS} from "../../../../../constants/status";
 
 @Component({
@@ -67,6 +66,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     trichYeu: '',
     tenTrangThai: '',
   };
+
   constructor(
     private spinner: NgxSpinnerService,
     private router: Router,
@@ -76,7 +76,8 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     await this.search();
@@ -133,6 +134,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     this.isDetail = false;
     // await this.getCount();
   }
+
   onInput(e: Event): void {
     const value = (e.target as HTMLInputElement).value.trim();
     if (value !== this.labelDonViSearch) {
@@ -149,6 +151,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
   }
 
   async search() {
+    console.log(this.userService.getUserLogin());
     let maDonVi = null;
     let tenDvi = null;
     let donviId = null;
@@ -163,7 +166,6 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         donviId = getDonVi[0].id;
       }
     }
-
     let body = {
       capDvi: this.capDvi,
       ngayKyDenNgay: this.startValue
@@ -196,6 +198,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
+
   async getCount() {
     try {
       let res = await this.chiTieuKeHoachNamService.getCountChiTieu();
@@ -360,10 +363,12 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       this.search();
     }
   }
+
   selectDonVi(donVi) {
     this.maDonViSearch = donVi.maDvi;
     this.labelDonViSearch = donVi.labelDonVi;
   }
+
   deleteSelect() {
     let dataDelete = [];
     if (this.dataTable && this.dataTable.length > 0) {
@@ -385,7 +390,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.chiTieuKeHoachNamService.deleteMultiple({ ids: dataDelete });
+            let res = await this.chiTieuKeHoachNamService.deleteMultiple({ids: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -400,11 +405,11 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
           }
         },
       });
-    }
-    else {
+    } else {
       this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
     }
   }
+
   updateAllChecked(): void {
     this.indeterminate = false;
     if (this.allChecked) {
@@ -435,6 +440,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
       this.indeterminate = true;
     }
   }
+
   selectTab(cap: string) {
     switch (cap) {
       case 'tong-cuc':
@@ -450,6 +456,7 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
     this.clearFilterTable();
     this.search();
   }
+
   filterInTable(key: string, value: string) {
     if (value && value != '') {
       this.dataTable = [];
@@ -462,11 +469,11 @@ export class ChiTieuKeHoachNamComponent implements OnInit {
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
+
   clearFilterTable() {
     this.filterTable = {
       soQd: '',
