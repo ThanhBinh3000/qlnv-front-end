@@ -144,6 +144,8 @@ export class PhuLuc01Component implements OnInit {
         this.tinhTong();
         this.updateEditCache();
         this.getStatusButton();
+        console.log(this.lstCtietBcao);
+
         this.spinner.hide();
     }
 
@@ -555,6 +557,12 @@ export class PhuLuc01Component implements OnInit {
                 tenDanhMuc: data.tenDanhMuc,
                 level: data.level,
                 danhMuc: data.danhMuc,
+                ttienNamDtoan: data.ttienNamDtoan,
+                thienNamTruoc: data.thienNamTruoc,
+                dtoanNamHtai: data.dtoanNamHtai,
+                uocNamHtai: data.uocNamHtai,
+                dmucNamDtoan: data.dmucNamDtoan,
+                ttienTd: data.ttienTd,
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
@@ -585,6 +593,12 @@ export class PhuLuc01Component implements OnInit {
                     tenDanhMuc: data.tenDanhMuc,
                     level: data.level,
                     danhMuc: data.danhMuc,
+                    ttienNamDtoan: data.ttienNamDtoan,
+                    thienNamTruoc: data.thienNamTruoc,
+                    dtoanNamHtai: data.dtoanNamHtai,
+                    uocNamHtai: data.uocNamHtai,
+                    dmucNamDtoan: data.dmucNamDtoan,
+                    ttienTd: data.ttienTd,
                 }
                 this.lstCtietBcao.forEach(item => {
                     if (this.getHead(item.stt) == stt) {
