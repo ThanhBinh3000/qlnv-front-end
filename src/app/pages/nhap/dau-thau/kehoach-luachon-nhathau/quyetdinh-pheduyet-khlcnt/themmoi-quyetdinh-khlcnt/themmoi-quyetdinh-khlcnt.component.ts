@@ -414,7 +414,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
             "id": this.idInput,
             "trangThai": trangThai
           }
-          let res = await this.quyetDinhPheDuyetKeHoachLCNTService.approve(body, true);
+          let res = await this.quyetDinhPheDuyetKeHoachLCNTService.approve(body);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             this.quayLai();

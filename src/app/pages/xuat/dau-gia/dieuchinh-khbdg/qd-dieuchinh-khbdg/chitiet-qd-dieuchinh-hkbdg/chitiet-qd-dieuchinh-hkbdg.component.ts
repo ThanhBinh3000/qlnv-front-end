@@ -33,7 +33,7 @@ import { PAGE_SIZE_DEFAULT } from "../../../../../../constants/config";
 import {
   QuyetDinhDchinhKhBdgService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
-import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/DeXuatKhBanDauGia.service';
+import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 
 @Component({
   selector: 'app-chitiet-qd-dieuchinh-hkbdg',
