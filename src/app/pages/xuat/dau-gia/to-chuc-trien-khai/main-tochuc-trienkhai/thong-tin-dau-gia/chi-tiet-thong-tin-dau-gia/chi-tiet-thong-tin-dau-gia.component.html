@@ -233,47 +233,39 @@
             <span>Thêm</span>
           </button>
         </ng-template>
-        <form nzLayout="vertical" [formGroup]="formData" nz-form>
-          <nz-table #tblDetail [nzData]="formData.value.detail" class="nowrap pd-10" nzBordered>
-            <thead>
-              <tr>
-                <th width="">Số QĐ PD kế hoạch BĐG</th>
-                <th width="">Lần đấu giá</th>
-                <th width="">Thông báo bán đấu giá</th>
-                <th width="">Tổ chức thực hiện dịch vụ BĐG</th>
-                <th width="">Thời gian tổ chức cuộc đấu giá</th>
-                <th width="">Địa điểm tổ chức</th>
-                <th width="">Kết quả đấu giá</th>
-                <th width="">Hành động</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let data of tblDetail.data; let i = index" (click)="selectRow(i)">
-                <td>{{ data.idTtinHdr }}</td>
-                <td>{{ data.idTtinHdr }}</td>
-                <td>{{ data.soTb }}</td>
-                <td>{{ data.toChucTen }}</td>
-                <td>{{ data.thoiGianToChucTu | date: 'dd/MM/YYYY' }}
-                  đến {{ data.thoiGianToChucDen | date: 'dd/MM/YYYY' }}</td>
-                <td>{{ data.diaDiemToChuc }}</td>
-                <td>{{ data.diaDiemToChuc }}</td>
-                <td class="text-center">
-                  <a>
-                    <i class="fa fa-pencil"></i>
-                  </a>
-                </td>
-              </tr>
-            </tbody>
-          </nz-table>
-          <nz-collapse>
-            <div formArrayName="detail">
-
-            </div>
-          </nz-collapse>
-        </form>
+        <!-- <nz-table #tblDetail [nzData]="dataTable" nzBordered>
+          <thead>
+            <tr>
+              <th width="">Số QĐ PD kế hoạch BĐG</th>
+              <th width="">Lần đấu giá</th>
+              <th width="">Thông báo bán đấu giá</th>
+              <th width="">Tổ chức thực hiện dịch vụ BĐG</th>
+              <th width="">Thời gian tổ chức cuộc đấu giá</th>
+              <th width="">Địa điểm tổ chức</th>
+              <th width="">Kết quả đấu giá</th>
+              <th width="">Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of tblDetail.data; let i = index" (click)="selectRow(i)">
+              <td>{{ data.idTtinHdr }}</td>
+              <td>{{ data.idTtinHdr }}</td>
+              <td>{{ data.soTb }}</td>
+              <td>{{ data.toChucTen }}</td>
+              <td>{{ data.thoiGianToChucTu | date: 'dd/MM/YYYY' }}
+                đến {{ data.thoiGianToChucDen | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.diaDiemToChuc }}</td>
+              <td>{{ data.diaDiemToChuc }}</td>
+              <td class="text-center">
+                <a>
+                  <i class="fa fa-pencil"></i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table> -->
       </nz-collapse-panel>
     </nz-collapse>
-
     <nz-card class="mg-t-16 flex-card p-lr16">
       <nz-collapse>
         <nz-collapse-panel nzActive="true" nzHeader="Thông báo bán đấu giá">
