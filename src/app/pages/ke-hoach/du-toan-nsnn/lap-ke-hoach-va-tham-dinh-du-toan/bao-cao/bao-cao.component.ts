@@ -1139,7 +1139,7 @@ export class BaoCaoComponent implements OnInit {
                 break;
             case 'TT342_13.8':
                 nzContent = BieuMau138Component;
-                if (Utils.statusSave.includes(this.baoCao.trangThai)) {
+                if (Utils.statusSave.includes(this.baoCao.trangThai) || Utils.statusTiepNhan.includes(this.baoCao.trangThai)) {
                     dataInfo.extraData = [];
                     //phu luc 3
                     const data1 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl03');
