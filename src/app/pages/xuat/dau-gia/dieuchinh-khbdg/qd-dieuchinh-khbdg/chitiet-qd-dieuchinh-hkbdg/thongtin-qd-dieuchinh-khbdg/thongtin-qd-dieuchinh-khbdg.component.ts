@@ -7,13 +7,13 @@ import { chain } from 'lodash';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HelperService } from 'src/app/services/helper.service';
 import { NzModalService } from "ng-zorro-antd/modal";
-import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 import {
   DialogThemDiaDiemPhanLoComponent
 } from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
 import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
+import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/DeXuatKhBanDauGia.service';
 
 @Component({
   selector: 'app-thongtin-qd-dieuchinh-khbdg',
