@@ -9,11 +9,11 @@
             <nz-option *ngFor="let p of dsNam" [nzValue]="p" [nzLabel]="p"></nz-option>
           </nz-select>
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="6" *ngIf="!userService.isChiCuc()">
           <nz-form-label class="search__label">Mã đơn vị</nz-form-label>
           <input type="text" nz-input formControlName="maDvi" />
         </div>
-        <div nz-col nzSpan="6">
+        <div nz-col nzSpan="6" *ngIf="!userService.isChiCuc()">
           <nz-form-label class="search__label">Tên đơn vị</nz-form-label>
           <input type="text" nz-input formControlName="tenDvi" />
         </div>

@@ -23,6 +23,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
   styleUrls: ['./so-kho-the-kho.component.scss'],
 })
 export class SoKhoTheKhoComponent implements OnInit {
+
   userInfo: UserLogin;
   detail: any = {};
   isDetail: false;
@@ -93,7 +94,7 @@ export class SoKhoTheKhoComponent implements OnInit {
     try {
       this.spinner.show();
       this.initForm();
-      await Promise.all([this.loadDsNam(), this.initData(), this.loaiVTHHGetAll(), this.search()]);
+      // await Promise.all([this.loadDsNam(), this.initData(), this.loaiVTHHGetAll(), this.search()]);
       this.spinner.hide();
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
@@ -201,7 +202,8 @@ export class SoKhoTheKhoComponent implements OnInit {
     }
     let res = await this.quanLySoKhoTheKhoService.timKiem(body);
     if (res.msg = MESSAGE.SUCCESS) {
-      this.dataTable = [...res.data.content]
+      this.dataTable = res.data.content;
+      this.convertDataTable();
       this.totalRecord = res.data.totalElements;
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach(item => item.checked = false)
@@ -213,6 +215,22 @@ export class SoKhoTheKhoComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg)
     }
     this.spinner.hide()
+  }
+
+  convertDataTable() {
+    this.dataTable.forEach(item => {
+      if (this.userService.isChiCuc()) {
+        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      } else {
+        let data = [];
+        item.dtlList.forEach(item => {
+          data = [...data, ...item.children];
+        })
+        item.detail = {
+          children: data
+        }
+      };
+    });
   }
 
   updateAllChecked(): void {

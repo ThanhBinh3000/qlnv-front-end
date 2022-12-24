@@ -4,23 +4,23 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="isStatus === globals.prop.NHAP_DU_THAO">
+    <button type="button" class="btn btn-sub" (click)="exportData()" *ngIf="dataTable != []">
       <i class="icon htvbdh_chuyen-xu-ly"></i>
       <span>Xuất file</span>
     </button>
-    <button type="button" class="btn btn-sub btn-xoa" (click)="tuChoi()">
+    <button type="button" class="btn btn-sub btn-xoa"  *ngIf="formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LDCC" (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Từ chối</span>
     </button>
-    <button type="button" class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
+    <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LDCC"  (click)="pheDuyet()">
       <i class="icon htvbdh_dakyduyet"></i>
       <span>Duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub xanh-nhat" (click)="luuVaDuyet()">
+    <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_TU_CHOI_LDCC "  (click)="luuVaDuyet()">
       <i class="icon htvbdh_tcdt_print"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub xanh" (click)="save(false)" >
+    <button type="button" class="btn btn-sub xanh" *ngIf="formData.value.trangThai == globals.prop.NHAP_DU_THAO || formData.value.trangThai == globals.prop.NHAP_TU_CHOI_LDCC " (click)="save(false)" >
       <i class="fa fa-save"></i>
       <span>Lưu</span>
     </button>
@@ -32,7 +32,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'status-xanh' : 'status-do'">
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC || formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span>Thẻ kho</span>
@@ -58,7 +58,7 @@
             </div>
             <div nz-col [nzSpan]="2">
               <nz-form-item>
-                <nz-form-label [nzNoColon]="true">Năm </nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Năm </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-select formControlName="nam" >
                     <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
@@ -90,7 +90,7 @@
             </div>
             <div nz-col [nzSpan]="6">
                 <nz-form-item>
-                  <nz-form-label>Loại hàng hóa</nz-form-label>
+                  <nz-form-label nzRequired>Loại hàng hóa</nz-form-label>
                   <nz-form-control [nzErrorTip]="error">
                     <nz-input-group>
                       <nz-select formControlName="loaiVthh"
@@ -104,7 +104,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label>Chủng loại hàng hóa</nz-form-label>
+                <nz-form-label nzRequired>Chủng loại hàng hóa</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
                     <nz-select formControlName="cloaiVthh"
@@ -120,8 +120,8 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Điểm kho </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="maDiemKho" (ngModelChange)="changeDiemKho(false)">
-                    <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.title">
+                  <nz-select formControlName="maDiemKho" (ngModelChange)="changeDiemKho($event)">
+                    <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
                     </nz-option>
                   </nz-select>
                 </nz-form-control>
@@ -131,7 +131,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Nhà kho </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="maNhaKho" (ngModelChange)="changeNhaKho(false)">
+                  <nz-select formControlName="maNhaKho" (ngModelChange)="changeNhaKho($event)">
                     <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maDvi" [nzLabel]="item.title">
                     </nz-option>
                   </nz-select>
@@ -142,7 +142,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Ngăn kho </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-select formControlName="maNganKho" (ngModelChange)="changeNganKho()">
+                  <nz-select formControlName="maNganKho" (ngModelChange)="changeNganKho($event)">
                     <nz-option *ngFor="let item of listNganKho" [nzValue]="item.maDvi" [nzLabel]="item.title">
                     </nz-option>
                   </nz-select>
@@ -182,7 +182,7 @@
             </div>
             <div nz-col [nzSpan]="24">
               <div class="tong-hop-button group-button-search mt-16">
-                <button type="button" class="btn btn-main btn-sm waves-effect waves-light" (click)="taoTheKho()">
+                <button *ngIf="btnTaoThe" type="button" class="btn btn-main btn-sm waves-effect waves-light" (click)="taoTheKho()">
                   <i class="icon htvbdh_luu-them-moi"></i>
                   <span>Tạo thẻ kho</span>
                 </button>
@@ -194,7 +194,7 @@
           <h3> Danh sách giao dịch nhập xuất</h3>
         </div>
         <nz-card class="mg-t-16 flex-card p-lr16 card-table pd-10">
-          <nz-table #basicTable class="nowrap" [nzData]="dataTable">
+          <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false">
             <thead>
               <tr>
                 <th class="text-center" style="width: 5%;">STT</th>
@@ -209,25 +209,23 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let data of basicTable.data; let idx = index">
+              <tr *ngFor="let data of dataTable; let idx = index">
                 <td>{{ idx + 1 }}</td>
                 <td>{{ data.loaiPhieu === 'NHAP' ? data.soPhieu : '' }}</td>
                 <td>{{ data.loaiPhieu === 'XUAT' ? data.soPhieu : '' }}</td>
                 <td>{{ data.ngay}}</td>
                 <td>
-                  <!-- <nz-input-group>
-                    <input nz-input [(ngModel)]="data.dienGiai"
-                      (ngModelChange)="changeDienGiaiGhiChu($event,idx ,'diengiai')" />
-                  </nz-input-group> -->
+                  <nz-input-group>
+                    <input nz-input [(ngModel)]="data.dienGiai"/>
+                  </nz-input-group>
                 </td>
                 <td>{{ data.loaiPhieu === 'NHAP' ? data.soLuong : '' }}</td>
                 <td>{{ data.loaiPhieu === 'XUAT' ? data.soLuong : '' }}</td>
                 <td>{{ data.ton }}</td>
                 <td>
-                  <!-- <nz-input-group>
-                    <input nz-input [(ngModel)]="data.ghiChu"
-                      (ngModelChange)="changeDienGiaiGhiChu($event,idx ,'ghichu')" />
-                  </nz-input-group> -->
+                  <nz-input-group>
+                    <input nz-input [(ngModel)]="data.ghiChu"/>
+                  </nz-input-group>
                 </td>
               </tr>
             </tbody>

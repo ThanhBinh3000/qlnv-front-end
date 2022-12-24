@@ -28,6 +28,8 @@ import {
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapKho.service';
 import {HttpClient} from '@angular/common/http';
 import {StorageService} from 'src/app/services/storage.service';
+import {STATUS} from "../../../../../constants/status";
+import {LkTheKhoCt} from "../../../../../models/LkTheKhoCt";
 
 @Component({
   selector: 'app-them-so-kho-the-kho',
@@ -42,6 +44,8 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
   @Input() isStatus: any;
 
   dataTable: any[] = [];
+
+  btnTaoThe : boolean = true;
 
   statusTaoThe
 
@@ -81,7 +85,7 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
       denNgay: ['', [Validators.required]],
       loaiVthh: ['', [Validators.required]],
       tenLoaiVthh: [''],
-      cloaiVthh: ['', [Validators.required]],
+      cloaiVthh: [''],
       tenCloaiVthh: [''],
       donViTinh: [''],
       tonDauKy: ['', [Validators.required]],
@@ -191,63 +195,40 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
     }
   }
 
-  changeDiemKho(fromChiTiet: boolean) {
-    let diemKho = this.listDiemKho.filter(x => {
-      return (this.idInput ? x.title : x.maDvi) == this.formData.value.idDiemKho
-    });
-    if (diemKho && diemKho.length > 0) {
-      if (!this.idInput) {
-        this.formData.patchValue({idNhaKho: null})
-      }
-      this.listNhaKho = diemKho[0].children;
-      if (fromChiTiet) {
-        this.changeNhaKho(fromChiTiet);
-      }
-    }
+  async changeDiemKho(event) {
+    const body = {
+      maDviCha: event,
+      trangThai: '01',
+    };
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    this.listNhaKho = dsTong[DANH_MUC_LEVEL.NHA_KHO];
   }
 
-  changeNhaKho(fromChiTiet: boolean) {
-    let nhaKho = this.listNhaKho.filter(x => {
-      return (this.idInput ? x.title : x.maDvi) == this.formData.value.idNhaKho
-    });
-    if (nhaKho && nhaKho.length > 0) {
-      if (!this.idInput) {
-        this.formData.patchValue({idNganKho: null})
-      }
-      this.listNganKho = nhaKho[0].children;
-      if (fromChiTiet) {
-        this.changeNganKho();
-      }
-    }
+  async changeNhaKho(event) {
+    const body = {
+      maDviCha: event,
+      trangThai: '01',
+    };
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    this.listNganKho = dsTong[DANH_MUC_LEVEL.NGAN_KHO];
   }
 
-  changeNganKho() {
-    let nganKho = this.listNganKho.filter(x => {
-      return (this.idInput ? x.title : x.maDvi) == this.formData.value.idNganKho
-    });
-
-    if (nganKho && nganKho.length > 0) {
-      if (!this.idInput && this.formData.value.idNganLo !== null) {
-        this.formData.patchValue({idNganLo: null})
-      }
-      this.listNganLo = nganKho[0].children;
-      if (this.idInput && this.listNganLo.length > 0) {
-        this.listNganLo.forEach(x => {
-          if (x.title == this.formData.value.idNganLo) {
-          }
-        });
-      }
-    }
+  async changeNganKho(event) {
+    const body = {
+      maDviCha: event,
+      trangThai: '01',
+    };
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    this.listNganLo = dsTong[DANH_MUC_LEVEL.LO_KHO];
   }
 
   async changeNganLo() {
-    if (this.formData.value.tuNgay && this.formData.value.denNgay && this.formData.value.idChungLoaiHangHoa) {
+    if (this.formData.value.tuNgay && this.formData.value.denNgay && this.formData.value.cloaiVthh) {
       await this.loadTonDauKy();
     }
   }
 
   async loadTonDauKy() {
-    console.log("ton dau ky")
     try {
       this.formData.patchValue({tonDauKy: 0})
 
@@ -312,6 +293,7 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
     this.spinner.show();
     let body = this.formData.value;
     body.maDvi = this.userInfo.MA_DVI
+    body.ds = this.dataTable
     let res
     if (this.idInput > 0) {
       res = await this.quanLySoKhoTheKhoService.update(body);
@@ -456,9 +438,22 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
       limit: this.globals.prop.MAX_INTERGER,
       page: 0,
     }
-    let res = await this.quanLyPhieuNhapKhoService.search(body);
+    body.trangThai = STATUS.DA_DUYET_LDCC
+    let res = await this.quanLyPhieuNhapKhoService.taoTheKho(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dataTable = res.data
+      let list = res.data.content;
+      if (list) {
+        this.btnTaoThe = false;
+        list.forEach(item => {
+          let theKhoCt = new LkTheKhoCt();
+          theKhoCt.loaiPhieu = 'NHAP';
+          theKhoCt.soPhieu = item.soPhieuNhapKho;
+          theKhoCt.ngay = item.ngayTao;
+          theKhoCt.ton = this.formData.value.tonDauKy + theKhoCt.soLuong;
+          theKhoCt.soLuong = item.hangHoaList && item.hangHoaList[0] ? item.hangHoaList[0]?.soLuongThucNhap : 0;
+          this.dataTable.push(theKhoCt);
+        })
+      }
       this.spinner.hide();
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR)
