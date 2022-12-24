@@ -136,7 +136,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       trangThai: [STATUS.DU_THAO],
       tchuanCluong: [''],
       tenTrangThai: ['Dự thảo'],
-      lyDoTuChoi: [''],
+      ldoTuchoi: [''],
       phanLoai: ['', [Validators.required]],
       vat: ['5'],
       gtriDthau: [null,],
@@ -373,6 +373,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     // Vật tư
     if (this.formData.get('loaiVthh').value.startsWith('02')) {
       switch (this.formData.get('trangThai').value) {
+        case STATUS.TU_CHOI_LDV:
         case STATUS.DU_THAO: {
           trangThai = STATUS.CHO_DUYET_LDV;
           mesg = 'Bạn có muốn gửi duyệt ?'
@@ -413,7 +414,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
             "id": this.idInput,
             "trangThai": trangThai
           }
-          let res = await this.quyetDinhPheDuyetKeHoachLCNTService.approve(body);
+          let res = await this.quyetDinhPheDuyetKeHoachLCNTService.approve(body, true);
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             this.quayLai();
