@@ -149,19 +149,10 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
     }
   }
 
-  isDetailPermission() {
-    if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_THEM") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP")) {
-      return true;
-    }
-    return false;
-  }
-
   async save() {
-    if (!this.isDetailPermission()) {
-      return;
-    }
     let body = this.formData.value;
-    let data = this.createUpdate(body)
+    let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
+    console.log(data);
     if (data) {
       this.quayLai();
     }
