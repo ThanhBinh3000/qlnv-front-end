@@ -104,8 +104,14 @@ export class BaoHiemKhoComponent implements OnInit {
     maDiaChiKhoChon: any;
     maNhaKhoChon: any;
     lstDviFull: any[] = [];
+    danhSachCuc1: any[] = [];
+    danhSachKho1: any[] = [];
     capDvi: string;
     isSynthetic: boolean;
+
+    disableTu: any;
+    disableDuoi: any;
+
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
@@ -133,7 +139,7 @@ export class BaoHiemKhoComponent implements OnInit {
         this.namBaoCao = this.dataInfo?.namBcao;
         this.isSynthetic = this.dataInfo?.isSynthetic;
         console.log(this.isSynthetic);
-        
+
         this.namTruoc = (Number(this.namBaoCao) - 1).toString();
         this.namKeHoach = (Number(this.namBaoCao) + 1).toString();
         this.thuyetMinh = this.formDetail?.thuyetMinh;
@@ -177,6 +183,8 @@ export class BaoHiemKhoComponent implements OnInit {
         }, err => {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
+
+
 
         await this.quanLyVonPhiService.dmKho(this.maDviTao).toPromise().then(res => {
             if (res.statusCode == 0) {
@@ -322,6 +330,10 @@ export class BaoHiemKhoComponent implements OnInit {
                 this.updateEditCache();
             }
         }
+
+        this.danhSachCuc1 = [...this.listDanhSachCuc]
+
+
         this.sortByIndex();
         this.getStatusButton();
         this.tinhTong();
@@ -449,6 +461,7 @@ export class BaoHiemKhoComponent implements OnInit {
         // console.log(this.lstCtietBcao);
 
         this.tinhTong();
+        this.processData()
         this.updateEditCache();
         this.checkAddNewRow = false;
     }
@@ -461,12 +474,14 @@ export class BaoHiemKhoComponent implements OnInit {
             edit: false
         };
         this.tinhTong();
+        this.checkAddNewRow = false;
     }
 
 
     // xoa dong
     deleteById(id: string): void {
         this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
+        this.checkAddNewRow = false;
         // this.processData()
     }
 
@@ -492,6 +507,10 @@ export class BaoHiemKhoComponent implements OnInit {
         }
         return false;
     }
+
+    khoiTichKhoDuoiM3: any;
+    khoiTichKhoTuM3: any;
+
     // start edit
     startEdit(id: string): void {
         // this.processData()
@@ -501,13 +520,43 @@ export class BaoHiemKhoComponent implements OnInit {
         })
         if (this.lstCtietBcao.every(e => !this.editCache[e.id].edit)) {
             this.editCache[id].edit = true;
-            this.maDviChon = this.editCache[id].data.maDvi,
-                this.maDiaChiKhoChon = this.editCache[id].data.maDiaChi,
-                this.maNhaKhoChon = this.editCache[id].data.maNhaKho,
-                this.checkAddNewRow = true;
+            this.maDviChon = this.editCache[id].data.maDvi;
+            this.maDiaChiKhoChon = this.editCache[id].data.maDiaChi;
+            this.maNhaKhoChon = this.editCache[id].data.maNhaKho;
+            this.khoiTichKhoTuM3 = this.editCache[id].data.khoiTichKhoTuM3;
+            this.khoiTichKhoDuoiM3 = this.editCache[id].data.khoiTichKhoDuoiM3;
+
+            if (this.khoiTichKhoTuM3 > 0) {
+                this.disableDuoi = true;
+            } else {
+                this.disableDuoi = false;
+            }
+
+            if (this.khoiTichKhoDuoiM3 > 0) {
+                this.disableTu = true;
+            } else {
+                this.disableTu = false;
+            }
+
+            this.checkAddNewRow = true;
         } else {
             this.notification.warning(MESSAGE.WARNING, 'Vui lòng lưu bản ghi đang sửa trước khi thực hiện thao tác');
             return;
+        }
+    }
+
+    checkEditDuoi(khoiTichKhoDuoiM3: any, id: any) {
+        if( khoiTichKhoDuoiM3 > 0){
+            this.disableTu = true;
+        }else {
+            this.disableTu = false;
+        }
+    }
+    checkEditTu(khoiTichKhoTuM3: any, id: any) {
+        if( khoiTichKhoTuM3 > 0){
+            this.disableDuoi = true;
+        }else {
+            this.disableDuoi = false;
         }
     }
 
@@ -537,8 +586,15 @@ export class BaoHiemKhoComponent implements OnInit {
 
     // them dong moi
     addLine(data: any): void {
-
         if (data == null) {
+
+            this.lstCtietBcao.forEach(s => {
+                this.danhSachCuc1 = this.danhSachCuc1.filter(a => a.maDvi !== s.maDvi)
+            })
+
+            this.listDanhMucKhoFull = [];
+            this.listDiemKho = [];
+
             let lstLv1 = []
             this.lstCtietBcao.forEach(item => {
                 if (item.stt.length == 3) {
@@ -552,7 +608,7 @@ export class BaoHiemKhoComponent implements OnInit {
             const item: ItemData = {
                 ...new ItemData,
                 id: uuid.v4() + 'FE',
-                stt: '0.' + index ,
+                stt: '0.' + index,
                 maDvi: '',
                 maDiaChi: '',
                 diaChiKho: '',
@@ -586,6 +642,10 @@ export class BaoHiemKhoComponent implements OnInit {
             };
             this.checkAddNewRow = true;
         } else {
+
+            const maDvi = data.maDvi;
+
+
             const stt = data.stt;
 
             let index = -1;
@@ -596,43 +656,78 @@ export class BaoHiemKhoComponent implements OnInit {
                 }
             }
             const tail = stt == this.lstCtietBcao[index]?.stt ? '1' : (this.getTail(this.lstCtietBcao[index]?.stt) + 1).toString();
-            const item: ItemData = {
-                ...new ItemData,
-                id: uuid.v4() + 'FE',
-                stt: stt + '.' + tail,
-                maDvi: '',
-                maDiaChi: '',
-                diaChiKho: '',
-                maNhaKho: '',
-                tenNhaKho: '',
-                khoiTichKhoDuoiM3: 0,
-                khoiTichKhoTuM3: 0,
-                slNhaKhoDuoi: 0,
-                slNhaKhoTu: 0,
-                slNhaKhoTong: 0,
-                duoiGtConLai: 0,
-                duoiHetKhauHao: 0,
-                duoiTongGtKho: 0,
-                tuGtConLai: 0,
-                tuHetKhauHao: 0,
-                tuTongGtKho: 0,
-                tong: 0,
-                level: '',
-                checked: false,
+
+            if (this.userInfo.capDvi == "2") {
+                this.selectDonvi(maDvi, null);
+                const item: ItemData = {
+                    ...new ItemData,
+                    id: uuid.v4() + 'FE',
+                    stt: stt + '.' + tail,
+                    maDvi: maDvi,
+                    maDiaChi: '',
+                    diaChiKho: '',
+                    maNhaKho: '',
+                    tenNhaKho: '',
+                    khoiTichKhoDuoiM3: 0,
+                    khoiTichKhoTuM3: 0,
+                    slNhaKhoDuoi: 0,
+                    slNhaKhoTu: 0,
+                    slNhaKhoTong: 0,
+                    duoiGtConLai: 0,
+                    duoiHetKhauHao: 0,
+                    duoiTongGtKho: 0,
+                    tuGtConLai: 0,
+                    tuHetKhauHao: 0,
+                    tuTongGtKho: 0,
+                    tong: 0,
+                    level: '',
+                    checked: false,
+                }
+
+                const str: string[] = item.stt.split('.');
+                item.level = str.length - 2;
+                this.lstCtietBcao.splice(index + 1, 0, item);
+                this.editCache[item.id] = {
+                    edit: true,
+                    data: { ...item }
+                };
+                this.checkAddNewRow = true;
+            } else {
+                const item: ItemData = {
+                    ...new ItemData,
+                    id: uuid.v4() + 'FE',
+                    stt: stt + '.' + tail,
+                    maDvi: '',
+                    maDiaChi: '',
+                    diaChiKho: '',
+                    maNhaKho: '',
+                    tenNhaKho: '',
+                    khoiTichKhoDuoiM3: 0,
+                    khoiTichKhoTuM3: 0,
+                    slNhaKhoDuoi: 0,
+                    slNhaKhoTu: 0,
+                    slNhaKhoTong: 0,
+                    duoiGtConLai: 0,
+                    duoiHetKhauHao: 0,
+                    duoiTongGtKho: 0,
+                    tuGtConLai: 0,
+                    tuHetKhauHao: 0,
+                    tuTongGtKho: 0,
+                    tong: 0,
+                    level: '',
+                    checked: false,
+                }
+
+                const str: string[] = item.stt.split('.');
+                item.level = str.length - 2;
+                this.lstCtietBcao.splice(index + 1, 0, item);
+                this.editCache[item.id] = {
+                    edit: true,
+                    data: { ...item }
+                };
+                this.checkAddNewRow = true;
             }
-            const str: string[] = item.stt.split('.');
-            item.level = str.length - 2;
-            this.lstCtietBcao.splice(index + 1, 0, item);
-            this.editCache[item.id] = {
-                edit: true,
-                data: { ...item }
-            };
-            this.checkAddNewRow = true;
         }
-
-
-
-
     }
 
     sortByIndex() {
@@ -713,47 +808,60 @@ export class BaoHiemKhoComponent implements OnInit {
     }
 
 
-    async selectDonvi(idDonvi: any) {
-
-        let diaDiem;
-        let capDonVi = this.listDanhSachCuc.find(e => e.maDvi === idDonvi)?.capDvi;
-        await this.quanLyVonPhiService.dmKho(idDonvi).toPromise().then(res => {
-            if (res.statusCode == 0) {
-                this.listDanhMucKho = res.data;
-            } else {
-                this.notification.error(MESSAGE.ERROR, res?.msg);
-            }
-        }, err => {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        })
-        if (capDonVi == "3") {
-
-            diaDiem = this.listDanhMucKho.find(ts => ts.maDvi === idDonvi);
+    async selectDonvi(idDonvi: any, stt: any) {
+        if (stt && stt.length == 3) {
+            this.listDanhMucKhoFull = []
         } else {
-            diaDiem = this.listDanhMucKho.find(ts => ts.maDviCha === idDonvi);
-        }
 
-        this.listDanhMucKho = diaDiem?.children;
-        this.listDanhMucKhoFull = []
-        for (let i = 0; i < diaDiem?.children.length; i++) {
-            var index = this.listDanhMucKhoFull.findIndex(item => item.maDviCha === idDonvi);
-            if (this.listDanhMucKhoFull.length == 0 || index == -1) {
-                this.listDanhMucKhoFull.push(diaDiem?.children[i]);
+            if (this.userInfo.capDvi == "1" || this.userInfo.capDvi == "2") {
+                this.danhSachCuc1 = this.listDanhSachCuc.filter(d => d.id == idDonvi)
+            }
+
+            let diaDiem;
+            let capDonVi = this.listDanhSachCuc.find(e => e.maDvi === idDonvi)?.capDvi;
+            await this.quanLyVonPhiService.dmKho(idDonvi).toPromise().then(res => {
+                if (res.statusCode == 0) {
+                    this.listDanhMucKho = res.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            }, err => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            })
+            if (capDonVi == "3") {
+
+                diaDiem = this.listDanhMucKho.find(ts => ts.maDvi === idDonvi);
+            } else {
+                diaDiem = this.listDanhMucKho.find(ts => ts.maDviCha === idDonvi);
+            }
+
+            this.listDanhMucKho = diaDiem?.children;
+            this.listDanhMucKhoFull = []
+            for (let i = 0; i < diaDiem?.children.length; i++) {
+                var index = this.listDanhMucKhoFull.findIndex(item => item.maDviCha === idDonvi);
+                if (this.listDanhMucKhoFull.length == 0 || index == -1) {
+                    this.listDanhMucKhoFull.push(diaDiem?.children[i]);
+                }
             }
         }
+
 
 
 
     }
 
-
+    diemKho1: any[] = [];
     selectDiadiem(Diadiem: any, id: any) {
         if (Diadiem != null && this.listDanhMucKho != undefined) {
             const diachinhaKho = this.listDanhMucKho.find(ts => ts?.tenDvi === Diadiem);
-
             if (diachinhaKho != undefined) {
                 this.editCache[id].data.maDiaChi = diachinhaKho.maDvi;
                 this.listDiemKho = diachinhaKho?.children;
+                this.lstCtietBcao.forEach(s => {
+                    this.listDiemKho = this.listDiemKho.filter(a => a.maDvi !== s.maNhaKho)
+                })
+
+
                 for (let i = 0; i < this.listDiemKho.length; i++) {
                     var index = this.listDiemKhoFull.findIndex(item => item.maDvi == this.listDiemKho[i].tenDvi)
                     if (index == -1 || this.listDiemKhoFull.length == 0) {
@@ -761,15 +869,16 @@ export class BaoHiemKhoComponent implements OnInit {
                     }
                 }
             }
+
         } else {
             return
         }
-
     }
 
     getmaNhaKho(nameNhaKho: string, id: any) {
         if (nameNhaKho != null && this.listDiemKho != undefined) {
-
+            this.diemKho1 = this.listDiemKho.filter(s => s.tenDvi == nameNhaKho)
+            // console.log(diemKho1);
             const nhaKho = this.listDiemKho.find(nk => nk?.tenDvi === nameNhaKho);
             if (nhaKho != undefined) {
                 this.editCache[id].data.maNhaKho = nhaKho.maDvi;
