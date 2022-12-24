@@ -254,6 +254,7 @@ export class DanhSachBaoCaoThucHienDuToanChiComponent implements OnInit {
 						if (data.statusCode == 0) {
 							this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
 							this.search();
+							this.allChecked = false;
 						} else {
 							this.notification.error(MESSAGE.ERROR, data?.msg);
 						}
