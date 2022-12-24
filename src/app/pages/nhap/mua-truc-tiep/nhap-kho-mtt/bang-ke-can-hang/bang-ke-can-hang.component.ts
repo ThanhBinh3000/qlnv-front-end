@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./bang-ke-can-hang.component.scss']
 })
 export class BangKeCanHangComponent implements OnInit {
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
   constructor() { }
 
   ngOnInit(): void {
