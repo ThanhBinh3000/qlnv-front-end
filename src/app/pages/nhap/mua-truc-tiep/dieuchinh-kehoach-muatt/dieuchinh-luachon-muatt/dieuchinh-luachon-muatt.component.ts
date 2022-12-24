@@ -26,7 +26,7 @@ export class DieuchinhLuachonMuattComponent implements OnInit {
   @Input() typeVthh: string;
   isDetail: boolean = false;
   selectedId: number = 0;
-  isViewDetail: boolean;
+  isView: boolean = false;
   searchValue = '';
   listNam: any[] = [];
 
@@ -181,10 +181,10 @@ export class DieuchinhLuachonMuattComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(id: number, isView?: boolean) {
+  redirectToChiTiet(isView: boolean, id: number) {
     this.selectedId = id;
     this.isDetail = true;
-    this.isViewDetail = isView ?? false;
+    this.isView = isView;
   }
 
   convertTrangThai(status: string) {
