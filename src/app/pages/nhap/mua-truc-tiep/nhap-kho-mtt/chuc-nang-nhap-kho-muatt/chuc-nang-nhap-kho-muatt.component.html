@@ -13,13 +13,13 @@
   </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
-  <app-phieu-nhap-kho [typeVthh]="typeVthh"></app-phieu-nhap-kho>
+  <app-phieu-nhap-kho [loaiVthh]="loaiVthh"></app-phieu-nhap-kho>
 </ng-container>
 <ng-container *ngIf="tabSelected == 1">
-  <app-bang-ke-can-hang [typeVthh]="typeVthh"></app-bang-ke-can-hang>
+  <app-bang-ke-can-hang [loaiVthh]="loaiVthh"></app-bang-ke-can-hang>
 </ng-container>
 <ng-container *ngIf="tabSelected == 2">
-  <app-bien-ban-nhap-day-kho [typeVthh]="typeVthh"></app-bien-ban-nhap-day-kho>
+  <app-bien-ban-nhap-day-kho [loaiVthh]="loaiVthh"></app-bien-ban-nhap-day-kho>
 </ng-container>
 <!-- <ng-container *ngIf="tabSelected == 1">
     <app-bien-ban-gui-hang [typeVthh]="typeVthh"></app-bien-ban-gui-hang>
@@ -27,7 +27,7 @@
   <ng-container *ngIf="tabSelected == 2">
     <quan-ly-phieu-nhap-kho [typeVthh]="typeVthh"></quan-ly-phieu-nhap-kho>
   </ng-container>
-  
+
   <ng-container *ngIf="tabSelected == 4">
     <quan-ly-phieu-nhap-day-kho [typeVthh]="typeVthh"></quan-ly-phieu-nhap-day-kho>
   </ng-container>
