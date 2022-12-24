@@ -31,12 +31,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-  formData: FormGroup;
   fileDinhKem: any[] = [];
-  userLogin: UserLogin;
-  STATUS = STATUS;
   datePipe = new DatePipe('en-US');
-  listNam: any[] = [];
 
   //
   currentSelected: any = 1;
@@ -174,14 +170,6 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
           })]),
       }
     );
-    this.userLogin = this.userService.getUserLogin();
-    // this.maDeXuat = '/' + this.userInfo.MA_TCKT;
-    for (let i = -3; i < 23; i++) {
-      this.listNam.push({
-        value: dayjs().get('year') - i,
-        text: dayjs().get('year') - i,
-      });
-    }
     let tmpData =
     {
       "serialVersionUID": 0,
@@ -535,10 +523,10 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
     } else {
-      this.formData.patchValue({
-        maDvi: this.userLogin.MA_DVI,
-        tenDvi: this.userLogin.TEN_DVI
-      })
+      // this.formData.patchValue({
+      //   maDvi: this.userLogin.MA_DVI,
+      //   tenDvi: this.userLogin.TEN_DVI
+      // })
     }
   }
 
