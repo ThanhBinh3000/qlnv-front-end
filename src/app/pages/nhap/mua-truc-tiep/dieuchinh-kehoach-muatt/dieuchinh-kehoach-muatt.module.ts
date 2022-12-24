@@ -6,6 +6,7 @@ import { DieuchinhKehoachMuattComponent } from './dieuchinh-kehoach-muatt.compon
 import { DieuchinhLuachonMuattComponent } from './dieuchinh-luachon-muatt/dieuchinh-luachon-muatt.component';
 import { ThemmoiDieuchinhMuattComponent } from './dieuchinh-luachon-muatt/themmoi-dieuchinh-muatt/themmoi-dieuchinh-muatt.component';
 import { ThongtinDieuchinhComponent } from './dieuchinh-luachon-muatt/themmoi-dieuchinh-muatt/thongtin-dieuchinh/thongtin-dieuchinh.component';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
 @NgModule({
   declarations: [
     DieuchinhKehoachMuattComponent,
@@ -13,14 +14,18 @@ import { ThongtinDieuchinhComponent } from './dieuchinh-luachon-muatt/themmoi-di
     ThemmoiDieuchinhMuattComponent,
     ThongtinDieuchinhComponent
 
+
   ],
   imports: [
+
     CommonModule,
     ComponentsModule,
     MainModule,
+
   ],
   exports: [
-    DieuchinhKehoachMuattComponent
+    DieuchinhKehoachMuattComponent,
+    NzStatisticModule
   ]
 })
 export class DieuchinhKehoachMuattModule { }

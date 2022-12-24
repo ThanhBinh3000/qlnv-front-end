@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./bien-ban-nhap-day-kho.component.scss']
 })
 export class BienBanNhapDayKhoComponent implements OnInit {
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
   constructor() { }
 
   ngOnInit(): void {
