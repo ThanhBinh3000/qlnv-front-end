@@ -1,7 +1,6 @@
 import { FileDinhKem } from './../../../../../../models/FileDinhKem';
 import { DatePipe } from '@angular/common';
 import { DieuChinhQuyetDinhPdKhmttService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/dieuchinh-khmtt/DieuChinhQuyetDinhPdKhmtt.service';
-import { async } from '@angular/core/testing';
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -11,18 +10,17 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { DialogThongTinPhuLucQuyetDinhPheDuyetComponent } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet/dialog-thong-tin-phu-luc-quyet-dinh-phe-duyet.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { DATEPICKER_CONFIG } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { dauThauGoiThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/dauThauGoiThau.service';
 import { HelperService } from 'src/app/services/helper.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../../constants/status";
 import { cloneDeep } from "lodash";
+import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -31,7 +29,7 @@ import { cloneDeep } from "lodash";
   styleUrls: ['./themmoi-dieuchinh-muatt.component.scss']
 })
 export class ThemmoiDieuchinhMuattComponent implements OnInit {
-  @Input() isViewDetail: boolean;
+  @Input('isView') isView: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
   @Input()
@@ -39,6 +37,8 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
   soLuongDiaDiemList: any;
+  dataOnChanges: any[] = [];
+  dataChildOnChanges: any[] = [];
 
   constructor(
     private router: Router,
@@ -50,7 +50,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     public globals: Globals,
     private danhMucService: DanhMucService,
     private fb: FormBuilder,
-    private dauThauGoiThauService: dauThauGoiThauService,
     private modal: NzModalService,
     private helperService: HelperService
   ) {
@@ -66,6 +65,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       trichYeu: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
+      ldoTchoi: [''],
       loaiVthh: [''],
       tenLoaiVthh: [''],
       cloaiVthh: [''],
@@ -92,7 +92,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   listLoaiHopDong: any[] = []
   listVthh: any[] = [];
   formData: FormGroup
-  isDetail = false;
   dataTable: any[] = [];
   danhsachDxMtt: any[] = [];
   danhsachDxMttCache: any[] = [];
@@ -107,6 +106,9 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
   datePipe = new DatePipe('en-US');
   dtl: any[] = [];
   fileDinhKem: Array<FileDinhKem> = [];
+  mthh: any = [];
+  selectedId: number = 0;
+  isDetail: boolean = false;
   async ngOnInit() {
     this.spinner.show();
     try {
@@ -153,12 +155,13 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
             trangThai: '',
           };
           switch (this.formData.get('trangThai').value) {
-            case STATUS.CHO_DUYET_TP: {
-              body.trangThai = STATUS.TU_CHOI_TP;
+
+            case STATUS.CHO_DUYET_LDV: {
+              body.trangThai = STATUS.TU_CHOI_LDV;
               break;
             }
-            case STATUS.CHO_DUYET_LDC: {
-              body.trangThai = STATUS.TU_CHOI_LDC;
+            case STATUS.DA_DUYET_LDV: {
+              body.trangThai = STATUS.TU_CHOI_LDV;
               break;
             }
           }
@@ -205,7 +208,7 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
           trichYeu: data.trichYeu,
           idQdGoc: data.idQdGoc,
           soQdGoc: data.soQdGoc,
-          ldoTuchoi: data.ldoTuchoi,
+          ldoTchoi: data.ldoTchoi,
           ngayKyQdGoc: data.ngayKyQdGoc,
 
         });
@@ -215,7 +218,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
-    this.setTitle();
   }
 
   quayLai() {
@@ -266,16 +268,22 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       let qdGoc = this.listQdGoc.filter(item => item.id == $event)
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
+        delete res.data?.trangThai;
+        delete res.data?.tenTrangThai;
+        for (let item of data.children) {
+          this.mthh = item.moTaHangHoa;
+        }
+        Object.assign(data, { mthh: this.mthh })
         this.formData.patchValue({
           id: null,
-          ngayKyQdGoc: data.ngayKy,
+          ngayKyQdGoc: data.ngayQd,
           idQdGoc: $event,
           soQdGoc: qdGoc.length > 0 ? qdGoc[0].soQd : null,
           loaiVthh: data.loaiVthh,
           tenLoaiVthh: data.tenLoaiVthh,
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
-          moTaHangHoa: data.moTaHangHoa,
+          moTaHangHoa: data.mthh,
         })
         this.danhsachDxMtt = data.children;
         this.danhsachDxMttCache = cloneDeep(this.danhsachDxMtt)
@@ -323,61 +331,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     }
   }
 
-
-  addRow(): void {
-    this.listNthauNopHs = [
-      ...this.listNthauNopHs,
-      {}
-    ];
-    this.i++;
-    this.listNthauNopHs.forEach((value, index) => {
-      this.editCache[index] = {
-        edit: false,
-        data: { ...value }
-      };
-    })
-    this.editCache[this.i].edit = true;
-  }
-
-  updateEditCache(): void {
-    this.listNthauNopHs.forEach((item, index) => {
-      this.editCache[index] = {
-        edit: true,
-        data: { ...item }
-      };
-    });
-    this.listDiaDiemNhapHang.forEach((item, index) => {
-      this.editDiaDiemCache[index] = {
-        edit: true,
-        data: { ...item }
-      };
-    });
-  }
-
-  startEdit(index: number): void {
-    this.editCache[index].edit = true;
-  }
-
-  deleteRow(index: number) {
-    this.listNthauNopHs = this.listNthauNopHs.filter((d, index) => index !== index);
-  }
-
-  cancelEdit(id: any): void {
-    const index = this.listNthauNopHs.findIndex(item => item.id === id);
-    this.editCache[id] = {
-      data: { ...this.listNthauNopHs[index] },
-      edit: false
-    };
-  }
-
-  saveEdit(index: any): void {
-    Object.assign(
-      this.listNthauNopHs[index],
-      this.editCache[index].data,
-    );
-    this.editCache[index].edit = false;
-  }
-
   calendarGia() {
     let donGia = this.formData.get('donGia').value;
     let VAT = this.formData.get('VAT').value;
@@ -390,63 +343,8 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
       })
     }
   }
-  iconButtonDuyet: string;
-  titleButtonDuyet: string;
-  titleStatus: string;
-  setTitle() {
-    let trangThai = this.formData.get('trangThai').value
-    switch (trangThai) {
-      case STATUS.DU_THAO: {
-        this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
-        this.titleButtonDuyet = 'Gửi duyệt';
-        this.titleStatus = 'Dự thảo';
-        break;
-      }
-      case STATUS.TU_CHOI_LDV: {
-        this.iconButtonDuyet = 'htvbdh_tcdt_guiduyet'
-        this.titleButtonDuyet = 'Gửi duyệt';
-        this.titleStatus = 'Từ chối - LĐ Vụ';
-        break;
-      }
-      case STATUS.CHO_DUYET_LDV: {
-        this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
-        this.titleButtonDuyet = 'Duyệt';
-        this.titleStatus = 'Chờ duyệt - LĐ Vụ';
-        break
-      }
-      case STATUS.DA_DUYET_LDV: {
-        this.iconButtonDuyet = 'htvbdh_tcdt_pheduyet'
-        this.titleButtonDuyet = 'Ban hành';
-        this.titleStatus = 'Đã duyệt';
-        break
-      }
-      case STATUS.BAN_HANH: {
-        this.titleStatus = 'Ban hành';
-        break
-      }
-    }
 
-  }
 
-  deleteItem(index) {
-    this.danhsachDxMtt = this.danhsachDxMtt.filter((item, i) => i !== index)
-  }
-
-  async openDialogDeXuat(index) {
-    let data = this.danhsachDxMtt[index]
-    this.modal.create({
-      nzTitle: '',
-      nzContent: DialogThongTinPhuLucQuyetDinhPheDuyetComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '90%',
-      nzFooter: null,
-      nzComponentParams: {
-        data: data,
-        isEdit: true
-      },
-    });
-  }
 
   async save(isGuiDuyet?) {
     this.helperService.markFormGroupTouched(this.formData);
@@ -457,14 +355,9 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     let body = this.formData.value;
     body.soQdDc = body.soQdDc + this.soQdDc;
     body.hhDcQdPduyetKhmttDxList = this.danhsachDxMtt;
-    body.fileDinhKems = this.fileDinhKem;
-    for (const item of body.hhDcQdPduyetKhmttDxList) {
-      item.hhDcQdPduyetKhmttSlddList = item.soLuongDiaDiemList;
-    };
-
     body.ngayKyDc = this.datePipe.transform(body.ngayKyDc, 'yyyy-MM-dd');
     body.ngayHluc = this.datePipe.transform(body.ngayHluc, 'yyyy-MM-dd');
-
+    body.fileDinhKems = this.fileDinhKem;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.dieuChinhQuyetDinhPdKhmttService.update(body);
@@ -495,23 +388,22 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
 
     switch (this.formData.get('trangThai').value) {
       case STATUS.DU_THAO: {
-        trangThai = STATUS.CHO_DUYET_TP;
+        trangThai = STATUS.CHO_DUYET_LDV;
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
-      case STATUS.TU_CHOI_TP:
-      case STATUS.TU_CHOI_LDC: {
-        trangThai = STATUS.CHO_DUYET_TP;
+      case STATUS.TU_CHOI_LDV: {
+        trangThai = STATUS.CHO_DUYET_LDV;
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
-      case STATUS.CHO_DUYET_TP: {
-        trangThai = STATUS.CHO_DUYET_LDC;
+      case STATUS.CHO_DUYET_LDV: {
+        trangThai = STATUS.DA_DUYET_LDV;
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
-      case STATUS.CHO_DUYET_LDC: {
-        trangThai = STATUS.DA_DUYET_LDC
+      case STATUS.DA_DUYET_LDV: {
+        trangThai = STATUS.BAN_HANH
         mesg = 'Bạn có muốn gửi duyệt ?'
         break;
       }
@@ -547,6 +439,13 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
         }
       },
     });
+  }
+  public onChangesData(_event) {
+    this.dataOnChanges.splice(0, 1, _event);
+
+  }
+  public onChangesDataChild(_event) {
+    this.dataChildOnChanges = _event;
   }
 
 }

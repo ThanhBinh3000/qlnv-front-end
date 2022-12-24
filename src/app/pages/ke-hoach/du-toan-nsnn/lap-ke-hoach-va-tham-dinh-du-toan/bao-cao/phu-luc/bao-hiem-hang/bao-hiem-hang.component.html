@@ -63,14 +63,14 @@
                                 {{i + 1}}
                             </td>
                             <td>
-                                <div *ngFor="let item of listDiemKho">
+                                <div *ngFor="let item of lstDviFull">
                                     <div *ngIf="item.id == data.maKho">
                                         {{item.tenDvi}}
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <div *ngFor="let item of listKhoFull">
+                                <div *ngFor="let item of lstDviFull">
                                     <div *ngIf="item.id == data.tenNhaKho">
                                         {{item.tenDvi}}
                                     </div>

@@ -144,8 +144,10 @@ export class DialogDiaDiemNhapKhoComponent implements OnInit {
   async loadChiCuc(maCuc: string) {
     this.chiCucList = this.listDvi;
     this.chiCucList = this.chiCucList.filter(s => s.capDvi == LEVEL_USER.CHI_CUC && s.maDviCha == maCuc);
-    let existsChiCuc = this.phuongAnXuatList.map((s) => s.maChiCuc);
-    this.chiCucList = this.chiCucList.filter((s) => !existsChiCuc.includes(s.maDvi));
+    if (this.phuongAnXuatList) {
+      let existsChiCuc = this.phuongAnXuatList.map((s) => s.maChiCuc);
+      this.chiCucList = this.chiCucList.filter((s) => !existsChiCuc.includes(s.maDvi));
+    }
 
     // console.log(this.cucList,'list cuc')
     /*   let res = await this.donViService.layDonViChiCuc();
