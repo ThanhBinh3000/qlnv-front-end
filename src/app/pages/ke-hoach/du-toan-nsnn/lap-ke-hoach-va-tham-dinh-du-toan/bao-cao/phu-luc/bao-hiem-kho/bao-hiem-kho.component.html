@@ -213,6 +213,7 @@
                                 <fm-input-number nz-input class="search__input"
                                     [(ngModel)]="editCache[data.id].data.khoiTichKhoDuoiM3"
                                     (ngModelChange)="checkEditDuoi(editCache[data.id].data.khoiTichKhoDuoiM3, editCache[data.id].data.id)"
+                                    [class]=" editCache[data.id].data.khoiTichKhoDuoiM3 < 5000 ?'' : 'input-error-validate'"
                                     [disabled]="disableDuoi">
                                 </fm-input-number>
                             </td>
@@ -220,6 +221,7 @@
                                 <fm-input-number nz-input class="search__input"
                                     [(ngModel)]="editCache[data.id].data.khoiTichKhoTuM3"
                                     (ngModelChange)="checkEditTu(editCache[data.id].data.khoiTichKhoTuM3, editCache[data.id].data.id)"
+                                    [class]="editCache[data.id].data.khoiTichKhoTuM3 == 0 || editCache[data.id].data.khoiTichKhoTuM3 >= 5000 ?'' : 'input-error-validate'"
                                     [disabled]="disableTu">
                                 </fm-input-number>
                             </td>
@@ -267,7 +269,7 @@
                                     (click)="deleteById(data.id)"></i>
                             </td>
                             <td>
-                                <a class="save" (click)="saveEdit(data.id)" style="margin-right:15px">Lưu</a>
+                                <a class="save" (click)="saveEdit(data)" style="margin-right:15px">Lưu</a>
                                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                     (nzOnConfirm)="cancelEdit(data.id)" class="save">Hủy</a>
                             </td>

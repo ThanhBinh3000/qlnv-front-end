@@ -384,6 +384,8 @@ export class BaoHiemKhoComponent implements OnInit {
             return;
         }
 
+
+
         // replace nhung ban ghi dc them moi id thanh null
         lstCtietBcaoTemp.forEach(item => {
             if (item.id?.length == 38) {
@@ -454,7 +456,21 @@ export class BaoHiemKhoComponent implements OnInit {
     }
 
     // luu thay doi
-    async saveEdit(id: string) {
+    async saveEdit(data: any) {
+        const id = data.id
+
+        if (
+            this.editCache[id].data.khoiTichKhoDuoiM3 >= 5000 &&
+            data.stt.length !== 3
+        ) {
+            this.notification.warning(MESSAGE.WARNING, "khối tích kho không được lớn hơn 5000")
+            return
+        }
+        if ((this.editCache[id].data.khoiTichKhoTuM3 > 0  && this.editCache[id].data.khoiTichKhoTuM3 < 5000 && data.stt.length !== 3)) {
+            this.notification.warning(MESSAGE.WARNING, "khối tích kho không được nhỏ hơn 5000")
+            return
+        }
+
         const index = this.lstCtietBcao.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.lstCtietBcao[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
@@ -546,16 +562,16 @@ export class BaoHiemKhoComponent implements OnInit {
     }
 
     checkEditDuoi(khoiTichKhoDuoiM3: any, id: any) {
-        if( khoiTichKhoDuoiM3 > 0){
+        if (khoiTichKhoDuoiM3 > 0) {
             this.disableTu = true;
-        }else {
+        } else {
             this.disableTu = false;
         }
     }
     checkEditTu(khoiTichKhoTuM3: any, id: any) {
-        if( khoiTichKhoTuM3 > 0){
+        if (khoiTichKhoTuM3 > 0) {
             this.disableDuoi = true;
-        }else {
+        } else {
             this.disableDuoi = false;
         }
     }
@@ -641,6 +657,8 @@ export class BaoHiemKhoComponent implements OnInit {
                 data: { ...item }
             };
             this.checkAddNewRow = true;
+            this.disableDuoi = false;
+            this.disableTu = false;
         } else {
 
             const maDvi = data.maDvi;
@@ -691,6 +709,8 @@ export class BaoHiemKhoComponent implements OnInit {
                     edit: true,
                     data: { ...item }
                 };
+                this.disableDuoi = false;
+                this.disableTu = false;
                 this.checkAddNewRow = true;
             } else {
                 const item: ItemData = {
@@ -725,6 +745,8 @@ export class BaoHiemKhoComponent implements OnInit {
                     edit: true,
                     data: { ...item }
                 };
+                this.disableDuoi = false;
+                this.disableTu = false;
                 this.checkAddNewRow = true;
             }
         }

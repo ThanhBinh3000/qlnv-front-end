@@ -76,6 +76,7 @@ export class PhuLuc02Component implements OnInit {
 	dsDinhMuc: any[] = [];
 	allChecked = false;
 	maDviTao: string;
+	isSynthetic: any;
 	constructor(
 		private _modalRef: NzModalRef,
 		private spinner: NgxSpinnerService,
@@ -108,6 +109,7 @@ export class PhuLuc02Component implements OnInit {
 		this.statusPrint = this.dataInfo?.statusBtnPrint;
 		this.checkViewTD = this.dataInfo?.viewAppraisalValue;
 		this.checkEditTD = this.dataInfo?.editAppraisalValue;
+		this.isSynthetic = this.dataInfo?.isSynthetic;
 		this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
 			this.lstCtietBcao.push({
 				...item,
@@ -134,6 +136,7 @@ export class PhuLuc02Component implements OnInit {
 		}
 
 		await this.getDinhMuc();
+
 		this.lstCtietBcao.forEach(item => {
 			if (!item.tenDanhMuc) {
 				const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maDanhMuc);
@@ -143,6 +146,20 @@ export class PhuLuc02Component implements OnInit {
 				item.ttienTaiKho = mulNumber(item.dmucTaiKho, item.sluongTaiKho);
 			}
 		})
+		if (this.isSynthetic) {
+			this.lstCtietBcao.forEach(item => {
+				// if (!item.tenDanhMuc) {
+				const dinhMuc = this.dsDinhMuc.find(e => e.cloaiVthh == item.maDanhMuc);
+				// item.tenDanhMuc = dinhMuc?.tenDinhMuc;
+				item.dmucTaiKho = dinhMuc?.tongDmuc;
+				// item.dviTinh = dinhMuc?.donViTinh;
+				item.ttienTaiKho = mulNumber(item.dmucTaiKho, item.sluongTaiKho);
+				item.binhQuanNgoaiKho = divNumber(item.ttienNgoaiKho, item.sluongTaiKho);
+				item.tongCong = sumNumber([item.ttienTaiKho, item.ttienNgoaiKho])
+				// }
+			})
+			this.sum1()
+		}
 
 		this.sortByIndex();
 		this.getTotal();
@@ -447,16 +464,52 @@ export class PhuLuc02Component implements OnInit {
 					this.lstCtietBcao[index].namUocTh = sumNumber([this.lstCtietBcao[index].namUocTh, item.namUocTh])
 					// this.lstCtietBcao[index].sluongTaiKho = sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
 					// this.lstCtietBcao[index].dmucTaiKho = sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
-					this.lstCtietBcao[index].ttienTaiKho = this.lstCtietBcao[index].dmucTaiKho * this.lstCtietBcao[index].sluongTaiKho
+					this.lstCtietBcao[index].ttienTaiKho = sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho]) * sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
 					this.lstCtietBcao[index].ttienNgoaiKho = sumNumber([this.lstCtietBcao[index].ttienNgoaiKho, item.ttienNgoaiKho])
-					// this.lstCtietBcao[index].binhQuanNgoaiKho = this.lstCtietBcao[index].ttienNgoaiKho / this.lstCtietBcao[index].sluongTaiKho
-					this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])
+					this.lstCtietBcao[index].binhQuanNgoaiKho = this.lstCtietBcao[index].ttienNgoaiKho / sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
+					// this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])
 					this.lstCtietBcao[index].tongCong = this.lstCtietBcao[index].ttienNgoaiKho + this.lstCtietBcao[index].ttienTaiKho
 				}
 			})
 			stt = this.getHead(stt);
 		}
 		this.getTotal();
+	}
+
+	sum1() {
+		this.lstCtietBcao.forEach(itm => {
+			let stt = this.getHead(itm.stt);
+			while (stt != '0') {
+				const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
+				const data = this.lstCtietBcao[index];
+				this.lstCtietBcao[index] = {
+					...new ItemData(),
+					id: data.id,
+					stt: data.stt,
+					maDanhMuc: data.maDanhMuc,
+					tenDanhMuc: data.tenDanhMuc,
+					level: data.level,
+				}
+				this.lstCtietBcao.forEach(item => {
+					if (this.getHead(item.stt) == stt) {
+						this.lstCtietBcao[index].thNamTruoc = sumNumber([this.lstCtietBcao[index].thNamTruoc, item.thNamTruoc])
+						this.lstCtietBcao[index].namDtoan = sumNumber([this.lstCtietBcao[index].namDtoan, item.namDtoan])
+						this.lstCtietBcao[index].namUocTh = sumNumber([this.lstCtietBcao[index].namUocTh, item.namUocTh])
+						// this.lstCtietBcao[index].sluongTaiKho = sumNumber([this.lstCtietBcao[index].sluongTaiKho, item.sluongTaiKho])
+						// this.lstCtietBcao[index].dmucTaiKho = sumNumber([this.lstCtietBcao[index].dmucTaiKho, item.dmucTaiKho])
+						this.lstCtietBcao[index].ttienTaiKho = sumNumber([this.lstCtietBcao[index].ttienTaiKho, item.ttienTaiKho])
+						this.lstCtietBcao[index].ttienNgoaiKho = sumNumber([this.lstCtietBcao[index].ttienNgoaiKho, item.ttienNgoaiKho])
+						this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])
+						// this.lstCtietBcao[index].binhQuanNgoaiKho = sumNumber([this.lstCtietBcao[index].binhQuanNgoaiKho, item.binhQuanNgoaiKho])
+						this.lstCtietBcao[index].tongCong = this.lstCtietBcao[index].ttienNgoaiKho + this.lstCtietBcao[index].ttienTaiKho
+					}
+				})
+				stt = this.getHead(stt);
+			}
+			// this.getTotal();
+			this.getTotal();
+		})
+
 	}
 
 	getTotal() {
@@ -468,10 +521,10 @@ export class PhuLuc02Component implements OnInit {
 				this.total.namUocTh = sumNumber([this.total.namUocTh, item.namUocTh]);
 				this.total.sluongTaiKho = sumNumber([this.total.sluongTaiKho, item.sluongTaiKho]);
 				this.total.dmucTaiKho = sumNumber([this.total.dmucTaiKho, item.dmucTaiKho]);
-				this.total.ttienTaiKho = mulNumber(this.total.sluongTaiKho, this.total.dmucTaiKho);
+				this.total.ttienTaiKho = sumNumber([this.total.ttienTaiKho, item.ttienTaiKho]);
 				this.total.ttienNgoaiKho = sumNumber([this.total.ttienNgoaiKho, item.ttienNgoaiKho]);
-				this.total.tongCong = this.total.ttienNgoaiKho + this.total.ttienTaiKho;
-				this.total.binhQuanNgoaiKho = divNumber(this.total.ttienNgoaiKho, this.total.sluongTaiKho);
+				this.total.tongCong = sumNumber([this.total.tongCong, item.tongCong]);
+				// this.total.binhQuanNgoaiKho = divNumber(this.total.ttienNgoaiKho, this.total.sluongTaiKho);
 				this.total.binhQuanNgoaiKho = sumNumber([this.total.binhQuanNgoaiKho, item.binhQuanNgoaiKho])
 			}
 		})
@@ -593,7 +646,7 @@ export class PhuLuc02Component implements OnInit {
 							level: 1,
 						})
 						this.lstCtietBcao.forEach(e => {
-							if(e.stt.startsWith("0.2.")){
+							if (e.stt.startsWith("0.2.")) {
 								this.lstCtietBcao[index].dmucTaiKho = null;
 								this.lstCtietBcao[index].thNamTruoc = null;
 								this.lstCtietBcao[index].namDtoan = null;
@@ -622,7 +675,7 @@ export class PhuLuc02Component implements OnInit {
 						})
 						const index2 = this.lstCtietBcao.findIndex(e => e.maDanhMuc == '0.1');
 						this.lstCtietBcao.forEach(e => {
-							if(e.stt.startsWith("0.1.")){
+							if (e.stt.startsWith("0.1.")) {
 								this.lstCtietBcao[index2].dmucTaiKho = null;
 								this.lstCtietBcao[index2].thNamTruoc = null;
 								this.lstCtietBcao[index2].namDtoan = null;

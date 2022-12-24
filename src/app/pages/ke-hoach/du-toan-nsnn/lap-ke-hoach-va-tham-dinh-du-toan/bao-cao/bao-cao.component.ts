@@ -858,6 +858,7 @@ export class BaoCaoComponent implements OnInit {
                 dataInfo.extraData = [];
                 //phu luc bao hiem hang 
                 const dataBaoHiemHang = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh_hang').lstCtietLapThamDinhs;
+                const lstMuoi = []
                 dataBaoHiemHang.forEach(item => {
                     const loaiHang = this.lstVatTuFull.find(v => v.ten == item.tenHang)?.loaiHang;
                     const tenHang = this.lstVatTuFull.find(v => v.ten == item.tenHang)?.ten;
@@ -908,6 +909,8 @@ export class BaoCaoComponent implements OnInit {
                             })
                         }
                     }
+
+                    
                     if (loaiHang == "M") {
                         let tongSoLuongTu = 0
                         let tongSoLuongDuoi = 0
@@ -921,7 +924,7 @@ export class BaoCaoComponent implements OnInit {
                             tongSoLuongDuoi += item.soLuong;
                             tongGiaTriDuoi += item.giaTri
                         }
-                        dataInfo.extraData.push({
+                        lstMuoi.push({
                             stt: '0.2.3',
                             maVtu: '0.2.3',
                             tenVtu: 'Muối',
@@ -935,6 +938,7 @@ export class BaoCaoComponent implements OnInit {
                             level: "2",
                         })
                     }
+
                     let checkCS = tenHang.includes("cứu sinh")
                     if (checkCS && loaiHang == "VT") {
                         let tongSoLuongTu = 0
@@ -1032,6 +1036,33 @@ export class BaoCaoComponent implements OnInit {
                     }
 
 
+                })
+                let slTuM31 = 0;
+                let slDuoiM31 = 0;
+                let slTong1 = 0;
+                let gtTuM31 = 0;
+                let gtDuoiM31 = 0;
+                let gtTong1 = 0;
+                lstMuoi.forEach(item => {
+                    slTuM31 += item.slTuM3;
+                    slDuoiM31 += item.slDuoiM3;
+                    slTong1 += item.slTong;
+                    gtTuM31 += item.gtTuM3;
+                    gtDuoiM31 += item.gtDuoiM3;
+                    gtTong1 += item.gtTong;
+                })
+                dataInfo.extraData.push({
+                    stt: '0.2.3',
+                    maVtu: '0.2.3',
+                    tenVtu: 'Muối',
+                    maDviTinh: "kg",
+                    slTuM3: slTuM31,
+                    slDuoiM3: slDuoiM31,
+                    slTong: slTuM31 + slDuoiM31,
+                    gtTuM3: gtTuM31,
+                    gtDuoiM3: gtDuoiM31,
+                    gtTong: gtTuM31 + gtDuoiM31,
+                    level: "2",
                 })
 
                 //phu luc bao hiem kho
