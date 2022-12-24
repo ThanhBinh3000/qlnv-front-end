@@ -300,7 +300,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
-    body.dsDeXuat = this.danhsachDx;
+    body.children = this.danhsachDx;
     body.fileDinhKems = this.fileDinhKem;
     let res = null;
     if (this.formData.get('id').value) {
@@ -455,7 +455,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         for (const item of this.danhsachDxCache) {
           await this.dauThauService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
-              item.dsGoiThau = res.data.dsGtDtlList;
+              item.children = res.data.dsGtDtlList;
             }
           })
         }
@@ -512,7 +512,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
         for (const item of this.danhsachDx) {
           await this.dauThauService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
-              item.dsGoiThau = res.data.dsGtDtlList;
+              item.children = res.data.dsGtDtlList;
             }
           })
         };
@@ -629,6 +629,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     $event.target.parentElement.classList.add('selectedRow');
     this.isTongHop = this.formData.value.phanLoai == 'TH';
+    console.log(this.danhsachDx);
     this.dataInput = this.danhsachDx[index];
     this.dataInputCache = this.danhsachDxCache[index];
     this.index = index;

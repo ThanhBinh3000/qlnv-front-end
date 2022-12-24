@@ -15,39 +15,9 @@ import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ba
   styleUrls: ['./thong-tin-dau-gia.component.scss']
 })
 export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
+
   @Input()
   loaiVthh: string;
-
-  searchFilter = {
-    soDxuat: null,
-    tenDvi: null,
-    maDvi: null,
-    nam: dayjs().get('year'),
-    ngayDxuat: null,
-    thoiGianThucHien: null,
-    loaiVthh: null,
-    trichYeu: null,
-    soQdPdKhBdg: null,
-    soQdPdKqBdg: null
-
-  };
-  filterTable: any = {
-    soDxuat: '',
-    tenDonVi: '',
-    ngayDxuat: '',
-    ngayKy: '',
-    trichYeu: '',
-    tenHangHoa: '',
-    soQuyetDinhGiaoChiTieu: '',
-    soQuyetDinhPheDuyet: '',
-    tenVthh: '',
-    tenCloaiVthh: '',
-    tenTrangThai: '',
-    tenTrangThaiTh: '',
-    nam: '',
-    tenLoaiHinhNhapXuat: '',
-    tongSoLuong: ''
-  };
 
   constructor(
     httpClient: HttpClient,
@@ -58,6 +28,32 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBdgService);
+    this.formData = this.fb.group({
+      namKh: dayjs().get('year'),
+      soDxuat: null,
+      soQdPd: null,
+      soQdPdKhBdg: null,
+      thoiGianThucHien: null,
+      soQdPdKqBdg: null,
+      trichYeu: null,
+      loaiVthh: null,
+      ngayKyQd: null,
+      soTrHdr: null,
+      lastest: 1
+    })
+    this.filterTable = {
+      namKh: '',
+      soQdPd: '',
+      ngayKyQd: '',
+      trichYeu: '',
+      soTrHdr: '',
+      idThHdr: '',
+      tenLoaiVthh: '',
+      tenCloaiVthh: '',
+      soDviTsan: '',
+      slHdDaKy: '',
+      tenTrangThai: '',
+    };
   }
 
   async ngOnInit() {
@@ -69,7 +65,5 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
-
 
 }
