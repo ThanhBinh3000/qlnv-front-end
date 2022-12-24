@@ -140,7 +140,7 @@ export class PhuLuc01Component implements OnInit {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
         this.sortByIndex();
-        // this.sum1();
+        this.sum1();
         this.tinhTong();
         this.updateEditCache();
         this.getStatusButton();
