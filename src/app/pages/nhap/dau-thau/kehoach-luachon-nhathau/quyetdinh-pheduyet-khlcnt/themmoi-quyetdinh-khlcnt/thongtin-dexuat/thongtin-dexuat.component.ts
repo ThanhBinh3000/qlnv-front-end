@@ -89,7 +89,11 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
       if (this.dataInput) {
         let res = await this.dxKhLcntService.getDetail(this.dataInput.idDxHdr);
         if (this.isTongHop) {
-          this.listOfData = this.dataInput.dsGoiThau;
+          if (this.isCache) {
+            this.listOfData = this.dataInput.dsGoiThau;
+          } else {
+            this.listOfData = this.dataInput.children;
+          }
         } else {
           this.listOfData = this.dataInput.dsGtDtlList ? this.dataInput.dsGtDtlList : this.dataInput.dsGoiThau;
         }

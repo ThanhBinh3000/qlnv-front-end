@@ -1,19 +1,14 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NzModalService } from "ng-zorro-antd/modal";
 import { DanhMucService } from "../../../../../../../services/danhmuc.service";
 import { DeXuatKeHoachBanDauGiaService } from "../../../../../../../services/deXuatKeHoachBanDauGia.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { Globals } from "../../../../../../../shared/globals";
-import { UserService } from "../../../../../../../services/user.service";
-import { DonviService } from "../../../../../../../services/donvi.service";
-import { TinhTrangKhoHienThoiService } from "../../../../../../../services/tinhTrangKhoHienThoi.service";
+import { FormArray, FormGroup, Validators } from "@angular/forms";
 import { DanhMucTieuChuanService } from "../../../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
 import {
   DeXuatPhuongAnCuuTroService
 } from "../../../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/DeXuatPhuongAnCuuTro.service";
-import { HelperService } from "../../../../../../../services/helper.service";
 import { MESSAGE } from "../../../../../../../constants/message";
 import { UserLogin } from "../../../../../../../models/userlogin";
 import { STATUS } from 'src/app/constants/status';
@@ -58,7 +53,6 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     private deXuatPhuongAnCuuTroService: DeXuatPhuongAnCuuTroService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, dmTieuChuanService);
-
     this.formData = this.fb.group(
       {
         id: [],
@@ -178,7 +172,6 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
               tenCloaiVthh: [],
             })]
           })]),
-        //listTaiSanQd: [Array<KeHoachVatTu>()]
       }
     );
     this.userLogin = this.userService.getUserLogin();
@@ -506,7 +499,6 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
   async ngOnInit() {
     try {
       this.spinner.show();
-      //this.loadDonVi();
       await Promise.all([
         this.loadDanhMuc(),
         this.loadDetail(this.idInput),
