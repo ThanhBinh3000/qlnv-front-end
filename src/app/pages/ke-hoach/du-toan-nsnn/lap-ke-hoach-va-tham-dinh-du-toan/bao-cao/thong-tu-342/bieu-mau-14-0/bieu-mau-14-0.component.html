@@ -23,9 +23,9 @@
           <tr>
             <th rowspan="2" class="text-center" nzWidth="100px">STT</th>
             <th rowspan="2" nzWidth="400px">Nội dung</th>
-            <th rowspan="2" nzWidth="150px">Thực hiện năm {{namBcao - 1}}</th>
-            <th colspan="2" nzWidth="150px">Năm {{namBcao}}</th>
-            <th rowspan="2" nzWidth="150px">Dự toán năm {{namBcao + 1}}</th>
+            <th rowspan="2" nzWidth="150px">Thực hiện năm {{namBcao - 2}}</th>
+            <th colspan="2" nzWidth="150px">Năm {{namBcao -1 }}</th>
+            <th rowspan="2" nzWidth="150px">Dự toán năm {{namBcao}}</th>
             <th *ngIf="viewAppraisalValue" rowspan="2">Giá trị thẩm định</th>
             <th rowspan="3" [hidden]="status && !editAppraisalValue"></th>
             <th rowspan="3" [hidden]="status"></th>
