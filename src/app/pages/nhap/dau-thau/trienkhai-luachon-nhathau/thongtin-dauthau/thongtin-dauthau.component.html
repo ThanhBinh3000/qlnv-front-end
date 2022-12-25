@@ -179,12 +179,11 @@
             <td>{{ data.hhQdKhlcntHdr?.tenCloaiVthh}}</td>
             <td>{{ loaiVthh.startsWith('02') ? data.tenTrangThaiDt : data.tenTrangThai }}</td>
             <td class="text-left">
-              <a *ngIf="loaiVthh.startsWith('02') ? ( data.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT ) : ( data.trangThai == STATUS.HOAN_THANH_CAP_NHAT ) && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_XEM')"
+              <a *ngIf="loaiVthh.startsWith('02') ? ( data.trangThaiDt == STATUS.HOAN_THANH_CAP_NHAT ) : ( data.trangThai == STATUS.HOAN_THANH_CAP_NHAT )"
                 (click)="redirectToChiTiet(data)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="loaiVthh.startsWith('02') ? ( data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT ) : ( data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT )
-                && userService.isAccessPermisson('NHDTQG_PTDT_TCKHLCNT_LT_TTDT_THEM')"
+              <a *ngIf="loaiVthh.startsWith('02') ? ( data.trangThaiDt == STATUS.CHUA_CAP_NHAT || data.trangThaiDt == STATUS.DANG_CAP_NHAT ) : ( data.trangThai == STATUS.CHUA_CAP_NHAT || data.trangThai == STATUS.DANG_CAP_NHAT)"
                 (click)="redirectToChiTiet(data)">
                 <i class="icon htvbdh_soanthao"></i>
               </a>

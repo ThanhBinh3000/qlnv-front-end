@@ -31,7 +31,7 @@ import { BaseComponent } from "../../../../../../components/base/base.component"
 import { DatePipe } from "@angular/common";
 import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
 import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
-import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
+import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 import {
   DialogThemDiaDiemPhanLoComponent
 } from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';

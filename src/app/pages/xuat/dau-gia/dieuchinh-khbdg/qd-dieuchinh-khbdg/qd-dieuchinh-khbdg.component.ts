@@ -1,30 +1,30 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {MESSAGE} from "../../../../../constants/message";
-import {saveAs} from 'file-saver';
-import {DanhMucService} from "../../../../../services/danhmuc.service";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MESSAGE } from "../../../../../constants/message";
+import { saveAs } from 'file-saver';
+import { DanhMucService } from "../../../../../services/danhmuc.service";
 import * as dayjs from "dayjs";
-import {convertTrangThai} from "../../../../../shared/commonFunction";
-import {Router} from "@angular/router";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { convertTrangThai } from "../../../../../shared/commonFunction";
+import { Router } from "@angular/router";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NzModalService } from "ng-zorro-antd/modal";
 import {
   QuyetDinhPdKhBdgService
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service";
 import {
   TongHopDeXuatKeHoachBanDauGiaService
-} from "../../../../../services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service";
-import {UserService} from "../../../../../services/user.service";
-import {NzDatePickerComponent} from "ng-zorro-antd/date-picker";
-import {PAGE_SIZE_DEFAULT} from "../../../../../constants/config";
-import {Subject} from "rxjs";
+} from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service";
+import { UserService } from "../../../../../services/user.service";
+import { NzDatePickerComponent } from "ng-zorro-antd/date-picker";
+import { PAGE_SIZE_DEFAULT } from "../../../../../constants/config";
+import { Subject } from "rxjs";
 import {
   VatTu
 } from "../../../../../components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type";
 
-import {STATUS} from 'src/app/constants/status';
-import {cloneDeep} from 'lodash';
-import {UserLogin} from "../../../../../models/userlogin";
+import { STATUS } from 'src/app/constants/status';
+import { cloneDeep } from 'lodash';
+import { UserLogin } from "../../../../../models/userlogin";
 import {
   QuyetDinhDchinhKhBdgService
 } from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
@@ -88,25 +88,25 @@ export class QdDieuchinhKhbdgComponent implements OnInit {
   listOfMapData: VatTu[];
   listOfMapDataClone: VatTu[];
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
-  selectHang: any = {ten: ""};
+  selectHang: any = { ten: "" };
   lastBreadcrumb: string;
   userInfo: UserLogin;
 
   constructor(private router: Router,
-              private spinner: NgxSpinnerService,
-              private notification: NzNotificationService,
-              private modal: NzModalService,
-              private danhMucService: DanhMucService,
-              // private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
-              private quyetDinhDchinhKhBdgService: QuyetDinhDchinhKhBdgService,
-              private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
-              public userService: UserService,) {
+    private spinner: NgxSpinnerService,
+    private notification: NzNotificationService,
+    private modal: NzModalService,
+    private danhMucService: DanhMucService,
+    // private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
+    private quyetDinhDchinhKhBdgService: QuyetDinhDchinhKhBdgService,
+    private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
+    public userService: UserService,) {
   }
 
   async ngOnInit() {
     await this.spinner.show();
     try {
-      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT") || !this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_XEM")) {
+      if (!this.userService.isAccessPermisson("XHDTQG_PTDG_DCKHBDG") || !this.userService.isAccessPermisson("XHDTQG_PTDG_DCKHBDG_XEM")) {
         window.location.href = '/error/401'
       }
       this.userInfo = this.userService.getUserLogin();
@@ -130,7 +130,7 @@ export class QdDieuchinhKhbdgComponent implements OnInit {
 
 
   insert() {
-    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_THEM")) {
+    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_DCKHBDG_THEM")) {
       return;
     }
     this.isDetail = true;
@@ -138,7 +138,7 @@ export class QdDieuchinhKhbdgComponent implements OnInit {
   }
 
   detail(data?) {
-    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_THEM")) {
+    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_DCKHBDG_THEM")) {
       return;
     }
     this.isDetail = true;
@@ -146,7 +146,7 @@ export class QdDieuchinhKhbdgComponent implements OnInit {
   }
 
   delete(data?) {
-    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_XOA")) {
+    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_DCKHBDG_XOA")) {
       return;
     }
     this.modal.confirm({
@@ -264,7 +264,7 @@ export class QdDieuchinhKhbdgComponent implements OnInit {
   }
 
   exportData() {
-    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_EXP")) {
+    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_DCKHBDG_EXP")) {
       return;
     }
     if (this.totalRecord > 0) {
@@ -301,7 +301,7 @@ export class QdDieuchinhKhbdgComponent implements OnInit {
   }
 
   deleteSelect() {
-    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_XOA")) {
+    if (!this.userService.isAccessPermisson("XHDTQG_PTDG_DCKHBDG_XOA")) {
       return;
     }
     let dataDelete = [];
@@ -324,7 +324,7 @@ export class QdDieuchinhKhbdgComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quyetDinhDchinhKhBdgService.deleteMuti({idList: dataDelete});
+            let res = await this.quyetDinhDchinhKhBdgService.deleteMuti({ idList: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

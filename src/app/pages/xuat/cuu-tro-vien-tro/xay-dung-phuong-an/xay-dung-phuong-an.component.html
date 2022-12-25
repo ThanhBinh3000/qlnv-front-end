@@ -62,7 +62,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_THEM')">
+        <button type="button" class="btn btn-main" (click)="themMoi()" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_THEM_CUC') || userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_THEM_VU')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
         </button>

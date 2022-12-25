@@ -98,13 +98,14 @@
                   <td>{{dataChild.tenDvi}}</td>
                   <td>{{dataChild.tenTrangThai}}</td>
                   <td class="text-left">
-                    <a (click)="goDetail(dataChild.id)">
+                    <a *ngIf="dataChild.trangThai == STATUS.HOAN_THANH_CAP_NHAT" (click)="goDetail(dataChild.id)">
                       <i class="fa fa-eye"></i>
                     </a>
-                    <a (click)="goDetail(dataChild.id)">
+                    <a *ngIf="dataChild.trangThai == STATUS.CHUA_CAP_NHAT || dataChild == STATUS.DANG_CAP_NHAT"
+                      (click)="goDetail(dataChild.id)">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a (click)="delete(dataChild)">
+                    <a *ngIf="dataChild.trangThai == STATUS.DANG_CAP_NHAT" (click)="delete(dataChild)">
                       <i class="fa fa-trash-o do"></i>
                     </a>
                   </td>
