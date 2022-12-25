@@ -36,12 +36,12 @@ import {LkTheKhoCt} from "../../../../../models/LkTheKhoCt";
   templateUrl: './them-so-kho-the-kho.component.html',
   styleUrls: ['./them-so-kho-the-kho.component.scss'],
 })
+// @ts-ignore
 export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
   @Output('close') onClose = new EventEmitter<any>();
 
   @Input() idInput: number;
-  @Input() isCheck: boolean;
-  @Input() isStatus: any;
+  @Input() isView: any;
 
   dataTable: any[] = [];
 
@@ -70,9 +70,11 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
     private storageService: StorageService,
     private donviService: DonviService,
     private danhMucService: DanhMucService,
+    private notification: NzNotificationService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
+    public globals : Globals
   ) {
     super(httpClient, storageService, quanLySoKhoTheKhoService);
     super.ngOnInit();
@@ -85,7 +87,7 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
       denNgay: ['', [Validators.required]],
       loaiVthh: ['', [Validators.required]],
       tenLoaiVthh: [''],
-      cloaiVthh: [''],
+      chungLoaiHH: [''],
       tenCloaiVthh: [''],
       donViTinh: [''],
       tonDauKy: ['', [Validators.required]],
@@ -122,51 +124,25 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
 
 
   async loadChiTiet() {
-    // this.isTaoTheKho = true;
-    // let res = await this.quanLySoKhoTheKhoService.chiTiet(this.idInput)
-    // this.dsChiTiet = res.data;
-    // this.detail = res.data;
-    // this.isStatus = this.detail.trangThai;
+    this.btnTaoThe = false;
+    let res = await this.quanLySoKhoTheKhoService.chiTiet(this.idInput)
+    if (res.msg == MESSAGE.SUCCESS) {
+      let detail = res.data
+      this.formData.patchValue({
+        nam: detail.nam,
+        tuNgay: detail.tuNgay,
+        denNgay: detail.denNgay,
+        loaiVthh: detail.loaiVthh,
+        chungLoaiHH: detail.chungLoaiHH,
+        maDiemKho: detail.maDiemKho,
+        maNhaKho: detail.maNhaKho,
+        maNganKho: detail.maNganKho,
+        maLoKho: detail.maLoKho,
+        donViTinh: detail.donViTinh
+      });
+      this.dataTable = detail.ctList
+    }
 
-    // this.formData.patchValue({
-    //   nam: res.data.nam,
-    //   tuNgay: res.data.tuNgay,
-    //   denNgay: res.data.denNgay,
-    //   idLoaiHangHoa: res.data.loaiHang,
-    //   idChungLoaiHangHoa: res.data.chungLoaiHang,
-    //   idDiemKho: res.data.diemKho,
-    //   idNhaKho: res.data.nhaKho,
-    //   idNganKho: res.data.nganKho,
-    //   idNganLo: res.data.loKho,
-    //   tonDauKy: res.data.tonDauKy
-    // });
-
-    // this.changeLoaiHangHoa();
-    // this.changeDiemKho(true);
-
-    // let listNhapXuat = [];
-    // res.data.ds.forEach(nhapXuatKho => {
-    //   if (nhapXuatKho.ngay) {
-    //     const ngay = nhapXuatKho.ngay.split("-");
-    //     nhapXuatKho.ngay = `${ngay[2]}-${ngay[1]}-${ngay[0]}`;
-    //   }
-
-    //   listNhapXuat = [
-    //     ...listNhapXuat,
-    //     {
-    //       dienGiai: nhapXuatKho.dienGiai,
-    //       ghiChu: nhapXuatKho.ghiChu,
-    //       loaiPhieu: nhapXuatKho.soPhieuNhap ? 'NHAP' : 'XUAT',
-    //       ngay: nhapXuatKho.ngay,
-    //       soLuong: nhapXuatKho.soPhieuNhap ? nhapXuatKho.soLuongNhap : nhapXuatKho.soLuongXuat,
-    //       soPhieu: nhapXuatKho.soPhieuNhap ? nhapXuatKho.soPhieuNhap : nhapXuatKho.soPhieuXuat,
-    //       ton: nhapXuatKho.ton,
-    //     }
-    //   ]
-    // })
-    // this.totalRecord = Number((res.data.ds.length / this.sizePage).toFixed()) * this.sizePage;
-    // this.dataTable = listNhapXuat;
-    // this.loadListTable(1);
   }
 
   initForm() {
@@ -223,7 +199,7 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
   }
 
   async changeNganLo() {
-    if (this.formData.value.tuNgay && this.formData.value.denNgay && this.formData.value.cloaiVthh) {
+    if (this.formData.value.tuNgay && this.formData.value.denNgay && this.formData.value.chungLoaiHH) {
       await this.loadTonDauKy();
     }
   }
@@ -250,11 +226,15 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data && res.data.content.length > 0) {
           res.data.content.forEach((item) => {
-            item.child.forEach((child) => {
-              if (child.maDvi === this.userInfo.MA_DVI) {
-                this.formData.patchValue({tonDauKy: child.tonKhoDauKy})
-              }
-            })
+            if (item && item.child) {
+              item.child.forEach((child) => {
+                if (child.maDvi === this.userInfo.MA_DVI) {
+                  this.formData.patchValue({
+                    tonDauKy: child.tonKhoDauKy?  child.tonKhoDauKy : 0
+                  })
+                }
+              })
+            }
           });
         }
       }
@@ -296,9 +276,9 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
     body.ds = this.dataTable
     let res
     if (this.idInput > 0) {
-      res = await this.quanLySoKhoTheKhoService.update(body);
+      res = await this.quanLySoKhoTheKhoService.sua(body);
     } else {
-      res = await this.quanLySoKhoTheKhoService.create(body);
+      res = await this.quanLySoKhoTheKhoService.them(body);
     }
     if (res.msg == MESSAGE.SUCCESS) {
       if (isGuiDuyet) {
@@ -366,10 +346,21 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
+          let trangThai;
+          switch (this.formData.value.trangThai) {
+            case STATUS.DU_THAO : {
+              trangThai = STATUS.CHO_DUYET_LDCC;
+              break;
+            }
+            case STATUS.TU_CHOI_LDCC : {
+              trangThai = STATUS.CHO_DUYET_LDCC;
+              break;
+            }
+          }
           let body = {
             id: this.idInput,
             lyDo: null,
-            trangThai: this.globals.prop.NHAP_DA_DUYET_LD_CHI_CUC,
+            trangThai: trangThai,
           };
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
           if (res.msg == MESSAGE.SUCCESS) {
@@ -449,7 +440,7 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
           theKhoCt.loaiPhieu = 'NHAP';
           theKhoCt.soPhieu = item.soPhieuNhapKho;
           theKhoCt.ngay = item.ngayTao;
-          theKhoCt.ton = this.formData.value.tonDauKy + theKhoCt.soLuong;
+          theKhoCt.ton = this.formData.value.tonDauKy + item.hangHoaList[0].soLuongThucNhap;
           theKhoCt.soLuong = item.hangHoaList && item.hangHoaList[0] ? item.hangHoaList[0]?.soLuongThucNhap : 0;
           this.dataTable.push(theKhoCt);
         })

@@ -17,6 +17,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { saveAs } from 'file-saver';
 import { Globals } from 'src/app/shared/globals';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {STATUS} from "../../../../constants/status";
 @Component({
   selector: 'app-so-kho-the-kho',
   templateUrl: './so-kho-the-kho.component.html',
@@ -27,6 +28,7 @@ export class SoKhoTheKhoComponent implements OnInit {
   userInfo: UserLogin;
   detail: any = {};
   isDetail: false;
+  isView: boolean;
 
   formData: FormGroup;
 
@@ -34,6 +36,8 @@ export class SoKhoTheKhoComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
+
+  STATUS = STATUS;
 
   filterDate = new Date();
 
@@ -71,7 +75,6 @@ export class SoKhoTheKhoComponent implements OnInit {
   dataTableAll: any[] = []
 
   idSelected: number = 0
-  isCheck: boolean = false
   isStatus: any
   getCount = new EventEmitter<any>();
 
@@ -89,28 +92,32 @@ export class SoKhoTheKhoComponent implements OnInit {
     public globals: Globals,
     private danhMucService: DanhMucService,
     private donviService: DonviService,
-  ) { }
+  ) {
+    this.formData = this.fb.group({
+      nam: [null],
+      maDvi: [null],
+      tenDVi: [null],
+      loaiHang: [null],
+      maChungLoaiHang: [null],
+      ngayTao: [null],
+    })
+  }
   async ngOnInit(): Promise<void> {
     try {
       this.spinner.show();
-      this.initForm();
-      // await Promise.all([this.loadDsNam(), this.initData(), this.loaiVTHHGetAll(), this.search()]);
+      this.userInfo = this.userService.getUserLogin();
+      await Promise.all([
+        this.loadDsNam(),
+        this.initData(),
+        this.loaiVTHHGetAll(),
+        this.search()
+        ])
       this.spinner.hide();
     } catch (error) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     } finally {
       this.spinner.hide();
     }
-  }
-  initForm(): void {
-    this.formData = this.fb.group({
-      "nam": [null],
-      "maDvi": [null],
-      "tenDVi": [null],
-      "loaiHang": [null],
-      "maChungLoaiHang": [null],
-      "ngayTao": [[]]
-    })
   }
   async initData() {
     this.userInfo = this.userService.getUserLogin();
@@ -183,54 +190,20 @@ export class SoKhoTheKhoComponent implements OnInit {
   }
   async search() {
     this.spinner.show();
-    let body = {
-      "denNgay": "",
-      "limit": this.pageSize, // cái này bằng 10 : PAGE_SIZE_DEFAULT
-      "loaiHH": this.formData.value.loaiHang,
-      "maChungLoaiHang": this.formData.value.maChungLoaiHang,
-      "maDvi": (this.userInfo.CAP_DVI === this.globals.prop.CHICUC) ? this.detail.maDvi : this.formData.value.maDvi,
-      "nam": this.formData.value.nam,
-      "orderBy": "",
-      "orderType": "",
-      "page": this.page - 1, // cái này  1 - 1 = 0
-      "tenDVi": this.formData.value.tenDVi,
-      "tuNgay": ""
-    }
-    if (this.formData.value.ngayTao != null) {
+    let body = this.formData.value
+    if (this.formData.value.ngayTao) {
       body.tuNgay = this.formData.value.ngayTao[0]
       body.denNgay = this.formData.value.ngayTao[1]
     }
+    body.maDvi = this.userInfo.MA_DVI;
     let res = await this.quanLySoKhoTheKhoService.timKiem(body);
     if (res.msg = MESSAGE.SUCCESS) {
-      this.dataTable = res.data.content;
-      this.convertDataTable();
-      this.totalRecord = res.data.totalElements;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach(item => item.checked = false)
-      }
-      this.dataTableAll = cloneDeep(this.dataTable);
+      this.dataTable = res.data;
+      console.log(this.dataTable)
     } else {
-      this.dataTable = [];
-      this.totalRecord = 0;
-      this.notification.error(MESSAGE.ERROR, res.msg)
+      this.notification.error(MESSAGE.ERROR, "Lỗi hệ thống!")
     }
     this.spinner.hide()
-  }
-
-  convertDataTable() {
-    this.dataTable.forEach(item => {
-      if (this.userService.isChiCuc()) {
-        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
-      } else {
-        let data = [];
-        item.dtlList.forEach(item => {
-          data = [...data, ...item.children];
-        })
-        item.detail = {
-          children: data
-        }
-      };
-    });
   }
 
   updateAllChecked(): void {
@@ -307,24 +280,14 @@ export class SoKhoTheKhoComponent implements OnInit {
     this.search()
   }
   exportData() {
-    if (this.totalRecord > 0) {
       this.spinner.show()
       try {
-        let body = {
-          "denNgay": "",
-          "loaiHH": this.formData.value.loaiHH,
-          "maChungLoaiHang": this.formData.value.maChungLoaiHang,
-          "maDvi": this.formData.value.maDvi,
-          "nam": this.formData.value.nam,
-          "orderBy": "",
-          "orderType": "",
-          "tenDVi": this.formData.value.tenDVi,
-          "tuNgay": "",
-        }
-        if (this.formData.value.ngayTao != null) {
+        let body = this.formData.value
+        if (this.formData.value.ngayTao) {
           body.tuNgay = this.formData.value.ngayTao[0]
           body.denNgay = this.formData.value.ngayTao[1]
         }
+        body.maDvi = this.userInfo.MA_DVI;
         this.quanLySoKhoTheKhoService.exportList(body).subscribe((blob) => {
           saveAs(blob, 'danh-sach-so-kho.xlsx')
         });
@@ -334,9 +297,6 @@ export class SoKhoTheKhoComponent implements OnInit {
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY)
-    }
   }
   xoaItem(item: any) {
     this.modal.confirm({
@@ -371,48 +331,6 @@ export class SoKhoTheKhoComponent implements OnInit {
       },
     });
   }
-  xoa() {
-    let dataDelete = [];
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.forEach((item) => {
-        if (item.checked) {
-          dataDelete.push(item.id)
-        }
-      })
-    }
-    if (dataDelete && dataDelete.length > 0) {
-      this.modal.confirm({
-        nzClosable: false,
-        nzTitle: 'Xác nhận',
-        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
-        nzOkText: 'Đồng ý',
-        nzCancelText: 'Không',
-        nzOkDanger: true,
-        nzWidth: 310,
-        nzOnOk: async () => {
-          this.spinner.show();
-          try {
-            let res = await this.quanLySoKhoTheKhoService.deleteMultiple({ ids: dataDelete });
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-              await this.search();
-              this.getCount.emit();
-              this.allChecked = false;
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-          } catch (e) {
-            console.log('error: ', e);
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          } finally {
-            this.spinner.hide();
-          }
-        },
-      })
-    } else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
-    }
-  }
   async changePageIndex(event) {
     this.spinner.show();
     try {
@@ -442,14 +360,23 @@ export class SoKhoTheKhoComponent implements OnInit {
   convertTrangThai(status: string) {
     return convertTrangThai(status);
   }
-  viewDetail(id: number, check: boolean, status: any) {
+  viewDetail(id: number, isView: boolean) {
     this.isAddNew = true;
     this.idSelected = id;
-    this.isCheck = check
-    this.isStatus = status
+    this.isView = isView
   }
   onClose() {
     this.isAddNew = false;
     this.search();
+  }
+
+  expandSet = new Set<number>();
+
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
   }
 }

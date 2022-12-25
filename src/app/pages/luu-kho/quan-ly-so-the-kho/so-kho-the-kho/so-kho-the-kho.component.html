@@ -56,152 +56,155 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button *ngIf="userService.isChiCuc()" type="button" class="btn btn-sub xanh" (click)="viewDetail(null,false,null)">
+        <button *ngIf="userService.isChiCuc()" type="button" class="btn btn-sub xanh" (click)="viewDetail(null,false)">
           <i class="icon htvbdh_dau-cong xanh"></i>
           <span>Thêm</span>
         </button>
       </div>
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false" nzBordered [nzScroll]=
-        "{ x: '2200px' }">
+      <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable" [nzFrontPagination]="false"
+                [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
-          <th style="width: 20%;">Điểm kho</th>
-          <th style="width: 10%;">Lô kho</th>
-          <th style="width: 10%;">Loại hàng hóa</th>
-          <th style="width: 10%;">Chủng loại</th>
-          <th style="width: 10%;">Tên hàng hóa</th>
-          <th style="width: 5%;">Năm nhập</th>
-          <th style="width: 5%;">SL hiện thời</th>
-          <th style="width: 5%;">ĐVT</th>
-          <th style="width: 5%;">Số sổ kho</th>
-          <th style="width: 7%;">Ngày tạo sổ kho</th>
-          <th style="width: 7%;">Trạng thái</th>
-          <th style="width: 7%; text-align: center"  nzRight>Hành động</th>
+          <th nzWidth="60px"  class="text-center">STT</th>
+          <th nzWidth="15px"  class="text-center"></th>
+          <th nzWidth="" >Điểm kho</th>
+          <th nzWidth="" >Lô kho</th>
+          <th nzWidth="" >Loại hàng hóa</th>
+          <th nzWidth="" >Chủng loại</th>
+          <th nzWidth="" >Năm nhập</th>
+          <th nzWidth="" >SL hiện thời</th>
+          <th nzWidth="" >ĐVT</th>
+          <th nzWidth="" >Ngày tạo sổ kho</th>
+          <th nzWidth="" >Trạng thái</th>
+          <th nzWidth="90px" class="text-center"   nzRight>Hành động</th>
         </tr>
-          <tr>
-            <th class="text-center">
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"
-                  (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />
-              </nz-input-group>
-            </th>
-            <th class="text-center">
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"
-                       (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />
-              </nz-input-group>
-            </th>
-            <th class="text-center">
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"
-                       (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />
-              </nz-input-group>
-            </th>
-            <th class="text-center">
-              <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"
-                       (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />
-              </nz-input-group>
-            </th>
-            <th class="text-center" >
-              <nz-input-group >
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"
-                       (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />
-              </nz-input-group>
-            </th>
-            <th class="text-center">
-              <nz-input-group [nzSuffix]="suffixIconSearch" >
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.donVi"
-                  (input)="filterInTable('donVi',filterTable.donVi, false)" size="smail" />
-              </nz-input-group>
-              <ng-template #suffixIconSearch>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
-            </th>
-            <th class="text-center">
-              <nz-input-group >
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.diemKho"
-                  (input)="filterInTable('diemKho',filterTable.diemKho, false)" size="smail" />
-              </nz-input-group>
-            </th>
-            <th class="text-center">
-              <nz-input-group >
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nhaKho"
-                  (input)="filterInTable('nhaKho',filterTable.nhaKho, false)" size="smail" />
-              </nz-input-group>
-            </th>
-            <th class="text-center">
-              <nz-input-group >
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                  (input)="filterInTable('tenTrangThai',filterTable.trangThai, false)" size="smail" />
-              </nz-input-group>
-            </th>
-            <th class="text-center">
-              <nz-input-group >
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                       (input)="filterInTable('tenTrangThai',filterTable.trangThai, false)" size="smail" />
-              </nz-input-group>
-            </th>
-            <th class="text-center">
-              <nz-input-group >
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                       (input)="filterInTable('tenTrangThai',filterTable.trangThai, false)" size="smail" />
-              </nz-input-group>
-            </th>
-            <th nzRight></th>
-          </tr>
+<!--          <tr>-->
+<!--            <th></th>-->
+<!--            <th class="text-center">-->
+<!--              <nz-input-group>-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"-->
+<!--                  (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
+<!--            <th class="text-center">-->
+<!--              <nz-input-group>-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"-->
+<!--                       (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
+<!--            <th class="text-center">-->
+<!--              <nz-input-group>-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"-->
+<!--                       (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
+<!--            <th class="text-center">-->
+<!--              <nz-input-group>-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"-->
+<!--                       (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
+<!--            <th class="text-center" >-->
+<!--              <nz-input-group >-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"-->
+<!--                       (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
+<!--            <th class="text-center">-->
+<!--              <nz-input-group [nzSuffix]="suffixIconSearch" >-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.donVi"-->
+<!--                  (input)="filterInTable('donVi',filterTable.donVi, false)" size="smail" />-->
+<!--              </nz-input-group>-->
+<!--              <ng-template #suffixIconSearch>-->
+<!--                <i nz-icon nzType="calendar"></i>-->
+<!--              </ng-template>-->
+<!--            </th>-->
+<!--            <th class="text-center">-->
+<!--              <nz-input-group >-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.diemKho"-->
+<!--                  (input)="filterInTable('diemKho',filterTable.diemKho, false)" size="smail" />-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
+<!--            <th class="text-center">-->
+<!--              <nz-input-group >-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nhaKho"-->
+<!--                  (input)="filterInTable('nhaKho',filterTable.nhaKho, false)" size="smail" />-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
+<!--            <th class="text-center">-->
+<!--              <nz-input-group >-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"-->
+<!--                  (input)="filterInTable('tenTrangThai',filterTable.trangThai, false)" size="smail" />-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
+<!--            <th class="text-center">-->
+<!--              <nz-input-group >-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"-->
+<!--                       (input)="filterInTable('tenTrangThai',filterTable.trangThai, false)" size="smail" />-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
+<!--            <th class="text-center">-->
+<!--              <nz-input-group >-->
+<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"-->
+<!--                       (input)="filterInTable('tenTrangThai',filterTable.trangThai, false)" size="smail" />-->
+<!--              </nz-input-group>-->
+<!--            </th>-->
+<!--            <th nzRight></th>-->
+<!--          </tr>-->
         </thead>
         <tbody>
-          <tr *ngFor="let data of basicTable.data; let idx = index">
-            <td class="text-center">{{ data.loaiHang }}</td>
-            <td class="text-center">{{ data.loaiHang }}</td>
-            <td class="text-center">{{ data.loaiHang }}</td>
-            <td class="text-center">{{ data.loaiHang }}</td>
-            <td class="text-center">{{ data.loaiHang }}</td>
-            <td class="text-center">{{ data.loaiHang }}</td>
-            <td class="text-center">{{ data.loaiHang }}</td>
-            <td class="text-center">{{ data.loaiHang }}</td>
-            <td class="text-center">{{ data.loaiHang }}</td>
-            <td class="text-center">{{ data.loaiHang }}</td>
-            <td class="text-center">{{ data.tenTrangThai }}</td>
-            <td class="text-center" nzRight>
-              <a (click)="viewDetail(data.id, true,data.trangThai)">
-                <i class="fa fa-eye"></i>
-              </a>
-              <a (click)="viewDetail(data.id, false,data.trangThai)"
-                *ngIf="data.trangThai === globals.prop.NHAP_DU_THAO && userService.isChiCuc()">
-                <i class="fa fa-pencil"></i>
-              </a>
-              <a (click)="xoaItem(data.id)"
-                *ngIf="data.trangThai === globals.prop.NHAP_DU_THAO && userService.isChiCuc()">
-                <i class="fa fa-trash-o do"></i>
-              </a>
+        <ng-container *ngFor="let item of dataTable , let i = index">
+          <tr>
+            <td class="text-center">{{ i + 1 }}</td>
+            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td>{{ item.tenDvi }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td *ngIf="userService.isChiCuc()">
+
             </td>
           </tr>
+          <ng-container *ngIf="expandSet.has(i)">
+            <tr *ngFor="let theKho of item.children, let y = index">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>{{ theKho.tenLoKho }}</td>
+              <td>{{ theKho.tenLoaiVthh }}</td>
+              <td>{{ theKho.tenCloaiVthh }}</td>
+              <td>{{ theKho.nam }}</td>
+              <td>{{ theKho.nam }}</td>
+              <td>{{ theKho.donViTinh }}</td>
+              <td>{{ theKho.ngayTao }}</td>
+              <td>{{ theKho.tenTrangThai }}</td>
+              <td *ngIf="userService.isChiCuc()" style="text-align: center;">
+                <a *ngIf="theKho.trangThai == STATUS.DA_DUYET_LDCC " (click)="viewDetail(theKho.id, true)">
+                  <i class=" icon htvbdh_eye"></i>
+                </a>
+                <a *ngIf="theKho.trangThai == STATUS.TU_CHOI_LDCC ||theKho.trangThai == STATUS.DU_THAO  " (click)="viewDetail(theKho.id, false)">
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <a *ngIf="theKho.trangThai == STATUS.DU_THAO " (click)="xoaItem(theKho.id)">
+                  <i  class="fa fa-trash-o do"></i>
+                </a>
+              </td>
+            </tr>
+          </ng-container>
+        </ng-container>
         </tbody>
       </nz-table>
-      <div class="tab-content tab-menu" id="myTabContent">
-        <div class="tab-pane fade show active justify-content-between">
-          <div class="trai">
-
-          </div>
-          <div class="canphai">
-            <nz-pagination class="pagination-card" [nzPageIndex]="page" [nzTotal]="totalRecord" nzShowSizeChanger
-              [nzPageSize]="pageSize" [nzShowTotal]="rangeTemplate" (nzPageIndexChange)="changePageIndex($event)"
-              (nzPageSizeChange)="changePageSize($event)">
-              <ng-template #rangeTemplate let-range="range" let-total>
-                {{ range[0] }}-{{ range[1] }} of {{ total }} items
-              </ng-template>
-            </nz-pagination>
-          </div>
-        </div>
-      </div>
     </nz-card>
   </div>
 </ng-container>
 <ng-template #templateThemmoi>
-  <app-them-so-kho-the-kho [isStatus]="isStatus" [isCheck]="isCheck" [idInput]="idSelected" (close)="onClose()">
+  <app-them-so-kho-the-kho [isView]="isView" [idInput]="idSelected" (close)="onClose()">
   </app-them-so-kho-the-kho>
 </ng-template>
