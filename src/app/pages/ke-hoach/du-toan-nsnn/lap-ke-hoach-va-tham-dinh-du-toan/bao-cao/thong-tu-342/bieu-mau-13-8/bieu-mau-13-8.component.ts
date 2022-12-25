@@ -432,7 +432,9 @@ export class BieuMau138Component implements OnInit {
   }
 
   checkEdit(stt: string) {
-    if (stt.startsWith('0.1.1.1') || stt.startsWith('0.1.1.2') || stt.startsWith('0.1.1.3')) {
+    if (stt.startsWith('0.1.1.1') || stt.startsWith('0.1.1.2') || stt.startsWith('0.1.1.3') ||
+      (stt.startsWith('0.1.2') && this.editAppraisalValue) || (stt.startsWith('0.1.3') && this.editAppraisalValue)
+      || (stt.startsWith('0.1.4') && this.editAppraisalValue) || (stt.startsWith('0.1.5') && this.editAppraisalValue)) {
       return false;
     }
     const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);

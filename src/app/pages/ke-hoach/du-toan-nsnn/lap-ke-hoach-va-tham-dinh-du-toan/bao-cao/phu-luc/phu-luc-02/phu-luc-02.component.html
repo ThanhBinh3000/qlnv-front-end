@@ -173,7 +173,7 @@
               <td>
                 {{displayValue(editCache[data.id].data.tongCong)}}
               </td>
-              <td>
+              <td class="d-flex" style="height: 31px">
                 <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                   (nzOnConfirm)="cancelEdit(data.id)" class="save">

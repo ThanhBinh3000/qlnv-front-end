@@ -56,4 +56,8 @@ export class ThongtinDaugiaComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  handleCancel() {
+
+  }
+
 }

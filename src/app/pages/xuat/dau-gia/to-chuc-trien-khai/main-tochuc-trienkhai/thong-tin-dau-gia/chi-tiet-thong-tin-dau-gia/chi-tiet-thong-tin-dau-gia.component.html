@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="quayLai()">
       <i class="fa fa-arrow-left"></i>
@@ -233,7 +233,7 @@
             <span>Thêm</span>
           </button>
         </ng-template>
-        <!-- <nz-table #tblDetail [nzData]="dataTable" nzBordered>
+        <nz-table #tblDetail [nzData]="dataTable" nzBordered>
           <thead>
             <tr>
               <th width="">Số QĐ PD kế hoạch BĐG</th>
@@ -263,15 +263,17 @@
               </td>
             </tr>
           </tbody>
-        </nz-table> -->
+        </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
     <nz-card class="mg-t-16 flex-card p-lr16">
-      <nz-collapse>
-        <nz-collapse-panel nzActive="true" nzHeader="Thông báo bán đấu giá">
-          <app-thongtin-daugia></app-thongtin-daugia>
-        </nz-collapse-panel>
-      </nz-collapse>
+      <app-thongtin-daugia></app-thongtin-daugia>
+
+
+
     </nz-card>
   </nz-card>
 </div>
+<ng-template #error let-control>
+  <app-template-error #error [control]="control"></app-template-error>
+</ng-template>
