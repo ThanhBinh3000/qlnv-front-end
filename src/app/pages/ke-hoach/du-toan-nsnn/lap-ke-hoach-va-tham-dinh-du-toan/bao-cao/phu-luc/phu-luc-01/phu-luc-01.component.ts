@@ -558,12 +558,12 @@ export class PhuLuc01Component implements OnInit {
                 level: data.level,
                 ttienTd: data.ttienTd,   
                 danhMuc: data.danhMuc,
-                sluongNamDtoan:data.sluongNamDtoan,
-                ttienNamDtoan: data.ttienNamDtoan,
-                thienNamTruoc: data.thienNamTruoc,
-                dtoanNamHtai: data.dtoanNamHtai,
-                uocNamHtai: data.uocNamHtai,
-                dmucNamDtoan: data.dmucNamDtoan,
+                // sluongNamDtoan:data.sluongNamDtoan,
+                // ttienNamDtoan: data.ttienNamDtoan,
+                // thienNamTruoc: data.thienNamTruoc,
+                // dtoanNamHtai: data.dtoanNamHtai,
+                // uocNamHtai: data.uocNamHtai,
+                // dmucNamDtoan: data.dmucNamDtoan,
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
@@ -594,13 +594,13 @@ export class PhuLuc01Component implements OnInit {
                     tenDanhMuc: data.tenDanhMuc,
                     level: data.level,
                     danhMuc: data.danhMuc,
-                    sluongNamDtoan: data.sluongNamDtoan,
-                    ttienNamDtoan: data.ttienNamDtoan,
-                    thienNamTruoc: data.thienNamTruoc,
-                    dtoanNamHtai: data.dtoanNamHtai,
-                    uocNamHtai: data.uocNamHtai,
-                    dmucNamDtoan: data.dmucNamDtoan,
-                    ttienTd: data.ttienTd,
+                    // sluongNamDtoan: data.sluongNamDtoan,
+                    // ttienNamDtoan: data.ttienNamDtoan,
+                    // thienNamTruoc: data.thienNamTruoc,
+                    // dtoanNamHtai: data.dtoanNamHtai,
+                    // uocNamHtai: data.uocNamHtai,
+                    // dmucNamDtoan: data.dmucNamDtoan,
+                    // ttienTd: data.ttienTd,
                 }
                 this.lstCtietBcao.forEach(item => {
                     if (this.getHead(item.stt) == stt) {
