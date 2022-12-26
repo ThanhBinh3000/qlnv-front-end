@@ -38,10 +38,10 @@
           </th>
           <th rowspan="3" class="text-center" nzWidth="100px">STT</th>
           <th rowspan="3" nzWidth="300px">LĨNH VỰC / TÊN ĐƠN VỊ</th>
-          <th colspan="7" nzWidth="150px">Thực hiện năm {{namTruoc}} (năm trước)</th>
-          <th colspan="6" nzWidth="150px">Dự toán năm {{namBaoCao}} (năm hiện hành)</th>
-          <th colspan="7" nzWidth="150px">Ước thực hiện năm {{namBaoCao}} (năm hiện hành)</th>
-          <th colspan="6" nzWidth="150px">Dự toán năm {{namKeHoach}} (năm kế hoạch)</th>
+          <th colspan="7" nzWidth="150px">Thực hiện năm {{namBaoCao - 2}} (năm trước)</th>
+          <th colspan="6" nzWidth="150px">Dự toán năm {{namBaoCao -1}} (năm hiện hành)</th>
+          <th colspan="7" nzWidth="150px">Ước thực hiện năm {{namBaoCao -1}} (năm hiện hành)</th>
+          <th colspan="6" nzWidth="150px">Dự toán năm {{namBaoCao}} (năm kế hoạch)</th>
           <th rowspan="4" [hidden]="status"></th>
         </tr>
         <tr>
@@ -359,7 +359,7 @@
           </ng-template>
         </tr>
         <tr>
-          <td></td>
+          <td [hidden]="status"></td>
           <td></td>
           <td>Tổng Số</td>
           <td>{{displayValue(total.thienTsoBcTqGiao)}}</td>
