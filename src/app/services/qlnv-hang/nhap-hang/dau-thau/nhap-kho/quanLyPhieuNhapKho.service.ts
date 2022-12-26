@@ -74,4 +74,11 @@ export class QuanLyPhieuNhapKhoService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/phieu-nhap-kho/export/list`;
     return this.httpClient.post(url, body, { responseType: 'blob' });
   }
+
+  taoTheKho(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/phieu-nhap-kho/lk-the-kho`;
+    return this.httpClient.post(url, body).toPromise();
+  }
+
+
 }
