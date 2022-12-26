@@ -91,7 +91,10 @@ export class ThongtinDexuatComponent implements OnInit, OnChanges {
         if (this.isTongHop) {
           this.listOfData = this.dataInput.children;
         } else {
-          this.listOfData = this.dataInput.dsGtDtlList ? this.dataInput.dsGtDtlList : this.dataInput.children;
+          if (this.dataInput.dsGtDtlList) {
+            this.dataInput.children = this.dataInput.dsGtDtlList
+          }
+          this.listOfData = this.dataInput.children;
         }
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
