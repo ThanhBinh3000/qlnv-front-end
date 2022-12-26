@@ -219,6 +219,13 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
             });
           } else {
             this.dataTable = data.details;
+            this.dataTable.forEach(x => {
+              x.soLuong = null;
+              x.children.forEach(y => {
+                y.soLuongDiemKho = y.soLuong;
+                y.soLuong = null;
+              })
+            });
           }
         } else {
           this.notification.error(MESSAGE.ERROR, res.msg)
@@ -424,7 +431,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
               this.dataTable = data.dtlList.filter(x => x.maDvi == this.userInfo.MA_DVI);
               this.dataTable.forEach(x => {
                 let objListDiemKho = x.children.map(x => x.maDiemKho);
-                console.log(objListDiemKho);
                 if (objListDiemKho.length > 0) {
                   this.listDiemKho = this.listDiemKho.filter(item => objListDiemKho.includes(item.key) > 0);
                 }
@@ -432,7 +438,6 @@ export class ThemmoiQdinhNhapXuatHangComponent implements OnInit {
                   let ttDk = x.children.filter(x => x.maDiemKho == item.key)[0];
                   item.soLuongDiemKho = ttDk.soLuongDiemKho;
                 })
-                console.log(this.listDiemKho);
                 this.formData.patchValue({
                   trangThaiChiCuc: x.trangThai
                 });

@@ -258,5 +258,5 @@
 </nz-card>
 <!--END TABLE-->
 <ng-template #error let-control>
-  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+  <app-template-error #error [control]="control"></app-template-error>
 </ng-template>

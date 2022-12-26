@@ -96,6 +96,7 @@ export class BaoCaoComponent implements OnInit {
     lstFiles: any = [];                         // list File de day vao api
     luyKes: ItemData[] = [];
     luyKeDetail = [];
+    lstVatTus: any[] = [];
     lstBieuMaus: any[] = [];
     trangThais: any[] = TRANG_THAI_TIM_KIEM;
     //trang thai cac nut
@@ -221,6 +222,8 @@ export class BaoCaoComponent implements OnInit {
             }
         )
 
+        await this.getListVatTu();
+
         this.getListUser();
         if (this.baoCao.id) {
             await this.getDetailReport();
@@ -278,6 +281,33 @@ export class BaoCaoComponent implements OnInit {
         this.getLuyKe();
         this.getStatusButton();
         this.spinner.hide();
+    }
+
+    async getListVatTu() {
+        let vatTus: any;
+        await this.danhMucService.dMVatTu().toPromise().then(res => {
+            if (res.statusCode == 0) {
+                vatTus = res.data;
+            } else {
+                this.notification.error(MESSAGE.ERROR, res?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
+        vatTus.forEach(element => {
+            this.getFullVatu(element);
+        })
+    }
+
+    getFullVatu(vatTu: any) {
+        this.lstVatTus.push({
+            id: vatTu.id,
+            ma: vatTu.ma,
+            ten: vatTu.ten,
+        })
+        vatTu?.child.forEach(item => {
+            this.getFullVatu(item);
+        })
     }
 
     async getDviCon() {
@@ -773,6 +803,8 @@ export class BaoCaoComponent implements OnInit {
                 namBcao: this.baoCao.namBcao,
                 maDvi: this.baoCao.maDvi,
                 dotBcao: this.baoCao.dotBcao,
+                isOffice: this.data.preTab == 'vanphong',
+                lstVtus: this.lstVatTus,
             }
             this.tabs = [];
             this.tabs.push(this.baoCao?.lstBcaos.find(item => item.maLoai == maPhuLuc));

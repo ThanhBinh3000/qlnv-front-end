@@ -34,8 +34,8 @@
           <th rowspan="5" [hidden]="status"></th>
         </tr>
         <tr>
-          <th colspan="4">Năm {{namBcao}} (năm hiện hành)</th>
-          <th colspan="3">Lũy kế số kinh phí đã bố trí đến hết năm {{namBcao}} (năm hiện hành)</th>
+          <th colspan="4">Năm {{namBcao - 1}} (năm hiện hành)</th>
+          <th colspan="3">Lũy kế số kinh phí đã bố trí đến hết năm {{namBcao - 1}} (năm hiện hành)</th>
           <th colspan="3">Dự toán bố trí năm {{namKeHoach}} (năm kế hoạch)</th>
         </tr>
         <tr>
@@ -55,7 +55,7 @@
           <th>Nguồn NSNN</th>
           <th>Nguồn khác</th>
           <th>Dự toán</th>
-          <th>Ước thực hiện <br> đến hết năm {{namBcao}} <br> (năm hiện hành)</th>
+          <th>Ước thực hiện <br> đến hết năm {{namBcao - 1}} <br> (năm hiện hành)</th>
         </tr>
         <tr>
           <th class="text-center">A</th>
@@ -237,7 +237,7 @@
 <div class="modal-footer">
   <div class="nut">
     <div class="cantrai">
-      <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+      <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
         <i nz-icon nzType="printer" nzTheme="outline"></i>
         <span>In</span>
       </button>

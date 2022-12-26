@@ -23,25 +23,36 @@
           <tr>
             <th rowspan="2" class="text-center" nzWidth="100px">STT</th>
             <th rowspan="2" nzWidth="400px">Nội dung</th>
-            <th rowspan="2" nzWidth="150px">Thực hiện năm {{namBcao - 1}}</th>
-            <th colspan="2" nzWidth="150px">Năm {{namBcao}}</th>
-            <th rowspan="2" class="text-center" nzWidth="150px">Dự toán năm {{namBcao + 1}}</th>
+            <th rowspan="2" nzWidth="150px">Thực hiện năm {{namBcao - 2}}</th>
+            <th colspan="2" nzWidth="150px">Năm {{namBcao -1 }}</th>
+            <th rowspan="2" nzWidth="150px">Dự toán năm {{namBcao}}</th>
             <th *ngIf="viewAppraisalValue" rowspan="2">Giá trị thẩm định</th>
-            <th rowspan="3" [hidden]="status"></th>
+            <th rowspan="3" [hidden]="status && !editAppraisalValue"></th>
             <th rowspan="3" [hidden]="status"></th>
           </tr>
           <tr>
-            <th class="text-center">Dự toán</th>
-            <th class="text-center">Ước thực hiện</th>
+            <th>Dự toán</th>
+            <th>Ước thực hiện</th>
           </tr>
           <tr>
             <th class="text-center">A</th>
-            <th class="text-center">B</th>
-            <th class="text-center">1</th>
-            <th class="text-center">2</th>
-            <th class="text-center">3</th>
-            <th class="text-center">4</th>
-            <th *ngIf="viewAppraisalValue" class="text-center">4A</th>
+            <th>B</th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th *ngIf="viewAppraisalValue">4A</th>
+          </tr>
+          <tr>
+            <th class="text-center"></th>
+            <th>TỔNG CỘNG</th>
+            <th>{{displayValue(total.thienNtruoc)}}</th>
+            <th>{{displayValue(total.namDtoan)}}</th>
+            <th>{{displayValue(total.namUocThien)}}</th>
+            <th>{{displayValue(total.namKh)}}</th>
+            <th *ngIf="viewAppraisalValue">{{displayValue(total.giaTriThamDinh)}}</th>
+            <th [hidden]="status && !editAppraisalValue"></th>
+            <th [hidden]="status"></th>
           </tr>
         </thead>
         <tbody>
@@ -58,7 +69,7 @@
               <td>{{displayValue(data.namUocThien)}}</td>
               <td>{{displayValue(data.namKh)}}</td>
               <td *ngIf="viewAppraisalValue">{{displayValue(data.giaTriThamDinh)}}</td>
-              <td [hidden]="status">
+              <td [hidden]="status && !editAppraisalValue">
                 <i *ngIf="checkEdit(data.stt)" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
               </td>
               <td [hidden]="status">
@@ -110,14 +121,14 @@
                   </fm-input-number>
                 </td>
               </ng-template>
-              <td>
+              <td [hidden]="status && !editAppraisalValue">
                 <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                 <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                   (nzOnConfirm)="cancelEdit(data.id)" class="save">
                   Hủy
                 </a>
               </td>
-              <td>
+              <td [hidden]="status">
                 <i *ngIf="checkAdd(data)" class="fa fa-plus" (click)="addLine(data.stt)"></i>
                 <i *ngIf="checkDelete(data.maNdung)" class="fa fa-trash-o do" (click)="deleteLine(data.stt)"></i>
               </td>
@@ -136,19 +147,19 @@
   <div class="modal-footer">
     <div class="nut">
       <div class="cantrai">
-        <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+        <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
           <i nz-icon nzType="printer" nzTheme="outline"></i>
           <span>In</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="save('5')" [hidden]="statusBtnFinish">
+        <button type="button" class="btn btn-main" (click)="save('5', null)" [hidden]="statusBtnFinish">
           <i nz-icon nzType="check" nzTheme="outline"></i>
           <span>Hoàn tất nhập liệu</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="save('4')" [hidden]="statusBtnFinish">
+        <button type="button" class="btn btn-main" (click)="save('4', null)" [hidden]="statusBtnFinish">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="onSubmit('1', null)" [hidden]="statusBtnOk">
+        <button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="statusBtnOk">
           <i nz-icon nzType="check" nzTheme="outline"></i>
           <span>OK</span>
         </button>

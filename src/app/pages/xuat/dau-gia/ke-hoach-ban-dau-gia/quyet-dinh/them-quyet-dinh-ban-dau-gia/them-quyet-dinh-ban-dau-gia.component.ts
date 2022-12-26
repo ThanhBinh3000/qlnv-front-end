@@ -18,8 +18,8 @@ import { STATUS } from "../../../../../../constants/status";
 import { cloneDeep } from "lodash";
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
-import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
+import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
+import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
@@ -69,7 +69,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBdgService);
     this.formData = this.fb.group({
       id: [null],
-      namKh: [dayjs().get('year'), Validators.required],
+      nam: [dayjs().get('year'), Validators.required],
       soQdPd: ['',],
       ngayKyQd: ['',],
       ngayHluc: ['',],
@@ -85,7 +85,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       tchuanCluong: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
-      phanLoai: ['', [Validators.required]],
+      phanLoai: ['TH', [Validators.required]],
     })
   }
 
@@ -143,7 +143,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
 
   initForm() {
     // this.formData.patchValue({
-    //   namKh: dayjs().get('year'),
+    //   nam: dayjs().get('year'),
     // })
   }
 
@@ -154,7 +154,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         tenCloaiVthh: dataTongHop.tenCloaiVthh,
         loaiVthh: dataTongHop.loaiVthh,
         tenLoaiVthh: dataTongHop.tenLoaiVthh,
-        namKh: +dataTongHop.namKh,
+        nam: +dataTongHop.nam,
         idThHdr: dataTongHop.id,
         tchuanCluong: dataTongHop.tchuanCluong,
         phanLoai: 'TH',
@@ -170,14 +170,15 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     if (this.formData.value.soQdPd) {
       body.soQdPd = this.formData.value.soQdPd + "/" + this.maQd;
     }
-    body.dsDeXuat = this.danhsachDx;
+    body.children = this.danhsachDx;
     body.fileDinhKems = this.fileDinhKem;
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
         this.guiDuyet();
+      } else {
+        this.quayLai();
       }
-      this.quayLai();
     }
     await this.spinner.hide();
   }
@@ -197,31 +198,16 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   async loadChiTiet(id: number) {
-    if (id > 0) {
-      let res = await this.quyetDinhPdKhBdgService.getDetail(id);
-      this.listToTrinh = [];
-      this.listDanhSachTongHop = [];
-      const data = res.data;
-      this.helperService.bidingDataInFormGroup(this.formData, data);
+    this.spinner.show()
+    if (id) {
+      let data = await this.detail(id);
       this.formData.patchValue({
-        soQdPd: data.soQdPd?.split("/")[0],
-      });
-      if (data.loaiVthh.startsWith("02")) {
-        this.danhsachDx = data.children;
-        this.danhsachDx.forEach(element => {
-        });
-      } else {
-        this.danhsachDx = data.children;
-        this.danhsachDxCache = cloneDeep(this.danhsachDx);
-        for (const item of this.danhsachDxCache) {
-          await this.deXuatKhBanDauGiaService.getDetail(item.idDxHdr).then((res) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              item.dsPhanLoList = res.data.dsPhanLoList;
-            }
-          })
-        }
-      }
-    };
+        soQdPd: data.soQdPd?.split('/')[0]
+      })
+      this.danhsachDx = data.children;
+      this.fileDinhKem = data.fileDinhKems;
+    }
+    this.spinner.hide()
   }
 
   async openDialogTh() {
@@ -231,7 +217,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     await this.spinner.show();
     let bodyTh = {
       trangThai: STATUS.CHUA_TAO_QD,
-      namKh: this.formData.get('namKh').value,
+      nam: this.formData.get('nam').value,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0
@@ -306,7 +292,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     let bodyToTrinh = {
       trangThai: this.loaiVthh == '02' ? STATUS.DA_DUYET_LDV : STATUS.DA_DUYET_LDC,
       trangThaiTh: STATUS.CHUA_TONG_HOP,
-      namKh: this.formData.get('namKh').value,
+      nam: this.formData.get('nam').value,
       loaiVthh: this.loaiVthh,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,

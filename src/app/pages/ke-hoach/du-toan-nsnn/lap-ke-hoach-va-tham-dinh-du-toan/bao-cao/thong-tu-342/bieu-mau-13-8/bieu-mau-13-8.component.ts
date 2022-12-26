@@ -46,6 +46,7 @@ export class BieuMau138Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  statusPrint: boolean;
   viewAppraisalValue: boolean;
   editAppraisalValue: boolean;
   editMoneyUnit = false;
@@ -76,6 +77,7 @@ export class BieuMau138Component implements OnInit {
     this.thuyetMinh = this.formDetail?.thuyetMinh;
     this.status = this.dataInfo?.status;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+    this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
     this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -209,11 +211,11 @@ export class BieuMau138Component implements OnInit {
       }
     })
 
-    if (!this.viewAppraisalValue) {
-      lstCtietBcaoTemp.forEach(item => {
-        item.giaTriThamDinh = item.namKh;
-      })
-    }
+    // if (!this.viewAppraisalValue) {
+    //   lstCtietBcaoTemp.forEach(item => {
+    //     item.giaTriThamDinh = item.namKh;
+    //   })
+    // }
 
     const request = JSON.parse(JSON.stringify(this.formDetail));
     request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
@@ -430,7 +432,9 @@ export class BieuMau138Component implements OnInit {
   }
 
   checkEdit(stt: string) {
-    if (stt.startsWith('0.1.1.1') || stt.startsWith('0.1.1.2') || stt.startsWith('0.1.1.3')) {
+    if (stt.startsWith('0.1.1.1') || stt.startsWith('0.1.1.2') || stt.startsWith('0.1.1.3') ||
+      (stt.startsWith('0.1.2') && this.editAppraisalValue) || (stt.startsWith('0.1.3') && this.editAppraisalValue)
+      || (stt.startsWith('0.1.4') && this.editAppraisalValue) || (stt.startsWith('0.1.5') && this.editAppraisalValue)) {
       return false;
     }
     const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);

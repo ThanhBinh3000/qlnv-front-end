@@ -1,10 +1,8 @@
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { saveAs } from 'file-saver';
-import { groupBy, chain } from 'lodash';
+import { chain } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogThemMoiVatTuComponent } from 'src/app/components/dialog/dialog-them-moi-vat-tu/dialog-them-moi-vat-tu.component';
 import { MESSAGE } from 'src/app/constants/message';
 import {
@@ -17,26 +15,23 @@ import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau
 import { UploadFileService } from 'src/app/services/uploaFile.service';
 import VNnum2words from 'vn-num2words';
 import * as dayjs from 'dayjs';
-import { Globals } from 'src/app/shared/globals';
-import { API_STATUS_CODE, PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
+import { API_STATUS_CODE } from 'src/app/constants/config';
 import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
 import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
 import { UploadComponent } from 'src/app/components/dialog/dialog-upload/upload.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { HelperService } from 'src/app/services/helper.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { DialogDanhSachHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { STATUS } from "../../../../../../constants/status";
-import { BaseComponent } from "../../../../../../components/base/base.component";
 import { DatePipe } from "@angular/common";
 import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 
 @Component({
@@ -44,7 +39,7 @@ import { StorageService } from 'src/app/services/storage.service';
   templateUrl: './themmoi-kehoach-lcnt.component.html',
   styleUrls: ['./themmoi-kehoach-lcnt.component.scss'],
 })
-export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit, OnChanges {
+export class ThemmoiKehoachLcntComponent extends Base2Component implements OnInit, OnChanges {
   @Input()
   loaiVthhInput: string;
   @Input()
@@ -56,17 +51,14 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
 
   editCache: { [key: string]: { edit: boolean; data: DanhSachGoiThau } } = {};
 
-  formData: FormGroup;
   listOfData: any[] = [];
   fileDinhKem: any[] = [];
-  userLogin: UserLogin;
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
   listLoaiHinhNx: any[] = [];
   listKieuNx: any[] = [];
 
   danhMucDonVi: any;
-  STATUS = STATUS;
   i = 0;
   editId: string | null = null;
   tabSelected: string = 'thongTinChung';
@@ -81,9 +73,7 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
   dataChiTieu: any;
   baoGiaThiTruongList: CanCuXacDinh[] = [];
   canCuKhacList: CanCuXacDinh[] = [];
-  userInfo: UserLogin;
   maTrinh: string = '';
-
   addModelBaoGia: any = {
     moTa: '',
     taiLieu: [],
@@ -92,28 +82,25 @@ export class ThemmoiKehoachLcntComponent extends BaseComponent implements OnInit
     moTa: '',
     taiLieu: [],
   };
-
   taiLieuDinhKemList: any[] = [];
-
   listDataGroup: any[] = [];
-
-
   editBaoGiaCache: { [key: string]: { edit: boolean; data: any } } = {};
   editCoSoCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private danhMucService: DanhMucService,
     private dauThauService: DanhSachDauThauService,
     private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private dmTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
-    _modal: NzModalService
   ) {
-    super(httpClient, storageService, dauThauService);
-    super.modal = _modal;
+    super(httpClient, storageService, notification, spinner, modal, dauThauService);
     this.formData = this.fb.group({
       id: [],
       maDvi: ['', [Validators.required]],

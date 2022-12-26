@@ -1485,7 +1485,6 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       delete muoi.xuatTrongNam;
       delete muoi.id;
     });
-    console.log(this.thongTinChiTieuKeHoachNamInput.khMuoi);
     delete this.thongTinChiTieuKeHoachNamInput.khMuoiDuTru;
     //convert to flat object
     this.thongTinChiTieuKeHoachNamInput.khVatTuNhap = this.dataVatTuNhap.flatMap(s => s.dsVatTu.map(s1 => {
@@ -1497,7 +1496,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       return Object.assign(s1, s)
     }));
 
-    console.log(this.thongTinChiTieuKeHoachNamInput, 'object save')
+    // console.log(this.thongTinChiTieuKeHoachNamInput, 'object save')
     const khVatTu = this.thongTinChiTieuKeHoachNamInput.khVatTu;
     for (let i = 0; i < khVatTu.length; i++) {
       for (let j = i + 1; j <= khVatTu.length - 1; j++) {
@@ -1548,7 +1547,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                     break;
                   }
                   case STATUS.TU_CHOI_LDC: {
-                    trangThai = STATUS.CHO_DUYET_LDC
+                    trangThai = STATUS.CHO_DUYET_TP
                     break;
                   }
                 }
@@ -1588,6 +1587,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.spinner.hide();
         });
     } else {
+      console.log(this.thongTinChiTieuKeHoachNamInput);
+      // return;
       this.chiTieuKeHoachNamService
         .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {

@@ -1,22 +1,13 @@
 import { cloneDeep } from 'lodash';
-import { convertTenVthh } from 'src/app/shared/commonFunction';
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
-import { NzModalService } from 'ng-zorro-antd/modal';
 import { DonviService } from 'src/app/services/donvi.service';
 import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import * as dayjs from 'dayjs';
 import { saveAs } from 'file-saver';
-import { Globals } from 'src/app/shared/globals';
-import {
-  ThongTinDauThauService
-} from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/thongTinDauThau.service";
 import { QuyetDinhPheDuyetKetQuaLCNTService } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/tochuc-trienkhai/quyetDinhPheDuyetKetQuaLCNT.service";
 import { STATUS } from "../../../../../constants/status";
 import { BaseComponent } from 'src/app/components/base/base.component';

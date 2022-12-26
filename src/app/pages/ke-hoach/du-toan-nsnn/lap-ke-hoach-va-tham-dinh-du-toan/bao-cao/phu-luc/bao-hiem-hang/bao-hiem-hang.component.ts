@@ -52,6 +52,7 @@ export class BaoHiemHangComponent implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    statusPrint: boolean;
     editMoneyUnit = false;
     isDataAvailable = false;
     //nho dem
@@ -62,6 +63,7 @@ export class BaoHiemHangComponent implements OnInit {
 
     listVattu: any[] = [];
     lstVatTuFull: any[] = [];
+    lstDviFull: any[] = [];
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
@@ -86,8 +88,60 @@ export class BaoHiemHangComponent implements OnInit {
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.maDviTao = this.dataInfo?.maDvi;
-        await this.getDmKho(); 
+        await this.getDmKho();
+        await this.quanLyVonPhiService.getDmucDviTrucThuocTCDT().toPromise().then(res => {
+            if (res.statusCode == 0) {
+                const listDsDvi = res.data.children
+                // this.listDanhSachCuc = res.data;
+                // listDsDvi.forEach(item => {
+                //     item.children.forEach(child => {
+                //         listDsDvi.push(child)
+                //         child.children.forEach(children => {
+                //             listDsDvi.push(child)
+                //         })
+                //     })
+                // })
+                // this.listDanhSachCuc = listDsDvi;
+                // =============
+                const lstDviFullTemp = res.data;
+                const lstTenKhoFull = []
+                this.lstDviFull.push(res.data)
+                lstDviFullTemp.children.forEach(item => {
+                    this.lstDviFull.push(item)
+                    item.children.forEach(child => {
+                        this.lstDviFull.push(child)
+                        child.children.forEach(children => {
+                            this.lstDviFull.push(children)
+
+                        })
+                    })
+                })
+
+                lstDviFullTemp.children.forEach(itm => {
+                    itm.children.forEach(itm1 => {
+                        itm1.children.forEach(itm2 => {
+                            itm2.children.forEach(itm3 => {
+                                lstTenKhoFull.push(itm3)
+                            })
+                        })
+                    })
+                })
+
+                lstTenKhoFull.forEach(item => {
+                    this.lstDviFull.push(item)
+                })
+
+                // console.log(this.lstDviFull);
+                // console.log("lstTenKhoFull:",lstTenKhoFull);
+
+            } else {
+                this.notification.error(MESSAGE.ERROR, res?.msg);
+            }
+        }, err => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        })
         await this.addListKho();
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
@@ -111,7 +165,7 @@ export class BaoHiemHangComponent implements OnInit {
     }
 
     addListKho() {
-
+        // console.log(this.listDanhMucKho)
         this.listDanhMucKho.forEach(itm => {
             itm.children.forEach(item => {
                 this.listDiemKho.push({
@@ -132,7 +186,7 @@ export class BaoHiemHangComponent implements OnInit {
 
     changeVatTu(maDanhMuc: any, id: any) {
         this.editCache[id].data.tenHang = this.lstVatTuFull.find(vt => vt.ma === maDanhMuc)?.ten;
-      }
+    }
 
     changeDiemKho(maKho: any) {
         const maKhoNum = Number(maKho)
@@ -207,7 +261,7 @@ export class BaoHiemHangComponent implements OnInit {
     }
 
     // luu
-    async save(trangThai: string) {
+    async save(trangThai: string, lyDoTuChoi: string) {
         let checkSaveEdit;
         //check xem tat ca cac dong du lieu da luu chua?
         //chua luu thi bao loi, luu roi thi cho di
@@ -248,7 +302,9 @@ export class BaoHiemHangComponent implements OnInit {
         const request = JSON.parse(JSON.stringify(this.formDetail));
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
         request.trangThai = trangThai;
-
+        if (lyDoTuChoi) {
+            request.lyDoTuChoi = lyDoTuChoi;
+        }
         this.spinner.show();
         this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
             async data => {
@@ -313,7 +369,7 @@ export class BaoHiemHangComponent implements OnInit {
         });
         modalTuChoi.afterClose.subscribe(async (text) => {
             if (text) {
-                this.onSubmit(mcn, text);
+                this.save(mcn, text);
             }
         });
     }
@@ -370,10 +426,10 @@ export class BaoHiemHangComponent implements OnInit {
     startEdit(id: string): void {
         if (this.lstCtietBcao.every(e => !this.editCache[e.id].edit)) {
             this.editCache[id].edit = true;
-          } else {
+        } else {
             this.notification.warning(MESSAGE.WARNING, 'Vui lòng lưu bản ghi đang sửa trước khi thực hiện thao tác');
             return;
-          }
+        }
     }
 
     // huy thay doi
@@ -396,7 +452,7 @@ export class BaoHiemHangComponent implements OnInit {
     }
 
     changeModel(id: string): void {
-        
+
     }
 
     sum(stt: string) {
@@ -405,6 +461,7 @@ export class BaoHiemHangComponent implements OnInit {
 
     getTotal() {
         this.total = new ItemData();
+        this.total.giaTri = 0
         this.lstCtietBcao.forEach(item => {
             this.total.giaTri = sumNumber([this.total.giaTri, item.giaTri]);
         })
@@ -437,7 +494,7 @@ export class BaoHiemHangComponent implements OnInit {
         num = exchangeMoney(num, '1', this.maDviTien);
         return displayNumber(num);
     }
-    
+
     displayNumber(num: number): string {
         return displayNumber(num)
     }

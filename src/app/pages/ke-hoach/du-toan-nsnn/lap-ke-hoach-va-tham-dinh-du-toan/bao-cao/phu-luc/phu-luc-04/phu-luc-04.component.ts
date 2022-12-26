@@ -57,6 +57,7 @@ export class PhuLuc04Component implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    statusPrint: boolean;
     editMoneyUnit = false;
     isDataAvailable = false;
 
@@ -84,10 +85,11 @@ export class PhuLuc04Component implements OnInit {
     async initialization() {
         this.spinner.show();
         this.formDetail = this.dataInfo?.data;
-        this.namBcao = this.dataInfo?.namBcao + 1;
+        this.namBcao = this.dataInfo?.namBcao;
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
         this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {

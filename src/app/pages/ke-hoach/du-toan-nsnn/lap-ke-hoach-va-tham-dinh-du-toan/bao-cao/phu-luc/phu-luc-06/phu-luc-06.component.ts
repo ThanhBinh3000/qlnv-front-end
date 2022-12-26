@@ -10,6 +10,7 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber, sumNumber } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
+import { DANH_MUC_TAI_SAN } from './phu-luc-6.constant';
 export class ItemData {
     id: any;
     stt: string;
@@ -45,8 +46,7 @@ export class PhuLuc06Component implements OnInit {
     total = new ItemData();
     //danh muc
     donViTiens: any[] = DON_VI_TIEN;
-    listVattu: any[] = [];
-    lstVatTuFull = [];
+    listVtu: any[] = DANH_MUC_TAI_SAN;
     dsDinhMuc: any[] = [];
     soLaMa: any[] = LA_MA;
     //cac nut
@@ -54,6 +54,7 @@ export class PhuLuc06Component implements OnInit {
     status = false;
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
+    statusPrint: boolean;
     isDataAvailable = false;
     allChecked = false;
 
@@ -90,6 +91,7 @@ export class PhuLuc06Component implements OnInit {
         this.thuyetMinh = this.formDetail?.thuyetMinh;
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+        this.statusPrint = this.dataInfo?.statusBtnPrint;
         this.checkEditTD = this.dataInfo?.editAppraisalValue;
         this.checkViewTD = this.dataInfo?.viewAppraisalValue;
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -97,40 +99,12 @@ export class PhuLuc06Component implements OnInit {
                 ...item,
             })
         })
-        await this.danhMucService.dMVatTu().toPromise().then(res => {
-            if (res.statusCode == 0) {
-                this.listVattu = res.data;
-            } else {
-                this.notification.error(MESSAGE.ERROR, res?.msg);
-            }
-        }, err => {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        })
-        await this.addVatTu();
+
         this.updateEditCache();
         this.tinhTong();
         this.getStatusButton();
 
         this.spinner.hide();
-    }
-
-    async addVatTu() {
-        const vatTuTemp = []
-        this.listVattu.forEach(vatTu => {
-            if (vatTu.child) {
-                vatTu.child.forEach(vatTuCon => {
-                    vatTuTemp.push({
-                        id: vatTuCon.ma,
-                        tenDm: vatTuCon.ten,
-                        tenTaiSan: vatTuCon.ma,
-                        dviTinh: vatTuCon.maDviTinh,
-                        maCha: "0",
-                        level: 0,
-                    })
-                })
-            }
-        })
-        this.lstVatTuFull = vatTuTemp;
     }
 
     // luu
@@ -263,11 +237,13 @@ export class PhuLuc06Component implements OnInit {
         // delete object have checked = true
         this.lstCtietBcao = this.lstCtietBcao.filter(item => item.checked != true)
         this.allChecked = false;
+        this.tinhTong()
     }
 
     // xoa dong
     deleteById(id: string): void {
-        this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id)
+        this.lstCtietBcao = this.lstCtietBcao.filter(item => item.id != id);
+        this.tinhTong();
     }
 
     // start edit
@@ -312,9 +288,8 @@ export class PhuLuc06Component implements OnInit {
     }
 
     selectTaisan(idTaiSan: any, idRow: any) {
-        const taiSan = this.lstVatTuFull.find(ts => ts.id === idTaiSan);
-        this.editCache[idRow].data.dviTinh = taiSan.dviTinh;
-        this.editCache[idRow].data.tenTaiSan = taiSan.tenDm;
+        const taiSan = this.listVtu.find(ts => ts.ma === idTaiSan);
+        this.editCache[idRow].data.tenTaiSan = taiSan.ten;
     }
 
     tinhTong() {

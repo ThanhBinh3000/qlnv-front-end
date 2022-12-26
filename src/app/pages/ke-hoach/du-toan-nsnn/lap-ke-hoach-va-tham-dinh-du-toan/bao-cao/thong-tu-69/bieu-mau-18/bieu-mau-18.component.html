@@ -144,13 +144,13 @@
                                 </fm-input-number>
                             </td>
                             <td>
-                                <input class="money-input" currencyMask
+                                <!-- <input class="money-input" currencyMask
                                     [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi1"
-                                    (ngModelChange)="changeModel(data.id)" [options]="amount" />
-                                <!-- <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi1"
-                                (ngModelChange)="changeModel(data.id)">
-                            </fm-input-number> -->
+                                    (ngModelChange)="changeModel(data.id)" [options]="amount" /> -->
+                                <fm-input-number class="search__input"
+                                    [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi1"
+                                    (ngModelChange)="changeModel(data.id)">
+                                </fm-input-number>
                             </td>
                             <td>
                                 {{displayValue(editCache[data.id].data.ncauChiChiaRaChiTx)}}
@@ -225,7 +225,7 @@
     <div class="modal-footer">
         <div class="nut">
             <div class="cantrai">
-                <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+                <button type="button" class="btn btn-main" [hidden]="!statusPrint" (click)="doPrint()">
                     <i nz-icon nzType="printer" nzTheme="outline"></i>
                     <span>In</span>
                 </button>

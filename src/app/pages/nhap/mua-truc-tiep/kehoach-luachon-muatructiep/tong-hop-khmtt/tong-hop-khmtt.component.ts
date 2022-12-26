@@ -284,7 +284,7 @@ export class TongHopKhmttComponent implements OnInit {
 
   redirectToChiTiet(isView: boolean, id: number) {
     if ((isView && !this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_TONGHOP_XEM"))
-      || (!isView && !this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_TONGHOP_SUA"))) {
+      || (!isView && !this.userService.isAccessPermisson("NHDTQG_PTMTT_KHMTT_TONGHOP_THEM"))) {
       return;
     }
     this.selectedId = id;

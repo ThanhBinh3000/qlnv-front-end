@@ -19,13 +19,19 @@
           <span>Ban hành</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP  ||thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_LDVU')"
+                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP  || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_TP')"
+                (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Duyệt</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_LDVU')"
                 (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
         </button>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-           *ngIf="(thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_LDVU')">
+           *ngIf="(thongTinChiTieuKeHoachNam.trangThai ==  STATUS.CHO_DUYET_TP || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDV || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && ( userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_LDVU') || userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_TP'))">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
@@ -621,30 +627,6 @@
               Hành động
             </th>
           </tr>
-          <!--          <tr>-->
-          <!--            <th rowspan="2" class="text-center">-->
-          <!--              Tổng số-->
-          <!--            </th>-->
-          <!--            <th colspan="3" class="text-center">Trong đó</th>-->
-          <!--            <th rowspan="2" class="text-center">-->
-          <!--              Tổng số-->
-          <!--            </th>-->
-          <!--            <th rowspan="2" class="text-center">-->
-          <!--              Tổng số-->
-          <!--            </th>-->
-          <!--            <th colspan="3" class="text-center">Trong đó</th>-->
-          <!--            <th rowspan="2" class="text-center">-->
-          <!--              Tổng số-->
-          <!--            </th>-->
-          <!--          </tr>-->
-          <!--          <tr>-->
-          <!--            <th class="text-center">Nhập <br> {{yearNow - 3}}</th>-->
-          <!--            <th class="text-center">Nhập <br> {{yearNow - 2}}</th>-->
-          <!--            <th class="text-center">Nhập <br> {{yearNow - 1}}</th>-->
-          <!--            <th class="text-center">Nhập <br> {{yearNow - 3}}</th>-->
-          <!--            <th class="text-center">Nhập <br> {{yearNow - 2}}</th>-->
-          <!--            <th class="text-center">Nhập <br> {{yearNow - 1}}</th>-->
-          <!--          </tr>-->
           <tr
             [ngClass]="this.thongTinChiTieuKeHoachNam.trangThai === this.globals.prop.BAN_HANH || this.isViewDetail ? 'row-disabled' : ''">
             <td></td>
@@ -671,18 +653,6 @@
                 </nz-autocomplete>
               </nz-form-control>
             </td>
-            <!--            <td class="text-right">{{calculatortkdnTongMuoiCreate()}}</td>-->
-            <!--            <td class="text-right">{{keHoachMuoiCreate.tkdnMuoi}}</td>-->
-            <!--            <td class="text-right">{{keHoachMuoiCreate.ntnMuoi}}</td>-->
-            <!--            <td class="text-right">{{keHoachMuoiCreate.xtnMuoi}}</td>-->
-            <!--            <td class="text-right">{{keHoachMuoiCreate.ntnMuoi}}</td>-->
-            <!--            <td class="text-right">{{keHoachMuoiCreate.tkdnMuoi[1].soLuong}}</td>-->
-            <!--            <td class="text-right">{{keHoachMuoiCreate.tkdnMuoi[2].soLuong}}</td>-->
-            <!--            <td class="text-right">-->
-            <!--              <input class="w-120" nz-input nzSize="small" appNumberOnly-->
-            <!--                     [(ngModel)]="keHoachMuoiCreate.ntnTongSoMuoi"/>-->
-            <!--            </td>-->
-            <!--            <td class="text-right">{{calculatorxtnTongMuoiCreate()}}</td>-->
             <td class="text-right">
               {{keHoachMuoiCreate.tonKhoDauNam}}
             </td>
@@ -700,20 +670,6 @@
             <td class="text-right">
               {{(keHoachMuoiCreate.tonKhoDauNam ? keHoachMuoiCreate.tonKhoDauNam : 0) + (keHoachMuoiCreate.nhapTrongNam ? keHoachMuoiCreate.nhapTrongNam : 0) - (keHoachMuoiCreate.xuatTrongNamMuoi ? keHoachMuoiCreate.xuatTrongNamMuoi : 0)}}
             </td>
-            <!--            <td class="text-right">-->
-            <!--              <nz-input-number type="text"
-             nz-input name="goiThau" class="w-120" [nzMin]="0"-->
-            <!--                               [nzMax]="keHoachMuoiCreate.tkdnMuoi[1].soLuong" [nzSize]="'small'"-->
-            <!--                               [(ngModel)]="keHoachMuoiCreate.xtnMuoi[1].soLuong">-->
-            <!--              </nz-input-number>-->
-            <!--            </td>-->
-            <!--            <td class="text-right">-->
-            <!--              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
-            <!--                               [nzMax]="keHoachMuoiCreate.tkdnMuoi[2].soLuong" [nzSize]="'small'"-->
-            <!--                               [(ngModel)]="keHoachMuoiCreate.xtnMuoi[2].soLuong">-->
-            <!--              </nz-input-number>-->
-            <!--            </td>-->
-            <!--            <td class="text-right">{{calculatortkcnTongMuoiCreate()}}</td>-->
             <td *ngIf="!this.isViewDetail" class="text-center">
               <a class="save" (click)="themMoiMuoiDuTru()" [ngClass]="{'isDisabled': (!isAddMuoi)}"
                  style="margin-right: 30px;">
@@ -730,33 +686,11 @@
             <ng-container *ngIf="!dsMuoiClone[i]?.isEdit; else editTemplateMuoi">
               <td class="text-right">{{dataMuoi.stt}}</td>
               <td class="text-left">{{dataMuoi.tenDonVi}}</td>
-              <!--              <td class="text-right">{{dataMuoi.tkdnTongSoMuoi | number: '1.0-1'}}</td>-->
-              <!--              <ng-container *ngIf="dataMuoi?.tkdnMuoi?.length > 0">-->
-              <!--                <td *ngFor="let itemMuoi of dataMuoi.tkdnMuoi" class="text-right">{{itemMuoi.soLuong | number:-->
-              <!--                  '1.0-1'}} </td>-->
-              <!--              </ng-container>-->
-              <!--              <ng-container *ngIf="dataMuoi?.tkdnMuoi?.length == 0">-->
-              <!--                <td class="text-right">0</td>-->
-              <!--                <td class="text-right">0</td>-->
-              <!--                <td class="text-right">0</td>-->
-              <!--              </ng-container>-->
               <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
               <td class="text-right">{{dataMuoi.nhapTrongNam | number: '1.0-1'}}</td>
               <td class="text-right">{{dataMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
               <td
                 class="text-right">{{dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi | number: '1.0-1'}}</td>
-              <!--              <ng-container *ngIf="dataMuoi?.xtnMuoi?.length > 0">-->
-              <!--                <td *ngFor="let itemMuoi of dataMuoi.xtnMuoi" class="text-right">{{itemMuoi.soLuong | number:-->
-              <!--                  '1.0-1'}} </td>-->
-              <!--              </ng-container>-->
-              <!--              <ng-container *ngIf="dataMuoi?.xtnMuoi?.length == 0">-->
-              <!--                <td class="text-right">0</td>-->
-              <!--                <td class="text-right">0</td>-->
-              <!--                <td class="text-right">0</td>-->
-              <!--              </ng-container>-->
-              <!--              <td class="text-right">{{dataMuoi.tkcnTongSoMuoi | number: '1.0-1'}}</td>-->
-              <!-- <td *ngIf="disableBanHanh()">{{
-              convertTrangThai(thongTinChiTieuKeHoachNam.trangThai) }}</td> -->
               <td *ngIf="!this.isViewDetail" class="text-center" nzRight>
                 <a (click)="startEditMuoi(i)">
                   <i class="fa fa-pencil"></i>
@@ -770,20 +704,6 @@
               <td class="text-right">{{dataMuoi.stt}}</td>
               <td class="text-left">{{dataMuoi.tenDonVi}}</td>
               <td class="text-right">{{dataMuoi.tonKhoDauNam | number: '1.0-1'}}</td>
-              <!--              <ng-container *ngIf="dataMuoi?.tkdnMuoi?.length > 0">-->
-              <!--                <td *ngFor="let itemMuoi of dataMuoi.tkdnMuoi" class="text-right">{{itemMuoi.soLuong | number:-->
-              <!--                  '1.0-1'}} </td>-->
-              <!--              </ng-container>-->
-              <!--              <ng-container *ngIf="dataMuoi?.tkdnMuoi?.length == 0">-->
-              <!--                <td class="text-right">0</td>-->
-              <!--                <td class="text-right">0</td>-->
-              <!--                <td class="text-right">0</td>-->
-              <!--              </ng-container>-->
-              <!--              <td class="text-right">-->
-              <!--                <input class="w-120" nz-input nzSize="small" appNumberOnly-->
-              <!--                       [(ngModel)]="dsMuoiClone[i].nhapTrongNam"/>-->
-              <!--              </td>-->
-              <!--              <td class="text-right">{{calculatorxtnTongSoMuoi(i)}}</td>-->
               <td class="text-right">
                 <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0" [nzSize]="'small'"
                                  [(ngModel)]="dsMuoiClone[i].nhapTrongNam">
@@ -797,14 +717,6 @@
               </td>
               <td
                 class="text-right">{{dataMuoi.tonKhoDauNam + dsMuoiClone[i].nhapTrongNam - dsMuoiClone[i].xuatTrongNamMuoi | number: '1.0-1'}}</td>
-              <!--              <td class="text-right">-->
-              <!--                <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"-->
-              <!--                                 [nzMax]="dsMuoiClone[i].tonKhoDauNam" [nzSize]="'small'"-->
-              <!--                                 [(ngModel)]="dsMuoiClone[i].xtnMuoi[2].soLuong">-->
-              <!--                </nz-input-number>-->
-              <!--              </td>-->
-              <!--              <td class="text-right">{{calculatortkcnTongSoMuoi(i)}}</td>-->
-              <!-- <td *ngIf="disableBanHanh()"></td> -->
               <td *ngIf="!this.isViewDetail" class="text-right" nzRight>
                 <a (click)="saveEditMuoi(i)" class="save">
                   <i class="fa fa-save"></i>
@@ -956,13 +868,6 @@
                   <a (click)="themVatTu('nhap')">
                     <i class="fa fa-plus"></i>
                   </a>
-                  <!--<a (click)="suaPhuongAn(i)" *ngIf="!isView">
-                    <i class="fa fa-pencil"></i>
-                  </a>
-                  &lt;!&ndash;              <a (click)="deletePhanLo(item.idVirtual)">&ndash;&gt;
-                  <a (click)="xoaPhuongAn(i)" *ngIf="!isView">
-                    <i class="fa fa-trash-o do"></i>
-                  </a>-->
                 </td>
               </tr>
               <ng-container *ngFor="let item of dataVatTuNhap, let i = index">

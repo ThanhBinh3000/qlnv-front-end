@@ -45,6 +45,7 @@ export class BieuMau140Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  statusPrint: boolean;
   editMoneyUnit = false;
   isDataAvailable = false;
 
@@ -76,6 +77,7 @@ export class BieuMau140Component implements OnInit {
     this.thuyetMinh = this.formDetail?.thuyetMinh;
     this.status = this.dataInfo?.status;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+    this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
     this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
@@ -127,7 +129,7 @@ export class BieuMau140Component implements OnInit {
   }
 
   // luu
-  async save(trangThai: string) {
+  async save(trangThai: string, lyDoTuChoi: string) {
     let checkSaveEdit;
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
@@ -144,10 +146,10 @@ export class BieuMau140Component implements OnInit {
     const lstCtietBcaoTemp: ItemData[] = [];
     let checkMoneyRange = true;
     this.lstCtietBcao.forEach(item => {
-      // if (item.ncauChiTongSo > MONEY_LIMIT) {
-      //     checkMoneyRange = false;
-      //     return;
-      // }
+      if (item.thienNtruoc > MONEY_LIMIT || item.namDtoan > MONEY_LIMIT || item.namUocThien > MONEY_LIMIT || item.namKh > MONEY_LIMIT || item.giaTriThamDinh > MONEY_LIMIT) {
+        checkMoneyRange = false;
+        return;
+      }
       lstCtietBcaoTemp.push({
         ...item,
       })
@@ -165,10 +167,19 @@ export class BieuMau140Component implements OnInit {
       }
     })
 
+    if (!this.viewAppraisalValue) {
+      lstCtietBcaoTemp?.forEach(item => {
+        item.giaTriThamDinh = item.namKh;
+      })
+    }
+
     const request = JSON.parse(JSON.stringify(this.formDetail));
     request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
     request.trangThai = trangThai;
 
+    if (lyDoTuChoi) {
+      request.lyDoTuChoi = lyDoTuChoi;
+    }
     this.spinner.show();
     this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
       async data => {
@@ -189,39 +200,6 @@ export class BieuMau140Component implements OnInit {
     this.spinner.hide();
   }
 
-  // chuc nang check role
-  async onSubmit(mcn: string, lyDoTuChoi: string) {
-    if (!this.formDetail?.id) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
-      return;
-    }
-    const requestGroupButtons = {
-      id: this.formDetail.id,
-      trangThai: mcn,
-      lyDoTuChoi: lyDoTuChoi,
-    };
-    this.spinner.show();
-    await this.lapThamDinhService.approveCtietThamDinh(requestGroupButtons).toPromise().then(async (data) => {
-      if (data.statusCode == 0) {
-        this.formDetail.trangThai = mcn;
-        this.getStatusButton();
-        if (mcn == "0") {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-        }
-        this._modalRef.close({
-          formDetail: this.formDetail,
-        });
-      } else {
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    }, err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
-  }
-
   //show popup tu choi
   tuChoi(mcn: string) {
     const modalTuChoi = this.modal.create({
@@ -235,7 +213,7 @@ export class BieuMau140Component implements OnInit {
     });
     modalTuChoi.afterClose.subscribe(async (text) => {
       if (text) {
-        this.onSubmit(mcn, text);
+        this.save(mcn, text);
       }
     });
   }
@@ -421,22 +399,28 @@ export class BieuMau140Component implements OnInit {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
       if (item.level == 0) {
-        // this.total.tmdtTongSo = sumNumber([this.total.tmdtTongSo, item.tmdtTongSo]);
-        // this.total.tmdtNstw = sumNumber([this.total.tmdtNstw, item.tmdtNstw]);
-        // this.total.keHoachTongSo = sumNumber([this.total.keHoachTongSo, item.keHoachTongSo]);
-        // this.total.keHoachNstw = sumNumber([this.total.keHoachNstw, item.keHoachNstw]);
-        // this.total.uocGiaiNganDauNamTong = sumNumber([this.total.uocGiaiNganDauNamTong, item.uocGiaiNganDauNamTong]);
+        this.total.thienNtruoc = sumNumber([this.total.thienNtruoc, item.thienNtruoc]);
+        this.total.namDtoan = sumNumber([this.total.namDtoan, item.namDtoan]);
+        this.total.namUocThien = sumNumber([this.total.namUocThien, item.namUocThien]);
+        this.total.namKh = sumNumber([this.total.namKh, item.namKh]);
+        this.total.giaTriThamDinh = sumNumber([this.total.giaTriThamDinh, item.giaTriThamDinh]);
       }
     })
   }
 
   checkEdit(stt: string) {
-    if (stt.startsWith('0.1.1') || stt.startsWith('0.1.2')) {
+
+    if ((stt.startsWith('0.1.1') && this.viewAppraisalValue == false) || (stt.startsWith('0.1.2') && this.viewAppraisalValue == false)) {
       return false
     }
     const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
     return lstTemp.every(e => !e.stt.startsWith(stt));
   }
+
+  // checkEditTd(stt: string) {
+  //   const lstTemp = this.lstCtietBcao.filter(e => e.stt !== stt);
+  //   return lstTemp.every(e => !e.stt.startsWith(stt));
+  // }
 
   checkAdd(data: ItemData) {
     if (data.stt == '0.2.3') {

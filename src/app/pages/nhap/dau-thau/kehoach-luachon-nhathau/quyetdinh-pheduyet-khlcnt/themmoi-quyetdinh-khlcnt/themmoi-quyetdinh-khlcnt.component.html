@@ -48,7 +48,7 @@
     </div>
   </div>
   <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV " nzShowIcon nzType="error" nzMessage="Lý do từ chối"
-    nzDescription="{{formData.value.lyDoTuChoi}}">
+    nzDescription="{{formData.value.ldoTuchoi}}">
   </nz-alert>
   <nz-card class="mg-t-16 flex-card p-lr16">
     <form nz-form nzLayout="vertical" [formGroup]="formData">
@@ -661,76 +661,6 @@
               </ng-container>
             </ng-container>
           </tbody>
-          <!-- <tbody>
-            <ng-container *ngFor="let item of danhsachDx , let i = index">
-              <tr>
-                <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                <td>{{item.goiThau}}</td>
-                <td>{{item.tenCloaiVthh}}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>{{item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.dviTinh }}</td>
-                <td>{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{item.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>
-                  <a (click)="themMoiTongCuc(item,i)">
-                    <i class="fa fa-pencil"></i>
-                  </a>
-                  <a (click)="deleteRow(i)">
-                    <i class="fa fa-trash-o do"></i>
-                  </a>
-                </td>
-              </tr>
-              <ng-container *ngIf="expandSet.has(i)">
-                <ng-container *ngFor="let dtGoiThau of item.children, let y = index">
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)"></td>
-                    <td>{{dtGoiThau.tenDvi}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{item.dviTinh }}</td>
-                    <td>{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{dtGoiThau.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{dtGoiThau.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                    <td class="text-right">
-                    </td>
-                  </tr>
-                  <ng-container *ngIf="expandSet2.has(y)">
-                    <tr *ngFor="let diemKho of dtGoiThau.children">
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td></td>
-                      <td>{{diemKho.tenDvi}}</td>
-                      <td></td>
-                      <td></td>
-                      <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td></td>
-                      <td>{{item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td>{{item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td>{{diemKho.soLuong * item.donGiaTamTinh | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td>{{diemKho.soLuong * item.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                      <td class="text-right">
-                      </td>
-                    </tr>
-                  </ng-container>
-                </ng-container>
-              </ng-container>
-            </ng-container>
-          </tbody> -->
         </nz-table>
       </nz-card>
       <form nz-form nzLayout="vertical" [formGroup]="formData">

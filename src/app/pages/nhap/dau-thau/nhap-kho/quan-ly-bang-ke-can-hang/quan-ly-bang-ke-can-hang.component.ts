@@ -1,31 +1,28 @@
 import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
 import { BaseComponent } from "../../../../../components/base/base.component";
 import {
   QuyetDinhGiaoNhapHangService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'quan-ly-bang-ke-can-hang',
   templateUrl: './quan-ly-bang-ke-can-hang.component.html',
   styleUrls: ['./quan-ly-bang-ke-can-hang.component.scss'],
 })
-export class QuanLyBangKeCanHangComponent extends BaseComponent implements OnInit {
+export class QuanLyBangKeCanHangComponent extends Base2Component implements OnInit {
   @Input() typeVthh: string;
 
   searchFilter = {
@@ -66,12 +63,15 @@ export class QuanLyBangKeCanHangComponent extends BaseComponent implements OnIni
   };
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
-    super(httpClient, storageService, quanLyBangKeCanHangService);
+    super(httpClient, storageService, notification, spinner, modal, quanLyBangKeCanHangService);
   }
 
   async ngOnInit() {

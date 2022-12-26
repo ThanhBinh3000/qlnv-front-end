@@ -60,6 +60,7 @@ export class PhuLuc05Component implements OnInit {
   status = false;
   statusBtnFinish: boolean;
   statusBtnOk: boolean;
+  statusPrint: boolean;
   editMoneyUnit = false;
   isDataAvailable = false;
   // check tham dinh
@@ -99,6 +100,7 @@ export class PhuLuc05Component implements OnInit {
     this.editAppraisalValue = this.dataInfo?.editAppraisalValue;
     this.viewAppraisalValue = this.dataInfo?.viewAppraisalValue;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
+    this.statusPrint = this.dataInfo?.statusBtnPrint;
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
@@ -178,7 +180,7 @@ export class PhuLuc05Component implements OnInit {
   }
 
   // luu
-  async save(trangThai: string) {
+  async save(trangThai: string, lyDoTuChoi: string) {
     let checkSaveEdit;
     //check xem tat ca cac dong du lieu da luu chua?
     //chua luu thi bao loi, luu roi thi cho di
@@ -218,14 +220,16 @@ export class PhuLuc05Component implements OnInit {
 
     if (!this.viewAppraisalValue) {
       lstCtietBcaoTemp?.forEach(item => {
-          item.keHoachVonTd = item.keHoachVon;
+        item.keHoachVonTd = item.keHoachVon;
       })
-  }
+    }
 
     const request = JSON.parse(JSON.stringify(this.formDetail));
     request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
     request.trangThai = trangThai;
-
+    if (lyDoTuChoi) {
+      request.lyDoTuChoi = lyDoTuChoi;
+    }
     this.spinner.show();
     this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
       async data => {
@@ -292,7 +296,7 @@ export class PhuLuc05Component implements OnInit {
     });
     modalTuChoi.afterClose.subscribe(async (text) => {
       if (text) {
-        this.onSubmit(mcn, text);
+        this.save(mcn, text);
       }
     });
   }
@@ -473,6 +477,9 @@ export class PhuLuc05Component implements OnInit {
     this.total = new ItemData();
     this.lstCtietBcao.forEach(item => {
       if (item.level == 0) {
+        this.total.giaTriCongTrinh = sumNumber([this.total.giaTriCongTrinh, item.giaTriCongTrinh]);
+        this.total.qdPdBcaoGtriDtoanKtoanTmdt = sumNumber([this.total.qdPdBcaoGtriDtoanKtoanTmdt, item.qdPdBcaoGtriDtoanKtoanTmdt]);
+        this.total.qdPdQtoanGtriQtoan = sumNumber([this.total.qdPdQtoanGtriQtoan, item.qdPdQtoanGtriQtoan]);
         this.total.luyKeVapVon = sumNumber([this.total.luyKeVapVon, item.luyKeVapVon]);
         this.total.keHoachVon = sumNumber([this.total.keHoachVon, item.keHoachVon]);
         this.total.keHoachVonTd = sumNumber([this.total.keHoachVonTd, item.keHoachVonTd]);
