@@ -1,40 +1,23 @@
-import { saveAs } from 'file-saver';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { UserLogin } from 'src/app/models/userlogin';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuanLyPhieuNhapKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { UserService } from 'src/app/services/user.service';
-import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import { HoSoKyThuatService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoKyThuat.service';
-import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { Validators } from "@angular/forms";
 import { STATUS } from "../../../../../../constants/status";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { BaseComponent } from "../../../../../../components/base/base.component";
 import { isEmpty } from 'lodash';
-import { HelperService } from "../../../../../../services/helper.service";
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-
+import { Base2Component } from 'src/app/components/base2/base2.component';
 
 
 @Component({
@@ -42,7 +25,7 @@ import { StorageService } from 'src/app/services/storage.service';
   templateUrl: './them-moi-phieu-nhap-kho.component.html',
   styleUrls: ['./them-moi-phieu-nhap-kho.component.scss'],
 })
-export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnInit {
+export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() loaiVthh: string;
@@ -59,13 +42,15 @@ export class ThemMoiPhieuNhapKhoComponent extends BaseComponent implements OnIni
   dataTable: any[] = [];
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
-    public userService: UserService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
   ) {
-    super(httpClient, storageService, quanLyPhieuNhapKhoService)
+    super(httpClient, storageService, notification, spinner, modal, quanLyPhieuNhapKhoService);
     this.formData = this.fb.group({
       id: [],
       nam: [dayjs().get('year')],
