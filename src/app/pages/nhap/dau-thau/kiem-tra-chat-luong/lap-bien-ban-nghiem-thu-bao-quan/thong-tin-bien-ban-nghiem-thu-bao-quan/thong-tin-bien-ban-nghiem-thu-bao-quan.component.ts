@@ -548,36 +548,27 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
   pheDuyet() {
     let trangThai = ''
-    // switch (this.detail.trangThai) {
-    //   case STATUS.DU_THAO: {
-    //     trangThai = STATUS.CHO_DUYET_TK;
-    //     break;
-    //   }
-    //   case STATUS.CHO_DUYET_TK: {
-    //     trangThai = STATUS.CHO_DUYET_KT;
-    //     break;
-    //   }
-    //   case STATUS.TU_CHOI_TK: {
-    //     trangThai = STATUS.CHO_DUYET_KT;
-    //     break;
-    //   }
-    //   case STATUS.CHO_DUYET_KT: {
-    //     trangThai = STATUS.CHO_DUYET_LDCC;
-    //     break;
-    //   }
-    //   case STATUS.TU_CHOI_KT: {
-    //     trangThai = STATUS.CHO_DUYET_LDCC;
-    //     break;
-    //   }
-    //   case STATUS.CHO_DUYET_LDCC: {
-    //     trangThai = STATUS.DA_DUYET_LDCC;
-    //     break;
-    //   }
-    //   case STATUS.TU_CHOI_LDCC: {
-    //     trangThai = STATUS.DA_DUYET_LDCC;
-    //     break;
-    //   }
-    // }
+    switch (this.formData.value.trangThai) {
+      case STATUS.TU_CHOI_LDCC:
+      case STATUS.TU_CHOI_KT:
+      case STATUS.TU_CHOI_TK:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TK;
+        break;
+      }
+      case STATUS.CHO_DUYET_TK: {
+        trangThai = STATUS.CHO_DUYET_KT;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.CHO_DUYET_LDCC;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.DA_DUYET_LDCC;
+        break;
+      }
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -616,20 +607,20 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component imp
 
   tuChoi() {
     let trangThai = ''
-    // switch (this.detail.trangThai) {
-    //   case STATUS.CHO_DUYET_TK: {
-    //     trangThai = STATUS.TU_CHOI_TK;
-    //     break;
-    //   }
-    //   case STATUS.CHO_DUYET_KT: {
-    //     trangThai = STATUS.TU_CHOI_KT;
-    //     break;
-    //   }
-    //   case STATUS.CHO_DUYET_LDCC: {
-    //     trangThai = STATUS.TU_CHOI_LDCC;
-    //     break;
-    //   }
-    // }
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_TK: {
+        trangThai = STATUS.TU_CHOI_TK;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.TU_CHOI_KT;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.TU_CHOI_LDCC;
+        break;
+      }
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,
