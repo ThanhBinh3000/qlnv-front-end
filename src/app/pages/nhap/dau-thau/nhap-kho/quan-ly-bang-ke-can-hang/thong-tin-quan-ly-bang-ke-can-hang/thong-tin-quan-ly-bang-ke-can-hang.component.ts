@@ -118,7 +118,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
       super.ngOnInit();
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
-        this.loadSoQuyetDinh(),
+        // this.loadSoQuyetDinh(),
       ]);
       if (this.id) {
         await this.loadChiTiet(this.id);
@@ -172,7 +172,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   async loadSoQuyetDinh() {
     let body = {
       "maDvi": this.userInfo.MA_DVI,
-      "maVthh": this.typeVthh,
+      "loaiVthh": this.typeVthh,
       "paggingReq": {
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
@@ -190,6 +190,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component impleme
   }
 
   async openDialogSoQd() {
+    await this.loadSoQuyetDinh();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
       nzContent: DialogTableSelectionComponent,
