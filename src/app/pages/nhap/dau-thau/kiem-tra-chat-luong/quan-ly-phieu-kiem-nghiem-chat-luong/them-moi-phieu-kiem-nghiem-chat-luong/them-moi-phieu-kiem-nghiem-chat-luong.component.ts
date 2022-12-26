@@ -145,7 +145,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       await Promise.all([
         this.loadDanhMucPhuongThucBaoQuan(),
         this.loadTieuChuan(),
-        this.loadBbLayMau(),
       ]);
       if (this.id > 0) {
         await this.getDetail(this.id);
@@ -355,6 +354,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
       },
+      loaiVthh: this.loaiVthh,
     }
     let res = await this.quanLyBienBanLayMauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -365,6 +365,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
   }
 
   openDialogBbLayMau() {
+    this.loadBbLayMau();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách biên bản lấy mẫu',
       nzContent: DialogTableSelectionComponent,
