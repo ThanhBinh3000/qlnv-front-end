@@ -74,7 +74,7 @@ export class BieuMau151Component implements OnInit {
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   allChecked = false;
   listIdDelete = "";
-  namBaoCao: string;
+  namBaoCao: number;
   namTruoc: string;
   namKeHoach: string;
 
@@ -97,7 +97,7 @@ export class BieuMau151Component implements OnInit {
   async initialization() {
     this.spinner.show();
     this.formDetail = this.dataInfo?.data;
-    this.namBaoCao = this.dataInfo?.namBcao;
+    this.namBaoCao = Number(this.dataInfo?.namBcao);
     this.namTruoc = (Number(this.namBaoCao) - 1).toString();
     this.namKeHoach = (Number(this.namBaoCao) + 1).toString();
     this.thuyetMinh = this.formDetail?.thuyetMinh;
