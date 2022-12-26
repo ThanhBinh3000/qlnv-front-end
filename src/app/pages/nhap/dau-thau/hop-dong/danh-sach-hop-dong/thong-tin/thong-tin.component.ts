@@ -427,7 +427,7 @@ export class ThongTinComponent implements OnInit, OnChanges {
 
     bindingDataKqLcntLuongThuc(data) {
         const dataDtl = data.qdKhlcntDtl
-        this.listGoiThau = dataDtl.dsGoiThau.filter(item => item.trangThai == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
+        this.listGoiThau = dataDtl.children.filter(item => item.trangThai == STATUS.THANH_CONG && (data.listHopDong.map(e => e.idGoiThau).indexOf(item.id) < 0));
         this.formData.patchValue({
             soQdKqLcnt: data.soQd,
             idQdKqLcnt: data.id,

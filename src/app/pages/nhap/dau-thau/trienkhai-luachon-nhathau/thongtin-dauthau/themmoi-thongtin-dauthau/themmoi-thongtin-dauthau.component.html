@@ -346,13 +346,14 @@
                                 <td>{{dtGoiThau.goiThau}}</td>
                                 <td>{{dtGoiThau.diaDiemNhap}}</td>
                                 <td>{{dtGoiThau.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td>{{dtGoiThau.donGia | number : '1.0-1' : 'vi_VN'}}</td>
-                                <td>{{dtGoiThau.soLuong * dtGoiThau.donGia * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
+                                <td>{{dtGoiThau.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                                <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaVat * 1000 | number: '1.0-1' : 'vi_VN'}}</td>
                                 <td>{{dtGoiThau.tenNhaThau}}</td>
                                 <td>{{dtGoiThau.donGiaNhaThau | number : '1.0-1' : 'vi_VN'}}</td>
                                 <td>{{dtGoiThau.soLuong * dtGoiThau.donGiaNhaThau * 1000 | number: '1.0-1' : 'vi_VN' }}
                                 </td>
-                                <td>{{(dtGoiThau.donGiaNhaThau - dtGoiThau.donGia) * dtGoiThau.soLuong * 1000 | number:
+                                <td>{{(dtGoiThau.donGiaNhaThau - dtGoiThau.donGiaVat) * dtGoiThau.soLuong * 1000 |
+                                    number:
                                     '1.0-1' : 'vi_VN' }} </td>
                                 <td>{{dtGoiThau.tenTrangThai}}</td>
                                 <td>

@@ -30,13 +30,14 @@ import { filter } from 'rxjs/operators';
 import { HelperService } from 'src/app/services/helper.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
   templateUrl: './thong-tin-bien-ban-nghiem-thu-bao-quan.component.html',
   styleUrls: ['./thong-tin-bien-ban-nghiem-thu-bao-quan.component.scss']
 })
-export class ThongTinBienBanNghiemThuBaoQuanComponent extends BaseComponent implements OnInit {
+export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() typeVthh: string;
@@ -66,14 +67,17 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends BaseComponent impl
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private donViService: DonviService,
     private danhMucService: DanhMucService,
     private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
   ) {
-    super(httpClient, storageService, quanLyNghiemThuKeLotService);
+    super(httpClient, storageService, notification, spinner, modal, quanLyNghiemThuKeLotService);
     this.formData = this.fb.group(
       {
         id: [],

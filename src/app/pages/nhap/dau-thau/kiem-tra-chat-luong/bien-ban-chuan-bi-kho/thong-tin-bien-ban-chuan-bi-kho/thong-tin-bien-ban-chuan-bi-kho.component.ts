@@ -33,13 +33,14 @@ import {
 import { HelperService } from 'src/app/services/helper.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-chuan-bi-kho',
   templateUrl: './thong-tin-bien-ban-chuan-bi-kho.component.html',
   styleUrls: ['./thong-tin-bien-ban-chuan-bi-kho.component.scss']
 })
-export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements OnInit {
+export class ThongTinBienBanChuanBiKhoComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() loaiVthh: string;
@@ -74,15 +75,18 @@ export class ThongTinBienBanChuanBiKhoComponent extends BaseComponent implements
   dataTable: any[] = [];
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private danhMucService: DanhMucService,
     private donViService: DonviService,
     private bienBanChuanBiKhoService: QuanLyBienBanChuanBiKhoService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
   ) {
-    super(httpClient, storageService, bienBanChuanBiKhoService);
+    super(httpClient, storageService, notification, spinner, modal, bienBanChuanBiKhoService);
     this.formData = this.fb.group(
       {
         id: [],
