@@ -356,7 +356,7 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
   }
 
   validateSave(): boolean {
-    if (this.calcTong() != this.formData.value.soLuongNhapKho) {
+    if (this.calcTong() != this.formData.value.soLuong) {
       this.notification.error(MESSAGE.ERROR, "Số lượng bảng kê cân hàng và phiếu nhập kho không đủ số lượng đầy kho")
       return false
     }
