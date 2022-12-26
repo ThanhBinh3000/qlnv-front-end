@@ -445,12 +445,13 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       this.formData.patchValue({
-        soQd: this.dataChiTieu.soQuyetDinh
+        soQd: res2.data.soQuyetDinh
+      });
+    } else {
+      this.formData.patchValue({
+        soQd: '150/TCDT',
       });
     }
-    this.formData.patchValue({
-      soQd: '150/TCDT',
-    });
   }
 
   convertTienTobangChu(tien: number): string {

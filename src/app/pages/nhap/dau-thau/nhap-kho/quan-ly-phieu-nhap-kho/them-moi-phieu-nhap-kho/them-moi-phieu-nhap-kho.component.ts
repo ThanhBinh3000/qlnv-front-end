@@ -302,7 +302,10 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       if (res.data) {
         const data = res.data;
         this.helperService.bidingDataInFormGroup(this.formData, data);
-        this.dataTable = data.hangHoaList
+        this.dataTable = data.hangHoaList;
+        this.formData.patchValue({
+          soBangKeCanHang: data.bangKeCanHang?.soBangKe
+        })
       }
     }
   }
