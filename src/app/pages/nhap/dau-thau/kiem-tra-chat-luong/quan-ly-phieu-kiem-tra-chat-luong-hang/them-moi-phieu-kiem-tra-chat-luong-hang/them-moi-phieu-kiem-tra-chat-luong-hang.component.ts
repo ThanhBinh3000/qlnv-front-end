@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Validators } from '@angular/forms';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -10,21 +9,14 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { DialogThemBienbanNghiemThuKeLotComponent } from 'src/app/components/dialog/dialog-them-bien-ban-nghiem-thu-ke-lot/dialog-them-bien-ban-nghiem-thu-ke-lot.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../../constants/status";
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
-import { HelperService } from 'src/app/services/helper.service';
-import { isEmpty } from 'lodash';
-import { BaseComponent } from "../../../../../../components/base/base.component";
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 
 
 @Component({
@@ -32,11 +24,11 @@ import { StorageService } from 'src/app/services/storage.service';
   templateUrl: './them-moi-phieu-kiem-tra-chat-luong-hang.component.html',
   styleUrls: ['./them-moi-phieu-kiem-tra-chat-luong-hang.component.scss'],
 })
-export class ThemMoiPhieuKiemTraChatLuongHangComponent extends BaseComponent implements OnInit {
+export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() isTatCa: boolean;
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
   @Input() idQdGiaoNvNh: number;
   @Output()
   showListEvent = new EventEmitter<any>();
@@ -60,17 +52,17 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends BaseComponent imp
   listFileDinhKem: any[] = [];
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private phieuKtraCluongService: QuanLyPhieuKiemTraChatLuongHangService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private danhMucService: DanhMucService,
-    private thongTinHopDongService: ThongTinHopDongService,
-    private donViService: DonviService,
-    private thongTinHopDong: ThongTinHopDongService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
   ) {
-    super(httpClient, storageService, phieuKtraCluongService);
+    super(httpClient, storageService, notification, spinner, modal, phieuKtraCluongService);
     this.formData = this.fb.group(
       {
         id: [],
@@ -265,7 +257,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends BaseComponent imp
 
   async loadTieuChuan() {
     let body = {
-      "maHang": this.typeVthh,
+      "maHang": this.loaiVthh,
       "namQchuan": null,
       "paggingReq": {
         "limit": 1000,
