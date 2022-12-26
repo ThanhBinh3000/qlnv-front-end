@@ -8,11 +8,6 @@ const routes: Routes = [
     component: TheoDoiBaoQuanComponent,
     children: [
       {
-        path: '',
-        redirectTo: 'theo-doi-bao-quan',
-        pathMatch: 'full',
-      },
-      {
         path: 'theo-doi-bao-quan',
         loadChildren: () =>
           import(
