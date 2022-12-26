@@ -64,6 +64,7 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
   dsNganLo = [];
   dsDonViTinh = [];
   idDonViSelected = null;
+   dsNam: any[] = [];
 
   constructor(
     private httpClient: HttpClient,
@@ -72,6 +73,7 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
     private danhMucService: DanhMucService,
     private notification: NzNotificationService,
     private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
+    private modal: NzModalService,
     private quanLyHangTrongKhoService: QuanLyHangTrongKhoService,
     private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
     public globals : Globals
@@ -80,7 +82,7 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [''],
-      nam: [dayjs().get('year'), [Validators.required]],
+      nam: [ null, [Validators.required]],
       tenDvi: ['', [Validators.required]],
       maDvi: [''],
       tuNgay: ['', [Validators.required]],
@@ -106,7 +108,8 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
         this.loadDiemKho(),
-        this.getAllLoaiVthh()
+        this.getAllLoaiVthh(),
+        this.loadDsNam()
       ]);
       if (this.idInput) {
         await this.loadChiTiet();
@@ -122,6 +125,13 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
     }
   }
 
+  loadDsNam() {
+    let thisYear = dayjs().get('year');
+    for (let i = -3; i < 23; i++) {
+      this.dsNam.push((thisYear + i).toString());
+    }
+  }
+
 
   async loadChiTiet() {
     this.btnTaoThe = false;
@@ -129,6 +139,7 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let detail = res.data
       this.formData.patchValue({
+        id : this.idInput,
         nam: detail.nam,
         tuNgay: detail.tuNgay,
         denNgay: detail.denNgay,
@@ -138,7 +149,11 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
         maNhaKho: detail.maNhaKho,
         maNganKho: detail.maNganKho,
         maLoKho: detail.maLoKho,
-        donViTinh: detail.donViTinh
+        donViTinh: detail.donViTinh,
+        tenDvi : detail.tenDvi,
+        tonDauKy : detail.tonDauKy,
+        trangThai : detail.trangThai,
+        tenTrangThai : detail.tenTrangThai
       });
       this.dataTable = detail.ctList
     }
@@ -354,6 +369,10 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
             }
             case STATUS.TU_CHOI_LDCC : {
               trangThai = STATUS.CHO_DUYET_LDCC;
+              break;
+            }
+            case STATUS.CHO_DUYET_LDCC : {
+              trangThai = STATUS.DA_DUYET_LDCC;
               break;
             }
           }

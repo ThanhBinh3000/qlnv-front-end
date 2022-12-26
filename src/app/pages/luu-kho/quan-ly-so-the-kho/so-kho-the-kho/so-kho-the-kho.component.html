@@ -186,7 +186,7 @@
               <td>{{ theKho.ngayTao }}</td>
               <td>{{ theKho.tenTrangThai }}</td>
               <td *ngIf="userService.isChiCuc()" style="text-align: center;">
-                <a *ngIf="theKho.trangThai == STATUS.DA_DUYET_LDCC " (click)="viewDetail(theKho.id, true)">
+                <a *ngIf="theKho.trangThai == STATUS.DA_DUYET_LDCC || theKho.trangThai == STATUS.CHO_DUYET_LDCC " (click)="viewDetail(theKho.id, true)">
                   <i class=" icon htvbdh_eye"></i>
                 </a>
                 <a *ngIf="theKho.trangThai == STATUS.TU_CHOI_LDCC ||theKho.trangThai == STATUS.DU_THAO  " (click)="viewDetail(theKho.id, false)">

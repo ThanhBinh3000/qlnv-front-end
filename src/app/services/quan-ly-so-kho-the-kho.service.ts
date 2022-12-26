@@ -8,8 +8,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class QuanLySoKhoTheKhoService extends BaseService {
-  // GATEWAY = '/qlnv-luukho';
-  GATEWAY = '';
+  GATEWAY = '/qlnv-luukho';
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'so-kho-the-kho', '');
   }
@@ -26,7 +25,7 @@ export class QuanLySoKhoTheKhoService extends BaseService {
 
   sua(body: any): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/cap-nhat`
-    return this.httpClient.put<any>(url, body).toPromise();
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 
   timKiem(body: any): Promise<any> {
