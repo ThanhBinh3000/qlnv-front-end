@@ -219,7 +219,6 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
       },
-      loaiVthh: this.loaiVthh
     };
 
     let res = await this.chaogiaUyquyenMualeService.search(body);
@@ -230,7 +229,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
       element.tenCloaiVthh = element.hhQdPheduyetKhMttHdr?.tenCloaiVthh;
       element.tenLoaiVthh = element.hhQdPheduyetKhMttHdr?.tenLoaiVthh;
     });
-    console.log(this.listQdPdKhMtt, 45454)
+    console.log(this.listQdPdKhMtt, 444)
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách đề xuất kế hoạch mua trực tiếp',
       nzContent: DialogTableSelectionComponent,
@@ -238,6 +237,7 @@ export class ThemmoiQuyetdinhKetquaChaogiaComponent implements OnInit {
       nzClosable: false,
       nzWidth: '1200px',
       nzFooter: null,
+
       nzComponentParams: {
         dataTable: this.listQdPdKhMtt,
         dataHeader: ['Số Đề Xuất KHMTT', 'Số QĐ PD KHMTT', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
