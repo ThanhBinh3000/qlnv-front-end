@@ -556,13 +556,14 @@ export class PhuLuc01Component implements OnInit {
                 stt: data.stt,
                 tenDanhMuc: data.tenDanhMuc,
                 level: data.level,
+                ttienTd: data.ttienTd,   
                 danhMuc: data.danhMuc,
-                ttienNamDtoan: data.ttienNamDtoan,
-                thienNamTruoc: data.thienNamTruoc,
-                dtoanNamHtai: data.dtoanNamHtai,
-                uocNamHtai: data.uocNamHtai,
-                dmucNamDtoan: data.dmucNamDtoan,
-                ttienTd: data.ttienTd,
+                // sluongNamDtoan:data.sluongNamDtoan,
+                // ttienNamDtoan: data.ttienNamDtoan,
+                // thienNamTruoc: data.thienNamTruoc,
+                // dtoanNamHtai: data.dtoanNamHtai,
+                // uocNamHtai: data.uocNamHtai,
+                // dmucNamDtoan: data.dmucNamDtoan,
             }
             this.lstCtietBcao.forEach(item => {
                 if (this.getHead(item.stt) == stt) {
@@ -570,7 +571,7 @@ export class PhuLuc01Component implements OnInit {
                     this.lstCtietBcao[index].thienNamTruoc = sumNumber([this.lstCtietBcao[index].thienNamTruoc, item.thienNamTruoc]);
                     this.lstCtietBcao[index].dtoanNamHtai = sumNumber([this.lstCtietBcao[index].dtoanNamHtai, item.dtoanNamHtai]);
                     this.lstCtietBcao[index].uocNamHtai = sumNumber([this.lstCtietBcao[index].uocNamHtai, item.uocNamHtai]);
-                    this.lstCtietBcao[index].dmucNamDtoan = sumNumber([this.lstCtietBcao[index].dmucNamDtoan, item.dmucNamDtoan]);
+                    // this.lstCtietBcao[index].dmucNamDtoan = sumNumber([this.lstCtietBcao[index].dmucNamDtoan, item.dmucNamDtoan]);
                     this.lstCtietBcao[index].ttienTd = sumNumber([this.lstCtietBcao[index].ttienTd, item.ttienTd]);
                 }
             })
@@ -593,12 +594,13 @@ export class PhuLuc01Component implements OnInit {
                     tenDanhMuc: data.tenDanhMuc,
                     level: data.level,
                     danhMuc: data.danhMuc,
-                    ttienNamDtoan: data.ttienNamDtoan,
-                    thienNamTruoc: data.thienNamTruoc,
-                    dtoanNamHtai: data.dtoanNamHtai,
-                    uocNamHtai: data.uocNamHtai,
-                    dmucNamDtoan: data.dmucNamDtoan,
-                    ttienTd: data.ttienTd,
+                    // sluongNamDtoan: data.sluongNamDtoan,
+                    // ttienNamDtoan: data.ttienNamDtoan,
+                    // thienNamTruoc: data.thienNamTruoc,
+                    // dtoanNamHtai: data.dtoanNamHtai,
+                    // uocNamHtai: data.uocNamHtai,
+                    // dmucNamDtoan: data.dmucNamDtoan,
+                    // ttienTd: data.ttienTd,
                 }
                 this.lstCtietBcao.forEach(item => {
                     if (this.getHead(item.stt) == stt) {
@@ -606,7 +608,7 @@ export class PhuLuc01Component implements OnInit {
                         this.lstCtietBcao[index].thienNamTruoc = sumNumber([this.lstCtietBcao[index].thienNamTruoc, item.thienNamTruoc]);
                         this.lstCtietBcao[index].dtoanNamHtai = sumNumber([this.lstCtietBcao[index].dtoanNamHtai, item.dtoanNamHtai]);
                         this.lstCtietBcao[index].uocNamHtai = sumNumber([this.lstCtietBcao[index].uocNamHtai, item.uocNamHtai]);
-                        this.lstCtietBcao[index].dmucNamDtoan = sumNumber([this.lstCtietBcao[index].dmucNamDtoan, item.dmucNamDtoan]);
+                        // this.lstCtietBcao[index].dmucNamDtoan = sumNumber([this.lstCtietBcao[index].dmucNamDtoan, item.dmucNamDtoan]);
                         this.lstCtietBcao[index].ttienTd = sumNumber([this.lstCtietBcao[index].ttienTd, item.ttienTd]);
                     }
                 })
