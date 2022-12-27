@@ -1,127 +1,157 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import * as dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { DonviService } from 'src/app/services/donvi.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { UserService } from 'src/app/services/user.service';
-import { QuanLySoKhoTheKhoService } from 'src/app/services/quan-ly-so-kho-the-kho.service';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { saveAs } from 'file-saver';
-import { Globals } from 'src/app/shared/globals';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {Component, EventEmitter, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {UserService} from 'src/app/services/user.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {MESSAGE} from 'src/app/constants/message';
+import {DANH_MUC_LEVEL} from 'src/app/pages/luu-kho/luu-kho.constant';
+import {saveAs} from 'file-saver';
+import {cloneDeep} from 'lodash';
+import {NzModalService} from "ng-zorro-antd/modal";
+import {Globals} from "../../../shared/globals";
 import {STATUS} from "../../../constants/status";
+import * as dayjs from "dayjs";
+import {TheoDoiBqService} from "../../../services/theo-doi-bq.service";
+
+
 @Component({
   selector: 'app-theo-doi-bao-quan',
   templateUrl: './theo-doi-bao-quan.component.html',
   styleUrls: ['./theo-doi-bao-quan.component.scss']
 })
 export class TheoDoiBaoQuanComponent implements OnInit {
-
   userInfo: UserLogin;
   detail: any = {};
-  isDetail: false;
-  isView: boolean;
+  isAddNew = false;
 
   formData: FormGroup;
-
-  isAddNew = false;
 
   allChecked = false;
   indeterminate = false;
 
-  STATUS = STATUS;
 
-  filterDate = new Date();
-
-  dsNam: string[] = []
+  dsTong;
+  dsDonVi = [];
+  dsDonViDataSource = [];
+  dsHangHoa = [];
+  dsLoaiHangHoa = [];
+  dsLoaiHangHoaDataSource = [];
 
   searchInTable: any = {
-    nam: dayjs().get('year'),
-    maDvi: "",
-    tenDVi: "",
-    loaiHang: "",
-    maChungLoaiHang: "",
-    ngayTao: ""
-  }
-
-  filterTable: any = {
-    nam: null,
-    tuNgay: null,
-    denNgay: null,
-    loaiHang: null,
-    maChungLoaiHang: null,
-    ngayTao: null,
+    maDanhSach: null,
     donVi: null,
-    diemKho: null,
-    nhaKho: null,
-    nganKho: null,
-    loKho: null,
+    ngayTao: new Date(),
     trangThai: null,
   };
+  filterTable: any = {
+    maDS: [null],
+    tenDVi: [null],
+    ngayTao: [null],
+    trangThaiXL: [null],
+  }
+
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 10;
+
   setOfCheckedId = new Set<number>();
-
   dataTable: any[] = [];
-  dataTableAll: any[] = []
-
-  idSelected: number = 0
-  isStatus: any
-  getCount = new EventEmitter<any>();
-
+  dataTableAll: any[] = [];
+  danhSachChiCuc: any[] = [];
   listLoaiHangHoa: any[] = [];
   listChungLoaiHangHoa: any[] = [];
-  dsDonVi: any = [];
+  dsNam: any[] = [];
+  idSelected: number;
+  isViewDetail: boolean;
+  getCount = new EventEmitter<any>();
 
   constructor(
-    private fb: FormBuilder,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private quanLySoKhoTheKhoService: QuanLySoKhoTheKhoService,
-    private modal: NzModalService,
+    private readonly fb: FormBuilder,
     public userService: UserService,
+    private readonly donviService: DonviService,
+    private readonly danhMucService: DanhMucService,
+    private readonly spinner: NgxSpinnerService,
+    private modal: NzModalService,
+    private donViService: DonviService,
+    private readonly notification: NzNotificationService,
+    private theoDoiBqService: TheoDoiBqService,
     public globals: Globals,
-    private danhMucService: DanhMucService,
-    private donviService: DonviService,
   ) {
     this.formData = this.fb.group({
-      nam: [null],
-      maDvi: [null],
-      tenDVi: [null],
-      loaiHang: [null],
-      maChungLoaiHang: [null],
-      ngayTao: [null],
-    })
+      maDonVi: [null],
+      nam: [dayjs().get('year')],
+      loaiHH: [null],
+      tenHH: [null],
+    });
   }
-  async ngOnInit(): Promise<void> {
-    try {
-      this.spinner.show();
-      this.userInfo = this.userService.getUserLogin();
+
+
+  async ngOnInit() {
+    this.spinner.show();
+    this.userInfo = this.userService.getUserLogin(),
       await Promise.all([
         this.loadDsNam(),
-        this.initData(),
         this.loaiVTHHGetAll(),
-        this.search()
+        this.loadDanhSachChiCuc(),
+        this.search(),
       ])
-      this.spinner.hide();
-    } catch (error) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    } finally {
-      this.spinner.hide();
+    this.spinner.hide()
+  }
+
+  loadDsNam() {
+    let thisYear = dayjs().get('year');
+    for (let i = -10; i < 10; i++) {
+      this.dsNam.push((thisYear - i).toString());
     }
   }
-  async initData() {
-    this.userInfo = this.userService.getUserLogin();
-    this.detail.maDvi = this.userInfo.MA_DVI;
-    this.detail.tenDvi = this.userInfo.TEN_DVI ? this.userInfo.TEN_DVI : null;
+
+  async changeLoaiHangHoa(id: any) {
+    if (id && id > 0) {
+      let loaiHangHoa = this.listLoaiHangHoa.filter(item => item.ma === id);
+      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
+    }
   }
+
+  async loadDanhSachChiCuc() {
+    if (!this.userService.isChiCuc()) {
+      const body = {
+        maDviCha: this.userInfo.MA_DVI,
+        trangThai: '01',
+      };
+      const dsTong = await this.donViService.layDonViTheoCapDo(body);
+      this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    }
+  }
+
+  async search() {
+    this.spinner.show();
+    let body = this.formData.value;
+    body.maDonVi = this.userInfo.MA_DVI
+    body.paggingReq = {
+      limit: this.pageSize,
+      page: this.page - 1
+    }
+    let res = await this.theoDoiBqService.search(body)
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.dataTable = [...data.content];
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach((item) => {
+          item.checked = false;
+        });
+      }
+      this.dataTableAll = cloneDeep(this.dataTable);
+      this.totalRecord = data.totalElements;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+    this.spinner.hide();
+  }
+
   async loaiVTHHGetAll() {
     try {
       await this.danhMucService.loadDanhMucHangHoa().subscribe((hangHoa) => {
@@ -129,8 +159,7 @@ export class TheoDoiBaoQuanComponent implements OnInit {
           hangHoa.data.forEach((item) => {
             if (item.cap === "1" && item.ma != '01') {
               this.listLoaiHangHoa = [...this.listLoaiHangHoa, item];
-            }
-            else {
+            } else {
               this.listLoaiHangHoa = [...this.listLoaiHangHoa, ...item.child];
             }
           })
@@ -141,67 +170,84 @@ export class TheoDoiBaoQuanComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-  async changeLoaiHangHoa(id: any) {
-    if (id && id > 0) {
-      let loaiHangHoa = this.listLoaiHangHoa.filter(item => item.ma === id);
-      this.listChungLoaiHangHoa = loaiHangHoa[0].child;
-    }
 
+  async clearFilter() {
+    this.formData.reset();
+    await this.search()
   }
-  onChangeLoaiHH(id: any) {
-    if (id && id !== '') {
-      this.listChungLoaiHangHoa = []
-      let data = this.listLoaiHangHoa.find(item => item.ma === id)
-      let temp = []
-      if (data != undefined) {
-        this.dataTableAll.forEach(item => {
-          if (item.loaiHang.toString().toLowerCase() === data.ten.toString().toLowerCase()) {
-            temp.push(item)
-          }
-        })
-        this.dataTable = [...temp]
-        if (this.dataTable.length > 0 && data.child.length > 0) {
-          this.listChungLoaiHangHoa = data.child
-        }
+
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value
+        body.maDonVi = this.userInfo.MA_DVI
+        this.theoDoiBqService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-    }
-  }
-  onChangeChungLoaiHH(id: any) {
-    if (id && id !== '') {
-      let data = this.listChungLoaiHangHoa.find(item => item.ma === id)
-      let temp = []
-      if (data != undefined) {
-        this.dataTableAll.forEach(item => {
-          if (item.chungLoaiHang.toString().toLowerCase() === data.ten.toString().toLowerCase()) {
-            temp.push(item)
-          }
-        })
-        this.dataTable = [...temp]
-      }
-    }
-  }
-  loadDsNam() {
-    let thisYear = dayjs().get('year');
-    for (let i = -10; i < 10; i++) {
-      this.dsNam.push((thisYear - i).toString());
-    }
-  }
-  async search() {
-    this.spinner.show();
-    let body = this.formData.value
-    if (this.formData.value.ngayTao) {
-      body.tuNgay = this.formData.value.ngayTao[0]
-      body.denNgay = this.formData.value.ngayTao[1]
-    }
-    body.maDvi = this.userInfo.MA_DVI;
-    let res = await this.quanLySoKhoTheKhoService.timKiem(body);
-    if (res.msg = MESSAGE.SUCCESS) {
-      this.dataTable = res.data;
-      console.log(this.dataTable)
     } else {
-      this.notification.error(MESSAGE.ERROR, "Lỗi hệ thống!")
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
-    this.spinner.hide()
+  }
+
+  xoa() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.theoDoiBqService.deleteMuti({ids: dataDelete});
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.getCount.emit();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+  themMoi() {
+    this.isAddNew = true;
+  }
+
+  onAllChecked(checked) {
+    this.dataTable.forEach(({id}) => this.updateCheckedSet(id, checked));
+    this.refreshCheckedStatus();
   }
 
   updateAllChecked(): void {
@@ -209,7 +255,7 @@ export class TheoDoiBaoQuanComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
+          if (item.trangThai == STATUS.CHUA_TONG_HOP) {
             item.checked = true;
           }
         });
@@ -219,84 +265,40 @@ export class TheoDoiBaoQuanComponent implements OnInit {
         this.dataTable.forEach((item) => {
           item.checked = false;
         });
+      }
+    }
+  }
 
-      }
-    }
-  }
-  updateSingleChecked(): void {
-    if (this.dataTable.every(item => !item.checked)) {
-      this.allChecked = false;
-      this.indeterminate = false;
-    } else if (this.dataTable.every(item => item.checked)) {
-      this.allChecked = true;
-      this.indeterminate = false;
+  updateCheckedSet(id: number, checked: boolean): void {
+    if (checked) {
+      this.setOfCheckedId.add(id);
     } else {
-      this.indeterminate = true;
+      this.setOfCheckedId.delete(id);
     }
   }
-  filterInTable(key: string, value: string, date: boolean) {
-    if (value && value != '') {
-      this.dataTable = [];
-      let temp = [];
-      if (this.dataTableAll && this.dataTableAll.length > 0) {
-        if (date) {
-          this.dataTableAll.forEach((item) => {
-            if (item[key] && item[key].toString().toLowerCase() === dayjs(value).format('YYYY-MM-DD')) {
-              temp.push(item)
-            }
-          });
-        } else {
-          this.dataTableAll.forEach((item) => {
-            if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-              temp.push(item)
-            }
-          });
-        }
-      }
-      this.dataTable = [...this.dataTable, ...temp]
-    } else {
-      this.dataTable = cloneDeep(this.dataTableAll);
-    }
+
+  refreshCheckedStatus(): void {
+    this.allChecked = this.dataTable.every(({id}) =>
+      this.setOfCheckedId.has(id),
+    );
+    this.indeterminate =
+      this.dataTable.some(({id}) => this.setOfCheckedId.has(id)) &&
+      !this.allChecked;
   }
-  clearFilter() {
-    this.formData.reset()
-    this.filterTable = {
-      nam: null,
-      tuNgay: null,
-      denNgay: null,
-      loaiHH: null,
-      maChungLoaiHang: null,
-      ngayTao: null,
-      donVi: null,
-      diemKho: null,
-      nhaKho: null,
-      nganKho: null,
-      loKho: null,
-      trangThai: null,
-    };
-    this.initData()
-    this.search()
+
+  changePageIndex(event) {
   }
-  exportData() {
-    this.spinner.show()
-    try {
-      let body = this.formData.value
-      if (this.formData.value.ngayTao) {
-        body.tuNgay = this.formData.value.ngayTao[0]
-        body.denNgay = this.formData.value.ngayTao[1]
-      }
-      body.maDvi = this.userInfo.MA_DVI;
-      this.quanLySoKhoTheKhoService.exportList(body).subscribe((blob) => {
-        saveAs(blob, 'danh-sach-so-kho.xlsx')
-      });
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
+
+  changePageSize(event) {
   }
-  xoaItem(item: any) {
+
+  viewDetail(id: number, isView: boolean) {
+    this.idSelected = id;
+    this.isAddNew = true;
+    this.isViewDetail = isView ?? false;
+  }
+
+  xoaItem(id) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -305,80 +307,50 @@ export class TheoDoiBaoQuanComponent implements OnInit {
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      nzOnOk: () => {
+      nzOnOk: async () => {
         this.spinner.show();
         try {
-          this.quanLySoKhoTheKhoService.deleteData(item).then((res) => {
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.DELETE_SUCCESS,
-              );
-              this.search();
-              this.getCount.emit();
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-            this.spinner.hide();
-          });
+          const res = await this.theoDoiBqService.delete(id);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+            this.search();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
         } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
         }
       },
     });
   }
-  async changePageIndex(event) {
-    this.spinner.show();
-    try {
-      this.page = event;
-      await this.search();
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
+
+
+  onItemChecked(id: number, checked) {
+    this.updateCheckedSet(id, checked);
+    this.refreshCheckedStatus();
   }
-  async changePageSize(event) {
-    this.spinner.show();
-    try {
-      this.pageSize = event;
-      if (this.page === 1) {
-        await this.search();
-      }
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-  }
-  convertTrangThai(status: string) {
-    return convertTrangThai(status);
-  }
-  viewDetail(id: number, isView: boolean) {
-    this.isAddNew = true;
-    this.idSelected = id;
-    this.isView = isView
-  }
+
   onClose() {
     this.isAddNew = false;
-    this.search();
+    this.search()
   }
 
-  expandSet = new Set<number>();
-
-  onExpandChange(id: number, checked: boolean): void {
-    if (checked) {
-      this.expandSet.add(id);
+  filterInTable(key: string, value: string) {
+    if (value && value != '') {
+      this.dataTable = [];
+      let temp = [];
+      if (this.dataTableAll && this.dataTableAll.length > 0) {
+        this.dataTableAll.forEach((item) => {
+          if (item[key].toString().toLowerCase().indexOf(value.toLowerCase()) != -1) {
+            temp.push(item)
+          }
+        });
+      }
+      this.dataTable = [...this.dataTable, ...temp];
     } else {
-      this.expandSet.delete(id);
+      this.dataTable = cloneDeep(this.dataTableAll);
     }
-  }
-
-  xoa() {
-
   }
 }

@@ -1,1 +1,323 @@
-<p>them-moi-so-theo-doi-bq works!</p>
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="btn-affix">
+  <div class="btn-group">
+    <button type="button" class="btn btn-sub" (click)="quayLai()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+    <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="save(true)">
+      <i class="icon htvbdh_chuyenvanthu"></i>
+      <span>Ban hành</span>
+    </button>
+    <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)">
+      <i class="icon htvbdh_tcdt_save"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
+</nz-affix>
+<div class="bg-trang">
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span
+          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDCC? 'status-xanh' : 'status-do'">
+          {{ formData.value.tenTrangThai }}
+        </span>
+        <span>SỔ NHẬT TRÌNH BẢO QUẢN</span>
+      </div>
+    </div>
+  </div>
+  <nz-card class="mt16 flex-card p-lr16">
+    <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
+      <div nz-row [nzGutter]="20">
+        <div nz-col nzSpan="2">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzRequired> Năm
+            </nz-form-label>
+            <nz-form-control>
+              <nz-select nzAllowClear formControlName="nam">
+                <nz-option *ngFor="let p of dsNam" [nzValue]="p" [nzLabel]="p">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item class="form-item">
+            <nz-form-label [nzNoColon]="true" nzRequired> Mã đơn vị
+            </nz-form-label>
+            <nz-form-control>
+              <nz-input-group >
+                <input class="search__input" formControlName="maDonVi" nz-input readonly />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-label [nzNoColon]="true" > Tên đơn vị
+          </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input class="search__input" formControlName="tenDvi" nz-input readonly />
+            </nz-input-group>
+          </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label nzRequired>Loại hàng hóa</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <nz-select [nzDisabled]="isViewDetail" formControlName="loaiHH"
+                           (ngModelChange)="onChangeLoaiVthh($event)">
+                  <nz-option *ngFor="let item of listVthh" [nzLabel]="item.giaTri"
+                             [nzValue]="item.ma"></nz-option>
+                </nz-select>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label nzRequired>Chủng loại hàng hóa</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-input-group>
+                <nz-select [nzDisabled]="isViewDetail" formControlName="tenHH"
+                           (ngModelChange)="onChangCloaiVthh($event)">
+                  <nz-option *ngFor="let item of listCloaiVthh" [nzLabel]="item.ten"
+                             [nzValue]="item.ma"></nz-option>
+                </nz-select>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Điểm kho </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select [nzDisabled]="isViewDetail" formControlName="maDiemKho" (ngModelChange)="changeDiemKho($event)">
+                <nz-option *ngFor="let item of listDiemKho" [nzValue]="item.maDvi" [nzLabel]="item.tenDvi">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Nhà kho </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select [nzDisabled]="isViewDetail" formControlName="maNhaKho" (ngModelChange)="changeNhaKho($event)">
+                <nz-option *ngFor="let item of listNhaKho" [nzValue]="item.maDvi" [nzLabel]="item.title">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngăn kho </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select [nzDisabled]="isViewDetail" formControlName="maNganKho" (ngModelChange)="changeNganKho($event)">
+                <nz-option *ngFor="let item of listNganKho" [nzValue]="item.maDvi" [nzLabel]="item.title">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Lô kho </nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-select [nzDisabled]="isViewDetail" formControlName="maLoKho" >
+                <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maDvi" [nzLabel]="item.title">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="4">
+          <nz-form-label [nzNoColon]="true" nzRequired>Số lượng
+          </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input class="search__input" formControlName="soLuong" nz-input readonly />
+            </nz-input-group>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-label [nzNoColon]="true" nzRequired>Tên thủ kho
+          </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input class="search__input" formControlName="thuKhoId" nz-input readonly />
+            </nz-input-group>
+          </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Nhập từ ngày </nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-input-group>
+                <nz-date-picker [nzDisabled]="isViewDetail" formControlName="tuNgay" nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="3">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Nhập đến ngày </nz-form-label>
+            <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+              <nz-input-group>
+                <nz-date-picker [nzDisabled]="isViewDetail" formControlName="denNgay" nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col nzSpan="6">
+          <nz-form-label [nzNoColon]="true" nzRequired>Quy cách chất xếp
+          </nz-form-label>
+          <nz-form-control>
+            <nz-input-group>
+              <input class="search__input" formControlName="quyCach" nz-input  />
+            </nz-input-group>
+          </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="6">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true" nzRequired> Phương thức bảo quản</nz-form-label>
+            <nz-form-control>
+              <nz-select formControlName="kieuBaoQuan">
+                <nz-option *ngFor="let p of listPhuongThucBaoQuan" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                </nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+  <div class="group-button">
+    <h3> Thông tin chi tiết</h3>
+  </div>
+  <nz-card class="mt-16 flex-card data-table card-border-content">
+      <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+        <thead>
+        <tr>
+          <th class="text-center" nzWitdh="15px">STT</th>
+          <th nzWitdh = "">Ngày</th>
+          <th nzWitdh = "">Người kiểm tra</th>
+          <th nzWitdh = "">Diễn biến hàng</th>
+          <th nzWitdh = "">Nguyên nhân</th>
+          <th nzWitdh = "">Biện pháp xử lý</th>
+          <th nzWitdh = "">Kết quả</th>
+          <th nzWitdh = "">Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th></th>
+          <th>
+            <nz-input-group>
+              <nz-date-picker [(ngModel)]="rowItem.ngayTao" nzFormat="dd/MM/yyyy">
+              </nz-date-picker>
+            </nz-input-group>
+          </th>
+          <th>
+            <nz-input-group>
+              <input  type="text" [(ngModel)]="rowItem.nguoiKtraId" nz-input  />
+            </nz-input-group>
+          </th><th>
+            <nz-input-group>
+              <input  type="text" [(ngModel)]="rowItem.dienBien" nz-input  />
+            </nz-input-group>
+        </th><th>
+            <nz-input-group>
+              <input  type="text" [(ngModel)]="rowItem.nguyenNhan" nz-input  />
+            </nz-input-group>
+        </th><th>
+            <nz-input-group>
+              <input  type="text" [(ngModel)]="rowItem.bienPhap" nz-input  />
+            </nz-input-group>
+        </th><th>
+            <nz-input-group>
+              <input  type="text" [(ngModel)]="rowItem.ketQua" nz-input  />
+            </nz-input-group>
+          </th>
+          <th style="text-align: center;" *ngIf="!isViewDetail">
+            <a (click)="themMoiItem()" >
+              <i class="fa fa-plus"></i>
+            </a>
+            <a (click)="clearData()" >
+              <i class="fa fa-trash-o do"></i>
+            </a>
+          </th>
+        </tr>
+        <tbody>
+        <tr *ngFor="let data of dataTable; let idx = index">
+          <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
+            <td style=" text-align: center;">{{ idx + 1 }}</td>
+            <td>{{ data.ngayTao | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.nguoiKtraId}}</td>
+            <td>{{ data.dienBien }}</td>
+            <td>{{ data.nguyenNhan }}</td>
+            <td>{{ data.bienPhap }}</td>
+            <td>{{ data.ketQua }}</td>
+            <th style="text-align: center;">
+              <a *ngIf="!isViewDetail" (click)="editItem(idx)">
+                <i class="table-icon fa fa-pencil"></i>
+              </a>
+              <a *ngIf="!isViewDetail" (click)="xoaItem(idx)">
+                <i class="table-icon fa fa-trash-o do"></i>
+              </a>
+            </th>
+          </ng-container>
+          <ng-template #editTemplate>
+            <th></th>
+            <th>
+              <nz-input-group>
+                <nz-date-picker  [(ngModel)]="dataEdit[idx].data.ngayTao"  nzFormat="dd/MM/yyyy">
+                </nz-date-picker>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input  [(ngModel)]="dataEdit[idx].data.nguoiKtraId"  nz-input  />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input  [(ngModel)]="dataEdit[idx].data.dienBien"  nz-input  />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input  [(ngModel)]="dataEdit[idx].data.nguyenNhan"  nz-input  />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input  [(ngModel)]="dataEdit[idx].data.bienPhap"  nz-input  />
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <input  [(ngModel)]="dataEdit[idx].data.ketQua"  nz-input  />
+              </nz-input-group>
+            </th>
+            <td class="text-center">
+              <a (click)="luuEdit(idx)" class="save">
+                <i class="fa fa-save"></i>
+              </a>
+              <a (click)="huyEdit(idx)">
+                <i class="fa fa-times do"></i> </a>
+            </td>
+          </ng-template>
+        </tr>
+        </tbody>
+    </nz-table>
+  </nz-card>
+</div>
+
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>
