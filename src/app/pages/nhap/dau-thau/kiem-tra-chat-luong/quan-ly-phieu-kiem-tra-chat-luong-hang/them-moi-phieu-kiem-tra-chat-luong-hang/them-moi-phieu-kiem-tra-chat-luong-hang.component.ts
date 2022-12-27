@@ -123,7 +123,7 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
         this.loadTieuChuan(),
-        this.loadSoQuyetDinh(),
+        // this.loadSoQuyetDinh(),
       ]);
       if (this.id) {
         await this.loadChiTiet(this.id);
@@ -160,10 +160,27 @@ export class ThemMoiPhieuKiemTraChatLuongHangComponent extends Base2Component im
   }
 
   async loadSoQuyetDinh() {
-
+    let body = {
+      "maDvi": this.userInfo.MA_DVI,
+      "loaiVthh": this.loaiVthh,
+      "paggingReq": {
+        "limit": this.globals.prop.MAX_INTERGER,
+        "page": 0
+      },
+      "trangThai": STATUS.BAN_HANH,
+      "namNhap": this.formData.get('nam').value
+    }
+    let res = await this.quyetDinhGiaoNhapHangService.search(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      this.listSoQuyetDinh = data.content;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
   }
 
   async openDialogSoQd() {
+    await this.loadSoQuyetDinh();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
       nzContent: DialogTableSelectionComponent,
