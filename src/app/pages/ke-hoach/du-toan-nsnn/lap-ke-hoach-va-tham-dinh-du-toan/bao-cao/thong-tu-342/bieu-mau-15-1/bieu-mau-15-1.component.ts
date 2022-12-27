@@ -1,3 +1,6 @@
+import { startWith } from 'rxjs/operators';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
+import { UserService } from './../../../../../../../services/user.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -59,6 +62,7 @@ export class BieuMau151Component implements OnInit {
   thuyetMinh: string;
   //danh muc
   // linhVucChis: any[] = DANH_MUC;
+  donVis: any[] = [];
   linhVucChis: any[] = [];
   soLaMa: any[] = LA_MA;
   lstCtietBcao: ItemData[] = [];
@@ -77,13 +81,18 @@ export class BieuMau151Component implements OnInit {
   namBaoCao: number;
   namTruoc: string;
   namKeHoach: string;
-
+  userInfo: any;
+  maDviTao: any;
+  listDanhSachCuc: any[] = [];
+  capDvi: string;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
     private lapThamDinhService: LapThamDinhService,
     private notification: NzNotificationService,
     private modal: NzModalService,
+    private userService: UserService,
+    private quanLyVonPhiService: QuanLyVonPhiService,
   ) {
   }
 
@@ -104,29 +113,48 @@ export class BieuMau151Component implements OnInit {
     this.status = this.dataInfo?.status;
     this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
     this.statusPrint = this.dataInfo?.statusBtnPrint;
+    this.userInfo = this.userService.getUserLogin().DON_VI;
+    this.capDvi = this.userInfo?.capDvi
+    this.maDviTao = this.dataInfo?.maDvi;
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
       this.lstCtietBcao.push({
         ...item,
-        checked: false,
       })
     })
-    // if (this.lstCtietBcao.length == 0) {
-    //   this.linhVucChis.forEach(e => {
-    //     debugger
-    //     this.lstCtietBcao.push({
-    //       ...new ItemData(),
-    //       id: uuid.v4() + 'FE',
-    //       stt: e.ma,
-    //       maLvuc: e.ma,
-    //       checked: false,
-    //     })
-    //   })
-    // } else if (!this.lstCtietBcao[0]?.stt) {
-    //   this.lstCtietBcao.forEach(item => {
-    //     item.stt = item.maLvuc;
-    //   })
-    // }
-    // this.sortByIndex();
+    const reqGetDonViCon = {
+      maDviCha: this.maDviTao,
+      trangThai: '01',
+    }
+    await this.quanLyVonPhiService.dmDviCon(reqGetDonViCon).toPromise().then(res => {
+      if (res.statusCode == 0) {
+        if (this.userInfo.capDvi == "1") {
+          this.donVis = res.data.filter(e => e.tenVietTat?.startsWith('CDT'));
+        } else if (this.userInfo.capDvi == "2") {
+          this.donVis = res.data.filter(e => e.tenVietTat?.startsWith('CCDT'));
+        } else if (this.userInfo.capDvi == "3") {
+          if (this.lstCtietBcao.length == 0) {
+            this.lstCtietBcao.push({
+              ... new ItemData(),
+              maLvuc: this.maDviTao,
+              tenDmuc: this.userInfo?.tenDvi
+            })
+          }
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res?.msg);
+      }
+    }, err => {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    })
+    this.donVis.forEach(item => {
+      if (this.lstCtietBcao.findIndex(e => e.maLvuc == item.maDvi) == -1) {
+        this.lstCtietBcao.push({
+          ... new ItemData(),
+          maLvuc: item.maDvi,
+          tenDmuc: item.tenDvi
+        })
+      }
+    })
     this.getTotal();
     this.updateEditCache();
     this.getStatusButton();

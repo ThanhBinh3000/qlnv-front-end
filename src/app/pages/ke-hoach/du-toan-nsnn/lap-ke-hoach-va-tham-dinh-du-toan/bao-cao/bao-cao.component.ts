@@ -61,6 +61,8 @@ export class ItemData {
     thuyetMinh: string;
     nguoiBcao: string;
     lstCtietLapThamDinhs: any[];
+    hsBhDuoi: number;
+    hsBhTu: number;
 }
 export class BaoCao {
     id: string;
@@ -879,8 +881,8 @@ export class BaoCaoComponent implements OnInit {
 
                         if (dataInfo.extraData.length == 0) {
                             dataInfo.extraData.push({
-                                stt: '0.2.1.1',
-                                maVtu: '0.2.1.1',
+                                stt: '0.3.1.1',
+                                maVtu: '0.3.1.1',
                                 tenVtu: item.tenHang,
                                 maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,
@@ -895,8 +897,8 @@ export class BaoCaoComponent implements OnInit {
                             let stt = dataInfo.extraData[dataInfo.extraData.length - 1]?.stt;
                             let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
                             dataInfo.extraData.push({
-                                stt: '0.2.1.' + sttObj,
-                                maVtu: '0.2.1.' + sttObj,
+                                stt: '0.3.1.' + sttObj,
+                                maVtu: '0.3.1.' + sttObj,
                                 tenVtu: item.tenHang,
                                 maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,
@@ -925,8 +927,8 @@ export class BaoCaoComponent implements OnInit {
                             tongGiaTriDuoi += item.giaTri
                         }
                         lstMuoi.push({
-                            stt: '0.2.3',
-                            maVtu: '0.2.3',
+                            stt: '0.3.3',
+                            maVtu: '0.3.3',
                             tenVtu: 'Muối',
                             maDviTinh: "kg",
                             slTuM3: tongSoLuongTu,
@@ -945,7 +947,7 @@ export class BaoCaoComponent implements OnInit {
                         let tongSoLuongDuoi = 0
                         let tongGiaTriTu = 0
                         let tongGiaTriDuoi = 0
-                        let stt = '0.2.2.1.1';
+                        let stt = '0.3.2.1.1';
                         if (item.khoiTich >= 5000) {
                             tongSoLuongTu += item.soLuong;
                             tongGiaTriTu += item.giaTri
@@ -957,8 +959,8 @@ export class BaoCaoComponent implements OnInit {
 
                         if (dataInfo.extraData[dataInfo.extraData.length - 1]?.stt !== stt) {
                             dataInfo.extraData.push({
-                                stt: '0.2.2.1.1',
-                                maVtu: '0.2.2.1.1',
+                                stt: '0.3.2.1.1',
+                                maVtu: '0.3.2.1.1',
                                 tenVtu: item.tenHang,
                                 maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,
@@ -973,8 +975,8 @@ export class BaoCaoComponent implements OnInit {
                             let stt = dataInfo.extraData[dataInfo.extraData.length - 1]?.stt;
                             let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
                             dataInfo.extraData.push({
-                                stt: '0.2.2.1.' + sttObj,
-                                maVtu: '0.2.2.1.' + sttObj,
+                                stt: '0.3.2.1.' + sttObj,
+                                maVtu: '0.3.2.1.' + sttObj,
                                 tenVtu: item.tenHang,
                                 maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,
@@ -992,7 +994,7 @@ export class BaoCaoComponent implements OnInit {
                         let tongSoLuongDuoi = 0
                         let tongGiaTriTu = 0
                         let tongGiaTriDuoi = 0
-                        let stt = '0.2.2.2.1';
+                        let stt = '0.3.2.2.1';
                         if (item.khoiTich >= 5000) {
                             tongSoLuongTu += item.soLuong;
                             tongGiaTriTu += item.giaTri
@@ -1004,8 +1006,8 @@ export class BaoCaoComponent implements OnInit {
 
                         if (dataInfo.extraData[dataInfo.extraData.length - 1]?.stt !== stt) {
                             dataInfo.extraData.push({
-                                stt: '0.2.2.2.1',
-                                maVtu: '0.2.2.2.1',
+                                stt: '0.3.2.2.1',
+                                maVtu: '0.3.2.2.1',
                                 tenVtu: item.tenHang,
                                 maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,
@@ -1020,8 +1022,8 @@ export class BaoCaoComponent implements OnInit {
                             let stt = dataInfo.extraData[dataInfo.extraData.length - 1]?.stt;
                             let sttObj = Number(stt.substring(stt.lastIndexOf('.') + 1, stt.length)) + 1
                             dataInfo.extraData.push({
-                                stt: '0.2.2.2.' + sttObj,
-                                maVtu: '0.2.2.2.' + sttObj,
+                                stt: '0.3.2.2.' + sttObj,
+                                maVtu: '0.3.2.2.' + sttObj,
                                 tenVtu: item.tenHang,
                                 maDviTinh: maDviTinh,
                                 slTuM3: tongSoLuongTu,
@@ -1052,8 +1054,8 @@ export class BaoCaoComponent implements OnInit {
                     gtTong1 += item.gtTong;
                 })
                 dataInfo.extraData.push({
-                    stt: '0.2.3',
-                    maVtu: '0.2.3',
+                    stt: '0.3.3',
+                    maVtu: '0.3.3',
                     tenVtu: 'Muối',
                     maDviTinh: "kg",
                     slTuM3: slTuM31,
@@ -1119,8 +1121,8 @@ export class BaoCaoComponent implements OnInit {
                         slNhaKhoDuoi1 += item.slNhaKhoDuoi;
                     }
                     lstTemp.push({
-                        stt: '0.1',
-                        maVtu: '0.1',
+                        stt: '0.2',
+                        maVtu: '0.2',
                         tenVtu: 'Kho Hàng DTQG',
                         maDviTinh: "",
                         slTuM3: slNhaKhoTu1,
@@ -1148,8 +1150,8 @@ export class BaoCaoComponent implements OnInit {
                 })
 
                 dataInfo.extraData.push({
-                    stt: '0.1',
-                    maVtu: '0.1',
+                    stt: '0.2',
+                    maVtu: '0.2',
                     tenVtu: 'Kho Hàng DTQG',
                     maDviTinh: "",
                     slTuM3: slTuM3,
