@@ -29,13 +29,14 @@ import { HelperService } from 'src/app/services/helper.service';
 import { HoSoBienBanService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoBienBan.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 
 @Component({
   selector: 'app-thong-tin-ho-so-ky-thuat',
   templateUrl: './thong-tin-ho-so-ky-thuat.component.html',
   styleUrls: ['./thong-tin-ho-so-ky-thuat.component.scss']
 })
-export class ThongTinHoSoKyThuatComponent extends BaseComponent implements OnInit {
+export class ThongTinHoSoKyThuatComponent extends Base2Component implements OnInit {
 
   @Input() id: number;
   @Input() idHoSoKyThuat: number;
@@ -86,14 +87,17 @@ export class ThongTinHoSoKyThuatComponent extends BaseComponent implements OnIni
   LOAI_BIEN_BAN = LOAI_BIEN_BAN;
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private hoSoKyThuatService: HoSoKyThuatService,
     private quanLyBienBanLayMauService: QuanLyBienBanLayMauService,
     private bienBanGuiHangService: BienBanGuiHangService,
     private hoSoBienBanService: HoSoBienBanService
   ) {
-    super(httpClient, storageService, hoSoKyThuatService);
+    super(httpClient, storageService, notification, spinner, modal, hoSoBienBanService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],

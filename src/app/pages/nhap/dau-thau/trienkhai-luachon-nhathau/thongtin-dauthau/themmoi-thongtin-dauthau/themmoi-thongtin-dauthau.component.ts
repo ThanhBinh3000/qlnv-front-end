@@ -199,8 +199,18 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
     if (res.msg == MESSAGE.SUCCESS) {
       const data = res.data;
       this.formData.patchValue({
+        namKhoach: data.namKhoach,
+        soQdPdKhlcnt: data.soQd,
         trangThai: data.trangThaiDt,
         tenTrangThai: data.tenTrangThaiDt,
+        tenNguonVon: data.tenNguonVon,
+        tenHthucLcnt: data.tenHthucLcnt,
+        tenPthucLcnt: data.tenPthucLcnt,
+        tenLoaiHdong: data.tenLoaiHdong,
+        loaiVthh: data.loaiVthh,
+        tenLoaiVthh: data.tenLoaiVthh,
+        cloaiVthh: data.cloaiVthh,
+        tenCloaiVthh: data.tenCloaiVthh,
       })
       this.danhsachDx = data.children;
     }
@@ -239,6 +249,7 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
         soGthauTrung: data.soGthauTrung,
         loaiVthh: data.hhQdKhlcntHdr.loaiVthh,
         tenLoaiVthh: data.hhQdKhlcntHdr.tenLoaiVthh,
+        cloaiVthh: data.hhQdKhlcntHdr.cloaiVthh,
         tenCloaiVthh: data.hhQdKhlcntHdr.tenCloaiVthh,
         tgianBdauTchuc: data.dxuatKhLcntHdr.tgianBdauTchuc,
         tgianDthau: data.dxuatKhLcntHdr.tgianDthau,
@@ -278,7 +289,6 @@ export class ThemmoiThongtinDauthauComponent implements OnInit, OnChanges {
       this.listPhuongThucDauThau = res.data;
     }
   }
-
 
   quayLai() {
     this.showListEvent.emit();

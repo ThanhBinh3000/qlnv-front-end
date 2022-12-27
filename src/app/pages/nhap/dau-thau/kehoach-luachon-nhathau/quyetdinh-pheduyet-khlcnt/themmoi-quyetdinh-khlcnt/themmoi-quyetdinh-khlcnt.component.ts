@@ -585,6 +585,9 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
           });
         } else {
           dataRes.idDxHdr = data.id;
+          if (dataRes.dsGtDtlList) {
+            dataRes.children = dataRes.dsGtDtlList
+          };
           this.danhsachDx.push(dataRes);
         }
         this.formData.patchValue({

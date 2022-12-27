@@ -81,7 +81,10 @@ export class Base2Component implements OnInit {
   }
 
   // SEARCH
-  async search() {
+  async search(roles?) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     this.spinner.show();
     try {
       let body = this.formData.value
@@ -362,7 +365,10 @@ export class Base2Component implements OnInit {
 
   }
 
-  async detail(id) {
+  async detail(id, roles?: any) {
+    if (!this.checkPermission(roles)) {
+      return
+    }
     this.spinner.show();
     try {
       let res = await this.service.getDetail(id);
@@ -471,9 +477,9 @@ export class Base2Component implements OnInit {
     if (roles) {
       let type = typeof (roles);
       if (type == 'object') {
-        console.log("objeect");
         roles.forEach(x => {
           if (!this.userService.isAccessPermisson(x)) {
+            console.error(x);
             this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
             return false;
           }
@@ -481,6 +487,7 @@ export class Base2Component implements OnInit {
       }
       if (type == 'string') {
         if (!this.userService.isAccessPermisson(roles)) {
+          console.error(roles);
           this.notification.error(MESSAGE.ERROR, MESSAGE.ACCESS_DENIED);
           return false;
         }

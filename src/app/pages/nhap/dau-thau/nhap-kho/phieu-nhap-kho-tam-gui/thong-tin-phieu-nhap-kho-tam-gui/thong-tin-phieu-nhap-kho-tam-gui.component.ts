@@ -27,13 +27,14 @@ import { HelperService } from 'src/app/services/helper.service';
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 
 @Component({
   selector: 'app-thong-tin-phieu-nhap-kho-tam-gui',
   templateUrl: './thong-tin-phieu-nhap-kho-tam-gui.component.html',
   styleUrls: ['./thong-tin-phieu-nhap-kho-tam-gui.component.scss']
 })
-export class ThongTinPhieuNhapKhoTamGuiComponent extends BaseComponent implements OnInit {
+export class ThongTinPhieuNhapKhoTamGuiComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() loaiVthh: string;
@@ -69,12 +70,15 @@ export class ThongTinPhieuNhapKhoTamGuiComponent extends BaseComponent implement
   dataTable: any[] = [];
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private phieuNhapKhoTamGuiService: PhieuNhapKhoTamGuiService,
   ) {
-    super(httpClient, storageService, quyetDinhGiaoNhapHangService);
+    super(httpClient, storageService, notification, spinner, modal, phieuNhapKhoTamGuiService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],

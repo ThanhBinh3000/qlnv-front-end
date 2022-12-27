@@ -112,7 +112,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   isDetailPermission() {
-    if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_SUA") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_THEM")) {
+    if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_THEM")) {
       return true;
     }
     return false;

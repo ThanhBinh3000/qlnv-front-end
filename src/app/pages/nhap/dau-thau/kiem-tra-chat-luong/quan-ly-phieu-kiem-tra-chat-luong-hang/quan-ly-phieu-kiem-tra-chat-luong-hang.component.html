@@ -133,8 +133,8 @@
                         (click)="redirectToChiTiet(false, dataPhieu.id)">
                         <i class="fa fa-pencil"></i>
                       </a>
-                      <a
-                        *ngIf="dataPhieu.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_XOA')">
+                      <a *ngIf="dataPhieu.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_PKTCL_XOA')"
+                        (click)="xoaItem(dataPhieu)">
                         <i class="fa fa-trash-o do"></i>
                       </a>
                     </td>
@@ -166,6 +166,6 @@
 </ng-container>
 <ng-container class="chi-tiet" *ngIf="isDetail">
   <them-moi-phieu-kiem-tra-chat-luong-hang [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
-    [typeVthh]="typeVthh" [isTatCa]="isTatCa" [idQdGiaoNvNh]="idQdGiaoNvNh">
+    [loaiVthh]="loaiVthh" [isTatCa]="isTatCa" [idQdGiaoNvNh]="idQdGiaoNvNh">
   </them-moi-phieu-kiem-tra-chat-luong-hang>
 </ng-container>
