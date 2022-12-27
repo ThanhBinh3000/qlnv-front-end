@@ -60,7 +60,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" (click)="themMoi()" *ngIf="userService.isChiCuc()">
+        <button type="button" class="btn btn-sub xanh" (click)="viewDetail(null, false)" *ngIf="userService.isChiCuc()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -93,20 +93,20 @@
           <th></th>
           <th>
             <nz-input-group [nzSuffix]="suffixIconSearch">
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDvi"
-                     (input)="filterInTable('maDvi',searchInTable.maDvi)"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.nam"
+                     (input)="filterInTable('nam',searchInTable.nam)"/>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDanhSach"
-                     (input)="filterInTable('maDanhSach',searchInTable.maDanhSach)"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tenDvi"
+                     (input)="filterInTable('tenDvi',searchInTable.tenDvi)"/>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.ngayDeXuat"
-                     (input)="filterInTable('ngayDeXuat',searchInTable.ngayDeXuat)"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tenDiemKho"
+                     (input)="filterInTable('tenDiemKho',searchInTable.tenDiemKho)"/>
             </nz-input-group>
             <ng-template #suffixIconSearch>
               <i nz-icon nzType="calendar"></i>
@@ -114,38 +114,38 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tongSoHang"
-                     (input)="filterInTable('tongSoHang',searchInTable.tongSoHang)"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tenNhaKho"
+                     (input)="filterInTable('tenNhaKho',searchInTable.tenNhaKho)"/>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.trangThai"
-                     (input)="filterInTable('trangThai',searchInTable.trangThai)"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tenNganKho"
+                     (input)="filterInTable('tenNganKho',searchInTable.tenNganKho)"/>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.trangThai"
-                     (input)="filterInTable('trangThai',searchInTable.trangThai)"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tenLoKho"
+                     (input)="filterInTable('tenLoKho',searchInTable.tenLoKho)"/>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.trangThai"
-                     (input)="filterInTable('trangThai',searchInTable.trangThai)"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tenLoaiVthh"
+                     (input)="filterInTable('tenLoaiVthh',searchInTable.tenLoaiVthh)"/>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.trangThai"
-                     (input)="filterInTable('trangThai',searchInTable.trangThai)"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tenCloaiVthh"
+                     (input)="filterInTable('tenCloaiVthh',searchInTable.tenCloaiVthh)"/>
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.trangThai"
-                     (input)="filterInTable('trangThai',searchInTable.trangThai)"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tenTrangThai"
+                     (input)="filterInTable('tenTrangThai',searchInTable.tenTrangThai)"/>
             </nz-input-group>
           </th>
           <th></th>
@@ -169,13 +169,13 @@
           <td>{{ data.tenCloaiVthh }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td style="text-align: center">
-            <a (click)="viewDetail(data.id, true)" *ngIf="globals.prop.NHAP_DA_TONG_HOP">
+            <a (click)="viewDetail(data.id, true)" *ngIf="data.trangThai == STATUS.DA_DUYET_LDCC || data.trangThai == STATUS.CHO_DUYET_LDCC">
               <i class=" icon htvbdh_eye"></i>
             </a>
-            <a (click)="viewDetail(data.id, false)" *ngIf="globals.prop.NHAP_CHUA_TONG_HOP">
+            <a (click)="viewDetail(data.id, false)" *ngIf="(data.trangThai == STATUS.TU_CHOI_LDCC || data.trangThai == STATUS.DU_THAO) && userService.isChiCuc() ">
               <i class="fa fa-pencil"></i>
             </a>
-            <a (click)="xoaItem(data.id)" *ngIf="globals.prop.NHAP_CHUA_TONG_HOP">
+            <a (click)="xoaItem(data.id)" *ngIf="(data.trangThai == STATUS.DU_THAO) && userService.isChiCuc()">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

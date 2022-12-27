@@ -4,12 +4,24 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button class="btn btn-sub btn-sm waves-effect waves-light" (click)="save(true)">
-      <i class="icon htvbdh_chuyenvanthu"></i>
-      <span>Ban hành</span>
+    <button type="button" class="btn btn-sub" (click)="exportCt()">
+      <i class="icon htvbdh_chuyen-xu-ly"></i>
+      <span>Xuất file</span>
     </button>
-    <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)">
-      <i class="icon htvbdh_tcdt_save"></i>
+    <button type="button" class="btn btn-sub btn-xoa"  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC" (click)="tuChoi()">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      <span>Từ chối</span>
+    </button>
+    <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC"  (click)="pheDuyet()">
+      <i class="icon htvbdh_dakyduyet"></i>
+      <span>Duyệt</span>
+    </button>
+    <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC "  (click)="save(true)">
+      <i class="icon htvbdh_tcdt_print"></i>
+      <span>Lưu và gửi duyệt</span>
+    </button>
+    <button type="button" class="btn btn-sub xanh" (click)="save(false)" *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC" >
+      <i class="fa fa-save"></i>
       <span>Lưu</span>
     </button>
   </div>
@@ -33,7 +45,7 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Năm
             </nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <nz-select nzAllowClear formControlName="nam">
                 <nz-option *ngFor="let p of dsNam" [nzValue]="p" [nzLabel]="p">
                 </nz-option>
@@ -126,7 +138,7 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Lô kho </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select [nzDisabled]="isViewDetail" formControlName="maLoKho" >
+              <nz-select [nzDisabled]="isViewDetail" formControlName="maLoKho" (ngModelChange)="changeNganLo()" >
                 <nz-option *ngFor="let item of listNganLo" [nzValue]="item.maDvi" [nzLabel]="item.title">
                 </nz-option>
               </nz-select>
@@ -145,9 +157,9 @@
         <div nz-col nzSpan="6">
           <nz-form-label [nzNoColon]="true" nzRequired>Tên thủ kho
           </nz-form-label>
-          <nz-form-control>
+          <nz-form-control [nzErrorTip]="error">
             <nz-input-group>
-              <input class="search__input" formControlName="thuKhoId" nz-input readonly />
+              <input class="search__input" formControlName="thuKhoId" nz-input  />
             </nz-input-group>
           </nz-form-control>
         </div>
@@ -176,7 +188,7 @@
         <div nz-col nzSpan="6">
           <nz-form-label [nzNoColon]="true" nzRequired>Quy cách chất xếp
           </nz-form-label>
-          <nz-form-control>
+          <nz-form-control [nzErrorTip]="error">
             <nz-input-group>
               <input class="search__input" formControlName="quyCach" nz-input  />
             </nz-input-group>
@@ -185,7 +197,7 @@
         <div nz-col [nzSpan]="6">
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Phương thức bảo quản</nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <nz-select formControlName="kieuBaoQuan">
                 <nz-option *ngFor="let p of listPhuongThucBaoQuan" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                 </nz-option>
@@ -210,7 +222,7 @@
           <th nzWitdh = "">Nguyên nhân</th>
           <th nzWitdh = "">Biện pháp xử lý</th>
           <th nzWitdh = "">Kết quả</th>
-          <th nzWitdh = "">Hành động</th>
+          <th nzWitdh = "90px" *ngIf="!isViewDetail">Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -243,7 +255,7 @@
               <input  type="text" [(ngModel)]="rowItem.ketQua" nz-input  />
             </nz-input-group>
           </th>
-          <th style="text-align: center;" *ngIf="!isViewDetail">
+          <th  style="text-align: left; white-space: nowrap;" *ngIf="!isViewDetail">
             <a (click)="themMoiItem()" >
               <i class="fa fa-plus"></i>
             </a>
@@ -262,7 +274,7 @@
             <td>{{ data.nguyenNhan }}</td>
             <td>{{ data.bienPhap }}</td>
             <td>{{ data.ketQua }}</td>
-            <th style="text-align: center;">
+            <th style="text-align: center;" *ngIf="!isViewDetail">
               <a *ngIf="!isViewDetail" (click)="editItem(idx)">
                 <i class="table-icon fa fa-pencil"></i>
               </a>

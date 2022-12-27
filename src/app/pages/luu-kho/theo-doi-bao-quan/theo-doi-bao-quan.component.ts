@@ -41,17 +41,18 @@ export class TheoDoiBaoQuanComponent implements OnInit {
   dsLoaiHangHoa = [];
   dsLoaiHangHoaDataSource = [];
 
+  STATUS = STATUS
+
   searchInTable: any = {
-    maDanhSach: null,
-    donVi: null,
-    ngayTao: new Date(),
-    trangThai: null,
-  };
-  filterTable: any = {
-    maDS: [null],
-    tenDVi: [null],
-    ngayTao: [null],
-    trangThaiXL: [null],
+    nam : '',
+    tenDvi : '',
+    tenDiemKho: '',
+    tenNhaKho: '',
+    tenNganKho: '',
+    tenLoKho: '',
+    tenLoaiVthh: '',
+    tenCloaiVthh: '',
+    tenTrangThai: '',
   }
 
   page: number = 1;
@@ -83,7 +84,7 @@ export class TheoDoiBaoQuanComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       maDonVi: [null],
-      nam: [dayjs().get('year')],
+      nam: [],
       loaiHH: [null],
       tenHH: [null],
     });
@@ -196,6 +197,7 @@ export class TheoDoiBaoQuanComponent implements OnInit {
     } else {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
+    this.spinner.hide()
   }
 
   xoa() {

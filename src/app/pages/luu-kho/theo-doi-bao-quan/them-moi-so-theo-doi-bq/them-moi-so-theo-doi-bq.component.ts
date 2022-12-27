@@ -1,6 +1,6 @@
 
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzNotificationService} from "ng-zorro-antd/notification";
@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import {UserLogin} from "../../../../models/userlogin";
 import {MESSAGE} from "../../../../constants/message";
 import {DANH_MUC_LEVEL} from "../../luu-kho.constant";
+import {saveAs} from 'file-saver';
 import {DonviService} from "../../../../services/donvi.service";
 import {TheoDoiBqService} from "../../../../services/theo-doi-bq.service";
 import {DialogTuChoiComponent} from "../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
@@ -63,21 +64,21 @@ export class ThemMoiSoTheoDoiBqComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
-      maDonVi : [''],
-      tenDvi : [''],
-      nam : [''],
-      kieuBaoQuan : [''],
-      loaiHH : [''],
-      tenHH : [''],
-      maDiemKho : [''],
-      maNhaKho : [''],
-      maNganKho : [''],
-      maLoKho : [''],
-      thuKhoId : [''],
-      tuNgay : [''],
-      denNgay : [''],
-      quyCach : [''],
-      soLuong : [''],
+      maDonVi : ['', Validators.required],
+      tenDvi : ['', Validators.required],
+      nam : ['', Validators.required],
+      kieuBaoQuan : ['', Validators.required],
+      loaiHH : ['', Validators.required],
+      tenHH : ['', Validators.required],
+      maDiemKho : ['', Validators.required],
+      maNhaKho : ['', Validators.required],
+      maNganKho : ['', Validators.required],
+      maLoKho : ['', Validators.required],
+      thuKhoId : ['', Validators.required],
+      tuNgay : ['', Validators.required],
+      denNgay : ['', Validators.required],
+      quyCach : ['', Validators.required],
+      soLuong : ['', Validators.required],
       lyDoTuChoi : [''],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
@@ -225,7 +226,7 @@ export class ThemMoiSoTheoDoiBqComponent implements OnInit {
         maLoKho : detail.maLoKho,
         soLuong : detail.soLuong,
         tenTrangThai : detail.tenTrangThai,
-        tenTrang: detail.tenTrang,
+        trangThai: detail.trangThai,
         thuKhoId: detail.thuKhoId,
         tuNgay: detail.tuNgay,
         denNgay: detail.denNgay,
@@ -296,6 +297,11 @@ export class ThemMoiSoTheoDoiBqComponent implements OnInit {
   }
   async save(isGuiDuyet?) {
     this.spinner.show();
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     body.maDonVi = this.userInfo.MA_DVI
     body.ds = this.dataTable
@@ -419,6 +425,29 @@ export class ThemMoiSoTheoDoiBqComponent implements OnInit {
     });
   }
 
+  exportCt() {
+    if (this.idInput) {
+      this.spinner.show();
+      try {
+        this.theoDoiBqService
+          .exportCt(this.idInput)
+          .subscribe((blob) =>
+            saveAs(blob, 'danh-sach.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    }
+    }
+
+  changeNganLo() {
+    this.formData.patchValue({
+      soLuong : 300
+    })
+  }
 }
 
 export class TheoDoiBqCt {
