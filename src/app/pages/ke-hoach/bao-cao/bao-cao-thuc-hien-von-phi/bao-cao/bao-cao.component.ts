@@ -802,6 +802,7 @@ export class BaoCaoComponent implements OnInit {
                 maDvi: this.baoCao.maDvi,
                 dotBcao: this.baoCao.dotBcao,
                 isOffice: this.isOffice,
+                isSynthetic: this.baoCao.lstBcaoDviTrucThuocs.length != 0,
                 lstVtus: this.lstVatTus,
             }
             this.tabs = [];

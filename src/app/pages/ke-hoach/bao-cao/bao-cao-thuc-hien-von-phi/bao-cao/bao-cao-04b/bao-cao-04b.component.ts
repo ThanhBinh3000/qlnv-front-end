@@ -174,6 +174,10 @@ export class BaoCao04bComponent implements OnInit {
             this.tinhDinhMuc(this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1'));
         }
 
+        if (this.trangThaiPhuLuc == '3' && this.data?.isSynthetic) {
+            this.getColTotal2();
+        }
+
         this.sortByIndex();
         this.updateEditCache();
         this.getStatusButton();

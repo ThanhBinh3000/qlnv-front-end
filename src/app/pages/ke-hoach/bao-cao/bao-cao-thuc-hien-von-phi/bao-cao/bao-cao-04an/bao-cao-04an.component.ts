@@ -164,9 +164,13 @@ export class BaoCao04anComponent implements OnInit {
                 item.stt = item.maNdungChi;
             })
         }
-
+        // tinh toan dinh muc trong man hinh neu bao cao la bao cao van phong
         if (this.trangThaiPhuLuc == '3' && this.data?.isOffice) {
             this.tinhDinhMuc(this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1'));
+        }
+        //tinh lai tong cong
+        if (this.trangThaiPhuLuc == '3' && this.data?.isSynthetic) {
+            this.getColTotal2();
         }
 
         this.sortByIndex();
