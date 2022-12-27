@@ -75,8 +75,8 @@ export class BaoCaoThucHienVonPhiService extends BaseService {
     //tong hop bao cao ket qua thuc hien von phi hang DTQG
     tongHopBaoCaoKetQua(request: any): Observable<any> {
         return this.httpClient.post(
-            // this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop',
-            'http://192.168.1.107:30101/bao-cao/tong-hop',
+            this.urlDefault + '/qlnv-khoachphi/bao-cao/tong-hop',
+            // 'http://192.168.1.107:30101/bao-cao/tong-hop',
             request);
     }
 
