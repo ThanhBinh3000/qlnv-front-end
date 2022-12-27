@@ -55,8 +55,7 @@
                                     Năm
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzErrorTip]="error">
-                                    <nz-select formControlName="nam" (ngModelChange)="loadSoQuyetDinh()"
-                                        [nzDisabled]="true">
+                                    <nz-select formControlName="nam" [nzDisabled]="true">
                                         <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                                         </nz-option>
                                     </nz-select>
