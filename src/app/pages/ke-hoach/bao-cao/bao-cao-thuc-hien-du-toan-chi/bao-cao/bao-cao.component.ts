@@ -205,8 +205,12 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-        if (!this.userService.isTongCuc()) {
-            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != '2');
+        if (this.userInfo?.DON_VI?.tenVietTat == 'CCNTT') {
+            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != '3');
+        } else {
+            if (!this.userService.isTongCuc()) {
+                this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != '2');
+            }
         }
 
         await this.danhMucService.dMDviCon().toPromise().then(

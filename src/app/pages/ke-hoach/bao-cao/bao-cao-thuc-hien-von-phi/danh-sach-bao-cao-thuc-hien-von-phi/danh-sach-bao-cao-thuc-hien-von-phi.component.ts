@@ -32,7 +32,6 @@ export class DanhSachBaoCaoThucHienVonPhiComponent implements OnInit {
         namBcao: null,
         thangBcao: null,
         dotBcao: '',
-        reportType: null,
         paggingReq: {
             limit: 10,
             page: 1
@@ -79,9 +78,6 @@ export class DanhSachBaoCaoThucHienVonPhiComponent implements OnInit {
         this.searchFilter.namBcao = date.getFullYear();
         date.setMonth(date.getMonth() - 1);
         this.searchFilter.ngayTaoTu = date.toDateString();
-        if (this.data?.tabSelected == 'vanphong') {
-            this.searchFilter.reportType = '1';
-        }
         //check quyen va cac nut chuc nang
         this.statusNewReport = this.userService.isAccessPermisson(BCVP.ADD_REPORT);
         this.statusDelete = this.userService.isAccessPermisson(BCVP.DELETE_REPORT) || this.userService.isAccessPermisson(BCVP.DELETE_SYNTHETIC_REPORT);
