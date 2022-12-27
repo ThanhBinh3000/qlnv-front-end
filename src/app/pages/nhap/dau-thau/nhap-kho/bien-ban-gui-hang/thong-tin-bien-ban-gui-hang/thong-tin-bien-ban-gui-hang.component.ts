@@ -27,13 +27,14 @@ import { isEmpty } from 'lodash';
 import { HelperService } from 'src/app/services/helper.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-gui-hang',
   templateUrl: './thong-tin-bien-ban-gui-hang.component.html',
   styleUrls: ['./thong-tin-bien-ban-gui-hang.component.scss']
 })
-export class ThongTinBienBanGuiHangComponent extends BaseComponent implements OnInit {
+export class ThongTinBienBanGuiHangComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() loaiVthh: string;
@@ -59,12 +60,15 @@ export class ThongTinBienBanGuiHangComponent extends BaseComponent implements On
   listDiaDiemNhap: any[] = [];
   dataTable: any[] = [];
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private bienBanGuiHangService: BienBanGuiHangService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
   ) {
-    super(httpClient, storageService, bienBanGuiHangService);
+    super(httpClient, storageService, notification, spinner, modal, bienBanGuiHangService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],

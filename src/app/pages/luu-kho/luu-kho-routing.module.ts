@@ -19,6 +19,13 @@ const routes: Routes = [
 						'../luu-kho/quan-ly-so-the-kho/quan-ly-so-the-kho.module'
 					).then((m) => m.QuanLySoTheKhoModule),
 			},
+      {
+				path: 'theo-doi-bao-quan',
+				loadChildren: () =>
+					import(
+						'../luu-kho/theo-doi-bao-quan/theo-doi-bao-quan.module'
+					).then((m) => m.TheoDoiBaoQuanModule),
+			},
 		],
 	},
 ];

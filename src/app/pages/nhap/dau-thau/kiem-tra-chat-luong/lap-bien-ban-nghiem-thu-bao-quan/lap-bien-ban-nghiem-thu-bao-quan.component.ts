@@ -233,6 +233,7 @@ export class LapBienBanNghiemThuBaoQuanComponent implements OnInit {
         "limit": this.pageSize,
         "page": this.page - 1
       },
+      loaiVthh: this.typeVthh,
       trangThai: STATUS.BAN_HANH
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);

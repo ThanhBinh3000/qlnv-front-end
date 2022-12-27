@@ -1,53 +1,38 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
-import {
-  DialogDanhSachHangHoaComponent
-} from 'src/app/components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
 import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
-import {
-  QuanLyPhieuKiemTraChatLuongHangService
-} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import {
   QuanLyPhieuNhapKhoService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapKho.service';
-import { QuanLyPhieuSoKhoService } from 'src/app/services/quanLySoKho.service';
 import {
   QuyetDinhGiaoNhapHangService
 } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { UserService } from 'src/app/services/user.service';
 import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
-import { BaseComponent } from "../../../../../../components/base/base.component";
-import { FormBuilder, Validators } from "@angular/forms";
+import { Validators } from "@angular/forms";
 import { STATUS } from "../../../../../../constants/status";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { isEmpty } from 'lodash';
-import { HelperService } from "../../../../../../services/helper.service";
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'thong-tin-quan-ly-bang-ke-can-hang',
   templateUrl: './thong-tin-quan-ly-bang-ke-can-hang.component.html',
   styleUrls: ['./thong-tin-quan-ly-bang-ke-can-hang.component.scss'],
 })
-export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implements OnInit {
+export class ThongTinQuanLyBangKeCanHangComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() typeVthh: string;
@@ -59,23 +44,24 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
   isVisibleChangeTab$ = new Subject();
   visibleTab: boolean = false;
 
-  userInfo: UserLogin;
 
   listSoQuyetDinh: any[] = [];
   listDiaDiemNhap: any[] = [];
   listSoPhieuNhapKho: any[] = [];
-  dataTable: any[] = []
   rowItem: any = {};
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private quanLyPhieuNhapKhoService: QuanLyPhieuNhapKhoService,
     public globals: Globals,
   ) {
-    super(httpClient, storageService, quanLyBangKeCanHangService);
+    super(httpClient, storageService, notification, spinner, modal, quanLyBangKeCanHangService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],
@@ -132,7 +118,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
       super.ngOnInit();
       this.userInfo = this.userService.getUserLogin();
       await Promise.all([
-        this.loadSoQuyetDinh(),
+        // this.loadSoQuyetDinh(),
       ]);
       if (this.id) {
         await this.loadChiTiet(this.id);
@@ -186,7 +172,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
   async loadSoQuyetDinh() {
     let body = {
       "maDvi": this.userInfo.MA_DVI,
-      "maVthh": this.typeVthh,
+      "loaiVthh": this.typeVthh,
       "paggingReq": {
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
@@ -204,6 +190,7 @@ export class ThongTinQuanLyBangKeCanHangComponent extends BaseComponent implemen
   }
 
   async openDialogSoQd() {
+    await this.loadSoQuyetDinh();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số quyết định kế hoạch giao nhiệm vụ nhập hàng',
       nzContent: DialogTableSelectionComponent,

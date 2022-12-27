@@ -1,8 +1,6 @@
-import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
 import { NzDatePickerComponent } from 'ng-zorro-antd/date-picker';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -11,32 +9,24 @@ import { Subject } from 'rxjs';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { BienBanGuiHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/bienBanGuiHang.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { HoSoKyThuatService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/hoSoKyThuat.service';
 import { QuanLyBienBanGiaoNhanService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyBienBanGiaoNhan.service';
-import { QuanLyBienBanKetThucNhapKhoService } from 'src/app/services/quanLyBienBanKetThucNhapKho.service';
 import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
-import { UserService } from 'src/app/services/user.service';
-import { convertTienTobangChu, thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
 import { BienBanGiaoNhan, ChiTietBienBanGiaoNhan } from './../../../../../../models/BienBanGiaoNhan';
 import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { BaseComponent } from "../../../../../../components/base/base.component";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
 import { ChiTiet } from "../../../../../../models/BienBanGuiHang";
 import { isEmpty } from "lodash";
-import { HelperService } from 'src/app/services/helper.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 @Component({
   selector: 'app-thong-tin-bien-ban-giao-nhan',
   templateUrl: './thong-tin-bien-ban-giao-nhan.component.html',
   styleUrls: ['./thong-tin-bien-ban-giao-nhan.component.scss']
 })
-export class ThongTinBienBanGiaoNhanComponent extends BaseComponent implements OnInit {
+export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements OnInit {
 
   @Input() id: number;
   @Input() loaiVthh: string;
@@ -82,12 +72,15 @@ export class ThongTinBienBanGiaoNhanComponent extends BaseComponent implements O
   benGiao: ChiTiet = new ChiTiet();
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
     private quanLyBienBanBanGiaoNhanService: QuanLyBienBanGiaoNhanService,
   ) {
-    super(httpClient, storageService, quanLyBienBanBanGiaoNhanService);
+    super(httpClient, storageService, notification, spinner, modal, quanLyBienBanBanGiaoNhanService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],
@@ -391,7 +384,6 @@ export class ThongTinBienBanGiaoNhanComponent extends BaseComponent implements O
     this.listDiaDiemNhap = []
     data.dtlList.forEach(item => {
       let ddKho = item.children.filter(x => !isEmpty(x.bienBanNhapDayKho));
-      console.log(ddKho);
       this.listDiaDiemNhap = [...this.listDiaDiemNhap, ...ddKho];
     })
     await this.spinner.hide();
@@ -440,7 +432,8 @@ export class ThongTinBienBanGiaoNhanComponent extends BaseComponent implements O
         soLuong: data.soLuong,
         ngayBatDauNhap: data.bienBanNhapDayKho.ngayBatDauNhap,
         ngayKetThucNhap: data.bienBanNhapDayKho.ngayKetThucNhap,
-        soBbNhapDayKho: data.bienBanNhapDayKho.soBienBanNhapDayKho
+        soBbNhapDayKho: data.bienBanNhapDayKho.soBienBanNhapDayKho,
+        soHoSoKyThuat: data.hoSoKyThuat.soHoSoKyThuat
       });
     }
   }
