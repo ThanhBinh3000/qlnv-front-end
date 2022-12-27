@@ -81,7 +81,7 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
     super(httpClient, storageService, quanLySoKhoTheKhoService);
     super.ngOnInit();
     this.formData = this.fb.group({
-      id: [''],
+      id: [null],
       nam: [ null, [Validators.required]],
       tenDvi: ['', [Validators.required]],
       maDvi: [''],
