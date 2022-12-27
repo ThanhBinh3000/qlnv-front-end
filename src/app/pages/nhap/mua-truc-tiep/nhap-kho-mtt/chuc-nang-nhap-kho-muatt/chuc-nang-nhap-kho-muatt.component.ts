@@ -7,7 +7,7 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./chuc-nang-nhap-kho-muatt.component.scss']
 })
 export class ChucNangNhapKhoMuattComponent implements OnInit {
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
 
   constructor(public userService: UserService, public globals: Globals) { }
 

@@ -238,8 +238,10 @@ export class ThemmoiQuyetdinhKetquaLcntComponent implements OnInit {
     this.listQdPdKhlcnt = res.data.content.filter(item => isEmpty(item.soQdPdKqLcnt));
     this.listQdPdKhlcnt.forEach(element => {
       element.soQdPdKhlcnt = element.hhQdKhlcntHdr?.soQd;
-      element.tenCloaiVthh = element.hhQdKhlcntHdr?.tenCloaiVthh;
+      element.loaiVthh = element.hhQdKhlcntHdr?.loaiVthh
       element.tenLoaiVthh = element.hhQdKhlcntHdr?.tenLoaiVthh;
+      element.cloaiVthh = element.hhQdKhlcntHdr?.cloaiVthh;
+      element.tenCloaiVthh = element.hhQdKhlcntHdr?.tenCloaiVthh;
     });
 
     const modalQD = this.modal.create({

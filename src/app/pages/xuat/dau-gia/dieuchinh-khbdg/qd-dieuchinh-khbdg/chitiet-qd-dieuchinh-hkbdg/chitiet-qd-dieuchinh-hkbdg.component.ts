@@ -1,39 +1,39 @@
-import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild,} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild, } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzNotificationService} from 'ng-zorro-antd/notification';
-import {NgxSpinnerService} from 'ngx-spinner';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import {VatTu} from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
-import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import {MESSAGE} from 'src/app/constants/message';
-import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {UserLogin} from 'src/app/models/userlogin';
-import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {HelperService} from 'src/app/services/helper.service';
-import {UserService} from 'src/app/services/user.service';
-import {convertTienTobangChu} from 'src/app/shared/commonFunction';
-import {Globals} from 'src/app/shared/globals';
-import {environment} from 'src/environments/environment';
-import {cloneDeep} from "lodash";
+import { VatTu } from 'src/app/components/dialog/dialog-them-thong-tin-vat-tu-trong-nam/danh-sach-vat-tu-hang-hoa.type';
+import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { MESSAGE } from 'src/app/constants/message';
+import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import { UserLogin } from 'src/app/models/userlogin';
+import { DanhMucService } from 'src/app/services/danhmuc.service';
+import { HelperService } from 'src/app/services/helper.service';
+import { UserService } from 'src/app/services/user.service';
+import { convertTienTobangChu } from 'src/app/shared/commonFunction';
+import { Globals } from 'src/app/shared/globals';
+import { environment } from 'src/environments/environment';
+import { cloneDeep } from "lodash";
 import {
   DialogThemMoiGoiThauComponent
 } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import {
   QuyetDinhPdKhBdgService
 } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import {TongHopDeXuatKeHoachBanDauGiaService} from 'src/app/services/tong-hop-de-xuat-ke-hoach-ban-dau-gia.service';
-import {DeXuatKhBanDauGiaService} from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
-import {STATUS} from 'src/app/constants/status';
-import {UploadFileService} from 'src/app/services/uploaFile.service';
-import {PAGE_SIZE_DEFAULT} from "../../../../../../constants/config";
+import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
+import { STATUS } from 'src/app/constants/status';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { PAGE_SIZE_DEFAULT } from "../../../../../../constants/config";
 import {
   QuyetDinhDchinhKhBdgService
 } from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
+import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 
 @Component({
   selector: 'app-chitiet-qd-dieuchinh-hkbdg',
@@ -54,7 +54,7 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
   listOfMapData: VatTu[];
   listOfMapDataClone: VatTu[];
   mapOfExpandedData: { [key: string]: VatTu[] } = {};
-  selectHang: any = {ten: ""};
+  selectHang: any = { ten: "" };
   errorInputRequired: string = null;
   errorGhiChu: boolean = false;
   maQd: string = null;
@@ -694,7 +694,7 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
           fileDinhKemQd.fileSize = resUpload.size;
           fileDinhKemQd.fileUrl = resUpload.url;
           fileDinhKemQd.idVirtual = new Date().getTime();
-          this.formData.patchValue({fileDinhKem: fileDinhKemQd, fileName: itemFile.name})
+          this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
         });
     }
   }
@@ -727,169 +727,169 @@ export class ChitietQdDieuchinhHkbdgComponent implements OnInit {
       this.quyetDinhPdKhBdgService.getDetail(id).then(res => {
         if (res.msg == MESSAGE.SUCCESS) {
           if (res.data) {
-         /*   res.data = {
-              "id": 622,
-              "namKh": 2022,
-              "maDvi": "0101",
-              "tenDvi": "Tổng cục Dự trữ Nhà nước",
-              "soQdPd": "312/QĐ-TCDT",
-              "ngayKyQd": "2022-12-19",
-              "ngayHluc": "2022-12-19",
-              "idThHdr": null,
-              "soTrHdr": "111/TTr-CDTVP",
-              "idTrHdr": 1262,
-              "trichYeu": "Test 5",
-              "loaiVthh": "0101",
-              "tenLoaiVthh": "Thóc tẻ",
-              "cloaiVthh": "010101",
-              "tenCloaiVthh": "Hạt rất dài",
-              "moTaHangHoa": "111",
-              "soQdCc": "150/TCDT",
-              "tchuanCluong": "Thông tư 87/2020/TT-BTC",
-              "tgianDkienTu": "2022-12-01",
-              "tgianDkienDen": "2023-02-07",
-              "tgianTtoan": 111,
-              "tgianTtoanGhiChu": "11",
-              "pthucTtoan": "1",
-              "tgianGnhan": 11,
-              "tgianGnhanGhiChu": "111",
-              "pthucGnhan": "11",
-              "thongBaoKh": "11",
-              "khoanTienDatTruoc": null,
-              "tongSoLuong": null,
-              "tongTienKdienDonGia": null,
-              "tongTienDatTruocDonGia": null,
-              "trangThai": "29",
-              "tenTrangThai": "Ban Hành",
-              "ngayTao": "2022-12-19",
-              "nguoiTao": "admin",
-              "ngaySua": "2022-12-19",
-              "nguoiSua": "admin",
-              "ngayGuiDuyet": null,
-              "nguoiGuiDuyet": null,
-              "soDviTsan": null,
-              "slHdDaKy": null,
-              "soQdPdKqBdg": null,
-              "ldoTuchoi": null,
-              "ngayPduyet": "19/12/2022 17:09:00",
-              "nguoiPduyet": "admin",
-              "lastest": false,
-              "phanLoai": "TTr",
-              "idGoc": null,
-              "soDxuatKhBdg": null,
-              "children": [
-                {
-                  "id": 566,
-                  "idQdHdr": 622,
-                  "idDxHdr": 1262,
-                  "maDvi": "010102",
-                  "tenDvi": "Cục DTNNKV Vĩnh Phú",
-                  "soDxuat": "111/TTr-CDTVP",
-                  "ngayTao": "2022-12-19",
-                  "ngayPduyet": "2022-12-19",
-                  "tgianDkienTu": "2022-12-01",
-                  "tgianDkienDen": "2023-02-07",
-                  "trichYeu": "Test ",
-                  "tongSoLuong": 0.011,
-                  "soDviTsan": null,
-                  "tongTienKdienDonGia": 0,
-                  "tongTienDatTruocDonGia": 0,
-                  "moTaHangHoa": "111",
-                  "diaChi": "Số 7 đường Trần Phú - phường Gia Cẩm - thành phố Việt Trì - tỉnh Phú Thọ",
-                  "soQdPdKqBdg": null,
-                  "trangThai": "33",
-                  "tenTrangThai": "Chưa cập nhật",
-                  "tgianTtoan": 111,
-                  "tgianTtoanGhiChu": "11",
-                  "pthucTtoan": "1",
-                  "tgianGnhan": 11,
-                  "tgianGnhanGhiChu": "111",
-                  "pthucGnhan": "11",
-                  "thongBaoKh": "11",
-                  "khoanTienDatTruoc": 11,
-                  "xhQdPdKhBdg": null,
-                  "xhDxKhBanDauGia": null,
-                  "children": [
-                    {
-                      "id": 606,
-                      "idQdDtl": 566,
-                      "maDvi": "01010201",
-                      "tenDvi": "Chi cục Dự trữ Nhà nước Việt Trì",
-                      "maDiemKho": "0101020101",
-                      "diaDiemKho": null,
-                      "tenDiemKho": "Điểm kho Phủ Đức",
-                      "maNhaKho": "010102010101",
-                      "tenNhakho": "Nhà kho A1",
-                      "maNganKho": "01010201010101",
-                      "tenNganKho": "Ngăn kho A1/1",
-                      "maLoKho": "0101020101010102",
-                      "tenLoKho": "Lô số 1 Ngăn kho A1/1",
-                      "loaiVthh": null,
-                      "tenLoaiVthh": null,
-                      "cloaiVthh": "010102",
-                      "tenCloaiVthh": "Hạt dài",
-                      "maDviTsan": "11",
-                      "duDau": 500000,
-                      "soLuong": 11,
-                      "giaKhongVat": 111,
-                      "giaKhoiDiem": 1221,
-                      "donGiaVat": null,
-                      "giaKhoiDiemDduyet": 0,
-                      "tienDatTruoc": 134.31,
-                      "tienDatTruocDduyet": 0,
-                      "soLuongChiTieu": 1000,
-                      "soLuongKh": null,
-                      "tongSoLuong": 11,
-                      "tongTienDatTruoc": 134.31,
-                      "tongTienDatTruocDd": 0,
-                      "dviTinh": null,
-                      "trangThai": "33",
-                      "tenTrangThai": "Chưa cập nhật",
-                      "xhQdPdKhBdgDtl": null,
-                      "xhQdPdKhBdg": null,
-                      "children": [
-                        {
-                          "id": 526,
-                          "idPhanLo": 606,
-                          "maDvi": "01010201",
-                          "tenDvi": "Chi cục Dự trữ Nhà nước Việt Trì",
-                          "maDiemKho": "0101020101",
-                          "tenDiemKho": "Điểm kho Phủ Đức",
-                          "maNhaKho": "010102010101",
-                          "tenNhakho": "Nhà kho A1",
-                          "maNganKho": "01010201010101",
-                          "tenNganKho": "Ngăn kho A1/1",
-                          "maLoKho": "0101020101010102",
-                          "tenLoKho": "Lô số 1 Ngăn kho A1/1",
-                          "loaiVthh": null,
-                          "tenLoaiVthh": null,
-                          "cloaiVthh": "010102",
-                          "tenCloaiVthh": "Hạt dài",
-                          "maDviTsan": "11",
-                          "duDau": 500000,
-                          "soLuong": 11,
-                          "giaKhongVat": 111,
-                          "giaKhoiDiem": 1221,
-                          "donGiaVat": null,
-                          "giaKhoiDiemDduyet": 0,
-                          "tienDatTruoc": 134.31,
-                          "tienDatTruocDduyet": 0,
-                          "soLuongChiTieu": null,
-                          "soLuongKh": null,
-                          "dviTinh": null,
-                          "tongSoLuong": 11,
-                          "tongTienDatTruoc": 134.31,
-                          "tongTienDatTruocDd": 0,
-                          "idQdHdr": 622
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ],
-              "fileDinhKems": [],
-              "canCuPhapLy": []
-            };*/
+            /*   res.data = {
+                 "id": 622,
+                 "namKh": 2022,
+                 "maDvi": "0101",
+                 "tenDvi": "Tổng cục Dự trữ Nhà nước",
+                 "soQdPd": "312/QĐ-TCDT",
+                 "ngayKyQd": "2022-12-19",
+                 "ngayHluc": "2022-12-19",
+                 "idThHdr": null,
+                 "soTrHdr": "111/TTr-CDTVP",
+                 "idTrHdr": 1262,
+                 "trichYeu": "Test 5",
+                 "loaiVthh": "0101",
+                 "tenLoaiVthh": "Thóc tẻ",
+                 "cloaiVthh": "010101",
+                 "tenCloaiVthh": "Hạt rất dài",
+                 "moTaHangHoa": "111",
+                 "soQdCc": "150/TCDT",
+                 "tchuanCluong": "Thông tư 87/2020/TT-BTC",
+                 "tgianDkienTu": "2022-12-01",
+                 "tgianDkienDen": "2023-02-07",
+                 "tgianTtoan": 111,
+                 "tgianTtoanGhiChu": "11",
+                 "pthucTtoan": "1",
+                 "tgianGnhan": 11,
+                 "tgianGnhanGhiChu": "111",
+                 "pthucGnhan": "11",
+                 "thongBaoKh": "11",
+                 "khoanTienDatTruoc": null,
+                 "tongSoLuong": null,
+                 "tongTienKdienDonGia": null,
+                 "tongTienDatTruocDonGia": null,
+                 "trangThai": "29",
+                 "tenTrangThai": "Ban Hành",
+                 "ngayTao": "2022-12-19",
+                 "nguoiTao": "admin",
+                 "ngaySua": "2022-12-19",
+                 "nguoiSua": "admin",
+                 "ngayGuiDuyet": null,
+                 "nguoiGuiDuyet": null,
+                 "soDviTsan": null,
+                 "slHdDaKy": null,
+                 "soQdPdKqBdg": null,
+                 "ldoTuchoi": null,
+                 "ngayPduyet": "19/12/2022 17:09:00",
+                 "nguoiPduyet": "admin",
+                 "lastest": false,
+                 "phanLoai": "TTr",
+                 "idGoc": null,
+                 "soDxuatKhBdg": null,
+                 "children": [
+                   {
+                     "id": 566,
+                     "idQdHdr": 622,
+                     "idDxHdr": 1262,
+                     "maDvi": "010102",
+                     "tenDvi": "Cục DTNNKV Vĩnh Phú",
+                     "soDxuat": "111/TTr-CDTVP",
+                     "ngayTao": "2022-12-19",
+                     "ngayPduyet": "2022-12-19",
+                     "tgianDkienTu": "2022-12-01",
+                     "tgianDkienDen": "2023-02-07",
+                     "trichYeu": "Test ",
+                     "tongSoLuong": 0.011,
+                     "soDviTsan": null,
+                     "tongTienKdienDonGia": 0,
+                     "tongTienDatTruocDonGia": 0,
+                     "moTaHangHoa": "111",
+                     "diaChi": "Số 7 đường Trần Phú - phường Gia Cẩm - thành phố Việt Trì - tỉnh Phú Thọ",
+                     "soQdPdKqBdg": null,
+                     "trangThai": "33",
+                     "tenTrangThai": "Chưa cập nhật",
+                     "tgianTtoan": 111,
+                     "tgianTtoanGhiChu": "11",
+                     "pthucTtoan": "1",
+                     "tgianGnhan": 11,
+                     "tgianGnhanGhiChu": "111",
+                     "pthucGnhan": "11",
+                     "thongBaoKh": "11",
+                     "khoanTienDatTruoc": 11,
+                     "xhQdPdKhBdg": null,
+                     "xhDxKhBanDauGia": null,
+                     "children": [
+                       {
+                         "id": 606,
+                         "idQdDtl": 566,
+                         "maDvi": "01010201",
+                         "tenDvi": "Chi cục Dự trữ Nhà nước Việt Trì",
+                         "maDiemKho": "0101020101",
+                         "diaDiemKho": null,
+                         "tenDiemKho": "Điểm kho Phủ Đức",
+                         "maNhaKho": "010102010101",
+                         "tenNhakho": "Nhà kho A1",
+                         "maNganKho": "01010201010101",
+                         "tenNganKho": "Ngăn kho A1/1",
+                         "maLoKho": "0101020101010102",
+                         "tenLoKho": "Lô số 1 Ngăn kho A1/1",
+                         "loaiVthh": null,
+                         "tenLoaiVthh": null,
+                         "cloaiVthh": "010102",
+                         "tenCloaiVthh": "Hạt dài",
+                         "maDviTsan": "11",
+                         "duDau": 500000,
+                         "soLuong": 11,
+                         "giaKhongVat": 111,
+                         "giaKhoiDiem": 1221,
+                         "donGiaVat": null,
+                         "giaKhoiDiemDduyet": 0,
+                         "tienDatTruoc": 134.31,
+                         "tienDatTruocDduyet": 0,
+                         "soLuongChiTieu": 1000,
+                         "soLuongKh": null,
+                         "tongSoLuong": 11,
+                         "tongTienDatTruoc": 134.31,
+                         "tongTienDatTruocDd": 0,
+                         "dviTinh": null,
+                         "trangThai": "33",
+                         "tenTrangThai": "Chưa cập nhật",
+                         "xhQdPdKhBdgDtl": null,
+                         "xhQdPdKhBdg": null,
+                         "children": [
+                           {
+                             "id": 526,
+                             "idPhanLo": 606,
+                             "maDvi": "01010201",
+                             "tenDvi": "Chi cục Dự trữ Nhà nước Việt Trì",
+                             "maDiemKho": "0101020101",
+                             "tenDiemKho": "Điểm kho Phủ Đức",
+                             "maNhaKho": "010102010101",
+                             "tenNhakho": "Nhà kho A1",
+                             "maNganKho": "01010201010101",
+                             "tenNganKho": "Ngăn kho A1/1",
+                             "maLoKho": "0101020101010102",
+                             "tenLoKho": "Lô số 1 Ngăn kho A1/1",
+                             "loaiVthh": null,
+                             "tenLoaiVthh": null,
+                             "cloaiVthh": "010102",
+                             "tenCloaiVthh": "Hạt dài",
+                             "maDviTsan": "11",
+                             "duDau": 500000,
+                             "soLuong": 11,
+                             "giaKhongVat": 111,
+                             "giaKhoiDiem": 1221,
+                             "donGiaVat": null,
+                             "giaKhoiDiemDduyet": 0,
+                             "tienDatTruoc": 134.31,
+                             "tienDatTruocDduyet": 0,
+                             "soLuongChiTieu": null,
+                             "soLuongKh": null,
+                             "dviTinh": null,
+                             "tongSoLuong": 11,
+                             "tongTienDatTruoc": 134.31,
+                             "tongTienDatTruocDd": 0,
+                             "idQdHdr": 622
+                           }
+                         ]
+                       }
+                     ]
+                   }
+                 ],
+                 "fileDinhKems": [],
+                 "canCuPhapLy": []
+               };*/
             delete res.data?.trangThai;
             delete res.data?.tenTrangThai;
             delete res.data?.id;
