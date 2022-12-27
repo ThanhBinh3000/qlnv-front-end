@@ -6,7 +6,8 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, sumNumber } from "src/app/Utility/utils";
+import { UserService } from 'src/app/services/user.service';
+import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, sumNumber, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { DANH_MUC } from './bao-hiem.constant';
 
@@ -49,17 +50,23 @@ export class BaoHiemComponent implements OnInit {
     statusBtnFinish: boolean;
     statusBtnOk: boolean;
     statusPrint: boolean;
+    statusBtnHs: boolean;
     editMoneyUnit = false;
     isDataAvailable = false;
     //nho dem
     editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-
+    tongHsoBh: number;
+    hsBhDuoi: number;
+    hsBhTu: number;
+    userInfo: any;
+    disableHs: boolean = true;
     constructor(
         private _modalRef: NzModalRef,
         private spinner: NgxSpinnerService,
         private lapThamDinhService: LapThamDinhService,
         private notification: NzNotificationService,
         private modal: NzModalService,
+        private userService: UserService,
     ) {
     }
 
@@ -78,6 +85,11 @@ export class BaoHiemComponent implements OnInit {
         this.status = this.dataInfo?.status;
         this.statusBtnFinish = this.dataInfo?.statusBtnFinish;
         this.statusPrint = this.dataInfo?.statusBtnPrint;
+        this.userInfo = this.userService.getUserLogin()
+        this.hsBhDuoi = this.dataInfo?.hsBhDuoi;
+        this.hsBhTu = this.dataInfo?.hsBhTu;
+        console.log(this.userInfo);
+
         this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
             this.lstCtietBcao.push({
                 ...item,
@@ -139,6 +151,14 @@ export class BaoHiemComponent implements OnInit {
         } else {
             this.statusBtnOk = true;
         }
+
+        if (this.userInfo.sub.includes("canbo") && (Utils.statusSave.includes(this.formDetail.trangThai))) {
+            this.disableHs = false;
+            this.statusBtnHs = true;
+        } else {
+            this.disableHs = true;
+            this.statusBtnHs = false;
+        }
     }
 
     // luu
@@ -183,7 +203,8 @@ export class BaoHiemComponent implements OnInit {
         const request = JSON.parse(JSON.stringify(this.formDetail));
         request.lstCtietLapThamDinhs = lstCtietBcaoTemp;
         request.trangThai = trangThai;
-
+        request.hsBhDuoi = this.hsBhDuoi;
+        request.hsBhTu = this.hsBhTu;
         this.spinner.show();
         this.lapThamDinhService.updateLapThamDinh(request).toPromise().then(
             async data => {
@@ -463,6 +484,7 @@ export class BaoHiemComponent implements OnInit {
                 this.total.gtTong = sumNumber([this.total.gtTuM3, this.total.gtDuoiM3]);
             }
         })
+        this.tongHsoBh = this.hsBhDuoi * this.total.gtDuoiM3 + this.hsBhTu * this.total.gtTuM3;
     }
 
     checkEdit(stt: string) {
@@ -543,4 +565,12 @@ export class BaoHiemComponent implements OnInit {
         this._modalRef.close();
     }
 
+    suaHeSo() {
+        this.disableHs = false;
+    }
+
+    SaveHs() {
+        this.disableHs = true;
+        this.tongHsoBh = this.hsBhTu * this.total.gtTuM3 + this.hsBhDuoi * this.total.gtDuoiM3;
+    }
 }
