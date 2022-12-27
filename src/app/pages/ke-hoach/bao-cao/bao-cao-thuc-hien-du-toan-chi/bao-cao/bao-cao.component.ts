@@ -732,7 +732,7 @@ export class BaoCaoComponent implements OnInit {
             if (maPhuLuc == '1' && Utils.statusSave.includes(this.baoCao.trangThai)) {
                 //lay du lieu cua phu luc 3
                 const dataPL3 = {
-                    maNdung: '0.1.2.3.1',
+                    maNdung: '0.1.1.2',
                     dtoanGiaoDtoan: 0,
                     giaiNganThangBcaoDtoan: 0,
                     luyKeGiaiNganDtoan: 0,
@@ -751,7 +751,7 @@ export class BaoCaoComponent implements OnInit {
                 }
                 //lay du lieu cua phu luc 2
                 const dataPL2 = {
-                    maNdung: '0.1.2.2',
+                    maNdung: '0.1.1.1',
                     dtoanGiaoDtoan: 0,
                     dtoanGiaoNguonKhac: 0,
                     dtoanGiaoNguonQuy: 0,

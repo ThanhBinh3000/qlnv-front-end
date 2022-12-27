@@ -81,7 +81,7 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
     super(httpClient, storageService, quanLySoKhoTheKhoService);
     super.ngOnInit();
     this.formData = this.fb.group({
-      id: [''],
+      id: [null],
       nam: [ null, [Validators.required]],
       tenDvi: ['', [Validators.required]],
       maDvi: [''],
@@ -448,7 +448,6 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
       limit: this.globals.prop.MAX_INTERGER,
       page: 0,
     }
-    body.trangThai = STATUS.DA_DUYET_LDCC
     let res = await this.quanLyPhieuNhapKhoService.taoTheKho(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let list = res.data.content;

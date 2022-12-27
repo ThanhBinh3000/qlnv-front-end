@@ -11,12 +11,12 @@ export class QuanLyChatLuongLuuKhoService extends BaseService {
   GATEWAY = '/qlnv-luukho';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuanLyChatLuongLuuKho', '');
+    super(httpClient, 'hang-thanh-ly', '');
   }
 
   suads(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-thanh-ly`;
-    return this.httpClient.put<any>(url_, body).toPromise();
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-thanh-ly/cap-nhat`;
+    return this.httpClient.post<any>(url_, body).toPromise();
   }
 
   traCuuHTL(body: any): Promise<any> {
@@ -24,13 +24,18 @@ export class QuanLyChatLuongLuuKhoService extends BaseService {
     return this.httpClient.post<any>(url_, body).toPromise();
   }
 
+  pheDuyet(body: any): Promise<any> {
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-thanh-ly/phe-duyet`;
+    return this.httpClient.put<any>(url_, body).toPromise();
+  }
+
   themds(body: any): Promise<any> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-thanh-ly`;
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-thanh-ly/them-moi`;
     return this.httpClient.post<any>(url_, body).toPromise();
   }
 
   xoads(id: any): Promise<any> {
-    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-thanh-ly/${id}`;
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-thanh-ly/xoa/${id}`;
     return this.httpClient.delete<any>(url_).toPromise();
   }
 
@@ -44,13 +49,13 @@ export class QuanLyChatLuongLuuKhoService extends BaseService {
     return this.httpClient.post(url_, body, { responseType: 'blob' });
   }
 
-  exportListDetail(body: any): Observable<Blob> {
-    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-thanh-ly/export/listct`;
-    return this.httpClient.post(url_, body, { responseType: 'blob' });
+  exportListDetail(id: number): Observable<Blob> {
+    let url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-thanh-ly/export/listct/${id}`;
+    return this.httpClient.get(url_, { responseType: 'blob' });
   }
 
   detail(id: any): Promise<any> {
-    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-thanh-ly/${id}`;
+    const url_ = `${environment.SERVICE_API}${this.GATEWAY}/hang-thanh-ly/chi-tiet/${id}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 
