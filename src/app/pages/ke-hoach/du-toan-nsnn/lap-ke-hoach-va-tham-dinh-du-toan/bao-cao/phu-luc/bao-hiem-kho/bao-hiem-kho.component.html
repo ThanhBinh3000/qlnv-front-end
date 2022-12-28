@@ -28,9 +28,8 @@
                         <span>Xóa</span>
                     </button> -->
                     <ng-container>
-                        <button
-                            *ngIf="(userInfo.capDvi == '1' && isSynthetic) || (userInfo.capDvi == '2' && isSynthetic)"
-                            type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
+                        <button *ngIf="(userInfo.capDvi == '1' && isSynthetic)" type="button" class="btn btn-main"
+                            (click)="addLine(null)" [hidden]="status">
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>
@@ -234,14 +233,14 @@
                             <td>
                                 <fm-input-number nz-input class="search__input"
                                     [(ngModel)]="editCache[data.id].data.duoiGtConLai"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"
-                                    [disabled]="disableDuoi"></fm-input-number>
+                                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [disabled]="disableDuoi">
+                                </fm-input-number>
                             </td>
                             <td>
                                 <fm-input-number nz-input class="search__input"
                                     [(ngModel)]="editCache[data.id].data.duoiHetKhauHao"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"
-                                    [disabled]="disableDuoi"></fm-input-number>
+                                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [disabled]="disableDuoi">
+                                </fm-input-number>
                             </td>
                             <td>
                                 {{displayValue(editCache[data.id].data.duoiTongGtKho)}}
@@ -249,14 +248,14 @@
                             <td>
                                 <fm-input-number nz-input class="search__input"
                                     [(ngModel)]="editCache[data.id].data.tuGtConLai"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"
-                                    [disabled]="disableTu"></fm-input-number>
+                                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [disabled]="disableTu">
+                                </fm-input-number>
                             </td>
                             <td>
                                 <fm-input-number nz-input class="search__input"
                                     [(ngModel)]="editCache[data.id].data.tuHetKhauHao"
-                                    (ngModelChange)="changeModel(editCache[data.id].data.id)"
-                                    [disabled]="disableTu"></fm-input-number>
+                                    (ngModelChange)="changeModel(editCache[data.id].data.id)" [disabled]="disableTu">
+                                </fm-input-number>
                             </td>
                             <td>
                                 {{displayValue(editCache[data.id].data.tuTongGtKho)}}

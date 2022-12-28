@@ -80,6 +80,8 @@ export class PhuLucIComponent implements OnInit {
     soLaMa: any[] = LA_MA;
     luyKeDetail: any[] = [];
     maLoaiBcao: string;
+    maCntt: string;
+    maSuaChua: string;
 
     //thong tin chung
     idBcao: string;
@@ -149,6 +151,8 @@ export class PhuLucIComponent implements OnInit {
         this.status = this.data?.status;
         this.statusEdit = this.status || this.maLoaiBcao == '527';
         this.statusBtnFinish = this.data?.statusBtnFinish;
+        this.maCntt = this.data.extraDataPL2?.maNdung;
+        this.maSuaChua = this.data.extraDataPL3?.maNdung;
 
         this.data?.lstCtietBcaos.forEach(item => {
             this.lstCtietBcao.push({
