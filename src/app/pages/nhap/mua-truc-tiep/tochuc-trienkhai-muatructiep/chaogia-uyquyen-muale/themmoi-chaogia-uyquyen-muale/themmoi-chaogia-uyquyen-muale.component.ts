@@ -72,8 +72,8 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
   STATUS = STATUS
   rowItem: ChiTietThongTinChaoGia = new ChiTietThongTinChaoGia();
   dataEdit: { [key: string]: { edit: boolean; data: ChiTietThongTinChaoGia } } = {};
-  radioValue: string = 'CG';
-  fileDinhKem: any[] = [];
+  radioValue: string = 'Chào giá';
+  fileDinhKems: any[] = [];
   listOfData: any[] = [];
   i = 0;
   formData: FormGroup
@@ -131,7 +131,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
       this.listOfData = data.hhChiTietTTinChaoGiaList;
       this.updateEditCache();
       this.emitDataTable();
-      this.fileDinhKem = data.fileDinhKems;
+      this.fileDinhKems = data.fileDinhKems;
       console.log(this.listOfData, 88888)
 
     } else {
@@ -177,7 +177,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
       idChaoGia: this.idInput,
       hhChiTietTTinChaoGiaReqs: this.listOfData,
       ptMuaTrucTiep: this.radioValue,
-      fileDinhKems: this.fileDinhKem,
+      fileDinhKems: this.fileDinhKems,
     }
     let res = await this.chaogiaUyquyenMualeService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
