@@ -637,8 +637,8 @@ export class BaoCao04axComponent implements OnInit {
                 })
             }
         })
-        const nvChuyenMon = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.1');
-        const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.2');
+        const nvChuyenMon = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.2');
+        const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.1');
         const cucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.2');
         const tongCucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.3');
         if (nvChuyenMon) {
