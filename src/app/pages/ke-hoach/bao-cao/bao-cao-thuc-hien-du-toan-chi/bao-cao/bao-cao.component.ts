@@ -612,17 +612,20 @@ export class BaoCaoComponent implements OnInit {
         await this.baoCaoThucHienDuToanChiService.tongHopBaoCaoKetQua(request).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
-                    this.baoCao.lstBcaos = data.data.lstBcaos;
+                    this.baoCao.lstBcaos = [];
                     this.baoCao.lstBcaoDviTrucThuocs = data.data.lstBcaoDviTrucThuocs;
-                    await this.baoCao?.lstBcaos?.forEach(item => {
-                        item.maDviTien = '1';   // set defaul ma don vi tien la Dong
-                        item.checked = false;
-                        const index = PHULUCLIST.findIndex(data => data.maPhuLuc == item.maLoai);
-                        if (index !== -1) {
-                            item.tieuDe = PHULUCLIST[index].tieuDe;
-                            item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
-                            item.trangThai = '3';
-                            item.nguoiBcao = this.userInfo.sub;
+                    data.data.lstBcaos.forEach(item => {
+                        if (item) {
+                            const data = PHULUCLIST.find(e => e.maPhuLuc == item.maLoai);
+                            this.baoCao.lstBcaos.push({
+                                ...item,
+                                maDviTien: '1',
+                                tieuDe: data.tieuDe,
+                                tenPhuLuc: data.tenPhuLuc,
+                                trangThai: '3',
+                                nguoiBcao: this.userInfo?.sub,
+                                checked: false,
+                            })
                         }
                     })
                     this.baoCao.lstBcaoDviTrucThuocs.forEach(item => {
