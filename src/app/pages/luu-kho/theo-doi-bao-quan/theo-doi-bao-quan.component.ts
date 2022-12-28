@@ -84,7 +84,7 @@ export class TheoDoiBaoQuanComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       maDonVi: [null],
-      nam: [dayjs().get('year')],
+      nam: [],
       loaiHH: [null],
       tenHH: [null],
     });
