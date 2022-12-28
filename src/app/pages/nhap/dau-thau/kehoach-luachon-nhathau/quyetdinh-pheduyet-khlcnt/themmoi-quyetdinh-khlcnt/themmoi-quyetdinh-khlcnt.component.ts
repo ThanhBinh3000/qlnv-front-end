@@ -463,7 +463,7 @@ export class ThemmoiQuyetdinhKhlcntComponent implements OnInit {
       }
     };
   }
-
+l
   openDialogTh() {
     if (this.formData.get('phanLoai').value != 'TH') {
       return;
