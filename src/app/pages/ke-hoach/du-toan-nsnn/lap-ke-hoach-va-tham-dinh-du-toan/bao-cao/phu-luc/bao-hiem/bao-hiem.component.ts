@@ -483,7 +483,8 @@ export class BaoHiemComponent implements OnInit {
         this.total.gtTong = sumNumber([this.total.gtTuM3, this.total.gtDuoiM3]);
       }
     })
-    this.tongHsoBh = this.hsBhDuoi * this.total.gtDuoiM3 + this.hsBhTu * this.total.gtTuM3;
+    this.SaveHs();
+    // this.tongHsoBh = this.hsBhDuoi * this.total.gtDuoiM3 + this.hsBhTu * this.total.gtTuM3;
   }
 
   checkEdit(stt: string) {
