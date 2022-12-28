@@ -147,6 +147,10 @@ export class BaoCao04anComponent implements OnInit {
             })
         }
 
+        this.lstCtietBcao.forEach(item => {
+            item.listCtiet.sort((a, b) => parseInt(a.maVtu, 10) - parseInt(b.maVtu, 10));
+        })
+
         //lay thong tin cua cac cot
         this.lstCtietBcao[0]?.listCtiet.forEach(item => {
             if (item.loaiMatHang == 0) {
