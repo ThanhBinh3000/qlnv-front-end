@@ -384,7 +384,6 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
     this.listDiaDiemNhap = []
     data.dtlList.forEach(item => {
       let ddKho = item.children.filter(x => !isEmpty(x.bienBanNhapDayKho));
-      console.log(ddKho);
       this.listDiaDiemNhap = [...this.listDiaDiemNhap, ...ddKho];
     })
     await this.spinner.hide();
@@ -433,7 +432,8 @@ export class ThongTinBienBanGiaoNhanComponent extends Base2Component implements 
         soLuong: data.soLuong,
         ngayBatDauNhap: data.bienBanNhapDayKho.ngayBatDauNhap,
         ngayKetThucNhap: data.bienBanNhapDayKho.ngayKetThucNhap,
-        soBbNhapDayKho: data.bienBanNhapDayKho.soBienBanNhapDayKho
+        soBbNhapDayKho: data.bienBanNhapDayKho.soBienBanNhapDayKho,
+        soHoSoKyThuat: data.hoSoKyThuat.soHoSoKyThuat
       });
     }
   }

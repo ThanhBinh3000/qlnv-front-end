@@ -205,8 +205,12 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-        if (!this.userService.isTongCuc()) {
-            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != '2');
+        if (this.userInfo?.DON_VI?.tenVietTat == 'CCNTT') {
+            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != '3');
+        } else {
+            if (!this.userService.isTongCuc()) {
+                this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != '2');
+            }
         }
 
         await this.danhMucService.dMDviCon().toPromise().then(
@@ -728,7 +732,7 @@ export class BaoCaoComponent implements OnInit {
             if (maPhuLuc == '1' && Utils.statusSave.includes(this.baoCao.trangThai)) {
                 //lay du lieu cua phu luc 3
                 const dataPL3 = {
-                    maNdung: '0.1.2.3.1',
+                    maNdung: '0.1.1.2',
                     dtoanGiaoDtoan: 0,
                     giaiNganThangBcaoDtoan: 0,
                     luyKeGiaiNganDtoan: 0,
@@ -747,7 +751,7 @@ export class BaoCaoComponent implements OnInit {
                 }
                 //lay du lieu cua phu luc 2
                 const dataPL2 = {
-                    maNdung: '0.1.2.2',
+                    maNdung: '0.1.1.1',
                     dtoanGiaoDtoan: 0,
                     dtoanGiaoNguonKhac: 0,
                     dtoanGiaoNguonQuy: 0,
