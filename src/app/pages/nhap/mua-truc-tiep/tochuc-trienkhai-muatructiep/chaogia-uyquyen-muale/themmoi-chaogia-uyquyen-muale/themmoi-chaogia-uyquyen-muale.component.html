@@ -9,6 +9,10 @@
             <i class="icon htvbdh_checkfile2"></i>
             <span>Hoàn thành cập nhật</span>
         </button>
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
+            <i class="icon htvbdh_tcdt_save"></i>
+            <span>Lưu</span>
+        </button>
     </div>
 </nz-affix>
 <div class="bg-trang">
@@ -34,9 +38,9 @@
                         <nz-form-control>
                             <nz-radio-group [(ngModel)]="radioValue" nzName="radiogroup"
                                 [ngModelOptions]="{standalone: true}">
-                                <label nz-radio nzValue="CG"> Chào giá </label>
-                                <label nz-radio nzValue="UQ"> Ủy quền </label>
-                                <label nz-radio nzValue="ML"> Mua lẻ </label>
+                                <label nz-radio nzValue="Chào giá"> Chào giá </label>
+                                <label nz-radio nzValue="Ủy quyền"> Ủy quền </label>
+                                <label nz-radio nzValue="Mua lẻ"> Mua lẻ </label>
                             </nz-radio-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -59,7 +63,7 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="17" *ngIf=" radioValue == 'CG'">
+                <div nz-col [nzSpan]="17" *ngIf=" radioValue == 'Chào giá'">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Địa điểm chào giá </nz-form-label>
                         <nz-form-control nz-col>
@@ -114,25 +118,24 @@
                         </nz-form-control>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="24" *ngIf=" radioValue == 'UQ'">
-
+                <div nz-col [nzSpan]="24" *ngIf=" radioValue == 'Ủy quyền'">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
                             File đính kèm QĐ ủy quyền (nếu có)
                         </nz-form-label>
                         <div class="list-file">
-                            <file-list [data]="fileDinhKem"></file-list>
+                            <file-list [data]="fileDinhKems"></file-list>
                         </div>
                     </nz-form-item>
                 </div>
-                <div nz-col [nzSpan]="24" *ngIf=" radioValue == 'ML'">
+                <div nz-col [nzSpan]="24" *ngIf=" radioValue == 'Mua lẻ'">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
                             File đính kèm QĐ giao chi cục mua lẻ
                             (nếu có)
                         </nz-form-label>
                         <div class="list-file">
-                            <file-list [data]="fileDinhKem"></file-list>
+                            <file-list [data]="fileDinhKems"></file-list>
                         </div>
                     </nz-form-item>
                 </div>
@@ -153,7 +156,7 @@
     <!-- END THÔNG TIN CHUNG -->
 
     <!-- START DANH SÁCH CÁC GÓI THẦU -->
-    <nz-card class="mg-t-16 flex-card p-lr16 ">
+    <nz-card class="mg-t-16 flex-card p-lr16 " *ngIf=" radioValue == 'Chào giá'">
         <div class="buttons">
             <button
                 *ngIf="idChaoGia > 0 && !isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT "

@@ -146,6 +146,7 @@
           <th>Tên dự án</th>
           <th>Số lượng (Tấn)</th>
           <th>Tổng tiền đã bao gồm thuế (đồng)</th>
+          <th>Trang thái</th>
           <th>Hành động</th>
         </tr>
       </thead>
@@ -158,7 +159,8 @@
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenDuAn }}</td>
           <td>{{ data.tongSoLuong | number: '1.0-1' : 'vi_VN' }}</td>
-          <td>{{ data.tongTienVat| number: '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.tongSoLuong * data.donGiaVat *1000| number: '1.0-1' : 'vi_VN' }}</td>
+          <td>{{ data.tenTrangThaiDx }}</td>
           <td>
             <a (click)="showDetail($event,data.idDxHdr)">
               <i class="fa fa-eye"></i>
