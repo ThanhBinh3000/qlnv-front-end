@@ -186,13 +186,13 @@
               <td>{{ theKho.ngayTao }}</td>
               <td>{{ theKho.tenTrangThai }}</td>
               <td *ngIf="userService.isChiCuc()" style="text-align: center;">
-                <a *ngIf="theKho.trangThai == STATUS.DA_DUYET_LDCC || theKho.trangThai == STATUS.CHO_DUYET_LDCC " (click)="viewDetail(theKho.id, true)">
+                <a *ngIf="theKho.trangThai == STATUS.DA_DUYET_LDCC || theKho.trangThai == STATUS.CHO_DUYET_LDCC || theKho.trangThai == STATUS.CHO_DUYET_KT  " (click)="viewDetail(theKho.id, true)">
                   <i class=" icon htvbdh_eye"></i>
                 </a>
-                <a *ngIf="theKho.trangThai == STATUS.TU_CHOI_LDCC ||theKho.trangThai == STATUS.DU_THAO  " (click)="viewDetail(theKho.id, false)">
+                <a *ngIf="(theKho.trangThai == STATUS.TU_CHOI_LDCC ||theKho.trangThai == STATUS.DU_THAO || theKho.trangThai == STATUS.TU_CHOI_KT) && userService.isChiCuc() " (click)="viewDetail(theKho.id, false)">
                   <i class="fa fa-pencil"></i>
                 </a>
-                <a *ngIf="theKho.trangThai == STATUS.DU_THAO " (click)="xoaItem(theKho.id)">
+                <a *ngIf="(theKho.trangThai == STATUS.DU_THAO) && userService.isChiCuc() " (click)="xoaItem(theKho.id)">
                   <i  class="fa fa-trash-o do"></i>
                 </a>
               </td>

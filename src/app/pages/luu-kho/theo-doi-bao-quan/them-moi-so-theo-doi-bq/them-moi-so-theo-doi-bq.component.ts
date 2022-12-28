@@ -73,13 +73,13 @@ export class ThemMoiSoTheoDoiBqComponent implements OnInit {
       maDiemKho : ['', Validators.required],
       maNhaKho : ['', Validators.required],
       maNganKho : ['', Validators.required],
-      maLoKho : ['', Validators.required],
+      maLoKho : [''],
       thuKhoId : ['', Validators.required],
       tuNgay : ['', Validators.required],
       denNgay : ['', Validators.required],
       quyCach : ['', Validators.required],
       soLuong : ['', Validators.required],
-      lyDoTuChoi : [''],
+      liDoTuChoi : [''],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
     });
@@ -397,7 +397,7 @@ export class ThemMoiSoTheoDoiBqComponent implements OnInit {
         this.spinner.show();
         try {
           let trangThai;
-          switch (this.formData.value.trangThaiChiCuc) {
+          switch (this.formData.value.trangThai) {
             case STATUS.CHO_DUYET_LDCC : {
               trangThai = STATUS.TU_CHOI_LDCC;
               break;
@@ -405,7 +405,7 @@ export class ThemMoiSoTheoDoiBqComponent implements OnInit {
           }
           let body = {
             id: this.idInput,
-            lyDoTuChoi: text,
+            liDoTuChoi: text,
             trangThai: trangThai
           };
           let res = await this.theoDoiBqService.approve(body);
