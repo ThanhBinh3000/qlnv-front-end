@@ -18,19 +18,19 @@
     <i class="icon htvbdh_chuyen-xu-ly"></i>
     <span>Xuất file</span>
   </button>
-  <button type="button" class="btn btn-sub btn-xoa"  *ngIf="formData.value.trangThaiChiCuc == STATUS.CHO_DUYET_LDCC" (click)="tuChoi()">
+  <button type="button" class="btn btn-sub btn-xoa"  *ngIf="formData.value.trangThaiChiCuc == STATUS.CHO_DUYET_LDCC || formData.value.trangThaiChiCuc == STATUS.CHO_DUYET_KT || formData.value.trangThaiChiCuc == STATUS.CHO_DUYET_KTVBQ" (click)="tuChoi()">
     <i class="icon htvbdh_tcdt_tuchoi"></i>
     <span>Từ chối</span>
   </button>
-  <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThaiChiCuc == STATUS.CHO_DUYET_LDCC"  (click)="pheDuyet()">
+  <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThaiChiCuc == STATUS.CHO_DUYET_LDCC || formData.value.trangThaiChiCuc == STATUS.CHO_DUYET_KT || formData.value.trangThaiChiCuc == STATUS.CHO_DUYET_KTVBQ"  (click)="pheDuyet()">
     <i class="icon htvbdh_dakyduyet"></i>
     <span>Duyệt</span>
   </button>
-  <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThaiChiCuc == STATUS.DU_THAO || formData.value.trangThaiChiCuc == STATUS.TU_CHOI_LDCC "  (click)="luu(true)">
+  <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThaiChiCuc == STATUS.DU_THAO || formData.value.trangThaiChiCuc == STATUS.TU_CHOI_LDCC ||  formData.value.trangThaiChiCuc == STATUS.TU_CHOI_KT ||  formData.value.trangThaiChiCuc == STATUS.TU_CHOI_KTVBQ  "  (click)="luu(true)">
     <i class="icon htvbdh_tcdt_print"></i>
     <span>Lưu và gửi duyệt</span>
   </button>
-  <button type="button" class="btn btn-sub xanh" (click)="luu(false)" >
+  <button type="button" *ngIf="formData.value.trangThaiChiCuc == STATUS.DU_THAO || formData.value.trangThaiChiCuc == STATUS.TU_CHOI_LDCC ||  formData.value.trangThaiChiCuc == STATUS.TU_CHOI_KT ||  formData.value.trangThaiChiCuc == STATUS.TU_CHOI_KTVBQ  " class="btn btn-sub xanh" (click)="luu(false)" >
     <i class="fa fa-save"></i>
     <span>Lưu</span>
   </button>

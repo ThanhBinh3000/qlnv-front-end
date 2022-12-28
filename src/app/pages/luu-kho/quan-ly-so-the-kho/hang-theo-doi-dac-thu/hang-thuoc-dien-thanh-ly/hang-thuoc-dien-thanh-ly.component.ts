@@ -14,6 +14,7 @@ import {QuanLyChatLuongLuuKhoService} from 'src/app/services/quanLyChatLuongLuuK
 import {cloneDeep} from 'lodash';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {saveAs} from 'file-saver';
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-hang-thuoc-dien-thanh-ly',
@@ -27,6 +28,8 @@ export class HangThuocDienThanhLyComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   dsTong;
+  STATUS = STATUS
+
   dsDonVi = [];
   dsDonViDataSource = [];
   dsHangHoa = [];
