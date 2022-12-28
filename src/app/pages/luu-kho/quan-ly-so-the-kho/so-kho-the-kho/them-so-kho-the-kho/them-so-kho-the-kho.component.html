@@ -8,19 +8,19 @@
       <i class="icon htvbdh_chuyen-xu-ly"></i>
       <span>Xuất file</span>
     </button>
-    <button type="button" class="btn btn-sub btn-xoa"  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC" (click)="tuChoi()">
+    <button type="button" class="btn btn-sub btn-xoa"  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC || formData.value.trangThai == STATUS.CHO_DUYET_KT " (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Từ chối</span>
     </button>
-    <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC"  (click)="pheDuyet()">
+    <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC || formData.value.trangThai == STATUS.CHO_DUYET_KT "   (click)="pheDuyet()">
       <i class="icon htvbdh_dakyduyet"></i>
       <span>Duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC "  (click)="save(true)">
+    <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT "  (click)="save(true)">
       <i class="icon htvbdh_tcdt_print"></i>
       <span>Lưu và gửi duyệt</span>
     </button>
-    <button type="button" class="btn btn-sub xanh" *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC " (click)="save(false)" >
+    <button type="button" class="btn btn-sub xanh" *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC  || formData.value.trangThai == STATUS.TU_CHOI_KT" (click)="save(false)" >
       <i class="fa fa-save"></i>
       <span>Lưu</span>
     </button>
@@ -39,6 +39,9 @@
       </div>
     </div>
   </div>
+  <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT  " nzShowIcon nzType="error"
+            nzMessage="Lý do từ chối" nzDescription="{{formData.value.liDoTuChoi}}">
+  </nz-alert>
   <nz-alert class="mg-t-10"
     *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV "
     nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.ldoTuchoi}}">

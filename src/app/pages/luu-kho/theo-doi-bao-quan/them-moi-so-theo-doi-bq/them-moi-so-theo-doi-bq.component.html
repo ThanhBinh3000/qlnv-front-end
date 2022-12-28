@@ -1,31 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="btn-affix">
-  <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="quayLai()">
-      <i class="fa fa-arrow-left"></i>
-      <span>Quay lại</span>
-    </button>
-    <button type="button" class="btn btn-sub" (click)="exportCt()">
-      <i class="icon htvbdh_chuyen-xu-ly"></i>
-      <span>Xuất file</span>
-    </button>
-    <button type="button" class="btn btn-sub btn-xoa"  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC" (click)="tuChoi()">
-      <i class="icon htvbdh_tcdt_tuchoi"></i>
-      <span>Từ chối</span>
-    </button>
-    <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC"  (click)="pheDuyet()">
-      <i class="icon htvbdh_dakyduyet"></i>
-      <span>Duyệt</span>
-    </button>
-    <button type="button" class="btn btn-sub xanh-nhat" *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC "  (click)="save(true)">
-      <i class="icon htvbdh_tcdt_print"></i>
-      <span>Lưu và gửi duyệt</span>
-    </button>
-    <button type="button" class="btn btn-sub xanh" (click)="save(false)" *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC" >
-      <i class="fa fa-save"></i>
-      <span>Lưu</span>
-    </button>
-  </div>
-</nz-affix>
+
 <div class="bg-trang">
   <div class="header header-green-background">
     <div class="header-text">
@@ -37,6 +10,36 @@
         <span>SỔ NHẬT TRÌNH BẢO QUẢN</span>
       </div>
     </div>
+
+  <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
+            nzMessage="Lý do từ chối" nzDescription="{{formData.value.liDoTuChoi}}">
+  </nz-alert>
+  <div class="btn-group">
+    <button type="button" class="btn btn-sub ml-2" (click)="quayLai()">
+      <i class="fa fa-arrow-left"></i>
+      <span>Quay lại</span>
+    </button>
+<!--    <button type="button" class="btn btn-sub ml-2" (click)="exportCt()">-->
+<!--      <i class="icon htvbdh_chuyen-xu-ly"></i>-->
+<!--      <span>Xuất file</span>-->
+<!--    </button>-->
+    <button type="button" class="btn btn-sub btn-xoa  ml-2"  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC" (click)="tuChoi()">
+      <i class="icon htvbdh_tcdt_tuchoi"></i>
+      <span>Từ chối</span>
+    </button>
+    <button type="button" class="btn btn-sub xanh-nhat  ml-2" *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC"  (click)="pheDuyet()">
+      <i class="icon htvbdh_dakyduyet"></i>
+      <span>Duyệt</span>
+    </button>
+    <button type="button" class="btn btn-sub xanh-nhat ml-2" *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC "  (click)="save(true)">
+      <i class="icon htvbdh_tcdt_print"></i>
+      <span>Lưu và gửi duyệt</span>
+    </button>
+    <button type="button" class="btn btn-sub xanh ml-2" (click)="save(false)" *ngIf="formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC" >
+      <i class="fa fa-save"></i>
+      <span>Lưu</span>
+    </button>
+  </div>
   </div>
   <nz-card class="mt16 flex-card p-lr16">
     <form [nzLayout]="'vertical'" [formGroup]="formData" nz-form>
@@ -215,54 +218,54 @@
       <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
         <thead>
         <tr>
-          <th class="text-center" nzWitdh="15px">STT</th>
-          <th nzWitdh = "">Ngày</th>
-          <th nzWitdh = "">Người kiểm tra</th>
-          <th nzWitdh = "">Diễn biến hàng</th>
-          <th nzWitdh = "">Nguyên nhân</th>
-          <th nzWitdh = "">Biện pháp xử lý</th>
-          <th nzWitdh = "">Kết quả</th>
-          <th nzWitdh = "90px" *ngIf="!isViewDetail">Hành động</th>
+          <th class="text-center" style="width: 5%">STT</th>
+          <th style="width: 10%">Ngày</th>
+          <th style="width: 15%">Người kiểm tra</th>
+          <th style="width: 15%">Diễn biến hàng</th>
+          <th style="width: 15%">Nguyên nhân</th>
+          <th style="width: 15%">Biện pháp xử lý</th>
+          <th style="width: 15%">Kết quả</th>
+          <th style="width: 5%" *ngIf="!isViewDetail">Hành động</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-          <th></th>
-          <th>
+          <td></td>
+          <td>
             <nz-input-group>
               <nz-date-picker [(ngModel)]="rowItem.ngayTao" nzFormat="dd/MM/yyyy">
               </nz-date-picker>
             </nz-input-group>
-          </th>
-          <th>
+          </td>
+          <td>
             <nz-input-group>
               <input  type="text" [(ngModel)]="rowItem.nguoiKtraId" nz-input  />
             </nz-input-group>
-          </th><th>
+          </td><td>
             <nz-input-group>
               <input  type="text" [(ngModel)]="rowItem.dienBien" nz-input  />
             </nz-input-group>
-        </th><th>
+        </td><td>
             <nz-input-group>
               <input  type="text" [(ngModel)]="rowItem.nguyenNhan" nz-input  />
             </nz-input-group>
-        </th><th>
+        </td><td>
             <nz-input-group>
               <input  type="text" [(ngModel)]="rowItem.bienPhap" nz-input  />
             </nz-input-group>
-        </th><th>
+        </td><td>
             <nz-input-group>
               <input  type="text" [(ngModel)]="rowItem.ketQua" nz-input  />
             </nz-input-group>
-          </th>
-          <th  style="text-align: left; white-space: nowrap;" *ngIf="!isViewDetail">
+          </td>
+          <td *ngIf="!isViewDetail">
             <a (click)="themMoiItem()" >
-              <i class="fa fa-plus"></i>
+              <i class="icon htvbdh_dau-cong"></i>
             </a>
             <a (click)="clearData()" >
               <i class="fa fa-trash-o do"></i>
             </a>
-          </th>
+          </td>
         </tr>
         <tbody>
         <tr *ngFor="let data of dataTable; let idx = index">
@@ -274,14 +277,14 @@
             <td>{{ data.nguyenNhan }}</td>
             <td>{{ data.bienPhap }}</td>
             <td>{{ data.ketQua }}</td>
-            <th style="text-align: center;" *ngIf="!isViewDetail">
+            <td *ngIf="!isViewDetail">
               <a *ngIf="!isViewDetail" (click)="editItem(idx)">
                 <i class="table-icon fa fa-pencil"></i>
               </a>
               <a *ngIf="!isViewDetail" (click)="xoaItem(idx)">
                 <i class="table-icon fa fa-trash-o do"></i>
               </a>
-            </th>
+            </td>
           </ng-container>
           <ng-template #editTemplate>
             <th></th>

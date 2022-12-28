@@ -133,13 +133,13 @@
                         <td>{{ data.tenTrangThai }}</td>
                         <td>{{ data.tenTrangThaiCuc }}</td>
                         <td style="text-align: left; white-space: nowrap;">
-                            <a (click)="viewDetail(data.id, true)" >
+                            <a (click)="viewDetail(data.id, true)" *ngIf="data.trangThaiChiCuc == STATUS.CHO_DUYET_KTVBQ || data.trangThaiChiCuc == STATUS.CHO_DUYET_KT || data.trangThaiChiCuc == STATUS.DA_DUYET_LDCC" >
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="isShowUpdate" (click)="viewDetail(data.id, false)">
+                            <a *ngIf="userService.isChiCuc() && (data.trangThaiChiCuc == STATUS.DU_THAO || data.trangThaiChiCuc == STATUS.TU_CHOI_KTVBQ || data.trangThaiChiCuc == STATUS.TU_CHOI_LDCC || data.trangThaiChiCuc == STATUS.TU_CHOI_KT)" (click)="viewDetail(data.id, false)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="isShowUpdate" (click)="xoaItem(data.id)">
+                            <a *ngIf="userService.isChiCuc() && data.trangThaiChiCuc == STATUS.DU_THAO" (click)="xoaItem(data.id)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>
