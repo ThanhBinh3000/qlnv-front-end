@@ -99,6 +99,7 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
       maNhaKho: ['', [Validators.required]],
       maNganKho: ['', [Validators.required]],
       maLoKho: [''],
+      liDoTuChoi: [''],
     });
   }
 
@@ -364,6 +365,14 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
           let trangThai;
           switch (this.formData.value.trangThai) {
             case STATUS.DU_THAO : {
+              trangThai = STATUS.CHO_DUYET_KT;
+              break;
+            }
+            case STATUS.CHO_DUYET_KT : {
+              trangThai = STATUS.CHO_DUYET_LDCC;
+              break;
+            }
+            case STATUS.TU_CHOI_KT : {
               trangThai = STATUS.CHO_DUYET_LDCC;
               break;
             }
@@ -413,10 +422,21 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
       if (text) {
         this.spinner.show();
         try {
+          let trangThai;
+          switch (this.formData.value.trangThai) {
+            case STATUS.CHO_DUYET_KT : {
+              trangThai = STATUS.TU_CHOI_KT;
+              break;
+            }
+            case STATUS.CHO_DUYET_LDCC : {
+              trangThai = STATUS.TU_CHOI_LDCC;
+              break;
+            }
+          }
           let body = {
             id: this.idInput,
-            lyDoTuChoi: text,
-            trangThai: this.globals.prop.NHAP_TU_CHOI_LD_CHI_CUC,
+            liDoTuChoi: text,
+            trangThai: trangThai
           };
           let res = await this.quanLySoKhoTheKhoService.pheDuyet(body);
           if (res.msg == MESSAGE.SUCCESS) {
