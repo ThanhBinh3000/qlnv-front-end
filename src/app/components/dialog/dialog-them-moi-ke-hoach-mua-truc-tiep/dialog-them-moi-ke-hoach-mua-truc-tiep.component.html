@@ -11,7 +11,7 @@
         <div nz-col [nzSpan]="6">
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Chi cục </nz-form-label>
-                <nz-form-control>
+                <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-select formControlName="maDvi" (ngModelChange)="changeChiCuc($event)"
                         [nzDisabled]='selectedChiCuc'>
                         <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDonVi"></nz-option>
@@ -22,7 +22,7 @@
         <div nz-col [nzSpan]="6">
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> SL theo chỉ tiêu KH giao đầu năm </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-number [nzDisabled]="true" formControlName="soLuongChiTieu" [nzMin]="1"
                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
@@ -33,7 +33,7 @@
         <div nz-col [nzSpan]="6">
             <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> SL nhập theo KH đã được duyệt </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                <nz-form-control nz-col [nzErrorTip]="error">
                     <nz-input-number [nzDisabled]="true" formControlName="soLuongKhDd" [nzMin]="1"
                         [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'" (input)="calculatorThanhTien()"
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
@@ -42,11 +42,19 @@
             </nz-form-item>
         </div>
         <div nz-col [nzSpan]="4">
-            <nz-form-label nz-col nzRequired [nzNoColon]="true">Đơn giá đề xuất (đ)</nz-form-label>
+            <!-- <nz-form-label nz-col nzRequired [nzNoColon]="true">Đơn giá đề xuất (đ)</nz-form-label>
             <nz-form-control nz-col [nzErrorTip]="error">
                 <input class="search__input" nz-input formControlName="donGia" />
-            </nz-form-control>
-
+            </nz-form-control> -->
+            <nz-form-item>
+                <nz-form-label nzRequired [nzNoColon]="true"> Đơn giá đề xuất (đ) </nz-form-label>
+                <nz-form-control nz-col [nzErrorTip]="error">
+                    <nz-input-number formControlName="donGia" [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1"
+                        [nzSize]="'small'" (input)="calculatorThanhTien()" [nzFormatter]="globals.formatter"
+                        [nzParser]="globals.parser">
+                    </nz-input-number>
+                </nz-form-control>
+            </nz-form-item>
         </div>
         <div nz-col [nzSpan]="5">
             <nz-form-item>

@@ -147,6 +147,10 @@ export class BaoCao04anComponent implements OnInit {
             })
         }
 
+        this.lstCtietBcao.forEach(item => {
+            item.listCtiet.sort((a, b) => parseInt(a.maVtu, 10) - parseInt(b.maVtu, 10));
+        })
+
         //lay thong tin cua cac cot
         this.lstCtietBcao[0]?.listCtiet.forEach(item => {
             if (item.loaiMatHang == 0) {
@@ -635,8 +639,8 @@ export class BaoCao04anComponent implements OnInit {
                 })
             }
         })
-        const nvChuyenMon = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.1');
-        const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.2');
+        const nvChuyenMon = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.2');
+        const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.1');
         const cucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.2');
         const tongCucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.3');
         //tinh dinh muc cho nghiep vu chuyen mon
