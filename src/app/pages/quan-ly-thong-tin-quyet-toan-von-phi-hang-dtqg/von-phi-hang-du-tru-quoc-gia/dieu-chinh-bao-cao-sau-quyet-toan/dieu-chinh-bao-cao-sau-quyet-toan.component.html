@@ -200,8 +200,11 @@
 </ng-container>
 <ng-template #templateThemmoi>
   <div class="bg-trang">
-    <app-them-bao-cao-dieu-chinh-sau-quyet-toan [data]="dataThemMoi" [isStatus]="isStatus" [idInput]="idSelected"
+    <!-- <app-them-bao-cao-dieu-chinh-sau-quyet-toan [data]="dataThemMoi" [isStatus]="isStatus" [idInput]="idSelected"
       (close)="onClose()">
-    </app-them-bao-cao-dieu-chinh-sau-quyet-toan>
+    </app-them-bao-cao-dieu-chinh-sau-quyet-toan> -->
+    <app-add-dieu-chinh-quyet-toan [data]="dataThemMoi" [isStatus]="isStatus" [idInput]="idSelected"
+      (close)="onClose()">
+    </app-add-dieu-chinh-quyet-toan>
   </div>
 </ng-template>

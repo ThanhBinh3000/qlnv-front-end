@@ -3,18 +3,19 @@ import { NzModalRef } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 
 @Component({
-  selector: 'app-dialog-them-dieu-chinh',
-  templateUrl: './dialog-them-dieu-chinh.component.html',
-  styleUrls: ['./dialog-them-dieu-chinh.component.scss']
+  selector: 'app-dialog-tong-hop',
+  templateUrl: './dialog-tong-hop.component.html',
+  styleUrls: ['./dialog-tong-hop.component.css']
 })
 
-export class DialogThemDieuChinhComponent implements OnInit {
+export class DialogTongHopComponent implements OnInit {
   @Input() obj: any;
 
   response: any = {
-    maPhanBcao: '2',
+    maPhanBcao: '1',
     namQtoan: null,
     thangBcao: null,
   };
@@ -27,21 +28,25 @@ export class DialogThemDieuChinhComponent implements OnInit {
 
   async ngOnInit() {
 
-  };
+  }
 
   async handleOk() {
     if (!this.response.namQtoan) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
       return;
     }
-    if (this.response.namQtoan >= 3000 || this.response.namQtoan < 1000) {
+    if (this.response.namnamQtoanBcao >= 3000 || this.response.namQtoan < 1000) {
       this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
       return;
     }
+    if (this.response.thangBcao < 1 || this.response.thangBcao > 12) {
+      this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập tháng đúng định dạng số từ 1 đến 12");
+      return;
+    }
     this._modalRef.close(this.response);
-  };
+  }
 
   handleCancel() {
     this._modalRef.close();
-  };
+  }
 }
