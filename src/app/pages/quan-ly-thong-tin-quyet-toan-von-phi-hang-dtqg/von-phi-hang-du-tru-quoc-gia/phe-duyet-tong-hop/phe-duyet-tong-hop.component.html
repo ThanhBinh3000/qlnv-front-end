@@ -45,15 +45,16 @@
     </nz-card>
     <div class="group-button">
       <h3 class="text-uppercase">DANH SÁCH BÁO CÁO QUYẾT TOÁN VỐN PHÍ HÀNG DTQG</h3>
-      <div class="button">
-
-        <button *ngIf="statusDelete" type="button" class="btn btn-do" (click)="deleteReport('')">
-          <i class="fa fa-trash-o do"></i>
-          <span>Xóa</span>
-        </button>
+      <!-- <div class="buttons">
         <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
-          <span>Thêm</span>
+          <span>Tổng hợp</span>
+        </button>
+      </div> -->
+      <div class="button">
+        <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
+          <i class="icon htvbdh_tcdt_tao-qd"></i>
+          <span>Tổng hợp</span>
         </button>
       </div>
     </div>
@@ -198,7 +199,7 @@
   <div class="bg-trang">
     <!-- <app-them-bao-cao-quyet-toan [data]="dataThemMoi" [isStatus]="isStatus" [idInput]="idSelected" (close)="onClose()">
     </app-them-bao-cao-quyet-toan> -->
-    <app-add-quyet-toan [data]="dataThemMoi" [isStatus]="isStatus" [idInput]="idSelected" (close)="onClose()">
-    </app-add-quyet-toan>
+    <app-add-quyet-toan-tong-hop [data]="dataThemMoi" [isStatus]="isStatus" [idInput]="idSelected" (close)="onClose()">
+    </app-add-quyet-toan-tong-hop>
   </div>
 </ng-template>
