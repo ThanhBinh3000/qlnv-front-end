@@ -57,7 +57,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
   errorInputRequired: string = null;
   errorGhiChu: boolean = false;
   maQd: string = null;
-  fileDinhKem: Array<FileDinhKem> = [];
+  fileDinhKems: any[] = [];
 
   listPhuongThucDauThau: any[] = [];
   listNguonVon: any[] = [];
@@ -270,7 +270,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
     body.dsDiaDiem = this.danhsachDx;
-    body.fileDinhKems = this.fileDinhKem;
+    body.fileDinhKems = this.fileDinhKems;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.quyetDinhPheDuyetKeHoachMTTService.update(body);
@@ -397,7 +397,7 @@ export class ThemmoiQuyetdinhKhmttComponent implements OnInit {
           }
         })
       }
-
+      this.fileDinhKems = data.fileDinhKems
     };
   }
 

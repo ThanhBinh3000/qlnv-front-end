@@ -481,16 +481,10 @@ export class PhuLuc03Component implements OnInit {
         ...new ItemData(),
         id: data.id,
         stt: data.stt,
+        matHang: data.matHang,
+        maDmuc: data.maDmuc,
         tenMatHang: data.tenMatHang,
         level: data.level,
-        // matHang: data.matHang,
-        // thucHienNamTruoc: data.thucHienNamTruoc,
-        // dtoanNamHtai: data.dtoanNamHtai,
-        // uocThNamHtai: data.uocThNamHtai,
-        // sluongNamDtoan: data.sluongNamDtoan,
-        // ttienNamDtoan: data.ttienNamDtoan,
-        // sluongNamN1Td: data.sluongNamN1Td,
-        // ttienNamN1Td: data.ttienNamN1Td,
       }
       this.lstCtietBcao.forEach(item => {
         if (this.getHead(item.stt) == stt) {

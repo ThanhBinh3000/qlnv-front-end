@@ -116,8 +116,8 @@
             </th>
             <th>
               <nz-input-group>
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.pthucMuatt"
-                  (input)="filterInTable('pthucMuatt',filterTable.pthucMuatt)" size="small" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ptMuaTrucTiep"
+                  (input)="filterInTable('ptMuaTrucTiep',filterTable.ptMuaTrucTiep)" size="small" />
               </nz-input-group>
             </th>
             <th>
@@ -142,7 +142,7 @@
             <td>{{ data.soTrHdr }}</td>
             <td>{{ data.idThHdr }}</td>
             <td>{{data.namKh}}</td>
-            <td>{{data.ptMua}}</td>
+            <td>{{data.ptMuaTrucTiep}}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="detail(data)"

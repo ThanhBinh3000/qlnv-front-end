@@ -7,7 +7,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, sumNumber, Utils } from "src/app/Utility/utils";
+import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, mulNumber, sumNumber, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { DANH_MUC } from './bao-hiem.constant';
 
@@ -483,7 +483,8 @@ export class BaoHiemComponent implements OnInit {
         this.total.gtTong = sumNumber([this.total.gtTuM3, this.total.gtDuoiM3]);
       }
     })
-    this.tongHsoBh = this.hsBhDuoi * this.total.gtDuoiM3 + this.hsBhTu * this.total.gtTuM3;
+    this.SaveHs();
+    // this.tongHsoBh = this.hsBhDuoi * this.total.gtDuoiM3 + this.hsBhTu * this.total.gtTuM3;
   }
 
   checkEdit(stt: string) {
@@ -556,6 +557,10 @@ export class BaoHiemComponent implements OnInit {
     return displayNumber(num);
   }
 
+  displayNumber(num: number): string {
+    return displayNumber(num);
+  }
+
   getMoneyUnit() {
     return this.donViTiens.find(e => e.id == this.maDviTien)?.tenDm;
   }
@@ -570,6 +575,6 @@ export class BaoHiemComponent implements OnInit {
 
   SaveHs() {
     this.disableHs = true;
-    this.tongHsoBh = this.hsBhTu * this.total.gtTuM3 + this.hsBhDuoi * this.total.gtDuoiM3;
+    this.tongHsoBh = mulNumber(divNumber(this.hsBhTu, 100), this.total.gtTuM3) + mulNumber(divNumber(this.hsBhDuoi, 100), this.total.gtDuoiM3);
   }
 }

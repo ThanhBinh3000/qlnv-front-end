@@ -350,7 +350,7 @@
                         {{displayValue(editCache[data.id].data.dtoanGiaoTcong)}}
                     </td>
                     <td>
-                        <ng-container *ngIf="data.maNdung == '0.1.2.3.1' || data.maNdung == '0.1.2.2'; else E1">
+                        <ng-container *ngIf="data.maNdung == maCntt || data.maNdung == maSuaChua; else E1">
                             {{displayValue(editCache[data.id].data.dtoanGiaoDtoan)}}
                         </ng-container>
                         <ng-template #E1>
@@ -360,7 +360,7 @@
                         </ng-template>
                     </td>
                     <td>
-                        <ng-container *ngIf="data.maNdung == '0.1.2.2'; else E2">
+                        <ng-container *ngIf="data.maNdung == maCntt; else E2">
                             {{displayValue(editCache[data.id].data.dtoanGiaoNguonKhac)}}
                         </ng-container>
                         <ng-template #E2>
@@ -372,7 +372,7 @@
 
                     </td>
                     <td>
-                        <ng-container *ngIf="data.maNdung == '0.1.2.2'; else E3">
+                        <ng-container *ngIf="data.maNdung == maCntt; else E3">
                             {{displayValue(editCache[data.id].data.dtoanGiaoNguonQuy)}}
                         </ng-container>
                         <ng-template #E3>
@@ -399,7 +399,7 @@
                         {{displayValue(editCache[data.id].data.giaiNganThangBcaoTcongTle)}}
                     </td>
                     <td>
-                        <ng-container *ngIf="data.maNdung == '0.1.2.3.1' || data.maNdung == '0.1.2.2'; else E4">
+                        <ng-container *ngIf="data.maNdung == maCntt || data.maNdung == maSuaChua; else E4">
                             {{displayValue(editCache[data.id].data.giaiNganThangBcaoDtoan)}}
                         </ng-container>
                         <ng-template #E4>
@@ -413,7 +413,7 @@
                         {{displayValue(editCache[data.id].data.giaiNganThangBcaoDtoanTle)}}
                     </td>
                     <td>
-                        <ng-container *ngIf="data.maNdung == '0.1.2.2'; else E5">
+                        <ng-container *ngIf="data.maNdung == maCntt; else E5">
                             {{displayValue(editCache[data.id].data.giaiNganThangBcaoNguonKhac)}}
                         </ng-container>
                         <ng-template #E5>
@@ -427,7 +427,7 @@
                         {{displayValue(editCache[data.id].data.giaiNganThangBcaoNguonKhacTle)}}
                     </td>
                     <td>
-                        <ng-container *ngIf="data.maNdung == '0.1.2.2'; else E6">
+                        <ng-container *ngIf="data.maNdung == maCntt; else E6">
                             {{displayValue(editCache[data.id].data.giaiNganThangBcaoNguonQuy)}}
                         </ng-container>
                         <ng-template #E6>
