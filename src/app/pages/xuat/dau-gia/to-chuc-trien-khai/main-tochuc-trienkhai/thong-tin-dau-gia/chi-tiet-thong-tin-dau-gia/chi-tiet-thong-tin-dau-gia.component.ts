@@ -42,11 +42,13 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       {
         id: [],
         nam: [dayjs().get("year"), [Validators.required]],
+        soQdPd: [],
         maDvi: [],
         loaiVthh: [],
+        tenLoaiVthh: [],
         cloaiVthh: [],
-        idQdPdKh: [],
-        soQdPdKh: [],
+        tenCloaiVthh: [],
+
         idQdDcKh: [],
         soQdDcKh: [],
         idQdPdKq: [],
@@ -69,8 +71,6 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         thoiGianToChucDen: [],
         tenDvi: [],
         tenDviThucHien: [],
-        tenLoaiVthh: [],
-        tenCloaiVthh: [],
         soDviTsan: [],
         soDviTsanThanhCong: [],
         soDviTsanKhongThanh: [],
@@ -159,318 +159,6 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
           })]),
       }
     );
-    let tmpData =
-    {
-      "serialVersionUID": 0,
-      "TABLE_NAME": "",
-      "id": 0,
-      "nam": 0,
-      "maDvi": "aaa",
-      "loaiVthh": "",
-      "cloaiVthh": "",
-      "idQdPdKh": 0,
-      "soQdPdKh": "",
-      "idQdDcKh": 0,
-      "soQdDcKh": "",
-      "idQdPdKq": 0,
-      "soQdPdKq": "",
-      "idKhDx": 0,
-      "soKhDx": "",
-      "ngayQdPdKqBdg": "2022-12-12",
-      "thoiHanGiaoNhan": 0,
-      "thoiHanThanhToan": 0,
-      "phuongThucThanhToan": "",
-      "phuongThucGiaoNhan": "",
-      "trangThai": "",
-      "maDviThucHien": "",
-      "tongTienGiaKhoiDiem": 0,
-      "tongTienDatTruoc": 0,
-      "tongTienDatTruocDuocDuyet": 0,
-      "tongSoLuong": 0,
-      "phanTramDatTruoc": 0,
-      "thoiGianToChucTu": "2022-12-12",
-      "thoiGianToChucDen": "2022-12-12",
-      "tenDvi": "",
-      "tenDviThucHien": "",
-      "tenLoaiVthh": "",
-      "tenCloaiVthh": "",
-      "soDviTsan": 0,
-      "soDviTsanThanhCong": 0,
-      "soDviTsanKhongThanh": 0,
-      "detail": [
-        {
-          "serialVersionUID": 0,
-          "TABLE_NAME": "",
-          "id": 0,
-          "idTtinHdr": 0,
-          "maDvi": "aaa",
-          "soBb": "",
-          "ngayKy": "2022-12-12",
-          "trichYeuKetQua": "",
-          "ketQua": "",
-          "soTb": "",
-          "trichYeuThongBao": "",
-          "toChucTen": "",
-          "toChucDiaChi": "",
-          "toChucSdt": "",
-          "toChucStk": "",
-          "soHopDong": "",
-          "ngayKyHopDong": "2022-12-12",
-          "hinhThucToChuc": "",
-          "thoiHanDkTu": "2022-12-12",
-          "thoiHanDkDen": "2022-12-12",
-          "ghiChuThoiGianDk": "",
-          "ghiChuThoiGianXem": "",
-          "diaDiemNopHoSo": "",
-          "diaDiemXemTaiSan": "",
-          "dieuKienDk": 0,
-          "buocGia": 0,
-          "thoiHanXemTaiSanTu": "2022-12-12",
-          "thoiHanXemTaiSanDen": "2022-12-12",
-          "thoiHanNopTienTu": "2022-12-12",
-          "thoiHanNopTienDen": "2022-12-12",
-          "phuongThucThanhToan": "",
-          "huongThuTen": "",
-          "huongThuStk": "",
-          "huongThuNganHang": "",
-          "huongThuChiNhanh": "",
-          "thoiGianToChucTu": "2022-12-12",
-          "thoiGianToChucDen": "2022-12-12",
-          "diaDiemToChuc": "",
-          "hinhThucDauGia": "",
-          "phuongThucDauGia": "",
-          "ghiChu": "",
-          "tenDvi": "",
-          "fileDinhKem": {
-            "id": 0,
-            "fileName": "",
-            "fileSize": "",
-            "fileUrl": "",
-            "fileType": "",
-            "dataType": "",
-            "createDate": "2022-12-12 08:44:18",
-            "dataId": 0,
-            "noiDung": ""
-          },
-          "canCu": [],
-          "listNguoiLienQuan": [
-            {
-              "serialVersionUID": 0,
-              "TABLE_NAME": "",
-              "id": 0,
-              "idTtinHdr": 0,
-              "idTtinDtl": 0,
-              "maDvi": "",
-              "hoVaTen": "",
-              "chucVu": "2022-12-12",
-              "diaChi": "",
-              "giayTo": "",
-              "loai": "",
-              "tenDvi": "",
-              "ngayTao": "2022-12-12T08:44:18.614841500",
-              "nguoiTaoId": 0,
-              "ngaySua": "2022-12-12T08:44:18.614841500",
-              "nguoiSuaId": 0
-            }
-          ],
-          "listTaiSan": [
-            {
-              "serialVersionUID": 0,
-              "TABLE_NAME": "",
-              "id": 0,
-              "idTtinHdr": 0,
-              "idTtinDtl": 0,
-              "maDvi": "",
-              "maDiaDiem": "aaa",
-              "soLuong": 0,
-              "donGia": 0,
-              "donGiaCaoNhat": 0,
-              "cloaiVthh": "",
-              "maDvTaiSan": "",
-              "tonKho": 0,
-              "donViTinh": "",
-              "giaKhoiDiem": 0,
-              "soTienDatTruoc": 0,
-              "soLanTraGia": 0,
-              "nguoiTraGiaCaoNhat": "",
-              "tenDvi": "",
-              "tenChiCuc": "",
-              "tenDiemKho": "",
-              "tenNhaKho": "",
-              "tenNganKho": "",
-              "tenLoKho": "",
-              "tenLoaiVthh": "",
-              "tenCloaiVthh": "",
-              "ngayTao": "2022-12-12T08:44:18.614841500",
-              "nguoiTaoId": 0,
-              "ngaySua": "2022-12-12T08:44:18.614841500",
-              "nguoiSuaId": 0
-            }
-          ],
-          "ngayTao": "2022-12-12T08:44:18.614841500",
-          "nguoiTaoId": 0,
-          "ngaySua": "2022-12-12T08:44:18.614841500",
-          "nguoiSuaId": 0
-        },
-        {
-          "serialVersionUID": 0,
-          "TABLE_NAME": "",
-          "id": 0,
-          "idTtinHdr": 0,
-          "maDvi": "aaa",
-          "soBb": "",
-          "ngayKy": "2022-12-12",
-          "trichYeuKetQua": "",
-          "ketQua": "",
-          "soTb": "",
-          "trichYeuThongBao": "",
-          "toChucTen": "",
-          "toChucDiaChi": "",
-          "toChucSdt": "",
-          "toChucStk": "",
-          "soHopDong": "",
-          "ngayKyHopDong": "2022-12-12",
-          "hinhThucToChuc": "",
-          "thoiHanDkTu": "2022-12-12",
-          "thoiHanDkDen": "2022-12-12",
-          "ghiChuThoiGianDk": "",
-          "ghiChuThoiGianXem": "",
-          "diaDiemNopHoSo": "",
-          "diaDiemXemTaiSan": "",
-          "dieuKienDk": 0,
-          "buocGia": 0,
-          "thoiHanXemTaiSanTu": "2022-12-12",
-          "thoiHanXemTaiSanDen": "2022-12-12",
-          "thoiHanNopTienTu": "2022-12-12",
-          "thoiHanNopTienDen": "2022-12-12",
-          "phuongThucThanhToan": "",
-          "huongThuTen": "",
-          "huongThuStk": "",
-          "huongThuNganHang": "",
-          "huongThuChiNhanh": "",
-          "thoiGianToChucTu": "2022-12-12",
-          "thoiGianToChucDen": "2022-12-12",
-          "diaDiemToChuc": "",
-          "hinhThucDauGia": "",
-          "phuongThucDauGia": "",
-          "ghiChu": "",
-          "tenDvi": "",
-          "fileDinhKem": {
-            "id": 0,
-            "fileName": "",
-            "fileSize": "",
-            "fileUrl": "",
-            "fileType": "",
-            "dataType": "",
-            "createDate": "2022-12-12 08:44:18",
-            "dataId": 0,
-            "noiDung": ""
-          },
-          "canCu": [],
-          "listNguoiLienQuan": [
-            {
-              "serialVersionUID": 0,
-              "TABLE_NAME": "",
-              "id": 0,
-              "idTtinHdr": 0,
-              "idTtinDtl": 0,
-              "maDvi": "",
-              "hoVaTen": "",
-              "chucVu": "2022-12-12",
-              "diaChi": "",
-              "giayTo": "",
-              "loai": "",
-              "tenDvi": "",
-              "ngayTao": "2022-12-12T08:44:18.614841500",
-              "nguoiTaoId": 0,
-              "ngaySua": "2022-12-12T08:44:18.614841500",
-              "nguoiSuaId": 0
-            }
-          ],
-          "listTaiSan": [
-            {
-              "serialVersionUID": 0,
-              "TABLE_NAME": "",
-              "id": 0,
-              "idTtinHdr": 0,
-              "idTtinDtl": 0,
-              "maDvi": "",
-              "maDiaDiem": "aaa",
-              "soLuong": 0,
-              "donGia": 0,
-              "donGiaCaoNhat": 0,
-              "cloaiVthh": "",
-              "maDvTaiSan": "",
-              "tonKho": 0,
-              "donViTinh": "",
-              "giaKhoiDiem": 0,
-              "soTienDatTruoc": 0,
-              "soLanTraGia": 0,
-              "nguoiTraGiaCaoNhat": "",
-              "tenDvi": "",
-              "tenChiCuc": "",
-              "tenDiemKho": "",
-              "tenNhaKho": "",
-              "tenNganKho": "",
-              "tenLoKho": "",
-              "tenLoaiVthh": "",
-              "tenCloaiVthh": "",
-              "ngayTao": "2022-12-12T08:44:18.614841500",
-              "nguoiTaoId": 0,
-              "ngaySua": "2022-12-12T08:44:18.614841500",
-              "nguoiSuaId": 0
-            }
-          ],
-          "ngayTao": "2022-12-12T08:44:18.614841500",
-          "nguoiTaoId": 0,
-          "ngaySua": "2022-12-12T08:44:18.614841500",
-          "nguoiSuaId": 0
-        }
-      ],
-      "listTaiSanQd": [
-        {
-          "serialVersionUID": 0,
-          "TABLE_NAME": "",
-          "id": 0,
-          "idTtinHdr": 0,
-          "idTtinDtl": 0,
-          "maDvi": "",
-          "maDiaDiem": "",
-          "soLuong": 0,
-          "donGia": 0,
-          "donGiaCaoNhat": 0,
-          "cloaiVthh": "",
-          "maDvTaiSan": "",
-          "tonKho": 0,
-          "donViTinh": "",
-          "giaKhoiDiem": 0,
-          "soTienDatTruoc": 0,
-          "soLanTraGia": 0,
-          "nguoiTraGiaCaoNhat": "",
-          "tenDvi": "",
-          "tenChiCuc": "",
-          "tenDiemKho": "",
-          "tenNhaKho": "",
-          "tenNganKho": "",
-          "tenLoKho": "",
-          "tenLoaiVthh": "",
-          "tenCloaiVthh": "",
-          "ngayTao": "2022-12-12T08:44:18.614841500",
-          "nguoiTaoId": 0,
-          "ngaySua": "2022-12-12T08:44:18.614841500",
-          "nguoiSuaId": 0
-        }
-      ],
-      "ngayTao": "2022-12-12T08:44:18.614841500",
-      "nguoiTaoId": 0,
-      "ngaySua": "2022-12-12T08:44:18.614841500",
-      "nguoiSuaId": 0
-    }
-    // tmpData.detail.map(s => {
-    //   this.detail.push(this.fb.group(s));
-    // });
-    this.formData.patchValue(tmpData);
-
   }
 
   async ngOnInit() {
@@ -491,19 +179,25 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
   async loadDetail(id: number) {
     if (id > 0) {
       await this.quyetDinhPdKhBdgService.getDtlDetail(id)
-        .then((res) => {
+        .then(async (res) => {
           console.log(res);
+          const data = res.data;
+          if (data) {
+            await this.quyetDinhPdKhBdgService.getDetail(data.idQdHdr).then(async (hdr) => {
+              const dataHdr = hdr.data;
+              this.formData.patchValue({
+                soQdPd: dataHdr.soQdPd,
+                nam: dataHdr.nam,
+              })
+              console.log(hdr);
+            })
+          }
         })
         .catch((e) => {
           console.log('error: ', e);
           this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         });
-    } else {
-      // this.formData.patchValue({
-      //   maDvi: this.userLogin.MA_DVI,
-      //   tenDvi: this.userLogin.TEN_DVI
-      // })
     }
   }
 
@@ -528,6 +222,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       nzWidth: '1200px',
       nzFooter: null,
       nzComponentParams: {
+        isModal: true
       },
     });
     modalQD.afterClose.subscribe((data) => {
