@@ -16,7 +16,7 @@ import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { LTD, sumNumber, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { divNumber, LTD, mulNumber, sumNumber, TRANG_THAI_PHU_LUC, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 import { PHU_LUC } from './bao-cao.constant';
 import { BaoHiemHangComponent } from './phu-luc/bao-hiem-hang/bao-hiem-hang.component';
@@ -260,6 +260,7 @@ export class BaoCaoComponent implements OnInit {
             this.baoCao.nguoiTao = this.userInfo?.sub;
             this.baoCao.ngayTao = this.datePipe.transform(new Date(), Utils.FORMAT_DATE_STR);
             this.baoCao.tongHopTuIds = [];
+            this.baoCao.lstFiles = [];
             await this.lapThamDinhService.sinhMaBaoCao().toPromise().then(
                 (data) => {
                     if (data.statusCode == 0) {
@@ -912,7 +913,7 @@ export class BaoCaoComponent implements OnInit {
                         }
                     }
 
-                    
+
                     if (loaiHang == "M") {
                         let tongSoLuongTu = 0
                         let tongSoLuongDuoi = 0
@@ -1285,17 +1286,19 @@ export class BaoCaoComponent implements OnInit {
                     //phu luc bao hiem
                     const data7 = this.baoCao.lstLapThamDinhs.find(e => e.maBieuMau == 'pl_bh');
                     if (data7?.trangThai != '3') {
-                        let tong7 = 0;
+                        let tongTu = 0;
+                        let tongDuoi = 0;
                         data7?.lstCtietLapThamDinhs?.forEach(item => {
                             const level = item.stt.split('.').length - 2;
                             if (level == 0) {
-                                tong7 += item.gtTong;
+                                tongTu = sumNumber([tongTu, item.gtTuM3]);
+                                tongDuoi = sumNumber([tongDuoi, item.gtDuoiM3])
                             }
                         })
                         dataInfo.extraData.push({
                             stt: '0.1.5',
                             maNdung: '0.1.5',
-                            namKh: tong7,
+                            namKh: sumNumber([mulNumber(divNumber(data7.hsBhDuoi, 100), tongDuoi), mulNumber(divNumber(data7.hsBhTu, 100), tongTu)]),
                             giaTriThamDinh: null,
                         })
                     }

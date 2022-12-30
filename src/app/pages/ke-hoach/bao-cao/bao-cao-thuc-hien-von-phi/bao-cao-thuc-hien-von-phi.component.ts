@@ -23,19 +23,11 @@ export class BaoCaoThucHienVonPhiComponent implements OnInit {
     async ngOnInit() {
         this.tabList.forEach(item => {
             let check = false;
-            if (item.code == 'vanphong') {
-                item.role.forEach(e => {
-                    if (this.userService.isAccessPermisson(e) && this.userService.isCuc()) {
-                        check = true;
-                    }
-                })
-            } else {
-                item.role.forEach(e => {
-                    if (this.userService.isAccessPermisson(e)) {
-                        check = true;
-                    }
-                })
-            }
+            item.role.forEach(e => {
+                if (this.userService.isAccessPermisson(e)) {
+                    check = true;
+                }
+            })
             item.status = check;
             item.isSelected = false;
             if (!this.tabSelected && item.status) {
@@ -45,11 +37,6 @@ export class BaoCaoThucHienVonPhiComponent implements OnInit {
         })
     }
     selectTab(tab) {
-        if (tab == 'vanphong') {
-            this.data = {
-                tabSelected: tab,
-            }
-        }
         this.tabSelected = tab;
         this.tabList.forEach(e => {
             e.isSelected = (tab == e.code);

@@ -33,13 +33,14 @@ import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMu
 import { HelperService } from 'src/app/services/helper.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 
 @Component({
   selector: 'app-them-moi-phieu-kiem-nghiem-chat-luong',
   templateUrl: './them-moi-phieu-kiem-nghiem-chat-luong.component.html',
   styleUrls: ['./them-moi-phieu-kiem-nghiem-chat-luong.component.scss'],
 })
-export class ThemMoiPhieuKiemNghiemChatLuongComponent extends BaseComponent implements OnInit {
+export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() typeVthh: string;
   @Input() isView: boolean;
@@ -76,14 +77,17 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends BaseComponent impl
   listTieuChuan: any[] = [];
   isValid = false;
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private phieuKiemNghiemChatLuongHangService: QuanLyPhieuKiemNghiemChatLuongHangService,
     private danhMucService: DanhMucService,
     private quanLyBienBanLayMauService: QuanLyBienBanLayMauService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
   ) {
-    super(httpClient, storageService, phieuKiemNghiemChatLuongHangService);
+    super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongHangService);
     this.formData = this.fb.group({
       id: [],
       trangThai: [STATUS.DU_THAO],
@@ -141,7 +145,6 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends BaseComponent impl
       await Promise.all([
         this.loadDanhMucPhuongThucBaoQuan(),
         this.loadTieuChuan(),
-        this.loadBbLayMau(),
       ]);
       if (this.id > 0) {
         await this.getDetail(this.id);
@@ -351,6 +354,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends BaseComponent impl
         "limit": this.globals.prop.MAX_INTERGER,
         "page": 0
       },
+      loaiVthh: this.loaiVthh,
     }
     let res = await this.quanLyBienBanLayMauService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -361,6 +365,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends BaseComponent impl
   }
 
   openDialogBbLayMau() {
+    this.loadBbLayMau();
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách biên bản lấy mẫu',
       nzContent: DialogTableSelectionComponent,

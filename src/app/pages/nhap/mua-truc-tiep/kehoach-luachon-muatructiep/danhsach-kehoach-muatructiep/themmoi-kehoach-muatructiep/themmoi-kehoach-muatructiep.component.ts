@@ -180,7 +180,6 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     let resNx = await this.danhMucService.danhMucChungGetAll('LOAI_HINH_NHAP_XUAT');
     if (resNx.msg == MESSAGE.SUCCESS) {
       this.listLoaiHinhNx = resNx.data.filter(item => item.phanLoai == 'N');
-      console.log(this.listLoaiHinhNx);
     }
     // kiểu nhập xuất
     this.listKieuNx = [];
@@ -284,7 +283,6 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
             maDvi: this.formData.value.maDvi
           }
           let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
-          console.log(pag, 33333)
           if (pag.msg == MESSAGE.SUCCESS) {
             const data = pag.data;
             this.formData.patchValue({
@@ -330,41 +328,53 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
       },
     });
     modalGT.afterClose.subscribe((res) => {
-      if (!res) {
-        return;
+      if (res) {
+        if (index >= 0) {
+          this.listOfData[index] = res.value;
+        } else {
+          this.listOfData = [...this.listOfData, res.value];
+        }
+        let tongTienVat: number = 0;
+        let tongMucDt: number = 0;
+        let tongSoLuong: number = 0;
+        let donGia: number = 0;
+        this.listOfData.forEach((item) => {
+          tongTienVat = tongTienVat + item.thanhTienVat;
+          tongMucDt = tongMucDt + item.soLuong * item.donGia * 1000;
+          tongSoLuong = tongSoLuong + item.soLuong / 1000;
+          donGia = +item.donGia;
+        });
+        this.formData.patchValue({
+          tongMucDt: tongMucDt,
+          tongSoLuong: tongSoLuong,
+          tongTienVat: tongTienVat,
+          donGia: donGia,
+        });
+        console.log(this.listOfData, 4444);
       }
-      if (index >= 0) {
-        this.listOfData[index] = res.value;
-      } else {
-        this.listOfData = [...this.listOfData, res.value];
-      }
-      let tongTienVat: number = 0;
-      let tongMucDt: number = 0;
-      let tongSoLuong: number = 0;
-      let donGia: number = 0;
-      this.listOfData.forEach((item) => {
-        tongTienVat = tongTienVat + item.thanhTienVat;
-        tongMucDt = tongMucDt + item.soLuong * item.donGia * 1000;
-        tongSoLuong = tongSoLuong + item.soLuong;
-        donGia = +item.donGia;
-      });
-      console.log(tongTienVat, 66666)
-      this.formData.patchValue({
-        tongMucDt: tongMucDt,
-        tongSoLuong: tongSoLuong,
-        tongTienVat: tongTienVat,
-        donGia: donGia,
-      });
-      this.convertListData();
-      console.log(donGia, 11111)
+      // this.convertListData();
     });
 
   }
 
-  deleteRow(i: number): void {
-    this.listOfData = this.listOfData.filter((d, index) => index !== i);
-    this.helperService.setIndexArray(this.listOfData);
-    this.convertListData();
+  deleteRow(i: number) {
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.listOfData = this.listOfData.filter((d, index) => index !== i);
+          this.helperService.setIndexArray(this.listOfData);
+        } catch (e) {
+          console.log('error', e);
+        }
+      },
+    });
   }
 
   async save(isGuiDuyet?) {
@@ -445,12 +455,13 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     if (res2.msg == MESSAGE.SUCCESS) {
       this.dataChiTieu = res2.data;
       this.formData.patchValue({
-        soQd: this.dataChiTieu.soQuyetDinh
+        soQd: res2.data.soQuyetDinh
+      });
+    } else {
+      this.formData.patchValue({
+        soQd: '150/TCDT',
       });
     }
-    this.formData.patchValue({
-      soQd: '150/TCDT',
-    });
   }
 
   convertTienTobangChu(tien: number): string {
@@ -815,11 +826,24 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     ;
   }
 
-  isDisbleForm(): boolean {
-    if (this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP || this.formData.value.trangThai == STATUS.TU_CHOI_LDC) {
-      return false
-    } else {
-      return true
+
+  calcTongSoLuong() {
+    if (this.listOfData) {
+      const sum = this.listOfData.reduce((prev, cur) => {
+        prev += cur.tongSoLuong;
+        return prev;
+      }, 0);
+      return sum;
+    }
+  }
+
+  calcTongThanhTienDeXuat() {
+    if (this.listOfData) {
+      const sum = this.listOfData.reduce((prev, cur) => {
+        prev += cur.tongThanhTien;
+        return prev;
+      }, 0);
+      return sum;
     }
   }
 

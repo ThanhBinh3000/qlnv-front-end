@@ -1496,7 +1496,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       return Object.assign(s1, s)
     }));
 
-    console.log(this.thongTinChiTieuKeHoachNamInput, 'object save')
+    // console.log(this.thongTinChiTieuKeHoachNamInput, 'object save')
     const khVatTu = this.thongTinChiTieuKeHoachNamInput.khVatTu;
     for (let i = 0; i < khVatTu.length; i++) {
       for (let j = i + 1; j <= khVatTu.length - 1; j++) {
@@ -1587,6 +1587,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           this.spinner.hide();
         });
     } else {
+      console.log(this.thongTinChiTieuKeHoachNamInput);
+      // return;
       this.chiTieuKeHoachNamService
         .themMoiChiTieuKeHoach(this.thongTinChiTieuKeHoachNamInput)
         .then((res) => {

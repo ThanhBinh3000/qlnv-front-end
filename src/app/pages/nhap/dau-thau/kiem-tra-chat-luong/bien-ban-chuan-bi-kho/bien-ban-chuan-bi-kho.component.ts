@@ -8,6 +8,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { BaseComponent } from 'src/app/components/base/base.component';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
@@ -26,7 +27,7 @@ import { Globals } from 'src/app/shared/globals';
   templateUrl: './bien-ban-chuan-bi-kho.component.html',
   styleUrls: ['./bien-ban-chuan-bi-kho.component.scss']
 })
-export class BienBanChuanBiKhoComponent extends BaseComponent implements OnInit {
+export class BienBanChuanBiKhoComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
   qdTCDT: string = MESSAGE.QD_TCDT;
 
@@ -71,12 +72,15 @@ export class BienBanChuanBiKhoComponent extends BaseComponent implements OnInit 
   };
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private bienBanChuanBiKhoService: QuanLyBienBanChuanBiKhoService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
   ) {
-    super(httpClient, storageService, bienBanChuanBiKhoService);
+    super(httpClient, storageService, notification, spinner, modal, bienBanChuanBiKhoService);
     super.ngOnInit
   }
 

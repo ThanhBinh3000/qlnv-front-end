@@ -205,8 +205,12 @@ export class BaoCaoComponent implements OnInit {
         //lay thong tin chung bao cao
         this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-        if (!this.userService.isTongCuc()) {
-            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != '2');
+        if (this.userInfo?.DON_VI?.tenVietTat == 'CCNTT') {
+            this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != '3');
+        } else {
+            if (!this.userService.isTongCuc()) {
+                this.lstPhuLuc = this.lstPhuLuc.filter(e => e.maPhuLuc != '2');
+            }
         }
 
         await this.danhMucService.dMDviCon().toPromise().then(
@@ -608,17 +612,20 @@ export class BaoCaoComponent implements OnInit {
         await this.baoCaoThucHienDuToanChiService.tongHopBaoCaoKetQua(request).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
-                    this.baoCao.lstBcaos = data.data.lstBcaos;
+                    this.baoCao.lstBcaos = [];
                     this.baoCao.lstBcaoDviTrucThuocs = data.data.lstBcaoDviTrucThuocs;
-                    await this.baoCao?.lstBcaos?.forEach(item => {
-                        item.maDviTien = '1';   // set defaul ma don vi tien la Dong
-                        item.checked = false;
-                        const index = PHULUCLIST.findIndex(data => data.maPhuLuc == item.maLoai);
-                        if (index !== -1) {
-                            item.tieuDe = PHULUCLIST[index].tieuDe;
-                            item.tenPhuLuc = PHULUCLIST[index].tenPhuLuc;
-                            item.trangThai = '3';
-                            item.nguoiBcao = this.userInfo.sub;
+                    data.data.lstBcaos.forEach(item => {
+                        if (item) {
+                            const data = PHULUCLIST.find(e => e.maPhuLuc == item.maLoai);
+                            this.baoCao.lstBcaos.push({
+                                ...item,
+                                maDviTien: '1',
+                                tieuDe: data.tieuDe,
+                                tenPhuLuc: data.tenPhuLuc,
+                                trangThai: '3',
+                                nguoiBcao: this.userInfo?.sub,
+                                checked: false,
+                            })
                         }
                     })
                     this.baoCao.lstBcaoDviTrucThuocs.forEach(item => {
@@ -728,7 +735,7 @@ export class BaoCaoComponent implements OnInit {
             if (maPhuLuc == '1' && Utils.statusSave.includes(this.baoCao.trangThai)) {
                 //lay du lieu cua phu luc 3
                 const dataPL3 = {
-                    maNdung: '0.1.2.3.1',
+                    maNdung: '0.1.1.2',
                     dtoanGiaoDtoan: 0,
                     giaiNganThangBcaoDtoan: 0,
                     luyKeGiaiNganDtoan: 0,
@@ -747,7 +754,7 @@ export class BaoCaoComponent implements OnInit {
                 }
                 //lay du lieu cua phu luc 2
                 const dataPL2 = {
-                    maNdung: '0.1.2.2',
+                    maNdung: '0.1.1.1',
                     dtoanGiaoDtoan: 0,
                     dtoanGiaoNguonKhac: 0,
                     dtoanGiaoNguonQuy: 0,

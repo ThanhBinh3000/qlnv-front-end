@@ -25,7 +25,7 @@ import {
   styleUrls: ['./quan-ly-phieu-kiem-tra-chat-luong-hang.component.scss'],
 })
 export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
 
   qdTCDT: string = MESSAGE.QD_TCDT;
 
@@ -89,9 +89,6 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      if (!this.typeVthh || this.typeVthh == '') {
-        this.isTatCa = true;
-      }
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
@@ -143,6 +140,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
         "limit": this.pageSize,
         "page": this.page - 1
       },
+      loaiVthh: this.loaiVthh,
       trangThai: STATUS.BAN_HANH
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);
@@ -262,7 +260,7 @@ export class QuanLyPhieuKiemTraChatLuongHangComponent implements OnInit {
         let body = {
           "kqDanhGia": this.searchFilter.ketLuan,
           "maDonVi": this.userInfo.MA_DVI,
-          "maHangHoa": this.typeVthh,
+          "maHangHoa": this.loaiVthh,
           "maNganKho": null,
           "ngayKiemTraDenNgay": this.searchFilter.ngayTongHop && this.searchFilter.ngayTongHop.length > 1
             ? dayjs(this.searchFilter.ngayTongHop[1]).format('YYYY-MM-DD')

@@ -46,7 +46,7 @@
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)"
+                <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
                     *ngIf="userService.isTongCuc()">
                     <i class="icon htvbdh_soanthao"></i>
                     <span>Tạo quyết định</span>
@@ -149,11 +149,11 @@
                         <td>{{data.tenCloaiVthh}}</td>
                         <td>{{data.tenTrangThai}}</td>
                         <td class="text-left">
-                            <a (click)="redirectToChiTiet(data.id,false)">
+                            <a (click)="redirectToChiTiet(true,data.id)" *ngIf="data.trangThai != '00'">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_VU) && userService.isTongCuc()"
-                                (click)="redirectToChiTiet(data.id,true)">
+                            <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_LDC) && userService.isTongCuc()"
+                                (click)="redirectToChiTiet(false,data.id)">
                                 <i class="fa fa-pencil"></i>
                             </a>
                             <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isTongCuc()"
@@ -186,7 +186,7 @@
 </ng-container>
 <ng-template #templateThemmoi>
     <div class="chi-tiet">
-        <app-themmoi-dieuchinh-muatt [idInput]="selectedId" (showListEvent)="showList()" [isViewDetail]="isViewDetail">
+        <app-themmoi-dieuchinh-muatt [idInput]="selectedId" (showListEvent)="showList()" [isView]="isView">
         </app-themmoi-dieuchinh-muatt>
     </div>
 </ng-template>

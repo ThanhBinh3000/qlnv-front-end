@@ -1,1 +1,107 @@
-<p>chi-tiet-qd-pd-ket-qua-bdg works!</p>
+<div class="bg-trang">
+  <div class="header header-green-background">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+          {{ formData.value.tenTrangThai }}
+        </span>
+        <span class="text-uppercase">Quyết định phê duyệt kết quả bán đấu giá</span>
+      </div>
+    </div>
+    <nz-alert *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDV " nzShowIcon nzType="error"
+              nzMessage="Lý do từ chối"
+              nzDescription="{{formData.value.lyDoTuChoi}}">
+    </nz-alert>
+    <div class="btn-group">
+      <button type="button" class="btn btn-sub" >
+        <i class="fa fa-arrow-left"></i>
+        <span>Quay lại</span>
+      </button>
+      <button *ngIf="!isView && formData.value.trangThai == STATUS.DU_THAO" type="button"
+              class="btn btn-sub xanh-nhat ml-2"  >
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
+        <span>Lưu và gửi duyệt</span>
+      </button>
+      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()" type="button"
+              class="btn btn-sub xanh-nhat ml-2"  >
+        <i class="icon htvbdh_tcdt_guiduyet"></i>
+        <span>Duyệt</span>
+      </button>
+      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDV && userService.isTongCuc()" type="button"
+              class="btn btn-sub do ml-2" >
+        <i class="icon htvbdh_tcdt_tuchoi"></i>
+        <span>Từ chối</span>
+      </button>
+      <button *ngIf="!isView"
+              type="button" class="btn btn-main ml-2"  >
+        <i class="icon htvbdh_tcdt_save"></i>
+        <span>Lưu</span>
+      </button>
+    </div>
+  </div>
+  <nz-card class="mg-t-16 flex-card p-lr16">
+    <form nz-form nzLayout="vertical" [formGroup]="formData">
+      <div nz-row [nzGutter]="[20]">
+        <div nz-col nzSpan="2">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Năm kế hoạch
+            </nz-form-label>
+            <nz-form-control nz-col [nzErrorTip]="error">
+              <nz-select formControlName="namKh" nzAllowClear>
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngày nhập</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-date-picker  formControlName="ngayNhap" nzFormat="dd/MM/yyyy">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item>
+            <nz-form-label nzRequired [nzNoColon]="true"> Ngày nhập</nz-form-label>
+            <nz-form-control [nzErrorTip]="error">
+              <nz-date-picker  formControlName="ngayNhap" nzFormat="dd/MM/yyyy">
+              </nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+    <ng-template #error let-control>
+      <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
+      </ng-container>
+    </ng-template>
+  </nz-card>
+  <div class="header header-green-background mt-3">
+    <div class="header-text">
+      <div class="title-chi-tieu">
+        <span class="text-uppercase">Quyết toán ngân sách trung ương chi DTQG</span>
+      </div>
+    </div>
+  </div>
+  <ng-container>
+    <nz-card class="mg-t-10 flex-card p-lr16 card-table">
+
+    </nz-card>
+  </ng-container>
+  <nz-card class="mg-t-10 flex-card p-lr16 card-table">
+    <div nz-col [nzSpan]="24">
+      <nz-form-item nz-col nzSpan="24" class="form-item">
+        <nz-form-label [nzNoColon]="true" class="label-color-kh">Tài liệu đính kèm
+        </nz-form-label>
+        <div class="list-file">
+          <file-list [data]="taiLieuDinhKemList" [isViewDetail]="false"></file-list>
+        </div>
+      </nz-form-item>
+    </div>
+  </nz-card>
+</div>
+<ng-template #error let-control>
+  <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
+</ng-template>

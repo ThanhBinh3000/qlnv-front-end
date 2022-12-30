@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NzModalRef } from 'ng-zorro-antd/modal';
-import VNnum2words from 'vn-num2words';
 import { Globals } from 'src/app/shared/globals';
 import { UserService } from 'src/app/services/user.service';
 import { DonviService } from 'src/app/services/donvi.service';
@@ -10,14 +9,11 @@ import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienTh
 import { LOAI_HANG_DTQG } from 'src/app/constants/config';
 import { HelperService } from 'src/app/services/helper.service';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DxuatKhLcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/dxuatKhLcnt.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { DeXuatKeHoachBanDauGiaService } from 'src/app/services/deXuatKeHoachBanDauGia.service';
-import { DeXuatKhBanDauGiaService } from 'src/app/services/de-xuat-kh-ban-dau-gia.service';
 import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
-import { cloneDeep } from 'lodash';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
+import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 @Component({
   selector: 'app-dialog-them-dia-diem-phan-lo',
   templateUrl: './dialog-them-dia-diem-phan-lo.component.html',
@@ -115,7 +111,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         maDiemKho: this.listOfData[0].maDiemKho,
         tenDiemKho: this.listOfData[0].tenDiemKho,
         maNhaKho: this.listOfData[0].maNhaKho,
-        tenNhaKho: this.listOfData[0].tenNhaKho,
+        tenNhakho: this.listOfData[0].tenNhakho,
         maNganKho: this.listOfData[0].maNganKho,
         tenNganKho: this.listOfData[0].tenNganKho,
         maLoKho: this.listOfData[0].maLoKho,
@@ -232,6 +228,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     let soLuongDaLenKh = await this.deXuatKhBanDauGiaService.getSoLuongAdded(body);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
+    console.log(res, 88888)
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
@@ -249,7 +246,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         };
         this.listDiemKho.push(item);
       }
-      ;
+      console.log(this.listDiemKho, 9999)
+        ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     }
   }

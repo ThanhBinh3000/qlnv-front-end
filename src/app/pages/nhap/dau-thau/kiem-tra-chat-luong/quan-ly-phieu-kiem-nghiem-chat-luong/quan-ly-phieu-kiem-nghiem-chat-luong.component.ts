@@ -152,6 +152,7 @@ export class QuanLyPhieuKiemNghiemChatLuongComponent extends BaseComponent imple
         "limit": this.pageSize,
         "page": this.page - 1
       },
+      loaiVthh: this.typeVthh,
       trangThai: this.STATUS.BAN_HANH
     };
     let res = await this.quyetDinhGiaoNhapHangService.search(body);

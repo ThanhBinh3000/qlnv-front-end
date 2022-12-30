@@ -100,7 +100,8 @@ export class ThemmoiTonghopKhmttComponent implements OnInit {
       ngayTao: [, [Validators.required]],
       ghiChu: ['',],
       tchuanCluong: [''],
-      soQdCc: [''],
+      soQd: [''],
+
     })
 
   }

@@ -63,7 +63,7 @@
               Năm
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="nam" (ngModelChange)="loadBbLayMau()" nzDisabled>
+              <nz-select formControlName="nam" nzDisabled>
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>

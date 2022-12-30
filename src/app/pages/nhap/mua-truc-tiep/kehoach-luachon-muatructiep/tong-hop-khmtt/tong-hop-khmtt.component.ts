@@ -62,7 +62,7 @@ export class TongHopKhmttComponent implements OnInit {
     tenLoaiVthh: '',
     tenCloaiVthh: '',
     tenTrangThai: '',
-    SoQdPduyet: '',
+    soQdPduyet: '',
   }
   STATUS = STATUS;
   dataTableAll: any[] = [];
@@ -112,10 +112,10 @@ export class TongHopKhmttComponent implements OnInit {
       ngayThopDen: this.searchFilter.ngayThop
         ? dayjs(this.searchFilter.ngayThop[1]).format('YYYY-MM-DD')
         : null,
-      ngayKyQdTu: this.searchFilter.ngayThop
+      ngayKyQdTu: this.searchFilter.ngayQd
         ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
         : null,
-      ngayKyQdDen: this.searchFilter.ngayThop
+      ngayKyQdDen: this.searchFilter.ngayQd
         ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
         : null,
       paggingReq: {
@@ -319,6 +319,7 @@ export class TongHopKhmttComponent implements OnInit {
     this.searchFilter.cloaiVthh = null;
     this.searchFilter.noiDung = null;
     this.searchFilter.ngayThop = null;
+    this.searchFilter.ngayQd = null;
     this.search();
 
   }
@@ -387,6 +388,12 @@ export class TongHopKhmttComponent implements OnInit {
             : null,
           ngayThopDen: this.searchFilter.ngayThop
             ? dayjs(this.searchFilter.ngayThop[1]).format('YYYY-MM-DD')
+            : null,
+          ngayKyQdTu: this.searchFilter.ngayQd
+            ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
+            : null,
+          ngayKyQdDen: this.searchFilter.ngayQd
+            ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
             : null,
           loaiVthh: this.searchFilter.loaiVthh,
           cloaiVthh: this.searchFilter.cloaiVthh,
@@ -485,7 +492,7 @@ export class TongHopKhmttComponent implements OnInit {
       tenLoaiVthh: '',
       tenCloaiVthh: '',
       tenTrangThai: '',
-      SoQdPduyet: '',
+      soQdPduyet: '',
     }
   }
 
