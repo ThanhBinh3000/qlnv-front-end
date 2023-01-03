@@ -10,14 +10,13 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DonviService } from 'src/app/services/donvi.service';
-import { QuanLyPhieuKiemTraChatLuongHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyPhieuKiemTraChatLuongHang.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../constants/status";
-import {
-  QuyetDinhGiaoNhapHangService
-} from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
+import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
+import { N } from '@angular/cdk/keycodes';
+import { MttPhieuKiemTraChatLuongService } from './../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttPhieuKiemTraChatLuongService.service';
 
 @Component({
   selector: 'app-phieu-kiem-tra-chat-luong',
@@ -26,17 +25,10 @@ import {
 })
 export class PhieuKiemTraChatLuongComponent implements OnInit {
   @Input() typeVthh: string;
-
+  @Input()
+  listVthh: any[] = [];
   qdTCDT: string = MESSAGE.QD_TCDT;
-
-  searchFilter = {
-    soPhieu: '',
-    ngayTongHop: '',
-    ketLuan: '',
-    soQuyetDinh: '',
-    namKh: ''
-  };
-
+  yearNow: number = 0;
   optionsDonVi: any[] = [];
   options: any[] = [];
   inputDonVi: string = '';
@@ -62,6 +54,13 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
 
   STATUS = STATUS;
 
+  searchFilter = {
+    soPhieu: '',
+    ngayTongHop: '',
+    ketLuan: '',
+    soQuyetDinh: '',
+    namKh: dayjs().get('year'),
+  };
   filterTable: any = {
     soPhieu: '',
     ngayGdinh: '',
@@ -74,13 +73,13 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
     tenTrangThai: '',
   };
   titleStatus: "";
-  listNam: any;
+  listNam: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
-    private quanLyPhieuKiemTraChatLuongHangService: QuanLyPhieuKiemTraChatLuongHangService,
-    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
+    private phieuKtraCluongService: MttPhieuKiemTraChatLuongService,
+    private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
     private notification: NzNotificationService,
     private router: Router,
     private modal: NzModalService,
@@ -97,6 +96,13 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
       this.userInfo = this.userService.getUserLogin();
       if (this.userInfo) {
         this.qdTCDT = this.userInfo.MA_QD;
+      }
+      this.yearNow = dayjs().get('year');
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: this.yearNow - i,
+          text: this.yearNow - i,
+        });
       }
       await this.search();
       this.spinner.hide();
@@ -147,14 +153,27 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
       },
       trangThai: STATUS.BAN_HANH
     };
-    let res = await this.quyetDinhGiaoNhapHangService.search(body);
+    let res = await this.quyetDinhGiaoNvNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.dataTable.forEach(item =>
-        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
-      );
-      console.log(this.dataTable);
+      console.log(data, 111);
+      this.dataTable.forEach(item => {
+        if (this.userService.isChiCuc()) {
+          item.hhQdGiaoNvNhangDtlList = item.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+          console.log(item.hhQdGiaoNvNhangDtlList, 123);
+        } else {
+          let data = [];
+          item.hhQdGiaoNvNhangDtlList.forEach(item => {
+            data = [...data, ...item.hhQdGiaoNvNhDdiemList];
+          })
+          console.log(data, 1234);
+          item.hhQdGiaoNvNhangDtlList = {
+            children: data,
+          }
+          console.log(item.hhQdGiaoNvNhangDtlList, 456);
+        };
+      });
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
@@ -195,7 +214,7 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
       ngayTongHop: '',
       ketLuan: '',
       soQuyetDinh: '',
-      namKh: ''
+      namKh: null,
     };
     this.search();
   }
@@ -205,6 +224,7 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
   }
 
   xoaItem(item: any) {
+    console.log(item, 5555);
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -216,7 +236,7 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyPhieuKiemTraChatLuongHangService.delete({ id: item.id }).then((res) => {
+          this.phieuKtraCluongService.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -274,8 +294,8 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
           "tenNguoiGiao": null,
           "trangThai": null
         };
-        this.quanLyPhieuKiemTraChatLuongHangService
-          .exportList(body)
+        this.phieuKtraCluongService
+          .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-phieu-kiem-tra-chat-luong-hang.xlsx'),
           );
@@ -311,7 +331,7 @@ export class PhieuKiemTraChatLuongComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyPhieuKiemTraChatLuongHangService.deleteMultiple({ ids: dataDelete });
+            let res = await this.phieuKtraCluongService.deleteMuti({ ids: dataDelete });
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();

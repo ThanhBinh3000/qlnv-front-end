@@ -29,6 +29,7 @@ export class Base2Component implements OnInit {
 
   // Const
   listNam: any[] = [];
+  fileDinhKem: any[] = []
   STATUS = STATUS
 
   // Form search and dataTable

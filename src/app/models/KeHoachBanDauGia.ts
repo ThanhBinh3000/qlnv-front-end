@@ -103,6 +103,7 @@ export class DanhSachPhanLo {
     soLuong: number;
     giaKhongVat: number;
     giaKhoiDiem: number;
+    donGiaDeXuat: number;
     donGiaVat: number;
     giaKhoiDiemDduyet: number;
     tienDatTruoc: number;
