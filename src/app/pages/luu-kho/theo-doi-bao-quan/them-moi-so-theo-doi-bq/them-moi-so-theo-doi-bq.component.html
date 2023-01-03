@@ -19,10 +19,6 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-<!--    <button type="button" class="btn btn-sub ml-2" (click)="exportCt()">-->
-<!--      <i class="icon htvbdh_chuyen-xu-ly"></i>-->
-<!--      <span>Xuất file</span>-->
-<!--    </button>-->
     <button type="button" class="btn btn-sub btn-xoa  ml-2"  *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC" (click)="tuChoi()">
       <i class="icon htvbdh_tcdt_tuchoi"></i>
       <span>Từ chối</span>
@@ -213,6 +209,10 @@
   </nz-card>
   <div class="group-button">
     <h3> Thông tin chi tiết</h3>
+        <button type="button" class="btn btn-sub ml-2" (click)="exportCt()" *ngIf="idInput > 0">
+          <i class="icon htvbdh_chuyen-xu-ly"></i>
+          <span>Xuất file</span>
+        </button>
   </div>
   <nz-card class="mt-16 flex-card data-table card-border-content">
       <nz-table #editRowTable [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
