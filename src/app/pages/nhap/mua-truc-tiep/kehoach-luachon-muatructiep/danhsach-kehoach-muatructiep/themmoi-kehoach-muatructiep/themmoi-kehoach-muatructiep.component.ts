@@ -847,4 +847,13 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     }
   }
 
+  isDisbleForm(): boolean {
+    if (this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP || this.formData.value.trangThai == STATUS.TU_CHOI_LDC) {
+      return false
+    } else {
+      return true
+    }
+  }
+
+
 }
