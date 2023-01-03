@@ -83,7 +83,8 @@ export class GiaoDuToanChiService extends BaseService {
   //tong hop giao du toan
   tongHopGiaoDuToan(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/giao_du_toan/tong-hop',
+      // this.urlDefault + '/qlnv-khoachphi/giao_du_toan/tong-hop',
+      'http://192.168.1.228:30101/giao_du_toan/tong-hop',
       request,
     );
   };
@@ -246,6 +247,13 @@ export class GiaoDuToanChiService extends BaseService {
   chiTietPhanBo(id: any): Observable<any> {
     return this.httpClient.get(
       'http://192.168.1.103:8094/qd-giao-phan-bo-dtoan/chi-tiet/' + id,
+    );
+  }
+  // tim kiem danh sach quyet dinh giao phan bo du toan 3.2.6
+  dsPaTongHop(request: any): Observable<any> {
+    return this.httpClient.post(
+      // this.urlDefault + '/qlnv-khoachphi/giao_du_toan/trang-thai', request);
+      'http://192.168.1.228:30101/giao_du_toan/danh-sach/phuong-an-tiep-nhan',request
     );
   }
 }

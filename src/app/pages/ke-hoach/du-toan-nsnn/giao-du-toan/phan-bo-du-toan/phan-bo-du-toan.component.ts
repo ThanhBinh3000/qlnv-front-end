@@ -178,25 +178,15 @@ export class PhanBoDuToanComponent implements OnInit {
   async initialization() {
     this.userInfo = this.userService.getUserLogin();
     this.searchFilter.donViTao = this.userInfo?.MA_DVI;
-    this.searchFilter.ngayTaoDen = new Date().toISOString().slice(0, 16);
-    this.date.setMonth(this.date.getMonth() - 1);
-    this.searchFilter.ngayTaoTu = this.date.toISOString().slice(0, 16);
-    this.searchFilter.namPa = new Date().getFullYear()
     if (this.userService.isAccessPermisson(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
       this.statusTaoMoi = false;
     }
     if (this.userService.isAccessPermisson(GDT.ADD_REPORT_CV_QD_GIAO_PA_PBDT)) {
-      // this.status = true;
       this.trangThai = '1';
-      // this.roleUser = 'canbo';
     } else if (this.userService.isAccessPermisson(GDT.DUYET_REPORT_PA_PBDT)) {
-      // this.status = false;
       this.trangThai = '2';
-      // this.roleUser = 'truongBoPhan';
     } else if (this.userService.isAccessPermisson(GDT.PHE_DUYET_REPORT_PA_PBDT)) {
-      // this.status = false;
       this.trangThai = '4';
-      // this.roleUser = 'lanhDao';
     }
     //lay danh sach danh muc
     this.danhMuc.dMDonVi().toPromise().then(
@@ -310,18 +300,12 @@ export class PhanBoDuToanComponent implements OnInit {
 
   xemChiTiet(id: string, maLoaiDan: string) {
     if (maLoaiDan == "1") {
-      // this.router.navigate([
-      //   MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-du-toan-chi-NSNN-cho-cac-don-vi/' + id,
-      // ])
       const obj = {
         id: id,
         tabSelected: 'phuongAnGiaoDuToan',
       }
       this.dataChange.emit(obj);
     } else if (maLoaiDan == "2") {
-      // this.router.navigate([
-      //   MAIN_ROUTE_KE_HOACH + '/' + MAIN_ROUTE_DU_TOAN + '/' + GIAO_DU_TOAN + '/xay-dung-phuong-an-giao-dieu-chinh-du-toan-chi-NSNN-cho-cac-don-vi/' + id,
-      // ])
       const obj = {
         id: id,
         tabSelected: 'phuongAnGiaoDieuChinh',

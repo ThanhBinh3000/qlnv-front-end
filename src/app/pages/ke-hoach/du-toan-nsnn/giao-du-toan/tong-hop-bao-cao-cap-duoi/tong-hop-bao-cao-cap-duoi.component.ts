@@ -1,7 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
+import { cloneDeep } from 'lodash';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
@@ -11,66 +13,73 @@ import { DataService } from 'src/app/services/data.service';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
-import { cloneDeep } from 'lodash';
-export const TRANG_THAI_GIAO_DU_TOAN = [
+import { GDT, Utils } from 'src/app/Utility/utils';
+import { DialogTongHopComponent } from '../dialog-tong-hop/dialog-tong-hop.component';
+
+export const TRANG_THAI_TIM_KIEM_GIAO = [
   {
-    id: '0',
-    tenDm: "Chưa giao",
-  },
-  {
-    id: '1',
+    id: "7",
     tenDm: "Mới",
   },
   {
-    id: '2',
-    tenDm: "Đã nhận",
+    id: "9",
+    tenDm: "Tiếp nhận",
   },
+  {
+    id: "8",
+    tenDm: "Từ chối",
+  },
+  {
+    id: "-1",
+    tenDm: "Chưa có"
+  }
+
 ]
+
 @Component({
-  selector: 'app-danh-sach-du-toan-giao-tu-cap-tren',
-  templateUrl: './danh-sach-du-toan-giao-tu-cap-tren.component.html',
-  styleUrls: ['./danh-sach-du-toan-giao-tu-cap-tren.component.scss']
+  selector: 'app-tong-hop-bao-cao-cap-duoi',
+  templateUrl: './tong-hop-bao-cao-cap-duoi.component.html',
+  styleUrls: ['./tong-hop-bao-cao-cap-duoi.component.scss']
 })
-export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
+export class TongHopBaoCaoCapDuoiComponent implements OnInit {
   @Output() dataChange = new EventEmitter();
 
-  //thong tin nguoi dang nhap
+  //thong tin dang nhap
   userInfo: any;
   //thong tin tim kiem
+  userRole: string;
+  maDviTao: string;
   searchFilter = {
-    loaiTimKiem: '1',
+    loaiTimKiem: "1",
     maPhanGiao: '2',
-    maLoai: '1',
-    namGiao: null,
-    ngayTaoTu: "",
-    ngayTaoDen: "",
-    maDviTao: "",
-    loaiDuAn: null,
-    maDviNhan: "",
-    maPa: null,
-    trangThais: [],
+    maLoai: '2',
+    namPa: null,
+    ngayTaoTu: null,
+    ngayTaoDen: null,
+    maPa: "",
+    donViTao: "",
+    // trangThai: "",
     paggingReq: {
       limit: 10,
       page: 1
     },
+    trangThais: [],
+    trangThaiGiaos: [],
   };
+
+  filterTable: any = {
+    maPa: "",
+    ngayTao: "",
+    namPa: "",
+    trangThai: "",
+  };
+
   //danh muc
   danhSachBaoCao: any[] = [];
   dataTableAll: any[] = [];
+
+  trangThais: any[] = [];
   donVis: any[] = [];
-  trangThais: any[] = TRANG_THAI_GIAO_DU_TOAN;
-  trangThai!: string;
-  loaiDuAns: any[] = [
-    {
-      id: '1',
-      tenDm: 'Giao dự toán'
-    },
-    {
-      id: '2',
-      tenDm: 'Giao, diều chỉnh dự toán'
-    }
-  ];
   //phan trang
   totalElements = 0;
   totalPages = 0;
@@ -78,16 +87,15 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
     size: 10,
     page: 1,
   }
+  //trang thai
+  status: boolean;
   date: any = new Date()
+  trangThai!: string;
   roleUser: string;
-
-  filterTable: any = {
-    maPa: "",
-    ngayTao: "",
-    namDtoan: "",
-    trangThai: "",
-  };
-
+  newDate = new Date();
+  isCanbotc: boolean;
+  isDataAvailable = false;
+  statusNewReport = true;
   constructor(
     private quanLyVonPhiService: QuanLyVonPhiService,
     private giaoDuToanChiService: GiaoDuToanChiService,
@@ -99,17 +107,44 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private userService: UserService,
     private dataSource: DataService,
+    private modal: NzModalService,
   ) {
   }
+  ngOnInit() {
+    this.action('init');
+  }
 
-  async ngOnInit() {
+  async action(code: string) {
+    this.spinner.show();
+    this.isDataAvailable = false;
+    switch (code) {
+      case 'init':
+        await this.initialization().then(() => {
+          this.isDataAvailable = true;
+        });
+        break;
+      default:
+        break;
+    }
+    this.spinner.hide();
+
+  }
+
+
+  async initialization() {
+    this.spinner.show()
+
     this.userInfo = this.userService.getUserLogin();
-    this.searchFilter.maDviNhan = this.userInfo?.MA_DVI;
+    this.maDviTao = this.userInfo?.MA_DVI;
+    if (this.userService.isAccessPermisson(GDT.TIEPNHAN_TUCHOI_PA_PBDT)) {
+      this.isCanbotc = true;
+    }
+
     //lay danh sach danh muc
-    this.danhMuc.dMDonVi().toPromise().then(
+    await this.danhMuc.dMDonVi().toPromise().then(
       data => {
         if (data.statusCode == 0) {
-          this.donVis = data?.data;
+          this.donVis = data.data;
         } else {
           this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
         }
@@ -118,8 +153,20 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
     );
-    this.onSubmit()
+
+    if (this.userService.isAccessPermisson(GDT.TIEPNHAN_TUCHOI_PA_PBDT) || this.userService.isAccessPermisson(GDT.XEM_PA_TONGHOP_PBDT)) {
+      this.trangThai = '9';
+      this.status = false;
+      this.searchFilter.loaiTimKiem = '1';
+      this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_7));
+      this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_8));
+      this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_9));
+      this.trangThais.push(TRANG_THAI_TIM_KIEM_GIAO.find(e => e.id == Utils.TT_BC_KT));
+    }
+    this.onSubmit();
+    this.spinner.hide();
   }
+
 
   redirectThongTinTimKiem() {
     this.router.navigate([
@@ -137,8 +184,8 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
 
   //search list bao cao theo tieu chi
   async onSubmit() {
-    if (this.searchFilter.namGiao || this.searchFilter.namGiao === 0) {
-      if (this.searchFilter.namGiao >= 3000 || this.searchFilter.namGiao < 1000) {
+    if (this.searchFilter.namPa || this.searchFilter.namPa === 0) {
+      if (this.searchFilter.namPa >= 3000 || this.searchFilter.namPa < 1000) {
         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.WRONG_FORMAT);
         return;
       }
@@ -147,12 +194,13 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
     searchFilterTemp.trangThais = [];
     searchFilterTemp.ngayTaoTu = this.datePipe.transform(searchFilterTemp.ngayTaoTu, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoTu;
     searchFilterTemp.ngayTaoDen = this.datePipe.transform(searchFilterTemp.ngayTaoDen, Utils.FORMAT_DATE_STR) || searchFilterTemp.ngayTaoDen;
+    this.spinner.show();
     if (this.trangThai) {
       searchFilterTemp.trangThais.push(this.trangThai)
     } else {
-      searchFilterTemp.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
+      searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9, Utils.TT_BC_KT]
     }
-    this.spinner.show();
+    searchFilterTemp.trangThaiGiaos = ['0', '1', '2']
     await this.giaoDuToanChiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
@@ -163,9 +211,9 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
             })
           })
           this.danhSachBaoCao.forEach(e => {
-            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
             e.ngayTao = this.datePipe.transform(e.ngayTao, Utils.FORMAT_DATE_STR);
             e.ngayTrinh = this.datePipe.transform(e.ngayTrinh, Utils.FORMAT_DATE_STR);
+            e.ngayDuyet = this.datePipe.transform(e.ngayDuyet, Utils.FORMAT_DATE_STR);
             e.ngayPheDuyet = this.datePipe.transform(e.ngayPheDuyet, Utils.FORMAT_DATE_STR);
             e.ngayTraKq = this.datePipe.transform(e.ngayTraKq, Utils.FORMAT_DATE_STR);
           })
@@ -194,38 +242,41 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
     this.searchFilter.paggingReq.limit = size;
     this.onSubmit();
   }
-
-  xemChiTiet(id: string) {
-    const obj = {
-      id: id,
-      tabSelected: 'chiTietDuToanCapTren',
-    }
-    this.dataChange.emit(obj);
+  xoaDieuKien() {
+    this.searchFilter.namPa = null
+    this.searchFilter.ngayTaoTu = null
+    this.searchFilter.ngayTaoDen = null
+    this.searchFilter.maPa = null
+    this.trangThai = null;
+    this.onSubmit();
   }
 
-  getStatusName(trangThai: any) {
-    return this.trangThais.find(e => e.id == trangThai)?.tenDm;
+  xemChiTiet(id: string, maLoaiDan: string) {
+    console.log({ "id": id, "maLoaiDan": maLoaiDan });
+
+    if (maLoaiDan == "1") {
+      const obj = {
+        id: id,
+        tabSelected: 'phuongAnGiaoDuToan',
+      }
+      this.dataChange.emit(obj);
+    } else if (maLoaiDan == "2") {
+      const obj = {
+        id: id,
+        tabSelected: 'phuongAnGiaoDieuChinh',
+      }
+      this.dataChange.emit(obj);
+    } else {
+      this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+    }
+  }
+
+  getStatusName(trangThai: string) {
+    return this.trangThais.find(e => e.id == trangThai).tenDm;
   }
 
   getUnitName(maDvi: string) {
     return this.donVis.find(e => e.maDvi == maDvi)?.tenDvi;
-  }
-
-  xoaDieuKien() {
-    this.searchFilter.namGiao = null;
-    this.searchFilter.ngayTaoTu = null;
-    this.searchFilter.ngayTaoDen = null;
-    this.searchFilter.loaiDuAn = null;
-    this.trangThai = null;
-    this.searchFilter.maPa = null;
-    this.onSubmit();
-  }
-
-  close() {
-    const obj = {
-      tabSelected: 'giaodutoan',
-    }
-    this.dataSource.changeData(obj);
   }
 
   filterInTable(key: string, value: string, isDate: boolean) {
@@ -247,5 +298,34 @@ export class DanhSachDuToanGiaoTuCapTrenComponent implements OnInit {
       this.danhSachBaoCao = cloneDeep(this.dataTableAll);
     }
   };
+  addNewReport() {
+    let obj = {
+      maDvi: this.maDviTao
+    };
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Thông tin tạo mới báo cáo điều chỉnh dự toán chi ngân sách nhà nước',
+      nzContent: DialogTongHopComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {
+        obj: obj
+      },
+    });
+    modalTuChoi.afterClose.toPromise().then(async (res) => {
+      if (res) {
+        // const obj = {
+        //   ...res,
+        //   id: null,
+        //   tabSelected: 'quyetDinhBTC',
+        //   isSynthetic: false,
+        // }
+        // this.dataChange.emit(obj);
+        console.log(res);
+        
+      }
+    });
+  }
 
 }

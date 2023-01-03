@@ -54,6 +54,12 @@
 
   <div class="group-button">
     <h3 class="text-uppercase">DANH SÁCH BÁO CÁO TỪ ĐƠN VỊ CẤP DƯỚI</h3>
+    <div class="buttons">
+      <button *ngIf="statusNewReport" type="button" class="btn btn-main" (click)="addNewReport()">
+        <i class="icon htvbdh_tcdt_tao-qd"></i>
+        <span>Tổng hợp</span>
+      </button>
+    </div>
   </div>
 
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -130,9 +136,10 @@
                 <i (click)="xemChiTiet(item.id, item.maLoaiDan)" class="fa fa-eye"></i>
               </ng-container>
               <ng-template #thongbao>
-                <button nz-button class="search__button--search">
+                <!-- <button nz-button class="search__button--search">
                   Thông báo đến cục khu vực
-                </button>
+                </button> -->
+                <i class="fa fa-bell"></i>
               </ng-template>
             </ng-template>
           </td>
