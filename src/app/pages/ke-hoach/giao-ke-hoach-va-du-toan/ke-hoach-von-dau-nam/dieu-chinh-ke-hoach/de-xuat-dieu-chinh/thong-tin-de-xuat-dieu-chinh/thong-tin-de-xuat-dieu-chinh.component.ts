@@ -489,8 +489,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               "loai": "00",
               "maVatTu": element?.maVatTuThoc,
               "maVatTuCha": element?.maVatTuCha,
-              "soLuongTang": element?.slTangThoc,
-              "soLuongGiam": element?.slGiamThoc,
+              "soLuongTang": element?.slTangThoc ?? 0,
+              "soLuongGiam": element?.slGiamThoc ?? 0,
               // "dxDcLtVtCtList": element?.dxDcLtVtCtList,
               // "diaDiemKho": element?.diaDiemKho,
             };
@@ -502,8 +502,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               "loai": "00",
               "maVatTu": element?.maVatTuGao,
               "maVatTuCha": element?.maVatTuCha,
-              "soLuongTang": element?.slTangGao,
-              "soLuongGiam": element?.slGiamGao,
+              "soLuongTang": element?.slTangGao ?? 0,
+              "soLuongGiam": element?.slGiamGao ?? 0,
             };
             dxDcLtVtReqList.push(itemGao);
           });
@@ -517,9 +517,10 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               "loai": "04",
               "maVatTu": element?.maVatTu,
               "maVatTuCha": element?.maVatTuCha,
-              "soLuong": element?.sdc,
-              "dxDcLtVtCtList": element?.dxDcLtVtCtList,
-              "diaDiemKho": element?.diaDiemKho,
+              "soLuongTang": element?.slTangMuoi ?? 0,
+              "soLuongGiam": element?.slGiamMuoi ?? 0,
+              // "dxDcLtVtCtList": element?.dxDcLtVtCtList,
+              // "diaDiemKho": element?.diaDiemKho,
             };
             dxDcLtVtReqList.push(item);
           });
@@ -910,7 +911,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   caculatorDieuChinhMuoi(data: any) {
-    data.sdc = (data?.tdc ?? 0) + (data?.dc ?? 0);
+    data.sdc = (data?.tdc ?? 0) + (data?.slTang ?? 0) - (data?.slGiam ?? 0);
   }
 
   checkDataExistMuoi(data) {
