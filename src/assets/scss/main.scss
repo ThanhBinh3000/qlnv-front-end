@@ -6826,8 +6826,6 @@ td.action.ant-table-cell {
   }
 }
 
-
-
 .selectedRow {
   td {
     background: #d8dcfe !important;
@@ -6836,6 +6834,18 @@ td.action.ant-table-cell {
 
 .ant-collapse-header {
   background-color: #eaf3f3 !important;
+}
+
+.ant-collapse {
+  background-color: transparent !important;
+}
+
+.ant-collapse-content>.ant-collapse-content-box {
+  padding: 0px;
+}
+
+.wrap {
+  white-space: normal !important;
 }
 
 
