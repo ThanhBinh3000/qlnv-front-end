@@ -151,11 +151,7 @@
           <td class="text-center" style="width: 2%;"></td>
           <td class="text-center" style="width: 15%;">
             <nz-input-group>
-              <nz-select [(ngModel)]="rowItem.dmucDuAn" [nzShowArrow]="false">
-                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.value}}" nzLabel="{{item.text}}" *ngFor="let item of listNam">
-                </nz-option>
-              </nz-select>
+              <input nz-input [(ngModel)]="rowItem.dmucDuAn"  />
             </nz-input-group>
           </td>
           <td class="text-center" style="width: 15%;">
@@ -247,11 +243,7 @@
             <td></td>
             <td style="width: 5%;">
               <nz-input-group>
-                <nz-select [(ngModel)]="dataEdit[idx].data.dmucDuAn" [nzShowArrow]="false">
-                  <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                  <nz-option nzValue="{{item.ma}}" nzLabel="{{item.ten}}" *ngFor="let item of dsChiCuc">
-                  </nz-option>
-                </nz-select>
+                <input nz-input [(ngModel)]="dataEdit[idx].data.dmucDuAn" />
               </nz-input-group>
             </td>
             <td style="width: 10%;">
