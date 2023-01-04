@@ -11,7 +11,9 @@ export enum PATH {
 
   // Menu 2
   DX_KH_BDG = "dx-kh-bdg",
-  TH_KH_BDG = "thop-kh-bdg"
+  TH_KH_BDG = "thop-kh-bdg",
+  QD_PD_BDG = "qd-pd-bdg"
+
 
 
 }

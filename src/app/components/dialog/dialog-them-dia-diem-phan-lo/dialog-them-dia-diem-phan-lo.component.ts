@@ -111,7 +111,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.listChiCuc = [];
     let body = {
       trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI,
+      maDviCha: this.userService.isCuc() ? this.userInfo.MA_DVI : this.dataEdit.maDvi.slice(0, 6),
       type: [null, 'MLK']
     };
 
@@ -127,7 +127,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       if (res.msg === MESSAGE.SUCCESS) {
         this.listChiCuc = res.data;
         this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
-        console.log(this.listChiCuc);
       }
     }
   }
