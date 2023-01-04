@@ -20,6 +20,35 @@ export class CapVonNguonChiService extends BaseService {
             this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/sinh-ma'
         );
     }
+    //ma hop dong
+    maHopDong(): Observable<any> {
+        return this.httpClient.get(
+            // this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/sinh-ma'
+            'http://192.168.1.107:30101/cap-von-hop-dong/sinh-ma'
+        );
+    }
+    //them moi hop dong
+    themMoiHopDong(request: any): Observable<any> {
+        return this.httpClient.post(
+            // this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/them-moi',
+            'http://192.168.1.107:30101/cap-von-hop-dong/them-moi',
+            request);
+    }
+    // cap nhat hop dong
+    updateHopDong(request: any): Observable<any> {
+        return this.httpClient.put(
+            // this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/cap-nhat',
+            'http://192.168.1.107:30101/cap-von-hop-dong/cap-nhat',
+            request,
+        );
+    }
+    //chi tiết hop dong
+    ctietHopDong(id: any): Observable<any> {
+        return this.httpClient.get(
+            // this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/chi-tiet/' + id
+            'http://192.168.1.107:30101/cap-von-hop-dong/chi-tiet/' + id,
+        );
+    }
     //danh sach de nghi cap von
     timKiemDeNghi(request: any): Observable<any> {
         return this.httpClient.post(
@@ -62,8 +91,8 @@ export class CapVonNguonChiService extends BaseService {
     //danh sach op dong
     dsachHopDong(request: any): Observable<any> {
         return this.httpClient.post(
-            this.urlDefault + '/qlnv-khoachphi/hop-dong/danh-sach/ds-hop-dong',
-            // 'http://192.168.10.12:30101/hop-dong/danh-sach/ds-hop-dong',
+            // this.urlDefault + '/qlnv-khoachphi/hop-dong/danh-sach/ds-hop-dong',
+            'http://192.168.1.107:30101/hop-dong/danh-sach/ds-hop-dong',
             request,
         );
     }
@@ -119,16 +148,16 @@ export class CapVonNguonChiService extends BaseService {
 
     danhSachHopDong(request: any): Observable<any> {
         return this.httpClient.post(
-            this.urlDefault + '/qlnv-khoachphi/hop-dong/danh-sach/so-qd',
-            // 'http://192.168.10.12:30101/hop-dong/danh-sach/so-qd',
+            // this.urlDefault + '/qlnv-khoachphi/hop-dong/danh-sach/so-qd',
+            'http://192.168.1.107:30101/hop-dong/danh-sach/so-qd',
             request,
         )
     }
 
     soQdChiTieu(request: any): Observable<any> {
         return this.httpClient.post(
-            this.urlDefault + '/qlnv-khoachphi/hop-dong/danh-sach/so-qdinh-ctieu',
-            // 'http://192.168.10.12:30101/hop-dong/danh-sach/so-qdinh-ctieu',
+            // this.urlDefault + '/qlnv-khoachphi/hop-dong/danh-sach/so-qdinh-ctieu',
+            'http://192.168.1.107:30101/hop-dong/danh-sach/so-qdinh-ctieu',
             request,
         )
     }

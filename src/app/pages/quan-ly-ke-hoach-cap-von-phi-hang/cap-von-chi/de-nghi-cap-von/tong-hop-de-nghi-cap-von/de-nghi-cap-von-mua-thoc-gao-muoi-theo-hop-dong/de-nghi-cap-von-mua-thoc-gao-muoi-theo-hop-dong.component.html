@@ -63,12 +63,12 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{ baoCao.maBcaoHd }}</td>
+                            <td>{{ baoCao.maDnghi }}</td>
                             <td>{{ baoCao.namBcao }}</td>
                             <td>{{ baoCao.soQdChiTieu }}</td>
                             <td>
                                 <ng-container *ngFor="let item of loaiDns">
-                                    <ng-container *ngIf="baoCao.loaiDeNghi == item.id">
+                                    <ng-container *ngIf="baoCao.loaiDnghi == item.id">
                                         {{ item.tenDm }}
                                     </ng-container>
                                 </ng-container>
@@ -128,7 +128,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- <tr *ngFor="let data of baoCao.lstCtiets; let i = index">
+                            <!-- <tr *ngFor="let data of baoCao.dnghiCapvonCtiets; let i = index">
                                 <td>
                                     {{ data.ten }}
                                 </td>

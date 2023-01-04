@@ -15,8 +15,9 @@ import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNg
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, Utils } from 'src/app/Utility/utils';
-import { BaoCao, TRANG_THAI } from '../../de-nghi-cap-von.constant';
+import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, sumNumber, Utils } from 'src/app/Utility/utils';
+import * as uuid from "uuid";
+import { BaoCao, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
 @Component({
     selector: 'app-de-nghi-cap-von-mua-thoc-gao-muoi-theo-hop-dong',
@@ -160,32 +161,19 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
+            this.baoCao.soLan = 1;
             this.baoCao.trangThai = Utils.TT_BC_1;
             this.baoCao.maDvi = this.userInfo?.MA_DVI;
             this.baoCao.soQdChiTieu = this.data?.qdChiTieu;
-            this.baoCao.loaiDeNghi = this.data?.loaiDn;
+            this.baoCao.loaiDnghi = this.data?.loaiDn;
             this.baoCao.namBcao = this.data?.namDn;
             this.baoCao.ngayTao = new Date();
-            this.data?.hopDong.forEach(item => {
-                this.baoCao.lstCtietHds.push({
-                    ...item,
-                    maHdong: item.soHd,
-                    qdTthau: item.soQdPdKhlcnt,
-                    maHang: item.loaiVthh,
-                    thanhTien: item.soLuong * item.donGia,
-                    maDviTinh: this.vatTus.find(e => e.ma == item.maHang)?.maDviTinh,
-                    dviDonGia: item.donGiaVat,
-                    dviThanhTien: "1",
-                    donGiaMua: item.donGia,
-                    id: null,
-                })
-            });
-
+            this.baoCao.dnghiCapvonCtiets = this.data?.lstCtietBcao;
 
             this.capVonNguonChiService.maDeNghi().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
-                        this.baoCao.maBcaoHd = res.data;
+                        this.baoCao.maDnghi = res.data;
                     } else {
                         this.notification.error(MESSAGE.ERROR, res?.msg);
                     }
@@ -194,6 +182,21 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
             );
+        }
+        if (!this.data.isNew) {
+            this.baoCao.dnghiCapvonCtiets.forEach(item => {
+                const temp = item.dnghiCapvonLuyKes.find(e => e.soLan == this.baoCao.soLan);
+                item.luyKeCong = sumNumber([item.luyKeCong, temp.vonDuyetCong]);
+                item.luyKeCapUng = sumNumber([item.luyKeCapUng, temp.vonDuyetCapUng]);
+                item.luyKeCapVon = sumNumber([item.luyKeCapVon, temp.vonDuyetCapVon]);
+                item.dnghiCapvonLuyKes.push({
+                    ...new Times(),
+                    id: uuid.v4() + 'FE',
+                    soLan: this.baoCao.soLan + 1,
+                    trangThai: Utils.TT_BC_1,
+                })
+            })
+            this.baoCao.soLan += 1;
 
         }
         this.getStatusButton();
@@ -225,8 +228,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
 
     back() {
         const obj = {
-            qdChiTieu: this.baoCao.soQdChiTieu,
-            tabSelected: 'danhsach',
+            tabSelected: 'ds-denghi',
         }
         this.dataChange.emit(obj);
     }
@@ -236,7 +238,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
         // day file len server
         const upfile: FormData = new FormData();
         upfile.append('file', file);
-        upfile.append('folder', this.baoCao.maDvi + '/' + this.baoCao.maBcaoHd);
+        upfile.append('folder', this.baoCao.maDvi + '/' + this.baoCao.maDnghi);
         const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
             (data) => {
                 const objfile = {
@@ -347,7 +349,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5) {
+                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
@@ -417,10 +419,15 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoHopDongComponent implements OnInit {
         }
 
         // replace nhung ban ghi dc them moi id thanh null
-        baoCaoTemp.lstCtiets.forEach(item => {
+        baoCaoTemp.dnghiCapvonCtiets.forEach(item => {
             if (item.id?.length == 38) {
                 item.id = null;
-            }
+            };
+            item.dnghiCapvonLuyKes.forEach(e => {
+                if (e.id?.length == 38) {
+                    e.id = null;
+                }
+            })
         })
 
         this.spinner.show();

@@ -48,6 +48,7 @@ export class HopDongMuaVatTuComponent implements OnInit {
     approveStatus = true;
     copyStatus = true;
     isDataAvailable = false;
+    editCache: { [key: string]: { edit: boolean; data: ItemContract } } = {};
     //file
     listFile: File[] = [];
     fileList: NzUploadFile[] = [];
@@ -163,29 +164,16 @@ export class HopDongMuaVatTuComponent implements OnInit {
             this.baoCao.trangThai = Utils.TT_BC_1;
             this.baoCao.maDvi = this.userInfo?.MA_DVI;
             this.baoCao.soQdChiTieu = this.data?.qdChiTieu;
-            this.baoCao.loaiDeNghi = this.data?.loaiDn;
+            this.baoCao.loaiDnghi = this.data?.loaiDn;
             this.baoCao.namBcao = this.data?.namDn;
             this.baoCao.ngayTao = new Date();
-            this.data?.hopDong.forEach(item => {
-                // this.baoCao.lstCtietHds.push({
-                //     ...item,
-                //     maHdong: item.soHd,
-                //     qdTthau: item.soQdPdKhlcnt,
-                //     maHang: item.loaiVthh,
-                //     thanhTien: item.soLuong * item.donGia,
-                //     maDviTinh: this.vatTus.find(e => e.ma == item.maHang)?.maDviTinh,
-                //     dviDonGia: item.donGiaVat,
-                //     dviThanhTien: "1",
-                //     donGiaMua: item.donGia,
-                //     id: null,
-                // })
-            });
+            this.baoCao.dnghiCvHopDongCtiets = this.data?.hopDong;
+            this.updateEditCache();
 
-
-            this.capVonNguonChiService.maDeNghi().toPromise().then(
+            this.capVonNguonChiService.maHopDong().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
-                        this.baoCao.maBcaoHd = res.data;
+                        this.baoCao.maHopDong = res.data;
                     } else {
                         this.notification.error(MESSAGE.ERROR, res?.msg);
                     }
@@ -236,7 +224,7 @@ export class HopDongMuaVatTuComponent implements OnInit {
         // day file len server
         const upfile: FormData = new FormData();
         upfile.append('file', file);
-        upfile.append('folder', this.baoCao.maDvi + '/' + this.baoCao.maBcaoHd);
+        upfile.append('folder', this.baoCao.maDvi + '/' + this.baoCao.maHopDong);
         const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
             (data) => {
                 const objfile = {
@@ -306,6 +294,7 @@ export class HopDongMuaVatTuComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
                     this.listFile = [];
+                    this.updateEditCache();
                     this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -425,7 +414,7 @@ export class HopDongMuaVatTuComponent implements OnInit {
 
         this.spinner.show();
         if (!this.baoCao.id) {
-            this.capVonNguonChiService.taoMoiDeNghi(baoCaoTemp).toPromise().then(
+            this.capVonNguonChiService.themMoiHopDong(baoCaoTemp).toPromise().then(
                 async (data) => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -454,6 +443,36 @@ export class HopDongMuaVatTuComponent implements OnInit {
                 },
             );
         }
+    }
+
+    updateEditCache(): void {
+        this.baoCao.dnghiCvHopDongCtiets.forEach(item => {
+            this.editCache[item.id] = {
+                edit: false,
+                data: { ...item }
+            };
+        });
+    }
+
+    startEdit(id: string): void {
+        this.editCache[id].edit = true;
+    }
+
+    // huy thay doi
+    cancelEdit(id: string): void {
+        const index = this.baoCao.dnghiCvHopDongCtiets.findIndex(item => item.id === id);
+        // lay vi tri hang minh sua
+        this.editCache[id] = {
+            data: { ...this.baoCao.dnghiCvHopDongCtiets[index] },
+            edit: false
+        };
+    }
+
+    // luu thay doi
+    saveEdit(id: string): void {
+        const index = this.baoCao.dnghiCvHopDongCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
+        Object.assign(this.baoCao.dnghiCvHopDongCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
+        this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
     }
 
     showDialogCopy() {

@@ -63,12 +63,12 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>{{ baoCao.maBcaoHd }}</td>
+                            <td>{{ baoCao.maHopDong }}</td>
                             <td>{{ baoCao.namBcao }}</td>
                             <td>{{ baoCao.soQdChiTieu }}</td>
                             <td>
                                 <ng-container *ngFor="let item of loaiDns">
-                                    <ng-container *ngIf="baoCao.loaiDeNghi == item.id">
+                                    <ng-container *ngIf="baoCao.loaiDnghi == item.id">
                                         {{ item.tenDm }}
                                     </ng-container>
                                 </ng-container>
@@ -101,7 +101,6 @@
                     <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
                         <thead>
                             <tr>
-                                <th rowspan="2">STT</th>
                                 <th rowspan="2">Tên khách hàng</th>
                                 <th rowspan="2">Quyết định phê duyệt kết quả lựa chọn nhà thầu / Hợp đồng</th>
                                 <th colspan="3">Số lượng</th>
@@ -110,6 +109,7 @@
                                 <th rowspan="2">Giá trị thực hiện</th>
                                 <th rowspan="2">Số thanh toán lũy kế</th>
                                 <th rowspan="2">Ghi chú</th>
+                                <th rowspan="2" [hidden]="status"></th>
                             </tr>
                             <tr>
                                 <th>Kế hoạch</th>
@@ -118,37 +118,80 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let data of baoCao.lstCtietHds; let i = index">
-                                <td>
-                                    {{ i + 1 }}
-                                </td>
-                                <td>
-                                    {{ data.maDvi }}
-                                </td>
-                                <td>
-                                    {{ displayValue(data.slKeHoach) }}
-                                </td>
-                                <td>
-                                    {{ displayValue(data.slHopDong) }}
-                                </td>
-                                <td>
-                                    {{ displayValue(data.slThucHien) }}
-                                </td>
-                                <td>
-                                    {{ displayValue(data.donGia) }}
-                                </td>
-                                <td>
-                                    {{ displayValue(data.gtHopDong) }}
-                                </td>
-                                <td>
-                                    {{ displayValue(data.gtriThucHien) }}
-                                </td>
-                                <td>
-                                    {{ displayValue(data.soTtLuyKe) }}
-                                </td>
-                                <td>
-                                    {{ data.ghiChu }}
-                                </td>
+                            <tr *ngFor="let data of baoCao.dnghiCvHopDongCtiets; let i = index">
+                                <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
+                                    <td>
+                                        <ng-container *ngIf="data.isParent">
+                                            {{ data.tenKhachHang }}
+                                        </ng-container>
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.slKeHoach) }}
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.slHopDong) }}
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.slThucHien) }}
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.donGia) }}
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.gtHopDong) }}
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.gtriThucHien) }}
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.soTtLuyKe) }}
+                                    </td>
+                                    <td>
+                                        {{ data.ghiChu }}
+                                    </td>
+                                    <td [hidden]="status">
+                                        <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                    </td>
+                                </ng-container>
+                                <ng-template #editTemplate>
+                                    <td>
+                                        <ng-container *ngIf="data.isParent">
+                                            {{ data.tenKhachHang }}
+                                        </ng-container>
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.slKeHoach) }}
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.slHopDong) }}
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.slThucHien) }}
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.donGia) }}
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.gtHopDong) }}
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.gtriThucHien) }}
+                                    </td>
+                                    <td>
+                                        {{ displayValue(data.soTtLuyKe) }}
+                                    </td>
+                                    <td>
+                                        <input nz-input class="search__input"
+                                            [(ngModel)]="editCache[data.id].data.ghiChu" />
+                                    </td>
+                                    <td [hidden]="status">
+                                        <a (click)="saveEdit(data.id)" class="save">Lưu</a>
+                                        <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
+                                            (nzOnConfirm)="cancelEdit(data.id)" class="save">
+                                            Hủy
+                                        </a>
+                                    </td>
+                                </ng-template>
                             </tr>
                         </tbody>
                     </nz-table>

@@ -168,7 +168,7 @@ export class DanhSachHopDongComponent implements OnInit {
     //them bao cao moi
     addNewReport() {
         const modalTuChoi = this.modal.create({
-            nzTitle: 'Thông tin tạo mới đề nghị',
+            nzTitle: 'Thông tin tạo mới',
             nzContent: DialogTaoMoiHopDongComponent,
             nzMaskClosable: false,
             nzClosable: false,
@@ -182,7 +182,7 @@ export class DanhSachHopDongComponent implements OnInit {
                 const obj = {
                     ...res,
                     id: null,
-                    tabSelected: 'hopdong',
+                    tabSelected: res.loaiDeNghi == Utils.MUA_VTU ? 'hd-vattu' : 'hd-luongthuc',
                 }
                 this.dataChange.emit(obj);
             }

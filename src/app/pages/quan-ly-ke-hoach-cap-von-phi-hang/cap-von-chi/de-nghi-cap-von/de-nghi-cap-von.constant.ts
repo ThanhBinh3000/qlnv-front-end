@@ -59,11 +59,13 @@ export class ItemCongVan {
 
 export class BaoCao {
     id: string;
-    maBcaoHd: string;
+    maHopDong: string;
     maDnghi: string;
+    soLan: number;
     namBcao: number;
-    loaiDeNghi: string;
-    lstCtietHds: ItemContract[];
+    loaiDnghi: string;
+    dnghiCvHopDongCtiets: ItemContract[];
+    dnghiCapvonCtiets: ItemAdvance[];
     lstFiles: any[];
     ngayTao: any;
     nguoiTao: string;
@@ -128,6 +130,7 @@ export class ItemAdvance {
     tongCap: number;
     soConDuocCap: number;
     ghiChu: string;
+    dnghiCapvonLuyKes: Times[];
 }
 
 export class Times {

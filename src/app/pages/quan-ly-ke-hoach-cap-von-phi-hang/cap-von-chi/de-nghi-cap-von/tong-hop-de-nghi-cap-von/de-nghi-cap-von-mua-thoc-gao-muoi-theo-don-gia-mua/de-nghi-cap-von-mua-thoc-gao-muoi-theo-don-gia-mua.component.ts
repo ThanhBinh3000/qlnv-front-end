@@ -164,11 +164,11 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
             this.baoCao.trangThai = Utils.TT_BC_1;
             this.baoCao.maDvi = this.userInfo?.MA_DVI;
             this.baoCao.soQdChiTieu = this.data?.qdChiTieu;
-            this.baoCao.loaiDeNghi = this.data?.loaiDn;
+            this.baoCao.loaiDnghi = this.data?.loaiDn;
             this.baoCao.namBcao = this.data?.namDn;
             this.baoCao.ngayTao = new Date();
             this.data?.hopDong.forEach(item => {
-                this.baoCao.lstCtietHds.push({
+                this.baoCao.dnghiCapvonCtiets.push({
                     ...item,
                     maHdong: item.soHd,
                     qdTthau: item.soQdPdKhlcnt,
@@ -186,7 +186,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
             this.capVonNguonChiService.maDeNghi().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
-                        this.baoCao.maBcaoHd = res.data;
+                        this.baoCao.maDnghi = res.data;
                     } else {
                         this.notification.error(MESSAGE.ERROR, res?.msg);
                     }
@@ -237,7 +237,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
         // day file len server
         const upfile: FormData = new FormData();
         upfile.append('file', file);
-        upfile.append('folder', this.baoCao.maDvi + '/' + this.baoCao.maBcaoHd);
+        upfile.append('folder', this.baoCao.maDvi + '/' + this.baoCao.maDnghi);
         const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
             (data) => {
                 const objfile = {

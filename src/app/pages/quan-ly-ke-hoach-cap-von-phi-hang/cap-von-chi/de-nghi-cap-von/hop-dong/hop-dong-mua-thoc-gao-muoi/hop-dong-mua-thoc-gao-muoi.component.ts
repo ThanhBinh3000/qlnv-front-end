@@ -5,18 +5,15 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
-import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, Utils } from 'src/app/Utility/utils';
-import { BaoCao, ItemCongVan, ItemContract, TRANG_THAI } from '../../de-nghi-cap-von.constant';
+import { CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
+import { BaoCao, ItemContract, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
 
 @Component({
@@ -45,10 +42,11 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
     status = false;
     saveStatus = true;
     submitStatus = true;
-    passStatus = true;
+    // passStatus = true;
     approveStatus = true;
     copyStatus = true;
     isDataAvailable = false;
+    editCache: { [key: string]: { edit: boolean; data: ItemContract } } = {};
     //file
     listFile: File[] = [];
     fileList: NzUploadFile[] = [];
@@ -83,7 +81,6 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
         private capVonNguonChiService: CapVonNguonChiService,
-        private danhMuc: DanhMucHDVService,
         private spinner: NgxSpinnerService,
         private datePipe: DatePipe,
         private userService: UserService,
@@ -117,16 +114,6 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
                 break;
             case 'submit':
                 await this.submitReport().then(() => {
-                    this.isDataAvailable = true;
-                })
-                break;
-            case 'nonpass':
-                await this.tuChoi('3').then(() => {
-                    this.isDataAvailable = true;
-                })
-                break;
-            case 'pass':
-                await this.onSubmit('4', null).then(() => {
                     this.isDataAvailable = true;
                 })
                 break;
@@ -164,15 +151,15 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
             this.baoCao.trangThai = Utils.TT_BC_1;
             this.baoCao.maDvi = this.userInfo?.MA_DVI;
             this.baoCao.soQdChiTieu = this.data?.soQdChiTieu;
-            this.baoCao.loaiDeNghi = this.data?.loaiDeNghi;
+            this.baoCao.loaiDnghi = this.data?.loaiDeNghi;
             this.baoCao.namBcao = this.data?.namBcao;
             this.baoCao.ngayTao = new Date();
-            this.baoCao.lstCtietHds = this.data?.hopDong;
-
-            this.capVonNguonChiService.maDeNghi().toPromise().then(
+            this.baoCao.dnghiCvHopDongCtiets = this.data?.hopDong;
+            this.updateEditCache();
+            this.capVonNguonChiService.maHopDong().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
-                        this.baoCao.maBcaoHd = res.data;
+                        this.baoCao.maHopDong = res.data;
                     } else {
                         this.notification.error(MESSAGE.ERROR, res?.msg);
                     }
@@ -183,31 +170,22 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
             );
 
         }
+        this.sortReport();
         this.getStatusButton();
     }
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        // if (Utils.statusSave.includes(this.trangThai) &&
-        //     (this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT) : this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT))) {
-        //     this.status = false;
-        // } else {
-        //     this.status = true;
-        // }
-
-        // const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-        // const isSave = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT) : this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT);
-        // this.saveStatus = Utils.statusSave.includes(this.trangThai) && isSave && checkChirld;
-        // const isSubmit = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.APPROVE_DN_MVT) : this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT);
-        // this.submitStatus = Utils.statusApprove.includes(this.trangThai) && isSubmit && checkChirld && !(!this.id);
-        // const isApprove = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT) : this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT);
-        // if (this.trangThai == Utils.TT_BC_2) {
-        //     this.approveStatus = isApprove && checkChirld;
-        // } else {
-        //     this.approveStatus = Utils.statusPheDuyet.includes(this.trangThai) && isApprove && checkChirld;
-        // }
-        // const isCopy = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.COPY_DN_MVT) : this.userService.isAccessPermisson(CVNC.COPY_DN_MLT);
-        // this.copyStatus = Utils.statusCopy.includes(this.trangThai) && isCopy && checkChirld;
+        const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
+        if (Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT)) {
+            this.status = false;
+        } else {
+            this.status = true;
+        }
+        this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) && checkChirld;
+        this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT) && checkChirld && !(!this.baoCao.id);
+        this.approveStatus = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) && checkChirld;
+        this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.COPY_DN_MLT) && checkChirld;
     }
 
     back() {
@@ -223,7 +201,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
         // day file len server
         const upfile: FormData = new FormData();
         upfile.append('file', file);
-        upfile.append('folder', this.baoCao.maDvi + '/' + this.baoCao.maBcaoHd);
+        upfile.append('folder', this.baoCao.maDvi + '/' + this.baoCao.maHopDong);
         const temp = await this.quanLyVonPhiService.uploadFile(upfile).toPromise().then(
             (data) => {
                 const objfile = {
@@ -288,11 +266,12 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
 
     // call chi tiet bao cao
     async getDetailReport() {
-        await this.capVonNguonChiService.ctietDeNghi(this.baoCao.id).toPromise().then(
+        await this.capVonNguonChiService.ctietHopDong(this.baoCao.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
                     this.listFile = [];
+                    this.updateEditCache();
                     this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -404,7 +383,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
         }
 
         // replace nhung ban ghi dc them moi id thanh null
-        baoCaoTemp.lstCtiets.forEach(item => {
+        baoCaoTemp.dnghiCvHopDongCtiets.forEach(item => {
             if (item.id?.length == 38) {
                 item.id = null;
             }
@@ -412,7 +391,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
 
         this.spinner.show();
         if (!this.baoCao.id) {
-            this.capVonNguonChiService.taoMoiDeNghi(baoCaoTemp).toPromise().then(
+            this.capVonNguonChiService.themMoiHopDong(baoCaoTemp).toPromise().then(
                 async (data) => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
@@ -427,7 +406,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
                 },
             );
         } else {
-            this.capVonNguonChiService.updateDeNghi(baoCaoTemp).toPromise().then(
+            this.capVonNguonChiService.updateHopDong(baoCaoTemp).toPromise().then(
                 async data => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
@@ -441,6 +420,46 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
                 },
             );
         }
+    }
+
+    updateEditCache(): void {
+        this.baoCao.dnghiCvHopDongCtiets.forEach(item => {
+            this.editCache[item.id] = {
+                edit: false,
+                data: { ...item }
+            };
+        });
+    }
+
+    startEdit(id: string): void {
+        this.editCache[id].edit = true;
+    }
+
+    // huy thay doi
+    cancelEdit(id: string): void {
+        const index = this.baoCao.dnghiCvHopDongCtiets.findIndex(item => item.id === id);
+        // lay vi tri hang minh sua
+        this.editCache[id] = {
+            data: { ...this.baoCao.dnghiCvHopDongCtiets[index] },
+            edit: false
+        };
+    }
+
+    // luu thay doi
+    saveEdit(id: string): void {
+        const index = this.baoCao.dnghiCvHopDongCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
+        Object.assign(this.baoCao.dnghiCvHopDongCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
+        this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+    }
+
+    sortReport() {
+        const lstCtietBcao = this.baoCao.dnghiCvHopDongCtiets;
+        const lstParent = this.baoCao.dnghiCvHopDongCtiets.filter(e => e.isParent);
+        this.baoCao.dnghiCvHopDongCtiets = [];
+        lstParent.forEach(item => {
+            this.baoCao.dnghiCvHopDongCtiets.push(item);
+            this.baoCao.dnghiCvHopDongCtiets = this.baoCao.dnghiCvHopDongCtiets.concat(lstCtietBcao.find(e => e.maDvi == item.maDvi && !e.isParent));
+        })
     }
 
     showDialogCopy() {
