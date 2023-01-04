@@ -156,7 +156,11 @@
           <td class="text-center" style="width: 2%;"></td>
           <td style="width: 9%;">
             <nz-input-group>
-              <input type="text" nz-input [(ngModel)]="rowItem.tenCuc" [readonly]="true">
+              <nz-select [(ngModel)]="rowItem.maCuc" [nzShowArrow]="false" (ngModelChange)="onChangeCuc($event)">
+                <nz-option nzValue="null" nzDisabled nzHide></nz-option>
+                <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsCuc">
+                </nz-option>
+              </nz-select>
             </nz-input-group>
           </td>
           <td style="width: 9%;">
@@ -220,14 +224,14 @@
         <tr *ngFor="let data of dataTable; let idx = index">
           <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
             <td>{{ idx + 1 }}</td>
-            <td>{{ data.tenVthh }}</td>
-            <td>{{ data.tenCloaiVthh }}</td>
-            <td>{{ data.dviTinh }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.soLuong }}</td>
-            <td>{{ data.soLuong }}</td>
+            <td>{{ data.tenCuc }}</td>
+            <td>{{ data.tenChiCuc }}</td>
+            <td>{{ data.tenDiemKho }}</td>
+            <td>{{ data.diaDiem }}</td>
+            <td>{{ data.dienTich }}</td>
+            <td>{{ data.tongTichLuong }}</td>
+            <td>{{ data.tenPhuongAn }}</td>
+            <td>{{ data.ghiChu }}</td>
             <td style="text-align: center;">
               <a (click)="editItem(idx)">
                 <i class=" fa fa-pencil"></i>

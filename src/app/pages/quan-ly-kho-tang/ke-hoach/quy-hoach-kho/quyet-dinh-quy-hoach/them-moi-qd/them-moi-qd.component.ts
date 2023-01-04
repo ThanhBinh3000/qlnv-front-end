@@ -1,23 +1,23 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Router } from "@angular/router";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { UserService } from "../../../../../../services/user.service";
-import { Globals } from "../../../../../../shared/globals";
-import { DanhMucService } from "../../../../../../services/danhmuc.service";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { NzModalService } from "ng-zorro-antd/modal";
-import { HelperService } from "../../../../../../services/helper.service";
-import { ThongTinQuyetDinh } from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
-import { QuyHoachKho } from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
-import { QuyHoachKhoService } from "../../../../../../services/quy-hoach-kho.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Router} from "@angular/router";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {UserService} from "../../../../../../services/user.service";
+import {Globals} from "../../../../../../shared/globals";
+import {DanhMucService} from "../../../../../../services/danhmuc.service";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {NzModalService} from "ng-zorro-antd/modal";
+import {HelperService} from "../../../../../../services/helper.service";
+import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import {QuyHoachKho} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
+import {QuyHoachKhoService} from "../../../../../../services/quy-hoach-kho.service";
 import dayjs from "dayjs";
-import { MESSAGE } from "../../../../../../constants/message";
-import { DANH_MUC_LEVEL } from "../../../../../luu-kho/luu-kho.constant";
-import { UserLogin } from "../../../../../../models/userlogin";
-import { STATUS } from "../../../../../../constants/status";
+import {MESSAGE} from "../../../../../../constants/message";
+import {DANH_MUC_LEVEL} from "../../../../../luu-kho/luu-kho.constant";
+import {UserLogin} from "../../../../../../models/userlogin";
+import {STATUS} from "../../../../../../constants/status";
 
-import { DonviService } from "../../../../../../services/donvi.service";
+import {DonviService} from "../../../../../../services/donvi.service";
 
 
 @Component({
@@ -43,6 +43,7 @@ export class ThemMoiQdComponent implements OnInit {
   dsChiCuc: any[] = [];
   danhSachChiCuc: any[] = [];
   danhSachDiemKho: any[] = [];
+
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -71,22 +72,24 @@ export class ThemMoiQdComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    await this.loadListPa();
     this.userInfo = this.userService.getUserLogin();
-    this.loadCuc()
-    await Promise.all([
-      this.maQd = '/QĐ-BTC',
-      this.loadDanhSachChiCuc(this.userInfo.MA_DVI),
-      this.getDataDetail(this.idInput)
-    ])
-    for (let i = -3; i < 23; i++) {
-      this.danhSachNam.push({
-        value: dayjs().get('year') - i,
-        text: dayjs().get('year') - i,
-      });
-    }
+    this.maQd = '/QĐ-BTC',
+      await Promise.all([
+        await this.loadListPa(),
+        await this.loadDsCuc(this.userInfo.MA_DVI),
+         await this.getDataDetail(this.idInput)
+      ])
     this.spinner.hide();
   }
+
+  loadDsNam() {
+    let thisYear = dayjs().get('year');
+    for (let i = -5; i < 5; i++) {
+      this.danhSachNam.push((thisYear - i));
+    }
+  }
+
+
   async loadListPa() {
     this.danhSachPhuongAn = [];
     let res = await this.danhMucService.danhMucChungGetAll('PA_QUY_HOACH');
@@ -94,22 +97,33 @@ export class ThemMoiQdComponent implements OnInit {
       this.danhSachPhuongAn = res.data;
     }
   }
-  loadCuc() {
-    this.rowItem.tenCuc = this.userInfo.TEN_DVI
-    this.rowItem.maCuc = this.userInfo.MA_DVI
-  }
 
-  async loadDanhSachChiCuc(maCuc) {
+  async loadDsCuc(maCuc) {
     const body = {
       maDviCha: maCuc,
       trangThai: '01',
     };
 
     const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
-    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
     this.dsCuc = dsTong[DANH_MUC_LEVEL.CUC];
+    this.dsCuc = this.dsCuc.filter(item => item.type != "PB")
   }
 
+  async onChangeCuc(event, type?) {
+    const body = {
+      maDviCha: event,
+      trangThai: '01',
+    };
+    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
+    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.danhSachChiCuc = this.danhSachChiCuc.filter(item => item.type != "PB")
+    const chiCuc = this.dsCuc.filter(item => item.maDvi == event);
+    if (type) {
+      type.tenCuc = chiCuc[0].tenDvi;
+    } else {
+      this.rowItem.tenCuc = chiCuc[0].tenDvi;
+    }
+  }
 
 
   async onChangChiCuc(event, type?) {
@@ -119,6 +133,7 @@ export class ThemMoiQdComponent implements OnInit {
     };
     const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+    this.danhSachDiemKho = this.danhSachDiemKho.filter(item => item.type == "MLK")
     const chiCuc = this.danhSachChiCuc.filter(item => item.maDvi == event);
     if (type) {
       type.tenChiCuc = chiCuc[0].tenDvi;
@@ -221,7 +236,6 @@ export class ThemMoiQdComponent implements OnInit {
   }
 
 
-
   editItem(index: number): void {
     this.dataEdit[index].edit = true;
   }
@@ -242,25 +256,6 @@ export class ThemMoiQdComponent implements OnInit {
         moTa: data.moTa
       });
       this.dataTable = data.quyetDinhQuyHoachCTiets;
-      this.updateEditCache()
-      for (const item of this.dataTable) {
-        console.log(item)
-        const listPhuongAn = this.danhSachPhuongAn.filter(pa => pa.ma == item.phuongAnQuyHoach);
-        if (listPhuongAn.length > 0) {
-          item.tenPhuongAn = listPhuongAn[0].giaTri
-        }
-        await this.loadDanhSachChiCuc(item.maCuc);
-        item.tenCuc = this.dsCuc[0].tenDvi
-        const listChiCuc = this.danhSachChiCuc.filter(chiCuc => chiCuc.maDvi == item.maChiCuc);
-        if (listChiCuc.length > 0) {
-          item.tenChiCuc = listChiCuc[0].tenDvi
-          await this.loadDanhSachDiemKho(item.maChiCuc)
-        }
-        const listDiemKho = this.danhSachDiemKho.filter(diemKho => diemKho.maDvi == item.maDiemKho);
-        if (listDiemKho.length > 0) {
-          item.tenDiemKho = listDiemKho[0].tenDvi
-        }
-      }
       this.updateEditCache()
     }
   }
@@ -301,7 +296,6 @@ export class ThemMoiQdComponent implements OnInit {
     this.dataTable = [...this.dataTable, this.rowItem]
     this.rowItem = new QuyHoachKho();
     this.updateEditCache()
-    this.loadCuc()
   }
 
   clearData() {
@@ -310,7 +304,7 @@ export class ThemMoiQdComponent implements OnInit {
 
   huyEdit(idx: number): void {
     this.dataEdit[idx] = {
-      data: { ...this.dataTable[idx] },
+      data: {...this.dataTable[idx]},
       edit: false,
     };
   }
@@ -325,7 +319,7 @@ export class ThemMoiQdComponent implements OnInit {
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         }
       });
     }
