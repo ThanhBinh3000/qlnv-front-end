@@ -50,14 +50,13 @@ export class DeXuatKeHoachComponent implements OnInit {
   };
 
   filterTable: any = {
-    soQd: '',
-    ngayQd: '',
-    trichYeu: '',
+    soCongVan: '',
+    tenDvi: '',
+    ngayKy: '',
     soQdGoc: '',
-    namKhoach: '',
-    tenVthh: '',
-    soGoiThau: '',
-    trangThai: '',
+    tmdt: '',
+    trichYeu: '',
+    tenTrangThai: '',
   };
 
   allChecked = false;
@@ -83,22 +82,23 @@ export class DeXuatKeHoachComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      if (this.userService.isCuc()) {
-        this.searchFilter.maDvi = this.userInfo.MA_DVI
-      }
-      for (let i = -3; i < 23; i++) {
-        this.listNam.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
-      await this.search();
+      this.loadDsNam();
       await this.loadDanhSachCuc();
+      await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  loadDsNam() {
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: dayjs().get('year') - i,
+        text: dayjs().get('year') - i,
+      });
     }
   }
   async loadDanhSachCuc() {
@@ -109,7 +109,6 @@ export class DeXuatKeHoachComponent implements OnInit {
 
     const dsTong = await this.dviService.layDonViTheoCapDo(body);
     this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
-    console.log(this.danhSachCuc)
     if (this.userService.isCuc()) {
       this.searchFilter.maDvi = this.userInfo.MA_DVI
     }
@@ -226,7 +225,7 @@ export class DeXuatKeHoachComponent implements OnInit {
   clearFilter() {
     this.searchFilter = {
       soCongVan: '',
-      maDvi: '',
+      maDvi: this.userService.isTongCuc()? '' : this.userInfo.MA_DVI,
       dmucDuAn: '',
       diaDiem: '',
       loaiDuAn: '',
@@ -255,6 +254,7 @@ export class DeXuatKeHoachComponent implements OnInit {
             maDvi: '',
           };
           this.deXuatTrungHanService.delete(body).then(async () => {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             await this.search();
             this.spinner.hide();
           });
@@ -272,12 +272,25 @@ export class DeXuatKeHoachComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-
+          diaDiem: this.searchFilter.diaDiem,
+          dmucDuAn: this.searchFilter.dmucDuAn,
+          loaiDuAn: this.searchFilter.loaiDuAn,
+          namBatDau: this.searchFilter.namBatDau,
+          namKetThuc: this.searchFilter.namKetThuc,
+          ngayKyTu: this.searchFilter.ngayKy[0],
+          ngayKyDen: this.searchFilter.ngayKy[1],
+          soCongVan: this.searchFilter.soCongVan,
+          tgKcHt: this.searchFilter.tgKcHt,
+          paggingReq: {
+            limit: this.pageSize,
+            page: this.page - 1,
+          },
+          maDvi: this.userInfo.MA_DVI
         };
         this.deXuatTrungHanService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
+            saveAs(blob, 'de-xuat-ke-hoach-trung-han.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
