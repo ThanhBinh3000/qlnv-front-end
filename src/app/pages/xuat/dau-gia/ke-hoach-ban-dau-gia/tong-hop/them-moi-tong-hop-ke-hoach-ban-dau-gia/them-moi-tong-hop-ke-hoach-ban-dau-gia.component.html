@@ -69,7 +69,8 @@
                                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày phê duyệt
                                     KH bán đấu giá </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <nz-range-picker formControlName="ngayPduyet" nzFormat="dd/MM/yyyy">
+                                    <nz-range-picker [nzDisabled]="isDisable()" formControlName="ngayPduyet"
+                                        nzFormat="dd/MM/yyyy">
                                     </nz-range-picker>
                                 </nz-form-control>
                             </nz-form-item>
@@ -125,7 +126,7 @@
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                                     <textarea formControlName="noiDungThop" nz-input [rows]="3"
-                                        [readonly]="formData.value.trangThai == '00'"></textarea>
+                                        [readonly]="isDisable()"></textarea>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -137,7 +138,7 @@
 
         <nz-collapse nzAccordion>
             <nz-collapse-panel [nzHeader]="'Thông tin chi tiết đề xuất của các cục DTNN KV'" [nzActive]="true">
-                <nz-table class="pd-10" nzBordered [nzData]="dataTableDanhSachDX" [nzFrontPagination]="false"
+                <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                     [nzShowPagination]="false">
                     <thead>
                         <tr>
@@ -147,22 +148,19 @@
                             <th>Ngày ký</th>
                             <th>Trích yếu</th>
                             <th>SL đơn vị tài sản</th>
-                            <th>Giá khởi điểm theo đơn giá được duyệt (đ)</th>
-                            <th>Khoản tiền đặt trước theo đơn giá được duyệt (đ)</th>
+                            <th>Trạng thái</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let data of dataTableDanhSachDX;let i = index"
-                            (click)="showDetail($event,data.idDxHdr)">
+                        <tr *ngFor="let data of dataTable;let i = index" (click)="showDetail($event,data.idDxHdr)">
                             <td class="text-center">{{i + 1}} </td>
                             <td>{{ data.tenDvi }}</td>
                             <td>{{ data.soDxuat }}</td>
-                            <td>{{ data.ngayTao | date: 'dd/MM/YYYY'}}</td>
+                            <td>{{ data.ngayPduyet | date: 'dd/MM/YYYY'}}</td>
                             <td>{{ data.trichYeu}}</td>
                             <td>{{ data.soDviTsan}}</td>
-                            <td>{{ data.tongTienKdienDonGia | number: '1.0-1' : 'vi_VN' }}</td>
-                            <td>{{ data.tongTienDatTruocDonGia | number: '1.0-1' : 'vi_VN' }}</td>
+                            <td>{{ data.tenTrangThai}}</td>
                             <td>
                                 <a (click)="showDetail($event,data.idDxHdr)">
                                     <i class="fa fa-eye"></i>

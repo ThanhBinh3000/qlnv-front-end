@@ -45,14 +45,18 @@
                 </nz-form-control>
             </nz-form-item>
         </div>
+        <div nz-col [nzSpan]="20">
+        </div>
+        <div nz-col [nzSpan]="4">
+            <div class="text-danger float-right" nzRight>
+                <span>
+                    Đơn vị: kg
+                </span>
+            </div>
+        </div>
     </div>
     <br />
 </form>
-<div class="text-danger float-right" nzRight>
-    <span>
-        Đơn vị: kg
-    </span>
-</div>
 <nz-card class="mt16 flex-card p-lr16 mb16 table-card scroll-modal">
     <nz-table nzBordered [nzData]="listOfData">
         <thead>
@@ -73,60 +77,62 @@
                 <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
                 <th nzWidth="70px" class="text-center">Hành động</th>
             </tr>
-        </thead>
-        <tbody>
             <tr>
-                <td>
+                <th>
                     <nz-select [(ngModel)]="thongtinPhanLo.maDiemKho" (ngModelChange)="changeDiemKho()">
                         <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
-                </td>
-                <td>
+                </th>
+                <th>
                     <nz-select [(ngModel)]="thongtinPhanLo.maNhaKho" (ngModelChange)="changeNhaKho()">
                         <nz-option *ngFor="let p of listNhaKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
-                </td>
-                <td>
+                </th>
+                <th>
                     <nz-select [(ngModel)]="thongtinPhanLo.maNganKho" (ngModelChange)="changeNganKho()">
                         <nz-option *ngFor="let p of listNganKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
-                </td>
-                <td>
+                </th>
+                <th>
                     <nz-select [(ngModel)]="thongtinPhanLo.maLoKho" (ngModelChange)="changeLoKho()">
                         <nz-option *ngFor="let p of listLoKho" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
-                </td>
-                <td>
+                </th>
+                <th>
                     <input nz-input [(ngModel)]="thongtinPhanLo.tenCloaiVthh" class="w-150" [disabled]="true" />
-                </td>
-                <td>
+                </th>
+                <th>
                     <input nz-input [(ngModel)]="thongtinPhanLo.maDviTsan" class="w-150" />
-                </td>
-                <td>{{thongtinPhanLo.duDau}}</td>
-                <td>
-                    <nz-input-number class="text-right" nz-input [(ngModel)]="thongtinPhanLo.soLuong" [nzMin]="1"
-                        [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                </th>
+                <th>{{thongtinPhanLo.duDau}}</th>
+                <th>
+                    <nz-input-number placeholder="(1)" class="text-right" nz-input [(ngModel)]="thongtinPhanLo.soLuong"
+                        [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                        [nzParser]="globals.parser">
                     </nz-input-number>
-                </td>
-                <td>
-                    <nz-input-number class="text-right" nz-input [(ngModel)]="thongtinPhanLo.donGiaDeXuat" [nzMin]="1"
-                        [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                </th>
+                <th>
+                    <nz-input-number placeholder="(2)" class="text-right" nz-input
+                        [(ngModel)]="thongtinPhanLo.donGiaDeXuat" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
+                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
-                </td>
-                <td>(3) = (1) * (2)</td>
-                <td>(4) - tự động lấy từ giá cụ thể được duyệt</td>
-                <td>(5) = (1) * (4)</td>
-                <td>= (3) * % khoản tiền đặt trước</td>
-                <td>= (5) * % khoản tiền đặt trước</td>
-                <td class="text-center">
+                </th>
+                <th>(3) = (1) * (2)</th>
+                <th class="wrap">(4) - tự động lấy từ giá cụ thể được duyệt</th>
+                <th>(5) = (1) * (4)</th>
+                <th class="wrap">= (3) * % khoản tiền đặt trước</th>
+                <th class="wrap">= (5) * % khoản tiền đặt trước</th>
+                <th class="text-center">
                     <a (click)="addDiemKho()">
                         <i class="icon htvbdh_dau-cong xanhla"></i>
                     </a>
                     <a (click)="clearDiemKho()">
                         <i class="fa fa-refresh"></i>
                     </a>
-                </td>
+                </th>
             </tr>
+        </thead>
+        <tbody>
             <tr *ngFor="let data of listOfData, let i = index" class="editable-row">
                 <ng-container *ngIf="!data.edit; else editTemplate">
                     <td>{{ data.tenDiemKho }}</td>
