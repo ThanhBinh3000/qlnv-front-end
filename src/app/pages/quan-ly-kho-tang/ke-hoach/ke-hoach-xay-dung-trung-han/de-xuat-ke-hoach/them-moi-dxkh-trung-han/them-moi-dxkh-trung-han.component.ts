@@ -65,7 +65,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       namBatDau: [null, [Validators.required]],
       namKetThuc: [null, [Validators.required]],
       trichYeu: [null],
-      lyDoTuChoi: [null]
+      lyDo: [null]
     });
 
   }
@@ -139,9 +139,11 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       return
     }
     let body = this.formData.value;
+    body.soCongVan = body.soCongVan + this.maQd;
     body.ctiets = this.dataTable;
     body.maDvi = this.userInfo.MA_DVI
     body.fileDinhKems = this.listFileDinhKem;
+    body.tmdt = this.calcTong('1') ?  this.calcTong('1') : 0;
     let res
     if (this.idInput > 0) {
       res = await this.dxTrungHanService.update(body);
@@ -196,7 +198,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           }
           let body = {
             id: this.formData.value.id,
-            lyDoTuChoi: text,
+            lyDo: text,
             trangThai: trangThai,
           };
           const res = await this.dxTrungHanService.approve(body);
@@ -240,7 +242,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           }
           let body = {
             id: this.formData.get('id').value,
-            lyDoTuChoi: null,
+            lyDo: null,
             trangThai: trangThai,
           };
           let res =
@@ -292,7 +294,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           }
           let body = {
             id: this.formData.get('id').value,
-            lyDoTuChoi: null,
+            lyDo: null,
             trangThai: trangThai,
           };
           let res =
@@ -326,10 +328,11 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         trangThai: data.trangThai,
         trichYeu: data.trichYeu,
         tenTrangThai: data.tenTrangThai,
-        soCongVan: data.soCongVan.split('/')[0],
+        soCongVan: data.soCongVan ? data.soCongVan.split('/')[0] : '',
         ngayKy: data.ngayKy,
         namBatDau: data.namBatDau,
         namKetThuc: data.namKetThuc,
+        lyDo: data.lyDoTuChoi,
       });
       this.listFileDinhKem = data.fileDinhKems
       this.dataTable = data.ctiets;
@@ -373,4 +376,37 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       });
     }
   }
+
+  calcTong(type) {
+      const sum = this.dataTable.reduce((prev, cur) => {
+        switch (type) {
+          case '1' : {
+            prev += cur.tmdtTongSo;
+            break;
+          }
+          case '2' : {
+            prev += cur.tmdtNstw;
+            break;
+          }
+          case '3' : {
+            prev += cur.luyKeTongSo;
+            break;
+          }
+          case '4' : {
+            prev += cur.luyKeNstw;
+            break;
+          }
+          case '5' : {
+            prev += cur.ncKhTongSo;
+            break;
+          }
+          case '6' : {
+            prev += cur.ncKhNstw;
+            break;
+          }
+        }
+        return prev;
+      }, 0);
+      return sum;
+    }
 }
