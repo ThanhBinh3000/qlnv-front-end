@@ -296,6 +296,11 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
 
   async save(isGuiDuyet?) {
     this.spinner.show();
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     body.maDvi = this.userInfo.MA_DVI
     body.ds = this.dataTable

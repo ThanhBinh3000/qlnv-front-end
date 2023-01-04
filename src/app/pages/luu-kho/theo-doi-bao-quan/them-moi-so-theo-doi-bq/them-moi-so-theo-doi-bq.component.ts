@@ -132,6 +132,9 @@ export class ThemMoiSoTheoDoiBqComponent implements OnInit {
 
   async onChangeLoaiVthh(event) {
     if (event) {
+      this.formData.patchValue({
+        tenHH : null
+      })
       let body = {
         "str": event
       };

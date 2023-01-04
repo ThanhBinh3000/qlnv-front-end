@@ -46,7 +46,7 @@ export class SoKhoTheKhoComponent implements OnInit {
   searchInTable: any = {
     nam: "",
     maDvi: "",
-    tenDVi: "",
+    tenDvi: "",
     loaiHang: "",
     maChungLoaiHang: "",
     ngayTao: ""
@@ -96,7 +96,7 @@ export class SoKhoTheKhoComponent implements OnInit {
     this.formData = this.fb.group({
       nam: [null],
       maDvi: [null],
-      tenDVi: [null],
+      tenDvi: [null],
       loaiHang: [null],
       maChungLoaiHang: [null],
       ngayTao: [null],
