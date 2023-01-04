@@ -169,49 +169,58 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
   }
 
   async loadDiemKho() {
-    let body = {
+    const body = {
       maDviCha: this.userInfo.MA_DVI,
       trangThai: '01',
-    }
-    const res = await this.donviService.getTreeAll(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        res.data.forEach(element => {
-          if (element && element.capDvi == '3' && element.children) {
-            this.listDiemKho = element.children;
-          }
-        });
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
+    };
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    let res = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+    this.listDiemKho = res.filter(item => item.type == "MLK")
   }
 
   async changeDiemKho(event) {
-    const body = {
-      maDviCha: event,
-      trangThai: '01',
-    };
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
-    this.listNhaKho = dsTong[DANH_MUC_LEVEL.NHA_KHO];
+    if (event) {
+      this.formData.patchValue({
+        maNhaKho : null,
+        maNganKho : null,
+        maLoKho :  null
+      })
+      const body = {
+        maDviCha: event,
+        trangThai: '01',
+      };
+      const dsTong = await this.donviService.layDonViTheoCapDo(body);
+      this.listNhaKho = dsTong[DANH_MUC_LEVEL.NHA_KHO];
+    }
   }
 
   async changeNhaKho(event) {
-    const body = {
-      maDviCha: event,
-      trangThai: '01',
-    };
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
-    this.listNganKho = dsTong[DANH_MUC_LEVEL.NGAN_KHO];
+    if (event) {
+      this.formData.patchValue({
+        maNganKho: null,
+        maLoKho :  null
+      })
+      const body = {
+        maDviCha: event,
+        trangThai: '01',
+      };
+      const dsTong = await this.donviService.layDonViTheoCapDo(body);
+      this.listNganKho = dsTong[DANH_MUC_LEVEL.NGAN_KHO];
+    }
   }
 
   async changeNganKho(event) {
-    const body = {
-      maDviCha: event,
-      trangThai: '01',
-    };
-    const dsTong = await this.donviService.layDonViTheoCapDo(body);
-    this.listNganLo = dsTong[DANH_MUC_LEVEL.LO_KHO];
+    if (event) {
+      this.formData.patchValue({
+        maLoKho: null
+      })
+      const body = {
+        maDviCha: event,
+        trangThai: '01',
+      };
+      const dsTong = await this.donviService.layDonViTheoCapDo(body);
+      this.listNganLo = dsTong[DANH_MUC_LEVEL.LO_KHO];
+    }
   }
 
   async changeNganLo() {
@@ -471,7 +480,7 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
     let res = await this.quanLyPhieuNhapKhoService.taoTheKho(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let list = res.data.content;
-      if (list) {
+      if (list && list.length != 0) {
         this.btnTaoThe = false;
         list.forEach(item => {
           let theKhoCt = new LkTheKhoCt();
@@ -482,6 +491,9 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
           theKhoCt.soLuong = item.hangHoaList && item.hangHoaList[0] ? item.hangHoaList[0]?.soLuongThucNhap : 0;
           this.dataTable.push(theKhoCt);
         })
+      } else  {
+        this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu!")
+        return;
       }
       this.spinner.hide();
     } else {
@@ -500,6 +512,9 @@ export class ThemSoKhoTheKhoComponent extends BaseComponent implements OnInit {
 
   async onChangeLoaiVthh(event) {
     if (event) {
+      this.formData.patchValue({
+        chungLoaiHH : null
+      })
       let body = {
         "str": event
       };
