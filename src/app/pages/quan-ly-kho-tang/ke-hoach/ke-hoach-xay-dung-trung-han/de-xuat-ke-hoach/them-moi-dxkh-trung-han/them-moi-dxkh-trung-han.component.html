@@ -15,7 +15,7 @@
           <span>Quay lại</span>
         </button>
         <button type="button" class="btn btn-sub xanh-nhat ml-2" *ngIf=" !isViewDetail && (formData.value.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || formData.value.trangThai == globals.prop.NHAP_TU_CHOI_TP || formData.value.trangThai == globals.prop.NHAP_DU_THAO) "  (click)="save(true)">
-          <i class="icon htvbdh_chuyenvanthu"></i>
+          <i class="icon htvbdh_tcdt_print"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
         <button type="button" class="btn btn-sub btn-xoa  ml-2"  *ngIf=" (formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC  || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_TP)"  (click)="tuChoi()">
@@ -23,7 +23,7 @@
           <span>Từ chối</span>
         </button>
         <button type="button" class="btn btn-sub xanh-nhat  ml-2" *ngIf="(formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_LD_CUC  || formData.value.trangThai == globals.prop.NHAP_CHO_DUYET_TP)"  (click)="duyet()">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <i class="icon htvbdh_dakyduyet"></i>
           <span>Duyệt</span>
         </button>
         <button type="button" class="btn btn-sub xanh ml-2" *ngIf="  !isViewDetail && (formData.value.trangThai == globals.prop.NHAP_DU_THAO  ||formData.value.trangThai == globals.prop.NHAP_TU_CHOI_LD_CUC || formData.value.trangThai == globals.prop.NHAP_TU_CHOI_TP )"   (click)="save()">

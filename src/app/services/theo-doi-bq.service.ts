@@ -30,4 +30,9 @@ export class TheoDoiBqService extends BaseService{
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/xoa/${id}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
+
+  deleteMulti(body): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/delete/multiple`;
+    return this._httpClient.post<OldResponseData>(url, body).toPromise();
+  }
 }
