@@ -105,9 +105,12 @@ export class TheoDoiBaoQuanComponent implements OnInit {
 
   loadDsNam() {
     let thisYear = dayjs().get('year');
-    for (let i = -10; i < 10; i++) {
-      this.dsNam.push((thisYear - i).toString());
+    for (let i = -5; i < 5; i++) {
+      this.dsNam.push((thisYear - i));
     }
+    this.formData.patchValue({
+      nam : dayjs().get('year')
+    })
   }
 
   async changeLoaiHangHoa(id: any) {
