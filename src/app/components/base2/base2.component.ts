@@ -377,6 +377,7 @@ export class Base2Component implements OnInit {
         if (res.data) {
           const data = res.data;
           this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.fileDinhKem = data.fileDinhKem
           return data;
         }
       } else {

@@ -1,26 +1,28 @@
-import { saveAs } from 'file-saver';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import {saveAs} from 'file-saver';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogQuyetDinhGiaoChiTieuComponent } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
-import { LEVEL } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DeXuatDieuChinhService } from 'src/app/services/deXuatDieuChinh.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { cloneDeep } from 'lodash';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { UploadFileService } from 'src/app/services/uploaFile.service';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {
+  DialogQuyetDinhGiaoChiTieuComponent
+} from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
+import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {LEVEL} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DeXuatDieuChinhService} from 'src/app/services/deXuatDieuChinh.service';
+import {UserService} from 'src/app/services/user.service';
+import {Globals} from 'src/app/shared/globals';
+import {cloneDeep} from 'lodash';
+import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {UploadFileService} from 'src/app/services/uploaFile.service';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
 import * as XLSX from 'xlsx';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { DialogDiaDiemKhoComponent } from 'src/app/components/dialog/dialog-dia-diem-kho/dialog-dia-diem-kho.component';
+import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import {DialogDiaDiemKhoComponent} from 'src/app/components/dialog/dialog-dia-diem-kho/dialog-dia-diem-kho.component';
 
 @Component({
   selector: 'app-thong-tin-de-xuat-dieu-chinh',
@@ -78,7 +80,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     private uploadFileService: UploadFileService,
     private danhMucService: DanhMucService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -486,9 +489,10 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               "loai": "00",
               "maVatTu": element?.maVatTuThoc,
               "maVatTuCha": element?.maVatTuCha,
-              "soLuong": element?.sdcThoc,
-              "dxDcLtVtCtList": element?.dxDcLtVtCtList,
-              "diaDiemKho": element?.diaDiemKho,
+              "soLuongTang": element?.slTangThoc ?? 0,
+              "soLuongGiam": element?.slGiamThoc ?? 0,
+              // "dxDcLtVtCtList": element?.dxDcLtVtCtList,
+              // "diaDiemKho": element?.diaDiemKho,
             };
             dxDcLtVtReqList.push(item);
             let itemGao = {
@@ -498,8 +502,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               "loai": "00",
               "maVatTu": element?.maVatTuGao,
               "maVatTuCha": element?.maVatTuCha,
-              "soLuong": element?.sdcGao,
-              "diaDiemKho": element?.diaDiemKho,
+              "soLuongTang": element?.slTangGao ?? 0,
+              "soLuongGiam": element?.slGiamGao ?? 0,
             };
             dxDcLtVtReqList.push(itemGao);
           });
@@ -513,9 +517,10 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               "loai": "04",
               "maVatTu": element?.maVatTu,
               "maVatTuCha": element?.maVatTuCha,
-              "soLuong": element?.sdc,
-              "dxDcLtVtCtList": element?.dxDcLtVtCtList,
-              "diaDiemKho": element?.diaDiemKho,
+              "soLuongTang": element?.slTangMuoi ?? 0,
+              "soLuongGiam": element?.slGiamMuoi ?? 0,
+              // "dxDcLtVtCtList": element?.dxDcLtVtCtList,
+              // "diaDiemKho": element?.diaDiemKho,
             };
             dxDcLtVtReqList.push(item);
           });
@@ -536,7 +541,6 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             dxDcLtVtReqList.push(item);
           });
         }
-
         let body = {
           "dxDcLtVtReqList": dxDcLtVtReqList,
           "fileDinhKemReqs": this.deXuatDieuChinh.fileDinhKemReqs,
@@ -819,7 +823,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       (item) => item.chiTieu === chiTieu,
     );
     this.editLuongThucCache[chiTieu] = {
-      data: { ...this.deXuatDieuChinh?.dxDcltList[index] },
+      data: {...this.deXuatDieuChinh?.dxDcltList[index]},
       edit: false,
     };
   }
@@ -834,15 +838,15 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       this.deXuatDieuChinh?.dxDcltList.forEach((item) => {
         this.editLuongThucCache[item.chiTieu] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
     }
   }
 
   caculatorDieuChinhLT(data: any) {
-    data.sdcThoc = (data?.tdcThoc ?? 0) + (data?.dcThoc ?? 0);
-    data.sdcGao = (data?.tdcGao ?? 0) + (data?.dcGao ?? 0);
+    data.sdcThoc = (data?.tdcThoc ?? 0) + (data?.slTangThoc ?? 0) - (data?.slGiamThoc ?? 0);
+    data.sdcGao = (data?.tdcGao ?? 0) + (data?.slTangGao ?? 0) - (data?.slGiamGao ?? 0);
     data.sdcTongSoQuyThoc = (data?.sdcThoc ?? 0) + (data?.sdcGao ?? 0) * 2;
   }
 
@@ -852,8 +856,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       if (index != -1) {
         this.deXuatDieuChinh.dxDcltList.splice(index, 1);
       }
-    }
-    else {
+    } else {
       this.deXuatDieuChinh.dxDcltList = [];
     }
     this.deXuatDieuChinh.dxDcltList = [
@@ -886,7 +889,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       (item) => item.chiTieu === chiTieu,
     );
     this.editMuoiCache[chiTieu] = {
-      data: { ...this.deXuatDieuChinh?.dxDcMuoiList[index] },
+      data: {...this.deXuatDieuChinh?.dxDcMuoiList[index]},
       edit: false,
     };
   }
@@ -901,14 +904,14 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       this.deXuatDieuChinh?.dxDcMuoiList.forEach((item) => {
         this.editMuoiCache[item.chiTieu] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
     }
   }
 
   caculatorDieuChinhMuoi(data: any) {
-    data.sdc = (data?.tdc ?? 0) + (data?.dc ?? 0);
+    data.sdc = (data?.tdc ?? 0) + (data?.slTang ?? 0) - (data?.slGiam ?? 0);
   }
 
   checkDataExistMuoi(data) {
@@ -917,8 +920,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       if (index != -1) {
         this.deXuatDieuChinh.dxDcMuoiList.splice(index, 1);
       }
-    }
-    else {
+    } else {
       this.deXuatDieuChinh.dxDcMuoiList = [];
     }
     this.deXuatDieuChinh.dxDcMuoiList = [
@@ -951,7 +953,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       (item) => item.maVatTuCha == maVatTuCha && item.maVatTu == maVatTu,
     );
     this.editVatTuCache[maVatTuCha + maVatTu] = {
-      data: { ...this.deXuatDieuChinh?.dxDcVtList[index] },
+      data: {...this.deXuatDieuChinh?.dxDcVtList[index]},
       edit: false,
     };
   }
@@ -966,7 +968,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       this.deXuatDieuChinh?.dxDcVtList.forEach((item) => {
         this.editVatTuCache[item.maVatTuCha + item.maVatTu] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         };
       });
     }
@@ -983,8 +985,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       if (index != -1) {
         this.deXuatDieuChinh.dxDcVtList.splice(index, 1);
       }
-    }
-    else {
+    } else {
       this.deXuatDieuChinh.dxDcVtList = [];
     }
     this.deXuatDieuChinh.dxDcVtList = [

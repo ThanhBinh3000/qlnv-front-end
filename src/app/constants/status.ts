@@ -51,6 +51,9 @@ export enum STATUS {
   CHODUYET_BTC = '49',
   TUCHOI_BTC = '50',
   DADUYET_BTC = '51',
+  DA_TAO_CBV = '52',
+  DA_DUYET_CBV = '53',
+  TU_CHOI_CBV = '54',
 }
 
 export enum LoaiTaiLieu {
