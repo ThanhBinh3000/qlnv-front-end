@@ -38,14 +38,10 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   @Output()
   showListEvent = new EventEmitter<any>();
 
-  selectHang: any = { ten: "" };
   maQd: string = null;
-  fileDinhKem: Array<FileDinhKem> = [];
-  listVatTuHangHoa: any[] = [];
   fileList: any[] = [];
   listDanhSachTongHop: any[] = [];
   listToTrinh: any[] = [];
-  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
 
   danhsachDx: any[] = [];
   danhsachDxCache: any[] = [];
@@ -112,7 +108,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   }
 
   isDetailPermission() {
-    if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_SUA") && this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_THEM")) {
+    if (this.userService.isAccessPermisson("XHDTQG_PTDG_KHBDG_QDLCNT_THEM")) {
       return true;
     }
     return false;
@@ -175,6 +171,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
+        this.idInput = data.id;
         this.guiDuyet();
       } else {
         this.quayLai();
@@ -265,11 +262,11 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
           idTrHdr: null,
           soTrHdr: null,
         })
-        this.danhsachDx = data.thopDxKhBdgDtlList;
+        this.danhsachDx = data.children;
         for (const item of this.danhsachDx) {
           await this.deXuatKhBanDauGiaService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
-              item.dsPhanLoList = res.data.dsPhanLoList;
+              item.children = res.data.children;
             }
           })
         };
@@ -290,7 +287,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     await this.spinner.show();
     // Get data tờ trình
     let bodyToTrinh = {
-      trangThai: this.loaiVthh == '02' ? STATUS.DA_DUYET_LDV : STATUS.DA_DUYET_LDC,
+      trangThai: STATUS.DA_DUYET_CBV,
       trangThaiTh: STATUS.CHUA_TONG_HOP,
       nam: this.formData.get('nam').value,
       loaiVthh: this.loaiVthh,
@@ -304,7 +301,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       this.listToTrinh = resToTrinh.data.content;
     }
     await this.spinner.hide();
-
 
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách đề xuất kế hoạch lựa chọn nhà thầu',
@@ -334,15 +330,8 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       if (res.msg == MESSAGE.SUCCESS) {
         const dataRes = res.data;
         let tongMucDt = 0
-        if (dataRes.loaiVthh.startsWith("02")) {
-          this.danhsachDx = dataRes.dsPhanLoList;
-          this.danhsachDx.forEach(element => {
-            tongMucDt += element.soLuong * element.donGiaVat;
-          });
-        } else {
-          dataRes.idDxHdr = data.id;
-          this.danhsachDx.push(dataRes);
-        }
+        dataRes.idDxHdr = data.id;
+        this.danhsachDx.push(dataRes);
         this.formData.patchValue({
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,

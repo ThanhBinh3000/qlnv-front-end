@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class QuanLySoKhoTheKhoService extends BaseService {
   GATEWAY = '/qlnv-luukho';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'QuanLySoKhoTheKho', '');
+    super(httpClient, 'so-kho-the-kho', '');
   }
 
   pheDuyet(body: any): Promise<any> {
@@ -19,13 +19,13 @@ export class QuanLySoKhoTheKhoService extends BaseService {
   }
 
   them(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho`
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/them-moi`
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
   sua(body: any): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho`
-    return this.httpClient.put<any>(url, body).toPromise();
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/cap-nhat`
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 
   timKiem(body: any): Promise<any> {
@@ -33,11 +33,11 @@ export class QuanLySoKhoTheKhoService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
   chiTiet(id: number): Promise<any> {
-    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/${id}`
+    let url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/chi-tiet/${id}`
     return this.httpClient.get<any>(url).toPromise()
   }
   deleteData(id: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/${id}`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/so-kho-the-kho/xoa/${id}`;
     return this.httpClient.delete(url).toPromise();
   }
   deleteMultiple(body: any): Promise<any> {

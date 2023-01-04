@@ -18,7 +18,6 @@ import * as uuid from "uuid";
 export class ItemData {
     bcaoCtietId: string;
     id: string;
-    header: string;
     stt: string;
     checked: boolean;
     level: number;
@@ -127,7 +126,6 @@ export class BaoCao04anComponent implements OnInit {
                         listCtiet: lstCtiet,
                         trongDotTcong: !this.data?.dotBcao ? item.trongDotTcong : 0,
                         tenNdung: this.noiDungChis.find(e => e.ma == item.maNdungChi)?.giaTri,
-                        header: '4an-B',
                         id: uuid.v4() + 'FE',
                     })
                 })
@@ -138,7 +136,6 @@ export class BaoCao04anComponent implements OnInit {
                         maNdungChi: item.ma,
                         tenNdung: item.giaTri,
                         stt: item.ma,
-                        header: '4an-B',
                         listCtiet: [],
                         id: uuid.v4() + "FE",
                     })
@@ -149,6 +146,10 @@ export class BaoCao04anComponent implements OnInit {
                 item.tenNdung = this.noiDungChis.find(e => e.ma == item.maNdungChi)?.giaTri;
             })
         }
+
+        this.lstCtietBcao.forEach(item => {
+            item.listCtiet.sort((a, b) => parseInt(a.maVtu, 10) - parseInt(b.maVtu, 10));
+        })
 
         //lay thong tin cua cac cot
         this.lstCtietBcao[0]?.listCtiet.forEach(item => {
@@ -167,6 +168,14 @@ export class BaoCao04anComponent implements OnInit {
                 item.stt = item.maNdungChi;
             })
         }
+        // tinh toan dinh muc trong man hinh neu bao cao la bao cao van phong
+        if (this.trangThaiPhuLuc == '3' && this.data?.isOffice) {
+            this.tinhDinhMuc(this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1'));
+        }
+        //tinh lai tong cong
+        if (this.trangThaiPhuLuc == '3' && this.data?.isSynthetic) {
+            this.getColTotal2();
+        }
 
         this.sortByIndex();
         this.updateEditCache();
@@ -174,12 +183,12 @@ export class BaoCao04anComponent implements OnInit {
         this.spinner.hide();
     }
 
-    getDinhMuc() {
+    async getDinhMuc() {
         const request = {
             loaiDinhMuc: '01',
             maDvi: this.maDvi,
         }
-        this.baoCaoThucHienVonPhiService.getDinhMuc(request).toPromise().then(
+        await this.baoCaoThucHienVonPhiService.getDinhMuc(request).toPromise().then(
             res => {
                 if (res.statusCode == 0) {
                     this.dinhMucs = res.data;
@@ -630,8 +639,8 @@ export class BaoCao04anComponent implements OnInit {
                 })
             }
         })
-        const nvChuyenMon = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.1');
-        const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.2');
+        const nvChuyenMon = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.2');
+        const ttCaNhan = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.1.1');
         const cucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.2');
         const tongCucDh = this.lstCtietBcao.findIndex(e => e.maNdungChi == '0.1.5.3');
         //tinh dinh muc cho nghiep vu chuyen mon
@@ -988,7 +997,6 @@ export class BaoCao04anComponent implements OnInit {
                 ...new ItemData(),
                 id: data.id,
                 stt: data.stt,
-                header: data.header,
                 checked: data.checked,
                 level: data.level,
                 bcaoCtietId: data.bcaoCtietId,

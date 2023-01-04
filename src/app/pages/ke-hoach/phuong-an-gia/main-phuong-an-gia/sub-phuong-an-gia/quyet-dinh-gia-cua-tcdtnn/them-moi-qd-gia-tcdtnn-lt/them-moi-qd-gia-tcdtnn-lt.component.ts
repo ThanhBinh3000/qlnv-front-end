@@ -139,7 +139,9 @@ export class ThemMoiQdGiaTcdtnnLtComponent implements OnInit {
       if (this.arrThongTinGia) {
         this.arrThongTinGia.forEach(item => {
           let dataFind = this.dsDonVi.find(data => data.maDvi == item.maDvi)
-          item.tenDvi = dataFind.tenDvi
+          if (dataFind ) {
+            item.tenDvi = dataFind.tenDvi ? dataFind.tenDvi  : ''
+          }
         })
       }
     }

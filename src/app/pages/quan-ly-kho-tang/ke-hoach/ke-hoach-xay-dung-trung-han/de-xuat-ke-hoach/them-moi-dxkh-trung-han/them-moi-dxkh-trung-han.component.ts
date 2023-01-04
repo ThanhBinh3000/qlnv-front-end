@@ -31,6 +31,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   formData: FormGroup
   maQd: string;
+
+  STATUS = STATUS
   dataTable: any[] = []
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
@@ -38,6 +40,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: KeHoachXayDungTrungHan } } = {};
   listNam: any[] = [];
   userInfo: UserLogin
+  listFileDinhKem: any[] = [];
+
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -54,31 +58,38 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       id: [null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
-      maDvi: [null, [Validators.required]],
+      maDvi: [null],
+      tenDvi: [null],
       soCongVan: [null, [Validators.required]],
       ngayKy: [null, [Validators.required]],
       namBatDau: [null, [Validators.required]],
       namKetThuc: [null, [Validators.required]],
-      trichYeu: [null, [Validators.required]]
+      trichYeu: [null],
+      lyDo: [null]
     });
 
   }
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
+    this.maQd = "/" + this.userInfo.DON_VI.tenVietTat + "-TCKT";
+    this.loadDsNam();
+    if (this.idInput > 0) {
+      await this.getDataDetail(this.idInput)
+    } else {
+      this.formData.patchValue({
+        tenDvi: this.userInfo.TEN_DVI
+      })
+    }
+  }
+
+  loadDsNam() {
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,
       });
     }
-    await Promise.all([
-      this.maQd = '/CDTVP-TCKT',
-      this.getDataDetail(this.idInput)
-    ])
-    this.formData.patchValue({
-      maDvi: this.userInfo.TEN_DVI
-    })
   }
 
   quayLai() {
@@ -128,8 +139,11 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       return
     }
     let body = this.formData.value;
+    body.soCongVan = body.soCongVan + this.maQd;
     body.ctiets = this.dataTable;
     body.maDvi = this.userInfo.MA_DVI
+    body.fileDinhKems = this.listFileDinhKem;
+    body.tmdt = this.calcTong('1') ?  this.calcTong('1') : 0;
     let res
     if (this.idInput > 0) {
       res = await this.dxTrungHanService.update(body);
@@ -184,7 +198,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           }
           let body = {
             id: this.formData.value.id,
-            lyDoTuChoi: text,
+            lyDo: text,
             trangThai: trangThai,
           };
           const res = await this.dxTrungHanService.approve(body);
@@ -228,8 +242,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           }
           let body = {
             id: this.formData.get('id').value,
-            lyDoTuChoi: null,
-            trangThai: trangThai ,
+            lyDo: null,
+            trangThai: trangThai,
           };
           let res =
             await this.dxTrungHanService.approve(
@@ -280,8 +294,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
           }
           let body = {
             id: this.formData.get('id').value,
-            lyDoTuChoi: null,
-            trangThai: trangThai ,
+            lyDo: null,
+            trangThai: trangThai,
           };
           let res =
             await this.dxTrungHanService.approve(
@@ -310,14 +324,17 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       const data = res.data;
       this.formData.patchValue({
         id: data.id,
+        tenDvi: data.tenDvi,
         trangThai: data.trangThai,
         trichYeu: data.trichYeu,
         tenTrangThai: data.tenTrangThai,
-        soCongVan: data.soCongVan.split('/')[0],
+        soCongVan: data.soCongVan ? data.soCongVan.split('/')[0] : '',
         ngayKy: data.ngayKy,
         namBatDau: data.namBatDau,
         namKetThuc: data.namKetThuc,
+        lyDo: data.lyDoTuChoi,
       });
+      this.listFileDinhKem = data.fileDinhKems
       this.dataTable = data.ctiets;
       this.updateEditCache()
     }
@@ -339,7 +356,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
 
   huyEdit(idx: number): void {
     this.dataEdit[idx] = {
-      data: { ...this.dataTable[idx] },
+      data: {...this.dataTable[idx]},
       edit: false,
     };
   }
@@ -354,9 +371,42 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
-          data: { ...item },
+          data: {...item},
         }
       });
     }
   }
+
+  calcTong(type) {
+      const sum = this.dataTable.reduce((prev, cur) => {
+        switch (type) {
+          case '1' : {
+            prev += cur.tmdtTongSo;
+            break;
+          }
+          case '2' : {
+            prev += cur.tmdtNstw;
+            break;
+          }
+          case '3' : {
+            prev += cur.luyKeTongSo;
+            break;
+          }
+          case '4' : {
+            prev += cur.luyKeNstw;
+            break;
+          }
+          case '5' : {
+            prev += cur.ncKhTongSo;
+            break;
+          }
+          case '6' : {
+            prev += cur.ncKhNstw;
+            break;
+          }
+        }
+        return prev;
+      }, 0);
+      return sum;
+    }
 }

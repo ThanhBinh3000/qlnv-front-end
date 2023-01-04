@@ -46,10 +46,10 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
   listChungLoaiHangHoa: any[] = [];
 
   searchInTable: any = {
-    maDanhSach: null,
-    donVi: null,
-    ngayTao: null,
-    trangThai: null,
+    maDanhSach: '',
+    tenDonVi: '',
+    ngayTao: '',
+    trangThaiXuLy: '',
   };
 
   page: number = 1;
@@ -422,10 +422,10 @@ export class HangThuocDienTieuHuyComponent implements OnInit {
 
   clearFilterTable() {
     this.searchInTable = {
-      maDanhSach: null,
-      donVi: null,
-      ngayTao: new Date(),
-      trangThai: null,
+      maDanhSach: '',
+      tenDonVi: '',
+      ngayTao: '',
+      trangThaiXuLy: '',
     }
   }
 }

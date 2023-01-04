@@ -16,6 +16,10 @@ import { cloneDeep, chain } from 'lodash';
 import { NzModalService } from "ng-zorro-antd/modal";
 import { QuyetDinhPheDuyetKeHoachMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ke-hoach-mtt.service';
 import { ChaogiaUyquyenMualeService } from 'src/app/services/chaogia-uyquyen-muale.service';
+import { ChiTietThongTinChaoGia, FileDinhKem } from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-themmoi-chaogia-uyquyen-muale',
@@ -29,6 +33,10 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
   showListEvent = new EventEmitter<any>();
   @Input() isShowFromKq: boolean;
 
+  @Output()
+  dataTableChange = new EventEmitter<any>();
+
+
   constructor(
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
@@ -37,6 +45,7 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
     private helperService: HelperService,
     private quyetDinhPheDuyetKeHoachMTTService: QuyetDinhPheDuyetKeHoachMTTService,
     public globals: Globals,
+    private uploadFileService: UploadFileService,
     private fb: FormBuilder,
     private chaogiaUyquyenMualeService: ChaogiaUyquyenMualeService,
   ) {
@@ -61,14 +70,13 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
 
   idChaoGia: number = 0;
   STATUS = STATUS
-  itemRow: any = {};
-  itemRowUpdate: any = {};
-  radioValue: string = 'CG';
-  taiLieuDinhKemList: any[] = [];
-  listNthauNopHs: any[] = [];
+  rowItem: ChiTietThongTinChaoGia = new ChiTietThongTinChaoGia();
+  dataEdit: { [key: string]: { edit: boolean; data: ChiTietThongTinChaoGia } } = {};
+  radioValue: string = 'Chào giá';
+  fileDinhKems: any[] = [];
+  listOfData: any[] = [];
   i = 0;
   formData: FormGroup
-  dataTable: any[] = [];
   dataDetail: any;
   danhsachDx: any[] = [];
   userInfo: UserLogin;
@@ -85,6 +93,8 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+    this.emitDataTable()
+    this.updateEditCache()
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -118,8 +128,11 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
         trangThaiTkhai: data.trangThaiTkhai,
         tenTrangThaiTkhai: data.tenTrangThaiTkhai
       })
-      this.listNthauNopHs = data.hhChiTietTTinChaoGiaList;
-      console.log(this.listNthauNopHs, 88888)
+      this.listOfData = data.hhChiTietTTinChaoGiaList;
+      this.updateEditCache();
+      this.emitDataTable();
+      this.fileDinhKems = data.fileDinhKems;
+      console.log(this.listOfData, 88888)
 
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -146,7 +159,6 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
     let body = {
       id: this.idInput,
       trangThaiTkhai: STATUS.HOAN_THANH_CAP_NHAT,
-      loaiVthh: this.loaiVthh
     }
     let res = await this.chaogiaUyquyenMualeService.approve(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -163,7 +175,9 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
     await this.spinner.show()
     let body = {
       idChaoGia: this.idInput,
-      hhChiTietTTinChaoGiaReqs: this.listNthauNopHs,
+      hhChiTietTTinChaoGiaReqs: this.listOfData,
+      ptMuaTrucTiep: this.radioValue,
+      fileDinhKems: this.fileDinhKems,
     }
     let res = await this.chaogiaUyquyenMualeService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -177,15 +191,15 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
 
   async showDetail($event, dataChaoGia: any) {
     await this.spinner.show();
-    this.listNthauNopHs = [];
+    this.listOfData = [];
     $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
     $event.target.parentElement.classList.add('selectedRow')
     this.idChaoGia = dataChaoGia.id;
     let res = await this.chaogiaUyquyenMualeService.getDetail(this.idChaoGia);
     if (res.msg == MESSAGE.SUCCESS) {
-      this.itemRow.soLuong = dataChaoGia.soLuong;
-      this.listNthauNopHs = res.data;
-      this.listNthauNopHs.forEach(item => {
+      this.rowItem.soLuong = dataChaoGia.soLuong;
+      this.listOfData = res.data;
+      this.listOfData.forEach(item => {
         item.edit = false;
       })
     } else {
@@ -196,23 +210,27 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
 
   addRow(): void {
     this.idChaoGia = this.idInput;
-    if (this.itemRow) {
-      this.listNthauNopHs = [
-        ...this.listNthauNopHs,
-        this.itemRow
-      ];
-      this.clearItemRow();
+    if (!this.listOfData) {
+      this.listOfData = [];
     }
+    this.listOfData = [...this.listOfData, this.rowItem];
+    this.rowItem = new ChiTietThongTinChaoGia();
+    this.emitDataTable();
+    this.updateEditCache()
   }
 
   clearItemRow() {
-    let soLuong = this.itemRow.soLuong;
-    this.itemRow = {};
-    this.itemRow.soLuong = soLuong;
-    this.itemRow.id = null;
+    let soLuong = this.rowItem.soLuong;
+    this.rowItem = new ChiTietThongTinChaoGia();
+    this.rowItem.soLuong = soLuong;
+    this.rowItem.id = null;
   }
 
-  deleteRow(i) {
+  emitDataTable() {
+    this.dataTableChange.emit(this.listOfData);
+  }
+
+  deleteRow(index: any) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -220,37 +238,46 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.listNthauNopHs.splice(i, 1)
+      nzWidth: 400,
+      nzOnOk: async () => {
+        try {
+          this.listOfData.splice(index, 1);
+          this.updateEditCache();
+        } catch (e) {
+          console.log('error', e);
+        }
       },
     });
   }
 
-  startEdit(index: number): void {
-    this.listNthauNopHs[index].edit = true;
-    this.itemRowUpdate = cloneDeep(this.listNthauNopHs[index]);
+
+  updateEditCache(): void {
+    if (this.listOfData) {
+      this.listOfData.forEach((item, index) => {
+        this.dataEdit[index] = {
+          edit: false,
+          data: { ...item },
+        };
+      });
+    }
   }
 
-  cancelEdit(index: number): void {
-    this.listNthauNopHs[index].edit = false;
+  startEdit(stt: number) {
+    this.dataEdit[stt].edit = true;
   }
 
-  saveEdit(dataUpdate, index: any): void {
-    if (this.itemRowUpdate, index) {
-      this.listNthauNopHs[index] = this.itemRowUpdate;
-      this.listNthauNopHs[index].edit = false;
+  cancelEdit(stt: number): void {
+    this.dataEdit[stt] = {
+      data: { ...this.listOfData[stt] },
+      edit: false
     };
   }
 
-  checkRoleData() {
-    if (this.userService.isCuc()) {
-      return true;
-    }
-    if (this.userService.isTongCuc()) {
-      return true
-    }
+  saveEdit(idx: number): void {
+    Object.assign(this.listOfData[idx], this.dataEdit[idx].data);
+    this.dataEdit[idx].edit = false;
   }
+
 
   expandSet2 = new Set<number>();
   onExpandChange2(id: number, checked: boolean): void {
@@ -269,4 +296,52 @@ export class ThemmoiChaogiaUyquyenMualeComponent implements OnInit, OnChanges {
       this.expandSet3.delete(id);
     }
   }
+
+
+  getNameFile(event?: any, tableName?: string, item?: FileDinhKem, type?: any) {
+    const element = event.currentTarget as HTMLInputElement;
+    const fileList: FileList | null = element.files;
+    if (fileList) {
+      const itemFile = {
+        name: fileList[0].name,
+        file: event.target.files[0] as File,
+      };
+      this.uploadFileService
+        .uploadFile(itemFile.file, itemFile.name)
+        .then((resUpload) => {
+          if (item) {
+            item.fileName = resUpload.filename;
+            item.fileSize = resUpload.size;
+            item.fileUrl = resUpload.url;
+          }
+          else {
+            if (!type) {
+              if (!this.rowItem.fileDinhKems) {
+                this.rowItem.fileDinhKems = new FileDinhKem();
+              }
+              this.rowItem.fileDinhKems.fileName = resUpload.filename;
+              this.rowItem.fileDinhKems.fileSize = resUpload.size;
+              this.rowItem.fileDinhKems.fileUrl = resUpload.url;
+              this.rowItem.fileDinhKems.idVirtual = new Date().getTime();
+            } else {
+              if (!type.fileDinhKem) {
+                type.fileDinhKem = new FileDinhKem();
+              }
+              type.fileDinhKem.fileName = resUpload.filename;
+              type.fileDinhKem.fileSize = resUpload.size;
+              type.fileDinhKem.fileUrl = resUpload.url;
+              type.fileDinhKem.idVirtual = new Date().getTime();
+            }
+
+          }
+        });
+    }
+  }
+
+  downloadFile(item: FileDinhKem) {
+    this.uploadFileService.downloadFile(item.fileUrl).subscribe((blob) => {
+      saveAs(blob, item.fileName);
+    });
+  }
+
 }

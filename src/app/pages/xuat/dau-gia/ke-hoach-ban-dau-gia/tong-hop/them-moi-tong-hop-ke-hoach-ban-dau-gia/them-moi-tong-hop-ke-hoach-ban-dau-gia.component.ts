@@ -33,11 +33,8 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
 
   formTraCuu: FormGroup;
   isDetailDxCuc: boolean = false;
-  dataTableDanhSachDX: any[] = [];
-  danhMucDonVi: any;
   isTongHop: boolean = false;
   isQuyetDinh: boolean = false;
-  dataDeXuat: any[] = [];
   datePipe = new DatePipe('en-US');
 
 
@@ -103,7 +100,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
         this.formData.patchValue({
           idTh: data.id
         })
-        this.dataTableDanhSachDX = data.thopDxKhBdgDtlList;
+        this.dataTable = data.children;
       }
       else {
         this.isTongHop = false;
@@ -134,7 +131,7 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
           idTh: idTh,
           ngayThop: dayjs().format("YYYY-MM-DD"),
         })
-        this.dataTableDanhSachDX = dataDetail.thopDxKhBdgDtlList;
+        this.dataTable = dataDetail.children;
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -152,7 +149,6 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
   async save() {
     let body = this.formData.value;
     let data = await this.createUpdate(body, 'XHDTQG_PTDG_KHBDG_TONGHOP_TONGHOP')
-    console.log(data);
     if (data) {
       this.quayLai();
     }
@@ -160,6 +156,15 @@ export class ThemMoiTongHopKeHoachBanDauGiaComponent extends Base2Component impl
 
   quayLai() {
     this.showListEvent.emit();
+  }
+
+  isDisable(): boolean {
+    if (this.formData.value.id) {
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   showList() {

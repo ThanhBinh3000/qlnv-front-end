@@ -13,14 +13,9 @@ export class QuyetDinhPdKhBdgService extends BaseService {
         super(httpClient, 'ban-dau-gia/qd-pd-bdg', '/qlnv-hang');
     }
 
-    getDtlDetail(id, isLocal?): Promise<OldResponseData> {
-        if (isLocal) {
-            const url = `http://localhost:189/${this.table}/chi-tiet/${id}`;
-            return this._httpClient.get<OldResponseData>(url).toPromise();
-        } else {
-            const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/dtl-chi-tiet/${id}`;
-            return this._httpClient.get<OldResponseData>(url).toPromise();
-        }
+    getDtlDetail(id): Promise<OldResponseData> {
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/dtl-chi-tiet/${id}`;
+        return this._httpClient.get<OldResponseData>(url).toPromise();
     }
 
 

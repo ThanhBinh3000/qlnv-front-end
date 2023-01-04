@@ -172,62 +172,142 @@
 </nz-collapse>
 <nz-collapse nzAccordion class="pd-10">
   <nz-collapse-panel [nzHeader]="'Danh mục đơn vị tài sản bán đấu giá'" [nzActive]="true">
-    <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-      <nz-table [nzData]="listOfData" class="nowrap" nzBordered>
-        <thead>
+    <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
+      <thead>
+        <tr>
+          <th width="60px" class="text-center"></th>
+          <th nzWidth="150px" class="text-center wrap">Chi cục</th>
+          <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
+          <th nzWidth="150px" class="text-center wrap">Nhà kho</th>
+          <th nzWidth="150px" class="text-center wrap">Ngăn kho</th>
+          <th class="text-center wrap">Lô kho</th>
+          <th nzWidth="100px" class="text-center wrap">Mã đơn vị tài sản</th>
+          <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
+          <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất</th>
+          <th nzWidth="100px" class="text-center wrap">ĐVT</th>
+          <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg)</th>
+          <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ)</th>
+          <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt VAT (đ/kg)</th>
+          <th nzWidth="100px" class="text-center wrap">Giá khởi điểm được duyệt (đ)</th>
+          <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ)</th>
+          <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
+          <th nzWidth="50px">Hành động</th>
+        </tr>
+        <tr>
+          <th colspan="8"></th>
+          <th>(1)</th>
+          <th></th>
+          <th>(2)</th>
+          <th>(3) = (1) * (2)</th>
+          <th class="wrap">(4) - tự động lấy từ giá cụ thể được duyệt</th>
+          <th>(5) = (1) * (4)</th>
+          <th class="wrap">= (3) * % khoản tiền đặt trước</th>
+          <th class="wrap">= (5) * % khoản tiền đặt trước</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of dataTable , let i = index">
           <tr>
-            <th style="width: 2%;">STT</th>
-            <th>Chi cục</th>
-            <th>Điểm kho</th>
-            <th>Nhà kho</th>
-            <th>Ngăn kho</th>
-            <th>Lô kho</th>
-            <th>Mã ĐVTS</th>
-            <th>SL xuất</th>
-            <th>ĐVT</th>
-            <th>Đơn giá được duyệt VAT (đ/kg)</th>
-            <th>Giá khởi điểm (đ)</th>
-            <th>Số tiền đặt trước (đ)</th>
-            <th *ngIf="!isView">Hành động</th>
+            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td colspan="7">{{item.tenDvi}}</td>
+            <td>{{item.tongSoLuong}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <a *ngIf="!isDisable()" (click)="themMoiBangPhanLoTaiSan(item,i)">
+                <i class="fa fa-pencil"></i>
+              </a>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          <ng-container *ngFor="let item of listOfData , let i = index">
-            <tr>
-              <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-              <td colspan="6">{{item.tenDvi}}</td>
+          <ng-container *ngIf="expandSet.has(i)">
+            <tr *ngFor="let children of item.children, let y = index">
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td *ngIf="!isView"></td>
+              <td>{{children.tenDiemKho}}</td>
+              <td>{{children.tenNhakho}}</td>
+              <td>{{children.tenNganKho}}</td>
+              <td>{{children.tenLoKho}}</td>
+              <td>{{children.maDviTsan}}</td>
+              <td>{{children.duDau | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{children.dviTinh}}</td>
+              <td>{{children.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
+              <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{children.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{children.donGiaVat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ (children.soLuong * children.donGiaDeXuat) + (children.soLuong * children.donGiaDeXuat *
+                formData.value.khoanTienDatTruoc /
+                100 ) | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{ (children.soLuong * children.donGiaVat) + (children.soLuong * children.donGiaVat *
+                formData.value.khoanTienDatTruoc / 100 ) |
+                number : '1.0-1' : 'vi_VN'}}</td>
+              <td class="text-right">
+              </td>
             </tr>
-            <ng-container *ngIf="expandSet.has(i)">
-              <tr *ngFor="let phanLo of listOfData, let y = index">
-                <td></td>
-                <td></td>
-                <td>{{phanLo.tenDiemKho}}</td>
-                <td>{{phanLo.tenNhakho}}</td>
-                <td>{{phanLo.tenNganKho}}</td>
-                <td>{{phanLo.tenLoKho}}</td>
-                <td>{{phanLo.maDviTsan}}</td>
-                <td>{{phanLo.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                <td>{{phanLo.dviTinh }}</td>
-                <td>{{phanLo.donGiaVat }}</td>
-                <td>{{phanLo.giaKhoiDiem }}</td>
-                <td>{{phanLo.tienDatTruoc }}</td>
-                <td *ngIf="!isView">
-                  <a (click)="themMoiBangPhanLoTaiSan(phanLo,phanLo.idx)">
-                    <i class="fa fa-pencil"></i>
-                  </a>
-                </td>
-              </tr>
-            </ng-container>
           </ng-container>
-        </tbody>
-      </nz-table>
-    </nz-card>
+        </ng-container>
+      </tbody>
+    </nz-table>
+    <!-- <nz-table [nzData]="dataTable" class="nowrap pd-10" nzBordered>
+      <thead>
+        <tr>
+          <th style="width: 2%;">STT</th>
+          <th>Chi cục</th>
+          <th>Điểm kho</th>
+          <th>Nhà kho</th>
+          <th>Ngăn kho</th>
+          <th>Lô kho</th>
+          <th>Mã ĐVTS</th>
+          <th>SL xuất</th>
+          <th>ĐVT</th>
+          <th>Đơn giá được duyệt VAT (đ/kg)</th>
+          <th>Giá khởi điểm (đ)</th>
+          <th>Số tiền đặt trước (đ)</th>
+          <th *ngIf="!isView">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of dataTable , let i = index">
+          <tr>
+            <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+            <td colspan="6">{{item.tenDvi}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td *ngIf="!isView"></td>
+          </tr>
+          <ng-container *ngIf="expandSet.has(i)">
+            <tr *ngFor="let phanLo of dataTable, let y = index">
+              <td></td>
+              <td></td>
+              <td>{{phanLo.tenDiemKho}}</td>
+              <td>{{phanLo.tenNhakho}}</td>
+              <td>{{phanLo.tenNganKho}}</td>
+              <td>{{phanLo.tenLoKho}}</td>
+              <td>{{phanLo.maDviTsan}}</td>
+              <td>{{phanLo.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
+              <td>{{phanLo.dviTinh }}</td>
+              <td>{{phanLo.donGiaVat }}</td>
+              <td>{{phanLo.giaKhoiDiem }}</td>
+              <td>{{phanLo.tienDatTruoc }}</td>
+              <td *ngIf="!isView">
+                <a (click)="themMoiBangPhanLoTaiSan(phanLo,phanLo.idx)">
+                  <i class="fa fa-pencil"></i>
+                </a>
+              </td>
+            </tr>
+          </ng-container>
+        </ng-container>
+      </tbody>
+    </nz-table> -->
   </nz-collapse-panel>
 </nz-collapse>
 <ng-template #error let-control>

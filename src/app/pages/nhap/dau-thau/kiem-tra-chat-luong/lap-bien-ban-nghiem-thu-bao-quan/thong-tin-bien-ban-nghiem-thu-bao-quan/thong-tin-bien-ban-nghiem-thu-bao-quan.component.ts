@@ -30,13 +30,14 @@ import { filter } from 'rxjs/operators';
 import { HelperService } from 'src/app/services/helper.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 
 @Component({
   selector: 'app-thong-tin-bien-ban-nghiem-thu-bao-quan',
   templateUrl: './thong-tin-bien-ban-nghiem-thu-bao-quan.component.html',
   styleUrls: ['./thong-tin-bien-ban-nghiem-thu-bao-quan.component.scss']
 })
-export class ThongTinBienBanNghiemThuBaoQuanComponent extends BaseComponent implements OnInit {
+export class ThongTinBienBanNghiemThuBaoQuanComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() typeVthh: string;
@@ -66,14 +67,17 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends BaseComponent impl
   editDataCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     private donViService: DonviService,
     private danhMucService: DanhMucService,
     private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
   ) {
-    super(httpClient, storageService, quanLyNghiemThuKeLotService);
+    super(httpClient, storageService, notification, spinner, modal, quanLyNghiemThuKeLotService);
     this.formData = this.fb.group(
       {
         id: [],
@@ -544,36 +548,27 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends BaseComponent impl
 
   pheDuyet() {
     let trangThai = ''
-    // switch (this.detail.trangThai) {
-    //   case STATUS.DU_THAO: {
-    //     trangThai = STATUS.CHO_DUYET_TK;
-    //     break;
-    //   }
-    //   case STATUS.CHO_DUYET_TK: {
-    //     trangThai = STATUS.CHO_DUYET_KT;
-    //     break;
-    //   }
-    //   case STATUS.TU_CHOI_TK: {
-    //     trangThai = STATUS.CHO_DUYET_KT;
-    //     break;
-    //   }
-    //   case STATUS.CHO_DUYET_KT: {
-    //     trangThai = STATUS.CHO_DUYET_LDCC;
-    //     break;
-    //   }
-    //   case STATUS.TU_CHOI_KT: {
-    //     trangThai = STATUS.CHO_DUYET_LDCC;
-    //     break;
-    //   }
-    //   case STATUS.CHO_DUYET_LDCC: {
-    //     trangThai = STATUS.DA_DUYET_LDCC;
-    //     break;
-    //   }
-    //   case STATUS.TU_CHOI_LDCC: {
-    //     trangThai = STATUS.DA_DUYET_LDCC;
-    //     break;
-    //   }
-    // }
+    switch (this.formData.value.trangThai) {
+      case STATUS.TU_CHOI_LDCC:
+      case STATUS.TU_CHOI_KT:
+      case STATUS.TU_CHOI_TK:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TK;
+        break;
+      }
+      case STATUS.CHO_DUYET_TK: {
+        trangThai = STATUS.CHO_DUYET_KT;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.CHO_DUYET_LDCC;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.DA_DUYET_LDCC;
+        break;
+      }
+    }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -612,20 +607,20 @@ export class ThongTinBienBanNghiemThuBaoQuanComponent extends BaseComponent impl
 
   tuChoi() {
     let trangThai = ''
-    // switch (this.detail.trangThai) {
-    //   case STATUS.CHO_DUYET_TK: {
-    //     trangThai = STATUS.TU_CHOI_TK;
-    //     break;
-    //   }
-    //   case STATUS.CHO_DUYET_KT: {
-    //     trangThai = STATUS.TU_CHOI_KT;
-    //     break;
-    //   }
-    //   case STATUS.CHO_DUYET_LDCC: {
-    //     trangThai = STATUS.TU_CHOI_LDCC;
-    //     break;
-    //   }
-    // }
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_TK: {
+        trangThai = STATUS.TU_CHOI_TK;
+        break;
+      }
+      case STATUS.CHO_DUYET_KT: {
+        trangThai = STATUS.TU_CHOI_KT;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDCC: {
+        trangThai = STATUS.TU_CHOI_LDCC;
+        break;
+      }
+    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Từ chối',
       nzContent: DialogTuChoiComponent,

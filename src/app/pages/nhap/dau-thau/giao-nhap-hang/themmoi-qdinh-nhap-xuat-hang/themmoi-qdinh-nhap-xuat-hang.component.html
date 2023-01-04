@@ -243,12 +243,6 @@
           <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
           <td>{{ item.tenTrangThai }}</td>
           <td *ngIf="userService.isChiCuc()">
-            <!--             <a *ngIf="userService.isCuc()"> -->
-            <!--               <i class="fa fa-pencil"></i> -->
-            <!--             </a> -->
-            <!--             <a *ngIf="userService.isCuc()"> -->
-            <!--               <i (click)=" xoaDiaDiemNhap(i)" class="fa fa-trash-o do"></i> -->
-            <!--             </a> -->
           </td>
         </tr>
         <ng-container *ngIf="expandSet.has(i)">

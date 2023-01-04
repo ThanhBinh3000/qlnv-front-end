@@ -109,7 +109,6 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     this.thongtinMuaTrucTiep = new DanhSachMuaTrucTiep();
     this.loadDonVi();
     if (this.dataEdit) {
-      console.log(this.dataEdit);
       this.listChiCuc = [{
         maDvi: this.dataEdit.maDvi,
         tenDonVi: this.dataEdit.tenDvi,
@@ -127,7 +126,6 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
         tongThanhTienVat: this.dataEdit.tongThanhTienVat,
         tenCcuc: this.dataEdit.tenCcuc,
         soLuong: this.dataEdit.soLuong,
-
         thanhTien: this.dataEdit.thanhTien,
       })
       this.changeChiCuc(this.dataEdit.maDvi);
@@ -173,7 +171,6 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     let soLuongDaLenKh = await this.danhSachMuaTrucTiepService.getSoLuongAdded(body);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
     const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
-    console.log(res, 1111)
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({

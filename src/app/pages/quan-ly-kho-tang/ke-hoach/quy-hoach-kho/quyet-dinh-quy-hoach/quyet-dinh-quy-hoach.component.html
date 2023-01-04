@@ -4,7 +4,7 @@
       <div nz-row [nzGutter]="20">
         <div nz-col nzSpan="3">
           <label class="search__label">Số quyết định</label>
-          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soQuyetDinh" />
+          <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.soQuyetDinh" />
         </div>
         <div nz-col nzSpan="3">
           <label class="search__label">Ngày ký</label>
@@ -91,16 +91,16 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH KHO TÀNG DTQG</h3>
       <div class="buttons" >
-        <button type="button" class="btn btn-sub btn-xoa" *ngIf="userService.isCuc()" (click)="xoa()">
+        <button type="button" class="btn btn-sub btn-xoa" *ngIf="userService.isTongCuc()" (click)="xoa()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
-        <button type="button" class="btn btn-sub" (click)="exportData()">
+        <button type="button" class="btn btn-sub" (click)="exportData()" >
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
         <button type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)"
-                *ngIf="userService.isCuc()">
+                *ngIf="userService.isTongCuc()">
           <i class="icon htvbdh_soanthao"></i>
           <span>Tạo quyết định</span>
         </button>
@@ -195,11 +195,11 @@
             <a (click)="redirectToChiTiet(data.id,true)">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="userService.isCuc() && data.trangThai == globals.prop.NHAP_DU_THAO"
+            <a *ngIf="userService.isTongCuc() && data.trangThai == globals.prop.NHAP_DU_THAO"
                (click)="redirectToChiTiet(data.id,false)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="userService.isCuc() && data.trangThai == globals.prop.NHAP_DU_THAO " (click)="xoaItem(data)">
+            <a *ngIf="userService.isTongCuc() && data.trangThai == globals.prop.NHAP_DU_THAO " (click)="xoaItem(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

@@ -61,7 +61,7 @@ export class ChiTietThongTinChaoGia {
   sdt: string;
   ngayChaoGia: number;
   soLuong: number;
-  dgiaChuaThue: number;
+  donGia: number;
   thueGtgt: number;
   thanhTien: number;
   luaChon: boolean = false;

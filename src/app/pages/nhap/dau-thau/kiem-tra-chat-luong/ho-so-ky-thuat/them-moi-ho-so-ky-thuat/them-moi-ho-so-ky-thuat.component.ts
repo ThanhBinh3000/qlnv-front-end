@@ -32,13 +32,14 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { QuanLyBienBanLayMauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanLayMau.service';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
 
 @Component({
   selector: 'app-them-moi-ho-so-ky-thuat',
   templateUrl: './them-moi-ho-so-ky-thuat.component.html',
   styleUrls: ['./them-moi-ho-so-ky-thuat.component.scss']
 })
-export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit {
+export class ThemMoiHoSoKyThuatComponent extends Base2Component implements OnInit {
 
   @Input() id: number;
   @Input() isView: boolean;
@@ -105,13 +106,16 @@ export class ThemMoiHoSoKyThuatComponent extends BaseComponent implements OnInit
   ];
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
     public userService: UserService,
     private hoSoKyThuatService: HoSoKyThuatService,
     private bienBanLayMauService: QuanLyBienBanLayMauService
   ) {
-    super(httpClient, storageService, hoSoKyThuatService);
+    super(httpClient, storageService, notification, spinner, modal, hoSoKyThuatService);
     super.ngOnInit();
     this.formData = this.fb.group({
       id: [],
