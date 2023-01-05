@@ -35,7 +35,8 @@
             </div>
             <div nz-col nzSpan="3">
                 <label class="search__label">Trạng thái</label>
-                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái" [(ngModel)]="trangThai">
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
+                    [(ngModel)]="searchFilter.trangThai">
                     <nz-option *ngFor="let item of trangThais" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
@@ -96,20 +97,23 @@
                         {{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}
                     </td>
                     <td>
-                        {{ data.maHdong }}
+                        {{ data.maHopDong }}
                     </td>
                     <td>
-                        {{ data.namHdong }}
+                        {{ data.namBcao }}
                     </td>
                     <td>
                         {{ data.soQdChiTieu }}
                     </td>
                     <td>
                         <div *ngFor="let e of loaiDns">
-                            <div *ngIf="data.loaiHdong == e.id">
+                            <div *ngIf="data.loaiDnghi == e.id">
                                 {{e.tenDm}}
                             </div>
                         </div>
+                    </td>
+                    <td>
+                        {{ data.ngayTao }}
                     </td>
                     <td>
                         {{ data.ngayTrinh }}

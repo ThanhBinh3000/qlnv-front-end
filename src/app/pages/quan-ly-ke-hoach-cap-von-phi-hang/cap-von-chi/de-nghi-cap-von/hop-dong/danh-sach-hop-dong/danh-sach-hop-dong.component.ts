@@ -33,11 +33,10 @@ export class DanhSachHopDongComponent implements OnInit {
             limit: 10,
             page: 1,
         },
-        trangThais: [],
+        trangThai: Utils.TT_BC_1,
     }
 
     // danh sach
-    trangThai: string = Utils.TT_BC_1;
     dataTable: any[] = [];
     dataTableAll: any[] = [];
     trangThais: any[] = TRANG_THAI;
@@ -71,17 +70,14 @@ export class DanhSachHopDongComponent implements OnInit {
         this.searchFilter.ngayTaoTu = newDate;
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
         // trang thai cua nut tao moi
-        // this.statusNewReport = this.userService.isAccessPermisson(CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(CVNC.ADD_DN_MVT);
-        // this.statusDelete = this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT);
+        this.statusNewReport = this.userService.isAccessPermisson(CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(CVNC.ADD_DN_MVT);
+        this.statusDelete = this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT);
 
         //neu cos quyen phe duyet thi trang thai mac dinh la trinh duyet
-        // if (this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) || this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT)) {
-        //     this.searchFilter.trangThai = Utils.TT_BC_2;
-        // }
-        if (this.userService.isTongCuc()) {
-            this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_VTU);
-            this.searchFilter.loaiHdong = Utils.MUA_VTU;
-        } else {
+        if (this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) || this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT)) {
+            this.searchFilter.trangThai = Utils.TT_BC_2;
+        }
+        if (!this.userService.isTongCuc()) {
             this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
         }
 
@@ -91,39 +87,36 @@ export class DanhSachHopDongComponent implements OnInit {
 
     async search() {
         const request = JSON.parse(JSON.stringify(this.searchFilter));
-        if (this.trangThai) {
-            request.trangThais = [this.trangThai];
-        }
         request.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, Utils.FORMAT_DATE_STR);
         request.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, Utils.FORMAT_DATE_STR);
         this.spinner.show();
-        // await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
-        //     (data) => {
-        //         if (data.statusCode == 0) {
-        //             this.dataTable = [];
-        //             data.data.content.forEach(item => {
-        //                 this.dataTable.push({
-        //                     ...item,
-        //                     ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
-        //                     ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
-        //                     ngayDuyet: this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR),
-        //                     ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
-        //                     checked: false,
-        //                     isEdit: this.checkEditStatus(item.trangThai),
-        //                     isDelete: this.checkDeleteStatus(item.trangThai),
-        //                 })
-        //             })
-        //             this.dataTableAll = cloneDeep(this.dataTable);
-        //             this.totalElements = data.data.totalElements;
-        //             this.totalPages = data.data.totalPages;
-        //         } else {
-        //             this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-        //         }
-        //     },
-        //     (err) => {
-        //         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //     }
-        // );
+        await this.capVonNguonChiService.timKiemHopDong(request).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    this.dataTable = [];
+                    data.data.content.forEach(item => {
+                        this.dataTable.push({
+                            ...item,
+                            ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
+                            ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
+                            ngayDuyet: this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR),
+                            ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
+                            checked: false,
+                            isEdit: this.checkEditStatus(item.trangThai),
+                            isDelete: this.checkDeleteStatus(item.trangThai),
+                        })
+                    })
+                    this.dataTableAll = cloneDeep(this.dataTable);
+                    this.totalElements = data.data.totalElements;
+                    this.totalPages = data.data.totalPages;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        );
         this.spinner.hide();
     }
 
@@ -153,12 +146,12 @@ export class DanhSachHopDongComponent implements OnInit {
 
     checkEditStatus(trangThai: string) {
         return Utils.statusSave.includes(trangThai) &&
-            ((this.userInfo?.CAP_DVI == '2' && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT)));
+            (this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) || this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT));
     }
 
     checkDeleteStatus(trangThai: string) {
         return Utils.statusDelete.includes(trangThai) &&
-            ((this.userInfo?.CAP_DVI == '2' && this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT)));
+            (this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT));
     }
 
     getStatusName(trangThai: string) {
@@ -193,7 +186,7 @@ export class DanhSachHopDongComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: 'hopdong',
+            tabSelected: data.loaiDeNghi == Utils.MUA_VTU ? 'hd-vattu' : 'hd-luongthuc',
         }
         this.dataChange.emit(obj);
     }
@@ -218,44 +211,44 @@ export class DanhSachHopDongComponent implements OnInit {
 
     //Xoa bao cao
     deleteReport(id: string) {
-        // this.modal.confirm({
-        //     nzClosable: false,
-        //     nzTitle: 'Xác nhận',
-        //     nzContent: 'Bạn có chắc chắn muốn xóa?',
-        //     nzOkText: 'Đồng ý',
-        //     nzCancelText: 'Không',
-        //     nzOkDanger: true,
-        //     nzWidth: 310,
-        //     nzOnOk: () => {
-        //         this.spinner.show();
-        //         let request = [];
-        //         if (id) {
-        //             request = [id];
-        //         } else {
-        //             if (this.dataTable && this.dataTable.length > 0) {
-        //                 this.dataTable.forEach(item => {
-        //                     if (item.checked) {
-        //                         request.push(item.id);
-        //                     }
-        //                 })
-        //             }
-        //         }
-        //         this.capVonNguonChiService.xoaDeNghi(request).toPromise().then(
-        //             data => {
-        //                 if (data.statusCode == 0) {
-        //                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-        //                     this.search();
-        //                 } else {
-        //                     this.notification.error(MESSAGE.ERROR, data?.msg);
-        //                 }
-        //             },
-        //             err => {
-        //                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //             }
-        //         )
-        //         this.spinner.hide();
-        //     },
-        // });
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn xóa?',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 310,
+            nzOnOk: () => {
+                this.spinner.show();
+                let request = [];
+                if (id) {
+                    request = [id];
+                } else {
+                    if (this.dataTable && this.dataTable.length > 0) {
+                        this.dataTable.forEach(item => {
+                            if (item.checked) {
+                                request.push(item.id);
+                            }
+                        })
+                    }
+                }
+                this.capVonNguonChiService.xoaHopDong(request).toPromise().then(
+                    data => {
+                        if (data.statusCode == 0) {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+                            this.search();
+                        } else {
+                            this.notification.error(MESSAGE.ERROR, data?.msg);
+                        }
+                    },
+                    err => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    }
+                )
+                this.spinner.hide();
+            },
+        });
     }
 
     // Tìm kiếm trong bảng

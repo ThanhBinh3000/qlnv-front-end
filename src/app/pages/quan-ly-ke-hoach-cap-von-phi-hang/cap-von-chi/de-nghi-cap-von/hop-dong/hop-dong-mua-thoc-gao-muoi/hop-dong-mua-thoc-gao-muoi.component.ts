@@ -12,6 +12,7 @@ import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNg
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import * as uuid from "uuid";
 import { CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemContract, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
@@ -154,7 +155,12 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
             this.baoCao.loaiDnghi = this.data?.loaiDeNghi;
             this.baoCao.namBcao = this.data?.namBcao;
             this.baoCao.ngayTao = new Date();
-            this.baoCao.dnghiCvHopDongCtiets = this.data?.hopDong;
+            //neu la tong cuc thi goi api tong hop
+            if (this.userService.isTongCuc()) {
+                await this.callSynthetic();
+            } else {
+                this.baoCao.dnghiCvHopDongCtiets = this.data?.hopDong;
+            }
             this.updateEditCache();
             this.capVonNguonChiService.maHopDong().toPromise().then(
                 (res) => {
@@ -190,8 +196,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
 
     back() {
         const obj = {
-            qdChiTieu: this.baoCao.soQdChiTieu,
-            tabSelected: 'danhsach',
+            tabSelected: 'ds-hopdong',
         }
         this.dataChange.emit(obj);
     }
@@ -283,6 +288,29 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
         );
     }
 
+    async callSynthetic() {
+        const request = {
+            loaiDnghi: this.baoCao.loaiDnghi,
+            maDvi: this.baoCao.maDvi,
+            namHdong: this.baoCao.namBcao,
+        }
+        await this.capVonNguonChiService.tongHopHopDong(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    this.baoCao.dnghiCvHopDongCtiets = data.data;
+                    this.baoCao.dnghiCvHopDongCtiets.forEach(item => {
+                        item.id = uuid.v4() + 'FE';
+                    })
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+    }
+
     async submitReport() {
         this.modal.confirm({
             nzClosable: false,
@@ -309,7 +337,7 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
             maChucNang: mcn,
             lyDoTuChoi: lyDoTuChoi,
         };
-        await this.capVonNguonChiService.trinhDeNghi(requestGroupButtons).toPromise().then(async (data) => {
+        await this.capVonNguonChiService.trinhHopDong(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
                 this.getStatusButton();

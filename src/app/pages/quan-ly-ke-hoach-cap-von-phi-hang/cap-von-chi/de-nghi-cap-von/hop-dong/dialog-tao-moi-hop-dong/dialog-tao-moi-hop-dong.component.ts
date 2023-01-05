@@ -45,9 +45,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
 
     async ngOnInit() {
         this.userInfo = this.userService.getUserLogin();
-        if (this.userService.isTongCuc()) {
-            this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_VTU);
-        } else {
+        if (!this.userService.isTongCuc()) {
             this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
         }
         this.response.hopDong = [];
@@ -121,10 +119,10 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        if (this.userService.isTongCuc() && this.response.loaiDeNghi != Utils.MUA_VTU) {
-
-        } else {
+        if (!this.userService.isTongCuc() || this.response.loaiDeNghi == Utils.MUA_VTU) {
             this.getContract();
+        } else {
+            this.response.hopDong = [];
         }
     }
     //lay ra danh sach cac goi thau theo hop dong

@@ -49,6 +49,36 @@ export class CapVonNguonChiService extends BaseService {
             'http://192.168.1.107:30101/cap-von-hop-dong/chi-tiet/' + id,
         );
     }
+    //danh sach hop dong
+    timKiemHopDong(request: any): Observable<any> {
+        return this.httpClient.post(
+            // this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/danh-sach',
+            'http://192.168.1.107:30101/cap-von-hop-dong/danh-sach',
+            request,
+        );
+    }
+    //xóa hop dong nút xóa Báo cáo
+    xoaHopDong(request: any): Observable<any> {
+        return this.httpClient.post(
+            // this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/xoa',
+            'http://192.168.1.107:30101/cap-von-hop-dong/xoa',
+            request,
+        );
+    }
+    ///thay doi trang thai hop dong
+    trinhHopDong(request: any): Observable<any> {
+        return this.httpClient.put(
+            // this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/trang-thai',
+            'http://192.168.1.107:30101/cap-von-hop-dong/trang-thai',
+            request);
+    }
+    tongHopHopDong(request: any): Observable<any> {
+        return this.httpClient.post(
+            // this.urlDefault + '/qlnv-khoachphi/de-nghi-cap-von/danh-sach',
+            'http://192.168.1.107:30101/cap-von-hop-dong/tong-hop',
+            request,
+        );
+    }
     //danh sach de nghi cap von
     timKiemDeNghi(request: any): Observable<any> {
         return this.httpClient.post(

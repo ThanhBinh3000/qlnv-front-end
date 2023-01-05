@@ -44,7 +44,6 @@ export class HopDongMuaVatTuComponent implements OnInit {
     status = false;
     saveStatus = true;
     submitStatus = true;
-    passStatus = true;
     approveStatus = true;
     copyStatus = true;
     isDataAvailable = false;
@@ -169,7 +168,6 @@ export class HopDongMuaVatTuComponent implements OnInit {
             this.baoCao.ngayTao = new Date();
             this.baoCao.dnghiCvHopDongCtiets = this.data?.hopDong;
             this.updateEditCache();
-
             this.capVonNguonChiService.maHopDong().toPromise().then(
                 (res) => {
                     if (res.statusCode == 0) {
@@ -189,32 +187,21 @@ export class HopDongMuaVatTuComponent implements OnInit {
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        // if (Utils.statusSave.includes(this.trangThai) &&
-        //     (this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT) : this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT))) {
-        //     this.status = false;
-        // } else {
-        //     this.status = true;
-        // }
-
-        // const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-        // const isSave = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT) : this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT);
-        // this.saveStatus = Utils.statusSave.includes(this.trangThai) && isSave && checkChirld;
-        // const isSubmit = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.APPROVE_DN_MVT) : this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT);
-        // this.submitStatus = Utils.statusApprove.includes(this.trangThai) && isSubmit && checkChirld && !(!this.id);
-        // const isApprove = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT) : this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT);
-        // if (this.trangThai == Utils.TT_BC_2) {
-        //     this.approveStatus = isApprove && checkChirld;
-        // } else {
-        //     this.approveStatus = Utils.statusPheDuyet.includes(this.trangThai) && isApprove && checkChirld;
-        // }
-        // const isCopy = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.COPY_DN_MVT) : this.userService.isAccessPermisson(CVNC.COPY_DN_MLT);
-        // this.copyStatus = Utils.statusCopy.includes(this.trangThai) && isCopy && checkChirld;
+        const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
+        if (Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT)) {
+            this.status = false;
+        } else {
+            this.status = true;
+        }
+        this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT) && checkChirld;
+        this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.APPROVE_DN_MVT) && checkChirld && !(!this.baoCao.id);
+        this.approveStatus = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT) && checkChirld;
+        this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.COPY_DN_MVT) && checkChirld;
     }
 
     back() {
         const obj = {
-            qdChiTieu: this.baoCao.soQdChiTieu,
-            tabSelected: 'danhsach',
+            tabSelected: 'ds-hopdong',
         }
         this.dataChange.emit(obj);
     }
@@ -332,11 +319,11 @@ export class HopDongMuaVatTuComponent implements OnInit {
             maChucNang: mcn,
             lyDoTuChoi: lyDoTuChoi,
         };
-        await this.capVonNguonChiService.trinhDeNghi(requestGroupButtons).toPromise().then(async (data) => {
+        await this.capVonNguonChiService.trinhHopDong(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
                 this.baoCao.trangThai = mcn;
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5) {
+                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
