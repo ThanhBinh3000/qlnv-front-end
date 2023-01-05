@@ -5,7 +5,7 @@ import { cloneDeep } from 'lodash';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogThemDieuChinhComponent } from './dialog-them-dieu-chinh/dialog-them-dieu-chinh.component';
+// import { DialogThemBaoCaoQuyetToanComponent } from './dialog-them-bao-cao-quyet-toan/dialog-them-bao-cao-quyet-toan.component';
 // import { DialogTaoMoiBaoCaoQuyetToanComponent } from 'src/app/components/dialog/dialog-tao-moi-bao-cao-quyet-toan/dialog-tao-moi-bao-cao-quyet-toan.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -15,41 +15,31 @@ import { QuanLyVonPhiService } from '../../../../services/quanLyVonPhi.service';
 import { MAIN_ROUTE_QUYET_TOAN, QUAN_LY_QUYET_TOAN } from '../../quan-ly-thong-tin-quyet-toan-von-phi-hang-dtqg.constant';
 import { QTVP } from './../../../../Utility/utils';
 import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetToanVonPhi.service';
+import { DialogTongHopComponent } from './dialog-tong-hop/dialog-tong-hop.component';
 
 // import { TRANGTHAIBAOCAO } from '../quan-ly-lap-tham-dinh-du-toan-nsnn.constant';
 // trang thai ban ghi
 export const TRANG_THAI_TIM_KIEM = [
   {
-    id: "1",
-    tenDm: 'Đang soạn'
+    id: "7",
+    tenDm: 'Mới'
   },
   {
-    id: "2",
-    tenDm: 'Trình duyệt'
+    id: "8",
+    tenDm: 'cấp trên từ chối'
   },
   {
-    id: "3",
-    tenDm: 'Trưởng BP từ chối'
-  },
-  {
-    id: "4",
-    tenDm: 'Trưởng BP duyệt'
-  },
-  {
-    id: "5",
-    tenDm: 'Lãnh đạo từ chối'
-  },
-  {
-    id: "6",
-    tenDm: 'Lãnh đạo phê duyệt'
+    id: "9",
+    tenDm: 'Tiếp nhận'
   },
 ]
+
 @Component({
-  selector: 'app-dieu-chinh-bao-cao-sau-quyet-toan',
-  templateUrl: './dieu-chinh-bao-cao-sau-quyet-toan.component.html',
-  styleUrls: ['./dieu-chinh-bao-cao-sau-quyet-toan.component.scss']
+  selector: 'app-phe-duyet-tong-hop',
+  templateUrl: './phe-duyet-tong-hop.component.html',
+  styleUrls: ['./phe-duyet-tong-hop.component.css']
 })
-export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
+export class PheDuyetTongHopComponent implements OnInit {
   @Input() data
 
   dataThemMoi: any;
@@ -58,11 +48,11 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
   //thong tin tim kiem
   searchFilter = {
     maBcao: null,
-    maPhanBcao: '2',
+    loaiTimKiem: "1",
+    maPhanBcao: '1',
     namQtoan: null,
     ngayTaoDen: null,
     ngayTaoTu: null,
-    thongBao: null,
     paggingReq: {
       limit: 10,
       page: 1
@@ -105,6 +95,7 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
   listIdDelete: string[] = [];
   statusBtnValidate = true;
   statusNewReport = true;
+  statusSythentic = true;
   statusDelete = false;
   allChecked = false;
   isAddNew = false;
@@ -130,15 +121,15 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     this.newDate.setMonth(this.newDate.getMonth() - 1);
     this.searchFilter.ngayTaoTu = this.newDate;
     this.donViTao = this.userInfo?.MA_DVI;
-    this.statusNewReport = this.userService.isAccessPermisson(QTVP.ADD_REPORT)
+    this.statusNewReport = this.userService.isAccessPermisson(QTVP.SYNTHETIC_REPORT)
     this.statusDelete = this.userService.isAccessPermisson(QTVP.DELETE_REPORT);
     //  check va lay gia tri role trong list role
     this.statusBtnXoaDk = false;
     if (this.userService.isAccessPermisson(QTVP.EDIT_REPORT)) {
       this.status = false;
-      this.trangThai = Utils.TT_BC_1;
+      this.trangThai = Utils.TT_BC_7;
       this.donVis = this.donVis.filter(e => e?.maDviCha == this.donViTao);
-      this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_1));
+      this.searchFilter.trangThais.push(TRANG_THAI_TIM_KIEM.find(e => e.id == Utils.TT_BC_7));
     }
     else {
       if (this.userService.isAccessPermisson(QTVP.DUYET_QUYET_TOAN_REPORT)) {
@@ -177,10 +168,10 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     if (this.trangThai) {
       searchFilterTemp.trangThais.push(this.trangThai)
     } else {
-      searchFilterTemp.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
+      searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
     }
     if (!this.trangThai) {
-      searchFilterTemp.trangThais = [Utils.TT_BC_1, Utils.TT_BC_2, Utils.TT_BC_3, Utils.TT_BC_4, Utils.TT_BC_5, Utils.TT_BC_6, Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
+      searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9]
     } else {
       searchFilterTemp.trangThais = [this.trangThai];
     }
@@ -243,7 +234,6 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
     this.searchFilter.ngayTaoDen = null
     this.searchFilter.ngayTaoTu = null
     this.searchFilter.maBcao = null
-    this.searchFilter.thongBao = null
     this.trangThai = null
     this.onSubmit();
   };
@@ -261,8 +251,8 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
   //them bao cao moi
   addNewReport() {
     const modalTuChoi = this.modal.create({
-      nzTitle: 'Thông tin tạo mới báo cáo quyết toán vốn, phi hàng DTQG',
-      nzContent: DialogThemDieuChinhComponent,
+      nzTitle: 'Thông tin tổng hợp',
+      nzContent: DialogTongHopComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
@@ -276,10 +266,22 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
           maPhanBcao: res.maPhanBcao,
           namQtoan: res.namQtoan,
           thangBcao: res.thangBcao,
+          isSythen: true,
         }
-        this.isAddNew = true;
-        this.dataThemMoi = request;
-        this.idSelected = null;
+        await this.quyetToanVonPhiService.checkNamTaoMoiQuyetToan(request).toPromise().then(
+          (data) => {
+            if (data.statusCode == 0) {
+              this.isAddNew = true;
+              this.dataThemMoi = request;
+              this.idSelected = null;
+            } else {
+              this.notification.warning(MESSAGE.WARNING, data?.msg)
+            }
+          },
+          (err) => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          },
+        );
       }
     });
   };
@@ -333,6 +335,27 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
         this.spinner.hide();
       },
     });
+
+    // let request = [];
+    // if (!id) {
+    //   request = this.listIdDelete;
+    // } else {
+    //   request = [id];
+    // }
+    // this.quanLyVonPhiService.xoaBaoCaoLapQuyetToan(request).toPromise().then(
+    //   data => {
+    //     if (data.statusCode == 0) {
+    //       this.listIdDelete = [];
+    //       this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+    //       this.onSubmit();
+    //     } else {
+    //       this.notification.error(MESSAGE.ERROR, data?.msg);
+    //     }
+    //   },
+    //   err => {
+    //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //   }
+    // )
   }
 
   updateSingleChecked(): void {
