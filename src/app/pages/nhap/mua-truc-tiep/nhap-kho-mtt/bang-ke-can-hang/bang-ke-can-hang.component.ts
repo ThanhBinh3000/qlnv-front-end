@@ -1,37 +1,35 @@
-import { saveAs } from 'file-saver';
 import { cloneDeep } from 'lodash';
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { saveAs } from 'file-saver';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { QuanLyBangKeCanHangService } from 'src/app/services/quanLyBangKeCanHang.service';
-import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
-import { UserService } from 'src/app/services/user.service';
-import { Globals } from 'src/app/shared/globals';
-import { BaseComponent } from "../../../../../components/base/base.component";
 import {
   QuyetDinhGiaoNhapHangService
 } from "../../../../../services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service";
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { BangCanKeMuaTrucTiepService } from 'src/app/services/bang-can-ke-mua-truc-tiep.service';
+
 @Component({
   selector: 'app-bang-ke-can-hang',
   templateUrl: './bang-ke-can-hang.component.html',
   styleUrls: ['./bang-ke-can-hang.component.scss']
 })
-export class BangKeCanHangComponent extends BaseComponent implements OnInit {
+export class BangKeCanHangComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   searchFilter = {
-    soQuyetDinh: '',
-    soBangKe: '',
-    ngayNhap: '',
-    soHopDong: '',
+    namKh: dayjs().get('year'),
+    soQuyetDinhNhap: '',
+    soBangKeCanHang: '',
+    ngayNkho: '',
   };
 
   listDiemKho: any[] = [];
@@ -49,28 +47,33 @@ export class BangKeCanHangComponent extends BaseComponent implements OnInit {
   isDetail: boolean = false;
   selectedId: number = 0;
   isView: boolean = false;
-  idQdGiaoNvNh: number = 0;
 
   allChecked = false;
   indeterminate = false;
 
   filterTable: any = {
     soQuyetDinhNhap: '',
+    namKh: '',
+    ngayNkho: '',
+    soBangKeCanHang: '',
     soPhieuNhapKho: '',
-    ngayNhapKho: '',
     tenDiemKho: '',
     tenNhaKho: '',
-    tenNganLo: '',
+    tenNganKho: '',
+    tenLoKho: '',
     tenTrangThai: '',
   };
 
   constructor(
-    private httpClient: HttpClient,
-    private storageService: StorageService,
-    private quanLyBangKeCanHangService: QuanLyBangKeCanHangService,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private bangCanKeMuaTrucTiepService: BangCanKeMuaTrucTiepService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
   ) {
-    super(httpClient, storageService, quanLyBangKeCanHangService);
+    super(httpClient, storageService, notification, spinner, modal, bangCanKeMuaTrucTiepService);
   }
 
   async ngOnInit() {
@@ -94,18 +97,25 @@ export class BangKeCanHangComponent extends BaseComponent implements OnInit {
   async search() {
     await this.spinner.show();
     let body = {
-      trangThai: this.STATUS.BAN_HANH,
+      ngayNhapKhoTu: this.searchFilter.ngayNkho
+        ? dayjs(this.searchFilter.ngayNkho[0]).format('YYYY-MM-DD')
+        : null,
+      ngayNhapKhoDen: this.searchFilter.ngayNkho
+        ? dayjs(this.searchFilter.ngayNkho[1]).format('YYYY-MM-DD')
+        : null,
+      namKh: this.searchFilter.namKh,
+      soQuyetDinhNhap: this.searchFilter.soQuyetDinhNhap,
+      soBangKeCanHang: this.searchFilter.soBangKeCanHang,
+      maDvi: this.userInfo.MA_DVI,
       paggingReq: {
-        "limit": this.pageSize,
-        "page": this.page - 1
+        limit: this.pageSize,
+        page: this.page - 1,
       },
-      loaiVthh: this.loaiVthh
     };
-    let res = await this.quyetDinhGiaoNhapHangService.search(body);
+    let res = await this.bangCanKeMuaTrucTiepService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      this.convertDataTable();
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
@@ -114,38 +124,12 @@ export class BangKeCanHangComponent extends BaseComponent implements OnInit {
     await this.spinner.hide();
   }
 
-  convertDataTable() {
-    // this.dataTable.forEach(item => {
-    //   item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0];
-    // });
-    this.dataTable.forEach(item => {
-      if (this.userService.isChiCuc()) {
-        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
-      } else {
-        let data = [];
-        item.dtlList.forEach(item => {
-          data = [...data, ...item.children];
-        })
-        item.detail = {
-          children: data
-        }
-      };
-    });
-    this.dataTable.forEach(item => {
-      item.detail.children.forEach(ddNhap => {
-        ddNhap.listBangKeCanHang.forEach(x => {
-          x.phieuNhapKho = ddNhap.listPhieuNhapKho.filter(item => item.soPhieuNhapKho == x.soPhieuNhapKho)[0];
-        });
-      })
-    });
-  }
-
   clearFilter() {
     this.searchFilter = {
-      soQuyetDinh: '',
-      soBangKe: '',
-      ngayNhap: '',
-      soHopDong: '',
+      namKh: dayjs().get('year'),
+      soQuyetDinhNhap: '',
+      soBangKeCanHang: '',
+      ngayNkho: '',
     };
     this.search()
   }
@@ -162,7 +146,7 @@ export class BangKeCanHangComponent extends BaseComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyBangKeCanHangService.xoa(item.id).then((res) => {
+          this.bangCanKeMuaTrucTiepService.delete(item.id).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -211,12 +195,10 @@ export class BangKeCanHangComponent extends BaseComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
+  redirectToChiTiet(isView: boolean, id: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
-    this.idQdGiaoNvNh = idQdGiaoNvNh;
-
   }
 
   async showList() {
@@ -229,21 +211,20 @@ export class BangKeCanHangComponent extends BaseComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          "denNgayNhap": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 1 ? dayjs(this.searchFilter.ngayNhap[1]).format('YYYY-MM-DD') : null,
-          "maDvi": this.userInfo.MA_DVI,
-          "orderBy": null,
-          "orderDirection": null,
-          "paggingReq": null,
-          "soBangKe": this.searchFilter.soBangKe,
-          "soQdNhap": this.searchFilter.soQuyetDinh,
-          "str": null,
-          "trangThai": null,
-          "tuNgayNhap": this.searchFilter.ngayNhap && this.searchFilter.ngayNhap.length > 0 ? dayjs(this.searchFilter.ngayNhap[0]).format('YYYY-MM-DD') : null,
-        }
-        this.quanLyBangKeCanHangService
-          .exportList(body)
+          ngayNhapKhoTu: this.searchFilter.ngayNkho
+            ? dayjs(this.searchFilter.ngayNkho[0]).format('YYYY-MM-DD')
+            : null,
+          ngayNhapKhoDen: this.searchFilter.ngayNkho
+            ? dayjs(this.searchFilter.ngayNkho[1]).format('YYYY-MM-DD')
+            : null,
+          namKh: this.searchFilter.namKh,
+          soQuyetDinhNhap: this.searchFilter.soQuyetDinhNhap,
+          soBangKeCanHang: this.searchFilter.soBangKeCanHang,
+        };
+        this.bangCanKeMuaTrucTiepService
+          .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-bang-ke-can-hang.xlsx'),
+            saveAs(blob, 'danh-sach-phieu-nhap-kho.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
