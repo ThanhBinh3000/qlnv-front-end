@@ -15,8 +15,8 @@ import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNg
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, Utils } from 'src/app/Utility/utils';
-import { BaoCao, TRANG_THAI } from '../../de-nghi-cap-von.constant';
+import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, mulNumber, sumNumber, Utils } from 'src/app/Utility/utils';
+import { BaoCao, ItemAdvance, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
 @Component({
     selector: 'app-de-nghi-cap-von-mua-thoc-gao-muoi-theo-don-gia-mua',
@@ -37,6 +37,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
     donVis: any[] = [];
     trangThais: any[] = TRANG_THAI;
     loaiDns: any[] = LOAI_DE_NGHI;
+    canCuGias: any[] = CAN_CU_GIA;
     dviTinhs: any[] = [];
     vatTus: any[] = [];
     dviTiens: any[] = DON_VI_TIEN;
@@ -48,6 +49,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
     approveStatus = true;
     copyStatus = true;
     isDataAvailable = false;
+    editCache: { [key: string]: { edit: boolean; data: ItemAdvance } } = {};
     //file
     listFile: File[] = [];
     fileList: NzUploadFile[] = [];
@@ -455,6 +457,50 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
                 },
             );
         }
+    }
+
+    updateEditCache(): void {
+        this.baoCao.dnghiCapvonCtiets.forEach(item => {
+            const data: Times[] = [];
+            item.dnghiCapvonLuyKes.forEach(e => {
+                data.push({ ...e });
+            })
+            this.editCache[item.id] = {
+                edit: false,
+                data: {
+                    ...item,
+                    dnghiCapvonLuyKes: data,
+                }
+            };
+        });
+    }
+
+    startEdit(id: string): void {
+        this.editCache[id].edit = true;
+    }
+
+    // huy thay doi
+    cancelEdit(id: string): void {
+        const index = this.baoCao.dnghiCapvonCtiets.findIndex(item => item.id === id);
+        // lay vi tri hang minh sua
+        this.editCache[id] = {
+            data: { ...this.baoCao.dnghiCapvonCtiets[index] },
+            edit: false
+        };
+    }
+
+    // luu thay doi
+    saveEdit(id: string): void {
+        const index = this.baoCao.dnghiCapvonCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
+        Object.assign(this.baoCao.dnghiCapvonCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
+        this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+    }
+
+    changeModel(id: string) {
+        this.editCache[id].data.gtTheoKeHoach = mulNumber(this.editCache[id].data.slKeHoach, this.editCache[id].data.donGia);
+        this.editCache[id].data.vonDnghiCapLanNay = sumNumber([this.editCache[id].data.gtTheoKeHoach, -this.editCache[id].data.luyKeCong]);
+        this.editCache[id].data.soLkeSauKhiCapLanNay = sumNumber([this.editCache[id].data.luyKeCong, this.editCache[id].data.vonDuyetCong]);
+        this.editCache[id].data.soConDuocCap = sumNumber([this.editCache[id].data.gtTheoKeHoach, -this.editCache[id].data.soLkeSauKhiCapLanNay]);
     }
 
     showDialogCopy() {

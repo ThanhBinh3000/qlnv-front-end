@@ -1,33 +1,26 @@
 <div class="modal__content">
     <div class="search__body" nz-row [nzGutter]="[18, 12]">
         <div nz-col nzSpan="6">
-            <label class="search__label">Năm</label>
-            <nz-input-number nzSize="small" [(ngModel)]="response.namDn"
-                [class]="response.namDn && (response.namDn > 999 && response.namDn < 3000) ? '' : 'input-error-validate'"
-                (change)="getSoQdChiTieu()">
-            </nz-input-number>
-        </div>
-        <div nz-col nzSpan="6">
             <label class="search__label">Căn cứ về giá</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá" [(ngModel)]="response.canCuGia"
-                [class]="response.canCuGia ?'' : 'input-error-validate'" (ngModelChange)="getListContract()">
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá" [(ngModel)]="response.canCuVeGia"
+                [class]="response.canCuVeGia ?'' : 'input-error-validate'">
                 <nz-option *ngFor="let item of canCuGias" [nzValue]="item.id" [nzLabel]="item.tenDm">
                 </nz-option>
             </nz-select>
         </div>
         <div nz-col nzSpan="6">
-            <label class="search__label">Loại đề nghị</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại đề nghị" [(ngModel)]="response.loaiDn"
-                [class]="response.loaiDn ?'' : 'input-error-validate'">
-                <nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
-                </nz-option>
-            </nz-select>
+            <label class="search__label">Năm</label>
+            <nz-input-number nzSize="small" [(ngModel)]="response.namBcao"
+                [class]="response.namBcao && (response.namBcao > 999 && response.namBcao < 3000) ? '' : 'input-error-validate'"
+                (change)="getSoQdChiTieu()">
+            </nz-input-number>
         </div>
-        <div nz-col nzSpan="6" *ngIf="isContract">
-            <label class="search__label">Q/Đ phê duyệt kết quả LCNT</label>
-            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn quyết định" [(ngModel)]="maHopDong"
-                [class]="maHopDong ?'' : 'input-error-validate'" (ngModelChange)="getContract()">
-                <nz-option *ngFor="let item of lstHdongs" [nzValue]="item" [nzLabel]="item">
+
+        <div nz-col nzSpan="6">
+            <label class="search__label">Loại đề nghị</label>
+            <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại đề nghị" [(ngModel)]="response.loaiDnghi"
+                [class]="response.loaiDnghi ?'' : 'input-error-validate'" (ngModelChange)="getDetail()">
+                <nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
                 </nz-option>
             </nz-select>
         </div>

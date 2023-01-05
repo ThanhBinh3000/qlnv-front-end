@@ -15,8 +15,8 @@ import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNg
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, Utils } from 'src/app/Utility/utils';
-import { BaoCao, TRANG_THAI } from '../../de-nghi-cap-von.constant';
+import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, sumNumber, Utils } from 'src/app/Utility/utils';
+import { BaoCao, ItemAdvance, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
 @Component({
     selector: 'app-de-nghi-cap-von-mua-vat-tu',
@@ -37,6 +37,7 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
     donVis: any[] = [];
     trangThais: any[] = TRANG_THAI;
     loaiDns: any[] = LOAI_DE_NGHI;
+    canCuGias: any[] = CAN_CU_GIA;
     dviTinhs: any[] = [];
     vatTus: any[] = [];
     dviTiens: any[] = DON_VI_TIEN;
@@ -48,6 +49,7 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
     approveStatus = true;
     copyStatus = true;
     isDataAvailable = false;
+    editCache: { [key: string]: { edit: boolean; data: ItemAdvance } } = {};
     //file
     listFile: File[] = [];
     fileList: NzUploadFile[] = [];
@@ -226,7 +228,7 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
     back() {
         const obj = {
             qdChiTieu: this.baoCao.soQdChiTieu,
-            tabSelected: 'danhsach',
+            tabSelected: 'ds-denghi',
         }
         this.dataChange.emit(obj);
     }
@@ -417,10 +419,15 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
         }
 
         // replace nhung ban ghi dc them moi id thanh null
-        baoCaoTemp.lstCtiets.forEach(item => {
+        baoCaoTemp.dnghiCapvonCtiets.forEach(item => {
             if (item.id?.length == 38) {
                 item.id = null;
             }
+            item.dnghiCapvonLuyKes.forEach(e => {
+                if (e.id?.length == 38) {
+                    e.id = null;
+                }
+            })
         })
 
         this.spinner.show();
@@ -454,6 +461,57 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
                 },
             );
         }
+    }
+
+    updateEditCache(): void {
+        this.baoCao.dnghiCapvonCtiets.forEach(item => {
+            const data: Times[] = [];
+            item.dnghiCapvonLuyKes.forEach(e => {
+                data.push({ ...e });
+            })
+            this.editCache[item.id] = {
+                edit: false,
+                data: {
+                    ...item,
+                    dnghiCapvonLuyKes: data,
+                }
+            };
+        });
+    }
+
+    startEdit(id: string): void {
+        this.editCache[id].edit = true;
+    }
+
+    // huy thay doi
+    cancelEdit(id: string): void {
+        const index = this.baoCao.dnghiCapvonCtiets.findIndex(item => item.id === id);
+        // lay vi tri hang minh sua
+        this.editCache[id] = {
+            data: { ...this.baoCao.dnghiCapvonCtiets[index] },
+            edit: false
+        };
+    }
+
+    // luu thay doi
+    saveEdit(id: string): void {
+        const index = this.baoCao.dnghiCapvonCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
+        Object.assign(this.baoCao.dnghiCapvonCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
+        this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+    }
+
+    sortReport() {
+        const lstCtietBcao = this.baoCao.dnghiCapvonCtiets;
+        const lstParent = this.baoCao.dnghiCapvonCtiets.filter(e => e.isParent);
+        this.baoCao.dnghiCapvonCtiets = [];
+        lstParent.forEach(item => {
+            this.baoCao.dnghiCapvonCtiets.push(item);
+            this.baoCao.dnghiCapvonCtiets = this.baoCao.dnghiCapvonCtiets.concat(lstCtietBcao.find(e => e.tenKhachHang == item.tenKhachHang && !e.isParent));
+        })
+    }
+
+    changeModel(id: string) {
+        this.editCache[id].data.soConDuocTtSauTtLanNay = sumNumber([this.editCache[id].data.soConDuocTt, -this.editCache[id].data.uyNhchiNienSoTien]);
     }
 
     showDialogCopy() {
