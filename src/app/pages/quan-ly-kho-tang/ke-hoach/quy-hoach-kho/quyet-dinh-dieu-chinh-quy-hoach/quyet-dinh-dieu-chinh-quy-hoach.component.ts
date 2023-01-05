@@ -19,6 +19,7 @@ import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
 import {QuyHoachKhoService} from "../../../../../services/quy-hoach-kho.service";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
 import {DonviService} from "../../../../../services/donvi.service";
+import {literal} from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: 'app-quyet-dinh-dieu-chinh-quy-hoach',
@@ -86,22 +87,33 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      for (let i = -3; i < 23; i++) {
-        this.danhSachNam.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
+      this.loadDsNam();
+      await this.loadListPa()
       await this.search();
+      if (this.userService.isTongCuc()) {
+        await this.loadDanhSachCuc();
+      }
+      if (this.userService.isCuc()) {
+        await this.loadDanhSachChiCuc();
+      }
+      if (this.userService.isChiCuc()) {
+        await this.loadDanhSachDiemKho();
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    console.log(
-      this.dataTable
-    )
+  }
+
+  loadDsNam() {
+    for (let i = -3; i < 23; i++) {
+      this.danhSachNam.push({
+        value: dayjs().get('year') - i,
+        text: dayjs().get('year') - i,
+      });
+    }
   }
 
   async search() {
@@ -116,6 +128,7 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
       maChiCuc: this.searchFilter.maChiCuc,
       maDiemKho: this.searchFilter.maDiemKho,
       type: this.type,
+      maDvi:this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -156,6 +169,7 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
     };
     const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.danhSachChiCuc = this.danhSachChiCuc.filter(item => item.type != "PB")
   }
 
   async loadDanhSachChiCuc() {
@@ -166,6 +180,7 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
 
     const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.danhSachChiCuc = this.danhSachChiCuc.filter(item => item.type != "PB")
   }
 
 
@@ -177,6 +192,7 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
 
     const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
+    this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB")
   }
   async loadDanhSachDiemKho() {
     const body = {
@@ -186,6 +202,7 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
 
     const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+    this.danhSachDiemKho = this.danhSachDiemKho.filter(item => item.type == "MLK")
   }
 
 
@@ -197,6 +214,7 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
     };
     const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+    this.danhSachDiemKho = this.danhSachDiemKho.filter(item => item.type == "MLK")
   }
 
   async changePageIndex(event) {
