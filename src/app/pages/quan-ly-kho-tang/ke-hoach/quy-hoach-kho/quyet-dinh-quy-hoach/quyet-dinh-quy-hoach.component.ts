@@ -48,14 +48,14 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
   };
 
   filterTable: any = {
-    soQd: '',
-    ngayQd: '',
-    trichYeu: '',
-    soQdGoc: '',
+    soQuyetDinh: '',
+    ngayKy: '',
+    namBatDau: '',
+    namKetThuc: '',
     namKhoach: '',
-    tenVthh: '',
-    soGoiThau: '',
-    trangThai: '',
+    trichYeu: '',
+    soQdDc: '',
+    tenTrangThai: '',
   };
 
   allChecked = false;
@@ -86,12 +86,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      for (let i = -3; i < 23; i++) {
-        this.danhSachNam.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
+      this.loadDsNam();
       await this.search();
       await this.loadListPa();
       if (this.userService.isTongCuc()) {
@@ -111,6 +106,15 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
     }
   }
 
+  loadDsNam() {
+    for (let i = -3; i < 23; i++) {
+      this.danhSachNam.push({
+        value: dayjs().get('year') - i,
+        text: dayjs().get('year') - i,
+      });
+    }
+  }
+
   async loadListPa() {
     this.danhSachPhuongAn = [];
     let res = await this.dmService.danhMucChungGetAll('PA_QUY_HOACH');
@@ -126,6 +130,8 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
     };
     const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.danhSachChiCuc = this.danhSachChiCuc.filter(item => item.type != "PB")
+
   }
 
   async loadDanhSachChiCuc() {
@@ -148,6 +154,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
 
     const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
+    this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB")
   }
   async loadDanhSachDiemKho() {
     const body = {
@@ -168,6 +175,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
     };
     const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+    this.danhSachDiemKho = this.danhSachDiemKho.filter(item => item.type == "MLK")
   }
 
 
@@ -175,6 +183,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
+      maDvi : this.userInfo.MA_DVI,
       ngayKyTu: this.searchFilter.ngayKy[0],
       ngayKyDen: this.searchFilter.ngayKy[1],
       soQuyetDinh: this.searchFilter.soQuyetDinh,
@@ -328,6 +337,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
       try {
         let body = {
           "maChiCuc": this.searchFilter.maChiCuc,
+          "maDvi": this.userInfo.MA_DVI,
           "maCuc": this.searchFilter.maCuc,
           "maDiemKho": this.searchFilter.maDiemKho,
           "namBatDau": this.searchFilter.namBatDau,
@@ -336,7 +346,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
           "namKetThuc": this.searchFilter.namKetThuc,
           "paggingReq": {
             "limit": 20,
-            "page": 1
+            "page": 0
           },
           "phuongAnQuyHoach": this.searchFilter.phuongAnQuyHoach,
           "soQuyetDinh": this.searchFilter.soQuyetDinh,
