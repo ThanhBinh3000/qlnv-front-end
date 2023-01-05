@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnInit, Output, Input} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
 import {isEmpty} from 'lodash';
 import {DANH_MUC_LEVEL} from '../../../../luu-kho.constant';
@@ -17,6 +17,7 @@ import {STATUS} from "../../../../../../constants/status";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {CanCuXacDinhPag} from "../../../../../../models/DeXuatPhuongAnGia";
 import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {HelperService} from "../../../../../../services/helper.service";
 
 
 @Component({
@@ -59,6 +60,7 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
     private danhMucService: DanhMucService,
     private donViService: DonviService,
     private notification: NzNotificationService,
+    private helperService: HelperService,
     private readonly spinner: NgxSpinnerService,
     public userService: UserService,
     public modal: NzModalService,
@@ -68,8 +70,8 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
       id: [null],
       tenDvi: [],
       maDonVi: [],
-      maDanhSach: [],
-      ngayTao: [],
+      maDanhSach: [null, Validators.required],
+      ngayTao: [null, Validators.required],
       trangThaiChiCuc: ['00'],
       trangThaiCuc: ['00'],
       tenTrangThai: ['Dự thảo'],
@@ -177,6 +179,11 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
 
   async luu(isGuiDuyet?) {
     this.spinner.show();
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.spinner.hide();
+      return;
+    }
     let body = this.formData.value;
     body.maDonVi = this.userInfo.MA_DVI
     body.ds = this.dataTable
