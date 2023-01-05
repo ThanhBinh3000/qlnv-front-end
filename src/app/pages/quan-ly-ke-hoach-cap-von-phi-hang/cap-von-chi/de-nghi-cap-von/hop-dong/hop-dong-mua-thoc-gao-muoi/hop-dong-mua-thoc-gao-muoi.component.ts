@@ -149,32 +149,8 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
-            this.baoCao.trangThai = Utils.TT_BC_1;
-            this.baoCao.maDvi = this.userInfo?.MA_DVI;
-            this.baoCao.soQdChiTieu = this.data?.soQdChiTieu;
-            this.baoCao.loaiDnghi = this.data?.loaiDeNghi;
-            this.baoCao.namBcao = this.data?.namBcao;
-            this.baoCao.ngayTao = new Date();
-            //neu la tong cuc thi goi api tong hop
-            if (this.userService.isTongCuc()) {
-                await this.callSynthetic();
-            } else {
-                this.baoCao.dnghiCvHopDongCtiets = this.data?.hopDong;
-            }
+            this.baoCao = this.data?.baoCao;
             this.updateEditCache();
-            this.capVonNguonChiService.maHopDong().toPromise().then(
-                (res) => {
-                    if (res.statusCode == 0) {
-                        this.baoCao.maHopDong = res.data;
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, res?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
-
         }
         this.sortReport();
         this.getStatusButton();
@@ -278,29 +254,6 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
                     this.listFile = [];
                     this.updateEditCache();
                     this.getStatusButton();
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
-    }
-
-    async callSynthetic() {
-        const request = {
-            loaiDnghi: this.baoCao.loaiDnghi,
-            maDvi: this.baoCao.maDvi,
-            namHdong: this.baoCao.namBcao,
-        }
-        await this.capVonNguonChiService.tongHopHopDong(request).toPromise().then(
-            async (data) => {
-                if (data.statusCode == 0) {
-                    this.baoCao.dnghiCvHopDongCtiets = data.data;
-                    this.baoCao.dnghiCvHopDongCtiets.forEach(item => {
-                        item.id = uuid.v4() + 'FE';
-                    })
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);
                 }

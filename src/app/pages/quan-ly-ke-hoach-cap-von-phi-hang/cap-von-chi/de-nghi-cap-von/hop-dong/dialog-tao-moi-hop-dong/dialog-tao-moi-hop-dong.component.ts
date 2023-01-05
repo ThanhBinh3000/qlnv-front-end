@@ -9,7 +9,7 @@ import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNg
 import { UserService } from 'src/app/services/user.service';
 import { CAN_CU_GIA, LOAI_DE_NGHI, mulNumber, sumNumber, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
-import { ItemContract } from '../../de-nghi-cap-von.constant';
+import { BaoCao, ItemContract } from '../../de-nghi-cap-von.constant';
 
 export class ItemData {
     namBcao: number;
@@ -28,8 +28,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
     @Input() obj: any;
 
     userInfo: any;
-    response: ItemData = new ItemData();
-    maHopDong: string;
+    response: BaoCao = new BaoCao();
     lstHdongs: any[] = [];
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
@@ -45,10 +44,13 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
 
     async ngOnInit() {
         this.userInfo = this.userService.getUserLogin();
+        this.response.ngayTao = new Date();
+        this.response.maDvi = this.userInfo?.MA_DVI;
+        this.response.trangThai = Utils.TT_BC_1;
         if (!this.userService.isTongCuc()) {
             this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
         }
-        this.response.hopDong = [];
+        this.response.dnghiCvHopDongCtiets = [];
     }
     //lay ra so quyet dinh chi tieu cho de nghi
     getSoQdChiTieu() {
@@ -77,53 +79,41 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
         )
         this.spinner.hide();
     }
-    //lay ra danh sach cac hop dong cho bao cao
-    // getListContract() {
-    //     const request = {
-    //         namKHoach: this.response.namBcao,
-    //     }
-    //     this.spinner.show();
-    //     this.capVonNguonChiService.danhSachHopDong(request).toPromise().then(
-    //         data => {
-    //             if (data.statusCode == 0) {
-    //                 this.lstHdongs = data.data;
-    //                 let str: string = '';
-    //                 for (let i = 0; i < this.lstHdongs.length; i++) {
-    //                     if (i == 0) {
-    //                         str += this.lstHdongs[i];
-    //                     } else {
-    //                         str += ', ' + this.lstHdongs[i];
-    //                     }
-    //                 }
-    //                 this.response.hopDong.push({
-    //                     ... new ItemContract(),
-    //                     id: uuid.v4() + 'FE',
-    //                     maDvi: this.userInfo?.MA_DVI,
-    //                     tenDvi: this.userInfo?.TEN_DVI,
-    //                     qdPheDuyetKqNhaThau: str,
-    //                     isParent: true,
-    //                 })
-    //             } else {
-    //                 this.notification.error(MESSAGE.ERROR, data.msg);
-    //             }
-    //         },
-    //         err => {
-    //             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //         }
-    //     )
-    //     this.spinner.hide();
-    // }
+
     //lay chi tiet cua bao cao
     getDetail() {
-        if (!this.response.loaiDeNghi) {
+        if (!this.response.loaiDnghi) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        if (!this.userService.isTongCuc() || this.response.loaiDeNghi == Utils.MUA_VTU) {
+        if (!this.userService.isTongCuc() || this.response.loaiDnghi == Utils.MUA_VTU) {
             this.getContract();
         } else {
-            this.response.hopDong = [];
+            this.callSynthetic();
         }
+    }
+    //tong hop hop dong mua luong thuc
+    async callSynthetic() {
+        const request = {
+            loaiDnghi: this.response.loaiDnghi,
+            maDvi: this.userInfo?.MA_DVI,
+            namHdong: this.response.namBcao,
+        }
+        await this.capVonNguonChiService.tongHopHopDong(request).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    this.response.dnghiCvHopDongCtiets = data.data;
+                    this.response.dnghiCvHopDongCtiets.forEach(item => {
+                        item.id = uuid.v4() + 'FE';
+                    })
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
     }
     //lay ra danh sach cac goi thau theo hop dong
     async getContract() {
@@ -132,7 +122,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
             maDvi: this.userInfo.MA_DVI,
             loaiVthh: "",
         }
-        switch (this.response.loaiDeNghi) {
+        switch (this.response.loaiDnghi) {
             case Utils.MUA_THOC:
                 request.loaiVthh = "0101"
                 break;
@@ -167,31 +157,31 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
                             soTtLuyKe: item.soTtLuyKe,
                             daGiaoDuToan: item.daGiaoDuToan,
                         }
-                        this.response.hopDong.push(temp);
+                        this.response.dnghiCvHopDongCtiets.push(temp);
                         let index: number;
-                        if (this.response.loaiDeNghi != Utils.MUA_VTU) {
-                            index = this.response.hopDong.findIndex(e => e.maDvi == temp.maDvi && e.isParent);
+                        if (this.response.loaiDnghi != Utils.MUA_VTU) {
+                            index = this.response.dnghiCvHopDongCtiets.findIndex(e => e.maDvi == temp.maDvi && e.isParent);
                         } else {
-                            index = this.response.hopDong.findIndex(e => e.tenKhachHang == temp.tenKhachHang && e.isParent);
+                            index = this.response.dnghiCvHopDongCtiets.findIndex(e => e.tenKhachHang == temp.tenKhachHang && e.isParent);
                         }
                         if (index == -1) {
-                            this.response.hopDong.push({
+                            this.response.dnghiCvHopDongCtiets.push({
                                 ...temp,
                                 id: uuid.v4() + 'FE',
                                 isParent: true,
                                 qdPheDuyetKqNhaThau: item.soQdPdKhlcnt,
                             })
                         } else {
-                            if (this.response.hopDong[index].qdPheDuyetKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {
-                                this.response.hopDong[index].qdPheDuyetKqNhaThau += ', ' + item.sosoQdPdKhlcnt;
+                            if (this.response.dnghiCvHopDongCtiets[index].qdPheDuyetKqNhaThau.indexOf(item.soQdPdKhlcnt) == -1) {
+                                this.response.dnghiCvHopDongCtiets[index].qdPheDuyetKqNhaThau += ', ' + item.sosoQdPdKhlcnt;
                             }
-                            this.response.hopDong[index].slHopDong = sumNumber([this.response.hopDong[index].slHopDong, temp.slHopDong]);
-                            this.response.hopDong[index].slKeHoach = sumNumber([this.response.hopDong[index].slKeHoach, temp.slKeHoach]);
-                            this.response.hopDong[index].slThucHien = sumNumber([this.response.hopDong[index].slThucHien, temp.slThucHien]);
-                            this.response.hopDong[index].gtHopDong = sumNumber([this.response.hopDong[index].gtHopDong, temp.gtHopDong]);
-                            this.response.hopDong[index].gtriThucHien = sumNumber([this.response.hopDong[index].gtriThucHien, temp.gtriThucHien]);
-                            this.response.hopDong[index].daGiaoDuToan = sumNumber([this.response.hopDong[index].daGiaoDuToan, temp.daGiaoDuToan]);
-                            this.response.hopDong[index].soTtLuyKe = sumNumber([this.response.hopDong[index].soTtLuyKe, temp.soTtLuyKe]);
+                            this.response.dnghiCvHopDongCtiets[index].slHopDong = sumNumber([this.response.dnghiCvHopDongCtiets[index].slHopDong, temp.slHopDong]);
+                            this.response.dnghiCvHopDongCtiets[index].slKeHoach = sumNumber([this.response.dnghiCvHopDongCtiets[index].slKeHoach, temp.slKeHoach]);
+                            this.response.dnghiCvHopDongCtiets[index].slThucHien = sumNumber([this.response.dnghiCvHopDongCtiets[index].slThucHien, temp.slThucHien]);
+                            this.response.dnghiCvHopDongCtiets[index].gtHopDong = sumNumber([this.response.dnghiCvHopDongCtiets[index].gtHopDong, temp.gtHopDong]);
+                            this.response.dnghiCvHopDongCtiets[index].gtriThucHien = sumNumber([this.response.dnghiCvHopDongCtiets[index].gtriThucHien, temp.gtriThucHien]);
+                            this.response.dnghiCvHopDongCtiets[index].daGiaoDuToan = sumNumber([this.response.dnghiCvHopDongCtiets[index].daGiaoDuToan, temp.daGiaoDuToan]);
+                            this.response.dnghiCvHopDongCtiets[index].soTtLuyKe = sumNumber([this.response.dnghiCvHopDongCtiets[index].soTtLuyKe, temp.soTtLuyKe]);
                         }
                     })
                 } else {
@@ -204,15 +194,31 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
         );
     }
 
-    handleOk() {
+    async getMaHd() {
+        await this.capVonNguonChiService.maHopDong().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    this.response.maHopDong = res.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+    }
+
+    async handleOk() {
         if (!this.response.namBcao) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        if (!this.response.loaiDeNghi) {
+        if (!this.response.loaiDnghi) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
+        await this.getMaHd();
         this._modalRef.close(this.response);
     }
 

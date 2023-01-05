@@ -141,6 +141,7 @@ export class DanhSachHopDongComponent implements OnInit {
         this.searchFilter.loaiHdong = null
         this.searchFilter.maHdong = null
         this.searchFilter.namHdong = null
+        this.searchFilter.trangThai = null
         this.search();
     }
 
@@ -173,9 +174,9 @@ export class DanhSachHopDongComponent implements OnInit {
         modalTuChoi.afterClose.toPromise().then(async (res) => {
             if (res) {
                 const obj = {
-                    ...res,
+                    baoCao: res,
                     id: null,
-                    tabSelected: res.loaiDeNghi == Utils.MUA_VTU ? 'hd-vattu' : 'hd-luongthuc',
+                    tabSelected: res.loaiDnghi == Utils.MUA_VTU ? 'hd-vattu' : 'hd-luongthuc',
                 }
                 this.dataChange.emit(obj);
             }
@@ -186,7 +187,7 @@ export class DanhSachHopDongComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: data.loaiDeNghi == Utils.MUA_VTU ? 'hd-vattu' : 'hd-luongthuc',
+            tabSelected: data.loaiDnghi == Utils.MUA_VTU ? 'hd-vattu' : 'hd-luongthuc',
         }
         this.dataChange.emit(obj);
     }

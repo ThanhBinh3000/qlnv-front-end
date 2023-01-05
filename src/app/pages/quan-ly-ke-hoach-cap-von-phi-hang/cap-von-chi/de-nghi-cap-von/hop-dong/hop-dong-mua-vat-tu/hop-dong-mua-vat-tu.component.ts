@@ -119,16 +119,6 @@ export class HopDongMuaVatTuComponent implements OnInit {
                     this.isDataAvailable = true;
                 })
                 break;
-            case 'nonpass':
-                await this.tuChoi('3').then(() => {
-                    this.isDataAvailable = true;
-                })
-                break;
-            case 'pass':
-                await this.onSubmit('4', null).then(() => {
-                    this.isDataAvailable = true;
-                })
-                break;
             case 'nonapprove':
                 await this.tuChoi('5').then(() => {
                     this.isDataAvailable = true;
@@ -160,28 +150,10 @@ export class HopDongMuaVatTuComponent implements OnInit {
         if (this.baoCao.id) {
             await this.getDetailReport();
         } else {
-            this.baoCao.trangThai = Utils.TT_BC_1;
-            this.baoCao.maDvi = this.userInfo?.MA_DVI;
-            this.baoCao.soQdChiTieu = this.data?.qdChiTieu;
-            this.baoCao.loaiDnghi = this.data?.loaiDn;
-            this.baoCao.namBcao = this.data?.namDn;
-            this.baoCao.ngayTao = new Date();
-            this.baoCao.dnghiCvHopDongCtiets = this.data?.hopDong;
+            this.baoCao = this.data?.baoCao;
             this.updateEditCache();
-            this.capVonNguonChiService.maHopDong().toPromise().then(
-                (res) => {
-                    if (res.statusCode == 0) {
-                        this.baoCao.maHopDong = res.data;
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, res?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
-
         }
+        this.sortReport();
         this.getStatusButton();
     }
 
@@ -276,7 +248,7 @@ export class HopDongMuaVatTuComponent implements OnInit {
 
     // call chi tiet bao cao
     async getDetailReport() {
-        await this.capVonNguonChiService.ctietDeNghi(this.baoCao.id).toPromise().then(
+        await this.capVonNguonChiService.ctietHopDong(this.baoCao.id).toPromise().then(
             async (data) => {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
@@ -393,7 +365,7 @@ export class HopDongMuaVatTuComponent implements OnInit {
         }
 
         // replace nhung ban ghi dc them moi id thanh null
-        baoCaoTemp.lstCtiets.forEach(item => {
+        baoCaoTemp.dnghiCvHopDongCtiets.forEach(item => {
             if (item.id?.length == 38) {
                 item.id = null;
             }
@@ -460,6 +432,16 @@ export class HopDongMuaVatTuComponent implements OnInit {
         const index = this.baoCao.dnghiCvHopDongCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
         Object.assign(this.baoCao.dnghiCvHopDongCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
         this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+    }
+
+    sortReport() {
+        const lstCtietBcao = this.baoCao.dnghiCvHopDongCtiets;
+        const lstParent = this.baoCao.dnghiCvHopDongCtiets.filter(e => e.isParent);
+        this.baoCao.dnghiCvHopDongCtiets = [];
+        lstParent.forEach(item => {
+            this.baoCao.dnghiCvHopDongCtiets.push(item);
+            this.baoCao.dnghiCvHopDongCtiets = this.baoCao.dnghiCvHopDongCtiets.concat(lstCtietBcao.find(e => e.tenKhachHang == item.tenKhachHang && !e.isParent));
+        })
     }
 
     showDialogCopy() {
