@@ -1,337 +1,335 @@
-<nz-card class="mt16 flex-card p-lr16 mb16 table-card scroll-modal">
+<nz-card class="flex-card p-lr16 scroll-modal">
     <nz-collapse>
         <nz-collapse-panel nzActive="true" nzHeader="Thông báo bán đấu giá">
             <form nzLayout="vertical" [formGroup]="formData" nz-form>
-                <div nz-row [nzGutter]="24">
-                    <div nz-row [nzGutter]="[24, 16]">
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Mã thông báo bán đấu giá</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="maThongBao" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="18">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="trichYeuThongBao" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <!-- <h3>Thông tin về tổ chức bán đấu giá</h3> -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Tên tổ chức bán đấu giá</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="tenToChuc" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Điện thoại</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="sdt" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="12">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">Địa chỉ</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="diaChi" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="24">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">Tk ngân hàng của tổ chức bđg</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <textarea rows="3" nz-input formControlName="taiKhoanNganHang"></textarea>
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Số hợp đồng</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="soHopDong" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Ngày ký hợp đồng</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="ngayKyHopDong" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="12">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Hình thức lựa chọn tổ chức bán đấu
-                                    giá</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="hinhThucToChuc" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <!-- <h3>Thông tin bán đấu giá</h3> -->
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Thời hạn đăng ký tham gia đấu giá</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <nz-range-picker formControlName="thoiGianThamGia"
-                                            nzFormat="dd/MM/yyyy"></nz-range-picker>
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Lưu ý về thời gian đăng ký</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="ghiChuThoiGianThamGia" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="12">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Địa điểm mua, nộp hồ sơ đăng ký</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="diaDiemNopHoSo" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Điều kiện đăng ký tham gia đấu giá</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="dieuKienDangKy" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Tiền mua hồ sơ(VNĐ/1 hồ sơ /1 đơn vị tài
-                                    sản)</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="tienHoSo" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="12">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Bước giá của từng đơn vị tài sản (%)</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="buocGia" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Thời hạn tổ chức xem tài sản</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <nz-range-picker formControlName="tgianXemTaiSan"
-                                            nzFormat="dd/MM/yyyy"></nz-range-picker>
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Lưu ý về thời gian xem tài sản</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="ghiChuTgianXemTaiSan" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="12">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Địa điểm tổ chức xem tài sản</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="diaDiemXemTaiSan" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Thời hạn nộp tiền đặt trước</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <nz-range-picker formControlName="tgianNopTien"
-                                            nzFormat="dd/MM/yyyy"></nz-range-picker>
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Lưu ý về thời gian xem tài sản</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="ghiChuTgianXem" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="12">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Phương thức thanh toán</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="pthucThanhToan" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Đơn vị thụ hưởng</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="donViThuHuong" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">Số tài khoản</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="stk" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">Ngân hàng</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="nganHang" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true">Chi nhánh ngân hàng</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="chiNhanhNganHang" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Thời gian tổ chức cuộc đấu giá</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <nz-range-picker formControlName="tgianToChucDauGia"
-                                            nzFormat="dd/MM/yyyy"></nz-range-picker>
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Địa điểm tổ chức đấu giá</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="diaDiemToChucDauGia" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Hình thức đấu giá</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="hthucDauGia" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="6">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Phương thức đấu giá</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <input nz-input formControlName="pthucDauGia" readonly />
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="24">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Điều kiện, cách thức đăng ký tham gia</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <textarea rows="3" nz-input formControlName="dieuKien"></textarea>
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col [nzSpan]="24">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true" [nzSpan]="24">
-                                    Tài liệu đính kèm
-                                </nz-form-label>
-                                <div class="list-file" nz-col nzSpan="24">
-                                    <file-list></file-list>
-                                </div>
-                            </nz-form-item>
-                        </div>
-                        <div nz-col nzSpan="24">
-                            <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
-                                <nz-form-control>
-                                    <nz-input-group>
-                                        <textarea rows="3" nz-input formControlName="ghiChu"></textarea>
-                                    </nz-input-group>
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
+                <div nz-row [nzGutter]="[24, 16]">
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Mã thông báo bán đấu giá</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="maThongBao" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="18">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Trích yếu</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="trichYeuThongBao" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <!-- <h3>Thông tin về tổ chức bán đấu giá</h3> -->
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Tên tổ chức bán đấu giá</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="tenToChuc" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Điện thoại</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="sdt" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true">Địa chỉ</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="diaChi" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="24">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true">Tk ngân hàng của tổ chức bđg</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <textarea rows="3" nz-input formControlName="taiKhoanNganHang"></textarea>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Số hợp đồng</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="soHopDong" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Ngày ký hợp đồng</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="ngayKyHopDong" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Hình thức lựa chọn tổ chức bán đấu
+                                giá</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="hinhThucToChuc" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <!-- <h3>Thông tin bán đấu giá</h3> -->
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Thời hạn đăng ký tham gia đấu giá</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <nz-range-picker formControlName="thoiGianThamGia"
+                                        nzFormat="dd/MM/yyyy"></nz-range-picker>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Lưu ý về thời gian đăng ký</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="ghiChuThoiGianThamGia" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Địa điểm mua, nộp hồ sơ đăng ký</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="diaDiemNopHoSo" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Điều kiện đăng ký tham gia đấu giá</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="dieuKienDangKy" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Tiền mua hồ sơ(VNĐ/1 hồ sơ /1 đơn vị tài
+                                sản)</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="tienHoSo" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Bước giá của từng đơn vị tài sản (%)</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="buocGia" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Thời hạn tổ chức xem tài sản</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <nz-range-picker formControlName="tgianXemTaiSan"
+                                        nzFormat="dd/MM/yyyy"></nz-range-picker>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Lưu ý về thời gian xem tài sản</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="ghiChuTgianXemTaiSan" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Địa điểm tổ chức xem tài sản</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="diaDiemXemTaiSan" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Thời hạn nộp tiền đặt trước</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <nz-range-picker formControlName="tgianNopTien"
+                                        nzFormat="dd/MM/yyyy"></nz-range-picker>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Lưu ý về thời gian xem tài sản</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="ghiChuTgianXem" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="12">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Phương thức thanh toán</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="pthucThanhToan" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Đơn vị thụ hưởng</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="donViThuHuong" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true">Số tài khoản</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="stk" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true">Ngân hàng</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="nganHang" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true">Chi nhánh ngân hàng</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="chiNhanhNganHang" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Thời gian tổ chức cuộc đấu giá</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <nz-range-picker formControlName="tgianToChucDauGia"
+                                        nzFormat="dd/MM/yyyy"></nz-range-picker>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Địa điểm tổ chức đấu giá</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="diaDiemToChucDauGia" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Hình thức đấu giá</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="hthucDauGia" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="6">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Phương thức đấu giá</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <input nz-input formControlName="pthucDauGia" readonly />
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="24">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Điều kiện, cách thức đăng ký tham gia</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <textarea rows="3" nz-input formControlName="dieuKien"></textarea>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col [nzSpan]="24">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true" [nzSpan]="24">
+                                Tài liệu đính kèm
+                            </nz-form-label>
+                            <div class="list-file" nz-col nzSpan="24">
+                                <file-list></file-list>
+                            </div>
+                        </nz-form-item>
+                    </div>
+                    <div nz-col nzSpan="24">
+                        <nz-form-item>
+                            <nz-form-label [nzNoColon]="true"> Ghi chú</nz-form-label>
+                            <nz-form-control>
+                                <nz-input-group>
+                                    <textarea rows="3" nz-input formControlName="ghiChu"></textarea>
+                                </nz-input-group>
+                            </nz-form-control>
+                        </nz-form-item>
                     </div>
                 </div>
             </form>
@@ -375,7 +373,7 @@
             <div class="group-button">
                 <h3>Khách mời chứng kiến</h3>
             </div>
-            <nz-table #basicTable>
+            <nz-table class="pd-10" #basicTable>
                 <thead>
                     <tr>
                         <th>STT</th>
@@ -401,7 +399,7 @@
             <div class="group-button">
                 <h3>Đấu giá viên</h3>
             </div>
-            <nz-table #basicTable>
+            <nz-table class="pd-10" #basicTable>
                 <thead>
                     <tr>
                         <th>STT</th>
@@ -427,7 +425,7 @@
             <div class="group-button">
                 <h3>Tổ chức/ cá nhân tham giá đấu giá</h3>
             </div>
-            <nz-table #basicTable>
+            <nz-table class="pd-10" #basicTable>
                 <thead>
                     <tr>
                         <th>STT</th>
@@ -454,7 +452,7 @@
     </nz-collapse>
     <nz-collapse>
         <nz-collapse-panel nzActive="true" nzHeader="Số lượng, địa điểm xuất bán(nơi đang bảo quản và quản lý tài sản)">
-            <nz-table #basicTable>
+            <nz-table class="pd-10" #basicTable>
                 <thead>
                     <tr>
                         <th>STT</th>
@@ -488,10 +486,10 @@
         <div class="cantrai">
         </div>
         <div class="canphai">
-            <!-- <button nz-button (click)="handleOk()" class="modal__button--save">
+            <button nz-button (click)="handleOk()" class="modal__button--save">
                 <i nz-icon nzType="save"></i>
                 Lưu
-            </button> -->
+            </button>
             <button nz-button (click)="handleCancel()" class="modal__button--cancel">
                 <i nz-icon nzType="close-circle" nzTheme="fill" class="icon-cancel"></i>
                 Đóng

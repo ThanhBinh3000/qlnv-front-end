@@ -428,10 +428,10 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     }
   }
 
-  calcTongSoLuong() {
+  calcTong(columnName) {
     if (this.dataTable) {
       const sum = this.dataTable.reduce((prev, cur) => {
-        prev += cur.tongSoLuong;
+        prev += cur[columnName];
         return prev;
       }, 0);
       return sum;

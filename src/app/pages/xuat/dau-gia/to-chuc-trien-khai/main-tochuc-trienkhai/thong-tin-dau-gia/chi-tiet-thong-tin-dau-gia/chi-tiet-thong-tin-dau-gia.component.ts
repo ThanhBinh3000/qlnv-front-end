@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from "ng-zorro-antd/modal";
+import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { FormArray, Validators } from "@angular/forms";
@@ -35,7 +35,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private thongTinDauGiaService: ThongTinDauGiaService,
-    private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService
+    private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, thongTinDauGiaService);
     this.formData = this.fb.group(
@@ -213,16 +213,17 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     console.log(i);
   }
 
-  themMoiPhienDauGia(data: any) {
+  themMoiPhienDauGia($event, data?: any) {
+    $event.stopPropagation();
     const modalQD = this.modal.create({
       nzTitle: 'Cập nhật thông tin đấu giá',
       nzContent: ThongtinDaugiaComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1200px',
+      nzWidth: '1500px',
       nzFooter: null,
       nzComponentParams: {
-        isModal: true
+        isModal: true,
       },
     });
     modalQD.afterClose.subscribe((data) => {
