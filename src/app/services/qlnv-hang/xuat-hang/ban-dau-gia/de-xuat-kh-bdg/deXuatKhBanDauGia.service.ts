@@ -1,6 +1,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { PATH } from 'src/app/constants/path';
 import { environment } from 'src/environments/environment';
 import { OldResponseData } from '../../../../../interfaces/response';
 import { BaseService } from '../../../../base.service';
@@ -10,10 +11,8 @@ import { BaseService } from '../../../../base.service';
   providedIn: 'root'
 })
 export class DeXuatKhBanDauGiaService extends BaseService {
-  GATEWAY = '/qlnv-hang';
-  CONTROLLER = 'ban-dau-gia/dx-kh-bdg';
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'ban-dau-gia/dx-kh-bdg', '/qlnv-hang');
+    super(httpClient, PATH.XUAT_HANG_DTQG + "/" + PATH.DAU_GIA + "/" + PATH.DX_KH_BDG, PATH.QLNV_HANG);
   }
 
   getSoLuongAdded(body): Promise<OldResponseData> {

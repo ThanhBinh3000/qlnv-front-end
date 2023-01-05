@@ -16,15 +16,6 @@
   </div>
 </nz-affix>
 <div *ngIf="!isDetailDxCuc && !isQuyetDinh" class="bg-trang">
-  <!-- <div class="header header-green-background ">
-    <div class="header-text">
-      <div class="title-chi-tieu">
-        <span></span>
-        <span>Tổng hợp đề xuất kế hoạch mua trực tiếp</span>
-      </div>
-    </div>
-  </div> -->
-  <!--  Start Thông tin tổng hợp-->
   <nz-card class="mg-t-16 flex-card p-lr16">
     <form nzLayout="vertical" nz-form [formGroup]="formTraCuu">
       <div nz-row [nzGutter]="20">
@@ -63,16 +54,13 @@
             <button class="btn btn-main btn-sm waves-effect waves-light" (click)="tongHopDeXuatTuCuc()"
               *ngIf="formData.value.trangThai == '00' || formData.value.trangThai == ''">
               <i class="icon htvbdh_tcdt_tong-hop-de-xuat-tu-cuc"></i>
-              <span>Tổng hợp KH mua trựu tiếp</span>
+              <span>Tổng hợp KH mua trực tiếp</span>
             </button>
           </div>
         </div>
       </div>
     </form>
   </nz-card>
-  <!--  End Thông tin tổng hợp-->
-
-  <!--  Start Thông tin chung-->
   <nz-card class="mg-t-16 flex-card p-lr16" *ngIf="isTongHop">
     <div class="header header-green-background mg-t-16">
       <div class="header-text">
@@ -122,9 +110,6 @@
       </div>
     </form>
   </nz-card>
-  <!--  End thông tin chung-->
-
-  <!--  Start Thông tin đề xuất-->
   <nz-card class="mg-t-16 flex-card p-lr16 " *ngIf="isTongHop">
     <div class="header header-green-background mg-t-16">
       <div class="header-text">
@@ -169,16 +154,16 @@
         </tr>
       </tbody>
     </nz-table>
-    <app-themmoi-kehoach-muatructiep *ngIf="idRowSelect" [idInput]="idRowSelect" [showFromTH]="true">
+    <app-themmoi-kehoach-muatructiep *ngIf="idRowSelect" [loaiVthhInput]="loaiVthh" [idInput]="idRowSelect"
+      [showFromTH]="true">
     </app-themmoi-kehoach-muatructiep>
   </nz-card>
-  <!--  End Thông tin đề xuất-->
 </div>
-
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
 <div *ngIf="isQuyetDinh" class="chi-tiet">
-  <app-themmoi-quyetdinh-khmtt [id]="selectedId" [dataTongHop]="formData.value" (showListEvent)="showTongHop()">
+  <app-themmoi-quyetdinh-khmtt [id]="idSelected" [loaiVthh]="loaiVthh" [dataTongHop]="formData.value"
+    (showListEvent)="showTongHop()">
   </app-themmoi-quyetdinh-khmtt>
 </div>

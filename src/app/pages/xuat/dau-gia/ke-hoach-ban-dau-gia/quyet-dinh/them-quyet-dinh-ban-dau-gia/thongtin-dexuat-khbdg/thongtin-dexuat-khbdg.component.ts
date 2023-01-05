@@ -26,9 +26,8 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
   @Input() isTongHop;
 
   formData: FormGroup
+  dataTable: any[] = [];
   listNguonVon: any[] = [];
-  listDataGroup: any[] = [];
-  listOfData: any[] = [];
   dataChiTieu: any;
 
   constructor(
@@ -76,16 +75,11 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
         this.formData.patchValue({
           tgianBdauTchuc: [res.data?.tgianDkienTu, res.data?.tgianDkienDen],
         });
-        if (this.isTongHop) {
-          this.listOfData = this.dataInput.children ? this.dataInput.children : this.dataInput.dsPhanLoList;
-        } else {
-          this.listOfData = this.dataInput.dsPhanLoList ? this.dataInput.dsPhanLoList : this.dataInput.children;
-        }
+        console.log(this.dataInput);
+        this.dataTable = this.dataInput.children
         if (res.msg == MESSAGE.SUCCESS) {
           this.helperService.bidingDataInFormGroup(this.formData, res.data);
         }
-        this.helperService.setIndexArray(this.listOfData);
-
       } else {
         this.formData.reset();
       }
@@ -127,9 +121,9 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
         return;
       }
       if (index >= 0) {
-        this.listOfData[index] = res.value;
+        this.dataTable[index] = res.value;
       } else {
-        this.listOfData = [...this.listOfData, res.value];
+        this.dataTable = [...this.dataTable, res.value];
       }
       let tongSoLuong: number = 0;
       let tongTienKdiem: number = 0;
@@ -137,7 +131,7 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
       let tongTienDatTruoc: number = 0;
       let tongTienDatTruocDonGia: number = 0;
       let soLuong: number = 0;
-      this.listOfData.forEach((item) => {
+      this.dataTable.forEach((item) => {
         tongSoLuong = tongSoLuong + item.soLuong;
         tongTienKdiem = tongTienKdiem + item.giaKhoiDiem;
         tongTienKdienDonGia = tongTienKdienDonGia + item.giaKhoiDiemDduyet;
@@ -152,7 +146,10 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
         tongTienDatTruocDonGia: tongTienDatTruocDonGia,
       });
       this.soLuongChange.emit(soLuong);
-      this.helperService.setIndexArray(this.listOfData);
     });
+  }
+
+  isDisable() {
+    return false;
   }
 }
