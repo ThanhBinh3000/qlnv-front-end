@@ -26,7 +26,7 @@ export class PhieuNhapKhoComponent implements OnInit {
   @Input() loaiVthh: string;
 
   searchFilter = {
-    namKh: '',
+    namKh: dayjs().get('year'),
     soQuyetDinhNhap: '',
     soPhieuNhapKho: '',
     ngayNkho: '',
@@ -133,7 +133,7 @@ export class PhieuNhapKhoComponent implements OnInit {
       soQuyetDinhNhap: '',
       soPhieuNhapKho: '',
       ngayNkho: '',
-      namKh: ''
+      namKh: dayjs().get('year'),
     };
     this.search();
   }
