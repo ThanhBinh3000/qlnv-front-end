@@ -72,6 +72,7 @@ export class BaoCao {
     maDvi: string;
     maDviTien: string;
     soQdChiTieu: string;
+    canCuVeGia: string;
     trangThai: string;
     ngayTrinh: any;
     ngayDuyet: any;
@@ -108,6 +109,7 @@ export class ItemAdvance {
     maDvi: string;
     tenDvi: string;
     tenKhachHang: string;
+    isParent: boolean;
     qdPheDuyetKqNhaThau: string;
     slKeHoach: number;
     slHopDong: number;
@@ -124,6 +126,13 @@ export class ItemAdvance {
     luyKeCong: number;
     luyKeCapUng: number;
     luyKeCapVon: number;
+    vonDuyetCong: number;
+    vonDuyetCapUng: number;
+    vonDuyetCapVon: number;
+    uyNhchiNgay: string;
+    uyNhchiMaNguonNs: string;
+    uyNhchiNienDoNs: string;
+    uyNhchiNienSoTien: number;
     tongVonVaDtDaCap: number;
     vonDnghiCapLanNay: number;
     soLkeSauKhiCapLanNay: number;

@@ -27,7 +27,7 @@ export class DanhSachHopDongComponent implements OnInit {
         ngayTaoDen: null,
         ngayTaoTu: null,
         soQdChiTieu: null,
-        loaiHdong: null,
+        loaiDnghi: null,
         maHdong: null,
         paggingReq: {
             limit: 10,
@@ -138,7 +138,7 @@ export class DanhSachHopDongComponent implements OnInit {
         this.searchFilter.ngayTaoDen = null
         this.searchFilter.ngayTaoTu = null
         this.searchFilter.soQdChiTieu = null
-        this.searchFilter.loaiHdong = null
+        this.searchFilter.loaiDnghi = null
         this.searchFilter.maHdong = null
         this.searchFilter.namHdong = null
         this.searchFilter.trangThai = null

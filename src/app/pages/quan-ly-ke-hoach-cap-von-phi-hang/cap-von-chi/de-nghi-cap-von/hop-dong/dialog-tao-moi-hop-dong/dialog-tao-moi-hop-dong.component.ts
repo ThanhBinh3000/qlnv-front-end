@@ -11,13 +11,6 @@ import { CAN_CU_GIA, LOAI_DE_NGHI, mulNumber, sumNumber, Utils } from 'src/app/U
 import * as uuid from "uuid";
 import { BaoCao, ItemContract } from '../../de-nghi-cap-von.constant';
 
-export class ItemData {
-    namBcao: number;
-    soQdChiTieu: string;
-    loaiDeNghi: string;
-    hopDong: ItemContract[];
-}
-
 @Component({
     selector: 'dialog-tao-moi-hop-dong',
     templateUrl: './dialog-tao-moi-hop-dong.component.html',
@@ -81,9 +74,41 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
     }
 
     //lay chi tiet cua bao cao
-    getDetail() {
+    async getDetail() {
         if (!this.response.loaiDnghi) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
+            return;
+        }
+        let isExist = false;
+        const request = {
+            maDvi: this.userInfo?.MA_DVI,
+            namHdong: this.response.namBcao,
+            loaiDnghi: this.response.loaiDnghi,
+            paggingReq: {
+                limit: 10,
+                page: 1,
+            },
+        }
+        await this.capVonNguonChiService.timKiemHopDong(request).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    data.data.content.forEach(item => {
+                        if (item.trangThai == Utils.TT_BC_2 || item.trangThai == Utils.TT_BC_7) {
+                            isExist = true;
+                        }
+                    })
+                } else {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.response.loaiDnghi = null;
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                this.response.loaiDnghi = null;
+            }
+        );
+        if (isExist) {
+            this.notification.warning(MESSAGE.WARNING, 'Hợp đồng cấp vốn đã tồn tại');
             return;
         }
         if (!this.userService.isTongCuc() || this.response.loaiDnghi == Utils.MUA_VTU) {
@@ -92,6 +117,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
             this.callSynthetic();
         }
     }
+
     //tong hop hop dong mua luong thuc
     async callSynthetic() {
         const request = {

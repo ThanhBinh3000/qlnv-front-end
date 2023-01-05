@@ -28,7 +28,7 @@
             <div nz-col nzSpan="3">
                 <label class="search__label">Loại hợp đồng</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn loại hợp đồng"
-                    [(ngModel)]="searchFilter.loaiHdong">
+                    [(ngModel)]="searchFilter.loaiDnghi">
                     <nz-option *ngFor="let item of loaiDns" [nzValue]="item.id" [nzLabel]="item.tenDm">
                     </nz-option>
                 </nz-select>
