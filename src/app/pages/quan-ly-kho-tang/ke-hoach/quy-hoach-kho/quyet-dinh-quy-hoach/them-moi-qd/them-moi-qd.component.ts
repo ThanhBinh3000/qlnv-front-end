@@ -75,7 +75,7 @@ export class ThemMoiQdComponent implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     this.userInfo = this.userService.getUserLogin();
-    this.maQd = '/QĐ-BTC',
+    this.maQd = '/QĐ-TC',
       await Promise.all([
         await this.loadListPa(),
         await this.loadDsNam(),
@@ -277,15 +277,6 @@ export class ThemMoiQdComponent implements OnInit {
       }
       this.updateEditCache()
     }
-  }
-
-  async loadDanhSachDiemKho(maChiCuc) {
-    const body = {
-      maDviCha: maChiCuc,
-      trangThai: '01',
-    };
-    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
-    this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
   }
 
   xoaItem(index: number) {
