@@ -234,11 +234,21 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      console.log(this.dataTable, 111);
-      this.dataTable.forEach(item =>
-        item.detail = item.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
-      );
-      this.totalRecord = data.totalElements;
+      this.dataTable.forEach(item => {
+        if (this.userService.isChiCuc()) {
+          item.detail = item.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+        } else {
+          let data = [];
+          item.hhQdGiaoNvNhangDtlList.forEach(item => {
+            data = [...data, ...item.listBienBanNghiemThuBq];
+          })
+          item.detail = {
+            listBienBanNghiemThuBq: data
+          }
+
+        };
+      });
+
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

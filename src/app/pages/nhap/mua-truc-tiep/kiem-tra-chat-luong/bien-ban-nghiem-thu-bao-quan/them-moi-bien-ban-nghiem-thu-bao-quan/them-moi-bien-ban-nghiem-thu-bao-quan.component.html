@@ -40,8 +40,9 @@
             </div>
         </div>
     </div>
-    <nz-alert class="mg-t-16" *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC " nzShowIcon nzType="error"
-        nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
+    <nz-alert class="mg-t-16"
+        *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDCC||formData.value.trangThai == STATUS.TU_CHOI_TK ||formData.value.trangThai == STATUS.TU_CHOI_KT"
+        nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lDoTuChoi}}">
     </nz-alert>
 
     <!--   START THÔNG TIN CHUNG -->

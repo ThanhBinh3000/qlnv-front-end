@@ -126,7 +126,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         dinhMucThucTe: [''],
         ketLuan: [''],
 
-        lyDoTuChoi: [''],
+        ldoTuChoi: [''],
         trangThai: [],
         tenTrangThai: [],
         dviChuDongThucHien: [],
@@ -180,7 +180,6 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
   async loadDataComboBox() {
     if (this.formData.value.cloaiVthh) {
       let res = await this.danhMucService.getDetail(this.formData.value.cloaiVthh);
-      console.log(res);
       if (res.msg == MESSAGE.SUCCESS) {
         this.listPhuongThucBaoQuan = res.data?.phuongPhapBq
         this.listHinhThucBaoQuan = res.data?.hinhThucBq
@@ -212,9 +211,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
   async bindingDataQd(id, isSetTc?) {
     await this.spinner.show();
     let dataRes = await this.quyetDinhGiaoNvNhapHangService.getDetail(id)
-    console.log(dataRes, 321);
     const data = dataRes.data;
-    console.log(data, 1111);
     this.formData.patchValue({
       soQdGiaoNvNh: data.soQd,
       idQdGiaoNvNh: data.id,
@@ -250,7 +247,6 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
     });
     modalQD.afterClose.subscribe(async (data) => {
       this.bindingDataDdNhap(data);
-      console.log(data, 333);
     });
   }
 
@@ -756,7 +752,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         try {
           let body = {
             id: this.id,
-            lyDoTuChoi: text,
+            lyDo: text,
             trangThai: '',
           };
           switch (this.formData.get('trangThai').value) {
