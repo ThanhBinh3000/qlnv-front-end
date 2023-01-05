@@ -134,7 +134,6 @@ export class DanhSachHopDongComponent implements OnInit {
 
     //reset tim kiem
     clearFilter() {
-        this.searchFilter.maDvi = null
         this.searchFilter.ngayTaoDen = null
         this.searchFilter.ngayTaoTu = null
         this.searchFilter.soQdChiTieu = null

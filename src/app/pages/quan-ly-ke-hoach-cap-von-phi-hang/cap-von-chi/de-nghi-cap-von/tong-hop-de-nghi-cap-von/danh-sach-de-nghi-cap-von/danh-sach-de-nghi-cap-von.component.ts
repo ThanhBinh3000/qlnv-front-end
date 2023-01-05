@@ -33,11 +33,12 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
         canCuVeGia: null,
         loaiDnghi: null,
         maDnghi: null,
+        namBcao: null,
         paggingReq: {
             limit: 10,
             page: 1,
         },
-        trangThais: [],
+        trangThai: Utils.TT_BC_1,
     }
 
     tableFilter = {
@@ -56,7 +57,6 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
     dataTable: any[] = [];
     dataTableAll: any[] = [];
     trangThais: any[] = TRANG_THAI;
-    trangThai: string = Utils.TT_BC_1;
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
     //phan trang
@@ -86,19 +86,17 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
         this.searchFilter.ngayTaoTu = newDate;
         this.searchFilter.maDvi = this.userInfo?.MA_DVI;
         // trang thai cua nut tao moi
-        // this.statusNewReport = this.userService.isAccessPermisson(CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(CVNC.ADD_DN_MVT);
-        // this.statusDelete = this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT);
+        this.statusNewReport = this.userService.isAccessPermisson(CVNC.ADD_DN_MLT) || this.userService.isAccessPermisson(CVNC.ADD_DN_MVT);
+        this.statusDelete = this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT);
 
-        //neu cos quyen phe duyet thi trang thai mac dinh la trinh duyet
-        // if (this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) || this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT)) {
-        //     this.searchFilter.trangThai = Utils.TT_BC_2;
-        // }
-        if (this.userService.isTongCuc()) {
-            this.canCuGias = this.canCuGias.filter(e => e.id == Utils.HD_TRUNG_THAU);
-            this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_VTU);
-            this.searchFilter.canCuVeGia = Utils.HD_TRUNG_THAU;
-            this.searchFilter.loaiDnghi = Utils.MUA_VTU;
-        } else {
+        // neu cos quyen phe duyet thi trang thai mac dinh la trinh duyet
+        if (this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) || this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT)) {
+            this.searchFilter.trangThai = Utils.TT_BC_2;
+        }
+        if (this.userService.isChiCuc()) {
+            this.canCuGias = this.canCuGias.filter(e => e.id == Utils.QD_DON_GIA);
+        }
+        if (!this.userService.isTongCuc()) {
             this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
         }
 
@@ -108,13 +106,10 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
 
     async search() {
         const request = JSON.parse(JSON.stringify(this.searchFilter));
-        if (this.trangThai) {
-            request.trangThais = [this.trangThai];
-        }
         request.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, Utils.FORMAT_DATE_STR);
         request.ngayTaoTu = this.datePipe.transform(this.searchFilter.ngayTaoTu, Utils.FORMAT_DATE_STR);
         this.spinner.show();
-        await this.capVonNguonChiService.timKiemDeNghi(this.searchFilter).toPromise().then(
+        await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     this.dataTable = [];
@@ -126,7 +121,7 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
                             ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
                             checked: false,
                             isEdit: this.checkEditStatus(item.trangThai),
-                            isDelete: this.checkDeleteStatus(item.trangThai),
+                            isDelete: this.checkDeleteStatus(item),
                         })
                     })
                     this.dataTableAll = cloneDeep(this.dataTable);
@@ -158,7 +153,7 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
     //reset tim kiem
     clearFilter() {
         this.searchFilter.maDnghi = null
-        this.trangThai = null
+        this.searchFilter.trangThai = null
         this.searchFilter.ngayTaoTu = null
         this.searchFilter.ngayTaoDen = null
         this.searchFilter.soQdChiTieu = null
@@ -169,12 +164,12 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
 
     checkEditStatus(trangThai: string) {
         return Utils.statusSave.includes(trangThai) &&
-            ((this.userInfo?.CAP_DVI == '2' && this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT)));
+            (this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT) || this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT));
     }
 
-    checkDeleteStatus(trangThai: string) {
-        return Utils.statusDelete.includes(trangThai) &&
-            ((this.userInfo?.CAP_DVI == '2' && this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT)) || (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT)));
+    checkDeleteStatus(data: any) {
+        return Utils.statusDelete.includes(data.trangThai) && data.soLan != 1 &&
+            (this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT));
     }
 
     getStatusName(trangThai: string) {
@@ -197,10 +192,8 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
             if (res) {
                 const obj = {
                     id: null,
-                    namDn: res.namDn,
-                    qdChiTieu: res.qdChiTieu,
-                    loaiDn: res.loaiDn,
-                    tabSelected: res.canCuGia == Utils.HD_TRUNG_THAU ? 'hopdong' : 'dongia',
+                    baoCao: res,
+                    tabSelected: res.canCuVeGia == Utils.HD_TRUNG_THAU ? (res.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'dn-hopdong') : 'dn-dongia',
                     hopDong: res.hopDong,
                 }
                 this.dataChange.emit(obj);
@@ -212,7 +205,7 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? 'hopdong' : 'dongia',
+            tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? (data.loaiDnghi == Utils.MUA_VTU ? 'dn-vattu' : 'dn-hopdong') : 'dn-dongia',
         }
         this.dataChange.emit(obj);
     }
@@ -237,44 +230,44 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
 
     //Xoa bao cao
     deleteReport(id: string) {
-        // this.modal.confirm({
-        //     nzClosable: false,
-        //     nzTitle: 'Xác nhận',
-        //     nzContent: 'Bạn có chắc chắn muốn xóa?',
-        //     nzOkText: 'Đồng ý',
-        //     nzCancelText: 'Không',
-        //     nzOkDanger: true,
-        //     nzWidth: 310,
-        //     nzOnOk: () => {
-        //         this.spinner.show();
-        //         let request = [];
-        //         if (id) {
-        //             request = [id];
-        //         } else {
-        //             if (this.dataTable && this.dataTable.length > 0) {
-        //                 this.dataTable.forEach(item => {
-        //                     if (item.checked) {
-        //                         request.push(item.id);
-        //                     }
-        //                 })
-        //             }
-        //         }
-        //         this.capVonNguonChiService.xoaDeNghi(request).toPromise().then(
-        //             data => {
-        //                 if (data.statusCode == 0) {
-        //                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-        //                     this.search();
-        //                 } else {
-        //                     this.notification.error(MESSAGE.ERROR, data?.msg);
-        //                 }
-        //             },
-        //             err => {
-        //                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        //             }
-        //         )
-        //         this.spinner.hide();
-        //     },
-        // });
+        this.modal.confirm({
+            nzClosable: false,
+            nzTitle: 'Xác nhận',
+            nzContent: 'Bạn có chắc chắn muốn xóa?',
+            nzOkText: 'Đồng ý',
+            nzCancelText: 'Không',
+            nzOkDanger: true,
+            nzWidth: 310,
+            nzOnOk: () => {
+                this.spinner.show();
+                let request = [];
+                if (id) {
+                    request = [id];
+                } else {
+                    if (this.dataTable && this.dataTable.length > 0) {
+                        this.dataTable.forEach(item => {
+                            if (item.checked) {
+                                request.push(item.id);
+                            }
+                        })
+                    }
+                }
+                this.capVonNguonChiService.xoaDeNghi(request).toPromise().then(
+                    data => {
+                        if (data.statusCode == 0) {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+                            this.search();
+                        } else {
+                            this.notification.error(MESSAGE.ERROR, data?.msg);
+                        }
+                    },
+                    err => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    }
+                )
+                this.spinner.hide();
+            },
+        });
     }
 
     // Tìm kiếm trong bảng

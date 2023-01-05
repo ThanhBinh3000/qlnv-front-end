@@ -16,7 +16,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, sumNumber, Utils } from 'src/app/Utility/utils';
-import { BaoCao, ItemAdvance, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
+import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
 @Component({
     selector: 'app-de-nghi-cap-von-mua-vat-tu',
@@ -49,7 +49,7 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
     approveStatus = true;
     copyStatus = true;
     isDataAvailable = false;
-    editCache: { [key: string]: { edit: boolean; data: ItemAdvance } } = {};
+    editCache: { [key: string]: { edit: boolean; data: ItemRequest } } = {};
     //file
     listFile: File[] = [];
     fileList: NzUploadFile[] = [];
@@ -157,77 +157,34 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
 
     async initialization() {
         //lay id cua de nghi
-        this.baoCao.id = this.data?.id;
         this.userInfo = this.userService.getUserLogin();
-        if (this.baoCao.id) {
+        if (this.data?.id) {
+            this.baoCao.id = this.data?.id;
             await this.getDetailReport();
         } else {
-            this.baoCao.trangThai = Utils.TT_BC_1;
-            this.baoCao.maDvi = this.userInfo?.MA_DVI;
-            this.baoCao.soQdChiTieu = this.data?.qdChiTieu;
-            this.baoCao.loaiDnghi = this.data?.loaiDn;
-            this.baoCao.namBcao = this.data?.namDn;
-            this.baoCao.ngayTao = new Date();
-            this.data?.hopDong.forEach(item => {
-                this.baoCao.dnghiCapvonCtiets.push({
-                    ...item,
-                    maHdong: item.soHd,
-                    qdTthau: item.soQdPdKhlcnt,
-                    maHang: item.loaiVthh,
-                    thanhTien: item.soLuong * item.donGia,
-                    maDviTinh: this.vatTus.find(e => e.ma == item.maHang)?.maDviTinh,
-                    dviDonGia: item.donGiaVat,
-                    dviThanhTien: "1",
-                    donGiaMua: item.donGia,
-                    id: null,
-                })
-            });
-
-
-            this.capVonNguonChiService.maDeNghi().toPromise().then(
-                (res) => {
-                    if (res.statusCode == 0) {
-                        this.baoCao.maDnghi = res.data;
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, res?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
-
+            this.baoCao = this.data?.baoCao;
         }
+        this.updateEditCache();
+        this.sortReport();
         this.getStatusButton();
     }
 
     //check role cho các nut trinh duyet
     getStatusButton() {
-        // if (Utils.statusSave.includes(this.trangThai) &&
-        //     (this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT) : this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT))) {
-        //     this.status = false;
-        // } else {
-        //     this.status = true;
-        // }
-
-        // const checkChirld = this.maDviTao == this.userInfo?.MA_DVI;
-        // const isSave = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT) : this.userService.isAccessPermisson(CVNC.EDIT_DN_MLT);
-        // this.saveStatus = Utils.statusSave.includes(this.trangThai) && isSave && checkChirld;
-        // const isSubmit = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.APPROVE_DN_MVT) : this.userService.isAccessPermisson(CVNC.APPROVE_DN_MLT);
-        // this.submitStatus = Utils.statusApprove.includes(this.trangThai) && isSubmit && checkChirld && !(!this.id);
-        // const isApprove = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT) : this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT);
-        // if (this.trangThai == Utils.TT_BC_2) {
-        //     this.approveStatus = isApprove && checkChirld;
-        // } else {
-        //     this.approveStatus = Utils.statusPheDuyet.includes(this.trangThai) && isApprove && checkChirld;
-        // }
-        // const isCopy = this.loaiDn == Utils.MUA_VTU ? this.userService.isAccessPermisson(CVNC.COPY_DN_MVT) : this.userService.isAccessPermisson(CVNC.COPY_DN_MLT);
-        // this.copyStatus = Utils.statusCopy.includes(this.trangThai) && isCopy && checkChirld;
+        const checkChirld = this.baoCao.maDvi == this.userInfo?.MA_DVI;
+        if (Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT)) {
+            this.status = false;
+        } else {
+            this.status = true;
+        }
+        this.saveStatus = Utils.statusSave.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.EDIT_DN_MVT) && checkChirld;
+        this.submitStatus = Utils.statusApprove.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.APPROVE_DN_MVT) && checkChirld && !(!this.baoCao.id);
+        this.approveStatus = this.baoCao.trangThai == Utils.TT_BC_2 && this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT) && checkChirld;
+        this.copyStatus = Utils.statusCopy.includes(this.baoCao.trangThai) && this.userService.isAccessPermisson(CVNC.COPY_DN_MVT) && checkChirld;
     }
 
     back() {
         const obj = {
-            qdChiTieu: this.baoCao.soQdChiTieu,
             tabSelected: 'ds-denghi',
         }
         this.dataChange.emit(obj);
@@ -308,6 +265,7 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
                     this.listFile = [];
+                    this.updateEditCache();
                     this.getStatusButton();
                 } else {
                     this.notification.error(MESSAGE.ERROR, data?.msg);

@@ -13,14 +13,14 @@
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Trình duyệt</span>
             </button>
-            <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('nonpass')">
+            <!-- <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('nonpass')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
             </button>
             <button *ngIf="passStatus" type="button" class="btn btn-sub" (click)="action('pass')">
                 <i class="icon htvbdh_tcdt_pheduyet"></i>
                 <span>Duyệt</span>
-            </button>
+            </button> -->
             <button *ngIf="approveStatus" type="button" class="btn btn-sub" (click)="action('nonapprove')">
                 <i class="icon htvbdh_tcdt_tuchoi"></i>
                 <span>Từ chối</span>
@@ -83,7 +83,7 @@
                                 </ng-container>
                             </td>
                             <td>
-                                <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="status">
+                                <nz-upload [nzBeforeUpload]="beforeUploadCV" [hidden]="statusCv">
                                     <button nz-button>
                                         <i nz-icon nzType="upload"></i>
                                         Chọn tệp
@@ -123,6 +123,7 @@
                                 <th rowspan="2">Số lũy kế sau khi cấp lần này</th>
                                 <th rowspan="2">Số còn được cấp</th>
                                 <th rowspan="2">Ghi chú</th>
+                                <th rowspan="2" [hidden]="status"></th>
                             </tr>
                             <tr>
                                 <th>Cấp ứng</th>
@@ -148,6 +149,7 @@
                                 <th>11=6+10</th>
                                 <th>12=3-11</th>
                                 <th>D</th>
+                                <th [hidden]="status"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -199,7 +201,8 @@
                                         {{ data.ghiChu }}
                                     </td>
                                     <td [hidden]="status">
-                                        <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                        <i *ngIf="data.maDvi == userInfo?.MA_DVI" class="fa fa-pencil"
+                                            (click)="startEdit(data.id)"></i>
                                     </td>
                                 </ng-container>
                                 <ng-template #editTemplate>
@@ -209,18 +212,28 @@
                                     <td>
                                         {{ editCache[data.id].data.tenDvi }}
                                     </td>
-                                    <td>
-                                        <fm-input-number class="search__input"
-                                            [(ngModel)]="editCache[data.id].data.slKeHoach"
-                                            (ngModelChange)="changeModel(data.id)">
-                                        </fm-input-number>
-                                    </td>
-                                    <td>
-                                        <fm-input-number class="search__input"
-                                            [(ngModel)]="editCache[data.id].data.donGia"
-                                            (ngModelChange)="changeModel(data.id)">
-                                        </fm-input-number>
-                                    </td>
+                                    <ng-container *ngIf="baoCao.soLan != 1; else moi">
+                                        <td>
+                                            {{ displayValue(editCache[data.id].data.slKeHoach) }}
+                                        </td>
+                                        <td>
+                                            {{ displayValue(editCache[data.id].data.donGia) }}
+                                        </td>
+                                    </ng-container>
+                                    <ng-template #moi>
+                                        <td>
+                                            <fm-input-number class="search__input"
+                                                [(ngModel)]="editCache[data.id].data.slKeHoach"
+                                                (ngModelChange)="changeModel(data.id)">
+                                            </fm-input-number>
+                                        </td>
+                                        <td>
+                                            <fm-input-number class="search__input"
+                                                [(ngModel)]="editCache[data.id].data.donGia"
+                                                (ngModelChange)="changeModel(data.id)">
+                                            </fm-input-number>
+                                        </td>
+                                    </ng-template>
                                     <td>
                                         {{ displayValue(editCache[data.id].data.gtTheoKeHoach) }}
                                     </td>

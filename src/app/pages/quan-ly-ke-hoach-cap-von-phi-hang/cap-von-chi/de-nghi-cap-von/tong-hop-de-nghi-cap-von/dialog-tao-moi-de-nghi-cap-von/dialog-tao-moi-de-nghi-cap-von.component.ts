@@ -6,8 +6,9 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
-import { BaoCao } from '../../de-nghi-cap-von.constant';
+import { CAN_CU_GIA, LOAI_DE_NGHI, sumNumber, Utils } from 'src/app/Utility/utils';
+import { BaoCao, ItemRequest } from '../../de-nghi-cap-von.constant';
+import * as uuid from "uuid";
 
 @Component({
     selector: 'dialog-tao-moi-de-nghi-cap-von',
@@ -20,11 +21,11 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
 
     userInfo: any;
     response: BaoCao = new BaoCao();
-    maHopDong: string;
-    lstHdongs: any[] = [];
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
-    isContract = false;
+    isRequestExist: number;
+    isContractExist: boolean;
+    idRequest!: string;
 
     constructor(
         private _modalRef: NzModalRef,
@@ -42,6 +43,7 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
         if (!this.userService.isTongCuc()) {
             this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
         }
+        this.response.dnghiCapvonCtiets = [];
     }
 
     //neu la de nghi theo don gia mua can lay ra so quyet dinh chi tieu;
@@ -49,9 +51,6 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
         if (!this.response.canCuVeGia) {
             this.notification.warning(MESSAGE.WARNING, 'Vui lòng chọn căn cứ về giá');
             this.response.namBcao = null;
-            return;
-        }
-        if (this.response.canCuVeGia == Utils.HD_TRUNG_THAU) {
             return;
         }
         const request = {
@@ -80,54 +79,257 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
         this.spinner.hide();
     }
     //lay ra chi tiet cua de nghi
-    getDetail() {
+    async getDetail() {
         if (!this.response.namBcao) {
             this.notification.warning(MESSAGE.WARNING, 'Vui lòng nhập năm đề nghị');
             this.response.loaiDnghi = null;
             return;
         }
+        await this.checkRequest();
+        if (this.isRequestExist == 2) {
+            this.notification.warning(MESSAGE.WARNING, 'Trạng thái đề nghị không cho phép đề nghị cấp vốn lần mới');
+            return;
+        }
+        if (this.isRequestExist == 0) {
+            this.response.maDvi = this.userInfo?.MA_DVI;
+            this.response.ngayTao = new Date();
+            this.response.soLan = 1;
+            this.response.trangThai = Utils.TT_BC_1;
+            this.response.maDviTien = '1';
+            //bao cao chua ton tai
+            if (this.response.canCuVeGia == Utils.HD_TRUNG_THAU) {
+                if (this.userService.isCuc() || this.response.loaiDnghi == Utils.MUA_VTU) {
+                    await this.checkContract();
+                    if (!this.isContractExist) {
+                        this.notification.warning(MESSAGE.WARNING, 'Không tồn tại hợp đồng cho loại đề nghị đã chọn');
+                        return;
+                    } else {
+                        await this.syntheticContract();
+                    }
+                } else {
+                    await this.callSynthetic();
+                }
+            } else {
+                //neu la chi cuc thi tao moi de nghi
+                if (this.userService.isChiCuc()) {
+                    this.response.dnghiCapvonCtiets = [];
+                    this.response.dnghiCapvonCtiets.push({
+                        ... new ItemRequest(),
+                        id: uuid.v4() + 'FE',
+                        maDvi: this.userInfo?.MA_DVI,
+                        tenDvi: this.userInfo?.TEN_DVI,
+                        dnghiCapvonLuyKes: [],
+                    })
+                } else {
+                    await this.callSynthetic();
+                    if (this.userService.isCuc()) {
+                        this.response.dnghiCapvonCtiets.push({
+                            ... new ItemRequest(),
+                            id: uuid.v4() + 'FE',
+                            maDvi: this.userInfo?.MA_DVI,
+                            tenDvi: this.userInfo?.TEN_DVI,
+                            dnghiCapvonLuyKes: [],
+                        })
+                    }
+                }
+            }
+            await this.getMaDnghi();
+        } else {
+            //them lan moi cho de nghi
+            await this.capVonNguonChiService.ctietDeNghi(this.idRequest).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        this.response = data.data;
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
+            this.response.dnghiCapvonCtiets.forEach(item => {
+                if (item.maDvi == this.userInfo?.MA_DVI || !item.maDvi) {
+                    item.dnghiCapvonLuyKes.push({
+                        id: uuid.v4() + 'FE',
+                        soLan: this.response.soLan,
+                        trangThai: this.response.trangThai,
+                        vonDuyetCong: item.vonDuyetCong,
+                        vonDuyetCapUng: item.vonDuyetCapUng,
+                        vonDuyetCapVon: item.vonDuyetCapVon,
+                        uyNhchiNgay: item.uyNhchiNgay,
+                        uyNhchiMaNguonNs: item.uyNhchiMaNguonNs,
+                        uyNhchiNienDoNs: item.uyNhchiNienDoNs,
+                        uyNhchiNienSoTien: item.uyNhchiNienSoTien,
+                    })
+                    item.luyKeCong = sumNumber([item.luyKeCong, item.vonDuyetCong]);
+                    item.luyKeCapUng = sumNumber([item.luyKeCapUng, item.vonDuyetCapUng]);
+                    item.luyKeCapVon = sumNumber([item.luyKeCapVon, item.vonDuyetCapVon]);
+                    item.soTtLuyKe = sumNumber([item.soTtLuyKe, item.uyNhchiNienSoTien]);
+                    item.vonDuyetCong = 0;
+                    item.vonDuyetCapUng = 0;
+                    item.vonDuyetCapVon = 0;
+                    item.uyNhchiNgay = null;
+                    item.uyNhchiMaNguonNs = null;
+                    item.uyNhchiNienDoNs = null;
+                    item.uyNhchiNienSoTien = 0;
+                }
+            })
+            if (this.response.loaiDnghi != Utils.MUA_VTU) {
+                if ((this.response.canCuVeGia == Utils.HD_TRUNG_THAU && this.userService.isTongCuc()) ||
+                    (this.response.canCuVeGia == Utils.QD_DON_GIA && !this.userService.isChiCuc())) {
+                    this.callSynthetic();
+                }
+            }
+            this.response.soLan += 1;
+            this.response.trangThai = Utils.TT_BC_1;
+        }
     }
 
-    // async getContract() {
-    //     if (!this.response.loaiDn || !this.maHopDong) {
-    //         this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-    //         this.maHopDong = null;
-    //         return;
-    //     }
-    //     const request = {
-    //         soQD: this.maHopDong,
-    //         maDvi: this.userInfo.MA_DVI,
-    //         loaiVthh: "",
-    //     }
-    //     switch (this.response.loaiDn) {
-    //         case Utils.MUA_THOC:
-    //             request.loaiVthh = "0101"
-    //             break;
-    //         case Utils.MUA_GAO:
-    //             request.loaiVthh = "0102"
-    //             break;
-    //         case Utils.MUA_MUOI:
-    //             request.loaiVthh = "04"
-    //             break;
-    //         case Utils.MUA_VTU:
-    //             request.loaiVthh = "02"
-    //             break;
-    //     }
-    //     await this.capVonNguonChiService.dsachHopDong(request).toPromise().then(
-    //         (data) => {
-    //             if (data.statusCode == 0) {
-    //                 this.response.hopDong = data.data;
-    //             } else {
-    //                 this.notification.warning(MESSAGE.WARNING, data?.msg);
-    //                 this.maHopDong = null;
-    //             }
-    //         },
-    //         (err) => {
-    //             this.notification.warning(MESSAGE.WARNING, MESSAGE.SYSTEM_ERROR);
-    //             this.maHopDong = null;
-    //         },
-    //     );
-    // }
+    async callSynthetic() {
+        const request = {
+            canCuVeGia: this.response.canCuVeGia,
+            loaiDnghi: this.response.loaiDnghi,
+            maDvi: this.userInfo?.MA_DVI,
+            namBcao: this.response.namBcao,
+        }
+        await this.capVonNguonChiService.tongHopDeNghi(request).toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    res.data.forEach(item => {
+                        const temp = item;
+                        const id = this.response.dnghiCapvonCtiets.find(e => e.maDvi == temp.maDvi)?.id;
+                        temp.id = id ? id : uuid.v4() + 'FE';
+                        this.response.dnghiCapvonCtiets = this.response.dnghiCapvonCtiets.filter(e => e.maDvi != temp.maDvi);
+                        this.response.dnghiCapvonCtiets.push(temp);
+                    })
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+    }
+
+    async syntheticContract() {
+        const request = {
+            loaiDnghi: this.response.loaiDnghi,
+            maDvi: this.userInfo?.MA_DVI,
+            namHdong: this.response.namBcao,
+        }
+        await this.capVonNguonChiService.tongHopHd(request).toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    res.data.forEach(item => {
+                        this.response.dnghiCapvonCtiets.push({
+                            ...new ItemRequest(),
+                            id: uuid.v4() + 'FE',
+                            slKeHoach: item.slKeHoach,
+                            slHopDong: item.slHopDong,
+                            slThucHien: item.slThucHien,
+                            gtHopDong: item.gtHopDong,
+                            donGia: item.donGia,
+                            gtriThucHien: item.gtriThucHien,
+                            dnghiCapvonLuyKes: [],
+                            maDvi: item.maDvi,
+                            tenDvi: item.tenDvi,
+                            tenKhachHang: item.tenKhachHang,
+                            isParent: item.isParent,
+                            qdPheDuyetKqNhaThau: item.qdPheDuyetKqNhaThau,
+                        })
+                    })
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+    }
+
+    async getMaDnghi() {
+        await this.capVonNguonChiService.maDeNghi().toPromise().then(
+            (res) => {
+                if (res.statusCode == 0) {
+                    this.response.maDnghi = res.data;
+                } else {
+                    this.notification.error(MESSAGE.ERROR, res?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+    }
+
+    async checkRequest() {
+        this.isRequestExist = 0;
+        const request = {
+            maDvi: this.userInfo?.MA_DVI,
+            namBcao: this.response.namBcao,
+            loaiDnghi: this.response.loaiDnghi,
+            canCuVeGia: this.response.canCuVeGia,
+            paggingReq: {
+                limit: 10,
+                page: 1,
+            },
+        }
+        await this.capVonNguonChiService.timKiemDeNghi(request).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    if (data.data.content?.length > 0) {
+                        if (data.data.content[0].trangThai == Utils.TT_BC_7) {
+                            this.isRequestExist = 1;
+                            this.idRequest = data.data.content[0].id;
+                        } else {
+                            this.isRequestExist = 2;
+                        }
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.response.loaiDnghi = null;
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                this.response.loaiDnghi = null;
+            }
+        );
+        this.spinner.hide();
+    }
+
+    async checkContract() {
+        this.isContractExist = false;
+        const request = {
+            maDvi: this.userInfo?.MA_DVI,
+            namHdong: this.response.namBcao,
+            loaiDnghi: this.response.loaiDnghi,
+            paggingReq: {
+                limit: 10,
+                page: 1,
+            },
+            trangThai: Utils.TT_BC_7,
+        }
+        await this.capVonNguonChiService.timKiemHopDong(request).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    if (data.data.content?.length > 0) {
+                        this.isContractExist = true;
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    this.response.loaiDnghi = null;
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                this.response.loaiDnghi = null;
+            }
+        );
+    }
 
     handleOk() {
         if (!this.response.canCuVeGia) {

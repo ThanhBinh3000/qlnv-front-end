@@ -15,13 +15,13 @@ export const TAB_LIST = [
         role: [],
         isSelected: false,
     },
-    {
-        name: 'Tổng hợp đề nghị cấp vốn',
-        code: 'th-denghi',
-        status: true,
-        role: [],
-        isSelected: false,
-    },
+    // {
+    //     name: 'Tổng hợp đề nghị cấp vốn',
+    //     code: 'th-denghi',
+    //     status: true,
+    //     role: [],
+    //     isSelected: false,
+    // },
 ]
 
 export const TRANG_THAI = [
@@ -65,7 +65,7 @@ export class BaoCao {
     namBcao: number;
     loaiDnghi: string;
     dnghiCvHopDongCtiets: ItemContract[];
-    dnghiCapvonCtiets: ItemAdvance[];
+    dnghiCapvonCtiets: ItemRequest[];
     lstFiles: any[];
     ngayTao: any;
     nguoiTao: string;
@@ -104,7 +104,7 @@ export class ItemContract {
     ghiChu: string;
 }
 
-export class ItemAdvance {
+export class ItemRequest {
     id: string;
     maDvi: string;
     tenDvi: string;
