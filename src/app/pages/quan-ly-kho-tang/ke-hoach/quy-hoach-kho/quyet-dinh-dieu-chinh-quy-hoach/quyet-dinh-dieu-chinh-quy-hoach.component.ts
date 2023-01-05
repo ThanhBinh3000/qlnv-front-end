@@ -53,14 +53,14 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
   };
 
   filterTable: any = {
-    soQd: '',
-    ngayQd: '',
+    soQuyetDinh: '',
+    ngayKy: '',
+    namBatDau: '',
+    namKetThuc: '',
+    namKhoach: '',
     trichYeu: '',
     soQdGoc: '',
-    namKhoach: '',
-    tenVthh: '',
-    soGoiThau: '',
-    trangThai: '',
+    tenTrangThai: '',
   };
 
   allChecked = false;
@@ -289,14 +289,14 @@ export class QuyetDinhDieuChinhQuyHoachComponent implements OnInit {
 
   clearFilter() {
     this.filterTable = {
-      soQd: '',
-      ngayQd: '',
+      soQuyetDinh: '',
+      ngayKy: '',
+      namBatDau: '',
+      namKetThuc: '',
+      namKhoach: '',
       trichYeu: '',
       soQdGoc: '',
-      namKhoach: '',
-      tenVthh: '',
-      soGoiThau: '',
-      trangThai: '',
+      tenTrangThai: '',
     };
     this.search();
   }
