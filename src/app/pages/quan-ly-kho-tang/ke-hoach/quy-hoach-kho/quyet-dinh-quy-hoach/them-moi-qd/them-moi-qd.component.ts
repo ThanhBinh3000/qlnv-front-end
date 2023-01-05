@@ -8,7 +8,7 @@ import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
-import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import { saveAs } from 'file-saver';
 import {QuyHoachKho} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
 import {QuyHoachKhoService} from "../../../../../../services/quy-hoach-kho.service";
 import dayjs from "dayjs";
@@ -31,6 +31,8 @@ export class ThemMoiQdComponent implements OnInit {
   @Input() idInput: number;
   @Output()
   showListEvent = new EventEmitter<any>();
+
+  STATUS = STATUS
   userInfo: UserLogin;
   formData: FormGroup
   maQd: string;
@@ -43,7 +45,7 @@ export class ThemMoiQdComponent implements OnInit {
   dsChiCuc: any[] = [];
   danhSachChiCuc: any[] = [];
   danhSachDiemKho: any[] = [];
-
+  fileDinhKems: any[] = [];
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -76,13 +78,14 @@ export class ThemMoiQdComponent implements OnInit {
     this.maQd = '/QĐ-BTC',
       await Promise.all([
         await this.loadListPa(),
+        await this.loadDsNam(),
         await this.loadDsCuc(this.userInfo.MA_DVI),
-         await this.getDataDetail(this.idInput)
+        await this.getDataDetail(this.idInput)
       ])
     this.spinner.hide();
   }
 
-  loadDsNam() {
+  async loadDsNam() {
     let thisYear = dayjs().get('year');
     for (let i = -5; i < 5; i++) {
       this.danhSachNam.push((thisYear - i));
@@ -120,8 +123,12 @@ export class ThemMoiQdComponent implements OnInit {
     const chiCuc = this.dsCuc.filter(item => item.maDvi == event);
     if (type) {
       type.tenCuc = chiCuc[0].tenDvi;
+      type.maChiCuc = null;
+      type.maDiemKho = null;
     } else {
       this.rowItem.tenCuc = chiCuc[0].tenDvi;
+      this.rowItem.maChiCuc = null;
+      this.rowItem.maDiemKho = null;
     }
   }
 
@@ -137,8 +144,10 @@ export class ThemMoiQdComponent implements OnInit {
     const chiCuc = this.danhSachChiCuc.filter(item => item.maDvi == event);
     if (type) {
       type.tenChiCuc = chiCuc[0].tenDvi;
+      type.maDiemKho= null;
     } else {
       this.rowItem.tenChiCuc = chiCuc[0].tenDvi;
+      this.rowItem.maDiemKho = null
     }
   }
 
@@ -170,6 +179,7 @@ export class ThemMoiQdComponent implements OnInit {
     body.quyetDinhQuyHoachCTietReqs = this.dataTable
     body.maDvi = this.userInfo.MA_DVI;
     body.type = this.type;
+    body.fileDinhKems = this.fileDinhKems;
     let res
     if (this.idInput > 0) {
       res = await this.quyHoachKhoService.update(body);
@@ -255,7 +265,16 @@ export class ThemMoiQdComponent implements OnInit {
         namKetThuc: data.namKetThuc,
         moTa: data.moTa
       });
+      this.fileDinhKems = data.fileDinhKems;
       this.dataTable = data.quyetDinhQuyHoachCTiets;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(item => {
+           let arr = this.danhSachPhuongAn.filter(a => a.ma == item.phuongAnQuyHoach)
+          if (arr && arr.length > 0) {
+            item.tenPhuongAn = arr[0].giaTri;
+          }
+        })
+      }
       this.updateEditCache()
     }
   }
@@ -338,7 +357,6 @@ export class ThemMoiQdComponent implements OnInit {
         this.rowItem.tenPhuongAn = phuongAn[0].giaTri
       }
     }
-
   }
 
   onChangDiemKho(event, type?) {
@@ -354,4 +372,28 @@ export class ThemMoiQdComponent implements OnInit {
     }
   }
 
+  exportCt() {
+    this.spinner.show();
+    try {
+      if (this.dataTable && this.dataTable.length > 0) {
+        let body = {
+          listCt : this.dataTable
+        }
+        this.quyHoachKhoService
+          .exportCt(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'quyet-dinh-quy-hoach-kho-chi-tiet.xlsx'),
+          );
+        this.spinner.hide();
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu");
+        return;
+      }
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+    this.spinner.hide();
+  }
 }
