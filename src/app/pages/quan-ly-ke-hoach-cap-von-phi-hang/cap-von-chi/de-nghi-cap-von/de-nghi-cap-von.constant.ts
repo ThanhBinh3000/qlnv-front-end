@@ -33,14 +33,14 @@ export const TRANG_THAI = [
         id: Utils.TT_BC_2,
         tenDm: "Trình duyệt",
     },
-    {
-        id: Utils.TT_BC_3,
-        tenDm: "Từ chối",
-    },
-    {
-        id: Utils.TT_BC_4,
-        tenDm: "Duyệt",
-    },
+    // {
+    //     id: Utils.TT_BC_3,
+    //     tenDm: "Từ chối",
+    // },
+    // {
+    //     id: Utils.TT_BC_4,
+    //     tenDm: "Duyệt",
+    // },
     {
         id: Utils.TT_BC_5,
         tenDm: "Từ chối",
