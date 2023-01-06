@@ -114,7 +114,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         fileDinhKem: [FileDinhKem],
         ketLuan: [],
         kqDanhGia: [],
-        lyDoTuChoi: [''],
+        ldoTuChoi: [''],
         trangThai: [],
         tenTrangThai: [],
       }
@@ -203,16 +203,13 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       if (data) {
         await this.bindingDataQd(data.id, true);
       }
-      console.log(this.bindingDataQd, 123);
     });
   };
 
   async bindingDataQd(id, isSetTc?) {
     await this.spinner.show();
     let dataRes = await this.quyetDinhGiaoNvNhapHangService.getDetail(id)
-    console.log(dataRes, 321);
     const data = dataRes.data;
-    console.log(data, 1111);
     this.formData.patchValue({
       soQdGiaoNvNh: data.soQd,
       idQdGiaoNvNh: data.id,
@@ -227,7 +224,6 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
     let dataChiCuc = data.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI);
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].hhQdGiaoNvNhDdiemList;
-      console.log(this.listDiaDiemNhap, 456);
     }
     if (isSetTc) {
       let dmTieuChuan = await this.danhMucTieuChuanService.getDetailByMaHh(data.cloaiVthh);
@@ -262,9 +258,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
 
   async bindingDataDdNhap(data) {
     if (data) {
-      console.log(data);
       let soLuongNhap = await this.phieuKtraCluongService.getSoLuongNhap({ "idDdiemGiaoNvNh": data.id });
-      console.log(soLuongNhap);
       this.formData.patchValue({
         idDdiemGiaoNvNh: data.id,
         maDiemKho: data.maDiemKho,
@@ -448,7 +442,7 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         try {
           let body = {
             id: this.id,
-            lyDoTuChoi: text,
+            lyDo: text,
             trangThai: STATUS.TU_CHOI_LDCC,
           };
           let res =

@@ -8,11 +8,8 @@ import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
-import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
+import { saveAs } from 'file-saver';
 import {QuyHoachKho} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
-import {
-  DialogDanhSachHangHoaComponent
-} from "../../../../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
 import {
   DialogSoQuyetDinhQlyKhoTangComponent
 } from "../../../../../../components/dialog/dialog-so-quyet-dinh-qly-kho-tang/dialog-so-quyet-dinh-qly-kho-tang.component";
@@ -47,6 +44,7 @@ export class ThemMoiQdDcComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: QuyHoachKho } } = {};
   danhSachPhuongAn: any[] = [];
   dsCuc: any[] = [];
+  fileDinhKems: any[] = [];
   danhSachChiCuc: any[] = [];
   danhSachDiemKho: any[] = [];
   constructor(
@@ -78,21 +76,15 @@ export class ThemMoiQdDcComponent implements OnInit {
 
   async ngOnInit() {
     this.spinner.show();
-    this.danhSachQdGoc();
-    await this.loadListPa();
     this.userInfo = this.userService.getUserLogin();
-    this.loadCuc()
+    await this.danhSachQdGoc();
+    await this.loadListPa();
+    this.maQd = '/QĐ-BTC'
     await Promise.all([
-      this.maQd = '/QĐ-BTC',
-      this.loadDanhSachChiCuc(this.userInfo.MA_DVI),
+      await this.loadDsNam(),
+      this.loadDsCuc(this.userInfo.MA_DVI),
       this.getDataDetail(this.idInput)
     ])
-    for (let i = -3; i < 23; i++) {
-      this.danhSachNam.push({
-        value: dayjs().get('year') - i,
-        text: dayjs().get('year') - i,
-      });
-    }
     this.spinner.hide();
   }
 
@@ -103,22 +95,44 @@ export class ThemMoiQdDcComponent implements OnInit {
       this.danhSachPhuongAn = res.data;
     }
   }
-  loadCuc() {
-    this.rowItem.tenCuc = this.userInfo.TEN_DVI
-    this.rowItem.maCuc = this.userInfo.MA_DVI
+
+  async loadDsNam() {
+    let thisYear = dayjs().get('year');
+    for (let i = -5; i < 5; i++) {
+      this.danhSachNam.push((thisYear - i));
+    }
   }
 
-  async loadDanhSachChiCuc(maCuc) {
+  async loadDsCuc(maCuc) {
     const body = {
       maDviCha: maCuc,
       trangThai: '01',
     };
 
     const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
-    this.dsCuc =  dsTong[DANH_MUC_LEVEL.CUC];
-    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.dsCuc = dsTong[DANH_MUC_LEVEL.CUC];
+    this.dsCuc = this.dsCuc.filter(item => item.type != "PB")
   }
 
+  async onChangeCuc(event, type?) {
+    const body = {
+      maDviCha: event,
+      trangThai: '01',
+    };
+    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
+    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.danhSachChiCuc = this.danhSachChiCuc.filter(item => item.type != "PB")
+    const chiCuc = this.dsCuc.filter(item => item.maDvi == event);
+    if (type) {
+      type.tenCuc = chiCuc[0].tenDvi;
+      type.maChiCuc = null;
+      type.maDiemKho = null;
+    } else {
+      this.rowItem.tenCuc = chiCuc[0] && chiCuc[0].tenDvi ? chiCuc[0].tenDvi : ''  ;
+      this.rowItem.maChiCuc = null;
+      this.rowItem.maDiemKho = null;
+    }
+  }
 
 
   async onChangChiCuc(event, type?) {
@@ -128,11 +142,14 @@ export class ThemMoiQdDcComponent implements OnInit {
     };
     const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+    this.danhSachDiemKho = this.danhSachDiemKho.filter(item => item.type == "MLK")
     const chiCuc = this.danhSachChiCuc.filter(item => item.maDvi == event);
     if (type) {
       type.tenChiCuc = chiCuc[0].tenDvi;
-    } else  {
-      this.rowItem.tenChiCuc = chiCuc[0].tenDvi;
+      type.maDiemKho= null;
+    } else {
+      this.rowItem.tenChiCuc = chiCuc[0] && chiCuc[0].tenDvi ? chiCuc[0].tenDvi : ''  ;
+      this.rowItem.maDiemKho = null
     }
   }
   changePhuongAn(event, type?) {
@@ -246,8 +263,24 @@ export class ThemMoiQdDcComponent implements OnInit {
     modal.afterClose.subscribe(async (data) => {
       if (data) {
         this.formData.patchValue({
-          soQdGoc: data.soQuyetDinh
+          soQdGoc: data.soQuyetDinh ? data.soQuyetDinh : null,
+          trichYeu : data.trichYeu ? data.trichYeu :null,
+          ngayKy : data.ngayKy ? data.ngayKy : null,
+          namBatDau : data.namBatDau ? data.namBatDau : null,
+          namKetThuc : data.namKetThuc ? data.namKetThuc : null,
+          moTa : data.moTa ? data.moTa : null,
         })
+        this.fileDinhKems = data.fileDinhKems;
+        this.dataTable = data.quyetDinhQuyHoachCTiets;
+        if (this.dataTable && this.dataTable.length > 0) {
+          this.dataTable.forEach(item => {
+            let arr = this.danhSachPhuongAn.filter(a => a.ma == item.phuongAnQuyHoach)
+            if (arr && arr.length > 0) {
+              item.tenPhuongAn = arr[0].giaTri;
+            }
+          })
+        }
+        this.updateEditCache();
       }
     });
   }
@@ -269,35 +302,17 @@ export class ThemMoiQdDcComponent implements OnInit {
         soQdGoc: data.soQdGoc
       });
       this.dataTable = data.quyetDinhQuyHoachCTiets;
-      this.updateEditCache()
-      for (const item of this.dataTable) {
-        const listPhuongAn = this.danhSachPhuongAn.filter(pa => pa.ma == item.phuongAnQuyHoach);
-        if (listPhuongAn.length > 0) {
-          item.tenPhuongAn = listPhuongAn[0].giaTri
-        }
-        await this.loadDanhSachChiCuc(item.maCuc);
-        item.tenCuc = this.dsCuc[0].tenDvi
-        const listChiCuc = this.danhSachChiCuc.filter(chiCuc => chiCuc.maDvi == item.maChiCuc);
-        if (listChiCuc.length > 0) {
-          item.tenChiCuc = listChiCuc[0].tenDvi
-          await this.loadDanhSachDiemKho(item.maChiCuc)
-        }
-        const listDiemKho =  this.danhSachDiemKho.filter(diemKho => diemKho.maDvi == item.maDiemKho);
-        if (listDiemKho.length > 0) {
-          item.tenDiemKho = listDiemKho[0].tenDvi
-        }
+      this.fileDinhKems = data.fileDinhKems;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(item => {
+          let arr = this.danhSachPhuongAn.filter(a => a.ma == item.phuongAnQuyHoach)
+          if (arr && arr.length > 0) {
+            item.tenPhuongAn = arr[0].giaTri;
+          }
+        })
       }
       this.updateEditCache();
     }
-  }
-
-  async loadDanhSachDiemKho(maChiCuc) {
-    const body = {
-      maDviCha: maChiCuc,
-      trangThai: '01',
-    };
-    const dsTong = await this.dmDviService.layDonViTheoCapDo(body);
-    this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
   }
 
   async save(isBanHanh?) {
@@ -323,6 +338,12 @@ export class ThemMoiQdDcComponent implements OnInit {
     body.quyetDinhQuyHoachCTietReqs = this.dataTable
     body.maDvi = this.userInfo.MA_DVI;
     body.type = this.type;
+    if (this.fileDinhKems && this.fileDinhKems.length > 0) {
+      this.fileDinhKems.forEach(item => {
+        item.id = null;
+      })
+    }
+    body.fileDinhKems = this.fileDinhKems;
     let res
     if (this.idInput > 0) {
       res = await this.quyHoachKhoService.update(body);
@@ -389,4 +410,28 @@ export class ThemMoiQdDcComponent implements OnInit {
 
   }
 
+  exportCt() {
+    this.spinner.show();
+    try {
+      if (this.dataTable && this.dataTable.length > 0) {
+        let body = {
+          listCt : this.dataTable
+        }
+        this.quyHoachKhoService
+          .exportCt(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'quyet-dinh-quy-hoach-kho-chi-tiet.xlsx'),
+          );
+        this.spinner.hide();
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu");
+        return;
+      }
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+    this.spinner.hide();
+  }
 }

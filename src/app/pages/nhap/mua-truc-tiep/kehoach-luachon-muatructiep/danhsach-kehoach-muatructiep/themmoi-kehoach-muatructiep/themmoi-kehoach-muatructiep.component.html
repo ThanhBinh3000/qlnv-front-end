@@ -491,7 +491,7 @@
                     <th>Thành tiền đề xuất(đ)</th>
                     <th>Đơn giá đã duyệt bao gồm VAT (đ/kg)</th>
                     <th>Thành tiền theo đơn giá đã duyệt (đ/kg)</th>
-                    <th style="width: 5%;" *ngIf="userService.isCuc()">Hành động</th>
+                    <th style="width: 5%;" *ngIf="userService.isCuc() && !isDisbleForm()">Hành động</th>
                 </tr>
             </thead>
             <tbody>
@@ -506,7 +506,7 @@
                         <td class="text-black">{{item.tongThanhTien | number : '1.0-1' : 'vi_VN'}}</td>
                         <td></td>
                         <td></td>
-                        <td></td>
+                        <td *ngIf="userService.isCuc()  && !isDisbleForm()"></td>
                     </tr>
                     <ng-container *ngIf="expandSet.has(i)">
                         <tr *ngFor="let chiCuc of item.children, let y = index">
@@ -520,11 +520,11 @@
                             <td>{{chiCuc.thanhTien | number: '1.0-1' : 'vi_VN'}}</td>
                             <td>{{chiCuc.donGiaVat | number: '1.0-1' : 'vi_VN'}}</td>
                             <td>{{chiCuc.thanhTienVat | number : '1.0-1' : 'vi_VN'}}</td>
-                            <td class="text-right" *ngIf="userService.isCuc()">
-                                <a (click)="themMoiSoLuongDiaDiem(item,i)">
+                            <td class="text-right" *ngIf="userService.isCuc()  && !isDisbleForm()">
+                                <a *ngIf="!isDisbleForm()" (click)="themMoiSoLuongDiaDiem(item,i)">
                                     <i class="fa fa-pencil"></i>
                                 </a>
-                                <a (click)="deleteRow(i)">
+                                <a *ngIf="!isDisbleForm()" (click)="deleteRow(i)">
                                     <i class="fa fa-trash-o do"></i>
                                 </a>
                             </td>
@@ -547,7 +547,6 @@
         <!-- END TABLE LƯƠNG THỰC  -->
     </nz-card>
     <!-- END PHỤ LỤC   -->
-
 </div>
 
 <ng-template #error let-control>

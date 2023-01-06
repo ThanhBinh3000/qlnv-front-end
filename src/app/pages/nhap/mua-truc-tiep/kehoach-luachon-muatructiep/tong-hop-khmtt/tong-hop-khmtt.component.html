@@ -150,7 +150,7 @@
             <td>{{ data.soQdPduyet }}</td>
             <td class="text-left">
               <a (click)="goDetail(data.id)"
-                *ngIf=" ( data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XEM')">
+                *ngIf=" (data.trangThai == STATUS.CHUA_TAO_QD ||data.trangThai==STATUS.DA_BAN_HANH_QD || data.trangThai == STATUS.DA_DU_THAO_QD ) && userService.isAccessPermisson('NHDTQG_PTMTT_KHMTT_TONGHOP_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.CHUA_TAO_QD" (click)="goDetail(data.id)">

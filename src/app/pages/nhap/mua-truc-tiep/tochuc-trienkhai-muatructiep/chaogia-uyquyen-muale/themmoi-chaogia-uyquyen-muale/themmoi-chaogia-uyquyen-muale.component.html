@@ -248,7 +248,7 @@
                             <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                             <td>{{ data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
                             <td>{{ data.thueGtgt }}</td>
-                            <td>{{ data.soLuong * data.donGia * 1000 | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td>{{ data.soLuong * data.donGia | number : '1.0-1' : 'vi_VN' }}</td>
                             <td>{{data.fileDinhKems?.fileName }}</td>
                             <td>{{ data.luaChon }}</td>
                             <td *ngIf="!isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT"

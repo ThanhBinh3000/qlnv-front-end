@@ -103,7 +103,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
 
   async ngOnInit() {
     this.spinner.show();
-    this.maTrinh = '/KH-CDTVP';
+    this.maTrinh = '/' + this.userInfo.MA_TR;
     if (this.idInput > 0) {
       // await this.getDetail(this.idInput);
     } else {
@@ -421,17 +421,18 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   isDisable(): boolean {
-    if (this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP || this.formData.value.trangThai == STATUS.TU_CHOI_LDC) {
+    if (this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP ||
+      this.formData.value.trangThai == STATUS.TU_CHOI_LDC || this.formData.value.trangThai == STATUS.TU_CHOI_CBV) {
       return false
     } else {
       return true
     }
   }
 
-  calcTongSoLuong() {
+  calcTong(columnName) {
     if (this.dataTable) {
       const sum = this.dataTable.reduce((prev, cur) => {
-        prev += cur.tongSoLuong;
+        prev += cur[columnName];
         return prev;
       }, 0);
       return sum;

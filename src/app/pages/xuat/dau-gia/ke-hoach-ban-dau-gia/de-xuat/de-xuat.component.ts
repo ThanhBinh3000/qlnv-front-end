@@ -33,6 +33,8 @@ export class DeXuatComponent extends Base2Component implements OnInit {
       ngayPduyet: [],
       loaiVthh: [],
       trichYeu: [],
+      maDvi: [],
+      trangThaiList: []
     });
 
     this.filterTable = {
@@ -55,7 +57,9 @@ export class DeXuatComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     try {
       this.formData.patchValue({
-        loaiVthh: this.loaiVthh
+        loaiVthh: this.loaiVthh,
+        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+        trangThaiList: this.userService.isTongCuc() ? [this.STATUS.DA_DUYET_LDC, this.STATUS.DA_DUYET_CBV, this.STATUS.TU_CHOI_CBV] : null
       })
       await this.search();
     }
@@ -64,11 +68,6 @@ export class DeXuatComponent extends Base2Component implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-  }
-
-  showList() {
-    this.isDetail = false;
-    this.search()
   }
 
 }

@@ -63,6 +63,7 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
 
     this.formData = this.fb.group({
       id: [],
+      idTh: [],
       ngayThop: [''],
       loaiVthh: [, [Validators.required]],
       tenLoaiVthh: [''],
@@ -71,7 +72,6 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
       namKh: [, [Validators.required]],
       noiDung: ['', [Validators.required]],
       trangThai: [''],
-      ngayTao: [, [Validators.required]],
       ghiChu: ['',],
       tchuanCluong: [''],
       soQd: [''],
@@ -94,17 +94,17 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
 
   async loadChiTiet() {
     if (this.id > 0) {
-      let res = await this.tongHopDeXuatKHMTTService.getDetail(this.id);
-      if (res.msg == MESSAGE.SUCCESS) {
-        const dataDetail = res.data;
-        this.dataTableDanhSachDX = dataDetail.hhDxKhMttThopDtls;
-        this.helperService.bidingDataInFormGroup(this.formTraCuu, dataDetail)
-        this.helperService.bidingDataInFormGroup(this.formData, dataDetail);
+      const data = await this.detail(this.id);
+      if (data) {
         this.isTongHop = true;
+        this.helperService.bidingDataInFormGroup(this.formTraCuu, data)
+        this.formData.patchValue({
+          idTh: data.id
+        })
+        this.dataTable = data.hhDxKhMttThopDtls;
       }
       else {
         this.isTongHop = false;
-        this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
   }
@@ -122,12 +122,12 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data
         let idTh = await this.userService.getId("HH_DX_KHMTT_THOP_HDR_SEQ");
-        this.helperService.bidingDataInFormGroup(this.formData, dataDetail)
+        this.helperService.bidingDataInFormGroup(this.formData, body)
         this.formData.patchValue({
-          id: idTh,
-          ngayTao: dayjs().format("YYYY-MM-DD"),
+          idTh: idTh,
+          ngayThop: dayjs().format("YYYY-MM-DD"),
         })
-        this.dataTableDanhSachDX = dataDetail.hhDxKhMttThopDtls;
+        this.dataTable = dataDetail.hhDxKhMttThopDtls;
         this.isTongHop = true;
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -144,16 +144,27 @@ export class ThemmoiTonghopKhmttComponent extends Base2Component implements OnIn
 
   async save() {
     let body = this.formData.value;
-    let data = await this.createUpdate(body, 'NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP');
+    let data = await this.createUpdate(body, 'NHDTQG_PTMTT_KHMTT_TONGHOP_TONGHOP')
     if (data) {
-      this.id = data.id;
-      await this.loadChiTiet();
-      this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      this.quayLai();
     }
   }
 
   quayLai() {
     this.showListEvent.emit();
+  }
+
+  isDisable(): boolean {
+    if (this.formData.value.id) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  showList() {
+    this.isDetailDxCuc = false;
   }
 
   selectHangHoa() {

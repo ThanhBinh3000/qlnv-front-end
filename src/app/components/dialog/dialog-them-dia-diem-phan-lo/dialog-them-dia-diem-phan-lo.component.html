@@ -1,64 +1,66 @@
-<form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-    <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
-        <div nz-col [nzSpan]="6">
-            <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Chi cục </nz-form-label>
-                <nz-form-control>
-                    <nz-select formControlName="maDvi" (ngModelChange)="changeChiCuc($event)"
-                        [nzDisabled]='selectedChiCuc'>
-                        <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi" [nzLabel]="p.tenDonVi"></nz-option>
-                    </nz-select>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
+<nz-card class="mt16 flex-card p-lr16 mb16 table-card scroll-modal">
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+        <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="24" nzGutter="24">
+            <div nz-col [nzSpan]="6">
+                <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true"> Chi cục </nz-form-label>
+                    <nz-form-control>
+                        <nz-select formControlName="maDvi" (ngModelChange)="changeChiCuc($event)"
+                            [nzDisabled]='selectedChiCuc'>
+                            <nz-option *ngFor="let p of listChiCuc" [nzValue]="p.maDvi"
+                                [nzLabel]="p.tenDvi"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
 
-        <div nz-col [nzSpan]="5">
-            <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">SL xuất theo chỉ tiêu KH giao đầu năm</nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                    <nz-input-number [nzDisabled]="true" formControlName="soLuongChiTieu" [nzMin]="1"
-                        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                    </nz-input-number>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="5">
-            <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true">Tổng SL xuất bán theo KH đã được duyệt </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                    <nz-input-number [nzDisabled]="true" formControlName="soLuongKh" [nzMin]="1"
-                        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                    </nz-input-number>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="5">
-            <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán đề xuất </nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-                    <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1"
-                        [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
-                    </nz-input-number>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="20">
-        </div>
-        <div nz-col [nzSpan]="4">
-            <div class="text-danger float-right" nzRight>
-                <span>
-                    Đơn vị: kg
-                </span>
+            <div nz-col [nzSpan]="5">
+                <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">SL xuất theo chỉ tiêu KH giao đầu năm</nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                        <nz-input-number [nzDisabled]="true" formControlName="soLuongChiTieu" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                        </nz-input-number>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="5">
+                <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true">Tổng SL xuất bán theo KH đã được duyệt </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                        <nz-input-number [nzDisabled]="true" formControlName="soLuongKh" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                        </nz-input-number>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="5">
+                <nz-form-item>
+                    <nz-form-label nzRequired [nzNoColon]="true"> Tổng SL xuất bán đề xuất </nz-form-label>
+                    <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+                        <nz-input-number [nzDisabled]="true" formControlName="soLuong" [nzMin]="1"
+                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
+                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
+                        </nz-input-number>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="20">
+            </div>
+            <div nz-col [nzSpan]="4">
+                <div class="text-danger float-right" nzRight>
+                    <span>
+                        Đơn vị: kg
+                    </span>
+                </div>
             </div>
         </div>
-    </div>
-    <br />
-</form>
-<nz-card class="mt16 flex-card p-lr16 mb16 table-card scroll-modal">
-    <nz-table nzBordered [nzData]="listOfData">
+        <br />
+    </form>
+
+    <nz-table nzBordered class="pd-10 overflow-auto" [nzData]="listOfData">
         <thead>
             <tr>
                 <th nzWidth="150px" class="text-center wrap">Điểm kho</th>
@@ -68,13 +70,15 @@
                 <th nzWidth="100px" class="text-center wrap">Chủng loại hàng hóa</th>
                 <th nzWidth="150px" class="text-center wrap">Mã đơn vị tài sản</th>
                 <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
-                <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg)</th>
-                <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ)</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt VAT (đ/kg)</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá khởi điểm được duyệt (đ)</th>
-                <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ)</th>
-                <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
+                <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất (1)</th>
+                <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg) (2)</th>
+                <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ) (3) = (1) * (2)</th>
+                <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt VAT (đ/kg) (4)</th>
+                <th nzWidth="100px" class="text-center wrap">Đơn giá khởi điểm được duyệt (đ) (5) = (1) * (4)</th>
+                <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ) = (3) * % khoản tiền đặt
+                    trước</th>
+                <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ) = (5) * % khoản tiền đặt
+                    trước</th>
                 <th nzWidth="70px" class="text-center">Hành động</th>
             </tr>
             <tr>
@@ -117,11 +121,13 @@
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </th>
-                <th>(3) = (1) * (2)</th>
-                <th class="wrap">(4) - tự động lấy từ giá cụ thể được duyệt</th>
-                <th>(5) = (1) * (4)</th>
-                <th class="wrap">= (3) * % khoản tiền đặt trước</th>
-                <th class="wrap">= (5) * % khoản tiền đặt trước</th>
+                <th>{{ thongtinPhanLo.soLuong * thongtinPhanLo.donGiaDeXuat | number : '1.0-1' : 'vi_VN'}}</th>
+                <th>{{ thongtinPhanLo.donGiaVat | number : '1.0-1' : 'vi_VN' }}</th>
+                <th>{{ thongtinPhanLo.soLuong * thongtinPhanLo.donGiaVat | number : '1.0-1' : 'vi_VN' }}</th>
+                <th>{{ (thongtinPhanLo.soLuong * thongtinPhanLo.donGiaVat * khoanTienDatTruoc / 100 ) | number : '1.0-1'
+                    : 'vi_VN'}}</th>
+                <th>{{ (thongtinPhanLo.soLuong *
+                    thongtinPhanLo.donGiaVat * khoanTienDatTruoc / 100 ) | number : '1.0-1' : 'vi_VN' }}</th>
                 <th class="text-center">
                     <a (click)="addDiemKho()">
                         <i class="icon htvbdh_dau-cong xanhla"></i>
@@ -147,10 +153,10 @@
                     <td>{{ data.soLuong * data.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
                     <td>{{ data.donGiaVat }}</td>
                     <td>{{ data.soLuong * data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-                    <td>{{ (data.soLuong * data.donGiaDeXuat) + (data.soLuong * data.donGiaDeXuat * khoanTienDatTruoc /
-                        100 )| number :
+                    <td>{{ (data.soLuong * data.donGiaDeXuat * khoanTienDatTruoc /
+                        100 ) | number :
                         '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ (data.soLuong * data.donGiaVat) + (data.soLuong * data.donGiaVat * khoanTienDatTruoc / 100 )
+                    <td>{{ (data.soLuong * data.donGiaVat * khoanTienDatTruoc / 100 )
                         | number :
                         '1.0-1' : 'vi_VN' }}</td>
                     <td class="text-center">
@@ -222,20 +228,23 @@
                     </td>
                 </ng-template>
             </tr>
-            <!-- <tr *ngIf="listOfData.length > 0">
-                <td colspan="6" class="first-last-row-table background-last-row text-left">Cộng</td>
-                <td class="background-last-row text-left"> {{ calcTong('duDau') | number : '1.0-1' : 'vi_VN' }}
-                </td>
-                <td class="background-last-row text-left"> {{ calcTong('') | number : '1.0-1' : 'vi_VN' }}
-                </td>
-                <td colspan="5">
-                </td>
-                <td class="background-last-row text-left"> {{ calcTong('tienDatTruocDduyet') | number : '1.0-1' : 'vi_VN' }}
-                </td>
-                <td>
-                </td>
-            </tr> -->
         </tbody>
+        <tfoot>
+            <tr *ngIf="listOfData.length > 0">
+                <th colspan="6" class="first-last-row-table background-last-row text-left">Cộng</th>
+                <th class="background-last-row text-left"> {{ calcTong('duDau') | number : '1.0-1' : 'vi_VN' }}
+                </th>
+                <th class="background-last-row text-left"> {{ calcTong('soLuong') | number : '1.0-1' : 'vi_VN' }}
+                </th>
+                <th colspan="5">
+                </th>
+                <th class="background-last-row text-left"> {{ calcTong('tienDatTruocDduyet') | number : '1.0-1' :
+                    'vi_VN' }}
+                </th>
+                <th>
+                </th>
+            </tr>
+        </tfoot>
     </nz-table>
 </nz-card>
 <div class="modal-footer">
