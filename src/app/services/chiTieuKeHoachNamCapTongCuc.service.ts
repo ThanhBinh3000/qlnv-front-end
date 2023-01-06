@@ -54,7 +54,6 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   loadThongTinChiTieuKeHoachNam(id: number): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/${id}`;
-    // const url_ = `http://localhost:3333/chi-tieu-ke-hoach-nam/${id}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 
