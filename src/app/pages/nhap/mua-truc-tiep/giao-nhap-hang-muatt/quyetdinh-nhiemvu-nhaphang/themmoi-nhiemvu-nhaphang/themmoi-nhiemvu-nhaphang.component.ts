@@ -128,6 +128,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       tenCloaiVthh: [''],
       lyDoTuChoi: [''],
       diaDiemGiaoNhan: [''],
+      ngayKyHd: ['']
     })
   }
 
@@ -268,6 +269,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
             donViTinh: data.donViTinh,
             soLuong: data.soLuong,
             tgianNkho: data.tgianKthuc,
+            ngayKyHd: data.ngayKy,
 
           })
           this.dataTable = data.diaDiemGiaoNhan

@@ -12,6 +12,7 @@ import { BienBanLayBanGiaoMauComponent } from './bien-ban-lay-ban-giao-mau/bien-
 import { ThemMoiBienBanLayBanGiaoMauComponent } from './bien-ban-lay-ban-giao-mau/them-moi-bien-ban-lay-ban-giao-mau/them-moi-bien-ban-lay-ban-giao-mau.component';
 import { PhieuKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-chat-luong/phieu-kiem-nghiem-chat-luong.component';
 import { ThemMoiPhieuKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component';
+import { ThanhPhanLayMauComponent } from './bien-ban-lay-ban-giao-mau/them-moi-bien-ban-lay-ban-giao-mau/thanh-phan-lay-mau/thanh-phan-lay-mau.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { ThemMoiPhieuKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-ch
     ThemMoiBienBanLayBanGiaoMauComponent,
     PhieuKiemNghiemChatLuongComponent,
     ThemMoiPhieuKiemNghiemChatLuongComponent,
+    ThanhPhanLayMauComponent,
   ],
   imports: [
     CommonModule,
