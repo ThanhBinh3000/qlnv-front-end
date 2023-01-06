@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import dayjs from 'dayjs';
-import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Base2Component } from 'src/app/components/base2/base2.component';
@@ -16,6 +16,7 @@ import { StorageService } from 'src/app/services/storage.service';
 export class ThongtinDaugiaComponent extends Base2Component implements OnInit {
 
   @Input() data
+  idDtl: number;
   isModal = false;
   constructor(
     httpClient: HttpClient,
@@ -28,50 +29,73 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, thongTinDauGiaService);
     this.formData = this.fb.group({
       id: [],
+      idQdPdDtl: [],
       nam: [dayjs().get("year"), [Validators.required]],
       maThongBao: [],
-      trichYeuThongBao: [],
+      trichYeuTbao: [],
       tenToChuc: [],
-      sdt: [],
-      diaChi: [],
-      taiKhoanNganHang: [],
-      soHopDong: [],
-      ngayKyHopDong: [],
-      hinhThucToChuc: [],
-      thoiGianThamGia: [],
-      ghiChuThoiGianThamGia: [],
-      diaDiemNopHoSo: [],
-      dieuKienDangKy: [],
-      tienHoSo: [],
+      sdtToChuc: [],
+      diaChiToChuc: [],
+      taiKhoanToChuc: [],
+      soHd: [],
+      ngayKyHd: [],
+      hthucTchuc: [],
+      tgianDky: [],
+      tgianDkyTu: [],
+      tgianDkyDen: [],
+      ghiChuTgianDky: [],
+      diaDiemDky: [],
+      dieuKienDky: [],
+      tienMuaHoSo: [],
       buocGia: [],
-      tgianXemTaiSan: [],
-      ghiChuTgianXemTaiSan: [],
-      diaDiemXemTaiSan: [],
-      tgianNopTien: [],
+      tgianXem: [],
+      tgianXemTu: [],
+      tgianXemDen: [],
       ghiChuTgianXem: [],
-      pthucThanhToan: [],
+      diaDiemXem: [],
+      tgianNopTien: [],
+      tgianNopTienTu: [],
+      tgianNopTienDen: [],
+      ghiChuTgianNopTien: [],
+      pthucTtoan: [],
       donViThuHuong: [],
-      stk: [],
-      nganHang: [],
+      stkThuHuong: [],
+      nganHangThuHuong: [],
       chiNhanhNganHang: [],
-      tgianToChucDauGia: [],
-      diaDiemToChucDauGia: [],
-      hthucDauGia: [],
-      pthucDauGia: [],
-      dieuKien: [],
+      tgianDauGia: [],
+      tgianDauGiaTu: [],
+      tgianDauGiaDen: [],
+      diaDiemDauGia: [],
+      hthucDgia: [],
+      pthucDgia: [],
+      dkienCthuc: [],
       ghiChu: [],
-      ketQuaDauGia: [],
-      soBienBanDauGia: [],
-      trichYeuKetQua: [],
+      ketQua: [],
+      soBienBan: [],
+      trichYeuBban: [],
+      ngayKyBban: [],
     })
   }
 
-  ngOnInit(): void {
-
+  async ngOnInit() {
+    if (this.data) {
+      this.helperService.bidingDataInFormGroup(this.formData, this.data);
+    } else {
+      let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ")
+      this.formData.patchValue({
+        maThongBao: idThongBao + "/" + this.formData.value.nam + "/TB-ĐG",
+        idQdPdDtl: this.idDtl,
+        soBienBan: idThongBao + "/" + this.formData.value.nam + "/BB-ĐG"
+      })
+    }
   }
 
   async handleCancel() {
     this.modal.closeAll();
+  }
+
+  isDisabled() {
+    return false;
   }
 
   async handleOk() {

@@ -9,6 +9,6 @@ import { PATH } from 'src/app/constants/path';
 export class ThongTinDauGiaService extends BaseService {
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'xuat-hang/ban-dau-gia/to-chuc-trien-khai', PATH.QLNV_HANG);
+    super(httpClient, PATH.XUAT_HANG_DTQG + "/" + PATH.DAU_GIA + "/" + PATH.TTIN_DGIA, PATH.QLNV_HANG);
   }
 }

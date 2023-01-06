@@ -103,7 +103,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
 
   async ngOnInit() {
     this.spinner.show();
-    this.maTrinh = '/KH-CDTVP';
+    this.maTrinh = '/' + this.userInfo.MA_TR;
     if (this.idInput > 0) {
       // await this.getDetail(this.idInput);
     } else {

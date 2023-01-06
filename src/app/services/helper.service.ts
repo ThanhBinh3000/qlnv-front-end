@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
 import Cleave from 'cleave.js';
 import * as XLSX from 'xlsx';
 import { environment } from 'src/environments/environment';
 import { ResponseData } from '../interfaces/response';
-import {MESSAGE} from "../constants/message";
-import {NzNotificationService} from "ng-zorro-antd/notification";
+import { MESSAGE } from "../constants/message";
+import { NzNotificationService } from "ng-zorro-antd/notification";
 declare var vgcapluginObject: any;
 
 @Injectable({
@@ -28,6 +28,19 @@ export class HelperService {
       }
     }
     this.findInvalidControls(formGroup);
+  }
+
+
+  async getId(sequenceName: string) {
+    if (sequenceName) {
+      const url = `${environment.SERVICE_API}/qlnv-system/system/${sequenceName}`;
+      let res = await this.httpClient.get<any>(url).toPromise();
+      if (res.msg == MESSAGE.SUCCESS) {
+        return res.data;
+      }
+    } else {
+      console.error('Sequence Name is null')
+    }
   }
 
   EnumToSelectList(key): Promise<ResponseData<any>> {
@@ -75,14 +88,14 @@ export class HelperService {
         invalid.push(name);
       }
     }
-    if(invalid.length > 0){
-      this.notification.error(MESSAGE.ERROR,MESSAGE.FORM_REQUIRED_ERROR);
+    if (invalid.length > 0) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
       console.log(invalid);
     }
   }
 
-  bidingDataInFormGroup(formGroup : FormGroup ,dataBinding : any){
-    if(dataBinding){
+  bidingDataInFormGroup(formGroup: FormGroup, dataBinding: any) {
+    if (dataBinding) {
       for (const name in dataBinding) {
         if (formGroup.controls.hasOwnProperty(name)) {
           formGroup.controls[name].setValue(dataBinding[name]);
@@ -91,9 +104,9 @@ export class HelperService {
     }
   }
 
-  setIndexArray( array : any[]){
-    if(array && array.length > 0){
-      array.forEach( (item , index) => {
+  setIndexArray(array: any[]) {
+    if (array && array.length > 0) {
+      array.forEach((item, index) => {
         item.idx = index;
       })
     }

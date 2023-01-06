@@ -224,61 +224,11 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       nzFooter: null,
       nzComponentParams: {
         isModal: true,
+
       },
     });
     modalQD.afterClose.subscribe((data) => {
-      // if (hopDongs) {
-      //   let canCuHd = '';
-      //   this.qdGiaoNhiemVuXuatHang.hopDongIds = [];
-      //   if (hopDongs.length > 0) {
-      //     this.hopDongList = [];
-      //     this.hopDongListShow = [];
-      //     this.totalRecord = 0;
-      //     hopDongs.forEach((hd, i) => {
-      //       if (hd && hd.bhDdiemNhapKhoList && hd.bhDdiemNhapKhoList.length > 0) {
-      //         hd.bhDdiemNhapKhoList.forEach((itemDiemKho: any) => {
-      //           let item = {
-      //             "donGiaKhongThue": itemDiemKho.donGia ?? 0,
-      //             "donViTinh": itemDiemKho.dviTinh,
-      //             "id": 0,
-      //             "maDiemKho": itemDiemKho.maDiemKho,
-      //             "maDvi": itemDiemKho.maDvi,
-      //             "maNganKho": itemDiemKho.maNganKho,
-      //             "maNganLo": itemDiemKho.maNganLo,
-      //             "maNhaKho": itemDiemKho.maNhaKho,
-      //             "maVatTu": hd.cloaiVthh,
-      //             "maVatTuCha": hd.loaiVthh,
-      //             "qdgnvxId": 0,
-      //             "soLuong": itemDiemKho.soLuong ?? 0,
-      //             "stt": 0,
-      //             "thanhTien": ((itemDiemKho.donGia ?? 0) * (itemDiemKho.soLuong ?? 0)) ?? 0,
-      //             "thoiHanXuatBan": null,
-      //             "tenDvi": itemDiemKho.tenDvi,
-      //             "tenDiemKho": itemDiemKho.tenDiemKho,
-      //             "tenNhaKho": itemDiemKho.tenNhaKho,
-      //             "tenNganKho": itemDiemKho.tenNganKho,
-      //             "tenLoKho": itemDiemKho.tenLoKho,
-      //             "tenVatTuCha": itemDiemKho.tenLoaiHangHoa,
-      //             "tenVatTu": itemDiemKho.tenChungLoaiHH,
-      //           }
-      //           this.hopDongList.push(item);
-      //         });
-      //       }
-      //       canCuHd += hd.soHd
-      //       if (i < hopDongs.length - 1) {
-      //         canCuHd += ' - '
-      //       };
-      //       this.qdGiaoNhiemVuXuatHang.hopDongIds.push(hd.id);
-      //     });
-      //     if (this.hopDongList && this.hopDongList.length > 0) {
-      //       this.totalRecord = this.hopDongList.length;
-      //       this.hopDongListShow = this.hopDongList.slice(((this.page - 1) * this.pageSize), (this.page * this.pageSize));
-      //     }
-      //   }
-      //   this.formData.patchValue({
-      //     soHopDong: canCuHd,
-      //   });
-      // }
+      this.loadDetail(this.idInput)
     });
   }
 
