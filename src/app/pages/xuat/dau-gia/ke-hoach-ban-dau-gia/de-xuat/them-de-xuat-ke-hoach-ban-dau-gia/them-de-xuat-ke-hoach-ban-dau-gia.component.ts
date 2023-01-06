@@ -186,12 +186,21 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
-        this.formData.patchValue({
-          cloaiVthh: data.cap == 3 ? data.ma : null,
-          tenCloaiVthh: data.cap == 3 ? data.ten : null,
-          loaiVthh: data.cap == 3 ? data.parent.ma : data.ma,
-          tenLoaiVthh: data.cap == 3 ? data.parent.ten : data.ten,
-        });
+        if (data.ma.startsWith('04')) {
+          this.formData.patchValue({
+            cloaiVthh: data.ma,
+            tenCloaiVthh: data.ten,
+            loaiVthh: data.parent.ma,
+            tenLoaiVthh: data.parent.ten
+          });
+        } else {
+          this.formData.patchValue({
+            cloaiVthh: data.cap == 3 ? data.ma : null,
+            tenCloaiVthh: data.cap == 3 ? data.ten : null,
+            loaiVthh: data.cap == 3 ? data.parent.ma : data.ma,
+            tenLoaiVthh: data.cap == 3 ? data.parent.ten : data.ten,
+          });
+        }
         let res = await this.dmTieuChuanService.getDetailByMaHh(
           this.formData.get('cloaiVthh').value,
         );
