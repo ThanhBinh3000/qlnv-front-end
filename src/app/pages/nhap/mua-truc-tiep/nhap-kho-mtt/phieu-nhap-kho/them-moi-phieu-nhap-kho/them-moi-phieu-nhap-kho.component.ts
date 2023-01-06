@@ -87,7 +87,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       donViGiao: [],
       diaChiNguoiGiao: [],
       thoiGianGiaoNhan: [],
-      soBangKeCanHang: ['2000'],
+      soBangKeCanHang: [''],
       ghiChu: [],
       trangThai: [],
       tenTrangThai: [],
@@ -282,7 +282,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
         this.dataTable = data.hhPhieuNhapKhoCtList;
         this.fileDinhKems = data.fileDinhKems
         this.formData.patchValue({
-          // soBangKeCanHang: data.bangKeCanHang?.soBangKe
+          soBangKeCanHang: data.hhBcanKeHangHdr?.soBangKeCanHang
         })
       }
     }

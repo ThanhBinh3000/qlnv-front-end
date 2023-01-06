@@ -15,6 +15,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { Globals } from 'src/app/shared/globals';
 import { STATUS } from "../../../../../constants/status";
 import { PhieuNhapKhoMuaTrucTiepService } from 'src/app/services/phieu-nhap-kho-mua-truc-tiep.service';
+import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
 
 
 @Component({
@@ -62,6 +63,7 @@ export class PhieuNhapKhoComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
     private phieuNhapKhoMuaTrucTiepService: PhieuNhapKhoMuaTrucTiepService,
+    private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
     private notification: NzNotificationService,
     private router: Router,
     public userService: UserService,
@@ -158,10 +160,18 @@ export class PhieuNhapKhoComponent implements OnInit {
             id: item.id,
             maDvi: '',
           };
-          this.phieuNhapKhoMuaTrucTiepService.delete(body).then(async () => {
-            this.search();
-            this.spinner.hide();
+          this.phieuNhapKhoMuaTrucTiepService.delete(body).then(async (res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(
+                MESSAGE.SUCCESS,
+                MESSAGE.DELETE_SUCCESS,
+              );
+              this.search();
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
           });
+          this.spinner.hide();
         } catch (e) {
           console.log('error: ', e);
           this.spinner.hide();
@@ -171,28 +181,23 @@ export class PhieuNhapKhoComponent implements OnInit {
     });
   }
 
+
+
   async search() {
     await this.spinner.show();
     let body = {
-      ngayNhapKhoTu: this.searchFilter.ngayNkho
-        ? dayjs(this.searchFilter.ngayNkho[0]).format('YYYY-MM-DD')
-        : null,
-      ngayNhapKhoDen: this.searchFilter.ngayNkho
-        ? dayjs(this.searchFilter.ngayNkho[1]).format('YYYY-MM-DD')
-        : null,
-      namKh: this.searchFilter.namKh,
-      soQuyetDinhNhap: this.searchFilter.soQuyetDinhNhap,
-      soPhieuNhapKho: this.searchFilter.soPhieuNhapKho,
+      trangThai: STATUS.BAN_HANH,
       maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
     };
-    let res = await this.phieuNhapKhoMuaTrucTiepService.search(body);
+    let res = await this.quyetDinhGiaoNvNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
+      this.convertDataTable();
       this.dataTableAll = cloneDeep(this.dataTable);
       this.totalRecord = data.totalElements;
     } else {
@@ -200,6 +205,23 @@ export class PhieuNhapKhoComponent implements OnInit {
     }
     await this.spinner.hide();
   }
+
+  convertDataTable() {
+    this.dataTable.forEach(item => {
+      if (this.userService.isChiCuc()) {
+        item.detail = item.hhPhieuNhapKhoHdrList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+      } else {
+        let data = [];
+        item.hhPhieuNhapKhoHdrList.forEach(item => {
+          // data = [...data, ...item.children];
+        })
+        item.detail = {
+          // children: data
+        }
+      };
+    });
+  }
+
 
   export() {
     if (this.totalRecord && this.totalRecord > 0) {
