@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="hoanThanhCapNhat()">
+    <button type="button" class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat()">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Hoàn thành cập nhật</span>
     </button>
@@ -41,7 +41,7 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Số QĐ PD Kế hoạch BĐG</nz-form-label>
                     <nz-form-control>
-                      <input nz-input formControlName="soQdPdKh" readonly />
+                      <input nz-input formControlName="soQdPd" readonly />
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -266,12 +266,7 @@
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
-    <nz-card class="mg-t-16 flex-card p-lr16">
-      <app-thongtin-daugia></app-thongtin-daugia>
-
-
-
-    </nz-card>
+    <app-thongtin-daugia></app-thongtin-daugia>
   </nz-card>
 </div>
 <ng-template #error let-control>

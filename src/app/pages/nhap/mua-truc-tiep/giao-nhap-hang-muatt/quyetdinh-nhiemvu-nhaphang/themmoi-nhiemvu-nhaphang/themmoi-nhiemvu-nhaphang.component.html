@@ -139,7 +139,7 @@
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogHopDong()">
-                                <input [readonly]="true" nz-input formControlName="soHdong" readonly="true" />
+                                <input [readonly]="true" nz-input formControlName="soHd" readonly="true" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -151,7 +151,7 @@
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogCanCuUyQuyen()">
-                                <input [readonly]="true" nz-input formControlName="soQdPduyet" readonly="true" />
+                                <input [readonly]="true" nz-input formControlName="soQdPdKq" readonly="true" />
                             </nz-input-group>
                         </nz-form-control>
                     </nz-form-item>
@@ -197,8 +197,8 @@
                             Thời gian nhập kho muộn nhất
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
-                            <nz-date-picker nzPlaceHolder="Ngày quyết định" formControlName="tgianNkho"
-                                nzFormat="dd/MM/yyyy" nzDisabled>
+                            <nz-date-picker nzPlaceHolder="" formControlName="tgianNkho" nzFormat="dd/MM/yyyy"
+                                nzDisabled>
                             </nz-date-picker>
                         </nz-form-control>
                     </nz-form-item>
@@ -252,35 +252,7 @@
                 <th class="text-center">Lô kho</th>
                 <th nzWidth="160px" class="text-center">Số lượng</th>
                 <th class="text-center">Trạng thái</th>
-                <th nzWidth="80px" class="text-center"></th>
-            </tr>
-            <tr *ngIf="userService.isCuc() && typeVthh == '02'">
-                <th></th>
-                <th></th>
-                <th>
-                    <nz-select [(ngModel)]="rowItem.maDvi" (ngModelChange)="changeChiCuc()">
-                        <nz-option *ngFor="let item of listChiCuc" [nzValue]="item.key" [nzLabel]="item.title">
-                        </nz-option>
-                    </nz-select>
-                </th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>
-                    <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzSize]="'small'"
-                        nz-input [(ngModel)]="rowItem.soLuong" [nzMin]="0">
-                    </nz-input-number>
-                </th>
-                <th> </th>
-                <th style="text-align: center;">
-                    <a (click)="themChiCuc()" [ngClass]="{'isDisabled': !validateButtonThem('chiCuc')}">
-                        <i class="fa fa-plus"></i>
-                    </a>
-                    <a>
-                        <i (click)="clearDiaDiemNhap()" class="icon htvbdh_nhap-lai1"></i>
-                    </a>
-                </th>
+                <th *ngIf="userService.isChiCuc()" nzWidth="80px" class="text-center"></th>
             </tr>
         </thead>
         <tbody>
@@ -295,13 +267,7 @@
                     <td></td>
                     <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                     <td>{{ item.tenTrangThai }}</td>
-                    <td>
-                        <a *ngIf="userService.isCuc()">
-                            <i class="fa fa-pencil"></i>
-                        </a>
-                        <a *ngIf="userService.isCuc()">
-                            <i (click)=" xoaDiaDiemNhap(i)" class="fa fa-trash-o do"></i>
-                        </a>
+                    <td *ngIf="userService.isChiCuc()">
                     </td>
                 </tr>
                 <ng-container *ngIf="expandSet.has(i)">
@@ -349,7 +315,7 @@
                             </a>
                         </td>
                     </tr>
-                    <tr *ngFor="let ddNhap of item.diaDiemNhapList, let y = index">
+                    <tr *ngFor="let ddNhap of item.hhQdGiaoNvNhDdiemList, let y = index">
                         <td></td>
                         <td></td>
                         <td></td>
@@ -357,10 +323,9 @@
                         <td>{{ddNhap.tenNhaKho}}</td>
                         <td>{{ddNhap.tenNganKho}}</td>
                         <td>{{ddNhap.tenLoKho}}</td>
-                        <td>{{ddNhap.soLuong | number : '1.0-1' : 'vi_VN'
-                            }}</td>
+                        <td>{{ddNhap.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                         <td></td>
-                        <td style="text-align: center;">
+                        <td *ngIf="userService.isChiCuc()" style="text-align: center;">
                             <a>
                                 <i class="fa fa-pencil"></i>
                             </a>
@@ -369,7 +334,7 @@
                             </a>
                         </td>
                     </tr>
-                    <tr *ngIf="item.diaDiemNhapList.length > 0 && this.userService.isChiCuc()">
+                    <tr *ngIf="this.userService.isChiCuc()">
                         <td style="text-align: right; font-weight: 700" colspan="7">Tổng số</td>
                         <td>{{ calcTong(i) | number : '1.0-1' : 'vi_VN' }}</td>
                         <td></td>
