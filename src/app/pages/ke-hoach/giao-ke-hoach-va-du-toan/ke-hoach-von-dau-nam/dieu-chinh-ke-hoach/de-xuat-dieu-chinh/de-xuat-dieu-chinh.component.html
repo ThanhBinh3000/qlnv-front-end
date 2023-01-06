@@ -10,7 +10,7 @@
             </nz-select>
           </div>
           <div nz-col nzSpan="5">
-            <label class="search__label">Số văn bản đề xuất</label>
+            <label class="search__label">Số đề xuất</label>
             <input class="search__input" nz-input [(ngModel)]="soQDGiao" />
           </div>
           <div nz-col nzSpan="6">
@@ -18,7 +18,7 @@
             <nz-range-picker [(ngModel)]="ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
           <div nz-col nzSpan="10">
-            <label class="search__label">Trích yếu văn bản đề xuất</label>
+            <label class="search__label">Trích yếu</label>
             <input class="search__input" nz-input [(ngModel)]="trichYeuGiao" />
           </div>
           <div nz-col nzSpan="24" *ngIf="userService.isTongCuc()">
@@ -51,7 +51,7 @@
       </nz-card>
 
       <div class="group-button">
-        <h3>Danh sách đề xuất điều chỉnh</h3>
+        <h3>DANH SÁCH ĐỀ XUẤT ĐIỀU CHỈNH CHỈ TIÊU KẾ HOẠCH NĂM</h3>
         <div class="buttons">
           <button type="button" class="btn btn-do" (click)="deleteSelect()"
             *ngIf="(userService.isCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XOA')">
@@ -94,9 +94,9 @@
               <th>Trích yếu</th>
               <th>Số QĐ giao chỉ tiêu</th>
               <th>Năm kế hoạch</th>
-              <th>Tên hàng hóa</th>
               <th *ngIf="userService.isCuc()">Trạng thái của đề xuất</th>
               <th>Trạng thái xử lý của TC</th>
+              <th>Số QĐ điều chỉnh</th>
               <th width="90" class="text-right">Hoạt động</th>
             </tr>
             <tr class="header-row search">
@@ -140,8 +140,8 @@
               </th>
               <th>
                 <nz-input-group>
-                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenHangHoa"
-                    (input)="filterInTable('tenHangHoa',filterTable.tenHangHoa)" />
+                  <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdDc"
+                         (input)="filterInTable('soQdDc',filterTable.soQdDc)"/>
                 </nz-input-group>
               </th>
               <th *ngIf="userService.isCuc()">
@@ -165,9 +165,9 @@
               <td>{{data.trichYeu}}</td>
               <td>{{data.soQdKeHoachNam}}</td>
               <td class="text-right">{{data.namKeHoach}}</td>
-              <td>{{data.tenHangHoa}}</td>
               <td *ngIf="userService.isCuc()" class="text-center">{{data.tenTrangThai}}</td>
               <td class="text-center">{{data.trangThaiDuyet}}</td>
+              <td class="text-center">{{data.soQdDc}}</td>
               <td>
                 <a *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XEM')"
                   (click)="redirectToChiTiet(true, data.id)">

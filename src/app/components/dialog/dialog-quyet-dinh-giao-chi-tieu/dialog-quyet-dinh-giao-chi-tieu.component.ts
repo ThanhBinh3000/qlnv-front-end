@@ -1,14 +1,14 @@
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalRef } from 'ng-zorro-antd/modal';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {NzModalRef} from 'ng-zorro-antd/modal';
+import {NgxSpinnerService} from 'ngx-spinner';
 import * as dayjs from 'dayjs';
-import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
-import { MESSAGE } from 'src/app/constants/message';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { DeXuatDieuChinhService } from 'src/app/services/deXuatDieuChinh.service';
-import { QuyetDinhDieuChinhChiTieuKeHoachNamService } from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
-import { STATUS } from 'src/app/constants/status';
+import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
+import {MESSAGE} from 'src/app/constants/message';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {DeXuatDieuChinhService} from 'src/app/services/deXuatDieuChinh.service';
+import {QuyetDinhDieuChinhChiTieuKeHoachNamService} from 'src/app/services/quyetDinhDieuChinhChiTieuKeHoachNam.service';
+import {STATUS} from 'src/app/constants/status';
 
 @Component({
   selector: 'dialog-quyet-dinh-giao-chi-tieu',
@@ -29,6 +29,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
   STATUS = STATUS
   namKeHoach?: number;
   capDonVi: number;
+
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,
@@ -36,7 +37,8 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
     private quyetDinhDieuChinhChiTieuKeHoachNamService: QuyetDinhDieuChinhChiTieuKeHoachNamService,
     private notification: NzNotificationService,
     private deXuatDieuChinhService: DeXuatDieuChinhService,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -106,8 +108,8 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
-    }
-    else {
+    } else {
+      body.capDvi = 1;
       let res = await this.chiTieuKeHoachNamService.timKiem(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
