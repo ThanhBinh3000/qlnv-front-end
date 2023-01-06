@@ -132,6 +132,9 @@ export class ThemMoiSoTheoDoiBqComponent implements OnInit {
 
   async onChangeLoaiVthh(event) {
     if (event) {
+      this.formData.patchValue({
+        tenHH : null
+      })
       let body = {
         "str": event
       };
@@ -157,22 +160,14 @@ export class ThemMoiSoTheoDoiBqComponent implements OnInit {
   }
 
   async loadDiemKho() {
-    let body = {
+    const body = {
       maDviCha: this.userInfo.MA_DVI,
       trangThai: '01',
-    }
-    const res = await this.donviService.getTreeAll(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        res.data.forEach(element => {
-          if (element && element.capDvi == '3' && element.children) {
-            this.listDiemKho = element.children;
-          }
-        });
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
+    };
+
+    const dsTong = await this.donviService.layDonViTheoCapDo(body);
+    let res = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+    this.listDiemKho = res.filter(item => item.type == "MLK")
   }
 
   async changeDiemKho(event) {

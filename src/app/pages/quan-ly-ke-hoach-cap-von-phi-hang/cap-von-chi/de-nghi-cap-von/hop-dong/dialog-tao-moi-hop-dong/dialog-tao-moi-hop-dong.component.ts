@@ -40,9 +40,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
         this.response.ngayTao = new Date();
         this.response.maDvi = this.userInfo?.MA_DVI;
         this.response.trangThai = Utils.TT_BC_1;
-        if (!this.userService.isTongCuc()) {
-            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
-        }
+        this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
         this.response.dnghiCvHopDongCtiets = [];
     }
     //lay ra so quyet dinh chi tieu cho de nghi
@@ -176,10 +174,10 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
                             qdPheDuyetKqNhaThau: item.soHd,
                             slKeHoach: item.soLuongKehoach,
                             slHopDong: item.soLuong,
-                            slThucHien: item.soLuongThien,
+                            // slThucHien: item.soLuongThien,
                             donGia: item.donGia,
                             gtHopDong: mulNumber(item.soLuong, item.donGia),
-                            gtriThucHien: mulNumber(item.soLuongThien, item.donGia),
+                            // gtriThucHien: mulNumber(item.soLuongThien, item.donGia),
                             soTtLuyKe: item.soTtLuyKe,
                             daGiaoDuToan: item.daGiaoDuToan,
                         }

@@ -55,11 +55,13 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
 
   deXuatLT: any = {};
   deXuatMuoi: any = {};
-  deXuatVatTu: any = {};
+  deXuatVatTuNhap: any = {};
+  deXuatVatTuXuat: any = {};
 
   editLuongThucCache: { [key: string]: { edit: boolean; data: any } } = {};
   editMuoiCache: { [key: string]: { edit: boolean; data: any } } = {};
-  editVatTuCache: { [key: string]: { edit: boolean; data: any } } = {};
+  editVatTuNhapCache: { [key: string]: { edit: boolean; data: any } } = {};
+  editVatTuXuatCache: { [key: string]: { edit: boolean; data: any } } = {};
 
   dataVatTuCha: any[] = [];
   dataVatTuChaShow: any[] = [];
@@ -127,12 +129,15 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       loaiHangHoa: [this.tabSelected]
     });
     this.deXuatDieuChinh.trangThai = '00';
+    this.deXuatVatTuNhap.chiTieu = '01';
+    this.deXuatVatTuXuat.chiTieu = '00';
     if (id > 0) {
       let res = await this.deXuatDieuChinhService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
           this.deXuatDieuChinh = res.data;
-
+          this.deXuatDieuChinh.dxDcVtNhapList = res.data.dxDcVtList.filter(it => it.chiTieu == '01') ?? [];
+          this.deXuatDieuChinh.dxDcVtXuatList = res.data.dxDcVtList.filter(it => it.chiTieu == '00') ?? [];
           this.selectedCanCu.id = this.deXuatDieuChinh?.keHoachNamId;
           this.selectedCanCu.soQuyetDinh = this.deXuatDieuChinh?.soQdKeHoachNam;
 
@@ -191,34 +196,36 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             });
           }
 
-          if (this.deXuatDieuChinh.dxDcltList && this.deXuatDieuChinh.dxDcltList.length > 0) {
-            this.deXuatDieuChinh.dxDcltList.forEach(element => {
-              if (element.diaDiemKho && element.diaDiemKho != '') {
-                element.diemKho = JSON.parse(element.diaDiemKho);
-              }
-            });
-          }
+          // if (this.deXuatDieuChinh.dxDcltList && this.deXuatDieuChinh.dxDcltList.length > 0) {
+          //   this.deXuatDieuChinh.dxDcltList.forEach(element => {
+          //     if (element.diaDiemKho && element.diaDiemKho != '') {
+          //       element.diemKho = JSON.parse(element.diaDiemKho);
+          //     }
+          //   });
+          // }
 
-          if (this.deXuatDieuChinh.dxDcMuoiList && this.deXuatDieuChinh.dxDcMuoiList.length > 0) {
-            this.deXuatDieuChinh.dxDcMuoiList.forEach(element => {
-              if (element.diaDiemKho && element.diaDiemKho != '') {
-                element.diemKho = JSON.parse(element.diaDiemKho);
-              }
-            });
-          }
+          // if (this.deXuatDieuChinh.dxDcMuoiList && this.deXuatDieuChinh.dxDcMuoiList.length > 0) {
+          //   this.deXuatDieuChinh.dxDcMuoiList.forEach(element => {
+          //     if (element.diaDiemKho && element.diaDiemKho != '') {
+          //       element.diemKho = JSON.parse(element.diaDiemKho);
+          //     }
+          //   });
+          // }
 
-          if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0) {
-            this.deXuatDieuChinh.dxDcVtList.forEach(element => {
-              if (element.diaDiemKho && element.diaDiemKho != '') {
-                element.diemKho = JSON.parse(element.diaDiemKho);
-              }
-            });
-          }
-
+          // if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0) {
+          //   this.deXuatDieuChinh.dxDcVtList.forEach(element => {
+          //     if (element.diaDiemKho && element.diaDiemKho != '') {
+          //       element.diemKho = JSON.parse(element.diaDiemKho);
+          //     }
+          //   });
+          // }
           this.updateEditLuongThucCache();
           this.updateEditMuoiCache();
-          this.updateEditVatTuCache();
+          this.updateEditVatTuNhapCache();
+          this.updateEditVatTuXuatCache();
         }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
   }
@@ -252,17 +259,17 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             .then((res) => {
               if (res && res.data) {
                 this.deXuatDieuChinh.dxDcMuoiList = res.data.dxDcMuoiList;
-                this.deXuatDieuChinh.dxDcVtList = res.data.dxDcVtList;
+                this.deXuatDieuChinh.dxDcVtNhapList = res.data.dxDcVtList.filter(it => it.chiTieu == '01') ?? [];
+                this.deXuatDieuChinh.dxDcVtXuatList = res.data.dxDcVtList.filter(it => it.chiTieu == '00') ?? [];
                 this.deXuatDieuChinh.dxDcltList = res.data.dxDcltList;
                 this.deXuatDieuChinh.namKeHoach = res.data.namKeHoach;
-
                 this.formData.controls['namKeHoach'].setValue(
                   this.deXuatDieuChinh.namKeHoach,
                 );
-
                 this.updateEditLuongThucCache();
                 this.updateEditMuoiCache();
-                this.updateEditVatTuCache();
+                this.updateEditVatTuNhapCache();
+                this.updateEditVatTuXuatCache();
               }
             });
           this.spinner.hide();
@@ -325,7 +332,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
       this.dataVatTuConShow = cloneDeep(this.dataVatTuConClone);
-      this.deXuatVatTu.donViTinh = '';
+      this.deXuatVatTuNhap.donViTinh = '';
     } else {
       this.dataVatTuConShow = this.dataVatTuConClone.filter(
         (x) => x.ten.toLowerCase().indexOf(value.toLowerCase()) != -1,
@@ -356,10 +363,10 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     const value = (e.target as HTMLInputElement).value;
     if (!value || value.indexOf('@') >= 0) {
       this.dataVatTuChaShow = cloneDeep(this.dataVatTuCha);
-      this.deXuatVatTu.maHang = '';
-      this.deXuatVatTu.donViTinh = '';
-      this.deXuatVatTu.kyHieu = '';
-      this.deXuatVatTu.chungLoaiHang = '';
+      this.deXuatVatTuNhap.maHang = '';
+      this.deXuatVatTuNhap.donViTinh = '';
+      this.deXuatVatTuNhap.kyHieu = '';
+      this.deXuatVatTuNhap.chungLoaiHang = '';
       this.dataVatTuConClone = cloneDeep(this.dataVatTuCon);
       this.dataVatTuConShow = cloneDeep(this.dataVatTuCon);
     } else {
@@ -372,7 +379,6 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   async selectTenHang(vatTu, isAdd, item) {
     this.dataVatTuConClone = vatTu.child;
     this.dataVatTuConShow = cloneDeep(this.dataVatTuConClone);
-
     item.donViTinh = vatTu.donViTinh;
     item.kyHieu = vatTu.kyHieu;
     item.maVatTuCha = vatTu.maHang;
@@ -386,6 +392,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       item.tenVatTu = '';
       item.chungLoaiHang = '';
     }
+
   }
 
   deleteDataMultipleTag(data: any) {
@@ -399,7 +406,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
 
       this.updateEditLuongThucCache();
       this.updateEditMuoiCache();
-      this.updateEditVatTuCache();
+      // this.updateEditVatTuCache();
     }
   }
 
@@ -525,8 +532,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             dxDcLtVtReqList.push(item);
           });
         }
-        if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0) {
-          this.deXuatDieuChinh.dxDcVtList.forEach(element => {
+        if ((this.deXuatDieuChinh.dxDcVtNhapList && this.deXuatDieuChinh.dxDcVtNhapList.length > 0) || (this.deXuatDieuChinh.dxDcVtXuatList && this.deXuatDieuChinh.dxDcVtXuatList.length > 0)) {
+          this.deXuatDieuChinh.dxDcVtNhapList.forEach(element => {
             let item = {
               "chiTieu": element.chiTieu,
               "donViTinh": element.donViTinh,
@@ -534,9 +541,25 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               "loai": "02",
               "maVatTu": element?.maVatTu,
               "maVatTuCha": element?.maVatTuCha,
-              "soLuong": element?.sdcKeHoachNam,
-              "dxDcLtVtCtList": element?.dxDcLtVtCtList,
-              "diaDiemKho": element?.diaDiemKho,
+              "soLuongTang": element?.slTang ?? 0,
+              "soLuongGiam": element?.slGiam ?? 0,
+              // "dxDcLtVtCtList": element?.dxDcLtVtCtList,
+              // "diaDiemKho": element?.diaDiemKho,
+            };
+            dxDcLtVtReqList.push(item);
+          });
+          this.deXuatDieuChinh.dxDcVtXuatList.forEach(element => {
+            let item = {
+              "chiTieu": element.chiTieu,
+              "donViTinh": element.donViTinh,
+              "id": element?.id ?? null,
+              "loai": "02",
+              "maVatTu": element?.maVatTu,
+              "maVatTuCha": element?.maVatTuCha,
+              "soLuongTang": element?.slTang ?? 0,
+              "soLuongGiam": element?.slGiam ?? 0,
+              // "dxDcLtVtCtList": element?.dxDcLtVtCtList,
+              // "diaDiemKho": element?.diaDiemKho,
             };
             dxDcLtVtReqList.push(item);
           });
@@ -930,43 +953,84 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     this.updateEditMuoiCache();
   }
 
-  clearDataVatTu() {
-    this.deXuatVatTu = {};
+  clearDataVatTu(chitieu) {
+    if (chitieu == '01') {
+      this.deXuatVatTuNhap = {};
+      this.deXuatVatTuNhap.chiTieu = chitieu;
+    } else {
+      this.deXuatVatTuXuat = {};
+      this.deXuatVatTuXuat.chiTieu = chitieu;
+    }
   }
 
-  themMoiVatTu() {
-    this.deXuatVatTu.chiTieu = '01';
-    this.checkDataExistVatTu(this.deXuatVatTu);
-    this.clearDataVatTu();
+  themMoiVatTu(chitieu) {
+    if (chitieu == '01') {
+      // this.deXuatVatTuNhap.chiTieu = chitieu;
+      this.checkDataExistVatTu(this.deXuatVatTuNhap, chitieu);
+    } else {
+      // this.deXuatVatTuXuat.chiTieu = chitieu;
+      this.checkDataExistVatTu(this.deXuatVatTuXuat, chitieu);
+    }
+    this.clearDataVatTu(chitieu);
   }
 
-  editRowVatTu(maVatTuCha, maVatTu) {
-    this.editVatTuCache[maVatTuCha + maVatTu].edit = true;
+  editRowVatTu(maVatTuCha, maVatTu, chiTieu) {
+    if (chiTieu == '01') {
+      this.editVatTuNhapCache[maVatTuCha + maVatTu].edit = true;
+    } else {
+      this.editVatTuXuatCache[maVatTuCha + maVatTu].edit = true;
+    }
   }
 
   deleteRowVatTu(data) {
     this.deXuatDieuChinh.dxDcVtList = this.deXuatDieuChinh?.dxDcVtList.filter((item) => item.maVatTuCha != data.maVatTuCha && item.maVatTu != data.maVatTu);
   }
 
-  cancelEditVatTu(maVatTuCha, maVatTu): void {
-    const index = this.deXuatDieuChinh?.dxDcVtList.findIndex(
-      (item) => item.maVatTuCha == maVatTuCha && item.maVatTu == maVatTu,
-    );
-    this.editVatTuCache[maVatTuCha + maVatTu] = {
-      data: {...this.deXuatDieuChinh?.dxDcVtList[index]},
-      edit: false,
-    };
+  cancelEditVatTu(maVatTuCha, maVatTu, chiTieu): void {
+    if (chiTieu == '01') {
+      const index = this.deXuatDieuChinh?.dxDcVtNhapList.findIndex(
+        (item) => item.maVatTuCha == maVatTuCha && item.maVatTu == maVatTu,
+      );
+      this.editVatTuNhapCache[maVatTuCha + maVatTu] = {
+        data: {...this.deXuatDieuChinh?.dxDcVtNhapList[index]},
+        edit: false,
+      };
+    } else {
+      const index = this.deXuatDieuChinh?.dxDcVtXuatList.findIndex(
+        (item) => item.maVatTuCha == maVatTuCha && item.maVatTu == maVatTu,
+      );
+      this.editVatTuXuatCache[maVatTuCha + maVatTu] = {
+        data: {...this.deXuatDieuChinh?.dxDcVtXuatList[index]},
+        edit: false,
+      };
+    }
   }
 
-  saveEditVatTu(maVatTuCha, maVatTu): void {
-    this.editVatTuCache[maVatTuCha + maVatTu].edit = false;
-    this.checkDataExistVatTu(this.editVatTuCache[maVatTuCha + maVatTu].data);
+  saveEditVatTu(maVatTuCha, maVatTu, chiTieu): void {
+    if (chiTieu == '01') {
+      this.editVatTuNhapCache[maVatTuCha + maVatTu].edit = false;
+      this.checkDataExistVatTu(this.editVatTuNhapCache[maVatTuCha + maVatTu].data, chiTieu);
+    } else {
+      this.editVatTuXuatCache[maVatTuCha + maVatTu].edit = false;
+      this.checkDataExistVatTu(this.editVatTuXuatCache[maVatTuCha + maVatTu].data, chiTieu);
+    }
   }
 
-  updateEditVatTuCache(): void {
-    if (this.deXuatDieuChinh?.dxDcVtList && this.deXuatDieuChinh?.dxDcVtList.length > 0) {
-      this.deXuatDieuChinh?.dxDcVtList.forEach((item) => {
-        this.editVatTuCache[item.maVatTuCha + item.maVatTu] = {
+  updateEditVatTuNhapCache(): void {
+    if (this.deXuatDieuChinh?.dxDcVtNhapList && this.deXuatDieuChinh?.dxDcVtNhapList.length > 0) {
+      this.deXuatDieuChinh?.dxDcVtNhapList.forEach((item) => {
+        this.editVatTuNhapCache[item.maVatTuCha + item.maVatTu] = {
+          edit: false,
+          data: {...item},
+        };
+      });
+    }
+  }
+
+  updateEditVatTuXuatCache(): void {
+    if (this.deXuatDieuChinh?.dxDcVtXuatList && this.deXuatDieuChinh?.dxDcVtXuatList.length > 0) {
+      this.deXuatDieuChinh?.dxDcVtXuatList.forEach((item) => {
+        this.editVatTuXuatCache[item.maVatTuCha + item.maVatTu] = {
           edit: false,
           data: {...item},
         };
@@ -975,24 +1039,41 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   caculatorDieuChinhVatTu(data: any) {
-    data.sdcKeHoachNam = (data?.tdcKeHoachNam ?? 0) + (data?.dc ?? 0);
-    data.sdcTongSo = (data?.sdcKeHoachNam ?? 0) + (!isNaN(data.tdcTongSo) ? data.tdcTongSo : 0);
+    // data.sdcKeHoachNam = (data?.tdcKeHoachNam ?? 0) + (data?.dc ?? 0);
+    data.sdcTongSo = (data?.slTang ?? 0) + (!isNaN(data.tdcTongSo) ? data.tdcTongSo : 0) - (data?.slGiam ?? 0);
   }
 
-  checkDataExistVatTu(data) {
-    if (this.deXuatDieuChinh?.dxDcVtList && this.deXuatDieuChinh?.dxDcVtList.length > 0) {
-      let index = this.deXuatDieuChinh?.dxDcVtList.findIndex(x => x.maVatTuCha == data.maVatTuCha && x.maVatTu == data.maVatTu);
-      if (index != -1) {
-        this.deXuatDieuChinh.dxDcVtList.splice(index, 1);
+  checkDataExistVatTu(data, chitieu) {
+    if (chitieu == '01') {
+      if (this.deXuatDieuChinh?.dxDcVtNhapList && this.deXuatDieuChinh?.dxDcVtNhapList.length > 0) {
+        let index = this.deXuatDieuChinh?.dxDcVtNhapList.findIndex(x => x.maVatTuCha == data.maVatTuCha && x.maVatTu == data.maVatTu);
+        if (index != -1) {
+          this.deXuatDieuChinh.dxDcVtNhapList.splice(index, 1);
+        }
+      } else {
+        this.deXuatDieuChinh.dxDcVtNhapList = [];
       }
+      this.deXuatDieuChinh.dxDcVtNhapList = [
+        ...this.deXuatDieuChinh.dxDcVtNhapList,
+        data,
+      ];
+      this.updateEditVatTuNhapCache();
     } else {
-      this.deXuatDieuChinh.dxDcVtList = [];
+      if (this.deXuatDieuChinh?.dxDcVtXuatList && this.deXuatDieuChinh?.dxDcVtXuatList.length > 0) {
+        let index = this.deXuatDieuChinh?.dxDcVtXuatList.findIndex(x => x.maVatTuCha == data.maVatTuCha && x.maVatTu == data.maVatTu);
+        if (index != -1) {
+          this.deXuatDieuChinh.dxDcVtXuatList.splice(index, 1);
+        }
+      } else {
+        this.deXuatDieuChinh.dxDcVtXuatList = [];
+      }
+      this.deXuatDieuChinh.dxDcVtXuatList = [
+        ...this.deXuatDieuChinh.dxDcVtXuatList,
+        data,
+      ];
+      this.updateEditVatTuXuatCache();
     }
-    this.deXuatDieuChinh.dxDcVtList = [
-      ...this.deXuatDieuChinh.dxDcVtList,
-      data,
-    ];
-    this.updateEditVatTuCache();
+
   }
 
   changeLoaiHangHoa() {

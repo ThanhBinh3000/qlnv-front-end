@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { NzModalService } from "ng-zorro-antd/modal";
+import { NzModalRef, NzModalService } from "ng-zorro-antd/modal";
 import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { FormArray, Validators } from "@angular/forms";
@@ -35,7 +35,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private thongTinDauGiaService: ThongTinDauGiaService,
-    private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService
+    private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, thongTinDauGiaService);
     this.formData = this.fb.group(
@@ -213,71 +213,22 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     console.log(i);
   }
 
-  themMoiPhienDauGia(data: any) {
+  themMoiPhienDauGia($event, data?: any) {
+    $event.stopPropagation();
     const modalQD = this.modal.create({
       nzTitle: 'Cập nhật thông tin đấu giá',
       nzContent: ThongtinDaugiaComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1200px',
+      nzWidth: '1500px',
       nzFooter: null,
       nzComponentParams: {
-        isModal: true
+        isModal: true,
+
       },
     });
     modalQD.afterClose.subscribe((data) => {
-      // if (hopDongs) {
-      //   let canCuHd = '';
-      //   this.qdGiaoNhiemVuXuatHang.hopDongIds = [];
-      //   if (hopDongs.length > 0) {
-      //     this.hopDongList = [];
-      //     this.hopDongListShow = [];
-      //     this.totalRecord = 0;
-      //     hopDongs.forEach((hd, i) => {
-      //       if (hd && hd.bhDdiemNhapKhoList && hd.bhDdiemNhapKhoList.length > 0) {
-      //         hd.bhDdiemNhapKhoList.forEach((itemDiemKho: any) => {
-      //           let item = {
-      //             "donGiaKhongThue": itemDiemKho.donGia ?? 0,
-      //             "donViTinh": itemDiemKho.dviTinh,
-      //             "id": 0,
-      //             "maDiemKho": itemDiemKho.maDiemKho,
-      //             "maDvi": itemDiemKho.maDvi,
-      //             "maNganKho": itemDiemKho.maNganKho,
-      //             "maNganLo": itemDiemKho.maNganLo,
-      //             "maNhaKho": itemDiemKho.maNhaKho,
-      //             "maVatTu": hd.cloaiVthh,
-      //             "maVatTuCha": hd.loaiVthh,
-      //             "qdgnvxId": 0,
-      //             "soLuong": itemDiemKho.soLuong ?? 0,
-      //             "stt": 0,
-      //             "thanhTien": ((itemDiemKho.donGia ?? 0) * (itemDiemKho.soLuong ?? 0)) ?? 0,
-      //             "thoiHanXuatBan": null,
-      //             "tenDvi": itemDiemKho.tenDvi,
-      //             "tenDiemKho": itemDiemKho.tenDiemKho,
-      //             "tenNhaKho": itemDiemKho.tenNhaKho,
-      //             "tenNganKho": itemDiemKho.tenNganKho,
-      //             "tenLoKho": itemDiemKho.tenLoKho,
-      //             "tenVatTuCha": itemDiemKho.tenLoaiHangHoa,
-      //             "tenVatTu": itemDiemKho.tenChungLoaiHH,
-      //           }
-      //           this.hopDongList.push(item);
-      //         });
-      //       }
-      //       canCuHd += hd.soHd
-      //       if (i < hopDongs.length - 1) {
-      //         canCuHd += ' - '
-      //       };
-      //       this.qdGiaoNhiemVuXuatHang.hopDongIds.push(hd.id);
-      //     });
-      //     if (this.hopDongList && this.hopDongList.length > 0) {
-      //       this.totalRecord = this.hopDongList.length;
-      //       this.hopDongListShow = this.hopDongList.slice(((this.page - 1) * this.pageSize), (this.page * this.pageSize));
-      //     }
-      //   }
-      //   this.formData.patchValue({
-      //     soHopDong: canCuHd,
-      //   });
-      // }
+      this.loadDetail(this.idInput)
     });
   }
 

@@ -41,12 +41,12 @@ export class SoKhoTheKhoComponent implements OnInit {
 
   filterDate = new Date();
 
-  dsNam: string[] = []
+  dsNam: any[] = []
 
   searchInTable: any = {
-    nam: dayjs().get('year'),
+    nam: "",
     maDvi: "",
-    tenDVi: "",
+    tenDvi: "",
     loaiHang: "",
     maChungLoaiHang: "",
     ngayTao: ""
@@ -96,7 +96,7 @@ export class SoKhoTheKhoComponent implements OnInit {
     this.formData = this.fb.group({
       nam: [null],
       maDvi: [null],
-      tenDVi: [null],
+      tenDvi: [null],
       loaiHang: [null],
       maChungLoaiHang: [null],
       ngayTao: [null],
@@ -145,6 +145,9 @@ export class SoKhoTheKhoComponent implements OnInit {
   }
   async changeLoaiHangHoa(id: any) {
     if (id && id > 0) {
+      this.formData.patchValue({
+        maChungLoaiHang  :null
+      })
       let loaiHangHoa = this.listLoaiHangHoa.filter(item => item.ma === id);
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }
@@ -184,9 +187,12 @@ export class SoKhoTheKhoComponent implements OnInit {
   }
   loadDsNam() {
     let thisYear = dayjs().get('year');
-    for (let i = -10; i < 10; i++) {
-      this.dsNam.push((thisYear - i).toString());
+    for (let i = -5; i < 5; i++) {
+      this.dsNam.push((thisYear - i));
     }
+    this.formData.patchValue({
+      nam : dayjs().get('year')
+    })
   }
   async search() {
     this.spinner.show();

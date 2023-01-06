@@ -34,6 +34,11 @@ export class DeNghiCapVonComponent implements OnInit {
         //         item.isSelected = true;
         //     }
         // })
+        if (this.userService.isChiCuc()) {
+            this.tabList = this.tabList.filter(e => e.code != 'ds-hopdong');
+        } else {
+            this.tabList[1].isSelected = false;
+        }
         this.tabSelected = this.tabList[0].code;
         this.tabList[0].isSelected = true;
     }

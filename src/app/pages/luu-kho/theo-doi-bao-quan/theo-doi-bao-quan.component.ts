@@ -105,13 +105,19 @@ export class TheoDoiBaoQuanComponent implements OnInit {
 
   loadDsNam() {
     let thisYear = dayjs().get('year');
-    for (let i = -10; i < 10; i++) {
-      this.dsNam.push((thisYear - i).toString());
+    for (let i = -5; i < 5; i++) {
+      this.dsNam.push((thisYear - i));
     }
+    this.formData.patchValue({
+      nam : dayjs().get('year')
+    })
   }
 
   async changeLoaiHangHoa(id: any) {
     if (id && id > 0) {
+      this.formData.patchValue({
+        tenHH : null
+      })
       let loaiHangHoa = this.listLoaiHangHoa.filter(item => item.ma === id);
       this.listChungLoaiHangHoa = loaiHangHoa[0].child;
     }
@@ -221,7 +227,7 @@ export class TheoDoiBaoQuanComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.theoDoiBqService.deleteMuti({ids: dataDelete});
+            let res = await this.theoDoiBqService.deleteMulti({ids: dataDelete});
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
               await this.search();
@@ -257,7 +263,7 @@ export class TheoDoiBaoQuanComponent implements OnInit {
     if (this.allChecked) {
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach((item) => {
-          if (item.trangThai == STATUS.CHUA_TONG_HOP) {
+          if (item.trangThai == STATUS.DU_THAO) {
             item.checked = true;
           }
         });

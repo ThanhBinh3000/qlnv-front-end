@@ -18,13 +18,13 @@
         <span>Duyệt</span>
       </button>
       <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC)"
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV)"
         type="button" class="btn btn-sub xanh-nhat" (click)="save(true)">
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button
-        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC ) "
+        *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_CBV ) "
         type="button" class="btn btn-main" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -53,14 +53,14 @@
           [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_CBV ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
-        <span>Danh sách kế hoạch bán đấu giá</span>
+        <span>Đề xuất kế hoạch bán đấu giá</span>
       </div>
     </div>
   </div>
 
   <nz-alert class="mg-t-10"
     *ngIf="formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.TU_CHOI_LDV "
-    nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.ldoTuChoi}}">
+    nzShowIcon nzType="error" nzMessage="Lý do từ chối" nzDescription="{{formData.value.lyDoTuChoi}}">
   </nz-alert>
 
   <nz-card class="mt16 flex-card p-lr16">
@@ -203,7 +203,7 @@
             </div>
             <div nz-col [nzSpan]="6">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <input nz-input [readonly]="isDisable()" formControlName="moTaHangHoa" />
                 </nz-form-control>
@@ -418,7 +418,7 @@
               <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
               <th nzWidth="50px">Hành động</th>
             </tr>
-            <tr>
+            <!-- <tr>
               <th colspan="8"></th>
               <th>(1)</th>
               <th></th>
@@ -429,7 +429,7 @@
               <th class="wrap">= (3) * % khoản tiền đặt trước</th>
               <th class="wrap">= (5) * % khoản tiền đặt trước</th>
               <th></th>
-            </tr>
+            </tr> -->
           </thead>
           <tbody>
             <ng-container *ngFor="let item of dataTable , let i = index">
@@ -469,12 +469,10 @@
                   <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                   <td>{{children.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                   <td>{{children.donGiaVat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{ (children.soLuong * children.donGiaDeXuat) + (children.soLuong * children.donGiaDeXuat *
-                    formData.value.khoanTienDatTruoc /
-                    100 ) | number : '1.0-1' : 'vi_VN'}}</td>
-                  <td>{{ (children.soLuong * children.donGiaVat) + (children.soLuong * children.donGiaVat *
-                    formData.value.khoanTienDatTruoc / 100 ) |
-                    number : '1.0-1' : 'vi_VN'}}</td>
+                  <td>{{(children.soLuong * children.donGiaDeXuat * formData.value.khoanTienDatTruoc / 100 ) | number :
+                    '1.0-1' : 'vi_VN' }}</td>
+                  <td>{{(children.soLuong * children.donGiaVat * formData.value.khoanTienDatTruoc / 100 ) | number :
+                    '1.0-1' : 'vi_VN' }}</td>
                   <td class="text-right">
                   </td>
                 </tr>
@@ -511,12 +509,15 @@
               <td>{{ item.diaChi }}</td>
               <td>{{ item.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
             </tr>
-            <tr *ngIf="dataTable.length > 0">
-              <td></td>
-              <td colspan="2">Cộng</td>
-              <td>{{calcTongSoLuong() | number : '1.0-1' : 'vi_VN'}}</td>
-            </tr>
+
           </tbody>
+          <tfoot>
+            <tr *ngIf="dataTable.length > 0">
+              <th></th>
+              <th colspan="2">Cộng</th>
+              <th>{{ calcTong('soLuong') | number : '1.0-1' : 'vi_VN'}}</th>
+            </tr>
+          </tfoot>
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>

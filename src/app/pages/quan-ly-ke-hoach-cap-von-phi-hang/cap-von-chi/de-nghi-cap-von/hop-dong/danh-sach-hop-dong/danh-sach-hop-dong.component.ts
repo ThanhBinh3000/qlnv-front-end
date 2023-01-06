@@ -77,9 +77,7 @@ export class DanhSachHopDongComponent implements OnInit {
         if (this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MLT) || this.userService.isAccessPermisson(CVNC.PHE_DUYET_DN_MVT)) {
             this.searchFilter.trangThai = Utils.TT_BC_2;
         }
-        if (!this.userService.isTongCuc()) {
-            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
-        }
+        this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
 
         this.search();
         this.spinner.hide();

@@ -66,6 +66,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
     namKeHoach: '',
     tenHangHoa: '',
     tenTrangThai: '',
+    soQdDc:''
   };
 
   allChecked = false;

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Globals } from "../../../../../../../shared/globals";
 import { MESSAGE } from "../../../../../../../constants/message";
@@ -17,7 +17,7 @@ import dayjs from 'dayjs';
   styleUrls: ['./thongtin-dexuat-khbdg.component.scss']
 })
 
-export class ThongtinDexuatKhbdgComponent implements OnInit {
+export class ThongtinDexuatKhbdgComponent implements OnChanges {
   @Input() title;
   @Input() dataInput;
   @Output() soLuongChange = new EventEmitter<number>();
@@ -61,9 +61,9 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
       diaChi: [],
       namKh: [dayjs().get('year'),],
       soDxuat: [null,],
-      trichYeu: [null],
-      ldoTuchoi: [],
-
+      thoiGianDuKien: [],
+      tongTienGiaDeXuat: [],
+      tongTienGiaVat: []
     });
   }
 
@@ -71,28 +71,18 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
     await this.spinner.show()
     if (changes) {
       if (this.dataInput) {
-        let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
+        this.helperService.bidingDataInFormGroup(this.formData, this.dataInput);
         this.formData.patchValue({
-          tgianBdauTchuc: [res.data?.tgianDkienTu, res.data?.tgianDkienDen],
-        });
-        console.log(this.dataInput);
+          thoiGianDuKien: (this.dataInput.tgianDkienTu && this.dataInput.tgianDkienDen) ? [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen] : null
+        })
         this.dataTable = this.dataInput.children
-        if (res.msg == MESSAGE.SUCCESS) {
-          this.helperService.bidingDataInFormGroup(this.formData, res.data);
-        }
+        this.calculatorTable();
       } else {
         this.formData.reset();
       }
     }
     await this.spinner.hide()
   }
-
-
-  async ngOnInit() {
-    await this.spinner.show()
-    await this.spinner.hide()
-  }
-
 
   expandSet = new Set<number>();
   onExpandChange(id: number, checked: boolean): void {
@@ -104,7 +94,6 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
   }
 
   themMoiBangPhanLoTaiSan(data?: any, index?: number) {
-    console.log(data, 454545)
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm giao nhận hàng',
       nzContent: DialogThemDiaDiemPhanLoComponent,
@@ -116,40 +105,43 @@ export class ThongtinDexuatKhbdgComponent implements OnInit {
         dataEdit: data,
       },
     });
-    modalGT.afterClose.subscribe((res) => {
-      if (!res) {
+    modalGT.afterClose.subscribe((data) => {
+      if (!data) {
         return;
       }
       if (index >= 0) {
-        this.dataTable[index] = res.value;
-      } else {
-        this.dataTable = [...this.dataTable, res.value];
+        this.dataTable[index] = data;
       }
-      let tongSoLuong: number = 0;
-      let tongTienKdiem: number = 0;
-      let tongTienKdienDonGia: number = 0;
-      let tongTienDatTruoc: number = 0;
-      let tongTienDatTruocDonGia: number = 0;
-      let soLuong: number = 0;
-      this.dataTable.forEach((item) => {
-        tongSoLuong = tongSoLuong + item.soLuong;
-        tongTienKdiem = tongTienKdiem + item.giaKhoiDiem;
-        tongTienKdienDonGia = tongTienKdienDonGia + item.giaKhoiDiemDduyet;
-        tongTienDatTruoc = tongTienDatTruoc + item.tienDatTruoc;
-        tongTienDatTruocDonGia = tongTienDatTruocDonGia + item.tienDatTruocDduyet;
-      });
-      this.formData.patchValue({
-        tongSoLuong: tongSoLuong,
-        tongTienKdiem: tongTienKdiem,
-        tongTienKdienDonGia: tongTienKdienDonGia,
-        tongTienDatTruoc: tongTienDatTruoc,
-        tongTienDatTruocDonGia: tongTienDatTruocDonGia,
-      });
-      this.soLuongChange.emit(soLuong);
+      this.calculatorTable();
     });
+  }
+
+  calculatorTable() {
+    let tongSoLuong: number = 0;
+    let tongTienGiaDeXuat: number = 0;
+    let tongTienGiaVat: number = 0;
+    this.dataTable.forEach((item) => {
+      let soLuongChiCuc = 0;
+      item.children.forEach(child => {
+        soLuongChiCuc += child.soLuong;
+        tongSoLuong += child.soLuong / 1000;
+        tongTienGiaDeXuat += child.donGiaDeXuat * child.soLuong;
+        tongTienGiaVat += child.donGiaVat * child.soLuong;
+      })
+      item.soLuong = soLuongChiCuc;
+    });
+    this.formData.patchValue({
+      tongSoLuong: tongSoLuong,
+      tongTienGiaDeXuat: tongTienGiaDeXuat,
+      tongTienGiaVat: tongTienGiaVat,
+      tongTienDatCocDx: tongTienGiaDeXuat + (tongTienGiaDeXuat * this.formData.value.khoanTienDatTruoc / 100),
+      tongTienDatCocVat: tongTienGiaVat + (tongTienGiaVat * this.formData.value.khoanTienDatTruoc / 100),
+    });
+    this.dataInput.soLuong = tongSoLuong * 1000
   }
 
   isDisable() {
     return false;
   }
+
 }
