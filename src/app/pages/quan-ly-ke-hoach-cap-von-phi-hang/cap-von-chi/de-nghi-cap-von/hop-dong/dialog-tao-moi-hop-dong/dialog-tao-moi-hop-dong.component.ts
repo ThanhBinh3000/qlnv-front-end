@@ -40,9 +40,7 @@ export class DialogTaoMoiHopDongComponent implements OnInit {
         this.response.ngayTao = new Date();
         this.response.maDvi = this.userInfo?.MA_DVI;
         this.response.trangThai = Utils.TT_BC_1;
-        if (!this.userService.isTongCuc()) {
-            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
-        }
+        this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
         this.response.dnghiCvHopDongCtiets = [];
     }
     //lay ra so quyet dinh chi tieu cho de nghi

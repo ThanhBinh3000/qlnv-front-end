@@ -113,6 +113,7 @@
                                 <th rowspan="2">Số duyệt thanh toán lần này</th>
                                 <th colspan="4">Ủy nhiệm chi (Số thanh toán lần này)</th>
                                 <th rowspan="2">Số còn được thanh toán sau thanh toán lần này</th>
+                                <th rowspan="2">Ghi chú </th>
                                 <th rowspan="2" [hidden]="status"></th>
                             </tr>
                             <tr>
@@ -178,6 +179,9 @@
                                     <td>
                                         {{ displayValue(data.soConDuocTtSauTtLanNay)}}
                                     </td>
+                                    <td>
+                                        {{ data.ghiChu }}
+                                    </td>
                                     <td [hidden]="status">
                                         <i *ngIf="data.isParent" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                     </td>
@@ -198,7 +202,10 @@
                                         {{ displayValue(editCache[data.id].data.slHopDong) }}
                                     </td>
                                     <td>
-                                        {{ displayValue(editCache[data.id].data.slThucHien) }}
+                                        <fm-input-number class="search__input"
+                                            [(ngModel)]="editCache[data.id].data.slThucHien"
+                                            (ngModelChange)="changeModel(data.id)">
+                                        </fm-input-number>
                                     </td>
                                     <td>
                                         {{ displayValue(editCache[data.id].data.donGia) }}
@@ -245,6 +252,10 @@
                                     </td>
                                     <td>
                                         {{ displayValue(editCache[data.id].data.soConDuocTtSauTtLanNay)}}
+                                    </td>
+                                    <td>
+                                        <input nz-input class="search__input"
+                                            [(ngModel)]="editCache[data.id].data.ghiChu" />
                                     </td>
                                     <td [hidden]="status">
                                         <a (click)="saveEdit(data.id)" class="save">Lưu</a>
