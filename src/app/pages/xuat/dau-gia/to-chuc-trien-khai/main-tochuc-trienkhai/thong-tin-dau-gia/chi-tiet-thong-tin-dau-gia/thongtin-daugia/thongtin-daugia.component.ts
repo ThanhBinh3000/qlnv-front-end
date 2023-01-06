@@ -17,6 +17,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit {
 
   @Input() data
   idDtl: number;
+  soQdPd: string;
   isModal = false;
   constructor(
     httpClient: HttpClient,
@@ -29,6 +30,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit {
     super(httpClient, storageService, notification, spinner, modal, thongTinDauGiaService);
     this.formData = this.fb.group({
       id: [],
+      soQdPd: [],
       idQdPdDtl: [],
       nam: [dayjs().get("year"), [Validators.required]],
       maThongBao: [],
@@ -85,6 +87,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit {
       this.formData.patchValue({
         maThongBao: idThongBao + "/" + this.formData.value.nam + "/TB-ĐG",
         idQdPdDtl: this.idDtl,
+        soQdPd: this.soQdPd,
         soBienBan: idThongBao + "/" + this.formData.value.nam + "/BB-ĐG"
       })
     }
@@ -100,11 +103,12 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit {
 
   async handleOk() {
     let body = this.formData.value;
-    let data = await this.createUpdate(body);
-    console.log(data);
-    if (data) {
-      this.modal.closeAll();
-    }
+    console.log(body);
+    // let data = await this.createUpdate(body);
+    // console.log(data);
+    // if (data) {
+    //   this.modal.closeAll();
+    // }
   }
 
 }

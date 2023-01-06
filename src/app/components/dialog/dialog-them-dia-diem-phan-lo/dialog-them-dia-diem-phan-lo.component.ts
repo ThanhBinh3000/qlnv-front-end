@@ -96,7 +96,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     this.thongtinPhanLo = new DanhSachPhanLo();
     this.loadDonVi();
     if (this.dataEdit) {
-      console.log("🚀 ~ this.dataEdit", this.dataEdit)
       this.helperService.bidingDataInFormGroup(this.formData, this.dataEdit);
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
@@ -117,7 +116,6 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     };
 
     if (this.dataChiTieu) {
-      console.log(this.dataChiTieu);
       if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
         this.dataChiTieu.khLuongThuc?.forEach(item => {
           let body = {
@@ -132,11 +130,22 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         this.dataChiTieu.khMuoiDuTru?.forEach(item => {
           let body = {
             maDvi: item.maDonVi,
-            tenDvi: item.tenDonvi,
+            tenDvi: item.tenDonVi,
             soLuongXuat: item.xuatTrongNamMuoi
           }
-          this.listChiCuc.push(body)
+          this.listChiCuc.push(body);
         });
+      }
+      if (this.loaiVthh.startsWith(LOAI_HANG_DTQG.VAT_TU)) {
+        let data = this.dataChiTieu.khVatTuXuat.filter(item => item.maVatTuCha == this.loaiVthh);
+        data.forEach(item => {
+          let body = {
+            maDvi: item.maDvi,
+            tenDvi: item.tenDonVi,
+            soLuongXuat: item.soLuongNhap
+          }
+          this.listChiCuc.push(body);
+        })
       }
     } else {
       let res = await this.donViService.getAll(body);
@@ -164,7 +173,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
         tenDvi: res.data.tenTongKho,
-        soLuongChiTieu: chiCuc?.soLuongXuat * 1000,
+        soLuongChiTieu: this.loaiVthh.startsWith('02') ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
       })
       for (let i = 0; i < res.data?.child.length; i++) {
         const item = {

@@ -19,7 +19,6 @@ import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-
 })
 export class ChiTietThongTinDauGiaComponent extends Base2Component implements OnInit {
   //base init
-  @Input() id: number;
   @Input() loaiVthhInput: string;
   @Input() idInput: number;
   @Input() isView: boolean;
@@ -224,7 +223,8 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       nzFooter: null,
       nzComponentParams: {
         isModal: true,
-
+        idDtl: this.idInput,
+        soQdPd: this.formData.value.soQdPd
       },
     });
     modalQD.afterClose.subscribe((data) => {
