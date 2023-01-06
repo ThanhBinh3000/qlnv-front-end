@@ -94,11 +94,14 @@
                             <td class="bold">{{ item.namNhap }}</td>
                             <td class="bold">{{ item.tgianNkho }}</td>
                             <td colspan="10"></td>
-                            <td> </td>
+                            <td>
+                                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(i)">
-                            <ng-container
-                                *ngFor="let dataDdiem of item.hhQdGiaoNvNhangDtlList.hhQdGiaoNvNhDdiemList, let y = index">
+                            <ng-container *ngFor="let dataDdiem of item.detail.hhQdGiaoNvNhDdiemList, let y = index">
                                 <tr class="level-2">
                                     <td></td>
                                     <td></td>

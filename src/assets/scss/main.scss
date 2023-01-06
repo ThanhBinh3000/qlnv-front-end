@@ -255,7 +255,14 @@ th {
 .scroll-modal {
   .ant-card-body {
     overflow: auto;
+    overflow-x: hidden;
     max-height: calc(80vh - 50px);
+  }
+}
+
+.overflow-auto {
+  .ant-table-content {
+    overflow: auto;
   }
 }
 

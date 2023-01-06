@@ -268,7 +268,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
                 );
                 this.updateEditLuongThucCache();
                 this.updateEditMuoiCache();
-                // this.updateEditVatTuCache();
+                this.updateEditVatTuNhapCache();
+                this.updateEditVatTuXuatCache();
               }
             });
           this.spinner.hide();

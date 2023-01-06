@@ -131,7 +131,6 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
     const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
     this.danhSachChiCuc = this.danhSachChiCuc.filter(item => item.type != "PB")
-
   }
 
   async loadDanhSachChiCuc() {
@@ -143,6 +142,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
     const dsTong = await this.donViService.layDonViTheoCapDo(body);
       this.dsTong = dsTong;
       this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+      this.danhSachChiCuc = this.danhSachChiCuc.filter(item => item.type != "PB")
   }
 
 
@@ -164,6 +164,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
 
     const dsTong = await this.donViService.layDonViTheoCapDo(body);
     this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+    this.danhSachDiemKho = this.danhSachDiemKho.filter(item => item.type == "MLK")
   }
 
 

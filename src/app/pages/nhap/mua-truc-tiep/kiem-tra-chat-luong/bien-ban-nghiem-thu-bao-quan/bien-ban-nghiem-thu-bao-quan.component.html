@@ -30,20 +30,12 @@
         <div class="group-button">
             <h3>Danh sách lập biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</h3>
             <div class="buttons">
-                <button type="button" class="btn btn-do" (click)="deleteSelect()"
-                    *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_XOA')">
-                    <i class="fa fa-trash-o do"></i>
-                    <span>Xóa</span>
-                </button>
                 <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_EXP')" type="button"
                     class="btn btn-sub" (click)="export()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <!-- <button type="button" class="btn btn-sub" (click)="print()">
-                            <i class="icon htvbdh_tcdt_print"></i>
-                            <span>In</span>
-                        </button> -->
+
                 <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
                     *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')">
                     <i class="icon htvbdh_dau-cong"></i>
@@ -93,11 +85,11 @@
                                     <td></td>
                                     <td></td>
                                     <td colspan="3"></td>
-                                    <td>{{bbNghiemThuBq.soBbNtBq}}</td>
+                                    <td>{{bbNghiemThuBq.soBb}}</td>
                                     <td>{{bbNghiemThuBq.ngayTao | date: 'dd/MM/YYYY' }}</td>
                                     <td>{{bbNghiemThuBq.ngayNghiemThu | date: 'dd/MM/YYYY' }}</td>
-                                    <td>{{bbNghiemThuBq.tenDiemKho}}</td>
-                                    <td>{{bbNghiemThuBq.tenNhaKho}}</td>
+                                    <td>{{bbNghiemThuBq.kinhPhiThucTe}}</td>
+                                    <td>{{bbNghiemThuBq.kinhPhiTcPd}}</td>
                                     <td>{{bbNghiemThuBq.tenTrangThai}}</td>
                                     <td>
                                         <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DA_DUYET_LDCC"

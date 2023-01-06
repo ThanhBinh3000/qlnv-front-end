@@ -43,7 +43,7 @@
       <div class="thong-tin-chi-tieu">
         <div class="title-chi-tieu">
           <span [ngClass]="thongTinTrangThai(deXuatDieuChinh.trangThai)">{{trangThai}}</span>
-          <span>Thông tin điều chỉnh chỉ tiêu kế hoạch năm Tổng Cục giao</span>
+          <span>Thông tin điều chỉnh chỉ tiêu kế hoạch năm</span>
         </div>
         <form nz-form [formGroup]="formData">
           <div nz-row [nzGutter]="[16, 12]" class="form-data-detail">
@@ -55,7 +55,7 @@
               </nz-select>
             </div>
             <div nz-col [nzSpan]="5">
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số QĐ</nz-form-label>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số đề xuât</nz-form-label>
               <nz-input-group [nzAddOnAfter]="'/' + qdTCDT">
                 <nz-input-number [nzSize]="'small'" nz-input formControlName="soQD"
                                  [nzDisabled]="deXuatDieuChinh.trangThai != '01' || isView">
@@ -86,7 +86,7 @@
                      [readonly]="!(deXuatDieuChinh.trangThai == '00' || id == 0) || userService.isTongCuc() || isView"/>
             </div>
             <div nz-col [nzSpan]="6">
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Căn cứ</nz-form-label>
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số QĐ giao chỉ tiêu của TC</nz-form-label>
               <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn QĐ giao chỉ tiêu cấp TC"
                             icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu"
                             [trangThai]="isView ? 'view-detail' : deXuatDieuChinh.trangThai"

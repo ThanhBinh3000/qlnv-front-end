@@ -1,66 +1,114 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import dayjs from 'dayjs';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-thongtin-daugia',
   templateUrl: './thongtin-daugia.component.html',
 })
-export class ThongtinDaugiaComponent implements OnInit {
+export class ThongtinDaugiaComponent extends Base2Component implements OnInit {
 
   @Input() data
-
+  idDtl: number;
+  soQdPd: string;
   isModal = false;
-
-  formData: FormGroup;
   constructor(
-    private fb: FormBuilder,
+    httpClient: HttpClient,
+    storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private thongTinDauGiaService: ThongTinDauGiaService,
   ) {
+    super(httpClient, storageService, notification, spinner, modal, thongTinDauGiaService);
     this.formData = this.fb.group({
       id: [],
+      soQdPd: [],
+      idQdPdDtl: [],
       nam: [dayjs().get("year"), [Validators.required]],
       maThongBao: [],
-      trichYeuThongBao: [],
+      trichYeuTbao: [],
       tenToChuc: [],
-      sdt: [],
-      diaChi: [],
-      taiKhoanNganHang: [],
-      soHopDong: [],
-      ngayKyHopDong: [],
-      hinhThucToChuc: [],
-      thoiGianThamGia: [],
-      ghiChuThoiGianThamGia: [],
-      diaDiemNopHoSo: [],
-      dieuKienDangKy: [],
-      tienHoSo: [],
+      sdtToChuc: [],
+      diaChiToChuc: [],
+      taiKhoanToChuc: [],
+      soHd: [],
+      ngayKyHd: [],
+      hthucTchuc: [],
+      tgianDky: [],
+      tgianDkyTu: [],
+      tgianDkyDen: [],
+      ghiChuTgianDky: [],
+      diaDiemDky: [],
+      dieuKienDky: [],
+      tienMuaHoSo: [],
       buocGia: [],
-      tgianXemTaiSan: [],
-      ghiChuTgianXemTaiSan: [],
-      diaDiemXemTaiSan: [],
-      tgianNopTien: [],
+      tgianXem: [],
+      tgianXemTu: [],
+      tgianXemDen: [],
       ghiChuTgianXem: [],
-      pthucThanhToan: [],
+      diaDiemXem: [],
+      tgianNopTien: [],
+      tgianNopTienTu: [],
+      tgianNopTienDen: [],
+      ghiChuTgianNopTien: [],
+      pthucTtoan: [],
       donViThuHuong: [],
-      stk: [],
-      nganHang: [],
+      stkThuHuong: [],
+      nganHangThuHuong: [],
       chiNhanhNganHang: [],
-      tgianToChucDauGia: [],
-      diaDiemToChucDauGia: [],
-      hthucDauGia: [],
-      pthucDauGia: [],
-      dieuKien: [],
+      tgianDauGia: [],
+      tgianDauGiaTu: [],
+      tgianDauGiaDen: [],
+      diaDiemDauGia: [],
+      hthucDgia: [],
+      pthucDgia: [],
+      dkienCthuc: [],
       ghiChu: [],
-      ketQuaDauGia: [],
-      soBienBanDauGia: [],
-      trichYeuKetQua: [],
+      ketQua: [],
+      soBienBan: [],
+      trichYeuBban: [],
+      ngayKyBban: [],
     })
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    if (this.data) {
+      this.helperService.bidingDataInFormGroup(this.formData, this.data);
+    } else {
+      let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ")
+      this.formData.patchValue({
+        maThongBao: idThongBao + "/" + this.formData.value.nam + "/TB-ĐG",
+        idQdPdDtl: this.idDtl,
+        soQdPd: this.soQdPd,
+        soBienBan: idThongBao + "/" + this.formData.value.nam + "/BB-ĐG"
+      })
+    }
   }
 
-  handleCancel() {
+  async handleCancel() {
+    this.modal.closeAll();
+  }
 
+  isDisabled() {
+    return false;
+  }
+
+  async handleOk() {
+    let body = this.formData.value;
+    console.log(body);
+    // let data = await this.createUpdate(body);
+    // console.log(data);
+    // if (data) {
+    //   this.modal.closeAll();
+    // }
   }
 
 }
