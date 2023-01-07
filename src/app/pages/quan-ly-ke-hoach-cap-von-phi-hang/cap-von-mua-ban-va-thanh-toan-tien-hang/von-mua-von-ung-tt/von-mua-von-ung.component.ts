@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { UserService } from 'src/app/services/user.service';
+import { BCDTC } from 'src/app/Utility/utils';
 import { TAB_LIST } from './von-mua-von-ung.constant';
 
 @Component({
@@ -12,6 +13,10 @@ export class VonMuaVonUngComponent implements OnInit {
 
     tabSelected!: string;
     data: any;
+    isList = false;
+    isAccept = false;
+    isCheck = false;
+    isSynthetic = false;
     isTongCuc = true;
     tabList: any[] = TAB_LIST;
 
@@ -30,10 +35,6 @@ export class VonMuaVonUngComponent implements OnInit {
                 item.isSelected = true;
             }
         })
-        this.data = {
-            tabSelected: this.tabSelected,
-        }
-        this.tabSelected = 'gnv-btc'
     }
 
     selectTab(tab) {
@@ -41,9 +42,6 @@ export class VonMuaVonUngComponent implements OnInit {
         this.tabList.forEach(e => {
             e.isSelected = (tab == e.code);
         })
-        this.data = {
-            tabSelected: this.tabSelected,
-        }
     }
 
     changeTab(obj: any) {
