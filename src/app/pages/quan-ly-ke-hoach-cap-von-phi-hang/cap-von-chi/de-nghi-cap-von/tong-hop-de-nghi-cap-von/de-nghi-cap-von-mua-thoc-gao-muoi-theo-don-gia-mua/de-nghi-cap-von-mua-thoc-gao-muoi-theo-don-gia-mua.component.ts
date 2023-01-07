@@ -88,7 +88,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
     private danhMuc: DanhMucHDVService,
     private spinner: NgxSpinnerService,
     private datePipe: DatePipe,
-    private userService: UserService,
+    public userService: UserService,
     private notification: NzNotificationService,
     private modal: NzModalService,
     public globals: Globals,

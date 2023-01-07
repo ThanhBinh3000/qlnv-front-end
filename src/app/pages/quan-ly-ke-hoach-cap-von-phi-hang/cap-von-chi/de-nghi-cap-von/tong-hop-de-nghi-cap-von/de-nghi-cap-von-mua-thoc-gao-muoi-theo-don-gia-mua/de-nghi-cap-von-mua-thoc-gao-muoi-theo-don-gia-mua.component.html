@@ -164,9 +164,16 @@
                   <td>
                     {{ displayValue(data.slKeHoach) }}
                   </td>
-                  <td>
-                    {{ displayValue(data.donGia) }}
-                  </td>
+                  <ng-container *ngIf="userService.isTongCuc(); else showCucAndChiCuc">
+                    <td>
+                      {{displayValue(data.gtTheoKeHoach/data.slKeHoach)}}
+                    </td>
+                  </ng-container>
+                  <ng-template #showCucAndChiCuc>
+                    <td>
+                      {{ displayValue(data.donGia) }}
+                    </td>
+                  </ng-template>
                   <td>
                     {{ displayValue(data.gtTheoKeHoach) }}
                   </td>
