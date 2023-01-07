@@ -35,6 +35,7 @@ export class Report {
     maCapUng: string;
     namDnghi: string;
     loaiDnghi: string;
+    canCuVeGia: string;
     ngayTao: Date;
     nguoiTao: string;
     dot: number;
@@ -111,5 +112,51 @@ export class LuyKeCapUng {
     vonUng: number;
     vonCap: number;
     tong: number;
+    dot: number;
+}
+
+export class ThanhToan {
+    id: string;
+    maDvi: string;
+    tenDvi: string;
+    isParent: boolean;
+    tenKhachHang: string;
+    qdPdKqNhaThau: string;
+    soLuongKeHoach: number;
+    soLuongHopDong: number;
+    soLuongThucHien: number;
+    donGia: number;
+    giaTriHd: number;
+    giaTriTh: number;
+    soTtLuyKe: number;
+    soConDuocTt: number;
+    soDuyetTtLanNay: number;
+    uyNhiemChiNgay: Date;
+    uyNhiemChiMaNguonNs: string;
+    uyNhiemChiNienDoNs: string;
+    uyNhiemChiSoTien: number;
+    tongDaTt: number;
+    soConDuocTtSauLanNay: number;
+    soLuong: number;
+    luyKeCapUng: number;
+    luyKeCapVon: number;
+    luyKeTong: number;
+    uyNhiemChiCapUng: number;
+    uyNhiemChiCapVon: number;
+    uyNhiemChiTong: number;
+    listTTCNLuyKe: LuyKeThanhToan[];
+}
+
+export class LuyKeThanhToan {
+    id: string;
+    capUng: number;
+    capVon: number;
+    tong: number;
+    uyNhiemChiNgay: Date;
+    uyNhiemChiMaNguonNs: number;
+    uyNhiemChiNienDoNs: number;
+    uyNhiemChiCapUng: number;
+    uyNhiemChiCapVon: number;
+    uyNhiemChiTong: number;
     dot: number;
 }

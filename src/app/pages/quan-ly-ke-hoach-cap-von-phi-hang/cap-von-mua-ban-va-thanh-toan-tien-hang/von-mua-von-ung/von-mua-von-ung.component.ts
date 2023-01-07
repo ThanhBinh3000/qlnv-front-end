@@ -31,9 +31,11 @@ export class VonMuaVonUngComponent implements OnInit {
             }
         })
         this.data = {
-            tabSelected: this.tabSelected,
+            // tabSelected: this.tabSelected,
+            tabSelected: 'gnv-cv',
+            preTab: 'gnv',
         }
-        this.tabSelected = 'gnv-btc'
+        this.tabSelected = 'tt-hopdong'
     }
 
     selectTab(tab) {

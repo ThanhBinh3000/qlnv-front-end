@@ -34,5 +34,21 @@
             <app-ghi-nhan-cap-ung-von-tu-btc [dataInfo]="data" (dataChange)="changeTab($event)">
             </app-ghi-nhan-cap-ung-von-tu-btc>
         </ng-container>
+        <ng-container *ngIf="tabSelected == 'gnv-cv'">
+            <app-cap-ung-von-cho-dvcd [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-cap-ung-von-cho-dvcd>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'tt-dongia'">
+            <app-thanh-toan-khach-hang-theo-don-gia [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-thanh-toan-khach-hang-theo-don-gia>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'tt-vattu'">
+            <app-thanh-toan-khach-hang-theo-hop-dong-vat-tu [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-thanh-toan-khach-hang-theo-hop-dong-vat-tu>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'tt-hopdong'">
+            <app-thanh-toan-khach-hang-theo-hop-dong-thoc-gao-muoi [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-thanh-toan-khach-hang-theo-hop-dong-thoc-gao-muoi>
+        </ng-container>
     </div>
 </div>
