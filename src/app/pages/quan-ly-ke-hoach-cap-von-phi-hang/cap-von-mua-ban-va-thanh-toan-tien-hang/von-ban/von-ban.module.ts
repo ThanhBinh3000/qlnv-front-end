@@ -7,10 +7,6 @@ import { VonBanComponent } from './von-ban.component';
 @NgModule({
     declarations: [
         VonBanComponent,
-        // DanhSachNopVonBanComponent,
-        // DanhSachGhiNhanVonBanComponent,
-        // VonBanHangComponent,
-        // DialogTaoMoiComponent,
     ],
     imports: [
         CommonModule,
