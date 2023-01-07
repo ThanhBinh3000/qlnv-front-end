@@ -50,5 +50,9 @@
             <app-thanh-toan-khach-hang-theo-hop-dong-thoc-gao-muoi [dataInfo]="data" (dataChange)="changeTab($event)">
             </app-thanh-toan-khach-hang-theo-hop-dong-thoc-gao-muoi>
         </ng-container>
+        <ng-container *ngIf="tabSelected == 'tienthua'">
+            <app-nop-tien-thua [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-nop-tien-thua>
+        </ng-container>
     </div>
 </div>

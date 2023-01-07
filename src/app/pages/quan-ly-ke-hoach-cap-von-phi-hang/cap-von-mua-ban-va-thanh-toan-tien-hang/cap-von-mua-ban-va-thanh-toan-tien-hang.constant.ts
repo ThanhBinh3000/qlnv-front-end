@@ -158,5 +158,37 @@ export class LuyKeThanhToan {
     uyNhiemChiCapUng: number;
     uyNhiemChiCapVon: number;
     uyNhiemChiTong: number;
+    soNopLanNay: number;
+    dot: number;
+}
+
+export class TienThua {
+    id: string;
+    maHang: string;
+    hangDtqg: string;
+    tongVonUngNhan: number;
+    tongVonCapNhan: number;
+    tongVonNhan: number;
+    tongCapUngGiao: number;
+    tongCapVonGiao: number;
+    tongCapGiao: number;
+    tongVonUngTt: number;
+    tongVonCapTt: number;
+    tongVonTt: number;
+    tongVonUngDu: number;
+    tongVonCapDu: number;
+    tongVonDu: number;
+    soDaNopTcLuyKeLanNay: number;
+    uyNhiemChiNgay: Date;
+    soNopLanNay: number;
+    luyKeSauLanNop: number;
+    soConPhaiNop: number;
+    listLuyKeTienThua: luyKeTienThua[];
+}
+
+export class luyKeTienThua {
+    id: string;
+    uyNhiemChiNgay: Date;
+    soNopLanNay: number;
     dot: number;
 }

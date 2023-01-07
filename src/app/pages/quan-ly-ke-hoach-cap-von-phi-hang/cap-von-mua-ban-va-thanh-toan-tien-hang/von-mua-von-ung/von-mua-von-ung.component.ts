@@ -35,7 +35,7 @@ export class VonMuaVonUngComponent implements OnInit {
             tabSelected: 'gnv-cv',
             preTab: 'gnv',
         }
-        this.tabSelected = 'tt-hopdong'
+        this.tabSelected = 'tienthua'
     }
 
     selectTab(tab) {
