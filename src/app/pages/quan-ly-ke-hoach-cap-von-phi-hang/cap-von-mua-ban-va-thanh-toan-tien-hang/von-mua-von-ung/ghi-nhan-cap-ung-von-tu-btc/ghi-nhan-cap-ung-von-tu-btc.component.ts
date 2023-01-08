@@ -14,8 +14,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, sumNumber, Utils } from 'src/app/Utility/utils';
-import * as uuid from "uuid";
-import { CapUng, LuyKeCapUng, receivedInfo, Report, sendInfo, TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { CapUng, LuyKeCapUng, Report, TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
     selector: 'app-ghi-nhan-cap-ung-von-tu-btc',
@@ -309,13 +308,13 @@ export class GhiNhanCapUngVonTuBtcComponent implements OnInit {
             id: this.baoCao.id,
             maChucNang: mcn,
             lyDoTuChoi: lyDoTuChoi,
-            maLoai: "0",
+            maLoai: "1",
         };
         await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
                 this.baoCao.ttNhan.trangThai = mcn;
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                if (mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
@@ -442,7 +441,7 @@ export class GhiNhanCapUngVonTuBtcComponent implements OnInit {
     }
 
     updateEditCache(): void {
-        this.lstCtietBcaos.forEach(item => {
+        this.lstCtietBcaos?.forEach(item => {
             const data: LuyKeCapUng[] = [];
             item.listLuyKe?.forEach(e => {
                 data.push({ ...e });

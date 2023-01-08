@@ -267,21 +267,15 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
 
     async checkRequest() {
         this.isRequestExist = 0;
-        const request = {
-            maDvi: this.userInfo?.MA_DVI,
-            namBcao: this.response.namDnghi,
-            loaiDnghi: this.response.loaiDnghi,
-            canCuVeGia: this.response.canCuVeGia,
-            paggingReq: {
-                limit: 10,
-                page: 1,
-            },
-        }
-        await this.capVonMuaBanTtthService.timKiemVonMuaBan(request).toPromise().then(
+        this.request.namDnghi = this.response.namDnghi;
+        this.request.loaiDnghi = this.response.loaiDnghi;
+        this.request.trangThai = null;
+        await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.request).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     if (data.data.content?.length > 0) {
-                        if (data.data.content[0].ttGui.trangThai == Utils.TT_BC_7) {
+                        if ((data.data.content[0].ttGui.trangThai == Utils.TT_BC_7 && this.request.loaiTimKiem == '0') ||
+                            (data.data.content[0].ttNhan.trangThai == Utils.TT_BC_7 && this.request.loaiTimKiem == '1')) {
                             this.isRequestExist = 1;
                             this.idRequest = data.data.content[0].id;
                         } else {
@@ -298,7 +292,6 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                 this.response.loaiDnghi = null;
             }
         );
-        this.spinner.hide();
     }
 
     handleOk() {

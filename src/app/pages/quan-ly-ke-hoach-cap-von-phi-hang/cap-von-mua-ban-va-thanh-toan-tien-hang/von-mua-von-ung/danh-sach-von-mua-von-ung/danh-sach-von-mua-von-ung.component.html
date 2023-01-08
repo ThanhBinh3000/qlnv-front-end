@@ -8,8 +8,8 @@
             <div nz-col nzSpan="3">
                 <label class="search__label">Năm</label>
                 <nz-input-number [nzSize]="'small'"
-                    [class]="(searchFilter.namBcao >= 1000 &&  searchFilter.namBcao <= 2999) || !searchFilter.namBcao && this.searchFilter.namBcao !== 0 ?'' : 'input-error-validate'"
-                    [(ngModel)]="searchFilter.namBcao"></nz-input-number>
+                    [class]="(searchFilter.namDnghi >= 1000 &&  searchFilter.namDnghi <= 2999) || !searchFilter.namDnghi && this.searchFilter.namDnghi !== 0 ?'' : 'input-error-validate'"
+                    [(ngModel)]="searchFilter.namDnghi"></nz-input-number>
             </div>
             <div nz-col nzSpan="3">
                 <label class="search__label">Loại</label>
@@ -94,10 +94,10 @@
                         {{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}
                     </td>
                     <td>
-                        {{ data.maDnghi}}
+                        {{ data.maCapUng}}
                     </td>
                     <td>
-                        {{ data.namBcao }}
+                        {{ data.namDnghi }}
                     </td>
                     <td>
                         <div *ngFor="let e of loaiDns">
@@ -107,16 +107,16 @@
                         </div>
                     </td>
                     <td>
-                        {{data.ngayTao}}
+                        {{ getDate(data.ngayTao) }}
                     </td>
                     <td>
-                        {{data.ngayTrinh}}
+                        {{ getDate(data.ngayTrinh) }}
                     </td>
                     <td>
-                        {{data.ngayDuyet}}
+                        {{ getDate(data.ngayDuyet) }}
                     </td>
                     <td>
-                        {{data.ngayPheDuyet}}
+                        {{ getDate(data.ngayPheDuyet) }}
                     </td>
                     <td>
                         {{getStatusName(data.trangThai)}}

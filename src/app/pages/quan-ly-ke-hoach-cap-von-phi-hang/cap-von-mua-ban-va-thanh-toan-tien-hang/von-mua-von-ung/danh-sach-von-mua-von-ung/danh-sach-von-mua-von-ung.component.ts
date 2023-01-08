@@ -9,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
-import { CVMB, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
+import { CVMB, LOAI_DE_NGHI, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
 import { TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import { DialogTaoMoiCapVonComponent } from '../dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
 import { DialogTaoMoiThanhToanComponent } from '../dialog-tao-moi-thanh-toan/dialog-tao-moi-thanh-toan.component';
@@ -33,7 +33,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
         maCapUng: null,
         maDvi: null,
         loaiDnghi: null,
-        namBcao: null,
+        namDnghi: null,
         ngayTaoDen: null,
         ngayTaoTu: null,
         paggingReq: {
@@ -54,6 +54,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     deletePermission: string;
     passPermission: string;
     approvePermission: string;
+    isSend: boolean;
     isParent = false;
     allChecked = false;
     statusNewReport = false;
@@ -97,6 +98,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.editPermission = CVMB.EDIT_REPORT_GNV;
                 this.passPermission = CVMB.DUYET_REPORT_GNV;
                 this.approvePermission = CVMB.PHE_DUYET_REPORT_GNV;
+                this.isSend = false;
                 break;
             case 'cv':
                 this.title = 'DANH SÁCH CẤP ỨNG VỐN CHO ĐƠN VỊ CẤP DƯỚI';
@@ -107,6 +109,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.deletePermission = CVMB.DELETE_REPORT_CV;
                 this.passPermission = CVMB.DUYET_REPORT_CV;
                 this.approvePermission = CVMB.PHE_DUYET_REPORT_CV;
+                this.isSend = true;
                 break;
             case 'tt':
                 this.title = 'DANH SÁCH TIỀN THỪA NỘP LÊN ĐƠN VỊ CẤP TRÊN';
@@ -117,6 +120,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.deletePermission = CVMB.DELETE_REPORT_NTVT;
                 this.passPermission = CVMB.DUYET_REPORT_NTVT;
                 this.approvePermission = CVMB.PHE_DUYET_REPORT_NTVT;
+                this.isSend = true;
                 break;
             case 'gn-tt':
                 this.title = 'DANH SÁCH GHI NHẬN TIỀN THỪA NỘP TỪ ĐƠN VỊ CẤP DƯỚI';
@@ -129,6 +133,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.passPermission = CVMB.DUYET_REPORT_GNV_TH;
                 this.approvePermission = CVMB.PHE_DUYET_REPORT_GNV_TH;
                 this.trangThais.find(e => e.id == Utils.TT_BC_1).tenDm = 'Mới';
+                this.isSend = false;
                 break;
             case 'thanhtoan':
                 this.title = 'DANH SÁCH THANH TOÁN CHO KHÁCH HÀNG';
@@ -139,6 +144,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.deletePermission = CVMB.DELETE_REPORT_TTKH;
                 this.passPermission = CVMB.DUYET_REPORT_TTKH;
                 this.approvePermission = CVMB.PHE_DUYET_REPORT_TTKH;
+                this.isSend = true;
                 break;
             default:
                 break;
@@ -157,6 +163,10 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
         this.spinner.hide();
     }
 
+    getDate(date: Date) {
+        return this.datePipe.transform(date, Utils.FORMAT_DATE_STR);
+    }
+
     async search() {
         const request = JSON.parse(JSON.stringify(this.searchFilter));
         request.ngayTaoDen = this.datePipe.transform(this.searchFilter.ngayTaoDen, Utils.FORMAT_DATE_STR);
@@ -168,14 +178,15 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                     this.dataTable = [];
                     data.data.content.forEach(item => {
                         this.dataTable.push({
-                            // ...item,
-                            // ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
-                            // ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
-                            // ngayDuyet: this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR),
-                            // ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
-                            // checked: false,
-                            // isEdit: this.checkEditStatus(item.trangThai),
-                            // isDelete: this.checkDeleteStatus(item.trangThai),
+                            ...item,
+                            ngayTrinh: this.isSend ? item.ttGui.ngayTrinh : item.ttNhan.ngayTrinh,
+                            ngayDuyet: this.isSend ? item.ttGui.ngayDuyet : item.ttNhan.ngayDuyet,
+                            ngayPheDuyet: this.isSend ? item.ttGui.ngayPheDuyet : item.ttNhan.ngayPheDuyet,
+                            trangThai: this.isSend ? item.ttGui.trangThai : item.ttNhan.trangThai,
+                            lyDoTuChoi: this.isSend ? item.ttGui.lyDoTuChoi : item.ttNhan.lyDoTuChoi,
+                            checked: false,
+                            isEdit: this.checkEditStatus(this.isSend ? item.ttGui.trangThai : item.ttNhan.trangThai),
+                            isDelete: this.checkDeleteStatus(this.isSend ? item.ttGui.trangThai : item.ttNhan.trangThai),
                         })
                     })
                     this.dataTableAll = cloneDeep(this.dataTable);
@@ -210,7 +221,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
         this.searchFilter.trangThai = null
         this.searchFilter.ngayTaoTu = null
         this.searchFilter.ngayTaoDen = null
-        this.searchFilter.namBcao = null
+        this.searchFilter.namDnghi = null
         this.searchFilter.loaiDnghi = null
         this.search();
     }
@@ -291,6 +302,33 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
         const obj = {
             id: data.id,
             tabSelected: '',
+        }
+        switch (this.searchFilter.maLoai) {
+            case 1:
+                obj.tabSelected = 'gnv-btc';
+                break;
+            case 2:
+                obj.tabSelected = 'gnv-cv';
+                break;
+            case 3:
+                obj.tabSelected = 'gnv-cv';
+                break;
+            case 5:
+                if (data.loaiDnghi == Utils.MUA_VTU) {
+                    obj.tabSelected = 'tt-vattu';
+                } else {
+                    if (data.canCuVeGia == Utils.HD_TRUNG_THAU) {
+                        obj.tabSelected = 'tt-hopdong';
+                    } else {
+                        obj.tabSelected = 'tt-dongia';
+                    }
+                }
+                break;
+            case 6:
+                obj.tabSelected = 'tienthua';
+                break;
+            default:
+                break;
         }
         this.dataChange.emit(obj);
     }

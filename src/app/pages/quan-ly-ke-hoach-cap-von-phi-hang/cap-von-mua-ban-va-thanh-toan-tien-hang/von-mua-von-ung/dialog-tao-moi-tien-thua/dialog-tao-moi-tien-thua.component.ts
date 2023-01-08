@@ -9,6 +9,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
+import { utils } from 'xlsx';
 import { receivedInfo, Report, sendInfo, TienThua } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
@@ -62,19 +63,19 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
             this.response.ttGui.lstCtietBcaos.push({
                 ...new TienThua(),
                 id: uuid.v4() + 'FE',
-                maHang: '0101',
+                maHang: Utils.MUA_THOC,
                 hangDtqg: 'Thóc',
             })
             this.response.ttGui.lstCtietBcaos.push({
                 ...new TienThua(),
                 id: uuid.v4() + 'FE',
-                maHang: '0102',
+                maHang: Utils.MUA_GAO,
                 hangDtqg: 'Gạo',
             })
             this.response.ttGui.lstCtietBcaos.push({
                 ...new TienThua(),
                 id: uuid.v4() + 'FE',
-                maHang: '04',
+                maHang: Utils.MUA_MUOI,
                 hangDtqg: 'Muối',
             })
             await this.getMaDnghi();

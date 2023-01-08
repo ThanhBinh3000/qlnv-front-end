@@ -5,8 +5,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
-import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -15,9 +13,8 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, sumNumber, Utils } from 'src/app/Utility/utils';
-import * as uuid from "uuid";
-import { CapUng, LuyKeCapUng, luyKeTienThua, receivedInfo, Report, sendInfo, TienThua, TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, sumNumber, Utils } from 'src/app/Utility/utils';
+import { luyKeTienThua, Report, TienThua, TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
     selector: 'app-nop-tien-thua',
@@ -34,6 +31,7 @@ export class NopTienThuaComponent implements OnInit {
     lstCtietBcaos: TienThua[] = [];
     editCache: { [key: string]: { edit: boolean; data: TienThua } } = {};
     title: string;
+    capDvi: number;
     //danh muc
     donVis: any[] = [];
     trangThais: any[] = TRANG_THAI;
@@ -89,7 +87,7 @@ export class NopTienThuaComponent implements OnInit {
         private danhMuc: DanhMucHDVService,
         private spinner: NgxSpinnerService,
         private datePipe: DatePipe,
-        private userService: UserService,
+        public userService: UserService,
         private notification: NzNotificationService,
         private modal: NzModalService,
         public globals: Globals,
@@ -172,6 +170,12 @@ export class NopTienThuaComponent implements OnInit {
         } else {
             this.baoCao = this.dataInfo?.baoCao;
             this.lstCtietBcaos = this.baoCao.ttGui.lstCtietBcaos;
+            this.isParent = false;
+        }
+        if (this.isParent) {
+            this.capDvi = (this.userInfo?.CAP_DVI).toString() + 1;
+        } else {
+            this.capDvi = (this.userInfo?.CAP_DVI).toString();
         }
         this.updateEditCache();
         this.getStatusButton();
@@ -331,13 +335,17 @@ export class NopTienThuaComponent implements OnInit {
             id: this.baoCao.id,
             maChucNang: mcn,
             lyDoTuChoi: lyDoTuChoi,
-            maLoai: "0",
+            maLoai: this.isParent ? '1' : '0',
         };
         await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
-                this.baoCao.ttNhan.trangThai = mcn;
+                if (this.isParent) {
+                    this.baoCao.ttNhan.trangThai = mcn;
+                } else {
+                    this.baoCao.ttGui.trangThai = mcn;
+                }
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                if (mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);

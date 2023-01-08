@@ -328,13 +328,17 @@ export class VonBanTheoDonGiaComponent implements OnInit {
             id: this.baoCao.id,
             maChucNang: mcn,
             lyDoTuChoi: lyDoTuChoi,
-            maLoai: "0",
+            maLoai: this.isParent ? '1' : '0',
         };
         await this.capVonMuaBanTtthService.trinhDuyetVonMuaBan(requestGroupButtons).toPromise().then(async (data) => {
             if (data.statusCode == 0) {
-                this.baoCao.ttNhan.trangThai = mcn;
+                if (this.isParent) {
+                    this.baoCao.ttNhan.trangThai = mcn;
+                } else {
+                    this.baoCao.ttGui.trangThai = mcn;
+                }
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_8 || mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
+                if (mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);

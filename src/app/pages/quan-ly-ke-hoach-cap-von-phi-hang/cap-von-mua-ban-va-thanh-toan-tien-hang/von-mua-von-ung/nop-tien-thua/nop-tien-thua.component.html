@@ -113,13 +113,14 @@
                             <th rowspan="3">STT</th>
                             <th rowspan="3">Hàng DTQG</th>
                             <th colspan="3" rowspan="2">Nhận</th>
-                            <th colspan="9">Chi</th>
+                            <th *ngIf="capDvi == 2" colspan="9">Chi</th>
+                            <th *ngIf="capDvi != 2" colspan="6">Chi</th>
                             <th colspan="5">Nộp lên đơn vị cấp trên</th>
                             <th [hidden]="statusGui" rowSpan="3"></th>
                         </tr>
                         <tr>
-                            <th colspan="3">Giao cho đơn vị cấp dưới</th>
-                            <th colspan="3">Tổng thanh toán cho khách hàng</th>
+                            <th *ngIf="capDvi != 3" colspan="3">Giao cho đơn vị cấp dưới</th>
+                            <th *ngIf="capDvi != 1" colspan="3">Tổng thanh toán cho khách hàng</th>
                             <th colspan="3">Số dư</th>
                             <th rowspan="2">Số đã nộp tổng cục <br /> (lũy kế) của lần nộp này</th>
                             <th colspan="2">Nộp lần này</th>
@@ -130,9 +131,9 @@
                             <th>Tổng vốn ứng</th>
                             <th>Tổng vốn cấp</th>
                             <th>Tổng vốn</th>
-                            <th>Tổng vốn ứng</th>
-                            <th>Tổng vốn cấp</th>
-                            <th>Tổng vốn</th>
+                            <th *ngIf="capDvi == 2">Tổng vốn ứng</th>
+                            <th *ngIf="capDvi == 2">Tổng vốn cấp</th>
+                            <th *ngIf="capDvi == 2">Tổng vốn</th>
                             <th>Tổng vốn ứng</th>
                             <th>Tổng vốn cấp</th>
                             <th>Tổng vốn</th>
@@ -148,12 +149,12 @@
                             <th>1</th>
                             <th>2</th>
                             <th>3=1+2</th>
-                            <th>4</th>
-                            <th>5</th>
-                            <th>6=4+6</th>
-                            <th>7</th>
-                            <th>8</th>
-                            <th>9=7+8</th>
+                            <th *ngIf="capDvi != 3">4</th>
+                            <th *ngIf="capDvi != 3">5</th>
+                            <th *ngIf="capDvi != 3">6=4+6</th>
+                            <th *ngIf="capDvi != 1">7</th>
+                            <th *ngIf="capDvi != 1">8</th>
+                            <th *ngIf="capDvi != 1">9=7+8</th>
                             <th>10=1-4-7</th>
                             <th>11=2-5-8</th>
                             <th>12=10+11</th>
@@ -183,22 +184,22 @@
                                 <td>
                                     {{ displayValue(data.tongVonNhan) }}
                                 </td>
-                                <td>
+                                <td *ngIf="capDvi != 3">
                                     {{ displayValue(data.tongCapUngGiao) }}
                                 </td>
-                                <td>
+                                <td *ngIf="capDvi != 3">
                                     {{ displayValue(data.tongCapVonGiao) }}
                                 </td>
-                                <td>
+                                <td *ngIf="capDvi != 3">
                                     {{ displayValue(data.tongCapGiao) }}
                                 </td>
-                                <td>
+                                <td *ngIf="capDvi != 1">
                                     {{ displayValue(data.tongVonUngTt) }}
                                 </td>
-                                <td>
+                                <td *ngIf="capDvi != 1">
                                     {{ displayValue(data.tongVonCapTt) }}
                                 </td>
-                                <td>
+                                <td *ngIf="capDvi != 1">
                                     {{ displayValue(data.tongVonTt) }}
                                 </td>
                                 <td>
@@ -245,22 +246,22 @@
                                 <td>
                                     {{ displayValue(editCache[data.id].data.tongVonNhan) }}
                                 </td>
-                                <td>
+                                <td *ngIf="capDvi != 3">
                                     {{ displayValue(editCache[data.id].data.tongCapUngGiao) }}
                                 </td>
-                                <td>
+                                <td *ngIf="capDvi != 3">
                                     {{ displayValue(editCache[data.id].data.tongCapVonGiao) }}
                                 </td>
-                                <td>
+                                <td *ngIf="capDvi != 3">
                                     {{ displayValue(editCache[data.id].data.tongCapGiao) }}
                                 </td>
-                                <td>
+                                <td *ngIf="capDvi != 1">
                                     {{ displayValue(editCache[data.id].data.tongVonUngTt) }}
                                 </td>
-                                <td>
+                                <td *ngIf="capDvi != 1">
                                     {{ displayValue(editCache[data.id].data.tongVonCapTt) }}
                                 </td>
-                                <td>
+                                <td *ngIf="capDvi != 1">
                                     {{ displayValue(editCache[data.id].data.tongVonTt) }}
                                 </td>
                                 <td>
@@ -273,10 +274,7 @@
                                     {{ displayValue(editCache[data.id].data.tongVonDu) }}
                                 </td>
                                 <td>
-                                    <fm-input-number class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.soDaNopTcLuyKeLanNay"
-                                        (ngModelChange)="changeModel(data.id)">
-                                    </fm-input-number>
+                                    {{ displayValue(editCache[data.id].data.soDaNopTcLuyKeLanNay) }}
                                 </td>
                                 <td>
                                     <nz-date-picker class="search__input"
