@@ -5,19 +5,19 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
-import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, divMoney, divNumber, LOAI_DE_NGHI, mulNumber, sumNumber, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, divNumber, LOAI_DE_NGHI, mulNumber, sumNumber, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { receivedInfo, Report, sendInfo, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
-    selector: 'dialog-tao-moi-von-ban',
-    templateUrl: './dialog-tao-moi-von-ban.component.html',
-    styleUrls: ['../von-ban.component.scss'],
+    selector: 'dialog-tao-moi-thanh-toan',
+    templateUrl: './dialog-tao-moi-thanh-toan.component.html',
+    styleUrls: ['../von-mua-von-ung.component.scss'],
 })
 
-export class DialogTaoMoiVonBanComponent implements OnInit {
+export class DialogTaoMoiThanhToanComponent implements OnInit {
+    @Input() request: any;
 
     userInfo: any;
     response: Report = new Report();
@@ -35,10 +35,16 @@ export class DialogTaoMoiVonBanComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
-        if (!this.userService.isCuc()) {
+        if (this.userService.isTongCuc()) {
+            this.response.canCuVeGia = Utils.HD_TRUNG_THAU;
+            this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_VTU);
+        } else {
+            this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
+        }
+        if (this.userService.isChiCuc()) {
             this.response.canCuVeGia = Utils.QD_DON_GIA;
         }
-        this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
+        this.response.maLoai = this.request.maLoai;
         this.userInfo = this.userService.getUserLogin();
     }
 
@@ -64,7 +70,6 @@ export class DialogTaoMoiVonBanComponent implements OnInit {
             this.response.maDvi = this.userInfo?.MA_DVI;
             this.response.ngayTao = new Date();
             this.response.dot = 1;
-            this.response.maLoai = 4;
             this.response.ttGui.trangThai = Utils.TT_BC_1;
             this.response.ttNhan.trangThai = Utils.TT_BC_1;
             //bao cao chua ton tai
@@ -100,12 +105,21 @@ export class DialogTaoMoiVonBanComponent implements OnInit {
                     item.listLuyKe.push({
                         id: uuid.v4() + 'FE',
                         uyNhiemChiNgay: item.uyNhiemChiNgay,
-                        soNopLanNay: item.soNopLanNay,
+                        uyNhiemChiMaNguonNs: item.uyNhiemChiMaNguonNs,
+                        uyNhiemChiNienDoNs: item.uyNhiemChiNienDoNs,
+                        uyNhiemChiCapUng: item.uyNhiemChiCapUng,
+                        uyNhiemChiCapVon: item.uyNhiemChiCapVon,
+                        uyNhiemChiSoTien: item.uyNhiemChiSoTien,
+                        uyNhiemChiTong: item.uyNhiemChiTong,
                         dot: this.response.dot,
                     })
-                    item.soDaNopTc = item.luyKeSauLanNopNay;
                     item.uyNhiemChiNgay = null;
-                    item.soNopLanNay = 0;
+                    item.uyNhiemChiMaNguonNs = null;
+                    item.uyNhiemChiNienDoNs = null;
+                    item.uyNhiemChiCapUng = 0;
+                    item.uyNhiemChiCapVon = 0;
+                    item.uyNhiemChiSoTien = 0;
+                    item.uyNhiemChiTong = 0;
                 }
             })
             this.response.ttNhan.lstCtietBcaos.push({

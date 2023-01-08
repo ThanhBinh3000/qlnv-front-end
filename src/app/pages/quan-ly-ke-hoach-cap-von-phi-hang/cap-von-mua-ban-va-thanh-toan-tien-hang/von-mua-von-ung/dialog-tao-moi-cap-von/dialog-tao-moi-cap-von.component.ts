@@ -5,109 +5,65 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
-import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNguonChi.service';
+import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { CAN_CU_GIA, divMoney, divNumber, LOAI_DE_NGHI, mulNumber, sumNumber, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, divNumber, LOAI_DE_NGHI, mulNumber, sumNumber, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
-import { receivedInfo, Report, sendInfo, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { CapUng, receivedInfo, Report, sendInfo, ThanhToan } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
-    selector: 'dialog-tao-moi-von-ban',
-    templateUrl: './dialog-tao-moi-von-ban.component.html',
-    styleUrls: ['../von-ban.component.scss'],
+    selector: 'dialog-tao-moi-cap-von',
+    templateUrl: './dialog-tao-moi-cap-von.component.html',
+    styleUrls: ['../von-mua-von-ung.component.scss'],
 })
 
-export class DialogTaoMoiVonBanComponent implements OnInit {
+export class DialogTaoMoiCapVonComponent implements OnInit {
+    @Input() request: any;
 
     userInfo: any;
     response: Report = new Report();
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
+    donVis: any[];
     isRequestExist!: number;
     idRequest: string;
 
     constructor(
         private _modalRef: NzModalRef,
         private notification: NzNotificationService,
+        private quanLyVonPhiService: QuanLyVonPhiService,
         public userService: UserService,
         private capVonMuaBanTtthService: CapVonMuaBanTtthService,
         private spinner: NgxSpinnerService,
     ) { }
 
     async ngOnInit() {
-        if (!this.userService.isCuc()) {
-            this.response.canCuVeGia = Utils.QD_DON_GIA;
-        }
         this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
+        this.response.maLoai = this.request.maLoai;
         this.userInfo = this.userService.getUserLogin();
     }
 
     //lay ra chi tiet cua de nghi
     async getDetail() {
-        if (!this.response.namDnghi || !this.response.canCuVeGia) {
+        if (!this.response.namDnghi) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             this.response.loaiDnghi = null;
             return;
         }
         this.spinner.show();
         await this.checkRequest();
-        if (this.isRequestExist == 2) {
-            this.notification.warning(MESSAGE.WARNING, 'Trạng thái bản ghi không cho phép tạo đợt mới');
-            this.response.loaiDnghi = null;
-            return;
-        }
-        if (this.isRequestExist == 0) {
-            this.response.ttGui = new sendInfo();
-            this.response.ttGui.lstCtietBcaos = [];
-            this.response.ttNhan = new receivedInfo();
-            this.response.ttNhan.lstCtietBcaos = [];
-            this.response.maDvi = this.userInfo?.MA_DVI;
-            this.response.ngayTao = new Date();
-            this.response.dot = 1;
-            this.response.maLoai = 4;
-            this.response.ttGui.trangThai = Utils.TT_BC_1;
-            this.response.ttNhan.trangThai = Utils.TT_BC_1;
-            //bao cao chua ton tai
-            if (this.response.canCuVeGia == Utils.HD_TRUNG_THAU) {
-                await this.getContractData();
-            } else {
-                this.response.ttGui.lstCtietBcaos.push({
-                    ...new ThanhToan(),
-                    id: uuid.v4() + 'FE',
-                    maDvi: this.userInfo?.MA_DVI,
-                    tenDvi: this.userInfo?.TEN_DVI,
-                })
+
+        if (this.response.maLoai == 2) {
+            if (this.isRequestExist == 0) {
+                this.notification.warning(MESSAGE.WARNING, 'Bản ghi chưa tồn tại');
+                this.response.loaiDnghi = null;
+                return;
             }
-            await this.getMaDnghi();
-        } else {
-            //them lan moi cho de nghi
-            await this.capVonMuaBanTtthService.ctietVonMuaBan(this.idRequest).toPromise().then(
-                async (data) => {
-                    if (data.statusCode == 0) {
-                        this.response = data.data;
-                        this.response.ttGui.listFile = [];
-                        this.response.ttNhan.listFile = [];
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, data?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
-            this.response.ttGui.lstCtietBcaos.forEach(item => {
-                if (item.maDvi == this.userInfo?.MA_DVI || item.isParent) {
-                    item.listLuyKe.push({
-                        id: uuid.v4() + 'FE',
-                        uyNhiemChiNgay: item.uyNhiemChiNgay,
-                        soNopLanNay: item.soNopLanNay,
-                        dot: this.response.dot,
-                    })
-                    item.soDaNopTc = item.luyKeSauLanNopNay;
-                    item.uyNhiemChiNgay = null;
-                    item.soNopLanNay = 0;
-                }
-            })
+            if (this.isRequestExist == 2) {
+                this.notification.warning(MESSAGE.WARNING, 'Trạng thái bản ghi không cho phép tạo đợt mới');
+                this.response.loaiDnghi = null;
+                return;
+            }
             this.response.ttNhan.lstCtietBcaos.push({
                 id: uuid.v4() + 'FE',
                 ngayNhanLenhChuyenCo: this.response.ttNhan.ngayNhanLenhChuyenCo,
@@ -117,8 +73,92 @@ export class DialogTaoMoiVonBanComponent implements OnInit {
             this.response.ttNhan.ngayNhanLenhChuyenCo = null;
             this.response.ttNhan.tkNhan = null;
             this.response.dot += 1;
-            this.response.ttGui.trangThai = Utils.TT_BC_1;
             this.response.ttNhan.trangThai = Utils.TT_BC_1;
+        }
+
+        if (this.response.maLoai == 1) {
+            if (this.isRequestExist == 0) {
+                this.response.ttGui = new sendInfo();
+                this.response.ttGui.lstCtietBcaos = [];
+                this.response.ttNhan = new receivedInfo();
+                this.response.ttNhan.lstCtietBcaos = [];
+                this.response.maDvi = this.userInfo?.MA_DVI;
+                this.response.ngayTao = new Date();
+                this.response.dot = 1;
+                this.response.ttGui.trangThai = Utils.TT_BC_1;
+                this.response.ttNhan.trangThai = Utils.TT_BC_1;
+                //bao cao chua ton tai
+                this.response.ttGui.lstCtietBcaos.push({
+                    ...new CapUng(),
+                    id: uuid.v4() + 'FE',
+                })
+                await this.getMaDnghi();
+            } else {
+                this.notification.warning(MESSAGE.WARNING, 'Bản ghi đã tồn tại');
+                this.response.loaiDnghi = null;
+                return;
+            }
+        }
+
+        if (this.response.maLoai == 3) {
+            if (this.isRequestExist == 2) {
+                this.notification.warning(MESSAGE.WARNING, 'Trạng thái bản ghi không cho phép tạo đợt mới');
+                this.response.loaiDnghi = null;
+                return;
+            }
+            if (this.isRequestExist == 0) {
+                this.response.ttGui = new sendInfo();
+                this.response.ttGui.lstCtietBcaos = [];
+                this.response.ttNhan = new receivedInfo();
+                this.response.ttNhan.lstCtietBcaos = [];
+                this.response.maDvi = this.userInfo?.MA_DVI;
+                this.response.ngayTao = new Date();
+                this.response.dot = 1;
+                this.response.ttGui.trangThai = Utils.TT_BC_1;
+                this.response.ttNhan.trangThai = Utils.TT_BC_1;
+                //bao cao chua ton tai
+                await this.getChildUnit();
+                this.donVis.forEach(item => {
+                    this.response.ttGui.lstCtietBcaos.push({
+                        ...new CapUng(),
+                        id: uuid.v4() + 'FE',
+                        maDvi: item.maDvi,
+                        tenDvi: item.tenDvi,
+                    })
+                })
+                await this.getMaDnghi();
+            } else {
+                //them lan moi cho de nghi
+                await this.capVonMuaBanTtthService.ctietVonMuaBan(this.idRequest).toPromise().then(
+                    async (data) => {
+                        if (data.statusCode == 0) {
+                            this.response = data.data;
+                            this.response.ttGui.listFile = [];
+                            this.response.ttNhan.listFile = [];
+                        } else {
+                            this.notification.error(MESSAGE.ERROR, data?.msg);
+                        }
+                    },
+                    (err) => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    },
+                );
+                this.response.ttGui.lstCtietBcaos.forEach(item => {
+                    item.listLuyKe.push({
+                        id: uuid.v4() + 'FE',
+                        vonUng: item.vonUng,
+                        vonCap: item.vonCap,
+                        tong: item.tong,
+                        dot: this.response.dot,
+                    })
+                    item.vonUng = 0;
+                    item.vonCap = 0;
+                    item.tong = 0;
+                })
+                this.response.dot += 1;
+                this.response.ttGui.trangThai = Utils.TT_BC_1;
+                this.response.ttNhan.trangThai = Utils.TT_BC_1;
+            }
         }
         this.spinner.hide();
     }
@@ -202,6 +242,29 @@ export class DialogTaoMoiVonBanComponent implements OnInit {
         );
     }
 
+    async getChildUnit() {
+        const request = {
+            maDviCha: this.response.maDvi,
+            trangThai: '01',
+        }
+        await this.quanLyVonPhiService.dmDviCon(request).toPromise().then(
+            data => {
+                if (data.statusCode == 0) {
+                    if (this.userService.isTongCuc()) {
+                        this.donVis = data.data.filter(e => e.tenVietTat && e.tenVietTat.startsWith('CDT'));
+                    } else {
+                        this.donVis = data.data.filter(e => e.tenVietTat && e.tenVietTat.startsWith('CCDT'))
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+            }
+        )
+    }
+
     async checkRequest() {
         this.isRequestExist = 0;
         const request = {
@@ -239,19 +302,11 @@ export class DialogTaoMoiVonBanComponent implements OnInit {
     }
 
     handleOk() {
-        if (!this.response.canCuVeGia) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-            return;
-        }
-        if (!this.response.namDnghi) {
+        if (!this.response.namDnghi || !this.response.loaiDnghi) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
 
-        if (!this.response.loaiDnghi) {
-            this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
-            return;
-        }
         this._modalRef.close(this.response);
     }
 

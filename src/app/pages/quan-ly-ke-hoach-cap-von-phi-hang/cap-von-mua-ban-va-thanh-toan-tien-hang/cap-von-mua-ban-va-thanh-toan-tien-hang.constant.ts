@@ -79,6 +79,7 @@ export class receivedInfo {
 }
 
 export class reInfo {
+    id: string;
     dot: number;
     ngayNhanLenhChuyenCo: Date;
     tkNhan: string;
@@ -104,7 +105,7 @@ export class CapUng {
     maDvi: string;
     tenDvi: string;
     ghiChu: string;
-    listGhiNhanVonLuyKe: LuyKeCapUng[];
+    listLuyKe: LuyKeCapUng[];
 }
 
 export class LuyKeCapUng {
@@ -144,7 +145,7 @@ export class ThanhToan {
     uyNhiemChiCapUng: number;
     uyNhiemChiCapVon: number;
     uyNhiemChiTong: number;
-    listTTCNLuyKe: LuyKeThanhToan[];
+    listLuyKe: LuyKeThanhToan[];
     soDaNopTc: number;
     luyKeSauLanNopNay: number;
     soConPhaiNop: number;
@@ -160,6 +161,7 @@ export class LuyKeThanhToan {
     uyNhiemChiNienDoNs: string;
     uyNhiemChiCapUng: number;
     uyNhiemChiCapVon: number;
+    uyNhiemChiSoTien: number;
     uyNhiemChiTong: number;
     soNopLanNay: number;
     dot: number;
@@ -186,7 +188,7 @@ export class TienThua {
     soNopLanNay: number;
     luyKeSauLanNop: number;
     soConPhaiNop: number;
-    listLuyKeTienThua: luyKeTienThua[];
+    listLuyKe: luyKeTienThua[];
 }
 
 export class luyKeTienThua {

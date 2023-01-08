@@ -1,3 +1,4 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { cloneDeep } from 'lodash';
@@ -10,6 +11,9 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { UserService } from 'src/app/services/user.service';
 import { CVMB, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
 import { TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { DialogTaoMoiCapVonComponent } from '../dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
+import { DialogTaoMoiThanhToanComponent } from '../dialog-tao-moi-thanh-toan/dialog-tao-moi-thanh-toan.component';
+import { DialogTaoMoiTienThuaComponent } from '../dialog-tao-moi-tien-thua/dialog-tao-moi-tien-thua.component';
 
 @Component({
     selector: 'app-danh-sach-von-mua-von-ung',
@@ -87,7 +91,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                     this.deletePermission = CVMB.DELETE_REPORT_GNV;
                 } else {
                     this.searchFilter.maLoai = 2;
-                    this.createPermission = 'NO';
+                    this.createPermission = CVMB.ADD_REPORT_GNV;
                     this.deletePermission = 'NO';
                 }
                 this.editPermission = CVMB.EDIT_REPORT_GNV;
@@ -224,30 +228,62 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     }
 
     addNewReport() {
-        // const newData = {
-        //     tab: 'gnv',
-        // }
-        // const modalTuChoi = this.modal.create({
-        //     nzTitle: 'Thông tin tạo mới',
-        //     nzContent: DialogTaoMoiComponent,
-        //     nzMaskClosable: false,
-        //     nzClosable: false,
-        //     nzWidth: '900px',
-        //     nzFooter: null,
-        //     nzComponentParams: {
-        //         obj: newData
-        //     },
-        // });
-        // modalTuChoi.afterClose.toPromise().then(async (res) => {
-        //     if (res) {
-        //         const obj = {
-        //             ...res,
-        //             id: null,
-        //             tabSelected: 'bc-gnv',
-        //         }
-        //         this.dataChange.emit(obj);
-        //     }
-        // });
+        let nzContent: ComponentType<any>;
+        if (this.searchFilter.maLoai == 1 || this.searchFilter.maLoai == 2 || this.searchFilter.maLoai == 3) {
+            nzContent = DialogTaoMoiCapVonComponent;
+        } else if (this.searchFilter.maLoai == 6) {
+            nzContent = DialogTaoMoiTienThuaComponent;
+        } else {
+            nzContent = DialogTaoMoiThanhToanComponent;
+        }
+        const modalTuChoi = this.modal.create({
+            nzTitle: 'Thông tin tạo mới',
+            nzContent: nzContent,
+            nzMaskClosable: false,
+            nzClosable: false,
+            nzWidth: '900px',
+            nzFooter: null,
+            nzComponentParams: {
+                request: this.searchFilter
+            },
+        });
+        modalTuChoi.afterClose.toPromise().then(async (res) => {
+            if (res) {
+                const obj = {
+                    baoCao: res,
+                    id: null,
+                    tabSelected: null,
+                }
+                switch (this.searchFilter.maLoai) {
+                    case 1:
+                        obj.tabSelected = 'gnv-btc';
+                        break;
+                    case 2:
+                        obj.tabSelected = 'gnv-cv';
+                        break;
+                    case 3:
+                        obj.tabSelected = 'gnv-cv';
+                        break;
+                    case 5:
+                        if (res.loaiDnghi == Utils.MUA_VTU) {
+                            obj.tabSelected = 'tt-vattu';
+                        } else {
+                            if (res.canCuVeGia == Utils.HD_TRUNG_THAU) {
+                                obj.tabSelected = 'tt-hopdong';
+                            } else {
+                                obj.tabSelected = 'tt-dongia';
+                            }
+                        }
+                        break;
+                    case 6:
+                        obj.tabSelected = 'tienthua';
+                        break;
+                    default:
+                        break;
+                }
+                this.dataChange.emit(obj);
+            }
+        });
     }
 
     //xem chi tiet bao cao

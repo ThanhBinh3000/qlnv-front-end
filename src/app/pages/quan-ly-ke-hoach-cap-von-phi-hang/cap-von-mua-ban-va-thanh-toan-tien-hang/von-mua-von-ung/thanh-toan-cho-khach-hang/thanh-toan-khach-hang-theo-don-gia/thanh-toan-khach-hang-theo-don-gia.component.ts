@@ -167,34 +167,8 @@ export class ThanhToanKhachHangTheoDonGiaComponent implements OnInit {
             this.baoCao.id = this.dataInfo?.id;
             await this.getDetailReport();
         } else {
-            this.baoCao.ttGui = new sendInfo();
-            this.baoCao.ttNhan = new receivedInfo();
-            this.baoCao.ttGui.trangThai = Utils.TT_BC_1;
-            this.baoCao.ttNhan.trangThai = Utils.TT_BC_1;
-            this.baoCao.maDvi = this.userInfo?.MA_DVI;
-            this.baoCao.loaiDnghi = this.dataInfo?.loaiDnghi;
-            this.baoCao.canCuVeGia = this.dataInfo?.canCuVeGia;
-            this.baoCao.ngayTao = new Date();
-            this.baoCao.dot = 1;
-            this.baoCao.maLoai = 1;
-            this.lstCtietBcaos.push({
-                ...new ThanhToan(),
-                id: uuid.v4() + 'FE',
-                maDvi: this.userInfo?.MA_DVI,
-                tenDvi: this.userInfo?.TEN_DVI,
-            })
-            this.capVonMuaBanTtthService.maCapVonUng().toPromise().then(
-                (res) => {
-                    if (res.statusCode == 0) {
-                        this.baoCao.maCapUng = res.data;
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, res?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
+            this.baoCao = this.dataInfo?.baoCao;
+            this.lstCtietBcaos = this.baoCao.ttGui.lstCtietBcaos;
         }
         this.updateEditCache();
         this.getStatusButton();
@@ -210,7 +184,7 @@ export class ThanhToanKhachHangTheoDonGiaComponent implements OnInit {
                 this.statusGui = true;
             }
             this.saveStatus = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_TTKH);
-            this.submitStatus = Utils.statusApprove.includes(trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_TTKH);
+            this.submitStatus = Utils.statusApprove.includes(trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_TTKH) && !(!this.baoCao.id);
             this.passStatus = Utils.statusDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_TTKH);
             this.approveStatus = Utils.statusPheDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_TTKH);
             this.copyStatus = Utils.statusCopy.includes(trangThai) && this.userService.isAccessPermisson(CVMB.COPY_REPORT_TTKH);
@@ -432,7 +406,7 @@ export class ThanhToanKhachHangTheoDonGiaComponent implements OnInit {
             if (item.id?.length == 38) {
                 item.id = null;
             }
-            item.listTTCNLuyKe?.forEach(e => {
+            item.listLuyKe?.forEach(e => {
                 if (e.id?.length == 38) {
                     e.id = null;
                 }
@@ -473,14 +447,14 @@ export class ThanhToanKhachHangTheoDonGiaComponent implements OnInit {
     updateEditCache(): void {
         this.lstCtietBcaos.forEach(item => {
             const data: LuyKeThanhToan[] = [];
-            item.listTTCNLuyKe?.forEach(e => {
+            item.listLuyKe?.forEach(e => {
                 data.push({ ...e });
             })
             this.editCache[item.id] = {
                 edit: false,
                 data: {
                     ...item,
-                    listTTCNLuyKe: data,
+                    listLuyKe: data,
                 }
             };
         });

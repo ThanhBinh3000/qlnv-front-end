@@ -52,7 +52,7 @@
                         <tr>
                             <th>Mã cấp ứng</th>
                             <th>Năm</th>
-                            <th>Loại đề nghị</th>
+                            <!-- <th>Loại đề nghị</th> -->
                             <th>Ngày tạo</th>
                             <th>Ngày trình duyệt</th>
                             <th>Ngày duyệt</th>
@@ -63,13 +63,13 @@
                         <tr>
                             <td>{{ baoCao.maCapUng }}</td>
                             <td>{{ baoCao.namDnghi }}</td>
-                            <td>
+                            <!-- <td>
                                 <div *ngFor="let item of loaiDns">
                                     <div *ngIf="item.id == baoCao.loaiDnghi">
                                         {{item.tenDm}}
                                     </div>
                                 </div>
-                            </td>
+                            </td> -->
                             <td>{{ getDate(baoCao.ngayTao) }}</td>
                             <ng-container *ngIf="!isParent; else GNV">
                                 <td>{{ getDate(baoCao.ttGui.ngayTrinh) }}</td>

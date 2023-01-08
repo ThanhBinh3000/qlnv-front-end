@@ -170,45 +170,8 @@ export class NopTienThuaComponent implements OnInit {
             this.baoCao.id = this.dataInfo?.id;
             await this.getDetailReport();
         } else {
-            this.baoCao.ttGui = new sendInfo();
-            this.baoCao.ttNhan = new receivedInfo();
-            this.baoCao.ttGui.trangThai = Utils.TT_BC_1;
-            this.baoCao.ttNhan.trangThai = Utils.TT_BC_1;
-            this.baoCao.maDvi = this.userInfo?.MA_DVI;
-            this.baoCao.loaiDnghi = this.dataInfo?.loaiDnghi;
-            this.baoCao.ngayTao = new Date();
-            this.baoCao.dot = 1;
-            this.baoCao.maLoai = 1;
-            this.lstCtietBcaos.push({
-                ...new TienThua(),
-                id: uuid.v4() + 'FE',
-                maHang: '0101',
-                hangDtqg: 'Thóc',
-            })
-            this.lstCtietBcaos.push({
-                ...new TienThua(),
-                id: uuid.v4() + 'FE',
-                maHang: '0102',
-                hangDtqg: 'Gạo',
-            })
-            this.lstCtietBcaos.push({
-                ...new TienThua(),
-                id: uuid.v4() + 'FE',
-                maHang: '04',
-                hangDtqg: 'Muối',
-            })
-            this.capVonMuaBanTtthService.maCapVonUng().toPromise().then(
-                (res) => {
-                    if (res.statusCode == 0) {
-                        this.baoCao.maCapUng = res.data;
-                    } else {
-                        this.notification.error(MESSAGE.ERROR, res?.msg);
-                    }
-                },
-                (err) => {
-                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                },
-            );
+            this.baoCao = this.dataInfo?.baoCao;
+            this.lstCtietBcaos = this.baoCao.ttGui.lstCtietBcaos;
         }
         this.updateEditCache();
         this.getStatusButton();
@@ -484,7 +447,7 @@ export class NopTienThuaComponent implements OnInit {
             if (item.id?.length == 38) {
                 item.id = null;
             }
-            item.listLuyKeTienThua?.forEach(e => {
+            item.listLuyKe?.forEach(e => {
                 if (e.id?.length == 38) {
                     e.id = null;
                 }
@@ -525,14 +488,14 @@ export class NopTienThuaComponent implements OnInit {
     updateEditCache(): void {
         this.lstCtietBcaos.forEach(item => {
             const data: luyKeTienThua[] = [];
-            item.listLuyKeTienThua?.forEach(e => {
+            item.listLuyKe?.forEach(e => {
                 data.push({ ...e });
             })
             this.editCache[item.id] = {
                 edit: false,
                 data: {
                     ...item,
-                    listLuyKeTienThua: data,
+                    listLuyKe: data,
                 }
             };
         });

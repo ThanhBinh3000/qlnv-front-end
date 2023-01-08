@@ -445,7 +445,7 @@ export class VonBanTheoHopDongComponent implements OnInit {
             if (item.id?.length == 38) {
                 item.id = null;
             }
-            item.listTTCNLuyKe?.forEach(e => {
+            item.listLuyKe?.forEach(e => {
                 if (e.id?.length == 38) {
                     e.id = null;
                 }
@@ -486,14 +486,14 @@ export class VonBanTheoHopDongComponent implements OnInit {
     updateEditCache(): void {
         this.lstCtietBcaos?.forEach(item => {
             const data: LuyKeThanhToan[] = [];
-            item.listTTCNLuyKe?.forEach(e => {
+            item.listLuyKe?.forEach(e => {
                 data.push({ ...e });
             })
             this.editCache[item.id] = {
                 edit: false,
                 data: {
                     ...item,
-                    listTTCNLuyKe: data,
+                    listLuyKe: data,
                 }
             };
         });
