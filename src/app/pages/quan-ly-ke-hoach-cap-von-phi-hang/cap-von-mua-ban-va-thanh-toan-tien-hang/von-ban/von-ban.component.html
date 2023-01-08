@@ -10,11 +10,23 @@
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
     <div class="contentDetail">
-        <!-- <ng-container *ngIf="tabSelected == 'nop'">
-            <app-danh-sach-nop-von-ban (dataChange)="changeTab($event)">
-            </app-danh-sach-nop-von-ban>
+        <ng-container *ngIf="tabSelected == 'nop'">
+            <app-danh-sach-von-ban [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-danh-sach-von-ban>
         </ng-container>
-        <ng-container *ngIf="tabSelected == 'ghinhan'">
+        <ng-container *ngIf="tabSelected == 'gn'">
+            <app-danh-sach-von-ban [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-danh-sach-von-ban>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'hopdong'">
+            <app-von-ban-theo-hop-dong [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-von-ban-theo-hop-dong>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'dongia'">
+            <app-von-ban-theo-don-gia [dataInfo]="data" (dataChange)="changeTab($event)">
+            </app-von-ban-theo-don-gia>
+        </ng-container>
+        <!-- <ng-container *ngIf="tabSelected == 'ghinhan'">
             <app-danh-sach-ghi-nhan-von-ban (dataChange)="changeTab($event)">
             </app-danh-sach-ghi-nhan-von-ban>
         </ng-container>

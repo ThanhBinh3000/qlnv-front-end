@@ -15,6 +15,15 @@ export class CapVonMuaBanTtthService extends BaseService {
 
   urlDefault = environment.SERVICE_API;
 
+  //danh sach op dong
+  dsachHopDong(request: any): Observable<any> {
+    return this.httpClient.post(
+      this.urlDefault + '/qlnv-khoachphi/hop-dong/danh-sach/ds-hop-dong',
+      // 'http://192.168.1.107:30101/hop-dong/danh-sach/ds-hop-dong',
+      request,
+    );
+  }
+
   //search list bao cao
   timKiemVonMuaBan(request: any): Observable<any> {
     return this.httpClient.post(

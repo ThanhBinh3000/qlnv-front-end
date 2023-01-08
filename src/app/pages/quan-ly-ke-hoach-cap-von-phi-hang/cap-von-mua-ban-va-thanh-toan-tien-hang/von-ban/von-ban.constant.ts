@@ -10,7 +10,7 @@ export const TAB_LIST = [
     },
     {
         name: 'Vốn bán từ đơn vị cấp dưới',
-        code: 'ghinhan',
+        code: 'gn',
         status: true,
         role: CVMB.VIEW_REPORT_GNV_BH,
         isSelected: false,

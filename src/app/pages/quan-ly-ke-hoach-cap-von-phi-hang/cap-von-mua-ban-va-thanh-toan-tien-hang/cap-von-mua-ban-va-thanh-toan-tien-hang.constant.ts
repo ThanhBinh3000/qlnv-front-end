@@ -33,7 +33,7 @@ export class Report {
     maDvi: string;
     maDviCha: string;
     maCapUng: string;
-    namDnghi: string;
+    namDnghi: number;
     loaiDnghi: string;
     canCuVeGia: string;
     ngayTao: Date;
@@ -145,6 +145,9 @@ export class ThanhToan {
     uyNhiemChiCapVon: number;
     uyNhiemChiTong: number;
     listTTCNLuyKe: LuyKeThanhToan[];
+    soDaNopTc: number;
+    luyKeSauLanNopNay: number;
+    soConPhaiNop: number;
 }
 
 export class LuyKeThanhToan {
@@ -153,8 +156,8 @@ export class LuyKeThanhToan {
     capVon: number;
     tong: number;
     uyNhiemChiNgay: Date;
-    uyNhiemChiMaNguonNs: number;
-    uyNhiemChiNienDoNs: number;
+    uyNhiemChiMaNguonNs: string;
+    uyNhiemChiNienDoNs: string;
     uyNhiemChiCapUng: number;
     uyNhiemChiCapVon: number;
     uyNhiemChiTong: number;
