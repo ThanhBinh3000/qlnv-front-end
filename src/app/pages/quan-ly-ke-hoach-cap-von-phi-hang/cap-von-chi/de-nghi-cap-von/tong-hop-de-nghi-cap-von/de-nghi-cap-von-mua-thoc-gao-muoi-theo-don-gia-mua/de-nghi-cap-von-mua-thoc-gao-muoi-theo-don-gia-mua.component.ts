@@ -16,7 +16,22 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, mulNumber, sumNumber, Utils } from 'src/app/Utility/utils';
-import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
+import { BaoCao, ItemRequest, Times, TRANG_THAI, } from '../../de-nghi-cap-von.constant';
+
+// export class BaoCao{
+//   slKeHoach: number;
+//   donGia: number;
+//   gtTheoKeHoach: number;
+//   luyKeCapVon: number;
+//   luyKeCapUng: number;
+//   luyKeCong: number;
+//   vonDnghiCapLanNay: number;
+//   vonDuyetCapVon: number;
+//   vonDuyetCapUng: number;
+//   vonDuyetCong: number;
+//   soLkeSauKhiCapLanNay: number;
+//   soConDuocCap: number;
+// }
 
 @Component({
   selector: 'app-de-nghi-cap-von-mua-thoc-gao-muoi-theo-don-gia-mua',
@@ -32,7 +47,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
   userInfo: any;
   //thong tin chung bao cao
   baoCao: BaoCao = new BaoCao();
-  // total: ItemData = new ItemData();
+  total: ItemRequest = new ItemRequest();
   //danh muc
   donVis: any[] = [];
   trangThais: any[] = TRANG_THAI;
@@ -280,6 +295,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
+    this.getTotal();
   }
 
   async submitReport() {
@@ -461,6 +477,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
     const index = this.baoCao.dnghiCapvonCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.baoCao.dnghiCapvonCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
+    this.baoCao.dnghiCapvonCtiets.forEach(itm => console.log(itm))
   }
 
   changeModel(id: string) {
@@ -470,6 +487,26 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
     this.editCache[id].data.soLkeSauKhiCapLanNay = sumNumber([this.editCache[id].data.luyKeCong, this.editCache[id].data.vonDuyetCong]);
     this.editCache[id].data.soConDuocCap = sumNumber([this.editCache[id].data.gtTheoKeHoach, -this.editCache[id].data.soLkeSauKhiCapLanNay]);
   }
+
+  getTotal() {
+    this.total = new ItemRequest();
+    this.baoCao.dnghiCapvonCtiets.forEach(item => {
+      console.log(item)
+      this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
+      this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
+      this.total.gtTheoKeHoach = mulNumber(this.total.slKeHoach, this.total.donGia);
+      this.total.luyKeCapVon = sumNumber([this.total.luyKeCapVon, item.luyKeCapVon]);
+      this.total.luyKeCapUng = sumNumber([this.total.luyKeCapUng, item.luyKeCapUng]);
+      this.total.luyKeCong = sumNumber([this.total.luyKeCong, item.luyKeCong]);
+      this.total.vonDnghiCapLanNay = this.total.gtTheoKeHoach - this.total.luyKeCong;
+      this.total.vonDuyetCapVon = sumNumber([this.total.vonDuyetCapVon, item.vonDuyetCapVon]);
+      this.total.vonDuyetCapUng = sumNumber([this.total.vonDuyetCapUng, item.vonDuyetCapUng]);
+      this.total.vonDuyetCong = sumNumber([this.total.vonDuyetCong, item.vonDuyetCong]);
+      this.total.soLkeSauKhiCapLanNay = sumNumber([this.total.soLkeSauKhiCapLanNay, item.soLkeSauKhiCapLanNay]);
+      this.total.soConDuocCap = this.total.gtTheoKeHoach - this.total.soLkeSauKhiCapLanNay;
+    })
+  }
+
 
   showDialogCopy() {
     // const obj = {

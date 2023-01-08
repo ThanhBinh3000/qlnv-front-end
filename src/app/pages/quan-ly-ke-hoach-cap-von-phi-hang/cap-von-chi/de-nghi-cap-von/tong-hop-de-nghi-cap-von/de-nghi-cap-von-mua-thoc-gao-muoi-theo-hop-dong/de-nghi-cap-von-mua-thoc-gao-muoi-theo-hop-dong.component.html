@@ -151,8 +151,30 @@
                 <th>11</th>
                 <th>12</th>
                 <th>13=8+10</th>
-                <th>14=3-10</th>
+                <th>14=3-13</th>
                 <th>D</th>
+                <th [hidden]="status"></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th>Tổng cộng</th>
+                <th>{{displayValue(total.slKeHoach)}}</th>
+                <th>{{displayValue(total.slHopDong)}}</th>
+                <th>{{displayValue(total.gtHopDong)}}</th>
+                <th>{{displayValue(total.duToanDaGiao)}}</th>
+                <th>
+                  {{displayValue(total.luyKeCong)}}
+                </th>
+                <th>{{displayValue(total.luyKeCapVon)}}</th>
+                <th>{{displayValue(total.luyKeCapUng)}}</th>
+                <th>{{displayValue(total.tongVonVaDtDaCap)}}</th>
+                <th>{{displayValue(total.gtHopDong - total.tongVonVaDtDaCap)}}</th>
+                <th>{{displayValue(total.vonDuyetCong)}}</th>
+                <th>{{displayValue(total.vonDuyetCapVon)}}</th>
+                <th>{{displayValue(total.vonDuyetCapUng)}}</th>
+                <th>{{displayValue(total.tongCap)}}</th>
+                <th>{{displayValue(total.gtHopDong - total.tongCap)}}</th>
+                <th></th>
                 <th [hidden]="status"></th>
               </tr>
             </thead>
@@ -187,7 +209,7 @@
                     {{ displayValue(data.luyKeCapVon) }}
                   </td>
                   <td>
-                    {{ displayValue(data.tongVonVaDtDaCap) }}
+                    {{ displayValue(data.duToanDaGiao + data.luyKeCong) }}
                   </td>
                   <td>
                     {{ displayValue(data.vonDnghiCapLanNay) }}
@@ -205,7 +227,7 @@
                     {{ displayValue(data.tongCap) }}
                   </td>
                   <td>
-                    {{ displayValue(data.soConDuocCap) }}
+                    {{ displayValue(data.gtHopDong - data.tongCap) }}
                   </td>
                   <td>
                     {{ data.ghiChu }}
