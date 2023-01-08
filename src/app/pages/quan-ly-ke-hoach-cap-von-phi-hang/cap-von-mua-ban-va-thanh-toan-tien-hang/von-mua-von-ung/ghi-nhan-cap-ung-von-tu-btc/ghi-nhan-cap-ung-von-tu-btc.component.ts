@@ -161,6 +161,10 @@ export class GhiNhanCapUngVonTuBtcComponent implements OnInit {
             this.baoCao = this.dataInfo?.baoCao;
             this.lstCtietBcaos = this.baoCao.ttGui.lstCtietBcaos;
         }
+        this.baoCao.ttGui.fileList = [];
+        this.baoCao.ttNhan.fileList = [];
+        this.baoCao.ttGui.listIdDeleteFiles = [];
+        this.baoCao.ttNhan.listIdDeleteFiles = [];
         this.updateEditCache();
         this.getStatusButton();
     }
@@ -396,16 +400,19 @@ export class GhiNhanCapUngVonTuBtcComponent implements OnInit {
             baoCaoTemp.ttNhan.fileDinhKems.push(await this.uploadFile(iterator));
         }
 
-        baoCaoTemp.ttGui.lstCtietBcaos = this.lstCtietBcaos;
-        // replace nhung ban ghi dc them moi id thanh null
-        baoCaoTemp.ttGui.lstCtietBcaos.forEach(item => {
-            if (item.id?.length == 38) {
-                item.id = null;
-            }
+        baoCaoTemp.ttGui.lstCtietBcaos = [];
+        this.lstCtietBcaos.forEach(item => {
+            const data: any[] = [];
             item.listLuyKe?.forEach(e => {
-                if (e.id?.length == 38) {
-                    e.id = null;
-                }
+                data.push({
+                    ...e,
+                    id: e.id?.length == 38 ? null : e.id,
+                })
+            })
+            baoCaoTemp.ttGui.lstCtietBcaos.push({
+                ...item,
+                listLuyKe: data,
+                id: item.id?.length == 38 ? null : item.id,
             })
         })
         if (!this.baoCao.id) {
@@ -414,7 +421,7 @@ export class GhiNhanCapUngVonTuBtcComponent implements OnInit {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.baoCao.id = data.data.id;
-                        this.getDetailReport();
+                        this.action('detail');
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
@@ -428,7 +435,7 @@ export class GhiNhanCapUngVonTuBtcComponent implements OnInit {
                 async (data) => {
                     if (data.statusCode == 0) {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                        await this.getDetailReport();
+                        this.action('detail');
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }

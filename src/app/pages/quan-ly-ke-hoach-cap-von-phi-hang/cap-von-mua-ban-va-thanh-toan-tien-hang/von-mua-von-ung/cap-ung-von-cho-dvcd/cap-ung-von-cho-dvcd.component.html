@@ -314,8 +314,8 @@
                                 </button>
                             </nz-upload>
                             <button nz-button [nzType]="'primary'" (click)="handleUploadGui()"
-                                [disabled]="baoCao.ttGui.fileList.length === 0" [hidden]="statusGui"
-                                style="margin-top: 16px">
+                                [disabled]="!baoCao.ttGui.fileList || baoCao.ttGui.fileList.length === 0"
+                                [hidden]="statusGui" style="margin-top: 16px">
                                 Thêm vào danh sách
                             </button>
                         </div>
@@ -396,8 +396,8 @@
                                 </button>
                             </nz-upload>
                             <button nz-button [nzType]="'primary'" (click)="handleUploadNhan()"
-                                [disabled]="baoCao.ttNhan.fileList?.length === 0" [hidden]="statusNhan"
-                                style="margin-top: 16px">
+                                [disabled]="!baoCao.ttNhan.fileList || baoCao.ttNhan.fileList?.length === 0"
+                                [hidden]="statusNhan" style="margin-top: 16px">
                                 Thêm vào danh sách
                             </button>
                         </div>

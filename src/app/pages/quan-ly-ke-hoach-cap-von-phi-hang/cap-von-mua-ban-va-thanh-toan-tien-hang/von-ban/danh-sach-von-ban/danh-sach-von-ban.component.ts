@@ -53,6 +53,7 @@ export class DanhSachVonBanComponent implements OnInit {
     deletePermission: string;
     passPermission: string;
     approvePermission: string;
+    isSend: boolean;
     isParent = false;
     allChecked = false;
     statusNewReport = false;
@@ -90,6 +91,7 @@ export class DanhSachVonBanComponent implements OnInit {
                 this.editPermission = CVMB.EDIT_REPORT_NTV_BH;
                 this.passPermission = CVMB.DUYET_REPORT_NTV_BH;
                 this.approvePermission = CVMB.PHE_DUYET_REPORT_NTV_BH;
+                this.isSend = true;
                 break;
             case 'gn':
                 this.title = 'DANH SÁCH GHI NHẬN VỐN BÁN HÀNG TỪ ĐƠN VỊ CẤP DƯỚI';
@@ -100,6 +102,7 @@ export class DanhSachVonBanComponent implements OnInit {
                 this.deletePermission = 'NO';
                 this.passPermission = CVMB.DUYET_REPORT_GNV_BH;
                 this.approvePermission = CVMB.PHE_DUYET_REPORT_GNV_BH;
+                this.isSend = false;
                 break;
             default:
                 break;
@@ -129,14 +132,15 @@ export class DanhSachVonBanComponent implements OnInit {
                     this.dataTable = [];
                     data.data.content.forEach(item => {
                         this.dataTable.push({
-                            // ...item,
-                            // ngayTao: this.datePipe.transform(item.ngayTao, Utils.FORMAT_DATE_STR),
-                            // ngayTrinh: this.datePipe.transform(item.ngayTrinh, Utils.FORMAT_DATE_STR),
-                            // ngayDuyet: this.datePipe.transform(item.ngayDuyet, Utils.FORMAT_DATE_STR),
-                            // ngayPheDuyet: this.datePipe.transform(item.ngayPheDuyet, Utils.FORMAT_DATE_STR),
-                            // checked: false,
-                            // isEdit: this.checkEditStatus(item.trangThai),
-                            // isDelete: this.checkDeleteStatus(item.trangThai),
+                            ...item,
+                            ngayTrinh: this.isSend ? item.ttGui.ngayTrinh : item.ttNhan.ngayTrinh,
+                            ngayDuyet: this.isSend ? item.ttGui.ngayDuyet : item.ttNhan.ngayDuyet,
+                            ngayPheDuyet: this.isSend ? item.ttGui.ngayPheDuyet : item.ttNhan.ngayPheDuyet,
+                            trangThai: this.isSend ? item.ttGui.trangThai : item.ttNhan.trangThai,
+                            lyDoTuChoi: this.isSend ? item.ttGui.lyDoTuChoi : item.ttNhan.lyDoTuChoi,
+                            checked: false,
+                            isEdit: this.checkEditStatus(this.isSend ? item.ttGui.trangThai : item.ttNhan.trangThai),
+                            isDelete: this.checkDeleteStatus(this.isSend ? item.ttGui.trangThai : item.ttNhan.trangThai),
                         })
                     })
                     this.dataTableAll = cloneDeep(this.dataTable);
@@ -177,6 +181,10 @@ export class DanhSachVonBanComponent implements OnInit {
         this.search();
     }
 
+    getDate(date: Date) {
+        return this.datePipe.transform(date, Utils.FORMAT_DATE_STR);
+    }
+
     checkEditStatus(trangThai: string) {
         return Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(this.editPermission);
     }
@@ -198,6 +206,7 @@ export class DanhSachVonBanComponent implements OnInit {
             nzWidth: '900px',
             nzFooter: null,
             nzComponentParams: {
+                request: this.searchFilter
             },
         });
         modalTuChoi.afterClose.toPromise().then(async (res) => {
@@ -216,7 +225,7 @@ export class DanhSachVonBanComponent implements OnInit {
     viewDetail(data: any) {
         const obj = {
             id: data.id,
-            tabSelected: '',
+            tabSelected: data.canCuVeGia == Utils.HD_TRUNG_THAU ? 'hopdong' : 'dongia',
         }
         this.dataChange.emit(obj);
     }

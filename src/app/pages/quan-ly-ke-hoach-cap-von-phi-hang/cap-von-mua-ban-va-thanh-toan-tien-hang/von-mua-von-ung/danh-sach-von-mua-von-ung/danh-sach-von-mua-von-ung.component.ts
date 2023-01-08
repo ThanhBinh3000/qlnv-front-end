@@ -9,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { UserService } from 'src/app/services/user.service';
-import { CVMB, LOAI_DE_NGHI, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
+import { CAN_CU_GIA, CVMB, LOAI_DE_NGHI, TRANG_THAI_GUI_DVCT, Utils } from 'src/app/Utility/utils';
 import { TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 import { DialogTaoMoiCapVonComponent } from '../dialog-tao-moi-cap-von/dialog-tao-moi-cap-von.component';
 import { DialogTaoMoiThanhToanComponent } from '../dialog-tao-moi-thanh-toan/dialog-tao-moi-thanh-toan.component';
@@ -34,6 +34,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
         maDvi: null,
         loaiDnghi: null,
         namDnghi: null,
+        canCuVeGia: null,
         ngayTaoDen: null,
         ngayTaoTu: null,
         paggingReq: {
@@ -48,6 +49,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     dataTableAll: any[] = [];
     trangThais: any[] = TRANG_THAI;
     loaiDns: any[] = LOAI_DE_NGHI;
+    canCuGias: any[] = CAN_CU_GIA;
     //cac quyn cua nguoi thao tac
     createPermission: string;
     editPermission: string;
@@ -223,6 +225,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
         this.searchFilter.ngayTaoDen = null
         this.searchFilter.namDnghi = null
         this.searchFilter.loaiDnghi = null
+        this.searchFilter.canCuVeGia = null
         this.search();
     }
 

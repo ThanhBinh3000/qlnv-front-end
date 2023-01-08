@@ -72,6 +72,8 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
             this.response.dot = 1;
             this.response.ttGui.trangThai = Utils.TT_BC_1;
             this.response.ttNhan.trangThai = Utils.TT_BC_1;
+            this.response.ttGui.lstFiles = [];
+            this.response.ttNhan.lstFiles = [];
             //bao cao chua ton tai
             if (this.response.canCuVeGia == Utils.HD_TRUNG_THAU) {
                 await this.getContractData();
@@ -218,17 +220,13 @@ export class DialogTaoMoiThanhToanComponent implements OnInit {
 
     async checkRequest() {
         this.isRequestExist = 0;
-        const request = {
-            maDvi: this.userInfo?.MA_DVI,
-            namBcao: this.response.namDnghi,
-            loaiDnghi: this.response.loaiDnghi,
-            canCuVeGia: this.response.canCuVeGia,
-            paggingReq: {
-                limit: 10,
-                page: 1,
-            },
-        }
-        await this.capVonMuaBanTtthService.timKiemVonMuaBan(request).toPromise().then(
+        this.request.namDnghi = this.response.namDnghi;
+        this.request.loaiDnghi = this.response.loaiDnghi;
+        this.request.canCuVeGia = this.response.canCuVeGia;
+        this.request.ngayTaoTu = null;
+        this.request.ngayTaoDen = null;
+        this.request.trangThai = null;
+        await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.request).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     if (data.data.content?.length > 0) {

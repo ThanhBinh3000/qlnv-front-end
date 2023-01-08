@@ -147,7 +147,6 @@
                             <th>12</th>
                             <th>13</th>
                             <th>14=12+13</th>
-                            <th>15=6+14</th>
                             <th [hidden]="statusGui"></th>
                         </tr>
                     </thead>
@@ -264,7 +263,7 @@
                                     </fm-input-number>
                                 </td>
                                 <td>
-                                    {{ displayValue(data.uyNhiemChiTong) }}
+                                    {{ displayValue(editCache[data.id].data.uyNhiemChiTong) }}
                                 </td>
                                 <td [hidden]="statusGui">
                                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>
@@ -295,8 +294,8 @@
                             </button>
                         </nz-upload>
                         <button nz-button [nzType]="'primary'" (click)="handleUploadGui()"
-                            [disabled]="baoCao.ttGui.fileList.length === 0" [hidden]="statusGui"
-                            style="margin-top: 16px">
+                            [disabled]="!baoCao.ttGui.fileList || baoCao.ttGui.fileList.length === 0"
+                            [hidden]="statusGui" style="margin-top: 16px">
                             Thêm vào danh sách
                         </button>
                     </div>

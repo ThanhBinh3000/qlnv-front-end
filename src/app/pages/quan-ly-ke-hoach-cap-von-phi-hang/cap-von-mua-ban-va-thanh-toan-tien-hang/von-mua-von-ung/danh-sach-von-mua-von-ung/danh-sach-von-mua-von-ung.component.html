@@ -18,6 +18,14 @@
                     </nz-option>
                 </nz-select>
             </div>
+            <div *ngIf="searchFilter.maLoai == 5" nz-col nzSpan="3">
+                <label class="search__label">Căn cứ về giá</label>
+                <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn căn cứ giá"
+                    [(ngModel)]="searchFilter.canCuVeGia">
+                    <nz-option *ngFor="let item of canCuGias" [nzValue]="item.id" [nzLabel]="item.tenDm">
+                    </nz-option>
+                </nz-select>
+            </div>
             <div nz-col nzSpan="3">
                 <label class="search__label">Trạng thái</label>
                 <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn trạng thái"
@@ -76,6 +84,7 @@
                     <th>Mã cấp ứng</th>
                     <th>Năm</th>
                     <th>Loại</th>
+                    <th *ngIf="searchFilter.maLoai == 5">Căn cứ về giá</th>
                     <th>Ngày tạo</th>
                     <th>Ngày trình duyệt</th>
                     <th>Ngày duyệt</th>
@@ -102,6 +111,13 @@
                     <td>
                         <div *ngFor="let e of loaiDns">
                             <div *ngIf="e.id == data.loaiDnghi">
+                                {{e.tenDm}}
+                            </div>
+                        </div>
+                    </td>
+                    <td *ngIf="searchFilter.maLoai == 5">
+                        <div *ngFor="let e of canCuGias">
+                            <div *ngIf="e.id == data.canCuVeGia">
                                 {{e.tenDm}}
                             </div>
                         </div>

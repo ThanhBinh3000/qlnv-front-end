@@ -87,6 +87,8 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                 this.response.dot = 1;
                 this.response.ttGui.trangThai = Utils.TT_BC_1;
                 this.response.ttNhan.trangThai = Utils.TT_BC_1;
+                this.response.ttGui.lstFiles = [];
+                this.response.ttNhan.lstFiles = [];
                 //bao cao chua ton tai
                 this.response.ttGui.lstCtietBcaos.push({
                     ...new CapUng(),
@@ -116,6 +118,8 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
                 this.response.dot = 1;
                 this.response.ttGui.trangThai = Utils.TT_BC_1;
                 this.response.ttNhan.trangThai = Utils.TT_BC_1;
+                this.response.ttGui.lstFiles = [];
+                this.response.ttNhan.lstFiles = [];
                 //bao cao chua ton tai
                 await this.getChildUnit();
                 this.donVis.forEach(item => {
@@ -269,6 +273,8 @@ export class DialogTaoMoiCapVonComponent implements OnInit {
         this.isRequestExist = 0;
         this.request.namDnghi = this.response.namDnghi;
         this.request.loaiDnghi = this.response.loaiDnghi;
+        this.request.ngayTaoTu = null;
+        this.request.ngayTaoDen = null;
         this.request.trangThai = null;
         await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.request).toPromise().then(
             (data) => {

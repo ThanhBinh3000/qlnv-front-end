@@ -212,7 +212,7 @@
                                     {{ displayValue(data.uyNhiemChiTong) }}
                                 </td>
                                 <td [hidden]="statusGui">
-                                    <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                    <i *ngIf="data.isParent" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                 </td>
                             </ng-container>
                             <ng-template #editTemplate>
@@ -279,7 +279,7 @@
                                     </fm-input-number>
                                 </td>
                                 <td>
-                                    {{ displayValue(data.uyNhiemChiTong) }}
+                                    {{ displayValue(editCache[data.id].data.uyNhiemChiTong) }}
                                 </td>
                                 <td [hidden]="statusGui">
                                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>
@@ -310,8 +310,8 @@
                             </button>
                         </nz-upload>
                         <button nz-button [nzType]="'primary'" (click)="handleUploadGui()"
-                            [disabled]="baoCao.ttGui.fileList.length === 0" [hidden]="statusGui"
-                            style="margin-top: 16px">
+                            [disabled]="!baoCao.ttGui.fileList || baoCao.ttGui.fileList?.length === 0"
+                            [hidden]="statusGui" style="margin-top: 16px">
                             Thêm vào danh sách
                         </button>
                     </div>

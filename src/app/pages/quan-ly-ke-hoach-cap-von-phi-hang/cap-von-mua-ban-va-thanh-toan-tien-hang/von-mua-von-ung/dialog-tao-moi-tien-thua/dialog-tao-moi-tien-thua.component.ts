@@ -7,7 +7,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { Utils } from 'src/app/Utility/utils';
+import { sumNumber, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { utils } from 'xlsx';
 import { receivedInfo, Report, sendInfo, TienThua } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
@@ -60,6 +60,8 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
             this.response.dot = 1;
             this.response.ttGui.trangThai = Utils.TT_BC_1;
             this.response.ttNhan.trangThai = Utils.TT_BC_1;
+            this.response.ttGui.lstFiles = [];
+            this.response.ttNhan.lstFiles = [];
             this.response.ttGui.lstCtietBcaos.push({
                 ...new TienThua(),
                 id: uuid.v4() + 'FE',
@@ -102,6 +104,7 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
                     soNopLanNay: item.soNopLanNay,
                     dot: this.response.dot,
                 })
+                item.soDaNopTcLuyKeLanNay = item.luyKeSauLanNop;
                 item.uyNhiemChiNgay = null;
                 item.soNopLanNay = 0;
             })
@@ -137,17 +140,12 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
 
     async checkRequest() {
         this.isRequestExist = 0;
-        const request = {
-            maDvi: this.userInfo?.MA_DVI,
-            namBcao: this.response.namDnghi,
-            loaiDnghi: this.response.loaiDnghi,
-            canCuVeGia: this.response.canCuVeGia,
-            paggingReq: {
-                limit: 10,
-                page: 1,
-            },
-        }
-        await this.capVonMuaBanTtthService.timKiemVonMuaBan(request).toPromise().then(
+        this.request.namDnghi = this.response.namDnghi;
+        this.request.loaiDnghi = this.response.loaiDnghi;
+        this.request.ngayTaoTu = null;
+        this.request.ngayTaoDen = null;
+        this.request.trangThai = null;
+        await this.capVonMuaBanTtthService.timKiemVonMuaBan(this.request).toPromise().then(
             (data) => {
                 if (data.statusCode == 0) {
                     if (data.data.content?.length > 0) {
@@ -160,24 +158,23 @@ export class DialogTaoMoiTienThuaComponent implements OnInit {
                     }
                 } else {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-                    this.response.loaiDnghi = null;
+                    this.response.namDnghi = null;
                 }
             },
             (err) => {
                 this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-                this.response.loaiDnghi = null;
+                this.response.namDnghi = null;
             }
         );
         this.spinner.hide();
     }
 
-    handleOk() {
+    async handleOk() {
         if (!this.response.namDnghi) {
             this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.NOTEMPTYS);
             return;
         }
-        this.getDetail();
-
+        await this.getDetail();
         this._modalRef.close(this.response);
     }
 

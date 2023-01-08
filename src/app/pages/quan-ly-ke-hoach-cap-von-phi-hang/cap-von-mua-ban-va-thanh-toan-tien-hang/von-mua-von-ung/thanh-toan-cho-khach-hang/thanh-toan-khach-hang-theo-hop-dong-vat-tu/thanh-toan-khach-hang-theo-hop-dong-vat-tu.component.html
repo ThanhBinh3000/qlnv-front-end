@@ -206,7 +206,7 @@
                                     {{ displayValue(data.soConDuocTtSauLanNay) }}
                                 </td>
                                 <td [hidden]="statusGui">
-                                    <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
+                                    <i *ngIf="data.isParent" class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                 </td>
                             </ng-container>
                             <ng-template #editTemplate>
@@ -219,15 +219,10 @@
                                     {{ data.qdPdKqNhaThau }}
                                 </td>
                                 <td>
-                                    <fm-input-number class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.soLuongKeHoach">
-                                    </fm-input-number>
+                                    {{ displayValue(editCache[data.id].data.soLuongKeHoach) }}
                                 </td>
                                 <td>
-                                    <fm-input-number class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.soLuongHopDong"
-                                        (ngModelChange)="changeModel(data.id)">
-                                    </fm-input-number>
+                                    {{ displayValue(editCache[data.id].data.soLuongHopDong) }}
                                 </td>
                                 <td>
                                     <fm-input-number class="search__input"
@@ -236,9 +231,7 @@
                                     </fm-input-number>
                                 </td>
                                 <td>
-                                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.donGia"
-                                        (ngModelChange)="changeModel(data.id)">
-                                    </fm-input-number>
+                                    {{ displayValue(editCache[data.id].data.donGia) }}
                                 </td>
                                 <td>
                                     {{ displayValue(editCache[data.id].data.giaTriHd) }}
@@ -308,8 +301,8 @@
                             </button>
                         </nz-upload>
                         <button nz-button [nzType]="'primary'" (click)="handleUploadGui()"
-                            [disabled]="baoCao.ttGui.fileList.length === 0" [hidden]="statusGui"
-                            style="margin-top: 16px">
+                            [disabled]="!baoCao.ttGui.fileList || baoCao.ttGui.fileList.length === 0"
+                            [hidden]="statusGui" style="margin-top: 16px">
                             Thêm vào danh sách
                         </button>
                     </div>

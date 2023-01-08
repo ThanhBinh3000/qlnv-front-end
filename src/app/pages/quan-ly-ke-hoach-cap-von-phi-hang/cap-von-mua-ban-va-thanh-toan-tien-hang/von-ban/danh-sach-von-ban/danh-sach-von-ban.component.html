@@ -84,6 +84,7 @@
                     <th>Mã cấp ứng</th>
                     <th>Năm</th>
                     <th>Loại</th>
+                    <th>Căn cứ về giá</th>
                     <th>Ngày tạo</th>
                     <th>Ngày trình duyệt</th>
                     <th>Ngày duyệt</th>
@@ -102,10 +103,10 @@
                         {{ (i + 1) + (searchFilter.paggingReq.page - 1)*searchFilter.paggingReq.limit }}
                     </td>
                     <td>
-                        {{ data.maDnghi}}
+                        {{ data.maCapUng}}
                     </td>
                     <td>
-                        {{ data.namBcao }}
+                        {{ data.namDnghi }}
                     </td>
                     <td>
                         <div *ngFor="let e of loaiDns">
@@ -115,16 +116,23 @@
                         </div>
                     </td>
                     <td>
-                        {{data.ngayTao}}
+                        <div *ngFor="let e of canCuGias">
+                            <div *ngIf="e.id == data.canCuVeGia">
+                                {{e.tenDm}}
+                            </div>
+                        </div>
                     </td>
                     <td>
-                        {{data.ngayTrinh}}
+                        {{ getDate(data.ngayTao) }}
                     </td>
                     <td>
-                        {{data.ngayDuyet}}
+                        {{ getDate(data.ngayTrinh) }}
                     </td>
                     <td>
-                        {{data.ngayPheDuyet}}
+                        {{ getDate(data.ngayDuyet) }}
+                    </td>
+                    <td>
+                        {{ getDate(data.ngayPheDuyet) }}
                     </td>
                     <td>
                         {{getStatusName(data.trangThai)}}
