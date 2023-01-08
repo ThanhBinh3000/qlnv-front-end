@@ -151,6 +151,24 @@
                 <th>D</th>
                 <th [hidden]="status"></th>
               </tr>
+              <tr>
+                <th></th>
+                <th>Tổng cộng</th>
+                <th>{{displayValue(total.slKeHoach)}}</th>
+                <th>{{displayValue(total.donGia)}}</th>
+                <th>{{displayValue(total.gtTheoKeHoach)}}</th>
+                <th>{{displayValue(total.luyKeCapVon)}}</th>
+                <th>{{displayValue(total.luyKeCapUng)}}</th>
+                <th>{{displayValue(total.luyKeCong)}}</th>
+                <th>{{displayValue(total.vonDnghiCapLanNay)}}</th>
+                <th>{{displayValue(total.vonDuyetCapVon)}}</th>
+                <th>{{displayValue(total.vonDuyetCapUng)}}</th>
+                <th>{{displayValue(total.vonDuyetCong)}}</th>
+                <th>{{displayValue(total.soLkeSauKhiCapLanNay)}}</th>
+                <th>{{displayValue(total.soConDuocCap)}}</th>
+                <th></th>
+                <th [hidden]="status"></th>
+              </tr>
             </thead>
             <tbody>
               <tr *ngFor="let data of baoCao.dnghiCapvonCtiets; let i = index">
@@ -178,22 +196,22 @@
                     {{ displayValue(data.gtTheoKeHoach) }}
                   </td>
                   <td>
-                    {{ displayValue(data.luyKeCapUng) }}
+                    {{ displayValue(data.luyKeCapVon) }}
                   </td>
                   <td>
-                    {{ displayValue(data.luyKeCapVon) }}
+                    {{ displayValue(data.luyKeCapUng) }}
                   </td>
                   <td>
                     {{ displayValue(data.luyKeCong) }}
                   </td>
                   <td>
-                    {{ displayValue(data.vonDnghiCapLanNay) }}
-                  </td>
-                  <td>
-                    {{ displayValue(data.vonDuyetCapUng) }}
+                    {{ displayValue(data.gtTheoKeHoach - data.luyKeCong)}}
                   </td>
                   <td>
                     {{ displayValue(data.vonDuyetCapVon) }}
+                  </td>
+                  <td>
+                    {{ displayValue(data.vonDuyetCapUng) }}
                   </td>
                   <td>
                     {{ displayValue(data.vonDuyetCong) }}
