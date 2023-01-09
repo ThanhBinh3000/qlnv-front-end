@@ -2,19 +2,19 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
-import { DanhSachGhiNhanVonBanComponent } from './danh-sach-ghi-nhan-von-ban/danh-sach-ghi-nhan-von-ban.component';
-import { DanhSachNopVonBanComponent } from './danh-sach-nop-von-ban/danh-sach-nop-von-ban.component';
-import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component';
-import { VonBanHangComponent } from './von-ban-hang/von-ban-hang.component';
+import { DanhSachVonBanComponent } from './danh-sach-von-ban/danh-sach-von-ban.component';
+import { DialogTaoMoiVonBanComponent } from './dialog-tao-moi-von-ban/dialog-tao-moi-von-ban.component';
+import { VonBanTheoDonGiaComponent } from './von-ban-theo-don-gia/von-ban-theo-don-gia.component';
+import { VonBanTheoHopDongComponent } from './von-ban-theo-hop-dong/von-ban-theo-hop-dong.component';
 import { VonBanComponent } from './von-ban.component';
 
 @NgModule({
     declarations: [
         VonBanComponent,
-        DanhSachNopVonBanComponent,
-        DanhSachGhiNhanVonBanComponent,
-        VonBanHangComponent,
-        DialogTaoMoiComponent,
+        DanhSachVonBanComponent,
+        VonBanTheoHopDongComponent,
+        VonBanTheoDonGiaComponent,
+        DialogTaoMoiVonBanComponent,
     ],
     imports: [
         CommonModule,
@@ -23,10 +23,10 @@ import { VonBanComponent } from './von-ban.component';
     ],
     exports: [
         VonBanComponent,
-        DanhSachNopVonBanComponent,
-        DanhSachGhiNhanVonBanComponent,
-        VonBanHangComponent,
-        DialogTaoMoiComponent,
+        DanhSachVonBanComponent,
+        VonBanTheoHopDongComponent,
+        VonBanTheoDonGiaComponent,
+        DialogTaoMoiVonBanComponent,
     ]
 })
 export class VonBanModule { }
