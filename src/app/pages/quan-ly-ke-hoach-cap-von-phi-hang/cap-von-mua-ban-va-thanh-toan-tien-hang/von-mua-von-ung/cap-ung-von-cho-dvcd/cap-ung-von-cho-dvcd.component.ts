@@ -371,7 +371,7 @@ export class CapUngVonChoDvcdComponent implements OnInit {
                     this.baoCao.ttNhan.trangThai = mcn;
                 }
                 this.getStatusButton();
-                if (mcn = Utils.TT_BC_7) {
+                if (mcn == Utils.TT_BC_7) {
                     await this.ghiNhanCapVon();
                 }
                 if (mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
@@ -618,30 +618,32 @@ export class CapUngVonChoDvcdComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
             );
-        }
-        const temp = this.getTotal();
-        const index = tienThua.ttGui.lstCtietBcaos.findIndex(e => e.maHang == this.baoCao.loaiDnghi);
-        if (this.dataInfo?.preTab == 'cv') {
-            tienThua.ttGui.lstCtietBcaos[index].tongCapUngGiao = temp.ung;
-            tienThua.ttGui.lstCtietBcaos[index].tongCapVonGiao = temp.cap;
-            tienThua.ttGui.lstCtietBcaos[index].tongCapGiao = temp.tong;
-        } else {
-            tienThua.ttGui.lstCtietBcaos[index].tongVonUngNhan = temp.ung;
-            tienThua.ttGui.lstCtietBcaos[index].tongVonCapNhan = temp.cap;
-            tienThua.ttGui.lstCtietBcaos[index].tongVonNhan = temp.tong;
-        }
-        await this.capVonMuaBanTtthService.capNhatVonMuaBan(tienThua).toPromise().then(
-            async (data) => {
-                if (data.statusCode == 0) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            const temp = this.getTotal();
+            const index = tienThua.ttGui?.lstCtietBcaos?.findIndex(e => e.maHang == this.baoCao.loaiDnghi);
+            if (index != -1) {
+                if (this.dataInfo?.preTab == 'cv') {
+                    tienThua.ttGui.lstCtietBcaos[index].tongCapUngGiao = temp.ung;
+                    tienThua.ttGui.lstCtietBcaos[index].tongCapVonGiao = temp.cap;
+                    tienThua.ttGui.lstCtietBcaos[index].tongCapGiao = temp.tong;
                 } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                    tienThua.ttGui.lstCtietBcaos[index].tongVonUngNhan = temp.ung;
+                    tienThua.ttGui.lstCtietBcaos[index].tongVonCapNhan = temp.cap;
+                    tienThua.ttGui.lstCtietBcaos[index].tongVonNhan = temp.tong;
                 }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
+                await this.capVonMuaBanTtthService.capNhatVonMuaBan(tienThua).toPromise().then(
+                    async (data) => {
+                        if (data.statusCode == 0) {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                        } else {
+                            this.notification.error(MESSAGE.ERROR, data?.msg);
+                        }
+                    },
+                    (err) => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    },
+                );
+            }
+        }
         this.spinner.hide();
     }
 

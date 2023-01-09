@@ -104,7 +104,7 @@ export class CapVonMuaBanTtthService extends BaseService {
 
 	trinhDuyetVonMuaBan(request: any): Observable<any> {
 		return this.httpClient.put(
-			this.urlDefault + '/qlnv-khoachphi/nhap-ghi-nhan-von/trang-thai',
+			this.urlDefault + '/qlnv-khoachphi/cap-von-ghi-nhan/trang-thai',
 			// 'http://192.168.1.107:30101/cap-von-ghi-nhan/trang-thai',
 			request);
 	}
