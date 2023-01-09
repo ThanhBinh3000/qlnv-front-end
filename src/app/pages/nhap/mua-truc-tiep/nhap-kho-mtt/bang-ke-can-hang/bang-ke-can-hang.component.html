@@ -9,7 +9,7 @@
                     </nz-select>
                 </div>
                 <div nz-col nzSpan="4">
-                    <label class="search__label">Số quyết định giao NV nhập hàng</label>
+                    <label class="search__label">Số QĐ giao NV nhập hàng</label>
                     <input class="search__input" placeholder="Nhập Số Quyết định nhập" nz-input
                         [(ngModel)]="searchFilter.soQuyetDinhNhap" />
                 </div>
@@ -34,9 +34,8 @@
                 </button>
             </div>
         </nz-card>
-
         <div class="group-button">
-            <h3>Danh sách bảng kê</h3>
+            <h3>DANH SÁCH BẢNG KÊ CÂN HÀNG</h3>
             <div class="buttons">
                 <button *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BKCH_EXP')" type="button"
                     class="btn btn-sub" (click)="export()">
@@ -51,7 +50,6 @@
                 </button>
             </div>
         </div>
-
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
             <nz-table nzBordered #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
                 [nzData]="dataTable">
@@ -78,18 +76,18 @@
                         <tr class="level-1">
                             <td>{{(page - 1) * pageSize + i + 1}}</td>
                             <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-                            <td class="bold">{{ item.soQuyetDinhNhap }}</td>
-                            <td class="bold">{{ item.namKh }}</td>
-                            <td class="bold">{{ item.ngayNkho }}</td>
-                            <td colspan="9"></td>
+                            <td class="link bold">{{ item.soQd }}</td>
+                            <td class="bold">{{ item.namNhap }}</td>
+                            <td class="bold">{{ item.tgianNkho }}</td>
+                            <td colspan="8"></td>
                             <td>
-                                <a (click)="redirectToChiTiet(true,item.id)">
+                                <a (click)="redirectToChiTiet(false, 0,item.id)">
                                     <i class="fa fa-plus"></i>
                                 </a>
                             </td>
                         </tr>
                         <ng-container *ngIf="expandSet.has(i)">
-                            <tr class="level-2" *ngFor="let dataDdiem of dataTable , let y = index">
+                            <tr class="level-2" *ngFor="let dataDdiem of item.hhBcanKeHangHdrList , let y = index">
                                 <td></td>
                                 <td></td>
                                 <td colspan="3"></td>
