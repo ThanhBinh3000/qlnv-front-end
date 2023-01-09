@@ -532,24 +532,28 @@ export class GhiNhanCapUngVonTuBtcComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
             );
+            const temp = this.lstCtietBcaos[0];
+            const index = tienThua.ttGui?.lstCtietBcaos?.findIndex(e => e.maHang == this.baoCao.loaiDnghi);
+            if (index != -1) {
+                tienThua.ttGui.lstCtietBcaos[index].tongVonUngNhan = temp.vonUng;
+                tienThua.ttGui.lstCtietBcaos[index].tongVonCapNhan = temp.vonCap;
+                tienThua.ttGui.lstCtietBcaos[index].tongVonNhan = temp.tong;
+                await this.capVonMuaBanTtthService.capNhatVonMuaBan(tienThua).toPromise().then(
+                    async (data) => {
+                        if (data.statusCode == 0) {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                        } else {
+                            this.notification.error(MESSAGE.ERROR, data?.msg);
+                        }
+                    },
+                    (err) => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    },
+                );
+            }
         }
-        const temp = this.lstCtietBcaos[0];
-        const index = tienThua.ttGui.lstCtietBcaos.findIndex(e => e.maHang == this.baoCao.loaiDnghi);
-        tienThua.ttGui.lstCtietBcaos[index].tongVonUngNhan = temp.vonUng;
-        tienThua.ttGui.lstCtietBcaos[index].tongVonCapNhan = temp.vonCap;
-        tienThua.ttGui.lstCtietBcaos[index].tongVonNhan = temp.tong;
-        await this.capVonMuaBanTtthService.capNhatVonMuaBan(tienThua).toPromise().then(
-            async (data) => {
-                if (data.statusCode == 0) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
+
+
         this.spinner.hide();
     }
 

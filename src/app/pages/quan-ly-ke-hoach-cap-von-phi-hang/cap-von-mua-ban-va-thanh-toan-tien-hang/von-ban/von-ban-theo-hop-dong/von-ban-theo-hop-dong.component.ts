@@ -663,7 +663,8 @@ export class VonBanTheoHopDongComponent implements OnInit {
     // }
 
     statusClass() {
-        if (Utils.statusSave.includes(this.baoCao.ttNhan.trangThai)) {
+        const trangThai = this.isParent ? this.baoCao.ttNhan.trangThai : this.baoCao.ttGui.trangThai;
+        if (Utils.statusSave.includes(trangThai)) {
             return 'du-thao-va-lanh-dao-duyet';
         } else {
             return 'da-ban-hanh';

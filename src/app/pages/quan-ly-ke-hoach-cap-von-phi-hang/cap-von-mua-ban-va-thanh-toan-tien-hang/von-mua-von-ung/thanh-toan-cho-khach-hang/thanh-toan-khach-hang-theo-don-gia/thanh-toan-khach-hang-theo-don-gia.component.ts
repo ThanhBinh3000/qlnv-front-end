@@ -155,10 +155,7 @@ export class ThanhToanKhachHangTheoDonGiaComponent implements OnInit {
     }
 
     getStatusName() {
-        if (this.dataInfo?.preTab == 'cv') {
-            return this.trangThais.find(e => e.id == this.baoCao.ttGui.trangThai)?.tenDm;
-        }
-        return this.trangThais.find(e => e.id == this.baoCao.ttNhan.trangThai)?.tenDm;
+        return this.trangThais.find(e => e.id == this.baoCao.ttGui.trangThai)?.tenDm;
     }
 
     getDate(date: Date) {
@@ -549,25 +546,29 @@ export class ThanhToanKhachHangTheoDonGiaComponent implements OnInit {
                     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
                 },
             );
-        }
-        await this.getTotal();
-        const index = tienThua.ttGui.lstCtietBcaos.findIndex(e => e.maHang == this.baoCao.loaiDnghi);
-        tienThua.ttGui.lstCtietBcaos[index].tongVonUngTt = this.updateInfo.ung;
-        tienThua.ttGui.lstCtietBcaos[index].tongVonCapTt = this.updateInfo.cap;
-        tienThua.ttGui.lstCtietBcaos[index].tongVonTt = this.updateInfo.tong;
+            await this.getTotal();
+            const index = tienThua.ttGui?.lstCtietBcaos?.findIndex(e => e.maHang == this.baoCao.loaiDnghi);
+            if (index != -1) {
+                tienThua.ttGui.lstCtietBcaos[index].tongVonUngTt = this.updateInfo.ung;
+                tienThua.ttGui.lstCtietBcaos[index].tongVonCapTt = this.updateInfo.cap;
+                tienThua.ttGui.lstCtietBcaos[index].tongVonTt = this.updateInfo.tong;
 
-        await this.capVonMuaBanTtthService.capNhatVonMuaBan(tienThua).toPromise().then(
-            async (data) => {
-                if (data.statusCode == 0) {
-                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
-                }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            },
-        );
+                await this.capVonMuaBanTtthService.capNhatVonMuaBan(tienThua).toPromise().then(
+                    async (data) => {
+                        if (data.statusCode == 0) {
+                            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                        } else {
+                            this.notification.error(MESSAGE.ERROR, data?.msg);
+                        }
+                    },
+                    (err) => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    },
+                );
+            }
+        }
+
+
         this.spinner.hide();
     }
 
@@ -591,6 +592,7 @@ export class ThanhToanKhachHangTheoDonGiaComponent implements OnInit {
                     limit: 10,
                     page: 1,
                 },
+                trangThai: Utils.TT_BC_7,
             }
             this.spinner.show();
             let idTt!: string;
@@ -746,7 +748,7 @@ export class ThanhToanKhachHangTheoDonGiaComponent implements OnInit {
     // }
 
     statusClass() {
-        if (Utils.statusSave.includes(this.baoCao.ttNhan.trangThai)) {
+        if (Utils.statusSave.includes(this.baoCao.ttGui.trangThai)) {
             return 'du-thao-va-lanh-dao-duyet';
         } else {
             return 'da-ban-hanh';
