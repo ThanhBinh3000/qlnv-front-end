@@ -243,7 +243,6 @@ export class BaoCaoComponent implements OnInit {
         this.userInfo = this.userService.getUserLogin();
 
         //lay danh sach danh muc don vi
-        await this.getChildUnit();
         await this.getListUser();
         if (this.baoCao.id) {
             await this.getDetailReport();
@@ -313,6 +312,7 @@ export class BaoCaoComponent implements OnInit {
             this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
         })
         await this.addVatTu();
+        await this.getChildUnit();
 
         this.getStatusButton();
         this.spinner.hide();
