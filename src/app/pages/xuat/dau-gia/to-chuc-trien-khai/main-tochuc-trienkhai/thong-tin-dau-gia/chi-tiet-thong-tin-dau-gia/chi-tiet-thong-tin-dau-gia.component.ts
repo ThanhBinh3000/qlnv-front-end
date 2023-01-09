@@ -25,7 +25,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
   @Output()
   showListEvent = new EventEmitter<any>();
   fileDinhKem: any[] = [];
-
+  dataDetail: any;
 
   constructor(
     httpClient: HttpClient,
@@ -179,16 +179,17 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     if (id > 0) {
       await this.quyetDinhPdKhBdgService.getDtlDetail(id)
         .then(async (res) => {
-          console.log(res);
-          const data = res.data;
-          if (data) {
-            await this.quyetDinhPdKhBdgService.getDetail(data.idQdHdr).then(async (hdr) => {
+          const dataDtl = res.data;
+          this.dataTable = dataDtl.listTtinDg
+          if (dataDtl) {
+            await this.quyetDinhPdKhBdgService.getDetail(dataDtl.idQdHdr).then(async (hdr) => {
               const dataHdr = hdr.data;
               this.formData.patchValue({
                 soQdPd: dataHdr.soQdPd,
                 nam: dataHdr.nam,
+                trangThai: dataDtl.trangThai,
+                tenTrangThai: dataDtl.tenTrangThai
               })
-              console.log(hdr);
             })
           }
         })
@@ -208,8 +209,10 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
 
   }
 
-  selectRow(i) {
-    console.log(i);
+  selectRow($event, i) {
+    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+    $event.target.parentElement.classList.add('selectedRow');
+    this.dataDetail = this.dataTable[i];
   }
 
   themMoiPhienDauGia($event, data?: any) {
@@ -219,12 +222,13 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       nzContent: ThongtinDaugiaComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1500px',
+      nzWidth: '1800px',
       nzFooter: null,
       nzComponentParams: {
         isModal: true,
         idDtl: this.idInput,
-        soQdPd: this.formData.value.soQdPd
+        soQdPd: this.formData.value.soQdPd,
+        dataDetail: data
       },
     });
     modalQD.afterClose.subscribe((data) => {
