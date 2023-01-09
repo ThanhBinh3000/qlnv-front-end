@@ -182,6 +182,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
     }
     this.updateEditCache();
     this.getStatusButton();
+    this.getTotal();
   }
 
   //check role cho các nut trinh duyet
@@ -287,6 +288,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
           this.listFile = [];
           this.updateEditCache();
           this.getStatusButton();
+          this.getTotal();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -295,7 +297,6 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       },
     );
-    this.getTotal();
   }
 
   async submitReport() {
@@ -440,6 +441,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
         },
       );
     }
+    this.getTotal();
   }
 
   updateEditCache(): void {
@@ -477,7 +479,7 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
     const index = this.baoCao.dnghiCapvonCtiets.findIndex(item => item.id === id); // lay vi tri hang minh sua
     Object.assign(this.baoCao.dnghiCapvonCtiets[index], this.editCache[id].data); // set lai data cua lstCtietBcao[index] = this.editCache[id].data
     this.editCache[id].edit = false; // CHUYEN VE DANG TEXT
-    this.baoCao.dnghiCapvonCtiets.forEach(itm => console.log(itm))
+    this.getTotal();
   }
 
   changeModel(id: string) {
@@ -491,7 +493,6 @@ export class DeNghiCapVonMuaThocGaoMuoiTheoDonGiaMuaComponent implements OnInit 
   getTotal() {
     this.total = new ItemRequest();
     this.baoCao.dnghiCapvonCtiets.forEach(item => {
-      console.log(item)
       this.total.slKeHoach = sumNumber([this.total.slKeHoach, item.slKeHoach]);
       this.total.donGia = sumNumber([this.total.donGia, item.donGia]);
       this.total.gtTheoKeHoach = mulNumber(this.total.slKeHoach, this.total.donGia);

@@ -162,18 +162,16 @@
                 <th>{{displayValue(total.slHopDong)}}</th>
                 <th>{{displayValue(total.gtHopDong)}}</th>
                 <th>{{displayValue(total.duToanDaGiao)}}</th>
-                <th>
-                  {{displayValue(total.luyKeCong)}}
-                </th>
+                <th>{{displayValue(total.luyKeCong)}}</th>
                 <th>{{displayValue(total.luyKeCapVon)}}</th>
                 <th>{{displayValue(total.luyKeCapUng)}}</th>
                 <th>{{displayValue(total.tongVonVaDtDaCap)}}</th>
-                <th>{{displayValue(total.gtHopDong - total.tongVonVaDtDaCap)}}</th>
+                <th>{{displayValue(total.vonDnghiCapLanNay)}}</th>
                 <th>{{displayValue(total.vonDuyetCong)}}</th>
                 <th>{{displayValue(total.vonDuyetCapVon)}}</th>
                 <th>{{displayValue(total.vonDuyetCapUng)}}</th>
                 <th>{{displayValue(total.tongCap)}}</th>
-                <th>{{displayValue(total.gtHopDong - total.tongCap)}}</th>
+                <th>{{displayValue(total.soConDuocCap)}}</th>
                 <th></th>
                 <th [hidden]="status"></th>
               </tr>
@@ -209,10 +207,10 @@
                     {{ displayValue(data.luyKeCapVon) }}
                   </td>
                   <td>
-                    {{ displayValue(data.duToanDaGiao + data.luyKeCong) }}
+                    {{displayValue(data.tongVonVaDtDaCap)}}
                   </td>
                   <td>
-                    {{ displayValue(data.vonDnghiCapLanNay) }}
+                    {{ displayValue((data.vonDnghiCapLanNay)) }}
                   </td>
                   <td>
                     {{ displayValue(data.vonDuyetCong) }}
@@ -227,7 +225,7 @@
                     {{ displayValue(data.tongCap) }}
                   </td>
                   <td>
-                    {{ displayValue(data.gtHopDong - data.tongCap) }}
+                    {{ displayValue(data.soConDuocCap) }}
                   </td>
                   <td>
                     {{ data.ghiChu }}
