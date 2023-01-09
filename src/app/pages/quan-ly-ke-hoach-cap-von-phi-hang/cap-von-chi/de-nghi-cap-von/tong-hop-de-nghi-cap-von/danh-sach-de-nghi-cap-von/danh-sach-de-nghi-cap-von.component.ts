@@ -168,7 +168,7 @@ export class DanhSachDeNghiCapVonComponent implements OnInit {
     }
 
     checkDeleteStatus(data: any) {
-        return Utils.statusDelete.includes(data.trangThai) && data.soLan != 1 &&
+        return Utils.statusDelete.includes(data.trangThai) && data.soLan == 1 &&
             (this.userService.isAccessPermisson(CVNC.DELETE_DN_MLT) || this.userService.isAccessPermisson(CVNC.DELETE_DN_MVT));
     }
 
