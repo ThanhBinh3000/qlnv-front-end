@@ -126,15 +126,15 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
           })
         } else {
           await this.callSynthetic();
-          if (this.userService.isCuc()) {
-            this.response.dnghiCapvonCtiets.push({
-              ... new ItemRequest(),
-              id: uuid.v4() + 'FE',
-              maDvi: this.userInfo?.MA_DVI,
-              tenDvi: this.userInfo?.TEN_DVI,
-              dnghiCapvonLuyKes: [],
-            })
-          }
+          // if (this.userService.isCuc()) {
+          //   this.response.dnghiCapvonCtiets.push({
+          //     ... new ItemRequest(),
+          //     id: uuid.v4() + 'FE',
+          //     maDvi: this.userInfo?.MA_DVI,
+          //     tenDvi: this.userInfo?.TEN_DVI,
+          //     dnghiCapvonLuyKes: [],
+          //   })
+          // }
         }
       }
       await this.getMaDnghi();
@@ -269,7 +269,6 @@ export class DialogTaoMoiDeNghiCapVonComponent implements OnInit {
   }
 
   async syntheticContract() {
-    console.log(this.response)
     const request = {
       loaiDnghi: this.response.loaiDnghi,
       maDvi: this.userInfo?.MA_DVI,
