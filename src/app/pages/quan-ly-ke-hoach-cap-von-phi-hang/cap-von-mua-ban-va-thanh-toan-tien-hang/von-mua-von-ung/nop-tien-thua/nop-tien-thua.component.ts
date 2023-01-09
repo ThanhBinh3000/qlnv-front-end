@@ -173,14 +173,15 @@ export class NopTienThuaComponent implements OnInit {
             this.isParent = false;
         }
         if (this.isParent) {
-            this.capDvi = (this.userInfo?.CAP_DVI).toString() + 1;
+            this.capDvi = parseInt(this.userInfo?.CAP_DVI, 10) + 1;
         } else {
-            this.capDvi = (this.userInfo?.CAP_DVI).toString();
+            this.capDvi = parseInt(this.userInfo?.CAP_DVI, 10);
         }
         this.baoCao.ttGui.fileList = [];
         this.baoCao.ttNhan.fileList = [];
         this.baoCao.ttGui.listIdDeleteFiles = [];
         this.baoCao.ttNhan.listIdDeleteFiles = [];
+        this.updateSoDu();
         this.updateEditCache();
         this.getStatusButton();
     }
@@ -301,11 +302,12 @@ export class NopTienThuaComponent implements OnInit {
                 if (data.statusCode == 0) {
                     this.baoCao = data.data;
                     this.lstCtietBcaos = this.baoCao.ttGui.lstCtietBcaos;
-                    if (this.userInfo.MA_DVI != this.baoCao.maDvi && this.baoCao.maDvi.startsWith(this.userInfo?.MA_DVI)) {
+                    if (this.userInfo.MA_DVI == this.baoCao.maDviCha) {
                         this.isParent = true;
                     }
                     this.baoCao.ttGui.listFile = [];
                     this.baoCao.ttNhan.listFile = [];
+                    this.updateSoDu();
                     this.updateEditCache();
                     this.getStatusButton();
                 } else {
@@ -540,6 +542,14 @@ export class NopTienThuaComponent implements OnInit {
     changeModel(id: string) {
         this.editCache[id].data.luyKeSauLanNop = sumNumber([this.editCache[id].data.soDaNopTcLuyKeLanNay, this.editCache[id].data.soNopLanNay]);
         this.editCache[id].data.soConPhaiNop = sumNumber([this.editCache[id].data.tongVonDu, -this.editCache[id].data.luyKeSauLanNop]);
+    }
+
+    updateSoDu() {
+        this.lstCtietBcaos.forEach(item => {
+            item.tongVonUngDu = sumNumber([item.tongVonUngNhan, -item.tongCapUngGiao, -item.tongVonUngTt]);
+            item.tongVonCapDu = sumNumber([item.tongVonCapNhan, -item.tongCapVonGiao, -item.tongVonCapTt]);
+            item.tongVonDu = sumNumber([item.tongVonCapDu, item.tongVonUngDu]);
+        })
     }
 
     async showDialogCopy() {

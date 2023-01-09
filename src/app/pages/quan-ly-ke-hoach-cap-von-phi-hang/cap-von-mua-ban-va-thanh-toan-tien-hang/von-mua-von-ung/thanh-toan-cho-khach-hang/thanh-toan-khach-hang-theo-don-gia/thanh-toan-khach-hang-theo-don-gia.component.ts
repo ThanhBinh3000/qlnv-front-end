@@ -34,6 +34,11 @@ export class ThanhToanKhachHangTheoDonGiaComponent implements OnInit {
     lstCtietBcaos: ThanhToan[] = [];
     editCache: { [key: string]: { edit: boolean; data: ThanhToan } } = {};
     title: string;
+    updateInfo = {
+        ung: 0,
+        cap: 0,
+        tong: 0,
+    }
     //danh muc
     donVis: any[] = [];
     trangThais: any[] = TRANG_THAI;
@@ -330,6 +335,9 @@ export class ThanhToanKhachHangTheoDonGiaComponent implements OnInit {
             if (data.statusCode == 0) {
                 this.baoCao.ttGui.trangThai = mcn;
                 this.getStatusButton();
+                if (mcn == Utils.TT_BC_7) {
+                    await this.ghiNhanTienThua();
+                }
                 if (mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
@@ -498,6 +506,129 @@ export class ThanhToanKhachHangTheoDonGiaComponent implements OnInit {
         this.editCache[id].data.luyKeCapVon = sumNumber([this.lstCtietBcaos[index].luyKeCapVon, this.editCache[id].data.uyNhiemChiCapVon, -this.lstCtietBcaos[index].uyNhiemChiCapVon]);
         this.editCache[id].data.luyKeTong = sumNumber([this.editCache[id].data.luyKeCapUng, this.editCache[id].data.luyKeCapVon]);
         this.editCache[id].data.soConDuocTt = sumNumber([this.editCache[id].data.giaTriHd, -this.editCache[id].data.luyKeTong]);
+    }
+
+    async ghiNhanTienThua() {
+        const request = {
+            loaiTimKiem: '0',
+            maLoai: 6,
+            maDvi: this.baoCao.maDvi,
+            namDnghi: this.baoCao.namDnghi,
+            paggingReq: {
+                limit: 10,
+                page: 1,
+            },
+        }
+        let idTienThua!: string;
+        let tienThua: Report = new Report();
+        this.spinner.show();
+        await this.capVonMuaBanTtthService.timKiemVonMuaBan(request).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    if (data.data.content?.length > 0) {
+                        idTienThua = data.data.content[0].id;
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        );
+        if (idTienThua) {
+            await this.capVonMuaBanTtthService.ctietVonMuaBan(idTienThua).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        tienThua = data.data;
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
+        }
+        await this.getTotal();
+        const index = tienThua.ttGui.lstCtietBcaos.findIndex(e => e.maHang == this.baoCao.loaiDnghi);
+        tienThua.ttGui.lstCtietBcaos[index].tongVonUngTt = this.updateInfo.ung;
+        tienThua.ttGui.lstCtietBcaos[index].tongVonCapTt = this.updateInfo.cap;
+        tienThua.ttGui.lstCtietBcaos[index].tongVonTt = this.updateInfo.tong;
+
+        await this.capVonMuaBanTtthService.capNhatVonMuaBan(tienThua).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        this.spinner.hide();
+    }
+
+    async getTotal() {
+        this.updateInfo.ung = 0;
+        this.updateInfo.cap = 0
+        this.lstCtietBcaos.forEach(item => {
+            this.updateInfo.ung = sumNumber([this.updateInfo.ung, item.luyKeCapUng]);
+            this.updateInfo.cap = sumNumber([this.updateInfo.ung, item.luyKeCapVon]);
+            this.updateInfo.tong = sumNumber([this.updateInfo.ung, item.luyKeTong]);
+        })
+        if (this.userService.isCuc()) {
+            const request = {
+                loaiTimKiem: '0',
+                maLoai: 5,
+                maDvi: this.baoCao.maDvi,
+                namDnghi: this.baoCao.namDnghi,
+                loaiDnghi: this.baoCao.loaiDnghi,
+                canCuVeGia: Utils.HD_TRUNG_THAU,
+                paggingReq: {
+                    limit: 10,
+                    page: 1,
+                },
+            }
+            this.spinner.show();
+            let idTt!: string;
+            await this.capVonMuaBanTtthService.timKiemVonMuaBan(request).toPromise().then(
+                (data) => {
+                    if (data.statusCode == 0) {
+                        if (data.data.content?.length > 0) {
+                            idTt = data.data.content[0].id;
+                        }
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                }
+            );
+            if (idTt) {
+                await this.capVonMuaBanTtthService.ctietVonMuaBan(idTt).toPromise().then(
+                    async (data) => {
+                        if (data.statusCode == 0) {
+                            data.data.ttGui.lstCtietBcaos.forEach(item => {
+                                if (item.isParent) {
+                                    this.updateInfo.ung = sumNumber([this.updateInfo.ung, item.luyKeCapUng]);
+                                    this.updateInfo.cap = sumNumber([this.updateInfo.ung, item.luyKeCapVon]);
+                                    this.updateInfo.tong = sumNumber([this.updateInfo.ung, item.luyKeTong]);
+                                }
+                            });
+                        } else {
+                            this.notification.error(MESSAGE.ERROR, data?.msg);
+                        }
+                    },
+                    (err) => {
+                        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                    },
+                );
+            }
+        }
     }
 
     async showDialogCopy() {
