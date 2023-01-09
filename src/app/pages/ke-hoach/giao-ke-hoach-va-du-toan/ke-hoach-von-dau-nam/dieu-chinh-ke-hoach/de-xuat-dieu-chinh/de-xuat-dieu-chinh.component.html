@@ -171,8 +171,9 @@
             <td class="text-center">{{data.trangThaiDuyet}}</td>
             <td class="text-center">{{data.soQdDc}}</td>
             <td>
-              <a *ngIf="userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XEM')"
-                 (click)="redirectToChiTiet(true, data.id)">
+              <a
+                *ngIf="(data.trangThai == STATUS.DA_DUYET_LDC  || data.trangThai == STATUS.CHO_DUYET_LDC  || data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XEM')"
+                (click)="redirectToChiTiet(true, data.id)">
                 <i class="icon htvbdh_eye"></i>
               </a>
               <a *ngIf="(userService.isCuc() && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC))
@@ -185,12 +186,9 @@
                 (click)="xoaItem(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
-              <a *ngIf="data.trangThai == globals.prop.BAN_HANH" (click)="redirectToDieuChinh(true, data.id)">
-                <i class="icon htvbdh_tcdt_viewdetail2"></i>
-              </a>
-              <a *ngIf="data.trangThai == globals.prop.LANH_DAO_DUYET" (click)="redirectToDieuChinh(false, data.id)">
-                <i class="icon htvbdh_tcdt_tao-qd"></i>
-              </a>
+              <!--              <a *ngIf="data.trangThai == globals.prop.LANH_DAO_DUYET" (click)="redirectToDieuChinh(false, data.id)">-->
+              <!--                <i class="icon htvbdh_tcdt_tao-qd"></i>-->
+              <!--              </a>-->
             </td>
           </tr>
           </tbody>

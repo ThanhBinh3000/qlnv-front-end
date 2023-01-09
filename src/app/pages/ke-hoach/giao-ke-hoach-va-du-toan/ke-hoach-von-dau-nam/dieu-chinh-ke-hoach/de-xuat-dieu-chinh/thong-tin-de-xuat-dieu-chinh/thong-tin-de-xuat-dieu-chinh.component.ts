@@ -132,6 +132,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     this.deXuatDieuChinh.trangThai = '00';
     this.deXuatVatTuNhap.chiTieu = '01';
     this.deXuatVatTuXuat.chiTieu = '00';
+    if (!id || id === 0) {
+      this.loadQdGiaoChiTieuCuaTC();
+    }
     if (id > 0) {
       let res = await this.deXuatDieuChinhService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -228,6 +231,59 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
+    }
+  }
+
+  async loadQdGiaoChiTieuCuaTC() {
+    let body = {
+      ngayKyDenNgay: null,
+      id: 0,
+      donViId: null,
+      namKeHoach: 2023,
+      tenDvi: null,
+      pageNumber: 1,
+      pageSize: 1000,
+      trichYeu: null,
+      ngayKyTuNgay: null,
+      trangThai: STATUS.BAN_HANH,
+      capDvi: 1,
+    };
+    let res = await this.chiTieuKeHoachNamService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let data = res.data;
+      if (data && data.content && data.content.length > 0) {
+        let itemChiTieuKH = data.content[0];
+        this.spinner.show();
+        this.formData.controls['canCu'].setValue(itemChiTieuKH.soQuyetDinh);
+        this.selectedCanCu = itemChiTieuKH;
+        this.dataGiaoChiTieu = [];
+        let item = {
+          id: itemChiTieuKH.id,
+          text: itemChiTieuKH.soQuyetDinh,
+        };
+        this.dataGiaoChiTieu.push(item);
+        this.deXuatDieuChinhService
+          .soLuongTruocDieuChinh(this.selectedCanCu.id)
+          .then((res) => {
+            if (res && res.data) {
+              this.deXuatDieuChinh.dxDcMuoiList = res.data.dxDcMuoiList;
+              this.deXuatDieuChinh.dxDcVtNhapList = res.data.dxDcVtList.filter(it => it.chiTieu == '01') ?? [];
+              this.deXuatDieuChinh.dxDcVtXuatList = res.data.dxDcVtList.filter(it => it.chiTieu == '00') ?? [];
+              this.deXuatDieuChinh.dxDcltList = res.data.dxDcltList;
+              this.deXuatDieuChinh.namKeHoach = res.data.namKeHoach;
+              // this.formData.controls['namKeHoach'].setValue(
+              //   this.deXuatDieuChinh.namKeHoach,
+              // );
+              this.updateEditLuongThucCache();
+              this.updateEditMuoiCache();
+              this.updateEditVatTuNhapCache();
+              this.updateEditVatTuXuatCache();
+            }
+          });
+        this.spinner.hide();
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
