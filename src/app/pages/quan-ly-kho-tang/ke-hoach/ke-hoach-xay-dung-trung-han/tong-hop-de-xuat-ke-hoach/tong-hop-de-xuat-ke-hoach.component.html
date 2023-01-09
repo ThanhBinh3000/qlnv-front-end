@@ -28,24 +28,13 @@
           </nz-form-control>
         </div>
         <div nz-col nzSpan="4">
-          <label class="search__label">Thời gian KC - HT</label>
-          <nz-form-control >
-            <nz-input-group>
-              <nz-select [(ngModel)]="searchFilter.tgKcHt" nzAllowClear>
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                </nz-option>
-              </nz-select>
-            </nz-input-group>
-          </nz-form-control>
-        </div>
-        <div nz-col nzSpan="4">
           <label class="search__label">Ngày tổng hợp</label>
           <nz-range-picker [(ngModel)]="searchFilter.ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
         </div>
       </div>
       <br>
       <div>
-        <div nz-col nzSpan="5">
+        <div nz-col nzSpan="4">
           <label class="search__label">Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)</label>
           <div nz-row>
             <div nz-col nzSpan="11">
@@ -68,7 +57,7 @@
       </div>
       <div nz-col class="cangiua group-button-search">
         <div>
-          <button nz-button class="search__button--clear" (click)="clearFilter()">
+          <button nz-button class="search__button--clear" (click)="clearFilterTable()">
             <i class="icon  htvbdh_nhap-lai1"></i>
             Xóa điều kiện
           </button>
@@ -119,13 +108,13 @@
           <th></th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maTongHop"
                      (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group  [nzSuffix]="suffixTemplateInfo" >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayTongHop"
                      (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
             </nz-input-group>
             <ng-template #suffixTemplateInfo>
@@ -134,25 +123,25 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinh"
                      (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdGoc"
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.giaiDoan"
                      (input)="filterInTable('soQdGoc',filterTable.soQdGoc)" size="small" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.noiDung"
                      (input)="filterInTable('namKhoach',filterTable.namKhoach)" size="small" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
                      (input)="filterInTable('trangThai',filterTable.trangThai)" size="small" />
             </nz-input-group>
           </th>
@@ -170,18 +159,18 @@
           <td>{{ data.maTongHop }}</td>
           <td>{{ data.ngayTongHop | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.maToTrinh }}</td>
-          <td>{{data.namBatDau +'-'+ data.namKetThuc}}</td>
+          <td>{{data.namBatDau +' - '+ data.namKetThuc}}</td>
           <td>{{data.noiDung}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-center">
-            <a (click)="redirectToChiTiet(data.id,false)">
+            <a (click)="redirectToChiTiet(data.id,false)" *ngIf="data.trangThai == STATUS.DA_DUYET_LDTC || data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDTC " >
               <i class="fa fa-eye"></i>
             </a>
-            <a
+            <a *ngIf="data.trangThai == STATUS.DU_THAO ||data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_LDTC"
               (click)="redirectToChiTiet(data.id,true)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a>
+            <a *ngIf="data.trangThai == STATUS.DU_THAO">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
