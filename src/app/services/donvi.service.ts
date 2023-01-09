@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { BaseService } from './base.service';
-import { OldResponseData } from '../interfaces/response';
-import { last } from 'lodash';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {BaseService} from './base.service';
+import {OldResponseData} from '../interfaces/response';
+import {last} from 'lodash';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DonviService extends BaseService {
   GATEWAY = '/qlnv-category';
+
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dmuc-donvi', '/qlnv-category');
   }
@@ -64,6 +65,11 @@ export class DonviService extends BaseService {
     return this.httpClient.post<any>(url, body).toPromise();
   }
 
+  getDonViTheoMaCha(body): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/search-kho`;
+    return this.httpClient.post<any>(url, body).toPromise();
+  }
+
   async layDonViTheoCapDo(
     body: any,
     capDv?: number | string,
@@ -111,7 +117,7 @@ export class DonviService extends BaseService {
     const maxLevel = Object.keys(dsTong)
       .filter((item) => item)
       .map((item) => Number(item))[0];
-    const result = { [ptuHienTai.capDvi]: ptuHienTai };
+    const result = {[ptuHienTai.capDvi]: ptuHienTai};
     let maDviCha = ptuHienTai.maDviCha;
     for (let i = Number(ptuHienTai.capDvi); i >= maxLevel; i--) {
       let dsCha = dsTong[i].find((item) => item.key === maDviCha);
@@ -130,7 +136,7 @@ export class DonviService extends BaseService {
         .filter((item) => item)
         .map((item) => Number(item)),
     );
-    const result = { [ptuHienTai.capDvi]: ptuHienTai };
+    const result = {[ptuHienTai.capDvi]: ptuHienTai};
     let dsCha = [ptuHienTai.key];
     for (let i = Number(ptuHienTai.capDvi) + 1; i <= minLevel; i++) {
       let dsCon = dsTong[i].filter((item) => dsCha.includes(item.maDviCha));
