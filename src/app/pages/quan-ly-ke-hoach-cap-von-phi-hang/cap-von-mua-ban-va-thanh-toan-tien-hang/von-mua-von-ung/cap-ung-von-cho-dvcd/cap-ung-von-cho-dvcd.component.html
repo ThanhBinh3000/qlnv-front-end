@@ -111,7 +111,7 @@
                     <thead>
                         <tr>
                             <th rowspan="2">STT</th>
-                            <th rowspan="2">Đơn vị</th>
+                            <th *ngIf="dataInfo.preTab == 'cv'" rowspan="2">Đơn vị</th>
                             <th colspan="12">Thông tin Ủy nhiệm chi bên gửi (đợt này)</th>
                             <th colspan="3">Lũy kế vốn cấp đến thời điểm hiện tại</th>
                             <th rowspan="2">Ghi chú</th>
@@ -136,7 +136,7 @@
                         </tr>
                         <tr>
                             <th></th>
-                            <th>A</th>
+                            <th *ngIf="dataInfo.preTab == 'cv'">A</th>
                             <th>B</th>
                             <th>C</th>
                             <th>D</th>
@@ -162,7 +162,7 @@
                                 <td>
                                     {{ (i + 1) }}
                                 </td>
-                                <td>
+                                <td *ngIf="dataInfo.preTab == 'cv'">
                                     {{ data.tenDvi }}
                                 </td>
                                 <td>
@@ -219,7 +219,7 @@
                             </ng-container>
                             <ng-template #editTemplate>
                                 <td> {{ (i + 1) }}</td>
-                                <td>
+                                <td *ngIf="dataInfo.preTab == 'cv'">
                                     {{ editCache[data.id].data.tenDvi }}
                                 </td>
                                 <td>

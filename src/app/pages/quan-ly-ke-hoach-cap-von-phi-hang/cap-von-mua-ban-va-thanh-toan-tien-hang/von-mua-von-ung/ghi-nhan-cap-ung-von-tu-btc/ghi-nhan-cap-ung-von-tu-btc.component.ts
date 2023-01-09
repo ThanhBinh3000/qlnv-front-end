@@ -318,6 +318,9 @@ export class GhiNhanCapUngVonTuBtcComponent implements OnInit {
             if (data.statusCode == 0) {
                 this.baoCao.ttNhan.trangThai = mcn;
                 this.getStatusButton();
+                if (mcn == Utils.TT_BC_7) {
+                    await this.ghiNhanCapVon();
+                }
                 if (mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
@@ -486,6 +489,68 @@ export class GhiNhanCapUngVonTuBtcComponent implements OnInit {
 
     changeModel(id: string) {
         this.editCache[id].data.tong = sumNumber([this.editCache[id].data.vonCap, this.editCache[id].data.vonUng]);
+    }
+
+    async ghiNhanCapVon() {
+        const request = {
+            loaiTimKiem: '0',
+            maLoai: 6,
+            maDvi: this.baoCao.maDvi,
+            namDnghi: this.baoCao.namDnghi,
+            paggingReq: {
+                limit: 10,
+                page: 1,
+            },
+        }
+        let idTienThua!: string;
+        let tienThua: Report = new Report();
+        this.spinner.show();
+        await this.capVonMuaBanTtthService.timKiemVonMuaBan(request).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    if (data.data.content?.length > 0) {
+                        idTienThua = data.data.content[0].id;
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        );
+        if (idTienThua) {
+            await this.capVonMuaBanTtthService.ctietVonMuaBan(idTienThua).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        tienThua = data.data;
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
+        }
+        const temp = this.lstCtietBcaos[0];
+        const index = tienThua.ttGui.lstCtietBcaos.findIndex(e => e.maHang == this.baoCao.loaiDnghi);
+        tienThua.ttGui.lstCtietBcaos[index].tongVonUngNhan = temp.vonUng;
+        tienThua.ttGui.lstCtietBcaos[index].tongVonCapNhan = temp.vonCap;
+        tienThua.ttGui.lstCtietBcaos[index].tongVonNhan = temp.tong;
+        await this.capVonMuaBanTtthService.capNhatVonMuaBan(tienThua).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        this.spinner.hide();
     }
 
     async showDialogCopy() {

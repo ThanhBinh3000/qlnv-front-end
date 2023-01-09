@@ -15,6 +15,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import { getTail } from 'src/app/Utility/func';
 import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, sumNumber, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { CapUng, LuyKeCapUng, receivedInfo, Report, sendInfo, TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
@@ -370,6 +371,9 @@ export class CapUngVonChoDvcdComponent implements OnInit {
                     this.baoCao.ttNhan.trangThai = mcn;
                 }
                 this.getStatusButton();
+                if (mcn = Utils.TT_BC_7) {
+                    await this.ghiNhanCapVon();
+                }
                 if (mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
@@ -566,6 +570,93 @@ export class CapUngVonChoDvcdComponent implements OnInit {
         this.editCache[id].data.luyKeVonUng = sumNumber([this.lstCtietBcaos[index].luyKeVonUng, this.editCache[id].data.vonUng, -this.lstCtietBcaos[index].vonUng]);
         this.editCache[id].data.luyKeVonCap = sumNumber([this.lstCtietBcaos[index].luyKeVonCap, this.editCache[id].data.vonCap, -this.lstCtietBcaos[index].vonCap]);
         this.editCache[id].data.luyKeTong = sumNumber([this.editCache[id].data.luyKeVonCap, this.editCache[id].data.luyKeVonUng]);
+    }
+
+    capChoDvcd() {
+
+    }
+
+    async ghiNhanCapVon() {
+        const request = {
+            loaiTimKiem: '0',
+            maLoai: 6,
+            maDvi: this.baoCao.maDvi,
+            namDnghi: this.baoCao.namDnghi,
+            paggingReq: {
+                limit: 10,
+                page: 1,
+            },
+        }
+        let idTienThua!: string;
+        let tienThua: Report = new Report();
+        this.spinner.show();
+        await this.capVonMuaBanTtthService.timKiemVonMuaBan(request).toPromise().then(
+            (data) => {
+                if (data.statusCode == 0) {
+                    if (data.data.content?.length > 0) {
+                        idTienThua = data.data.content[0].id;
+
+                    }
+                } else {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            }
+        );
+        if (idTienThua) {
+            await this.capVonMuaBanTtthService.ctietVonMuaBan(idTienThua).toPromise().then(
+                async (data) => {
+                    if (data.statusCode == 0) {
+                        tienThua = data.data;
+                    } else {
+                        this.notification.error(MESSAGE.ERROR, data?.msg);
+                    }
+                },
+                (err) => {
+                    this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+                },
+            );
+        }
+        const temp = this.getTotal();
+        const index = tienThua.ttGui.lstCtietBcaos.findIndex(e => e.maHang == this.baoCao.loaiDnghi);
+        if (this.dataInfo?.preTab == 'cv') {
+            tienThua.ttGui.lstCtietBcaos[index].tongCapUngGiao = temp.ung;
+            tienThua.ttGui.lstCtietBcaos[index].tongCapVonGiao = temp.cap;
+            tienThua.ttGui.lstCtietBcaos[index].tongCapGiao = temp.tong;
+        } else {
+            tienThua.ttGui.lstCtietBcaos[index].tongVonUngNhan = temp.ung;
+            tienThua.ttGui.lstCtietBcaos[index].tongVonCapNhan = temp.cap;
+            tienThua.ttGui.lstCtietBcaos[index].tongVonNhan = temp.tong;
+        }
+        await this.capVonMuaBanTtthService.capNhatVonMuaBan(tienThua).toPromise().then(
+            async (data) => {
+                if (data.statusCode == 0) {
+                    this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+                } else {
+                    this.notification.error(MESSAGE.ERROR, data?.msg);
+                }
+            },
+            (err) => {
+                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+            },
+        );
+        this.spinner.hide();
+    }
+
+    getTotal() {
+        const obj = {
+            ung: 0,
+            cap: 0,
+            tong: 0,
+        }
+        this.lstCtietBcaos.forEach(item => {
+            obj.ung = sumNumber([obj.ung, item.luyKeVonUng]);
+            obj.cap = sumNumber([obj.ung, item.luyKeVonCap]);
+            obj.tong = sumNumber([obj.ung, item.luyKeTong]);
+        })
+        return obj;
     }
 
     async showDialogCopy() {

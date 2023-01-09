@@ -76,6 +76,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     ) { }
 
     async ngOnInit() {
+        this.trangThais = TRANG_THAI;
         this.userInfo = this.userService.getUserLogin();
         this.spinner.show();
         //khoi tao gia tri mac dinh
@@ -94,7 +95,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                     this.deletePermission = CVMB.DELETE_REPORT_GNV;
                 } else {
                     this.searchFilter.maLoai = 2;
-                    this.createPermission = CVMB.ADD_REPORT_GNV;
+                    this.createPermission = 'NO';
                     this.deletePermission = 'NO';
                 }
                 this.editPermission = CVMB.EDIT_REPORT_GNV;
