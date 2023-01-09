@@ -46,8 +46,8 @@
           <span [ngClass]="thongTinTrangThai(dieuChinhThongTinChiTieuKHNam.trangThai)">{{trangThai}}</span>
           <span>Thông tin điều chỉnh chỉ tiêu kế hoạch năm {{lastBreadcrumb}} giao</span>
         </div>
-        <form nz-form [formGroup]="formData">
-          <div nz-row [nzGutter]="[16, 12]" class="form-data-detail">
+        <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
+          <div nz-row [nzGutter]="[16, 12]"ae>
             <div nz-col [nzSpan]="3">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm kế hoạch
               </nz-form-label>
@@ -149,7 +149,7 @@
                             [showDowloadFile]="false" typeFile="tai-lieu-dinh-kem">
               </multiple-tag>
             </div>
-            <div nz-col [nzSpan]="16" *ngIf="userService.isTongCuc()">
+            <div nz-col [nzSpan]="24" *ngIf="userService.isTongCuc()">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm
               </nz-form-label>
               <nz-form-item >

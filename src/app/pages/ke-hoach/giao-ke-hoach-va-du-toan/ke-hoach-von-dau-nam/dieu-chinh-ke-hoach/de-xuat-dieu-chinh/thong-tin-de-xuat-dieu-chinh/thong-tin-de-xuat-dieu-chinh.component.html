@@ -5,13 +5,11 @@
       <div class="trai">
       </div>
       <div class="canphai phai">
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
-                *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03') && !userService.isTongCuc() && !isView">
-          <i class="icon htvbdh_tcdt_save"></i>
-          <span>Lưu</span>
-        </button>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
+          <span>Quay lại</span>
+        </a>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="save(true)"
-                *ngIf="(deXuatDieuChinh.trangThai == '00' || id == 0 || deXuatDieuChinh.trangThai == '03') && !userService.isTongCuc() && !isView">
+                *ngIf="(deXuatDieuChinh.trangThai == STATUS.DU_THAO || id == 0 || deXuatDieuChinh.trangThai == STATUS.TU_CHOI_LDC || deXuatDieuChinh.trangThai == STATUS.TU_CHOI_TP) && !userService.isTongCuc() && !isView">
           <i class="icon htvbdh_tcdt_guiduyet"></i>
           <span>Lưu và gửi duyệt</span>
         </button>
@@ -36,13 +34,15 @@
         <!--          <span>Ban hành</span>-->
         <!--        </button>-->
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-           *ngIf="deXuatDieuChinh.trangThai == '02' && !userService.isTongCuc()">
+           *ngIf="(deXuatDieuChinh.trangThai == STATUS.CHO_DUYET_LDC || deXuatDieuChinh.trangThai == STATUS.CHO_DUYET_TP ) && !userService.isTongCuc()">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="back()">
-          <span>Quay lại</span>
-        </a>
+        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)"
+                *ngIf="(deXuatDieuChinh.trangThai == STATUS.DU_THAO || id == 0 || deXuatDieuChinh.trangThai == STATUS.TU_CHOI_TP || deXuatDieuChinh.trangThai == STATUS.TU_CHOI_LDC) && !userService.isTongCuc() && !isView">
+          <i class="icon htvbdh_tcdt_save"></i>
+          <span>Lưu</span>
+        </button>
       </div>
     </div>
   </div>
@@ -51,20 +51,26 @@
   <div class="contentDetail">
     <div class="main-content main-ke-hoach">
       <div class="thong-tin-chi-tieu">
+        <nz-alert
+          *ngIf="deXuatDieuChinh.trangThai == STATUS.TU_CHOI_TP || deXuatDieuChinh.trangThai == STATUS.TU_CHOI_LDC "
+          nzShowIcon nzType="error"
+          nzMessage="Lý do từ chối" nzDescription="{{deXuatDieuChinh.lyDoTuChoi}}">
+        </nz-alert>
         <div class="title-chi-tieu">
-          <span [ngClass]="thongTinTrangThai(deXuatDieuChinh.trangThai)">{{deXuatDieuChinh.id ? deXuatDieuChinh.tenTrangThai : 'Dự thảo'}}</span>
+          <span
+            [ngClass]="thongTinTrangThai(deXuatDieuChinh.trangThai)">{{deXuatDieuChinh.id ? deXuatDieuChinh.tenTrangThai : 'Dự thảo'}}</span>
           <span>Thông tin điều chỉnh chỉ tiêu kế hoạch năm</span>
         </div>
-        <form nz-form [formGroup]="formData">
-          <div nz-row [nzGutter]="[16, 12]" class="form-data-detail">
-            <div nz-col [nzSpan]="3">
+        <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
+          <div nz-row [nzGutter]="[16, 12]">
+            <div nz-col nzSpan="3">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm kế hoạch
               </nz-form-label>
               <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()" nzDisabled>
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </div>
-            <div nz-col [nzSpan]="5">
+            <div nz-col nzSpan="5">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số đề xuất</nz-form-label>
               <nz-input-group [nzAddOnAfter]="'/' + qdTCDT">
                 <nz-input-number [nzSize]="'small'" nz-input formControlName="soQD"
@@ -72,7 +78,7 @@
                 </nz-input-number>
               </nz-input-group>
             </div>
-            <div nz-col [nzSpan]="5">
+            <div nz-col nzSpan="5">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Ngày ký
               </nz-form-label>
               <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="yyyy-MM-dd"
@@ -90,12 +96,12 @@
                 <nz-option nzValue="02" nzLabel="Điều chỉnh vật tư, thiết bị"></nz-option>
               </nz-select>
             </div> -->
-            <div nz-col [nzSpan]="24">
+            <div nz-col nzSpan="24">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Trích yếu</nz-form-label>
               <input formControlName="trichYeu" rows="1" nz-input placeholder="Nhập text"
                      [readonly]="!(deXuatDieuChinh.trangThai == '00' || id == 0) || userService.isTongCuc() || isView"/>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col nzSpan="6">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số QĐ giao chỉ tiêu của TC</nz-form-label>
               <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn QĐ giao chỉ tiêu cấp TC"
                             icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu"
@@ -105,13 +111,13 @@
                             [showDowloadFile]="false">
               </multiple-tag>
             </div>
-            <div nz-col [nzSpan]="24">
+            <div nz-col nzSpan="24">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Nội dung và nguyên nhân điều chỉnh
               </nz-form-label>
               <textarea formControlName="noiDung" rows="1" nz-input placeholder="Nhập text"
                         [readonly]="!(deXuatDieuChinh.trangThai == '00' || id == 0) || userService.isTongCuc() || isView"></textarea>
             </div>
-            <div nz-col [nzSpan]="24">
+            <div nz-col nzSpan="24">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm
               </nz-form-label>
               <nz-form-item>

@@ -783,10 +783,14 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       if (text) {
         this.spinner.show();
         try {
+          let trangThai = STATUS.TU_CHOI_TP;
+          if (this.deXuatDieuChinh.trangThai == STATUS.CHO_DUYET_LDC) {
+            trangThai = STATUS.TU_CHOI_LDC;
+          }
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: '03',
+            trangThai: trangThai,
           };
           let res =
             await this.deXuatDieuChinhService.updateStatus(
@@ -824,7 +828,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   thongTinTrangThai(trangThai: string): string {
-    if (trangThai === STATUS.DU_THAO || trangThai === STATUS.CHO_DUYET_TP || trangThai === STATUS.CHO_DUYET_LDC || trangThai === STATUS.TU_CHOI_LDC) {
+    if (trangThai === STATUS.DU_THAO || trangThai === STATUS.CHO_DUYET_TP || trangThai === STATUS.CHO_DUYET_LDC || trangThai === STATUS.TU_CHOI_TP || trangThai === STATUS.TU_CHOI_LDC) {
       return 'du-thao-va-lanh-dao-duyet';
     } else if (trangThai === STATUS.DA_DUYET_LDC) {
       return 'da-ban-hanh';
