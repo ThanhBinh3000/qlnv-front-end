@@ -244,22 +244,27 @@
               <th width="">Thời gian tổ chức cuộc đấu giá</th>
               <th width="">Địa điểm tổ chức</th>
               <th width="">Kết quả đấu giá</th>
+              <th width="">SL DVTS</th>
               <th width="">Hành động</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of dataTable; let i = index" (click)="selectRow(i)">
-              <td>{{ data.idTtinHdr }}</td>
-              <td>{{ data.idTtinHdr }}</td>
-              <td>{{ data.soTb }}</td>
-              <td>{{ data.toChucTen }}</td>
-              <td>{{ data.thoiGianToChucTu | date: 'dd/MM/YYYY' }}
-                đến {{ data.thoiGianToChucDen | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.diaDiemToChuc }}</td>
-              <td>{{ data.diaDiemToChuc }}</td>
+            <tr *ngFor="let data of dataTable; let i = index" (click)="selectRow($event,i)">
+              <td>{{ data.soQdPd }}</td>
+              <td>{{ data.lanDauGia }}</td>
+              <td>{{ data.maThongBao }}</td>
+              <td>{{ data.tenToChuc }}</td>
+              <td>{{ data.tgianDauGiaTu | date: 'dd/MM/YYYY' }}
+                đến {{ data.tgianDauGiaDen | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.diaDiemDauGia }}</td>
+              <td>{{ data.ketQua == 1 ? 'Đấu giá thành công' : 'Đấu giá không thành' }}</td>
+              <td>{{ data.ketQuaSl }}</td>
               <td class="text-center">
-                <a>
+                <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="themMoiPhienDauGia($event,data)">
                   <i class="fa fa-pencil"></i>
+                </a>
+                <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data.id)">
+                  <i class="fa fa-trash do"></i>
                 </a>
               </td>
             </tr>
@@ -267,7 +272,7 @@
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
-    <app-thongtin-daugia></app-thongtin-daugia>
+    <app-thongtin-daugia [data]="dataDetail" [isView]="true"></app-thongtin-daugia>
   </nz-card>
 </div>
 <ng-template #error let-control>
