@@ -222,11 +222,11 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
     if (dataChiCuc.length > 0) {
       this.listDiaDiemNhap = dataChiCuc[0].hhQdGiaoNvNhDdiemList;
     }
-    this.listSoPhieuNhapKho = data.hhPhieuNhapKhoHdrList.filter(item => item.trangThai == STATUS.DA_DUYET_LDCC);
     await this.spinner.hide();
   }
 
   openDialogDdiemNhapHang() {
+    console.log(this.listDiaDiemNhap, 7777)
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách địa điểm nhập hàng',
       nzContent: DialogTableSelectionComponent,
@@ -242,12 +242,12 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        this.bindingDataDdNhap(data);
+        this.bindingDataDdNhap(data, true);
       }
     });
   }
 
-  bindingDataDdNhap(data) {
+  bindingDataDdNhap(data, isDetail?) {
     this.dataTable = [];
     this.formData.patchValue({
       idDdiemGiaoNvNh: data.id,
@@ -260,8 +260,19 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       maLoKho: data.maLoKho,
       tenLoKho: data.tenLoKho,
     });
+    if (isDetail) {
+      this.formData.patchValue({
+        soPhieuNhapKho: null,
+        ngayNkho: null,
+        hoTenNguoiGiao: null,
+        cmt: null,
+        donViGiao: null,
+        diaChiNguoiGiao: null,
+        thoiGianGiaoNhan: null,
+      });
+    }
+    this.listSoPhieuNhapKho = data.hhPhieuNhapKhoHdr.filter(item => (item.trangThai == STATUS.DA_DUYET_LDCC));
   }
-
   openDialogSoPhieuNhapKho() {
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách số phiếu nhập kho',
