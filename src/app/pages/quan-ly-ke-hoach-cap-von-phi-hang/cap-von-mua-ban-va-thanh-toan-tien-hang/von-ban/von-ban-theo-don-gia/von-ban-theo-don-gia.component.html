@@ -207,7 +207,9 @@
                                     </fm-input-number>
                                 </td>
                                 <td>
-                                    {{ displayValue(editCache[data.id].data.donGia) }}
+                                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.donGia"
+                                        (ngModelChange)="changeModel(data.id)">
+                                    </fm-input-number>
                                 </td>
                                 <td>
                                     {{ displayValue(editCache[data.id].data.giaTriHd) }}

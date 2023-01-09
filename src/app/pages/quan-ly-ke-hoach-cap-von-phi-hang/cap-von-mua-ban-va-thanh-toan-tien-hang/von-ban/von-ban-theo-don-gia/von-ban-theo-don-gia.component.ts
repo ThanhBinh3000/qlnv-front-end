@@ -531,6 +531,7 @@ export class VonBanTheoDonGiaComponent implements OnInit {
     }
 
     changeModel(id: string) {
+        this.editCache[id].data.giaTriHd = mulNumber(this.editCache[id].data.soLuongKeHoach, this.editCache[id].data.donGia);
         this.editCache[id].data.giaTriTh = mulNumber(this.editCache[id].data.soLuongThucHien, this.editCache[id].data.donGia);
         this.editCache[id].data.luyKeSauLanNopNay = sumNumber([this.editCache[id].data.uyNhiemChiSoTien, this.editCache[id].data.soDaNopTc]);
         this.editCache[id].data.soConPhaiNop = sumNumber([this.editCache[id].data.giaTriTh, -this.editCache[id].data.luyKeSauLanNopNay]);
