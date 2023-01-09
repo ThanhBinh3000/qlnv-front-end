@@ -248,8 +248,9 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       new ItemDetail(0),
       new ItemDetail(0),
     ];
-    this.keHoachLuongThucCreate.xtnGao = [new ItemDetail(0), new ItemDetail(0)];
+    this.keHoachLuongThucCreate.xtnGao = [new ItemDetail(0), new ItemDetail(0), new ItemDetail(0)];
     this.keHoachLuongThucCreate.tkdnGao = [
+      new ItemDetail(0),
       new ItemDetail(0),
       new ItemDetail(0),
     ];
@@ -501,7 +502,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             soLuong: +luongThuc.value.tkdnGaoSoLuong2,
             vatTuId: null,
           };
-          this.keHoachLuongThucDialog.tkdnGao = [tkdnGao1, tkdnGao2];
+          const tkdnGao3 = {
+            id: null,
+            nam: this.yearNow - 3,
+            soLuong: +luongThuc.value.tkdnGaoSoLuong3,
+            vatTuId: null,
+          };
+          this.keHoachLuongThucDialog.tkdnGao = [tkdnGao1, tkdnGao2, tkdnGao3];
           this.keHoachLuongThucDialog.ntnTongSoQuyThoc =
             +luongThuc.value.ntnTongSoQuyThoc;
           this.keHoachLuongThucDialog.ntnThoc = +luongThuc.value.ntnThoc;
@@ -532,7 +539,7 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
           };
           this.keHoachLuongThucDialog.xtnThoc = [xtnThoc1, xtnThoc2, xtnThoc3];
           this.keHoachLuongThucDialog.xtnTongGao =
-            +luongThuc.value.xtnGaoSoLuong1 + +luongThuc.value.xtnGaoSoLuong2;
+            +luongThuc.value.xtnGaoSoLuong1 + +luongThuc.value.xtnGaoSoLuong2 + +luongThuc.value.xtnGaoSoLuong3;
           const xtnGao1 = {
             id: null,
             nam: this.yearNow - 1,
@@ -545,7 +552,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
             soLuong: +luongThuc.value.xtnGaoSoLuong2,
             vatTuId: null,
           };
-          this.keHoachLuongThucDialog.xtnGao = [xtnGao1, xtnGao2];
+          const xtnGao3 = {
+            id: null,
+            nam: this.yearNow - 3,
+            soLuong: +luongThuc.value.xtnGaoSoLuong3,
+            vatTuId: null,
+          };
+          this.keHoachLuongThucDialog.xtnGao = [xtnGao1, xtnGao2, xtnGao3];
           this.keHoachLuongThucDialog.tkcnTongSoQuyThoc =
             +luongThuc.value.tkcnTongSoQuyThoc;
           this.keHoachLuongThucDialog.tkcnTongThoc =
@@ -1671,11 +1684,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.thongTinChiTieuKeHoachNam?.khLuongThuc.forEach((luongThuc) => {
         luongThuc.tkdnGao[0].nam = this.yearNow - 1;
         luongThuc.tkdnGao[1].nam = this.yearNow - 2;
+        luongThuc.tkdnGao[2].nam = this.yearNow - 3;
         luongThuc.tkdnThoc[0].nam = this.yearNow - 1;
         luongThuc.tkdnThoc[1].nam = this.yearNow - 2;
         luongThuc.tkdnThoc[2].nam = this.yearNow - 3;
         luongThuc.xtnGao[0].nam = this.yearNow - 1;
         luongThuc.xtnGao[1].nam = this.yearNow - 2;
+        luongThuc.xtnGao[2].nam = this.yearNow - 3;
         luongThuc.xtnThoc[0].nam = this.yearNow - 1;
         luongThuc.xtnThoc[1].nam = this.yearNow - 2;
         luongThuc.xtnThoc[2].nam = this.yearNow - 3;
@@ -1892,6 +1907,10 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
                   break;
                 case (this.yearNow - 2).toString():
                   this.keHoachLuongThucCreate.tkdnGao[1].soLuong =
+                    tonKho.duDau;
+                  break;
+                case (this.yearNow - 3).toString():
+                  this.keHoachLuongThucCreate.tkdnGao[2].soLuong =
                     tonKho.duDau;
                   break;
                 default:
@@ -2145,7 +2164,8 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachLuongThucDialog.tkdnThoc = [tkdnThoc1, tkdnThoc2, tkdnThoc3];
     this.keHoachLuongThucDialog.tkdnTongGao =
       +this.keHoachLuongThucCreate.tkdnGao[0].soLuong +
-      +this.keHoachLuongThucCreate.tkdnGao[1].soLuong;
+      +this.keHoachLuongThucCreate.tkdnGao[1].soLuong +
+      +this.keHoachLuongThucCreate.tkdnGao[2].soLuong;
     const tkdnGao1 = {
       id: null,
       nam: this.yearNow - 1,
@@ -2158,7 +2178,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       soLuong: +this.keHoachLuongThucCreate.tkdnGao[1].soLuong,
       vatTuId: null,
     };
-    this.keHoachLuongThucDialog.tkdnGao = [tkdnGao1, tkdnGao2];
+    const tkdnGao3 = {
+      id: null,
+      nam: this.yearNow - 3,
+      soLuong: +this.keHoachLuongThucCreate.tkdnGao[2].soLuong,
+      vatTuId: null,
+    };
+    this.keHoachLuongThucDialog.tkdnGao = [tkdnGao1, tkdnGao2,tkdnGao3];
     this.keHoachLuongThucDialog.ntnTongSoQuyThoc =
       +this.keHoachLuongThucCreate.ntnTongSoQuyThoc;
     this.keHoachLuongThucDialog.ntnThoc = +this.keHoachLuongThucCreate.ntnThoc;
@@ -2203,7 +2229,13 @@ export class ThongTinChiTieuKeHoachNamComponent implements OnInit {
       soLuong: +this.keHoachLuongThucCreate.xtnGao[1].soLuong,
       vatTuId: null,
     };
-    this.keHoachLuongThucDialog.xtnGao = [xtnGao1, xtnGao2];
+    const xtnGao3 = {
+      id: null,
+      nam: this.yearNow - 3,
+      soLuong: +this.keHoachLuongThucCreate.xtnGao[2].soLuong,
+      vatTuId: null,
+    };
+    this.keHoachLuongThucDialog.xtnGao = [xtnGao1, xtnGao2,xtnGao3];
     this.keHoachLuongThucDialog.tkcnTongSoQuyThoc =
       +this.keHoachLuongThucCreate.tkcnTongSoQuyThoc;
     this.keHoachLuongThucDialog.tkcnTongThoc =

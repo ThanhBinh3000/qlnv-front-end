@@ -23,6 +23,7 @@ import {DanhMucService} from 'src/app/services/danhmuc.service';
 import * as XLSX from 'xlsx';
 import {ChiTieuKeHoachNamCapTongCucService} from 'src/app/services/chiTieuKeHoachNamCapTongCuc.service';
 import {DialogDiaDiemKhoComponent} from 'src/app/components/dialog/dialog-dia-diem-kho/dialog-dia-diem-kho.component';
+import {STATUS} from "../../../../../../../constants/status";
 
 @Component({
   selector: 'app-thong-tin-de-xuat-dieu-chinh',
@@ -41,11 +42,11 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   formData: FormGroup;
 
   lastBreadcrumb: string;
-  trangThai: string = 'Dự thảo';
+  // trangThai: string = 'Dự thảo';
 
   qdTCDT: string = MESSAGE.QD_TCDT;
   userInfo: UserLogin;
-
+  STATUS = STATUS;
   listNam: any[] = [];
   yearNow: number = 0;
 
@@ -575,20 +576,22 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           "ngayKy": this.deXuatDieuChinh.ngayKy,
           "nguyenNhan": this.deXuatDieuChinh.nguyenNhan,
           "noiDung": this.deXuatDieuChinh.noiDung,
-          "soVanBan": this.deXuatDieuChinh.soQuyetDinh,
-          "trichYeu": this.deXuatDieuChinh.trichYeu
+          "soVanBan": this.deXuatDieuChinh.soQuyetDinh ?? null,
+          "trichYeu": this.deXuatDieuChinh.trichYeu,
+          "trangThai": this.deXuatDieuChinh.trangThai
         };
         if (this.id > 0) {
           let res = await this.deXuatDieuChinhService.sua(
             body,
           );
           if (res.msg == MESSAGE.SUCCESS) {
-            if (!isGuiDuyet) {
+            if (isGuiDuyet) {
+              this.guiDuyet();
+            } else {
               this.notification.success(
                 MESSAGE.SUCCESS,
                 MESSAGE.UPDATE_SUCCESS,
               );
-              this.back();
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -598,7 +601,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
             body,
           );
           if (res.msg == MESSAGE.SUCCESS) {
-            if (!isGuiDuyet) {
+            if (isGuiDuyet) {
+              this.guiDuyet();
+            } else {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
               this.back();
             }
@@ -627,11 +632,40 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          await this.save(true);
+          // await this.save(true);
+          let trangThai;
+          if (this.userService.isTongCuc()) {
+            switch (this.deXuatDieuChinh.trangThai) {
+              case STATUS.DU_THAO: {
+                trangThai = STATUS.CHO_DUYET_LDV
+                break;
+              }
+              case STATUS.TU_CHOI_LDV: {
+                trangThai = STATUS.CHO_DUYET_LDV
+                break;
+              }
+            }
+          }
+          if (this.userService.isCuc()) {
+            switch (this.deXuatDieuChinh.trangThai) {
+              case STATUS.DU_THAO: {
+                trangThai = STATUS.CHO_DUYET_TP
+                break;
+              }
+              case STATUS.TU_CHOI_TP: {
+                trangThai = STATUS.CHO_DUYET_TP
+                break;
+              }
+              case STATUS.TU_CHOI_LDC: {
+                trangThai = STATUS.CHO_DUYET_TP
+                break;
+              }
+            }
+          }
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '04',
+            trangThai: trangThai,
           };
           let res =
             await this.deXuatDieuChinhService.updateStatus(
@@ -665,10 +699,17 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
+          let trangThai = STATUS.CHO_DUYET_LDC;
+          if (this.deXuatDieuChinh.trangThai == STATUS.CHO_DUYET_TP) {
+            trangThai = STATUS.CHO_DUYET_LDC
+          }
+          if (this.deXuatDieuChinh.trangThai == STATUS.CHO_DUYET_LDC) {
+            trangThai = STATUS.DA_DUYET_LDC
+          }
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: trangThai,
           };
           let res =
             await this.deXuatDieuChinhService.updateStatus(
@@ -783,9 +824,9 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   thongTinTrangThai(trangThai: string): string {
-    if (trangThai === '00' || trangThai === '01' || trangThai === '04' || trangThai === '03') {
+    if (trangThai === STATUS.DU_THAO || trangThai === STATUS.CHO_DUYET_TP || trangThai === STATUS.CHO_DUYET_LDC || trangThai === STATUS.TU_CHOI_LDC) {
       return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === '02') {
+    } else if (trangThai === STATUS.DA_DUYET_LDC) {
       return 'da-ban-hanh';
     }
   }

@@ -149,17 +149,27 @@
                             [showDowloadFile]="false" typeFile="tai-lieu-dinh-kem">
               </multiple-tag>
             </div>
-            <div nz-col [nzSpan]="24">
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>
-              <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"
-                            [data]="taiLieuDinhKemList" type="file" (selectDataEvent)="openFile($event)"
-                            [trangThai]="isView ? 'view-detail' : dieuChinhThongTinChiTieuKHNam.trangThai"
-                            (removeDataEvent)="deleteTaiLieuDinhKemTag($event)"
-                            (downloadFileEvent)="downloadFileKeHoach($event)"
-                            typeFile="tai-lieu-dinh-kem">
-              </multiple-tag>
+            <div nz-col [nzSpan]="16" *ngIf="userService.isTongCuc()">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm
+              </nz-form-label>
+              <nz-form-item >
+                <div class="list-file">
+                  <file-list [data]="taiLieuDinhKemList" [isViewDetail]="isView"></file-list>
+                </div>
+              </nz-form-item>
             </div>
+            <!--            <div nz-col [nzSpan]="24">-->
+            <!--              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm</nz-form-label>-->
+            <!--              <multiple-tag buttonName="Chọn file" placeHolder="Chọn tài liệu đính kèm" icon="icon htvbdh_tcdt_tep"-->
+            <!--                            [data]="taiLieuDinhKemList" type="file" (selectDataEvent)="openFile($event)"-->
+            <!--                            [trangThai]="isView ? 'view-detail' : dieuChinhThongTinChiTieuKHNam.trangThai"-->
+            <!--                            (removeDataEvent)="deleteTaiLieuDinhKemTag($event)"-->
+            <!--                            (downloadFileEvent)="downloadFileKeHoach($event)"-->
+            <!--                            typeFile="tai-lieu-dinh-kem">-->
+            <!--              </multiple-tag>-->
+            <!--            </div>-->
           </div>
+
         </form>
       </div>
       <div class="tab__container" *ngIf="selectedCanCu && selectedCanCu.id && yearNow > 0">
@@ -167,7 +177,7 @@
           <nz-tab [nzTitle]="'Điều chỉnh lương thực dự trữ nhà nước'" (nzClick)="selectTabData('00')">
           </nz-tab>
           <nz-tab [nzTitle]="'Điều chỉnh muối dự trữ nhà nước'" (nzClick)="selectTabData('01')"></nz-tab>
-          <nz-tab [nzTitle]="'Điều chỉnh nhập vật tư, thiết bị'" class="vat-tu__container"
+          <nz-tab [nzTitle]="'Điều chỉnh vật tư, thiết bị dự trữ nhà nước'" class="vat-tu__container"
                   (nzClick)="selectTabData('02')"></nz-tab>
         </nz-tabset>
         <div [ngClass]="tabSelected == '00' ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
@@ -257,6 +267,7 @@
                 <th>Nhập <br> {{yearNow - 2}}</th>
                 <th>Nhập <br> {{yearNow - 1}}</th>
                 <th>Tổng</th>
+
                 <th>Nhập <br> {{yearNow - 2}}</th>
                 <th>Nhập <br> {{yearNow - 1}}</th>
                 <th>Thóc (Tấn)</th>
@@ -331,7 +342,7 @@
                 <td>{{keHoachLuongThucCreate?.tdcNtnGao ?? 0 | number: '1.0-1'}}</td>
                 <td>
                   <input *ngIf="!isAddLuongThuc" nz-input [(ngModel)]="keHoachLuongThucCreate.dcNtnThoc"
-                         [readonly]="true" />
+                         [readonly]="true"/>
                   <nz-input-number *ngIf="isAddLuongThuc" type="text" nz-input [nzSize]="'small'"
                                    [(ngModel)]="keHoachLuongThucCreate.dcNtnThoc"
                                    (input)="caculatorDieuChinhLT(keHoachLuongThucCreate)"
@@ -341,8 +352,8 @@
                 </td>
                 <td>
                   <input *ngIf="!isAddLuongThuc" nz-input [(ngModel)]="keHoachLuongThucCreate.dcNtnGao"
-                         [readonly]="true"  />
-                  <nz-input-number *ngIf="isAddLuongThuc" type="text" nz-input   [nzSize]="'small'"
+                         [readonly]="true"/>
+                  <nz-input-number *ngIf="isAddLuongThuc" type="text" nz-input [nzSize]="'small'"
                                    [(ngModel)]="keHoachLuongThucCreate.dcNtnGao"
                                    (input)="caculatorDieuChinhLT(keHoachLuongThucCreate)"
                                    [nzMin]="0 - (keHoachLuongThucCreate?.tdcNtnGao ?? 0)"
@@ -373,15 +384,15 @@
                   </td>
                 </ng-container>
                 <ng-container *ngIf="keHoachLuongThucCreate?.dcXtnThoc?.length == 0">
-                  <td><input nz-input  value="0" [readonly]="true"/></td>
-                  <td><input nz-input  value="0" [readonly]="true"/></td>
-                  <td><input nz-input  value="0" [readonly]="true"/></td>
+                  <td><input nz-input value="0" [readonly]="true"/></td>
+                  <td><input nz-input value="0" [readonly]="true"/></td>
+                  <td><input nz-input value="0" [readonly]="true"/></td>
                 </ng-container>
                 <ng-container *ngIf="keHoachLuongThucCreate?.dcXtnThoc?.length > 0">
                   <td *ngFor="let item of keHoachLuongThucCreate.dcXtnThoc;let gg = index;">
-                    <input *ngIf="!isAddLuongThuc" nz-input  [(ngModel)]="item.soLuong"
+                    <input *ngIf="!isAddLuongThuc" nz-input [(ngModel)]="item.soLuong"
                            [readonly]="true"/>
-                    <nz-input-number *ngIf="isAddLuongThuc" type="text" nz-input  [nzSize]="'small'"
+                    <nz-input-number *ngIf="isAddLuongThuc" type="text" nz-input [nzSize]="'small'"
                                      [(ngModel)]="item.soLuong" (input)="caculatorDieuChinhLT(keHoachLuongThucCreate)"
                                      [nzMin]="0 - (keHoachLuongThucCreate?.tdcXtnThoc[gg]?.soLuong ?? 0)"
                                      [nzMax]="0 + (keHoachLuongThucCreate?.tdcXtnThoc[gg]?.soLuong ?? 0)">
@@ -394,9 +405,9 @@
                 </ng-container>
                 <ng-container *ngIf="keHoachLuongThucCreate?.dcXtnGao?.length > 0">
                   <td *ngFor="let item of keHoachLuongThucCreate.dcXtnGao;let gg = index;">
-                    <input *ngIf="!isAddLuongThuc" nz-input   [(ngModel)]="item.soLuong"
+                    <input *ngIf="!isAddLuongThuc" nz-input [(ngModel)]="item.soLuong"
                            [readonly]="true"/>
-                    <nz-input-number *ngIf="isAddLuongThuc" type="text" nz-input  [nzSize]="'small'"
+                    <nz-input-number *ngIf="isAddLuongThuc" type="text" nz-input [nzSize]="'small'"
                                      [(ngModel)]="item.soLuong" (input)="caculatorDieuChinhLT(keHoachLuongThucCreate)"
                                      [nzMin]="0 - (keHoachLuongThucCreate?.tdcXtnGao[gg]?.soLuong ?? 0)"
                                      [nzMax]="0 + (keHoachLuongThucCreate?.tdcXtnGao[gg]?.soLuong ?? 0)">
@@ -607,7 +618,7 @@
                                      [nzMax]="globals.prop.MAX_INPUT"></nz-input-number>
                   </td>
                   <td>
-                    <nz-input-number type="text" nz-input  [nzSize]="'small'"
+                    <nz-input-number type="text" nz-input [nzSize]="'small'"
                                      [(ngModel)]="editLuongThucCache[data.donViId].data.dcNtnGao"
                                      (input)="caculatorDieuChinhLT(editLuongThucCache[data.donViId].data)"
                                      [nzMin]="0 - (editLuongThucCache[data.donViId].data?.tdcNtnGao ?? 0)"
@@ -640,13 +651,13 @@
                     </td>
                   </ng-container>
                   <ng-container *ngIf="editLuongThucCache[data.donViId].data?.dcXtnThoc?.length == 0">
-                    <td><input nz-input  value="0" [readonly]="true"/></td>
-                    <td><input nz-input  value="0" [readonly]="true"/></td>
-                    <td><input nz-input  value="0" [readonly]="true"/></td>
+                    <td><input nz-input value="0" [readonly]="true"/></td>
+                    <td><input nz-input value="0" [readonly]="true"/></td>
+                    <td><input nz-input value="0" [readonly]="true"/></td>
                   </ng-container>
                   <ng-container *ngIf="editLuongThucCache[data.donViId].data?.dcXtnThoc?.length > 0">
                     <td *ngFor="let item of editLuongThucCache[data.donViId].data.dcXtnThoc;let gg = index;">
-                      <nz-input-number type="text" nz-input   [nzSize]="'small'"
+                      <nz-input-number type="text" nz-input [nzSize]="'small'"
                                        [(ngModel)]="item.soLuong"
                                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.donViId].data)"
                                        [nzMin]="0 - (editLuongThucCache[data.donViId].data?.tdcXtnThoc[gg]?.soLuong ?? 0)"
@@ -655,12 +666,12 @@
                     </td>
                   </ng-container>
                   <ng-container *ngIf="editLuongThucCache[data.donViId].data?.dcXtnGao?.length == 0">
-                    <td><input nz-input   value="0" [readonly]="true"/></td>
-                    <td><input nz-input   value="0" [readonly]="true"/></td>
+                    <td><input nz-input value="0" [readonly]="true"/></td>
+                    <td><input nz-input value="0" [readonly]="true"/></td>
                   </ng-container>
                   <ng-container *ngIf="editLuongThucCache[data.donViId].data?.dcXtnGao?.length > 0">
                     <td *ngFor="let item of editLuongThucCache[data.donViId].data.dcXtnGao;let gg = index;">
-                      <nz-input-number type="text" nz-input   [nzSize]="'small'"
+                      <nz-input-number type="text" nz-input [nzSize]="'small'"
                                        [(ngModel)]="item.soLuong"
                                        (input)="caculatorDieuChinhLT(editLuongThucCache[data.donViId].data)"
                                        [nzMin]="0 - (editLuongThucCache[data.donViId].data?.tdcXtnGao[gg]?.soLuong ?? 0)"
