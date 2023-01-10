@@ -19,5 +19,10 @@ export class QuyetDinhPdKhBdgService extends BaseService {
         return this._httpClient.get<OldResponseData>(url).toPromise();
     }
 
+    approveDtl(body): Promise<OldResponseData> {
+        const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/dtl-chi-tiet/phe-duyet`;
+        return this._httpClient.post<OldResponseData>(url, body).toPromise();
+    }
+
 
 }

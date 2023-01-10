@@ -70,7 +70,7 @@
                             <nz-form-label [nzNoColon]="true"> Số hợp đồng</nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group>
-                                    <input nz-input formControlName="soHd" [readonly]="isDisabled()" />
+                                    <input nz-input formControlName="soHd" [readonly]="true" />
                                 </nz-input-group>
                             </nz-form-control>
                         </nz-form-item>
@@ -80,7 +80,7 @@
                             <nz-form-label [nzNoColon]="true"> Ngày ký hợp đồng</nz-form-label>
                             <nz-form-control [nzErrorTip]="error">
                                 <nz-input-group>
-                                    <input nz-input formControlName="ngayKyHd" [readonly]="isDisabled()" />
+                                    <input nz-input formControlName="ngayKyHd" [readonly]="true" />
                                 </nz-input-group>
                             </nz-form-control>
                         </nz-form-item>
@@ -586,6 +586,7 @@
                                     </td>
                                     <td nzLeft>{{dviTsan.maDviTsan}}</td>
                                     <td></td>
+                                    <td>{{ calendarSoLuong(dviTsan) | number : '1.0-1' : 'vi_VN'}}</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -593,13 +594,17 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td></td>
-                                    <td><nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                            nz-input [(ngModel)]="dviTsan.soLanTraGia"></nz-input-number></td>
-                                    <td><nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
-                                            nz-input [(ngModel)]="dviTsan.donGiaTraGia"></nz-input-number></td>
-                                    <td></td>
-                                    <td><input nz-input [(ngModel)]="dviTsan.toChucCaNhan" /></td>
+                                    <td><nz-input-number [nzDisabled]="isDisabled() || formData.value.ketQua == 0"
+                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
+                                            [(ngModel)]="dviTsan.soLanTraGia"></nz-input-number></td>
+                                    <td><nz-input-number [nzDisabled]="isDisabled() || formData.value.ketQua == 0"
+                                            [nzFormatter]="globals.formatter" [nzParser]="globals.parser" nz-input
+                                            [(ngModel)]="dviTsan.donGiaTraGia"></nz-input-number></td>
+                                    <td>{{ calendarSoLuong(dviTsan) * dviTsan.donGiaTraGia | number : '1.0-1' :
+                                        'vi_VN'}}</td>
+                                    <td><input [readonly]="isDisabled() || formData.value.ketQua == 0" nz-input
+                                            [(ngModel)]="dviTsan.toChucCaNhan" />
+                                    </td>
                                 </tr>
                                 <ng-container *ngIf="expandSet2.has(y)">
                                     <tr *ngFor="let children of dviTsan.children, let z = index">
