@@ -82,6 +82,7 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
       suCanThiet: [null],
       mucTieu: [null],
       phamVi: [null],
+
       trangThai: [null, [Validators.required]],
       tenTrangThai: [null,],
       tongChiPhi: [null, [Validators.required]],
@@ -151,6 +152,14 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     }
   }
 
+  isDisable(): boolean {
+    if (this.formData.value.trangThai == this.STATUS.DU_THAO || this.formData.value.trangThai == this.STATUS.DANG_THUC_HIEN) {
+      return false
+    } else {
+      return true
+    }
+  }
+
   async initForm() {
     this.formData.patchValue({
       trangThai: "00",
@@ -179,7 +188,8 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     this.showListEvent.emit();
   }
 
-  async save() {
+  async save(isGuiDuyet?) {
+    this.setValidator(isGuiDuyet);
     this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
       return;
@@ -220,6 +230,28 @@ export class ThongTinQuanLyCongTrinhNghienCuuBaoQuanComponent extends Base2Compo
     }
   }
 
+  setValidator(isGuiDuyet) {
+    if (isGuiDuyet) {
+
+      if (this.formData.value.trangThai == this.STATUS.DA_NGHIEM_THU) {
+        this.formData.controls["ngayNghiemThu"].setValidators([Validators.required]);
+        this.formData.controls["diaDiem"].setValidators([Validators.required]);
+        this.formData.controls["danhGia"].setValidators([Validators.required]);
+        this.formData.controls["tongDiem"].setValidators([Validators.required]);
+        this.formData.controls["xepLoai"].setValidators([Validators.required]);
+      } else {
+
+        this.formData.controls["ngayNghiemThu"].clearValidators();
+        this.formData.controls["diaDiem"].clearValidators();
+        this.formData.controls["danhGia"].clearValidators();
+        this.formData.controls["tongDiem"].clearValidators();
+        this.formData.controls["xepLoai"].clearValidators();
+      }
+    }
+    else {
+
+    }
+  }
 
 
   // tiến độ thực hiện
