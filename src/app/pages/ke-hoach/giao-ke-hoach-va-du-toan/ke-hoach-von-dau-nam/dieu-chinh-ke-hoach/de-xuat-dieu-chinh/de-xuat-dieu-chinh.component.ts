@@ -239,6 +239,7 @@ export class DeXuatDieuChinhComponent implements OnInit {
     this.ngayKyDC = null;
     this.inputDonVi = '';
     this.selectedDonVi = {};
+    this.search();
   }
 
   async search() {

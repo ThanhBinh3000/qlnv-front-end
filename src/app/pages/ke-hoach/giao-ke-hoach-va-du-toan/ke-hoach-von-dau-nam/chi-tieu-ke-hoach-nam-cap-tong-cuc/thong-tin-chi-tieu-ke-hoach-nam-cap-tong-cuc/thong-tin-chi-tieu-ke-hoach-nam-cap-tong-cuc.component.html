@@ -19,7 +19,13 @@
           <span>Ban hành</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
-                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP  || thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_TP')"
+                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_TP) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_TP')"
+                (click)="pheDuyet()">
+          <i class="icon htvbdh_tcdt_pheduyet"></i>
+          <span>Duyệt</span>
+        </button>
+        <button class="btn btn-outline-grey btn-sm waves-effect waves-light"
+                *ngIf="(thongTinChiTieuKeHoachNam.trangThai == STATUS.CHO_DUYET_LDC) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_DUYET_LDC')"
                 (click)="pheDuyet()">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Duyệt</span>
@@ -174,9 +180,9 @@
             <th rowspan="4" class="text-center" width="40px" nzLeft>STT</th>
             <th rowspan="4" class="text-center" width="330px" nzLeft>
               {{userService.isTongCuc() ? 'CỤC DTNN KHU VỰC' : 'CHI CỤC KHU VỰC'}}</th>
-            <th colspan="8" class="text-center" width="1200px">Tồn kho đầu năm (1) <br/>( 01/01/{{yearNow}})</th>
+            <th colspan="9" class="text-center" width="1200px">Tồn kho đầu năm (1) <br/>( 01/01/{{yearNow}})</th>
             <th colspan="3" class="text-center" width="400px">Nhập trong năm (2)</th>
-            <th colspan="8" class="text-center" width="1200px">Xuất trong năm (3)</th>
+            <th colspan="9" class="text-center" width="1200px">Xuất trong năm (3)</th>
             <th colspan="3" class="text-center" width="400px">Tồn kho cuối năm (4)
               <br>
               ( 31/12/{{yearNow}})
@@ -190,7 +196,7 @@
               <br/>
               (quy thóc)
             </th>
-            <th colspan="7" class="text-center">Trong đó</th>
+            <th colspan="8" class="text-center">Trong đó</th>
             <th rowspan="3" class="text-center">
               Tổng số
               <br/>
@@ -202,7 +208,7 @@
               <br/>
               (quy thóc)
             </th>
-            <th colspan="7" class="text-center">Trong đó</th>
+            <th colspan="8" class="text-center">Trong đó</th>
             <th rowspan="3" class="text-center">Tổng số
               <br>
               (quy thóc)
@@ -211,11 +217,11 @@
           </tr>
           <tr>
             <th colspan="4" class="text-center">Thóc (Tấn)</th>
-            <th colspan="3" class="text-center">Gạo (Tấn)</th>
+            <th colspan="4" class="text-center">Gạo (Tấn)</th>
             <th rowspan="2" class="text-center">Thóc (Tấn)</th>
             <th rowspan="2" class="text-center">Gạo (Tấn)</th>
             <th colspan="4" class="text-center">Thóc (Tấn)</th>
-            <th colspan="3" class="text-center">Gạo (Tấn)</th>
+            <th colspan="4" class="text-center">Gạo (Tấn)</th>
             <th rowspan="2" class="text-center">Thóc (Tấn)</th>
             <th rowspan="2" class="text-center">Gạo (Tấn)</th>
           </tr>
@@ -225,6 +231,7 @@
             <th class="text-center">Nhập <br> {{yearNow - 2}}</th>
             <th class="text-center">Nhập <br> {{yearNow - 1}}</th>
             <th class="text-center">Tổng</th>
+            <th class="text-center">Nhập <br> {{yearNow - 3}}</th>
             <th class="text-center">Nhập <br> {{yearNow - 2}}</th>
             <th class="text-center">Nhập <br> {{yearNow - 1}}</th>
             <th class="text-center">Tổng</th>
@@ -232,6 +239,7 @@
             <th class="text-center">Nhập <br> {{yearNow - 2}}</th>
             <th class="text-center">Nhập <br> {{yearNow - 1}}</th>
             <th class="text-center">Tổng</th>
+            <th class="text-center">Nhập <br> {{yearNow - 3}}</th>
             <th class="text-center">Nhập <br> {{yearNow - 2}}</th>
             <th class="text-center">Nhập <br> {{yearNow - 1}}</th>
           </tr>
@@ -268,6 +276,7 @@
             <th class="text-right">{{calculatortkdnTongGaoCreate()}}</th>
             <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[0].soLuong}}</th>
             <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[1].soLuong}}</th>
+            <th class="text-right">{{this.keHoachLuongThucCreate.tkdnGao[2].soLuong}}</th>
             <th class="text-right">{{calculatorntnTongQuyThocCreate()}}</th>
             <th class="text-right">
               <nz-input-number [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
@@ -312,6 +321,11 @@
                                [nzMax]="keHoachLuongThucCreate.tkdnGao[1].soLuong" [nzSize]="'small'"
                                [(ngModel)]="keHoachLuongThucCreate.xtnGao[1].soLuong"></nz-input-number>
             </th>
+            <th class="text-right">
+              <nz-input-number type="text" nz-input name="goiThau" class="w-120" [nzMin]="0"
+                               [nzMax]="keHoachLuongThucCreate.tkdnGao[2].soLuong" [nzSize]="'small'"
+                               [(ngModel)]="keHoachLuongThucCreate.xtnGao[2].soLuong"></nz-input-number>
+            </th>
             <th class="text-right">{{calculatortkcnTongSoQuyThocCreate()}}</th>
             <th class="text-right">{{calculatortkcnTongThocCreate()}}</th>
             <th class="text-right">{{calculatortkcnTongGaoCreate()}}</th>
@@ -351,6 +365,7 @@
               <ng-container *ngIf="data?.tkdnGao?.length == 0">
                 <td class="text-right"> 0</td>
                 <td class="text-right"> 0</td>
+                <td class="text-right"> 0</td>
               </ng-container>
               <td class="tong-so-quy-tdoc" class="text-right"> {{data.ntnTongSoQuyThoc | number: '1.0-1'}}</td>
               <td class="text-right">{{data.ntnThoc | number: '1.0-1'}}</td>
@@ -375,6 +390,7 @@
                   {{item.soLuong | number: '1.0-1'}}</td>
               </ng-container>
               <ng-container *ngIf="data?.xtnGao?.length == 0">
+                <td class="text-right">0</td>
                 <td class="text-right">0</td>
                 <td class="text-right">0</td>
               </ng-container>
@@ -417,6 +433,7 @@
                 <td *ngFor="let item of data.tkdnGao" class="text-right"> {{item.soLuong | number: '1.0-1'}} </td>
               </ng-container>
               <ng-container *ngIf="data?.tkdnGao?.length == 0">
+                <td class="text-right"> 0</td>
                 <td class="text-right"> 0</td>
                 <td class="text-right"> 0</td>
               </ng-container>
@@ -467,6 +484,12 @@
               <td class="text-right">
                 <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[1].soLuong"
                                  name="goiThau" [nzMin]="0" [nzMax]="dsKeHoachLuongThucClone[i].tkdnGao[1].soLuong"
+                                 class="w-200"
+                                 [nzSize]="'small'"></nz-input-number>
+              </td>
+              <td class="text-right">
+                <nz-input-number type="text" nz-input [(ngModel)]="dsKeHoachLuongThucClone[i].xtnGao[2].soLuong"
+                                 name="goiThau" [nzMin]="0" [nzMax]="dsKeHoachLuongThucClone[i].tkdnGao[2].soLuong"
                                  class="w-200"
                                  [nzSize]="'small'"></nz-input-number>
               </td>
@@ -580,6 +603,14 @@
               number: '1.0-1'}}
             </td>
             <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 23, 5,
+              ',', 'table-luong-thuc') : 0 |
+              number: '1.0-1'}}
+            </td>
+            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 24, 5,
+              ',', 'table-luong-thuc') : 0 |
+              number: '1.0-1'}}
+            </td>
+            <td class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 25, 5,
               ',', 'table-luong-thuc') : 0 |
               number: '1.0-1'}}
             </td>
