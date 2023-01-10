@@ -11,6 +11,7 @@ import {
 } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import {LEVEL} from 'src/app/constants/config';
+import {HelperService} from 'src/app/services/helper.service';
 import {MESSAGE} from 'src/app/constants/message';
 import {UserLogin} from 'src/app/models/userlogin';
 import {DeXuatDieuChinhService} from 'src/app/services/deXuatDieuChinh.service';
@@ -80,6 +81,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
     public globals: Globals,
     public userService: UserService,
     private fb: FormBuilder,
+    private helperService: HelperService,
     private uploadFileService: UploadFileService,
     private danhMucService: DanhMucService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
@@ -119,22 +121,18 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
 
   async loadDataChiTiet(id: number) {
     this.formData = this.fb.group({
-      canCu: [null, [Validators.required]],
+      canCu: [null],
       soQD: [null],
       ngayKy: [null],
       ngayHieuLuc: [null],
-      namKeHoach: [this.yearNow],
-      trichYeu: [null],
-      nguyenNhan: [null],
-      noiDung: [null],
+      namKeHoach: [this.yearNow, [Validators.required]],
+      trichYeu: [null, [Validators.required]],
+      noiDung: [null, [Validators.required]],
       loaiHangHoa: [this.tabSelected]
     });
     this.deXuatDieuChinh.trangThai = '00';
     this.deXuatVatTuNhap.chiTieu = '01';
     this.deXuatVatTuXuat.chiTieu = '00';
-    if (!id || id === 0) {
-      this.loadQdGiaoChiTieuCuaTC();
-    }
     if (id > 0) {
       let res = await this.deXuatDieuChinhService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
@@ -144,7 +142,6 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           this.deXuatDieuChinh.dxDcVtXuatList = res.data.dxDcVtList.filter(it => it.chiTieu == '00') ?? [];
           this.selectedCanCu.id = this.deXuatDieuChinh?.keHoachNamId;
           this.selectedCanCu.soQuyetDinh = this.deXuatDieuChinh?.soQdKeHoachNam;
-
           this.dataGiaoChiTieu = [];
           let item = {
             id: this.selectedCanCu.id,
@@ -175,16 +172,12 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           this.formData.controls['trichYeu'].setValue(
             this.deXuatDieuChinh.trichYeu,
           );
-          this.formData.controls['nguyenNhan'].setValue(
-            this.deXuatDieuChinh.nguyenNhan,
-          );
           this.formData.controls['noiDung'].setValue(
             this.deXuatDieuChinh.noiDung,
           );
           this.formData.controls['loaiHangHoa'].setValue(
             this.deXuatDieuChinh.loaiHangHoa,
           );
-
           if (this.deXuatDieuChinh.fileDinhKems && this.deXuatDieuChinh.fileDinhKems.length > 0) {
             this.deXuatDieuChinh.fileDinhKemReqs = cloneDeep(this.deXuatDieuChinh.fileDinhKems);
             this.deXuatDieuChinh.fileDinhKemReqs.forEach(element => {
@@ -199,30 +192,6 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               this.taiLieuDinhKemList.push(item);
             });
           }
-
-          // if (this.deXuatDieuChinh.dxDcltList && this.deXuatDieuChinh.dxDcltList.length > 0) {
-          //   this.deXuatDieuChinh.dxDcltList.forEach(element => {
-          //     if (element.diaDiemKho && element.diaDiemKho != '') {
-          //       element.diemKho = JSON.parse(element.diaDiemKho);
-          //     }
-          //   });
-          // }
-
-          // if (this.deXuatDieuChinh.dxDcMuoiList && this.deXuatDieuChinh.dxDcMuoiList.length > 0) {
-          //   this.deXuatDieuChinh.dxDcMuoiList.forEach(element => {
-          //     if (element.diaDiemKho && element.diaDiemKho != '') {
-          //       element.diemKho = JSON.parse(element.diaDiemKho);
-          //     }
-          //   });
-          // }
-
-          // if (this.deXuatDieuChinh.dxDcVtList && this.deXuatDieuChinh.dxDcVtList.length > 0) {
-          //   this.deXuatDieuChinh.dxDcVtList.forEach(element => {
-          //     if (element.diaDiemKho && element.diaDiemKho != '') {
-          //       element.diemKho = JSON.parse(element.diaDiemKho);
-          //     }
-          //   });
-          // }
           this.updateEditLuongThucCache();
           this.updateEditMuoiCache();
           this.updateEditVatTuNhapCache();
@@ -231,6 +200,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
+    } else {
+      this.loadQdGiaoChiTieuCuaTC();
     }
   }
 
@@ -262,8 +233,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           text: itemChiTieuKH.soQuyetDinh,
         };
         this.dataGiaoChiTieu.push(item);
-        this.deXuatDieuChinhService
-          .soLuongTruocDieuChinh(this.selectedCanCu.id)
+        await this.deXuatDieuChinhService
+          .soLuongTruocDieuChinh(itemChiTieuKH.id)
           .then((res) => {
             if (res && res.data) {
               this.deXuatDieuChinh.dxDcMuoiList = res.data.dxDcMuoiList;
@@ -271,9 +242,6 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               this.deXuatDieuChinh.dxDcVtXuatList = res.data.dxDcVtList.filter(it => it.chiTieu == '00') ?? [];
               this.deXuatDieuChinh.dxDcltList = res.data.dxDcltList;
               this.deXuatDieuChinh.namKeHoach = res.data.namKeHoach;
-              // this.formData.controls['namKeHoach'].setValue(
-              //   this.deXuatDieuChinh.namKeHoach,
-              // );
               this.updateEditLuongThucCache();
               this.updateEditMuoiCache();
               this.updateEditVatTuNhapCache();
@@ -529,18 +497,24 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   async save(isGuiDuyet: boolean) {
+    this.spinner.show();
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
+      this.spinner.hide();
+      return;
+    }
     if (this.formData.valid) {
       this.spinner.show();
       try {
         this.deXuatDieuChinh.id = this.id;
-        if (this.deXuatDieuChinh.trangThai == '01') {
-          this.deXuatDieuChinh.soQuyetDinh = this.formData.get('soQD').value + '/' + this.qdTCDT;
-          this.deXuatDieuChinh.ngayKy = this.formData.get('ngayKy').value;
-          this.deXuatDieuChinh.ngayHieuLuc = this.formData.get('ngayHieuLuc').value;
-        }
+        this.deXuatDieuChinh.soQuyetDinh = this.formData.get('soQD').value ? this.formData.get('soQD').value + '/' + this.qdTCDT
+          :
+          null;
+        this.deXuatDieuChinh.ngayKy = this.formData.get('ngayKy').value;
+        // this.deXuatDieuChinh.ngayHieuLuc = this.formData.get('ngayHieuLuc').value;
         this.deXuatDieuChinh.namKeHoach = this.formData.get('namKeHoach').value;
         this.deXuatDieuChinh.trichYeu = this.formData.get('trichYeu').value;
-        this.deXuatDieuChinh.nguyenNhan = this.formData.get('nguyenNhan').value;
         this.deXuatDieuChinh.noiDung = this.formData.get('noiDung').value;
 
         let dxDcLtVtReqList = [];
@@ -630,7 +604,6 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           "namKeHoach": this.deXuatDieuChinh.namKeHoach,
           "ngayHieuLuc": this.deXuatDieuChinh.ngayHieuLuc,
           "ngayKy": this.deXuatDieuChinh.ngayKy,
-          "nguyenNhan": this.deXuatDieuChinh.nguyenNhan,
           "noiDung": this.deXuatDieuChinh.noiDung,
           "soVanBan": this.deXuatDieuChinh.soQuyetDinh ?? null,
           "trichYeu": this.deXuatDieuChinh.trichYeu,

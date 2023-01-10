@@ -19,7 +19,7 @@
           </div>
           <div nz-col nzSpan="10">
             <label class="search__label">Trích yếu</label>
-            <input class="search__input" nz-input [(ngModel)]="trichYeuGiao"/>
+            <input class="search__input" nz-input [(ngModel)]="trichYeuDieuChinh"/>
           </div>
           <div nz-col nzSpan="24" *ngIf="userService.isTongCuc()">
             <label class="search__label">Đơn vị</label>
@@ -99,7 +99,7 @@
             <th *ngIf="userService.isTongCuc()">Trạng thái</th>
             <th *ngIf="userService.isCuc()">Số QĐ điều chỉnh</th>
             <th *ngIf="userService.isTongCuc()">QĐ điều chỉnh/TB từ chối</th>
-            <th width="90" class="text-right">Hành động</th>
+            <th width="90" class="text-right" *ngIf="!userService.isTongCuc">Hành động</th>
           </tr>
           <tr class="header-row search">
             <th></th>
@@ -153,7 +153,7 @@
               </nz-input-group>
             </th>
             <th></th>
-            <th></th>
+            <th *ngIf="!userService.isTongCuc"></th>
           </tr>
           <tr *ngFor="let data of basicTable.data; let i = index">
             <th width="40px">
@@ -166,11 +166,11 @@
             <td>{{data.ngayKy}}</td>
             <td>{{data.trichYeu}}</td>
             <td>{{data.soQdKeHoachNam}}</td>
-            <td class="text-right">{{data.namKeHoach}}</td>
-            <td *ngIf="userService.isCuc()" class="text-center">{{data.tenTrangThai}}</td>
-            <td class="text-center">{{data.trangThaiDuyet}}</td>
-            <td class="text-center">{{data.soQdDc}}</td>
-            <td>
+            <td>{{data.namKeHoach}}</td>
+            <td *ngIf="userService.isCuc()">{{data.tenTrangThai}}</td>
+            <td>{{data.trangThaiDuyet}}</td>
+            <td>{{data.soQdDc}}</td>
+            <td *ngIf="!userService.isTongCuc">
               <a
                 *ngIf="(data.trangThai == STATUS.DA_DUYET_LDC  || data.trangThai == STATUS.CHO_DUYET_LDC  || data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.TU_CHOI_LDC || data.trangThai == STATUS.TU_CHOI_TP) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_XEM')"
                 (click)="redirectToChiTiet(true, data.id)">
