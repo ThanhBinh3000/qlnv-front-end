@@ -256,6 +256,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   openDialogQuyetDinhGiaoChiTieu() {
+    return;
     if (this.id == 0 && !this.isView) {
       const modalQD = this.modal.create({
         nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',

@@ -99,7 +99,6 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
 
   soLuongTruocDieuChinh(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/so-luong-truoc-dieu-chinh`;
-    // const url = `http://localhost:3333/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/so-luong-truoc-dieu-chinh`;
     return this.httpClient.post(url, body).toPromise();
   }
 
