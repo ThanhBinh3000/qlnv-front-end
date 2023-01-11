@@ -22,7 +22,6 @@ export class ThongTriDuyetYCapVonService extends BaseService {
 
   loadChiTiet(id: number): Promise<any> {
     const url_ = `${environment.SERVICE_API}${this.GATEWAY}/${this.router}/${id}`;
-    // const url_ = `http://localhost:3333/von-thong-tri-duyet-y-du-toan/${id}`;
     return this.httpClient.get<any>(url_).toPromise();
   }
 

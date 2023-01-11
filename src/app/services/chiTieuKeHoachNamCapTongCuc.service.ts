@@ -18,7 +18,6 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   timKiem(body: any): Promise<any> {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam?`;
-    // let url_ = `http://localhost:3333/chi-tieu-ke-hoach-nam?`;
     if (body.maDvi)
       url_ += 'donViId=' + encodeURIComponent('' + body.donViId) + '&';
     if (body.donViId)
@@ -66,7 +65,6 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   updateStatus(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/status`;
-    // const url = `http://localhost:3333/chi-tieu-ke-hoach-nam/status`;
     return this.httpClient.put(url, body).toPromise();
   }
 
@@ -82,13 +80,11 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   themMoiChiTieuKeHoach(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam`;
-    // const url = `http://localhost:3333/chi-tieu-ke-hoach-nam`;
     return this.httpClient.post(url, body).toPromise();
   }
 
   chinhSuaChiTieuKeHoach(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam`;
-    // const url = `http://localhost:3333/chi-tieu-ke-hoach-nam`;
     return this.httpClient.put(url, body).toPromise();
   }
 

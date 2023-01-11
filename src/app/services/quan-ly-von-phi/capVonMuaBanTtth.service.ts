@@ -28,7 +28,7 @@ export class CapVonMuaBanTtthService extends BaseService {
 	timKiemVonMuaBan(request: any): Observable<any> {
 		return this.httpClient.post(
 			this.urlDefault + '/qlnv-khoachphi/cap-von-ghi-nhan/danh-sach',
-			// 'http://192.168.1.107:30101/cap-von-ghi-nhan/danh-sach',
+			// 'http://192.168.1.142:30101/cap-von-ghi-nhan/danh-sach',
 			request,
 		);
 	}

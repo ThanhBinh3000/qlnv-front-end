@@ -173,15 +173,6 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
   }
 
   selectHangHoa() {
-    let data = this.loaiVthhInput;
-    let bodyParamVatTu = {
-      data,
-      isCaseSpecial: true,
-      onlyVatTu: true
-    }
-    let bodyParamLT = {
-      onlyLuongThuc: true
-    }
     const modalTuChoi = this.modal.create({
       nzTitle: 'Danh sách hàng hóa',
       nzContent: DialogDanhSachHangHoaComponent,
@@ -189,40 +180,44 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: this.userService.isTongCuc() ? bodyParamLT : bodyParamVatTu
+      nzComponentParams: {
+        data: this.loaiVthhInput
+      }
     });
     modalTuChoi.afterClose.subscribe(async (data) => {
       if (data) {
-        if (this.userService.isCuc()) {
+        if (data.ma.startsWith('04')) {
           this.formData.patchValue({
             cloaiVthh: data.ma,
             tenCloaiVthh: data.ten,
             loaiVthh: data.parent.ma,
-            tenLoaiVthh: data.parent.ten,
+            tenLoaiVthh: data.parent.ten
           });
-          let res = await this.dmTieuChuanService.getDetailByMaHh(
-            this.formData.get('cloaiVthh').value,
-          );
-          let bodyPag = {
-            namKeHoach: this.formData.value.namKh,
-            loaiVthh: this.formData.value.loaiVthh,
-            cloaiVthh: this.formData.value.cloaiVthh,
-            trangThai: STATUS.BAN_HANH,
-            maDvi: this.formData.value.maDvi
-          }
-          let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
-          if (pag.msg == MESSAGE.SUCCESS) {
-            const data = pag.data;
-          }
-          if (res.statusCode == API_STATUS_CODE.SUCCESS) {
-            this.formData.patchValue({
-              tchuanCluong: res.data ? res.data.tenQchuan : null,
-            });
-          }
         } else {
           this.formData.patchValue({
-            loaiVthh: data.ma,
-            tenLoaiVthh: data.ten
+            cloaiVthh: data.cap == 3 ? data.ma : null,
+            tenCloaiVthh: data.cap == 3 ? data.ten : null,
+            loaiVthh: data.cap == 3 ? data.parent.ma : data.ma,
+            tenLoaiVthh: data.cap == 3 ? data.parent.ten : data.ten,
+          });
+        }
+        let res = await this.dmTieuChuanService.getDetailByMaHh(
+          this.formData.get('cloaiVthh').value,
+        );
+        let bodyPag = {
+          namKeHoach: this.formData.value.namKh,
+          loaiVthh: this.formData.value.loaiVthh,
+          cloaiVthh: this.formData.value.cloaiVthh,
+          trangThai: STATUS.BAN_HANH,
+          maDvi: this.formData.value.maDvi
+        }
+        let pag = await this.quyetDinhGiaTCDTNNService.getPag(bodyPag)
+        if (pag.msg == MESSAGE.SUCCESS) {
+          const data = pag.data;
+        }
+        if (res.statusCode == API_STATUS_CODE.SUCCESS) {
+          this.formData.patchValue({
+            tchuanCluong: res.data ? res.data.tenQchuan : null,
           });
         }
       }
@@ -368,6 +363,7 @@ export class ThemDeXuatKeHoachBanDauGiaComponent extends Base2Component implemen
     let trangThai = '';
     let msg = '';
     switch (this.formData.get('trangThai').value) {
+      case STATUS.TU_CHOI_CBV:
       case STATUS.TU_CHOI_LDC:
       case STATUS.TU_CHOI_TP:
       case STATUS.DU_THAO: {
