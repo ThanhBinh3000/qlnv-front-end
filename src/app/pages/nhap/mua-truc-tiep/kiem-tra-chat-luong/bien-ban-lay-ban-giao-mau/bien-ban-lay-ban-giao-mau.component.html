@@ -64,8 +64,8 @@
                         <th>Lô kho </th>
                         <th>Số BB LM/BGM</th>
                         <th>Ngày lấy mẫu</th>
-                        <th>{{ loaiVthh == '02' ? 'Số BB gửi hàng' : 'Số BB nhập đầy kho' }} </th>
-                        <th>{{ loaiVthh == '02' ? 'Ngày gửi hàng' : 'Ngày nhập đầy kho' }} </th>
+                        <th>Số BB nhập đầy kho </th>
+                        <th>Ngày nhập đầy kho</th>
                         <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
@@ -97,12 +97,8 @@
                                     <td>{{bb.tenLoKho}}</td>
                                     <td>{{bb.soBienBan}}</td>
                                     <td>{{bb.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
-                                    <td>{{
-                                        bb.soBienBanNhapDayKho }}</td>
-                                    <td>{{
-                                        bb.ngayKetThucNhap | date:
-                                        'dd/MM/YYYY'
-                                        }}
+                                    <td>{{bb.bienBanNhapDayKho?.soBienBanNhapDayKho }}</td>
+                                    <td>{{bb.bienBanNhapDayKho?.ngayKetThucNhap | date:'dd/MM/YYYY'}}
                                     </td>
                                     <td>{{bb.tenTrangThai}}</td>
                                     <td class="text-left">
@@ -114,8 +110,7 @@
                                             (click)="goDetail(bb.id,['XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM','XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM'])">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a *ngIf="(bb.trangThai == STATUS.DU_THAO )"
-                                            (click)="delete(bb,['XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA','XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA'])">
+                                        <a *ngIf="(bb.trangThai == STATUS.DU_THAO )" (click)="xoaItem(bb)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
                                     </td>
