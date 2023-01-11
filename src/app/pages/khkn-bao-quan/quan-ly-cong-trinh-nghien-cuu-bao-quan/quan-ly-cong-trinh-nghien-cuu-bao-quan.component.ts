@@ -39,8 +39,8 @@ export class QuanLyCongTrinhNghienCuuBaoQuanComponent implements OnInit {
     maDeTai: '',
     tenDeTai: '',
     capDeTai: '',
-    tuNam: '',
-    denNam: '',
+    ngayKyTu: '',
+    ngayKyDen: '',
     tenTrangThai: '',
   };
   listCapDt: any[] = []

@@ -4,7 +4,8 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button *ngIf="this.userService.isCuc()" type="button" class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat()">
+    <button *ngIf="this.userService.isCuc() && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT" type="button"
+      class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat()">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Hoàn thành cập nhật</span>
     </button>
@@ -14,7 +15,7 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC ? 'status-xanh' : 'status-do'">
+        <span [ngClass]="formData.value.trangThai == STATUS.HOAN_THANH_CAP_NHAT ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span>Quản lý thông tin đấu giá</span>
@@ -47,17 +48,9 @@
                 </div>
                 <div nz-col nzSpan="24">
                   <nz-form-item>
-                    <nz-form-label [nzNoColon]="true"> Số QĐ PD Kết quả BĐG</nz-form-label>
-                    <nz-form-control>
-                      <input nz-input formControlName="soQdPdKq" readonly />
-                    </nz-form-control>
-                  </nz-form-item>
-                </div>
-                <div nz-col nzSpan="24">
-                  <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Đơn vị thực hiện (đơn vị có tài sản)</nz-form-label>
                     <nz-form-control>
-                      <input nz-input formControlName="tenDviThucHien" readonly />
+                      <input nz-input formControlName="tenDvi" readonly />
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -228,8 +221,9 @@
       <nz-collapse-panel nzActive="true" [nzExtra]="tmpThemMoiPhienDauGia"
         nzHeader="Thông tin các lần thực hiện đấu giá">
         <ng-template #tmpThemMoiPhienDauGia>
-          <button type="button" *ngIf="this.userService.isCuc()" class="btn btn-sub xanh-nhat"
-            (click)="themMoiPhienDauGia($event)">
+          <button type="button"
+            *ngIf="this.userService.isCuc() && formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT"
+            class="btn btn-sub xanh-nhat" (click)="themMoiPhienDauGia($event)">
             <i class="icon htvbdh_tcdt_tao-qd"></i>
             <span>Thêm</span>
           </button>
@@ -244,22 +238,27 @@
               <th width="">Thời gian tổ chức cuộc đấu giá</th>
               <th width="">Địa điểm tổ chức</th>
               <th width="">Kết quả đấu giá</th>
+              <th width="">SL DVTS</th>
               <th width="">Hành động</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of dataTable; let i = index" (click)="selectRow(i)">
-              <td>{{ data.idTtinHdr }}</td>
-              <td>{{ data.idTtinHdr }}</td>
-              <td>{{ data.soTb }}</td>
-              <td>{{ data.toChucTen }}</td>
-              <td>{{ data.thoiGianToChucTu | date: 'dd/MM/YYYY' }}
-                đến {{ data.thoiGianToChucDen | date: 'dd/MM/YYYY' }}</td>
-              <td>{{ data.diaDiemToChuc }}</td>
-              <td>{{ data.diaDiemToChuc }}</td>
+            <tr *ngFor="let data of dataTable; let i = index" (click)="selectRow($event,i)">
+              <td>{{ data.soQdPd }}</td>
+              <td>{{ data.lanDauGia }}</td>
+              <td>{{ data.maThongBao }}</td>
+              <td>{{ data.tenToChuc }}</td>
+              <td>{{ data.tgianDauGiaTu | date: 'dd/MM/YYYY' }}
+                đến {{ data.tgianDauGiaDen | date: 'dd/MM/YYYY' }}</td>
+              <td>{{ data.diaDiemDauGia }}</td>
+              <td>{{ data.ketQua == 1 ? 'Đấu giá thành công' : 'Đấu giá không thành' }}</td>
+              <td>{{ data.ketQuaSl }}</td>
               <td class="text-center">
-                <a>
+                <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="themMoiPhienDauGia($event,data)">
                   <i class="fa fa-pencil"></i>
+                </a>
+                <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
+                  <i class="fa fa-trash do"></i>
                 </a>
               </td>
             </tr>
@@ -267,7 +266,7 @@
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
-    <app-thongtin-daugia></app-thongtin-daugia>
+    <app-thongtin-daugia [data]="dataDetail" [isView]="true"></app-thongtin-daugia>
   </nz-card>
 </div>
 <ng-template #error let-control>

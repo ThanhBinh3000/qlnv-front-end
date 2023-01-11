@@ -101,13 +101,13 @@
                     <a *ngIf="dataChild.trangThai == STATUS.HOAN_THANH_CAP_NHAT" (click)="goDetail(dataChild.id)">
                       <i class="fa fa-eye"></i>
                     </a>
-                    <a *ngIf="dataChild.trangThai == STATUS.CHUA_CAP_NHAT || dataChild == STATUS.DANG_CAP_NHAT"
+                    <a *ngIf="dataChild.trangThai == STATUS.CHUA_CAP_NHAT || dataChild.trangThai == STATUS.DANG_CAP_NHAT"
                       (click)="goDetail(dataChild.id)">
                       <i class="fa fa-pencil"></i>
                     </a>
-                    <a *ngIf="dataChild.trangThai == STATUS.DANG_CAP_NHAT" (click)="delete(dataChild)">
+                    <!-- <a *ngIf="dataChild.trangThai == STATUS.DANG_CAP_NHAT" (click)="delete(dataChild)">
                       <i class="fa fa-trash-o do"></i>
-                    </a>
+                    </a> -->
                   </td>
                 </tr>
               </ng-container>

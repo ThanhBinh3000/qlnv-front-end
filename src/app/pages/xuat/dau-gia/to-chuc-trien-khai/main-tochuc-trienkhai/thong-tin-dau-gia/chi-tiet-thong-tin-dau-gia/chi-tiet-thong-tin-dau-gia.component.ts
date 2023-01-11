@@ -25,7 +25,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
   @Output()
   showListEvent = new EventEmitter<any>();
   fileDinhKem: any[] = [];
-
+  dataDetail: any;
 
   constructor(
     httpClient: HttpClient,
@@ -60,6 +60,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         phuongThucThanhToan: [],
         phuongThucGiaoNhan: [],
         trangThai: [],
+        tenTrangThai: [],
         maDviThucHien: [],
         tongTienGiaKhoiDiem: [],
         tongTienDatTruoc: [],
@@ -73,89 +74,6 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
         soDviTsan: [],
         soDviTsanThanhCong: [],
         soDviTsanKhongThanh: [],
-        detail:
-          new FormArray([this.fb.group({
-            id: [],
-            idTtinHdr: [],
-            maDvi: [],
-            soBb: [],
-            ngayKy: [],
-            trichYeuKetQua: [],
-            ketQua: [],
-            soTb: [],
-            trichYeuThongBao: [],
-            toChucTen: [],
-            toChucDiaChi: [],
-            toChucSdt: [],
-            toChucStk: [],
-            soHopDong: [],
-            ngayKyHopDong: [],
-            hinhThucToChuc: [],
-            thoiHanDkTu: [],
-            thoiHanDkDen: [],
-            thoiHanDk: [],
-            ghiChuThoiGianDk: [],
-            ghiChuThoiGianXem: [],
-            diaDiemNopHoSo: [],
-            diaDiemXemTaiSan: [],
-            dieuKienDk: [],
-            buocGia: [],
-            thoiHanXemTaiSanTu: [],
-            thoiHanXemTaiSanDen: [],
-            thoiHanNopTienTu: [],
-            thoiHanNopTienDen: [],
-            phuongThucThanhToan: [],
-            huongThuTen: [],
-            huongThuStk: [],
-            huongThuNganHang: [],
-            huongThuChiNhanh: [],
-            thoiGianToChucTu: [],
-            thoiGianToChucDen: [],
-            diaDiemToChuc: [],
-            hinhThucDauGia: [],
-            phuongThucDauGia: [],
-            ghiChu: [],
-            tenDvi: [],
-            fileDinhKem: [],
-            canCu: [],
-            listNguoiLienQuan: [this.fb.group({
-              id: [],
-              idTtinHdr: [],
-              idTtinDtl: [],
-              maDvi: [],
-              hoVaTen: [],
-              chucVu: [],
-              diaChi: [],
-              giayTo: [],
-              loai: [],
-            })],
-            listTaiSan: [this.fb.group({
-              id: [],
-              idTtinHdr: [],
-              idTtinDtl: [],
-              maDvi: [],
-              maDiaDiem: [],
-              soLuong: [],
-              donGia: [],
-              donGiaCaoNhat: [],
-              cloaiVthh: [],
-              maDvTaiSan: [],
-              tonKho: [],
-              donViTinh: [],
-              giaKhoiDiem: [],
-              soTienDatTruoc: [],
-              soLanTraGia: [],
-              nguoiTraGiaCaoNhat: [],
-              tenDvi: [],
-              tenChiCuc: [],
-              tenDiemKho: [],
-              tenNhaKho: [],
-              tenNganKho: [],
-              tenLoKho: [],
-              tenLoaiVthh: [],
-              tenCloaiVthh: [],
-            })]
-          })]),
       }
     );
   }
@@ -179,16 +97,20 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
     if (id > 0) {
       await this.quyetDinhPdKhBdgService.getDtlDetail(id)
         .then(async (res) => {
-          console.log(res);
-          const data = res.data;
-          if (data) {
-            await this.quyetDinhPdKhBdgService.getDetail(data.idQdHdr).then(async (hdr) => {
+          const dataDtl = res.data;
+          this.dataTable = dataDtl.listTtinDg
+          if (dataDtl) {
+            await this.quyetDinhPdKhBdgService.getDetail(dataDtl.idQdHdr).then(async (hdr) => {
               const dataHdr = hdr.data;
               this.formData.patchValue({
                 soQdPd: dataHdr.soQdPd,
                 nam: dataHdr.nam,
+                trangThai: dataDtl.trangThai,
+                tenTrangThai: dataDtl.tenTrangThai,
+                tenDvi: dataDtl.tenDvi,
+                tenCloaiVthh: dataHdr.tenCloaiVthh,
+                tenLoaiVthh: dataHdr.tenLoaiVthh,
               })
-              console.log(hdr);
             })
           }
         })
@@ -205,26 +127,76 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
   }
 
   hoanThanhCapNhat() {
-
+    if (this.dataTable.length == 0) {
+      this.notification.error(MESSAGE.ERROR, "Không thể hoàn thành cập nhật, phải có ít nhất 1 lần đấu giá");
+      return
+    }
+    this.modal.confirm({
+      nzClosable: false,
+      nzTitle: 'Xác nhận',
+      nzContent: 'Bạn có muốn hoàn thành cập nhập ?',
+      nzOkText: 'Đồng ý',
+      nzCancelText: 'Không',
+      nzOkDanger: true,
+      nzWidth: 350,
+      nzOnOk: async () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.idInput,
+            trangThai: this.STATUS.HOAN_THANH_CAP_NHAT
+          }
+          let res = await this.quyetDinhPdKhBdgService.approveDtl(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
+            this.spinner.hide();
+            this.loadDetail(this.idInput);
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+            this.spinner.hide();
+          }
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
+        }
+      },
+    });
   }
 
-  selectRow(i) {
-    console.log(i);
+  selectRow($event, i) {
+    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+    $event.target.parentElement.classList.add('selectedRow');
+    this.dataDetail = this.dataTable[i];
   }
 
   themMoiPhienDauGia($event, data?: any) {
     $event.stopPropagation();
+    console.log(data);
+    if (!data) {
+      let dataCheck = this.dataTable.filter(item => {
+        return item.trangThai == this.STATUS.DU_THAO
+      })
+      if (dataCheck.length > 0) {
+        this.notification.error(MESSAGE.ERROR, "Không thể thêm mới vì đang có gói thầu chưa hoàn thành cập nhật, xin vui lòng hoàn thành cập nhật");
+        return;
+      }
+    }
+
     const modalQD = this.modal.create({
       nzTitle: 'Cập nhật thông tin đấu giá',
       nzContent: ThongtinDaugiaComponent,
       nzMaskClosable: false,
       nzClosable: false,
-      nzWidth: '1500px',
+      nzWidth: '1800px',
       nzFooter: null,
       nzComponentParams: {
         isModal: true,
         idDtl: this.idInput,
-        soQdPd: this.formData.value.soQdPd
+        soQdPd: this.formData.value.soQdPd,
+        dataDetail: data
       },
     });
     modalQD.afterClose.subscribe((data) => {

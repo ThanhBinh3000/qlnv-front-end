@@ -54,6 +54,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
       id: [],
       namKh: [dayjs().get('year')],
       idQdGiaoNvNh: [],
+      idDdiemGiaoNvNh: [],
       maDvi: ['', [Validators.required]],
       maQhns: ['',],
       tenDvi: ['', [Validators.required]],

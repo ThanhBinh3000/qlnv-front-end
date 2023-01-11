@@ -359,6 +359,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
   }
 
   validateSoLuong(isAdd?) {
+    return true;
     const soLuongConLai = this.formData.value.soLuongChiTieu - this.formData.value.soLuongKh
     const soLuong1 = this.thongtinPhanLo.duDau
     let soLuong = 0

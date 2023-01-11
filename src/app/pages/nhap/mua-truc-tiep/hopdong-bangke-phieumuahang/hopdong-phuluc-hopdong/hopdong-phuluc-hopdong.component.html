@@ -1,35 +1,34 @@
 <ng-container *ngIf="!isDetail ">
     <div class="bg-trang">
         <nz-card class="mt16 flex-card p-lr16">
-            <div nz-row [nzGutter]="[20]">
-                <div nz-col nzSpan="2">
-                    <label class="search__label"> Năm kế hoạch </label>
-                    <nz-select [(ngModel)]="searchFilter.namHd">
-                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
-                    </nz-select>
+            <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+                <div nz-row [nzGutter]="[20]">
+                    <div nz-col nzSpan="2">
+                        <label class="search__label"> Năm kế hoạch </label>
+                        <nz-select formControlName="nam">
+                            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                        </nz-select>
+                    </div>
+                    <div nz-col nzSpan="2">
+                        <label class="search__label">Số hợp đồng</label>
+                        <input class="search__input" placeholder="Nhập số hợp đồng" nz-input formControlName="soHd" />
+                    </div>
+                    <div nz-col nzSpan="5">
+                        <label class="search__label">Tên hợp đồng</label>
+                        <input class="search__input" placeholder="Nhập tên hợp đồng" nz-input formControlName="tenHd" />
+                    </div>
+                    <div nz-col nzSpan="10">
+                        <label class="search__label">đơn vị mua</label>
+                        <input class="search__input" placeholder="Nhập đơn vị mua" nz-input formControlName="tenDvi" />
+                    </div>
+                    <div nz-col nzSpan="5">
+                        <label class="search__label">Ngày ký hợp đồng</label>
+                        <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                    </div>
                 </div>
-                <div nz-col nzSpan="2">
-                    <label class="search__label">Số hợp đồng</label>
-                    <input class="search__input" placeholder="Nhập số hợp đồng" nz-input
-                        [(ngModel)]="searchFilter.soHd" />
-                </div>
-                <div nz-col nzSpan="5">
-                    <label class="search__label">Tên hợp đồng</label>
-                    <input class="search__input" placeholder="Nhập tên hợp đồng" nz-input
-                        [(ngModel)]="searchFilter.tenHd" />
-                </div>
-                <div nz-col nzSpan="10">
-                    <label class="search__label">đơn vị mua</label>
-                    <input class="search__input" placeholder="Nhập đơn vị mua" nz-input
-                        [(ngModel)]="searchFilter.tenDvi" />
-                </div>
-                <div nz-col nzSpan="5">
-                    <label class="search__label">Ngày ký hợp đồng</label>
-                    <nz-range-picker [(ngModel)]="searchFilter.ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
-                </div>
-            </div>
+            </form>
             <div class="cangiua group-button-search">
-                <button nz-button class="search__button--clear" (click)="clearFilter()">
+                <button nz-button class="search__button--clear" (click)="clearForm()">
                     <i class="icon  htvbdh_nhap-lai1"></i>
                     Xóa điều kiện
                 </button>
@@ -43,7 +42,7 @@
             <h3> DANH SÁCH HỢP ĐỒNG MUA TRỰC TIẾP </h3>
             <div class="buttons">
                 <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_XOA')" type="button"
-                    class="btn btn-do" (click)="deleteSelect()">
+                    class="btn btn-do" (click)="deleteMulti()">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
@@ -53,7 +52,7 @@
                     <span>Xuất file</span>
                 </button>
                 <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM')" type="button"
-                    class="btn btn-main" (click)="themMoi(false, 0)">
+                    class="btn btn-main" (click)="goDetail(null)">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm mới</span>
                 </button>
@@ -171,20 +170,15 @@
                         <td></td>
                         <td></td>
                         <td class="text-left">
-                            <div nz-row>
-                                <div nz-col nzSpan="8">
-                                    <a *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_XEM')"
-                                        (click)="redirectToChiTiet(true, data)">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                </div>
-                                <div nz-col nzSpan="8">
-                                    <a (click)="redirectToChiTiet(false, data)"
-                                        *ngIf="data.trangThai==globals.prop.NHAP_DU_THAO && userService.isAccessPermisson('NHDTQG_PTDT_HDBKPM_LT_HDPL_THEM')">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                </div>
-                            </div>
+                            <a (click)="goDetail(data.id)" *ngIf="(data.trangThai == STATUS.DA_KY)">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a *ngIf="(data.trangThai != STATUS.DA_KY )" (click)="goDetail(data.id)">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                            <a *ngIf="(data.trangThai == STATUS.DU_THAO )" (click)="delete(data)">
+                                <i class="fa fa-trash-o do"></i>
+                            </a>
                         </td>
                     </tr>
                 </tbody>
@@ -210,7 +204,7 @@
     </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-    <app-themmoi-hopdong-phuluc *ngIf="isAddNew" [id]="selectedId" [idChaoGia]="idChaoGia" (showListEvent)="showList()"
-        [isView]="isView" [loaiVthh]="loaiVthh">
+    <app-themmoi-hopdong-phuluc [idInput]="idSelected" [idChaoGia]="idChaoGia" (showListEvent)="showList()"
+        [loaiVthh]="loaiVthh">
     </app-themmoi-hopdong-phuluc>
 </ng-container>

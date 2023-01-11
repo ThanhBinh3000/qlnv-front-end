@@ -100,51 +100,46 @@
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maDeTai"
                   (input)="filterInTable('maDeTai',filterTable.maDeTai)" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
+
             </td>
             <td>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDeTai"
                   (input)="filterInTable('tenDeTai',filterTable.tenDeTai)" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
+
             </td>
             <td>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.capDeTai"
                   (input)="filterInTable('capDeTai',filterTable.capDeTai)" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
+
             </td>
             <td>
-              <nz-input-group>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tuNam"
-                  (input)="filterInTable('tuNam',filterTable.tuNam)" />
+                  (input)="filterInTable('ngayKyTu',filterTable.ngayKyTu)" />
               </nz-input-group>
               <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
+                <i nz-icon nzType="calendar"></i>
               </ng-template>
             </td>
             <td>
-              <nz-input-group>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.denNam"
-                  (input)="filterInTable('denNam',filterTable.denNam)" />
+                  (input)="filterInTable('ngayKyDen',filterTable.ngayKyDen)" />
               </nz-input-group>
+              <ng-template #suffixTemplateInfo>
+                <i nz-icon nzType="calendar"></i>
+              </ng-template>
             </td>
             <td>
               <nz-input-group>
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
                   (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
+
             </td>
             <td></td>
           </tr>
@@ -157,8 +152,8 @@
             <td>{{ data.maDeTai }}</td>
             <td>{{ data.tenDeTai }}</td>
             <td>{{ data.tenCapDt }}</td>
-            <td>{{ data.ngayKyTu }}</td>
-            <td>{{ data.ngayKyDen }}</td>
+            <td>{{ data.ngayKyTu | date: 'dd/MM/YYYY'}}</td>
+            <td>{{ data.ngayKyDen | date: 'dd/MM/YYYY'}}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
               <a (click)="redirectToChiTiet(true,data.id)" *ngIf="data.trangThai == STATUS.DA_NGHIEM_THU">

@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button class="btn btn-main" (click)="save()">
+    <button class="btn btn-main" *ngIf="!isView" (click)="save(true)">
       <i class="icon  htvbdh_tcdt_save"></i>
       <span>Lưu</span>
     </button>
@@ -14,8 +14,7 @@
   <div class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
-        <span
-          [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_LDV ? 'status-xanh' : 'status-do'">
+        <span [ngClass]="formData.value.trangThai == STATUS.DA_NGHIEM_THU ? 'status-xanh' : 'status-do'">
           {{ formData.value.tenTrangThai }}
         </span>
         <span>Công trình nghiên cứu</span>
@@ -39,7 +38,7 @@
               Mã đề tài
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="maDeTai" />
+              <input nz-input [readonly]="isDisable()" formControlName="maDeTai" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -49,7 +48,7 @@
               Tên đề tài
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="tenDeTai" />
+              <input nz-input [readonly]="isDisable()" formControlName="tenDeTai" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -60,7 +59,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
 
-              <nz-select formControlName="capDeTai">
+              <nz-select [nzDisabled]="isDisable()" formControlName="capDeTai">
                 <nz-option *ngFor="let item of listCapDt" [nzValue]="item.ma" [nzLabel]="item.giaTri">
                 </nz-option>
               </nz-select>
@@ -73,7 +72,7 @@
               Thời gian thực hiện
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-range-picker formControlName="ngayKy" nzFormat="dd/MM/yyyy">
+              <nz-range-picker [nzDisabled]="isDisable()" formControlName="ngayKy" nzFormat="dd/MM/yyyy">
               </nz-range-picker>
             </nz-form-control>
           </nz-form-item>
@@ -85,7 +84,7 @@
               Chủ nhiệm đề tài
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="chuNhiem" />
+              <input nz-input [readonly]="isDisable()" formControlName="chuNhiem" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -95,7 +94,7 @@
               Chức vụ
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="chucVu" />
+              <input nz-input [readonly]="isDisable()" formControlName="chucVu" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -105,7 +104,7 @@
               Email
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input type="email" nz-input formControlName="email" ngModel [email]="true" />
+              <input type="email" nz-input [readonly]="isDisable()" formControlName="email" ngModel [email]="true" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -115,7 +114,7 @@
               Số điện thoại
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="sdt" />
+              <input nz-input [readonly]="isDisable()" formControlName="sdt" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -125,7 +124,7 @@
               Đơn vị chủ trì
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="dviChuTri" />
+              <input nz-input [readonly]="isDisable()" formControlName="dviChuTri" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -135,7 +134,7 @@
               Đơn vị phối hợp
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="dviPhoiHop" />
+              <input nz-input [readonly]="isDisable()" formControlName="dviPhoiHop" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -143,7 +142,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" nzRequired> Nguồn vốn </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="nguonVon" nzPlaceHolder="">
+              <nz-select [nzDisabled]="isDisable()" formControlName="nguonVon" nzPlaceHolder="">
                 <nz-option *ngFor="let p of listNguonVon" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
               </nz-select>
             </nz-form-control>
@@ -155,7 +154,7 @@
               Số QĐ phê duyệt
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="sdt" />
+              <input nz-input [readonly]="isDisable()" formControlName="sdt" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -165,7 +164,7 @@
               Sự cần thiết
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <textarea formControlName="suCanThiet" nz-input></textarea>
+              <textarea [readonly]="isDisable()" formControlName="suCanThiet" nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -175,7 +174,7 @@
               Mục tiêu
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <textarea formControlName="mucTieu" nz-input></textarea>
+              <textarea [readonly]="isDisable()" formControlName="mucTieu" nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -186,7 +185,7 @@
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
 
-              <textarea formControlName="phamVi" nz-input></textarea>
+              <textarea [readonly]="isDisable()" formControlName="phamVi" nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -196,7 +195,7 @@
               Nội dung đề tài
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <textarea formControlName="noiDung" nz-input></textarea>
+              <textarea [readonly]="isDisable()" formControlName="noiDung" nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -206,7 +205,7 @@
               Phương pháp nghiên cứu
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <textarea formControlName="phuongPhap" nz-input></textarea>
+              <textarea [readonly]="isDisable()" formControlName="phuongPhap" nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -216,7 +215,7 @@
               Tổng chi phí (đồng)
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+              <nz-input-number [nzDisabled]="isDisable()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
                 formControlName="tongChiPhi" type="number" nz-input [nzSize]="'small'"></nz-input-number>
             </nz-form-control>
           </nz-form-item>
@@ -227,7 +226,7 @@
               Trạng thái
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-select formControlName="trangThai">
+              <nz-select [nzDisabled]="isDisable()"  formControlName="trangThai">
                 <nz-option *ngFor="let item of listTrangThai" [nzValue]="item.ma" [nzLabel]="item.giaTri">
                 </nz-option>
               </nz-select>
@@ -240,7 +239,7 @@
               Tài liệu đính kèm
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="fileDinhKem"></file-list>
+              <file-list [disabled]="isDisable()" [data]="fileDinhKem"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -265,7 +264,7 @@
             <th rowspan="3">Đến ngày</th>
             <th rowspan="3">Người thực hiện</th>
             <th rowspan="3">Trạng thái</th>
-            <th rowspan="3" *ngIf="userService.isTongCuc()">Hành động</th>
+            <th rowspan="3">Hành động</th>
           </tr>
 
         </thead>
@@ -308,7 +307,7 @@
                 </nz-select>
               </nz-input-group>
             </td>
-            <td *ngIf="userService.isTongCuc()">
+            <td>
               <a (click)="themMoiItem()">
                 <i class="icon htvbdh_dau-cong"></i>
               </a>
@@ -402,7 +401,7 @@
               Ngày nghiệm thu
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker formControlName="ngayNghiemThu" nzFormat="dd/MM/yyyy">
+              <nz-date-picker [nzDisabled]="isDisable()" formControlName="ngayNghiemThu" nzFormat="dd/MM/yyyy">
               </nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -413,7 +412,7 @@
               Địa điểm
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="diaDiem" />
+              <input nz-input [readonly]="isDisable()" formControlName="diaDiem" />
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -431,7 +430,7 @@
               <th nzWidth="20px">STT</th>
               <th>Họ tên</th>
               <th>Đơn vị</th>
-              <th nzWidth="50px" *ngIf="userService.isTongCuc()">Hành động</th>
+              <th nzWidth="50px">Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -515,7 +514,7 @@
               Ý kiến đánh giá
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <textarea nz-input formControlName="danhGia"></textarea>
+              <textarea nz-input [readonly]="isDisable()" formControlName="danhGia"></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -525,8 +524,8 @@
               Tổng điểm
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-input-number [nzFormatter]="globals.formatter" [nzParser]="globals.parser" formControlName="tongDiem"
-                type="number" nz-input [nzSize]="'small'"></nz-input-number>
+              <nz-input-number [nzDisabled]="isDisable()" [nzFormatter]="globals.formatter" [nzParser]="globals.parser"
+                formControlName="tongDiem" type="number" nz-input [nzSize]="'small'"></nz-input-number>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -536,7 +535,7 @@
               Xét loại
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <input nz-input formControlName="xepLoai" />
+              <input nz-input [readonly]="isDisable()" formControlName="xepLoai" />
             </nz-form-control>
           </nz-form-item>
         </div>
