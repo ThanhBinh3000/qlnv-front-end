@@ -16,7 +16,6 @@ export class DeXuatDieuChinhService extends BaseService {
 
   timKiem(body: any): Promise<any> {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/de-xuat-dieu-chinh-ke-hoach-nam?`
-    // let url_ = `http://localhost:3333/de-xuat-dieu-chinh-ke-hoach-nam?`
     if (body.namKeHoach)
       url_ += 'namKeHoach=' + encodeURIComponent('' + body.namKeHoach) + '&';
     if (body.maDvi)
@@ -57,7 +56,6 @@ export class DeXuatDieuChinhService extends BaseService {
 
   sua(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-xuat-dieu-chinh-ke-hoach-nam`;
-    // const url = `http://localhost:3333/de-xuat-dieu-chinh-ke-hoach-nam`;
     return this.httpClient.put(url, body).toPromise();
   }
 
@@ -73,7 +71,6 @@ export class DeXuatDieuChinhService extends BaseService {
 
   updateStatus(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-xuat-dieu-chinh-ke-hoach-nam/status`;
-    // const url = `http://localhost:3333/de-xuat-dieu-chinh-ke-hoach-nam/status`;
     return this.httpClient.put(url, body).toPromise();
   }
 

@@ -250,12 +250,12 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
 
   checkEditStatus(trangThai: string) {
     return Utils.statusSave.includes(trangThai) &&
-      (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(QTVP.EDIT_REPORT));
+      (this.userService.isAccessPermisson(QTVP.EDIT_REPORT));
   };
 
   checkDeleteStatus(trangThai: string) {
     return Utils.statusDelete.includes(trangThai) &&
-      (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(QTVP.DELETE_REPORT));
+      (this.userService.isAccessPermisson(QTVP.DELETE_REPORT));
   };
 
   //them bao cao moi
@@ -274,7 +274,8 @@ export class DieuChinhBaoCaoSauQuyetToanComponent implements OnInit {
       if (res) {
         const request = {
           maPhanBcao: res.maPhanBcao,
-          namQtoan: res.namQtoan
+          namQtoan: res.namQtoan,
+          thangBcao: res.thangBcao,
         }
         this.isAddNew = true;
         this.dataThemMoi = request;
