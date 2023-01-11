@@ -24,7 +24,7 @@
         <td>
           <nz-select nzShowSearch nzAllowClear nzPlaceHolder="Chọn phương án" [(ngModel)]="maPa"
             [class]="maPa ?'' : 'input-error-validate'">
-            <nz-option *ngFor="let item of phuongAns" [nzValue]="item" [nzLabel]="item">
+            <nz-option *ngFor="let item of phuongAns" [nzValue]="item.maPa" [nzLabel]="item.maPa">
             </nz-option>
           </nz-select>
         </td>
