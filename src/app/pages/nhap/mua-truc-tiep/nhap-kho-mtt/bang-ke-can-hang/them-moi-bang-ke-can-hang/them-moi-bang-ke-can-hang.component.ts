@@ -99,6 +99,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       trangThai: [''],
       tenTrangThai: [''],
       lyDoTuChoi: [''],
+      soPhieuKtraCluong: [''],
     })
   }
 
@@ -307,6 +308,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
         donViGiao: data.donViGiao,
         diaChiNguoiGiao: data.diaChiNguoiGiao,
         thoiGianGiaoNhan: data.thoiGianGiaoNhan,
+        soPhieuKtraCluong: data.soPhieuKtraCluong
       });
     }
   }
