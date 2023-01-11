@@ -37,3 +37,4 @@ export const TAB_LIST = [
         isSelected: false,
     },
 ]
+

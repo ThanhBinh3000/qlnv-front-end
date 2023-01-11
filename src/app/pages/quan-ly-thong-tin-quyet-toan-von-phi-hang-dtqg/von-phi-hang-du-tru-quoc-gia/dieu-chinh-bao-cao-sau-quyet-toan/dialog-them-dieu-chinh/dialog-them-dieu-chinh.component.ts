@@ -16,6 +16,7 @@ export class DialogThemDieuChinhComponent implements OnInit {
   response: any = {
     maPhanBcao: '2',
     namQtoan: null,
+    thangBcao: null,
   };
 
 

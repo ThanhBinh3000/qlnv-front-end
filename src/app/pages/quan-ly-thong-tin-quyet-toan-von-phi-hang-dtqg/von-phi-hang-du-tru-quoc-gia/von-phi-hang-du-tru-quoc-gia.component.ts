@@ -15,13 +15,17 @@ export class VonPhiHangDuTruQuocGiaComponent implements OnInit {
   tabSelected: string = 'baoCaoQuyetToan';
   viewBaoCaoQuyetToan = true;
   viewDieuChinhSauQuyetToan = true;
+  viewTongHopPheDuyet = true;
   data: any;
+  userInfo: any;
   constructor(
     public userService: UserService,
     public globals: Globals
   ) { }
 
   ngOnInit(): void {
+    this.userInfo = this.userService.getUserLogin();
+    console.log(this.userInfo);
     this.isVisibleChangeTab$.subscribe((value: boolean) => {
       this.visibleTab = value;
     });

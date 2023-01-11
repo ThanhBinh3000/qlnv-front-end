@@ -58,6 +58,9 @@ export class ThongTinDauGiaComponent extends Base2Component implements OnInit {
 
   async ngOnInit() {
     try {
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh
+      })
       await this.search();
     } catch (e) {
       console.log('error: ', e);

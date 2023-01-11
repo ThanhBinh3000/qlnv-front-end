@@ -1,14 +1,15 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Base2Component} from "../../../../../../components/base2/base2.component";
-import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
+import { Component, Input, OnInit } from '@angular/core';
+import { Base2Component } from "../../../../../../components/base2/base2.component";
+import { HttpClient } from "@angular/common/http";
+import { StorageService } from "../../../../../../services/storage.service";
+import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
+import { NzModalService } from "ng-zorro-antd/modal";
 import {
   QdPdKetQuaBanDauGiaService
-} from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/QdPdKetQuaBanDauGia";
+} from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service";
 import dayjs from "dayjs";
+import { MESSAGE } from 'src/app/constants/message';
 
 @Component({
   selector: 'app-qd-pd-ket-qua-bdg',
@@ -19,18 +20,21 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
 
-  constructor(private httpClient: HttpClient,
-              private storageService: StorageService,
-              notification: NzNotificationService,
-              spinner: NgxSpinnerService,
-              modal: NzModalService, private banDauGiaService: QdPdKetQuaBanDauGiaService) {
-    super(httpClient, storageService, notification, spinner, modal, banDauGiaService);
+  constructor(
+    private httpClient: HttpClient,
+    private storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService
+  ) {
+    super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
     super.ngOnInit();
     this.formData = this.fb.group({
-      namKh: [dayjs().get('year')],
+      nam: [dayjs().get('year')],
       loaiVthh: [''],
       trichYeu: [''],
-      soQdPdKqBdg: [''],
+      soQdKq: [''],
       ngayKy: [],
     });
     this.filterTable = {
@@ -49,12 +53,17 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
     };
   }
 
-  ngOnInit(): void {
-  }
-
-  themMoi() {
-    this.isDetail = true;
-    this.idSelected = null;
+  async ngOnInit() {
+    try {
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh
+      })
+      await this.search();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
 }

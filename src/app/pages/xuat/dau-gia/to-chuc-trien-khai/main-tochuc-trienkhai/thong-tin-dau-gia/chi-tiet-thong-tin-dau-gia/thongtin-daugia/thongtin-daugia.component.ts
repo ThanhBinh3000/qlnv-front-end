@@ -114,10 +114,31 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       if (!this.isView) {
         this.spinner.show();
         let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ");
-        let dataDtl = await this.quyetDinhPdKhBdgService.getDtlDetail(this.idDtl);
-        if (dataDtl.data) {
-          this.dataTable = dataDtl.data.children;
+        let res = await this.quyetDinhPdKhBdgService.getDtlDetail(this.idDtl);
+        if (res.data) {
+          const data = res.data
+          if (data.listTtinDg) {
+            // Nếu có thông tin đấu thầu thì sẽ lấy data laster => Set dataTable = children data lastest ý
+            let tTinDthauLastest = data.listTtinDg.pop();
+            let tTinDthau = await this.thongTinDauGiaService.getDetail(tTinDthauLastest.id);
+            this.dataTable = tTinDthau.data?.children;
+          } else {
+            this.dataTable = data.children;
+          }
           this.convertDataTable();
+          // ( filter table sẽ không hiển thị mã đơn vị tàn sản của lần đấu giá trước;
+          this.dataTable.forEach(item => {
+            item.dataDviTsan.forEach((dvi, index) => {
+              if (dvi.soLanTraGia) {
+                item.dataDviTsan = item.dataDviTsan.filter(x => x.maDviTsan != dvi.maDviTsan);
+                item.children = item.children.filter(x => x.maDviTsan != dvi.maDviTsan);
+              }
+            });
+            if (item.dataDviTsan.length == 0) {
+              this.dataTable = this.dataTable.filter(x => x.id != item.id);
+            }
+          });
+          console.log("🚀 ~ ngOnInit ~ this.dataTable", this.dataTable)
         }
         this.formData.patchValue({
           maThongBao: idThongBao + "/" + this.formData.value.nam + "/TB-ĐG",
@@ -134,7 +155,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     let res = await this.thongTinDauGiaService.getDetail(id)
     if (res.data) {
       const data = res.data;
-      console.log("🚀 ~ data", data)
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         tgianDky: [data.tgianDkyTu, data.tgianDkyDen],
@@ -144,9 +164,16 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         ketQua: data.ketQua.toString()
       })
       this.dataTable = data.children;
-      this.dataNguoiShow = chain(data.listNguoiTgia).groupBy('loai').map((value, key) => ({ loai: key, dataChild: value })).value();
+      this.dataNguoiTgia = data.listNguoiTgia
+      this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({ loai: key, dataChild: value })).value();
       this.convertDataTable();
     }
+  }
+
+  calendarSoLuong(dviTsan) {
+    let soLuong = 0;
+    dviTsan.children.forEach(item => soLuong += item.soLuong);
+    return soLuong
   }
 
   async handleCancel() {
@@ -163,7 +190,7 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         x.toChucCaNhan = x.children[0].toChucCaNhan
       })
     })
-    console.log("🚀 ~ this.dataTable", this.dataTable)
+    console.log("🚀 ~ this.dataTable.forEach ~ this.dataTable", this.dataTable)
   }
 
   isDisabled() {
@@ -201,9 +228,9 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
     this.dataTable.forEach(item => {
       item.children.forEach(children => {
         let dataDviTsan = item.dataDviTsan.filter(x => x.maDviTsan == children.maDviTsan)[0];
-        children.soLanTraGia = dataDviTsan.soLanTraGia
-        children.donGiaTraGia = dataDviTsan.donGiaTraGia
-        children.toChucCaNhan = dataDviTsan.toChucCaNhan
+        children.soLanTraGia = dataDviTsan?.soLanTraGia
+        children.donGiaTraGia = dataDviTsan?.donGiaTraGia
+        children.toChucCaNhan = dataDviTsan?.toChucCaNhan
       });
       soLuongTrung += item.dataDviTsan.filter(item => item.soLanTraGia > 0).length;
       soLuongDviTsan += item.dataDviTsan.length;

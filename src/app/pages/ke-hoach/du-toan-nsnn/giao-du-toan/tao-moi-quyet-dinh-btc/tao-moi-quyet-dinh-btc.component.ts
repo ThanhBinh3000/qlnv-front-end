@@ -11,19 +11,21 @@ import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToa
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { MESSAGE } from 'src/app/constants/message';
 import * as fileSaver from 'file-saver';
-import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
+// import { DialogThemKhoanMucComponent } from 'src/app/components/dialog/dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import * as uuid from 'uuid';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { UserService } from 'src/app/services/user.service';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { DialogCopyGiaoDuToanComponent } from 'src/app/components/dialog/dialog-copy-giao-du-toan/dialog-copy-giao-du-toan.component';
 import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
+import { DialogThemKhoanMucComponent } from '../dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 
 export class ItemData {
   id!: any;
   stt: any;
   level: number;
   maNdung: number;
+  idKm: number;
   tongCong: number;
   nguonNsnn: number;
   nguonKhac: number;
@@ -80,8 +82,9 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
   initItem: ItemData = {
     id: null,
     stt: "0",
-    level: 0,
+    level: null,
     maNdung: 0,
+    idKm: null,
     tongCong: null,
     nguonNsnn: null,
     nguonKhac: null,
@@ -90,8 +93,9 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
   total: ItemData = {
     id: null,
     stt: "0",
-    level: 0,
+    level: null,
     maNdung: 0,
+    idKm: null,
     tongCong: null,
     nguonNsnn: null,
     nguonKhac: null,
@@ -235,7 +239,24 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       // this.namPa = this.newDate.getFullYear();
       this.spinner.hide()
     }
-    this.getStatusButton();
+
+    if (this.lstCtietBcao.length == 0) {
+      this.noiDungs.forEach(e => {
+        this.lstCtietBcao.push({
+          ...new ItemData(),
+          id: uuid.v4() + 'FE',
+          stt: e.ma,
+          maNdung: e.ma,
+          idKm: e.id
+        })
+      })
+      this.setLevel();
+    } else if (!this.lstCtietBcao[0]?.stt) {
+      this.lstCtietBcao.forEach(item => {
+        item.stt = item.maNdung;
+      })
+    }
+    this.sortByIndex();
     const capDvi = this.donVis.find(e => e.maDvi == this.userInfo?.MA_DVI)?.capDvi;
     if (capDvi != Utils.TONG_CUC) {
       this.statusBtnSave = true;
@@ -244,8 +265,21 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
       this.statusBtnPrint = true;
       this.status = true;
     }
+    this.getStatusButton();
+    this.updateEditCache();
     this.spinner.hide();
   };
+
+  setLevel() {
+    this.lstCtietBcao.forEach(item => {
+      const str: string[] = item.stt.split('.');
+      item.level = str.length - 2;
+    })
+  }
+
+  getIdCha(maKM: any) {
+    return this.noiDungs.find(e => e.ma == maKM)?.maCha;
+  }
 
   getStatusButton() {
     if (this.id && this.userService.isAccessPermisson(GDT.ADD_REPORT_PA_PBDT)) {
@@ -323,6 +357,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
             this.statusBtnPrint = true;
             this.status = true;
           }
+          this.getStatusButton();
           this.updateEditCache();
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
@@ -336,7 +371,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
   };
 
   sortByIndex() {
-    this.setDetail();
+    this.setLevel();
     this.lstCtietBcao.sort((item1, item2) => {
       if (item1.level > item2.level) {
         return 1;
@@ -498,7 +533,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
           if (data.statusCode == 0) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
             this.id = data.data.id;
-            // this.getDetailReport();
+            this.getDetailReport();
           } else {
             this.notification.error(MESSAGE.ERROR, data?.msg);
           }
@@ -931,7 +966,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
   };
 
   addLine(id: any) {
-    const maNdung: any = this.lstCtietBcao.find(e => e.id == id)?.maNdung;
+    const maNdung: any = this.lstCtietBcao.find(e => e.id == id)?.idKm;
     const obj = {
       maKhoanMuc: maNdung,
       lstKhoanMuc: this.noiDungs,

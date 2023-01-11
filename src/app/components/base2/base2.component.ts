@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -23,6 +23,9 @@ import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.c
   templateUrl: './base2.component.html',
 })
 export class Base2Component implements OnInit {
+
+  @Output()
+  showListEvent = new EventEmitter<any>();
 
   // User Info 
   userInfo: UserLogin;
@@ -126,6 +129,10 @@ export class Base2Component implements OnInit {
   showList() {
     this.isDetail = false;
     this.search();
+  }
+
+  goBack() {
+    this.showListEvent.emit();
   }
 
   goDetail(id: number, roles?: any) {
@@ -416,7 +423,7 @@ export class Base2Component implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             this.spinner.hide();
-            this.detail(id);
+            this.goBack();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             this.spinner.hide();
