@@ -37,7 +37,7 @@
                     [ngClass]="formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_CBV ? 'status-xanh' : 'status-do'">
                     {{ formData.value.tenTrangThai }}
                 </span>
-                <span>Danh sách kế hoạch bán đấu giá</span>
+                <span>Biên bản lấy mẫu/bàn giao mẫu</span>
             </div>
         </div>
     </div>
@@ -204,7 +204,8 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="6">
+
+                        <div nz-col [nzSpan]="3">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true" nzRequired> Điểm kho</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
@@ -214,7 +215,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="6">
+                        <div nz-col [nzSpan]="3">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true" nzRequired> Nhà kho</nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
@@ -224,7 +225,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="6">
+                        <div nz-col [nzSpan]="3">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true" nzRequired> Ngăn kho</nz-form-label>
                                 <nz-form-control>
@@ -234,7 +235,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="6">
+                        <div nz-col [nzSpan]="3">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> Lô kho</nz-form-label>
                                 <nz-form-control>
@@ -244,6 +245,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
+
                         <div nz-col [nzSpan]="6">
                             <nz-form-item class="form-item">
                                 <nz-form-label [nzNoColon]="true" nzRequired> Số biên bản nhập đầy kho</nz-form-label>
@@ -252,14 +254,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="6">
-                            <nz-form-item class="form-item">
-                                <nz-form-label [nzNoColon]="true" nzRequired> Số biên bản gửi hàng</nz-form-label>
-                                <nz-form-control [nzErrorTip]="error">
-                                    <input nz-input formControlName="soBbGuiHang" readonly />
-                                </nz-form-control>
-                            </nz-form-item>
-                        </div>
+
                         <div nz-col [nzSpan]="24">
                             <nz-form-item>
                                 <nz-form-label [nzNoColon]="true"> File đính kèm biên bản đã ký </nz-form-label>
