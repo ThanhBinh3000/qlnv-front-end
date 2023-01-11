@@ -6,6 +6,7 @@ import { VonPhiHangDuTruQuocGiaComponent } from './von-phi-hang-du-tru-quoc-gia.
 import { VonPhiHangDuTruQuocGiaRoutingModule } from './von-phi-hang-du-tru-quoc-gia-routing.module';
 import { BaoCaoQuyetToanModule } from './bao-cao-quyet-toan/bao-cao-quyet-toan.module';
 import { DieuChinhBaoCaoSauQuyetToanModule } from './dieu-chinh-bao-cao-sau-quyet-toan/dieu-chinh-bao-cao-sau-quyet-toan.module';
+import { PheDuyetTongHopModule } from './phe-duyet-tong-hop/phe-duyet-tong-hop.module';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { DieuChinhBaoCaoSauQuyetToanModule } from './dieu-chinh-bao-cao-sau-quye
     DirectivesModule,
     BaoCaoQuyetToanModule,
     DieuChinhBaoCaoSauQuyetToanModule,
+    PheDuyetTongHopModule,
   ],
   providers: [DatePipe]
 })

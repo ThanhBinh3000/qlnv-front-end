@@ -13,10 +13,10 @@
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Trình duyệt</span>
             </button>
-            <button class="btn btn-main" (click)="action('approveDVCT')" [hidden]="statusBtnGuiDVCT">
+            <!-- <button class="btn btn-main" (click)="action('approveDVCT')" [hidden]="statusBtnGuiDVCT">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Gửi đơn vị cấp trên</span>
-            </button>
+            </button> -->
             <button class="btn btn-main" (click)="tongHop()" [hidden]="statusBtnTongHop">
                 <i class="icon htvbdh_tcdt_guiduyet"></i>
                 <span>Tổng hợp</span>
@@ -140,10 +140,10 @@
                                 <th rowspan="2">Tổng số</th>
                                 <th colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
                                 <th rowspan="2" colspan="3" [hidden]="status"></th>
-                                <th rowspan="2" [hidden]="status">
+                                <!-- <th rowspan="2" [hidden]="status">
                                     <label nz-checkbox [(ngModel)]="allChecked"
                                         (ngModelChange)="updateAllChecked()"></label>
-                                </th>
+                                </th> -->
                             </tr>
                             <tr>
                                 <th *ngFor="let item of lstDvi" nz-popconfirm
@@ -174,21 +174,21 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td [hidden]="status">
+                                    <!-- <td [hidden]="status">
                                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
-                                    </td>
+                                    </td> -->
                                     <td [hidden]="status">
                                         <ng-container *ngIf="!getLowStatus(data.stt)">
                                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                         </ng-container>
                                     </td>
-                                    <td [hidden]="status">
+                                    <!-- <td [hidden]="status">
                                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                                     </td>
                                     <td [hidden]="status">
                                         <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                             (ngModelChange)="updateChecked(data.id)"></label>
-                                    </td>
+                                    </td> -->
                                 </ng-container>
                                 <ng-template #editTemplate>
                                     <td [nzIndentSize]="data.level * 8">
@@ -214,9 +214,9 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td [hidden]="status">
+                                    <!-- <td [hidden]="status">
                                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
-                                    </td>
+                                    </td> -->
                                     <td>
                                         <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                     </td>
@@ -226,10 +226,10 @@
                                             Hủy
                                         </a>
                                     </td>
-                                    <td [hidden]="status">
+                                    <!-- <td [hidden]="status">
                                         <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                             (ngModelChange)="updateChecked(data.id)"></label>
-                                    </td>
+                                    </td> -->
                                 </ng-template>
                             </tr>
                             <ng-container *ngIf="lstCtietBcao.length > 0">

@@ -395,7 +395,7 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
           if (this.checkSumUp == true && this.userInfo.CAP_DVI == "1" && this.trangThaiBanGhi == "6") {
             this.statusBtnTongHop = false
           }
-          if (this.lstCtietBcao[0].lstCtietDvis) {
+          if (this.lstCtietBcao[0].lstCtietDvis.length > 0) {
             this.lstCtietBcao[0]?.lstCtietDvis.forEach(item => {
               this.lstDvi.push(this.donVis.find(e => e.maDvi == item.maDviNhan))
             })
@@ -800,9 +800,16 @@ export class TaoMoiGiaoDieuChinhDuToanComponent implements OnInit {
     })
   }
 
+  setLevel() {
+    this.lstCtietBcao.forEach(item => {
+      const str: string[] = item.stt.split('.');
+      item.level = str.length - 2;
+    })
+  }
+
   // sắp xếp lại thứ tự
   sortByIndex() {
-    this.setDetail();
+    this.setLevel();
     this.lstCtietBcao.sort((item1, item2) => {
       if (item1.level > item2.level) {
         return 1;
