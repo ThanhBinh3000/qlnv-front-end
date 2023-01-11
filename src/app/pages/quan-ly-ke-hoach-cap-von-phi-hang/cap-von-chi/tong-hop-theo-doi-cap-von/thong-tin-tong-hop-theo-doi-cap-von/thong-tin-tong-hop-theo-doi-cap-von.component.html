@@ -31,11 +31,9 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Số thông tri </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-input-group nz-col [nzSpan]="24">
-                <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" formControlName="soThongTri"
-                  [nzDisabled]="isView">
-                </nz-input-number>
-              </nz-input-group>
+              <nz-select formControlName="soThongTri" (ngModelChange)="changeThongTri($event)">
+                <nz-option *ngFor="let p of dsThongTri" [nzValue]="p.id" [nzLabel]="p.soThongTri"></nz-option>
+              </nz-select>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -44,7 +42,7 @@
             <nz-form-label [nzNoColon]="true"> Đơn vị được duyệt </nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select formControlName="maDviDuocDuyet">
-                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.code" [nzLabel]="p.tenDvi"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -102,7 +100,7 @@
         </div>
         <div nz-col [nzSpan]="3">
           <nz-form-item>
-            <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị hưởng thụ </nz-form-label>
+            <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị thụ hưởng</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
               <input nz-input formControlName="dviThuHuong" [readonly]="isView" />
             </nz-input-group>
