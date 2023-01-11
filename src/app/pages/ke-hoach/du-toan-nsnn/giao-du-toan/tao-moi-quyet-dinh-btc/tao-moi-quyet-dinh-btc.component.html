@@ -104,15 +104,15 @@
                     <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
                         <thead>
                             <tr>
-                                <th rowspan="2" nzWidth="50px">STT</th>
+                                <th rowspan="2" nzWidth="150px">STT</th>
                                 <th rowspan="2" nzWidth="400px">Nội dung</th>
                                 <th rowspan="2" nzWidth="300px">Tổng cộng</th>
                                 <th colspan="2" nzWidth="200px">Trong đó</th>
-                                <th rowspan="2" colspan="3" [hidden]="status"></th>
-                                <th rowspan="2" [hidden]="status">
+                                <th rowspan="2" [hidden]="status"></th>
+                                <!-- <th rowspan="2" [hidden]="status">
                                     <label nz-checkbox [(ngModel)]="allChecked"
                                         (ngModelChange)="updateAllChecked()"></label>
-                                </th>
+                                </th> -->
                             </tr>
                             <tr>
                                 <th style="width: 50%">
@@ -131,7 +131,7 @@
                                     </td>
                                     <td>
                                         <div *ngFor="let item of noiDungs">
-                                            <div *ngIf="item.id ==data.maNdung">
+                                            <div *ngIf="item.ma ==data.maNdung">
                                                 {{item.tenDm}}
                                             </div>
                                         </div>
@@ -139,21 +139,21 @@
                                     <td>{{displayValue(data.tongCong)}}</td>
                                     <td>{{displayValue(data.nguonNsnn)}}</td>
                                     <td>{{displayValue(data.nguonKhac)}}</td>
-                                    <td [hidden]="status">
+                                    <!-- <td [hidden]="status">
                                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
-                                    </td>
+                                    </td> -->
                                     <td [hidden]="status">
                                         <ng-container *ngIf="!getLowStatus(data.stt)">
                                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                         </ng-container>
                                     </td>
-                                    <td [hidden]="status">
+                                    <!-- <td [hidden]="status">
                                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
-                                    </td>
-                                    <td [hidden]="status">
+                                    </td> -->
+                                    <!-- <td [hidden]="status">
                                         <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                             (ngModelChange)="updateChecked(data.id)"></label>
-                                    </td>
+                                    </td> -->
                                 </ng-container>
                                 <ng-template #editTemplate>
                                     <td [nzIndentSize]="data.level * 8">
@@ -161,7 +161,7 @@
                                     </td>
                                     <td>
                                         <div *ngFor="let item of noiDungs;">
-                                            <div *ngIf="item.id ==data.maNdung">
+                                            <div *ngIf="item.ma ==data.maNdung">
                                                 {{item.tenDm}}
                                             </div>
                                         </div>
@@ -183,9 +183,9 @@
                                             [class]="(editCache[data.id].data.nguonKhac || editCache[data.id].data.nguonKhac ===0) &&  editCache[data.id].data.nguonKhac >= 0?'' : 'input-error-validate'">
                                         </fm-input-number>
                                     </td>
-                                    <td [hidden]="status">
+                                    <!-- <td [hidden]="status">
                                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
-                                    </td>
+                                    </td> -->
                                     <td>
                                         <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                     </td>
@@ -195,10 +195,10 @@
                                             Hủy
                                         </a>
                                     </td>
-                                    <td [hidden]="status">
+                                    <!-- <td [hidden]="status">
                                         <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                             (ngModelChange)="updateChecked(data.id)"></label>
-                                    </td>
+                                    </td> -->
                                 </ng-template>
                             </tr>
                         </tbody>
@@ -264,7 +264,7 @@
 
             <ng-template #extraTemplate>
                 <div class="buttons">
-                    <button type="button" class="btn btn-sub btn-xoa" (click)="deleteAllChecked()" [hidden]="status">
+                    <!-- <button type="button" class="btn btn-sub btn-xoa" (click)="deleteAllChecked()" [hidden]="status">
                         <i class="fa fa-trash-o do"></i>
                         <span>Xóa</span>
                     </button>
@@ -273,7 +273,7 @@
                             <i class="icon htvbdh_dau-cong"></i>
                             <span>Thêm</span>
                         </button>
-                    </ng-container>
+                    </ng-container> -->
                 </div>
             </ng-template>
         </div>

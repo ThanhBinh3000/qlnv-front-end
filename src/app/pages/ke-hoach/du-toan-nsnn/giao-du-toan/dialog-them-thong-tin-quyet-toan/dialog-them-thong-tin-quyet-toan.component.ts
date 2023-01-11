@@ -127,6 +127,8 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.phuongAns = data.data;
+          console.log(this.phuongAns);
+
         } else {
           this.notification.error(MESSAGE.ERROR, data?.msg);
         }
@@ -273,6 +275,7 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
     let phuongAn!: string;
     let loaiPa!: string;
     const requestReport = {
+      loaiTimKiem: "0",
       maPhanGiao: '2',
       maLoai: '2',
       namPa: null,
@@ -280,15 +283,58 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
       ngayTaoDen: "",
       donViTao: this.maDviTao,
       loai: null,
-      trangThais: [],
+      trangThais: ["1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"],
       maPa: this.maPa,
       maLoaiDan: null,
       soQd: "",
-      trangThaiGiaos: [],
+      trangThaiGiaos: ["0",
+        "1",
+        "2"],
       paggingReq: {
         limit: 10,
         page: 1
       },
+
+      // loaiTimKiem: "0",
+      // maPhanGiao: "2",
+      // maLoai: "2",
+      // namPa: null,
+      // ngayTaoTu: null,
+      // ngayTaoDen: null,
+      // donViTao: "0101",
+      // loai: null,
+      // trangThais: [
+      //   "1",
+      //   "2",
+      //   "3",
+      //   "4",
+      //   "5",
+      //   "6",
+      //   "7",
+      //   "8",
+      //   "9"
+      // ],
+      // maPa: null,
+      // maLoaiDan: null,
+      // soQd: "",
+      // trangThaiGiaos: [
+      //   "0",
+      //   "1",
+      //   "2"
+      // ],
+      // paggingReq: {
+      //   limit: 10,
+      //   page: 1
+      // }
+
     };
     this.spinner.show();
     await this.GiaoDuToanChiService.timBaoCaoGiao(requestReport).toPromise().then(
@@ -305,7 +351,7 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
       }
     );
     let data = {
-      phuongAn: phuongAn,
+      id: phuongAn,
       loaiPa: loaiPa
     }
     this._modalRef.close(data);

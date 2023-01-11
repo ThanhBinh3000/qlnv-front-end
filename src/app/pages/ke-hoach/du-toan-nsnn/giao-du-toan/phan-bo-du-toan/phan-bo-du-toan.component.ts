@@ -355,7 +355,7 @@ export class PhanBoDuToanComponent implements OnInit {
     modalTuChoi.afterClose.toPromise().then(async (res) => {
       if (res && res?.loaiPa == "1") {
         let obj = {
-          ...res,
+          id: res.id,
           tabSelected: 'phuongAnGiaoDuToan',
           isSynthetic: false,
         }
@@ -363,7 +363,7 @@ export class PhanBoDuToanComponent implements OnInit {
       }
       if (res && res?.loaiPa == "2") {
         let obj = {
-          ...res,
+          id: res.id,
           tabSelected: 'phuongAnGiaoDieuChinh',
           isSynthetic: false,
         }

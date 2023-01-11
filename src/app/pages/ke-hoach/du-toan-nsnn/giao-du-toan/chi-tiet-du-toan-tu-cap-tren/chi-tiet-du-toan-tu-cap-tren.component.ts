@@ -138,14 +138,17 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
   };
 
   back() {
+    let preTab = localStorage.getItem('preTab');
     const obj = {
-      tabSelected: this.data?.preTab,
+      tabSelected: preTab,
     }
     this.dataChange.emit(obj);
+    localStorage.removeItem('preTab');
   };
 
   async initialization() {
     this.spinner.show();
+    localStorage.setItem("preTab", "dsGiaoTuCapTren")
     this.id = this.data.id;
     this.userInfo = this.userService.getUserLogin();
     this.maDviTao = this.userInfo?.MA_DVI;
@@ -167,7 +170,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     if (this.id) {
       this.getDetailReport();
     }
-
+    this.sortByIndex()
     this.spinner.hide();
   }
 
@@ -234,7 +237,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
           // this.isStatus = this.trangThais.find(e => e.id == data.data.trangThai)?.tenDm;
           this.isStatus = data.data.trangThai
           this.maDviTien = data.data.maDviTien
-          if (data.data.trangThai == '1') {
+          if (data.data.trangThai == '1' || this.userInfo.CAP_DVI == '3') {
             this.statusBtnNew = true;
           }
         } else {
@@ -299,8 +302,15 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
   }
 
+  setLevel() {
+    this.lstCtietBcao.forEach(item => {
+      const str: string[] = item.stt.split('.');
+      item.level = str.length - 2;
+    })
+  }
+
   sortByIndex() {
-    this.setDetail();
+    this.setLevel();
     this.lstCtietBcao.sort((item1, item2) => {
       if (item1.level > item2.level) {
         return 1;
@@ -463,6 +473,103 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       }
     }
   };
+
+  async taoMoiBaoCao(loaiPa) {
+    const listCtietDvi: any[] = [];
+    const maPaCha = this.maPa
+    let maBcao
+    await this.giaoDuToanChiService.SinhMaBaoCao().toPromise().then(
+      (res) => {
+        if (res.statusCode == 0) {
+          maBcao = res.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+          return;
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        return;
+      },
+    );
+
+
+    // this.lstDvi.forEach(item => {
+    // })
+    listCtietDvi.push({
+      id: uuid.v4() + 'FE',
+      maDviNhan: this.userInfo.MA_DVI,
+      soTranChi: 0,
+    })
+
+    const lstCtietBcaoTemp: any[] = [];
+    // gui du lieu trinh duyet len server
+    this.lstCtietBcao.forEach(item => {
+      lstCtietBcaoTemp.push({
+        ...item,
+        dtoanGiao: item.soTien,
+        nguonNsnn: item.nguonNsnn,
+        nguonKhac: item.nguonKhac,
+        tongCong: item.soTien,
+        lstCtietDvis: listCtietDvi,
+        id: uuid.v4() + 'FE',
+      })
+    })
+    const request1 = {
+      id: null,
+      fileDinhKems: [],
+      listIdDeleteFiles: [],
+      lstCtiets: lstCtietBcaoTemp,
+      maDvi: this.maDviTao,
+      maDviTien: this.maDviTien,
+      maBcao: maBcao,
+      maPa: this.maPa,
+      maPaCha: maPaCha,
+      namPa: this.namDtoan,
+      soQd: this.soQd,
+      maPhanGiao: "2",
+      maLoaiDan: '1',
+      trangThai: "1",
+      thuyetMinh: "",
+      idPaBTC: this.id,
+      tabSelected: 'addBaoCao',
+    };
+
+    const request2 = {
+      id: null,
+      fileDinhKems: [],
+      listIdDeleteFiles: [],
+      lstCtiets: lstCtietBcaoTemp,
+      maDvi: this.maDviTao,
+      maDviTien: this.maDviTien,
+      maBcao: maBcao,
+      maPa: this.maPa,
+      maPaCha: maPaCha,
+      namPa: this.namDtoan,
+      soQd: this.soQd,
+      maPhanGiao: "2",
+      maLoaiDan: '2',
+      trangThai: "1",
+      thuyetMinh: "",
+      idPaBTC: this.id,
+      tabSelected: 'addBaoCao',
+    };
+
+    if (loaiPa) {
+      if (loaiPa === 1) {
+        localStorage.setItem("idChiTiet", this.id);
+        this.dataChange.emit(request1);
+      }
+
+      if (loaiPa === 2) {
+        localStorage.setItem("idChiTiet", this.id);
+        this.dataChange.emit(request2);
+      }
+    }
+  };
+
+
+
   displayValue(num: number): string {
     num = exchangeMoney(num, '1', this.maDviTien);
     return displayNumber(num);

@@ -49,12 +49,12 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
   maDviTao: string;
   searchFilter = {
     loaiTimKiem: "1",
-    maPhanGiao: '2',
+    maPhanGiao: '3',
     maLoai: '2',
     namPa: null,
     ngayTaoTu: null,
     ngayTaoDen: null,
-    maPa: "",
+    maBcao: "",
     donViTao: "",
     // trangThai: "",
     paggingReq: {
@@ -62,11 +62,11 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
       page: 1
     },
     trangThais: [],
-    trangThaiGiaos: [],
+    // trangThaiGiaos: [],
   };
 
   filterTable: any = {
-    maPa: "",
+    maBcao: "",
     ngayTao: "",
     namPa: "",
     trangThai: "",
@@ -151,7 +151,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
       }
     );
 
-    if (this.userService.isAccessPermisson(GDT.TIEPNHAN_TUCHOI_PA_PBDT) || this.userService.isAccessPermisson(GDT.XEM_PA_TONGHOP_PBDT)) {
+    if (this.userService.isAccessPermisson(GDT.TIEP_NHAN_TC_REPORT_TH) || this.userService.isAccessPermisson(GDT.VIEW_REPORT_TH)) {
       this.trangThai = '7';
       this.status = false;
       this.searchFilter.loaiTimKiem = '1';
@@ -197,7 +197,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     } else {
       searchFilterTemp.trangThais = [Utils.TT_BC_7, Utils.TT_BC_8, Utils.TT_BC_9, Utils.TT_BC_KT]
     }
-    searchFilterTemp.trangThaiGiaos = ['0', '1', '2']
+    // searchFilterTemp.trangThaiGiaos = ['0', '1', '2']
     await this.giaoDuToanChiService.timBaoCaoGiao(searchFilterTemp).toPromise().then(
       (data) => {
         if (data.statusCode == 0) {
@@ -243,7 +243,7 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     this.searchFilter.namPa = null
     this.searchFilter.ngayTaoTu = null
     this.searchFilter.ngayTaoDen = null
-    this.searchFilter.maPa = null
+    this.searchFilter.maBcao = null
     this.trangThai = null;
     this.onSubmit();
   }
@@ -254,13 +254,13 @@ export class BaoCaoTuDonViCapDuoiComponent implements OnInit {
     if (maLoaiDan == "1") {
       const obj = {
         id: id,
-        tabSelected: 'phuongAnGiaoDuToan',
+        tabSelected: 'addBaoCao',
       }
       this.dataChange.emit(obj);
     } else if (maLoaiDan == "2") {
       const obj = {
         id: id,
-        tabSelected: 'phuongAnGiaoDieuChinh',
+        tabSelected: 'addBaoCao',
       }
       this.dataChange.emit(obj);
     } else {

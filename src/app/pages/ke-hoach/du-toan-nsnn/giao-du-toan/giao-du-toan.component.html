@@ -62,5 +62,17 @@
             <app-tao-moi-giao-du-toan [data]="data" (dataChange)="changeTab($event)">
             </app-tao-moi-giao-du-toan>
         </ng-container>
+        <ng-container *ngIf="tabSelected == 'addBaoCao'">
+            <app-add-bao-cao [data]="data" (dataChange)="changeTab($event)">
+            </app-add-bao-cao>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'nextaddBaoCao'">
+            <app-add-bao-cao [data]="data" (dataChange)="changeTab($event)">
+            </app-add-bao-cao>
+        </ng-container>
+        <ng-container *ngIf="tabSelected == 'danhSachBaoCao'">
+            <app-danh-sach-bao-cao (dataChange)="changeTab($event)">
+            </app-danh-sach-bao-cao>
+        </ng-container>
     </div>
 </div>

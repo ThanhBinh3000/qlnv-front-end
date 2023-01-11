@@ -27,8 +27,8 @@
         </ng-container>
       </div>
       <div nz-col nzSpan="6">
-        <label class="search__label">Mã phương án</label>
-        <input class="search__input" nz-input [(ngModel)]="searchFilter.maPa" />
+        <label class="search__label">Mã báo cáo</label>
+        <input class="search__input" nz-input [(ngModel)]="searchFilter.maBcao" />
       </div>
       <div nz-col nzSpan="6">
         <label class="search__label">Trạng thái</label>
@@ -63,7 +63,7 @@
         <tr>
           <th nzWidth="50px">STT</th>
           <th nzWidth="100px">Đơn vị tạo</th>
-          <th nzWidth="150px">Mã phương án</th>
+          <th nzWidth="150px">Mã báo cáo</th>
           <th nzWidth="150px">Ngày tạo</th>
           <th nzWidth="150px">Năm dự toán</th>
           <th nzWidth="150px" style="text-align:center;">Trạng thái</th>
@@ -111,10 +111,10 @@
           <td>
             {{getUnitName(item.maDvi)}}
           </td>
-          <td>{{item.maPa}}</td>
+          <td>{{item.maBcao}}</td>
           <td>{{item.ngayTao}}</td>
           <td>
-            {{item.namDtoan}}
+            {{item.namPa}}
           </td>
           <td class="text-center">{{getStatusName(item.trangThai)}}
             <ng-template [ngIf]="item.trangThai == '3' || item.trangThai == '5' || item.trangThai == '8'"><br>Lý do:

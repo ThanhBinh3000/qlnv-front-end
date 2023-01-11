@@ -63,7 +63,7 @@ export class DialogTongHopComponent implements OnInit {
     this.response.maDvi = this.userInfo?.MA_DVI;
 
     const thisYear = dayjs().get('year');
-    for (let i = -10; i < 30; i++) {
+    for (let i = -50; i < 30; i++) {
       this.lstNam.push(thisYear + i);
     }
   }
@@ -71,6 +71,8 @@ export class DialogTongHopComponent implements OnInit {
   async tongHopPa() {
     const request = {
       maPa: this.response.maPa,
+      maDvi: this.obj.maDvi,
+      namPa: this.response.namHienTai
     }
     this.spinner.show();
     await this.giaoDuToanChiService.tongHopGiaoDuToan(request).toPromise().then(
@@ -83,8 +85,8 @@ export class DialogTongHopComponent implements OnInit {
             if (!item.id) {
               item.id = uuid.v4() + 'FE';
             }
-            item.lstCtietDvis.forEach(itm => {
-              if(!itm.id){
+            item.lstCtietBcaos.forEach(itm => {
+              if (!itm.id) {
                 itm.id = uuid.v4() + 'FE';
               }
             });
@@ -136,7 +138,7 @@ export class DialogTongHopComponent implements OnInit {
     lstPaTemp.forEach(s => {
       this.lstPaLoai.push(
         {
-          maPa: s.maPaCha
+          maPa: s.maPa
         }
       )
     })
@@ -158,8 +160,74 @@ export class DialogTongHopComponent implements OnInit {
       return;
     }
 
-    console.log(this.response);
-    
+    const maPaCha = this.response.maPa
+    let maBcao
+    await this.giaoDuToanChiService.SinhMaBaoCao().toPromise().then(
+      (res) => {
+        if (res.statusCode == 0) {
+          maBcao = res.data;
+        } else {
+          this.notification.error(MESSAGE.ERROR, res?.msg);
+          return;
+        }
+      },
+      (err) => {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        return;
+      },
+    );
+
+    const request1 = {
+      id: null,
+      fileDinhKems: [],
+      listIdDeleteFiles: [],
+      lstGiaoDtoanTrucThuocs: this.response.lstDviTrucThuoc,
+      lstCtiets: this.response.lstCtietBcao,
+      maDvi: this.response.maDvi,
+      maDviTien: "1",
+      maBcao: maBcao,
+      maPa: this.response.maPa,
+      maPaCha: maPaCha,
+      namPa: this.response.namHienTai,
+      // soQd: null,
+      maPhanGiao: "2",
+      maLoaiDan: '1',
+      trangThai: "1",
+      thuyetMinh: "",
+      idPaBTC: null,
+      tabSelected: 'addBaoCao',
+    };
+
+    const request2 = {
+      id: null,
+      fileDinhKems: [],
+      listIdDeleteFiles: [],
+      lstGiaoDtoanTrucThuocs: this.response.lstDviTrucThuoc,
+      lstCtiets: this.response.lstCtietBcao,
+      maDvi: this.response.maDvi,
+      maDviTien: "1",
+      maBcao: maBcao,
+      maPa: this.response.maPa,
+      maPaCha: maPaCha,
+      namPa: this.response.namHienTai,
+      // soQd: null,
+      maPhanGiao: "2",
+      maLoaiDan: '2',
+      trangThai: "1",
+      thuyetMinh: "",
+      idPaBTC: null,
+      tabSelected: 'addBaoCao',
+    };
+
+    if (this.response.loai == "1") {
+      this._modalRef.close(request1);
+    }
+    if (this.response.loai == "2") {
+      this._modalRef.close(request2);
+    }
+
+    // console.log(this.response);
+
     // this._modalRef.close(this.response);
   }
 

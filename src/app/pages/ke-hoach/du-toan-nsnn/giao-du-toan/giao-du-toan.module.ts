@@ -2,10 +2,13 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
+import { AddBaoCaoModule } from './add-bao-cao/add-bao-cao.module';
 import { BaoCaoTuDonViCapDuoiModule } from './bao-cao-tu-don-vi-cap-duoi/bao-cao-tu-don-vi-cap-duoi.module';
 import { ChiTietDuToanTuCapTrenComponent } from './chi-tiet-du-toan-tu-cap-tren/chi-tiet-du-toan-tu-cap-tren.component';
+import { DanhSachBaoCaoComponent } from './danh-sach-bao-cao/danh-sach-bao-cao.component';
 import { DanhSachDuToanGiaoTuCapTrenComponent } from './danh-sach-du-toan-giao-tu-cap-tren/danh-sach-du-toan-giao-tu-cap-tren.component';
 import { DialogTaoMoiComponent } from './dialog-tao-moi/dialog-tao-moi.component';
+import { DialogThemKhoanMucComponent } from './dialog-them-khoan-muc/dialog-them-khoan-muc.component';
 import { DialogThemThongTinQuyetToanComponent } from './dialog-them-thong-tin-quyet-toan/dialog-them-thong-tin-quyet-toan.component';
 import { DialogTongHopComponent } from './dialog-tong-hop/dialog-tong-hop.component';
 import { GiaoDuToanComponent } from './giao-du-toan.component';
@@ -30,12 +33,15 @@ import { TongHopBaoCaoCapDuoiComponent } from './tong-hop-bao-cao-cap-duoi/tong-
     TongHopBaoCaoCapDuoiComponent,
     ChiTietDuToanTuCapTrenComponent,
     DialogTongHopComponent,
+    DanhSachBaoCaoComponent,
+    DialogThemKhoanMucComponent,
   ],
   imports: [
     CommonModule,
     ComponentsModule,
     DirectivesModule,
     BaoCaoTuDonViCapDuoiModule,
+    AddBaoCaoModule,
   ],
   exports: [
     GiaoDuToanComponent,
@@ -49,7 +55,9 @@ import { TongHopBaoCaoCapDuoiComponent } from './tong-hop-bao-cao-cap-duoi/tong-
     DialogThemThongTinQuyetToanComponent,
     TongHopBaoCaoCapDuoiComponent,
     ChiTietDuToanTuCapTrenComponent,
-    DialogTongHopComponent
+    DialogTongHopComponent,
+    DanhSachBaoCaoComponent,
+    DialogThemKhoanMucComponent
   ],
 })
 export class GiaoDuToanModule { }

@@ -5,7 +5,7 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button *ngIf="statusBtnNew" type="button" class="btn btn-sub" (click)="action('save')">
+      <button type="button" class="btn btn-sub" (click)="action('save')">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Tiếp nhận</span>
       </button>
@@ -18,10 +18,24 @@
         </div>
       </ng-template>
       <button class="btn btn-main" nz-button nz-popover nzPopoverTitle="Phương án" [nzPopoverContent]="contentTemplate"
-        nzPopoverTrigger="click" [hidden]="statusBtnNew">
+        nzPopoverTrigger="click">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Tạo phương án</span>
       </button>
+
+      <ng-template #contentTemplate1>
+        <div class="contentTemplate_chonpa">
+          <a (click)="taoMoiBaoCao(1)" class="contentTemplate_chonpa__con">1. Báo cáo phân bổ giao dự toán chi</a>
+          <a (click)="taoMoiBaoCao(2)" class="contentTemplate_chonpa__con">2. Báo cáo giao, điều chỉnh dự toán chi</a>
+        </div>
+      </ng-template>
+      <button class="btn btn-main" nz-button nz-popover nzPopoverTitle="Phương án" [nzPopoverContent]="contentTemplate1"
+        nzPopoverTrigger="click" [hidden]="userInfo.CAP_DVI !== '3' ">
+        <i class="icon htvbdh_tcdt_save"></i>
+        <span>Tạo Báo cáo</span>
+      </button>
+
+
     </div>
   </nz-affix>
 
@@ -31,7 +45,7 @@
         <div class="header-text">
           <div class="title-chi-tieu">
             <span [ngClass]="statusClass()">{{getStatusName(isStatus)}}</span>
-            <span>Nhập quyết định giao dự toán chi NSNN từ BTC</span>
+            <span>CHI TIẾT SỐ KIỂM TRA TRẦN CHI GIAO TỪ CẤP TRÊN </span>
           </div>
         </div>
         <nz-card class="mt-2px flex-card data-table card-border-content table-card">
@@ -104,7 +118,7 @@
                 </td>
                 <td>
                   <div *ngFor="let e of noiDungs">
-                    <div *ngIf="e.id == item.maNdung">
+                    <div *ngIf="e.ma == item.maNdung">
                       {{e.tenDm}}
                     </div>
                   </div>
