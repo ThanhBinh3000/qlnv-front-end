@@ -168,25 +168,17 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
     // });
     this.dataTable.forEach(item => {
       if (this.userService.isChiCuc()) {
-        item.detail = item.dtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+        item.detail = item.hhBienBanDayKhoHdrList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
       } else {
         let data = [];
-        item.dtlList.forEach(item => {
-          data = [...data, ...item.listBienBanNhapDayKho];
+        item.hhBienBanDayKhoHdrList.forEach(item => {
+          // data = [...data, ...item.listBienBanNhapDayKho];
         })
         item.detail = {
-          listBienBanNhapDayKho: data
+          // listBienBanNhapDayKho: data
         }
       };
     });
-    // this.dataTable.forEach(item => {
-    //   item.detail.children.forEach(ddNhap => {
-    //     ddNhap.listPhieuNhapKho.forEach(x => {
-    //       x.phieuKiemTraCl = ddNhap.listPhieuKtraCl.filter(item => item.soPhieu == x.soPhieuKtraCl)[0];
-    //     });
-    //   })
-    // });
-    console.log(this.dataTable);
   }
 
   clearFilter() {
@@ -323,26 +315,33 @@ export class BienBanNhapDayKhoComponent extends Base2Component implements OnInit
     this.idQdGiaoNvNh = idQdGiaoNvNh;
   }
 
-
   export() {
     if (this.totalRecord && this.totalRecord > 0) {
       this.spinner.show();
       try {
         let body = {
-          // "maDvi": this.userInfo.MA_DVI,
-          // "maVatTuCha": this.isTatCa ? null : this.maVthh,
-          // "ngayKetThucNhapDen": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 1 ? dayjs(this.searchFilter.ngayKetThucNhap[1]).format('YYYY-MM-DD') : null,
-          // "ngayKetThucNhapTu": this.searchFilter.ngayKetThucNhap && this.searchFilter.ngayKetThucNhap.length > 0 ? dayjs(this.searchFilter.ngayKetThucNhap[0]).format('YYYY-MM-DD') : null,
-          // "ngayNhapDayKhoDen": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 1 ? dayjs(this.searchFilter.ngayNhapDayKho[1]).format('YYYY-MM-DD') : null,
-          // "ngayNhapDayKhoTu": this.searchFilter.ngayNhapDayKho && this.searchFilter.ngayNhapDayKho.length > 0 ? dayjs(this.searchFilter.ngayNhapDayKho[0]).format('YYYY-MM-DD') : null,
-          // "orderBy": null,
-          // "orderDirection": null,
-          // "paggingReq": null,
-          // "soBienBan": this.searchFilter.soBienBan,
-          // "soQdNhap": this.searchFilter.soQd,
-          // "str": null,
-          // "trangThai": null
-        }
+          ngayBdauNhapTu: this.searchFilter.ngayBdauNhap
+            ? dayjs(this.searchFilter.ngayBdauNhap[0]).format('YYYY-MM-DD')
+            : null,
+          ngayBdauNhapDen: this.searchFilter.ngayBdauNhap
+            ? dayjs(this.searchFilter.ngayBdauNhap[1]).format('YYYY-MM-DD')
+            : null,
+          ngayKthucNhapTu: this.searchFilter.ngayKthucNhap
+            ? dayjs(this.searchFilter.ngayKthucNhap[0]).format('YYYY-MM-DD')
+            : null,
+          ngayKthucNhapDen: this.searchFilter.ngayKthucNhap
+            ? dayjs(this.searchFilter.ngayKthucNhap[1]).format('YYYY-MM-DD')
+            : null,
+          ngayLapBbanTu: this.searchFilter.ngayLapBban
+            ? dayjs(this.searchFilter.ngayLapBban[0]).format('YYYY-MM-DD')
+            : null,
+          ngayLapBbanDen: this.searchFilter.ngayLapBban
+            ? dayjs(this.searchFilter.ngayLapBban[1]).format('YYYY-MM-DD')
+            : null,
+          namKh: this.searchFilter.namKh,
+          soQuyetDinhNhap: this.searchFilter.soQuyetDinhNhap,
+          soBbNhapDayKho: this.searchFilter.soBbNhapDayKho,
+        };
         this.bienBanDayKhoMuaTrucTiepService.export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-phieu-nhap-day-kho.xlsx'),

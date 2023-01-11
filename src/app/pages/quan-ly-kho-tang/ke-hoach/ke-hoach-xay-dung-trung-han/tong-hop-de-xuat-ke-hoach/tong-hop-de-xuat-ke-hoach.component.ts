@@ -20,6 +20,7 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
 import {TongHopKhTrungHanService} from "../../../../../services/tong-hop-kh-trung-han.service";
+import {STATUS} from "../../../../../constants/status";
 @Component({
   selector: 'app-tong-hop-de-xuat-ke-hoach',
   templateUrl: './tong-hop-de-xuat-ke-hoach.component.html',
@@ -34,26 +35,25 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
   searchValue = '';
   listNam: any[] = [];
 
+  STATUS = STATUS
+
   searchFilter = {
     maTongHop: '',
     dmucDuAn: '',
     diaDiem: '',
     loaiDuAn: '' ,
-    tgKcHt: '',
     ngayTongHop: '',
     namBatDau: '',
     namKetThuc: ''
   };
 
   filterTable: any = {
-    soQd: '',
-    ngayQd: '',
-    trichYeu: '',
-    soQdGoc: '',
-    namKhoach: '',
-    tenVthh: '',
-    soGoiThau: '',
-    trangThai: '',
+    maTongHop : '',
+    ngayTongHop : '',
+    soQuyetDinh : '',
+    giaiDoan : '',
+    noiDung : '',
+    tenTrangThai : '',
   };
 
   allChecked = false;
@@ -78,18 +78,22 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      for (let i = -3; i < 23; i++) {
-        this.listNam.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
       await this.search();
+      this.loadDsNam();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  loadDsNam() {
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: dayjs().get('year') - i,
+        text: dayjs().get('year') - i,
+      });
     }
   }
 
@@ -99,8 +103,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
       diaDiem: this.searchFilter.diaDiem,
       dmucDuAn: this.searchFilter.dmucDuAn,
       loaiDuAn: this.searchFilter.loaiDuAn,
-      maTongHop: this.searchFilter.diaDiem,
-      tgKcHt: this.searchFilter.tgKcHt,
+      maTongHop: this.searchFilter.maTongHop,
       ngayKyTu: this.searchFilter.ngayTongHop[0],
       ngayKyDen: this.searchFilter.ngayTongHop[1],
       namBatDau: this.searchFilter.namBatDau,
@@ -199,19 +202,6 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     await this.search();
   }
 
-  clearFilter() {
-    this.searchFilter = {
-      maTongHop: '',
-      dmucDuAn: '',
-      diaDiem: '',
-      loaiDuAn: '' ,
-      tgKcHt: '',
-      ngayTongHop: '',
-      namBatDau: '',
-      namKetThuc: ''
-    }
-  }
-
   xoaItem(item: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -282,17 +272,18 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     }
   }
 
-  clearFilterTable() {
+  async clearFilterTable() {
     this.filterTable = {
-      soQd: '',
-      ngayQd: '',
-      trichYeu: '',
-      soQdGoc: '',
-      namKhoach: '',
-      tenVthh: '',
-      soGoiThau: '',
-      trangThai: '',
+      maTongHop: '',
+      dmucDuAn: '',
+      diaDiem: '',
+      loaiDuAn: '' ,
+      tgKcHt: '',
+      ngayTongHop: '',
+      namBatDau: '',
+      namKetThuc: ''
     };
+    await this.search();
   }
 }
 

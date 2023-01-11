@@ -29,12 +29,19 @@ export class VonBanComponent implements OnInit {
                 item.isSelected = true;
             }
         })
+        this.data = {
+            tabSelected: this.tabSelected,
+        }
     }
+
     selectTab(tab) {
         this.tabSelected = tab;
         this.tabList.forEach(e => {
             e.isSelected = (tab == e.code);
         })
+        this.data = {
+            tabSelected: this.tabSelected,
+        }
     }
 
     changeTab(obj: any) {

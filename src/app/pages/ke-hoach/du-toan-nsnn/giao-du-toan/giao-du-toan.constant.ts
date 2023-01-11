@@ -29,13 +29,38 @@ export const TAB_LIST = [
         isSelected: false,
     },
     {
-        name: 'Báo cáo từ đươn vị cấp dưới',
+        name: 'Báo cáo từ đơn vị cấp dưới',
         code: 'baoCaoCapDuoi',
         status: true,
         role: [
             GDT.DUYET_TUCHOI_PA_TH_PBDT,
             GDT.PHEDUYET_TUCHOI_PA_TH_PBDT,
-            GDT.XEM_PA_TONGHOP_PBDT
+            GDT.XEM_PA_TONGHOP_PBDT,
+            GDT.XEM_PA_TONGHOP_PBDT,
+            GDT.VIEW_REPORT_TH,
+        ],
+        isSelected: false,
+    },
+    {
+        name: 'Tổng hợp báo cáo từ đơn vị cấp dưới',
+        code: 'tongHopBaoCaoCapDuoi',
+        status: true,
+        role: [
+            GDT.TONGHOP_PA_PBDT,
+            GDT.TRINHDUYET_PA_TONGHOP_PBDT,
+            GDT.XEM_PA_TONGHOP_PBDT,
+            GDT.VIEW_REPORT_TH,
+        ],
+        isSelected: false,
+    },
+    {
+        name: 'Danh sách báo cáo',
+        code: 'danhSachBaoCao',
+        status: true,
+        role: [
+            GDT.EDIT_REPORT_TH,
+            GDT.XOA_REPORT_TH,
+
         ],
         isSelected: false,
     },

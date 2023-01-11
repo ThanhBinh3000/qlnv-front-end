@@ -43,6 +43,18 @@ export const TRANG_THAI_TIM_KIEM = [
     id: "6",
     tenDm: 'Lãnh đạo phê duyệt'
   },
+  {
+    id: "7",
+    tenDm: 'mới'
+  },
+  {
+    id: "8",
+    tenDm: 'Cấp trên từ chối'
+  },
+  {
+    id: "9",
+    tenDm: 'Tiếp nhận'
+  },
 ]
 @Component({
   selector: 'app-bao-cao-quyet-toan',
@@ -248,12 +260,12 @@ export class BaoCaoQuyetToanComponent implements OnInit {
 
   checkEditStatus(trangThai: string) {
     return Utils.statusSave.includes(trangThai) &&
-      (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(QTVP.EDIT_REPORT));
+      (this.userService.isAccessPermisson(QTVP.EDIT_REPORT));
   };
 
   checkDeleteStatus(trangThai: string) {
     return Utils.statusDelete.includes(trangThai) &&
-      (this.userInfo.CAP_DVI == '1' && this.userService.isAccessPermisson(QTVP.DELETE_REPORT));
+      (this.userService.isAccessPermisson(QTVP.DELETE_REPORT));
   };
 
   //them bao cao moi
@@ -272,7 +284,9 @@ export class BaoCaoQuyetToanComponent implements OnInit {
       if (res) {
         const request = {
           maPhanBcao: res.maPhanBcao,
-          namQtoan: res.namQtoan
+          namQtoan: res.namQtoan,
+          thangBcao: res.thangBcao,
+
         }
         await this.quyetToanVonPhiService.checkNamTaoMoiQuyetToan(request).toPromise().then(
           (data) => {
