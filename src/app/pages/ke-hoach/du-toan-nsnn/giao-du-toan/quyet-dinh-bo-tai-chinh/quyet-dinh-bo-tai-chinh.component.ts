@@ -65,10 +65,10 @@ export class QuyetDinhBoTaiChinhComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.searchFilter.ngayTaoTu = new Date();
-    const newDate = new Date();
-    newDate.setMonth(newDate.getMonth() - 1);
-    this.searchFilter.ngayTaoDen = newDate;
+    // this.searchFilter.ngayTaoTu = new Date();
+    // const newDate = new Date();
+    // newDate.setMonth(newDate.getMonth() - 1);
+    // this.searchFilter.ngayTaoDen = newDate;
 
     this.userInfo = this.userService.getUserLogin();
     this.search();

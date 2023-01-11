@@ -345,6 +345,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     if (!this.dataTable) {
       this.dataTable = [];
     }
+    this.rowItem.maDvi = this.userInfo.MA_DVI
     this.dataTable = [...this.dataTable, this.rowItem]
     this.rowItem = new KeHoachXayDungTrungHan();
     this.updateEditCache()
