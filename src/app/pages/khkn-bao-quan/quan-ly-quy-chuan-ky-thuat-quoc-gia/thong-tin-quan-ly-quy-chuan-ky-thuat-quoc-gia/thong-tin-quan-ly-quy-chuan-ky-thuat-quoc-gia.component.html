@@ -51,8 +51,8 @@
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-input-group nzAddOnAfter="{{maVb}}" id="so-qd">
-                  <nz-input-number [nzDisabled]="isView" type="text" nz-input formControlName="soVanBan" [nzMin]="1"
-                    [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
+                  <nz-input-number [nzDisabled]="isDisable()" type="text" nz-input formControlName="soVanBan"
+                    [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                   </nz-input-number>
                 </nz-input-group>
               </nz-form-control>
@@ -66,7 +66,7 @@
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày ký"
-                  formControlName="ngayKy">
+                  [nzDisabled]="isDisable()" formControlName="ngayKy">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -79,7 +79,7 @@
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
                 <nz-date-picker class="search__input" nzFormat="yyyy-MM-dd" nzPlaceHolder="Ngày hiệu lực"
-                  formControlName="ngayHieuLuc">
+                  [nzDisabled]="isDisable()" formControlName="ngayHieuLuc">
                 </nz-date-picker>
               </nz-form-control>
             </nz-form-item>
@@ -91,7 +91,8 @@
                 Số hiệu quy chuẩn, tiêu chuẩn chất lượng
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input nz-input placeholder="Số hiệu quy chuẩn" formControlName="soHieuQuyChuan" />
+                <input nz-input [readonly]="isDisable()" placeholder="Số hiệu quy chuẩn"
+                  formControlName="soHieuQuyChuan" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -101,7 +102,7 @@
               <nz-form-label [nzNoColon]="true">
                 Áp dụng tại
               </nz-form-label>
-              <input nz-input formControlName="apDungTai" placeholder="Áp dụng tại" readonly />
+              <input nz-input [readonly]="isDisable()" formControlName="apDungTai" placeholder="Áp dụng tại" readonly />
             </nz-form-item>
           </div>
 
@@ -110,8 +111,8 @@
               <nz-form-label [nzNoColon]="true">
                 Văn bản thay thế (nếu có)
               </nz-form-label>
-              <nz-select nzAllowClear nzShowSearch [(ngModel)]="listVanBanId" (ngModelChange)="changeListVanBan()"
-                [ngModelOptions]="{standalone: true}">
+              <nz-select [nzDisabled]="isDisable()" nzAllowClear nzShowSearch [(ngModel)]="listVanBanId"
+                (ngModelChange)="changeListVanBan()" [ngModelOptions]="{standalone: true}">
                 <nz-option nzValue="{{item.id}}" nzLabel="{{item.soVanBan}}" *ngFor="let item of listVanBan">
                 </nz-option>
               </nz-select>
@@ -125,7 +126,7 @@
               <nz-form-label [nzNoColon]="true">
                 Loại vật tư hàng hóa
               </nz-form-label>
-              <nz-select nzMode="tags" nzPlaceHolder="" [(ngModel)]="listOfTagOptions"
+              <nz-select [nzDisabled]="isDisable()" nzMode="tags" nzPlaceHolder="" [(ngModel)]="listOfTagOptions"
                 (ngModelChange)="changeListOfTagOptions($event)" [ngModelOptions]="{standalone: true}">
                 <nz-option *ngFor="let option of listOfOption" [nzLabel]="option.tenHangHoa"
                   [nzValue]="option.maHangHoa">
@@ -140,7 +141,8 @@
                 Trích yếu
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <input nz-input formControlName="trichYeu" placeholder="Thời gian lưu kho tối đa" />
+                <input nz-input [readonly]="isDisable()" formControlName="trichYeu"
+                  placeholder="Thời gian lưu kho tối đa" />
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -150,7 +152,8 @@
               <nz-form-label [nzNoColon]="true">
                 Thời gian lưu kho tối đa
               </nz-form-label>
-              <input nz-input formControlName="thoiGianLuuKhoToiDa" placeholder="Thời gian lưu kho tối đa" />
+              <input nz-input [readonly]="isDisable()" formControlName="thoiGianLuuKhoToiDa"
+                placeholder="Thời gian lưu kho tối đa" />
             </nz-form-item>
           </div>
 
@@ -159,7 +162,7 @@
               <nz-form-label [nzNoColon]="true">
                 Trạng thái hiệu lực văn bản
               </nz-form-label>
-              <nz-select formControlName="trangThaiHl">
+              <nz-select [nzDisabled]="isDisable()" formControlName="trangThaiHl">
                 <nz-option nzValue="Còn hiệu lực" nzLabel="Còn hiệu lực" selected></nz-option>
                 <nz-option nzValue="Hết hiệu lực" nzLabel="Hết hiệu lực"></nz-option>
               </nz-select>
@@ -173,14 +176,15 @@
                 Tài liệu đính kèm
               </nz-form-label>
               <div class="list-file" nz-col nzSpan="24">
-                <file-list [disabled]="isView" [data]="taiLieuDinhKemList"></file-list>
+                <file-list [disabled]="isDisable()" [data]="taiLieuDinhKemList"></file-list>
               </div>
             </nz-form-item>
           </div>
 
           <div nz-col nzSpan="5" class="mt-1">
             <nz-form-item>
-              <label nz-checkbox formControlName="apDungCloaiVthh" (ngModelChange)="onChangeLoaiVthh()">
+              <label [nzDisabled]="isDisable()" nz-checkbox formControlName="apDungCloaiVthh"
+                (ngModelChange)="onChangeLoaiVthh()">
                 Áp dụng cho tất cả chủng loại hàng hóa
               </label>
             </nz-form-item>
@@ -202,16 +206,16 @@
           <thead>
             <tr>
               <th nzWidth="20px">STT</th>
-              <th nzWidth="170px">Tên tiêu chuẩn</th>
-              <th nzWidth="50px">Chỉ tiêu cha?</th>
-              <th nzWidth="100px" *ngIf="!formData.value.apDungCloaiVthh == true">Chủng loại hàng hóa</th>
-              <th nzWidth=" 100px">Mức yêu cầu nhập</th>
-              <th nzWidth="100px">Mức yêu cầu nhập tối thiểu</th>
-              <th nzWidth="100px">Mức yêu cầu nhập tối đa</th>
-              <th nzWidth="100px">Mức yêu cầu xuất </th>
-              <th nzWidth="100px">Mức yêu cầu xuất tối thiểu</th>
-              <th nzWidth="100px">Mức yêu cầu xuất tối đa</th>
-              <th nzWidth="50px" *ngIf="userService.isTongCuc()">Hành động</th>
+              <th>Tên tiêu chuẩn</th>
+              <th>Chỉ tiêu cha?</th>
+              <th *ngIf="!formData.value.apDungCloaiVthh == true">Chủng loại hàng hóa</th>
+              <th>Mức yêu cầu nhập</th>
+              <th>Mức yêu cầu nhập tối thiểu</th>
+              <th>Mức yêu cầu nhập tối đa</th>
+              <th>Mức yêu cầu xuất </th>
+              <th>Mức yêu cầu xuất tối thiểu</th>
+              <th>Mức yêu cầu xuất tối đa</th>
+              <th nzWidth="50px">Hành động</th>
             </tr>
 
           </thead>

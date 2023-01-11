@@ -98,7 +98,6 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
       this.initForm();
       await Promise.all([
         this.userInfo = this.userService.getUserLogin(),
-        console.log(this.userInfo.DON_VI.maDviCha, 123),
         this.loadDsNam(),
         this.maVb = '/QĐ-BTC',
         this.loadLoaiHangHoa(),
@@ -161,6 +160,14 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
         diaChiDvi: this.userInfo.DON_VI.diaChi,
         apDungTai: this.userInfo.TEN_DVI
       })
+    }
+  }
+
+  isDisable(): boolean {
+    if (this.formData.value.trangThai == STATUS.BAN_HANH) {
+      return true
+    } else {
+      return false
     }
   }
 
@@ -392,10 +399,10 @@ export class ThongTinQuanLyQuyChuanKyThuatQuocGiaComponent extends Base2Componen
   onChangeChiTieuCha() {
     if (this.rowItem.chiTieuCha) {
       this.rowItem.chiTieuCha = true
-      console.log(33);
+
     } else {
       this.rowItem.chiTieuCha = false
-      console.log(44);
+
     }
   }
   clearData() {

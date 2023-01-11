@@ -4,31 +4,31 @@
             <div class="search__body" nz-row [nzGutter]="20">
                 <div nz-col nzSpan="3">
                     <label class="search__label"> Năm kế hoạch </label>
-                    <nz-select formControlName="nam">
+                    <nz-select [(ngModel)]="searchFilter.namKh">
                         <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                     </nz-select>
                 </div>
                 <div nz-col nzSpan="3">
                     <label class="search__label">Số QĐ giao NV nhập hàng</label>
                     <input class="search__input" placeholder="Số quyết định nhập" nz-input
-                        [(ngModel)]="searchFilter.soQd" />
+                        [(ngModel)]="searchFilter.soQuyetDinhNhap" />
                 </div>
                 <div nz-col nzSpan="3">
                     <label class="search__label">Số BB nhập đầy kho</label>
                     <input class="search__input" placeholder="Số bảng kê" nz-input
-                        [(ngModel)]="searchFilter.soBienBan" />
+                        [(ngModel)]="searchFilter.soBbNhapDayKho" />
                 </div>
-                <div nz-col nzSpan="3">
-                    <label class="search__label">Ngày băt đầu nhập</label>
-                    <nz-range-picker [(ngModel)]="searchFilter.ngayNhapDayKho" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                <div nz-col nzSpan="4">
+                    <label class="search__label">Ngày bắt đầu nhập</label>
+                    <nz-range-picker [(ngModel)]="searchFilter.ngayBdauNhap" nzFormat="dd/MM/yyyy"></nz-range-picker>
                 </div>
-                <div nz-col nzSpan="3">
+                <div nz-col nzSpan="4">
                     <label class="search__label">Ngày kết thúc nhập</label>
-                    <nz-range-picker [(ngModel)]="searchFilter.ngayKetThucNhap" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                    <nz-range-picker [(ngModel)]="searchFilter.ngayKthucNhap" nzFormat="dd/MM/yyyy"></nz-range-picker>
                 </div>
-                <div nz-col nzSpan="3">
+                <div nz-col nzSpan="4">
                     <label class="search__label">Thời hạn nhập hàng</label>
-                    <nz-range-picker [(ngModel)]="searchFilter.ngayKetThucNhap" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                    <nz-range-picker [(ngModel)]="searchFilter.ngayLapBban" nzFormat="dd/MM/yyyy"></nz-range-picker>
                 </div>
             </div>
             <div class="cangiua group-button-search">
@@ -46,22 +46,22 @@
             <h3>Danh sách biên bản nhập đầy kho </h3>
             <div class="buttons">
                 <button type="button" class="btn btn-do" (click)="deleteSelect()"
-                    *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_XOA')">
+                    *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_XOA')">
                     <i class="fa fa-trash-o do"></i>
                     <span>Xóa</span>
                 </button>
-                <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_EXP')" type="button"
+                <button *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_EXP')" type="button"
                     class="btn btn-sub" (click)="export()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
                 <button type="button" class="btn btn-sub" (click)="print()"
-                    *ngIf="userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_IN')">
+                    *ngIf="userService.isCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_IN')">
                     <i class="icon htvbdh_tcdt_print"></i>
                     <span>In</span>
                 </button>
                 <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
-                    *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_NK_VT_PNKTG_THEM')">
+                    *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_NK_LT_BBNDK_THEM')">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
@@ -81,14 +81,14 @@
                         <th>Số BB NĐK</th>
                         <th>Ngày bắt đầu nhập</th>
                         <th>Ngày kết thúc nhập</th>
+                        <th>Số phiếu NK</th>
+                        <th>Số bảng kê</th>
+                        <th>Ngày nhập kho</th>
                         <th>Điểm kho</th>
                         <th>Nhà kho</th>
                         <th>Ngăn kho</th>
                         <th>Lô kho</th>
                         <th>Số phiếu KT CL</th>
-                        <th>Số phiếu NK</th>
-                        <th>Số bảng kê</th>
-                        <th>Ngày nhập kho</th>
                         <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
@@ -117,13 +117,9 @@
                                     <td [nzExpand]="expandSet2.has(y)" (nzExpandChange)="onExpandChange2(y, $event)">
                                     </td>
                                     <td colspan="3"></td>
-                                    <td>{{bbNhapDayKho.soBienBanNhapDayKho}}</td>
-                                    <td>{{bbNhapDayKho.ngayBatDauNhap | date: 'dd/MM/YYYY' }}</td>
-                                    <td>{{bbNhapDayKho.ngayKetThucNhap | date: 'dd/MM/YYYY' }}</td>
-                                    <td>{{bbNhapDayKho.tenDiemKho}}</td>
-                                    <td>{{bbNhapDayKho.tenNhaKho}}</td>
-                                    <td>{{bbNhapDayKho.tenNganKho}}</td>
-                                    <td>{{bbNhapDayKho.tenLoKho}}</td>
+                                    <td>{{bbNhapDayKho.soBbNhapDayKho}}</td>
+                                    <td>{{bbNhapDayKho.ngayBdauNhap | date: 'dd/MM/YYYY' }}</td>
+                                    <td>{{bbNhapDayKho.ngayKthucNhap | date: 'dd/MM/YYYY' }}</td>
                                     <td colspan="4"></td>
                                     <td>{{bbNhapDayKho.tenTrangThai}}</td>
                                     <td>
@@ -146,10 +142,13 @@
                                         <td></td>
                                         <td></td>
                                         <td colspan="11"></td>
-                                        <td class="link">{{dataPhieu.soPhieuKtraCl}}</td>
-                                        <td class="link">{{dataPhieu.soPhieuNhapKho}}</td>
-                                        <td class="link">{{dataPhieu.soBangKe}}</td>
-                                        <td class="bold">{{dataPhieu.ngayNhap | date: 'dd/MM/YYYY'}}</td>
+                                        <td>{{dataPhieu.soPhieuNhapKho}}</td>
+                                        <td>{{dataPhieu.soBangKeCanHang}}</td>
+                                        <td>{{dataPhieu.ngayNkho}}</td>
+                                        <td>{{dataPhieu.tenDiemKho}}</td>
+                                        <td class="link">{{dataPhieu.tenNhaKho}}</td>
+                                        <td class="link">{{dataPhieu.tenNganKho}}</td>
+                                        <td class="link">{{dataPhieu.tenLoKho}}</td>
                                         <td></td>
                                         <td></td>
                                     </tr>
@@ -179,7 +178,7 @@
     </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-    <app-them-moi-bien-ban-nhap-day-kho [id]="selectedId" (showListEvent)="showList()" [isView]="isViewDetail"
-        [loaiVthh]="loaiVthh" [isTatCa]="isTatCa">
+    <app-them-moi-bien-ban-nhap-day-kho [id]="selectedId" (showListEvent)="showList()" [isView]="isView"
+        [loaiVthh]="loaiVthh">
     </app-them-moi-bien-ban-nhap-day-kho>
 </ng-container>

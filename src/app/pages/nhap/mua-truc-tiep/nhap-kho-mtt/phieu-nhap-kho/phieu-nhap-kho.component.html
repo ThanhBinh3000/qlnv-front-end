@@ -75,18 +75,18 @@
             <tr class="level-1">
               <td>{{(page - 1) * pageSize + i + 1}}</td>
               <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
-              <td class="bold">{{ item.soQuyetDinhNhap }}</td>
-              <td class="bold">{{ item.namKh }}</td>
-              <td class="bold">{{ item.ngayNkho }}</td>
+              <td class="bold">{{ item.soQd }}</td>
+              <td class="bold">{{ item.namNhap }}</td>
+              <td class="bold">{{ item.tgianNkho }}</td>
               <td colspan="9"></td>
               <td>
-                <a (click)="redirectToChiTiet(true,item.id)">
+                <a (click)="redirectToChiTiet(false, 0,item.id)">
                   <i class="fa fa-plus"></i>
                 </a>
               </td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
-              <tr class="level-2" *ngFor="let dataDdiem of dataTable , let y = index">
+              <tr class="level-2" *ngFor="let dataDdiem of item.hhPhieuNhapKhoHdrList , let y = index">
                 <td></td>
                 <td></td>
                 <td colspan="3"></td>

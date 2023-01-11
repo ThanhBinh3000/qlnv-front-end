@@ -1,0 +1,11 @@
+:host ::ng-deep .ant-form-vertical .ant-form-item-label {
+  line-height: 1;
+
+  label {
+    height: 32px;
+  }
+}
+
+:host ::ng-deep .ant-table-thead > tr > th {
+  text-align: center;
+}

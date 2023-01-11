@@ -9,7 +9,7 @@ export class HopdongPhulucHopdongService extends BaseService {
   GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'mua-truc-tiep/hd-bk-pmh', '/qlnv-hang');
+    super(httpClient, 'mua-truc-tiep/hd-mtt', '/qlnv-hang');
   }
 
 

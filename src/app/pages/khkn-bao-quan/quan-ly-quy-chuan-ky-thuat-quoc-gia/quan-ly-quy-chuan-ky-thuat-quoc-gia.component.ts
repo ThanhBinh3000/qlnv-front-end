@@ -49,7 +49,7 @@ export class QuanLyQuyChuanKyThuatQuocGiaComponent implements OnInit {
     tenLoaiVthh: '',
     tenCloaiVthh: '',
   };
-  filterTable: any = {
+  filterTable = {
     soVanBan: '',
     soVanBanThayThe: '',
     soHieuQuyChuan: '',
