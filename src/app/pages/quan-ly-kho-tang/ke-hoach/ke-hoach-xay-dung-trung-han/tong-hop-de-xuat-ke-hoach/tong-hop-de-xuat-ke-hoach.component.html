@@ -163,7 +163,7 @@
           <td>{{data.noiDung}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-center">
-            <a (click)="redirectToChiTiet(data.id,false)" *ngIf="data.trangThai == STATUS.DA_DUYET_LDTC || data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDTC " >
+            <a (click)="redirectToChiTiet(data.id,false)" *ngIf="data.trangThai == STATUS.DA_DUYET_LDTC || data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDTC || data.trangThai == STATUS.DA_KY " >
               <i class="fa fa-eye"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO ||data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_LDTC"

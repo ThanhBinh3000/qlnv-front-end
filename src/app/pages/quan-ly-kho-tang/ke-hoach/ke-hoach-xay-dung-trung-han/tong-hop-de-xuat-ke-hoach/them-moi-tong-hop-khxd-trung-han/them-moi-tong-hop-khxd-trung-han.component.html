@@ -15,7 +15,7 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub xanh-nhat ml-2" *ngIf=" !isViewDetail && isTongHop "  (click)="save(true)">
+      <button type="button" class="btn btn-sub xanh-nhat ml-2" *ngIf=" !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "  (click)="save(true)">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
@@ -27,7 +27,7 @@
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
       </button>
-      <button type="button" class="btn btn-sub xanh ml-2" *ngIf=" !isViewDetail && isTongHop " (click)="save()">
+      <button type="button" class="btn btn-sub xanh ml-2" *ngIf=" !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV  || formData.value.trangThai == STATUS.TU_CHOI_LDTC) " (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>

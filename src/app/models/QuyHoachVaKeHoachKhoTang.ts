@@ -18,7 +18,7 @@ export class QuyHoachKho {
 export class KeHoachXayDungTrungHan {
   id: number;
 
-  dviDeXuat: string;
+  maDvi: string;
   dmucDuAn: string;
   diaDiem: string;
   loaiDuAn : string;

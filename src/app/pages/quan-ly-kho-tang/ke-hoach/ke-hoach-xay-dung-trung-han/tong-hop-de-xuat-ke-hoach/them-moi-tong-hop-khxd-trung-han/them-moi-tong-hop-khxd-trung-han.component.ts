@@ -65,12 +65,14 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       maToTrinh: [null],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
+      lyDo: [],
     });
   }
 
   async ngOnInit() {
     this.userInfo = this.userService.getUserLogin();
-    this.loadDsNam()
+    this.loadDsNam();
+    await this.getDataDetail(this.idInput)
   }
 
   loadDsNam() {
@@ -81,6 +83,29 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       });
     }
   }
+
+  async getDataDetail(id) {
+    if (id > 0) {
+      this.isTongHop = true;
+      let res = await this.tongHopDxXdTh.getDetail(id);
+      const data = res.data;
+      this.formData.patchValue({
+        id: data.id,
+        loaiDuAn: data.loaiDuAn,
+        namBatDau: data.namBatDau,
+        namKetThuc: data.namKetThuc,
+        ngayTongHop: data.ngayTongHop,
+        noiDung: data.noiDung,
+        maToTrinh: data.maToTrinh,
+        trangThai: data.trangThai,
+        tenTrangThai: data.tenTrangThai,
+        lyDo: data.lyDoTuChoi,
+      });
+      this.fileDinhKems = data.fileDinhKems
+      this.dataTable = data.ctiets;
+    }
+  }
+
 
   quayLai() {
     this.showListEvent.emit();
@@ -146,15 +171,19 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
           let trangThai;
           switch (this.formData.value.trangThai) {
             case STATUS.DU_THAO : {
-              trangThai = STATUS.CHO_DUYET_TP;
+              trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.TU_CHOI_TP : {
-              trangThai = STATUS.CHO_DUYET_TP;
+            case STATUS.TU_CHOI_LDV : {
+              trangThai = STATUS.CHO_DUYET_LDV;
               break;
             }
-            case STATUS.TU_CHOI_LDC : {
-              trangThai = STATUS.CHO_DUYET_LDC;
+            case STATUS.CHO_DUYET_LDV : {
+              trangThai = STATUS.CHO_DUYET_LDTC;
+              break;
+            }
+            case STATUS.TU_CHOI_LDTC : {
+              trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
           }
@@ -201,12 +230,12 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.CHO_DUYET_TP: {
-              trangThai = STATUS.TU_CHOI_TP
+            case STATUS.CHO_DUYET_LDV: {
+              trangThai = STATUS.TU_CHOI_LDV
               break;
             }
-            case STATUS.CHO_DUYET_LDC: {
-              trangThai = STATUS.TU_CHOI_LDC
+            case STATUS.CHO_DUYET_LDTC: {
+              trangThai = STATUS.TU_CHOI_LDTC
               break;
             }
           }
@@ -245,12 +274,12 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.CHO_DUYET_TP : {
-              trangThai = STATUS.CHO_DUYET_LDC;
+            case STATUS.CHO_DUYET_LDV : {
+              trangThai = STATUS.CHO_DUYET_LDTC;
               break;
             }
-            case STATUS.CHO_DUYET_LDC : {
-              trangThai = STATUS.DA_DUYET_LDC;
+            case STATUS.CHO_DUYET_LDTC : {
+              trangThai = STATUS.DA_DUYET_LDTC;
               break;
             }
           }
