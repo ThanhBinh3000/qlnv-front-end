@@ -69,15 +69,16 @@
                     <i class="icon htvbdh_tcdt_print"></i>
                     <span>In</span>
                 </button> -->
-                <button *ngIf="isShowUpdate" type="button" class="btn btn-sub xanh" (click)="themMoi()">
+                <button *ngIf="isShowUpdate" type="button" class="btn btn-sub xanh" (click)="viewDetail(null, false)">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
             </div>
         </div>
 
-        <nz-card class="mt-16 flex-card data-table card-border-content">
-            <nz-table #rowSelectionTable [nzData]=" dataTable " [nzFrontPagination]="false" [nzShowPagination]="false">
+      <nz-card class="mt-2px flex-card data-table card-border-content table-card">
+        <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable" [nzFrontPagination]="false"
+                  [nzShowPagination]="false" nzBordered>
                 <thead>
                     <tr>
                         <th width="45px" [nzChecked]="allChecked" [nzIndeterminate]="indeterminate" (nzCheckedChange)="onAllChecked($event)"></th>
@@ -99,22 +100,22 @@
                         </th>
                       <th class="text-center" >
                         <nz-input-group >
-                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDanhSach" (input)="filterInTable('maDanhSach',searchInTable.maDanhSach)" />
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.tenDvi" (input)="filterInTable('tenDvi',searchInTable.tenDvi)" />
                         </nz-input-group>
                       </th>
                       <th class="text-center">
                         <nz-input-group [nzSuffix]="suffixIconSearch">
-                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDanhSach" (input)="filterInTable('maDanhSach',searchInTable.maDanhSach)" />
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.ngayTao" (input)="filterInTable('ngayTao',searchInTable.ngayTao)" />
                         </nz-input-group>
                       </th>
                       <th class="text-center" >
                         <nz-input-group >
-                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDanhSach" (input)="filterInTable('maDanhSach',searchInTable.maDanhSach)" />
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.trangThaiChiCuc" (input)="filterInTable('trangThaiChiCuc',searchInTable.trangThaiChiCuc)" />
                         </nz-input-group>
                       </th>
                       <th class="text-center" >
                         <nz-input-group >
-                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.maDanhSach" (input)="filterInTable('maDanhSach',searchInTable.maDanhSach)" />
+                          <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="searchInTable.trangThaiCuc" (input)="filterInTable('trangThaiCuc',searchInTable.trangThaiCuc)" />
                         </nz-input-group>
                       </th>
                         <th></th>
@@ -124,7 +125,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let data of rowSelectionTable.data; let idx = index">
+                    <tr *ngFor="let data of basicTable.data; let idx = index">
                         <td [nzChecked]="setOfCheckedId.has(data.id)" [nzDisabled]="data.disabled" (nzCheckedChange)="onItemChecked(data.id, $event)"></td>
                         <td style="text-align: center">{{ idx + 1 }}</td>
                         <td>{{ data.maDanhSach }}</td>
@@ -133,7 +134,7 @@
                         <td>{{ data.tenTrangThai }}</td>
                         <td>{{ data.tenTrangThaiCuc }}</td>
                         <td style="text-align: left; white-space: nowrap;">
-                            <a (click)="viewDetail(data.id, true)" *ngIf="data.trangThaiChiCuc == STATUS.CHO_DUYET_KTVBQ || data.trangThaiChiCuc == STATUS.CHO_DUYET_KT || data.trangThaiChiCuc == STATUS.DA_DUYET_LDCC" >
+                            <a (click)="viewDetail(data.id, true)" *ngIf="data.trangThaiChiCuc == STATUS.CHO_DUYET_KTVBQ || data.trangThaiChiCuc == STATUS.CHO_DUYET_KT || data.trangThaiChiCuc == STATUS.DA_DUYET_LDCC || data.trangThaiChiCuc == STATUS.CHO_DUYET_LDCC " >
                                 <i class="fa fa-eye"></i>
                             </a>
                             <a *ngIf="userService.isChiCuc() && (data.trangThaiChiCuc == STATUS.DU_THAO || data.trangThaiChiCuc == STATUS.TU_CHOI_KTVBQ || data.trangThaiChiCuc == STATUS.TU_CHOI_LDCC || data.trangThaiChiCuc == STATUS.TU_CHOI_KT)" (click)="viewDetail(data.id, false)">

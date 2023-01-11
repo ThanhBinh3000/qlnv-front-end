@@ -80,7 +80,12 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     this.disableChiCuc();
   }
 
-  save() {
+  async save() {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      await this.spinner.hide();
+      return;
+    }
     if (this.validateSoLuong()) {
       let dataDiemNhap = '';
       this.listOfData.forEach(item => {

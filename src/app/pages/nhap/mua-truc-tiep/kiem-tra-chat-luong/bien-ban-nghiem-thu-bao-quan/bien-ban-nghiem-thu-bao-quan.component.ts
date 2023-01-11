@@ -13,7 +13,9 @@ import { UserService } from 'src/app/services/user.service';
 import { UserLogin } from 'src/app/models/userlogin';
 import { TinhTrangKhoHienThoiService } from 'src/app/services/tinhTrangKhoHienThoi.service';
 import { Globals } from 'src/app/shared/globals';
-import { QuanLyNghiemThuKeLotService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyNghiemThuKeLot.service';
+import { QuyetDinhGiaoNvNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/mua-truc-tiep/qdinh-giao-nvu-nh/quyetDinhGiaoNvNhapHang.service';
+import { STATUS } from 'src/app/constants/status';
+import { MttBienBanNghiemThuBaoQuan } from './../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttBienBanNghiemThuBaoQuan.service';
 
 @Component({
   selector: 'app-bien-ban-nghiem-thu-bao-quan',
@@ -33,10 +35,6 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
   totalRecord: number = 0;
   dataTable: any[] = [];
   dataTableAll: any[] = [];
-
-  thocIdDefault: string = LOAI_HANG_DTQG.THOC;
-  gaoIdDefault: string = LOAI_HANG_DTQG.GAO;
-  muoiIdDefault: string = LOAI_HANG_DTQG.MUOI;
 
   soQuyetDinh: string;
   soBB: number = null;
@@ -59,6 +57,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
 
+
   filterTable: any = {
     soQuyetDinhNhap: '',
     soBb: '',
@@ -71,17 +70,20 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
     tongGiaTri: '',
     trangThaiDuyet: '',
   };
-
+  STATUS = STATUS
+  idQdGiaoNvNh: number
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
-    private quanLyNghiemThuKeLotService: QuanLyNghiemThuKeLotService,
+    private MttBienBanNghiemThuBaoQuan: MttBienBanNghiemThuBaoQuan,
     private notification: NzNotificationService,
     private modal: NzModalService,
     private router: Router,
     public userService: UserService,
     private tinhTrangKhoHienThoiService: TinhTrangKhoHienThoiService,
     public globals: Globals,
+    private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
+
   ) { }
 
   async ngOnInit() {
@@ -222,46 +224,31 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
 
   async search() {
     let body = {
-      capDvis: ['3'],
-      denNgayLap:
-        this.ngayTongHop && this.ngayTongHop.length > 1
-          ? dayjs(this.ngayTongHop[1]).format('YYYY-MM-DD')
-          : null,
-      maVatTuCha: this.isTatCa ? null : this.typeVthh,
-      maDvi: this.userInfo.MA_DVI,
-      maNganKho: this.nganLo,
-      maNganlo: this.nganLo,
-      maDiemkho: this.diemKho,
-      orderBy: null,
-      orderDirection: null,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page - 1,
+      "paggingReq": {
+        "limit": this.pageSize,
+        "page": this.page - 1
       },
-      soBb: this.soBB,
-      str: null,
-      trangThai: null,
-      tuNgayLap:
-        this.ngayTongHop && this.ngayTongHop.length > 0
-          ? dayjs(this.ngayTongHop[0]).format('YYYY-MM-DD')
-          : null,
+      trangThai: STATUS.BAN_HANH
     };
-    let res = await this.quanLyNghiemThuKeLotService.search(body);
+    let res = await this.quyetDinhGiaoNvNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          if (item.ngayNghiemThu && item.ngayNghiemThu != null) {
-            item.ngayNghiemThuShow = dayjs(item.ngayNghiemThu).format(
-              'DD/MM/YYYY',
-            );
+      this.dataTable.forEach(item => {
+        if (this.userService.isChiCuc()) {
+          item.detail = item.hhQdGiaoNvNhangDtlList.filter(item => item.maDvi == this.userInfo.MA_DVI)[0]
+        } else {
+          let data = [];
+          item.hhQdGiaoNvNhangDtlList.forEach(item => {
+            data = [...data, ...item.listBienBanNghiemThuBq];
+          })
+          item.detail = {
+            listBienBanNghiemThuBq: data
           }
-          item.checked = false;
-        });
-      }
-      this.dataTableAll = cloneDeep(this.dataTable);
-      this.totalRecord = data.totalElements;
+
+        };
+      });
+
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -305,7 +292,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyNghiemThuKeLotService.delete({ id: item.id }).then((res) => {
+          this.MttBienBanNghiemThuBaoQuan.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -338,7 +325,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.quanLyNghiemThuKeLotService.delete({ id: item.id }).then((res) => {
+          this.MttBienBanNghiemThuBaoQuan.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -382,7 +369,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
               ? dayjs(this.ngayTongHop[0]).format('YYYY-MM-DD')
               : null,
         };
-        this.quanLyNghiemThuKeLotService
+        this.MttBienBanNghiemThuBaoQuan
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'danh-sach-bien-ban-nghiem-thu-bao-quan.xlsx'),
@@ -398,11 +385,13 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
+  redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
     this.isDetail = true;
     this.isView = isView;
+    this.idQdGiaoNvNh = idQdGiaoNvNh
   }
+
 
   async showList() {
     this.isDetail = false;
@@ -430,7 +419,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.quanLyNghiemThuKeLotService.deleteMuti({
+            let res = await this.MttBienBanNghiemThuBaoQuan.deleteMuti({
               ids: dataDelete,
             });
             if (res.msg == MESSAGE.SUCCESS) {
@@ -494,4 +483,22 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
   }
 
   print() { }
+
+  expandSet = new Set<number>();
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
+  expandSet2 = new Set<number>();
+  onExpandChange2(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet2.add(id);
+    } else {
+      this.expandSet2.delete(id);
+    }
+  }
 }

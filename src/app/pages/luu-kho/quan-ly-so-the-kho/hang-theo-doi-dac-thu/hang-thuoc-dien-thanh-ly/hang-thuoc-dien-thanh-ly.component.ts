@@ -42,11 +42,11 @@ export class HangThuocDienThanhLyComponent implements OnInit {
   idSelected: number;
 
   searchInTable: any = {
-    maDanhSach: null,
-    tenDvi: null,
-    ngayTao: null,
-    trangThaiCuc: null,
-    trangThaiChiCuc: null,
+    maDanhSach: '',
+    tenDvi: '',
+    ngayTao: '',
+    trangThaiCuc: '',
+    trangThaiChiCuc: '',
   };
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
@@ -125,8 +125,9 @@ export class HangThuocDienThanhLyComponent implements OnInit {
       this.dataTable = [];
       this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
+      this.spinner.hide()
     }
-    this.spinner.hide();
+    this.spinner.hide()
   }
 
 
@@ -275,12 +276,9 @@ export class HangThuocDienThanhLyComponent implements OnInit {
       !this.allChecked;
   }
 
-  clearFilter() {
+  async clearFilter() {
     this.formData.reset();
-  }
-
-  onChangeFilterDate(event) {
-    console.log(event)
+    await this.traCuuDsHangThanhLy();
   }
 
   async changePageIndex(event) {

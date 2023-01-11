@@ -255,7 +255,14 @@ th {
 .scroll-modal {
   .ant-card-body {
     overflow: auto;
+    overflow-x: hidden;
     max-height: calc(80vh - 50px);
+  }
+}
+
+.overflow-auto {
+  .ant-table-content {
+    overflow: auto;
   }
 }
 
@@ -6826,8 +6833,6 @@ td.action.ant-table-cell {
   }
 }
 
-
-
 .selectedRow {
   td {
     background: #d8dcfe !important;
@@ -6836,6 +6841,18 @@ td.action.ant-table-cell {
 
 .ant-collapse-header {
   background-color: #eaf3f3 !important;
+}
+
+.ant-collapse {
+  background-color: transparent !important;
+}
+
+.ant-collapse-content>.ant-collapse-content-box {
+  padding: 0px;
+}
+
+.wrap {
+  white-space: normal !important;
 }
 
 

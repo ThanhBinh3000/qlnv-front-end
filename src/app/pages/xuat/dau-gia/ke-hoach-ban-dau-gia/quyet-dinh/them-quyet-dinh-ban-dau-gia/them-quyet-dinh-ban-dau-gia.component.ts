@@ -13,10 +13,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { environment } from 'src/environments/environment';
 import { STATUS } from "../../../../../../constants/status";
 import { cloneDeep } from "lodash";
-import { DialogThemMoiGoiThauComponent } from 'src/app/components/dialog/dialog-them-moi-goi-thau/dialog-them-moi-goi-thau.component';
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
 import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
@@ -38,17 +36,12 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
   @Output()
   showListEvent = new EventEmitter<any>();
 
-  selectHang: any = { ten: "" };
   maQd: string = null;
-  fileDinhKem: Array<FileDinhKem> = [];
-  listVatTuHangHoa: any[] = [];
   fileList: any[] = [];
   listDanhSachTongHop: any[] = [];
   listToTrinh: any[] = [];
-  urlUploadFile: string = `${environment.SERVICE_API}/qlnv-core/file/upload-attachment`;
 
   danhsachDx: any[] = [];
-  danhsachDxCache: any[] = [];
 
   dataInput: any;
   dataInputCache: any;
@@ -175,6 +168,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     let data = await this.createUpdate(body);
     if (data) {
       if (isGuiDuyet) {
+        this.idInput = data.id;
         this.guiDuyet();
       } else {
         this.quayLai();
@@ -265,15 +259,15 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
           idTrHdr: null,
           soTrHdr: null,
         })
-        this.danhsachDx = data.thopDxKhBdgDtlList;
-        for (const item of this.danhsachDx) {
+        for (let item of data.children) {
           await this.deXuatKhBanDauGiaService.getDetail(item.idDxHdr).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
-              item.dsPhanLoList = res.data.dsPhanLoList;
+              const dataRes = res.data;
+              dataRes.idDxHdr = dataRes.id;
+              this.danhsachDx.push(dataRes);
             }
           })
         };
-        this.danhsachDxCache = cloneDeep(this.danhsachDx);
         this.dataInput = null;
         this.dataInputCache = null;
       } else {
@@ -290,7 +284,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     await this.spinner.show();
     // Get data tờ trình
     let bodyToTrinh = {
-      trangThai: this.loaiVthh == '02' ? STATUS.DA_DUYET_LDV : STATUS.DA_DUYET_LDC,
+      trangThai: STATUS.DA_DUYET_CBV,
       trangThaiTh: STATUS.CHUA_TONG_HOP,
       nam: this.formData.get('nam').value,
       loaiVthh: this.loaiVthh,
@@ -304,7 +298,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       this.listToTrinh = resToTrinh.data.content;
     }
     await this.spinner.hide();
-
 
     const modalQD = this.modal.create({
       nzTitle: 'Danh sách đề xuất kế hoạch lựa chọn nhà thầu',
@@ -333,16 +326,9 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
       const res = await this.deXuatKhBanDauGiaService.getDetail(data.id)
       if (res.msg == MESSAGE.SUCCESS) {
         const dataRes = res.data;
+        dataRes.idDxHdr = dataRes.id;
+        this.danhsachDx.push(dataRes);
         let tongMucDt = 0
-        if (dataRes.loaiVthh.startsWith("02")) {
-          this.danhsachDx = dataRes.dsPhanLoList;
-          this.danhsachDx.forEach(element => {
-            tongMucDt += element.soLuong * element.donGiaVat;
-          });
-        } else {
-          dataRes.idDxHdr = data.id;
-          this.danhsachDx.push(dataRes);
-        }
         this.formData.patchValue({
           cloaiVthh: data.cloaiVthh,
           tenCloaiVthh: data.tenCloaiVthh,
@@ -369,7 +355,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
           idTrHdr: dataRes.id,
           tongMucDt: tongMucDt
         })
-        this.danhsachDxCache = cloneDeep(this.danhsachDx);
         this.dataInput = null;
         this.dataInputCache = null;
       } else {
@@ -386,52 +371,12 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     $event.target.parentElement.classList.add('selectedRow');
     this.isTongHop = this.formData.value.phanLoai == 'TH';
     this.dataInput = this.danhsachDx[index];
-    this.dataInputCache = this.danhsachDxCache[index];
+    if (this.dataInput) {
+      let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
+      this.dataInputCache = res.data;
+    }
     this.index = index;
     await this.spinner.hide();
-  }
-
-  setNewSoLuong($event) {
-    this.danhsachDx[this.index].soLuong = $event;
-  }
-
-  themMoiGoiThau(data?: any, index?: number) {
-    if (!this.formData.get('loaiVthh').value) {
-      this.notification.error(MESSAGE.NOTIFICATION, "Vui lòng chọn loại hàng hóa");
-      return;
-    }
-    const modal = this.modal.create({
-      nzTitle: 'Địa điểm nhập hàng',
-      nzContent: DialogThemMoiGoiThauComponent,
-      nzMaskClosable: false,
-      nzClosable: false,
-      nzWidth: '1200px',
-      nzFooter: null,
-      nzComponentParams: {
-        data: data,
-        loaiVthh: this.formData.get('loaiVthh').value,
-        dviTinh: this.formData.get('loaiVthh').value.maDviTinh,
-      },
-    });
-    modal.afterClose.subscribe((res) => {
-      if (res) {
-        if (index >= 0) {
-          this.danhsachDx[index] = res;
-        } else {
-          this.danhsachDx.push(res);
-        }
-        let tongMucDt: number = 0;
-        this.danhsachDx.forEach((item) => {
-          tongMucDt = tongMucDt + item.soLuong * item.donGia;
-        });
-        this.formData.patchValue({
-          tongMucDt: tongMucDt,
-        });
-      }
-    });
-  }
-
-  deleteRow(index) {
   }
 
   getNameFile(event?: any, item?: FileDinhKem) {
@@ -452,6 +397,14 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
           fileDinhKem.fileSize = resUpload.size;
           fileDinhKem.fileUrl = resUpload.url;
         });
+    }
+  }
+
+  isDisabled() {
+    if (this.formData.value.trangThai == STATUS.DU_THAO) {
+      return false;
+    } else {
+      return true;
     }
   }
 }

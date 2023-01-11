@@ -16,7 +16,7 @@
             <span>Từ chối</span>
         </button>
         <button class="btn btn-sub xanh-nhat"
-            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_DUYET')"
+            *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTDT_NK_LT_BKCH_DUYET_LDCCUC')"
             (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet "></i>
             <span>Duyệt</span>
@@ -61,7 +61,7 @@
                             Năm
                         </nz-form-label>
                         <nz-form-control nz-col [nzErrorTip]="error">
-                            <nz-select formControlName="nam" (ngModelChange)="loadSoQuyetDinh()" [nzDisabled]="true">
+                            <nz-select formControlName="nam" [nzDisabled]="true">
                                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                                 </nz-option>
                             </nz-select>

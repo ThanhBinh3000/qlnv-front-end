@@ -4,7 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
-    <button type="button" class="btn btn-sub" (click)="hoanThanhCapNhat()">
+    <button type="button" class="btn btn-sub xanh-nhat" (click)="hoanThanhCapNhat()">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
       <span>Hoàn thành cập nhật</span>
     </button>
@@ -21,7 +21,7 @@
       </div>
     </div>
   </div>
-  <nz-card class="mg-t-16 flex-card p-lr16">
+  <nz-card class="flex-card p-lr16">
     <!-- START THÔNG TIN CHUNG -->
     <nz-collapse>
       <nz-collapse-panel nzActive="true" nzHeader="Thông tin chung">
@@ -41,7 +41,7 @@
                   <nz-form-item>
                     <nz-form-label [nzNoColon]="true"> Số QĐ PD Kế hoạch BĐG</nz-form-label>
                     <nz-form-control>
-                      <input nz-input formControlName="soQdPdKh" readonly />
+                      <input nz-input formControlName="soQdPd" readonly />
                     </nz-form-control>
                   </nz-form-item>
                 </div>
@@ -233,7 +233,7 @@
             <span>Thêm</span>
           </button>
         </ng-template>
-        <nz-table #tblDetail [nzData]="dataTable" nzBordered>
+        <nz-table class="pd-10" [nzData]="dataTable" nzBordered>
           <thead>
             <tr>
               <th width="">Số QĐ PD kế hoạch BĐG</th>
@@ -247,7 +247,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let data of tblDetail.data; let i = index" (click)="selectRow(i)">
+            <tr *ngFor="let data of dataTable; let i = index" (click)="selectRow(i)">
               <td>{{ data.idTtinHdr }}</td>
               <td>{{ data.idTtinHdr }}</td>
               <td>{{ data.soTb }}</td>
@@ -266,12 +266,7 @@
         </nz-table>
       </nz-collapse-panel>
     </nz-collapse>
-    <nz-card class="mg-t-16 flex-card p-lr16">
-      <app-thongtin-daugia></app-thongtin-daugia>
-
-
-
-    </nz-card>
+    <app-thongtin-daugia></app-thongtin-daugia>
   </nz-card>
 </div>
 <ng-template #error let-control>

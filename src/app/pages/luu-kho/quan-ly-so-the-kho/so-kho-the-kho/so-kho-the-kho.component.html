@@ -80,79 +80,6 @@
           <th nzWidth="" >Trạng thái</th>
           <th nzWidth="90px" class="text-center"   nzRight>Hành động</th>
         </tr>
-<!--          <tr>-->
-<!--            <th></th>-->
-<!--            <th class="text-center">-->
-<!--              <nz-input-group>-->
-<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"-->
-<!--                  (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />-->
-<!--              </nz-input-group>-->
-<!--            </th>-->
-<!--            <th class="text-center">-->
-<!--              <nz-input-group>-->
-<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"-->
-<!--                       (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />-->
-<!--              </nz-input-group>-->
-<!--            </th>-->
-<!--            <th class="text-center">-->
-<!--              <nz-input-group>-->
-<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"-->
-<!--                       (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />-->
-<!--              </nz-input-group>-->
-<!--            </th>-->
-<!--            <th class="text-center">-->
-<!--              <nz-input-group>-->
-<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"-->
-<!--                       (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />-->
-<!--              </nz-input-group>-->
-<!--            </th>-->
-<!--            <th class="text-center" >-->
-<!--              <nz-input-group >-->
-<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nam"-->
-<!--                       (input)="filterInTable('nam',filterTable.nam , false)" size="smail" />-->
-<!--              </nz-input-group>-->
-<!--            </th>-->
-<!--            <th class="text-center">-->
-<!--              <nz-input-group [nzSuffix]="suffixIconSearch" >-->
-<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.donVi"-->
-<!--                  (input)="filterInTable('donVi',filterTable.donVi, false)" size="smail" />-->
-<!--              </nz-input-group>-->
-<!--              <ng-template #suffixIconSearch>-->
-<!--                <i nz-icon nzType="calendar"></i>-->
-<!--              </ng-template>-->
-<!--            </th>-->
-<!--            <th class="text-center">-->
-<!--              <nz-input-group >-->
-<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.diemKho"-->
-<!--                  (input)="filterInTable('diemKho',filterTable.diemKho, false)" size="smail" />-->
-<!--              </nz-input-group>-->
-<!--            </th>-->
-<!--            <th class="text-center">-->
-<!--              <nz-input-group >-->
-<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.nhaKho"-->
-<!--                  (input)="filterInTable('nhaKho',filterTable.nhaKho, false)" size="smail" />-->
-<!--              </nz-input-group>-->
-<!--            </th>-->
-<!--            <th class="text-center">-->
-<!--              <nz-input-group >-->
-<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"-->
-<!--                  (input)="filterInTable('tenTrangThai',filterTable.trangThai, false)" size="smail" />-->
-<!--              </nz-input-group>-->
-<!--            </th>-->
-<!--            <th class="text-center">-->
-<!--              <nz-input-group >-->
-<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"-->
-<!--                       (input)="filterInTable('tenTrangThai',filterTable.trangThai, false)" size="smail" />-->
-<!--              </nz-input-group>-->
-<!--            </th>-->
-<!--            <th class="text-center">-->
-<!--              <nz-input-group >-->
-<!--                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"-->
-<!--                       (input)="filterInTable('tenTrangThai',filterTable.trangThai, false)" size="smail" />-->
-<!--              </nz-input-group>-->
-<!--            </th>-->
-<!--            <th nzRight></th>-->
-<!--          </tr>-->
         </thead>
         <tbody>
         <ng-container *ngFor="let item of dataTable , let i = index">
@@ -169,7 +96,6 @@
             <td></td>
             <td></td>
             <td *ngIf="userService.isChiCuc()">
-
             </td>
           </tr>
           <ng-container *ngIf="expandSet.has(i)">

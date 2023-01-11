@@ -27,25 +27,7 @@
         </div>
         <div nz-col nzSpan="3">
           <label class="search__label">Loại dự án</label>
-          <nz-form-control >
-            <nz-input-group>
-              <nz-select [(ngModel)]="searchFilter.loaiDuAn" nzAllowClear>
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                </nz-option>
-              </nz-select>
-            </nz-input-group>
-          </nz-form-control>
-        </div>
-        <div nz-col nzSpan="3">
-          <label class="search__label">Thời gian KC - HT</label>
-          <nz-form-control >
-            <nz-input-group>
-              <nz-select [(ngModel)]="searchFilter.tgKcHt"  nzAllowClear>
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                </nz-option>
-              </nz-select>
-            </nz-input-group>
-          </nz-form-control>
+          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.loaiDuAn" />
         </div>
         <div nz-col nzSpan="4">
           <label class="search__label">Ngày ký</label>
@@ -100,7 +82,7 @@
           <span>Xuất file</span>
         </button>
         <button  *ngIf="userService.isCuc()"  type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
-          <i class="icon htvbdh_soanthao"></i>
+          <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
       </div>
@@ -129,20 +111,20 @@
           <th></th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQd"
-                     (input)="filterInTable('soQd',filterTable.soQd)" size="small" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCongVan"
+                     (input)="filterInTable('soCongVan',filterTable.soCongVan)" size="small" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
-                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenDvi"
+                     (input)="filterInTable('tenDvi',filterTable.tenDvi)" size="small" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group  [nzSuffix]="suffixTemplateInfo" >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayQd"
-                     (input)="filterInTable('ngayQd',filterTable.ngayQd)" size="small" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
+                     (input)="filterInTable('ngayKy',filterTable.ngayKy)" size="small" />
             </nz-input-group>
             <ng-template #suffixTemplateInfo>
               <i nz-icon nzType="calendar"></i>
@@ -150,14 +132,14 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQdGoc"
-                     (input)="filterInTable('soQdGoc',filterTable.soQdGoc)" size="small" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
+                     (input)="filterInTable('namBatDau' + '-' + 'namKetThuc',filterTable.namKhoach)" size="small" />
             </nz-input-group>
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKhoach"
-                     (input)="filterInTable('namKhoach',filterTable.namKhoach)" size="small" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tmdt"
+                     (input)="filterInTable('tmdt',filterTable.tmdt)" size="small" />
             </nz-input-group>
           </th>
           <th>
@@ -168,8 +150,8 @@
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trangThai"
-                     (input)="filterInTable('trangThai',filterTable.trangThai)" size="small" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
+                     (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
             </nz-input-group>
           </th>
           <th></th>
@@ -183,21 +165,21 @@
           </td>
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
           <td>{{ data.soCongVan }}</td>
-          <td>{{ data.maDvi }}</td>
+          <td>{{ data.tenDvi }}</td>
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.namBatDau +' - '+data.namKetThuc }}</td>
-          <td>{{ data.trichYeu }}</td>
+          <td>{{ data.tmdt }}</td>
           <td>{{data.trichYeu}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left" >
-            <a (click)="redirectToChiTiet(data.id,true)">
+            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="data.trangThai == STATUS.DA_DUYET_LDC || data.trangThai == STATUS.CHO_DUYET_TP || data.trangThai == STATUS.CHO_DUYET_LDC ">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="userService.isCuc() && !(data.trangThai == globals.prop.NHAP_DA_DUYET_LD_CUC )"
+            <a *ngIf="userService.isCuc() && (data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_TP || data.trangThai == STATUS.TU_CHOI_LDC )"
                (click)="redirectToChiTiet(data.id,false)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="userService.isCuc() && !(data.trangThai == globals.prop.NHAP_DA_DUYET_LD_CUC )" (click)="xoaItem(data)">
+            <a *ngIf="userService.isCuc() && data.trangThai == STATUS.DU_THAO " (click)="xoaItem(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
