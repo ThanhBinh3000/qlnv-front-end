@@ -18,7 +18,7 @@
 <!--            </nz-select>-->
 <!--          </div>-->
           <div nz-col nzSpan="4">
-            <label class="search__label">Số QĐ điều chỉnh</label>
+            <label class="search__label">Số quyết định điều chỉnh</label>
             <input class="search__input" nz-input [(ngModel)]="soQDGiao"/>
           </div>
           <div nz-col nzSpan="8">
@@ -29,7 +29,7 @@
             <label class="search__label">Ngày ký</label>
             <nz-range-picker [(ngModel)]="ngayKy" nzFormat="dd/MM/yyyy"></nz-range-picker>
           </div>
-          <div nz-col nzSpan="24">
+          <!--<div nz-col nzSpan="24">
             <label class="search__label">Đơn vị</label>
             <nz-input-group nzSize="large" [nzSuffix]="suffixIcon" class="search__input autocomplete__input">
               <input placeholder="Đơn vị" nz-input [(ngModel)]="inputDonVi" (input)="onInputDonVi($event)"
@@ -45,7 +45,7 @@
                 {{ option.labelDonVi }}
               </nz-auto-option>
             </nz-autocomplete>
-          </div>
+          </div>-->
         </div>
         <div class="cangiua group-button-search">
           <button nz-button class="search__button--clear" (click)="clearFilter()">

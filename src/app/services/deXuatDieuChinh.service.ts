@@ -66,7 +66,7 @@ export class DeXuatDieuChinhService extends BaseService {
 
   deleteMultiple(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/de-xuat-dieu-chinh-ke-hoach-nam/delete/multiple`;
-    return this.httpClient.put(url, body).toPromise();
+    return this.httpClient.post(url, body).toPromise();
   }
 
   updateStatus(body: any): Promise<any> {
