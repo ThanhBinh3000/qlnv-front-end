@@ -1,4 +1,3 @@
-
 import {
   Component,
   Input,
@@ -12,48 +11,50 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
-import { DieuChinhQuyetDinhPdKhlcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
-import {TongHopKhTrungHanService} from "../../../../../services/tong-hop-kh-trung-han.service";
-import {STATUS} from "../../../../../constants/status";
+import {DonviService} from "../../../../services/donvi.service";
+import {DanhMucService} from "../../../../services/danhmuc.service";
+import {QuyHoachKhoService} from "../../../../services/quy-hoach-kho.service";
+import {DANH_MUC_LEVEL} from "../../../luu-kho/luu-kho.constant";
 @Component({
-  selector: 'app-tong-hop-de-xuat-ke-hoach',
-  templateUrl: './tong-hop-de-xuat-ke-hoach.component.html',
-  styleUrls: ['./tong-hop-de-xuat-ke-hoach.component.scss']
+  selector: 'app-danh-muc-du-an',
+  templateUrl: './danh-muc-du-an.component.html',
+  styleUrls: ['./danh-muc-du-an.component.scss']
 })
-export class TongHopDeXuatKeHoachComponent implements OnInit {
+export class DanhMucDuAnComponent implements OnInit {
   @Input() typeVthh: string;
+  @Input() type: string;
   isDetail: boolean = false;
   selectedId: number = 0;
   isViewDetail: boolean;
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
-  listNam: any[] = [];
-
-  STATUS = STATUS
+  danhSachNam: any[] = [];
+  dsTong: any = {};
 
   searchFilter = {
-    maTongHop: '',
-    dmucDuAn: '',
-    diaDiem: '',
-    loaiDuAn: '' ,
-    ngayTongHop: '',
-    namBatDau: '',
-    namKetThuc: ''
+    soQd : '',
+    khoi : '',
+    dvi : '',
+    tenDuAn : '',
+    diaDiem : '',
+    trangThai : '',
+    giaiDoan : '',
+    tgKcHt : ''
   };
 
   filterTable: any = {
-    maTongHop : '',
-    ngayTongHop : '',
-    soQuyetDinh : '',
-    giaiDoan : '',
-    noiDung : '',
-    tenTrangThai : '',
+    soQuyetDinh: '',
+    ngayKy: '',
+    namBatDau: '',
+    namKetThuc: '',
+    namKhoach: '',
+    trichYeu: '',
+    soQdDc: '',
+    tenTrangThai: '',
   };
 
   allChecked = false;
@@ -64,11 +65,17 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
   userInfo: UserLogin;
+  danhSachPhuongAn: any[] = [];
+  danhSachChiCuc: any[] = [];
+  danhSachCuc: any[] = [];
+  danhSachDiemKho: any[] = [];
 
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private tongHopTrungHanService: TongHopKhTrungHanService,
+    private quyHoachKhoService: QuyHoachKhoService,
+    private donViService: DonviService,
+    private dmService: DanhMucService,
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
@@ -78,8 +85,18 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      await this.search();
       this.loadDsNam();
+      await this.search();
+      await this.loadListPa();
+      if (this.userService.isTongCuc()) {
+        await this.loadDanhSachCuc();
+      }
+      if (this.userService.isCuc()) {
+        await this.loadDanhSachChiCuc();
+      }
+      if (this.userService.isChiCuc()) {
+        await this.loadDanhSachDiemKho();
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -90,30 +107,88 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
 
   loadDsNam() {
     for (let i = -3; i < 23; i++) {
-      this.listNam.push({
+      this.danhSachNam.push({
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,
       });
     }
   }
 
+  async loadListPa() {
+    this.danhSachPhuongAn = [];
+    let res = await this.dmService.danhMucChungGetAll('PA_QUY_HOACH');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.danhSachPhuongAn = res.data;
+    }
+  }
+
+  async ongChangMaCuc(event) {
+    const body = {
+      maDviCha: event,
+      trangThai: '01',
+    };
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
+    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.danhSachChiCuc = this.danhSachChiCuc.filter(item => item.type != "PB")
+  }
+
+  async loadDanhSachChiCuc() {
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
+    this.dsTong = dsTong;
+    this.danhSachChiCuc = dsTong[DANH_MUC_LEVEL.CHI_CUC];
+    this.danhSachChiCuc = this.danhSachChiCuc.filter(item => item.type != "PB")
+  }
+
+
+  async loadDanhSachCuc() {
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
+    this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
+    this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB")
+  }
+  async loadDanhSachDiemKho() {
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
+    this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+    this.danhSachDiemKho = this.danhSachDiemKho.filter(item => item.type == "MLK")
+  }
+
+
+
+  async onChangChiCuc(event) {
+    const body = {
+      maDviCha: event,
+      trangThai: '01',
+    };
+    const dsTong = await this.donViService.layDonViTheoCapDo(body);
+    this.danhSachDiemKho = dsTong[DANH_MUC_LEVEL.DIEM_KHO];
+    this.danhSachDiemKho = this.danhSachDiemKho.filter(item => item.type == "MLK")
+  }
+
+
+
   async search() {
     this.spinner.show();
     let body = {
-      diaDiem: this.searchFilter.diaDiem,
-      dmucDuAn: this.searchFilter.dmucDuAn,
-      loaiDuAn: this.searchFilter.loaiDuAn,
-      maTongHop: this.searchFilter.maTongHop,
-      ngayKyTu: this.searchFilter.ngayTongHop[0],
-      ngayKyDen: this.searchFilter.ngayTongHop[1],
-      namBatDau: this.searchFilter.namBatDau,
-      namKetThuc: this.searchFilter.namKetThuc,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
-      }
+      },
     };
-    let res = await this.tongHopTrungHanService.search(body);
+    let res = await this.quyHoachKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -202,6 +277,20 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     await this.search();
   }
 
+  clearFilter() {
+    this.searchFilter = {
+      soQd : '',
+      khoi : '',
+      dvi : '',
+      tenDuAn : '',
+      diaDiem : '',
+      trangThai : '',
+      giaiDoan : '',
+      tgKcHt : ''
+    };
+    this.search();
+  }
+
   xoaItem(item: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -215,11 +304,10 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
         this.spinner.show();
         try {
           let body = {
-            id: item.id,
-            maDvi: '',
+            id: item.id
           };
-          this.tongHopTrungHanService.delete(body).then(async () => {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.DELETE_SUCCESS);
+          this.quyHoachKhoService.delete(body).then(async () => {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             await this.search();
             this.spinner.hide();
           });
@@ -237,12 +325,11 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-
-        };
-        this.tongHopTrungHanService
+        }
+        this.quyHoachKhoService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
+            saveAs(blob, 'quyet-dinh-quy-hoach-kho.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -273,18 +360,55 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     }
   }
 
-  async clearFilterTable() {
-    this.filterTable = {
-      maTongHop: '',
-      dmucDuAn: '',
-      diaDiem: '',
-      loaiDuAn: '' ,
-      tgKcHt: '',
-      ngayTongHop: '',
-      namBatDau: '',
-      namKetThuc: ''
-    };
-    await this.search();
+  clearFilterTable() {
+
   }
+
+  xoa() {
+    let dataDelete = [];
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach((item) => {
+        if (item.checked) {
+          dataDelete.push(item.id);
+        }
+      });
+    }
+    if (dataDelete && dataDelete.length > 0) {
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.spinner.show();
+          try {
+            let res = await this.quyHoachKhoService.deleteMuti({ ids: dataDelete });
+            if (res.msg == MESSAGE.SUCCESS) {
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
+              await this.search();
+              this.allChecked = false;
+            } else {
+              this.notification.error(MESSAGE.ERROR, res.msg);
+            }
+          } catch (e) {
+            console.log('error: ', e);
+            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+          } finally {
+            this.spinner.hide();
+          }
+        },
+      });
+    }
+    else {
+      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
+    }
+  }
+
+
+
 }
+
 

@@ -10,8 +10,7 @@ export class TongHopKhTrungHanService extends BaseService{
 
   GATEWAY = '/qlnv-kho';
   constructor(public httpClient: HttpClient) {
-    // super(httpClient, 'dt-tx-trung-han/tong-hop','/qlnv-kho');
-    super(httpClient, 'dt-tx-trung-han/tong-hop','');
+    super(httpClient, 'dt-tx-trung-han/tong-hop','/qlnv-kho');
   }
 
   tongHop(body: any): Promise<any> {

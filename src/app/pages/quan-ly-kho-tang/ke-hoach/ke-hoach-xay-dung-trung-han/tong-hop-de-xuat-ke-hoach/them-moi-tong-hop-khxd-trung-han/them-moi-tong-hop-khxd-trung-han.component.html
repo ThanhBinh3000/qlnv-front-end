@@ -19,11 +19,11 @@
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button type="button" class="btn btn-sub btn-xoa  ml-2"  *ngIf=" (formData.value.trangThai == STATUS.TU_CHOI_LDV  || formData.value.trangThai == STATUS.TU_CHOI_LDTC)  && isTongHop "   (click)="tuChoi()">
+      <button type="button" class="btn btn-sub btn-xoa  ml-2"  *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_LDV  || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)  && isTongHop "   (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
-      <button type="button" class="btn btn-sub xanh-nhat  ml-2" *ngIf="(formData.value.trangThai == STATUS.TU_CHOI_LDV  || formData.value.trangThai == STATUS.TU_CHOI_LDTC)  && isTongHop "  (click)="duyet()">
+      <button type="button" class="btn btn-sub xanh-nhat  ml-2" *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV  || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)  && isTongHop "  (click)="duyet()">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
       </button>
@@ -152,7 +152,7 @@
       </div>
     </div>
   </div>
-  <nz-table *ngIf="isTongHop" #editRowTable [nzData]="dataTable" nzBordered class="nowrap" [nzFrontPagination]="false"
+  <nz-table *ngIf="isTongHop"  [nzData]="dataTableDx" nzBordered class="nowrap" [nzFrontPagination]="false"
             [nzShowPagination]="false">
     <thead>
     <tr>
@@ -206,7 +206,7 @@
       </div>
     </div>
   </div>
-  <nz-table  *ngIf="isTongHop" #editRowTable [nzData]="dataTable" nzBordered class="nowrap" [nzFrontPagination]="false"
+  <nz-table  *ngIf="isTongHop"  [nzData]="dataTable" nzBordered class="nowrap" [nzFrontPagination]="false"
             [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
     <thead>
     <tr>
