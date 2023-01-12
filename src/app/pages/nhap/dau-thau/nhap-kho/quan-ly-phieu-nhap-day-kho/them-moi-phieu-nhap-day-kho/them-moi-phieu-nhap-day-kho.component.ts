@@ -65,7 +65,6 @@ export class ThemMoiPhieuNhapDayKhoComponent extends Base2Component implements O
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
-    private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamService: ChiTieuKeHoachNamCapTongCucService,
     private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService,
   ) {

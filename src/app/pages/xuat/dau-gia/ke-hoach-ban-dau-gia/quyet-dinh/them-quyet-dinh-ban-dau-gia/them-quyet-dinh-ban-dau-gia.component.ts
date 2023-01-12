@@ -54,7 +54,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
-    private uploadFileService: UploadFileService,
     private deXuatKhBanDauGiaService: DeXuatKhBanDauGiaService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
   ) {
