@@ -78,6 +78,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
       idQdGiaoNvNh: [],
       idPhieuNhapKho: [],
       idBangCanKeHang: [],
+      idDdiemGiaoNvNh: [],
       namKh: [dayjs().get('year')],
       maDvi: ['', [Validators.required]],
       tenDvi: ['', [Validators.required]],
@@ -456,6 +457,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
           this.notification.error(MESSAGE.ERROR, res.msg);
         }
       }).catch(err => {
+        console.log(err)
         this.notification.error(MESSAGE.ERROR, err.msg);
       })
   }
