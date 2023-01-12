@@ -104,8 +104,6 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
       chiTieuKiemTra: ['', [Validators.required]],
       ketQuaNiemPhong: [''],
       tenNguoiTao: [''],
-      soBbGuiHang: [''],
-      idBbGuiHang: [''],
     });
   }
 
@@ -142,7 +140,6 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
       tenNguoiTao: this.userInfo.TEN_DAY_DU
     });
     if (this.idQdGiaoNvNh) {
-      console.log(this.idQdGiaoNvNh, 333333);
       await this.bindingDataQd(this.idQdGiaoNvNh, true);
     }
   }
@@ -489,8 +486,6 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
           tenLoKho: data.tenLoKho,
           soBbNhapDayKho: data.bienBanNhapDayKho?.soBienBanNhapDayKho,
           idBbNhapDayKho: data.bienBanNhapDayKho?.id,
-          soBbGuiHang: data.bienBanGuiHang?.soBienBanGuiHang,
-          idBbGuiHang: data.bienBanGuiHang?.id
         });
       }
     });

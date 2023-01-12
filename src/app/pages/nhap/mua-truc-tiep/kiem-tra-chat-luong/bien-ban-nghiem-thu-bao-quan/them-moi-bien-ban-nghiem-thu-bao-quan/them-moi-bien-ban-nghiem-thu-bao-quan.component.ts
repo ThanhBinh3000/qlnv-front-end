@@ -87,11 +87,10 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         idQdGiaoNvNh: ['', [Validators.required]],
         soQdGiaoNvNh: [, [Validators.required]],
         tgianNkho: [''],
-        slThucNhap: [''],
         soBb: ['', [Validators.required]],
         ngayTao: [dayjs().format('YYYY-MM-DD'),],
         ngayNghiemThu: [''],
-
+        slCanNhap: [''],
         nguoiTao: [''],
         tenThuKho: [''],
         tenKeToan: [''],
@@ -118,7 +117,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
 
         idPhieuNhapKho: [],
         soPhieuNhapKho: [],
-        soLuongPhieuNhapKho: [],
+        slThucNhap: [],
         hthucBquan: [''],
         pthucBquan: [''],
         dinhMucGiao: [''],
@@ -215,7 +214,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       soQdGiaoNvNh: data.soQd,
       idQdGiaoNvNh: data.id,
       tgianNkho: data.tgianNkho,
-      slThucNhap: data.soLuong * 1000,
+      slCanNhap: data.soLuong * 1000,
       loaiVthh: data.loaiVthh,
       cloaiVthh: data.cloaiVthh,
       tenLoaiVthh: data.tenLoaiVthh,
@@ -270,6 +269,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         maLoKho: data.maLoKho,
         tenLoKho: data.tenLoKho,
       })
+      this.loadLoaiKho()
     }
   }
 
@@ -288,14 +288,16 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
-      this.bindingDataSoPhieuNk(data);
+      if (data) {
+        this.bindingDataSoPhieuNk(data);
+      }
     });
   }
 
   async bindingDataSoPhieuNk(data) {
     this.formData.patchValue({
       soPhieuNhapKho: data.soPhieuNhapKho,
-      soLuongPhieuNhapKho: data.soLuongThucNhap
+      slThucNhap: data.soLuongThucNhap
     })
   }
 
@@ -341,9 +343,6 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
         await this.bindingDataQd(res.data?.idQdGiaoNvNh);
         let dataDdNhap = this.listDiaDiemNhap.filter(item => item.id == res.data.idDdiemGiaoNvNh)[0];
         this.bindingDataDdNhap(dataDdNhap);
-        this.formData.patchValue({
-          tenDvi: this.userInfo.TEN_DVI,
-        })
         this.dataTable = data.dviChuDongThucHien;
         this.updateEditCache()
         this.dataTable1 = data.dmTongCucPdTruocThucHien;
@@ -579,7 +578,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
 
   async loadLoaiKho() {
     let body = {
-      "maLhKho": null,
+      "maLhKho": this.formData.value.maLoKho,
       "paggingReq": {
         "limit": 1000,
         "page": 1
@@ -591,6 +590,7 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
     let res = await this.danhMucService.danhMucLoaiKhoGetList(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.content) {
+        console.log(res.data, 5555);
         this.listLoaiKho = res.data.content;
       }
     } else {
