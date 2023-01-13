@@ -148,7 +148,11 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
   }
 
   isDisabled() {
-    return false;
+    if (this.formData.value.trangThai == STATUS.CHO_DUYET_TP || this.formData.value.trangThai == STATUS.CHO_DUYET_LDC || this.formData.value.trangThai == STATUS.DA_DUYET_LDC || this.formData.value.trangThai == STATUS.BAN_HANH) {
+      return true
+    } else {
+      return false;
+    }
   }
 
   async openMaThongBao() {
