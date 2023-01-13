@@ -54,8 +54,10 @@ export class DeXuatDieuChinhComponent implements OnInit {
   lastBreadcrumb: string;
 
   isDetail: boolean = false;
+  isCreateQdDc: boolean =false;
   selectedId: number = 0;
   isView: boolean = false;
+  isViewDetailQdDc: boolean = false;
 
   filterTable: any = {
     soVanBan: '',
@@ -380,11 +382,13 @@ export class DeXuatDieuChinhComponent implements OnInit {
     }
   }
 
-  redirectToDieuChinh(isView, id) {
-    this.showDieuChinhEvent.emit({
-      isView: isView,
-      deXuatId: id,
-    });
+  redirectToQdDieuChinh(isView, id) {
+    // this.showDieuChinhEvent.emit({
+    //   isView: isView,
+    //   deXuatId: id,
+    // });
+    this.isCreateQdDc = isView;
+    this.isViewDetailQdDc = isView;
   }
 
   deleteSelect() {
