@@ -60,7 +60,6 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private uploadFileService: UploadFileService,
     private phieuKtraCluongService: MttPhieuKiemTraChatLuongService,
     public globals: Globals,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
