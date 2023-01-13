@@ -158,6 +158,15 @@
 
     <!-- START DANH SÁCH CÁC GÓI THẦU -->
     <nz-card class="mg-t-16 flex-card p-lr16 " *ngIf=" radioValue == 'Chào giá'">
+        <div class="header header-green-background mg-t-10">
+            <div class="header-text">
+                <div class="title-chi-tieu">
+                    <span>
+                    </span>
+                    <span> Chi tiết thông tin chào giá </span>
+                </div>
+            </div>
+        </div>
         <nz-card class="mg-t-16 flex-card p-lr16 table-card">
             <nz-table #basicTable nzBordered [nzData]="listOfData" [nzFrontPagination]="false"
                 [nzShowPagination]="false">

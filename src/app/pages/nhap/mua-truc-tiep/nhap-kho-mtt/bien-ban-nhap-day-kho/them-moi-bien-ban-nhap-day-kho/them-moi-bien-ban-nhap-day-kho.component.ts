@@ -240,6 +240,10 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
         item.soPhieuNhapKho = item.phieuNhapKhoHdr.soPhieuNhapKho;
         item.soBangKeCanHang = item.bcanKeHangHdr.soBangKeCanHang;
         item.ngayNkho = item.phieuNhapKhoHdr.ngayTao;
+        item.maDiemKho = item.bcanKeHangHdr.maDiemKho;
+        item.maNhaKho = item.bcanKeHangHdr.maNhaKho;
+        item.maNganKho = item.bcanKeHangHdr.maNganKho;
+        item.maLoKho = item.bcanKeHangHdr.maLoKho;
         item.soLuong = item.soLuongNhapKho;
         this.formData.patchValue({
           ktvBanQuan: item.ktvBaoQuan,
