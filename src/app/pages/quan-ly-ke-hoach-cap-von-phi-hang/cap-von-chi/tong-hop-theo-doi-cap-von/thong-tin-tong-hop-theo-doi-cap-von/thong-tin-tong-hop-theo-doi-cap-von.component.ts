@@ -84,9 +84,12 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
     if (id > 0) {
       let res = await this.tongHopTheoDoiCapVonService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
+
         if (res.data) {
           this.khBanDauGia = res.data;
           this.initForm();
+          this.formData.patchValue({soThongTri:+this.khBanDauGia.soThongTri})
+          console.log(this.formData.value,198289389)
           if (this.khBanDauGia.fileDinhKems) {
             this.listFileDinhKem = this.khBanDauGia.fileDinhKems;
           }
@@ -105,7 +108,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      soThongTri: [this.khBanDauGia ? this.khBanDauGia.soThongTri : null, [Validators.required]],
+      soThongTri: [, [Validators.required]],
       maDviDuocDuyet: [this.khBanDauGia ? this.khBanDauGia.maDviDuocDuyet : null],
       soLenhChiTien: [this.khBanDauGia ? this.khBanDauGia.soLenhChiTien : null, [Validators.required]],
       chuong: [this.khBanDauGia ? this.khBanDauGia.chuong : null],
@@ -114,6 +117,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
       lyDoChi: [this.khBanDauGia ? this.khBanDauGia.lyDoChi : null],
       soTien: [this.khBanDauGia ? this.khBanDauGia.soTien : null],
       dviThuHuong: [this.khBanDauGia ? this.khBanDauGia.dviThuHuong : null, [Validators.required]],
+      tenDviThuHuong: [this.khBanDauGia ? this.khBanDauGia.tenDviThuHuong : null],
       taiKhoan: [this.khBanDauGia ? this.khBanDauGia.taiKhoan : null, [Validators.required]],
       nganHang: [this.khBanDauGia ? this.khBanDauGia.nganHang : null, [Validators.required]],
       canCu: [this.khBanDauGia ? this.khBanDauGia.canCu : null],
@@ -243,11 +247,8 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
       dataDetail.soLenhChiTien = dataDetail.soDnCapVon;
       dataDetail.soTien = dataDetail.chiTietList.reduce((pre, cur) => pre = +cur.soTien, 0);
       dataDetail.taiKhoan = dataDetail.dviThuHuongStk;
-      dataDetail.nganhang = dataDetail.dviThuHuongNganHang;
-      this.formData.patchValue(dataDetail)
+      dataDetail.nganHang = dataDetail.dviThuHuongNganHang;
+      this.formData.patchValue(dataDetail);
     }
-
   }
 }
-
-
