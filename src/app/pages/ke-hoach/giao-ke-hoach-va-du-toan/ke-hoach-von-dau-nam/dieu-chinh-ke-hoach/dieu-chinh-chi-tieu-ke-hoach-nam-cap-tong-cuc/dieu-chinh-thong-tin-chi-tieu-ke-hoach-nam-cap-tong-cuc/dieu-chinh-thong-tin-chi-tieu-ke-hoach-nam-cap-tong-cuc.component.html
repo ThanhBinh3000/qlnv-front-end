@@ -16,17 +16,22 @@
           <span>Lưu và gửi duyệt</span>
         </button>
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)" [disabled]="!formData.valid"
-                *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">
+                *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DU_THAO || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != STATUS.CHO_DUYET_LDC && !isView">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="pheDuyet()"
-                *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '04' && dieuChinhThongTinChiTieuKHNam.trangThai != '03'">
+                *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_DUYET') && userService.isTongCuc() && !isView">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Phê duyệt</span>
         </button>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
+           *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.CHO_DUYET_LDV && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_DUYET') && userService.isTongCuc() && !isView">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Từ chối</span>
+        </a>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="banHanh()"
-                *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '01' && dieuChinhThongTinChiTieuKHNam.trangThai != '03')&& userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_BANHANH')">
+                *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.CHO_DUYET_TP && dieuChinhThongTinChiTieuKHNam.trangThai != STATUS.CHO_DUYET_LDC)&& userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_BANHANH')">
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>

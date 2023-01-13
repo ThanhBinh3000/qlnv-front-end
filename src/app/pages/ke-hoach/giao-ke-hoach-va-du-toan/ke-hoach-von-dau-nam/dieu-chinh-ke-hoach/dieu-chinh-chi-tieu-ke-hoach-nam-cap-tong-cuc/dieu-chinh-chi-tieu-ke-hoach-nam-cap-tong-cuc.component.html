@@ -162,7 +162,7 @@
                   <a (click)="redirectToChiTiet(true, data.id)">
                     <i class="fa fa-eye"></i>
                   </a>
-                  <a (click)="redirectToChiTiet(false, data.id)" *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.CHO_DUYET_LDC) && userService.isTongCuc()
+                  <a (click)="redirectToChiTiet(false, data.id)" *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.CHO_DUYET_LDV) && userService.isTongCuc()
                       ">
                     <i class="fa fa-pencil"></i>
                   </a>
