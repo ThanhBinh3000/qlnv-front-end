@@ -74,7 +74,6 @@ export class ThemMoiBienBanNghiemThuBaoQuanComponent extends Base2Component impl
     private bienBanNghiemThuBaoQuan: MttBienBanNghiemThuBaoQuan,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
-    private uploadFileService: UploadFileService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanNghiemThuBaoQuan);
 

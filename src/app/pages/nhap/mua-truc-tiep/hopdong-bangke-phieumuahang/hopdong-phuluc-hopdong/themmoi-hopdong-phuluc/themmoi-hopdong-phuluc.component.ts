@@ -54,7 +54,6 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private uploadFileService: UploadFileService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
     private thongTinPhuLucHopDongService: ThongTinPhuLucHopDongService,
 

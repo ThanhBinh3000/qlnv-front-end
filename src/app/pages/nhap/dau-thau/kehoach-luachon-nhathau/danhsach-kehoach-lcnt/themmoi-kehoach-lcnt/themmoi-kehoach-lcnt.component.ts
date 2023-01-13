@@ -95,7 +95,6 @@ export class ThemmoiKehoachLcntComponent extends Base2Component implements OnIni
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private dauThauService: DanhSachDauThauService,
-    private uploadFileService: UploadFileService,
     private chiTieuKeHoachNamCapTongCucService: ChiTieuKeHoachNamCapTongCucService,
     private dmTieuChuanService: DanhMucTieuChuanService,
     private quyetDinhGiaTCDTNNService: QuyetDinhGiaTCDTNNService,
