@@ -2399,11 +2399,40 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          await this.save(true);
+          // await this.save(true);
+          let trangThai;
+          if (this.userService.isTongCuc()) {
+            switch (this.dieuChinhThongTinChiTieuKHNam.trangThai) {
+              case STATUS.DU_THAO: {
+                trangThai = STATUS.CHO_DUYET_LDV
+                break;
+              }
+              case STATUS.TU_CHOI_LDV: {
+                trangThai = STATUS.CHO_DUYET_LDV
+                break;
+              }
+            }
+          }
+          if (this.userService.isCuc()) {
+            switch (this.dieuChinhThongTinChiTieuKHNam.trangThai) {
+              case STATUS.DU_THAO: {
+                trangThai = STATUS.CHO_DUYET_TP
+                break;
+              }
+              case STATUS.TU_CHOI_TP: {
+                trangThai = STATUS.CHO_DUYET_TP
+                break;
+              }
+              case STATUS.TU_CHOI_LDC: {
+                trangThai = STATUS.CHO_DUYET_TP
+                break;
+              }
+            }
+          }
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '04',
+            trangThai: trangThai,
           };
           let res =
             await this.quyetDinhDieuChinhChiTieuKeHoachNamService.updateStatus(
@@ -2580,6 +2609,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           });
         }
         this.dieuChinhThongTinChiTieuKHNam.dxDcKhnIds = dxDcKhnIds;
+        // console.log(this.dieuChinhThongTinChiTieuKHNam);
+        // return;
         if (this.dataDieuChinh && this.dataDieuChinh.length > 0) {
           this.dieuChinhThongTinChiTieuKHNam.dcChiTieuId = this.dataDieuChinh[0].id;
         }
@@ -2629,6 +2660,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                 MESSAGE.UPDATE_SUCCESS,
               );
               this.redirectChiTieuKeHoachNam();
+            }else{
+              this.guiDuyet();
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -2641,6 +2674,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             if (!isGuiDuyet) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
               this.redirectChiTieuKeHoachNam();
+            }else{
+              this.guiDuyet();
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
