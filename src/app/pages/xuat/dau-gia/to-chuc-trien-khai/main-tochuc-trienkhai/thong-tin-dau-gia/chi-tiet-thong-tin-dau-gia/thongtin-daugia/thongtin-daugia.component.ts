@@ -117,7 +117,8 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         let res = await this.quyetDinhPdKhBdgService.getDtlDetail(this.idDtl);
         if (res.data) {
           const data = res.data
-          if (data.listTtinDg) {
+          console.log("🚀 ~ ngOnInit ~ data", data)
+          if (data.listTtinDg && data.listTtinDg.length > 0) {
             // Nếu có thông tin đấu thầu thì sẽ lấy data laster => Set dataTable = children data lastest ý
             let tTinDthauLastest = data.listTtinDg.pop();
             let tTinDthau = await this.thongTinDauGiaService.getDetail(tTinDthauLastest.id);
