@@ -2466,10 +2466,25 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
+          let trangThai;
+          switch (this.dieuChinhThongTinChiTieuKHNam.trangThai) {
+            case STATUS.CHO_DUYET_LDV: {
+              trangThai = STATUS.DA_DUYET_LDV;
+              break;
+            }
+            case STATUS.CHO_DUYET_LDC: {
+              trangThai = STATUS.DA_DUYET_LDC;
+              break;
+            }
+            case STATUS.CHO_DUYET_TP: {
+              trangThai = STATUS.CHO_DUYET_LDC;
+              break;
+            }
+          }
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '01',
+            trangThai: trangThai,
           };
           let res =
             await this.quyetDinhDieuChinhChiTieuKeHoachNamService.updateStatus(
@@ -2503,11 +2518,11 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzOnOk: async () => {
         this.spinner.show();
         try {
-          await this.save(true);
+          // await this.save(true);
           let body = {
             id: this.id,
             lyDoTuChoi: null,
-            trangThai: '02',
+            trangThai: STATUS.BAN_HANH
           };
           let res =
             await this.quyetDinhDieuChinhChiTieuKeHoachNamService.updateStatus(
@@ -2546,7 +2561,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: '03',
+            trangThai: STATUS.TU_CHOI_LDV,
           };
           let res =
             await this.quyetDinhDieuChinhChiTieuKeHoachNamService.updateStatus(
@@ -2567,6 +2582,46 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       }
     });
   }
+
+  khongBanHanh() {
+    const modalTuChoi = this.modal.create({
+      nzTitle: 'Không ban hành',
+      nzContent: DialogTuChoiComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalTuChoi.afterClose.subscribe(async (text) => {
+      if (text) {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            lyDoTuChoi: text,
+            trangThai: STATUS.KHONG_BAN_HANH,
+          };
+          let res =
+            await this.quyetDinhDieuChinhChiTieuKeHoachNamService.updateStatus(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
+    });
+  }
+
 
   huyBo() {
     this.modal.confirm({
@@ -2660,7 +2715,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                 MESSAGE.UPDATE_SUCCESS,
               );
               this.redirectChiTieuKeHoachNam();
-            }else{
+            } else {
               this.guiDuyet();
             }
           } else {
@@ -2674,7 +2729,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             if (!isGuiDuyet) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
               this.redirectChiTieuKeHoachNam();
-            }else{
+            } else {
               this.guiDuyet();
             }
           } else {
@@ -2902,13 +2957,17 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   thongTinTrangThai(trangThai: string): string {
     if (
-      trangThai === '00' ||
-      trangThai === '01' ||
-      trangThai === '04' ||
-      trangThai === '03'
+      trangThai === STATUS.DU_THAO ||
+      trangThai === STATUS.CHO_DUYET_TP ||
+      trangThai === STATUS.TU_CHOI_LDC ||
+      trangThai === STATUS.CHO_DUYET_LDC ||
+      trangThai === STATUS.CHO_DUYET_LDV
+      || trangThai === STATUS.TU_CHOI_LDV
+      || trangThai === STATUS.TU_CHOI_TP
+      || trangThai === STATUS.KHONG_BAN_HANH
     ) {
       return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === '02') {
+    } else if (trangThai === STATUS.DA_DUYET_LDC || trangThai === STATUS.DA_DUYET_LDV || trangThai === STATUS.BAN_HANH) {
       return 'da-ban-hanh';
     }
   }

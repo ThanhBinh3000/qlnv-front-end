@@ -87,7 +87,7 @@
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
               <ng-container *ngFor="let dataChild of data.children , let y = index">
-                <tr *ngIf="dataChild.maDvi == userInfo.MA_DVI">
+                <tr *ngIf="this.userService.isCuc() ? dataChild.maDvi == userInfo.MA_DVI : null">
                   <td></td>
                   <td></td>
                   <td></td>

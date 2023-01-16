@@ -105,7 +105,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
 
   async getListBoNganh() {
     this.dsBoNganh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data;
     }
