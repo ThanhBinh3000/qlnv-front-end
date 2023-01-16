@@ -162,6 +162,10 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         value: this.khBanDauGia ? +this.khBanDauGia.dviThuHuong : null,
         disabled: this.isView ? true : false,
       }],
+      tenDviThuHuong: [{
+        value: this.khBanDauGia ? +this.khBanDauGia.tenDviThuHuong : null,
+        disabled: this.isView ? true : false,
+      }],
       dviThuHuongStk: [{
         value: this.khBanDauGia ? this.khBanDauGia.dviThuHuongStk : null,
         disabled: this.isView ? true : false,
