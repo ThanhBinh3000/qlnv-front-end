@@ -52,7 +52,7 @@
             <nz-form-label nzRequired [nzNoColon]="true"> Số lệnh chi tiền</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
               <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" formControlName="soLenhChiTien"
-                [nzDisabled]="true">
+                [nzDisabled]="isView">
               </nz-input-number>
             </nz-input-group>
           </nz-form-item>
@@ -93,7 +93,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true"> Số tiền</nz-form-label>
             <nz-input-group nz-col [nzSpan]="24">
-              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" formControlName="soTien" [nzDisabled]="true">
+              <nz-input-number [nzMin]="1" [nzMax]="" [nzSize]="'small'" formControlName="soTien" [nzDisabled]="isView">
               </nz-input-number>
             </nz-input-group>
           </nz-form-item>
