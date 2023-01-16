@@ -31,6 +31,7 @@ export class DanhMucDuAnComponent implements OnInit {
   tabSelected: string = 'phuong-an-tong-hop'
   danhSachNam: any[] = [];
 
+  STATUS = STATUS;
   rowItem: DanhMucKho = new DanhMucKho();
 
 
@@ -182,7 +183,7 @@ export class DanhMucDuAnComponent implements OnInit {
     this.search();
   }
 
-  xoaItem(item: any) {
+  xoaItem(id) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -191,25 +192,28 @@ export class DanhMucDuAnComponent implements OnInit {
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      nzOnOk: () => {
+      nzOnOk: async () => {
         this.spinner.show();
         try {
           let body = {
-            id: item.id
-          };
-          this.danhMucKhoService.delete(body).then(async () => {
+            "ids": id,
+          }
+          const res = await this.danhMucKhoService.delete(body);
+          if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             await this.search();
-            this.spinner.hide();
-          });
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
         } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
         }
       },
     });
   }
+
 
   exportData() {
     if (this.totalRecord > 0) {
@@ -245,6 +249,10 @@ export class DanhMucDuAnComponent implements OnInit {
 
   async themMoiItem(id?) {
     this.spinner.show();
+    if (!this.checkValidators(this.rowItem)) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng không để trống!!")
+      return;
+    }
     let body = {
       "diaDiem": this.rowItem.diaDiem,
       "id": id ? id : null,
@@ -255,12 +263,13 @@ export class DanhMucDuAnComponent implements OnInit {
       "nstwDuyet": this.rowItem.nstwDuyet,
       "soQdPd": this.rowItem.soQdPd,
       "tenDuAn": this.rowItem.tenDuAn,
-      "tgHoanThanh": this.rowItem.tgHoanThanh,
-      "tgKhoiCong": this.rowItem.tgKhoiCong,
+      "tgHoanThanh": this.rowItem.tgKcHt && this.rowItem.tgKcHt[1] ? dayjs(this.rowItem.tgKcHt[1]).get('year')  :null,
+      "tgKhoiCong": this.rowItem.tgKcHt && this.rowItem.tgKcHt[0] ? dayjs(this.rowItem.tgKcHt[0]).get('year') :null,
       "tmdtDuKien": this.rowItem.tmdtDuKien,
       "tmdtDuyet": this.rowItem.tmdtDuyet,
       "tongSoLuyKe": this.rowItem.tongSoLuyKe,
-      "trangThai": STATUS.DU_THAO
+      "trangThai": STATUS.DU_THAO,
+      "maDvi" : this.userInfo.MA_DVI
     }
     let res
     if (id > 0) {
@@ -274,13 +283,27 @@ export class DanhMucDuAnComponent implements OnInit {
       } else {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
       }
+      this.rowItem = new DanhMucKho();
       await this.search();
     }
     this.spinner.hide();
   }
 
-  checkValidators() {
-
+  checkValidators(rowItem : DanhMucKho) {
+    let arr = [];
+    let check = true;
+    arr.push(
+      rowItem.maDuAn, rowItem.tenDuAn, rowItem.diaDiem, rowItem.khoi, rowItem.tgKcHt && rowItem.tgKcHt[0] ? rowItem.tgKcHt[0] : null,rowItem.tgKcHt && rowItem.tgKcHt[1] ? rowItem.tgKcHt[1] : null, rowItem.tmdtDuKien, rowItem.nstwDuKien
+    )
+    if (arr && arr.length > 0) {
+      for (let  i = 0; i < arr.length; i++) {
+        if (arr[i] == '' || arr[i] == null || arr[i] == undefined) {
+          check = false;
+          break;
+        }
+      }
+    }
+    return check;
   }
 
   updateEditCache(): void {
@@ -300,7 +323,7 @@ export class DanhMucDuAnComponent implements OnInit {
   }
 
   clearData() {
-
+    this.rowItem = new DanhMucKho();
   }
 }
 
@@ -312,6 +335,7 @@ export class DanhMucKho {
   khoi: string;
 
   giaiDoan : any
+  tgKcHt : any
   tuNam: number;
   denNam: number;
   tgKhoiCong: number;

@@ -18,6 +18,7 @@ import {UserLogin} from "../../../../../../models/userlogin";
 import {STATUS} from "../../../../../../constants/status";
 
 import {DonviService} from "../../../../../../services/donvi.service";
+import {iterator} from "rxjs/internal-compatibility";
 
 
 @Component({
@@ -41,6 +42,8 @@ export class ThemMoiQdComponent implements OnInit {
   rowItem: QuyHoachKho = new QuyHoachKho();
   dataEdit: { [key: string]: { edit: boolean; data: QuyHoachKho } } = {};
   danhSachPhuongAn: any[] = [];
+  dsThanhLy: any[] = [];
+  dsDauTu: any[] = [];
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
   danhSachChiCuc: any[] = [];
@@ -98,6 +101,8 @@ export class ThemMoiQdComponent implements OnInit {
     let res = await this.danhMucService.danhMucChungGetAll('PA_QUY_HOACH');
     if (res.msg == MESSAGE.SUCCESS) {
       this.danhSachPhuongAn = res.data;
+      this.dsThanhLy = this.danhSachPhuongAn.filter(item => item.ma != "ĐT")
+      this.dsDauTu = this.danhSachPhuongAn.filter(item => item.ma != "ĐT")
     }
   }
 
