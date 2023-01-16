@@ -75,7 +75,7 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private bienBanLayMauServive: MttBienBanLayMauService,
-    private uploadFileService: UploadFileService,
+    public uploadFileService: UploadFileService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private phieuKiemNghiemChatLuongService: MttPhieuKiemNghiemChatLuongService
 
