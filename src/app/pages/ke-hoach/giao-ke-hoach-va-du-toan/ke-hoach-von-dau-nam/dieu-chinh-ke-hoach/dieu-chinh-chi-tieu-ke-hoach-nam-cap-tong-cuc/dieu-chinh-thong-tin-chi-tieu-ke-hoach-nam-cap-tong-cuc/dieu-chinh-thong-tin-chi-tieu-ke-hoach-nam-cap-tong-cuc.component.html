@@ -16,7 +16,7 @@
           <span>Lưu và gửi duyệt</span>
         </button>
         <button class="btn btn-main btn-sm waves-effect waves-light" (click)="save(false)" [disabled]="!formData.valid"
-                *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DU_THAO || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != STATUS.CHO_DUYET_LDC && !isView">
+                *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DU_THAO || dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.TU_CHOI_LDV  || dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.TU_CHOI_LDC || dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.TU_CHOI_TP || id == 0) && !isView">
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
@@ -35,11 +35,11 @@
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>
-        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-           *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '04' && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">
-          <i class="icon htvbdh_tcdt_tuchoi"></i>
-          <span>Từ chối</span>
-        </a>
+        <!--        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"-->
+        <!--           *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '04' && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">-->
+        <!--          <i class="icon htvbdh_tcdt_tuchoi"></i>-->
+        <!--          <span>Từ chối</span>-->
+        <!--        </a>-->
       </div>
     </div>
   </div>
@@ -102,7 +102,7 @@
             <div nz-col [nzSpan]="24">
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Trích yếu</nz-form-label>
               <input formControlName="trichYeu" rows="1" nz-input placeholder="Nhập trích yếu"
-                     [readonly]="!(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DU_THAO || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.CHO_DUYET_LDC) || isView"/>
+                     [readonly]="checkTrangThaiRecord() || isView"/>
             </div>
             <div nz-col [nzSpan]="24" *ngIf="userService.isTongCuc()">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số đề xuất điều chỉnh của Cục DTNN KV
@@ -358,7 +358,7 @@
                 <td>{{keHoachLuongThucCreate?.tkcnTongThoc ?? 0 | number: '1.0-1'}}</td>
                 <td>{{keHoachLuongThucCreate?.tkcnTongGao ?? 0 | number: '1.0-1'}}</td>
                 <td
-                  *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai==='00' || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai==='03'"
+                  *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView "
                   nzRight>
                   <a class="save" (click)="themMoiKHLT()" [ngClass]="{'isDisabled': !isAddLuongThuc}">
                     <i class="icon htvbdh_dau-cong"></i>
@@ -425,7 +425,7 @@
                   <td>{{data?.tkcnTongThoc ?? 0 | number: '1.0-1'}}</td>
                   <td>{{data?.tkcnTongGao ?? 0 | number: '1.0-1'}}</td>
                   <td
-                    *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DU_THAO || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != STATUS.CHO_DUYET_LDC && !isView"
+                    *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView"
                     nzRight>
                     <a (click)="editRowLuongThuc(data.donViId)">
                       <i class="fa fa-pencil"></i>
@@ -625,7 +625,7 @@
                 <td class="background-last-row">{{(tableExist ? reduceRowData(0, 25, 5,
                   ',', 'table-luong-thuc-tong-hop') : 0) | number: '1.0-1'}}</td>
                 <td class="background-last-row"
-                    *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.CHO_DUYET_LDC"
+                    *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView"
                     nzRight>
                 </td>
               </tr>
@@ -667,14 +667,14 @@
                 <th class="text-center" width="10%">Xuất trong năm</th>
                 <th class="text-center" width="10%">Tồn kho cuối năm</th>
                 <th width="10%" class="text-center" nzRight
-                    *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DU_THAO || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != STATUS.CHO_DUYET_LDC && !isView">
+                    *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView">
                   Hành động
                 </th>
               </tr>
               </thead>
               <tbody>
               <tr
-                *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DU_THAO  || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != STATUS.CHO_DUYET_LDC && !isView">
+                *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView">
                 <td></td>
                 <td>
                   <nz-input-group nzSize="large" [nzSuffix]="suffixIcon"
@@ -709,7 +709,7 @@
                   {{(keHoachMuoiCreate.tonKhoDauNam ? keHoachMuoiCreate.tonKhoDauNam : 0) + (keHoachMuoiCreate.nhapTrongNam ? keHoachMuoiCreate.nhapTrongNam : 0) - (keHoachMuoiCreate.xuatTrongNamMuoi ? keHoachMuoiCreate.xuatTrongNamMuoi : 0)}}
                 </td>
                 <td
-                  *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.CHO_DUYET_LDC"
+                  *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView"
                   class="text-center" nzRight>
                   <a class="save" (click)="themMoiKHMuoi()" [ngClass]="{'isDisabled': !isAddMuoi}">
                     <i class="icon htvbdh_dau-cong"></i>
@@ -730,7 +730,7 @@
                     {{(dataMuoi.tonKhoCuoiNam ? dataMuoi.tonKhoCuoiNam : 0) | number: '1.0-1' }}
                   </td>
                   <td
-                    *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DU_THAO || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != STATUS.CHO_DUYET_LDC && !isView"
+                    *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView"
                     class="text-center" nzRight>
                     <a (click)="editRowMuoi(dataMuoi.donViId)">
                       <i class="fa fa-pencil"></i>
@@ -951,7 +951,7 @@
                             <td>{{+r.soLuongChuyenSang + +r.soLuongNhap|number: '1.0-1'}}</td>
                             <td>{{r.soLuongChuyenSang|number: '1.0-1'}}</td>
                             <td>{{r.soLuongNhap|number: '1.0-1'}}</td>
-                            <td>
+                            <td *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView">
                               <a (click)="suaVatTu(i,i1,'nhap')">
                                 <i class="fa fa-pencil"></i>
                               </a>
@@ -1179,7 +1179,7 @@
                             <td>{{+r.soLuongChuyenSang + +r.soLuongNhap}}</td>
                             <td>{{r.soLuongChuyenSang}}</td>
                             <td>{{r.soLuongNhap}}</td>
-                            <td>
+                            <td *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView">
                               <a (click)="suaVatTu(i,i1,'xuat')">
                                 <i class="fa fa-pencil"></i>
                               </a>
