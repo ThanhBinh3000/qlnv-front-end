@@ -2546,7 +2546,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
           let body = {
             id: this.id,
             lyDoTuChoi: text,
-            trangThai: '03',
+            trangThai: STATUS.TU_CHOI_LDV,
           };
           let res =
             await this.quyetDinhDieuChinhChiTieuKeHoachNamService.updateStatus(
@@ -2660,7 +2660,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
                 MESSAGE.UPDATE_SUCCESS,
               );
               this.redirectChiTieuKeHoachNam();
-            }else{
+            } else {
               this.guiDuyet();
             }
           } else {
@@ -2674,7 +2674,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
             if (!isGuiDuyet) {
               this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
               this.redirectChiTieuKeHoachNam();
-            }else{
+            } else {
               this.guiDuyet();
             }
           } else {
@@ -2902,13 +2902,16 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
 
   thongTinTrangThai(trangThai: string): string {
     if (
-      trangThai === '00' ||
-      trangThai === '01' ||
-      trangThai === '04' ||
-      trangThai === '03'
+      trangThai === STATUS.BAN_HANH ||
+      trangThai === STATUS.CHO_DUYET_TP ||
+      trangThai === STATUS.TU_CHOI_LDC ||
+      trangThai === STATUS.CHO_DUYET_LDC ||
+      trangThai === STATUS.CHO_DUYET_LDV
+      || trangThai === STATUS.TU_CHOI_LDV
+      || trangThai === STATUS.TU_CHOI_TP
     ) {
       return 'du-thao-va-lanh-dao-duyet';
-    } else if (trangThai === '02') {
+    } else if (trangThai === STATUS.DA_DUYET_LDC || trangThai === STATUS.DA_DUYET_LDV || trangThai === STATUS.BAN_HANH) {
       return 'da-ban-hanh';
     }
   }
