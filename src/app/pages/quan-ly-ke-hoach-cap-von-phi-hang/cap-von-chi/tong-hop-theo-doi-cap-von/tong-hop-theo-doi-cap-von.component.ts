@@ -12,6 +12,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { TongHopTheoDoiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import {DonviService} from "../../../../services/donvi.service";
 
 @Component({
   selector: 'app-tong-hop-theo-doi-cap-von',
@@ -77,6 +78,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
     public globals: Globals,
     private tongHopTheoDoiCapVonService: TongHopTheoDoiCapVonService,
     private danhMucService: DanhMucService,
+    private donviService: DonviService,
   ) { }
 
   async ngOnInit() {
@@ -101,7 +103,7 @@ export class TongHopTheoDoiCapVonComponent implements OnInit {
 
   async getListBoNganh() {
     this.dsBoNganh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data;
     }
