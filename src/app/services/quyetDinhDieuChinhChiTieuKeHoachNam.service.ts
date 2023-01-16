@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { BaseService } from './base.service';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {BaseService} from './base.service';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -84,7 +84,7 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
 
   exportList(body: any): Observable<Blob> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/export/list`;
-    return this.httpClient.post(url, body, { responseType: 'blob' });
+    return this.httpClient.post(url, body, {responseType: 'blob'});
   }
 
   deleteData(id: any): Promise<any> {
@@ -104,6 +104,7 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
 
   updateStatus(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/status`;
+    // const url = `http://localhost:3333/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/status`;
     return this.httpClient.put(url, body).toPromise();
   }
 
