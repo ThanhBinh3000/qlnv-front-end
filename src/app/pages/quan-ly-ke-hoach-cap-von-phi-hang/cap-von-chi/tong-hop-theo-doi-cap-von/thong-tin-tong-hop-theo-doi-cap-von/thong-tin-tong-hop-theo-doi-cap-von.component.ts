@@ -244,8 +244,8 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
       let dataDetail = res.data;
       delete dataDetail.soThongTri;
       dataDetail.maDviDuocDuyet = dataDetail.dviThongTri;
-      dataDetail.soLenhChiTien = dataDetail.soDnCapVon;
-      dataDetail.soTien = dataDetail.chiTietList.reduce((pre, cur) => pre = +cur.soTien, 0);
+      // dataDetail.soLenhChiTien = dataDetail.soDnCapVon;
+      // dataDetail.soTien = dataDetail.chiTietList.reduce((pre, cur) => pre = +cur.soTien, 0);
       dataDetail.taiKhoan = dataDetail.dviThuHuongStk;
       dataDetail.nganHang = dataDetail.dviThuHuongNganHang;
       this.formData.patchValue(dataDetail);
