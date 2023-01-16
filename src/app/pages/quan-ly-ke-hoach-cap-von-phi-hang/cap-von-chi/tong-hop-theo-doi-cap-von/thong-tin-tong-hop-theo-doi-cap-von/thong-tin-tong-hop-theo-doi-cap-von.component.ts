@@ -89,7 +89,6 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
           this.khBanDauGia = res.data;
           this.initForm();
           this.formData.patchValue({soThongTri:+this.khBanDauGia.soThongTri})
-          console.log(this.formData.value,198289389)
           if (this.khBanDauGia.fileDinhKems) {
             this.listFileDinhKem = this.khBanDauGia.fileDinhKems;
           }
