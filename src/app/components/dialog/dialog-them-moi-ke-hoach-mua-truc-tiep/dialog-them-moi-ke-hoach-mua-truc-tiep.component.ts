@@ -32,6 +32,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   isValid: boolean = false;
   userInfo: UserLogin;
   donGiaVat: number = 0;
+  namKh: number = 0;
 
 
   constructor(
@@ -114,25 +115,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     this.thongtinMuaTrucTiep = new DanhSachMuaTrucTiep();
     this.loadDonVi();
     if (this.dataEdit) {
-      this.listChiCuc = [{
-        maDvi: this.dataEdit.maDvi,
-        tenDonVi: this.dataEdit.tenDvi,
-        soLuongNhap: this.dataEdit.soLuongChiTieu
-      }]
-      this.formData.patchValue({
-        tenGoiThau: this.dataEdit.tenGoiThau,
-        maDvi: this.dataEdit.maDvi,
-        tenDvi: this.dataEdit.tenDvi,
-        soLuongKhDd: this.dataEdit.soLuongKhDd,
-        donGia: this.dataEdit.donGia,
-        donGiaVat: this.dataEdit.donGiaVat,
-        tongSoLuong: this.dataEdit.tongSoLuong,
-        tongThanhTien: this.dataEdit.tongThanhTien,
-        tongThanhTienVat: this.dataEdit.tongThanhTienVat,
-        tenCcuc: this.dataEdit.tenCcuc,
-        soLuong: this.dataEdit.soLuong,
-        thanhTien: this.dataEdit.thanhTien,
-      })
+      this.helperService.bidingDataInFormGroup(this.formData, this.dataEdit);
       this.changeChiCuc(this.dataEdit.maDvi);
       this.listOfData = this.dataEdit.children
     } else {
@@ -144,15 +127,26 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
     this.checkDisabledSave();
   }
 
+
   async loadDonVi() {
     this.listChiCuc = [];
     let body = {
       trangThai: "01",
-      maDviCha: this.userInfo.MA_DVI
+      maDviCha: this.userInfo.MA_DVI,
+      type: [null, 'MLK']
     };
+
     if (this.dataChiTieu) {
+      console.log(this.dataChiTieu, 7777)
       if (this.loaiVthh === LOAI_HANG_DTQG.THOC) {
-        this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
+        this.dataChiTieu.khLuongThuc?.forEach(item => {
+          let body = {
+            maDvi: item.maDonVi,
+            tenDvi: item.tenDonvi,
+            soLuongNhap: item.ntnThoc
+          }
+          this.listChiCuc.push(body)
+        });
       }
     } else {
       let res = await this.donViService.getAll(body);
@@ -169,7 +163,7 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
 
   async changeChiCuc(event) {
     let body = {
-      year: 2022,
+      year: this.namKh,
       loaiVthh: this.loaiVthh,
       maDvi: event
     }
@@ -181,13 +175,15 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
       this.formData.patchValue({
         tenDvi: res.data.tenTongKho,
         soLuongKhDd: soLuongDaLenKh.data,
-        soLuongChiTieu: chiCuc.soLuongNhap
+        soLuongChiTieu: chiCuc?.soLuongNhap * 1000
+
       })
       for (let i = 0; i < res.data?.child.length; i++) {
         const item = {
           'value': res.data.child[i].maDiemkho,
           'text': res.data.child[i].tenDiemkho,
           'diaDiemNhap': res.data.child[i].diaChi,
+
         };
         this.listDiemKho.push(item);
       };

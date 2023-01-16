@@ -324,7 +324,8 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
-        donGiaVat: this.formData.value.donGiaVat
+        donGiaVat: this.formData.value.donGiaVat,
+        namKh: this.formData.value.namKh
       },
     });
     modalGT.afterClose.subscribe((res) => {
