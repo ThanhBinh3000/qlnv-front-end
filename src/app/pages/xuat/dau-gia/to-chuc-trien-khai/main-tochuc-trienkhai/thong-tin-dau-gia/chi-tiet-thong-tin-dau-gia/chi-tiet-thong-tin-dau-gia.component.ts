@@ -128,13 +128,19 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
 
   hoanThanhCapNhat() {
     if (this.dataTable.length == 0) {
-      this.notification.error(MESSAGE.ERROR, "Không thể hoàn thành cập nhật, phải có ít nhất 1 lần đấu giá");
+      this.notification.error(MESSAGE.ERROR, "Không thể kết thúc đấu giá, phải có ít nhất 1 lần đấu giá");
       return
+    } else {
+      let dataFilter = this.dataTable.filter(item => item.trangThai == this.STATUS.DU_THAO)
+      if (dataFilter) {
+        this.notification.error(MESSAGE.ERROR, "Không thể kết thúc đấu giá, thông báo " + dataFilter[0].maThongBao + " đang chưa hoàn thành");
+        return
+      }
     }
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có muốn hoàn thành cập nhập ?',
+      nzContent: 'Bạn có chắc chắn muốn kết thúc đấu giá ?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,

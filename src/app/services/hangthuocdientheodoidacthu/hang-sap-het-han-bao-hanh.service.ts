@@ -18,7 +18,6 @@ export class HangSapHetHanBaoHanhService extends BaseService {
 
   search(body: any): Promise<any> {
     let url = `${environment.SERVICE_API}${this.GATEWAY}/hang-het-han-bao-hanh/tra-cuu`
-    // let url = `http://localhost:3333/hang-het-han-bao-hanh/tra-cuu`
     return this.httpClient.post<any>(url, body).toPromise();
   }
 

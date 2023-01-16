@@ -75,11 +75,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private bienBanLayMauServive: MttBienBanLayMauService,
-    public uploadFileService: UploadFileService,
     private danhMucTieuChuanService: DanhMucTieuChuanService,
     private phieuKiemNghiemChatLuongService: MttPhieuKiemNghiemChatLuongService
-
-
   ) {
     super(httpClient, storageService, notification, spinner, modal, phieuKiemNghiemChatLuongService);
     this.formData = this.fb.group({

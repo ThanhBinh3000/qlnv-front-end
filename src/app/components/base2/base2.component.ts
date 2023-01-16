@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
@@ -17,12 +17,16 @@ import { Globals } from 'src/app/shared/globals';
 import { cloneDeep } from 'lodash';
 import { saveAs } from 'file-saver';
 import { DialogTuChoiComponent } from '../dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { UploadFileService } from 'src/app/services/uploaFile.service';
 
 @Component({
   selector: 'app-base2',
   templateUrl: './base2.component.html',
 })
 export class Base2Component implements OnInit {
+
+  @Output()
+  showListEvent = new EventEmitter<any>();
 
   // User Info 
   userInfo: UserLogin;
@@ -54,6 +58,7 @@ export class Base2Component implements OnInit {
   userService: UserService
   spinner: NgxSpinnerService
   notification: NzNotificationService
+  uploadFileService: UploadFileService
 
   constructor(
     httpClient: HttpClient,
@@ -69,6 +74,7 @@ export class Base2Component implements OnInit {
     this.helperService = new HelperService(httpClient, notification);
     this.userService = new UserService(httpClient, storageService);
     this.userInfo = this.userService.getUserLogin();
+    this.uploadFileService = new UploadFileService(httpClient);
     for (let i = -3; i < 23; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
@@ -126,6 +132,10 @@ export class Base2Component implements OnInit {
   showList() {
     this.isDetail = false;
     this.search();
+  }
+
+  goBack() {
+    this.showListEvent.emit();
   }
 
   goDetail(id: number, roles?: any) {
@@ -416,7 +426,7 @@ export class Base2Component implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
             this.spinner.hide();
-            this.detail(id);
+            this.goBack();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             this.spinner.hide();
@@ -458,7 +468,7 @@ export class Base2Component implements OnInit {
           if (res.msg == MESSAGE.SUCCESS) {
             this.notification.success(MESSAGE.SUCCESS, MESSAGE.TU_CHOI_SUCCESS);
             this.spinner.hide();
-            this.detail(id);
+            this.goBack();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
             this.spinner.hide();

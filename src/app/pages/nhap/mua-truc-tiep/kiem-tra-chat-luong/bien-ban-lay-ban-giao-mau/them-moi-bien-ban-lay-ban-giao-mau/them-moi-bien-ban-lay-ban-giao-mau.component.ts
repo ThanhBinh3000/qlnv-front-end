@@ -59,9 +59,7 @@ export class ThemMoiBienBanLayBanGiaoMauComponent extends Base2Component impleme
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private bienBanLayMauServive: MttBienBanLayMauService,
-    private uploadFileService: UploadFileService,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
-
   ) {
     super(httpClient, storageService, notification, spinner, modal, bienBanLayMauServive);
     this.formData = this.fb.group({

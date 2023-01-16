@@ -1,17 +1,13 @@
-import { cloneDeep } from 'lodash';
 import { Component, Input, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
-import { UserLogin } from 'src/app/models/userlogin';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { MESSAGE } from 'src/app/constants/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/hop-dong/hopDongXuatHang.service';
-import dayjs from 'dayjs';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -20,45 +16,33 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
-
-  searchBody = {
-
-  }
-
-
-  isDetail: boolean = false;
-  selectedId: number = 0;
-  isView: boolean = false;
-
-  allChecked = false;
-  indeterminate = false;
-
-  filterTable: any = {
-    soHd: '',
-    tenHd: '',
-    ngayKy: '',
-    loaiVthh: '',
-    chungLoaiVthh: '',
-    chuDauTu: '',
-    nhaCungCap: '',
-    gtriHdSauVat: '',
-  };
-
+  isQuanLy: boolean;
+  isAddNew: boolean;
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private hopDongXuatHang: HopDongXuatHangService
+    private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, hopDongXuatHang);
+    super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
     this.formData = this.fb.group({
       ngayKy: '',
       soHd: '',
       tenHd: '',
       nhaCungCap: ''
-    })
+    });
+    this.filterTable = {
+      soHd: '',
+      tenHd: '',
+      ngayKy: '',
+      loaiVthh: '',
+      chungLoaiVthh: '',
+      chuDauTu: '',
+      nhaCungCap: '',
+      gtriHdSauVat: '',
+    }
   }
 
   async ngOnInit() {
@@ -74,15 +58,11 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
     }
   }
 
-  redirectToChiTiet(isView: boolean, id: number) {
-    this.selectedId = id;
+  goDetail(id: number, roles?: any, isQuanLy?: boolean) {
+    this.idSelected = id;
     this.isDetail = true;
-    this.isView = isView;
-  }
-
-  async showList() {
-    this.isDetail = false;
-    await this.search()
+    this.isQuanLy = isQuanLy;
+    this.isAddNew = !isQuanLy;
   }
 
 }

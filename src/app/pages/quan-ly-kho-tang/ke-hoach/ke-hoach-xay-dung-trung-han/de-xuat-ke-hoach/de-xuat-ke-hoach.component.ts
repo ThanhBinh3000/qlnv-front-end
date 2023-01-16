@@ -109,6 +109,7 @@ export class DeXuatKeHoachComponent implements OnInit {
 
     const dsTong = await this.dviService.layDonViTheoCapDo(body);
     this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
+    this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB")
     if (this.userService.isCuc()) {
       this.searchFilter.maDvi = this.userInfo.MA_DVI
     }

@@ -256,6 +256,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
   }
 
   openDialogQuyetDinhGiaoChiTieu() {
+    return;
     if (this.id == 0 && !this.isView) {
       const modalQD = this.modal.create({
         nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
@@ -555,10 +556,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               "loai": "04",
               "maVatTu": element?.maVatTu,
               "maVatTuCha": element?.maVatTuCha,
-              "soLuongTang": element?.slTangMuoi ?? 0,
-              "soLuongGiam": element?.slGiamMuoi ?? 0,
-              // "dxDcLtVtCtList": element?.dxDcLtVtCtList,
-              // "diaDiemKho": element?.diaDiemKho,
+              "soLuongTang": element?.slTang ?? 0,
+              "soLuongGiam": element?.slGiam ?? 0,
             };
             dxDcLtVtReqList.push(item);
           });
@@ -622,6 +621,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
                 MESSAGE.UPDATE_SUCCESS,
               );
             }
+            this.back();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }

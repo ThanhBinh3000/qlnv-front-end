@@ -77,6 +77,8 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
       donViTinh: ['kg'],
       tenDvi: [],
       soLuong: [0],
+      canCu: [],
+      fileDinhKem: [],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       /*noiDungCuuTroView: new FormArray([this.fb.group({
@@ -120,7 +122,6 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
         */
       ])
       await this.loadDetail(this.id)
-      // await Promise.all([this.loaiVTHHGetAll(), this.loaiHopDongGetAll()]);
       this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
@@ -394,7 +395,7 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
   async loadDsDonVi() {
     const res = await this.donViService.layDonViCon();
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsDonVi = res.data;
+      this.dsDonVi = res.data.filter(s => !s.type);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
