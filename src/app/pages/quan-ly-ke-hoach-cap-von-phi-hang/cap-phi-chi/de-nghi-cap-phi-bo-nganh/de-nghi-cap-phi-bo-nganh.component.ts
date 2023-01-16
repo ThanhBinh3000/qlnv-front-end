@@ -175,7 +175,7 @@ export class DeNghiCapPhiBoNganhComponent implements OnInit {
 
   async getListBoNganh() {
     this.listBoNganh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listBoNganh = res.data;
     }

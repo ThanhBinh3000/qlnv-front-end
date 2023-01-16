@@ -18,6 +18,8 @@ import { TongHopTheoDoiCapPhiService } from 'src/app/services/ke-hoach/von-phi/t
 import { UserService } from 'src/app/services/user.service';
 import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
+import {ThongTriDuyetYCapVonService} from "../../../../../services/ke-hoach/von-phi/thongTriDuyetYCapVon.service";
+import {ThongTriDuyetYCapPhiService} from "../../../../../services/ke-hoach/von-phi/thongTriDuyetYCapPhi.service";
 
 @Component({
   selector: 'app-thong-tin-tong-hop-theo-doi-cap-phi',
@@ -47,6 +49,7 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
   khBanDauGia: any = {};
   dsBoNganh: any[] = [];
   chiTietList: any[] = [];
+  dsThongTri: any;
 
   constructor(
     private modal: NzModalService,
@@ -58,6 +61,7 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
     public userService: UserService,
     private donviService: DonviService,
     private tongHopTheoDoiCapVonService: TongHopTheoDoiCapPhiService,
+    private thongTriDuyetYCapVonService: ThongTriDuyetYCapPhiService,
   ) {
   }
 
@@ -69,6 +73,7 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
     await Promise.all([
       this.initForm(),
       this.getListBoNganh(),
+      this.getListThongTri(),
     ]);
     await this.loadChiTiet(this.idInput);
     this.spinner.hide();
@@ -91,7 +96,7 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
 
   async getListBoNganh() {
     this.dsBoNganh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data;
     }
@@ -108,6 +113,7 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
       lyDoChi: [this.khBanDauGia ? this.khBanDauGia.lyDoChi : null],
       soTien: [this.khBanDauGia ? this.khBanDauGia.soTien : null],
       dviThuHuong: [this.khBanDauGia ? this.khBanDauGia.dviThuHuong : null, [Validators.required]],
+      tenDviThuHuong: [this.khBanDauGia ? this.khBanDauGia.tenDviThuHuong : null],
       taiKhoan: [this.khBanDauGia ? this.khBanDauGia.taiKhoan : null, [Validators.required]],
       nganHang: [this.khBanDauGia ? this.khBanDauGia.nganHang : null, [Validators.required]],
       canCu: [this.khBanDauGia ? this.khBanDauGia.canCu : null],
@@ -214,5 +220,32 @@ export class ThongTinTongHopTheoDoiCapPhiComponent implements OnInit {
 
   thongTinTrangThai(trangThai: string): string {
     return thongTinTrangThaiNhap(trangThai);
+  }
+
+  async getListThongTri() {
+    let body = {
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0,
+      },
+    };
+    let res = await this.thongTriDuyetYCapVonService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsThongTri = res.data.content;
+    }
+  }
+
+  async changeThongTri($event: any) {
+    let res = await this.thongTriDuyetYCapVonService.loadChiTiet($event);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let dataDetail = res.data;
+      delete dataDetail.soThongTri;
+      dataDetail.maDviDuocDuyet = dataDetail.dviThongTri;
+      // dataDetail.soLenhChiTien = dataDetail.soDnCapPhi;
+      // dataDetail.soTien = dataDetail.chiTietList.reduce((pre, cur) => pre = +cur.soTien, 0);
+      dataDetail.taiKhoan = dataDetail.dviThuHuongStk;
+      dataDetail.nganHang = dataDetail.dviThuHuongNganHang;
+      this.formData.patchValue(dataDetail);
+    }
   }
 }

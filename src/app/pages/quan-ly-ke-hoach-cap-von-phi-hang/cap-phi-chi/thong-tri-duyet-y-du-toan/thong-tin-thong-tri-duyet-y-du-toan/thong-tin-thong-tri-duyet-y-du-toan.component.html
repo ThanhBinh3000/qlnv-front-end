@@ -86,8 +86,8 @@
           <nz-form-item>
             <nz-form-label nzRequired [nzNoColon]="true"> Đơn vị</nz-form-label>
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
-              <nz-select formControlName="dviThongTri" [nzDisabled]="isView">
-                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.maBoNganh" [nzLabel]="p.tenBoNganh">
+              <nz-select formControlName="dviThongTri" [nzDisabled]="isView" (ngModelChange)="changeDonVi()">
+                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.code" [nzLabel]="p.tenDvi">
                 </nz-option>
               </nz-select>
             </nz-form-control>
@@ -125,8 +125,8 @@
             <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
               <nz-select formControlName="dviThuHuong" [nzDisabled]="isView" (ngModelChange)="changeDonViThuHuong()"
                          nzAllowClear>
-<!--                <nz-option *ngFor="let p of listDviThuHuong" [nzValue]="p.id" [nzLabel]="p.dvCungCapHang"></nz-option>-->
-                <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.id" [nzLabel]="p.tenDvCungCap"></nz-option>
+                <!--                <nz-option *ngFor="let p of listDviThuHuong" [nzValue]="p.id" [nzLabel]="p.dvCungCapHang"></nz-option>-->
+                <nz-option *ngFor="let p of listDviThuHuong" [nzValue]="p.id" [nzLabel]="p.tenDvCungCap"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
