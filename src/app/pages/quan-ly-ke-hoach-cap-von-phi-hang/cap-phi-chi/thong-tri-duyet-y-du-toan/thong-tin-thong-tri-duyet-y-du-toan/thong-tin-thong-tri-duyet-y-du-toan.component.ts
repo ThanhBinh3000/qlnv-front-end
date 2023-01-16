@@ -208,6 +208,10 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
         value: this.khBanDauGia ? +this.khBanDauGia.dviThuHuong : null,
         disabled: this.isView ? true : false,
       }],
+      tenDviThuHuong: [{
+        value: this.khBanDauGia ? +this.khBanDauGia.tenDviThuHuong : null,
+        disabled: this.isView ? true : false,
+      }],
       dviThuHuongStk: [{
         value: this.khBanDauGia ? this.khBanDauGia.dviThuHuongStk : null,
         disabled: this.isView ? true : false,
@@ -255,7 +259,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
 
   async getListBoNganh() {
     this.dsBoNganh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data;
       this.dsBoNganhFix = res.data;
@@ -502,13 +506,12 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     if (selected) {
       let res = await this.tongHopDeNghiCapPhiService.loadChiTiet(this.formData.get('soDnCapPhi').value);
       if (res.msg == MESSAGE.SUCCESS && res.data) {
-       /* let map = res.data.ct1s.map(s => s.tenBoNganh);
+        let map = res.data.ct1s.map(s => s.tenBoNganh);
         if (map.includes('Tổng cục Dự Trữ')) {
           map.push('Bộ Tài chính');
-        }*/
-        this.dsBoNganh=res.data.cts;
-        // this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.tenDvi))
-
+        }
+        // this.dsBoNganh=res.data.cts;
+        this.dsBoNganh = this.dsBoNganhFix.filter(s => map.includes(s.tenDvi))
       }
     }
   }
@@ -517,7 +520,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
     if (this.formData.value.dviThongTri) {
       let res = await this.deNghiCapPhiBoNganhService.dsThuHuong({
         maBoNganh: this.formData.value.dviThongTri,
-        maTh: this.formData.value.soDnCapVon
+        maTh: this.formData.value.soDnCapPhi
       });
       if (res.msg == MESSAGE.SUCCESS && res.data) {
         this.listDviThuHuong = res.data;
@@ -531,6 +534,7 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       this.formData.patchValue({
         dviThuHuongStk: data.soTaiKhoan,
         dviThuHuongNganHang: data.nganHang,
+        tenDviThuHuong: data.tenDvCungCap,
       })
     }
 

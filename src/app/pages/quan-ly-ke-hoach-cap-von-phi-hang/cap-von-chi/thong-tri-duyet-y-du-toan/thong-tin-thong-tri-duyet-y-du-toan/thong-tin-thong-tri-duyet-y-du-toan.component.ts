@@ -504,8 +504,8 @@ export class ThongTinThongTriDuyetYDuToanComponent implements OnInit {
       this.formData.patchValue({
         dviThuHuongStk: data.soTaiKhoan,
         dviThuHuongNganHang: data.nganHang,
+        tenDviThuHuong: data.dvCungCapHang,
       })
     }
-
   }
 }

@@ -42,7 +42,7 @@
                     <nz-form-item>
                         <nz-form-label nzRequired [nzNoColon]="true"> Bộ Ngành </nz-form-label>
                         <nz-select formControlName="maBoNganh">
-                            <nz-option *ngFor="let item of listBoNganh" [nzValue]="item.ma" [nzLabel]="item.giaTri">
+                            <nz-option *ngFor="let item of listBoNganh" [nzValue]="item.code" [nzLabel]="item.tenDvi">
                             </nz-option>
                         </nz-select>
                     </nz-form-item>
