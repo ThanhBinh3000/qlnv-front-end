@@ -549,8 +549,7 @@
                 <div class="header-text">
                     <div class="title-chi-tieu">
                         <span></span>
-                        <span>Địa điểm giao, nhận hành (dữ liệu lấy từ quyết định kết quả kh mua trực tiếp, cho phép
-                            xóa)</span>
+                        <span>Địa điểm giao, nhận hàng</span>
                     </div>
                 </div>
             </div>
@@ -572,42 +571,23 @@
                         <tbody>
                             <ng-container *ngFor="let cuc of dataTable , let i = index">
                                 <tr>
-                                    <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
+                                    <td class="text-center">{{i + 1}}</td>
                                     <td>{{cuc.tenDvi}}</td>
                                     <td></td>
-                                    <td></td>
                                     <td>{{cuc.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td>{{cuc.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td>{{cuc.soLuong * cuc.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                                    <td>{{formData.value.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                                    <td>{{cuc.soLuong * formData.value.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
+                                    <td>{{convertTienTobangChu(cuc.soLuong * formData.value.donGiaVat)}}</td>
+                                    <td>
+                                        <a>
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a>
+                                            <i class="fa fa-trash-o do"></i>
+                                        </a>
+                                    </td>
                                 </tr>
-                                <ng-container *ngIf="expandSet.has(i)">
-                                    <ng-container *ngFor="let chiCuc of cuc.children, let y = index">
-                                        <tr>
-                                            <td></td>
-                                            <td class="text-right" [nzExpand]="expandSet2.has(y)"
-                                                (nzExpandChange)="onExpandChange2(y, $event)">
-                                            <td>{{ chiCuc.tenDvi }}</td>
-                                            <td></td>
-                                            <td>{{ chiCuc.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
-                                            <td>{{ cuc.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-                                            <td>{{ chiCuc.soLuong * cuc.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-                                        </tr>
-                                        <ng-container *ngIf="expandSet2.has(y)">
-                                            <ng-container *ngFor="let diemKho of chiCuc.children, let z = index">
-                                                <tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>{{diemKho.tenDvi}}</td>
-                                                    <td>{{diemKho.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                                    <td>{{ cuc.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-                                                    <td>{{ diemKho.soLuong * cuc.donGiaVat | number : '1.0-1' : 'vi_VN'
-                                                        }}</td>
-                                                </tr>
-                                            </ng-container>
-                                        </ng-container>
-                                    </ng-container>
-                                </ng-container>
+
                             </ng-container>
                         </tbody>
                     </nz-table>
