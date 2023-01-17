@@ -132,7 +132,7 @@
       </button>
     </div>
   </div>
-    <nz-table  [nzData]="dataTable" nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
+    <nz-table  [nzData]="dataTableTL" nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
                [nzShowPagination]="false">
       <thead>
         <tr>
@@ -213,7 +213,7 @@
             </nz-input-group>
           </td>
           <td class="text-center" *ngIf="!isViewDetail">
-            <a (click)="themMoiItem()">
+            <a (click)="themMoiItem('TL')">
               <i class="fa fa-plus"></i>
             </a>
             <a (click)="clearData()">
@@ -222,7 +222,7 @@
           </td>
         </tr>
 
-        <tr *ngFor="let data of dataTable; let idx = index">
+        <tr *ngFor="let data of dataTableTL; let idx = index">
           <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
             <td>{{ idx + 1 }}</td>
             <td>{{ data.tenCuc }}</td>
@@ -282,7 +282,7 @@
               <nz-input-group>
                 <nz-select [(ngModel)]="dataEdit[idx].data.phuongAnQuyHoach" nzAllowClear>
                   <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                  <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of danhSachPhuongAn">
+                  <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsThanhLy">
                   </nz-option>
                 </nz-select>
               </nz-input-group>
@@ -317,7 +317,7 @@
         </button>
       </div>
     </div>
-    <nz-table  [nzData]="dataTable" nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
+    <nz-table  [nzData]="dataTableDTM" nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
                [nzShowPagination]="false">
       <thead>
       <tr>
@@ -387,7 +387,7 @@
           <nz-input-group>
             <nz-select [(ngModel)]="rowItem.phuongAnQuyHoach" [nzShowArrow]="false"
                        (ngModelChange)="changePhuongAn($event)">
-              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of danhSachPhuongAn">
+              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsDauTu">
               </nz-option>
             </nz-select>
           </nz-input-group>
@@ -398,7 +398,7 @@
           </nz-input-group>
         </td>
         <td class="text-center" *ngIf="!isViewDetail">
-          <a (click)="themMoiItem()">
+          <a (click)="themMoiItem('DTM')">
             <i class="fa fa-plus"></i>
           </a>
           <a (click)="clearData()">
@@ -407,7 +407,7 @@
         </td>
       </tr>
 
-      <tr *ngFor="let data of dataTable; let idx = index">
+      <tr *ngFor="let data of dataTableDTM; let idx = index">
         <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
           <td>{{ idx + 1 }}</td>
           <td>{{ data.tenCuc }}</td>

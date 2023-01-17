@@ -107,7 +107,7 @@ export class QuyetDinhQuyHoachComponent implements OnInit {
   }
 
   loadDsNam() {
-    for (let i = -3; i < 23; i++) {
+    for (let i = -10; i < 10; i++) {
       this.danhSachNam.push({
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,

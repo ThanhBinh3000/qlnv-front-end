@@ -38,6 +38,9 @@ export class ThemMoiQdComponent implements OnInit {
   formData: FormGroup
   maQd: string;
   dataTable: any[] = []
+  dataTableDTM: any[] = []
+
+  dataTableTL: any[] = []
   danhSachNam: any[] = [];
   rowItem: QuyHoachKho = new QuyHoachKho();
   dataEdit: { [key: string]: { edit: boolean; data: QuyHoachKho } } = {};
@@ -90,7 +93,7 @@ export class ThemMoiQdComponent implements OnInit {
 
   async loadDsNam() {
     let thisYear = dayjs().get('year');
-    for (let i = -5; i < 5; i++) {
+    for (let i = -10; i < 10; i++) {
       this.danhSachNam.push((thisYear - i));
     }
   }
@@ -102,7 +105,7 @@ export class ThemMoiQdComponent implements OnInit {
     if (res.msg == MESSAGE.SUCCESS) {
       this.danhSachPhuongAn = res.data;
       this.dsThanhLy = this.danhSachPhuongAn.filter(item => item.ma != "ĐT")
-      this.dsDauTu = this.danhSachPhuongAn.filter(item => item.ma != "ĐT")
+      this.dsDauTu = this.danhSachPhuongAn.filter(item => item.ma == "ĐT")
     }
   }
 
@@ -272,6 +275,10 @@ export class ThemMoiQdComponent implements OnInit {
       });
       this.fileDinhKems = data.fileDinhKems;
       this.dataTable = data.quyetDinhQuyHoachCTiets;
+      if (this.dataTable) {
+        this.dataTableDTM = this.dataTable.filter(item => item.phuongAnQuyHoach == "ĐT")
+        this.dataTableTL = this.dataTable.filter(item => item.phuongAnQuyHoach != "ĐT")
+      }
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach(item => {
            let arr = this.danhSachPhuongAn.filter(a => a.ma == item.phuongAnQuyHoach)
@@ -304,12 +311,17 @@ export class ThemMoiQdComponent implements OnInit {
     });
   }
 
-  themMoiItem() {
+  themMoiItem(type) {
     if (!this.dataTable) {
       this.dataTable = [];
     }
-    this.dataTable = [...this.dataTable, this.rowItem]
-    this.rowItem = new QuyHoachKho();
+    if (type == 'TL') {
+      this.dataTableTL = [...this.dataTableTL, this.rowItem]
+      this.rowItem = new QuyHoachKho();
+    }else {
+      this.dataTableDTM = [...this.dataTableDTM, this.rowItem]
+      this.rowItem = new QuyHoachKho();
+    }
     this.updateEditCache()
   }
 

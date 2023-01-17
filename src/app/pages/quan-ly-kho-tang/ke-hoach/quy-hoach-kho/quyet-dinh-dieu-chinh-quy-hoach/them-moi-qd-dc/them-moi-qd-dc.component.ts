@@ -98,7 +98,7 @@ export class ThemMoiQdDcComponent implements OnInit {
 
   async loadDsNam() {
     let thisYear = dayjs().get('year');
-    for (let i = -5; i < 5; i++) {
+    for (let i = -10; i < 10;  i++) {
       this.danhSachNam.push((thisYear - i));
     }
   }

@@ -18,6 +18,12 @@ import {DonviService} from "../../../../services/donvi.service";
 import {DanhMucService} from "../../../../services/danhmuc.service";
 import {DanhMucKhoService} from "../../../../services/danh-muc-kho.service";
 import {STATUS} from "../../../../constants/status";
+import {
+  DialogQuyetDinhGiaCuaTcdtnnComponent
+} from "../../../../components/dialog/dialog-ke-hoach-phuong-an-gia/dialog-quyet-dinh-gia-cua-tcdtnn/dialog-quyet-dinh-gia-cua-tcdtnn.component";
+import {
+  DialogDanhMucKhoComponent
+} from "../../../../components/dialog/dialog-danh-muc-kho/dialog-danh-muc-kho.component";
 
 @Component({
   selector: 'app-danh-muc-du-an',
@@ -61,7 +67,6 @@ export class DanhMucDuAnComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private donViService: DonviService,
     private dmService: DanhMucService,
     private modal: NzModalService,
     public userService: UserService,
@@ -163,12 +168,6 @@ export class DanhMucDuAnComponent implements OnInit {
     }
   }
 
-  redirectToChiTiet(id: number, isView?: boolean) {
-    this.selectedId = id;
-    this.isDetail = true;
-    this.isViewDetail = isView ?? false;
-  }
-
   clearFilter() {
     this.searchFilter = {
       soQd: '',
@@ -245,6 +244,21 @@ export class DanhMucDuAnComponent implements OnInit {
       data: {...this.dataTable[index]},
       edit: false,
     };
+  }
+
+  async openDialog() {
+    let modalQD = this.modal.create({
+      nzTitle: 'CHI TIẾT DỰ ÁN',
+      nzContent: DialogDanhMucKhoComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '700px',
+      nzStyle: {top: '70px'},
+      nzFooter: null,
+      nzComponentParams: {},
+    });
+    modalQD.afterClose.subscribe((data) => {
+    })
   }
 
   async themMoiItem(id?) {
