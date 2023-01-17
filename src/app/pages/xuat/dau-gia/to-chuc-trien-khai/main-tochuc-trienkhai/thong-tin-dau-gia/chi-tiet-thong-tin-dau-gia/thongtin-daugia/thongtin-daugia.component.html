@@ -602,8 +602,12 @@
                                             [(ngModel)]="dviTsan.donGiaTraGia"></nz-input-number></td>
                                     <td>{{ calendarSoLuong(dviTsan) * dviTsan.donGiaTraGia | number : '1.0-1' :
                                         'vi_VN'}}</td>
-                                    <td><input [readonly]="isDisabled() || formData.value.ketQua == 0" nz-input
-                                            [(ngModel)]="dviTsan.toChucCaNhan" />
+                                    <td>
+                                        <nz-select [nzDisabled]="isDisabled() || formData.value.ketQua == 0"
+                                            [(ngModel)]="dviTsan.toChucCaNhan">
+                                            <nz-option *ngFor="let data of findTableName('NTG')?.dataChild"
+                                                [nzValue]="data.hoVaTen" [nzLabel]="data.hoVaTen"></nz-option>
+                                        </nz-select>
                                     </td>
                                 </tr>
                                 <ng-container *ngIf="expandSet2.has(y)">

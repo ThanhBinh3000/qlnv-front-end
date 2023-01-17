@@ -1,6 +1,6 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
   <div class="btn-group">
-    <button type="button" class="btn btn-sub" (click)="back()">
+    <button type="button" class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
@@ -16,7 +16,6 @@
     </button>
   </div>
 </nz-affix>
-
 <div class="bg-trang">
   <div class="header header-green-background">
     <div class="header-text">
@@ -43,44 +42,45 @@
             </div>
             <div nz-col [nzSpan]="4">
               <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Căn cứ</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true" nzTooltipTitle="Quyết định phê duyệt kết quả bán đấu giá">
+                  Căn cứ </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogCanCu()">
-                    <input nz-input [readonly]="true" formControlName="canCu" />
+                  <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogKqBdg()">
+                    <input nz-input [readonly]="true" formControlName="soQdKq" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label nzTooltipTitle="Ngày ký QĐ phê duyệt kết quả BĐG" nzRequired [nzNoColon]="true">Ngày
-                  ký</nz-form-label>
+                <nz-form-label nzTooltipTitle="Ngày ký quyết định phê duyệt kết quả bán đấu giá" nzRequired
+                  [nzNoColon]="true">Ngày ký</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input [readonly]="true" formControlName="canCu" />
+                    <input nz-input [readonly]="true" formControlName="ngayKyQdKq" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="3">
               <nz-form-item>
-                <nz-form-label nzTooltipTitle="Ngày ký QĐ phê duyệt kết quả BĐG" nzRequired [nzNoColon]="true">Ngày
-                  ký</nz-form-label>
+                <nz-form-label nzTooltipTitle="Ngày ký QĐ phê duyệt kế hoạch bán đấu giá" nzRequired
+                  [nzNoColon]="true">Căn cứ QĐ phê duyệt</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <input nz-input [readonly]="true" formControlName="canCu" />
+                    <input nz-input [readonly]="true" formControlName="soQdPd" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
             </div>
             <div nz-col [nzSpan]="9">
               <nz-form-item>
-                <nz-form-label nzTooltipTitle="Căn cứ quyết định phê duyệt KH BĐG" nzRequired [nzNoColon]="true">Căn cứ
-                  QĐ</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true">Mã đơn vị tài sản</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
-                    <nz-select>
-                      <nz-option *ngFor="let item of listDviLquan" [nzValue]="item.id" [nzLabel]="item.tenDvi">
+                    <nz-select nzMode="multiple" formControlName="listMaDviTsan">
+                      <nz-option *ngFor="let item of listDviTsan" [nzDisabled]="filterDataDviTsan(item)"
+                        [nzValue]="item.maDviTsan" [nzLabel]="item.maDviTsan">
                       </nz-option>
                     </nz-select> </nz-input-group>
                 </nz-form-control>
