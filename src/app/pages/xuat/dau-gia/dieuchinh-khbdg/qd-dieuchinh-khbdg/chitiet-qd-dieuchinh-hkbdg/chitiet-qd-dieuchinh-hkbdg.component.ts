@@ -54,8 +54,9 @@ export class ChitietQdDieuchinhHkbdgComponent extends Base2Component implements 
       soQdDc: ['',],
       ngayHlucDc: ['',],
       ngayKyDc: ['',],
-      soQdPd: ['',],
-      ngayKyQdPd: ['',],
+      soQdGoc: ['',],
+      idQdGoc: [''],
+      ngayKyQdGoc: ['',],
       loaiVthh: ['', [Validators.required]],
       tenLoaiVthh: ['', [Validators.required]],
       cloaiVthh: [''],
@@ -151,8 +152,9 @@ export class ChitietQdDieuchinhHkbdgComponent extends Base2Component implements 
             if (res.data) {
               const data = res.data;
               this.formData.patchValue({
-                soQdPd: data.soQdPd,
-                ngayKyQdPd: data.ngayKyQd,
+                soQdGoc: data.soQdPd,
+                idQdGoc: data.id,
+                ngayKyQdGoc: data.ngayKyQd,
                 loaiVthh: data.loaiVthh,
                 tenLoaiVthh: data.tenLoaiVthh,
                 cloaiVthh: data.cloaiVthh,
@@ -171,6 +173,7 @@ export class ChitietQdDieuchinhHkbdgComponent extends Base2Component implements 
   }
 
   async save(isGuiDuyet?) {
+    console.log("🚀 ~ save ~ isGuiDuyet", isGuiDuyet)
     this.setValidator(isGuiDuyet);
     let body = this.formData.value;
     if (this.formData.value.soQdDc) {
@@ -180,6 +183,7 @@ export class ChitietQdDieuchinhHkbdgComponent extends Base2Component implements 
     body.children = this.dataTable;
     console.log(body);
     let data = await this.createUpdate(body);
+    console.log("🚀 ~ save ~ data", data)
     if (data) {
       if (isGuiDuyet) {
         this.approve(data.id, STATUS.BAN_HANH, "Bạn có muốn ban hành điều chỉnh ?");
@@ -196,7 +200,7 @@ export class ChitietQdDieuchinhHkbdgComponent extends Base2Component implements 
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
         soQdDc: data.soQdDc?.split("/")[0],
-        soQdPd: +data.soQdPd,
+        soQdGoc: data.soQdGoc,
       });
       // if (data.loaiVthh.startsWith("02")) {
       //   this.dataTable = data.children;
