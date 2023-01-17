@@ -325,7 +325,6 @@ export class ThongTinComponent extends Base2Component implements OnInit {
         .then(async (resKq) => {
           const dataKq = resKq.data;
           let resTtin = await this.thongTinDauGiaService.getDetail(dataKq.maThongBao?.split('/')[0])
-          console.log("🚀 ~ .then ~ res", dataKq, resTtin)
           this.dataTable = resTtin.data?.children
           this.setListDviTsan();
           this.formData.patchValue({
@@ -373,7 +372,6 @@ export class ThongTinComponent extends Base2Component implements OnInit {
       })
     })
 
-    console.log("🚀 ~ this.dataTable.forEach ~ this.dataTable", this.dataTable, this.listDviTsan)
   }
 
   taiLieuDinhKem(type?: string) {
