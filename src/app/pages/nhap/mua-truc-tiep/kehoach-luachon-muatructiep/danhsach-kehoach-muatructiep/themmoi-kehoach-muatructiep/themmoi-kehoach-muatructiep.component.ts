@@ -838,6 +838,14 @@ export class ThemmoiKehoachMuatructiepComponent implements OnInit, OnChanges {
     }
   }
 
+  isDisable(): boolean {
+    if (this.formData.value.trangThai == STATUS.DU_THAO || this.formData.value.trangThai == STATUS.TU_CHOI_TP) {
+      return false
+    } else {
+      return true
+    }
+  }
+
   calcTongThanhTienDeXuat() {
     if (this.listOfData) {
       const sum = this.listOfData.reduce((prev, cur) => {

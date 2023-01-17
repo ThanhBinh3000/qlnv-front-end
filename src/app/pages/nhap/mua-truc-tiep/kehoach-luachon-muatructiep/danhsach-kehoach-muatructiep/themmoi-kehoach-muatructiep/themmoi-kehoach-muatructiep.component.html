@@ -472,7 +472,7 @@
                 </div>
             </div>
             <div class="buttons">
-                <button type="button" class="btn btn-main" (click)="themMoiSoLuongDiaDiem()">
+                <button type="button" class="btn btn-main" *ngIf="!isDisable()" (click)="themMoiSoLuongDiaDiem()">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
