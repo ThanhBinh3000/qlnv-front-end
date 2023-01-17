@@ -21,6 +21,7 @@ import { HttpClient } from '@angular/common/http';
 import { StorageService } from './../../../../../../services/storage.service';
 import { DanhMucService } from './../../../../../../services/danhmuc.service';
 import { UploadFileService } from './../../../../../../services/uploaFile.service';
+import { MttHopDongPhuLucHdService } from './../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttHopDongPhuLucHdService.service';
 
 @Component({
   selector: 'app-themmoi-hopdong-phuluc',
@@ -55,7 +56,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
     modal: NzModalService,
     private danhMucService: DanhMucService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
-    private thongTinPhuLucHopDongService: ThongTinPhuLucHopDongService,
+    private thongTinPhuLucHopDongService: MttHopDongPhuLucHdService,
 
   ) {
     super(httpClient, storageService, notification, spinner, modal, thongTinPhuLucHopDongService);
@@ -220,7 +221,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
         : null;
     }
     body.fileDinhKems = this.fileDinhKem;
-    body.detail = this.dataTable;
+    body.diaDiemGiaoNhan = this.dataTable;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.thongTinPhuLucHopDongService.update(body);
@@ -298,7 +299,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
 
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách kết quả lựa chọn nhà thầu',
+      nzTitle: 'Danh sách căn cứ QĐ phê duyệt kết quả chào giá',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -334,6 +335,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
     const dataDtl = data.hhQdPheduyetKhMttDx
     this.listDviCungCap = dataDtl.hhChiTietTTinChaoGiaList;
     this.dataTable = dataDtl.children;
+    console.log(this.dataTable, 555);
     this.formData.patchValue({
       soQdPdKq: data.soQd,
       idQdPdKq: data.id,
@@ -348,12 +350,18 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
       moTaHangHoa: dataDtl.moTaHangHoa,
       donViTinh: "kg",
       soLuong: dataDtl.tongSoLuong * 1000,
-      donGiaVat: dataDtl.donGia * dataDtl * dataDtl.thueGtgt,
-      thanhTien: +(dataDtl.tongSoLuong * 1000) * +(dataDtl.donGiaVat),
+      donGiaVat: dataDtl.donGia + (dataDtl.donGia * dataDtl.thueGtgt / 100),
     })
-
+    this.calculatorThanhTien()
   }
 
+  calculatorThanhTien() {
+    this.formData.patchValue({
+      thanhTien:
+        +this.formData.get('soLuong').value *
+        +this.formData.get('donGiaVat').value,
+    });
+  }
   convertTienTobangChu(tien: number): string {
     return convertTienTobangChu(tien);
   }
