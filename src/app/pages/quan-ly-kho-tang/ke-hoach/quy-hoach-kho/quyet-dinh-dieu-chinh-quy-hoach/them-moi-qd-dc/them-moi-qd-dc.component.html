@@ -148,7 +148,7 @@
         </button>
       </div>
     </div>
-    <nz-table [nzData]="dataTable" nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
+    <nz-table [nzData]="dataTableTL" nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
               [nzShowPagination]="false">
       <thead>
       <tr>
@@ -169,7 +169,7 @@
         <td class="text-center" style="width: 2%;"></td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.maCuc" nzAllowClear (ngModelChange)="onChangeCuc($event)">
+            <nz-select [(ngModel)]="rowItemTL.maCuc" nzAllowClear (ngModelChange)="onChangeCuc($event, 'TL')">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
               <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsCuc">
               </nz-option>
@@ -178,7 +178,7 @@
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.maChiCuc" nzAllowClear (ngModelChange)="onChangChiCuc($event)">
+            <nz-select [(ngModel)]="rowItemTL.maChiCuc" nzAllowClear (ngModelChange)="onChangChiCuc($event,'TL')">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
               <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of danhSachChiCuc">
               </nz-option>
@@ -188,7 +188,7 @@
 
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.maDiemKho" nzAllowClear (ngModelChange)="onChangDiemKho($event)">
+            <nz-select [(ngModel)]="rowItemTL.maDiemKho" nzAllowClear (ngModelChange)="onChangDiemKho($event)">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
               <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of danhSachDiemKho">
               </nz-option>
@@ -197,39 +197,39 @@
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.diaDiem"/>
+            <input nz-input [(ngModel)]="rowItemTL.diaDiem"/>
           </nz-input-group>
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-input-number [(ngModel)]="rowItem.dienTich" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+            <nz-input-number [(ngModel)]="rowItemTL.dienTich" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                              [nzSize]="'small'">
             </nz-input-number>
           </nz-input-group>
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-input-number [(ngModel)]="rowItem.tongTichLuong" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+            <nz-input-number [(ngModel)]="rowItemTL.tongTichLuong" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                              [nzSize]="'small'">
             </nz-input-number>
           </nz-input-group>
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.phuongAnQuyHoach" [nzShowArrow]="false"
-                       (ngModelChange)="changePhuongAn($event)">
-              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of danhSachPhuongAn">
+            <nz-select [(ngModel)]="rowItemTL.phuongAnQuyHoach" [nzShowArrow]="false"
+                       (ngModelChange)="changePhuongAn($event, 'TL')">
+              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsThanhLy">
               </nz-option>
             </nz-select>
           </nz-input-group>
         </td>
         <td style="width: 32%;">
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.ghiChu"/>
+            <input nz-input [(ngModel)]="rowItemTL.ghiChu"/>
           </nz-input-group>
         </td>
         <td class="text-center" *ngIf="!isViewDetail">
-          <a (click)="themMoiItem()">
+          <a (click)="themMoiItem('TL')">
             <i class="fa fa-plus"></i>
           </a>
           <a (click)="clearData()">
@@ -238,8 +238,8 @@
         </td>
       </tr>
 
-      <tr *ngFor="let data of dataTable; let idx = index">
-        <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
+      <tr *ngFor="let data of dataTableTL; let idx = index">
+        <ng-container *ngIf="!dataEditTL[idx].edit; else editTemplate">
           <td>{{ idx + 1 }}</td>
           <td>{{ data.tenCuc }}</td>
           <td>{{ data.tenChiCuc }}</td>
@@ -250,7 +250,7 @@
           <td>{{ data.tenPhuongAn }}</td>
           <td>{{ data.ghiChu }}</td>
           <td style="text-align: center;" *ngIf="!isViewDetail">
-            <a (click)="editItem(idx)">
+            <a (click)="editItem(idx,'TL')">
               <i class=" fa fa-pencil"></i>
             </a>
             <a (click)="xoaItem(idx)">
@@ -262,57 +262,58 @@
           <td style="width: 2%;"></td>
           <td style="width: 8%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.tenCuc" readonly/>
+              <input nz-input [(ngModel)]="dataEditTL[idx].data.tenCuc" readonly/>
             </nz-input-group>
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.tenChiCuc" readonly/>
+              <input nz-input [(ngModel)]="dataEditTL[idx].data.tenChiCuc" readonly/>
             </nz-input-group>
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.tenDiemKho" readonly/>
+              <input nz-input [(ngModel)]="dataEditTL[idx].data.tenDiemKho" readonly/>
             </nz-input-group>
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.diaDiem"/>
+              <input nz-input [(ngModel)]="dataEditTL[idx].data.diaDiem"/>
             </nz-input-group>
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <nz-input-number [(ngModel)]="dataEdit[idx].data.dienTich" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+              <nz-input-number [(ngModel)]="dataEditTL[idx].data.dienTich" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                                [nzSize]="'small'">
               </nz-input-number>
             </nz-input-group>
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <nz-input-number [(ngModel)]="dataEdit[idx].data.tongTichLuong" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+              <nz-input-number [(ngModel)]="dataEditTL[idx].data.tongTichLuong" [nzMin]="1" [nzMax]="9999999"
+                               [nzStep]="1"
                                [nzSize]="'small'">
               </nz-input-number>
             </nz-input-group>
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.phuongAnQuyHoach" nzAllowClear>
+              <nz-select [(ngModel)]="dataEditTL[idx].data.phuongAnQuyHoach" nzAllowClear>
                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of danhSachPhuongAn">
+                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsThanhLy">
                 </nz-option>
               </nz-select>
             </nz-input-group>
           </td>
           <td style="width: 32%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.ghiChu"/>
+              <input nz-input [(ngModel)]="dataEditTL[idx].data.ghiChu"/>
             </nz-input-group>
           </td>
           <td class="text-center" style="width: 10%;">
-            <a (click)="luuEdit(idx)" class="save">
+            <a (click)="luuEdit(idx, 'TL')" class="save">
               <i class="fa fa-save"></i>
             </a>
-            <a (click)="huyEdit(idx)">
+            <a (click)="huyEdit(idx, 'TL')">
               <i class="fa fa-ban do"></i> </a>
           </td>
         </ng-template>
@@ -333,7 +334,7 @@
         </button>
       </div>
     </div>
-    <nz-table [nzData]="dataTable" nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
+    <nz-table [nzData]="dataTableDTM" nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
               [nzShowPagination]="false">
       <thead>
       <tr>
@@ -354,7 +355,7 @@
         <td class="text-center" style="width: 2%;"></td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.maCuc" nzAllowClear (ngModelChange)="onChangeCuc($event)">
+            <nz-select [(ngModel)]="rowItemDTM.maCuc" nzAllowClear (ngModelChange)="onChangeCuc($event, 'DTM')">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
               <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of dsCuc">
               </nz-option>
@@ -363,7 +364,7 @@
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.maChiCuc" nzAllowClear (ngModelChange)="onChangChiCuc($event)">
+            <nz-select [(ngModel)]="rowItemDTM.maChiCuc" nzAllowClear (ngModelChange)="onChangChiCuc($event, 'DTM')">
               <nz-option nzValue="null" nzDisabled nzHide></nz-option>
               <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of danhSachChiCuc">
               </nz-option>
@@ -373,48 +374,44 @@
 
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.maDiemKho" nzAllowClear (ngModelChange)="onChangDiemKho($event)">
-              <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-              <nz-option nzValue="{{item.maDvi}}" nzLabel="{{item.tenDvi}}" *ngFor="let item of danhSachDiemKho">
-              </nz-option>
-            </nz-select>
+            <input nz-input [(ngModel)]="rowItemDTM.maDiemKho"/>
           </nz-input-group>
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.diaDiem"/>
+            <input nz-input [(ngModel)]="rowItemDTM.diaDiem"/>
           </nz-input-group>
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-input-number [(ngModel)]="rowItem.dienTich" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+            <nz-input-number [(ngModel)]="rowItemDTM.dienTich" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                              [nzSize]="'small'">
             </nz-input-number>
           </nz-input-group>
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-input-number [(ngModel)]="rowItem.tongTichLuong" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+            <nz-input-number [(ngModel)]="rowItemDTM.tongTichLuong" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                              [nzSize]="'small'">
             </nz-input-number>
           </nz-input-group>
         </td>
         <td style="width: 9%;">
           <nz-input-group>
-            <nz-select [(ngModel)]="rowItem.phuongAnQuyHoach" [nzShowArrow]="false"
-                       (ngModelChange)="changePhuongAn($event)">
-              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of danhSachPhuongAn">
+            <nz-select [(ngModel)]="rowItemDTM.phuongAnQuyHoach" [nzShowArrow]="false"
+                       (ngModelChange)="changePhuongAn($event, 'DTM')">
+              <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsDauTu">
               </nz-option>
             </nz-select>
           </nz-input-group>
         </td>
         <td style="width: 32%;">
           <nz-input-group>
-            <input nz-input [(ngModel)]="rowItem.ghiChu"/>
+            <input nz-input [(ngModel)]="rowItemDTM.ghiChu"/>
           </nz-input-group>
         </td>
         <td class="text-center" *ngIf="!isViewDetail">
-          <a (click)="themMoiItem()">
+          <a (click)="themMoiItem('DTM')">
             <i class="fa fa-plus"></i>
           </a>
           <a (click)="clearData()">
@@ -423,19 +420,19 @@
         </td>
       </tr>
 
-      <tr *ngFor="let data of dataTable; let idx = index">
-        <ng-container *ngIf="!dataEdit[idx].edit; else editTemplate">
+      <tr *ngFor="let data of dataTableDTM; let idx = index">
+        <ng-container *ngIf="!dataEditDTM[idx].edit; else editTemplate">
           <td>{{ idx + 1 }}</td>
           <td>{{ data.tenCuc }}</td>
           <td>{{ data.tenChiCuc }}</td>
-          <td>{{ data.tenDiemKho }}</td>
+          <td>{{ data.maDiemKho }}</td>
           <td>{{ data.diaDiem }}</td>
           <td>{{ data.dienTich }}</td>
           <td>{{ data.tongTichLuong }}</td>
           <td>{{ data.tenPhuongAn }}</td>
           <td>{{ data.ghiChu }}</td>
           <td style="text-align: center;" *ngIf="!isViewDetail">
-            <a (click)="editItem(idx)">
+            <a (click)="editItem(idx, 'DTM')">
               <i class=" fa fa-pencil"></i>
             </a>
             <a (click)="xoaItem(idx)">
@@ -447,57 +444,58 @@
           <td style="width: 2%;"></td>
           <td style="width: 8%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.tenCuc" readonly/>
+              <input nz-input [(ngModel)]="dataEditDTM[idx].data.tenCuc" readonly/>
             </nz-input-group>
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.tenChiCuc" readonly/>
+              <input nz-input [(ngModel)]="dataEditDTM[idx].data.tenChiCuc" readonly/>
             </nz-input-group>
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.tenDiemKho" readonly/>
+              <input nz-input [(ngModel)]="dataEditDTM[idx].data.maDiemKho" readonly/>
             </nz-input-group>
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.diaDiem"/>
+              <input nz-input [(ngModel)]="dataEditDTM[idx].data.diaDiem"/>
             </nz-input-group>
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <nz-input-number [(ngModel)]="dataEdit[idx].data.dienTich" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+              <nz-input-number [(ngModel)]="dataEditDTM[idx].data.dienTich" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                                [nzSize]="'small'">
               </nz-input-number>
             </nz-input-group>
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <nz-input-number [(ngModel)]="dataEdit[idx].data.tongTichLuong" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+              <nz-input-number [(ngModel)]="dataEditDTM[idx].data.tongTichLuong" [nzMin]="1" [nzMax]="9999999"
+                               [nzStep]="1"
                                [nzSize]="'small'">
               </nz-input-number>
             </nz-input-group>
           </td>
           <td style="width: 8%;">
             <nz-input-group>
-              <nz-select [(ngModel)]="dataEdit[idx].data.phuongAnQuyHoach" nzAllowClear>
+              <nz-select [(ngModel)]="dataEditDTM[idx].data.phuongAnQuyHoach" nzAllowClear>
                 <nz-option nzValue="null" nzDisabled nzHide></nz-option>
-                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of danhSachPhuongAn">
+                <nz-option nzValue="{{item.ma}}" nzLabel="{{item.giaTri}}" *ngFor="let item of dsDauTu">
                 </nz-option>
               </nz-select>
             </nz-input-group>
           </td>
           <td style="width: 32%;">
             <nz-input-group>
-              <input nz-input [(ngModel)]="dataEdit[idx].data.ghiChu"/>
+              <input nz-input [(ngModel)]="dataEditDTM[idx].data.ghiChu"/>
             </nz-input-group>
           </td>
           <td class="text-center" style="width: 10%;">
-            <a (click)="luuEdit(idx)" class="save">
+            <a (click)="luuEdit(idx, 'DTM')" class="save">
               <i class="fa fa-save"></i>
             </a>
-            <a (click)="huyEdit(idx)">
+            <a (click)="huyEdit(idx, 'DTM')">
               <i class="fa fa-ban do"></i> </a>
           </td>
         </ng-template>

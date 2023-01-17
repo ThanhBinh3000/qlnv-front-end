@@ -8,7 +8,7 @@ import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 import {QuyHoachKho} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
 import {QuyHoachKhoService} from "../../../../../../services/quy-hoach-kho.service";
 import dayjs from "dayjs";
@@ -42,8 +42,10 @@ export class ThemMoiQdComponent implements OnInit {
 
   dataTableTL: any[] = []
   danhSachNam: any[] = [];
-  rowItem: QuyHoachKho = new QuyHoachKho();
-  dataEdit: { [key: string]: { edit: boolean; data: QuyHoachKho } } = {};
+  rowItemTL: QuyHoachKho = new QuyHoachKho();
+  rowItemDTM: QuyHoachKho = new QuyHoachKho();
+  dataEditTL: { [key: string]: { edit: boolean; data: QuyHoachKho } } = {};
+  dataEditDTM: { [key: string]: { edit: boolean; data: QuyHoachKho } } = {};
   danhSachPhuongAn: any[] = [];
   dsThanhLy: any[] = [];
   dsDauTu: any[] = [];
@@ -52,6 +54,7 @@ export class ThemMoiQdComponent implements OnInit {
   danhSachChiCuc: any[] = [];
   danhSachDiemKho: any[] = [];
   fileDinhKems: any[] = [];
+
   constructor(
     private router: Router,
     private spinner: NgxSpinnerService,
@@ -120,7 +123,7 @@ export class ThemMoiQdComponent implements OnInit {
     this.dsCuc = this.dsCuc.filter(item => item.type != "PB")
   }
 
-  async onChangeCuc(event, type?) {
+  async onChangeCuc(event, pa, type?) {
     const body = {
       maDviCha: event,
       trangThai: '01',
@@ -134,14 +137,20 @@ export class ThemMoiQdComponent implements OnInit {
       type.maChiCuc = null;
       type.maDiemKho = null;
     } else {
-      this.rowItem.tenCuc = chiCuc[0].tenDvi;
-      this.rowItem.maChiCuc = null;
-      this.rowItem.maDiemKho = null;
+      if (pa == 'TL') {
+        this.rowItemTL.tenCuc = chiCuc[0].tenDvi;
+        this.rowItemTL.maChiCuc = null;
+        this.rowItemTL.maDiemKho = null;
+      } else if (pa == 'DTM') {
+        this.rowItemDTM.tenCuc = chiCuc[0].tenDvi;
+        this.rowItemDTM.maChiCuc = null;
+        this.rowItemDTM.maDiemKho = null;
+      }
     }
   }
 
 
-  async onChangChiCuc(event, type?) {
+  async onChangChiCuc(event, pa, type?) {
     const body = {
       maDviCha: event,
       trangThai: '01',
@@ -152,10 +161,15 @@ export class ThemMoiQdComponent implements OnInit {
     const chiCuc = this.danhSachChiCuc.filter(item => item.maDvi == event);
     if (type) {
       type.tenChiCuc = chiCuc[0].tenDvi;
-      type.maDiemKho= null;
+      type.maDiemKho = null;
     } else {
-      this.rowItem.tenChiCuc = chiCuc[0].tenDvi;
-      this.rowItem.maDiemKho = null
+      if (pa == 'TL') {
+        this.rowItemTL.tenChiCuc = chiCuc[0].tenDvi;
+        this.rowItemTL.maDiemKho = null
+      } else if (pa == 'DTM') {
+        this.rowItemDTM.tenChiCuc = chiCuc[0].tenDvi;
+        this.rowItemDTM.maDiemKho = null
+      }
     }
   }
 
@@ -177,11 +191,12 @@ export class ThemMoiQdComponent implements OnInit {
       this.spinner.hide();
       return
     }
-    if (this.dataTable.length == 0) {
+    if (this.dataTableTL.length == 0 && this.dataTableDTM.length == 0) {
       this.notification.error(MESSAGE.ERROR, "Không được để trống thông tin chi tiết quy hoạch")
       this.spinner.hide();
       return
     }
+    this.dataTable = [...this.dataTableDTM, ...this.dataTableTL]
     let body = this.formData.value;
     body.soQuyetDinh = body.soQuyetDinh + this.maQd;
     body.quyetDinhQuyHoachCTietReqs = this.dataTable
@@ -254,8 +269,13 @@ export class ThemMoiQdComponent implements OnInit {
   }
 
 
-  editItem(index: number): void {
-    this.dataEdit[index].edit = true;
+  editItem(index: number, type): void {
+    if (type == 'TL') {
+      this.dataEditTL[index].edit = true;
+    }
+    if (type == 'DTM') {
+      this.dataEditDTM[index].edit = true;
+    }
   }
 
   async getDataDetail(id) {
@@ -281,13 +301,14 @@ export class ThemMoiQdComponent implements OnInit {
       }
       if (this.dataTable && this.dataTable.length > 0) {
         this.dataTable.forEach(item => {
-           let arr = this.danhSachPhuongAn.filter(a => a.ma == item.phuongAnQuyHoach)
+          let arr = this.danhSachPhuongAn.filter(a => a.ma == item.phuongAnQuyHoach)
           if (arr && arr.length > 0) {
             item.tenPhuongAn = arr[0].giaTri;
           }
         })
       }
-      this.updateEditCache()
+      this.updateEditCache('TL');
+      this.updateEditCache('DTM');
     }
   }
 
@@ -303,7 +324,8 @@ export class ThemMoiQdComponent implements OnInit {
       nzOnOk: async () => {
         try {
           this.dataTable.splice(index, 1);
-          this.updateEditCache()
+          this.updateEditCache('TL')
+          this.updateEditCache('DTM')
         } catch (e) {
           console.log('error', e);
         }
@@ -312,43 +334,89 @@ export class ThemMoiQdComponent implements OnInit {
   }
 
   themMoiItem(type) {
-    if (!this.dataTable) {
-      this.dataTable = [];
-    }
     if (type == 'TL') {
-      this.dataTableTL = [...this.dataTableTL, this.rowItem]
-      this.rowItem = new QuyHoachKho();
-    }else {
-      this.dataTableDTM = [...this.dataTableDTM, this.rowItem]
-      this.rowItem = new QuyHoachKho();
+      if (!this.dataTableTL) {
+        this.dataTableTL = [];
+      }
+      if (!this.checkValidators(this.rowItemTL)) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đầy đủ thông tin!!!")
+        return;
+      }
+      this.dataTableTL = [...this.dataTableTL, this.rowItemTL]
+      this.rowItemTL = new QuyHoachKho();
+      this.updateEditCache('TL')
+    } else {
+      if (!this.dataTableDTM) {
+        this.dataTableDTM = [];
+      }
+      if (!this.checkValidators(this.rowItemDTM)) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đầy đủ thông tin!!!")
+        return;
+      }
+      this.dataTableDTM = [...this.dataTableDTM, this.rowItemDTM]
+      this.rowItemDTM = new QuyHoachKho();
+      this.updateEditCache('DTM')
     }
-    this.updateEditCache()
   }
 
   clearData() {
 
   }
 
-  huyEdit(idx: number): void {
-    this.dataEdit[idx] = {
-      data: {...this.dataTable[idx]},
-      edit: false,
-    };
+  huyEdit(idx: number, type): void {
+    if (type == 'TL') {
+      this.dataEditTL[idx] = {
+        data: {...this.dataTableTL[idx]},
+        edit: false,
+      };
+    }
+    if (type == 'DTM') {
+      this.dataEditDTM[idx] = {
+        data: {...this.dataTableDTM[idx]},
+        edit: false,
+      };
+    }
   }
 
-  luuEdit(index: number): void {
-    Object.assign(this.dataTable[index], this.dataEdit[index].data);
-    this.dataEdit[index].edit = false;
+  luuEdit(index: number, type): void {
+    if (type == 'DTM') {
+      if (!this.checkValidators(this.dataEditDTM[index].data)) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin!!!")
+        return;
+      }
+      Object.assign(this.dataTableDTM[index], this.dataEditDTM[index].data);
+      this.dataEditDTM[index].edit = false;
+    }
+    if (type == 'TL') {
+      if (!this.checkValidators(this.dataEditTL[index].data)) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng nhập đủ thông tin!!!")
+        return;
+      }
+      Object.assign(this.dataTableTL[index], this.dataEditTL[index].data);
+      this.dataEditTL[index].edit = false;
+    }
   }
 
-  updateEditCache(): void {
-    if (this.dataTable) {
-      this.dataTable.forEach((item, index) => {
-        this.dataEdit[index] = {
-          edit: false,
-          data: {...item},
-        }
-      });
+  updateEditCache(type): void {
+    if (type = 'TL') {
+      if (this.dataTableTL) {
+        this.dataTableTL.forEach((item, index) => {
+          this.dataEditTL[index] = {
+            edit: false,
+            data: {...item},
+          }
+        });
+      }
+    }
+    if (type = 'DTM') {
+      if (this.dataTableDTM) {
+        this.dataTableDTM.forEach((item, index) => {
+          this.dataEditDTM[index] = {
+            edit: false,
+            data: {...item},
+          }
+        });
+      }
     }
   }
 
@@ -356,13 +424,17 @@ export class ThemMoiQdComponent implements OnInit {
 
   }
 
-  changePhuongAn(event, type?) {
+  changePhuongAn(event, pa, type?) {
     const phuongAn = this.danhSachPhuongAn.filter(item => item.ma == event);
     if (phuongAn) {
       if (type) {
         type.tenPhuongAn = phuongAn[0].giaTri
       } else {
-        this.rowItem.tenPhuongAn = phuongAn[0].giaTri
+        if (pa == 'TL') {
+          this.rowItemTL.tenPhuongAn = phuongAn[0].giaTri
+        } else {
+          this.rowItemDTM.tenPhuongAn = phuongAn[0].giaTri
+        }
       }
     }
   }
@@ -374,10 +446,27 @@ export class ThemMoiQdComponent implements OnInit {
         type.tenDiemKho = diemKho[0].tenDvi
         type.diaDiem = diemKho[0].diaChi
       } else {
-        this.rowItem.tenDiemKho = diemKho[0].tenDvi
-        this.rowItem.diaDiem = diemKho[0].diaChi
+        this.rowItemTL.tenDiemKho = diemKho[0].tenDvi
+        this.rowItemTL.diaDiem = diemKho[0].diaChi
       }
     }
+  }
+
+  checkValidators(rowItem : QuyHoachKho) {
+    let arr = [];
+    let check = true;
+    arr.push(
+      rowItem.maCuc, rowItem.maChiCuc, rowItem.maDiemKho, rowItem.diaDiem, rowItem.dienTich, rowItem.tongTichLuong, rowItem.phuongAnQuyHoach, rowItem.ghiChu
+    )
+    if (arr && arr.length > 0) {
+      for (let  i = 0; i < arr.length; i++) {
+        if (arr[i] == '' || arr[i] == null || arr[i] == undefined) {
+          check = false;
+          break;
+        }
+      }
+    }
+    return check;
   }
 
   exportCt() {
@@ -385,7 +474,7 @@ export class ThemMoiQdComponent implements OnInit {
     try {
       if (this.dataTable && this.dataTable.length > 0) {
         let body = {
-          listCt : this.dataTable
+          listCt: this.dataTable
         }
         this.quyHoachKhoService
           .exportCt(body)
