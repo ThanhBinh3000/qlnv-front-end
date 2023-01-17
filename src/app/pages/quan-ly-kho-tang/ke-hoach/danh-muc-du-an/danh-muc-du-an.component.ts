@@ -215,14 +215,28 @@ export class DanhMucDuAnComponent implements OnInit {
 
 
   exportData() {
-    if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        let body = {}
+        let body = {
+          "denNam": this.searchFilter.giaiDoan ? this.searchFilter.giaiDoan[1] : null,
+          "diaDiem": this.searchFilter.diaDiem,
+          "khoi": this.searchFilter.khoi,
+          "maDuAn": this.searchFilter.maDuAn,
+          "paggingReq": {
+            "limit": 20,
+            "page": this.page - 1
+          },
+          "soQd": this.searchFilter.soQd,
+          "tenDuAn": this.searchFilter.tenDuAn,
+          "tgHoanThanh": this.searchFilter.tgKcHt ? this.searchFilter.tgKcHt[1] : null,
+          "tgKhoiCong": this.searchFilter.tgKcHt ? this.searchFilter.tgKcHt[0] : null,
+          "trangThai": this.searchFilter.trangThai,
+          "tuNam": this.searchFilter.giaiDoan ? this.searchFilter.giaiDoan[0] : null,
+        };
         this.danhMucKhoService
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'quyet-dinh-quy-hoach-kho.xlsx'),
+            saveAs(blob, 'danh-muc-kho-tang.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -230,10 +244,7 @@ export class DanhMucDuAnComponent implements OnInit {
         this.spinner.hide();
         this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
       }
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
-  }
 
   startEdit(idx: number) {
     this.dataEdit[idx].edit = true;
@@ -253,7 +264,7 @@ export class DanhMucDuAnComponent implements OnInit {
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '700px',
-      nzStyle: {top: '70px'},
+      nzStyle: {top: '150px'},
       nzFooter: null,
       nzComponentParams: {},
     });
