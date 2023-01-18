@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV1" class="btn-affix">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
@@ -93,7 +93,7 @@
                 <nz-form-label [nzNoColon]="true"> Quyết định gốc</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogSoQdGoc()">
-                    <input [readonly]="true" nz-input formControlName="soQdPd" readonly="true" />
+                    <input [readonly]="true" nz-input formControlName="soQdGoc" readonly="true" />
                   </nz-input-group>
                 </nz-form-control>
               </nz-form-item>
@@ -102,8 +102,7 @@
               <nz-form-item>
                 <nz-form-label nzRequired [nzNoColon]="true"> Ngày ký QĐ gốc</nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
-                  <nz-date-picker formControlName="ngayKyQdPd" nzFormat="dd/MM/yyyy"
-                    [nzDisabled]="formData.value.trangThai !== '00' && formData.value.trangThai !== '03' && formData.value.trangThai !== ''">
+                  <nz-date-picker formControlName="ngayKyQdGoc" nzFormat="dd/MM/yyyy" [nzDisabled]="true">
                   </nz-date-picker>
                 </nz-form-control>
               </nz-form-item>

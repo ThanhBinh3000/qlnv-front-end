@@ -62,10 +62,10 @@
             <div nz-col [nzSpan]="3">
               <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Năm kế hoạch
               </nz-form-label>
-<!--              <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"-->
-<!--                         [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DU_THAO || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.CHO_DUYET_LDC) || isView">-->
-<!--                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>-->
-<!--              </nz-select>-->
+              <!--              <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()"-->
+              <!--                         [nzDisabled]="!(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DU_THAO || id == 0 || dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.CHO_DUYET_LDC) || isView">-->
+              <!--                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>-->
+              <!--              </nz-select>-->
               <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()">
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
@@ -785,16 +785,16 @@
               <tr *ngIf="groupingTableMuoiSau?.data?.length > 0">
                 <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
                 <td
-                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 2, 5, ',', 'table-muoi-tong-hop') :
+                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 2, 3, ',', 'table-muoi-tong-hop') :
                   0 | number: '1.0-1'}}</td>
                 <td
-                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 3, 5, ',', 'table-muoi-tong-hop') :
+                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 3, 3, ',', 'table-muoi-tong-hop') :
                   0 | number: '1.0-1'}}</td>
                 <td
-                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 4, 5, ',', 'table-muoi-tong-hop') :
+                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 4, 3, ',', 'table-muoi-tong-hop') :
                   0 | number: '1.0-1'}}</td>
                 <td
-                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 5, 5, ',', 'table-muoi-tong-hop') :
+                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 5, 3, ',', 'table-muoi-tong-hop') :
                   0 | number: '1.0-1'}}</td>
                 <td class="background-last-row" nzRight></td>
               </tr>

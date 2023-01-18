@@ -104,7 +104,6 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
 
   updateStatus(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/status`;
-    // const url = `http://localhost:3333/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/status`;
     return this.httpClient.put(url, body).toPromise();
   }
 

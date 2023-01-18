@@ -73,7 +73,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
     let body = {
       ngayKyDenNgay: null,
       id: 0,
-      donViId: null,
+      donViId: 0,
       maDvi: this.maDVi ?? null,
       namKeHoach: this.namKeHoach ?? null,
       tenDvi: null,

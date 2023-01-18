@@ -219,6 +219,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
             maDvi: '',
           };
           this.tongHopTrungHanService.delete(body).then(async () => {
+            this.notification.error(MESSAGE.ERROR, MESSAGE.DELETE_SUCCESS);
             await this.search();
             this.spinner.hide();
           });

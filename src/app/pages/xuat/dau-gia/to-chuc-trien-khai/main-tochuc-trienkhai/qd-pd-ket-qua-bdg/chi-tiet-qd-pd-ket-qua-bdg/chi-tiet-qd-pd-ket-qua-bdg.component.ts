@@ -89,6 +89,7 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
     let res = await this.createUpdate(body);
     if (res) {
       if (isGuiDuyet) {
+        this.idInput = res.id
         this.guiDuyet();
       } else {
         this.goBack();

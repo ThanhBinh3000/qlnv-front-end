@@ -8,7 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
 import { StorageService } from 'src/app/services/storage.service';
-import { chain } from 'lodash'
+import { chain, cloneDeep } from 'lodash'
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { MESSAGE } from 'src/app/constants/message';
 
@@ -245,9 +245,11 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   }
 
   addRow(item, name) {
-    item.loai = name;
-    item.idVirtual = new Date().getTime();
-    this.dataNguoiTgia.push(item)
+    let data = cloneDeep(item)
+    data.loai = name;
+    data.idVirtual = new Date().getTime();
+
+    this.dataNguoiTgia.push(data)
     this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({ loai: key, dataChild: value })).value();
   }
 
