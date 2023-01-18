@@ -169,7 +169,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
         page: 0
       },
       trangThai: STATUS.BAN_HANH,
-      namNhap: 2022
+      namNhap: this.formData.get('namKh').value,
     }
     let res = await this.quyetDinhGiaoNvNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
