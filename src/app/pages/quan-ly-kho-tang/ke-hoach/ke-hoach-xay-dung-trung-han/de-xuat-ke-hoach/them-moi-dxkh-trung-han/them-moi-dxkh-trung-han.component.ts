@@ -16,6 +16,8 @@ import {MESSAGE} from "../../../../../../constants/message";
 import {DxXdTrungHanService} from "../../../../../../services/dx-xd-trung-han.service";
 import {STATUS} from "../../../../../../constants/status";
 import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {DanhMucKhoService} from "../../../../../../services/danh-muc-kho.service";
+import {DanhMucKho} from "../../../danh-muc-du-an/danh-muc-du-an.component";
 
 @Component({
   selector: 'app-them-moi-dxkh-trung-han',
@@ -36,11 +38,15 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   dataTable: any[] = []
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
-  rowItem: KeHoachXayDungTrungHan = new KeHoachXayDungTrungHan();
-  dataEdit: { [key: string]: { edit: boolean; data: KeHoachXayDungTrungHan } } = {};
+  rowItem: DanhMucKho = new DanhMucKho();
+  dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
   listNam: any[] = [];
   userInfo: UserLogin
   listFileDinhKem: any[] = [];
+  listDmKho: any[] = [];
+  listLoaiDuAn: any[] = [];
+
+
 
   constructor(
     private router: Router,
@@ -49,6 +55,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
     private danhMucService: DanhMucService,
+    private dmKhoService: DanhMucKhoService,
     private dxTrungHanService: DxXdTrungHanService,
     private fb: FormBuilder,
     private modal: NzModalService,
@@ -74,6 +81,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.maQd = "/" + this.userInfo.DON_VI.tenVietTat + "-TCKT";
     this.loadDsNam();
+    await this.getAllDmKho();
+    await this.getAllLoaiDuAn();
     if (this.idInput > 0) {
       await this.getDataDetail(this.idInput)
     } else {
@@ -340,6 +349,20 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     }
   }
 
+  async getAllDmKho() {
+    let res = await this.dmKhoService.getAllDmKho('DMK');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDmKho = res.data
+    }
+  }
+
+  async getAllLoaiDuAn() {
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_DU_AN_KT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiDuAn = res.data;
+    }
+  }
+
 
   themMoiItem() {
     if (!this.dataTable) {
@@ -347,7 +370,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     }
     this.rowItem.maDvi = this.userInfo.MA_DVI
     this.dataTable = [...this.dataTable, this.rowItem]
-    this.rowItem = new KeHoachXayDungTrungHan();
+    this.rowItem = new DanhMucKho();
     this.updateEditCache()
   }
 
@@ -410,4 +433,14 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       }, 0);
       return sum;
     }
+
+  changeDmucDuAn(event: any) {
+    if (event) {
+      this.rowItem.diaDiem = event.diaDiem;
+      this.rowItem.tenDuAn = event.tenDuAn;
+      this.rowItem.tgKcHt = event.tgKhoiCong + ' - ' + event.tgHoanThanh;
+      this.rowItem.khoi = event.khoi;
+      this.rowItem.soQdPd = event.soQdPd;
+    }
+  }
 }

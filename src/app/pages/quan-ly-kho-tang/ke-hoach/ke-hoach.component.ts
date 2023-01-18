@@ -22,7 +22,7 @@ export class KeHoachComponent implements OnInit {
       this.visibleTab = value;
     });
   }
-  tabSelected = 'qhk';
+  tabSelected = 'dmk';
   selectTab(tab) {
     this.tabSelected = tab;
   }
