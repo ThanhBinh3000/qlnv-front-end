@@ -16,6 +16,7 @@ import { NzModalService } from "ng-zorro-antd/modal";
 import { DanhSachMuaTrucTiepService } from 'src/app/services/danh-sach-mua-truc-tiep.service';
 import { convertTienTobangChu } from 'src/app/shared/commonFunction';
 import { DialogThemMoiKeHoachMuaTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-ke-hoach-mua-truc-tiep/dialog-them-moi-ke-hoach-mua-truc-tiep.component';
+import { DanhSachMuaTrucTiep } from 'src/app/models/DeXuatKeHoachMuaTrucTiep';
 @Component({
   selector: 'app-thongtin-dexuat-muatt',
   templateUrl: './thongtin-dexuat-muatt.component.html',
@@ -103,7 +104,7 @@ export class ThongtinDexuatMuattComponent implements OnInit, OnChanges {
           }
         }
         this.helperService.setIndexArray(this.listOfData);
-        this.convertListData();
+        // this.convertListData();
       } else {
         this.formData.reset();
         this.formData.patchValue({
@@ -178,7 +179,7 @@ export class ThongtinDexuatMuattComponent implements OnInit, OnChanges {
       });
       this.soLuongChange.emit(soLuong);
       this.helperService.setIndexArray(this.listOfData);
-      this.convertListData();
+      // this.convertListData();
     });
   };
 

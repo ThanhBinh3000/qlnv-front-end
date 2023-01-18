@@ -6,7 +6,7 @@
     </button>
     <button
       (click)="reject(id,STATUS.TU_CHOI_LDC)"
-      *ngIf="checkPermission('XHDTQG_XCTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC && userService.isCuc())"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC && userService.isCuc())"
       class="btn btn-sub"
       type="button">
       <i class="icon htvbdh_tcdt_tuchoi do"></i>
@@ -14,7 +14,7 @@
     </button>
     <button
       (click)="approve(id,STATUS.DA_DUYET_LDC,'Bạn có muốn duyệt quyết định này')"
-      *ngIf="checkPermission('XHDTQG_XCTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC && userService.isCuc())"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC && userService.isCuc())"
       class="btn btn-sub"
       type="button">
       <i class="icon htvbdh_tcdt_pheduyet"></i>
@@ -22,7 +22,7 @@
     </button>
     <button
       (click)="saveAndSend()"
-      *ngIf="checkPermission('XHDTQG_XCTVT_QDGNVXH_THEM') && (formData.value.trangThai===STATUS.DU_THAO && userService.isCuc())"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_THEM') && (formData.value.trangThai===STATUS.DU_THAO && userService.isCuc())"
       class="btn btn-sub"
       type="button">
       <i class="icon htvbdh_tcdt_guiduyet"></i>
@@ -30,7 +30,7 @@
     </button>
     <button
       (click)="save()"
-      *ngIf="checkPermission('XHDTQG_XCTVT_QDGNVXH_THEM') &&
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_THEM') &&
        ((formData.value.trangThai===STATUS.DA_DUYET_LDC && userService.isChiCuc())||(formData.value.trangThai===STATUS.DU_THAO && userService.isCuc()))"
       class="btn btn-main" type="
         button">

@@ -154,7 +154,7 @@ export class ThemMoiBienBanNhapDayKhoComponent extends Base2Component implements
     this.spinner.show();
     let body = {
       trangThai: STATUS.BAN_HANH,
-      namNhap: 2022,
+      namNhap: this.formData.get('namKh').value,
       maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
