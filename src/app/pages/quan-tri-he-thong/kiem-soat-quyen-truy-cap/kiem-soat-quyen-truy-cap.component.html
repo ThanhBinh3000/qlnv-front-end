@@ -57,7 +57,7 @@
                   <th width="161px">Thông tin thiết bị</th>
                   <th width="161px">Hệ thống</th>
                   <th width="161px">Phương thức</th>
-                  <th width="161px">Chức năng truy cập</th>
+                  <th width="161px">Đường dẫn chức năng</th>
                   <th width="161px">Tham số đầu vào</th>
                   <th width="350px">Ngày thực hiện</th>
                 </tr>
@@ -97,7 +97,7 @@
                   <td>{{data.system}}</td>
                   <td>{{data.requestMethod}}</td>
                   <td>{{data.requestUrl}}</td>
-                  <td>{{data.requestParameter}}</td>
+                  <td>{{ data.requestMethod == 'GET' ? data.requestParameter : data.requestBody }}</td>
                   <td>{{data.ngayTao}}</td>
                 </tr>
                 </tbody>
