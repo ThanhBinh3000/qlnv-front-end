@@ -47,14 +47,18 @@
                         [nzShowPagination]="false" nzBordered>
                 <thead>
                 <tr>
-<!--                  <th width="45px">-->
-<!--                    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"-->
-<!--                           [nzIndeterminate]="indeterminate"></label>-->
-<!--                  </th>-->
+                  <!--                  <th width="45px">-->
+                  <!--                    <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"-->
+                  <!--                           [nzIndeterminate]="indeterminate"></label>-->
+                  <!--                  </th>-->
                   <th width="60px">STT</th>
                   <th width="161px">Tên đăng nhập</th>
                   <th width="161px">Địa chỉ IP</th>
+                  <th width="161px">Thông tin thiết bị</th>
                   <th width="161px">Hệ thống</th>
+                  <th width="161px">Phương thức</th>
+                  <th width="161px">Đường dẫn chức năng</th>
+                  <th width="161px">Tham số đầu vào</th>
                   <th width="350px">Ngày thực hiện</th>
                 </tr>
                 </thead>
@@ -82,14 +86,18 @@
                 <!--                  </th>-->
                 <!--                </tr>-->
                 <tr *ngFor="let data of basicTable.data; let i = index">
-<!--                  <td width="45px">-->
-<!--                    <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"-->
-<!--                           [nzDisabled]="data.trangThai != '00'"></label>-->
-<!--                  </td>-->
+                  <!--                  <td width="45px">-->
+                  <!--                    <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"-->
+                  <!--                           [nzDisabled]="data.trangThai != '00'"></label>-->
+                  <!--                  </td>-->
                   <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
                   <td>{{data.userName}}</td>
                   <td>{{data.ip}}</td>
+                  <td>{{data.userAgent}}</td>
                   <td>{{data.system}}</td>
+                  <td>{{data.requestMethod}}</td>
+                  <td>{{data.requestUrl}}</td>
+                  <td>{{ data.requestMethod == 'GET' ? data.requestParameter : data.requestBody }}</td>
                   <td>{{data.ngayTao}}</td>
                 </tr>
                 </tbody>

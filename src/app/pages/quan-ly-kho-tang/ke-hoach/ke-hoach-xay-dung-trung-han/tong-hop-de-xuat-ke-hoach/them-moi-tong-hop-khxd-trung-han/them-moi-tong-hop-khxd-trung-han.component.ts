@@ -34,6 +34,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   userInfo : UserLogin
   formData: FormGroup
   dataTable: any[] = []
+  dataTableDx: any[] = []
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
   rowItem: KeHoachXayDungTrungHan = new KeHoachXayDungTrungHan();
@@ -103,6 +104,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       });
       this.fileDinhKems = data.fileDinhKems
       this.dataTable = data.ctiets;
+      this.dataTableDx = data.ctietsDx;
     }
   }
 
@@ -126,7 +128,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       return
     }
     let body = this.formData.value;
-    body.ctiets = this.dataTable;
+    body.ctiets = this.dataTableDx;
     body.fileDinhKems = this.fileDinhKems;
     let res
     if (this.idInput > 0) {

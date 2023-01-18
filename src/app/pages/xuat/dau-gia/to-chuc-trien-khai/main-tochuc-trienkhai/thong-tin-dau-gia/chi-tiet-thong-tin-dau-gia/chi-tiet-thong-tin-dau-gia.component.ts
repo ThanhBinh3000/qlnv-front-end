@@ -132,7 +132,7 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
       return
     } else {
       let dataFilter = this.dataTable.filter(item => item.trangThai == this.STATUS.DU_THAO)
-      if (dataFilter) {
+      if (dataFilter && dataFilter.length > 0) {
         this.notification.error(MESSAGE.ERROR, "Không thể kết thúc đấu giá, thông báo " + dataFilter[0].maThongBao + " đang chưa hoàn thành");
         return
       }

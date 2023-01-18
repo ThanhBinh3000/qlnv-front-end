@@ -14,6 +14,7 @@ import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
+import {QuyetDinhKhTrungHanService} from "../../../../../services/quyet-dinh-kh-trung-han.service";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-ke-hoach',
@@ -31,12 +32,10 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   listNam: any[] = [];
 
   searchFilter = {
-    soQd: '',
-    namKh: dayjs().get('year'),
-    ngayQd: '',
-    loaiVthh: '',
-    trichYeu: '',
-    soGoiThau: '',
+    soQd : '',
+    soCongVan : '',
+    trichYeu : '',
+    ngayKy : '',
   };
 
   filterTable: any = {
@@ -66,7 +65,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
     public userService: UserService,
-    private dieuChinhQuyetDinhPdKhlcntService: DieuChinhQuyetDinhPdKhlcntService,
+    private quyetDinhService: QuyetDinhKhTrungHanService,
     public globals: Globals,
   ) { }
 
@@ -74,12 +73,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      for (let i = -3; i < 23; i++) {
-        this.listNam.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
+      this.loadDsNam();
       await this.search();
       this.spinner.hide();
     } catch (e) {
@@ -87,32 +81,32 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    console.log(
-      this.dataTable
-    )
+  }
+
+  loadDsNam() {
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: dayjs().get('year') - i,
+        text: dayjs().get('year') - i,
+      });
+    }
   }
 
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-        : null,
-      denNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-        : null,
-      soQdinh: this.searchFilter.soQd,
-      loaiVthh: this.searchFilter.loaiVthh,
-      namKhoach: this.searchFilter.namKh,
-      soGoiThau: this.searchFilter.soGoiThau,
-      trichYeu: this.searchFilter.trichYeu,
+      soQuyetDinh : this.searchFilter.soQd,
+      soCongVan : this.searchFilter.soCongVan,
+      trichYeu : this.searchFilter.trichYeu,
+      ngayKyTu : this.searchFilter.ngayKy[0],
+      ngayKyDen : this.searchFilter.ngayKy[1],
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
       },
       maDvi: this.userInfo.MA_DVI
     };
-    let res = await this.dieuChinhQuyetDinhPdKhlcntService.search(body);
+    let res = await this.quyetDinhService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -208,17 +202,11 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soQd: '',
-      namKh: dayjs().get('year'),
-      ngayQd: '',
-      loaiVthh: '',
-      trichYeu: '',
-      soGoiThau: '',
-    };
-    // this.namKeHoach = null;
-    // this.loaiVthh = null;
-    // this.startValue = null;
-    // this.endValue = null;
+      soQd : '',
+      soCongVan : '',
+      trichYeu : '',
+      ngayKy : '',
+    }
     this.search();
   }
 
@@ -256,18 +244,8 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       this.spinner.show();
       try {
         let body = {
-          tuNgayTao: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-            : null,
-          denNgayTao: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-            : null,
-          soQd: this.searchFilter.soQd,
-          loaiVthh: this.searchFilter.loaiVthh,
-          namKhoach: this.searchFilter.namKh,
-          soGoiThau: this.searchFilter.soGoiThau,
         };
-        this.dieuChinhQuyetDinhPdKhlcntService
+        this.quyetDinhService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
