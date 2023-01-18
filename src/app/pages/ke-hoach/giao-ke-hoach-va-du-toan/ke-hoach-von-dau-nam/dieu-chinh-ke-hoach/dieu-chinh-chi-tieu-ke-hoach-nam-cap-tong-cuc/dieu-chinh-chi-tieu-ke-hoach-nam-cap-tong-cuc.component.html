@@ -80,7 +80,7 @@
                 <th width="175px">Số VB đề xuất điều chỉnh</th>
                 <!--                <th width="175px">Loại hàng hóa</th>-->
                 <th width="175px">Trạng thái</th>
-                <th width="130px" class="text-center">Hành động</th>
+                <th width="130px" class="text-center" *ngIf="userService.isTongCuc()">Hành động</th>
               </tr>
               </thead>
               <tbody>
@@ -141,7 +141,7 @@
                            (input)="filterInTable('trangThaiDuyet',filterTable.trangThaiDuyet)"/>
                   </nz-input-group>
                 </th>
-                <th></th>
+                <th *ngIf="userService.isTongCuc()"></th>
               </tr>
               <tr *ngFor="let data of basicTable.data; let i = index">
                 <th width="45px">
@@ -158,13 +158,14 @@
                 <td>{{ data.soVbDeXuat }}</td>
                 <!--                <td>{{ data.loaiHangHoa }}</td>-->
                 <td class="text-center">{{ data.trangThaiDuyet }}</td>
-                <td class="text-center">
+                <td class="text-center" *ngIf="userService.isTongCuc()">
                   <a
-                    *ngIf="(data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.DA_DUYET_LDV  || data.trangThai == STATUS.BAN_HANH ) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_XEM')"
+                    *ngIf="(data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.DA_DUYET_LDV  || data.trangThai == STATUS.BAN_HANH ) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_XEM') && userService.isTongCuc()"
                     (click)="redirectToChiTiet(true, data.id)">
                     <i class="fa fa-eye"></i>
                   </a>
-                  <a (click)="redirectToChiTiet(false, data.id)" *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV) && userService.isTongCuc() &&  userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_THEM')">
+                  <a (click)="redirectToChiTiet(false, data.id)"
+                     *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.TU_CHOI_LDV) && userService.isTongCuc() &&  userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_THEM')">
                     <i class="fa fa-pencil"></i>
                   </a>
                   <a
@@ -329,9 +330,14 @@
             </div>
           </nz-tab>
         </nz-tabset>
-        <div class="action-giao-chi-tieu">
+        <div class="action-giao-chi-tieu mt-2">
           <button type="button" class="btn btn-sub" (click)="deleteSelect()"
-                  *ngIf="(tabSelected == 'tu-choi' && userService.isTongCuc()) || (tabSelected == 'cuc' && userService.isCuc())&& userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_XOA')">
+                  *ngIf="(tabSelected == 'tu-choi' && userService.isTongCuc()) && tabSelected == 'tu-choi' && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_XOA') )">
+            <i class="fa fa-trash-o do"></i>
+            <span>Xóa</span>
+          </button>
+          <button type="button" class="btn btn-sub" (click)="deleteSelect()"
+                  *ngIf="tabSelected == 'cuc' && userService.isCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_XOA') ">
             <i class="fa fa-trash-o do"></i>
             <span>Xóa</span>
           </button>
@@ -341,7 +347,12 @@
             <span>Export</span>
           </button>
           <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
-                  *ngIf="(tabSelected == 'tu-choi' && userService.isTongCuc()) || (tabSelected == 'cuc' && userService.isCuc()) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_THEM') ">
+                  *ngIf="(tabSelected == 'tu-choi' && userService.isTongCuc()) && tabSelected == 'tu-choi' && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_THEM') )">
+            <i class="icon htvbdh_dau-cong"></i>
+            <span>Thêm</span>
+          </button>
+          <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
+                  *ngIf="tabSelected == 'cuc' && userService.isCuc() && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_THEM')  ">
             <i class="icon htvbdh_dau-cong"></i>
             <span>Thêm</span>
           </button>
