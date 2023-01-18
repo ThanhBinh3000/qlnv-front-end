@@ -374,4 +374,8 @@ export class DanhMucKho {
   luyKeNstw: number;
   trangThai: string;
   tenTrangThai: string;
+
+  maDvi : string
+
+  loaiDuAn : string;
 }
