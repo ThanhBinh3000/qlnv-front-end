@@ -144,12 +144,12 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     }
     if (this.dataTable.length == 0) {
       this.notification.error(MESSAGE.ERROR, "Không được để trống thông tin chi tiết quy hoạch")
-      this.spinner.hide();
       return
+      this.spinner.hide();
     }
     let body = this.formData.value;
     body.soCongVan = body.soCongVan + this.maQd;
-    body.ctiets = this.dataTable;
+    body.chiTietsReq = this.dataTable;
     body.maDvi = this.userInfo.MA_DVI
     body.fileDinhKems = this.listFileDinhKem;
     body.tmdt = this.calcTong('1') ?  this.calcTong('1') : 0;
