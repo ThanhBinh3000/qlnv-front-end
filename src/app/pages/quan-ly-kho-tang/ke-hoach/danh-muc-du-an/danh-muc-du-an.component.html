@@ -8,7 +8,7 @@
       <div nz-col nzSpan="3">
         <label class="search__label">Khối</label>
         <nz-select nzPlaceHolder="Năm bắt đầu" nzAllowClear [(ngModel)]="searchFilter.khoi">
-          <nz-option *ngFor="let p of danhSachNam" [nzValue]="p.value" [nzLabel]="p.text">
+          <nz-option *ngFor="let p of dsKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
           </nz-option>
         </nz-select>
       </div>
@@ -30,7 +30,7 @@
       <div nz-col nzSpan="6">
         <label class="search__label">Trạng thái</label>
         <nz-select [(ngModel)]="searchFilter.trangThai" nzAllowClear>
-          <nz-option *ngFor="let p of danhSachNam" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+          <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri">
           </nz-option>
         </nz-select>
       </div>
@@ -183,7 +183,7 @@
         <td>{{ data.luyKeNstw }}</td>
         <td>{{ data.tenTrangThai }}</td>
         <td class="text-center" nzRight>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="openDialog()">
+          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="openDialog(data.id)">
             <i class="fa fa-eye"></i>
           </a>
           <a *ngIf="data.trangThai == STATUS.DU_THAO">

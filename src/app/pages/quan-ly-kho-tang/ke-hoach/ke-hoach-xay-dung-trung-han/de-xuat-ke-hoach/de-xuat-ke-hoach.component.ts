@@ -119,6 +119,7 @@ export class DeXuatKeHoachComponent implements OnInit {
     this.spinner.show();
     let body = {
       diaDiem: this.searchFilter.diaDiem,
+      role : this.userService.isCuc() ? 'CUC' : 'TC',
       dmucDuAn: this.searchFilter.dmucDuAn,
       loaiDuAn: this.searchFilter.loaiDuAn,
       namBatDau: this.searchFilter.namBatDau,
