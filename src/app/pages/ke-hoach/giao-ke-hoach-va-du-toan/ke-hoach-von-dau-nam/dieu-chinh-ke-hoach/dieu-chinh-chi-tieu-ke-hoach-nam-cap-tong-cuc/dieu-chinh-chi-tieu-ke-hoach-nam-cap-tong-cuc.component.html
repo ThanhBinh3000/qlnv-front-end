@@ -80,7 +80,7 @@
                 <th width="175px">Số VB đề xuất điều chỉnh</th>
                 <!--                <th width="175px">Loại hàng hóa</th>-->
                 <th width="175px">Trạng thái</th>
-                <th width="130px" class="text-center" *ngIf="userService.isTongCuc()">Hành động</th>
+                <th width="130px" class="text-center" *ngIf="!userService.isChiCuc()">Hành động</th>
               </tr>
               </thead>
               <tbody>
@@ -141,7 +141,7 @@
                            (input)="filterInTable('trangThaiDuyet',filterTable.trangThaiDuyet)"/>
                   </nz-input-group>
                 </th>
-                <th *ngIf="userService.isTongCuc()"></th>
+                <th *ngIf="!userService.isChiCuc()"></th>
               </tr>
               <tr *ngFor="let data of basicTable.data; let i = index">
                 <th width="45px">
@@ -158,9 +158,9 @@
                 <td>{{ data.soVbDeXuat }}</td>
                 <!--                <td>{{ data.loaiHangHoa }}</td>-->
                 <td class="text-center">{{ data.trangThaiDuyet }}</td>
-                <td class="text-center" *ngIf="userService.isTongCuc()">
+                <td class="text-center" *ngIf="!userService.isChiCuc()">
                   <a
-                    *ngIf="(data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.DA_DUYET_LDV  || data.trangThai == STATUS.BAN_HANH ) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_XEM') && userService.isTongCuc()"
+                    *ngIf="((data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.DA_DUYET_LDV  || data.trangThai == STATUS.BAN_HANH ) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_XEM') && userService.isTongCuc()) || (userService.isCuc() && data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_XEM'))"
                     (click)="redirectToChiTiet(true, data.id)">
                     <i class="fa fa-eye"></i>
                   </a>
