@@ -374,6 +374,10 @@ export class ThemMoiQdDcComponent implements OnInit {
         })
         this.fileDinhKems = data.fileDinhKems;
         this.dataTable = data.quyetDinhQuyHoachCTiets;
+        if (this.dataTable) {
+          this.dataTableDTM = this.dataTable.filter(item => item.phuongAnQuyHoach == "ĐT")
+          this.dataTableTL = this.dataTable.filter(item => item.phuongAnQuyHoach != "ĐT")
+        }
         if (this.dataTable && this.dataTable.length > 0) {
           this.dataTable.forEach(item => {
             let arr = this.danhSachPhuongAn.filter(a => a.ma == item.phuongAnQuyHoach)
