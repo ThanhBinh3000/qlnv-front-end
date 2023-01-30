@@ -160,7 +160,7 @@
                 <td class="text-center">{{ data.trangThaiDuyet }}</td>
                 <td class="text-center" *ngIf="!userService.isChiCuc()">
                   <a
-                    *ngIf="((data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.DA_DUYET_LDV  || data.trangThai == STATUS.BAN_HANH ) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_XEM') && userService.isTongCuc()) || (userService.isCuc() && data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_XEM'))"
+                    *ngIf="((data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.KHONG_BAN_HANH || data.trangThai == STATUS.BAN_HANH ) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_XEM') && userService.isTongCuc()) || (userService.isCuc() && data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_CUC_XEM'))"
                     (click)="redirectToChiTiet(true, data.id)">
                     <i class="fa fa-eye"></i>
                   </a>
