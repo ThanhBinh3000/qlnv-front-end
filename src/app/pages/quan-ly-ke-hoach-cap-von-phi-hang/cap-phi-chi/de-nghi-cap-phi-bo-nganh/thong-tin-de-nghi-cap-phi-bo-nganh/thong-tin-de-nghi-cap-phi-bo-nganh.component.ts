@@ -442,7 +442,6 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
   }
 
   selectRow(row, rowSet) {
-    console.log(row);
     if (row) {
       if (rowSet === 'rowDisplay') {
         this.rowDisplay = cloneDeep(row);
