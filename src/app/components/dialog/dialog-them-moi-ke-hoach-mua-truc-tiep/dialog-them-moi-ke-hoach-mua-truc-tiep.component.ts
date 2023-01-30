@@ -185,36 +185,36 @@ export class DialogThemMoiKeHoachMuaTrucTiepComponent implements OnInit {
   }
 
   addDiemKho() {
-    if (this.validateDiemKho()) {
-      this.thongTinMuaTrucTiep.donGia = this.formData.get('donGia').value;
-      this.listOfData = [...this.listOfData, this.thongTinMuaTrucTiep];
-      this.thongTinMuaTrucTiep = new DanhSachMuaTrucTiep();
-      this.calcTongSLnhapTrucTiepDeXuat();
-      this.calcTongThanhTienTrucTiep();
-      this.calcTongThanhTienTheoDonGiaDd();
-      this.updateEditCache();
-      this.disableChiCuc();
-      this.checkDisabledSave();
-    }
-  }
-
-  validateDiemKho(): boolean {
-    if (this.thongTinMuaTrucTiep.maDiemKho) {
-      let data = this.listOfData.filter(item => item.maDiemKho == this.thongTinMuaTrucTiep.maDiemKho);
-      if (data.length > 0) {
-        this.notification.error(MESSAGE.ERROR, "Điểm kho đã tồn tại. Xin vui lòng chọn lại")
-        return false;
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Điểm kho đã tồn tại. Xin vui lòng chọn lại")
-        return false;
-      }
-      return true;
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
-      return false
-    }
+    // if (this.validateDiemKho()) {
+    this.thongTinMuaTrucTiep.donGia = this.formData.get('donGia').value;
+    this.listOfData = [...this.listOfData, this.thongTinMuaTrucTiep];
+    this.thongTinMuaTrucTiep = new DanhSachMuaTrucTiep();
+    this.calcTongSLnhapTrucTiepDeXuat();
+    this.calcTongThanhTienTrucTiep();
+    this.calcTongThanhTienTheoDonGiaDd();
+    this.updateEditCache();
+    this.disableChiCuc();
+    this.checkDisabledSave();
 
   }
+
+  // validateDiemKho(): boolean {
+  //   if (this.thongTinMuaTrucTiep.maDiemKho) {
+  //     let data = this.listOfData.filter(item => item.maDiemKho == this.thongTinMuaTrucTiep.maDiemKho);
+  //     if (data.length > 0) {
+  //       this.notification.error(MESSAGE.ERROR, "Điểm kho đã tồn tại. Xin vui lòng chọn lại")
+  //       return false;
+  //     } else {
+  //       this.notification.error(MESSAGE.ERROR, "Điểm kho đã tồn tại. Xin vui lòng chọn lại")
+  //       return false;
+  //     }
+  //     return true;
+  //   } else {
+  //     this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR);
+  //     return false
+  //   }
+
+  // }
 
   validateSoLuong(isAdd?) {
     return true;

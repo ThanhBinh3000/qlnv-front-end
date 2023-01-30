@@ -77,6 +77,7 @@ import { DialogThemThongTinMuoiComponent } from './dialog/dialog-them-thong-tin-
 import { DialogLuaChonInComponent } from './dialog/dialog-lua-chon-in/dialog-lua-chon-in.component';
 import { DialogThemThongTinVatTuTrongNamComponent } from './dialog/dialog-them-thong-tin-vat-tu-trong-nam/dialog-them-thong-tin-vat-tu-trong-nam.component';
 import { DialogTuChoiComponent } from './dialog/dialog-tu-choi/dialog-tu-choi.component';
+import { DialogKhongBanHanhComponent } from './dialog/dialog-khong-ban-hanh/dialog-khong-ban-hanh.component';
 import { DialogPhuongAnTrinhTongCucComponent } from './dialog/dialog-phuong-an-trinh-tong-cuc/dialog-phuong-an-trinh-tong-cuc.component';
 import { DialogThongTinPhuLucHopDongMuaComponent } from './dialog/dialog-thong-tin-phu-luc-hop-dong-mua/dialog-thong-tin-phu-luc-hop-dong-mua.component';
 import { DialogThemBienbanNghiemThuKeLotComponent } from './dialog/dialog-them-bien-ban-nghiem-thu-ke-lot/dialog-them-bien-ban-nghiem-thu-ke-lot.component';
@@ -164,6 +165,7 @@ import { DialogThemMoiSoDuDauKyComponent } from './dialog/dialog-them-moi-so-du-
 import { DialogDanhSachVatTuHangHoaComponent } from './dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import { Base2Component } from './base2/base2.component';
 import { DialogChonDanhMucComponent } from './dialog/dialog-chon-danh-muc/dialog-chon-danh-muc.component';
+import { DialogThemMoiBangKeThuMuaLeComponent } from './dialog/dialog-them-moi-bang-ke-thu-mua-le/dialog-them-moi-bang-ke-thu-mua-le.component';
 import { DialogQdXdTrungHanComponent } from './dialog/dialog-qd-xd-trung-han/dialog-qd-xd-trung-han.component';
 import { DialogDanhMucKhoComponent } from './dialog/dialog-danh-muc-kho/dialog-danh-muc-kho.component';
 @NgModule({
@@ -185,6 +187,7 @@ import { DialogDanhMucKhoComponent } from './dialog/dialog-danh-muc-kho/dialog-d
     DialogLuaChonInComponent,
     DialogThemThongTinVatTuTrongNamComponent,
     DialogTuChoiComponent,
+    DialogKhongBanHanhComponent,
     DialogPhuongAnTrinhTongCucComponent,
     DialogThongTinPhuLucHopDongMuaComponent,
     DialogThemBienbanNghiemThuKeLotComponent,
@@ -280,6 +283,7 @@ import { DialogDanhMucKhoComponent } from './dialog/dialog-danh-muc-kho/dialog-d
     DialogDanhSachVatTuHangHoaComponent,
     DialogChonDanhMucComponent,
     Base2Component,
+    DialogThemMoiBangKeThuMuaLeComponent,
     DialogQdXdTrungHanComponent,
     DialogDanhMucKhoComponent,
   ],
