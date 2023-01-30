@@ -7,15 +7,18 @@ import {environment} from "../../environments/environment";
 @Injectable({
   providedIn: 'root'
 })
-export class QuyetDinhKhTrungHanService extends BaseService{
+export class DanhMucKhoService extends BaseService{
 
-  GATEWAY = '/qlnv-kho';
+  gateway: string = '/qlnv-kho'
+
   constructor(public httpClient: HttpClient) {
-    super(httpClient, 'dt-tx-trung-han/quyet-dinh','/qlnv-kho');
+    super(httpClient, 'danh-muc-kho', '/qlnv-kho');
   }
 
-  getListToTrinh(): Promise<OldResponseData> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/list-tt`;
+  getAllDmKho(type): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach/${type}`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
+
+
 }

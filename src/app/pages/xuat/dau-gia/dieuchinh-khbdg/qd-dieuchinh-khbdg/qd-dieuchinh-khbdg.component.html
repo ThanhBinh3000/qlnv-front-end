@@ -141,27 +141,24 @@
                 [nzDisabled]="data.trangThai != '00'"></label>
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-            <td>{{data.namKh}}</td>
+            <td>{{data.nam}}</td>
             <td>{{ data.soQdDc }}</td>
-            <td>{{ data.soQdPd }}</td>
-            <td>{{ data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.soQdGoc }}</td>
+            <td>{{ data.ngayKyDc | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
             <td>{{data.tenLoaiVthh}}</td>
             <td>{{data.tenCloaiVthh}}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="detail(data)"
-                *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('XHDTQG_PTDG_DCKHBDG_XEM')">
+              <a (click)="goDetail(data.id,'XHDTQG_PTDG_DCKHBDG_XEM')" *ngIf="data.trangThai == STATUS.BAN_HANH ">
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
-                              && (userService.isAccessPermisson('XHDTQG_PTDG_DCKHBDG_THEM')) && userService.isTongCuc()"
-                (click)="detail(data)">
+                               && userService.isTongCuc()" (click)="goDetail(data.id,'XHDTQG_PTDG_DCKHBDG_THEM')">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO
-                              && (userService.isAccessPermisson('XHDTQG_PTDG_DCKHBDG_XOA')) && userService.isTongCuc()"
-                (click)="delete(data)">
+              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc()"
+                (click)="delete(data,'XHDTQG_PTDG_DCKHBDG_XOA')">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

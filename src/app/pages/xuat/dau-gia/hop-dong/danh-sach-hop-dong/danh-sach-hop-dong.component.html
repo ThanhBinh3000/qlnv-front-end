@@ -152,7 +152,6 @@
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -161,16 +160,17 @@
             <td>{{ data.nam }}</td>
             <td>{{ data.soQdPd }}</td>
             <td>{{ data.soQdKq }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
-            <td>{{ data.trichYeu }}</td>
+            <td>{{ data.tenLoaiVthh }}</td>
+            <td>{{ data.tenDvi }}</td>
             <td></td>
             <td></td>
-            <td>{{ data.maThongBao }}</td>
             <td></td>
-            <td></td>
-            <td>{{ data.loaiVthh }}</td>
-            <td>{{ data.soBienBan }}</td>
-            <td>{{ data.tenTrangThai }}</td>
+            <td>{{ data.tenTrangThaiHd }}</td>
+            <td>{{ data.tenTrangThaiXh }}</td>
             <td class="text-left">
               <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThai=='00'">
                 <i class="fa fa-pencil"></i>
