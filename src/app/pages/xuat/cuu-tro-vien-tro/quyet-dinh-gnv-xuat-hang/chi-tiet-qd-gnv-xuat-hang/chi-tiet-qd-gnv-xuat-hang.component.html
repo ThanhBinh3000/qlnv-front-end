@@ -4,6 +4,7 @@
       <i class="fa fa-arrow-left"></i>
       <span>Quay lại</span>
     </button>
+    <!--    cap ld cuc-->
     <button
       (click)="reject(id,STATUS.TU_CHOI_LDC)"
       *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_LDCUC') && (formData.value.trangThai===STATUS.CHO_DUYET_LDC && userService.isCuc())"
@@ -20,6 +21,25 @@
       <i class="icon htvbdh_tcdt_pheduyet"></i>
       <span>Duyệt</span>
     </button>
+    <!--    end cap ld cuc-->
+    <!--    cap truong phong-->
+    <button
+      (click)="reject(id,STATUS.TU_CHOI_TP)"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP && userService.isCuc())"
+      class="btn btn-sub"
+      type="button">
+      <i class="icon htvbdh_tcdt_tuchoi do"></i>
+      <span>Từ chối</span>
+    </button>
+    <button
+      (click)="approve(id,STATUS.CHO_DUYET_LDC,'Bạn có muốn duyệt quyết định này')"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_DUYET_TP') && (formData.value.trangThai===STATUS.CHO_DUYET_TP && userService.isCuc())"
+      class="btn btn-sub"
+      type="button">
+      <i class="icon htvbdh_tcdt_pheduyet"></i>
+      <span>Duyệt</span>
+    </button>
+    <!--    end cap truong phong-->
     <button
       (click)="saveAndSend()"
       *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDGNVXH_THEM') && (formData.value.trangThai===STATUS.DU_THAO && userService.isCuc())"
