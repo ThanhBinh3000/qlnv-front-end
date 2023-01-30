@@ -375,7 +375,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   }
 
   clearData() {
-
+    this.rowItem = new DanhMucKho();
   }
 
   huyEdit(idx: number): void {
@@ -436,11 +436,8 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
 
   changeDmucDuAn(event: any) {
     if (event) {
-      this.rowItem.diaDiem = event.diaDiem;
-      this.rowItem.tenDuAn = event.tenDuAn;
-      this.rowItem.tgKcHt = event.tgKhoiCong + ' - ' + event.tgHoanThanh;
-      this.rowItem.khoi = event.khoi;
-      this.rowItem.soQdPd = event.soQdPd;
+      console.log(event)
+      this.rowItem = event;
     }
   }
 }
