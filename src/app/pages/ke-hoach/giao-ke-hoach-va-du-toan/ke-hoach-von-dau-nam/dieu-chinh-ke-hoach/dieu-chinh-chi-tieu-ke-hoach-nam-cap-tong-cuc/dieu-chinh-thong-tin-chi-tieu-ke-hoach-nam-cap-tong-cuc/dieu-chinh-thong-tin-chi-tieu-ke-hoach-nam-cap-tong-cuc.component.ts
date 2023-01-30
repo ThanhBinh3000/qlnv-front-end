@@ -22,6 +22,9 @@ import {
   DialogQuyetDinhGiaoChiTieuComponent
 } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {
+  DialogKhongBanHanhComponent
+} from 'src/app/components/dialog/dialog-khong-ban-hanh/dialog-khong-ban-hanh.component';
 import {LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
 import {MESSAGE} from 'src/app/constants/message';
 import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
@@ -2584,26 +2587,31 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   khongBanHanh() {
-    const modalTuChoi = this.modal.create({
-      nzTitle: 'Không ban hành',
-      nzContent: DialogTuChoiComponent,
+    const modalKhongBanHanh = this.modal.create({
+      nzTitle: 'THÔNG BÁO KHÔNG BAN HÀNH',
+      nzContent: DialogKhongBanHanhComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {},
     });
-    modalTuChoi.afterClose.subscribe(async (text) => {
-      if (text) {
+    modalKhongBanHanh.afterClose.subscribe(async (dataKhongBanHanh) => {
+      if (dataKhongBanHanh) {
         this.spinner.show();
         try {
+          console.log(dataKhongBanHanh);
           let body = {
             id: this.id,
-            lyDoTuChoi: text,
+            lyDo: dataKhongBanHanh.lyDo,
+            noiDung: dataKhongBanHanh.noiDung,
+            ngayKy: dataKhongBanHanh.ngayKy,
             trangThai: STATUS.KHONG_BAN_HANH,
+            soVanVan: dataKhongBanHanh.soVanBan,
+            vanBanDinhKemReqs: dataKhongBanHanh.vanBanDinhKems
           };
           let res =
-            await this.quyetDinhDieuChinhChiTieuKeHoachNamService.updateStatus(
+            await this.quyetDinhDieuChinhChiTieuKeHoachNamService.cancelBanHanh(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -3356,4 +3364,47 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
+  viewVbKhongBanHanh() {
+    const modalKhongBanHanh = this.modal.create({
+      nzTitle: 'THÔNG BÁO KHÔNG BAN HÀNH',
+      nzContent: DialogKhongBanHanhComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {dataQĐ: this.dieuChinhThongTinChiTieuKHNam,isView:true},
+    });
+    // modalKhongBanHanh.afterClose.subscribe(async (dataKhongBanHanh) => {
+    //   if (dataKhongBanHanh) {
+    //     this.spinner.show();
+    //     try {
+    //       console.log(dataKhongBanHanh);
+    //       let body = {
+    //         id: this.id,
+    //         lyDo: dataKhongBanHanh.lyDo,
+    //         noiDung: dataKhongBanHanh.noiDung,
+    //         ngayKy: dataKhongBanHanh.ngayKy,
+    //         trangThai: STATUS.KHONG_BAN_HANH,
+    //         soVanVan: dataKhongBanHanh.soVanBan,
+    //         vanBanDinhKemReqs: dataKhongBanHanh.vanBanDinhKems
+    //       };
+    //       let res =
+    //         await this.quyetDinhDieuChinhChiTieuKeHoachNamService.cancelBanHanh(
+    //           body,
+    //         );
+    //       if (res.msg == MESSAGE.SUCCESS) {
+    //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+    //         this.redirectChiTieuKeHoachNam();
+    //       } else {
+    //         this.notification.error(MESSAGE.ERROR, res.msg);
+    //       }
+    //       this.spinner.hide();
+    //     } catch (e) {
+    //       console.log('error: ', e);
+    //       this.spinner.hide();
+    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    //     }
+    //   }
+    // });
+  }
 }
