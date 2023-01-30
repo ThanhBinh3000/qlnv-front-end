@@ -274,7 +274,7 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
       noiDungCuuTro: this.flattenTree(this.noiDungCuuTroView)
     })
     await this.createUpdate(this.formData.value);
-    await this.approve(this.id, STATUS.CHO_DUYET_LDC, 'Bạn có muốn gửi duyệt ?');
+    await this.approve(this.id, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?');
 
   }
 
