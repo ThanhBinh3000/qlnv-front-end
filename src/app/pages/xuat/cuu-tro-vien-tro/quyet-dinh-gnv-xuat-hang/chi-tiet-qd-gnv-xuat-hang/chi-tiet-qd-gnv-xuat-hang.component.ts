@@ -222,6 +222,8 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
               delete res.data.id
               delete res.data.soQd
               delete res.data.nam
+              delete res.data.canCu
+              delete res.data.fileDinhKem
               this.formData.patchValue(res.data)
               this.formData.patchValue({
                 soQdPd: soQdPd,
@@ -231,7 +233,7 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
               let dataView = chain(this.formData.value.noiDungCuuTro)
                 .groupBy("noiDung")
                 .map((value, key) => {
-                  return {idVirtual: uuid.v4(), noiDung: key, soLuong: value[0].soLuong, tenCloaiVthh: 'haha1'};
+                  return {idVirtual: uuid.v4(), noiDung: key, soLuong: value[0].soLuong, tenCloaiVthh: ''};
                 }).value();
               this.noiDungCuuTroView = dataView;
               this.dsNoiDung = dataView
