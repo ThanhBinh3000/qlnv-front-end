@@ -2600,7 +2600,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       if (dataKhongBanHanh) {
         this.spinner.show();
         try {
-          console.log(dataKhongBanHanh);
           let body = {
             id: this.id,
             lyDo: dataKhongBanHanh.lyDo,
@@ -3372,39 +3371,38 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
-      nzComponentParams: {dataQĐ: this.dieuChinhThongTinChiTieuKHNam,isView:true},
+      nzComponentParams: {dataQĐ: this.dieuChinhThongTinChiTieuKHNam, isView: false},
     });
-    // modalKhongBanHanh.afterClose.subscribe(async (dataKhongBanHanh) => {
-    //   if (dataKhongBanHanh) {
-    //     this.spinner.show();
-    //     try {
-    //       console.log(dataKhongBanHanh);
-    //       let body = {
-    //         id: this.id,
-    //         lyDo: dataKhongBanHanh.lyDo,
-    //         noiDung: dataKhongBanHanh.noiDung,
-    //         ngayKy: dataKhongBanHanh.ngayKy,
-    //         trangThai: STATUS.KHONG_BAN_HANH,
-    //         soVanVan: dataKhongBanHanh.soVanBan,
-    //         vanBanDinhKemReqs: dataKhongBanHanh.vanBanDinhKems
-    //       };
-    //       let res =
-    //         await this.quyetDinhDieuChinhChiTieuKeHoachNamService.cancelBanHanh(
-    //           body,
-    //         );
-    //       if (res.msg == MESSAGE.SUCCESS) {
-    //         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
-    //         this.redirectChiTieuKeHoachNam();
-    //       } else {
-    //         this.notification.error(MESSAGE.ERROR, res.msg);
-    //       }
-    //       this.spinner.hide();
-    //     } catch (e) {
-    //       console.log('error: ', e);
-    //       this.spinner.hide();
-    //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    //     }
-    //   }
-    // });
+    modalKhongBanHanh.afterClose.subscribe(async (dataKhongBanHanh) => {
+      if (dataKhongBanHanh) {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            lyDo: dataKhongBanHanh.lyDo,
+            noiDung: dataKhongBanHanh.noiDung,
+            ngayKy: dataKhongBanHanh.ngayKy,
+            trangThai: STATUS.KHONG_BAN_HANH,
+            soVanVan: dataKhongBanHanh.soVanBan,
+            vanBanDinhKemReqs: dataKhongBanHanh.vanBanDinhKems
+          };
+          let res =
+            await this.quyetDinhDieuChinhChiTieuKeHoachNamService.cancelBanHanh(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
+    });
   }
 }
