@@ -191,7 +191,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
 
           });
           this.fileDinhKem = data.fileDinhKems;
-          this.dataTable = data.details;
+          this.dataTable = data.diaDiemGiaoNhan;
 
 
         }
@@ -465,4 +465,12 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
       })
     }
   }
+
+  themMoiPhuLuc() {
+    // this.isViewPhuLuc = true;
+  }
+  backPhuLuc() {
+    // this.isViewPhuLuc = false;
+  }
+
 }
