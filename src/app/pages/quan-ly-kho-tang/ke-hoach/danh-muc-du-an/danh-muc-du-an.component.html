@@ -7,7 +7,7 @@
       </div>
       <div nz-col nzSpan="3">
         <label class="search__label">Khối</label>
-        <nz-select nzPlaceHolder="Năm bắt đầu" nzAllowClear [(ngModel)]="searchFilter.khoi">
+        <nz-select  nzAllowClear [(ngModel)]="searchFilter.khoi">
           <nz-option *ngFor="let p of dsKhoi" [nzValue]="p.giaTri" [nzLabel]="p.giaTri">
           </nz-option>
         </nz-select>
