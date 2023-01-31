@@ -101,7 +101,11 @@
                                 <nz-form-label [nzNoColon]="true" nzRequired> Chọn đơn vị cung cấp
                                 </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <input nz-input [readonly]="true" formControlName="nccTen" />
+                                  <nz-select (ngModelChange)="changeDviCungCap($event)" [nzDisabled]="formData.value.trangThai !== STATUS.DU_THAO"
+                                             formControlName="nccId" nzAllowClear
+                                             nzShowSearch>
+                                    <nz-option *ngFor="let p of listDviCungCap" [nzLabel]="p.canhanTochuc" [nzValue]="p.id"></nz-option>
+                                  </nz-select>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>

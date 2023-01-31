@@ -84,7 +84,7 @@
           <nz-form-item>
             <nz-form-label [nzNoColon]="true" class="label-color-kh"> Năm xuất
             </nz-form-label>
-            <nz-select formControlName="nam" [nzDisabled]="formData.value.trangThai!==STATUS.DU_THAO">
+            <nz-select formControlName="nam" [nzDisabled]="formData.value.trangThai!==STATUS.DU_THAO" (ngModelChange)="loadDsQdPd()">
               <nz-option *ngFor="let p of listNam" [nzLabel]="p.text" [nzValue]="p.value"></nz-option>
             </nz-select>
           </nz-form-item>
