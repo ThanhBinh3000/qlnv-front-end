@@ -330,6 +330,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       if (list && list.length != 0) {
         this.isTongHop = true;
         this.dataTable = list;
+        this.dataTableDx = list;
         this.formData.patchValue({
           id : idTh
         })
