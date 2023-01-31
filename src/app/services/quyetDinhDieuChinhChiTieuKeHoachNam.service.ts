@@ -108,7 +108,7 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
   }
 
   cancelBanHanh(body: any): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/status`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh/khong-ban-hanh`;
     return this.httpClient.put(url, body).toPromise();
   }
 

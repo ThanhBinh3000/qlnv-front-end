@@ -30,6 +30,7 @@ export class DialogKhongBanHanhComponent implements OnInit {
 
   handleOk() {
     this.khongBanHanh.vanBanDinhKems = this.vanBanDinhKemList;
+    console.log
     this._modalRef.close(this.khongBanHanh);
   }
 
