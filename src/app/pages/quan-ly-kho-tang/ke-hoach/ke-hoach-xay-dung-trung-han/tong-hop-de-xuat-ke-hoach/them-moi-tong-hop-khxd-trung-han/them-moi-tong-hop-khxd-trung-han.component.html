@@ -116,7 +116,7 @@
             <nz-form-label [nzNoColon]="true" nzRequired>Nội dung tổng hợp
             </nz-form-label>
             <nz-form-control>
-              <textarea formControlName="noiDung" rows="3" class="search__input" nz-input></textarea>
+              <textarea [readonly]="isViewDetail" formControlName="noiDung" rows="3" class="search__input" nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -126,7 +126,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input formControlName="maToTrinh" type="text" nz-input size="small"/>
+                <input formControlName="maToTrinh" [readonly]="isViewDetail" type="text" nz-input size="small"/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -137,7 +137,7 @@
               File đính kèm phương án đã được Lãnh đạo Tổng cục phê duyệt
             </nz-form-label>
             <div class="list-file">
-              <file-list [data]="fileDinhKems"></file-list>
+              <file-list [disabled]="isViewDetail" [data]="fileDinhKems"></file-list>
             </div>
           </nz-form-item>
         </div>
@@ -181,19 +181,19 @@
     <tr *ngFor="let data of dataTable; let idx = index">
       <ng-container *ngIf="isTongHop">
         <td>{{ idx + 1 }}</td>
-        <td>{{ data.dmucDuAn }}</td>
-        <td>{{ data.dmucDuAn }}</td>
+        <td>{{ data.tenDuAn }}</td>
+        <td>{{ data.tenDvi }}</td>
         <td>{{ data.diaDiem }}</td>
         <td>{{ data.loaiDuAn }}</td>
-        <td>{{ data.tgKcHt }}</td>
+        <td>{{ data.tgKhoiCong + ' - ' + data.tgHoanThanh }}</td>
         <td>{{ data.khoi }}</td>
-        <td>{{ data.soQdPdDc }}</td>
-        <td>{{ data.tmdtTongSo }}</td>
-        <td>{{ data.tmdtNstw }}</td>
-        <td>{{ data.luyKeTongSo }}</td>
+        <td>{{ data.soQdPd }}</td>
+        <td>{{ data.tmdtDuKien }}</td>
+        <td>{{ data.nstwDuKien }}</td>
+        <td>{{ data.tmdtDuyet }}</td>
+        <td>{{ data.nstwDuyet }}</td>
+        <td>{{ data.tongSoLuyKe }}</td>
         <td>{{ data.luyKeNstw }}</td>
-        <td>{{ data.ncKhTongSo }}</td>
-        <td>{{ data.ncKhNstw }}</td>
       </ng-container>
     </tr>
     </tbody>
@@ -232,25 +232,25 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let data of dataTable; let idx = index">
+    <tr *ngFor="let data of dataTableDx; let idx = index">
       <td>{{ idx + 1 }}</td>
-      <td>{{ data.dmucDuAn }}</td>
-      <td>{{ data.dmucDuAn }}</td>
+      <td>{{ data.tenDuAn }}</td>
+      <td>{{ data.tenDvi }}</td>
       <td>{{ data.diaDiem }}</td>
       <td>{{ data.loaiDuAn }}</td>
-      <td>{{ data.tgKcHt }}</td>
+      <td>{{ data.tgKhoiCong + ' - ' + data.tgHoanThanh }}</td>
       <td>{{ data.khoi }}</td>
-      <td>{{ data.soQdPdDc }}</td>
-      <td>{{ data.tmdtTongSo }}</td>
-      <td>{{ data.tmdtNstw }}</td>
-      <td>{{ data.luyKeTongSo }}</td>
-      <td>{{ data.luyKeNstw }}</td>
+      <td>{{ data.soQdPd }}</td>
+      <td>{{ data.tmdtDuKien }}</td>
+      <td>{{ data.nstwDuKien }}</td>
+      <td>{{ data.tmdtDuyet }}</td>
+      <td>{{ data.nstwDuyet }}</td>
       <td>
-        <nz-input-number [(ngModel)]="data.ncKhTongSo" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+        <nz-input-number [(ngModel)]="data.tongSoLuyKe" [nzSize]="'small'" nz-input [nzMin]="0" [nzFormatter]="globals.formatter"
                          [nzParser]="globals.parser"></nz-input-number>
       </td>
       <td>
-        <nz-input-number [(ngModel)]="data.ncKhNstw" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+        <nz-input-number [(ngModel)]="data.luyKeNstw" [nzSize]="'small'" nz-input [nzMin]="0" [nzFormatter]="globals.formatter"
                          [nzParser]="globals.parser"></nz-input-number>
       </td>
     </tr>
