@@ -250,8 +250,8 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
   async loadDsQdPd() {
     this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
       trangThai: STATUS.BAN_HANH,
-      // namKh: this.formData.get('nam').value,
-      nam: 2022,
+      nam: this.formData.get('nam').value,
+      // nam: 2022,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: this.page - 1,
