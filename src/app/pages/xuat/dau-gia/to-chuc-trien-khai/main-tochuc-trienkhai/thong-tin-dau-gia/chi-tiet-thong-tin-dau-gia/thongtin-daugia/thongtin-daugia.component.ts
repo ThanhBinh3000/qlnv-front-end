@@ -92,7 +92,10 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       soBienBan: [, [Validators.required]],
       trichYeuBban: [, [Validators.required]],
       ngayKyBban: [, [Validators.required]],
-      trangThai: ['00']
+      trangThai: ['00'],
+      loaiVthh: [''],
+      cloaiVthh: [''],
+      moTaHangHoa: ['']
     })
   }
 
@@ -115,9 +118,14 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         this.spinner.show();
         let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ");
         let res = await this.quyetDinhPdKhBdgService.getDtlDetail(this.idDtl);
+        console.log("🚀 ~ file: thongtin-daugia.component.ts:121 ~ ngOnInit ~ res", res)
         if (res.data) {
           const data = res.data
-          console.log("🚀 ~ ngOnInit ~ data", data)
+          this.formData.patchValue({
+            loaiVthh: data.loaiVthh,
+            cloaiVthh: data.cloaiVthh,
+            moTaHangHoa: data.moTaHangHoa
+          })
           if (data.listTtinDg && data.listTtinDg.length > 0) {
             // Nếu có thông tin đấu thầu thì sẽ lấy data laster => Set dataTable = children data lastest ý
             let tTinDthauLastest = data.listTtinDg.pop();
@@ -139,7 +147,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
               this.dataTable = this.dataTable.filter(x => x.id != item.id);
             }
           });
-          console.log("🚀 ~ ngOnInit ~ this.dataTable", this.dataTable)
         }
         this.formData.patchValue({
           maThongBao: idThongBao + "/" + this.formData.value.nam + "/TB-ĐG",
@@ -191,7 +198,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         x.toChucCaNhan = x.children[0].toChucCaNhan
       })
     })
-    console.log("🚀 ~ this.dataTable.forEach ~ this.dataTable", this.dataTable)
   }
 
   isDisabled() {

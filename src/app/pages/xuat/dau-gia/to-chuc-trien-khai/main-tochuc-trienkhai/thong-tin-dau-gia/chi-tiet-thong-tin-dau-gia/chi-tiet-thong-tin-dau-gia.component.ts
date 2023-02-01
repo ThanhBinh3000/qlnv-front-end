@@ -180,7 +180,6 @@ export class ChiTietThongTinDauGiaComponent extends Base2Component implements On
 
   themMoiPhienDauGia($event, data?: any) {
     $event.stopPropagation();
-    console.log(data);
     if (!data) {
       let dataCheck = this.dataTable.filter(item => {
         return item.trangThai == this.STATUS.DU_THAO
