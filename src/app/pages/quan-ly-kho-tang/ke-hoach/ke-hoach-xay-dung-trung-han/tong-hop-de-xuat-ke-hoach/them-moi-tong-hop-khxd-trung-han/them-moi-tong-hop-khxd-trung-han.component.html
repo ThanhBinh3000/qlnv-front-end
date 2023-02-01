@@ -39,9 +39,10 @@
         <div nz-col nzSpan="18">
           <nz-form-label>Loại dự án</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <nz-input-group>
-              <input [readOnly]="isTongHop" formControlName="loaiDuAn" type="text" nz-input size="small"/>
-            </nz-input-group>
+            <nz-select [nzDisabled]="isTongHop" formControlName="loaiDuAn" nzAllowClear>
+                <nz-option *ngFor="let item of listLoaiDuAn" [nzLabel]="item.giaTri" [nzValue]="item.giaTri">
+              </nz-option>
+            </nz-select>
           </nz-form-control>
         </div>
         <div nz-col nzSpan="6">
@@ -95,7 +96,7 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">Mã tổng hợp
             </nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <input readonly formControlName="id" type="text" nz-input size="small"/>
               </nz-input-group>
@@ -106,7 +107,7 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">Ngày tổng hợp
             </nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
@@ -115,7 +116,7 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired>Nội dung tổng hợp
             </nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <textarea [readonly]="isViewDetail" formControlName="noiDung" rows="3" class="search__input" nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
@@ -124,7 +125,7 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true">Mã tờ trình
             </nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <input formControlName="maToTrinh" [readonly]="isViewDetail" type="text" nz-input size="small"/>
               </nz-input-group>
@@ -152,7 +153,7 @@
       </div>
     </div>
   </div>
-  <nz-table *ngIf="isTongHop"  [nzData]="dataTableDx" nzBordered class="nowrap" [nzFrontPagination]="false"
+  <nz-table *ngIf="isTongHop"  nzBordered class="nowrap" [nzFrontPagination]="false"
             [nzShowPagination]="false">
     <thead>
     <tr>
@@ -206,7 +207,7 @@
       </div>
     </div>
   </div>
-  <nz-table  *ngIf="isTongHop"  [nzData]="dataTable" nzBordered class="nowrap" [nzFrontPagination]="false"
+  <nz-table  *ngIf="isTongHop" nzBordered class="nowrap" [nzFrontPagination]="false"
             [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
     <thead>
     <tr>

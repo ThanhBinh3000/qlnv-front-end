@@ -13,7 +13,7 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save()">
+      <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
@@ -37,9 +37,9 @@
     <div nz-row [nzGutter]="20">
       <div nz-col nzSpan="4">
         <nz-form-item class="form-item">
-          <nz-form-label [nzNoColon]="true" nzRequired> Số công văn
+          <nz-form-label [nzNoColon]="true" nzRequired> Số quyết định
           </nz-form-label>
-          <nz-form-control>
+          <nz-form-control [nzErrorTip]="error">
             <nz-input-group nzAddOnAfter="{{maQd}}">
               <nz-input-number formControlName="soCongVan" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                                [nzSize]="'small'">
@@ -51,7 +51,7 @@
       <div nz-col nzSpan="4">
         <nz-form-label [nzNoColon]="true" nzRequired> Phương án của Tổng cục
         </nz-form-label>
-        <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
+        <nz-form-control  nz-col [nzSpan]="24" [nzErrorTip]="error">
           <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogToTrinh()">
             <input class="search__input" nz-input readonly="true" formControlName="phuongAnTc" />
           </nz-input-group>
@@ -60,18 +60,24 @@
       <div nz-col nzSpan="3">
         <nz-form-label [nzNoColon]="true" nzRequired>Ngày trình BTC
         </nz-form-label>
-        <nz-range-picker nzFormat="dd/MM/yyyy"></nz-range-picker>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayTrinhBtc" nzFormat="dd/MM/yyyy"></nz-date-picker>
+        </nz-form-control>
       </div>
       <div nz-col nzSpan="3">
         <nz-form-label [nzNoColon]="true" nzRequired>Ngày ký QĐ của BTC
         </nz-form-label>
-        <nz-range-picker nzFormat="dd/MM/yyyy"></nz-range-picker>
+        <nz-form-control [nzErrorTip]="error">
+          <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayKyBtc" nzFormat="dd/MM/yyyy"></nz-date-picker>
+        </nz-form-control>
       </div>
       <div nz-col nzSpan="10">
         <nz-form-item class="form-item">
           <nz-form-label [nzNoColon]="true" nzRequired>Trích yếu
           </nz-form-label>
-          <input class="search__input" nz-input/>
+          <nz-form-control [nzErrorTip]="error">
+            <input class="search__input" formControlName="trichYeu" [readonly]="isViewDetail" nz-input/>
+          </nz-form-control>
         </nz-form-item>
       </div>
       <br>
@@ -122,7 +128,7 @@
       </div>
     </div>
   </div>
-  <nz-table  [nzData]="dataTableTh" nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
+  <nz-table nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
             [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
     <thead>
     <tr>
@@ -148,27 +154,21 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let data of dataTable; let idx = index">
+    <tr *ngFor="let data of dataTableTh; let idx = index">
       <td>{{ idx + 1 }}</td>
-      <td>{{ data.dmucDuAn }}</td>
-      <td>{{ data.dmucDuAn }}</td>
+      <td>{{ data.tenDuAn }}</td>
+      <td>{{ data.tenDvi }}</td>
       <td>{{ data.diaDiem }}</td>
       <td>{{ data.loaiDuAn }}</td>
-      <td>{{ data.tgKcHt }}</td>
+      <td>{{ data.tgKhoiCong + ' - ' + data.tgHoanThanh }}</td>
       <td>{{ data.khoi }}</td>
-      <td>{{ data.soQdPdDc }}</td>
-      <td>{{ data.tmdtTongSo }}</td>
-      <td>{{ data.tmdtNstw }}</td>
-      <td>{{ data.luyKeTongSo }}</td>
+      <td>{{ data.soQdPd }}</td>
+      <td>{{ data.tmdtDuKien }}</td>
+      <td>{{ data.nstwDuKien }}</td>
+      <td>{{ data.tmdtDuyet }}</td>
+      <td>{{ data.nstwDuyet }}</td>
+      <td>{{ data.tongSoLuyKe }}</td>
       <td>{{ data.luyKeNstw }}</td>
-      <td>
-        <nz-input-number [(ngModel)]="data.ncKhTongSo" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                         [nzParser]="globals.parser"></nz-input-number>
-      </td>
-      <td>
-        <nz-input-number [(ngModel)]="data.ncKhNstw" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                         [nzParser]="globals.parser"></nz-input-number>
-      </td>
     </tr>
     </tbody>
     <tfoot>
@@ -196,7 +196,7 @@
         </div>
       </div>
     </div>
-    <nz-table  [nzData]="dataTable" nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
+    <nz-table nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
               [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
       <thead>
       <tr>
@@ -224,17 +224,17 @@
       <tbody>
       <tr *ngFor="let data of dataTable; let idx = index">
         <td>{{ idx + 1 }}</td>
-        <td>{{ data.dmucDuAn }}</td>
-        <td>{{ data.dmucDuAn }}</td>
+        <td>{{ data.tenDuAn }}</td>
+        <td>{{ data.tenDvi }}</td>
         <td>{{ data.diaDiem }}</td>
         <td>{{ data.loaiDuAn }}</td>
-        <td>{{ data.tgKcHt }}</td>
+        <td>{{ data.tgKhoiCong + ' - ' + data.tgHoanThanh }}</td>
         <td>{{ data.khoi }}</td>
-        <td>{{ data.soQdPdDc }}</td>
-        <td>{{ data.tmdtTongSo }}</td>
-        <td>{{ data.tmdtNstw }}</td>
-        <td>{{ data.luyKeTongSo }}</td>
-        <td>{{ data.luyKeNstw }}</td>
+        <td>{{ data.soQdPd }}</td>
+        <td>{{ data.tmdtDuKien }}</td>
+        <td>{{ data.nstwDuKien }}</td>
+        <td>{{ data.tmdtDuyet }}</td>
+        <td>{{ data.nstwDuyet }}</td>
         <td>
           <nz-input-number [(ngModel)]="data.ncKhTongSo" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                            [nzParser]="globals.parser"></nz-input-number>
