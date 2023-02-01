@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {BaseService} from './base.service';
 import {Observable} from 'rxjs';
+import {OldResponseData} from "../interfaces/response";
 
 @Injectable({
   providedIn: 'root',
@@ -120,5 +121,10 @@ export class QuyetDinhDieuChinhChiTieuKeHoachNamService extends BaseService {
   sua(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/quyet-dinh-dieu-chinh`;
     return this.httpClient.put(url, body).toPromise();
+  }
+
+  layDanhSach(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam/danh-sach-qd-dc`;
+    return this.httpClient.post(url, body).toPromise();
   }
 }

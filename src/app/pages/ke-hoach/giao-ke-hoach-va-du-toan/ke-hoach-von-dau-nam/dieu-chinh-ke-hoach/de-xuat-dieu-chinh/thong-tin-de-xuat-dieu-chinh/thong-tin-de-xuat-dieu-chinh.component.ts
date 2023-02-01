@@ -237,6 +237,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           .soLuongTruocDieuChinh(itemChiTieuKH.id)
           .then((res) => {
             if (res && res.data) {
+              // console.log(res.data);
               this.deXuatDieuChinh.dxDcMuoiList = res.data.dxDcMuoiList;
               this.deXuatDieuChinh.dxDcVtNhapList = res.data.dxDcVtList.filter(it => it.chiTieu == '01') ?? [];
               this.deXuatDieuChinh.dxDcVtXuatList = res.data.dxDcVtList.filter(it => it.chiTieu == '00') ?? [];
