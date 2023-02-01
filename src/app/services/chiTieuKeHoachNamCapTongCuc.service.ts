@@ -18,9 +18,9 @@ export class ChiTieuKeHoachNamCapTongCucService extends BaseService {
 
   timKiem(body: any): Promise<any> {
     let url_ = `${environment.SERVICE_API}${this.GATEWAY}/chi-tieu-ke-hoach-nam?`;
-    if (body.maDvi)
-      url_ += 'donViId=' + encodeURIComponent('' + body.donViId) + '&';
     if (body.donViId)
+      url_ += 'donViId=' + encodeURIComponent('' + body.donViId) + '&';
+    if (body.maDvi)
       url_ += 'maDvi=' + encodeURIComponent('' + body.maDvi) + '&';
     if (body.capDvi)
       url_ += 'capDvi=' + encodeURIComponent('' + body.capDvi) + '&';
