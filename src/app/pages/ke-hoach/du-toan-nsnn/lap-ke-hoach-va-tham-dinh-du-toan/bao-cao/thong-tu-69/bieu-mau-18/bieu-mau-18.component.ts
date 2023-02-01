@@ -6,7 +6,8 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, QUATITY, sumNumber } from "src/app/Utility/utils";
+import { displayNumber, exchangeMoney, getHead, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { DANH_MUC } from './bieu-mau-18.constant';
 
@@ -107,7 +108,9 @@ export class BieuMau18Component implements OnInit {
         item.stt = item.maLvuc;
       })
     }
-    this.sortByIndex();
+
+    this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+
     this.getTotal();
     this.updateEditCache();
     this.getStatusButton();
@@ -189,39 +192,6 @@ export class BieuMau18Component implements OnInit {
     this.spinner.hide();
   }
 
-  // chuc nang check role
-  async onSubmit(mcn: string, lyDoTuChoi: string) {
-    if (!this.formDetail?.id) {
-      this.notification.warning(MESSAGE.WARNING, MESSAGE.MESSAGE_DELETE_WARNING);
-      return;
-    }
-    const requestGroupButtons = {
-      id: this.formDetail.id,
-      trangThai: mcn,
-      lyDoTuChoi: lyDoTuChoi,
-    };
-    this.spinner.show();
-    await this.lapThamDinhService.approveCtietThamDinh(requestGroupButtons).toPromise().then(async (data) => {
-      if (data.statusCode == 0) {
-        this.formDetail.trangThai = mcn;
-        this.getStatusButton();
-        if (mcn == "0") {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
-        } else {
-          this.notification.success(MESSAGE.SUCCESS, MESSAGE.APPROVE_SUCCESS);
-        }
-        this._modalRef.close({
-          formDetail: this.formDetail,
-        });
-      } else {
-        this.notification.error(MESSAGE.ERROR, data?.msg);
-      }
-    }, err => {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    });
-    this.spinner.hide();
-  }
-
   //show popup tu choi
   tuChoi(mcn: string) {
     const modalTuChoi = this.modal.create({
@@ -269,14 +239,6 @@ export class BieuMau18Component implements OnInit {
     }
     return xau;
   }
-  // lấy phần đầu của số thứ tự, dùng để xác định phần tử cha
-  getHead(str: string): string {
-    return str.substring(0, str.lastIndexOf('.'));
-  }
-  // lấy phần đuôi của stt
-  getTail(str: string): number {
-    return parseInt(str.substring(str.lastIndexOf('.') + 1, str.length), 10);
-  }
 
   // gan editCache.data == lstCtietBcao
   updateEditCache(): void {
@@ -312,44 +274,6 @@ export class BieuMau18Component implements OnInit {
     this.updateEditCache();
   }
 
-  sortByIndex() {
-    this.setLevel();
-    this.lstCtietBcao.sort((item1, item2) => {
-      if (item1.level > item2.level) {
-        return 1;
-      }
-      if (item1.level < item2.level) {
-        return -1;
-      }
-      if (this.getTail(item1.stt) > this.getTail(item2.stt)) {
-        return -1;
-      }
-      if (this.getTail(item1.stt) < this.getTail(item2.stt)) {
-        return 1;
-      }
-      return 0;
-    });
-    const lstTemp: ItemData[] = [];
-    this.lstCtietBcao.forEach(item => {
-      const index: number = lstTemp.findIndex(e => e.stt == this.getHead(item.stt));
-      if (index == -1) {
-        lstTemp.splice(0, 0, item);
-      } else {
-        lstTemp.splice(index + 1, 0, item);
-      }
-    })
-
-    this.lstCtietBcao = lstTemp;
-  }
-
-  setLevel() {
-    this.lstCtietBcao.forEach(item => {
-      const str: string[] = item.stt.split('.');
-      item.level = str.length - 2;
-    })
-  }
-
-
   changeModel(id: string): void {
     this.editCache[id].data.ncauChiChiaRaDtuPtrien = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs1, this.editCache[id].data.ncauChiChiaRaChiMoi1]);
     this.editCache[id].data.ncauChiChiaRaChiTx = sumNumber([this.editCache[id].data.ncauChiChiaRaChiCs2, this.editCache[id].data.ncauChiChiaRaChiMoi2]);
@@ -360,7 +284,7 @@ export class BieuMau18Component implements OnInit {
   }
 
   sum(stt: string) {
-    stt = this.getHead(stt);
+    stt = getHead(stt);
     while (stt != '0') {
       const index = this.lstCtietBcao.findIndex(e => e.stt == stt);
       const data = this.lstCtietBcao[index];
@@ -373,7 +297,7 @@ export class BieuMau18Component implements OnInit {
         level: data.level,
       }
       this.lstCtietBcao.forEach(item => {
-        if (this.getHead(item.stt) == stt) {
+        if (getHead(item.stt) == stt) {
           this.lstCtietBcao[index].ncauChiTongSo = sumNumber([this.lstCtietBcao[index].ncauChiTongSo, item.ncauChiTongSo]);
           this.lstCtietBcao[index].ncauChiTrongDoChiCs = sumNumber([this.lstCtietBcao[index].ncauChiTrongDoChiCs, item.ncauChiTrongDoChiCs]);
           this.lstCtietBcao[index].ncauChiTrongDoChiMoi = sumNumber([this.lstCtietBcao[index].ncauChiTrongDoChiMoi, item.ncauChiTrongDoChiMoi]);
@@ -388,7 +312,7 @@ export class BieuMau18Component implements OnInit {
           this.lstCtietBcao[index].ncauChiChiaRaChiDtqg = sumNumber([this.lstCtietBcao[index].ncauChiChiaRaChiDtqg, item.ncauChiChiaRaChiDtqg]);
         }
       })
-      stt = this.getHead(stt);
+      stt = getHead(stt);
     }
     this.getTotal();
   }
