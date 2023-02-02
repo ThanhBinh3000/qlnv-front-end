@@ -9,6 +9,11 @@
           <i class="fa fa-arrow-left"></i>
           <span>Quay lại</span>
         </button>
+        <button class="btn btn-outline-danger btn-sm waves-effect waves-light" (click)="khongBanHanh()"
+                *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.TU_CHOI_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH')  && userService.isTongCuc()">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Không ban hành</span>
+        </button>
         <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="save(true)"
                 [disabled]="!formData.valid"
                 *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DU_THAO || dieuChinhThongTinChiTieuKHNam.trangThai ==  STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.TU_CHOI_LDC || dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.TU_CHOI_LDV) && !isView">
@@ -35,11 +40,6 @@
           <i class="icon htvbdh_tcdt_pheduyet"></i>
           <span>Ban hành</span>
         </button>
-        <button class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="khongBanHanh()"
-                *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.DA_DUYET_LDV) && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_QDDC_TC_BANHANH')  && userService.isTongCuc()">
-          <i class="icon htvbdh_tcdt_pheduyet"></i>
-          <span>Không ban hành</span>
-        </button>
         <!--        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"-->
         <!--           *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == '04' && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView">-->
         <!--          <i class="icon htvbdh_tcdt_tuchoi"></i>-->
@@ -54,11 +54,18 @@
     <div class="main-content main-ke-hoach">
       <div class="thong-tin-chi-tieu">
         <div class="title-chi-tieu">
-          <span [ngClass]="thongTinTrangThai(dieuChinhThongTinChiTieuKHNam.trangThai)">{{trangThai}}</span>
-          <span>Thông tin điều chỉnh chỉ tiêu kế hoạch năm {{lastBreadcrumb}} giao</span>
+          <span [ngClass]="thongTinTrangThai(dieuChinhThongTinChiTieuKHNam.trangThai)">{{trangThai}} </span>
+          <span>Quyết định điều chỉnh chỉ tiêu kế hoạch năm {{lastBreadcrumb}} giao</span>
         </div>
+        <div class="text-right align-content-end" *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.KHONG_BAN_HANH">
+          <span class="text-xem-vanban-khongbanhanh" (click)="viewVbKhongBanHanh()">Xem văn bản không đồng ý điều chỉnh</span>
+        </div>
+        <nz-alert class="mg-t-16 mb-2" *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai == STATUS.TU_CHOI_LDV " nzShowIcon
+                  nzType="error"
+                  nzMessage="Lý do từ chối" nzDescription="{{dieuChinhThongTinChiTieuKHNam.lyDoTuChoi}}">
+        </nz-alert>
         <form nz-form [formGroup]="formData" [nzLayout]="'vertical'">
-          <div nz-row [nzGutter]="[16, 12]" ae>
+          <div nz-row [nzGutter]="[16, 12]">
             <div nz-col [nzSpan]="3">
               <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Năm kế hoạch
               </nz-form-label>
@@ -123,18 +130,7 @@
               </multiple-tag>
             </div>
             <div nz-col [nzSpan]="6" *ngIf="userService.isCuc()">
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Quyết định giao chỉ tiêu KH năm cấp Cục
-              </nz-form-label>
-              <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn quyết định giao chỉ tiêu kế hoạch năm"
-                            icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu"
-                            [trangThai]="isView ? 'view-detail' : dieuChinhThongTinChiTieuKHNam.trangThai"
-                            (selectDataEvent)="openDialogQuyetDinhGiaoChiTieu()"
-                            (removeDataEvent)="deleteDataMultipleTag($event)"
-                            [showDowloadFile]="false" typeFile="tai-lieu-dinh-kem">
-              </multiple-tag>
-            </div>
-            <div nz-col [nzSpan]="6" *ngIf="userService.isCuc()">
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> QĐ điều chỉnh giao chỉ tiêu cấp TC
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> QĐ điều chỉnh chỉ tiêu KH năm của TC
               </nz-form-label>
               <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn quyết định điều chỉnh giao chỉ tiêu kế hoạch năm"
                             icon="htvbdh_chuyen-vao-thu-vien" [data]="dataDieuChinh"
@@ -145,7 +141,18 @@
               </multiple-tag>
             </div>
             <div nz-col [nzSpan]="6" *ngIf="userService.isCuc()">
-              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Đề xuất điều chỉnh giao chỉ tiêu của cục
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Số QĐ giao chỉ tiêu KH năm của Cục
+              </nz-form-label>
+              <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn quyết định giao chỉ tiêu kế hoạch năm"
+                            icon="htvbdh_chuyen-vao-thu-vien" [data]="dataGiaoChiTieu"
+                            [trangThai]="isView ? 'view-detail' : dieuChinhThongTinChiTieuKHNam.trangThai"
+                            (selectDataEvent)="openDialogQuyetDinhGiaoChiTieu()"
+                            (removeDataEvent)="deleteDataMultipleTag($event)"
+                            [showDowloadFile]="false" typeFile="tai-lieu-dinh-kem">
+              </multiple-tag>
+            </div>
+            <div nz-col [nzSpan]="6" *ngIf="userService.isCuc()">
+              <nz-form-label [nzNoColon]="true" class="label-color-kh"> Đề xuất điều chỉnh chỉ tiêu KH của Cục
               </nz-form-label>
               <multiple-tag buttonName="Chọn căn cứ" placeHolder="Chọn văn bản đề xuất của cục"
                             icon="htvbdh_chuyen-vao-thu-vien" [data]="dataDeXuat"
@@ -154,7 +161,7 @@
                             [showDowloadFile]="false" typeFile="tai-lieu-dinh-kem">
               </multiple-tag>
             </div>
-            <div nz-col [nzSpan]="24" *ngIf="userService.isTongCuc()">
+            <div nz-col [nzSpan]="24">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Tài liệu đính kèm
               </nz-form-label>
               <nz-form-item>

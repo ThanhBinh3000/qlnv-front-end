@@ -22,6 +22,9 @@ import {
   DialogQuyetDinhGiaoChiTieuComponent
 } from 'src/app/components/dialog/dialog-quyet-dinh-giao-chi-tieu/dialog-quyet-dinh-giao-chi-tieu.component';
 import {DialogTuChoiComponent} from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
+import {
+  DialogKhongBanHanhComponent
+} from 'src/app/components/dialog/dialog-khong-ban-hanh/dialog-khong-ban-hanh.component';
 import {LEVEL, LEVEL_USER, PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
 import {MESSAGE} from 'src/app/constants/message';
 import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
@@ -207,6 +210,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.loadDefaultMuoiNew();
       this.loadDefaultVatTuNew();
       this.loadDonVi();
+      await this.selectedQdDcCTKHTC();
+      await this.selectedQdGiaoCTKHCuaCuc();
+      await this.selectedDeXuatDieuChinhCuc();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -1713,7 +1719,304 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     console.log('handleEndOpenChange', open);
   }
 
+  async selectedQdGiaoCTKHCuaCuc() {
+    if (this.id == 0 && !this.isView) {
+      let body = {
+        ngayKyDenNgay: null,
+        id: 0,
+        donViId: null,
+        maDvi: null,
+        namKeHoach: this.namKeHoach ?? null,
+        tenDvi: null,
+        pageNumber: this.page,
+        pageSize: this.pageSize,
+        trichYeu: null,
+        ngayKyTuNgay: null,
+        trangThai: STATUS.BAN_HANH,
+        capDvi: 2,
+      };
+      this.spinner.show();
+      let res = await this.chiTieuKeHoachNamCapTongCucService.timKiem(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        if (data && data.content && data.content.length > 0) {
+          this.dataGiaoChiTieu = [];
+          let item = {
+            id: data.content[0].id,
+            text: data.content[0].soQuyetDinh,
+          };
+          this.dataGiaoChiTieu.push(item);
+          this.selectedCanCu = data.content[0];
+          this.chiTieuKeHoachNamCapTongCucService
+            .loadThongTinChiTieuKeHoachNam(this.selectedCanCu.id)
+            .then((res) => {
+              if (res.msg == MESSAGE.SUCCESS) {
+                let tempData = res.data;
+                this.formData.controls['namKeHoach'].setValue(
+                  tempData.namKeHoach,
+                );
+
+                this.dieuChinhThongTinChiTieuKHNam.qdGocId = tempData.id;
+                this.dieuChinhThongTinChiTieuKHNam.khLuongThuc = cloneDeep(
+                  tempData.khLuongThuc,
+                );
+                if (
+                  this.dieuChinhThongTinChiTieuKHNam.khLuongThuc &&
+                  this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.length > 0
+                ) {
+                  for (
+                    let i = 0;
+                    i < this.dieuChinhThongTinChiTieuKHNam.khLuongThuc.length;
+                    i++
+                  ) {
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].id = null;
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].khGaoId =
+                      null;
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].khThocId =
+                      null;
+
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                      i
+                      ].tdcNtnTongSoQuyThoc =
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                        i
+                        ].ntnTongSoQuyThoc;
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                      i
+                      ].tdcNtnThoc =
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].ntnThoc;
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                      i
+                      ].tdcNtnGao =
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].ntnGao;
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                      i
+                      ].tdcXtnTongSoQuyThoc =
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                        i
+                        ].xtnTongSoQuyThoc;
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                      i
+                      ].tdcXtnTongThoc =
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                        i
+                        ].xtnTongThoc;
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                      i
+                      ].tdcXtnTongGao =
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                        i
+                        ].xtnTongGao;
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                      i
+                      ].tdcXtnThoc =
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].xtnThoc;
+                    this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                      i
+                      ].tdcXtnGao =
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].xtnGao;
+
+                    if (
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i]
+                        .xtnGao &&
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].xtnGao
+                        .length > 0
+                    ) {
+                      for (
+                        let j = 0;
+                        j <
+                        this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].xtnGao
+                          .length;
+                        j++
+                      ) {
+                        this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                          i
+                          ].xtnGao[j].id = null;
+                      }
+                    }
+
+                    if (
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i]
+                        .dcXtnThoc &&
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i]
+                        .dcXtnThoc.length > 0
+                    ) {
+                    } else {
+                      let tkdnThoc: Array<ItemDetail> = [
+                        {
+                          nam: this.yearNow - 1,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                        {
+                          nam: this.yearNow - 2,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                        {
+                          nam: this.yearNow - 3,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                      ];
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                        i
+                        ].dcXtnThoc = tkdnThoc;
+                    }
+                    if (
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i]
+                        .dcXtnGao &&
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].dcXtnGao
+                        .length > 0
+                    ) {
+                    } else {
+                      let tkdnGao: Array<ItemDetail> = [
+                        {
+                          nam: this.yearNow - 1,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                        {
+                          nam: this.yearNow - 2,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                        {
+                          nam: this.yearNow - 3,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                      ];
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                        i
+                        ].dcXtnGao = tkdnGao;
+                    }
+
+                    if (
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i]
+                        .xtnThoc &&
+                      this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i].xtnThoc
+                        .length > 0
+                    ) {
+                      for (
+                        let j = 0;
+                        j <
+                        this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[i]
+                          .xtnThoc.length;
+                        j++
+                      ) {
+                        this.dieuChinhThongTinChiTieuKHNam.khLuongThuc[
+                          i
+                          ].xtnThoc[j].id = null;
+                      }
+                    }
+                  }
+                }
+
+                this.dieuChinhThongTinChiTieuKHNam.khMuoi = cloneDeep(
+                  tempData.khMuoiDuTru,
+                );
+                if (
+                  this.dieuChinhThongTinChiTieuKHNam.khMuoi &&
+                  this.dieuChinhThongTinChiTieuKHNam.khMuoi.length > 0
+                ) {
+                  for (
+                    let i = 0;
+                    i < this.dieuChinhThongTinChiTieuKHNam.khMuoi.length;
+                    i++
+                  ) {
+                    this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].id = null;
+
+                    this.dieuChinhThongTinChiTieuKHNam.khMuoi[
+                      i
+                      ].tdcNtnTongSoMuoi =
+                      this.dieuChinhThongTinChiTieuKHNam.khMuoi[
+                        i
+                        ].ntnTongSoMuoi;
+                    this.dieuChinhThongTinChiTieuKHNam.khMuoi[
+                      i
+                      ].tdcXtnTongSoMuoi =
+                      this.dieuChinhThongTinChiTieuKHNam.khMuoi[
+                        i
+                        ].xtnTongSoMuoi;
+                    this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].tdcXtnMuoi =
+                      this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].xtnMuoi;
+
+                    if (
+                      this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].xtnMuoi &&
+                      this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].xtnMuoi
+                        .length > 0
+                    ) {
+                      for (
+                        let j = 0;
+                        j <
+                        this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].xtnMuoi
+                          .length;
+                        j++
+                      ) {
+                        this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].xtnMuoi[
+                          j
+                          ].id = null;
+                      }
+                    }
+
+                    if (
+                      this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi &&
+                      this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi
+                        .length > 0
+                    ) {
+                    } else {
+                      let tkdnMuoi: Array<ItemDetail> = [
+                        {
+                          nam: this.yearNow - 1,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                        {
+                          nam: this.yearNow - 2,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                        {
+                          nam: this.yearNow - 3,
+                          soLuong: 0,
+                          vatTuId: this.thocIdDefault,
+                          id: 0,
+                        },
+                      ];
+                      this.dieuChinhThongTinChiTieuKHNam.khMuoi[i].dcXtnMuoi =
+                        tkdnMuoi;
+                    }
+                  }
+                }
+                this.processDataVattu(tempData);
+                this.dieuChinhThongTinChiTieuKHNam.khVatTu = cloneDeep(
+                  tempData.khVatTu,
+                );
+                this.updateDataVatTu();
+                this.loadData();
+              }
+            });
+          this.spinner.hide();
+        } else {
+          this.notification.error(MESSAGE.ERROR, "Không tìm thấy quyết định giao chỉ tiêu kế hoạch của Cục");
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+
   openDialogQuyetDinhGiaoChiTieu() {
+    return;
     if (this.id == 0 && !this.isView) {
       const modalQD = this.modal.create({
         nzTitle: 'Thông tin QĐ giao chỉ tiêu kế hoạch',
@@ -2584,26 +2887,30 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   khongBanHanh() {
-    const modalTuChoi = this.modal.create({
-      nzTitle: 'Không ban hành',
-      nzContent: DialogTuChoiComponent,
+    const modalKhongBanHanh = this.modal.create({
+      nzTitle: 'THÔNG BÁO KHÔNG BAN HÀNH',
+      nzContent: DialogKhongBanHanhComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '900px',
       nzFooter: null,
       nzComponentParams: {},
     });
-    modalTuChoi.afterClose.subscribe(async (text) => {
-      if (text) {
+    modalKhongBanHanh.afterClose.subscribe(async (dataKhongBanHanh) => {
+      if (dataKhongBanHanh) {
         this.spinner.show();
         try {
           let body = {
             id: this.id,
-            lyDoTuChoi: text,
+            lyDo: dataKhongBanHanh.lyDo,
+            noiDung: dataKhongBanHanh.noiDung,
+            ngayKy: dataKhongBanHanh.ngayKy,
             trangThai: STATUS.KHONG_BAN_HANH,
+            soVanVan: dataKhongBanHanh.soVanBan,
+            vanBanDinhKemReqs: dataKhongBanHanh.vanBanDinhKems
           };
           let res =
-            await this.quyetDinhDieuChinhChiTieuKeHoachNamService.updateStatus(
+            await this.quyetDinhDieuChinhChiTieuKeHoachNamService.cancelBanHanh(
               body,
             );
           if (res.msg == MESSAGE.SUCCESS) {
@@ -2997,7 +3304,46 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
+  async selectedDeXuatDieuChinhCuc() {
+    if (this.id == 0 && !this.isView) {
+      let body = {
+        ngayKyDenNgay: null,
+        id: 0,
+        donViId: null,
+        maDvi: null,
+        namKeHoach: this.namKeHoach ?? null,
+        tenDvi: null,
+        pageNumber: this.page,
+        pageSize: this.pageSize,
+        soQD: null,
+        soQuyetDinh: null,
+        trichYeu: null,
+        ngayKyTuNgay: null,
+        trangThai: null,
+        capDvi: null,
+      };
+      let res = await this.deXuatDieuChinhService.timKiem(body);
+      if (res.msg == MESSAGE.SUCCESS) {
+        let data = res.data;
+        if (data && data.content && data.content.length > 0) {
+          let item = {
+            id: data.content[0].id,
+            text: data.content[0].soVanBan,
+          };
+          this.dataDeXuat.push(item);
+        } else {
+          this.dataDeXuat = [];
+          this.notification.error(MESSAGE.ERROR, "Không tìm thấy đề xuất điều chỉnh của Cục.");
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
+    }
+  }
+
+
   openDialogDeXuatCuc() {
+    return;
     if (this.id == 0 && !this.isView) {
       const modalQD = this.modal.create({
         nzTitle: 'Thông tin đề xuất của cục',
@@ -3043,7 +3389,65 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
+  async selectedQdDcCTKHTC() {
+    let body = {
+      "namKeHoach": this.formData.value.namKeHoach,
+      "trangThai": STATUS.BAN_HANH,
+      "capDvi": "1",
+      "loaiQuyetDinh": "01",
+      "maDvi": this.userInfo.MA_DVI
+    };
+    let res =
+      await this.quyetDinhDieuChinhChiTieuKeHoachNamService.layDanhSach(
+        body,
+      );
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        this.dataDieuChinh = [];
+        let item = {
+          id: res.data[0].id,
+          text: res.data[0].soQuyetDinh,
+        };
+        this.dataDieuChinh.push(item);
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Không tìm thấy quyết định điều chỉnh của Tổng Cục");
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+  async selectedQdGiaoCTKHCuc() {
+    let body = {
+      "namKeHoach": this.formData.value.namKeHoach,
+      "trangThai": STATUS.BAN_HANH,
+      "capDvi": "2",
+      "loaiQuyetDinh": "00",
+      "maDvi": this.userInfo.MA_DVI
+    };
+    let res =
+      await this.quyetDinhDieuChinhChiTieuKeHoachNamService.layDanhSach(
+        body,
+      );
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data && res.data.length > 0) {
+        this.dataDieuChinh = [];
+        let item = {
+          id: res.data[0].id,
+          text: res.data[0].soQuyetDinh,
+        };
+        this.dataDieuChinh.push(item);
+      } else {
+        this.notification.error(MESSAGE.ERROR, "Không tìm thấy quyết định điều chỉnh của Tổng Cục");
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
+
+
   openDialogQuyetDinhDieuChinh() {
+    return;
     if (this.id == 0 && !this.isView) {
       const modalQD = this.modal.create({
         nzTitle: 'Thông tin điều chỉnh của cục',
@@ -3356,4 +3760,46 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     }
   }
 
+  viewVbKhongBanHanh() {
+    const modalKhongBanHanh = this.modal.create({
+      nzTitle: 'THÔNG BÁO KHÔNG BAN HÀNH',
+      nzContent: DialogKhongBanHanhComponent,
+      nzMaskClosable: false,
+      nzClosable: false,
+      nzWidth: '900px',
+      nzFooter: null,
+      nzComponentParams: {dataQĐ: this.dieuChinhThongTinChiTieuKHNam, isView: false},
+    });
+    modalKhongBanHanh.afterClose.subscribe(async (dataKhongBanHanh) => {
+      if (dataKhongBanHanh) {
+        this.spinner.show();
+        try {
+          let body = {
+            id: this.id,
+            lyDo: dataKhongBanHanh.lyDo,
+            noiDung: dataKhongBanHanh.noiDung,
+            ngayKy: dataKhongBanHanh.ngayKy,
+            trangThai: STATUS.KHONG_BAN_HANH,
+            soVanVan: dataKhongBanHanh.soVanBan,
+            vanBanDinhKemReqs: dataKhongBanHanh.vanBanDinhKems
+          };
+          let res =
+            await this.quyetDinhDieuChinhChiTieuKeHoachNamService.cancelBanHanh(
+              body,
+            );
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+            this.redirectChiTieuKeHoachNam();
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
+          this.spinner.hide();
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      }
+    });
+  }
 }
