@@ -4,9 +4,11 @@ import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Base2Component} from "../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
+import {saveAs} from 'file-saver';
 import {StorageService} from "../../../services/storage.service";
 import {UserActivityService} from "../../../services/user-activity.service";
 import {PAGE_SIZE_DEFAULT} from "../../../constants/config";
+import {MESSAGE} from "../../../constants/message";
 
 
 @Component({
@@ -20,7 +22,7 @@ export class KiemSoatQuyenTruyCapComponent extends Base2Component implements OnI
   listSystem: any[] = [{"code": "hang", "ten": "Quản lý hàng"}, {
     "code": "khoach",
     "ten": "Quản lý kế hoạch"
-  }, {"code": "kho", "ten": "Quản lý kho"}];
+  }, {"code": "kho", "ten": "Quản lý kho"}, {"code": "security", "ten": "Quản lý đăng nhập"}];
   pageSize: number = 100;
 
   constructor(
@@ -47,6 +49,26 @@ export class KiemSoatQuyenTruyCapComponent extends Base2Component implements OnI
 
   }
 
+
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        this.UserActivityService
+          .export(this.formData.value)
+          .subscribe((blob) =>
+            saveAs(blob, 'lich-su-truy-cap.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
 }
 
 
