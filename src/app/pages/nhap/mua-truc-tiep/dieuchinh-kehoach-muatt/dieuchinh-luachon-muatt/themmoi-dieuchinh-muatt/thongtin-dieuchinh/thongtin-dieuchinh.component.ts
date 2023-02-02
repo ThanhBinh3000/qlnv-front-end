@@ -10,6 +10,7 @@ import { Globals } from "../../../../../../../shared/globals";
 import { DieuChinhQuyetDinhPdKhmttService } from './../../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/dieuchinh-khmtt/DieuChinhQuyetDinhPdKhmtt.service';
 import { STATUS } from 'src/app/constants/status';
 import { DanhSachMuaTrucTiepService } from './../../../../../../../services/danh-sach-mua-truc-tiep.service';
+import { ChiTietList } from './../../../../../../../models/QdPheDuyetKHBanDauGia';
 @Component({
   selector: 'app-thongtin-dieuchinh',
   templateUrl: './thongtin-dieuchinh.component.html',
@@ -96,14 +97,18 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       if (this.dataInput) {
         let res;
         if (this.isCache) {
+          console.log(this.dataInput.idDxHdr, "chan");
           res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.idDxHdr);
           if (res.msg == MESSAGE.SUCCESS) {
+            console.log(this.isCache, 4567);
+            console.log(res, 567);
             this.formData.patchValue(res.data)
             this.formData.patchValue({
               hhDcQdPduyetKhmttSlddList: res.data.dsSlddDtlList,
             })
           }
         } else {
+          console.log("comm");
           this.updateDonGiaVat()
           this.formData.patchValue(this.dataInput);
           this.formData.patchValue({
@@ -162,31 +167,26 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
 
   calcTong() {
     let dt = this.formData.value.hhDcQdPduyetKhmttSlddList
-    let tong: any = [];
+    let tong = 0;
     dt.forEach(e => {
       const sum = e.children.reduce((prev, cur) => {
         prev += cur.soLuong;
         return prev;
       }, 0);
+      tong += sum;
+      this.dataChild.emit(this.formData.value.hhDcQdPduyetKhmttSlddList)
       this.formData.patchValue({
-        tongSoLuong: sum,
-        tongMucDt: sum * this.formData.value.donGiaVat * 1000
+        tongSoLuong: tong,
+        tongMucDt: tong * this.formData.value.donGiaVat * 1000
       })
       this.data.emit(this.formData.value)
-      this.dataChild.emit(this.formData.value.hhDcQdPduyetKhmttSlddList)
-      tong = sum;
 
     });
     return tong;
-  }
-
-  updateSlTt() {
   }
 
   OnChangesAll() {
     this.data.emit(this.formData.value)
     this.dataChild.emit(this.formData.value.hhDcQdPduyetKhmttSlddList)
   }
-
-
 }
