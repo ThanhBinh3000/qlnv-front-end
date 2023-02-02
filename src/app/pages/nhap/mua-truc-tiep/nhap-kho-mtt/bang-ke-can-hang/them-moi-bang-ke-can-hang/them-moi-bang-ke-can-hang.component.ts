@@ -272,7 +272,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
         thoiGianGiaoNhan: null,
       });
     }
-    this.listSoPhieuNhapKho = data.hhPhieuNhapKhoHdr.filter(item => (item.trangThai == STATUS.DA_DUYET_LDCC));
+    this.listSoPhieuNhapKho = data.hhPhieuNhapKhoHdr.filter(item => (item.trangThai == STATUS.DU_THAO));
   }
   openDialogSoPhieuNhapKho() {
     const modalQD = this.modal.create({
