@@ -4,7 +4,7 @@
             Đơn vị:
         </div>
         <div nz-col [nzSpan]="2">
-            <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+            <ng-container *ngIf="status || !editMoneyUnit; else editMoney">
                 <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
             </ng-container>
             <ng-template #editMoney>
@@ -16,23 +16,22 @@
             </ng-template>
         </div>
         <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
-            <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
+            <button *ngIf="status" type="button" class="btn btn-main" (click)="deleteAllChecked()">
                 <i class="fa fa-trash-o"></i>
                 <span>Xóa</span>
             </button>
-            <ng-container *ngIf="lstCtietBcao.length == 0">
-                <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="status">
-                    <i class="icon htvbdh_dau-cong"></i>
-                    <span>Thêm</span>
-                </button>
-            </ng-container>
+            <button *ngIf="status && lstCtietBcao.length == 0" type="button" class="btn btn-main"
+                (click)="addLine(null)">
+                <i class="icon htvbdh_dau-cong"></i>
+                <span>Thêm</span>
+            </button>
         </div>
     </div>
-    <nz-table nzBordered class="table__body" [nzScroll]="{ x: '200%'}">
+    <nz-table nzBordered [nzScroll]="{x: scrollX}" class="table__body">
         <thead>
             <tr>
-                <th nzWidth="80px" rowspan="4" nzLeft>STT</th>
-                <th nzWidth="400px" rowspan="4" nzLeft>Danh mục nội dung</th>
+                <th nzWidth="50px" rowspan="4" nzLeft>STT</th>
+                <th nzWidth="300px" rowspan="4" nzLeft>Danh mục nội dung</th>
                 <th colspan="4">Dự toán được sử dụng trong năm</th>
                 <th colspan="8">Giải ngân tháng báo cáo</th>
                 <th colspan="8">Lũy kế giải ngân từ đầu năm đến tháng báo cáo đối
@@ -40,10 +39,10 @@
                     (đến hết thời gian chỉnh lý quyết toán ngân sách - ngày 31/1 năm sau đối
                     với báo cáo năm)
                 </th>
-                <th style="width: 50px;" rowspan="4" [hidden]="status" nzRight></th>
-                <th style="width: 55px;" rowspan="4" [hidden]="status" nzRight></th>
-                <th style="width: 55px;" rowspan="4" [hidden]="status" nzRight></th>
-                <th style="width: 50px;" rowspan="4" [hidden]="status" nzRight>
+                <th style="width: 50px;" rowspan="4" *ngIf="status" nzRight></th>
+                <th style="width: 55px;" rowspan="4" *ngIf="status" nzRight></th>
+                <th style="width: 55px;" rowspan="4" *ngIf="status" nzRight></th>
+                <th style="width: 40px;" rowspan="4" *ngIf="status" nzRight>
                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
                     </label>
                 </th>
@@ -174,10 +173,10 @@
                 <td>18=17/3</td>
                 <td>19</td>
                 <td>20=19/4</td>
-                <td [hidden]="status" nzRight></td>
-                <td [hidden]="status" nzRight></td>
-                <td [hidden]="status" nzRight></td>
-                <td [hidden]="status" nzRight></td>
+                <td *ngIf="status" nzRight></td>
+                <td *ngIf="status" nzRight></td>
+                <td *ngIf="status" nzRight></td>
+                <td *ngIf="status" nzRight></td>
             </tr>
 
             <tr>
@@ -203,15 +202,15 @@
                 <td>{{ displayValue(total.luyKeGiaiNganNguonSnTle) }}</td>
                 <td>{{ displayValue(total.luyKeGiaiNganNguonQuy) }}</td>
                 <td>{{ displayValue(total.luyKeGiaiNganNguonQuyTle) }}</td>
-                <td [hidden]="status" nzRight></td>
-                <td [hidden]="status" nzRight></td>
-                <td [hidden]="status" nzRight></td>
-                <td [hidden]="status" nzRight></td>
+                <td *ngIf="status" nzRight></td>
+                <td *ngIf="status" nzRight></td>
+                <td *ngIf="status" nzRight></td>
+                <td *ngIf="status" nzRight></td>
             </tr>
 
             <tr *ngFor="let data of lstCtietBcao; let i = index">
                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                    <td [nzIndentSize]="data.level! * 8" nzLeft>
+                    <td nzLeft>
                         {{getIndex(data.stt)}}
                     </td>
                     <td nzLeft>
@@ -238,24 +237,24 @@
                     <td>{{ displayValue(data.luyKeGiaiNganNguonQuy) }}</td>
                     <td>{{ displayValue(data.luyKeGiaiNganNguonQuyTle) }}</td>
 
-                    <td [hidden]="status" nzRight>
+                    <td *ngIf="status" nzRight>
                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                     </td>
-                    <td [hidden]="status" nzRight>
+                    <td *ngIf="status" nzRight>
                         <ng-container *ngIf="!getLowStatus(data.stt)">
                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </ng-container>
                     </td>
-                    <td [hidden]="status" nzRight>
+                    <td *ngIf="status" nzRight>
                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                     </td>
-                    <td [hidden]="status" nzRight>
+                    <td *ngIf="status" nzRight>
                         <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                             (ngModelChange)="updateChecked(data.id)"></label>
                     </td>
                 </ng-container>
                 <ng-template #editTemplate>
-                    <td [nzIndentSize]="data.level! * 8" nzLeft>
+                    <td nzLeft>
                         {{getIndex(data.stt)}}
                     </td>
                     <td nzLeft>
@@ -340,19 +339,19 @@
                     <td>
                         {{displayValue(editCache[data.id].data.luyKeGiaiNganNguonQuyTle)}}
                     </td>
-                    <td [hidden]="status" nzRight>
+                    <td *ngIf="status" nzRight>
                         <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                     </td>
                     <td nzRight>
                         <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                     </td>
-                    <td [hidden]="status" nzRight>
+                    <td *ngIf="status" nzRight>
                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                             (nzOnConfirm)="cancelEdit(data.id)" class="save">
                             Hủy
                         </a>
                     </td>
-                    <td [hidden]="status" nzRight>
+                    <td *ngIf="status" nzRight>
                         <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                             (ngModelChange)="updateChecked(data.id)"></label>
                     </td>
