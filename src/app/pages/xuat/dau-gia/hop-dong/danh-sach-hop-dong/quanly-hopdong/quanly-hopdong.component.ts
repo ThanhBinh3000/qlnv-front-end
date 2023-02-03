@@ -8,6 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
 import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
 import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
+import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
@@ -18,7 +19,7 @@ import { StorageService } from 'src/app/services/storage.service';
 export class QuanlyHopdongComponent extends Base2Component implements OnInit {
 
   @Input() id: number;
-  @Input() loaiVthh: String;
+  @Input() loaiVthh: string;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -32,57 +33,32 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private hopDongXuatHangService: HopDongXuatHangService,
-    private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService
+    private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService,
+    private thongTinDauGiaService: ThongTinDauGiaService
   ) {
     super(httpClient, storageService, notification, spinner, modal, hopDongXuatHangService);
     this.formData = this.fb.group({
       id: [],
-      namKhoach: [''],
-      soQdPdKhlcnt: [],
-      soQdPdKqLcnt: [],
-      tenDuAn: [],
+      nam: [''],
+      soQdKq: [],
+      soQdPd: [],
       tenDvi: [],
-      tongMucDt: [],
-      tongMucDtGoiTrung: [],
-      nguonVon: [''],
-      tenNguonVon: [''],
-      hthucLcnt: [''],
-      tenHthucLcnt: [],
-      pthucLcnt: [''],
-      tenPthucLcnt: [],
-      loaiHdong: [''],
-      tenLoaiHdong: [''],
-      tgianBdauTchuc: [],
-      tgianDthau: [],
-      tgianMthau: [],
-      tgianNhang: [''],
-      gtriDthau: [],
-      gtriHdong: [],
-      donGiaVat: [],
-      loaiVthh: [],
+      soLuongDviTsan: [],
+      soLuongDviTsanTrung: [],
+      soLuongDviTsanTruot: [],
+      vat: ['5'],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
-      soGthau: [],
-      soGthauTrung: [],
-      soGthauTruot: [],
-      soLuong: [''],
-      donGia: [''],
+      soLuongXuatBan: [],
+      donGiaTrungThau: [],
       tongTien: [''],
-      vat: ['5'],
-      ghiChu: ['',],
-      trangThai: [''],
-      tenTrangThai: [''],
-      soLuongTong: [''],
-      soLuongGtTrung: [''],
-      soLuongNhap: [''],
-      tenTrangThaiHd: [''],
       trangThaiHd: [''],
+      tenTrangThaiHd: [''],
     });
   }
 
   async ngOnInit() {
     await this.spinner.show()
-    this.userInfo = this.userService.getUserLogin();
     await Promise.all([
     ]);
     if (this.id) {
@@ -93,86 +69,24 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
 
   async getDetail(id) {
     if (id) {
-      console.log(id);
       let res = await this.qdPdKetQuaBanDauGiaService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         const data = res.data;
-        console.log(data);
+        await this.thongTinDauGiaService.getDetail(data.maThongBao?.split('/')[0]).then(dataTtin => {
+          this.formData.patchValue({
+            nam: data.nam,
+            soQdKq: data.soQdKq,
+            soQdPd: dataTtin.data?.soQdPd,
+            tenDvi: data.tenDvi,
+            tenLoaiVthh: dataTtin.data?.tenLoaiVthh,
+            tenCloaiVthh: dataTtin.data?.tenCloaiVthh,
+            trangThaiHd: data.trangThaiHd,
+            tenTrangThaiHd: data.tenTrangThaiHd
+          })
+          this.dataTable = data.listHopDong;
+        });
       }
     }
-  }
-
-  detailVatTu(data) {
-    console.log(data);
-    this.formData.patchValue({
-      id: data.id,
-      namKhoach: data.namKhoach,
-      soQdPdKhlcnt: data.hhQdKhlcntHdr.soQd,
-      tenLoaiHdong: data.hhQdKhlcntHdr.tenLoaiHdong,
-      tenNguonVon: data.hhQdKhlcntHdr.tenNguonVon,
-      tenLoaiVthh: data.hhQdKhlcntHdr.tenLoaiVthh,
-      tenCloaiVthh: data.hhQdKhlcntHdr.tenCloaiVthh,
-      vat: 5,
-      tenTrangThaiHd: data.tenTrangThaiHd,
-      trangThaiHd: data.trangThaiHd,
-    });
-    this.dataTable = data.hhQdKhlcntHdr.children.filter(item => item.trangThai == STATUS.THANH_CONG);
-    if (data.listHopDong) {
-      let soLuong = 0
-      let tongMucDtGoiTrung = 0;
-      this.dataTable.forEach(item => {
-        let hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0];
-        item.hopDong = hopDong
-        if (item.hopDong) {
-          soLuong += item.hopDong.soLuong;
-          tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
-        }
-      })
-      this.formData.patchValue({
-        soLuongNhap: soLuong,
-        tongMucDtGoiTrung: tongMucDtGoiTrung
-      })
-    };
-    this.idHopDong = null;
-  }
-
-  detailLuongThuc(data) {
-    this.formData.patchValue({
-      id: data.id,
-      namKhoach: data.namKhoach,
-      soQdPdKhlcnt: data.qdKhlcntDtl.hhQdKhlcntHdr.soQd,
-      soQdPdKqLcnt: data.qdKhlcntDtl.soQdPdKqLcnt,
-      tenDuAn: data.qdKhlcntDtl.tenDuAn,
-      tenLoaiHdong: data.qdKhlcntDtl.hhQdKhlcntHdr.tenLoaiHdong,
-      tenDvi: data.tenDvi,
-      tenNguonVon: data.qdKhlcntDtl.hhQdKhlcntHdr.tenNguonVon,
-      soGthau: data.qdKhlcntDtl.soGthau,
-      tenLoaiVthh: data.qdKhlcntDtl.hhQdKhlcntHdr.tenLoaiVthh,
-      tenCloaiVthh: data.qdKhlcntDtl.hhQdKhlcntHdr.tenCloaiVthh,
-      vat: 5,
-      soGthauTrung: data.qdKhlcntDtl.soGthauTrung,
-      tenTrangThaiHd: data.tenTrangThaiHd,
-      trangThaiHd: data.trangThaiHd,
-      tongMucDt: data.qdKhlcntDtl.soLuong * data.qdKhlcntDtl.donGiaVat * 1000
-    });
-    this.dataTable = data.qdKhlcntDtl.children.filter(item => item.trangThai == STATUS.THANH_CONG);
-    if (data.listHopDong) {
-      let soLuong = 0
-      let tongMucDtGoiTrung = 0;
-      this.dataTable.forEach(item => {
-        let hopDong = data.listHopDong.filter(x => x.idGoiThau == item.id)[0];
-        item.hopDong = hopDong
-        if (item.hopDong) {
-          soLuong += item.hopDong.soLuong;
-          tongMucDtGoiTrung += item.hopDong.soLuong * item.hopDong.donGia * 1000;
-        }
-      })
-      this.formData.patchValue({
-        soLuongNhap: soLuong,
-        tongMucDtGoiTrung: tongMucDtGoiTrung
-      })
-    };
-    this.idHopDong = null;
   }
 
   async getDetailHopDong($event, id: number) {
@@ -189,10 +103,6 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     if (!isShowHd) {
       await this.ngOnInit()
     }
-  }
-
-  back() {
-    this.showListEvent.emit();
   }
 
   async approve() {
@@ -231,42 +141,31 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     return result;
   }
 
-  deleteHopDong(id: number) {
+  async deleteHd(data) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: MESSAGE.DELETE_CONFIRM,
+      nzContent: 'Bạn có chắc chắn muốn xóa?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      // nzOnOk: () => {
-      //   this.spinner.show();
-      //   try {
-      //     let body = {
-      //       id: id,
-      //       maDvi: null,
-      //     };
-      //     this.thongTinHopDong
-      //       .delete(body)
-      //       .then(async (res) => {
-      //         if (res.msg == MESSAGE.SUCCESS) {
-      //           await this.getDetail(this.id)
-      //           this.notification.success(
-      //             MESSAGE.SUCCESS,
-      //             MESSAGE.DELETE_SUCCESS,
-      //           );
-      //         } else {
-      //           this.notification.error(MESSAGE.ERROR, res.msg);
-      //         }
-      //         this.spinner.hide();
-      //       });
-      //   } catch (e) {
-      //     console.log('error: ', e);
-      //     this.spinner.hide();
-      //     this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      //   }
-      // },
+      nzOnOk: () => {
+        this.spinner.show();
+        try {
+          let body = {
+            id: data.id
+          };
+          this.hopDongXuatHangService.delete(body).then(async () => {
+            this.getDetail(this.id);
+            this.spinner.hide();
+          });
+        } catch (e) {
+          console.log('error: ', e);
+          this.spinner.hide();
+          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        }
+      },
     });
   }
 
