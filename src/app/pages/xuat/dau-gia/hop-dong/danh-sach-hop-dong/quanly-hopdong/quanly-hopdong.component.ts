@@ -6,7 +6,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { STATUS } from 'src/app/constants/status';
-import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/hop-dong/hopDongXuatHang.service';
+import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
+import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
@@ -31,6 +32,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private hopDongXuatHangService: HopDongXuatHangService,
+    private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService
   ) {
     super(httpClient, storageService, notification, spinner, modal, hopDongXuatHangService);
     this.formData = this.fb.group({
@@ -91,17 +93,12 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
 
   async getDetail(id) {
     if (id) {
-      // let res = await this.kqLcnt.getDetail(id);
-      // if (res.msg == MESSAGE.SUCCESS) {
-      //   const data = res.data;
-      //   if (this.loaiVthh.startsWith('02')) {
-      //     this.detailVatTu(data);
-      //   } else {
-      //     this.detailLuongThuc(data);
-      //   }
-      // } else {
-      //   this.notification.error(MESSAGE.ERROR, res.msg);
-      // }
+      console.log(id);
+      let res = await this.qdPdKetQuaBanDauGiaService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        const data = res.data;
+        console.log(data);
+      }
     }
   }
 

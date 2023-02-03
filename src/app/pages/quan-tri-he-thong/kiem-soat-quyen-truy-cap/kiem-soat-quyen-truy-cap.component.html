@@ -40,8 +40,18 @@
             </button>
           </div>
         </nz-card>
+        <div class="group-button">
+          <h3></h3>
+          <div class="buttons">
+            <button type="button"
+                    class="btn btn-sub" (click)="exportData()">
+              <i class="icon htvbdh_chuyen-xu-ly"></i>
+              <span>Export</span>
+            </button>
+          </div>
+        </div>
         <div class="tab-giao-chi-tieu mt-16">
-          <nz-tabset nzType="card" class="tab-level-3" [nzTabBarExtraContent]="action">
+          <nz-tabset nzType="card" class="tab-level-3" >
             <nz-tab nzTitle="Lịch sử truy cập hệ thống">
               <nz-table #basicTable  nzBordered  [nzData]="dataTable" [nzFrontPagination]="false"
                         [nzShowPagination]="false" nzBordered  [nzScroll]="{ x: '1400px' }">

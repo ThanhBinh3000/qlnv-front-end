@@ -73,7 +73,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
     let body = {
       ngayKyDenNgay: null,
       id: 0,
-      donViId: 0,
+      donViId: null,
       maDvi: this.maDVi ?? null,
       namKeHoach: this.namKeHoach ?? null,
       tenDvi: null,
@@ -110,6 +110,7 @@ export class DialogQuyetDinhGiaoChiTieuComponent implements OnInit {
       }
     } else {
       body.capDvi = 1;
+      body.donViId = 0;
       let res = await this.chiTieuKeHoachNamService.timKiem(body);
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;

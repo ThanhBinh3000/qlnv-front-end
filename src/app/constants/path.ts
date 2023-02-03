@@ -16,7 +16,8 @@ export enum PATH {
   TTIN_DGIA = "ttin-dgia", // Thông tin đáu giá
   KQ_BDG = "kq-bdg", // Kết quả bán đấu giá
   HOP_DONG = "hop-dong", // Hợp đồng,
-  QD_DC = 'qd-dieu-chinh' // Quyết định điều chỉnh
+  QD_DC = 'qd-dieu-chinh', // Quyết định điều chỉnh
+  QD_GNV_XH = 'qd-gnv-xh' // Quyết định giao nhiệm vụ xuất hàng
 
 
 

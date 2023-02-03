@@ -336,24 +336,13 @@ export class ThemmoiQuyetdinhKhmttComponent extends Base2Component implements On
           tenLoaiVthh: data.tenLoaiVthh,
           tchuanCluong: data.tchuanCluong,
           moTaHangHoa: data.moTaHangHoa,
-          tgianDkienTu: data.tgianDkienTu,
-          tgianDkienDen: data.tgianDkienDen,
-          tgianTtoan: data.tgianTtoan,
-          tgianTtoanGhiChu: data.tgianTtoanGhiChu,
-          pthucTtoan: data.pthucTtoan,
-          tgianGnhan: data.tgianGnhan,
-          tgianGnhanGhiChu: data.tgianGnhanGhiChu,
-          pthucGnhan: data.pthucGnhan,
-          thongBaoKh: data.thongBaoKh,
-          soQdCc: data.soQdCtieu,
+          soQdCc: data.soQd,
           trichYeu: dataRes.trichYeu,
           tenDvi: data.tenDvi,
-          diaChi: data.diaChi,
           maDvi: data.maDvi,
           idThHdr: null,
           soTrHdr: dataRes.soDxuat,
           idTrHdr: dataRes.id,
-          tongMucDt: tongMucDt
         })
         this.dataInput = null;
         this.dataInputCache = null;
