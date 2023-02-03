@@ -172,11 +172,11 @@
           <i class="icon htvbdh_tcdt_save"></i>
           <span>Lưu</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="save('1', null)">
+        <button type="button" class="btn btn-main" (click)="save('1', null)" [hidden]="!statusBtnOk">
           <i nz-icon nzType="check" nzTheme="outline"></i>
           <span>OK</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="tuChoi('0')">
+        <button type="button" class="btn btn-main" (click)="tuChoi('0')" [hidden]="!statusBtnOk">
           <i nz-icon nzType="close" nzTheme="outline"></i>
           <span>Not OK</span>
         </button>

@@ -33,11 +33,7 @@ export const TAB_LIST = [
         code: 'baoCaoCapDuoi',
         status: true,
         role: [
-            GDT.DUYET_TUCHOI_PA_TH_PBDT,
-            GDT.PHEDUYET_TUCHOI_PA_TH_PBDT,
             GDT.XEM_PA_TONGHOP_PBDT,
-            GDT.XEM_PA_TONGHOP_PBDT,
-            GDT.VIEW_REPORT_TH,
         ],
         isSelected: false,
     },
@@ -46,10 +42,7 @@ export const TAB_LIST = [
         code: 'tongHopBaoCaoCapDuoi',
         status: true,
         role: [
-            GDT.TONGHOP_PA_PBDT,
-            GDT.TRINHDUYET_PA_TONGHOP_PBDT,
             GDT.XEM_PA_TONGHOP_PBDT,
-            GDT.VIEW_REPORT_TH,
         ],
         isSelected: false,
     },

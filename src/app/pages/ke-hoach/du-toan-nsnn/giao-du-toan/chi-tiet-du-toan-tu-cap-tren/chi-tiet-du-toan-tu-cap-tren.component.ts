@@ -224,6 +224,8 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
     await this.giaoDuToanChiService.QDGiaoChiTiet(this.id, "1").toPromise().then(
       async (data) => {
         if (data.statusCode == 0) {
+          console.log(data.data);
+
           this.lstCtietBcao = data.data.lstCtiets;
           this.sortByIndex();
           this.soQd = data.data.soQd;
@@ -520,6 +522,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       fileDinhKems: [],
       listIdDeleteFiles: [],
       lstCtiets: lstCtietBcaoTemp,
+      lstCtiets1: lstCtietBcaoTemp,
       maDvi: this.maDviTao,
       maDviTien: this.maDviTien,
       maBcao: maBcao,
@@ -540,6 +543,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       fileDinhKems: [],
       listIdDeleteFiles: [],
       lstCtiets: lstCtietBcaoTemp,
+      lstCtiets1: lstCtietBcaoTemp,
       maDvi: this.maDviTao,
       maDviTien: this.maDviTien,
       maBcao: maBcao,
