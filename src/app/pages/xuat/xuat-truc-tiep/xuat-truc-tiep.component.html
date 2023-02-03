@@ -1,0 +1,15 @@
+<nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
+    <ul nz-menu nzMode="horizontal">
+        <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="!userService.isChiCuc()">
+            Kế hoạch bán trực tiếp
+        </li>
+
+    </ul>
+</nz-affix>
+<div class="contentBor chi-tieu__body giao-ke-hoach">
+    <div class="contentDetail">
+        <ng-container *ngIf="tabSelected == 0">
+            <app-ke-hoach-ban-truc-tiep></app-ke-hoach-ban-truc-tiep>
+        </ng-container>
+    </div>
+</div>
