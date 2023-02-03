@@ -42,7 +42,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
   isTongHop: boolean = false;
   listNam: any[] = [];
   fileDinhKems: any[] = [];
-
+  listLoaiDuAn: any[] = [];
   STATUS = STATUS
   constructor(
     private router: Router,
@@ -74,14 +74,22 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.loadDsNam();
     await this.getDataDetail(this.idInput)
+    await this.getAllLoaiDuAn();
   }
 
   loadDsNam() {
-    for (let i = -3; i < 23; i++) {
+    for (let i = -10; i < 10; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,
       });
+    }
+  }
+
+  async getAllLoaiDuAn() {
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_DU_AN_KT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiDuAn = res.data;
     }
   }
 
@@ -113,9 +121,16 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
     this.showListEvent.emit();
   }
 
+  addValidate() {
+    this.formData.controls["ngayTongHop"].setValidators([Validators.required]);
+    this.formData.controls["noiDung"].setValidators([Validators.required]);
+    this.formData.controls["maToTrinh"].setValidators([Validators.required]);
+  }
+
 
   async save(isGuiDuyet?) {
     this.spinner.show();
+    this.addValidate();
     this.helperService.markFormGroupTouched(this.formData);
     if (this.formData.invalid) {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
@@ -130,6 +145,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
     let body = this.formData.value;
     body.ctiets = this.dataTableDx;
     body.fileDinhKems = this.fileDinhKems;
+    body.maDvi = this.userInfo.MA_DVI;
     let res
     if (this.idInput > 0) {
       res = await this.tongHopDxXdTh.update(body);
@@ -337,8 +353,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
       } else  {
         this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu!")
         return;
+        this.spinner.hide();
       }
-      this.spinner.hide();
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg)
       this.spinner.hide();
