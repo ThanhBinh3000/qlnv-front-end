@@ -181,9 +181,8 @@
                             <th>Ngày ký hợp đồng</th>
                             <th>Số lượng</th>
                             <th>Thành tiền</th>
-                            <th>Trạng thái HĐ</th>
                             <th>Số QĐ giao NV NH</th>
-                            <th>Trạng thái NH</th>
+                            <th>Trạng thái HĐ</th>
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -195,9 +194,8 @@
                             <td>{{data.ngayHluc | date: 'dd/MM/YYYY' }}</td>
                             <td>{{data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>
                             <td>{{data.tongTien | number : '1.0-1' : 'vi_VN' }}</td>
+                            <td></td>
                             <td>{{data.tenTrangThai}}</td>
-                            <td></td>
-                            <td></td>
                             <td>
                                 <a *ngIf="data.trangThai == STATUS.DA_KY" (click)="getDetailHopDong($event,data.id)">
                                     <i class="fa fa-eye"></i>
