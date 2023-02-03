@@ -22,6 +22,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./cuu-tro-vien-tro/cuu-tro-vien-tro.module').then((m) => m.CuuTroVienTroModule),
       },
+      {
+        path: 'xuat-truc-tiep',
+        loadChildren: () =>
+          import('./xuat-truc-tiep/xuat-truc-tiep.module').then((m) => m.XuatTrucTiepModule),
+      },
     ],
   },
 ];
