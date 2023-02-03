@@ -162,6 +162,7 @@
             <tr>
                 <th style="width: 2%;">STT</th>
                 <th>Chi cục</th>
+                <th>Điểm kho</th>
                 <th>SL chỉ tiêu kế hoạch năm</th>
                 <th>SL theo kế hoạch năm đã được duyệt</th>
                 <th>SL đề xuất mua trực tiếp (tấn)</th>
@@ -181,26 +182,28 @@
                     <tr *ngFor="let slDd of item.children, let y = index">
                         <td></td>
                         <td></td>
+                        <td>{{slDd.tenDiemKho}}</td>
                         <td>{{slDd.soLuongChiTieu}}</td>
                         <td>{{slDd.soLuongKhDd}}</td>
                         <td *ngIf="isView">{{slDd.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                         <td *ngIf="!isView">
                             <nz-input-number class="text-right" nz-input [(ngModel)]="slDd.soLuong"
-                                (ngModelChange)="updateSlTt()" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                                (ngModelChange)="calcTong()" [nzSize]="'small'" [nzFormatter]="globals.formatter"
                                 [nzParser]="globals.parser">
                             </nz-input-number>
                         </td>
                         <td>{{formData.value.donGiaVat*slDd.soLuong*1000| number: '1.0-1' : 'vi_VN'}}</td>
                     </tr>
-                    <tr>
-                        <td colspan="4" class="first-last-row-table background-last-row text-left">Cộng</td>
-                        <td colspan="2" class="background-last-row text-left"> {{ calcTong() | number: '1.0-1' :
-                            'vi_VN'}}
-                        </td>
-                    </tr>
                 </ng-container>
             </ng-container>
         </tbody>
+        <tfoot>
+
+            <tr *ngIf="tableData.data.length > 0">
+                <th colspan="4">Cộng</th>
+                <th>{{ calcTong() | number : '1.0-1' : 'vi_VN'}}</th>
+            </tr>
+        </tfoot>
     </nz-table>
 </nz-card>
 <!--END TABLE-->

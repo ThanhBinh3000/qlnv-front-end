@@ -21,6 +21,7 @@ import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
 import {TongHopKhTrungHanService} from "../../../../../services/tong-hop-kh-trung-han.service";
 import {STATUS} from "../../../../../constants/status";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 @Component({
   selector: 'app-tong-hop-de-xuat-ke-hoach',
   templateUrl: './tong-hop-de-xuat-ke-hoach.component.html',
@@ -34,7 +35,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   listNam: any[] = [];
-
+  listLoaiDuAn: any[] = [];
   STATUS = STATUS
 
   searchFilter = {
@@ -70,6 +71,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     private notification: NzNotificationService,
     private tongHopTrungHanService: TongHopKhTrungHanService,
     private modal: NzModalService,
+    private danhMucService: DanhMucService,
     public userService: UserService,
     public globals: Globals,
   ) { }
@@ -79,6 +81,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     try {
       this.userInfo = this.userService.getUserLogin();
       await this.search();
+      await this.getAllLoaiDuAn();
       this.loadDsNam();
       this.spinner.hide();
     } catch (e) {
@@ -94,6 +97,13 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,
       });
+    }
+  }
+
+  async getAllLoaiDuAn() {
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_DU_AN_KT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiDuAn = res.data;
     }
   }
 
@@ -219,7 +229,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
             maDvi: '',
           };
           this.tongHopTrungHanService.delete(body).then(async () => {
-            this.notification.error(MESSAGE.ERROR, MESSAGE.DELETE_SUCCESS);
+            this.notification.success(MESSAGE.ERROR, MESSAGE.DELETE_SUCCESS);
             await this.search();
             this.spinner.hide();
           });

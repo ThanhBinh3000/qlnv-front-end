@@ -1,7 +1,7 @@
 
 
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -21,6 +21,7 @@ import {
 import {QuyetDinhKhTrungHanService} from "../../../../../../services/quyet-dinh-kh-trung-han.service";
 import {MESSAGE} from "../../../../../../constants/message";
 import {STATUS} from "../../../../../../constants/status";
+import {UserLogin} from "../../../../../../models/userlogin";
 
 @Component({
   selector: 'app-them-moi-qd-phe-duyet',
@@ -46,6 +47,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
   fileDinhKems: any[] = [];
   listNam: any[] = [];
+  userInfo : UserLogin;
 
   STATUS = STATUS
   constructor(
@@ -63,14 +65,13 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
-      phuongAnTc: [null],
-      soQuyetDinh: [null],
-      soCongVan: [null],
-      ngayTrinhBtc: [null],
-      ngayKyBtc: [null],
-      trichYeu: [null],
-      namBatDau: [null],
-      namKetThuc: [null],
+      phuongAnTc: [null, Validators.required],
+      soCongVan: [null, Validators.required],
+      ngayTrinhBtc: [null, Validators.required],
+      ngayKyBtc: [null, Validators.required],
+      trichYeu: [null, Validators.required],
+      namBatDau: [null, Validators.required],
+      namKetThuc:[null, Validators.required],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
     });
@@ -84,12 +85,13 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.userInfo = this.userService.getUserLogin();
     this.maQd = '/TCDT-TVQT'
-    this.loadDsNam()
+    this.loadDsNam();
   }
 
   loadDsNam() {
-    for (let i = -3; i < 23; i++) {
+    for (let i = -10; i < 10; i++) {
       this.listNam.push({
         value: dayjs().get('year') - i,
         text: dayjs().get('year') - i,
@@ -116,8 +118,10 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       return
     }
     let body = this.formData.value;
-    body.ctiets = this.dataTableTh;
+    body.soCongVan = body.soCongVan + this.maQd;
+    body.ctiets = this.dataTable;
     body.fileDinhKems = this.fileDinhKems;
+    body.maDvi = this.userInfo.MA_DVI;
     let res
     if (this.idInput > 0) {
       res = await this.quyetDinhService.update(body);
@@ -150,7 +154,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn gửi duyệt?',
+      nzContent: 'Bạn có chắc chắn muốn ban hành?',
       nzOkText: 'Đồng ý',
       nzCancelText: 'Không',
       nzOkDanger: true,
@@ -161,19 +165,7 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
           let trangThai;
           switch (this.formData.value.trangThai) {
             case STATUS.DU_THAO : {
-              trangThai = STATUS.CHO_DUYET_LDV;
-              break;
-            }
-            case STATUS.TU_CHOI_LDV : {
-              trangThai = STATUS.CHO_DUYET_LDV;
-              break;
-            }
-            case STATUS.CHO_DUYET_LDV : {
-              trangThai = STATUS.CHO_DUYET_LDTC;
-              break;
-            }
-            case STATUS.TU_CHOI_LDTC : {
-              trangThai = STATUS.CHO_DUYET_LDTC;
+              trangThai = STATUS.BAN_HANH;
               break;
             }
           }
@@ -218,11 +210,12 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     });
     modal.afterClose.subscribe(async (data) => {
       if (data) {
+        console.log(data)
         this.formData.patchValue({
           phuongAnTc : data.maToTrinh
         })
         this.dataTable = data.ctiets;
-        this.dataTableTh = data.ctietsTh;
+        this.dataTableTh = data.ctiets;
       }
     });
   }

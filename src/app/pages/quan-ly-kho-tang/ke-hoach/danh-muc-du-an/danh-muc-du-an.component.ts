@@ -39,7 +39,7 @@ export class DanhMucDuAnComponent implements OnInit {
 
   STATUS = STATUS;
   rowItem: DanhMucKho = new DanhMucKho();
-
+  itemDetail : any;
 
   dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
 
@@ -53,6 +53,8 @@ export class DanhMucDuAnComponent implements OnInit {
     giaiDoan: '',
     tgKcHt: ''
   };
+
+  listTrangThai = [{"ma": "00", "giaTri": "Dự thảo"}, {"ma": "29", "giaTri": "Hoàn thành"}];
 
   allChecked = false;
   indeterminate = false;
@@ -213,6 +215,15 @@ export class DanhMucDuAnComponent implements OnInit {
     });
   }
 
+  async getDetail(id) {
+      let res = await this.danhMucKhoService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        this.itemDetail = res.data;
+      } else {
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR )
+      }
+  }
+
 
   exportData() {
       this.spinner.show();
@@ -257,7 +268,8 @@ export class DanhMucDuAnComponent implements OnInit {
     };
   }
 
-  async openDialog() {
+  async openDialog(id) {
+    await this.getDetail(id);
     let modalQD = this.modal.create({
       nzTitle: 'CHI TIẾT DỰ ÁN',
       nzContent: DialogDanhMucKhoComponent,
@@ -266,10 +278,10 @@ export class DanhMucDuAnComponent implements OnInit {
       nzWidth: '700px',
       nzStyle: {top: '150px'},
       nzFooter: null,
-      nzComponentParams: {},
+      nzComponentParams: {
+        item : this.itemDetail
+      },
     });
-    modalQD.afterClose.subscribe((data) => {
-    })
   }
 
   async themMoiItem(id?) {
