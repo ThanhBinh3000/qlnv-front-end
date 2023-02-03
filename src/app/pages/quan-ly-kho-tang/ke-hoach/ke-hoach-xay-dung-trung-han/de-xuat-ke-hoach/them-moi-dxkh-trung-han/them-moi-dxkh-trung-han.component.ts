@@ -344,7 +344,12 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         lyDo: data.lyDoTuChoi,
       });
       this.listFileDinhKem = data.fileDinhKems
-      this.dataTable = data.ctiets;
+      this.dataTable = data.chiTiets;
+      if (this.dataTable && this.dataTable.length > 0) {
+        this.dataTable.forEach(item => {
+          item.tgKcHt = item.tgKhoiCong +' - ' + item.tgHoanThanh
+        })
+      }
       this.updateEditCache()
     }
   }
@@ -375,7 +380,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   }
 
   clearData() {
-
+    this.rowItem = new DanhMucKho();
   }
 
   huyEdit(idx: number): void {
@@ -402,7 +407,9 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   }
 
   calcTong(type) {
-      const sum = this.dataTable.reduce((prev, cur) => {
+    let sum;
+    if (this.dataTable && this.dataTable.length > 0) {
+       sum = this.dataTable.reduce((prev, cur) => {
         switch (type) {
           case '1' : {
             prev += cur.tmdtTongSo;
@@ -431,16 +438,17 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         }
         return prev;
       }, 0);
+    }
       return sum;
     }
 
   changeDmucDuAn(event: any) {
     if (event) {
-      this.rowItem.diaDiem = event.diaDiem;
-      this.rowItem.tenDuAn = event.tenDuAn;
-      this.rowItem.tgKcHt = event.tgKhoiCong + ' - ' + event.tgHoanThanh;
-      this.rowItem.khoi = event.khoi;
-      this.rowItem.soQdPd = event.soQdPd;
+      let result = this.listDmKho.filter(item => item.maDuAn == event)
+      if (result && result.length > 0) {
+        this.rowItem = result[0];
+        this.rowItem.tgKcHt = this.rowItem.tgKhoiCong + ' - ' + this.rowItem.tgHoanThanh
+      }
     }
   }
 }

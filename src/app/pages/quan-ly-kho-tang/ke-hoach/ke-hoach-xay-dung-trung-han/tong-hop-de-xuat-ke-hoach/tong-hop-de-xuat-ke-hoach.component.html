@@ -21,7 +21,7 @@
           <nz-form-control >
             <nz-input-group>
               <nz-select [(ngModel)]="searchFilter.loaiDuAn" nzAllowClear>
-                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
+                <nz-option *ngFor="let item of listLoaiDuAn" [nzLabel]="item.giaTri" [nzValue]="item.giaTri">
                 </nz-option>
               </nz-select>
             </nz-input-group>
@@ -97,6 +97,7 @@
           <th class="text-center" style="width: 2%;">STT</th>
           <th class="text-center" style="width: 12%;">Mã tổng hợp</th>
           <th class="text-center" style="width: 12%;">Ngày tổng hợp</th>
+          <th class="text-center" style="width: 12%;">Mã tờ trình</th>
           <th class="text-center" style="width: 12%;">Số quyết định</th>
           <th class="text-center" style="width: 12%;">Giai đoạn</th>
           <th class="text-center" style="width: 35%;">Nội dung tổng hợp</th>
@@ -120,6 +121,12 @@
             <ng-template #suffixTemplateInfo>
               <i nz-icon nzType="calendar"></i>
             </ng-template>
+          </th>
+          <th>
+            <nz-input-group>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinh"
+                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small" />
+            </nz-input-group>
           </th>
           <th>
             <nz-input-group>
@@ -156,18 +163,19 @@
                    [nzDisabled]="data.trangThai != '00'"></label>
           </td>
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-          <td>{{ data.maTongHop }}</td>
+          <td>{{ data.id }}</td>
           <td>{{ data.ngayTongHop | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.maToTrinh }}</td>
+          <td>{{ data.soQd }}</td>
           <td>{{data.namBatDau +' - '+ data.namKetThuc}}</td>
           <td>{{data.noiDung}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-center">
-            <a (click)="redirectToChiTiet(data.id,false)" *ngIf="data.trangThai == STATUS.DA_DUYET_LDTC || data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDTC || data.trangThai == STATUS.DA_KY " >
+            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="data.trangThai == STATUS.DA_DUYET_LDTC || data.trangThai == STATUS.CHO_DUYET_LDV || data.trangThai == STATUS.CHO_DUYET_LDTC || data.trangThai == STATUS.DA_KY " >
               <i class="fa fa-eye"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO ||data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.TU_CHOI_LDTC"
-              (click)="redirectToChiTiet(data.id,true)">
+              (click)="redirectToChiTiet(data.id,false)">
               <i class="fa fa-pencil"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="xoaItem(data)">

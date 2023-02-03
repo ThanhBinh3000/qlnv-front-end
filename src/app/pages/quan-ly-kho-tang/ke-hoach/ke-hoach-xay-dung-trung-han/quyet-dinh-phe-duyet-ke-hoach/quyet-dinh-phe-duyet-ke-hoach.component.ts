@@ -32,10 +32,11 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   listNam: any[] = [];
 
   searchFilter = {
-    soQd : '',
     soCongVan : '',
+    phuongAnTc : '',
     trichYeu : '',
-    ngayKy : '',
+    ngayKyBtc : '',
+    trangThai : ''
   };
 
   filterTable: any = {
@@ -95,11 +96,11 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      soQuyetDinh : this.searchFilter.soQd,
-      soCongVan : this.searchFilter.soCongVan,
-      trichYeu : this.searchFilter.trichYeu,
-      ngayKyTu : this.searchFilter.ngayKy[0],
-      ngayKyDen : this.searchFilter.ngayKy[1],
+      // soQuyetDinh : this.searchFilter.soQd,
+      // soCongVan : this.searchFilter.soCongVan,
+      // trichYeu : this.searchFilter.trichYeu,
+      // ngayKyTu : this.searchFilter.ngayKy[0],
+      // ngayKyDen : this.searchFilter.ngayKy[1],
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
@@ -202,10 +203,11 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soQd : '',
       soCongVan : '',
+      phuongAnTc : '',
       trichYeu : '',
-      ngayKy : '',
+      ngayKyBtc : '',
+      trangThai : ''
     }
     this.search();
   }

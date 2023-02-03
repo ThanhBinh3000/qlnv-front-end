@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {NzModalRef} from "ng-zorro-antd/modal";
 
 @Component({
@@ -7,6 +7,8 @@ import {NzModalRef} from "ng-zorro-antd/modal";
   styleUrls: ['./dialog-danh-muc-kho.component.scss']
 })
 export class DialogDanhMucKhoComponent implements OnInit {
+  @Input()
+  item : any;
 
   constructor(
     private _modalRef : NzModalRef

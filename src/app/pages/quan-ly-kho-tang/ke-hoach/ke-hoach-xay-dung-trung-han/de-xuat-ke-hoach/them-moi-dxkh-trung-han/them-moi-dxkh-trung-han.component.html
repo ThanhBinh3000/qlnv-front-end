@@ -112,8 +112,7 @@
       </div>
     </form>
   </nz-card>
-  <nz-card class="mt16 flex-card p-lr16">
-    <div class="header header-green-background">
+  <div class="header header-green-background">
       <div class="header-text">
         <div class="title-chi-tieu">
           <span></span>
@@ -121,7 +120,7 @@
         </div>
       </div>
     </div>
-    <nz-table #basicTable class="nowrap table__container-tt" [nzData]="dataTable" [nzFrontPagination]="false"
+    <nz-table class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
               [nzShowPagination]="false" nzBordered>
       <thead>
         <tr>
@@ -151,8 +150,8 @@
           <td class="text-center" ></td>
           <td class="text-center">
             <nz-input-group>
-              <nz-select [ngModel]="rowItem.tenDuAn" nzAllowClear (ngModelChange)="changeDmucDuAn($event)">
-                <nz-option *ngFor="let item of listDmKho" [nzLabel]="item.tenDuAn" [nzValue]="item">
+              <nz-select [ngModel]="rowItem.maDuAn" nzAllowClear (ngModelChange)="changeDmucDuAn($event)">
+                <nz-option *ngFor="let item of listDmKho" [nzLabel]="item.tenDuAn" [nzValue]="item.maDuAn">
                 </nz-option>
               </nz-select>
             </nz-input-group>
@@ -162,7 +161,6 @@
               <input nz-input [(ngModel)]="rowItem.diaDiem" readonly  />
             </nz-input-group>
           </td>
-
           <td class="text-center" >
             <nz-input-group>
               <nz-select [(ngModel)]="rowItem.loaiDuAn" nzAllowClear>
@@ -187,19 +185,19 @@
             </nz-input-group>
           </td>
           <td class="text-center" >
-            <nz-input-number [(ngModel)]="rowItem.tmdtDuKien" [nzSize]="'small'" readonly="" [nzFormatter]="globals.formatter" [nzMin]="0"
+            <nz-input-number [(ngModel)]="rowItem.tmdtDuKien" nzDisabled [nzSize]="'small'" readonly="" [nzFormatter]="globals.formatter" [nzMin]="0"
                              [nzParser]="globals.parser" ></nz-input-number>
           </td>
           <td class="text-center" >
-            <nz-input-number [(ngModel)]="rowItem.nstwDuKien"  [nzSize]="'small'" readonly="" [nzFormatter]="globals.formatter" [nzMin]="0"
+            <nz-input-number [(ngModel)]="rowItem.nstwDuKien" nzDisabled  [nzSize]="'small'" readonly="" [nzFormatter]="globals.formatter" [nzMin]="0"
                              [nzParser]="globals.parser" ></nz-input-number>
           </td>
           <td class="text-center" >
-            <nz-input-number [(ngModel)]="rowItem.tongSoLuyKe" [nzSize]="'small'"  readonly=" " [nzFormatter]="globals.formatter" [nzMin]="0"
+            <nz-input-number [(ngModel)]="rowItem.tongSoLuyKe" nzDisabled [nzSize]="'small'"  readonly=" " [nzFormatter]="globals.formatter" [nzMin]="0"
                              [nzParser]="globals.parser" ></nz-input-number>
           </td>
           <td class="text-center" >
-            <nz-input-number [(ngModel)]="rowItem.luyKeNstw" [nzSize]="'small'" readonly="" [nzFormatter]="globals.formatter" [nzMin]="0"
+            <nz-input-number [(ngModel)]="rowItem.luyKeNstw" nzDisabled [nzSize]="'small'" readonly="" [nzFormatter]="globals.formatter" [nzMin]="0"
                              [nzParser]="globals.parser" ></nz-input-number>
 
           </td>
@@ -230,12 +228,12 @@
             <td>{{ data.tgKcHt }}</td>
             <td>{{ data.khoi }}</td>
             <td>{{ data.soQdPd }}</td>
-            <td>{{ data.tmdtTongSo }}</td>
-            <td>{{ data.tmdtNstw }}</td>
-            <td>{{ data.luyKeTongSo }}</td>
+            <td>{{ data.tmdtDuKien }}</td>
+            <td>{{ data.nstwDuKien }}</td>
+            <td>{{ data.tongSoLuyKe }}</td>
             <td>{{ data.luyKeNstw }}</td>
-            <td>{{ data.ncKhTongSo }}</td>
-            <td>{{ data.ncKhNstw }}</td>
+            <td>{{ data.tmdtDuyet }}</td>
+            <td>{{ data.nstwDuyet }}</td>
             <td style="text-align: center;" nzRight  *ngIf="!isViewDetail">
               <a (click)="editItem(idx)">
                 <i class=" fa fa-pencil"></i>
@@ -249,17 +247,17 @@
             <td></td>
             <td nzWidth = "">
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.tenDuAn" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.tenDuAn" readonly />
               </nz-input-group>
             </td>
             <td >
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.diaDiem" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.diaDiem" readonly />
               </nz-input-group>
             </td>
             <td >
               <nz-input-group>
-                <nz-select [(ngModel)]="dataEdit[idx].data.loaiDuAn" nzAllowClear>
+                <nz-select [(ngModel)]="dataEdit[idx].data.loaiDuAn" nzAllowClear nzDisabled>
                   <nz-option *ngFor="let item of listLoaiDuAn" [nzLabel]="item.giaTri" [nzValue]="item.giaTri">
                   </nz-option>
                 </nz-select>
@@ -267,40 +265,40 @@
             </td>
             <td >
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.tgKcHt"  />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.tgKcHt" readonly  />
               </nz-input-group>
             </td>
             <td >
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.khoi" />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.khoi" readonly />
               </nz-input-group>
             </td>
             <td >
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.soQdPd"  />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.soQdPd"readonly  />
               </nz-input-group>
             </td>
             <td >
               <nz-input-group>
-                <nz-input-number [(ngModel)]="dataEdit[idx].data.tmdtDuKien"  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0"
+                <nz-input-number [(ngModel)]="dataEdit[idx].data.tmdtDuKien" nzDisabled  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0"
                                  [nzParser]="globals.parser" ></nz-input-number>
               </nz-input-group>
             </td>
             <td >
               <nz-input-group>
-                <nz-input-number [(ngModel)]="dataEdit[idx].data.nstwDuKien"  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0"
+                <nz-input-number [(ngModel)]="dataEdit[idx].data.nstwDuKien" nzDisabled  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0"
                                  [nzParser]="globals.parser" ></nz-input-number>
               </nz-input-group>
             </td>
             <td >
               <nz-input-group>
-                <nz-input-number [(ngModel)]="dataEdit[idx].data.tongSoLuyKe"  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0"
+                <nz-input-number [(ngModel)]="dataEdit[idx].data.tongSoLuyKe" nzDisabled  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0"
                                  [nzParser]="globals.parser" ></nz-input-number>
               </nz-input-group>
             </td>
             <td >
               <nz-input-group>
-                <nz-input-number [(ngModel)]="dataEdit[idx].data.luyKeNstw"  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0"
+                <nz-input-number [(ngModel)]="dataEdit[idx].data.luyKeNstw" nzDisabled  [nzSize]="'small'" [nzFormatter]="globals.formatter" [nzMin]="0"
                                  [nzParser]="globals.parser" ></nz-input-number>
               </nz-input-group>
             </td>
@@ -343,7 +341,4 @@
         <td nzRight></td>
       </tfoot>
     </nz-table>
-
-  </nz-card>
-
 </div>
