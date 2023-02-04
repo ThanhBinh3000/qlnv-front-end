@@ -245,7 +245,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   processDataVattu(data) {
-    console.log(data);
     this.dataVatTuNhap = chain(data.khVatTuNhap)
       .groupBy("maDvi")
       .map((value, key) => {
@@ -275,12 +274,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       }).value();
     this.dataVatTuXuat.forEach(s => this.expandSetVatTuXuat.add(s.maDvi));
     this.dataVatTuXuatEdit = cloneDeep(this.dataVatTuXuat);
-
-    console.log(this.dataVatTuNhap);
   }
 
   caculatorDieuChinhLT(item: any) {
-    console.log(item)
     item.sdcNtnThoc =
       (!isNaN(item.tdcNtnThoc) ? item.tdcNtnThoc : 0) +
       (!isNaN(item.dcNtnThoc) ? item.dcNtnThoc : 0);
@@ -499,7 +495,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
         };
       });
     }
-    console.log(this.editMuoiCache);
   }
 
   cancelEditMuoi(donViId: number): void {
@@ -689,10 +684,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dieuChinhThongTinChiTieuKHNam.khMuoiDuTru = [];
       this.dieuChinhThongTinChiTieuKHNam.khMuoi = [];
       this.dieuChinhThongTinChiTieuKHNam.khVatTu = [];
-
       this.dieuChinhThongTinChiTieuKHNam.namKeHoach = 0;
       this.formData.controls['namKeHoach'].setValue(0);
-
       this.updateDataVatTu();
       this.loadData();
     }
