@@ -6,6 +6,7 @@ import {Globals} from 'src/app/shared/globals';
 import {UploadFileService} from 'src/app/services/uploaFile.service';
 import {NzNotificationService} from 'ng-zorro-antd/notification';
 import {MESSAGE} from 'src/app/constants/message';
+import {NzModalService} from "ng-zorro-antd/modal";
 
 @Component({
   selector: 'file-list',
@@ -23,6 +24,7 @@ export class FileListComponent implements OnInit {
   constructor(
     public globals: Globals,
     public userService: UserService,
+    private modal: NzModalService,
     private uploadFileService: UploadFileService,
     private notification: NzNotificationService,
   ) {
@@ -95,7 +97,18 @@ export class FileListComponent implements OnInit {
 
   deleteFile(index) {
     if (!this.disabled) {
-      this.data.splice(index, 1);
+      this.modal.confirm({
+        nzClosable: false,
+        nzTitle: 'Xác nhận',
+        nzContent: 'Bạn có chắc chắn muốn xóa?',
+        nzOkText: 'Đồng ý',
+        nzCancelText: 'Không',
+        nzOkDanger: true,
+        nzWidth: 310,
+        nzOnOk: async () => {
+          this.data.splice(index, 1);
+        }
+      });
       // this.data = this.data.filter(x => x.idVirtual != item.idVirtual);
     }
   }
