@@ -86,6 +86,8 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   phuongAnRow: any = {};
   isVisible = false;
   listNoiDung = []
+  listThanhTien:any;
+  listSoLuong:any;
 
 
   constructor(
@@ -384,6 +386,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   handleOk(): void {
+    this.phuongAnRow.thanhTien = this.phuongAnRow.soLuongXuatChiCuc * this.phuongAnRow.donGiaKhongVat
     let table = this.formData.get('deXuatPhuongAn').value;
     table = [...table, this.phuongAnRow]
     this.formData.patchValue({
@@ -422,6 +425,11 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     console.log(dataView)
     this.phuongAnView = dataView
     this.expandAll()
+
+    //
+    this.listThanhTien = this.formData.value.deXuatPhuongAn.map(s=>s.thanhTien);
+    this.listSoLuong = this.formData.value.deXuatPhuongAn.map(s=>s.soLuongXuatChiCuc);
+    console.log(this.listThanhTien,'thanhtien')
   }
 
   async changeCuc(event: any) {

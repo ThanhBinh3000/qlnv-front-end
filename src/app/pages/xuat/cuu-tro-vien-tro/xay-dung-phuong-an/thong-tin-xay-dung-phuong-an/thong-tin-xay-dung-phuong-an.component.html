@@ -338,20 +338,22 @@
     </div>
     <div nz-row [nzGutter]="24">
       <div nz-col [nzSpan]="4">
-        <nz-form-item>
-          <nz-form-label [nzNoColon]="true"> Tổng số lượng viện trợ, cứu trợ</nz-form-label>
-          <nz-form-control nz-col [nzSpan]="24">
-            <span class="text-green">{{formData.value.tongSoLuong|number: '1.0-1'}} kg</span>
-          </nz-form-control>
-        </nz-form-item>
+<!--        <nz-form-item>-->
+<!--          <nz-form-label [nzNoColon]="true"> Tổng số lượng viện trợ, cứu trợ</nz-form-label>-->
+<!--          <nz-form-control nz-col [nzSpan]="24">-->
+<!--            <span class="text-green">{{formData.value.tongSoLuong|number: '1.0-1'}} kg</span>-->
+<!--          </nz-form-control>-->
+<!--        </nz-form-item>-->
+        <nz-statistic [nzValue]="listSoLuong | nzAggregate: 'sum'|number: '1.0-1'" [nzTitle]="'Tổng số lượng viện trợ, cứu trợ'"></nz-statistic>
       </div>
       <div nz-col [nzSpan]="4">
-        <nz-form-item>
+        <nz-statistic [nzValue]="listThanhTien | nzAggregate: 'sum'|number: '1.0-1'" [nzTitle]="'Thành tiền'"></nz-statistic>
+        <!--<nz-form-item>
           <nz-form-label [nzNoColon]="true"> Thành tiền</nz-form-label>
           <nz-form-control nz-col [nzSpan]="24">
             <span class="text-green">{{formData.value.tongTien|number:'1.0-1'}}(vnđ)</span>
           </nz-form-control>
-        </nz-form-item>
+        </nz-form-item>-->
       </div>
     </div>
     <div class="action d-flex align-items-center flex-row-reverse">
