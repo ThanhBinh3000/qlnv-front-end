@@ -17,6 +17,7 @@ import { ThongTinXayDungPhuongAnComponent } from './thong-tin-xay-dung-phuong-an
   ],
   exports: [
     XayDungPhuongAnComponent,
+    ThongTinXayDungPhuongAnComponent,
   ]
 })
 export class XayDungPhuongAnModule { }
