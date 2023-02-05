@@ -9,6 +9,17 @@
   font-weight: bold;
   background-color: #ededed;
 }
-.bg-selected {
+.bg-selected td{
   background-color: #efefef;
+}
+.title-card {
+  width: 100%;
+
+  & > * {
+    display: inline;
+  }
+
+  button {
+    float: right;
+  }
 }
