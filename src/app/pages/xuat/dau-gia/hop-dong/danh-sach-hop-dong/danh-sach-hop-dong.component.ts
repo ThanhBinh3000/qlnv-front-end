@@ -31,7 +31,8 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
       ngayKy: '',
       soHd: '',
       tenHd: '',
-      nhaCungCap: ''
+      nhaCungCap: '',
+      trangThai: this.STATUS.BAN_HANH
     });
     this.filterTable = {
       soHd: '',

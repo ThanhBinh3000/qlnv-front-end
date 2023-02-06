@@ -14,12 +14,13 @@ import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { QuanLyHangTrongKhoService } from 'src/app/services/quanLyHangTrongKho.service';
 import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
+
 @Component({
-  selector: 'app-dialog-them-dia-diem-phan-lo',
-  templateUrl: './dialog-them-dia-diem-phan-lo.component.html',
-  styleUrls: ['./dialog-them-dia-diem-phan-lo.component.scss']
+  selector: 'app-dialog-them-moi-xuat-ban-truc-tiep',
+  templateUrl: './dialog-them-moi-xuat-ban-truc-tiep.component.html',
+  styleUrls: ['./dialog-them-moi-xuat-ban-truc-tiep.component.scss']
 })
-export class DialogThemDiaDiemPhanLoComponent implements OnInit {
+export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   formData: FormGroup;
   thongtinPhanLo: DanhSachPhanLo;
   loaiVthh: any;

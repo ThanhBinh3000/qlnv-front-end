@@ -18,14 +18,14 @@ export const XUAT_ROUTE_LIST: Array<ChiTietMenu> = [
     idHover: 'dauthau',
     hasTab: false,
   },
-  // {
-  //   icon: 'htvbdh_tcdt_dieu_chuyen',
-  //   title: 'Xuất theo phương thức bán trực tiếp',
-  //   url: `/cuu-tro-ho-tro`,
-  //   dropdown: 'dau-thau',
-  //   idHover: 'dauthau',
-  //   hasTab: false,
-  // },
+  {
+    icon: 'htvbdh_tcdt_dieu_chuyen',
+    title: 'Xuất theo phương thức bán trực tiếp',
+    url: `/xuat-truc-tiep`,
+    dropdown: 'xuat-truc-tiep',
+    idHover: 'xuat-truc-tiep',
+    hasTab: false,
+  },
   {
     icon: 'htvbdh_tcdt_nhapkhac2',
     title: 'Xuất Thanh lý, tiêu hủy',

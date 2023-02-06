@@ -68,7 +68,6 @@
             <th width="175px" class="wrap">Tổng SL xuất bán (kg)</th>
             <th width="90px">Thành tiền</th>
             <th width="90px">Trạng thái HĐ</th>
-            <th width="90px">Trạng thái XH</th>
             <th width="120px">Hành động</th>
           </tr>
           <tr class="search-table">
@@ -151,7 +150,6 @@
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -170,7 +168,6 @@
             <td></td>
             <td></td>
             <td>{{ data.tenTrangThaiHd }}</td>
-            <td>{{ data.tenTrangThaiXh }}</td>
             <td class="text-left">
               <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThai=='00'">
                 <i class="fa fa-pencil"></i>
