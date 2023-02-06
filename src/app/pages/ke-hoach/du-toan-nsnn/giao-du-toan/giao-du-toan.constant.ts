@@ -53,7 +53,7 @@ export const TAB_LIST = [
         role: [
             GDT.EDIT_REPORT_TH,
             GDT.XOA_REPORT_TH,
-
+            GDT.XEM_PA_TONGHOP_PBDT,
         ],
         isSelected: false,
     },

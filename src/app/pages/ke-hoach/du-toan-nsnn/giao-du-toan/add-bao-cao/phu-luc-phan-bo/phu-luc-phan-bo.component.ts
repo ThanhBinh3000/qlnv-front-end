@@ -78,7 +78,6 @@ export class PhuLucPhanBoComponent implements OnInit {
   async initialization() {
     this.spinner.show();
     this.maDvi = this.dataInfo.maDvi;
-    console.log("this.dataInfo: ", this.dataInfo);
 
     // lấy danh sách đơn vị
     await this.danhMuc.dMDonVi().toPromise().then(
@@ -102,20 +101,18 @@ export class PhuLucPhanBoComponent implements OnInit {
     this.statusPrint = this.dataInfo?.statusBtnPrint;
 
     this.lstCtietBcao = this.dataInfo.data.lstCtietBcaos;
-    console.log("this.lstCtietBcao", this.lstCtietBcao);
-
     if (this.isSynthetic && this.isSynthetic == true) {
       let lstDvi1 = this.donVis.filter(e => e?.maDviCha === this.maDvi);
+      let lstDvi2 = []
       this.dataInfo.data?.lstCtietBcaos[0].lstCtietDvis.forEach(s => {
-        lstDvi1 = lstDvi1.filter(v => v.maDvi === s.maDviNhan)
+        const Dvi2 = lstDvi1.filter(v => v.maDvi === s.maDviNhan)[0]
+        lstDvi2.push(Dvi2)
       })
-      this.lstDvi = lstDvi1
+      this.lstDvi = lstDvi2
     } else {
       this.lstDvi = this.donVis.filter(e => e?.maDvi === this.maDvi);
     }
     if (this.dataInfo.data.trangThai == "3" && this.dataInfo?.extraData && this.dataInfo.extraData.length > 0) {
-      console.log("this.dataInfo?.extraData", this.dataInfo?.extraData);
-
       this.dataInfo.extraData.forEach(item => {
         if (item.maNdung) {
           const index = this.lstCtietBcao.findIndex(e => e.maNdung == item.maNdung);
@@ -207,7 +204,7 @@ export class PhuLucPhanBoComponent implements OnInit {
   };
 
   getStatusButton() {
-    if (!this.dataInfo?.statusBtnOk && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5")) {
+    if (this.dataInfo?.statusBtnOk && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5")) {
       this.statusBtnOk = false;
     } else {
       this.statusBtnOk = true;
