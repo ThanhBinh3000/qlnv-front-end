@@ -121,3 +121,42 @@ export class DanhSachPhanLo {
     expand?: boolean;
     parent?: DanhSachPhanLo;
 }
+
+
+export class DanhSachXuatBanTrucTiep {
+    id: number;
+    maDvi: string;
+    tenDvi: string;
+    maDiemKho: string;
+    diaDiemKho: string;
+    tenDiemKho: string
+    maNhaKho: string;
+    tenNhakho: string;
+    maNganKho: string;
+    tenNganKho: string;
+    maLoKho: string;
+    tenLoKho: string;
+    loaiVthh: string;
+    tenLoaiVthh: string;
+    cloaiVthh: string;
+    tenCloaiVthh: string;
+    maDviTsan: string;
+    duDau: number;
+    soLuong: number;
+    giaKhongVat: number;
+    giaKhoiDiem: number;
+    donGiaDeXuat: number;
+    donGiaVat: number;
+    giaKhoiDiemDduyet: number;
+    soLuongChiTieu: number;
+    soLuongKh: number;
+    dviTinh: string;
+    tongSoLuong: number;
+    idVirtual?: number;
+    isEdit: boolean;
+    children?: DanhSachPhanLo[];
+    level?: number;
+    expand?: boolean;
+    parent?: DanhSachPhanLo;
+}
+
