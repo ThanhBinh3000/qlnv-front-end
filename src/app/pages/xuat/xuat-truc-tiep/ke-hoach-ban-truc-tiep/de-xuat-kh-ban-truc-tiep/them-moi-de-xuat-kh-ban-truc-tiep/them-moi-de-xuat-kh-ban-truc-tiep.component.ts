@@ -14,7 +14,7 @@ import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHo
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { STATUS } from "../../../../../../constants/status";
 import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
+import { DanhSachPhanLo, DanhSachXuatBanTrucTiep } from 'src/app/models/KeHoachBanDauGia';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
@@ -217,7 +217,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     });
   }
 
-  themMoiBangPhanLoTaiSan($event, data?: DanhSachPhanLo, index?: number) {
+  themMoiBangPhanLoTaiSan($event, data?: DanhSachXuatBanTrucTiep, index?: number) {
     $event.stopPropagation();
     if (!this.formData.get('loaiVthh').value) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
@@ -234,7 +234,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
-        khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
         namKh: this.formData.get('namKh').value,
       },
     });

@@ -72,8 +72,8 @@
                 <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
                 <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất (1)</th>
                 <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg) (2)</th>
-                <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ) (3) = (1) * (2)</th>
-                <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt VAT (đ/kg) (4)</th>
+                <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ/kg) (3) = (1) * (2)</th>
+                <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg) (4)</th>
                 <th nzWidth="100px" class="text-center wrap">Đơn giá khởi điểm được duyệt (đ) (5) = (1) * (4)</th>
                 <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ) = (3) * % khoản tiền đặt
                     trước</th>
@@ -83,51 +83,55 @@
             </tr>
             <tr>
                 <th>
-                    <nz-select [(ngModel)]="thongtinPhanLo.maDiemKho" (ngModelChange)="changeDiemKho()">
+                    <nz-select [(ngModel)]="thongTinXuatBanTrucTiep.maDiemKho" (ngModelChange)="changeDiemKho()">
                         <nz-option *ngFor="let p of listDiemKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                     </nz-select>
                 </th>
                 <th>
-                    <nz-select [(ngModel)]="thongtinPhanLo.maNhaKho" (ngModelChange)="changeNhaKho()">
+                    <nz-select [(ngModel)]="thongTinXuatBanTrucTiep.maNhaKho" (ngModelChange)="changeNhaKho()">
                         <nz-option *ngFor="let p of listNhaKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                     </nz-select>
                 </th>
                 <th>
-                    <nz-select [(ngModel)]="thongtinPhanLo.maNganKho" (ngModelChange)="changeNganKho()">
+                    <nz-select [(ngModel)]="thongTinXuatBanTrucTiep.maNganKho" (ngModelChange)="changeNganKho()">
                         <nz-option *ngFor="let p of listNganKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                     </nz-select>
                 </th>
                 <th>
-                    <nz-select [(ngModel)]="thongtinPhanLo.maLoKho" (ngModelChange)="changeLoKho()">
+                    <nz-select [(ngModel)]="thongTinXuatBanTrucTiep.maLoKho" (ngModelChange)="changeLoKho()">
                         <nz-option *ngFor="let p of listLoKho" [nzValue]="p.maDvi" [nzLabel]="p.tenDvi"></nz-option>
                     </nz-select>
                 </th>
                 <th>
-                    <input nz-input [(ngModel)]="thongtinPhanLo.tenCloaiVthh" class="w-150" [disabled]="true" />
+                    <input nz-input [(ngModel)]="thongTinXuatBanTrucTiep.tenCloaiVthh" class="w-150"
+                        [disabled]="true" />
                 </th>
                 <th>
-                    <input nz-input [(ngModel)]="thongtinPhanLo.maDviTsan" class="w-150" />
+                    <input nz-input [(ngModel)]="thongTinXuatBanTrucTiep.maDviTsan" class="w-150" />
                 </th>
-                <th>{{thongtinPhanLo.duDau}}</th>
+                <th>{{thongTinXuatBanTrucTiep.duDau}}</th>
                 <th>
-                    <nz-input-number placeholder="(1)" class="text-right" nz-input [(ngModel)]="thongtinPhanLo.soLuong"
-                        [nzMin]="1" [nzStep]="1" [nzSize]="'small'" [nzFormatter]="globals.formatter"
-                        [nzParser]="globals.parser">
+                    <nz-input-number placeholder="(1)" class="text-right" nz-input
+                        [(ngModel)]="thongTinXuatBanTrucTiep.soLuong" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
+                        [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </th>
                 <th>
                     <nz-input-number placeholder="(2)" class="text-right" nz-input
-                        [(ngModel)]="thongtinPhanLo.donGiaDeXuat" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
+                        [(ngModel)]="thongTinXuatBanTrucTiep.donGiaDeXuat" [nzMin]="1" [nzStep]="1" [nzSize]="'small'"
                         [nzFormatter]="globals.formatter" [nzParser]="globals.parser">
                     </nz-input-number>
                 </th>
-                <th>{{ thongtinPhanLo.soLuong * thongtinPhanLo.donGiaDeXuat | number : '1.0-1' : 'vi_VN'}}</th>
-                <th>{{ thongtinPhanLo.donGiaVat | number : '1.0-1' : 'vi_VN' }}</th>
-                <th>{{ thongtinPhanLo.soLuong * thongtinPhanLo.donGiaVat | number : '1.0-1' : 'vi_VN' }}</th>
-                <th>{{ (thongtinPhanLo.soLuong * thongtinPhanLo.donGiaVat * khoanTienDatTruoc / 100 ) | number : '1.0-1'
+                <th>{{ thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaDeXuat | number : '1.0-1' :
+                    'vi_VN'}}</th>
+                <th>{{ thongTinXuatBanTrucTiep.donGiaVat | number : '1.0-1' : 'vi_VN' }}</th>
+                <th>{{ thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaVat | number : '1.0-1' : 'vi_VN'
+                    }}</th>
+                <th>{{ (thongTinXuatBanTrucTiep.soLuong * thongTinXuatBanTrucTiep.donGiaVat )
+                    | number : '1.0-1'
                     : 'vi_VN'}}</th>
-                <th>{{ (thongtinPhanLo.soLuong *
-                    thongtinPhanLo.donGiaVat * khoanTienDatTruoc / 100 ) | number : '1.0-1' : 'vi_VN' }}</th>
+                <th>{{ (thongTinXuatBanTrucTiep.soLuong *
+                    thongTinXuatBanTrucTiep.donGiaVat ) | number : '1.0-1' : 'vi_VN' }}</th>
                 <th class="text-center">
                     <a (click)="addDiemKho()">
                         <i class="icon htvbdh_dau-cong xanhla"></i>
@@ -153,10 +157,9 @@
                     <td>{{ data.soLuong * data.donGiaDeXuat | number : '1.0-1' : 'vi_VN' }}</td>
                     <td>{{ data.donGiaVat }}</td>
                     <td>{{ data.soLuong * data.donGiaVat | number : '1.0-1' : 'vi_VN' }}</td>
-                    <td>{{ (data.soLuong * data.donGiaDeXuat * khoanTienDatTruoc /
-                        100 ) | number :
+                    <td>{{ (data.soLuong * data.donGiaDeXuat) | number :
                         '1.0-1' : 'vi_VN'}}</td>
-                    <td>{{ (data.soLuong * data.donGiaVat * khoanTienDatTruoc / 100 )
+                    <td>{{ (data.soLuong * data.donGiaVat )
                         | number :
                         '1.0-1' : 'vi_VN' }}</td>
                     <td class="text-center">
@@ -213,11 +216,11 @@
                             [nzParser]="globals.parser">
                         </nz-input-number>
                     </td>
-                    <td>{{thongtinPhanLo.giaKhoiDiem}}</td>
-                    <td>{{thongtinPhanLo.donGiaVat}}</td>
-                    <td>{{thongtinPhanLo.giaKhoiDiemDduyet}}</td>
-                    <td>{{thongtinPhanLo.tienDatTruoc}}</td>
-                    <td>{{thongtinPhanLo.tienDatTruocDduyet}}</td>
+                    <td>{{thongTinXuatBanTrucTiep.giaKhoiDiem}}</td>
+                    <td>{{thongTinXuatBanTrucTiep.donGiaVat}}</td>
+                    <td>{{thongTinXuatBanTrucTiep.giaKhoiDiemDduyet}}</td>
+                    <td></td>
+                    <td></td>
                     <td class="text-center">
                         <a (click)="saveEdit(i)" class="save">
                             <i class="icon htvbdh_tcdt_save"></i>
