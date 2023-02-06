@@ -10,64 +10,110 @@ import {Globals} from "../../../../../../shared/globals";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
+import {Base2Component} from "../../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../../services/storage.service";
+import {KtKhXdHangNamService} from "../../../../../../services/kt-kh-xd-hang-nam.service";
+import {DonviService} from "../../../../../../services/donvi.service";
+import {DanhMucKho} from "../../../danh-muc-du-an/danh-muc-du-an.component";
+import {MESSAGE} from "../../../../../../constants/message";
+import {DanhMucKhoService} from "../../../../../../services/danh-muc-kho.service";
 
 @Component({
   selector: 'app-them-moi-dx-nhu-cau',
   templateUrl: './them-moi-dx-nhu-cau.component.html',
   styleUrls: ['./them-moi-dx-nhu-cau.component.scss']
 })
-export class ThemMoiDxNhuCauComponent implements OnInit {
+export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
 
   @Input() isViewDetail: boolean;
   @Input() typeHangHoa: string;
   @Input() idInput: number;
-  @Output()
-  showListEvent = new EventEmitter<any>();
-  formData: FormGroup
   maQd: string;
-  dataTable: any[] = []
   dsCuc: any[] = [];
   dsChiCuc: any[] = [];
-  rowItem: ThongTinQuyetDinh = new ThongTinQuyetDinh();
-  dataEdit: { [key: string]: { edit: boolean; data: ThongTinQuyetDinh } } = {};
+  rowItem: DanhMucKho = new DanhMucKho();
+  dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
   listQdKhTh: any[] = [];
+  listDmKho: any[] = [];
+
+  listLoaiDuAn: any[] = [];
+
   constructor(
-    private router: Router,
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    public userService: UserService,
-    public globals: Globals,
-    private danhMucService: DanhMucService,
-    private fb: FormBuilder,
-    private modal: NzModalService,
-    private helperService: HelperService
+    private httpClient: HttpClient,
+    private storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private dexuatService : KtKhXdHangNamService,
+    private dviService : DonviService,
+    private dmKhoService : DanhMucKhoService,
+    private danhMucService : DanhMucService
   ) {
+    super(httpClient, storageService, notification, spinner, modal, dexuatService);
+    super.ngOnInit()
     this.formData = this.fb.group({
-      id: [null],
-      trangThai: ['00'],
-      tenTrangThai: ['Dự thảo'],
+      maDvi : [null],
+
+      trangThai : ['00'],
+      tenTrangThai : ['Dự thảo'],
     });
   }
 
   async ngOnInit() {
-    this.maQd = '/CDTVP-TCKT'
+    await this.spinner.show();
+    try {
+      this.maQd = this.userInfo.MA_QD;
+      await Promise.all([
+      ]);
+      if (this.idInput) {
+
+      } else {
+
+      }
+      await Promise.all([
+        this.getAllDmKho(),
+        this.getAllLoaiDuAn()
+      ]);
+    } catch (e) {
+      console.log('error: ', e);
+      await this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+    await this.spinner.hide();
   }
 
-  quayLai() {
-    this.showListEvent.emit();
+  async getAllDmKho() {
+    let res = await this.dmKhoService.getAllDmKho('DMK');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDmKho = res.data
+    }
+  }
+
+  async getAllLoaiDuAn() {
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_DU_AN_KT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiDuAn = res.data;
+    }
   }
 
 
-  save() {
 
-  }
-
-  guiDuyet() {
-
-  }
-
-  editItem(index: number): void {
-    this.dataEdit[index].edit = true;
+  async save(isOther: boolean) {
+    this.helperService.markFormGroupTouched(this.formData);
+    if (this.formData.invalid) {
+      this.spinner.hide();
+      return;
+    }
+    let body = this.formData.value;
+    let data = await this.createUpdate(body);
+    if (data) {
+      if (isOther) {
+        this.approve(data.id, this.STATUS.DA_KY, "Bạn có muốn ký hợp đồng ?")
+      } else {
+        this.goBack()
+      }
+    }
   }
 
   xoaItem(index: number) {
@@ -95,12 +141,12 @@ export class ThemMoiDxNhuCauComponent implements OnInit {
       this.dataTable = [];
     }
     this.dataTable = [...this.dataTable, this.rowItem]
-    this.rowItem = new ThongTinQuyetDinh();
+    this.rowItem = new DanhMucKho();
     this.updateEditCache()
   }
 
   clearData() {
-
+    this.rowItem = new DanhMucKho();
   }
 
   huyEdit(idx: number): void {
@@ -123,6 +169,19 @@ export class ThemMoiDxNhuCauComponent implements OnInit {
           data: { ...item },
         }
       });
+    }
+  }
+  editItem(index: number): void {
+    this.dataEdit[index].edit = true;
+  }
+
+  changeDmucDuAn(event: any) {
+    if (event) {
+      let result = this.listDmKho.filter(item => item.maDuAn == event)
+      if (result && result.length > 0) {
+        this.rowItem = result[0];
+        this.rowItem.tgKcHt = this.rowItem.tgKhoiCong + ' - ' + this.rowItem.tgHoanThanh
+      }
     }
   }
 }
