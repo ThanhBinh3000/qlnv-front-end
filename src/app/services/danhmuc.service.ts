@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
-import { BaseService } from './base.service';
-import { OldResponseData } from "../interfaces/response";
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {environment} from '../../environments/environment';
+import {BaseService} from './base.service';
+import {OldResponseData} from "../interfaces/response";
 
 @Injectable({
   providedIn: 'root',
 })
 export class DanhMucService extends BaseService {
   gateway: string = '/qlnv-category'
+
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dm-hang', '/qlnv-category');
   }
@@ -92,6 +93,7 @@ export class DanhMucService extends BaseService {
     const url = `${environment.SERVICE_API}${this.gateway}/dmuc-pthuc-bquan/danh-sach`;
     return this.httpClient.post<any>(url, body).toPromise();
   }
+
   loadDanhMucHinhThucBaoQuan(body: any): Promise<any> {
     const url = `${environment.SERVICE_API}${this.gateway}/dmuc-hthuc-bquan/findList`;
     return this.httpClient.post<any>(url, body).toPromise();
@@ -121,12 +123,19 @@ export class DanhMucService extends BaseService {
     const url = `${environment.SERVICE_API}${this.GATEWAY}/dm-hang/dvql`
     return this.httpClient.get<any>(url).toPromise();
   }
+
   getDanhMucHangDvql(body: any) {
     const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/search-all`;
     return this.httpClient.post<any>(url, body);
   }
+
   getDanhMucHangHoaDvql(body: any) {
     const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/search-all-ma`;
     return this.httpClient.post<any>(url, body);
+  }
+
+  getDanhMucHangDvqlAsyn(body: any): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.gateway}/dm-hang/search-all`;
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 }
