@@ -56,7 +56,7 @@
     <div class="group-button">
       <h3 class="text-uppercase">Danh sách phương án xuất cứu trợ, viện trợ</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-do" click)="deleteMulti()"
+        <button type="button" class="btn btn-do" (click)="deleteMulti()"
           *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_XOA')">
           <i class="fa fa-trash-o do"></i>
           <span>Xóa</span>
@@ -200,12 +200,12 @@
             <td>{{ data.tenTrangThai }}</td>
             <td>{{ data.maTongHop }}</td>
             <td class="text-left">
-              <a (click)="detail(data, true)">
+              <a (click)="redirectDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
               <a *ngIf="(data.trangThai==STATUS.DU_THAO || ((data.trangThai==STATUS.TU_CHOI_LDC || data.trangThai==STATUS.TU_CHOI_TP) && userService.isCuc())||
               (data.trangThai == STATUS.TU_CHOI_LDV && userService.isTongCuc())) && isOwner(data.maDvi)"
-                (click)="detail(data, false)">
+                (click)="redirectDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
               <a *ngIf="data.trangThai==STATUS.DU_THAO && isOwner(data.maDvi)" (click)="delete(data)">

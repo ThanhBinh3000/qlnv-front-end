@@ -5,7 +5,7 @@ import jsonGlobals from './globals.json';
 @Injectable()
 export class Globals {
   prop: any = jsonGlobals;
-  formatter = (value) => value ? formatNumber(value, 'vi_VN', '1.0-1') : 0;
-  parser = value => value.replaceAll('.', '');
+  formatter = (value: number) => value.toLocaleString('vi-VN');
+  parser = (value: string) => value.replace(/\,/g, '');
   parserInput = value => value.replaceAll(',', '.');
 }

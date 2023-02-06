@@ -123,4 +123,10 @@ export class XayDungPhuongAnComponent extends Base2Component implements OnInit {
     }
     await this.search();
   }
+
+  redirectDetail(id, b: boolean) {
+    this.selectedId = id;
+    this.isDetail = true;
+    // this.isViewDetail = isView ?? false;
+  }
 }
