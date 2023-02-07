@@ -19,7 +19,7 @@
             <div nz-col [nzSpan]="2">
                 <label class="search__label">Từ ngày</label>
             </div>
-            <div nz-col [nzSpan]="2">
+            <div nz-col [nzSpan]="3">
                 <ng-container *ngIf="!status; else tu">
                     {{tuNgay}}
                 </ng-container>
@@ -30,7 +30,7 @@
             <div nz-col [nzSpan]="2">
                 <label class="search__label">Đến ngày</label>
             </div>
-            <div nz-col [nzSpan]="2">
+            <div nz-col [nzSpan]="3">
                 <ng-container *ngIf="!status;else den">
                     {{denNgay}}
                 </ng-container>
@@ -38,7 +38,7 @@
                     <nz-date-picker class="search__input" [(ngModel)]="denNgay" nzFormat="dd/MM/yyyy"></nz-date-picker>
                 </ng-template>
             </div>
-            <div nz-col class="gutter-row canphai phai" [nzSpan]="12" style="display:flex; justify-content: end;">
+            <div nz-col class="gutter-row canphai phai" [nzSpan]="10" style="display:flex; justify-content: end;">
                 <button *ngIf="status" type="button" class="btn btn-main" (click)="deleteAllChecked()">
                     <i class="fa fa-trash-o"></i>
                     <span>Xóa</span>
@@ -49,7 +49,7 @@
             <thead>
                 <tr>
                     <th rowspan="2" nzWidth="50px" nzLeft>STT</th>
-                    <th rowspan="2" nzWidth="200px" nzLeft>Tên vật tư, hàng hóa</th>
+                    <th rowspan="2" nzWidth="300px" nzLeft>Tên vật tư, hàng hóa</th>
                     <th rowspan="2">DVT</th>
                     <th colspan="4">Kế hoạch</th>
                     <th colspan="3">Thực hiện</th>
@@ -64,10 +64,10 @@
                     <th>QĐ số... <br>Ngày...</th>
                     <th>Số lượng</th>
                     <th>Giá mua tối đa <br>Tổng cục QĐ</th>
-                    <th>Thành tiền (Đã bao gồm thuế GTGT) </th>
+                    <th>Thành tiền (Đã <br /> gồm thuế GTGT) </th>
                     <th>Số lượng</th>
                     <th>Đơn giá mua thực tế</th>
-                    <th>Thành tiền (Đã bao gồm thuế GTGT)</th>
+                    <th>Thành tiền (Đã <br /> gồm thuế GTGT)</th>
                 </tr>
                 <tr>
                     <th nzLeft>A</th>

@@ -10,7 +10,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienVonPhi.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, mulNumber, NOT_OK, OK, sumNumber, Utils } from "src/app/Utility/utils";
+import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
+import { BOX_NUMBER_WIDTH, DON_VI_TIEN, MONEY_LIMIT, NOT_OK, OK, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
 export class ItemData {
@@ -67,6 +68,7 @@ export class BaoCao03Component implements OnInit {
     listIdDelete = "";
     trangThaiPhuLuc = '3';
     luyKes: any[] = []          // lay bao cao nam
+    scrollX = (350 + 9 * BOX_NUMBER_WIDTH + 400).toString() + 'px';
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
@@ -111,7 +113,10 @@ export class BaoCao03Component implements OnInit {
         this.id = this.data?.id;
         this.maDviTien = this.data?.maDviTien ? this.data.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
-        this.status = this.data?.status;
+        this.status = !this.data?.status;
+        if (this.status) {
+            this.scrollX = (350 + 9 * BOX_NUMBER_WIDTH + 200).toString() + 'px';
+        }
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.luyKes = this.data?.luyKes.find(item => item.maLoai == '5')?.lstCtietBcaos;

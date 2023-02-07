@@ -66,7 +66,7 @@ export class BaoCao02Component implements OnInit {
     trangThaiPhuLuc = '3';
     idBaoCao: string;        //id bao cao to
     luyKes: any[] = [];         //bao cao nam
-    scrollX = (250 + 8 * BOX_NUMBER_WIDTH + 400).toString() + 'px';
+    scrollX = (350 + 8 * BOX_NUMBER_WIDTH + 400).toString() + 'px';
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
@@ -116,7 +116,7 @@ export class BaoCao02Component implements OnInit {
         this.thuyetMinh = this.data?.thuyetMinh;
         this.status = !this.data?.status;
         if (this.status) {
-            this.scrollX = (250 + 8 * BOX_NUMBER_WIDTH + 200).toString() + 'px';
+            this.scrollX = (350 + 8 * BOX_NUMBER_WIDTH + 200).toString() + 'px';
         }
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnExport = this.data?.statusBtnExport;
