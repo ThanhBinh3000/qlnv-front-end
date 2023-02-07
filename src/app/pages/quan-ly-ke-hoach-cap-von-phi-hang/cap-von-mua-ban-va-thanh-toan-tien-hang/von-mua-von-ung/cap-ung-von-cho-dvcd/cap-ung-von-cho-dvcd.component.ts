@@ -371,9 +371,9 @@ export class CapUngVonChoDvcdComponent implements OnInit {
                     this.baoCao.ttNhan.trangThai = mcn;
                 }
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_7) {
-                    await this.ghiNhanCapVon();
-                }
+                // if (mcn == Utils.TT_BC_7) {
+                //     await this.ghiNhanCapVon();
+                // }
                 if (mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
@@ -776,7 +776,7 @@ export class CapUngVonChoDvcdComponent implements OnInit {
     // }
 
     statusClass() {
-        if (Utils.statusSave.includes(this.baoCao.ttNhan.trangThai)) {
+        if (Utils.statusSave.includes(this.baoCao.ttGui.trangThai)) {
             return 'du-thao-va-lanh-dao-duyet';
         } else {
             return 'da-ban-hanh';

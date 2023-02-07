@@ -332,9 +332,9 @@ export class ThanhToanKhachHangTheoDonGiaComponent implements OnInit {
             if (data.statusCode == 0) {
                 this.baoCao.ttGui.trangThai = mcn;
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_7) {
-                    await this.ghiNhanTienThua();
-                }
+                // if (mcn == Utils.TT_BC_7) {
+                //     await this.ghiNhanTienThua();
+                // }
                 if (mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {

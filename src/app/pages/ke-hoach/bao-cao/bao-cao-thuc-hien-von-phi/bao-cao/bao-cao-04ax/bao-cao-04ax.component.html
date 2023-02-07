@@ -1,11 +1,11 @@
 <ng-container *ngIf="isDataAvailable">
     <div id="tablePrint">
         <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-            <div nz-col [nzSpan]="1">
+            <div nz-col [nzSpan]="2">
                 Đơn vị:
             </div>
             <div nz-col [nzSpan]="2">
-                <ng-container *ngIf="!status || !editMoneyUnit; else editMoney">
+                <ng-container *ngIf="status || !editMoneyUnit; else editMoney">
                     <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
                 </ng-container>
                 <ng-template #editMoney>
@@ -16,24 +16,24 @@
                     </nz-select>
                 </ng-template>
             </div>
-            <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
-                <button type="button" class="btn btn-main" (click)="addNewCol()" [hidden]="status">
+            <div nz-col class="gutter-row canphai phai" [nzSpan]="20" style="display:flex; justify-content: end;">
+                <button type="button" *ngIf="status" class="btn btn-main" (click)="addNewCol()">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm cột</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="status">
+                <button *ngIf="status" type="button" class="btn btn-main" (click)="deleteAllChecked()">
                     <i class="fa fa-trash-o"></i>
                     <span>Xóa</span>
                 </button>
             </div>
         </div>
-        <nz-table nzBordered class="table__body">
+        <nz-table nzBordered class="table__body" [nzScroll]="{x: scrollX}">
             <thead>
                 <tr>
-                    <th rowspan="2" nzWidth="100px">
+                    <th rowspan="2" nzWidth="50px" nzLeft>
                         STT
                     </th>
-                    <th rowspan="2" nzWidth="400px">
+                    <th rowspan="2" nzWidth="300px" nzLeft>
                         Nội dung chi
                     </th>
                     <th colspan="{{1 + listColTemp.length}}">
@@ -42,22 +42,22 @@
                     <th colspan="{{1 + listColTemp.length}}">
                         Chi tiết theo từng mặt hàng lũy kế từ đầu năm
                     </th>
-                    <th rowspan="2">
+                    <th rowspan="2" style="width: 200px;">
                         Ghi chú
                     </th>
-                    <th style="width: 50px;" rowspan="2" [hidden]="status"></th>
-                    <th style="width: 55px;" rowspan="2" [hidden]="status"></th>
-                    <th style="width: 55px;" rowspan="2" [hidden]="status"></th>
-                    <th style="width: 45px;" rowspan="2" [hidden]="status">
+                    <th style="width: 50px;" rowspan="2" *ngIf="status" nzRight></th>
+                    <th style="width: 55px;" rowspan="2" *ngIf="status" nzRight></th>
+                    <th style="width: 55px;" rowspan="2" *ngIf="status" nzRight></th>
+                    <th style="width: 45px;" rowspan="2" *ngIf="status" nzRight>
                         <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
                         </label>
                     </th>
                 </tr>
                 <tr>
-                    <th nzWidth="100px">
+                    <th>
                         Tổng Cộng
                     </th>
-                    <th nzWidth="100px" *ngFor="let col of listColTemp">
+                    <th *ngFor="let col of listColTemp">
                         <ng-container *ngIf="status || statusDeleteCol(col.maVtu); else xoa">
                             {{col.colName}}
                         </ng-container>
@@ -67,10 +67,10 @@
                             </a>
                         </ng-template>
                     </th>
-                    <th nzWidth="100px">
+                    <th>
                         Tổng Cộng
                     </th>
-                    <th nzWidth="100px" *ngFor="let col of listColTemp">
+                    <th *ngFor="let col of listColTemp">
                         <ng-container *ngIf="status || statusDeleteCol(col.maVtu); else xoa">
                             {{col.colName}}
                         </ng-container>
@@ -85,10 +85,10 @@
             <tbody>
                 <tr *ngFor="let item of lstCtietBcao; let i = index">
                     <ng-container *ngIf="!editCache[item.id].edit; else editTemplate4axB">
-                        <td [nzIndentSize]="item.level * 8">
+                        <td nzLeft>
                             {{getChiMuc(item.stt)}}
                         </td>
-                        <td>
+                        <td nzLeft>
                             {{item.tenNdung}}
                         </td>
                         <td>
@@ -112,16 +112,16 @@
                             </ng-container>
                         </ng-container>
                         <td>{{item.ghiChu}}</td>
-                        <td [hidden]="status">
+                        <td *ngIf="status" nzRight>
                             <i *ngIf="checkDelete(item)" class="fa fa-trash-o do" (click)="deleteLine(item.id)"></i>
                         </td>
-                        <td [hidden]="status">
+                        <td *ngIf="status" nzRight>
                             <i *ngIf="checkEdit(item)" class="fa fa-pencil" (click)="startEdit(item.id)"></i>
                         </td>
-                        <td [hidden]="status">
+                        <td *ngIf="status" nzRight>
                             <i class="fa fa-plus" (click)="addLine(item.id)"></i>
                         </td>
-                        <td [hidden]="status">
+                        <td *ngIf="status" nzRight>
                             <ng-container *ngIf="checkDelete(item)">
                                 <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
                                     (ngModelChange)="updateChecked(item.id)"></label>
@@ -129,10 +129,10 @@
                         </td>
                     </ng-container>
                     <ng-template #editTemplate4axB>
-                        <td [nzIndentSize]="editCache[item.id].data.level * 8">
+                        <td nzLeft>
                             {{getChiMuc(editCache[item.id].data.stt)}}
                         </td>
-                        <td>
+                        <td nzLeft>
                             {{editCache[item.id].data.tenNdung}}
                         </td>
                         <td>
@@ -161,17 +161,17 @@
                             <input type="text" class="search__input" nz-input
                                 [(ngModel)]="editCache[item.id].data.ghiChu" />
                         </td>
-                        <td [hidden]="status">
+                        <td *ngIf="status" nzRight>
                             <i *ngIf="checkDelete(item)" class="fa fa-trash-o do" (click)="deleteLine(item.id)"></i>
                         </td>
-                        <td>
+                        <td nzRight>
                             <a (click)="saveEdit(item.id)" class="save" style="margin-right:15px">Lưu</a>
                         </td>
-                        <td [hidden]="status">
+                        <td *ngIf="status" nzRight>
                             <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                 (nzOnConfirm)="cancelEdit(item.id)" class="save">Hủy</a>
                         </td>
-                        <td [hidden]="status">
+                        <td *ngIf="status" nzRight>
                             <ng-container *ngIf="checkDelete(item)">
                                 <label nz-checkbox [nzValue]="item.id" [(ngModel)]="item.checked"
                                     (ngModelChange)="updateChecked(item.id)"></label>
@@ -184,19 +184,14 @@
     </div>
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
         <div nz-col nzSpan="24">
-            <label class="search__label">Thuyết minh</label>
-            <ng-container *ngIf="status;else templatePresent">
-                <br>{{thuyetMinh}}
-            </ng-container>
-            <ng-template #templatePresent>
-                <nz-textarea-count [nzMaxCharacterCount]="100">
-                    <textarea rows="4" nz-input [(ngModel)]="thuyetMinh"></textarea>
-                </nz-textarea-count>
-            </ng-template>
+            <div nz-col nzSpan="24">
+                <label class="search__label">Thuyết minh</label>
+                <textarea rows="2" nz-input [(ngModel)]="thuyetMinh" [disabled]="status"></textarea>
+            </div>
         </div>
     </div>
     <div class="action">
-        <button type="button" class="btn btn-main" [hidden]="!status" (click)="doPrint()">
+        <button type="button" class="btn btn-main" *ngIf="!status" (click)="doPrint()">
             <i nz-icon nzType="printer" nzTheme="outline"></i>
             <span>In</span>
         </button>
