@@ -154,7 +154,12 @@
 
 .money-input {
     min-width: 100px !important;
+    border: 1px solid #e1e1e1 !important;
     //border: 1px;
+}
+
+.money-input:focus-visible {
+    outline: none !important;
 }
 
 .ng-touched:focus {

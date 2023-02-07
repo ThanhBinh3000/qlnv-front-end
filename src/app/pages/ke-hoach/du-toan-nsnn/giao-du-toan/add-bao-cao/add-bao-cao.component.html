@@ -29,11 +29,11 @@
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Phê duyệt</span>
       </button>
-      <button *ngIf="!acceptStatus" type="button" class="btn btn-sub" (click)="action('nonaccept')">
+      <button *ngIf="acceptStatus" type="button" class="btn btn-sub" (click)="action('nonaccept')">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
-      <button *ngIf="!acceptStatus" type="button" class="btn btn-sub" (click)="action('accept')">
+      <button *ngIf="acceptStatus" type="button" class="btn btn-sub" (click)="action('accept')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Tiếp nhận</span>
       </button>

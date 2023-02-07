@@ -84,6 +84,8 @@ export class PhuLuc01NhapComponent implements OnInit {
 
 
   async initialization() {
+    console.log(this.dataInfo);
+
     this.spinner.show();
     this.formDetail = this.dataInfo?.data;
     this.maDviTao = this.dataInfo?.maDvi;
@@ -632,7 +634,7 @@ export class PhuLuc01NhapComponent implements OnInit {
   }
 
   getStatusButton() {
-    if (!this.dataInfo?.statusBtnOk && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5")) {
+    if (this.dataInfo?.statusBtnOk && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5")) {
       this.statusBtnOk = false;
     } else {
       this.statusBtnOk = true;
