@@ -7,16 +7,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {
-  QuyetDinhPdKhBdgService
-} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
 import { STATUS } from 'src/app/constants/status';
-
-import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
@@ -24,11 +17,11 @@ import { QuyetDinhGiaoNvXuatHangService } from 'src/app/services/qlnv-hang/xuat-
 import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
 
 @Component({
-  selector: 'app-themmoi-qdinh-nhap-xuat-hang',
-  templateUrl: './themmoi-qdinh-nhap-xuat-hang.component.html',
-  styleUrls: ['./themmoi-qdinh-nhap-xuat-hang.component.scss'],
+  selector: 'app-create-giao-xh',
+  templateUrl: './create-giao-xh.component.html',
+  styleUrls: ['./create-giao-xh.component.scss'],
 })
-export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements OnInit {
+export class CreateGiaoXh extends Base2Component implements OnInit {
   @Input() loaiVthh: string
   @Input() idInput: number = 0;
 
@@ -71,7 +64,7 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
       bbHaoDoi: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
-
+      fileName: []
     })
   }
 
@@ -101,8 +94,6 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
       } else {
         this.initForm();
       }
-      await Promise.all([
-      ]);
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -124,7 +115,10 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
     let dsQdPd = []
     let re = await this.hopDongXuatHangService.search({
       trangThai: STATUS.DA_KY,
-    }).then(res => {
+      maDvi: this.formData.value.maDvi,
+      nam: this.formData.value.nam
+    }
+    ).then(res => {
       if (res.msg == MESSAGE.SUCCESS) {
         let data = res.data;
         if (data && data.content && data.content.length > 0) {
@@ -143,8 +137,8 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
       nzFooter: null,
       nzComponentParams: {
         dataTable: dsQdPd,
-        dataHeader: ['Số hợp đồng', 'Tên hợp đồng', 'Ngày ký', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
-        dataColumn: ['soHd', 'tenHd', 'ngayKy', 'tenLoaiVthh', 'tenCloaiVthh']
+        dataHeader: ['Số hợp đồng', 'Tên hợp đồng', 'Loại hàng hóa', 'Chủng loại hàng hóa'],
+        dataColumn: ['soHd', 'tenHd', 'tenLoaiVthh', 'tenCloaiVthh']
       },
     });
     modalQD.afterClose.subscribe(async (data) => {
@@ -165,11 +159,10 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
                 soLuong: data.soLuong,
                 donViTinh: data.donViTinh,
                 tgianGnhan: data.tgianGnhan,
-                trichYeu: data.trichYeu
-
+                trichYeu: data.trichYeu,
+                tenTtcn: data.tenNguoiDdien
               })
-              console.log(data);
-              this.dataTable = data.cts;
+              this.dataTable = data.children;
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -181,43 +174,80 @@ export class ThemmoiQdinhNhapXuatHangComponent extends Base2Component implements
   }
 
   async save(isGuiDuyet?) {
-    console.log("🚀 ~ save ~ isGuiDuyet", isGuiDuyet)
     this.setValidator(isGuiDuyet);
     let body = this.formData.value;
     if (this.formData.value.soQd) {
       body.soQd = this.formData.value.soQd + "/" + this.maQd;
     }
     body.fileDinhKems = this.fileDinhKem;
-    body.cts = this.dataTable;
-    console.log(body);
+    body.children = this.dataTable;
     let data = await this.createUpdate(body);
-    console.log("🚀 ~ save ~ data", data)
     if (data) {
       if (isGuiDuyet) {
-        this.approve(data.id, STATUS.BAN_HANH, "Bạn có muốn ban hành điều chỉnh ?");
+        this.idInput = data.id;
+        this.pheDuyet();
       } else {
         this.goBack()
       }
     }
   }
 
-  async loadChiTiet(id: number) {
-    if (id > 0) {
-      let res = await this.quyetDinhGiaoNvXuatHangService.getDetail(id);
-      const data = res.data;
-      this.helperService.bidingDataInFormGroup(this.formData, data);
-      this.formData.patchValue({
-        soQd: data.soQd?.split("/")[0],
-        soQdGoc: data.soQdGoc,
-      });
-
+  pheDuyet() {
+    let trangThai = '';
+    let msg = '';
+    switch (this.formData.value.trangThai) {
+      case STATUS.TU_CHOI_TP:
+      case STATUS.TU_CHOI_LDC:
+      case STATUS.DU_THAO: {
+        trangThai = STATUS.CHO_DUYET_TP;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
+        break;
+      }
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.CHO_DUYET_LDC;
+        msg = MESSAGE.GUI_DUYET_CONFIRM;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC: {
+        msg = MESSAGE.BAN_HANH_CONFIRM;
+        trangThai = STATUS.BAN_HANH;
+        break;
+      }
     }
-    ;
+    this.approve(this.idInput, trangThai, msg);
   }
 
-  index = 0;
-  async showDetail($event, index) {
+  tuChoi() {
+    let trangThai = '';
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_TP: {
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC: {
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      }
+    }
+    this.reject(this.idInput, trangThai)
+  }
 
+  async loadChiTiet(id: number) {
+    if (id > 0) {
+      let data = await this.detail(id);
+      this.formData.patchValue({
+        soQd: data.soQd.split('/')[0]
+      })
+      this.dataTable = data.children;
+    };
+  }
+
+  isDisabled() {
+    let trangThai = this.formData.value.trangThai;
+    if (trangThai == STATUS.BAN_HANH || trangThai == STATUS.CHO_DUYET_TP || trangThai == STATUS.CHO_DUYET_LDC) {
+      return true
+    }
+    return false;
   }
 
   getNameFileQD($event: any) {
