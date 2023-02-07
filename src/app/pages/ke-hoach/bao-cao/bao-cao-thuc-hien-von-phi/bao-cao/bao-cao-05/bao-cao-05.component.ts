@@ -14,7 +14,7 @@ import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/ba
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { findIndex, getHead, getTail } from 'src/app/Utility/func';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber, NOT_OK, OK, sumNumber } from "src/app/Utility/utils";
+import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber, NOT_OK, OK, QUATITY, sumNumber } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
 export class ItemData {
@@ -66,6 +66,8 @@ export class BaoCao05Component implements OnInit {
     listIdDelete = "";
     trangThaiPhuLuc = '1';
     idBaoCao: string;        //id bao cao to
+    amount = AMOUNT;
+    quatity = QUATITY;
 
     //trang thai cac nut
     status = false;

@@ -11,7 +11,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienVonPhi.service';
 import { displayNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
-import { BOX_NUMBER_WIDTH, DON_VI_TIEN, MONEY_LIMIT, NOT_OK, OK, Utils } from "src/app/Utility/utils";
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, MONEY_LIMIT, NOT_OK, OK, QUATITY, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
 export class ItemData {
@@ -69,6 +69,9 @@ export class BaoCao03Component implements OnInit {
     trangThaiPhuLuc = '3';
     luyKes: any[] = []          // lay bao cao nam
     scrollX = (350 + 9 * BOX_NUMBER_WIDTH + 400).toString() + 'px';
+    amount = AMOUNT;
+    quatity = QUATITY;
+
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;

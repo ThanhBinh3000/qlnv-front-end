@@ -12,7 +12,7 @@ import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/ba
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { addChild, addHead, addParent, deleteRow, displayNumber, exchangeMoney, findIndex, getHead, getTail, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
-import { BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, NOT_OK, OK } from "src/app/Utility/utils";
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, NOT_OK, OK, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
 export class ItemData {
@@ -65,6 +65,8 @@ export class BaoCao04axComponent implements OnInit {
     trangThaiPhuLuc = '1';
     idBaoCao: string;        //id bao cao to
     scrollX: string;
+    amount = AMOUNT;
+    quatity = QUATITY;
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;

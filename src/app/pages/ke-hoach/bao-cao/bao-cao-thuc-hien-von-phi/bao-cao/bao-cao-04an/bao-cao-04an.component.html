@@ -173,8 +173,8 @@
                         <ng-container *ngFor="let kv of editCache[item.id].data.listCtiet">
                             <ng-container *ngIf="kv.loaiMatHang == 0">
                                 <td>
-                                    <fm-input-number class="search__input" [(ngModel)]="kv.sl"
-                                        (ngModelChange)="getColTotal(item.id)"></fm-input-number>
+                                    <input class="money-input" currencyMask [options]="amount" [(ngModel)]="kv.sl"
+                                        (ngModelChange)="getColTotal(item.id)" />
                                 </td>
                             </ng-container>
                         </ng-container>
