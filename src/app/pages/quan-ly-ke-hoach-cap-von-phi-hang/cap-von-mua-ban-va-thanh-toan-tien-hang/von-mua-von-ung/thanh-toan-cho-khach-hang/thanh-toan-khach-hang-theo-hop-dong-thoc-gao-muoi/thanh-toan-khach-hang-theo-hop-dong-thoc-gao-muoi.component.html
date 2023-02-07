@@ -249,9 +249,8 @@
                                     {{ displayValue(editCache[data.id].data.soConDuocTt) }}
                                 </td>
                                 <td>
-                                    <fm-input-number class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.soDuyetTtLanNay">
-                                    </fm-input-number>
+                                    <input class="money-input" currencyMask [options]="amount"
+                                        [(ngModel)]="editCache[data.id].data.soDuyetTtLanNay" />
                                 </td>
                                 <td>
                                     <nz-date-picker class="search__input"
@@ -267,16 +266,14 @@
                                         [(ngModel)]="editCache[data.id].data.uyNhiemChiNienDoNs" />
                                 </td>
                                 <td>
-                                    <fm-input-number class="search__input"
+                                    <input class="money-input" currencyMask [options]="amount"
                                         [(ngModel)]="editCache[data.id].data.uyNhiemChiCapUng"
-                                        (ngModelChange)="changeModel(data.id)">
-                                    </fm-input-number>
+                                        (ngModelChange)="changeModel(data.id)" />
                                 </td>
                                 <td>
-                                    <fm-input-number class="search__input"
+                                    <input class="money-input" currencyMask [options]="amount"
                                         [(ngModel)]="editCache[data.id].data.uyNhiemChiCapVon"
-                                        (ngModelChange)="changeModel(data.id)">
-                                    </fm-input-number>
+                                        (ngModelChange)="changeModel(data.id)" />
                                 </td>
                                 <td>
                                     {{ displayValue(editCache[data.id].data.uyNhiemChiTong) }}

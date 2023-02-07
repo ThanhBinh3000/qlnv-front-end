@@ -207,9 +207,9 @@
                                     </fm-input-number>
                                 </td>
                                 <td>
-                                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.donGia"
-                                        (ngModelChange)="changeModel(data.id)">
-                                    </fm-input-number>
+                                    <input class="money-input" currencyMask [options]="amount"
+                                        [(ngModel)]="editCache[data.id].data.donGia"
+                                        (ngModelChange)="changeModel(data.id)" />
                                 </td>
                                 <td>
                                     {{ displayValue(editCache[data.id].data.giaTriHd) }}
@@ -226,10 +226,9 @@
                                     </nz-date-picker>
                                 </td>
                                 <td>
-                                    <fm-input-number class="search__input"
+                                    <input class="money-input" currencyMask [options]="amount"
                                         [(ngModel)]="editCache[data.id].data.uyNhiemChiSoTien"
-                                        (ngModelChange)="changeModel(data.id)">
-                                    </fm-input-number>
+                                        (ngModelChange)="changeModel(data.id)" />
                                 </td>
                                 <td>
                                     {{ displayValue(editCache[data.id].data.luyKeSauLanNopNay) }}

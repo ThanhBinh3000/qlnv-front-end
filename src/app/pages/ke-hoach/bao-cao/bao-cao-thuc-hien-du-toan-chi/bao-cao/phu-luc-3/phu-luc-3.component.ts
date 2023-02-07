@@ -10,7 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { addChild, addHead, addParent, deleteRow, displayNumber, divNumber, exchangeMoney, getHead, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
-import { DON_VI_TIEN, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
+import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { DIADIEM } from '../bao-cao.constant';
 
@@ -99,6 +99,8 @@ export class PhuLucIIIComponent implements OnInit {
     initItem: ItemData = new ItemData();
     total: ItemData = new ItemData();
     scrollX = '5900px'
+    amount = AMOUNT;
+    quatity = QUATITY;
     //trang thai cac nut
     status = false;
     statusEdit: boolean;
