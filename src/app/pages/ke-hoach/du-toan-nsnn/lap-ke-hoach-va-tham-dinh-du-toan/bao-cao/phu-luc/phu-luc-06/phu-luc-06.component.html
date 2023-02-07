@@ -181,9 +181,9 @@
                                         [(ngModel)]="editCache[data.id].data.dviTinh" />
                                 </td>
                                 <td>
-                                    <fm-input-number nz-input class="search__input"
+                                    <input class="money-input" currencyMask
                                         [(ngModel)]="editCache[data.id].data.donGiaTdTheoQd"
-                                        (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                        (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                                 </td>
                                 <td>
                                     <fm-input-number nz-input class="search__input"

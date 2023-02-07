@@ -15,3 +15,13 @@
     background-color: rgb(130, 180, 238);
     color: #000;
 }
+
+.money-input {
+    border: 1px solid #bbb8b8;
+    height: inherit;
+    width: 100%;
+}
+
+.money-input:focus-visible {
+    outline: none !important;
+}

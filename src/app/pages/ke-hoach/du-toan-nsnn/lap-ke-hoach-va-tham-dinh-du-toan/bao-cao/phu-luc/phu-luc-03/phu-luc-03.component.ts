@@ -10,7 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber, sumNumber } from 'src/app/Utility/utils';
+import { AMOUNT, displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber, sumNumber } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 
 export class ItemData {
@@ -67,6 +67,7 @@ export class PhuLuc03Component implements OnInit {
   //nho dem
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   userInfo: any;
+  amount = AMOUNT;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,

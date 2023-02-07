@@ -8,7 +8,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { displayNumber, exchangeMoney, getHead, getTail, sortByIndex, sumNumber } from 'src/app/Utility/func';
-import { DON_VI_TIEN, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
+import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { DANH_MUC } from './bieu-mau-13-3.constant';
 
@@ -65,7 +65,7 @@ export class BieuMau133Component implements OnInit {
 	isDataAvailable = false;
 	//nho dem
 	editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
-
+	amount = AMOUNT;
 	constructor(
 		private _modalRef: NzModalRef,
 		private spinner: NgxSpinnerService,

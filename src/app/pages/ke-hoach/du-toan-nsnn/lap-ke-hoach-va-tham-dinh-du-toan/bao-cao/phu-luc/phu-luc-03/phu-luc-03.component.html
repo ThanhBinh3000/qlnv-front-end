@@ -151,16 +151,16 @@
                             </ng-container>
                             <ng-template #editAppraisal>
                                 <td>
-                                    <fm-input-number nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.thucHienNamTruoc"></fm-input-number>
+                                    <input class="money-input" currencyMask
+                                        [(ngModel)]="editCache[data.id].data.thucHienNamTruoc" [options]="amount" />
                                 </td>
                                 <td>
-                                    <fm-input-number nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.dtoanNamHtai"></fm-input-number>
+                                    <input class="money-input" currencyMask
+                                        [(ngModel)]="editCache[data.id].data.dtoanNamHtai" [options]="amount" />
                                 </td>
                                 <td>
-                                    <fm-input-number nz-input class="search__input"
-                                        [(ngModel)]="editCache[data.id].data.uocThNamHtai"></fm-input-number>
+                                    <input class="money-input" currencyMask
+                                        [(ngModel)]="editCache[data.id].data.uocThNamHtai" [options]="amount" />
                                 </td>
                                 <td>
                                     {{editCache[data.id].data.dmucNamDtoan}}
