@@ -36,7 +36,7 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     private qdPdKetQuaBanDauGiaService: QdPdKetQuaBanDauGiaService,
     private thongTinDauGiaService: ThongTinDauGiaService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, hopDongXuatHangService);
+    super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBanDauGiaService);
     this.formData = this.fb.group({
       id: [],
       nam: [''],
@@ -105,39 +105,31 @@ export class QuanlyHopdongComponent extends Base2Component implements OnInit {
     }
   }
 
-  async approve() {
+  async pheDuyet() {
     await this.spinner.show()
     if (this.validateData()) {
-      let body = {
-        id: this.id,
-        trangThai: STATUS.DA_HOAN_THANH
-      }
-      // let res = await this.kqLcnt.approve(body);
-      // if (res.msg == MESSAGE.SUCCESS) {
-      //   this.notification.success(MESSAGE.SUCCESS, MESSAGE.THAO_TAC_SUCCESS);
-      //   this.back();
-      // } else {
-      //   this.notification.error(MESSAGE.ERROR, res.msg);
-      // }
+      this.approve(this.id, STATUS.DA_HOAN_THANH, "Bạn có muốn hoành thành thực hiện hợp đồng ?")
     }
     await this.spinner.hide()
   }
 
   validateData(): boolean {
     let result = true;
-    this.dataTable.forEach(item => {
-      if (item.hopDong) {
-        if (item.hopDong.trangThai != STATUS.DA_KY) {
-          this.notification.error(MESSAGE.ERROR, "Vui lòng ký tất cả hợp đồng cho các gói thầu");
-          result = false;
-          return
+    if (this.dataTable && this.dataTable.length > 0) {
+      this.dataTable.forEach(item => {
+        if (item) {
+          if (item.trangThai != STATUS.DA_KY) {
+            this.notification.error(MESSAGE.ERROR, "Vui lòng ký tất cả hợp đồng cho các gói thầu");
+            result = false;
+            return
+          }
         }
-      } else {
-        this.notification.error(MESSAGE.ERROR, "Vui lòng thêm các hợp đồng cho các gói thầu");
-        result = false;
-        return
-      }
-    });
+      });
+    } else {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng thêm hợp đồng");
+      result = false;
+      return
+    }
     return result;
   }
 

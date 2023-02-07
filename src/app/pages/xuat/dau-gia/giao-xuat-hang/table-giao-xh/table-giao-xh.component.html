@@ -51,8 +51,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="goDetail(null)"
-          *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_QDGNVXH_THEM')">
+        <button type="button" class="btn btn-main" (click)="goDetail(null)" *ngIf="userService.isCuc() ">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Tạo quyết định</span>
         </button>
@@ -186,15 +185,13 @@
             <td>{{ data.tenTrangThai }}</td>
             <td>{{ data.tenTrangThaiXh }}</td>
             <td class="text-left">
-              <a (click)="goDetail(data.id,'XHDTQG_PTDG_QDGNVXH_XEM')" *ngIf="data.trangThai == STATUS.BAN_HANH ">
+              <a *ngIf="data.trangThai == STATUS.DA_DUYET_LDC" (click)="goDetail(data.id,'XHDTQG_PTDG_QDGNVXH_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
-                               && userService.isTongCuc()" (click)="goDetail(data.id,'XHDTQG_PTDG_QDGNVXH_THEM')">
+              <a *ngIf="data.trangThai != STATUS.DA_DUYET_LDC" (click)="goDetail(data.id,'XHDTQG_PTDG_QDGNVXH_THEM')">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isTongCuc()"
-                (click)="delete(data,'XHDTQG_PTDG_QDGNVXH_XOA')">
+              <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
@@ -222,6 +219,6 @@
   </div>
 </div>
 <div *ngIf="isDetail" class="chi-tiet">
-  <app-themmoi-qdinh-nhap-xuat-hang [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
-  </app-themmoi-qdinh-nhap-xuat-hang>
+  <app-create-giao-xh [idInput]="idSelected" [loaiVthh]="loaiVthh" (showListEvent)="showList()">
+  </app-create-giao-xh>
 </div>
