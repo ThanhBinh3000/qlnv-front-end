@@ -181,7 +181,7 @@ export class NopTienThuaComponent implements OnInit {
         this.baoCao.ttNhan.fileList = [];
         this.baoCao.ttGui.listIdDeleteFiles = [];
         this.baoCao.ttNhan.listIdDeleteFiles = [];
-        this.updateSoDu();
+        // this.updateSoDu();
         this.updateEditCache();
         this.getStatusButton();
     }
@@ -307,7 +307,7 @@ export class NopTienThuaComponent implements OnInit {
                     }
                     this.baoCao.ttGui.listFile = [];
                     this.baoCao.ttNhan.listFile = [];
-                    this.updateSoDu();
+                    // this.updateSoDu();
                     this.updateEditCache();
                     this.getStatusButton();
                 } else {
