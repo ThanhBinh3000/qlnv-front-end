@@ -12,24 +12,22 @@ import {UserLogin} from 'src/app/models/userlogin';
 import {DonviService} from 'src/app/services/donvi.service';
 import {UserService} from 'src/app/services/user.service';
 import {convertTrangThai} from 'src/app/shared/commonFunction';
-import {ThongBaoDauGiaTaiSanService} from 'src/app/services/thongBaoDauGiaTaiSan.service';
 import {Globals} from 'src/app/shared/globals';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
 import {
   DialogDanhSachHangHoaComponent
-} from "../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";
-import {CanCuXacDinhPag, ThongTinKhaoSatGia} from "../../../models/DeXuatPhuongAnGia";
-import {DinhMucPhiNxBq} from "../../../models/DinhMucPhi";
-import {QlDinhMucPhiService} from "../../../services/qlnv-kho/QlDinhMucPhi.service";
-import {DanhMucDinhMucService} from "../../../services/danh-muc-dinh-muc.service";
+} from "../../../../components/dialog/dialog-danh-sach-hang-hoa/dialog-danh-sach-hang-hoa.component";;
+import {DinhMucPhiNxBq} from "../../../../models/DinhMucPhi";
+import {QlDinhMucPhiService} from "../../../../services/qlnv-kho/QlDinhMucPhi.service";
+import {DanhMucDinhMucService} from "../../../../services/danh-muc-dinh-muc.service";
 
 @Component({
-  selector: 'app-dinh-muc-phi-bao-quan',
-  templateUrl: './dinh-muc-phi-bao-quan.component.html',
-  styleUrls: ['./dinh-muc-phi-bao-quan.component.scss']
+  selector: 'app-dinh-muc-phi-nhap-xuat-bao-quan',
+  templateUrl: './dinh-muc-phi-nhap-xuat-bao-quan.component.html',
+  styleUrls: ['./dinh-muc-phi-nhap-xuat-bao-quan.component.scss']
 })
-export class DinhMucPhiBaoQuanComponent implements OnInit {
-
+export class DinhMucPhiNhapXuatBaoQuanComponent implements OnInit {
+  @Input() capDvi: number;
   @Input() typeVthh: string;
   @Input() idInput: number;
   qdTCDT: string = MESSAGE.QD_TCDT;

@@ -71,7 +71,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
   ) {
     this.formData = this.fb.group({
       id: [null],
-      cloaiVthh: [null, [Validators.required]],
+      cloaiVthh: [null],
       tenCloaiVthh: [null],
       hinhThucBq: [null, [Validators.required]],
       loaiDinhMuc: [null, [Validators.required]],
@@ -85,7 +85,7 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
     })
     this.formDataChinhSua = this.fb.group({
       id: [null],
-      cloaiVthh: [null, [Validators.required]],
+      cloaiVthh: [null],
       tenCloaiVthh: [null],
       hinhThucBq: [null, [Validators.required]],
       loaiDinhMuc: [null, [Validators.required]],
@@ -229,14 +229,15 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
         maDinhMuc: data.maDinhMuc,
         tenDinhMuc: data.tenDinhMuc,
         dviTinh: data.dviTinh,
+        trangThai: data.trangThai,
       })
       this.helperService.markFormGroupTouched(this.formDataChinhSua);
+      console.log(this.formDataChinhSua,'22222');
       if (this.formDataChinhSua.invalid) {
         return;
       }
     } else {
       this.helperService.markFormGroupTouched(this.formData);
-      console.log(this.formDataChinhSua.invalid);
       if (this.formData.invalid) {
         return;
       }
