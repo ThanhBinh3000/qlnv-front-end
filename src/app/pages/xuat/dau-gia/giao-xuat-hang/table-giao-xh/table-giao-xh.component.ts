@@ -5,21 +5,17 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { UserService } from "../../../../../services/user.service";
-
-import {
-  QuyetDinhDchinhKhBdgService
-} from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
 import { QuyetDinhGiaoNvXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
 
 @Component({
-  selector: 'app-danh-sach-giao-nhap-hang',
-  templateUrl: './danh-sach-giao-nhap-hang.component.html',
-  styleUrls: ['./danh-sach-giao-nhap-hang.component.scss'],
+  selector: 'app-table-giao-xh',
+  templateUrl: './table-giao-xh.component.html',
+  styleUrls: ['./table-giao-xh.component.scss'],
 })
-export class DanhSachGiaoNhapHangComponent extends Base2Component implements OnInit {
+export class TableGiaoXh extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   constructor(
