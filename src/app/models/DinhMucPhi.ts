@@ -4,7 +4,8 @@ export class DinhMucPhiNxBq {
   id: number;
   maDinhMuc: string;
   tenDinhMuc: string;
-  apDungTaiCuc: string;
+  apDungTai: string;
+  apDungTaiStr: string;
   loaiDinhMuc:string;
   loaiBaoQuan:string;
   htBaoQuan:string;

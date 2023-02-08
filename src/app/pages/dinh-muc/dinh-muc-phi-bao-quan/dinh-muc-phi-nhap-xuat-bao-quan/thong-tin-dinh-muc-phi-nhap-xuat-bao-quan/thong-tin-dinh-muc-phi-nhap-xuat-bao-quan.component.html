@@ -13,9 +13,20 @@
               nzDescription="{{formData.value.lyDoTuChoi}}">
     </nz-alert>
     <div class="btn-group">
-      <button type="button" class="btn btn-sub" (click)="goBack()">
+      <button type="button" class="btn btn-sub" (click)="quayLai(capDvi)">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
+      </button>
+      <button type="button" class="btn btn-info ml-2" (click)="banHanh(formData.value.id,STATUS.BAN_HANH)"
+              *ngIf="formData.value.trangThai == STATUS.DU_THAO && formData.value.id > 0">
+        <i class="icon htvbdh_chuyenvanthu"></i>
+        <span>Ban hành</span>
+      </button>
+      <button type="button" class="btn btn-outline-danger ml-2"
+              (click)="ngungHieuLuc(formData.value.id,STATUS.HET_HIEU_LUC)"
+              *ngIf="formData.value.trangThai == STATUS.BAN_HANH && formData.value.id > 0">
+        <i class="icon htvbdh_chuyenvanthu"></i>
+        <span>Ngừng hiệu lực văn bản </span>
       </button>
       <button *ngIf="!isViewDetail"
               type="button" class="btn btn-main ml-2" (click)="save()">
@@ -35,7 +46,7 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="16">
+        <div nz-col nzSpan="11">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Trích yếu</nz-form-label>
@@ -43,12 +54,32 @@
             </nz-form-control>
           </nz-form-item>
         </div>
-        <div nz-col nzSpan="4">
-          <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Ngày ký
+        <div nz-col nzSpan="3">
+          <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Ngày ký QĐ
           </nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy"
                             formControlName="ngayKy" nzPlaceHolder="Ngày ký"
+                            [nzDisabled]="isViewDetail">
+            </nz-date-picker>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="3">
+          <nz-form-label [nzNoColon]="true" nzRequired class="label-color-kh"> Ngày hiệu lực
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy"
+                            formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
+                            [nzDisabled]="isViewDetail">
+            </nz-date-picker>
+          </nz-form-control>
+        </div>
+        <div nz-col nzSpan="3" *ngIf="formData.value.trangThai == STATUS.HET_HIEU_LUC">
+          <nz-form-label [nzNoColon]="true" class="label-color-kh"> Ngày hết hiệu lực
+          </nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+            <nz-date-picker class="search__input" nzFormat="dd/MM/yyyy"
+                            formControlName="ngayHetHieuLuc"
                             [nzDisabled]="isViewDetail">
             </nz-date-picker>
           </nz-form-control>
@@ -70,31 +101,28 @@
   </nz-card>
   <div style="height: 30px"></div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-    <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable"
+    <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
+              [nzData]="dataTableDetail"
               nzBordered>
       <thead>
       <tr>
-        <th width="45px" rowspan="3">
-          <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                 [nzIndeterminate]="indeterminate"></label>
-        </th>
         <th rowspan="3">STT</th>
         <th rowspan="3">Mã định mức</th>
         <th rowspan="3">Tên định mức</th>
         <th rowspan="3">Áp dụng tại cục</th>
         <th rowspan="3" [nzWidth]="'150px'">Đơn vị tính</th>
         <th rowspan="3">Tổng định mức</th>
-        <th colspan="5">Mức chi giao văn phòng Tổng cục</th>
-        <th colspan="5">Mức chi giao cục DTNN KV</th>
-        <th rowspan="3" *ngIf="userService.isTongCuc()">Hành động</th>
+        <th colspan="5">Mức chi giao văn phòng {{capDvi == 1 ? 'Tổng cục' : 'cục'}}</th>
+        <th colspan="5">{{capDvi == 1 ? 'Mức chi giao cục DTNN KV' : 'Mức chi giao Chi cục DTNN trực thuộc'}}</th>
+        <th rowspan="3">Hành động</th>
       </tr>
       <tr>
         <th rowspan="2">Tổng cộng</th>
         <th colspan="3">Văn phòng chủ động</th>
-        <th rowspan="2">Tổng cục điều hành</th>
+        <th rowspan="2">{{capDvi== 1 ? 'Tổng cục':'Cục'}} điều hành</th>
         <th rowspan="2">Tổng cộng</th>
-        <th colspan="3">Cục chủ động thực hiện</th>
-        <th rowspan="2">Tổng cục điều hành</th>
+        <th colspan="3">{{capDvi== 1 ? 'Cục':'Chi cục'}} chủ động thực hiện</th>
+        <th rowspan="2">{{capDvi== 1 ? 'Tổng cục':'Cục'}} điều hành</th>
       </tr>
       <tr>
         <th [nzWidth]="'150px'">Cộng</th>
@@ -104,8 +132,7 @@
         <th>NV chuyên môn</th>
         <th>Thanh toán cá nhân</th>
       </tr>
-      <tr *ngIf="userService.isTongCuc()">
-        <th></th>
+      <tr>
         <th></th>
         <th>
           <nz-select [(ngModel)]="rowItem.maDinhMuc" [nzDisabled]="isViewDetail" (ngModelChange)="changeDm('ma')"
@@ -135,8 +162,7 @@
             style="width:200px"
             nzPlaceHolder="Chọn đơn vị áp dụng"
             nzAllowClear
-            [(ngModel)]=rowItem.apDungTaiCuc
-          >
+            [(ngModel)]=rowItem.apDungTai>
             <nz-option *ngFor="let option of listDonVi" [nzValue]="option.maDvi"
                        [nzLabel]="option.tenDvi"></nz-option>
           </nz-select>
@@ -204,15 +230,12 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let data of dataTable; let idx = index">
+      <tr *ngFor="let data of dataTableDetail; let idx = index">
         <ng-container *ngIf="(dataEdit && dataEdit[idx] && !dataEdit[idx].edit); else editTemplate">
-          <th width="45px">
-            <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"></label>
-          </th>
           <td>{{idx + 1}}</td>
           <td>{{data.maDinhMuc}}</td>
           <td>{{data.tenDinhMuc}}</td>
-          <td>Áp dụng tại cục</td>
+          <td>{{data.apDungTai ? data.apDungTaiStr : 'Tất cả '}}</td>
           <td>{{data.donViTinh}}</td>
           <td>{{data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc + data.nvChuyenMonKv + data.ttCaNhanKv + data.tcDieuHanhKv}}</td>
           <td>{{data.nvChuyenMonTc + data.ttCaNhanTc + data.tcDieuHanhTc}}</td>
@@ -236,41 +259,33 @@
         </ng-container>
         <ng-template #editTemplate>
           <td></td>
-          <td></td>
           <td>
-            <nz-select [(ngModel)]="dataEdit[idx].data.maDinhMuc" [nzDisabled]="true"
-                       (ngModelChange)="changeDm('ma')"
-                       nzAllowClear="true">
-              <nz-option *ngFor="let p of listDmDinhMuc" [nzValue]="p.ma" [nzLabel]="p.ma">
-              </nz-option>
-              <ng-template #error let-control>
-                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                </ng-container>
-              </ng-template>
-            </nz-select>
+            {{dataEdit[idx].data.maDinhMuc}}
+            <!--            <nz-select [(ngModel)]="dataEdit[idx].data.maDinhMuc"-->
+            <!--                       nzAllowClear="true">-->
+            <!--              <nz-option *ngFor="let p of listDmDinhMuc" [nzValue]="p.ma" [nzLabel]="p.ma">-->
+            <!--              </nz-option>-->
+            <!--            </nz-select>-->
           </td>
           <td>
-            <nz-select [(ngModel)]="dataEdit[idx].data.tenDinhMuc" [nzDisabled]="true"
-                       (ngModelChange)="changeDm('ten')"
-                       nzAllowClear="true">
-              <nz-option *ngFor="let p of listDmDinhMuc" [nzValue]="p.ten" [nzLabel]="p.ten">
-              </nz-option>
-              <ng-template #error let-control>
-                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                </ng-container>
-              </ng-template>
-            </nz-select>
+            {{dataEdit[idx].data.tenDinhMuc}}
+            <!--            <nz-select [(ngModel)]="dataEdit[idx].data.tenDinhMuc" [nzDisabled]="true"-->
+            <!--                       nzAllowClear="true">-->
+            <!--              <nz-option *ngFor="let p of listDmDinhMuc" [nzValue]="p.ten" [nzLabel]="p.ten">-->
+            <!--              </nz-option>-->
+            <!--            </nz-select>-->
           </td>
           <td>
-            <nz-select [(ngModel)]="dataEdit[idx].data.apDungTaiCuc" [nzDisabled]="isViewDetail"
-                       nzAllowClear="true">
-              <nz-option *ngFor="let p of listLoaiDinhMuc" [nzValue]="p.ma" [nzLabel]="p.ten">
-              </nz-option>
-              <ng-template #error let-control>
-                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
-                </ng-container>
-              </ng-template>
-            </nz-select>
+            {{dataEdit[idx].data.apDungTai ? dataEdit[idx].data.apDungTai : 'Tất cả '}}
+            <!--            <nz-select [(ngModel)]="dataEdit[idx].data.apDungTai" [nzDisabled]="isViewDetail"-->
+            <!--                       nzAllowClear="true">-->
+            <!--              <nz-option *ngFor="let p of listLoaiDinhMuc" [nzValue]="p.ma" [nzLabel]="p.ten">-->
+            <!--              </nz-option>-->
+            <!--              <ng-template #error let-control>-->
+            <!--                <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}-->
+            <!--                </ng-container>-->
+            <!--              </ng-template>-->
+            <!--            </nz-select>-->
           </td>
           <td>
             <input type="text" [disabled]="true" [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>
@@ -334,24 +349,12 @@
                              [nzParser]="globals.parser">
             </nz-input-number>
           </td>
-          <!--          <td>-->
-          <!--            <nz-form-control [nzErrorTip]="error">-->
-          <!--              <nz-date-picker [(ngModel)]="dataEdit[idx].data.ngayHieuLuc" nzFormat="dd/MM/yyyy"-->
-          <!--                              id="ngay-hieu-luc-edit"-->
-          <!--                              class="search__input">-->
-          <!--              </nz-date-picker>-->
-          <!--              <ng-template #error let-control>-->
-          <!--                <ng-container *ngIf="dataEdit[idx].data.ngayHieuLuc">{{globals.prop.REQUIRED}}-->
-          <!--                </ng-container>-->
-          <!--              </ng-template>-->
-          <!--            </nz-form-control>-->
-          <!--          </td>-->
           <td>
-            <!--              <a class="save" (click)="saveDinhMuc(idx)">-->
-            <!--                <i class="fa fa-save"></i>-->
-            <!--              </a>-->
-            <!--              <a (click)="cancelEdit(idx)">-->
-            <!--                <i class="fa fa-ban do"></i> </a>-->
+            <a class="save" (click)="saveDinhMuc(idx)">
+              <i class="fa fa-save"></i>
+            </a>
+            <a (click)="cancelEdit(idx)">
+              <i class="fa fa-ban do"></i> </a>
           </td>
         </ng-template>
 

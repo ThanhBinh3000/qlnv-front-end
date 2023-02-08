@@ -29,7 +29,7 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
     super(httpClient, storageService, notification, spinner, modal, deXuatKhBanTrucTiepService);
     this.formData = this.fb.group({
       namKh: [dayjs().get('year')],
-      soKeHoach: [],
+      soDxuat: [],
       ngayTao: [],
       ngayPduyet: [],
       loaiVthh: [],
@@ -39,7 +39,7 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
 
     this.filterTable = {
       namKh: '',
-      soKeHoach: '',
+      soDxuat: '',
       ngayTao: '',
       ngayPduyet: '',
       soQdPd: '',

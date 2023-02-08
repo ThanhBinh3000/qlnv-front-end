@@ -25,6 +25,6 @@ export enum PATH {
   BAN_TRUC_TIEP = "ban-truc-tiep",
 
   // Menu 2
-  DX_KH_BTT = "dx-kh-btt"
-
+  DX_KH_BTT = "dx-kh-btt",
+  TH_KH_BTT = "thop-kh-btt"
 }

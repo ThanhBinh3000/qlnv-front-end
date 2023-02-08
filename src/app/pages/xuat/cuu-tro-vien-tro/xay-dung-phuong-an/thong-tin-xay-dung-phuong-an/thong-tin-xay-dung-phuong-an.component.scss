@@ -10,7 +10,7 @@
   background-color: #ededed;
 }
 .bg-selected td{
-  background-color: #efefef;
+  background-color: #ebedff;
 }
 .title-card {
   width: 100%;
@@ -22,4 +22,9 @@
   button {
     float: right;
   }
+}
+
+:host ::ng-deep .ant-statistic-content {
+  color: #001CFF;
+  font-size: 18px;
 }

@@ -9,10 +9,10 @@
   </ul>
 </nz-affix>
 <div class="contentBor chi-tieu__body giao-ke-hoach">
-    <ng-container *ngIf="tabSelected == '01'">
-      <app-dinh-muc-phi-nhap-xuat-bao-quan [capDvi]="1"></app-dinh-muc-phi-nhap-xuat-bao-quan>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == '02'">
-      <app-dinh-muc-phi-nhap-xuat-bao-quan [capDvi]="2"></app-dinh-muc-phi-nhap-xuat-bao-quan>
-    </ng-container>
+  <ng-container *ngIf="tabSelected == '01'">
+    <app-dinh-muc-phi-nhap-xuat-bao-quan [capDvi]="capDvi"></app-dinh-muc-phi-nhap-xuat-bao-quan>
+  </ng-container>
+  <ng-container *ngIf="tabSelected == '02'">
+    <app-dinh-muc-phi-nhap-xuat-bao-quan [capDvi]="capDvi"></app-dinh-muc-phi-nhap-xuat-bao-quan>
+  </ng-container>
 </div>

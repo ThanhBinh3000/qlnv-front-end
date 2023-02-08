@@ -778,7 +778,8 @@ export class CapUngVonChoDvcdComponent implements OnInit {
     // }
 
     statusClass() {
-        if (Utils.statusSave.includes(this.baoCao.ttGui.trangThai)) {
+        const trangThai = this.dataInfo?.preTab == 'cv' ? this.baoCao.ttGui.trangThai : this.baoCao.ttNhan.trangThai;
+        if (Utils.statusSave.includes(trangThai)) {
             return 'du-thao-va-lanh-dao-duyet';
         } else {
             return 'da-ban-hanh';
