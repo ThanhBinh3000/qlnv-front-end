@@ -31,6 +31,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   taiLieuDinhKemList: any[] = [];
   isAddDetail: boolean = false;
   rowItem: DinhMucPhiNxBq = new DinhMucPhiNxBq();
+  dataTableDetail: any[] = [];
   dataEdit: { [key: string]: { edit: boolean; data: DinhMucPhiNxBq } } = {};
   dsQtNsChiTw: any[] = [];
   filterTable: any = {
@@ -54,17 +55,20 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    qlDinhMucPhiService: QlDinhMucPhiService,
+    private qlDinhMucPhiService: QlDinhMucPhiService,
     private danhMucDinhMucService: DanhMucDinhMucService,
     private danhMucService: DanhMucService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService)
     super.ngOnInit()
     this.formData = this.fb.group({
+      id: [''],
       soQd: ['', [Validators.required]],
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       ngayKy: ['', [Validators.required]],
+      ngayHieuLuc: ['', [Validators.required]],
+      ngayHetHieuLuc: [''],
       capDvi: [],
       trichYeu: ['', [Validators.required]],
       listQlDinhMucPhis: [null],
@@ -74,6 +78,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   async ngOnInit() {
+    this.dataTableDetail = [];
     this.spinner.show();
     try {
       await this.getAllLoaiDinhMuc();
@@ -81,7 +86,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       await this.loadDmDinhMuc();
       await this.loadDonVi();
       await this.search();
-      if(this.idInput > 0){
+      if (this.idInput > 0) {
         this.detail(this.idInput);
       }
       this.updateEditCache();
@@ -92,8 +97,38 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     }
   }
 
+
+  async detail(id) {
+    this.spinner.show();
+    try {
+      let res = await this.qlDinhMucPhiService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          const data = res.data;
+          this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.fileDinhKem = data.fileDinhKem;
+          this.dataTableDetail = data.listQlDinhMucPhis;
+          this.dataTableDetail.forEach(item => {
+            item.apDungTaiStr = this.getStrTenDonVi(item.apDungTai);
+          })
+          this.updateEditCache();
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.spinner.hide();
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e);
+      this.spinner.hide();
+    } finally {
+      this.spinner.hide();
+    }
+
+  }
+
+
   save() {
-    if (this.dataTable.length <= 0) {
+    if (this.dataTableDetail.length <= 0) {
       this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập chi tiết định mức phí nhập xuất bảo quản.");
       return;
     }
@@ -104,11 +139,23 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
-    this.formData.value.listQlDinhMucPhis = this.dataTable;
+    this.formData.value.listQlDinhMucPhis = this.dataTableDetail;
     this.formData.value.capDvi = this.capDvi;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
-    console.log(this.formData.value);
     this.createUpdate(this.formData.value)
+  }
+
+  banHanh(id, trangThai) {
+    this.approve(id, trangThai, 'Bạn có chắc chắn muốn ban hành?');
+  }
+
+  quayLai(capDvi) {
+    this.capDvi = capDvi;
+    this.goBack();
+  }
+
+  ngungHieuLuc(id, trangThai) {
+    this.approve(id, trangThai, 'Bạn có chắc chắn muốn ban ngừng hiệu lực văn bản này?');
   }
 
   async loadDmDinhMuc() {
@@ -159,10 +206,39 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.validAddDetailDm();
   }
 
+  changeDmEdit(attr, idx): void {
+    let item;
+    if (attr == 'ma') {
+      item = this.listDmDinhMuc.filter(item => item.maDinhMuc == this.dataEdit[idx].data.maDinhMuc)[0];
+    } else {
+      item = this.listDmDinhMuc.filter(item => item.tenDinhMuc == this.dataEdit[idx].data.tenDinhMuc)[0];
+    }
+    if (item) {
+      this.dataEdit[idx].data.tenDinhMuc = item.tenDinhMuc ? item.tenDinhMuc.toString() : null;
+      this.dataEdit[idx].data.maDinhMuc = item.maDinhMuc ? item.maDinhMuc.toString() : null;
+      this.dataEdit[idx].data.donViTinh = item.dviTinh ? item.dviTinh.toString() : null;
+      this.dataEdit[idx].data.loaiDinhMuc = item.loaiDinhMuc ? item.loaiDinhMuc.toString() : null;
+      this.dataEdit[idx].data.loaiBaoQuan = item.loaiHinhBq ? item.loaiHinhBq.toString() : null;
+      this.dataEdit[idx].data.htBaoQuan = item.hinhThucBq ? item.hinhThucBq.toString() : null;
+      this.dataEdit[idx].data.loaiVthh = item.loaiVthh ? item.loaiVthh.toString() : null;
+      this.dataEdit[idx].data.cloaiVthh = item.cloaiVthh ? item.cloaiVthh.toString() : null;
+    } else {
+      this.dataEdit[idx].data.tenDinhMuc = null;
+      this.dataEdit[idx].data.maDinhMuc = null;
+      this.dataEdit[idx].data.donViTinh = null;
+      this.dataEdit[idx].data.loaiDinhMuc = null;
+      this.dataEdit[idx].data.loaiBaoQuan = null;
+      this.dataEdit[idx].data.htBaoQuan = null;
+      this.dataEdit[idx].data.loaiVthh = null;
+      this.dataEdit[idx].data.cloaiVthh = null;
+    }
+  }
+
   async loadDonVi() {
     const res = await this.donViService.layDonViCon();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDonVi = res.data.filter(item => item.type !== 'PB');
+      console.log(this.listDonVi);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -207,11 +283,29 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.spinner.hide();
       return;
     }
-    this.rowItem.apDungTaiCuc = this.rowItem.apDungTaiCuc ? this.rowItem.apDungTaiCuc.toString() : null;
-    this.dataTable = [...this.dataTable, this.rowItem];
+    if (this.rowItem.apDungTai) {
+      this.rowItem.apDungTai = this.rowItem.apDungTai ? this.rowItem.apDungTai.toString() : null;
+      this.rowItem.apDungTaiStr = this.getStrTenDonVi(this.rowItem.apDungTai);
+    }
+    this.dataTableDetail = [...this.dataTableDetail, this.rowItem];
     this.rowItem = new DinhMucPhiNxBq();
     this.updateEditCache();
     this.isAddDetail = false;
+  }
+
+  getStrTenDonVi(strMaDonVi) {
+    let str = "";
+    if (strMaDonVi) {
+      let arrMaDvi = strMaDonVi.split(",");
+      arrMaDvi.forEach((item) => {
+        this.listDonVi.forEach(donvi => {
+          if (item == donvi.maDvi) {
+            str = str + donvi.tenDvi + ",";
+          }
+        });
+      });
+    }
+    return str.slice(0, -1);
   }
 
   validAddDetailDm() {
@@ -221,18 +315,19 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
   updateEditCache(): void {
-    if (this.dataTable) {
-      this.dataTable.forEach((item, index) => {
+    if (this.dataTableDetail) {
+      this.dataTableDetail.forEach((item, index) => {
         this.dataEdit[index] = {
           edit: false,
           data: {...item},
         };
       });
     }
+
   }
 
   saveEdit(idx: number): void {
-    Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
+    Object.assign(this.dataTableDetail[idx], this.dataEdit[idx].data);
     this.dataEdit[idx].edit = false;
   }
 
@@ -243,9 +338,28 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   cancelEdit(stt: number): void {
     this.dataEdit[stt] = {
-      data: {...this.dataTable[stt]},
+      data: {...this.dataTableDetail[stt]},
       edit: false
     };
+  }
+
+  async saveDinhMuc(idx: number) {
+    let msgRequired = '';
+    //validator
+    if (!this.dataEdit[idx].data.tenDinhMuc) {
+      msgRequired = "Tên định mức không được để trống";
+    } else if (!this.dataEdit[idx].data.maDinhMuc) {
+      msgRequired = "Mã định mức không được để trống";
+    }
+    if (msgRequired) {
+      this.notification.error(MESSAGE.ERROR, msgRequired);
+      this.spinner.hide();
+      return;
+    }
+    this.dataEdit[idx].data.apDungTai = this.dataEdit[idx].data.apDungTai ? this.dataEdit[idx].data.apDungTai.toString() : null;
+    Object.assign(this.dataTableDetail[idx], this.dataEdit[idx].data);
+    this.dataEdit[idx].edit = false;
+    // this.updateEditCache();
   }
 
   deleteItem(index: any) {
@@ -259,7 +373,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       nzWidth: 400,
       nzOnOk: async () => {
         try {
-          this.dataTable.splice(index, 1);
+          this.dataTableDetail.splice(index, 1);
           this.updateEditCache();
         } catch (e) {
           console.log('error', e);

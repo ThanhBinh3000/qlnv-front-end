@@ -62,22 +62,22 @@
     </nz-card>
     <div class="group-button">
       <h3>QUẢN LÝ ĐỊNH MỨC</h3>
-      <div class="buttons">
-        <button type="button" (click)="deleteSelect()" class="btn btn-sub btn-xoa">
-          <i class="fa fa-trash-o do"></i>
-          <span>Xoá</span>
-        </button>
-      </div>
+<!--      <div class="buttons">-->
+<!--        <button type="button" (click)="deleteSelect()" class="btn btn-sub btn-xoa">-->
+<!--          <i class="fa fa-trash-o do"></i>-->
+<!--          <span>Xoá</span>-->
+<!--        </button>-->
+<!--      </div>-->
     </div>
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
       <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false" [nzData]="dataTable"
                 nzBordered>
         <thead>
         <tr>
-          <th width="45px" rowspan="3">
-            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                   [nzIndeterminate]="indeterminate"></label>
-          </th>
+<!--          <th width="45px" rowspan="3">-->
+<!--            <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"-->
+<!--                   [nzIndeterminate]="indeterminate"></label>-->
+<!--          </th>-->
           <th rowspan="3">STT</th>
           <th rowspan="3">Mã định mức</th>
           <th rowspan="3">Tên định mức</th>
@@ -107,7 +107,7 @@
           <th>Thanh toán cá nhân</th>
         </tr>
         <tr *ngIf="userService.isTongCuc()">
-          <th></th>
+<!--          <th></th>-->
           <th></th>
           <th>
             <nz-select [(ngModel)]="rowItem.maDinhMuc" [nzDisabled]="isView" (ngModelChange)="changeDm('ma')"
@@ -229,10 +229,10 @@
         <tbody>
         <tr *ngFor="let data of basicTable.data; let idx = index">
           <ng-container *ngIf="!dataEdit[data.id].edit; else editTemplate">
-            <th width="45px">
-              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                     [nzDisabled]="data.trangThai != '00'"></label>
-            </th>
+<!--            <th width="45px">-->
+<!--              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"-->
+<!--                     [nzDisabled]="data.trangThai != '00'"></label>-->
+<!--            </th>-->
             <td>{{idx + 1}}</td>
             <td>{{data.maDinhMuc}}</td>
             <td>{{data.tenDinhMuc}}</td>
@@ -261,7 +261,7 @@
             </td>
           </ng-container>
           <ng-template #editTemplate>
-            <td></td>
+<!--            <td></td>-->
             <td></td>
             <td>
               <nz-select [(ngModel)]="dataEdit[data.id].data.maDinhMuc" [nzDisabled]="true"

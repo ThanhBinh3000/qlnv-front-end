@@ -13,26 +13,21 @@ export class KiemTraChatLuongComponent implements OnInit {
   constructor(
     private danhMucService: DanhMucService,
     public globals: Globals,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loaiVTHHGetAll();
   }
 
   async loaiVTHHGetAll() {
-    this.tabs = [
-      {
-        giaTri: 'Tất cả',
-        ma: null,
-      },
-    ];
+
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
         res.data.forEach((element) => {
-          element.count = 0;
           this.tabs.push(element);
         });
+        this.selectTab(this.tabs[0].ma);
       }
     }
   }

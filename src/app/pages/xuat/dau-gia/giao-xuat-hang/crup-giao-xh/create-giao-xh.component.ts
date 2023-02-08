@@ -64,7 +64,8 @@ export class CreateGiaoXh extends Base2Component implements OnInit {
       bbHaoDoi: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
-      fileName: []
+      fileName: [],
+      lyDoTuChoi: []
     })
   }
 
