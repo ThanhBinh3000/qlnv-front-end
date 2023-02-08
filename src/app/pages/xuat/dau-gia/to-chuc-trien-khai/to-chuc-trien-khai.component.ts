@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {DanhMucService} from "../../../../services/danhmuc.service";
-import {MESSAGE} from "../../../../constants/message";
+import { Component, OnInit } from '@angular/core';
+import { DanhMucService } from "../../../../services/danhmuc.service";
+import { MESSAGE } from "../../../../constants/message";
 
 @Component({
   selector: 'app-to-chuc-trien-khai',
@@ -20,12 +20,6 @@ export class ToChucTrienKhaiComponent implements OnInit {
   }
 
   async loaiVTHHGetAll() {
-    /*this.tabs = [
-      {
-        giaTri: 'Tất cả',
-        ma: ""
-      }
-    ];*/
     let res = await this.danhMucService.loaiVatTuHangHoaGetAll();
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.length > 0) {
