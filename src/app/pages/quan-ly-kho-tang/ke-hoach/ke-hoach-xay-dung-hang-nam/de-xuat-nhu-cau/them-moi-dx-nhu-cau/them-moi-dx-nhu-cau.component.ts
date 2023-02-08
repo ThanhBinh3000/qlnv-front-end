@@ -186,5 +186,41 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       }
     }
   }
+  calcTong(type) {
+    let sum;
+    if (this.dataTable && this.dataTable.length > 0) {
+      sum = this.dataTable.reduce((prev, cur) => {
+        switch (type) {
+          case '1' : {
+            prev += cur.tmdtDuKien;
+            break;
+          }
+          case '2' : {
+            prev += cur.nstwDuKien;
+            break;
+          }
+          case '3' : {
+            prev += cur.tongSoLuyKe;
+            break;
+          }
+          case '4' : {
+            prev += cur.luyKeNstw;
+            break;
+          }
+          case '5' : {
+            prev += cur.tmdtDuyet;
+            break;
+          }
+          case '6' : {
+            prev += cur.nstwDuyet;
+            break;
+          }
+        }
+        return prev;
+      }, 0);
+    }
+    return sum;
+  }
+
 }
 

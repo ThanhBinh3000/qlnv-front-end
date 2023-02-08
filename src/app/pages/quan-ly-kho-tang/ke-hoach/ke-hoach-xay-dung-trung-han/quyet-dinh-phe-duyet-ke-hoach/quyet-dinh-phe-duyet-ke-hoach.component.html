@@ -41,7 +41,7 @@
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG KHO TÀNG DTQG TRUNG HẠN (5 NĂM)</h3>
       <div class="buttons">
-        <button  type="button" class="btn btn-sub btn-xoa">
+        <button  type="button" class="btn btn-sub btn-xoa" *ngIf="userService.isTongCuc()">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>
         </button>
@@ -49,7 +49,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button  type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
+        <button *ngIf="userService.isTongCuc()"  type="button" class="btn btn-main" (click)="redirectToChiTiet(0, false)">
           <i class="icon htvbdh_soanthao"></i>
           <span>Tạo quyết định</span>
         </button>
