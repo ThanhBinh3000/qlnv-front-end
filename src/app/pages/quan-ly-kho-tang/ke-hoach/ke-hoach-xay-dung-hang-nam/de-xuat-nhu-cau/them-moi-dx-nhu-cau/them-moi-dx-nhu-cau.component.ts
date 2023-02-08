@@ -1,6 +1,6 @@
 
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ThongTinQuyetDinh} from "../../../../../../models/DeXuatKeHoachuaChonNhaThau";
 import {Router} from "@angular/router";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -18,6 +18,7 @@ import {DonviService} from "../../../../../../services/donvi.service";
 import {DanhMucKho} from "../../../danh-muc-du-an/danh-muc-du-an.component";
 import {MESSAGE} from "../../../../../../constants/message";
 import {DanhMucKhoService} from "../../../../../../services/danh-muc-kho.service";
+import {QuyetDinhKhTrungHanService} from "../../../../../../services/quyet-dinh-kh-trung-han.service";
 
 @Component({
   selector: 'app-them-moi-dx-nhu-cau',
@@ -48,35 +49,41 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     private dexuatService : KtKhXdHangNamService,
     private dviService : DonviService,
     private dmKhoService : DanhMucKhoService,
-    private danhMucService : DanhMucService
+    private danhMucService : DanhMucService,
+    private qdTrungHanSv : QuyetDinhKhTrungHanService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dexuatService);
     super.ngOnInit()
     this.formData = this.fb.group({
+      id: [null],
       maDvi : [null],
+      tenDvi : [null],
+      soCongVan : [null, Validators.required],
+      namKeHoach : [null, Validators.required],
+      soQdTrunghan : [null, Validators.required],
+      trichYeu : [null, Validators.required],
+      ngayKy : [null, Validators.required],
       trangThai : ['00'],
       tenTrangThai : ['Dự thảo'],
-      tenDvi : [null],
     });
   }
 
   async ngOnInit() {
     await this.spinner.show();
     try {
-      this.maQd = this.userInfo.MA_QD;
+      this.maQd = '/' + this.userInfo.MA_QD;
       await Promise.all([
+        this.getAllDmKho(),
+        this.getAllLoaiDuAn(),
+        this.getAllQdTrungHan()
       ]);
       if (this.idInput) {
-
+        await this.getDataDetail(this.idInput)
       } else {
         this.formData.patchValue({
           tenDvi : this.userInfo.TEN_DVI
         })
       }
-      await Promise.all([
-        this.getAllDmKho(),
-        this.getAllLoaiDuAn()
-      ]);
     } catch (e) {
       console.log('error: ', e);
       await this.spinner.hide();
@@ -99,6 +106,37 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     }
   }
 
+  async getAllQdTrungHan() {
+    let res = await this.qdTrungHanSv.getListQd();
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listQdKhTh = res.data
+    }
+  }
+
+
+  async getDataDetail(id) {
+    if (id > 0) {
+      let res = await this.dexuatService.getDetail(id);
+      const data = res.data;
+      this.formData.patchValue({
+        id: data.id,
+        maDvi : data.maDvi,
+        tenDvi : data.tenDvi,
+        soCongVan: data.soCongVan ? data.soCongVan.split('/')[0] : '',
+        namKeHoach : data.namKeHoach,
+        soQdTrunghan :data.soQdTrunghan,
+        trichYeu : data.trichYeu,
+        ngayKy : data.ngayKy,
+        trangThai : data.trangThai,
+        tenTrangThai : data.tenTrangThai,
+      });
+      this.fileDinhKem = data.fileDinhKems
+      this.dataTable = data.ctiets;
+      this.updateEditCache()
+    }
+  }
+
+
 
 
   async save(isOther: boolean) {
@@ -108,6 +146,11 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       return;
     }
     let body = this.formData.value;
+    body.maDvi = this.userInfo.MA_DVI
+    body.soCongVan = body.soCongVan + this.maQd
+    body.fileDinhKems = this.fileDinhKem
+    body.ctiets = this.dataTable
+    body.tmdt = this.calcTong('1') ? this.calcTong('1') : 0 ;
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
@@ -222,5 +265,13 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     return sum;
   }
 
+  async updateDx(event) {
+    let arr = this.listQdKhTh.filter(item => item.soCongVan == event);
+    if (arr && arr.length >0) {
+      let result = arr[0];
+      this.dataTable = result.ctiets
+      this.updateEditCache()
+    }
+  }
 }
 

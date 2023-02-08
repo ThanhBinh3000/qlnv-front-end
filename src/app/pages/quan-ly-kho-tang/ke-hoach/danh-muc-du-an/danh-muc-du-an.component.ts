@@ -389,6 +389,8 @@ export class DanhMucKho {
   trangThai: string;
   tenTrangThai: string;
 
+  vonDauTu : number;
+
   maDvi : string
 
   loaiDuAn : string;

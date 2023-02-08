@@ -3,7 +3,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
         <span *ngIf="isTongHop"
-              [ngClass]="formData.value.trangThai == globals.prop.NHAP_DA_DUYET_LDTC ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+              [ngClass]="formData.value.trangThai == globals.prop.NHAP_DA_DUYET_LDTC || formData.value.trangThai == globals.prop.NHAP_DA_KY ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
         <span *ngIf="!isTongHop"></span>
@@ -90,11 +90,10 @@
     </form>
   </nz-card>
   <nz-card class="mt16 flex-card p-lr16" *ngIf="isTongHop">
-    <div class="header header-green-background">
+    <div class="header header-green-background mg-t-10">
       <div class="header-text">
         <div class="title-chi-tieu">
-          <span></span>
-          <span>THÔNG TIN TỔNG HỢP</span>
+          <span class="text-uppercase font-weight-bold">THÔNG TIN TỔNG HỢP</span>
         </div>
       </div>
     </div>
@@ -154,43 +153,110 @@
         </div>
       </div>
     </form>
-  </nz-card>
-  <div class="header header-green-background" *ngIf="isTongHop">
-    <div class="header-text">
-      <div class="title-chi-tieu">
-        <span></span>
-        <span>ĐỀ XUẤT CỦA CÁC CỤC</span>
+    <div class="header header-green-background mg-t-10 " *ngIf="isTongHop">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span class="text-uppercase font-weight-bold">ĐỀ XUẤT CỦA CÁC CỤC</span>
+        </div>
       </div>
     </div>
-  </div>
-  <nz-table *ngIf="isTongHop" nzBordered class="nowrap" [nzFrontPagination]="false"
-            [nzShowPagination]="false">
-    <thead>
-    <tr>
-      <th class="text-center" width="32px" rowSpan="2">STT</th>
-      <th class="text-center" width="211px" rowSpan="2">Danh mục dự án</th>
-      <th class="text-center" width="116px" rowSpan="2">Đơn vị đề xuất</th>
-      <th class="text-center" width="153.8px" rowSpan="2">Địa điểm xây dựng</th>
-      <th class="text-center" width="86px" rowSpan="2">Loại dự án</th>
-      <th class="text-center" width="130px" rowSpan="2">Thời gian KC-HT</th>
-      <th class="text-center" width="76px" rowSpan="2">Khối</th>
-      <th class="text-center" width="130px" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
-      <th class="text-center" width="280px" colSpan="2">TMĐT</th>
-      <th class="text-center" width="296px" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
-      <th class="text-center" width="330px" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
-    </tr>
-    <tr>
-      <th class="text-center" style="width: 10%;">Tổng số</th>
-      <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
-      <th class="text-center" style="width: 10%;">Tổng số</th>
-      <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
-      <th class="text-center" style="width: 10%;">Tổng số</th>
-      <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let data of dataTable; let idx = index">
-      <ng-container *ngIf="isTongHop">
+    <nz-table *ngIf="isTongHop" nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
+              [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th class="text-center" width="32px" rowSpan="2">STT</th>
+        <th class="text-center" width="211px" rowSpan="2">Danh mục dự án</th>
+        <th class="text-center" width="116px" rowSpan="2">Đơn vị đề xuất</th>
+        <th class="text-center" width="153.8px" rowSpan="2">Địa điểm xây dựng</th>
+        <th class="text-center" width="86px" rowSpan="2">Loại dự án</th>
+        <th class="text-center" width="130px" rowSpan="2">Thời gian KC-HT</th>
+        <th class="text-center" width="76px" rowSpan="2">Khối</th>
+        <th class="text-center" width="130px" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
+        <th class="text-center" width="280px" colSpan="2">TMĐT</th>
+        <th class="text-center" width="296px" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
+        <th class="text-center" width="330px" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
+      </tr>
+      <tr>
+        <th class="text-center" style="width: 10%;">Tổng số</th>
+        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+        <th class="text-center" style="width: 10%;">Tổng số</th>
+        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+        <th class="text-center" style="width: 10%;">Tổng số</th>
+        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of dataTable; let idx = index">
+        <ng-container *ngIf="isTongHop">
+          <td>{{ idx + 1 }}</td>
+          <td>{{ data.tenDuAn }}</td>
+          <td>{{ data.tenDvi }}</td>
+          <td>{{ data.diaDiem }}</td>
+          <td>{{ data.loaiDuAn }}</td>
+          <td>{{ data.tgKhoiCong + ' - ' + data.tgHoanThanh }}</td>
+          <td>{{ data.khoi }}</td>
+          <td>{{ data.soQdPd }}</td>
+          <td>{{ data.tmdtDuKien }}</td>
+          <td>{{ data.nstwDuKien }}</td>
+          <td>{{ data.tmdtDuyet }}</td>
+          <td>{{ data.nstwDuyet }}</td>
+          <td>{{ data.tongSoLuyKe }}</td>
+          <td>{{ data.luyKeNstw }}</td>
+        </ng-container>
+      </tr>
+      </tbody>
+      <tfoot>
+      <td></td>
+      <td class="text-uppercase font-weight-bold">Tổng</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td nzRight></td>
+      </tfoot>
+    </nz-table>
+    <div class="header header-green-background mg-t-10" *ngIf="isTongHop">
+      <div class="header-text">
+        <div class="title-chi-tieu">
+          <span class="text-uppercase font-weight-bold">PHƯƠNG ÁN CỦA TỔNG CỤC</span>
+        </div>
+      </div>
+    </div>
+    <nz-table *ngIf="isTongHop" nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
+              [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th class="text-center" width="32px" rowSpan="2">STT</th>
+        <th class="text-center" width="211px" rowSpan="2">Danh mục dự án</th>
+        <th class="text-center" width="116px" rowSpan="2">Đơn vị đề xuất</th>
+        <th class="text-center" width="153.8px" rowSpan="2">Địa điểm xây dựng</th>
+        <th class="text-center" width="86px" rowSpan="2">Loại dự án</th>
+        <th class="text-center" width="130px" rowSpan="2">Thời gian KC-HT</th>
+        <th class="text-center" width="76px" rowSpan="2">Khối</th>
+        <th class="text-center" width="130px" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
+        <th class="text-center" width="280px" colSpan="2">TMĐT</th>
+        <th class="text-center" width="296px" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
+        <th class="text-center" width="330px" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
+      </tr>
+      <tr>
+        <th class="text-center" style="width: 10%;">Tổng số</th>
+        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+        <th class="text-center" style="width: 10%;">Tổng số</th>
+        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+        <th class="text-center" style="width: 10%;">Tổng số</th>
+        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of dataTableDx; let idx = index">
         <td>{{ idx + 1 }}</td>
         <td>{{ data.tenDuAn }}</td>
         <td>{{ data.tenDvi }}</td>
@@ -203,106 +269,37 @@
         <td>{{ data.nstwDuKien }}</td>
         <td>{{ data.tmdtDuyet }}</td>
         <td>{{ data.nstwDuyet }}</td>
-        <td>{{ data.tongSoLuyKe }}</td>
-        <td>{{ data.luyKeNstw }}</td>
-      </ng-container>
-    </tr>
-    </tbody>
-    <tfoot>
-    <td></td>
-    <td class="text-uppercase font-weight-bold">Tổng</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td nzRight></td>
-    </tfoot>
-  </nz-table>
-  <div class="header header-green-background" *ngIf="isTongHop">
-    <div class="header-text">
-      <div class="title-chi-tieu">
-        <span></span>
-        <span>PHƯƠNG ÁN CỦA TỔNG CỤC</span>
-      </div>
-    </div>
-  </div>
-  <nz-table *ngIf="isTongHop" nzBordered class="nowrap" [nzFrontPagination]="false"
-            [nzShowPagination]="false">
-    <thead>
-    <tr>
-      <th class="text-center" width="32px" rowSpan="2">STT</th>
-      <th class="text-center" width="211px" rowSpan="2">Danh mục dự án</th>
-      <th class="text-center" width="116px" rowSpan="2">Đơn vị đề xuất</th>
-      <th class="text-center" width="153.8px" rowSpan="2">Địa điểm xây dựng</th>
-      <th class="text-center" width="86px" rowSpan="2">Loại dự án</th>
-      <th class="text-center" width="130px" rowSpan="2">Thời gian KC-HT</th>
-      <th class="text-center" width="76px" rowSpan="2">Khối</th>
-      <th class="text-center" width="130px" rowSpan="2">Số QĐ phê duyệt/ <br> điều chỉnh TMĐT</th>
-      <th class="text-center" width="280px" colSpan="2">TMĐT</th>
-      <th class="text-center" width="296px" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
-      <th class="text-center" width="330px" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
-    </tr>
-    <tr>
-      <th class="text-center" style="width: 10%;">Tổng số</th>
-      <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
-      <th class="text-center" style="width: 10%;">Tổng số</th>
-      <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
-      <th class="text-center" style="width: 10%;">Tổng số</th>
-      <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let data of dataTableDx; let idx = index">
-      <td>{{ idx + 1 }}</td>
-      <td>{{ data.tenDuAn }}</td>
-      <td>{{ data.tenDvi }}</td>
-      <td>{{ data.diaDiem }}</td>
-      <td>{{ data.loaiDuAn }}</td>
-      <td>{{ data.tgKhoiCong + ' - ' + data.tgHoanThanh }}</td>
-      <td>{{ data.khoi }}</td>
-      <td>{{ data.soQdPd }}</td>
-      <td>{{ data.tmdtDuKien }}</td>
-      <td>{{ data.nstwDuKien }}</td>
-      <td>{{ data.tmdtDuyet }}</td>
-      <td>{{ data.nstwDuyet }}</td>
-      <td>
-        <nz-input-number [(ngModel)]="data.tongSoLuyKe" [nzSize]="'small'" nz-input [nzMin]="0"
-                         [nzFormatter]="globals.formatter"
-                         [nzParser]="globals.parser"></nz-input-number>
-      </td>
-      <td>
-        <nz-input-number [(ngModel)]="data.luyKeNstw" [nzSize]="'small'" nz-input [nzMin]="0"
-                         [nzFormatter]="globals.formatter"
-                         [nzParser]="globals.parser"></nz-input-number>
-      </td>
-    </tr>
-    </tbody>
-    <tfoot>
-    <td></td>
-    <td class="text-uppercase font-weight-bold">Tổng</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
-    <td nzRight></td>
-    </tfoot>
-  </nz-table>
+        <td>
+          <nz-input-number [(ngModel)]="data.tongSoLuyKe" [nzSize]="'small'" nz-input [nzMin]="0"
+                           [nzFormatter]="globals.formatter"
+                           [nzParser]="globals.parser"></nz-input-number>
+        </td>
+        <td>
+          <nz-input-number [(ngModel)]="data.luyKeNstw" [nzSize]="'small'" nz-input [nzMin]="0"
+                           [nzFormatter]="globals.formatter"
+                           [nzParser]="globals.parser"></nz-input-number>
+        </td>
+      </tr>
+      </tbody>
+      <tfoot>
+      <td></td>
+      <td class="text-uppercase font-weight-bold">Tổng</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td class="text-uppercase font-weight-bold">{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td nzRight></td>
+      </tfoot>
+    </nz-table>
+  </nz-card>
 </div>
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}
