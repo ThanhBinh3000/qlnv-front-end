@@ -284,6 +284,11 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.spinner.hide();
       return;
     }
+    if (this.checkExitsData(this.rowItem, this.dataTableDetail)) {
+      this.notification.error(MESSAGE.ERROR, "Dữ liệu trùng lặp, đề nghị nhập lại.");
+      this.spinner.hide();
+      return;
+    }
     if (this.rowItem.apDungTai) {
       this.rowItem.apDungTai = this.rowItem.apDungTai ? this.rowItem.apDungTai.toString() : null;
       this.rowItem.apDungTaiStr = this.getStrTenDonVi(this.rowItem.apDungTai);
@@ -292,6 +297,19 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.rowItem = new DinhMucPhiNxBq();
     this.updateEditCache();
     this.isAddDetail = false;
+  }
+
+  checkExitsData(item, dataItem): boolean {
+    let rs = false;
+    if (dataItem && dataItem.length > 0) {
+      dataItem.forEach(it => {
+        if (it.maDinhMuc == item.maDinhMuc) {
+          rs = true;
+          return;
+        }
+      })
+    }
+    return rs;
   }
 
   getStrTenDonVi(strMaDonVi) {
