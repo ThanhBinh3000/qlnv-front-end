@@ -123,7 +123,7 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
       let res = await this.tongHopKhBanTrucTiepService.tonghop(body);
       if (res.msg == MESSAGE.SUCCESS) {
         const dataDetail = res.data
-        let idTh = await this.userService.getId("XH_THOP_DX_KH_BTT_HDR");
+        let idTh = await this.userService.getId("XH_THOP_DX_KH_MTT_SEQ");
         this.helperService.bidingDataInFormGroup(this.formData, body)
         this.formData.patchValue({
           idTh: idTh,
