@@ -160,12 +160,13 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   async loadDmDinhMuc() {
     let body = {
+      capDvi: this.capDvi,
       paggingReq: {
         limit: 10000,
         page: 0,
       }
     };
-    let res = await this.danhMucDinhMucService.search(body);
+    let res = await this.danhMucDinhMucService.searchDsChuaSuDung(body);
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.content && res.data.content.length > 0) {
         for (let item of res.data.content) {
