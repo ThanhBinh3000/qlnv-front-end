@@ -7,7 +7,7 @@ import { OldResponseData } from 'src/app/interfaces/response';
 @Injectable({
   providedIn: 'root',
 })
-export class QuanLyBienBanLayMauXuatService extends BaseService {
+export class BienBanLayMauXhService extends BaseService {
   GATEWAY = '/qlnv-hang';
 
   constructor(public httpClient: HttpClient) {
