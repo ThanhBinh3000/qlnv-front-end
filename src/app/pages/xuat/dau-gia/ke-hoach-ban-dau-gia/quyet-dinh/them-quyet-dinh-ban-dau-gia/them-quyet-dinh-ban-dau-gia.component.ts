@@ -14,7 +14,6 @@ import { DialogTableSelectionComponent } from 'src/app/components/dialog/dialog-
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { STATUS } from "../../../../../../constants/status";
-import { cloneDeep } from "lodash";
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
 import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
@@ -55,7 +54,6 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
-    private uploadFileService: UploadFileService,
     private deXuatKhBanDauGiaService: DeXuatKhBanDauGiaService,
     private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
   ) {
@@ -147,7 +145,7 @@ export class ThemQuyetDinhBanDauGiaComponent extends Base2Component implements O
         tenCloaiVthh: dataTongHop.tenCloaiVthh,
         loaiVthh: dataTongHop.loaiVthh,
         tenLoaiVthh: dataTongHop.tenLoaiVthh,
-        nam: +dataTongHop.nam,
+        nam: dataTongHop.namKh,
         idThHdr: dataTongHop.id,
         tchuanCluong: dataTongHop.tchuanCluong,
         phanLoai: 'TH',

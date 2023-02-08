@@ -5,7 +5,7 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     {
         icon: 'htvbdh_tcdt_dinhmuc2',
         title: 'Định mức phí',
-        url: `/${MAIN_ROUTE_DINH_MUC}/dinh-muc-phi-bao-quan`,
+        url: `/${MAIN_ROUTE_DINH_MUC}/dinh-muc-phi`,
         dropdown: 'dau-thau',
         idHover: 'dauthau',
         hasTab: true,

@@ -42,7 +42,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)">
+        <button type="button" class="btn btn-main" (click)="goDetail(null,null,false)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm mới</span>
         </button>
@@ -50,24 +50,25 @@
     </div>
 
     <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-      <nz-table #basicTable class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false" [nzShowPagination]="false">
+      <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
+        [nzShowPagination]="false">
         <thead>
           <tr>
-            <th width="45px">
-              <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
-                [nzIndeterminate]="indeterminate"></label>
-            </th>
             <th width="60px">STT</th>
-            <th width="130px">Số HĐ</th>
-            <th width="175px">Tên hợp đồng</th>
-            <th width="175px">Ngày ký</th>
+            <th width="100px">Năm</th>
+            <th width="130px">QĐ PD KHLCNT</th>
+            <th width="175px">QĐ PD KQLCNT</th>
+            <th width="175px" class="wrap">Tổng số ĐV tài sản</th>
+            <th width="175px" class="wrap">Tổng số ĐVTS ĐG thành công</th>
+            <th width="175px" class="wrap">SL HĐ đã ký</th>
+            <th width="175px" class="wrap">Thời hạn thanh toán </th>
             <th width="175px">Loại hàng hóa</th>
-            <th width="175px">Chủng loại hàng hóa</th>
-            <th width="175px">Bên bán </th>
-            <th width="175px">Bên mua</th>
-            <th width="175px">Giá trị hợp đồng</th>
-            <th width="175px">Trạng thái</th>
-            <th width="90px">Hành động</th>
+            <th width="175px">ĐV thực hiện</th>
+            <th width="175px" class="wrap">TCCN thắng đấu giá</th>
+            <th width="175px" class="wrap">Tổng SL xuất bán (kg)</th>
+            <th width="90px">Thành tiền</th>
+            <th width="90px">Trạng thái HĐ</th>
+            <th width="120px">Hành động</th>
           </tr>
           <tr class="search-table">
             <th></th>
@@ -146,34 +147,34 @@
             </th>
             <th></th>
             <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let data of basicTable.data; let i = index">
-            <th width="45px">
-              <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
-                [nzDisabled]="data.trangThai != '00'"></label>
-            </th>
-            <td>{{(page-1)*pageSize+i+1}}</td>
-            <td>{{ data.soHd }}</td>
-            <td>{{ data.tenHd }}</td>
-            <td>{{ data.ngayKy }}</td>
-            <td>{{ data.loaiVthh }}</td>
-            <td>{{ data.chungLoaiVthh }}</td>
-            <td>{{ data.chuDauTu }}</td>
-            <td>{{ data.nhaCungCap }}</td>
-            <td>{{ data.gtriHdSauVat }}</td>
-            <td>{{ data.tenTrangThai }}</td>
+            <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
+            <td>{{ data.nam }}</td>
+            <td>{{ data.soQdPd }}</td>
+            <td>{{ data.soQdKq }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.tenLoaiVthh }}</td>
+            <td>{{ data.tenDvi }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ data.tenTrangThaiHd }}</td>
             <td class="text-left">
-              <a (click)="redirectToChiTiet(false, data.id)" *ngIf="data.trangThai=='00'">
+              <a (click)="goDetail(data.id,null,true)" *ngIf="data.trangThai=='00'">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a (click)="redirectToChiTiet(true, data.id)">
+              <a (click)="goDetail(data.id,null,true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <!-- <a (click)="xoaItem(data)" *ngIf="data.trangThai=='00'">
-                <i class="fa fa-trash-o do"></i>
-              </a> -->
             </td>
           </tr>
         </tbody>
@@ -198,6 +199,8 @@
   </div>
 </ng-container>
 <ng-container *ngIf="isDetail">
-  <app-thong-tin [id]="selectedId" (showListEvent)="showList()" [isView]="isView" [typeVthh]="loaiVthh">
+  <app-thong-tin *ngIf="isAddNew" [id]="idSelected" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
   </app-thong-tin>
+  <app-quanly-hopdong *ngIf="isQuanLy" [id]="idSelected" (showListEvent)="showList()" [loaiVthh]="loaiVthh">
+  </app-quanly-hopdong>
 </ng-container>

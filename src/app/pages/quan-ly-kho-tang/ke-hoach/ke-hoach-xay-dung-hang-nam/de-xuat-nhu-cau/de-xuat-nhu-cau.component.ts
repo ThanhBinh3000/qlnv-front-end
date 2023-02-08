@@ -98,40 +98,40 @@ export class DeXuatNhuCauComponent implements OnInit {
   }
 
   async search() {
-    this.spinner.show();
-    let body = {
-      soCongVan: this.searchFilter.soCongVan,
-      dmucDuAn: this.searchFilter.dmucDuAn,
-      loaiDuAn: this.searchFilter.loaiDuAn,
-      diaDiem: this.searchFilter.diaDiem,
-      tgKcHt:this.searchFilter.tgKcHt,
-      ngayKyTu: this.searchFilter.ngayKy[0],
-      ngayKyDen: this.searchFilter.ngayKy[1],
-      namBatDau: this.searchFilter.namBatDau,
-      namKetThuc: this.searchFilter.namKetThuc,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page - 1,
-      },
-      maDvi: this.userInfo.MA_DVI
-    };
-    let res = await this.dxService.search(body);
-    if (res.msg == MESSAGE.SUCCESS) {
-      let data = res.data;
-      this.dataTable = data.content;
-      this.totalRecord = data.totalElements;
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
-      this.dataTableAll = cloneDeep(this.dataTable);
-    } else {
-      this.dataTable = [];
-      this.totalRecord = 0;
-      this.notification.error(MESSAGE.ERROR, res.msg);
-    }
-    this.spinner.hide();
+    // this.spinner.show();
+    // let body = {
+    //   soCongVan: this.searchFilter.soCongVan,
+    //   dmucDuAn: this.searchFilter.dmucDuAn,
+    //   loaiDuAn: this.searchFilter.loaiDuAn,
+    //   diaDiem: this.searchFilter.diaDiem,
+    //   tgKcHt:this.searchFilter.tgKcHt,
+    //   ngayKyTu: this.searchFilter.ngayKy[0],
+    //   ngayKyDen: this.searchFilter.ngayKy[1],
+    //   namBatDau: this.searchFilter.namBatDau,
+    //   namKetThuc: this.searchFilter.namKetThuc,
+    //   paggingReq: {
+    //     limit: this.pageSize,
+    //     page: this.page - 1,
+    //   },
+    //   maDvi: this.userInfo.MA_DVI
+    // };
+    // let res = await this.dxService.search(body);
+    // if (res.msg == MESSAGE.SUCCESS) {
+    //   let data = res.data;
+    //   this.dataTable = data.content;
+    //   this.totalRecord = data.totalElements;
+    //   if (this.dataTable && this.dataTable.length > 0) {
+    //     this.dataTable.forEach((item) => {
+    //       item.checked = false;
+    //     });
+    //   }
+    //   this.dataTableAll = cloneDeep(this.dataTable);
+    // } else {
+    //   this.dataTable = [];
+    //   this.totalRecord = 0;
+    //   this.notification.error(MESSAGE.ERROR, res.msg);
+    // }
+    // this.spinner.hide();
   }
   async changePageIndex(event) {
     this.spinner.show();

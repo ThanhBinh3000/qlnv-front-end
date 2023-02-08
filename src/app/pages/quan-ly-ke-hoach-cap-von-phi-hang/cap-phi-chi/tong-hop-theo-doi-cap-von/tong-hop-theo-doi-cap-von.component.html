@@ -9,7 +9,7 @@
                 <div nz-col nzSpan="3">
                     <label class="search__label">Đơn vị được duyệt</label>
                     <nz-select [(ngModel)]="searchFilter.donViDuocDuyet">
-                        <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.ma" [nzLabel]="p.giaTri"></nz-option>
+                        <nz-option *ngFor="let p of dsBoNganh" [nzValue]="p.code" [nzLabel]="p.tenDvi"></nz-option>
                     </nz-select>
                 </div>
                 <div nz-col nzSpan="3">

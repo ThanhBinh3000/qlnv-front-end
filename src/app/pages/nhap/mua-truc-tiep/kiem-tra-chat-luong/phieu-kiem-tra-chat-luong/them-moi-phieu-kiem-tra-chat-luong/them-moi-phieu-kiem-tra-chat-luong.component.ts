@@ -60,7 +60,6 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private uploadFileService: UploadFileService,
     private phieuKtraCluongService: MttPhieuKiemTraChatLuongService,
     public globals: Globals,
     private quyetDinhGiaoNvNhapHangService: QuyetDinhGiaoNvNhapHangService,
@@ -316,6 +315,11 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
         if (res.data) {
           const data = res.data;
           this.dataTableChiTieu = data.phieuKiemTraChatLuongDtlList;
+          this.dataTableChiTieu.forEach(e => {
+            e.tenTchuan = e.chiTieuCl;
+            e.chiSoNhap = e.chiSoCl;
+            e.ketQuaKiemTra = e.ketQuaPt
+          });
           this.helperService.bidingDataInFormGroup(this.formData, data);
           await this.bindingDataQd(data.idQdGiaoNvNh);
           let dataDdiem = this.listDiaDiemNhap.filter(item => item.id == data.idDdiemGiaoNvNh)[0];
@@ -338,6 +342,11 @@ export class ThemMoiPhieuKiemTraChatLuongComponent extends Base2Component implem
       let body = this.formData.value;
       body.fileDinhKems = this.listFileDinhKem;
       body.phieuKiemTraChatLuongDtlList = this.dataTableChiTieu;
+      body.phieuKiemTraChatLuongDtlList.forEach(e => {
+        e.chiTieuCl = e.tenTchuan;
+        e.chiSoCl = e.chiSoNhap;
+        e.ketQuaPt = e.ketQuaKiemTra
+      });
       let res;
       if (this.formData.get('id').value > 0) {
         res = await this.phieuKtraCluongService.update(body);

@@ -14,6 +14,7 @@ import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DeNghiCapPhiBoNganhService } from 'src/app/services/ke-hoach/von-phi/deNghiCapPhiBoNganh.service';
 import { Globals } from 'src/app/shared/globals';
 import { isEmpty } from 'lodash';
+import {DonviService} from "../../../../../services/donvi.service";
 
 export class DeNghiCapPhi {
   stt: string;
@@ -100,6 +101,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
     private danhMucService: DanhMucService,
     private modal: NzModalService,
     private helperService: HelperService,
+    private donviService: DonviService,
 
   ) { }
 
@@ -180,7 +182,7 @@ export class ThongTinDeNghiCapPhiBoNganhComponent implements OnInit {
 
   async getListBoNganh() {
     this.listBoNganh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listBoNganh = res.data;
     }

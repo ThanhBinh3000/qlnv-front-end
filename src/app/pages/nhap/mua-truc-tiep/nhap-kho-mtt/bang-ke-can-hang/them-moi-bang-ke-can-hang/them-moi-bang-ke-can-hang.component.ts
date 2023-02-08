@@ -99,6 +99,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
       trangThai: [''],
       tenTrangThai: [''],
       lyDoTuChoi: [''],
+      soPhieuKtraCluong: [''],
     })
   }
 
@@ -168,7 +169,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
         page: 0
       },
       trangThai: STATUS.BAN_HANH,
-      namNhap: 2022
+      namNhap: this.formData.get('namKh').value,
     }
     let res = await this.quyetDinhGiaoNvNhapHangService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -271,7 +272,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
         thoiGianGiaoNhan: null,
       });
     }
-    this.listSoPhieuNhapKho = data.hhPhieuNhapKhoHdr.filter(item => (item.trangThai == STATUS.DA_DUYET_LDCC));
+    this.listSoPhieuNhapKho = data.hhPhieuNhapKhoHdr.filter(item => (item.trangThai == STATUS.DU_THAO));
   }
   openDialogSoPhieuNhapKho() {
     const modalQD = this.modal.create({
@@ -307,6 +308,7 @@ export class ThemMoiBangKeCanHangComponent extends Base2Component implements OnI
         donViGiao: data.donViGiao,
         diaChiNguoiGiao: data.diaChiNguoiGiao,
         thoiGianGiaoNhan: data.thoiGianGiaoNhan,
+        soPhieuKtraCluong: data.soPhieuKtraCluong
       });
     }
   }

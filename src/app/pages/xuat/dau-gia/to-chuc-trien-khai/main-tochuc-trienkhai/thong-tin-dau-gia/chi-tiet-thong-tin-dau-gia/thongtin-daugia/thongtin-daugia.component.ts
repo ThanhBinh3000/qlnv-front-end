@@ -8,7 +8,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { ThongTinDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/thongTinDauGia.service';
 import { StorageService } from 'src/app/services/storage.service';
-import { chain } from 'lodash'
+import { chain, cloneDeep } from 'lodash'
 import { QuyetDinhPdKhBdgService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
 import { MESSAGE } from 'src/app/constants/message';
 
@@ -92,7 +92,10 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
       soBienBan: [, [Validators.required]],
       trichYeuBban: [, [Validators.required]],
       ngayKyBban: [, [Validators.required]],
-      trangThai: ['00']
+      trangThai: ['00'],
+      loaiVthh: [''],
+      cloaiVthh: [''],
+      moTaHangHoa: ['']
     })
   }
 
@@ -115,9 +118,15 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         this.spinner.show();
         let idThongBao = await this.helperService.getId("XH_TC_TTIN_BDG_HDR_SEQ");
         let res = await this.quyetDinhPdKhBdgService.getDtlDetail(this.idDtl);
+        console.log("🚀 ~ file: thongtin-daugia.component.ts:121 ~ ngOnInit ~ res", res)
         if (res.data) {
           const data = res.data
-          if (data.listTtinDg) {
+          this.formData.patchValue({
+            loaiVthh: data.loaiVthh,
+            cloaiVthh: data.cloaiVthh,
+            moTaHangHoa: data.moTaHangHoa
+          })
+          if (data.listTtinDg && data.listTtinDg.length > 0) {
             // Nếu có thông tin đấu thầu thì sẽ lấy data laster => Set dataTable = children data lastest ý
             let tTinDthauLastest = data.listTtinDg.pop();
             let tTinDthau = await this.thongTinDauGiaService.getDetail(tTinDthauLastest.id);
@@ -138,7 +147,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
               this.dataTable = this.dataTable.filter(x => x.id != item.id);
             }
           });
-          console.log("🚀 ~ ngOnInit ~ this.dataTable", this.dataTable)
         }
         this.formData.patchValue({
           maThongBao: idThongBao + "/" + this.formData.value.nam + "/TB-ĐG",
@@ -190,7 +198,6 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
         x.toChucCaNhan = x.children[0].toChucCaNhan
       })
     })
-    console.log("🚀 ~ this.dataTable.forEach ~ this.dataTable", this.dataTable)
   }
 
   isDisabled() {
@@ -244,9 +251,11 @@ export class ThongtinDaugiaComponent extends Base2Component implements OnInit, O
   }
 
   addRow(item, name) {
-    item.loai = name;
-    item.idVirtual = new Date().getTime();
-    this.dataNguoiTgia.push(item)
+    let data = cloneDeep(item)
+    data.loai = name;
+    data.idVirtual = new Date().getTime();
+
+    this.dataNguoiTgia.push(data)
     this.dataNguoiShow = chain(this.dataNguoiTgia).groupBy('loai').map((value, key) => ({ loai: key, dataChild: value })).value();
   }
 

@@ -230,7 +230,7 @@
             <td>{{data.tenLoaiHinhBq}}</td>
             <td>{{ data.tenHinhThucBq }}</td>
             <td>{{ data.dviTinh }}</td>
-            <td>{{ data.trangThai }}</td>
+            <td>{{ data.trangThai  == '01' ? 'Hoạt động' : 'Không hoạt động'}}</td>
             <td style="text-align: center;">
               <a (click)="startEdit(i)">
                 <i class="table-icon fa fa-pencil"></i>
@@ -320,9 +320,9 @@
               <nz-form-control>
                 <nz-input-group>
                   <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear [(ngModel)]=dataEdit[i].data.trangThai>
-                    <nz-option nzValue="00" nzLabel="Hoạt động">
+                    <nz-option nzValue="01" nzLabel="Hoạt động">
                     </nz-option>
-                    <nz-option nzValue="01" nzLabel="Không hoạt động">
+                    <nz-option nzValue="00" nzLabel="Không hoạt động">
                     </nz-option>
                   </nz-select>
                 </nz-input-group>

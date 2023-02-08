@@ -138,7 +138,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
   async loadSoQuyetDinh() {
     let body = {
       trangThai: STATUS.BAN_HANH,
-      namNhap: 2022,
+      namNhap: this.formData.get('namKh').value,
       maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
@@ -201,7 +201,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
 
   openDialogDdiemNhapHang() {
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách địa điểm nhập hàng',
+      nzTitle: ' Danh sách địa điểm nhập hàng ',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -434,12 +434,7 @@ export class ThemMoiPhieuNhapKhoComponent extends Base2Component implements OnIn
   }
 
   setValidator() {
-    if (this.loaiVthh == '02') {
-      this.formData.controls["soPhieuKtraCluong"].clearValidators();
-
-    } else {
-      this.formData.controls["soPhieuKtraCluong"].setValidators([Validators.required]);
-    }
+    this.formData.controls["soPhieuKtraCluong"].setValidators([Validators.required]);
   }
 
   print() {

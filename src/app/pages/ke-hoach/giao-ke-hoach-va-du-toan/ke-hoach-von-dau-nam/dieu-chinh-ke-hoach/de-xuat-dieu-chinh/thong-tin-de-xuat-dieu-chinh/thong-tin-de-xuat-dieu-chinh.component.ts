@@ -237,6 +237,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
           .soLuongTruocDieuChinh(itemChiTieuKH.id)
           .then((res) => {
             if (res && res.data) {
+              // console.log(res.data);
               this.deXuatDieuChinh.dxDcMuoiList = res.data.dxDcMuoiList;
               this.deXuatDieuChinh.dxDcVtNhapList = res.data.dxDcVtList.filter(it => it.chiTieu == '01') ?? [];
               this.deXuatDieuChinh.dxDcVtXuatList = res.data.dxDcVtList.filter(it => it.chiTieu == '00') ?? [];
@@ -556,10 +557,8 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
               "loai": "04",
               "maVatTu": element?.maVatTu,
               "maVatTuCha": element?.maVatTuCha,
-              "soLuongTang": element?.slTangMuoi ?? 0,
-              "soLuongGiam": element?.slGiamMuoi ?? 0,
-              // "dxDcLtVtCtList": element?.dxDcLtVtCtList,
-              // "diaDiemKho": element?.diaDiemKho,
+              "soLuongTang": element?.slTang ?? 0,
+              "soLuongGiam": element?.slGiam ?? 0,
             };
             dxDcLtVtReqList.push(item);
           });
@@ -623,6 +622,7 @@ export class ThongTinDeXuatDieuChinhComponent implements OnInit {
                 MESSAGE.UPDATE_SUCCESS,
               );
             }
+            this.back();
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
           }

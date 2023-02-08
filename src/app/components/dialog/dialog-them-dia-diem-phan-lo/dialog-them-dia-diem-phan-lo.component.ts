@@ -150,7 +150,7 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     } else {
       let res = await this.donViService.getAll(body);
       if (res.msg === MESSAGE.SUCCESS) {
-        this.listChiCuc = res.data;
+        this.listChiCuc = res.data.filter(item => item.type == 'DV');
         this.listChiCuc.map(v => Object.assign(v, { tenDonVi: v.tenDvi }))
       }
     }
@@ -168,22 +168,22 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
     // }
     // let soLuongDaLenKh = await this.deXuatKhBanDauGiaService.getSoLuongAdded(body);
     let chiCuc = this.listChiCuc.filter(item => item.maDvi == event)[0];
-    const res = await this.tinhTrangKhoHienThoiService.getChiCucByMaTongCuc(event)
+    const res = await this.donViService.getDonVi({ str: event })
     this.listDiemKho = [];
     if (res.msg == MESSAGE.SUCCESS) {
       this.formData.patchValue({
-        tenDvi: res.data.tenTongKho,
         soLuongChiTieu: this.loaiVthh.startsWith('02') ? chiCuc?.soLuongXuat : chiCuc?.soLuongXuat * 1000,
       })
-      for (let i = 0; i < res.data?.child.length; i++) {
-        const item = {
-          'value': res.data.child[i].maDiemkho,
-          'text': res.data.child[i].tenDiemkho,
-          'diaDiemKho': res.data.child[i].diaChi,
-          listDiemKhoEdit: res.data.child[i],
-        };
-        this.listDiemKho.push(item);
-      }
+      this.listDiemKho = res.data.children.filter(item => item.type == 'MLK');
+      // for (let i = 0; i < res.data?.child.length; i++) {
+      //   const item = {
+      //     'value': res.data.child[i].maDiemkho,
+      //     'text': res.data.child[i].tenDiemkho,
+      //     'diaDiemKho': res.data.child[i].diaChi,
+      //     listDiemKhoEdit: res.data.child[i],
+      //   };
+      //   this.listDiemKho.push(item);
+      // }
       this.thongtinPhanLo = new DanhSachPhanLo();
     }
   }
@@ -203,25 +203,13 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
           listNganKhoEdit: diemKho[0].listDiemKhoEdit.child[i],
         };
         this.listNhaKho.push(item);
-      }
-      ;
-      this.thongtinPhanLo = new DanhSachPhanLo();
+      };
     } else {
-      let diemKho = this.listDiemKho.filter(item => item.value == this.thongtinPhanLo.maDiemKho);
-      if (diemKho.length > 0) {
-        this.thongtinPhanLo.tenDiemKho = diemKho[0].text;
-        this.thongtinPhanLo.diaDiemKho = diemKho[0].diaDiemKho;
-      }
-      this.listNhaKho = [];
-      for (let i = 0; i < diemKho[0].listDiemKhoEdit?.child.length; i++) {
-        const item = {
-          'value': diemKho[0].listDiemKhoEdit.child[i].maNhakho,
-          'text': diemKho[0].listDiemKhoEdit.child[i].tenNhakho,
-          listNganKhoEdit: diemKho[0].listDiemKhoEdit.child[i],
-        };
-        this.listNhaKho.push(item);
-      }
-      ;
+      let diemKho = this.listDiemKho.filter(item => item.maDvi == this.thongtinPhanLo.maDiemKho)[0];
+      this.listNhaKho = diemKho.children;
+      this.thongtinPhanLo.tenDiemKho = diemKho.tenDvi;
+      this.thongtinPhanLo.diaDiemKho = diemKho.diaChi;
+
     }
   }
 
@@ -243,20 +231,9 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     } else {
-      let nhakho = this.listNhaKho.filter(item => item.value == this.thongtinPhanLo.maNhaKho);
-      if (nhakho.length > 0) {
-        this.thongtinPhanLo.tenNhakho = nhakho[0].text;
-      }
-      this.listNganKho = [];
-      for (let i = 0; i < nhakho[0].listNganKhoEdit?.child.length; i++) {
-        const item = {
-          'value': nhakho[0].listNganKhoEdit.child[i].maNgankho,
-          'text': nhakho[0].listNganKhoEdit.child[i].tenNgankho,
-          listLoKhoEdit: nhakho[0].listNganKhoEdit.child[i],
-        };
-        this.listNganKho.push(item);
-      }
-      ;
+      let nhakho = this.listNhaKho.filter(item => item.maDvi == this.thongtinPhanLo.maNhaKho)[0];
+      this.listNganKho = nhakho.children;
+      this.thongtinPhanLo.tenNhakho = nhakho.tenDvi;
     }
   }
 
@@ -276,19 +253,10 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
       ;
       this.thongtinPhanLo = new DanhSachPhanLo();
     } else {
-      let nganKho = this.listNganKho.filter(item => item.value == this.thongtinPhanLo.maNganKho);
-      if (nganKho.length > 0) {
-        this.thongtinPhanLo.tenNganKho = nganKho[0].text;
-      }
-      this.listLoKho = [];
-      for (let i = 0; i < nganKho[0].listLoKhoEdit?.child.length; i++) {
-        const item = {
-          'value': nganKho[0].listLoKhoEdit.child[i].maNganlo,
-          'text': nganKho[0].listLoKhoEdit.child[i].tenNganlo,
-        };
-        this.listLoKho.push(item);
-      }
-      ;
+      let nganKho = this.listNganKho.filter(item => item.maDvi == this.thongtinPhanLo.maNganKho)[0];
+      this.listLoKho = nganKho.children;
+      this.thongtinPhanLo.tenNganKho = nganKho.tenDvi;
+
     }
 
   }
@@ -300,25 +268,8 @@ export class DialogThemDiaDiemPhanLoComponent implements OnInit {
         this.editCache[index].data.tenLoKho = loKho[0].text;
       }
     } else {
-      let loKho = this.listLoKho.filter(item => item.value == this.thongtinPhanLo.maLoKho);
-      if (loKho.length > 0) {
-        this.thongtinPhanLo.tenLoKho = loKho[0].text;
-        let body = {
-          maDvi: this.thongtinPhanLo.maLoKho,
-          loaiVthh: this.loaiVthh,
-          nam: this.namKh,
-        }
-        const res = await this.quanLyHangTrongKhoService.getTrangThaiHt(body)
-        if (res.msg == MESSAGE.SUCCESS) {
-          if (res.data) {
-            // this.thongtinPhanLo.cloaiVthh = res.data[0].cloaiVthh;
-            // this.thongtinPhanLo.tenCloaiVthh = res.data[0].tenCloaiVthh;
-            // this.thongtinPhanLo.duDau = res.data[0].duDau;
-          }
-        } else {
-          this.notification.error(MESSAGE.ERROR, res.msg);
-        }
-      }
+      let loKho = this.listLoKho.filter(item => item.maDvi == this.thongtinPhanLo.maLoKho)[0];
+      this.thongtinPhanLo.tenLoKho = loKho.tenDvi;
     }
   }
 

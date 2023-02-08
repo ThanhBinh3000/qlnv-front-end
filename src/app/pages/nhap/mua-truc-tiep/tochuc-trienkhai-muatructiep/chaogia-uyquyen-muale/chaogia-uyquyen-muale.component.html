@@ -144,10 +144,11 @@
             <td>{{ data.tenCloaiVthh}}</td>
             <td>{{ data.tenTrangThaiTkhai }}</td>
             <td class="text-left">
-              <a (click)="redirectToChiTiet(data)">
+              <a *ngIf="data.trangThaiTkhai == STATUS.HOAN_THANH_CAP_NHAT" (click)="redirectToChiTiet(data)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a (click)="redirectToChiTiet(data)">
+              <a *ngIf=" data.trangThaiTkhai == STATUS.CHUA_CAP_NHAT || data.trangThaiTkhai == STATUS.DANG_CAP_NHAT "
+                (click)="redirectToChiTiet(data)">
                 <i class="icon htvbdh_soanthao"></i>
               </a>
             </td>

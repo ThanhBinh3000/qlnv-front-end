@@ -5,20 +5,22 @@ import {
   OnInit,
   Output
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhMucService } from 'src/app/services/danhmuc.service';
-import { DonviService } from 'src/app/services/donvi.service';
-import { TongHopTheoDoiCapVonService } from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
-import { UserService } from 'src/app/services/user.service';
-import { thongTinTrangThaiNhap } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
+import {UserLogin} from 'src/app/models/userlogin';
+import {DanhMucService} from 'src/app/services/danhmuc.service';
+import {DonviService} from 'src/app/services/donvi.service';
+import {TongHopTheoDoiCapVonService} from 'src/app/services/ke-hoach/von-phi/tongHopTheoDoiCapVon.service';
+import {UserService} from 'src/app/services/user.service';
+import {thongTinTrangThaiNhap} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
 import {STATUS} from "../../../../../constants/status";
+import {ThongTriDuyetYCapVonService} from "../../../../../services/ke-hoach/von-phi/thongTriDuyetYCapVon.service";
+import dayjs from "dayjs";
 
 @Component({
   selector: 'app-thong-tin-tong-hop-theo-doi-cap-von',
@@ -33,7 +35,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
   showListEvent = new EventEmitter<any>();
   @Input() id: number;
   formData: FormGroup;
-  STATUS:STATUS;
+  STATUS: STATUS;
   fileDinhKem: Array<FileDinhKem> = [];
   userLogin: UserLogin;
   listChiCuc: any[] = [];
@@ -47,6 +49,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
   listFileDinhKem: any[] = [];
   khBanDauGia: any = {};
   dsBoNganh: any[] = [];
+  dsThongTri: any[] = [];
   chiTietList: any[] = [];
 
   constructor(
@@ -59,6 +62,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
     public userService: UserService,
     private donviService: DonviService,
     private tongHopTheoDoiCapVonService: TongHopTheoDoiCapVonService,
+    private thongTriDuyetYCapVonService: ThongTriDuyetYCapVonService,
   ) {
   }
 
@@ -70,6 +74,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
     await Promise.all([
       this.initForm(),
       this.getListBoNganh(),
+      this.getListThongTri(),
     ]);
     await this.loadChiTiet(this.idInput);
     this.spinner.hide();
@@ -79,9 +84,11 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
     if (id > 0) {
       let res = await this.tongHopTheoDoiCapVonService.loadChiTiet(id);
       if (res.msg == MESSAGE.SUCCESS) {
+
         if (res.data) {
           this.khBanDauGia = res.data;
           this.initForm();
+          this.formData.patchValue({soThongTri:+this.khBanDauGia.soThongTri})
           if (this.khBanDauGia.fileDinhKems) {
             this.listFileDinhKem = this.khBanDauGia.fileDinhKems;
           }
@@ -92,7 +99,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
 
   async getListBoNganh() {
     this.dsBoNganh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('BO_NGANH');
+    let res = await this.donviService.layTatCaDonViByLevel(0);
     if (res.msg == MESSAGE.SUCCESS) {
       this.dsBoNganh = res.data;
     }
@@ -100,7 +107,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
 
   initForm() {
     this.formData = this.fb.group({
-      soThongTri: [this.khBanDauGia ? this.khBanDauGia.soThongTri : null, [Validators.required]],
+      soThongTri: [, [Validators.required]],
       maDviDuocDuyet: [this.khBanDauGia ? this.khBanDauGia.maDviDuocDuyet : null],
       soLenhChiTien: [this.khBanDauGia ? this.khBanDauGia.soLenhChiTien : null, [Validators.required]],
       chuong: [this.khBanDauGia ? this.khBanDauGia.chuong : null],
@@ -109,6 +116,7 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
       lyDoChi: [this.khBanDauGia ? this.khBanDauGia.lyDoChi : null],
       soTien: [this.khBanDauGia ? this.khBanDauGia.soTien : null],
       dviThuHuong: [this.khBanDauGia ? this.khBanDauGia.dviThuHuong : null, [Validators.required]],
+      tenDviThuHuong: [this.khBanDauGia ? this.khBanDauGia.tenDviThuHuong : null],
       taiKhoan: [this.khBanDauGia ? this.khBanDauGia.taiKhoan : null, [Validators.required]],
       nganHang: [this.khBanDauGia ? this.khBanDauGia.nganHang : null, [Validators.required]],
       canCu: [this.khBanDauGia ? this.khBanDauGia.canCu : null],
@@ -215,6 +223,31 @@ export class ThongTinTongHopTheoDoiCapVonComponent implements OnInit {
   thongTinTrangThai(trangThai: string): string {
     return thongTinTrangThaiNhap(trangThai);
   }
+
+  async getListThongTri() {
+    let body = {
+      paggingReq: {
+        limit: this.globals.prop.MAX_INTERGER,
+        page: 0,
+      },
+    };
+    let res = await this.thongTriDuyetYCapVonService.timKiem(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.dsThongTri = res.data.content;
+    }
+  }
+
+  async changeThongTri($event: any) {
+    let res = await this.thongTriDuyetYCapVonService.loadChiTiet($event);
+    if (res.msg == MESSAGE.SUCCESS) {
+      let dataDetail = res.data;
+      delete dataDetail.soThongTri;
+      dataDetail.maDviDuocDuyet = dataDetail.dviThongTri;
+      // dataDetail.soLenhChiTien = dataDetail.soDnCapVon;
+      // dataDetail.soTien = dataDetail.chiTietList.reduce((pre, cur) => pre = +cur.soTien, 0);
+      dataDetail.taiKhoan = dataDetail.dviThuHuongStk;
+      dataDetail.nganHang = dataDetail.dviThuHuongNganHang;
+      this.formData.patchValue(dataDetail);
+    }
+  }
 }
-
-

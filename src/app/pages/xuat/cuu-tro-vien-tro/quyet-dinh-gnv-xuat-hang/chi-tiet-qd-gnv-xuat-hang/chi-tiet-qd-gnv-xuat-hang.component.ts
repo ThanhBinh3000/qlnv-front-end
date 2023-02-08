@@ -77,6 +77,8 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
       donViTinh: ['kg'],
       tenDvi: [],
       soLuong: [0],
+      canCu: [],
+      fileDinhKem: [],
       tenLoaiVthh: [],
       tenCloaiVthh: [],
       /*noiDungCuuTroView: new FormArray([this.fb.group({
@@ -120,7 +122,6 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
         */
       ])
       await this.loadDetail(this.id)
-      // await Promise.all([this.loaiVTHHGetAll(), this.loaiHopDongGetAll()]);
       this.spinner.hide();
     } catch (e) {
       this.notification.error(MESSAGE.ERROR, 'Có lỗi xảy ra.');
@@ -221,6 +222,8 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
               delete res.data.id
               delete res.data.soQd
               delete res.data.nam
+              delete res.data.canCu
+              delete res.data.fileDinhKem
               this.formData.patchValue(res.data)
               this.formData.patchValue({
                 soQdPd: soQdPd,
@@ -230,7 +233,7 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
               let dataView = chain(this.formData.value.noiDungCuuTro)
                 .groupBy("noiDung")
                 .map((value, key) => {
-                  return {idVirtual: uuid.v4(), noiDung: key, soLuong: value[0].soLuong, tenCloaiVthh: 'haha1'};
+                  return {idVirtual: uuid.v4(), noiDung: key, soLuong: value[0].soLuong, tenCloaiVthh: ''};
                 }).value();
               this.noiDungCuuTroView = dataView;
               this.dsNoiDung = dataView
@@ -249,8 +252,8 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
   async loadDsQdPd() {
     this.quyetDinhPheDuyetPhuongAnCuuTroService.search({
       trangThai: STATUS.BAN_HANH,
-      // namKh: this.formData.get('nam').value,
-      nam: 2022,
+      nam: this.formData.get('nam').value,
+      // nam: 2022,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
         page: this.page - 1,
@@ -273,7 +276,7 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
       noiDungCuuTro: this.flattenTree(this.noiDungCuuTroView)
     })
     await this.createUpdate(this.formData.value);
-    await this.approve(this.id, STATUS.CHO_DUYET_LDC, 'Bạn có muốn gửi duyệt ?');
+    await this.approve(this.id, STATUS.CHO_DUYET_TP, 'Bạn có muốn gửi duyệt ?');
 
   }
 
@@ -394,7 +397,7 @@ export class ChiTietQdGnvXuatHangComponent extends Base2Component implements OnI
   async loadDsDonVi() {
     const res = await this.donViService.layDonViCon();
     if (res.msg == MESSAGE.SUCCESS) {
-      this.dsDonVi = res.data;
+      this.dsDonVi = res.data.filter(s => !s.type);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }

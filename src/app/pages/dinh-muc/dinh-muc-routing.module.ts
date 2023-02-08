@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/guard/auth.guard';
-import { DinhMucPhiBaoQuanComponent } from './dinh-muc-phi-bao-quan/dinh-muc-phi-bao-quan.component';
+import { DinhMucPhiComponent } from './dinh-muc-phi-bao-quan/dinh-muc-phi.component';
 import { DinhMucComponent } from './dinh-muc.component';
 
 const routes: Routes = [
@@ -12,12 +12,12 @@ const routes: Routes = [
         children: [
             {
                 path: '',
-                redirectTo: 'dinh-muc-phi-bao-quan',
+                redirectTo: 'dinh-muc-phi',
                 pathMatch: 'full'
             },
             {
-                path: 'dinh-muc-phi-bao-quan',
-                component: DinhMucPhiBaoQuanComponent,
+                path: 'dinh-muc-phi',
+                component: DinhMucPhiComponent,
                 canActivate: [AuthGuard],
             },
             {
