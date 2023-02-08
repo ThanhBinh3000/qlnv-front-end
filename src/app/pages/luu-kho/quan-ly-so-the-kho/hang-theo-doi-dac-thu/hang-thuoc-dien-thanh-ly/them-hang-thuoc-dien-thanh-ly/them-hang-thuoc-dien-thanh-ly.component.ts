@@ -376,7 +376,6 @@ export class ThemHangThuocDienThanhLyComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, "Số lượng yêu cầu không hợp lệ!");
       return;
     }
-    console.log(this.dataTable)
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new IHangThanhLy();
     this.updateEditCache();

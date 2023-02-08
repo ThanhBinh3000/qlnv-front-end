@@ -1,23 +1,26 @@
-
 <ng-container *ngIf="!isDetail; else templateThemmoi">
   <div class="bg-trang">
     <nz-card class="mt16 flex-card p-lr16">
       <div nz-row [nzGutter]="20">
         <div nz-col nzSpan="3">
-          <label class="search__label">Số quyết định/Số thông báo</label>
-          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soQd" />
+          <label class="search__label">Số quyết định</label>
+          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soCongVan" />
         </div>
         <div nz-col nzSpan="3">
-          <label class="search__label">Số công văn trình BTC/Bộ KHĐT</label>
-          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soQd" />
+          <label class="search__label">Phương án TC</label>
+          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soCongVan" />
         </div>
         <div nz-col nzSpan="14">
           <label class="search__label">Trích yếu</label>
-          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.soQd" />
+          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.trichYeu" />
         </div>
-        <div nz-col nzSpan="4">
-          <label class="search__label">Ngày quyết định</label>
-          <nz-range-picker [(ngModel)]="searchFilter.ngayQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
+        <div nz-col nzSpan="3">
+          <label class="search__label">Ngày ký</label>
+          <nz-range-picker  nzFormat="dd/MM/yyyy"></nz-range-picker>
+        </div>
+        <div nz-col nzSpan="3">
+          <label class="search__label">Trạng thái</label>
+          <input class="search__input" placeholder="" nz-input [(ngModel)]="searchFilter.trichYeu" />
         </div>
       </div>
       <div nz-col class="cangiua group-button-search">
@@ -34,7 +37,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG KHO TÀNG DTQG HÀNG NĂM</h3>
+      <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG KHO TÀNG DTQG TRUNG HẠN (5 NĂM)</h3>
       <div class="buttons">
         <button  type="button" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do"></i>
@@ -60,7 +63,7 @@
                    [nzIndeterminate]="indeterminate"></label>
           </th>
           <th class="text-center" style="width: 2%;">STT</th>
-          <th class="text-center" style="width: 11%;">Số quyết định/Số thông báo</th>
+          <th class="text-center" style="width: 11%;">Số quyết định</th>
           <th class="text-center" style="width: 11%;">Phương án của Tổng cục</th>
           <th class="text-center" style="width: 11%;">Ngày ký</th>
           <th class="text-center" style="width: 40%;">Trích yếu</th>
@@ -120,11 +123,11 @@
                    [nzDisabled]="data.trangThai != '00'"></label>
           </td>
           <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-          <td>{{ data.soQd }}</td>
-          <td>{{ data.ngayQd | date: 'dd/MM/YYYY' }}</td>
-          <td>{{ data.trichYeu }}</td>
-          <td>{{ data.soQdGoc }}</td>
-          <td>{{data.namKhoach}}</td>
+          <td>{{ data.soCongVan }}</td>
+          <td>{{ data.ngayKyBtc | date: 'dd/MM/YYYY' }}</td>
+          <td>{{ data.phuongAnTc }}</td>
+          <td>{{ data.namBatDau + ' - ' + data.namKetThuc }}</td>
+          <td>{{data.trichYeu}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
             <a (click)="redirectToChiTiet(data.id,false)">

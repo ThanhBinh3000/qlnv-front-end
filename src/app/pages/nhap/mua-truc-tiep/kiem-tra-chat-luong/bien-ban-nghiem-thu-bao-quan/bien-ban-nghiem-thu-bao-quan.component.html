@@ -2,17 +2,24 @@
     <div class="bg-trang">
         <nz-card class="mt16 flex-card p-lr16">
             <div class="search__body" nz-row [nzGutter]="20">
+                <div nz-col nzSpan="3">
+                    <label class="search__label">Năm kế hoạch</label>
+                    <nz-select [(ngModel)]="searchFilter.namKh">
+                        <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
+                    </nz-select>
+                </div>
                 <div nz-col nzSpan="5">
                     <label class="search__label">Số quyết định nhập</label>
-                    <input class="search__input" placeholder="Nhập số quyết định" nz-input [(ngModel)]="soQuyetDinh" />
+                    <input class="search__input" placeholder="Nhập số quyết định" nz-input
+                        [(ngModel)]="searchFilter.soQd" />
                 </div>
                 <div nz-col nzSpan="5">
                     <label class="search__label">Số biên bản</label>
-                    <input class="search__input" placeholder="Số biên bản" nz-input [(ngModel)]="soBB" />
+                    <input class="search__input" placeholder="Số biên bản" nz-input [(ngModel)]="searchFilter.soBb" />
                 </div>
                 <div nz-col nzSpan="5">
                     <label class="search__label">Ngày biên bản</label>
-                    <nz-range-picker [(ngModel)]="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                    <nz-range-picker [(ngModel)]="searchFilter.ngayKn" nzFormat="dd/MM/yyyy"></nz-range-picker>
                 </div>
             </div>
             <div class="cangiua group-button-search">
@@ -28,16 +35,17 @@
         </nz-card>
 
         <div class="group-button">
-            <h3>Danh sách lập biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ quốc gia</h3>
+            <h3 style="text-transform: uppercase;">Danh sách lập biên bản nghiệm thu bảo quản lần đầu nhập hàng dự trữ
+                quốc gia</h3>
             <div class="buttons">
-                <button *ngIf="userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_EXP')" type="button"
-                    class="btn btn-sub" (click)="export()">
+                <button *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_EXP')
+                " type="button" class="btn btn-sub" (click)="export()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
 
-                <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)"
-                    *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTDT_KTCL_LT_BBNTBQLD_THEM')">
+                <button type="button" class="btn btn-main" (click)="redirectToChiTiet(false, 0)" *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM')
+                    ">
                     <i class="icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
@@ -73,7 +81,8 @@
                             <td class="bold">{{ item.tgianNkho }}</td>
                             <td colspan="6"></td>
                             <td>
-                                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                                <a *ngIf="userService.isChiCuc()&& userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_THEM')
+                                " (click)="redirectToChiTiet(false, 0,item.id)">
                                     <i class="fa fa-plus"></i>
                                 </a>
                             </td>
@@ -92,15 +101,15 @@
                                     <td>{{bbNghiemThuBq.kinhPhiTcPd}}</td>
                                     <td>{{bbNghiemThuBq.tenTrangThai}}</td>
                                     <td>
-                                        <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DA_DUYET_LDCC"
+                                        <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_XEM')"
                                             (click)="redirectToChiTiet(false, bbNghiemThuBq.id)">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a *ngIf="bbNghiemThuBq.trangThai != STATUS.DA_DUYET_LDCC"
+                                        <a *ngIf="bbNghiemThuBq.trangThai != STATUS.DA_DUYET_LDCC && userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_CTKH_THEM')"
                                             (click)="redirectToChiTiet(false, bbNghiemThuBq.id)">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DU_THAO"
+                                        <a *ngIf="bbNghiemThuBq.trangThai == STATUS.DU_THAO && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_XOA')"
                                             (click)="xoaItem(bbNghiemThuBq)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>

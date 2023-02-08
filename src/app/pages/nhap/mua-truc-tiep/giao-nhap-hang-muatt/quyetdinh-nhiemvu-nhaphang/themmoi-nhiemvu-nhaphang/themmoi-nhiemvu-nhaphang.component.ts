@@ -126,9 +126,11 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       donViTinh: [''],
       tgianNkho: [''],
       tenCloaiVthh: [''],
+      moTaHangHoa: [''],
       lyDoTuChoi: [''],
       diaDiemGiaoNhan: [''],
-      ngayKyHd: ['']
+      ngayKyHd: [''],
+      fileDinhKem: [FileDinhKem],
     })
   }
 
@@ -182,7 +184,7 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
         "maDvi": "010102",
         "loaiVthh": "0101",
         "tenLoaiVthh": "Thóc tẻ",
-        "cloaiVthh": "cloaiVthh",
+        "cloaiVthh": "010102",
         "tenCloaiVthh": "Hạt dài",
         "moTaHangHoa": "thóc hạt rất dài",
         "donViTinh": "kg",
@@ -888,6 +890,25 @@ export class ThemmoiNhiemvuNhaphangComponent implements OnInit {
       return true
     } else {
       return false;
+    }
+  }
+
+  getNameFile($event: any) {
+    if ($event.target.files) {
+      const itemFile = {
+        name: $event.target.files[0].name,
+        file: $event.target.files[0] as File,
+      };
+      this.uploadFileService
+        .uploadFile(itemFile.file, itemFile.name)
+        .then((resUpload) => {
+          let fileDinhKemQd = new FileDinhKem();
+          fileDinhKemQd.fileName = resUpload.filename;
+          fileDinhKemQd.fileSize = resUpload.size;
+          fileDinhKemQd.fileUrl = resUpload.url;
+          fileDinhKemQd.idVirtual = new Date().getTime();
+          this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
+        });
     }
   }
 }

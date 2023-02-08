@@ -25,7 +25,12 @@
           <span>Phê duyệt</span>
         </button>
         <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
-           *ngIf="(deXuatDieuChinh.trangThai == STATUS.CHO_DUYET_LDC || deXuatDieuChinh.trangThai == STATUS.CHO_DUYET_TP ) && !userService.isTongCuc()">
+           *ngIf="(deXuatDieuChinh.trangThai == STATUS.CHO_DUYET_TP ) && !userService.isTongCuc() && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_DUYET_TP'))">
+          <i class="icon htvbdh_tcdt_tuchoi"></i>
+          <span>Từ chối</span>
+        </a>
+        <a class="btn btn-outline-grey btn-sm waves-effect waves-light" (click)="tuChoi()"
+           *ngIf="(deXuatDieuChinh.trangThai == STATUS.CHO_DUYET_LDC  ) && !userService.isTongCuc() && (userService.isAccessPermisson('KHVDTNSNN_GKHDT_VDNDT_DCCTKH_DEXUAT_DUYET_LDCUC'))">
           <i class="icon htvbdh_tcdt_tuchoi"></i>
           <span>Từ chối</span>
         </a>
@@ -59,7 +64,7 @@
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Năm kế hoạch
               </nz-form-label>
               <nz-form-control [nzErrorTip]="error">
-                <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()" nzDisabled>
+                <nz-select formControlName="namKeHoach" (ngModelChange)="selectNam()" >
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                 </nz-select>
               </nz-form-control>
@@ -502,14 +507,14 @@
               </td>
               <td class="text-right">{{deXuatMuoi?.tdc ?? 0 | number: '1.0-1'}}</td>
               <td class="text-right">
-                <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="deXuatMuoi.slTangMuoi"
+                <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="deXuatMuoi.slTang"
                                  (input)="caculatorDieuChinhMuoi(deXuatMuoi)" [nzMin]="0 - (deXuatMuoi?.tdc ?? 0)"
                                  [nzMax]="globals.prop.MAX_INPUT"
                                  [nzDisabled]="!deXuatMuoi.chiTieu || deXuatMuoi.chiTieu == ''">
                 </nz-input-number>
               </td>
               <td class="text-right">
-                <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="deXuatMuoi.slGiamMuoi"
+                <nz-input-number type="text" nz-input [nzSize]="'small'" [(ngModel)]="deXuatMuoi.slGiam"
                                  (input)="caculatorDieuChinhMuoi(deXuatMuoi)" [nzMin]="0 - (deXuatMuoi?.tdc ?? 0)"
                                  [nzMax]="globals.prop.MAX_INPUT"
                                  [nzDisabled]="!deXuatMuoi.chiTieu || deXuatMuoi.chiTieu == ''">

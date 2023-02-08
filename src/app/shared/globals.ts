@@ -1,5 +1,5 @@
-import { formatNumber } from '@angular/common';
-import { Injectable } from '@angular/core';
+import {formatNumber} from '@angular/common';
+import {Injectable} from '@angular/core';
 import jsonGlobals from './globals.json';
 
 @Injectable()

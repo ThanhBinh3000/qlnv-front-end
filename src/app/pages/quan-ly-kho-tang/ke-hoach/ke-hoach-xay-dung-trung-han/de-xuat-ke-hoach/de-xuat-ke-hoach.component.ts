@@ -109,6 +109,7 @@ export class DeXuatKeHoachComponent implements OnInit {
 
     const dsTong = await this.dviService.layDonViTheoCapDo(body);
     this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
+    this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB")
     if (this.userService.isCuc()) {
       this.searchFilter.maDvi = this.userInfo.MA_DVI
     }
@@ -118,6 +119,7 @@ export class DeXuatKeHoachComponent implements OnInit {
     this.spinner.show();
     let body = {
       diaDiem: this.searchFilter.diaDiem,
+      role : this.userService.isCuc() ? 'CUC' : 'TC',
       dmucDuAn: this.searchFilter.dmucDuAn,
       loaiDuAn: this.searchFilter.loaiDuAn,
       namBatDau: this.searchFilter.namBatDau,

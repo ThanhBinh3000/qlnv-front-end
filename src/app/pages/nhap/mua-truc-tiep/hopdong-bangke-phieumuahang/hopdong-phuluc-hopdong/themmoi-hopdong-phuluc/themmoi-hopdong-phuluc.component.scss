@@ -36,3 +36,16 @@
     line-height: 16px;
   }
 }
+
+.title-card {
+  width: 100%;
+
+  & > * {
+    display: inline;
+  }
+
+  button {
+    float: right;
+  }
+}
+
