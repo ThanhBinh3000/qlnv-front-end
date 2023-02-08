@@ -4,12 +4,13 @@
             <i class="fa fa-arrow-left"></i>
             <span>Quay lại</span>
         </button>
-        <button *ngIf="formData.value.trangThai != STATUS.HOAN_THANH_CAP_NHAT" type="button"
+        <button *ngIf="formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT" type="button"
             class="btn btn-sub xanh-nhat" (click)="save()">
             <i class="icon htvbdh_checkfile2"></i>
             <span>Hoàn thành cập nhật</span>
         </button>
-        <button class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
+        <button *ngIf="formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT"
+            class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
             <i class="icon htvbdh_tcdt_save"></i>
             <span>Lưu</span>
         </button>
@@ -157,13 +158,14 @@
 
     <!-- START DANH SÁCH CÁC GÓI THẦU -->
     <nz-card class="mg-t-16 flex-card p-lr16 " *ngIf=" radioValue == 'Chào giá'">
-        <div class="buttons">
-            <button
-                *ngIf="idChaoGia > 0 && !isShowFromKq && formData.value.trangThaiTkhai != STATUS.HOAN_THANH_CAP_NHAT "
-                class="btn btn-main btn-sm waves-effect waves-light" (click)="saveGoiThau()">
-                <i class="icon htvbdh_tcdt_save"></i>
-                <span>Lưu</span>
-            </button>
+        <div class="header header-green-background mg-t-10">
+            <div class="header-text">
+                <div class="title-chi-tieu">
+                    <span>
+                    </span>
+                    <span> Chi tiết thông tin chào giá </span>
+                </div>
+            </div>
         </div>
         <nz-card class="mg-t-16 flex-card p-lr16 table-card">
             <nz-table #basicTable nzBordered [nzData]="listOfData" [nzFrontPagination]="false"

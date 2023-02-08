@@ -56,26 +56,20 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
 
   allChecked = false;
   indeterminate = false;
-
-
-  filterTable: any = {
-    soQuyetDinhNhap: '',
+  listNam: any[] = [];
+  searchFilter = {
+    namKh: dayjs().get('year'),
+    soQd: '',
     soBb: '',
-    ngayNghiemThuShow: '',
-    tenDiemKho: '',
-    tenNhaKho: '',
-    tenNganLo: '',
-    chiPhiThucHienTrongNam: '',
-    chiPhiThucHienNamTruoc: '',
-    tongGiaTri: '',
-    trangThaiDuyet: '',
+    ngayKn: '',
   };
+
   STATUS = STATUS
   idQdGiaoNvNh: number
   constructor(
     private spinner: NgxSpinnerService,
     private donViService: DonviService,
-    private MttBienBanNghiemThuBaoQuan: MttBienBanNghiemThuBaoQuan,
+    private bienBanNghiemThuBaoQuan: MttBienBanNghiemThuBaoQuan,
     private notification: NzNotificationService,
     private modal: NzModalService,
     private router: Router,
@@ -91,6 +85,12 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
     try {
       if (!this.typeVthh || this.typeVthh == '') {
         this.isTatCa = true;
+      }
+      for (let i = -3; i < 23; i++) {
+        this.listNam.push({
+          value: dayjs().get('year') - i,
+          text: dayjs().get('year') - i,
+        });
       }
       this.userInfo = this.userService.getUserLogin();
       let res = await this.donViService.layTatCaDonVi();
@@ -212,13 +212,12 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
   }
 
   clearFilter() {
-    this.inputDonVi = '';
-    this.soBB = null;
-    this.ngayTongHop = null;
-    this.diemKho = '';
-    this.nhaKho = '';
-    this.nganLo = '';
-    this.soQuyetDinh = null;
+    this.searchFilter = {
+      namKh: null,
+      soQd: '',
+      soBb: '',
+      ngayKn: '',
+    }
     this.search();
   }
 
@@ -248,7 +247,8 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
 
         };
       });
-
+      this.dataTableAll = cloneDeep(this.dataTable);
+      this.totalRecord = data.totalElements;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -292,7 +292,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.MttBienBanNghiemThuBaoQuan.delete({ id: item.id }).then((res) => {
+          this.bienBanNghiemThuBaoQuan.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -325,7 +325,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.MttBienBanNghiemThuBaoQuan.delete({ id: item.id }).then((res) => {
+          this.bienBanNghiemThuBaoQuan.delete({ id: item.id }).then((res) => {
             if (res.msg == MESSAGE.SUCCESS) {
               this.notification.success(
                 MESSAGE.SUCCESS,
@@ -347,32 +347,30 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
   }
 
   export() {
-    if (this.totalRecord && this.totalRecord > 0) {
+    if (this.totalRecord > 0) {
       this.spinner.show();
       try {
         let body = {
-          denNgayLap:
-            this.ngayTongHop && this.ngayTongHop.length > 1
-              ? dayjs(this.ngayTongHop[1]).format('YYYY-MM-DD')
-              : null,
-          loaiVthh: this.typeVthh,
-          maDvi: this.userInfo.MA_DVI,
-          maNganKho: this.nganLo,
-          orderBy: null,
-          orderDirection: null,
-          paggingReq: null,
-          soBb: this.soBB,
-          str: null,
-          trangThai: null,
-          tuNgayLap:
-            this.ngayTongHop && this.ngayTongHop.length > 0
-              ? dayjs(this.ngayTongHop[0]).format('YYYY-MM-DD')
-              : null,
+          "namKh": this.searchFilter.namKh,
+          "maDonVi": this.userInfo.MA_DVI,
+          "ngayKnDen": this.searchFilter.ngayKn && this.searchFilter.ngayKn.length > 1
+            ? dayjs(this.searchFilter.ngayKn[1]).format('YYYY-MM-DD')
+            : null,
+          "ngayKnTu": this.searchFilter.ngayKn && this.searchFilter.ngayKn.length > 0
+            ? dayjs(this.searchFilter.ngayKn[0]).format('YYYY-MM-DD')
+            : null,
+          "soQd": this.searchFilter.soQd,
+          "soBb": this.searchFilter.soBb,
+          "orderDirection": null,
+          "paggingReq": null,
+          "str": null,
+          "tenNguoiGiao": null,
+          "trangThai": null
         };
-        this.MttBienBanNghiemThuBaoQuan
+        this.bienBanNghiemThuBaoQuan
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-bien-ban-nghiem-thu-bao-quan.xlsx'),
+            saveAs(blob, 'danh-sach-bien-ban-nghiem-thu-bao-quan-lan-dau.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -384,6 +382,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
     }
   }
+
 
   redirectToChiTiet(isView: boolean, id: number, idQdGiaoNvNh?: number) {
     this.selectedId = id;
@@ -419,7 +418,7 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
         nzOnOk: async () => {
           this.spinner.show();
           try {
-            let res = await this.MttBienBanNghiemThuBaoQuan.deleteMuti({
+            let res = await this.bienBanNghiemThuBaoQuan.deleteMuti({
               ids: dataDelete,
             });
             if (res.msg == MESSAGE.SUCCESS) {
@@ -465,21 +464,6 @@ export class BienBanNghiemThuBaoQuanComponent implements OnInit {
     } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
-  }
-
-  clearFilterTable() {
-    this.filterTable = {
-      soQuyetDinhNhap: '',
-      soBb: '',
-      ngayNghiemThuShow: '',
-      tenDiemKho: '',
-      tenNhaKho: '',
-      tenNganLo: '',
-      chiPhiThucHienTrongNam: '',
-      chiPhiThucHienNamTruoc: '',
-      tongGiaTri: '',
-      trangThaiDuyet: '',
-    };
   }
 
   print() { }

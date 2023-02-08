@@ -41,7 +41,7 @@
       </div>
     </nz-card>
     <div class="group-button">
-      <h3 class="text-uppercase">Danh sách phương án xuất viện trợ cứu trợ</h3>
+      <h3 class="text-uppercase">Quản lý thông tin đấu giá</h3>
       <div class="buttons">
         <button type="button" class="btn btn-sub" (click)="exportData()"
           *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP')">
@@ -87,7 +87,7 @@
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
               <ng-container *ngFor="let dataChild of data.children , let y = index">
-                <tr>
+                <tr *ngIf="this.userService.isCuc() ? dataChild.maDvi == userInfo.MA_DVI : null">
                   <td></td>
                   <td></td>
                   <td></td>

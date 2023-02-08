@@ -54,7 +54,7 @@
                         <nz-form-label [nzNoColon]="true">
                             Năm kế hoạch
                         </nz-form-label>
-                        <nz-form-control nz-col [nzErrorTip]="error">
+                        <nz-form-control nz-col>
                             <nz-select formControlName="namKh" [nzDisabled]="true">
                                 <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                                 </nz-option>
@@ -300,7 +300,7 @@
                 <div nz-col nzSpan="4">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                            Họ và tên người giao hàng
+                            Họa và tên người giao hàng
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
@@ -348,7 +348,7 @@
                 <div nz-col nzSpan="4">
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true">
-                            Thời gian giao,nhận hàng
+                            Thời gian giao, nhận hàng
                         </nz-form-label>
                         <nz-form-control [nzErrorTip]="error">
                             <nz-date-picker formControlName="thoiGianGiaoNhan" nzFormat="HH:mm dd/MM/yyyy"

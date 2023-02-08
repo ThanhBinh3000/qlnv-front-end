@@ -1,26 +1,31 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import * as dayjs from 'dayjs';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {
   DialogThongTinPhuLucBangGiaHopDongComponent
 } from 'src/app/components/dialog/dialog-thong-tin-phu-luc-bang-gia-hop-dong/dialog-thong-tin-phu-luc-bang-gia-hop-dong.component';
-import { MESSAGE } from 'src/app/constants/message';
-import { FileDinhKem } from 'src/app/models/FileDinhKem';
-import { STATUS } from "../../../../../../constants/status";
-import { ThongTinPhuLucHopDongService } from "../../../../../../services/thongTinPhuLucHopDong.service";
+import {MESSAGE} from 'src/app/constants/message';
+import {FileDinhKem} from 'src/app/models/FileDinhKem';
+import {STATUS} from "../../../../../../constants/status";
+import {ThongTinPhuLucHopDongService} from "../../../../../../services/thongTinPhuLucHopDong.service";
 import {
   DialogTableSelectionComponent
 } from "../../../../../../components/dialog/dialog-table-selection/dialog-table-selection.component";
-import { convertTienTobangChu } from 'src/app/shared/commonFunction';
-import { QuyetDinhPheDuyetKetQuaChaoGiaMTTService } from 'src/app/services/quyet-dinh-phe-duyet-ket-qua-chao-gia-mtt.service';
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from './../../../../../../services/storage.service';
-import { DanhMucService } from './../../../../../../services/danhmuc.service';
-import { UploadFileService } from './../../../../../../services/uploaFile.service';
+import {convertTienTobangChu} from 'src/app/shared/commonFunction';
+import {
+  QuyetDinhPheDuyetKetQuaChaoGiaMTTService
+} from 'src/app/services/quyet-dinh-phe-duyet-ket-qua-chao-gia-mtt.service';
+import {Base2Component} from 'src/app/components/base2/base2.component';
+import {HttpClient} from '@angular/common/http';
+import {StorageService} from './../../../../../../services/storage.service';
+import {DanhMucService} from './../../../../../../services/danhmuc.service';
+import {UploadFileService} from './../../../../../../services/uploaFile.service';
+import {
+  MttHopDongPhuLucHdService
+} from './../../../../../../services/qlnv-hang/nhap-hang/mua-truc-tiep/MttHopDongPhuLucHdService.service';
 
 @Component({
   selector: 'app-themmoi-hopdong-phuluc',
@@ -54,10 +59,8 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private danhMucService: DanhMucService,
-    private uploadFileService: UploadFileService,
     private quyetDinhPheDuyetKetQuaChaoGiaMTTService: QuyetDinhPheDuyetKetQuaChaoGiaMTTService,
-    private thongTinPhuLucHopDongService: ThongTinPhuLucHopDongService,
-
+    private thongTinPhuLucHopDongService: MttHopDongPhuLucHdService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, thongTinPhuLucHopDongService);
     this.formData = this.fb.group(
@@ -96,6 +99,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
         cdtStk: [null],
         cdtMoTai: [null],
         cdtThongTinGiayUyQuyen: [null],
+        nccId: [null],
         nccTen: [null],
         nccDiaChi: [null],
         nccMst: [null],
@@ -177,15 +181,19 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
       let res = await this.thongTinPhuLucHopDongService.getDetail(id);
       if (res.msg == MESSAGE.SUCCESS) {
         if (res.data) {
-          const data = res.data;
+          const data = res.data[0];
+          await this.bindingDataQdPdKqChaoGia(data.idQdPdKq);
+
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.formData.patchValue({
-            maHdong: data.soHd?.split('/')[0],
+            soHd: data.soHd?.split('/')[0],
             tgianGnhan: data.tgianGnhanTu && data.tgianGnhanDen ? [data.tgianGnhanTu, data.tgianGnhanDen] : null
 
           });
           this.fileDinhKem = data.fileDinhKems;
-          this.dataTable = data.details;
+          this.dataTable = data.diaDiemGiaoNhan;
+
+
         }
       }
     }
@@ -207,21 +215,20 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
       return;
     }
     let body = this.formData.value;
-    if (this.formData.value.maHdong) {
-      body.soHd = `${this.formData.value.maHdong}${this.maHopDongSuffix}`;
-      body.tgianGnhanDen = this.formData.get('tgianGnhan').value
-        ? dayjs(this.formData.get('tgianGnhan').value[0]).format(
-          'YYYY-MM-DD',
-        )
-        : null;
-      body.tgianGnhanTu = this.formData.get('tgianGnhan').value
-        ? dayjs(this.formData.get('tgianGnhan').value[1]).format(
-          'YYYY-MM-DD',
-        )
-        : null;
-    }
+    body.soHd = `${this.formData.value.soHd}${this.maHopDongSuffix}`;
+    body.tgianGnhanTu = this.formData.get('tgianGnhan').value
+      ? dayjs(this.formData.get('tgianGnhan').value[0]).format(
+        'YYYY-MM-DD',
+      )
+      : null;
+    body.tgianGnhanDen = this.formData.get('tgianGnhan').value
+      ? dayjs(this.formData.get('tgianGnhan').value[1]).format(
+        'YYYY-MM-DD',
+      )
+      : null;
+
     body.fileDinhKems = this.fileDinhKem;
-    body.detail = this.dataTable;
+    body.diaDiemGiaoNhan = this.dataTable;
     let res = null;
     if (this.formData.get('id').value) {
       res = await this.thongTinPhuLucHopDongService.update(body);
@@ -246,8 +253,6 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
     }
     this.spinner.hide();
   }
-
-
 
 
   redirectPhuLuc(id) {
@@ -299,7 +304,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
 
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách kết quả lựa chọn nhà thầu',
+      nzTitle: 'Danh sách căn cứ QĐ phê duyệt kết quả chào giá',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -349,10 +354,17 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
       moTaHangHoa: dataDtl.moTaHangHoa,
       donViTinh: "kg",
       soLuong: dataDtl.tongSoLuong * 1000,
-      donGiaVat: dataDtl.donGia * dataDtl * dataDtl.thueGtgt,
-      thanhTien: +(dataDtl.tongSoLuong * 1000) * +(dataDtl.donGiaVat),
+      donGiaVat: dataDtl.donGia + (dataDtl.donGia * dataDtl.thueGtgt / 100),
     })
+    this.calculatorThanhTien()
+  }
 
+  calculatorThanhTien() {
+    this.formData.patchValue({
+      thanhTien:
+        +this.formData.get('soLuong').value *
+        +this.formData.get('donGiaVat').value,
+    });
   }
 
   convertTienTobangChu(tien: number): string {
@@ -388,7 +400,7 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.thongTinPhuLucHopDongService.delete({ id: id })
+          this.thongTinPhuLucHopDongService.delete({id: id})
             .then(async () => {
               await this.loadChiTiet(this.idInput);
             });
@@ -431,9 +443,34 @@ export class ThemmoiHopdongPhulucComponent extends Base2Component implements OnI
           fileDinhKemQd.fileSize = resUpload.size;
           fileDinhKemQd.fileUrl = resUpload.url;
           fileDinhKemQd.idVirtual = new Date().getTime();
-          this.formData.patchValue({ fileDinhKem: fileDinhKemQd, fileName: itemFile.name })
+          this.formData.patchValue({fileDinhKem: fileDinhKemQd, fileName: itemFile.name})
         });
     }
+  }
+
+  changeDviCungCap($event: any) {
+    let nccData = this.listDviCungCap.find(s => s.id === $event);
+    if (nccData) {
+      this.formData.patchValue({
+        nccTen: nccData.canhanTochuc,
+        nccDiaChi: nccData.diaChi,
+        nccMst: nccData.mst,
+        // nccTenNguoiDdien: nccData.canhanTochuc,
+        nccChucVu: nccData.canhanTochuc,
+        nccSdt: nccData.sdt,
+        // nccFax: nccData.canhanTochuc,
+        // nccStk: nccData.canhanTochuc,
+        // nccMoTai: nccData.canhanTochuc,
+        // nccThongTinGiayUyQuyen: nccData.canhanTochuc,
+      })
+    }
+  }
+
+  themMoiPhuLuc() {
+    // this.isViewPhuLuc = true;
+  }
+  backPhuLuc() {
+    // this.isViewPhuLuc = false;
   }
 
 }

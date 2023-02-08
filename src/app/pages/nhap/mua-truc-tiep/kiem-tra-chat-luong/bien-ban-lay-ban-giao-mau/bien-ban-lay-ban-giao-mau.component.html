@@ -36,13 +36,15 @@
             </div>
         </nz-card>
         <div class="group-button">
-            <h3>Danh sách biên bản lấy mẫu</h3>
+            <h3 style="text-transform: uppercase;">Danh sách biên bản lấy mẫu/Bàn giao mẫu</h3>
             <div class="buttons">
-                <button type="button" class="btn btn-sub" (click)="exportData()">
+                <button type="button" class="btn btn-sub"
+                    *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_EXP')" (click)="exportData()">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="goDetail(null)" *ngIf="userService.isChiCuc()">
+                <button type="button" class="btn btn-main" (click)="goDetail(null)"
+                    *ngIf="userService.isChiCuc() && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_THEM')">
                     <i class=" icon htvbdh_dau-cong"></i>
                     <span>Thêm</span>
                 </button>
@@ -64,8 +66,8 @@
                         <th>Lô kho </th>
                         <th>Số BB LM/BGM</th>
                         <th>Ngày lấy mẫu</th>
-                        <th>{{ loaiVthh == '02' ? 'Số BB gửi hàng' : 'Số BB nhập đầy kho' }} </th>
-                        <th>{{ loaiVthh == '02' ? 'Ngày gửi hàng' : 'Ngày nhập đầy kho' }} </th>
+                        <th>Số BB nhập đầy kho </th>
+                        <th>Ngày nhập đầy kho</th>
                         <th>Trạng thái</th>
                         <th>Hành động</th>
                     </tr>
@@ -80,7 +82,8 @@
                             <td class="bold">{{ item.tgianNkho }}</td>
                             <td colspan="9"></td>
                             <td>
-                                <a (click)="redirectToChiTiet(false, 0,item.id)">
+                                <a *ngIf="userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_THEM')"
+                                    (click)="redirectToChiTiet(false, 0,item.id)">
                                     <i class="fa fa-plus"></i>
                                 </a>
                             </td>
@@ -97,25 +100,21 @@
                                     <td>{{bb.tenLoKho}}</td>
                                     <td>{{bb.soBienBan}}</td>
                                     <td>{{bb.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
-                                    <td>{{
-                                        bb.soBienBanNhapDayKho }}</td>
-                                    <td>{{
-                                        bb.ngayKetThucNhap | date:
-                                        'dd/MM/YYYY'
-                                        }}
+                                    <td>{{bb.soBbNhapDayKho }}</td>
+                                    <td>{{bb.ngayKetThucNhap | date:'dd/MM/YYYY'}}
                                     </td>
                                     <td>{{bb.tenTrangThai}}</td>
                                     <td class="text-left">
                                         <a (click)="goDetail(bb.id)"
-                                            *ngIf="(bb.trangThai == STATUS.DA_DUYET_LDC || bb.trangThai == STATUS.DA_DUYET_CBV )">
+                                            *ngIf="(bb.trangThai == STATUS.DA_DUYET_LDC || bb.trangThai == STATUS.DA_DUYET_CBV ) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_XEM')">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a *ngIf="(bb.trangThai != STATUS.DA_DUYET_LDC && bb.trangThai != STATUS.DA_DUYET_CBV )"
-                                            (click)="goDetail(bb.id,['XHDTQG_PTDG_KHBDG_VT_DEXUAT_THEM','XHDTQG_PTDG_KHBDG_LT_DEXUAT_THEM'])">
+                                        <a *ngIf="(bb.trangThai != STATUS.DA_DUYET_LDC && bb.trangThai != STATUS.DA_DUYET_CBV ) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_THEM')"
+                                            (click)="goDetail(bb.id) ">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                        <a *ngIf="(bb.trangThai == STATUS.DU_THAO )"
-                                            (click)="delete(bb,['XHDTQG_PTDG_KHBDG_VT_DEXUAT_XOA','XHDTQG_PTDG_KHBDG_LT_DEXUAT_XOA'])">
+                                        <a *ngIf="(bb.trangThai == STATUS.DU_THAO ) && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBLMBGM_XOA')"
+                                            (click)="xoaItem(bb)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
                                     </td>

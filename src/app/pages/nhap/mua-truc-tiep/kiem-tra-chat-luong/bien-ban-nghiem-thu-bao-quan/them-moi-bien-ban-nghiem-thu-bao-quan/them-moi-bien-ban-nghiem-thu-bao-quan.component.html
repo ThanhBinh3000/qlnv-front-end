@@ -16,9 +16,10 @@
             <i class="icon htvbdh_tcdt_tuchoi do"></i>
             <span>Từ chối</span>
         </button>
-        <button class="btn btn-sub xanh-nhat"
-            *ngIf=" !(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_TK )"
-            (click)="pheDuyet()">
+        <button class="btn btn-sub xanh-nhat" *ngIf=" !(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDCC || formData.value.trangThai == STATUS.TU_CHOI_KT || formData.value.trangThai == STATUS.TU_CHOI_TK )
+            && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_TK')
+            && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_KT')
+            && userService.isAccessPermisson('NHDTQG_PTMTT_KTCL_LT_BBNTBQLD_DUYET_LDCC')" (click)="pheDuyet()">
             <i class="icon htvbdh_tcdt_pheduyet "></i>
             <span>Duyệt</span>
         </button>
@@ -127,7 +128,7 @@
                         <nz-form-control [nzErrorTip]="error">
                             <nz-input-group>
                                 <nz-input-number type="text" nz-input [nzSize]="'small'"
-                                    placeholder="Nhập khối lượng theo hợp đồng" formControlName="slThucNhap"
+                                    placeholder="Nhập khối lượng theo hợp đồng" formControlName="slCanNhap"
                                     [nzFormatter]="globals.formatter" [nzParser]="globals.parser" [nzDisabled]="true">
                                 </nz-input-number>
                             </nz-input-group>
@@ -316,7 +317,7 @@
                     <nz-form-item>
                         <nz-form-label [nzNoColon]="true"> Thực nhập</nz-form-label>
                         <nz-form-control>
-                            <input [readonly]="true" nz-input formControlName="soLuongPhieuNhapKho" readonly />
+                            <input [readonly]="true" nz-input formControlName="slThucNhap" readonly />
                         </nz-form-control>
                     </nz-form-item>
                 </div>

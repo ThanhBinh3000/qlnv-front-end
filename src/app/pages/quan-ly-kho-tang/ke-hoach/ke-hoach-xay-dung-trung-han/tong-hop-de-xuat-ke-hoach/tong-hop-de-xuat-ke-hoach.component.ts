@@ -20,6 +20,8 @@ import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
 import {TongHopKhTrungHanService} from "../../../../../services/tong-hop-kh-trung-han.service";
+import {STATUS} from "../../../../../constants/status";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 @Component({
   selector: 'app-tong-hop-de-xuat-ke-hoach',
   templateUrl: './tong-hop-de-xuat-ke-hoach.component.html',
@@ -33,27 +35,26 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   listNam: any[] = [];
+  listLoaiDuAn: any[] = [];
+  STATUS = STATUS
 
   searchFilter = {
     maTongHop: '',
     dmucDuAn: '',
     diaDiem: '',
     loaiDuAn: '' ,
-    tgKcHt: '',
     ngayTongHop: '',
     namBatDau: '',
     namKetThuc: ''
   };
 
   filterTable: any = {
-    soQd: '',
-    ngayQd: '',
-    trichYeu: '',
-    soQdGoc: '',
-    namKhoach: '',
-    tenVthh: '',
-    soGoiThau: '',
-    trangThai: '',
+    maTongHop : '',
+    ngayTongHop : '',
+    soQuyetDinh : '',
+    giaiDoan : '',
+    noiDung : '',
+    tenTrangThai : '',
   };
 
   allChecked = false;
@@ -70,6 +71,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     private notification: NzNotificationService,
     private tongHopTrungHanService: TongHopKhTrungHanService,
     private modal: NzModalService,
+    private danhMucService: DanhMucService,
     public userService: UserService,
     public globals: Globals,
   ) { }
@@ -78,18 +80,30 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      for (let i = -3; i < 23; i++) {
-        this.listNam.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
       await this.search();
+      await this.getAllLoaiDuAn();
+      this.loadDsNam();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
+  }
+
+  loadDsNam() {
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: dayjs().get('year') - i,
+        text: dayjs().get('year') - i,
+      });
+    }
+  }
+
+  async getAllLoaiDuAn() {
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_DU_AN_KT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiDuAn = res.data;
     }
   }
 
@@ -99,8 +113,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
       diaDiem: this.searchFilter.diaDiem,
       dmucDuAn: this.searchFilter.dmucDuAn,
       loaiDuAn: this.searchFilter.loaiDuAn,
-      maTongHop: this.searchFilter.diaDiem,
-      tgKcHt: this.searchFilter.tgKcHt,
+      maTongHop: this.searchFilter.maTongHop,
       ngayKyTu: this.searchFilter.ngayTongHop[0],
       ngayKyDen: this.searchFilter.ngayTongHop[1],
       namBatDau: this.searchFilter.namBatDau,
@@ -199,19 +212,6 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     await this.search();
   }
 
-  clearFilter() {
-    this.searchFilter = {
-      maTongHop: '',
-      dmucDuAn: '',
-      diaDiem: '',
-      loaiDuAn: '' ,
-      tgKcHt: '',
-      ngayTongHop: '',
-      namBatDau: '',
-      namKetThuc: ''
-    }
-  }
-
   xoaItem(item: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -229,6 +229,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
             maDvi: '',
           };
           this.tongHopTrungHanService.delete(body).then(async () => {
+            this.notification.success(MESSAGE.ERROR, MESSAGE.DELETE_SUCCESS);
             await this.search();
             this.spinner.hide();
           });
@@ -282,17 +283,18 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     }
   }
 
-  clearFilterTable() {
+  async clearFilterTable() {
     this.filterTable = {
-      soQd: '',
-      ngayQd: '',
-      trichYeu: '',
-      soQdGoc: '',
-      namKhoach: '',
-      tenVthh: '',
-      soGoiThau: '',
-      trangThai: '',
+      maTongHop: '',
+      dmucDuAn: '',
+      diaDiem: '',
+      loaiDuAn: '' ,
+      tgKcHt: '',
+      ngayTongHop: '',
+      namBatDau: '',
+      namKetThuc: ''
     };
+    await this.search();
   }
 }
 
