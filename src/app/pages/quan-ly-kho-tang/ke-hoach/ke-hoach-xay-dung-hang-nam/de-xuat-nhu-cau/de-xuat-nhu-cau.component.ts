@@ -52,6 +52,7 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
       diaDiem : [null],
       ngayKy : [null],
       trangThai : [null],
+      role : [null],
     });
     this.filterTable = {
       soCongVan: '',
@@ -69,6 +70,10 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
+      this.formData.patchValue({
+        role : this.userService.isCuc() ? 'CUC': 'TC',
+        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
+      })
       await Promise.all([
         this.loadDviDeXuat(),
         this.search()

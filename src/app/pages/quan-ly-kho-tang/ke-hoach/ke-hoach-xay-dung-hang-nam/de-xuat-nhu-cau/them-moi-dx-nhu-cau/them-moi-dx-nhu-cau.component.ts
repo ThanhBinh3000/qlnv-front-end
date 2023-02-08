@@ -54,9 +54,9 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi : [null],
-
       trangThai : ['00'],
       tenTrangThai : ['Dự thảo'],
+      tenDvi : [null],
     });
   }
 
@@ -69,7 +69,9 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
       if (this.idInput) {
 
       } else {
-
+        this.formData.patchValue({
+          tenDvi : this.userInfo.TEN_DVI
+        })
       }
       await Promise.all([
         this.getAllDmKho(),

@@ -112,20 +112,20 @@ export class DanhMucDuAnComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "denNam": this.searchFilter.giaiDoan ? this.searchFilter.giaiDoan[1] : null,
+      "denNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[1] ).get('year'): null,
       "diaDiem": this.searchFilter.diaDiem,
       "khoi": this.searchFilter.khoi,
       "maDuAn": this.searchFilter.maDuAn,
       "paggingReq": {
-        "limit": 20,
+        "limit": 10,
         "page": this.page - 1
       },
       "soQd": this.searchFilter.soQd,
       "tenDuAn": this.searchFilter.tenDuAn,
-      "tgHoanThanh": this.searchFilter.tgKcHt ? this.searchFilter.tgKcHt[1] : null,
-      "tgKhoiCong": this.searchFilter.tgKcHt ? this.searchFilter.tgKcHt[0] : null,
+      "tgHoanThanh": this.searchFilter.tgKcHt ? dayjs(this.searchFilter.tgKcHt[1]).get('year') : null,
+      "tgKhoiCong": this.searchFilter.tgKcHt ? dayjs(this.searchFilter.tgKcHt[0]).get('year') : null,
       "trangThai": this.searchFilter.trangThai,
-      "tuNam": this.searchFilter.giaiDoan ? this.searchFilter.giaiDoan[0] : null,
+      "tuNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[0]).get('year') : null,
     };
     let res = await this.danhMucKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -142,6 +142,7 @@ export class DanhMucDuAnComponent implements OnInit {
       this.dataTable = [];
       this.totalRecord = 0;
       this.notification.error(MESSAGE.ERROR, res.msg);
+      this.spinner.hide();
     }
     this.spinner.hide();
   }
@@ -288,6 +289,7 @@ export class DanhMucDuAnComponent implements OnInit {
     this.spinner.show();
     if (!this.checkValidators(this.rowItem)) {
       this.notification.error(MESSAGE.ERROR, "Vui lòng không để trống!!")
+      this.spinner.hide();
       return;
     }
     let body = {

@@ -36,7 +36,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input class="search__input" readonly="true" nz-input/>
+                <input formControlName="tenDvi" class="search__input" readonly="true" nz-input/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -47,7 +47,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{maQd}}">
-                <nz-input-number [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
+                <nz-input-number formControlName="soCongVan" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -58,7 +58,7 @@
           </nz-form-label>
           <nz-form-control>
             <nz-input-group>
-              <nz-select nzAllowClear>
+              <nz-select formControlName="soQdTrungHan" nzAllowClear>
                 <nz-option *ngFor="let p of listQdKhTh" [nzValue]="p.value" [nzLabel]="p.text">
                 </nz-option>
               </nz-select>
@@ -117,12 +117,12 @@
         <th class="text-center" width="69px" rowSpan="2" nzRight>Hành động</th>
       </tr>
       <tr>
-        <th class="text-center" style="width: 10%;">Tổng số</th>
-        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
-        <th class="text-center" style="width: 10%;">Tổng số</th>
-        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
-        <th class="text-center" style="width: 10%;">Tổng số</th>
-        <th class="text-center" style="width: 10%;">Trong đó vốn NSTW</th>
+        <th class="text-center" >Tổng số</th>
+        <th class="text-center" >Trong đó vốn NSTW</th>
+        <th class="text-center" >Tổng số</th>
+        <th class="text-center" >Trong đó vốn NSTW</th>
+        <th class="text-center" >Tổng số</th>
+        <th class="text-center" >Trong đó vốn NSTW</th>
       </tr>
       </thead>
       <tbody>

@@ -45,7 +45,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
     loaiDuAn: '' ,
     ngayTongHop: '',
     namBatDau: '',
-    namKetThuc: ''
+    namKetThuc: '',
   };
 
   filterTable: any = {

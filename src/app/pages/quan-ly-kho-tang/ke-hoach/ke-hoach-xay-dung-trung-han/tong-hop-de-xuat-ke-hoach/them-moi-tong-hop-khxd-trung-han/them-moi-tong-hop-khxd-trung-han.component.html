@@ -10,24 +10,32 @@
         <span>TỔNG HỢP PHƯƠNG ÁN ĐỀ XUẤT KẾ HOẠCH ĐẦU TƯ XÂY DỰNG TRUNG HẠN (5 NĂM)</span>
       </div>
     </div>
-    <div class="btn-group" >
+    <div class="btn-group">
       <button type="button" class="btn btn-sub ml-2" (click)="quayLai()">
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub xanh-nhat ml-2" *ngIf=" !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "  (click)="save(true)">
+      <button type="button" class="btn btn-sub xanh-nhat ml-2"
+              *ngIf=" !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
+              (click)="save(true)">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
-      <button type="button" class="btn btn-sub btn-xoa  ml-2"  *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_LDV  || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)  && isTongHop "   (click)="tuChoi()">
+      <button type="button" class="btn btn-sub btn-xoa  ml-2"
+              *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_LDV  || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)  && isTongHop "
+              (click)="tuChoi()">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
       </button>
-      <button type="button" class="btn btn-sub xanh-nhat  ml-2" *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV  || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)  && isTongHop "  (click)="duyet()">
+      <button type="button" class="btn btn-sub xanh-nhat  ml-2"
+              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDV  || formData.value.trangThai == STATUS.CHO_DUYET_LDTC)  && isTongHop "
+              (click)="duyet()">
         <i class="icon htvbdh_dakyduyet"></i>
         <span>Duyệt</span>
       </button>
-      <button type="button" class="btn btn-sub xanh ml-2" *ngIf=" !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV  || formData.value.trangThai == STATUS.TU_CHOI_LDTC) " (click)="save()">
+      <button type="button" class="btn btn-sub xanh ml-2"
+              *ngIf=" !isViewDetail && isTongHop && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDV  || formData.value.trangThai == STATUS.TU_CHOI_LDTC) "
+              (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -40,7 +48,7 @@
           <nz-form-label>Loại dự án</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-select [nzDisabled]="isTongHop" formControlName="loaiDuAn" nzAllowClear>
-                <nz-option *ngFor="let item of listLoaiDuAn" [nzLabel]="item.giaTri" [nzValue]="item.giaTri">
+              <nz-option *ngFor="let item of listLoaiDuAn" [nzLabel]="item.giaTri" [nzValue]="item.giaTri">
               </nz-option>
             </nz-select>
           </nz-form-control>
@@ -82,7 +90,7 @@
     </form>
   </nz-card>
   <nz-card class="mt16 flex-card p-lr16" *ngIf="isTongHop">
-    <div class="header header-green-background" >
+    <div class="header header-green-background">
       <div class="header-text">
         <div class="title-chi-tieu">
           <span></span>
@@ -108,7 +116,8 @@
             <nz-form-label [nzNoColon]="true">Ngày tổng hợp
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayTongHop" nzFormat="dd/MM/yyyy"></nz-date-picker>
+              <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayTongHop"
+                              nzFormat="dd/MM/yyyy"></nz-date-picker>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -117,7 +126,8 @@
             <nz-form-label [nzNoColon]="true" nzRequired>Nội dung tổng hợp
             </nz-form-label>
             <nz-form-control [nzErrorTip]="error">
-              <textarea [readonly]="isViewDetail" formControlName="noiDung" rows="3" class="search__input" nz-input></textarea>
+              <textarea [readonly]="isViewDetail" formControlName="noiDung" rows="3" class="search__input"
+                        nz-input></textarea>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -153,7 +163,7 @@
       </div>
     </div>
   </div>
-  <nz-table *ngIf="isTongHop"  nzBordered class="nowrap" [nzFrontPagination]="false"
+  <nz-table *ngIf="isTongHop" nzBordered class="nowrap" [nzFrontPagination]="false"
             [nzShowPagination]="false">
     <thead>
     <tr>
@@ -198,6 +208,23 @@
       </ng-container>
     </tr>
     </tbody>
+    <tfoot>
+    <td></td>
+    <td>Tổng</td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td>{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td>{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td>{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td>{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td>{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td nzRight></td>
+    </tfoot>
   </nz-table>
   <div class="header header-green-background" *ngIf="isTongHop">
     <div class="header-text">
@@ -207,8 +234,8 @@
       </div>
     </div>
   </div>
-  <nz-table  *ngIf="isTongHop" nzBordered class="nowrap" [nzFrontPagination]="false"
-            [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
+  <nz-table *ngIf="isTongHop" nzBordered class="nowrap" [nzFrontPagination]="false"
+            [nzShowPagination]="false">
     <thead>
     <tr>
       <th class="text-center" width="32px" rowSpan="2">STT</th>
@@ -247,11 +274,13 @@
       <td>{{ data.tmdtDuyet }}</td>
       <td>{{ data.nstwDuyet }}</td>
       <td>
-        <nz-input-number [(ngModel)]="data.tongSoLuyKe" [nzSize]="'small'" nz-input [nzMin]="0" [nzFormatter]="globals.formatter"
+        <nz-input-number [(ngModel)]="data.tongSoLuyKe" [nzSize]="'small'" nz-input [nzMin]="0"
+                         [nzFormatter]="globals.formatter"
                          [nzParser]="globals.parser"></nz-input-number>
       </td>
       <td>
-        <nz-input-number [(ngModel)]="data.luyKeNstw" [nzSize]="'small'" nz-input [nzMin]="0" [nzFormatter]="globals.formatter"
+        <nz-input-number [(ngModel)]="data.luyKeNstw" [nzSize]="'small'" nz-input [nzMin]="0"
+                         [nzFormatter]="globals.formatter"
                          [nzParser]="globals.parser"></nz-input-number>
       </td>
     </tr>
@@ -265,12 +294,13 @@
     <td></td>
     <td></td>
     <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td>{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td>{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td>{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td>{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td>{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td>{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+    <td nzRight></td>
     </tfoot>
   </nz-table>
 </div>

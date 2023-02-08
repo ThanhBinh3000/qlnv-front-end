@@ -13,11 +13,11 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
+      <button *ngIf="userService.isTongCuc() && formData.value.trangThai == STATUS.DU_THAO" type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save(true)">
         <i class="icon htvbdh_chuyenvanthu"></i>
         <span>Ban hành</span>
       </button>
-      <button type="button" class="btn btn-sub xanh-nhat ml-2" (click)="save()">
+      <button *ngIf="userService.isTongCuc() && formData.value.trangThai == STATUS.DU_THAO" class="btn btn-sub xanh-nhat ml-2" (click)="save()">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
       </button>
@@ -41,7 +41,7 @@
           </nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-input-group nzAddOnAfter="{{maQd}}">
-              <nz-input-number formControlName="soCongVan" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+              <nz-input-number [nzDisabled]="isViewDetail" formControlName="soCongVan" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
                                [nzSize]="'small'">
               </nz-input-number>
             </nz-input-group>
@@ -53,7 +53,7 @@
         </nz-form-label>
         <nz-form-control  nz-col [nzSpan]="24" [nzErrorTip]="error">
           <nz-input-group nzAddOnAfterIcon="folder-open" (click)="openDialogToTrinh()">
-            <input class="search__input" nz-input readonly="true" formControlName="phuongAnTc" />
+            <input [readOnly]="isViewDetail" class="search__input" nz-input readonly="true" formControlName="phuongAnTc" />
           </nz-input-group>
         </nz-form-control>
       </div>
@@ -76,7 +76,7 @@
           <nz-form-label [nzNoColon]="true" nzRequired>Trích yếu
           </nz-form-label>
           <nz-form-control [nzErrorTip]="error">
-            <input class="search__input" formControlName="trichYeu" [readonly]="isViewDetail" nz-input/>
+            <input  class="search__input" formControlName="trichYeu" [readonly]="isViewDetail" nz-input/>
           </nz-form-control>
         </nz-form-item>
       </div>
@@ -128,8 +128,8 @@
       </div>
     </div>
   </div>
-  <nz-table nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
-            [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
+    <nz-table nzBordered class="nowrap" [nzFrontPagination]="false"
+              [nzShowPagination]="false">
     <thead>
     <tr>
       <th class="text-center" width="32px" rowSpan="2">STT</th>
@@ -171,22 +171,23 @@
       <td>{{ data.luyKeNstw }}</td>
     </tr>
     </tbody>
-    <tfoot>
-    <td></td>
-    <td>Tổng</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    </tfoot>
+      <tfoot>
+      <td></td>
+      <td>Tổng</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td>{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td>{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td>{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td>{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td>{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td nzRight></td>
+      </tfoot>
   </nz-table>
     <div class="header header-green-background mg-t-10">
       <div class="header-text">
@@ -196,8 +197,8 @@
         </div>
       </div>
     </div>
-    <nz-table nzBordered class="nowrap pd-10" [nzFrontPagination]="false"
-              [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
+    <nz-table nzBordered class="nowrap" [nzFrontPagination]="false"
+              [nzShowPagination]="false">
       <thead>
       <tr>
         <th class="text-center" width="32px" rowSpan="2">STT</th>
@@ -254,12 +255,13 @@
       <td></td>
       <td></td>
       <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td>{{ calcTong('1') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td>{{ calcTong('2') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td>{{ calcTong('3') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td>{{ calcTong('4') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td>{{ calcTong('5') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td>{{ calcTong('6') | number : '1.0-1' : 'vi_VN'}}</td>
+      <td nzRight></td>
       </tfoot>
     </nz-table>
   </nz-card>

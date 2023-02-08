@@ -88,6 +88,29 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin();
     this.maQd = '/TCDT-TVQT'
     this.loadDsNam();
+    await this.getDetail(this.idInput);
+  }
+
+  async getDetail(id) {
+    if (id > 0) {
+      let res = await this.quyetDinhService.getDetail(id);
+      const data = res.data;
+      this.formData.patchValue({
+        id: data.id,
+        phuongAnTc: data.phuongAnTc,
+        soCongVan: data.soCongVan ? data.soCongVan.split("/")[0] : null,
+        ngayTrinhBtc:data.ngayTrinhBtc,
+        ngayKyBtc: data.ngayKyBtc,
+        trichYeu: data.trichYeu,
+        namBatDau: data.namBatDau,
+        namKetThuc:data.namKetThuc,
+        trangThai: data.trangThai,
+        tenTrangThai:data.tenTrangThai,
+      });
+      this.fileDinhKems = data.fileDinhKems
+      this.dataTable = data.ctiets;
+      this.dataTableTh = data.ctietsTh;
+    }
   }
 
   loadDsNam() {
@@ -210,7 +233,6 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
     });
     modal.afterClose.subscribe(async (data) => {
       if (data) {
-        console.log(data)
         this.formData.patchValue({
           phuongAnTc : data.maToTrinh
         })
@@ -219,6 +241,42 @@ export class ThemMoiQdPheDuyetComponent implements OnInit {
       }
     });
   }
+  calcTong(type) {
+    let sum;
+    if (this.dataTable && this.dataTable.length > 0) {
+      sum = this.dataTable.reduce((prev, cur) => {
+        switch (type) {
+          case '1' : {
+            prev += cur.tmdtDuKien;
+            break;
+          }
+          case '2' : {
+            prev += cur.nstwDuKien;
+            break;
+          }
+          case '3' : {
+            prev += cur.tongSoLuyKe;
+            break;
+          }
+          case '4' : {
+            prev += cur.luyKeNstw;
+            break;
+          }
+          case '5' : {
+            prev += cur.tmdtDuyet;
+            break;
+          }
+          case '6' : {
+            prev += cur.nstwDuyet;
+            break;
+          }
+        }
+        return prev;
+      }, 0);
+    }
+    return sum;
+  }
+
 }
 
 
