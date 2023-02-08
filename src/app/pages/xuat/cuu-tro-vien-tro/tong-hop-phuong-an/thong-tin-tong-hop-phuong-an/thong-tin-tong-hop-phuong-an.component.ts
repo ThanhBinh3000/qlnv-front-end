@@ -415,6 +415,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
             this.selectRow(this.formData.value.deXuatCuuTro[0])
+            this.summaryData();
           }
         })
         .catch((e) => {
@@ -433,7 +434,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
   }
 
   async synthetic() {
-    this.formData.controls['tenDvi'].setValidators([]);
+    // this.formData.controls['tenDvi'].setValidators([]);
     this.formData.controls['ngayThop'].setValidators([]);
     this.formData.controls['noiDungThop'].setValidators([]);
     this.helperService.markFormGroupTouched(this.formData);
@@ -461,10 +462,11 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
               deXuatCuuTro: res.data.deXuatCuuTro,
               maTongHop: this.maTongHop
             });
+            if (this.formData.value.deXuatCuuTro) {
+              this.selectRow(this.formData.value.deXuatCuuTro[0])
+            }
+            this.summaryData()
           } else {
-            this.formData.patchValue({thongTinTongHop: []})
-            this.thongTinChiTiet = [];
-            this.thongTinChiTietTh = [];
             this.notification.error(MESSAGE.ERROR, res.msg);
           }
           console.log(this.thongTinChiTiet, 'chitiet');
@@ -597,36 +599,8 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
   }
 
   summaryData() {
-    this.tongSoLuongDxuat = 0;
-    this.tongSoLuongTongHop = 0;
-    this.tongThanhTienDxuat = 0;
-    this.tongThanhTienTongHop = 0;
-
-    this.thongTinChiTietTh.forEach(s => {
-      let tongSoLuong = 0;
-      let thanhTien = 0;
-      s.thongTinChiTiet.forEach(s1 => {
-        tongSoLuong += s1.soLuong;
-        thanhTien += s1.thanhTien;
-      })
-      s.tongSoLuong = tongSoLuong;
-      s.thanhTien = thanhTien;
-      this.tongSoLuongTongHop += s.tongSoLuong;
-      this.tongThanhTienTongHop += s.thanhTien;
-    })
-
-    this.thongTinChiTiet.forEach(s => {
-      let tongSoLuong = 0;
-      let thanhTien = 0;
-      s.thongTinChiTiet.forEach(s1 => {
-        tongSoLuong += s1.soLuong
-        thanhTien += s1.thanhTien;
-      })
-      s.tongSoLuong = tongSoLuong;
-      s.thanhTien = thanhTien;
-      this.tongSoLuongDxuat += s.tongSoLuong;
-      this.tongThanhTienDxuat += s.thanhTien;
-    })
+    this.tongSoLuongDxuat = this.formData.value.deXuatCuuTro.reduce((prev, cur) => prev + cur.tongSoLuongDx, 0)
+    this.tongThanhTienDxuat = this.formData.value.deXuatCuuTro.reduce((prev, cur) => prev +cur.thanhTienDx, 0)
   }
 
   checkAvailableByStatus(nextStatus: String) {
