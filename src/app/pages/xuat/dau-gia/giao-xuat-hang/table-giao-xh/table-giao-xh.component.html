@@ -185,10 +185,10 @@
             <td>{{ data.tenTrangThai }}</td>
             <td>{{ data.tenTrangThaiXh }}</td>
             <td class="text-left">
-              <a *ngIf="data.trangThai == STATUS.DA_DUYET_LDC" (click)="goDetail(data.id,'XHDTQG_PTDG_QDGNVXH_XEM')">
+              <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="goDetail(data.id,'XHDTQG_PTDG_QDGNVXH_XEM')">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai != STATUS.DA_DUYET_LDC" (click)="goDetail(data.id,'XHDTQG_PTDG_QDGNVXH_THEM')">
+              <a *ngIf="data.trangThai != STATUS.BAN_HANH" (click)="goDetail(data.id,'XHDTQG_PTDG_QDGNVXH_THEM')">
                 <i class="fa fa-pencil"></i>
               </a>
               <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">

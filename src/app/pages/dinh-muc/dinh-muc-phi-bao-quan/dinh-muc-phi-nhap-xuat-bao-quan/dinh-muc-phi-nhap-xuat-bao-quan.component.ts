@@ -35,7 +35,7 @@ import {
   styleUrls: ['./dinh-muc-phi-nhap-xuat-bao-quan.component.scss']
 })
 export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implements OnInit {
-  @Input() capDvi: number;
+  @Input() capDvi: number =1;
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
@@ -53,10 +53,10 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
     this.formData = this.fb.group({
       soQd: [''],
       trangThai: [''],
-      ngayKyTu: [''],
       ngayKy: [''],
+      ngayHieuLuc: [''],
       trichYeu: [''],
-      capDvi:  [],
+      capDvi: [1],
     });
     this.filterTable = {};
   }
@@ -67,9 +67,13 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
   }
 
   filter() {
-    if (this.formData.value.ngayKy) {
-      this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('DD-MM-YYYY');
-      this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('DD-MM-YYYY');
+    if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
+      this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY');
+      this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY');
+    }
+    if (this.formData.value.ngayHieuLuc && this.formData.value.ngayHieuLuc.length > 0) {
+      this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('DD/MM/YYYY');
+      this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('DD/MM/YYYY');
     }
     this.search();
   }
@@ -78,5 +82,9 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
+  }
+
+  checkRolesTemplate(): boolean {
+    return (this.capDvi == Number(this.userInfo.CAP_DVI));
   }
 }

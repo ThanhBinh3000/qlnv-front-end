@@ -8,7 +8,7 @@ import { Globals } from 'src/app/shared/globals';
   styleUrls: ['./chuc-nang-kiem-tra.component.scss']
 })
 export class ChucNangKiemTraComponent implements OnInit {
-  @Input() typeVthh: string;
+  @Input() loaiVthh: string;
 
   constructor(
     public userService: UserService,

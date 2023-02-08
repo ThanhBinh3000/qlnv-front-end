@@ -18,20 +18,20 @@ import { DANH_MUC_LEVEL } from 'src/app/pages/luu-kho/luu-kho.constant';
 import { DanhMucService } from 'src/app/services/danhmuc.service';
 import { DonviService } from 'src/app/services/donvi.service';
 import { HopDongXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/hop-dong/hopDongXuatHang.service';
-import { QuanLyBienBanLayMauXuatService } from 'src/app/services/qlnv-hang/xuat-hang/kiem-tra-chat-luong/quanLyBienBanLayMauXuat';
 import { QuanLyBienBanLayMauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kiemtra-cl/quanLyBienBanLayMau.service';
 import { QuanLyPhieuNhapDayKhoService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/nhap-kho/quanLyPhieuNhapDayKho.service';
 import { QuyetDinhGiaoNhiemVuXuatHangService } from 'src/app/services/quyetDinhGiaoNhiemVuXuatHang.service';
 import { ThongTinHopDongService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/hop-dong/thongTinHopDong.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
+import { BienBanLayMauXhService } from 'src/app/services/qlnv-hang/xuat-hang/kiem-tra-chat-luong/bienBanLayMauXh.service';
 
 @Component({
-  selector: 'them-moi-bien-ban-lay-mau',
-  templateUrl: './them-moi-bien-ban-lay-mau.component.html',
-  styleUrls: ['./them-moi-bien-ban-lay-mau.component.scss'],
+  selector: 'app-create-bien-ban-lay-mau',
+  templateUrl: './create-bien-ban-lay-mau.component.html',
+  styleUrls: ['./create-bien-ban-lay-mau.component.scss'],
 })
-export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
+export class CreateBienBanLayMauKhoComponent implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input() isTatCa: boolean;
@@ -95,7 +95,7 @@ export class ThemMoiBienBanLayMauKhoComponent implements OnInit {
     private quanLyPhieuNhapDayKhoService: QuanLyPhieuNhapDayKhoService,
     private donViService: DonviService,
     private fb: FormBuilder,
-    private quanLyBienBanLayMauXuatService: QuanLyBienBanLayMauXuatService,
+    private quanLyBienBanLayMauXuatService: BienBanLayMauXhService,
     private hopDongXuatHang: HopDongXuatHangService
   ) { }
 
