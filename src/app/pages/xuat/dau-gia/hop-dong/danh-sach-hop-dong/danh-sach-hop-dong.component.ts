@@ -49,7 +49,6 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.userInfo = this.userService.getUserLogin();
       await this.search();
       this.spinner.hide();
     } catch (e) {

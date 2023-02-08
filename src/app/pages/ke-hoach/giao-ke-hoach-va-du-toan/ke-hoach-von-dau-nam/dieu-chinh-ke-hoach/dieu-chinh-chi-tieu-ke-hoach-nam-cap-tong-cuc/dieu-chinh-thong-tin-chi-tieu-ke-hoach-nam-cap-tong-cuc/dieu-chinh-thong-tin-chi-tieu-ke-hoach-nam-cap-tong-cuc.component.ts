@@ -210,7 +210,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.loadDefaultMuoiNew();
       this.loadDefaultVatTuNew();
       this.loadDonVi();
-      await this.selectedQdDcCTKHTC();
+      if (this.userService.isCuc()) {
+        await this.selectedQdDcCTKHTC();
+      }
       await this.selectedQdGiaoCTKHCuaCuc();
       await this.selectedDeXuatDieuChinhCuc();
       this.spinner.hide();
@@ -243,7 +245,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
   }
 
   processDataVattu(data) {
-    console.log(data);
     this.dataVatTuNhap = chain(data.khVatTuNhap)
       .groupBy("maDvi")
       .map((value, key) => {
@@ -273,8 +274,6 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       }).value();
     this.dataVatTuXuat.forEach(s => this.expandSetVatTuXuat.add(s.maDvi));
     this.dataVatTuXuatEdit = cloneDeep(this.dataVatTuXuat);
-
-    console.log(this.dataVatTuNhap);
   }
 
   caculatorDieuChinhLT(item: any) {
@@ -657,6 +656,9 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
     this.keHoachLuongThucCreate.tkdnThoc = cloneDeep(tkdnThoc);
     this.keHoachLuongThucCreate.tkdnGao = cloneDeep(tkdnGao);
 
+    this.keHoachLuongThucCreate.dcNtnThoc = 0;
+    this.keHoachLuongThucCreate.dcNtnGao = 0;
+
     // this.keHoachLuongThucCreate.tdcXtnThoc = cloneDeep(tkdnThoc);
     // this.keHoachLuongThucCreate.tdcXtnGao = cloneDeep(tkdnGao);
     //
@@ -682,10 +684,8 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       this.dieuChinhThongTinChiTieuKHNam.khMuoiDuTru = [];
       this.dieuChinhThongTinChiTieuKHNam.khMuoi = [];
       this.dieuChinhThongTinChiTieuKHNam.khVatTu = [];
-
       this.dieuChinhThongTinChiTieuKHNam.namKeHoach = 0;
       this.formData.controls['namKeHoach'].setValue(0);
-
       this.updateDataVatTu();
       this.loadData();
     }
@@ -3395,7 +3395,7 @@ export class DieuChinhThongTinChiTieuKeHoachNamComponent implements OnInit {
       "trangThai": STATUS.BAN_HANH,
       "capDvi": "1",
       "loaiQuyetDinh": "01",
-      "maDvi": this.userInfo.MA_DVI
+      "maDvi": this.userInfo.MA_DVI,
     };
     let res =
       await this.quyetDinhDieuChinhChiTieuKeHoachNamService.layDanhSach(

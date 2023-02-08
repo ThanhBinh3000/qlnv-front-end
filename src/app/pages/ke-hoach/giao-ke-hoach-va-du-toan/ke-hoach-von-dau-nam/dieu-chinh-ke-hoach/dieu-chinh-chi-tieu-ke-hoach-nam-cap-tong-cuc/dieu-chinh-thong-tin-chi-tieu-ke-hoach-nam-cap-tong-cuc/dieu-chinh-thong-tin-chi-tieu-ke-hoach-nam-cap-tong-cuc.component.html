@@ -88,7 +88,7 @@
             <div nz-col [nzSpan]="3">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Ngày ký
               </nz-form-label>
-              <nz-date-picker class="search__input" [nzDisabledDate]="disabledStartDate" nzFormat="dd/MM/yyyy"
+              <nz-date-picker class="search__input"  nzFormat="dd/MM/yyyy"
                               formControlName="ngayKy" nzPlaceHolder="Ngày ký"
                               (nzOnOpenChange)="handleEndOpenChange($event)"
                               [nzDisabled]="checkTrangThaiRecord() || isView">
@@ -97,7 +97,7 @@
             <div nz-col [nzSpan]="3">
               <nz-form-label [nzNoColon]="true" class="label-color-kh"> Ngày hiệu lực
               </nz-form-label>
-              <nz-date-picker class="search__input" [nzDisabledDate]="disabledEndDate" nzFormat="dd/MM/yyyy"
+              <nz-date-picker class="search__input"  nzFormat="dd/MM/yyyy"
                               formControlName="ngayHieuLuc" nzPlaceHolder="Ngày hiệu lực"
                               (nzOnOpenChange)="handleEndOpenChange($event)"
                               [nzDisabled]="checkTrangThaiRecord() || isView">
@@ -194,7 +194,7 @@
         </nz-tabset>
         <div [ngClass]="tabSelected == '00' ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <div id="table-luong-thuc-tong-hop">
-            <div class="ghichu_tab text-right"><h3>Đơn vị tính:Tấn</h3></div>
+            <div class="ghichu_tab text-right"><h3>Đơn vị tính: Tấn</h3></div>
             <nz-table #groupingTableThocSau [nzData]="dataLuongThuc" nzBordered [nzFrontPagination]="false"
                       [nzShowPagination]="false" class="table__body" [nzScroll]="{ x: '1700px' }">
               <thead>
@@ -208,9 +208,8 @@
                   <br>
                   ( 31/12/{{yearNow}})
                 </th>
-                <th width="90px" rowspan="4"
-                    *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai == '00' || id == 0) && dieuChinhThongTinChiTieuKHNam.trangThai != '03' && !isView"
-                    nzRight>
+                <th width="90px" rowspan="4" nzRight
+                    *ngIf="dieuChinhThongTinChiTieuKHNam.trangThai != STATUS.CHO_DUYET_LDC && dieuChinhThongTinChiTieuKHNam.trangThai != STATUS.CHO_DUYET_LDV  && dieuChinhThongTinChiTieuKHNam.trangThai != STATUS.CHO_DUYET_TP && !isView">
                   Hành động
                 </th>
               </tr>
@@ -410,9 +409,9 @@
                   </ng-container>
                   <td class="tong-so-quy-thoc"> {{data?.tdcNtnTongSoQuyThoc ?? 0 | number: '1.0-1'}}
                   </td>
-                  <td>{{data?.dcNtnThoc ?? 0 | number: '1.0-1' }}
+                  <td>{{data?.ntnThoc ?? 0 | number: '1.0-1' }}
                   </td>
-                  <td>{{data?.dcNtnGao ?? 0 | number: '1.0-1' }}
+                  <td>{{data?.ntnGao ?? 0 | number: '1.0-1' }}
                   </td>
                   <td>{{data?.xtnTongSoQuyThoc ?? 0 | number: '1.0-1'}}</td>
                   <td>{{data?.xtnTongThoc ?? 0 | number: '1.0-1'}}</td>
@@ -668,7 +667,7 @@
         </div>
         <div [ngClass]="tabSelected == '01' ? 'show-table table-out-tab' : 'hide-table table-out-tab'">
           <div id="table-muoi-tong-hop">
-            <div class="ghichu_tab text-right"><h3>Đơn vị tính:Kg</h3></div>
+            <div class="ghichu_tab text-right"><h3>Đơn vị tính: Kg</h3></div>
             <nz-table #groupingTableMuoiSau [nzData]="dataMuoi" nzBordered [nzFrontPagination]="false"
                       [nzShowPagination]="false" [nzScroll]="{ x: '1700px' }">
               <thead>
@@ -742,7 +741,8 @@
                   <td class="text-right">{{dataMuoi.nhapTrongNam ?? 0 | number: '1.0-1' }}</td>
                   <td class="text-right">{{dataMuoi.xuatTrongNamMuoi ?? 0 | number: '1.0-1' }}</td>
                   <td class="text-right">
-                    {{(dataMuoi.tonKhoCuoiNam ? dataMuoi.tonKhoCuoiNam : 0) | number: '1.0-1' }}
+<!--                    {{(dataMuoi.tonKhoCuoiNam ? dataMuoi.tonKhoCuoiNam : 0) | number: '1.0-1' }}-->
+                    {{(dataMuoi.tonKhoDauNam + dataMuoi.nhapTrongNam - dataMuoi.xuatTrongNamMuoi ) | number: '1.0-1' }}
                   </td>
                   <td
                     *ngIf="(dieuChinhThongTinChiTieuKHNam.trangThai=== STATUS.DU_THAO || id===0 || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_TP || dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDV ||dieuChinhThongTinChiTieuKHNam.trangThai===STATUS.TU_CHOI_LDC) && !isView"
@@ -758,7 +758,7 @@
                 <ng-template #editMuoiTemplate>
                   <td></td>
                   <td>
-                    {{editMuoiCache[dataMuoi.donViId].data?.tenDonvi}}
+                    {{editMuoiCache[dataMuoi.donViId].data?.tenDonVi}}
                   </td>
                   <td
                     class="text-right">{{editMuoiCache[dataMuoi.donViId].data?.tonKhoDauNam ?? 0 | number: '1.0-1'}}</td>
@@ -777,7 +777,8 @@
                     </nz-input-number>
                   </td>
                   <td class="text-right">
-                    {{(editMuoiCache[dataMuoi.donViId].data.tonKhoCuoiNam ? editMuoiCache[dataMuoi.donViId].data.tonKhoDauNam : 0) | number: '1.0-1'}}
+                    {{(editMuoiCache[dataMuoi.donViId].data.tonKhoDauNam + editMuoiCache[dataMuoi.donViId].data.nhapTrongNam - editMuoiCache[dataMuoi.donViId].data.xuatTrongNamMuoi ) | number: '1.0-1' }}
+<!--                    {{(editMuoiCache[dataMuoi.donViId].data.tonKhoCuoiNam ? editMuoiCache[dataMuoi.donViId].data.tonKhoDauNam : 0) | number: '1.0-1'}}-->
                   </td>
                   <td class="text-center" nzRight>
                     <a (click)="saveEditMuoi(dataMuoi.donViId)" class="save">
@@ -792,16 +793,16 @@
               <tr *ngIf="groupingTableMuoiSau?.data?.length > 0">
                 <td colspan="2" class="first-last-row-table background-last-row">Cộng</td>
                 <td
-                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 2, 3, ',', 'table-muoi-tong-hop') :
+                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 2, 2, ',', 'table-muoi-tong-hop') :
                   0 | number: '1.0-1'}}</td>
                 <td
-                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 3, 3, ',', 'table-muoi-tong-hop') :
+                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 3, 2, ',', 'table-muoi-tong-hop') :
                   0 | number: '1.0-1'}}</td>
                 <td
-                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 4, 3, ',', 'table-muoi-tong-hop') :
+                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 4, 2, ',', 'table-muoi-tong-hop') :
                   0 | number: '1.0-1'}}</td>
                 <td
-                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 5, 3, ',', 'table-muoi-tong-hop') :
+                  class="background-last-row text-right">{{ tableExist ? reduceRowData(0, 5, 2, ',', 'table-muoi-tong-hop') :
                   0 | number: '1.0-1'}}</td>
                 <td class="background-last-row" nzRight></td>
               </tr>

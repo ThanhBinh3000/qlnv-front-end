@@ -123,19 +123,28 @@ export class DialogThemMoiVatTuComponent implements OnInit {
       trangThai: "01",
       maDviCha: this.userInfo.MA_DVI
     };
-
+    console.log(this.dataChiTieu);
     if (this.dataChiTieu) {
       if (this.loaiVthh === LOAI_HANG_DTQG.GAO || this.loaiVthh === LOAI_HANG_DTQG.THOC) {
-        this.listChiCuc = this.dataChiTieu.khLuongThucList.filter(item => item.maVatTu == this.loaiVthh);
+        this.listChiCuc = this.dataChiTieu.khLuongThuc.filter(item => this.loaiVthh === LOAI_HANG_DTQG.GAO ? item.ntnGao > 0 : item.ntnThoc > 0);
+        this.listChiCuc.forEach(item => {
+          item.maDvi = item.maDonVi
+          item.tenDonVi = item.tenDonvi
+          item.soLuongNhap = this.loaiVthh === LOAI_HANG_DTQG.GAO ? item.ntnGao : item.ntnThoc
+        })
       }
       if (this.loaiVthh === LOAI_HANG_DTQG.MUOI) {
-        this.listChiCuc = this.dataChiTieu.khMuoiList.filter(item => item.maVatTu == this.loaiVthh);
+        this.listChiCuc = this.dataChiTieu.khMuoiDuTru.filter(item => item.nhapTrongNam > 0);
+        this.listChiCuc.forEach(item => {
+          item.maDvi = item.maDonVi
+          item.soLuongNhap = item.nhapTrongNam
+        })
       }
     } else {
-      // let res = await this.donViService.getAll(body);
-      // if (res.msg === MESSAGE.SUCCESS) {
-      //   this.listChiCuc = res.data;
-      // }
+      let res = await this.donViService.getAll(body);
+      if (res.msg === MESSAGE.SUCCESS) {
+        this.listChiCuc = res.data;
+      }
     }
   }
 
