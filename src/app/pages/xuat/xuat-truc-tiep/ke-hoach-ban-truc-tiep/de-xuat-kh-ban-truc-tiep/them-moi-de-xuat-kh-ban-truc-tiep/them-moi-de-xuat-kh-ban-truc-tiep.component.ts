@@ -14,7 +14,7 @@ import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHo
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { STATUS } from "../../../../../../constants/status";
 import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import { DanhSachPhanLo, DanhSachXuatBanTrucTiep } from 'src/app/models/KeHoachBanDauGia';
+import { DanhSachXuatBanTrucTiep } from 'src/app/models/KeHoachBanDauGia';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
@@ -63,7 +63,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       kieuNx: [''],
       diaChi: [],
       namKh: [dayjs().get('year'), [Validators.required]],
-      soKeHoach: ['', [Validators.required]],
+      soDxuat: ['', [Validators.required]],
       trichYeu: [, [Validators.required]],
       ngayTao: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
       ngayPduyet: [],
@@ -148,7 +148,7 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       let data = await this.detail(id);
       if (data) {
         this.formData.patchValue({
-          soKeHoach: data.soKeHoach?.split('/')[0],
+          soDxuat: data.soDxuat?.split('/')[0],
           thoiGianDuKien: (data.tgianDkienTu && data.tgianDkienDen) ? [data.tgianDkienTu, data.tgianDkienDen] : null
         })
         this.dataTable = data.children;
@@ -292,8 +292,8 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       return;
     }
     let body = this.formData.value;
-    if (this.formData.get('soKeHoach').value) {
-      body.soKeHoach = this.formData.get('soKeHoach').value + this.maTrinh;
+    if (this.formData.get('soDxuat').value) {
+      body.soDxuat = this.formData.get('soDxuat').value + this.maTrinh;
     }
     if (this.formData.get('thoiGianDuKien').value) {
       body.tgianDkienTu = dayjs(this.formData.get('thoiGianDuKien').value[0]).format('YYYY-MM-DD');
@@ -313,9 +313,9 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
 
   setValidator(isGuiDuyet) {
     if (isGuiDuyet) {
-      this.formData.controls["soKeHoach"].setValidators([Validators.required]);
+      this.formData.controls["soDxuat"].setValidators([Validators.required]);
     } else {
-      this.formData.controls["soKeHoach"].clearValidators();
+      this.formData.controls["soDxuat"].clearValidators();
     }
   }
 
