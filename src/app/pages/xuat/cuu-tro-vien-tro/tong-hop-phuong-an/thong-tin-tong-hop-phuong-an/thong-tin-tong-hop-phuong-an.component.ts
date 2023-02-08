@@ -221,8 +221,8 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
   }
 
   async saveAndSend() {
-    await this.createUpdate(this.formData.value);
-    await this.approve(this.idInput, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
+    let currentData = await this.createUpdate(this.formData.value);
+    await this.approve(currentData.id, STATUS.CHO_DUYET_LDV, 'Bạn có muốn gửi duyệt ?');
   }
 
   async guiDuyet() {
@@ -465,6 +465,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
             if (this.formData.value.deXuatCuuTro) {
               this.selectRow(this.formData.value.deXuatCuuTro[0])
             }
+            console.log(this.formData.value,8787)
             this.summaryData()
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
