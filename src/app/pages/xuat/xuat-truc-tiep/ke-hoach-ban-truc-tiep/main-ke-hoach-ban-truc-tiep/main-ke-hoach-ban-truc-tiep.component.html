@@ -3,8 +3,14 @@
         <li nz-menu-item nzSelected (click)="selectTab(0)">
             Đề xuất KH bán trực tiếp
         </li>
+        <li nz-menu-item (click)="selectTab(1)">
+            Tổng hợp đề xuất KH bán trực tiếp
+        </li>
     </ul>
 </nz-affix>
 <ng-container *ngIf="tabSelected == 0">
     <app-de-xuat-kh-ban-truc-tiep [loaiVthh]="inputLoaiVthh"></app-de-xuat-kh-ban-truc-tiep>
+</ng-container>
+<ng-container *ngIf="tabSelected == 1">
+    <app-tong-hop-ke-hoach-ban-truc-tiep [loaiVthh]="inputLoaiVthh"></app-tong-hop-ke-hoach-ban-truc-tiep>
 </ng-container>
