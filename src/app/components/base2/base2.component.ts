@@ -28,7 +28,7 @@ export class Base2Component implements OnInit {
   @Output()
   showListEvent = new EventEmitter<any>();
 
-  // User Info 
+  // User Info
   userInfo: UserLogin;
 
   // Const
@@ -49,7 +49,7 @@ export class Base2Component implements OnInit {
   isDetail: boolean = false;
   idSelected: number = 0;
 
-  // Service 
+  // Service
   modal: NzModalService
   filterTable: any = {}
   fb: FormBuilder = new FormBuilder();
@@ -334,7 +334,7 @@ export class Base2Component implements OnInit {
     }
   }
 
-  // Save 
+  // Save
   async createUpdate(body, roles?: any) {
     if (!this.checkPermission(roles)) {
       return
