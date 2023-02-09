@@ -1,20 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
+import * as dayjs from 'dayjs';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MESSAGE } from 'src/app/constants/message';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import dayjs from 'dayjs';
-import { MESSAGE } from 'src/app/constants/message';
-import { QuyetDinhGiaoNvXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
+import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
 
 @Component({
-  selector: 'app-table-bien-ban-lay-mau',
-  templateUrl: './table-bien-ban-lay-mau.component.html',
-  styleUrls: ['./table-bien-ban-lay-mau.component.scss'],
+  selector: 'app-quyet-dinh-phe-duyet-kh-ban-truc-tiep',
+  templateUrl: './quyet-dinh-phe-duyet-kh-ban-truc-tiep.component.html',
+  styleUrls: ['./quyet-dinh-phe-duyet-kh-ban-truc-tiep.component.scss']
 })
-export class TableBienBanLayMauComponent extends Base2Component implements OnInit {
+export class QuyetDinhPheDuyetKhBanTrucTiepComponent extends Base2Component implements OnInit {
   @Input() loaiVthh: string;
 
   constructor(
@@ -23,31 +23,30 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService
+    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBanTrucTiepService);
     this.formData = this.fb.group({
-      nam: dayjs().get('year'),
-      soQd: null,
-      loaiVthh: null,
+      namKh: dayjs().get('year'),
+      soQdPd: null,
       trichYeu: null,
-      ngayTao: null,
-      maChiCuc: null,
+      loaiVthh: null,
+      ngayKyQd: null,
+      soTrHdr: null,
+      lastest: 0
     })
-
     this.filterTable = {
-      nam: '',
-      soQd: '',
-      ngayTao: '',
-      soHd: '',
+      namKh: '',
+      soQdPd: '',
+      ngayKyQd: '',
+      trichYeu: '',
+      soTrHdr: '',
+      idThHdr: '',
       tenLoaiVthh: '',
       tenCloaiVthh: '',
-      tgianGnhan: '',
-      trichYeu: '',
-      bbTinhKho: '',
-      bbHaoDoi: '',
+      soDviTsan: '',
+      soHopDong: '',
       tenTrangThai: '',
-      tenTrangThaiXh: '',
     };
   }
 
@@ -55,11 +54,12 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
     await this.spinner.show();
     try {
       this.formData.patchValue({
-        loaiVthh: this.loaiVthh,
-        maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
+        loaiVthh: this.loaiVthh
       })
       await this.search();
-    } catch (e) {
+      await this.spinner.hide();
+    }
+    catch (e) {
       console.log('error: ', e)
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);

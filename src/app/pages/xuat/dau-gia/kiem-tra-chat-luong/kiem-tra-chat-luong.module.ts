@@ -7,7 +7,7 @@ import { HoSoKyThuatComponent } from './ho-so-ky-thuat/ho-so-ky-thuat.component'
 import { ThongTinHoSoKyThuatComponent } from './ho-so-ky-thuat/thong-tin-ho-so-ky-thuat/thong-tin-ho-so-ky-thuat.component';
 import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong.component';
 import { TableBienBanLayMauComponent } from './bien-ban-lay-mau/table-bien-ban-lay-mau.component';
-import { CreateBienBanLayMauKhoComponent } from './bien-ban-lay-mau/create-bien-ban-lay-mau/create-bien-ban-lay-mau.component';
+import { CreateBienBanLayMauComponent } from './bien-ban-lay-mau/create-bien-ban-lay-mau/create-bien-ban-lay-mau.component';
 import { QuanLyPhieuKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-cl/quan-ly-phieu-kiem-nghiem-chat-luong.component';
 import { ThemMoiPhieuKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-cl/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component';
 
@@ -16,7 +16,7 @@ import { ThemMoiPhieuKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-cl
     KiemTraChatLuongComponent,
     ChucNangKiemTraComponent,
     TableBienBanLayMauComponent,
-    CreateBienBanLayMauKhoComponent,
+    CreateBienBanLayMauComponent,
     HoSoKyThuatComponent,
     ThongTinHoSoKyThuatComponent,
     QuanLyPhieuKiemNghiemChatLuongComponent,
@@ -31,7 +31,7 @@ import { ThemMoiPhieuKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-cl
     KiemTraChatLuongComponent,
     ChucNangKiemTraComponent,
     TableBienBanLayMauComponent,
-    CreateBienBanLayMauKhoComponent,
+    CreateBienBanLayMauComponent,
     HoSoKyThuatComponent,
   ]
 })
