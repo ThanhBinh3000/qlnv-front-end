@@ -15,7 +15,7 @@ import { CapVonNguonChiService } from 'src/app/services/quan-ly-von-phi/capVonNg
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, mulNumber, sumNumber, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, CAN_CU_GIA, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, mulMoney, mulNumber, QUATITY, sumNumber, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemRequest, Times, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
 @Component({
@@ -41,6 +41,8 @@ export class DeNghiCapVonMuaVatTuComponent implements OnInit {
     dviTinhs: any[] = [];
     vatTus: any[] = [];
     dviTiens: any[] = DON_VI_TIEN;
+    amount = AMOUNT;
+    quatity = QUATITY;
     //trang thai cac nut
     status = false;
     saveStatus = true;

@@ -13,7 +13,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CAN_CU_GIA, CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, mulNumber, sumNumber, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, CAN_CU_GIA, CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, mulNumber, QUATITY, sumNumber, Utils } from 'src/app/Utility/utils';
 import { LuyKeThanhToan, receivedInfo, Report, sendInfo, ThanhToan, TRANG_THAI } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
@@ -42,6 +42,8 @@ export class ThanhToanKhachHangTheoHopDongThocGaoMuoiComponent implements OnInit
     loaiDns: any[] = LOAI_DE_NGHI;
     canCuGias: any[] = CAN_CU_GIA;
     donViTiens: any[] = DON_VI_TIEN;
+    amount = AMOUNT;
+    quatity = QUATITY;
     //trang thai cac nut
     statusGui = false;
     statusNhan = false;
@@ -330,9 +332,9 @@ export class ThanhToanKhachHangTheoHopDongThocGaoMuoiComponent implements OnInit
             if (data.statusCode == 0) {
                 this.baoCao.ttGui.trangThai = mcn;
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_7) {
-                    await this.ghiNhanTienThua();
-                }
+                // if (mcn == Utils.TT_BC_7) {
+                //     await this.ghiNhanTienThua();
+                // }
                 if (mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {

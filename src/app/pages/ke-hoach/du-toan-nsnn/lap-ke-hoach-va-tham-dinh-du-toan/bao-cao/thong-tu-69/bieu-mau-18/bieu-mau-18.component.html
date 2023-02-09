@@ -138,49 +138,40 @@
                                 {{displayValue(editCache[data.id].data.ncauChiChiaRaDtuPtrien)}}
                             </td>
                             <td>
-                                <fm-input-number class="search__input"
+                                <input class="money-input" currencyMask
                                     [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiCs1"
-                                    (ngModelChange)="changeModel(data.id)">
-                                </fm-input-number>
+                                    (ngModelChange)="changeModel(data.id)" [options]="amount" />
                             </td>
                             <td>
-                                <!-- <input class="money-input" currencyMask
+                                <input class="money-input" currencyMask
                                     [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi1"
-                                    (ngModelChange)="changeModel(data.id)" [options]="amount" /> -->
-                                <fm-input-number class="search__input"
-                                    [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi1"
-                                    (ngModelChange)="changeModel(data.id)">
-                                </fm-input-number>
+                                    (ngModelChange)="changeModel(data.id)" [options]="amount" />
                             </td>
                             <td>
                                 {{displayValue(editCache[data.id].data.ncauChiChiaRaChiTx)}}
                             </td>
                             <td>
-                                <fm-input-number class="search__input"
+                                <input class="money-input" currencyMask
                                     [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiCs2"
-                                    (ngModelChange)="changeModel(data.id)">
-                                </fm-input-number>
+                                    (ngModelChange)="changeModel(data.id)" [options]="amount" />
                             </td>
                             <td>
-                                <fm-input-number class="search__input"
+                                <input class="money-input" currencyMask
                                     [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi2"
-                                    (ngModelChange)="changeModel(data.id)">
-                                </fm-input-number>
+                                    (ngModelChange)="changeModel(data.id)" [options]="amount" />
                             </td>
                             <td>
                                 {{displayValue(editCache[data.id].data.ncauChiChiaRaChiDtqg)}}
                             </td>
                             <td>
-                                <fm-input-number class="search__input"
+                                <input class="money-input" currencyMask
                                     [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiCs3"
-                                    (ngModelChange)="changeModel(data.id)">
-                                </fm-input-number>
+                                    (ngModelChange)="changeModel(data.id)" [options]="amount" />
                             </td>
                             <td>
-                                <fm-input-number class="search__input"
+                                <input class="money-input" currencyMask
                                     [(ngModel)]="editCache[data.id].data.ncauChiChiaRaChiMoi3"
-                                    (ngModelChange)="changeModel(data.id)">
-                                </fm-input-number>
+                                    (ngModelChange)="changeModel(data.id)" [options]="amount" />
                             </td>
                             <td>
                                 <a (click)="saveEdit(data.id)" class="save">Lưu</a>

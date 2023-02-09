@@ -13,7 +13,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, sumNumber, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, QUATITY, sumNumber, Utils } from 'src/app/Utility/utils';
 import { CapUng, LuyKeCapUng, Report, TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
@@ -35,6 +35,8 @@ export class GhiNhanCapUngVonTuBtcComponent implements OnInit {
     trangThais: any[] = TRANG_THAI;
     loaiDns: any[] = LOAI_DE_NGHI;
     donViTiens: any[] = DON_VI_TIEN;
+    amount = AMOUNT;
+    quatity = QUATITY;
     //trang thai cac nut
     status = false;
     saveStatus = false;
@@ -318,9 +320,9 @@ export class GhiNhanCapUngVonTuBtcComponent implements OnInit {
             if (data.statusCode == 0) {
                 this.baoCao.ttNhan.trangThai = mcn;
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_7) {
-                    await this.ghiNhanCapVon();
-                }
+                // if (mcn == Utils.TT_BC_7) {
+                //     await this.ghiNhanCapVon();
+                // }
                 if (mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
