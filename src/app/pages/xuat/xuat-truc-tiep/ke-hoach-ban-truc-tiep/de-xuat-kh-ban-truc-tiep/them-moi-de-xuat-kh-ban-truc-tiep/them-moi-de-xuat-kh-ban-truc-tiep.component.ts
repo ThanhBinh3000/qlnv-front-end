@@ -264,7 +264,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
 
   calculatorTable() {
     let tongSoLuong: number = 0;
-
     this.dataTable.forEach((item) => {
       let soLuongChiCuc = 0;
       item.children.forEach(child => {
