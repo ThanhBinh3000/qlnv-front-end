@@ -478,6 +478,8 @@ export const QUATITY = {
   inputMode: CurrencyMaskInputMode.NATURAL,
 }
 
+export const BOX_NUMBER_WIDTH = 150;
+
 // loai bao cao quy trinh thuc hien du toan chi
 export const LBC_QUY_TRINH_THUC_HIEN_DU_TOAN_CHI = [
   {
