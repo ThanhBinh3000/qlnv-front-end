@@ -194,7 +194,7 @@ export class PhuLuc03Component implements OnInit {
   }
 
   getStatusButton() {
-    if (!this.dataInfo?.statusBtnOk && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5")) {
+    if (this.dataInfo?.statusBtnOk && (this.formDetail.trangThai == "2" || this.formDetail.trangThai == "5")) {
       this.statusBtnOk = false;
     } else {
       this.statusBtnOk = true;

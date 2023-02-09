@@ -13,7 +13,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import * as uuid from "uuid";
-import { CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, CVNC, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, QUATITY, Utils } from 'src/app/Utility/utils';
 import { BaoCao, ItemContract, TRANG_THAI } from '../../de-nghi-cap-von.constant';
 
 
@@ -39,6 +39,8 @@ export class HopDongMuaThocGaoMuoiComponent implements OnInit {
     dviTinhs: any[] = [];
     vatTus: any[] = [];
     dviTiens: any[] = DON_VI_TIEN;
+    amount = AMOUNT;
+    quatity = QUATITY;
     //trang thai cac nut
     status = false;
     saveStatus = true;

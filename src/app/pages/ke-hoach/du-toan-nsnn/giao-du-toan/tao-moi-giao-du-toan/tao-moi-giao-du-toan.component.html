@@ -21,10 +21,10 @@
         <i class="icon htvbdh_tcdt_guiduyet"></i>
         <span>Tổng hợp</span>
       </button>
-      <a class="btn btn-main" (click)="action('nonpass')" [hidden]="statusBtnTBP">
+      <button class="btn btn-main" (click)="action('nonpass')" [hidden]="statusBtnTBP">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Từ chối</span>
-      </a>
+      </button>
       <button class="btn btn-main" (click)="action('pass')" [hidden]="statusBtnTBP">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
@@ -33,26 +33,26 @@
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Từ chối</span>
       </button>
-      <a class="btn btn-main" (click)="action('approve')" [hidden]="statusBtnLD">
+      <button class="btn btn-main" (click)="action('approve')" [hidden]="statusBtnLD">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Phê duyệt</span>
-      </a>
+      </button>
       <button class="btn btn-main" (click)="action('refuse')" [hidden]="statusBtnDVCT">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Từ chối</span>
       </button>
-      <a class="btn btn-main" (click)="action('receive')" [hidden]="statusBtnDVCT">
+      <button class="btn btn-main" (click)="action('receive')" [hidden]="statusBtnDVCT">
         <i class="icon htvbdh_tcdt_tuchoi"></i>
         <span>Tiếp nhận</span>
-      </a>
-      <a class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
+      </button>
+      <button class="btn btn-main" [hidden]="statusBtnCopy" (click)="showDialogCopy()">
         <i nz-icon nzType="copy" nzTheme="outline"></i>
         <span>Copy</span>
-      </a>
-      <a class="btn btn-main" [hidden]="statusBtnPrint" (click)="doPrint()">
+      </button>
+      <button class="btn btn-main" [hidden]="statusBtnPrint" (click)="doPrint()">
         <i nz-icon nzType="printer" nzTheme="outline"></i>
         <span>In</span>
-      </a>
+      </button>
     </div>
   </nz-affix>
   <div class="bg-trang">
@@ -130,14 +130,15 @@
             </div>
           </div>
 
-          <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
+          <nz-table #fixedTable class="nowrap mt-16 table-chi-tiet" nzBordered [nzScroll]="{x: '500%'}">
             <thead>
               <tr>
-                <th rowspan="2" nzWidth="100px">STT</th>
-                <th rowspan="2" nzWidth="300px">Nhóm</th>
-                <th rowspan="2">Tổng số</th>
+                <th rowspan="2" nzWidth="150px">STT</th>
+                <th rowspan="2" nzWidth="700px">Nhóm</th>
+                <th rowspan="2" nzWidth="150px">Tổng số</th>
                 <th colspan="{{lstDvi.length}}">Chi tiết theo các đơn vị sử dụng</th>
-                <th rowspan="2" colspan="3" [hidden]="status"></th>
+                <th rowspan="2" [hidden]="status"></th>
+
                 <!-- <th rowspan="2" [hidden]="status">
                   <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"></label>
                 </th> -->
@@ -157,8 +158,10 @@
                   </td>
                   <td>
                     <div *ngFor="let item of noiDungs">
-                      <div *ngIf="item.ma ==data.maNdung">
-                        {{item.tenDm}}
+                      <div *ngIf="item.ma == data.maNdung">
+                        <span nzWidth="150px">
+                          {{item.tenDm}}
+                        </span>
                       </div>
                     </div>
                   </td>
@@ -215,13 +218,14 @@
                   </td> -->
                   <td>
                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>
-                  </td>
-                  <td [hidden]="status">
                     <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                       (nzOnConfirm)="cancelEdit(data.id)" class="save">
                       Hủy
                     </a>
                   </td>
+                  <!-- <td [hidden]="status" >
+                    
+                  </td> -->
                   <!-- <td [hidden]="status">
                     <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                       (ngModelChange)="updateChecked(data.id)"></label>

@@ -14,10 +14,8 @@
       </div>
       <div nz-col nzSpan="6">
         <label class="search__label">Mã dự án</label>
-        <nz-select [(ngModel)]="searchFilter.maDuAn" nzAllowClear>
-          <nz-option *ngFor="let p of danhSachNam" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-          </nz-option>
-        </nz-select>
+        <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.maDuAn"/>
+
       </div>
       <div nz-col nzSpan="6">
         <label class="search__label">Tên dự án</label>

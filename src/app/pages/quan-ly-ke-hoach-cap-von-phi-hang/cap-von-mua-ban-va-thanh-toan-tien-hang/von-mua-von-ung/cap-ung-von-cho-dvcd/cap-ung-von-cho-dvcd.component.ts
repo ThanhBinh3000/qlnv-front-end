@@ -16,7 +16,7 @@ import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { getTail } from 'src/app/Utility/func';
-import { CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, sumNumber, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, QUATITY, sumNumber, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { CapUng, LuyKeCapUng, receivedInfo, Report, sendInfo, TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
@@ -40,6 +40,8 @@ export class CapUngVonChoDvcdComponent implements OnInit {
     trangThais: any[] = TRANG_THAI;
     loaiDns: any[] = LOAI_DE_NGHI;
     donViTiens: any[] = DON_VI_TIEN;
+    amount = AMOUNT;
+    quatity = QUATITY;
     //trang thai cac nut
     statusGui = false;
     statusNhan = false;
@@ -371,9 +373,9 @@ export class CapUngVonChoDvcdComponent implements OnInit {
                     this.baoCao.ttNhan.trangThai = mcn;
                 }
                 this.getStatusButton();
-                if (mcn == Utils.TT_BC_7) {
-                    await this.ghiNhanCapVon();
-                }
+                // if (mcn == Utils.TT_BC_7) {
+                //     await this.ghiNhanCapVon();
+                // }
                 if (mcn == Utils.TT_BC_5 || mcn == Utils.TT_BC_3) {
                     this.notification.success(MESSAGE.SUCCESS, MESSAGE.REJECT_SUCCESS);
                 } else {
@@ -776,7 +778,8 @@ export class CapUngVonChoDvcdComponent implements OnInit {
     // }
 
     statusClass() {
-        if (Utils.statusSave.includes(this.baoCao.ttNhan.trangThai)) {
+        const trangThai = this.dataInfo?.preTab == 'cv' ? this.baoCao.ttGui.trangThai : this.baoCao.ttNhan.trangThai;
+        if (Utils.statusSave.includes(trangThai)) {
             return 'du-thao-va-lanh-dao-duyet';
         } else {
             return 'da-ban-hanh';

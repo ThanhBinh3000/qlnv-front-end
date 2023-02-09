@@ -51,6 +51,7 @@ export class DeXuatKeHoachComponent implements OnInit {
 
   filterTable: any = {
     soCongVan: '',
+    namKeHoach: '',
     tenDvi: '',
     ngayKy: '',
     soQdGoc: '',
@@ -83,8 +84,8 @@ export class DeXuatKeHoachComponent implements OnInit {
     try {
       this.userInfo = this.userService.getUserLogin();
       this.loadDsNam();
-      await this.loadDanhSachCuc();
       await this.search();
+      await this.loadDanhSachCuc();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -132,7 +133,7 @@ export class DeXuatKeHoachComponent implements OnInit {
         limit: this.pageSize,
         page: this.page - 1,
       },
-      maDvi: this.userInfo.MA_DVI
+      maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
     };
     let res = await this.deXuatTrungHanService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -287,7 +288,7 @@ export class DeXuatKeHoachComponent implements OnInit {
             limit: this.pageSize,
             page: this.page - 1,
           },
-          maDvi: this.userInfo.MA_DVI
+          maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
         };
         this.deXuatTrungHanService
           .export(body)
@@ -311,6 +312,7 @@ export class DeXuatKeHoachComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
+          item.namKeHoach = item.namBatDau + '-' + item.namKetThuc
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
             temp.push(item)
           }
