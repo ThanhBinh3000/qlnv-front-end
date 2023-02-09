@@ -75,7 +75,7 @@
     </nz-card>
     <div class="group-button">
       <h3> DANH SÁCH QUYẾT ĐỊNH ĐIỀU CHỈNH THÔNG TIN QUY HOẠCH KHO TÀNG DTQG </h3>
-      <div class="buttons">
+      <div class="buttons"  *ngIf="userService.isTongCuc()">
         <button type="button" class="btn btn-sub btn-xoa">
           <i class="fa fa-trash-o do"></i>
           <span>Xoá</span>

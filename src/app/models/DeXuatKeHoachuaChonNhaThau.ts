@@ -167,6 +167,14 @@ export class DanhMucMucPhi {
   trangThai: string
 }
 
-
+export class DanhMucCongCuDungCu {
+  id: number
+  maCcdc: string
+  tenCcdc: string
+  moTa: string
+  donViTinh: string
+  nhomCcdc: string
+  trangThai: string
+}
 
 

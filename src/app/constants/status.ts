@@ -78,7 +78,8 @@ export enum TrangThaiHoatDong {
 
 export enum LOAI_DON_VI {
   MLK = "MLK",
-  PB = "PB"
+  PB = "PB",
+  DV = "DV"
 }
 
 export enum LOAI_BIEN_BAN {

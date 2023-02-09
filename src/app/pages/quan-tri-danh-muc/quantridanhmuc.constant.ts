@@ -49,4 +49,11 @@ export const NHAP_ROUTE_LIST = [
     dropdown: 'danh-muc-dinh-muc-phi',
     idHover: 'danh-muc-dinh-muc-phi',
   },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'DM Công cụ, dụng cụ',
+    url: `/${NHAP_MAIN_ROUTE}/danh-muc-cong-cu-dung-cu`,
+    dropdown: 'danh-muc-cong-cu-dung-cu',
+    idHover: 'danh-muc-cong-cu-dung-cu',
+  },
 ];
