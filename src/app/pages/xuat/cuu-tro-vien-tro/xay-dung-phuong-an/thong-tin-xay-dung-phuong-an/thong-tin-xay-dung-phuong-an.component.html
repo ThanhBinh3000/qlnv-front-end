@@ -468,7 +468,7 @@
                 style="width: 35px"></td>
             <td>{{i + 1}}</td>
             <td>{{ item.noiDung }}</td>
-            <td>{{ item.soLuongXuat |number:'1.0-1'}}</td>
+            <td><strong>{{ item.soLuongXuat |number:'1.0-1'}}</strong></td>
             <td></td>
             <td></td>
             <td></td>
@@ -502,7 +502,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+                <td><strong>{{lv1.soLuongXuatCuc|number:'1.0-1'}}</strong></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -547,6 +547,8 @@
     </div>
   </div>
 </div>
+
+<!--tong cuc-->
 <nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()"
           (nzOnOk)="handleOk()" nzTitle="Chi tiết phương án">
   <ng-container *nzModalContent>
@@ -569,6 +571,14 @@
                    nzPlaceHolder="Chọn đơn vị" nzShowSearch>
           <nz-option *ngFor="let p of dsDonVi" [nzLabel]="p.tenDvi" [nzValue]="p.maDvi"></nz-option>
         </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzXs]="7">Tổng số lượng giao cục</nz-form-label>
+      <nz-form-control>
+        <nz-input-number [(ngModel)]="phuongAnRow.soLuongXuatCuc" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
+                         [nzSize]="'small'">
+        </nz-input-number>
       </nz-form-control>
     </nz-form-item>
     <nz-form-item>
