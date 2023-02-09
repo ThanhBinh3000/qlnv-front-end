@@ -239,7 +239,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     const res = await this.donViService.layDonViCon();
     if (res.msg == MESSAGE.SUCCESS) {
       this.listDonVi = res.data.filter(item => item.type !== 'PB');
-      console.log(this.listDonVi);
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
@@ -352,7 +351,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   editRow(stt: number) {
     this.dataEdit[stt].edit = true;
-    console.log(this.dataEdit[stt]);
   }
 
   cancelEdit(stt: number): void {
