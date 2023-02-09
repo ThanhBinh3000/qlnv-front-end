@@ -5,6 +5,7 @@ import { DanhMucDungChungComponent } from './danh-muc-dung-chung/danh-muc-dung-c
 import { QuanTriDanhMucComponent } from './quantridanhmuc.component';
 import {DanhMucDinhMucPhiComponent} from "./danh-muc-dinh-muc-phi/danh-muc-dinh-muc-phi-component";
 import {DanhMucHangHoaComponent} from "./danh-muc-hang-hoa/danh-muc-hang-hoa.component";
+import {DanhMucCongCuDungCuComponent} from "./danh-muc-cong-cu-dung-cu/danh-muc-cong-cu-dung-cu.component";
 
 
 const routes: Routes = [
@@ -32,6 +33,10 @@ const routes: Routes = [
       {
         path: 'danh-muc-hang-hoa',
         component: DanhMucHangHoaComponent,
+      },
+      {
+        path: 'danh-muc-cong-cu-dung-cu',
+        component: DanhMucCongCuDungCuComponent,
       },
     ],
   },
