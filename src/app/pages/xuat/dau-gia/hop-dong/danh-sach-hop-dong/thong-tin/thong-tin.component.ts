@@ -227,10 +227,9 @@ export class ThongTinComponent extends Base2Component implements OnInit {
     this.spinner.show()
     let listQdKq: any[] = [];
     let body = {
-      paggingReq: {
-        limit: this.globals.prop.MAX_INTERGER,
-        page: 0
-      }
+      loaiVthh: this.loaiVthh,
+      nam: this.formData.value.nam,
+      maDvi: this.userInfo.MA_DVI
     };
     let res = await this.qdPdKetQuaBanDauGiaService.search(body)
     if (res.data) {

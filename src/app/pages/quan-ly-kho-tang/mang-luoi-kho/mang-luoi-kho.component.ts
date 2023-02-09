@@ -197,13 +197,13 @@ export class MangLuoiKhoComponent implements OnInit {
    * call api init
    */
 
+  listType = ["MLK", "DV"]
   async layTatCaDonViTheoTree(id?) {
-    // await this.donviService.layTatCaByMaDvi(LOAI_DON_VI.MLK, this.userInfo.MA_DVI).then((res: OldResponseData) => {
     let body = {
-      maDviCha: this.userInfo.MA_DVI,
-      trangThai: '01',
+      maDvi : this.userInfo.MA_DVI,
+      type : this.listType
     }
-    await this.donviService.layTatCaDangTree(body).then((res: OldResponseData) => {
+    await this.donviService.layTatCaByMaDvi(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         if (res && res.data && res.data.length > 0) {
           this.nodes = res.data

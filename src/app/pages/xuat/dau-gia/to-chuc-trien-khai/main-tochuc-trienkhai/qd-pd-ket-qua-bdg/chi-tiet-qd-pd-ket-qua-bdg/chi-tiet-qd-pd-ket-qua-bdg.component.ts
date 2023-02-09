@@ -53,7 +53,8 @@ export class ChiTietQdPdKetQuaBdgComponent extends Base2Component implements OnI
       trangThai: ['00'],
       tenTrangThai: ['Dự thảo'],
       lyDoTuChoi: [null],
-      loaiVthh: []
+      loaiVthh: [],
+      maDvi: []
     });
   }
 
