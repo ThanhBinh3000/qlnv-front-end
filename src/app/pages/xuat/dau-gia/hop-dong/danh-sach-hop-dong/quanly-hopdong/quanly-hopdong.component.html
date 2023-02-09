@@ -6,7 +6,7 @@
                 <span>Quay lại</span>
             </button>
             <button *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH" type="button"
-                class="btn btn-sub xanh-nhat" (click)="approve()">
+                class="btn btn-sub xanh-nhat" (click)="pheDuyet()">
                 <i class="icon htvbdh_checkfile2"></i>
                 <span>Hoàn thành thực hiện</span>
             </button>
@@ -164,7 +164,7 @@
                         <span>Danh sách hợp đồng cần ký với các gói thầu đã trúng</span>
                     </div>
                 </div>
-                <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.HOAN_THANH_CAP_NHAT">
+                <div class="buttons" *ngIf="formData.value.trangThaiHd != STATUS.DA_HOAN_THANH">
                     <button type="button" class="btn btn-main" (click)="redirectHopDong(true, null)">
                         <i class="icon htvbdh_dau-cong"></i>
                         <span>Thêm</span>
@@ -211,8 +211,8 @@
                     </tbody>
                 </nz-table>
             </nz-card>
-            <!-- <app-thong-tin [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isQuanLy]="true">
-            </app-thong-tin> -->
+            <app-thong-tin [idKqBdg]="id" [loaiVthh]="loaiVthh" *ngIf="idHopDong" [id]="idHopDong" [isQuanLy]="true">
+            </app-thong-tin>
         </nz-card>
     </div>
 </ng-container>

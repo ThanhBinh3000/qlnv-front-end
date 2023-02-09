@@ -64,7 +64,7 @@
     </nz-alert>
 
     <nz-card class="mt16 flex-card p-lr16">
-        <form nzLayout="vertical" nz-form [formGroup]="formData">
+        <form nzLayout="vertical" nz-form [formGroup]="formData" *ngIf="!showFromTH">
             <div nz-row [nzGutter]="24">
                 <div nz-col [nzSpan]="6">
                     <nz-form-item>
@@ -119,7 +119,7 @@
                 </div>
                 <div nz-col [nzSpan]="4">
                     <nz-form-item>
-                        <nz-form-label nzRequired [nzNoColon]="true"> Số kế hoạch/ đề xuất </nz-form-label>
+                        <nz-form-label nzRequired [nzNoColon]="true"> Số kế hoạch/tờ trình </nz-form-label>
                         <nz-form-control nz-col [nzSpan]="24" [nzErrorTip]="error">
                             <nz-input-group nzAddOnAfter="{{maTrinh}}">
                                 <nz-input-number formControlName="soDxuat" [nzMin]="1" [nzMax]="9999999" [nzStep]="1"
@@ -223,7 +223,7 @@
                     <div nz-row [nzGutter]="24">
                         <div nz-col [nzSpan]="7">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian dự kiến tổ chức BĐG
+                                <nz-form-label nzRequired [nzNoColon]="true"> Thời gian dự kiến tổ chức bán trực tiếp
                                 </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
                                     <nz-range-picker formControlName="thoiGianDuKien" nzFormat="dd/MM/yyyy"
@@ -322,7 +322,7 @@
                     <div nz-row nzGutter="24">
                         <div nz-col nzSpan="24">
                             <nz-form-item>
-                                <nz-form-label nzRequired [nzNoColon]="true"> Thông báo kế hoạch bán đấu giá
+                                <nz-form-label nzRequired [nzNoColon]="true"> Thông báo kế hoạch bán trực tiếp
                                 </nz-form-label>
                                 <nz-form-control nz-col [nzErrorTip]="error">
                                     <textarea [readonly]="isDisable()" nz-input [rows]="3"
@@ -373,16 +373,14 @@
                             <th nzWidth="150px" class="text-center wrap">Nhà kho</th>
                             <th nzWidth="150px" class="text-center wrap">Ngăn kho</th>
                             <th class="text-center wrap">Lô kho</th>
-                            <th nzWidth="100px" class="text-center wrap">Mã đơn vị tài sản</th>
+                            <th nzWidth="100px" class="text-center wrap">MDVTS</th>
                             <th nzWidth="100px" class="text-center wrap">Tồn kho</th>
-                            <th nzWidth="100px" class="text-center wrap">SL xuất bán đề xuất</th>
+                            <th nzWidth="100px" class="text-center wrap">SL xuất bán TT đề xuất</th>
                             <th nzWidth="100px" class="text-center wrap">ĐVT</th>
                             <th nzWidth="100px" class="text-center wrap">Đơn giá đề xuất (đ/kg)</th>
-                            <th nzWidth="100px" class="text-center wrap">Giá khởi điểm đề xuất (đ)</th>
-                            <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt VAT (đ/kg)</th>
-                            <th nzWidth="100px" class="text-center wrap">Giá khởi điểm được duyệt (đ)</th>
-                            <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước đề xuất (đ)</th>
-                            <th nzWidth="100px" class="text-center wrap">Số tiền đặt trước được duyệt (đ)</th>
+                            <th nzWidth="100px" class="text-center wrap">Thành tiền đề xuất(đ)</th>
+                            <th nzWidth="100px" class="text-center wrap">Đơn giá được duyệt (đ/kg)</th>
+                            <th nzWidth="100px" class="text-center wrap">Thành tiền được duyệt (đ)</th>
                             <th nzWidth="50px">Hành động</th>
                         </tr>
                     </thead>
@@ -391,9 +389,7 @@
                             <tr>
                                 <td [nzExpand]="expandSet.has(i)" (nzExpandChange)="onExpandChange(i, $event)"></td>
                                 <td colspan="7">{{item.tenDvi}}</td>
-                                <td>{{item.tongSoLuong}}</td>
-                                <td></td>
-                                <td></td>
+                                <td>{{item.soLuong}}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -424,12 +420,6 @@
                                     <td>{{children.donGiaDeXuat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
                                     <td>{{children.donGiaVat | number : '1.0-1' : 'vi_VN'}}</td>
                                     <td>{{children.donGiaVat * children.soLuong | number : '1.0-1' : 'vi_VN'}}</td>
-                                    <td>{{(children.soLuong * children.donGiaDeXuat * formData.value.khoanTienDatTruoc /
-                                        100 ) | number :
-                                        '1.0-1' : 'vi_VN' }}</td>
-                                    <td>{{(children.soLuong * children.donGiaVat * formData.value.khoanTienDatTruoc /
-                                        100 ) | number :
-                                        '1.0-1' : 'vi_VN' }}</td>
                                     <td class="text-right">
                                     </td>
                                 </tr>

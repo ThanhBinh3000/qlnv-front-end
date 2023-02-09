@@ -28,6 +28,7 @@ export class ThongTinComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() loaiVthh: string;
   @Input() idKqBdg: number;
+  @Input() isQuanLy: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
 
@@ -371,7 +372,9 @@ export class ThongTinComponent extends Base2Component implements OnInit {
       let soLuong = 0;
       let tongTien = 0;
       this.formData.value.listMaDviTsan.forEach(x => {
+        console.log(x);
         let item = this.listDviTsan.filter(item => item.maDviTsan == x)[0];
+        console.log(item);
         item.children.forEach(element => {
           soLuong = soLuong + element.soLuong
           tongTien = tongTien + (element.soLuong * element.donGiaVat)
@@ -391,13 +394,16 @@ export class ThongTinComponent extends Base2Component implements OnInit {
           this.dataTable = [...this.dataTable, item]
         }
       })
+      this.formData.patchValue({
+        soLuong: soLuong,
+        tongTien: tongTien
+      })
       if (ttDauThau && ttDauThau.length > 0) {
         this.formData.patchValue({
           tenNhaThau: ttDauThau[0].hoVaTen,
           diaChiNhaThau: ttDauThau[0].diaChi,
           mstNhaThau: ttDauThau[0].soCccd,
-          soLuong: soLuong,
-          tongTien: tongTien
+
         })
       }
     }

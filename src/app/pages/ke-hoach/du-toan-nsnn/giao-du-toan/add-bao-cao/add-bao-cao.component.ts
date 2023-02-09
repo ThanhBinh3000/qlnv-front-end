@@ -273,7 +273,6 @@ export class AddBaoCaoComponent implements OnInit {
       this.baoCao.maPhanGiao = "3"
       this.baoCao.maBcao = this.data?.maBcao
       this.baoCao.soQd = this.data?.soQd
-      console.log("this.data:", this.data);
       if (this.data.preTab == "tongHopBaoCaoCapDuoi") {
         this.baoCao.lstCtiets = this.data?.lstCtiets ? this.data?.lstCtiets : [];
       }
@@ -471,7 +470,7 @@ export class AddBaoCaoComponent implements OnInit {
       // editAppraisalValue: this.acceptStatus,
       isSynthetic: isSynthetic
     };
-    console.log(dataInfo);
+    
 
 
     dataInfo.data.maDviTien = '1';
@@ -756,7 +755,7 @@ export class AddBaoCaoComponent implements OnInit {
         item.id = null;
       }
     })
-    console.log("baoCaoTemp: ", baoCaoTemp);
+    
 
     //call service them moi
     if (!this.baoCao.id) {
@@ -826,7 +825,7 @@ export class AddBaoCaoComponent implements OnInit {
       (data) => {
         if (data.statusCode == 0) {
           this.baoCao = data.data;
-          console.log("chi tiet bao cao to: ", this.baoCao);
+          
 
           this.baoCao.lstCtiets.forEach(item => {
             const appendix = this.listAppendix.find(e => e.id == item.maBieuMau);
@@ -867,8 +866,6 @@ export class AddBaoCaoComponent implements OnInit {
         preData: this.data,
       }
       this.dataChange.emit(obj);
-      console.log(obj);
-
       localStorage.removeItem("idChiTiet");
     }
   }
@@ -883,7 +880,8 @@ export class AddBaoCaoComponent implements OnInit {
 
   getStatusName(status: string) {
     const statusMoi = status == Utils.TT_BC_6 || status == Utils.TT_BC_7;
-    if (statusMoi && this.userInfo.MA_DVI == this.baoCao.maDviCha) {
+    const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
+    if (statusMoi && this.userInfo.MA_DVI == maDviCha) {
       return 'Mới';
     } else {
       return this.trangThais.find(e => e.id == status)?.tenDm;
@@ -934,9 +932,10 @@ export class AddBaoCaoComponent implements OnInit {
 
 
   getStatusButton() {
+    const maDviCha = this.baoCao.maDvi.slice(0, (this.baoCao.maDvi.length - 2));
     const isSynthetic = this.baoCao.lstGiaoDtoanTrucThuocs && this.baoCao.lstGiaoDtoanTrucThuocs.length != 0;
     const isChild = this.userInfo.MA_DVI == this.baoCao.maDvi;
-    const isParent = this.userInfo.MA_DVI == this.baoCao.maDviCha;
+    const isParent = this.userInfo.MA_DVI == maDviCha;
     //kiem tra quyen cua cac user
     const checkSave = isSynthetic ? this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH) : this.userService.isAccessPermisson(GDT.EDIT_REPORT_TH);
     const checkSunmit = isSynthetic ? this.userService.isAccessPermisson(GDT.APPROVE_REPORT_TH) : this.userService.isAccessPermisson(GDT.APPROVE_REPORT_TH);
@@ -1051,8 +1050,6 @@ export class AddBaoCaoComponent implements OnInit {
       preData: this.data,
       tabSelected: 'next' + this.data?.tabSelected,
     }
-    console.log(obj);
-
     this.dataChange.emit(obj);
   };
 

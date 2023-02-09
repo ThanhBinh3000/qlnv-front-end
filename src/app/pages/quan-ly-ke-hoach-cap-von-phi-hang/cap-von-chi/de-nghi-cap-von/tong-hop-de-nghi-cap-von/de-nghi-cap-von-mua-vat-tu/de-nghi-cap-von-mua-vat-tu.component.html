@@ -202,10 +202,9 @@
                                         {{ displayValue(editCache[data.id].data.slHopDong) }}
                                     </td>
                                     <td>
-                                        <fm-input-number class="search__input"
+                                        <input class="money-input" currencyMask [options]="amount"
                                             [(ngModel)]="editCache[data.id].data.slThucHien"
-                                            (ngModelChange)="changeModel(data.id)">
-                                        </fm-input-number>
+                                            (ngModelChange)="changeModel(data.id)" />
                                     </td>
                                     <td>
                                         {{ displayValue(editCache[data.id].data.donGia) }}
@@ -227,9 +226,8 @@
                                             {{ displayValue(editCache[data.id].data.soDuyetTtLanNay) }}
                                         </ng-container>
                                         <ng-template #moi>
-                                            <fm-input-number class="search__input"
-                                                [(ngModel)]="editCache[data.id].data.soDuyetTtLanNay">
-                                            </fm-input-number>
+                                            <input class="money-input" currencyMask [options]="amount"
+                                                [(ngModel)]="editCache[data.id].data.soDuyetTtLanNay" />
                                         </ng-template>
                                     </td>
                                     <td>
@@ -245,10 +243,9 @@
                                             [(ngModel)]="editCache[data.id].data.uyNhchiNienDoNs" />
                                     </td>
                                     <td>
-                                        <fm-input-number class="search__input"
+                                        <input class="money-input" currencyMask [options]="amount"
                                             [(ngModel)]="editCache[data.id].data.uyNhchiNienSoTien"
-                                            (ngModelChange)="changeModel(data.id)">
-                                        </fm-input-number>
+                                            (ngModelChange)="changeModel(data.id)" />
                                     </td>
                                     <td>
                                         {{ displayValue(editCache[data.id].data.soConDuocTtSauTtLanNay)}}

@@ -1,142 +1,82 @@
 import {
-  Component,
+  Component, EventEmitter,
   Input,
-  OnInit,
+  OnInit, Output,
 } from '@angular/core';
-import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
-import { DieuChinhQuyetDinhPdKhlcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
-import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import { saveAs } from 'file-saver';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
 import {KtKhXdHangNamService} from "../../../../../services/kt-kh-xd-hang-nam.service";
+import {MESSAGE} from "../../../../../constants/message";
+import {DANH_MUC_LEVEL} from "../../../../luu-kho/luu-kho.constant";
+import {DonviService} from "../../../../../services/donvi.service";
 
 @Component({
   selector: 'app-de-xuat-nhu-cau',
   templateUrl: './de-xuat-nhu-cau.component.html',
   styleUrls: ['./de-xuat-nhu-cau.component.scss']
 })
-export class DeXuatNhuCauComponent implements OnInit {
-  @Input() typeVthh: string;
-  isDetail: boolean = false;
-  selectedId: number = 0;
-  isViewDetail: boolean;
-  tabSelected: string = 'phuong-an-tong-hop';
-  searchValue = '';
-  listNam: any[] = [];
+export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
+  isViewDetail : boolean;
 
-  searchFilter = {
-    maDvi: '',
-    soCongVan: '',
-    dmucDuAn: '',
-    loaiDuAn: '',
-    diaDiem: '',
-    tgKcHt:'',
-    ngayKy: '',
-    namBatDau: '',
-    namKetThuc: ''
-  };
+  danhSachCuc : any[] = [];
 
-  filterTable: any = {
-    soQd: '',
-    ngayQd: '',
-    trichYeu: '',
-    soQdGoc: '',
-    namKhoach: '',
-    tenVthh: '',
-    soGoiThau: '',
-    trangThai: '',
-  };
-
-  allChecked = false;
-  indeterminate = false;
-  dataTableAll: any[] = [];
-  dataTable: any[] = [];
-  page: number = 1;
-  pageSize: number = PAGE_SIZE_DEFAULT;
-  totalRecord: number = 0;
-  userInfo: UserLogin;
+  listTrangThai = [{"ma": "00", "giaTri": "Dự thảo"},
+    {"ma": "03", "giaTri": "Chờ duyệt - LĐ Cục"},
+    {"ma": "04", "giaTri": "Từ chối - lĐ Cục"},
+    {"ma": "05", "giaTri": "Đã duyệt - lĐ Cục"},
+    {"ma": "18", "giaTri": "Chờ duyệt - lĐ Vụ"},
+    {"ma": "19", "giaTri": "Từ chối - lĐ Vụ"},
+    {"ma": "20", "giaTri": "Đã duyệt - lĐ Vụ"},
+  ];
 
   constructor(
-    private spinner: NgxSpinnerService,
-    private notification: NzNotificationService,
-    private dxService: KtKhXdHangNamService,
-    private modal: NzModalService,
-    public userService: UserService,
-    public globals: Globals,
-  ) { }
+    private httpClient: HttpClient,
+    private storageService: StorageService,
+    notification: NzNotificationService,
+    spinner: NgxSpinnerService,
+    modal: NzModalService,
+    private dexuatService : KtKhXdHangNamService,
+    private dviService : DonviService
+  ) {
+    super(httpClient, storageService, notification, spinner, modal, dexuatService);
+    super.ngOnInit()
+    this.formData = this.fb.group({
+      maDvi : [null],
+      soCongVan : [null],
+      namBatDau : [null],
+      namKetThuc : [null],
+      diaDiem : [null],
+      ngayKy : [null],
+      trangThai : [null],
+      role : [null],
+    });
+    this.filterTable = {
+      soCongVan: '',
+      ngayKy: '',
+      namKeHoach: '',
+      tmdt: '',
+      trichYeu: '',
+      soQdTrunghan: '',
+      tenTrangThai: '',
+    };
+  }
 
   async ngOnInit() {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      for (let i = -3; i < 23; i++) {
-        this.listNam.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
-      await this.search();
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
-    console.log(
-      this.dataTable
-    )
-  }
-
-  async search() {
-    // this.spinner.show();
-    // let body = {
-    //   soCongVan: this.searchFilter.soCongVan,
-    //   dmucDuAn: this.searchFilter.dmucDuAn,
-    //   loaiDuAn: this.searchFilter.loaiDuAn,
-    //   diaDiem: this.searchFilter.diaDiem,
-    //   tgKcHt:this.searchFilter.tgKcHt,
-    //   ngayKyTu: this.searchFilter.ngayKy[0],
-    //   ngayKyDen: this.searchFilter.ngayKy[1],
-    //   namBatDau: this.searchFilter.namBatDau,
-    //   namKetThuc: this.searchFilter.namKetThuc,
-    //   paggingReq: {
-    //     limit: this.pageSize,
-    //     page: this.page - 1,
-    //   },
-    //   maDvi: this.userInfo.MA_DVI
-    // };
-    // let res = await this.dxService.search(body);
-    // if (res.msg == MESSAGE.SUCCESS) {
-    //   let data = res.data;
-    //   this.dataTable = data.content;
-    //   this.totalRecord = data.totalElements;
-    //   if (this.dataTable && this.dataTable.length > 0) {
-    //     this.dataTable.forEach((item) => {
-    //       item.checked = false;
-    //     });
-    //   }
-    //   this.dataTableAll = cloneDeep(this.dataTable);
-    // } else {
-    //   this.dataTable = [];
-    //   this.totalRecord = 0;
-    //   this.notification.error(MESSAGE.ERROR, res.msg);
-    // }
-    // this.spinner.hide();
-  }
-  async changePageIndex(event) {
-    this.spinner.show();
-    try {
-      this.page = event;
+      this.formData.patchValue({
+        role : this.userService.isCuc() ? 'CUC': 'TC',
+        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null
+      })
+      await Promise.all([
+        this.loadDviDeXuat(),
+        this.search()
+      ]);
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -145,168 +85,34 @@ export class DeXuatNhuCauComponent implements OnInit {
     }
   }
 
-  updateAllChecked(): void {
-    this.indeterminate = false;
-    if (this.allChecked) {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          if (item.trangThai == '00') {
-            item.checked = true;
-          }
-        });
-      }
-    } else {
-      if (this.dataTable && this.dataTable.length > 0) {
-        this.dataTable.forEach((item) => {
-          item.checked = false;
-        });
-      }
+  async loadDviDeXuat() {
+    const body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    };
+
+    const dsTong = await this.dviService.layDonViTheoCapDo(body);
+    this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
+    this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB")
+    if (this.userService.isCuc()) {
+      this.formData.patchValue({
+        maDvi: this.userInfo.MA_DVI
+      })
     }
   }
 
-  updateSingleChecked(): void {
-    if (this.dataTable.every((item) => !item.checked)) {
-      this.allChecked = false;
-      this.indeterminate = false;
-    } else if (this.dataTable.every((item) => item.checked)) {
-      this.allChecked = true;
-      this.indeterminate = false;
-    } else {
-      this.indeterminate = true;
-    }
-  }
-
-  async changePageSize(event) {
-    this.spinner.show();
-    try {
-      this.pageSize = event;
-      this.spinner.hide();
-    } catch (e) {
-      console.log('error: ', e);
-      this.spinner.hide();
-      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    }
+  initForm() {
+      this.formData.patchValue({
+        role : this.userService.isCuc() ? 'CUC' : 'TC'
+      })
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {
-    this.selectedId = id;
+    this.idSelected = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;
   }
 
-  convertTrangThai(status: string) {
-    return convertTrangThai(status);
-  }
 
-  async showList() {
-    this.isDetail = false;
-    await this.search();
-  }
-
-  clearFilter() {
-    this.searchFilter = {
-      maDvi: '',
-      soCongVan: '',
-      dmucDuAn: '',
-      loaiDuAn: '',
-      diaDiem: '',
-      tgKcHt: '',
-      ngayKy: '',
-      namBatDau: '',
-      namKetThuc: ''
-    }
-    this.search();
-  }
-
-  xoaItem(item: any) {
-    this.modal.confirm({
-      nzClosable: false,
-      nzTitle: 'Xác nhận',
-      nzContent: 'Bạn có chắc chắn muốn xóa?',
-      nzOkText: 'Đồng ý',
-      nzCancelText: 'Không',
-      nzOkDanger: true,
-      nzWidth: 310,
-      nzOnOk: () => {
-        this.spinner.show();
-        try {
-          let body = {
-            id: item.id,
-            maDvi: '',
-          };
-          this.dxService.delete(body).then(async () => {
-            await this.search();
-            this.spinner.hide();
-          });
-        } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
-          this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-        }
-      },
-    });
-  }
-
-  exportData() {
-    if (this.totalRecord > 0) {
-      this.spinner.show();
-      try {
-        let body = {
-          maDvi: '',
-          soCongVan: '',
-          dmucDuAn: '',
-          loaiDuAn: '',
-          diaDiem: '',
-          tgKcHt:'',
-          ngayKy: '',
-          namBatDau: '',
-          namKetThuc: ''
-        };
-        this.dxService
-          .export(body)
-          .subscribe((blob) =>
-            saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
-          );
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    } else {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
-    }
-  }
-
-  filterInTable(key: string, value: string) {
-    if (value && value != '') {
-      this.dataTable = [];
-      let temp = [];
-      if (this.dataTableAll && this.dataTableAll.length > 0) {
-        this.dataTableAll.forEach((item) => {
-          if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
-            temp.push(item)
-          }
-        });
-      }
-      this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
-      this.dataTable = cloneDeep(this.dataTableAll);
-    }
-  }
-
-  clearFilterTable() {
-    this.filterTable = {
-      soQd: '',
-      ngayQd: '',
-      trichYeu: '',
-      soQdGoc: '',
-      namKhoach: '',
-      tenVthh: '',
-      soGoiThau: '',
-      trangThai: '',
-    };
-  }
 }
 

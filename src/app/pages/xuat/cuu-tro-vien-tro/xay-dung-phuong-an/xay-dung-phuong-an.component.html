@@ -28,7 +28,7 @@
           </div>
           <div nz-col nzSpan="3">
             <label>Số công văn/đề xuất</label>
-            <input nz-input formControlName="soDx" />
+            <input placeholder="Nhập nội dung" nz-input formControlName="soDx" />
           </div>
           <div nz-col nzSpan="4">
             <label>Thời hạn xuất viện trợ, cứu trợ</label>
@@ -66,7 +66,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-main" (click)="goDetail(null)"
+        <button type="button" class="btn btn-main" (click)="redirectDetail(0,false)"
           *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_THEM_CUC') || userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_THEM_VU')">
           <i class="icon htvbdh_tcdt_tao-qd"></i>
           <span>Thêm</span>
@@ -183,10 +183,10 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of basicTable.data; let i = index">
-            <td width="45px">
+            <th width="45px">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                 [nzDisabled]="data.trangThai != STATUS.DU_THAO || !isOwner(data.maDvi)"></label>
-            </td>
+            </th>
             <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
             <td>{{ data.nam }}</td>
             <td>{{ data.tenLoaiHinhNhapXuat }}</td>

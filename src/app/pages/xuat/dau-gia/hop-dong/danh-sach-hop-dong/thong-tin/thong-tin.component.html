@@ -1,4 +1,4 @@
-<nz-affix [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
+<nz-affix *ngIf="!isQuanLy" [nzOffsetTop]="globals.prop.MENU_LV2" class="btn-affix">
   <div class="btn-group">
     <button type="button" class="btn btn-sub" (click)="goBack()">
       <i class="fa fa-arrow-left"></i>
@@ -17,7 +17,7 @@
   </div>
 </nz-affix>
 <div class="bg-trang">
-  <div class="header header-green-background">
+  <div *ngIf="!isQuanLy" class="header header-green-background">
     <div class="header-text">
       <div class="title-chi-tieu">
         <span [ngClass]="formData.value.trangThai == STATUS.DA_KY ? 'status-xanh' : 'status-do'">

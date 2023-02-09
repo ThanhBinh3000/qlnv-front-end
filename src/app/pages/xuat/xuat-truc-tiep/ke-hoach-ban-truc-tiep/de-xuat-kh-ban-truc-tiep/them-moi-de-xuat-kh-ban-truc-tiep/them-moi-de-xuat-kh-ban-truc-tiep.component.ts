@@ -14,15 +14,12 @@ import { ChiTieuKeHoachNamCapTongCucService } from 'src/app/services/chiTieuKeHo
 import { DanhMucTieuChuanService } from 'src/app/services/quantri-danhmuc/danhMucTieuChuan.service';
 import { STATUS } from "../../../../../../constants/status";
 import { QuyetDinhGiaTCDTNNService } from 'src/app/services/ke-hoach/phuong-an-gia/quyetDinhGiaTCDTNN.service';
-import { DanhSachPhanLo } from 'src/app/models/KeHoachBanDauGia';
-import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
-import {
-  DialogThemDiaDiemPhanLoComponent
-} from 'src/app/components/dialog/dialog-them-dia-diem-phan-lo/dialog-them-dia-diem-phan-lo.component';
+import { DanhSachXuatBanTrucTiep } from 'src/app/models/KeHoachBanDauGia';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
+import { DialogThemMoiXuatBanTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
 
 @Component({
   selector: 'app-them-moi-de-xuat-kh-ban-truc-tiep',
@@ -87,15 +84,10 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
       tgianGnhanGhiChu: [null],
       pthucGnhan: [, [Validators.required]],
       thongBaoKh: [, [Validators.required]],
-      khoanTienDatTruoc: [, [Validators.required]],
-
       tongSoLuong: [null],
-      tongTienGiaDeXuat: [null],
-      tongTienGiaVat: [null],
-      tongTienDatCocDx: [null],
-      tongTienDatCocVat: [null],
-
       ghiChu: [null],
+      soQdPd: [''],
+      ngayKyQd: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự Thảo'],
       lyDoTuChoi: [null],
@@ -225,19 +217,15 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
     });
   }
 
-  themMoiBangPhanLoTaiSan($event, data?: DanhSachPhanLo, index?: number) {
+  themMoiBangPhanLoTaiSan($event, data?: DanhSachXuatBanTrucTiep, index?: number) {
     $event.stopPropagation();
     if (!this.formData.get('loaiVthh').value) {
       this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn loại hàng hóa');
       return;
     }
-    if (!this.formData.get('khoanTienDatTruoc').value) {
-      this.notification.error(MESSAGE.ERROR, 'Vui lòng chọn khoản tiền đặt trước');
-      return;
-    }
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm giao nhận hàng',
-      nzContent: DialogThemDiaDiemPhanLoComponent,
+      nzContent: DialogThemMoiXuatBanTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '2500px',
@@ -246,7 +234,6 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
         dataEdit: data,
         dataChiTieu: this.dataChiTieu,
         loaiVthh: this.formData.get('loaiVthh').value,
-        khoanTienDatTruoc: this.formData.get('khoanTienDatTruoc').value,
         namKh: this.formData.get('namKh').value,
       },
     });
@@ -277,24 +264,17 @@ export class ThemMoiDeXuatKhBanTrucTiepComponent extends Base2Component implemen
 
   calculatorTable() {
     let tongSoLuong: number = 0;
-    let tongTienGiaDeXuat: number = 0;
-    let tongTienGiaVat: number = 0;
+
     this.dataTable.forEach((item) => {
       let soLuongChiCuc = 0;
       item.children.forEach(child => {
         soLuongChiCuc += child.soLuong;
         tongSoLuong += child.soLuong / 1000;
-        tongTienGiaDeXuat += child.donGiaDeXuat * child.soLuong;
-        tongTienGiaVat += child.donGiaVat * child.soLuong;
       })
       item.soLuong = soLuongChiCuc;
     });
     this.formData.patchValue({
       tongSoLuong: tongSoLuong,
-      tongTienGiaDeXuat: tongTienGiaDeXuat,
-      tongTienGiaVat: tongTienGiaVat,
-      tongTienDatCocDx: tongTienGiaDeXuat + (tongTienGiaDeXuat * this.formData.value.khoanTienDatTruoc / 100),
-      tongTienDatCocVat: tongTienGiaVat + (tongTienGiaVat * this.formData.value.khoanTienDatTruoc / 100),
     });
   }
 

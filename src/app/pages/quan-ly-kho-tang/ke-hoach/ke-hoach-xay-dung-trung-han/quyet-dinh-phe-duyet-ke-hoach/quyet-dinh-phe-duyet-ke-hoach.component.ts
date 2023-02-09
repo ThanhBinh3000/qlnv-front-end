@@ -8,13 +8,12 @@ import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
 import { MESSAGE } from 'src/app/constants/message';
 import { UserLogin } from 'src/app/models/userlogin';
 import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
-import { DieuChinhQuyetDinhPdKhlcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
 import { UserService } from 'src/app/services/user.service';
 import { convertTrangThai } from 'src/app/shared/commonFunction';
 import { Globals } from 'src/app/shared/globals';
 import { saveAs } from 'file-saver';
 import {QuyetDinhKhTrungHanService} from "../../../../../services/quyet-dinh-kh-trung-han.service";
+import {STATUS} from "../../../../../constants/status";
 
 @Component({
   selector: 'app-quyet-dinh-phe-duyet-ke-hoach',
@@ -25,6 +24,8 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
 
   @Input() typeVthh: string;
   isDetail: boolean = false;
+
+  STATUS = STATUS;
   selectedId: number = 0;
   isViewDetail: boolean;
   tabSelected: string = 'phuong-an-tong-hop';
@@ -40,20 +41,20 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   };
 
   filterTable: any = {
-    soQd: '',
-    ngayQd: '',
+    soCongVan: '',
+    ngayKyBtc: '',
     trichYeu: '',
-    soQdGoc: '',
-    namKhoach: '',
-    tenVthh: '',
-    soGoiThau: '',
-    trangThai: '',
+    phuongAnTc: '',
+    namKeHoach: '',
+    tenTrangThai: '',
   };
 
   allChecked = false;
   indeterminate = false;
   dataTableAll: any[] = [];
   dataTable: any[] = [];
+
+  listTrangThai = [{"ma": "00", "giaTri": "Dự thảo"}, {"ma": "29", "giaTri": "Ban hành"}];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -62,7 +63,6 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
     private danhSachDauThauService: DanhSachDauThauService,
     private modal: NzModalService,
     public userService: UserService,
@@ -228,7 +228,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
             id: item.id,
             maDvi: '',
           };
-          this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
+          this.quyetDinhService.delete(body).then(async () => {
             await this.search();
             this.spinner.hide();
           });
@@ -269,6 +269,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
+          item.namKeHoach = item.namBatDau+ '-' + item.namKetThuc
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
             temp.push(item)
           }
