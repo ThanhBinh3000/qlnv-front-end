@@ -18,4 +18,9 @@ export class QuyetDinhKhTrungHanService extends BaseService{
     const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/list-tt`;
     return this._httpClient.get<OldResponseData>(url).toPromise();
   }
+
+  getListQd(): Promise<OldResponseData> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach-qd`;
+    return this._httpClient.get<OldResponseData>(url).toPromise();
+  }
 }
