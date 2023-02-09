@@ -45,7 +45,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     ngayKyBtc: '',
     trichYeu: '',
     phuongAnTc: '',
-    namKhoach: '',
+    namKeHoach: '',
     tenTrangThai: '',
   };
 
@@ -269,6 +269,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
+          item.namKeHoach = item.namBatDau+ '-' + item.namKetThuc
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
             temp.push(item)
           }

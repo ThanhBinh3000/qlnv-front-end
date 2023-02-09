@@ -51,6 +51,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
   filterTable: any = {
     maTongHop : '',
     ngayTongHop : '',
+    maToTrinh : '',
     soQuyetDinh : '',
     giaiDoan : '',
     noiDung : '',
@@ -271,6 +272,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
+          item.giaiDoan = item.namBatDau+ '-' +item.namKetThuc
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
             temp.push(item)
           }

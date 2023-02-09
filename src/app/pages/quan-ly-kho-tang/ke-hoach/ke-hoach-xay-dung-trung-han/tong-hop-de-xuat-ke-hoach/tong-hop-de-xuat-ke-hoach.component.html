@@ -117,8 +117,8 @@
           </th>
           <th>
             <nz-input-group>
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soQuyetDinh"
-                     (input)="filterInTable('trichYeu',filterTable.trichYeu)" size="small"/>
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.maToTrinh"
+                     (input)="filterInTable('maToTrinh',filterTable.maToTrinh)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -130,7 +130,7 @@
           <th>
             <nz-input-group>
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.giaiDoan"
-                     (input)="filterInTable('soQdGoc',filterTable.soQdGoc)" size="small"/>
+                     (input)="filterInTable('giaiDoan',filterTable.giaiDoan)" size="small"/>
             </nz-input-group>
           </th>
           <th>
@@ -160,7 +160,7 @@
           <td>{{ data.ngayTongHop | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.maToTrinh }}</td>
           <td>{{ data.soQd }}</td>
-          <td>{{data.namBatDau + ' - ' + data.namKetThuc}}</td>
+          <td>{{data.namBatDau + '-' + data.namKetThuc}}</td>
           <td>{{data.noiDung}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-center">

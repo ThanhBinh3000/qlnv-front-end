@@ -60,18 +60,17 @@
                 [nzShowPagination]="false" nzBordered>
         <thead>
         <tr>
-          <th width="40px">
+          <th nzWidth="40px">
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th class="text-center" style="width: 2%;">STT</th>
-          <th class="text-center" style="width: 11%;">Số quyết định</th>
-          <th class="text-center" style="width: 11%;">Phương án của Tổng cục</th>
-          <th class="text-center" style="width: 11%;">Ngày ký</th>
-          <th class="text-center" style="width: 40%;">Trích yếu</th>
-          <th class="text-center" style="width: 10%;">Số công văn</th>
-          <th class="text-center" style="width: 8%;">Trạng thái</th>
-          <th  class="text-center" style="width: 7%;" >Hành động</th>
+          <th class="text-center" nzWidth="40px">STT</th>
+          <th class="text-center" nzWidth="150px" >Số quyết định</th>
+          <th class="text-center"  nzWidth="150px">Ngày ký</th>
+          <th class="text-center" nzWidth="150px" >Phương án của Tổng cục</th>
+          <th class="text-center" nzWidth="150px" >Giai đoạn</th>
+          <th class="text-center" nzWidth="" >Trích yếu</th>
+          <th  class="text-center"  nzWidth="100px" >Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -99,8 +98,8 @@
           </th>
           <th>
             <nz-input-group >
-              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.tenTrangThai"
-                     (input)="filterInTable('trangThai',filterTable.tenTrangThai)" size="small" />
+              <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
+                     (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" size="small" />
             </nz-input-group>
           </th>
           <th>
@@ -128,7 +127,7 @@
           <td>{{ data.soCongVan }}</td>
           <td>{{ data.ngayKyBtc | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.phuongAnTc }}</td>
-          <td>{{ data.namBatDau + ' - ' + data.namKetThuc }}</td>
+          <td>{{ data.namBatDau + '-' + data.namKetThuc }}</td>
           <td>{{data.trichYeu}}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-center">
