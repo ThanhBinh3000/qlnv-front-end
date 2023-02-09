@@ -114,6 +114,7 @@ export class TongHopPhuongAnComponent extends Base2Component implements OnInit {
   redirectDetail(id, b: boolean) {
     this.selectedId = id;
     this.isDetail = true;
+    this.isView = b;
     // this.isViewDetail = isView ?? false;
   }
 }
