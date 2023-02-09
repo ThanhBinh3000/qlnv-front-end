@@ -28,7 +28,7 @@
           </div>
           <div nz-col nzSpan="3">
             <label>Số công văn/đề xuất</label>
-            <input placeholder="Nhập nội dung" nz-input formControlName="soDx" />
+            <input nz-input formControlName="soDx" />
           </div>
           <div nz-col nzSpan="4">
             <label>Thời hạn xuất viện trợ, cứu trợ</label>
@@ -183,10 +183,10 @@
         </thead>
         <tbody>
           <tr *ngFor="let data of basicTable.data; let i = index">
-            <th width="45px">
+            <td width="45px">
               <label nz-checkbox [(ngModel)]="data.checked" (ngModelChange)="updateSingleChecked()"
                 [nzDisabled]="data.trangThai != STATUS.DU_THAO || !isOwner(data.maDvi)"></label>
-            </th>
+            </td>
             <td class="text-center">{{(page - 1) * pageSize + i + 1}}</td>
             <td>{{ data.nam }}</td>
             <td>{{ data.tenLoaiHinhNhapXuat }}</td>
