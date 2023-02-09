@@ -78,7 +78,12 @@ export class DanhMucDonViComponent implements OnInit {
    */
 
   async layTatCaDonViTheoTree(id?) {
-    await this.donviService.layTatCaDonViCha(LOAI_DON_VI.PB).then((res: OldResponseData) => {
+    // await this.donviService.layTatCaDonViCha(LOAI_DON_VI.PB).then((res: OldResponseData) => {
+    let body = {
+      maDviCha: this.userInfo.MA_DVI,
+      trangThai: '01',
+    }
+    await this.donviService.layTatCaDangTree(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
         this.nodes = res.data;
         this.nodes[0].expanded = true;

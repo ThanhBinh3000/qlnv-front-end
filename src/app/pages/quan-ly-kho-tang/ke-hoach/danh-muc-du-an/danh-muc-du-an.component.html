@@ -1,6 +1,6 @@
 <div class="bg-trang">
   <nz-card class="mt16 flex-card p-lr16">
-    <div nz-row [nzGutter]="20">
+    <div nz-row [nzGutter]="24">
       <div nz-col nzSpan="3">
         <label class="search__label">Số QĐ phê duyệt</label>
         <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.soQd"/>
@@ -12,10 +12,12 @@
           </nz-option>
         </nz-select>
       </div>
-      <div nz-col nzSpan="6">
-        <label class="search__label">Mã dự án</label>
-        <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.maDuAn"/>
-
+      <div nz-col nzSpan="6" *ngIf="userService.isTongCuc()">
+        <label class="search__label">Đơn vị</label>
+        <nz-select  nzAllowClear [(ngModel)]="searchFilter.maDvi">
+          <nz-option *ngFor="let p of danhSachCuc" [nzValue]="p.tenDvi" [nzLabel]="p.maDvi">
+          </nz-option>
+        </nz-select>
       </div>
       <div nz-col nzSpan="6">
         <label class="search__label">Tên dự án</label>
@@ -26,21 +28,26 @@
         <input class="search__input" placeholder="Nhập text" nz-input [(ngModel)]="searchFilter.diaDiem"/>
       </div>
       <div nz-col nzSpan="6">
-        <label class="search__label">Trạng thái</label>
-        <nz-select [(ngModel)]="searchFilter.trangThai" nzAllowClear>
-          <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-          </nz-option>
-        </nz-select>
-      </div>
-      <div nz-col nzSpan="6">
         <label class="search__label">Giai đoạn</label>
         <nz-range-picker [nzPlaceHolder]="['Từ năm', 'Đến năm']" [(ngModel)]="searchFilter.giaiDoan"
                          nzMode="year"></nz-range-picker>
       </div>
       <div nz-col nzSpan="6">
-        <label class="search__label">Thời gian khởi công - hoàn thành</label>
-        <nz-range-picker [nzPlaceHolder]="['Từ năm', 'Đến năm']" [(ngModel)]="searchFilter.tgKcHt"
+        <label class="search__label">Thời gian khởi công</label>
+        <nz-range-picker [nzPlaceHolder]="['Từ năm', 'Đến năm']" [(ngModel)]="searchFilter.tgKhoiCong"
                          nzMode="year"></nz-range-picker>
+      </div>
+      <div nz-col nzSpan="6">
+        <label class="search__label">Thời gian hoàn thành</label>
+        <nz-range-picker [nzPlaceHolder]="['Từ năm', 'Đến năm']" [(ngModel)]="searchFilter.tgHoanThanh"
+                         nzMode="year"></nz-range-picker>
+      </div>
+      <div nz-col nzSpan="6">
+        <label class="search__label">Trạng thái</label>
+        <nz-select [(ngModel)]="searchFilter.trangThai" nzAllowClear>
+          <nz-option *ngFor="let p of listTrangThai" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+          </nz-option>
+        </nz-select>
       </div>
     </div>
     <div nz-col class="cangiua group-button-search">
@@ -75,7 +82,8 @@
         <th class="text-left" nzWidth = "60px">Tên dự án</th>
         <th class="text-left" nzWidth = "60px">Địa điểm xây dựng</th>
         <th class="text-left" nzWidth = "">Khối</th>
-        <th class="text-left" nzWidth = "">Thời gian KC-HT</th>
+        <th class="text-left" nzWidth = "">Thời gian <br> khởi công</th>
+        <th class="text-left" nzWidth = "">Thời gian <br> hoàn thành</th>
         <th class="text-left" nzWidth = "">Tổng số <br> TMĐT dự kiến</th>
         <th class="text-left" nzWidth = "">TMĐT vốn <br> NSTW dự kiến</th>
         <th class="text-left" nzWidth = "">Số QĐ phê duyệt</th>
@@ -115,7 +123,11 @@
           </nz-input-group>
         </td>
         <td class="text-center">
-          <nz-range-picker [nzPlaceHolder]="['Từ năm', 'Đến năm']" [(ngModel)]="rowItem.tgKcHt"
+          <nz-range-picker [nzPlaceHolder]="['Từ năm', 'Đến năm']" [(ngModel)]="rowItem.tgKhoiCong"
+                           nzMode="year"></nz-range-picker>
+        </td>
+        <td class="text-center">
+          <nz-range-picker [nzPlaceHolder]="['Từ năm', 'Đến năm']" [(ngModel)]="rowItem.tgHoanThanh"
                            nzMode="year"></nz-range-picker>
         </td>
         <td class="text-center">
@@ -157,10 +169,10 @@
           </nz-input-group>
         </td>
         <td class="text-center" nzRight *ngIf="!isViewDetail">
-          <a (click)="themMoiItem()">
+          <a (click)="themMoiItem()" *ngIf="userService.isCuc()">
             <i class="fa fa-plus"></i>
           </a>
-          <a (click)="clearData()">
+          <a (click)="clearData()" *ngIf="userService.isCuc()">
             <i class="icon  htvbdh_nhap-lai1 "></i>
           </a>
         </td>
@@ -171,7 +183,8 @@
         <td>{{ data.tenDuAn}}</td>
         <td>{{ data.diaDiem }}</td>
         <td>{{ data.khoi }}</td>
-        <td>{{data.tgKhoiCong + ' - ' + data.tgHoanThanh}}</td>
+        <td>{{data.tgKhoiCongTu + ' - ' + data.tgKhoiCongDen}}</td>
+        <td>{{data.tgHoanThanhTu + ' - ' + data.tgHoanThanhDen}}</td>
         <td>{{ data.tmdtDuKien }}</td>
         <td>{{ data.nstwDuKien }}</td>
         <td>{{ data.soQdPd }}</td>
@@ -181,13 +194,13 @@
         <td>{{ data.luyKeNstw }}</td>
         <td>{{ data.tenTrangThai }}</td>
         <td class="text-center" nzRight>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="openDialog(data.id)">
+          <a (click)="openDialog(data.id)" *ngIf="userService.isCuc()">
             <i class="fa fa-eye"></i>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO">
+          <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()" >
             <i class="fa fa-pencil"></i>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="xoaItem(data.id)">
+          <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()" (click)="xoaItem(data.id)">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>
