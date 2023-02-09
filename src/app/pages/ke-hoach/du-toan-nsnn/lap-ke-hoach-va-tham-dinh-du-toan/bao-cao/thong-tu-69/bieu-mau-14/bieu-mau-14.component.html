@@ -54,21 +54,20 @@
                             {{editCache[data.id].data.tenNdung}}
                         </td>
                         <td>
-                            <fm-input-number class="search__input"
-                                [(ngModel)]="editCache[data.id].data.thNamHienHanhN1">
-                            </fm-input-number>
+                            <input class="money-input" currencyMask [options]="amount"
+                                [(ngModel)]="editCache[data.id].data.thNamHienHanhN1" />
                         </td>
                         <td>
-                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.ncauNamDtoanN">
-                            </fm-input-number>
+                            <input class="money-input" currencyMask [options]="amount"
+                                [(ngModel)]="editCache[data.id].data.ncauNamDtoanN" />
                         </td>
                         <td>
-                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.ncauNamN1">
-                            </fm-input-number>
+                            <input class="money-input" currencyMask [options]="amount"
+                                [(ngModel)]="editCache[data.id].data.ncauNamN1" />
                         </td>
                         <td>
-                            <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.ncauNamN2">
-                            </fm-input-number>
+                            <input class="money-input" currencyMask [options]="amount"
+                                [(ngModel)]="editCache[data.id].data.ncauNamN2" />
                         </td>
                         <td>
                             <a (click)="saveEdit(data.id)" class="save">Lưu</a>

@@ -130,6 +130,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
         trangThai: [STATUS.DU_THAO],
         maTongHop: [''],
         tongSoLuong: [0],
+        thanhTien: [0],
         ngayGduyet: [''],
         nguoiGduyetId: [''],
         ngayPduyet: [''],

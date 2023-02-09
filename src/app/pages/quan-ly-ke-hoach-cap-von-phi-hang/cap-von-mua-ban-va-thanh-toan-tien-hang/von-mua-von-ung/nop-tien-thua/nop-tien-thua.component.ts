@@ -13,7 +13,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, sumNumber, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, QUATITY, sumNumber, Utils } from 'src/app/Utility/utils';
 import { luyKeTienThua, Report, TienThua, TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
@@ -37,6 +37,8 @@ export class NopTienThuaComponent implements OnInit {
     trangThais: any[] = TRANG_THAI;
     loaiDns: any[] = LOAI_DE_NGHI;
     donViTiens: any[] = DON_VI_TIEN;
+    amount = AMOUNT;
+    quatity = QUATITY;
     //trang thai cac nut
     isParent = false;
     statusGui = false;
@@ -181,7 +183,7 @@ export class NopTienThuaComponent implements OnInit {
         this.baoCao.ttNhan.fileList = [];
         this.baoCao.ttGui.listIdDeleteFiles = [];
         this.baoCao.ttNhan.listIdDeleteFiles = [];
-        this.updateSoDu();
+        // this.updateSoDu();
         this.updateEditCache();
         this.getStatusButton();
     }
@@ -307,7 +309,7 @@ export class NopTienThuaComponent implements OnInit {
                     }
                     this.baoCao.ttGui.listFile = [];
                     this.baoCao.ttNhan.listFile = [];
-                    this.updateSoDu();
+                    // this.updateSoDu();
                     this.updateEditCache();
                     this.getStatusButton();
                 } else {

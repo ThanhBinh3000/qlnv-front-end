@@ -1,10 +1,10 @@
 <ng-container *ngIf="isDataAvailable">
     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-        <div nz-col [nzSpan]="1">
+        <div nz-col [nzSpan]="2">
             Đơn vị:
         </div>
         <div nz-col [nzSpan]="2">
-            <ng-container *ngIf="!statusEdit || !editMoneyUnit; else editMoney">
+            <ng-container *ngIf="statusEdit || !editMoneyUnit; else editMoney">
                 <span (click)="editMoneyUnit=true">{{getMoneyUnit()}}</span>
             </ng-container>
             <ng-template #editMoney>
@@ -15,23 +15,22 @@
                 </nz-select>
             </ng-template>
         </div>
-        <div nz-col class="gutter-row canphai phai" [nzSpan]="21" style="display:flex; justify-content: end;">
-            <button type="button" class="btn btn-main" (click)="deleteAllChecked()" [hidden]="statusEdit">
+        <div nz-col class="gutter-row canphai phai" [nzSpan]="20" style="display:flex; justify-content: end;">
+            <button *ngIf="statusEdit" type="button" class="btn btn-main" (click)="deleteAllChecked()">
                 <i class="fa fa-trash-o"></i>
                 <span>Xóa</span>
             </button>
-            <ng-container *ngIf="lstCtietBcao.length == 0">
-                <button type="button" class="btn btn-main" (click)="addLine(null)" [hidden]="statusEdit">
-                    <i class="icon htvbdh_dau-cong"></i>
-                    <span>Thêm</span>
-                </button>
-            </ng-container>
+            <button *ngIf="statusEdit && lstCtietBcao.length == 0" type="button" class="btn btn-main"
+                (click)="addLine(null)">
+                <i class="icon htvbdh_dau-cong"></i>
+                <span>Thêm</span>
+            </button>
         </div>
     </div>
-    <nz-table nzBordered class="table__body" [nzScroll]="{ x: '400%'}">
+    <nz-table nzBordered class="table__body" [nzScroll]="{ x: scrollX}">
         <thead>
             <tr>
-                <th rowspan="4" nzWidth="100px" nzLeft> STT </th>
+                <th rowspan="4" nzWidth="50px" nzLeft> STT </th>
                 <th rowspan="4" nzWidth="300px" nzLeft>Danh mục Dự án</th>
                 <th rowspan="4" style="width: 150px;">Địa điểm XD</th>
                 <th colspan="3">Quyết định đầu tư</th>
@@ -51,10 +50,10 @@
                 </th>
                 <th colspan="3" style="width: 600px;" rowspan="1">Tình hình thực hiện dự án</th>
                 <th rowspan="4" style="width: 200px;">Ghi chú</th>
-                <th style="width: 50px;" rowspan="4" [hidden]="statusEdit" nzRight></th>
-                <th style="width: 55px;" rowspan="4" [hidden]="statusEdit" nzRight></th>
-                <th style="width: 55px;" rowspan="4" [hidden]="statusEdit" nzRight></th>
-                <th style="width: 50px;" rowspan="4" [hidden]="statusEdit" nzRight>
+                <th style="width: 50px;" rowspan="4" *ngIf="statusEdit" nzRight></th>
+                <th style="width: 55px;" rowspan="4" *ngIf="statusEdit" nzRight></th>
+                <th style="width: 55px;" rowspan="4" *ngIf="statusEdit" nzRight></th>
+                <th style="width: 40px;" rowspan="4" *ngIf="statusEdit" nzRight>
                     <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()">
                     </label>
                 </th>
@@ -340,10 +339,10 @@
                 <td>23</td>
                 <td>24</td>
                 <td>25</td>
-                <td [hidden]="statusEdit" nzRight></td>
-                <td [hidden]="statusEdit" nzRight></td>
-                <td [hidden]="statusEdit" nzRight></td>
-                <td [hidden]="statusEdit" nzRight></td>
+                <td *ngIf="statusEdit" nzRight></td>
+                <td *ngIf="statusEdit" nzRight></td>
+                <td *ngIf="statusEdit" nzRight></td>
+                <td *ngIf="statusEdit" nzRight></td>
             </tr>
             <tr>
                 <td nzLeft></td>
@@ -394,14 +393,14 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td [hidden]="statusEdit" nzRight></td>
-                <td [hidden]="statusEdit" nzRight></td>
-                <td [hidden]="statusEdit" nzRight></td>
-                <td [hidden]="statusEdit" nzRight></td>
+                <td *ngIf="statusEdit" nzRight></td>
+                <td *ngIf="statusEdit" nzRight></td>
+                <td *ngIf="statusEdit" nzRight></td>
+                <td *ngIf="statusEdit" nzRight></td>
             </tr>
             <tr *ngFor="let data of lstCtietBcao; let i = index">
                 <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                    <td [nzIndentSize]="data.level! * 8" nzLeft>
+                    <td nzLeft>
                         {{getIndex(data.stt)}}
                     </td>
                     <td nzLeft>
@@ -460,20 +459,20 @@
                     <td>{{ data.khoachThienNdungCviecThangConLaiNam }}</td>
                     <td>{{ data.ghiChu }}</td>
 
-                    <td [hidden]="statusEdit" nzRight>
+                    <td *ngIf="statusEdit" nzRight>
                         <ng-container *ngIf="!getDeleteStatus(data)">
                             <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                         </ng-container>
                     </td>
-                    <td [hidden]="statusEdit" nzRight>
+                    <td *ngIf="statusEdit" nzRight>
                         <ng-container *ngIf="!getLowStatus(data.stt)">
                             <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                         </ng-container>
                     </td>
-                    <td [hidden]="statusEdit" nzRight>
+                    <td *ngIf="statusEdit" nzRight>
                         <i class="fa fa-plus" (click)="addLine(data.id)"></i>
                     </td>
-                    <td [hidden]="statusEdit" nzRight>
+                    <td *ngIf="statusEdit" nzRight>
                         <ng-container *ngIf="!getDeleteStatus(data)">
                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                 (ngModelChange)="updateChecked(data.id)"></label>
@@ -481,7 +480,7 @@
                     </td>
                 </ng-container>
                 <ng-template #editTemplate>
-                    <td [nzIndentSize]="data.level! * 8" nzLeft>
+                    <td nzLeft>
                         {{getIndex(data.stt)}}
                     </td>
                     <td nzLeft>
@@ -499,99 +498,93 @@
                             [(ngModel)]="editCache[data.id].data.qddtSoQdinh">
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.qddtTmdtTso"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.qddtTmdtTso" (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.qddtTmdtNsnn"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.qddtTmdtNsnn" (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
                         {{displayValue(editCache[data.id].data.luyKeVonTso)}}
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.luyKeVonNsnn"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.luyKeVonNsnn" (ngModelChange)="changeModel(data.id)" />
                     </td>
 
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.luyKeVonDt"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.luyKeVonDt" (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.luyKeVonThue"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.luyKeVonThue" (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.luyKeVonScl"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.luyKeVonScl" (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input"
+                        <input class="money-input" currencyMask [options]="amount"
                             [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamTso"
-                            (ngModelChange)="changeModel(data.id)"></fm-input-number>
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input"
+                        <input class="money-input" currencyMask [options]="amount"
                             [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamNsnnTso"
-                            (ngModelChange)="changeModel(data.id)"></fm-input-number>
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input"
+                        <input class="money-input" currencyMask [options]="amount"
                             [(ngModel)]="editCache[data.id].data.luyKeGiaiNganHetNamNsnnKhNamTruoc"
-                            (ngModelChange)="changeModel(data.id)"></fm-input-number>
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
                         {{displayValue(editCache[data.id].data.khoachVonNamTruocKeoDaiTso)}}
                     </td>
                     <td>
-                        <fm-input-number class="search__input"
+                        <input class="money-input" currencyMask [options]="amount"
                             [(ngModel)]="editCache[data.id].data.khoachVonNamTruocKeoDaiDtpt"
-                            (ngModelChange)="changeModel(data.id)"></fm-input-number>
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input"
+                        <input class="money-input" currencyMask [options]="amount"
                             [(ngModel)]="editCache[data.id].data.khoachVonNamTruocKeoDaiVonKhac"
-                            (ngModelChange)="changeModel(data.id)"></fm-input-number>
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
                         {{displayValue(editCache[data.id].data.khoachNamVonTso)}}
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.khoachNamVonNsnn"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.khoachNamVonNsnn"
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.khoachNamVonDt"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.khoachNamVonDt"
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.khoachNamVonThue"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.khoachNamVonThue"
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.khoachNamVonScl"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.khoachNamVonScl"
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.kluongThienTso"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.kluongThienTso"
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input"
+                        <input class="money-input" currencyMask [options]="amount"
                             [(ngModel)]="editCache[data.id].data.kluongThienThangBcao"
-                            (ngModelChange)="changeModel(data.id)"></fm-input-number>
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
                         {{displayValue(editCache[data.id].data.giaiNganTso)}}
@@ -600,23 +593,23 @@
                         {{displayValue(editCache[data.id].data.giaiNganTsoTle)}}
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaiNganNsnn"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.giaiNganNsnn" (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonDt"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonDt"
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonThue"
-                            (ngModelChange)="changeModel(data.id)"></fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonThue"
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
-                        <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonScl"
-                            (ngModelChange)="changeModel(data.id)">
-                        </fm-input-number>
+                        <input class="money-input" currencyMask [options]="amount"
+                            [(ngModel)]="editCache[data.id].data.giaiNganNsnnVonScl"
+                            (ngModelChange)="changeModel(data.id)" />
                     </td>
                     <td>
                         {{displayValue(editCache[data.id].data.giaiNganNsnnTle)}}
@@ -676,7 +669,7 @@
                         <input class="search__input" [nzSize]="'small'" [(ngModel)]="editCache[data.id].data.ghiChu"
                             nz-input />
                     </td>
-                    <td [hidden]="statusEdit" nzRight>
+                    <td *ngIf="statusEdit" nzRight>
                         <ng-container *ngIf="!getDeleteStatus(data)">
                             <i class="fa fa-trash-o do" (click)="deleteLine(data.id)"></i>
                         </ng-container>
@@ -684,13 +677,13 @@
                     <td nzRight>
                         <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                     </td>
-                    <td [hidden]="statusEdit" nzRight>
+                    <td *ngIf="statusEdit" nzRight>
                         <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                             (nzOnConfirm)="cancelEdit(data.id)" class="save">
                             Hủy
                         </a>
                     </td>
-                    <td [hidden]="statusEdit" nzRight>
+                    <td *ngIf="statusEdit" nzRight>
                         <ng-container *ngIf="!getDeleteStatus(data)">
                             <label nz-checkbox [nzValue]="data.id" [(ngModel)]="data.checked"
                                 (ngModelChange)="updateChecked(data.id)"></label>

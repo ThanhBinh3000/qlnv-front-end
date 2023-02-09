@@ -244,14 +244,14 @@ export class DialogThemThongTinQuyetToanComponent implements OnInit {
 
     //get file cong van url
     const file: any = this.fileDetail;
-    if (file) {
-      if (file.size > Utils.FILE_SIZE) {
-        this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
-        return;
-      } else {
-        request.soQd = await this.uploadFile(file);
-      }
-    }
+    // if (file) {
+    //   if (file.size > Utils.FILE_SIZE) {
+    //     this.notification.warning(MESSAGE.WARNING, MESSAGEVALIDATE.OVER_SIZE);
+    //     return;
+    //   } else {
+    //     request.soQd = await this.uploadFile(file);
+    //   }
+    // }
 
     if (!request.soQd) {
       this.notification.warning(MESSAGE.WARNING, "Vui lòng nhập số quyết định công văn");

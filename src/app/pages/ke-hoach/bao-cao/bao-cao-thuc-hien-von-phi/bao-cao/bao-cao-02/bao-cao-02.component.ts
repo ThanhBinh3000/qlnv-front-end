@@ -10,8 +10,8 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienVonPhi.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, MONEY_LIMIT, mulNumber, NOT_OK, OK, sumNumber, Utils } from "src/app/Utility/utils";
+import { displayNumber, divNumber, exchangeMoney, mulNumber, sumNumber } from 'src/app/Utility/func';
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, MONEY_LIMIT, NOT_OK, OK, QUATITY, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
 export class ItemData {
@@ -66,6 +66,9 @@ export class BaoCao02Component implements OnInit {
     trangThaiPhuLuc = '3';
     idBaoCao: string;        //id bao cao to
     luyKes: any[] = [];         //bao cao nam
+    scrollX = (350 + 8 * BOX_NUMBER_WIDTH + 400).toString() + 'px';
+    amount = AMOUNT;
+    quatity = QUATITY;
     //trang thai cac nut
     status = false;
     statusBtnFinish: boolean;
@@ -113,11 +116,14 @@ export class BaoCao02Component implements OnInit {
         this.id = this.data?.id;
         this.maDviTien = this.data?.maDviTien ? this.data?.maDviTien : '1';
         this.thuyetMinh = this.data?.thuyetMinh;
-        this.status = this.data?.status;
+        this.status = !this.data?.status;
+        if (this.status) {
+            this.scrollX = (350 + 8 * BOX_NUMBER_WIDTH + 200).toString() + 'px';
+        }
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.statusBtnExport = this.data?.statusBtnExport;
         this.luyKes = this.data?.luyKes.find(item => item.maLoai == '4')?.lstCtietBcaos;
-        if (this.status) {
+        if (!this.status) {
             this.tuNgay = this.datePipe.transform(this.data?.tuNgay, Utils.FORMAT_DATE_STR);
             this.denNgay = this.datePipe.transform(this.data?.denNgay, Utils.FORMAT_DATE_STR);
         } else {
