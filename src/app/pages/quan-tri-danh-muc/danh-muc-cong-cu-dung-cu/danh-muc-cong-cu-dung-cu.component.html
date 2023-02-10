@@ -62,15 +62,16 @@
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
     <form nz-form nzLayout="vertical" [formGroup]="formData">
       <nz-table #basicTable nzBordered class="nowrap" [nzData]="dataTable" [nzFrontPagination]="false"
-                [nzShowPagination]="false" nzBordered>
+                [nzShowPagination]="false" nzBordered [nzScroll]="{ x: '1150px'}">
         <thead>
         <tr>
           <th class="text-center" style="width: 2%;">STT</th>
           <th class="text-center" style="width: 8%;">Mã CCDC</th>
           <th class="text-center" style="width: 15%;">Tên CCDC</th>
           <th class="text-center">Mô tả CCDC</th>
+          <th class="text-center" nzWidth="200px">Yêu cầu kỹ thuật</th>
           <th class="text-center" style="width: 8%;">Đơn vị tính</th>
-          <th class="text-center" style="width: 15%;">Nhóm CCDC</th>
+          <th class="text-center" nzWidth="300px">Nhóm CCDC</th>
           <th class="text-center" style="width: 8%;">Trạng thái</th>
           <th class="text-center" style="width: 8%;">Hành động</th>
         </tr>
@@ -94,6 +95,13 @@
             <nz-form-control>
               <nz-input-group>
                 <input type="text" nz-input formControlName="moTa"/>
+              </nz-input-group>
+            </nz-form-control>
+          </th>
+          <th>
+            <nz-form-control>
+              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="inputYcKyThuat()">
+                <input type="text" class="search__input" nz-input [readonly]="true" formControlName="yeuCauKt"/>
               </nz-input-group>
             </nz-form-control>
           </th>
@@ -143,6 +151,7 @@
             <td>{{ data.maCcdc }}</td>
             <td>{{ data.tenCcdc }}</td>
             <td>{{ data.moTa }}</td>
+            <td>{{ data.yeuCauKt }}</td>
             <td>{{ data.donViTinh }}</td>
             <td>{{data.tenNhomCcdc}}</td>
             <td>{{ data.trangThai == '01' ? 'Hoạt động' : 'Không hoạt động'}}</td>
@@ -183,6 +192,17 @@
             </th>
             <th>
               <nz-form-control>
+                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="inputYcKyThuatEdit(dataEdit[i].data)">
+                  <input [ngModelOptions]="{standalone: true}"
+                         type="text" [readonly]="true" nz-input [(ngModel)]=dataEdit[i].data.yeuCauKt/>
+                </nz-input-group>
+                <!--                <nz-input-group  nzAddOnAfterIcon="folder-open"  (click)="inputYcKyThuat()" >-->
+                <!--                  <input type="text" [ngModelOptions]="{standalone: true}" class="search__input" nz-input  [readonly]="true" formControlName="yeuCauKt"/>-->
+                <!--                </nz-input-group>-->
+              </nz-form-control>
+            </th>
+            <th>
+              <nz-form-control>
                 <nz-input-group>
                   <input [ngModelOptions]="{standalone: true}"
                          type="text" nz-input [(ngModel)]=dataEdit[i].data.donViTinh/>
@@ -213,7 +233,7 @@
               </nz-form-control>
             </th>
             <th style="text-align: center;">
-              <a (click)="saveDmCc(dataEdit[i].data, data.id)" >
+              <a (click)="saveDmCc(dataEdit[i].data, data.id)">
                 <i class="fa fa-save mr-3"></i>
               </a>
               <a (click)="huyEdit(i)">
@@ -245,3 +265,26 @@
     </div>
   </nz-card>
 </div>
+<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisible" nzTitle="The first Modal" (nzOnCancel)="handleCancel()"
+          (nzOnOk)="handleOk()" nzTitle="Nhập yêu cầu kỹ thuật">
+  <ng-container *nzModalContent>
+    <nz-form-item>
+      <nz-form-label [nzXs]="7">Yêu cầu kỹ thuật</nz-form-label>
+      <nz-form-control>
+        <textarea [(ngModel)]="yeuCauKt" rows="20" nz-input></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
+</nz-modal>
+
+<nz-modal [nzWidth]="'50%'" [(nzVisible)]="isVisibleEdit" nzTitle="The first Modal" (nzOnCancel)="handleCancelEdit()"
+          (nzOnOk)="handleOkEdit()" nzTitle="Sửa yêu cầu kỹ thuật">
+  <ng-container *nzModalContent>
+    <nz-form-item>
+      <nz-form-label [nzXs]="7">Yêu cầu kỹ thuật</nz-form-label>
+      <nz-form-control>
+        <textarea [(ngModel)]="yeuCauKtEdit" rows="20" nz-input></textarea>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
+</nz-modal>
