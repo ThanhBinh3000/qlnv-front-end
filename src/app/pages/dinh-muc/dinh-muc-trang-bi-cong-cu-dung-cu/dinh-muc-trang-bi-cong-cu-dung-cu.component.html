@@ -1,4 +1,4 @@
-<div class="luong-thuc__danh-sach">
+<div class="luong-thuc__danh-sach" *ngIf="!isDetail; else templateThemmoi">
   <div class="bg-trang">
     <h3 class="mt-16">QUẢN LÝ ĐỊNH MỨC TRANG BỊ CÔNG CỤ, DỤNG CỤ</h3>
     <nz-card class="flex-card p-lr16">
@@ -54,7 +54,7 @@
           <span>Export</span>
         </button>
         <button
-          type="button" class="btn btn-main">
+          type="button" class="btn btn-main" (click)="redirectToChiTiet(0,false)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
         </button>
@@ -172,3 +172,6 @@
     </nz-card>
   </div>
 </div>
+<ng-template #templateThemmoi>
+  <app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu></app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu>
+</ng-template>

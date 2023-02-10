@@ -28,7 +28,8 @@ import {Globals} from "../../../shared/globals";
 export class DanhMucDinhMucPhiComponent implements OnInit {
   formData: FormGroup;
   formDataChinhSua: FormGroup;
-  listVthh: any[] = [];
+  listLoaiVthh: any[] = [];
+  listChungLoaiVthh: any[] = [];
   listDinhMuc: any[] = [];
   listDviTinh: any[] = [];
   listLhbq: any[] = [];
@@ -109,10 +110,11 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
   }
 
   async loadDsVthh() {
-    this.listVthh = [];
-    let res = await this.danhMucService.danhMucChungGetAll('LOAI_HHOA');
+    this.listLoaiVthh = [];
+    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
     if (res.msg == MESSAGE.SUCCESS) {
-      this.listVthh = res.data;
+      this.listLoaiVthh = res.data;
+      this.listLoaiVthh = res.data?.filter((x) => x.ma.length == 4);
     }
   }
 
@@ -159,6 +161,19 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
         this.dataEdit[index].data.tenLoaiVthh = item.tenLoaiVthh
         this.dataEdit[index].data.tencLoaiVthh = item.tencLoaiVthh
       });
+    }
+  }
+
+  async selectLoaiHangHoa(event: any) {
+    if (event) {
+      let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          this.listChungLoaiVthh = res.data;
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+      }
     }
   }
 
@@ -250,18 +265,33 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
         dviTinh: data.dviTinh,
         trangThai: data.trangThai,
       })
-      this.helperService.markFormGroupTouched(this.formDataChinhSua);
-      if(this.formDataChinhSua.value && this.formDataChinhSua.value.loaiDinhMuc == '03'){
+      if (this.formDataChinhSua.value && this.formDataChinhSua.value.loaiDinhMuc == '03') {
         this.formDataChinhSua.controls["hinhThucBq"].setValidators([Validators.required]);
         this.formDataChinhSua.controls["loaiHinhBq"].setValidators([Validators.required]);
+      } else {
+        this.formDataChinhSua.controls["hinhThucBq"].setValidators(null);
+        this.formDataChinhSua.controls["loaiHinhBq"].setValidators(null);
+        this.formDataChinhSua.patchValue({
+          hinhThucBq: null,
+          loaiHinhBq: null,
+        });
       }
+      console.log(this.formDataChinhSua.value);
+      this.helperService.markFormGroupTouched(this.formDataChinhSua);
       if (this.formDataChinhSua.invalid) {
         return;
       }
     } else {
-      if(this.formData.value && this.formData.value.loaiDinhMuc == '03'){
+      if (this.formData.value && this.formData.value.loaiDinhMuc == '03') {
         this.formData.controls["hinhThucBq"].setValidators([Validators.required]);
         this.formData.controls["loaiHinhBq"].setValidators([Validators.required]);
+      } else {
+        this.formData.controls["hinhThucBq"].setValidators(null);
+        this.formData.controls["loaiHinhBq"].setValidators(null);
+        this.formData.patchValue({
+          hinhThucBq: null,
+          loaiHinhBq: null,
+        });
       }
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
@@ -293,7 +323,8 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       }
     }
   }
-  refresh(){
+
+  refresh() {
     this.formData.reset();
   }
 
@@ -547,6 +578,5 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
 
   startEdit(i: number) {
     this.dataEdit[i].edit = true;
-    console.log(this.dataEdit[i].data)
   }
 }
