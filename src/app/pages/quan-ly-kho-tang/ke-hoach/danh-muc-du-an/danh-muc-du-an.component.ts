@@ -41,7 +41,7 @@ export class DanhMucDuAnComponent implements OnInit {
   dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
 
   searchFilter = {
-    maDvi: '',
+    maDvi: null,
     soQd: '',
     khoi: '',
     tenDuAn: '',
@@ -192,7 +192,7 @@ export class DanhMucDuAnComponent implements OnInit {
   clearFilter() {
     this.searchFilter = {
       soQd: '',
-      maDvi : '',
+      maDvi : null,
       khoi: '',
       tenDuAn: '',
       diaDiem: '',
