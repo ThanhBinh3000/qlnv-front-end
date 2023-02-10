@@ -691,7 +691,7 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
   }
 
   buildTableView() {
-    let dataView = chain(this.deXuatPhuongAn)
+    let dataView = chain(this.formData.value.deXuatPhuongAn)
       .groupBy("noiDung")
       .map((value, key) => {
         let rs = chain(value)
@@ -699,22 +699,21 @@ export class ThongTinTongHopPhuongAnComponent extends Base2Component implements 
           .map((v, k) => ({
               idVirtual: uuid.v4(),
               tenCuc: k,
-              // soLuongGiao: v[0].soLuongGiao,
-              // tenCloaiVthh: v[0].tenCloaiVthh,
+              soLuongXuatCuc: v[0].soLuongXuatCuc,
+              tenCloaiVthh: v[0].tenCloaiVthh,
               childData: v
             })
           ).value();
-        return {idVirtual: uuid.v4(), noiDung: key, childData: rs};
+        let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0)
+        return {idVirtual: uuid.v4(), noiDung: key, soLuongXuat: soLuongXuat, childData: rs};
       }).value();
-    console.log(dataView)
     this.phuongAnView = dataView
     this.expandAll()
 
     //
-    console.log(this.formData.value.deXuatPhuongAn, 11111111, !this.formData.value.deXuatPhuongAn);
-    if (this.deXuatPhuongAn.length !== 0) {
-      this.listThanhTien = this.deXuatPhuongAn.map(s => s.thanhTien);
-      this.listSoLuong = this.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
+    if (this.formData.value.deXuatPhuongAn.length !== 0) {
+      this.listThanhTien = this.formData.value.deXuatPhuongAn.map(s => s.thanhTien);
+      this.listSoLuong = this.formData.value.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
     } else {
       this.listThanhTien = [0];
       this.listSoLuong = [0];
