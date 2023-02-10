@@ -280,13 +280,19 @@ export class DanhMucDuAnComponent implements OnInit {
   }
 
   async startEdit(idx: number, id: number) {
-    // console.log(  this.dataEdit[idx].data.tgKhoiCong)
-    // console.log(  this.dataEdit[idx].data.tgHoanThanh)
     this.dataEdit[idx].edit = true;
     await this.getDetail(id);
     if (this.itemDetail) {
-      this.dataEdit[idx].data.tgKhoiCong = [this.itemDetail.tgKhoiCongTu, this.itemDetail.tgKhoiCongDen];
-      this.dataEdit[idx].data.tgHoanThanh = [this.itemDetail.tgHoanThanhTu, this.itemDetail.tgHoanThanhDen];
+      const tgKhoiCongTu = new Date();
+      tgKhoiCongTu.setFullYear(this.itemDetail.tgKhoiCongTu)
+      const tgKhoiCongDen = new Date();
+      tgKhoiCongDen.setFullYear(this.itemDetail.tgKhoiCongDen)
+      const tgHoanThanhTu = new Date();
+      tgHoanThanhTu.setFullYear(this.itemDetail.tgHoanThanhTu)
+      const tgHoanThanhDen = new Date();
+      tgHoanThanhDen.setFullYear(this.itemDetail.tgHoanThanhDen)
+      this.dataEdit[idx].data.tgKhoiCong = [tgKhoiCongTu, tgKhoiCongDen];
+      this.dataEdit[idx].data.tgHoanThanh = [tgHoanThanhTu, tgHoanThanhDen];
     }
   }
 
