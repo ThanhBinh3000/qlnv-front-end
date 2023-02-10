@@ -28,7 +28,7 @@ export class GiaoDuToanChiService extends BaseService {
   timBaoCaoGiao1(request: any): Observable<any> {
     return this.httpClient.post(
       // this.urlDefault + '/qlnv-khoachphi/giao_du_toan/danh-sach',
-      'http://192.168.1.228:30101/giao_du_toan/danh-sach',
+      'http://localhost:9159/giao_du_toan/danh-sach',
       request,
     );
   };
@@ -44,7 +44,7 @@ export class GiaoDuToanChiService extends BaseService {
   // call api chi tiết báo cáo giao dự toán chi nsnn
   QDGiaoChiTiet1(id: any, maLoai: string): Observable<any> {
     return this.httpClient.get(
-      'http://192.168.1.228:30101/giao_du_toan/chi-tiet/' + id + '?maLoai=' + maLoai,
+      'http://localhost:9159/giao_du_toan/chi-tiet/' + id + '?maLoai=' + maLoai,
     );
   };
 
@@ -91,7 +91,7 @@ export class GiaoDuToanChiService extends BaseService {
   //tong hop giao du toan
   tongHopGiaoDuToan1(request: any): Observable<any> {
     return this.httpClient.post(
-      'http://192.168.1.103:30101/giao_du_toan/tong-hop',
+      'http://localhost:9159/bao_cao_du_toan/tong-hop',
       request,
     );
   };
@@ -147,7 +147,7 @@ export class GiaoDuToanChiService extends BaseService {
   //giao so tran chi trong Giao du toan NSNN
   giaoSoTranChiGiaoDuToan1(request: any): Observable<any> {
     return this.httpClient.post(
-      'http://192.168.1.228:30101/giao_du_toan/giao-so'
+      'http://localhost:9159/giao_du_toan/giao-so'
       , request);
   };
 
@@ -167,14 +167,14 @@ export class GiaoDuToanChiService extends BaseService {
   //tim kiem giao danh sách nội dung khoản mục
   xoaBanGhiGiaoBTC(request: any): Observable<any> {
     return this.httpClient.post(
-      this.urlDefault + '/qlnv-khoachphi/giao_du_toan/xoa',
+      this.urlDefault + '/qlnv-khoachphi/bao_cao_du_toan/xoa',
       request
     )
   };
   //tim kiem giao danh sách nội dung khoản mục
   xoaBanGhiGiaoBTC1(request: any): Observable<any> {
     return this.httpClient.post(
-      'http://192.168.1.101:8094/giao_du_toan/xoa',
+      'http://localhost:9159/bao_cao_du_toan/xoa',
       request
     )
   };
@@ -254,6 +254,12 @@ export class GiaoDuToanChiService extends BaseService {
     return this.httpClient.post(
       this.urlDefault + '/qlnv-khoachphi/bao_cao_du_toan/danh-sach/phuong-an-tiep-nhan', request
       // 'http://192.168.1.228:30101/bao_cao_du_toan/danh-sach/phuong-an-tiep-nhan', request
+    );
+  };
+
+  dsPaTongHop1(request: any): Observable<any> {
+    return this.httpClient.post(
+      'http://localhost:9159/bao_cao_du_toan/danh-sach/phuong-an-tiep-nhan', request
     );
   };
 

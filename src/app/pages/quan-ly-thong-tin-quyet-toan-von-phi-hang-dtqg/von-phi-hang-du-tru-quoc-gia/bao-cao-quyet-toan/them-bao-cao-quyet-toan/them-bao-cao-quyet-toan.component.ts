@@ -16,7 +16,7 @@ import { QuyetToanVonPhiService } from 'src/app/services/quan-ly-von-phi/quyetTo
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, QTVP, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, QTVP, Utils } from 'src/app/Utility/utils';
 import * as uuid from "uuid";
 import { NOI_DUNG } from './them-bao-cao-quyet-toan.constant';
 export class ItemData {
@@ -101,7 +101,7 @@ export class ThemBaoCaoQuyetToanComponent implements OnInit {
     maDviTien!: string;
     allChecked = false;                         // check all checkbox
     soLaMa: any[] = LA_MA;
-
+    amount = AMOUNT;
     initItem: ItemData = {
         id: null,
         stt: "0",

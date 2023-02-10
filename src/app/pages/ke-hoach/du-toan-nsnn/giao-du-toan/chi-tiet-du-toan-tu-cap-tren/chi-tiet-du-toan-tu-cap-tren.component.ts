@@ -68,6 +68,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
   soQd: ItemCongVan;
   maDviTao: string;
   maPa: string;
+  maPaCha: string;
   maGiao: string;
   trangThai: string;
   namDtoan: number;
@@ -230,6 +231,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
           this.sortByIndex();
           this.soQd = data.data.soQd;
           this.maPa = data.data.maPa;
+          this.maPaCha = data.data.maPaCha
           this.maGiao = data.data.maGiao;
           this.namDtoan = data.data.namDtoan;
           this.ngayNhap = this.datepipe.transform(data.data.ngayTao, Utils.FORMAT_DATE_STR);
@@ -392,7 +394,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
 
   async taoMoiPhuongAn(loaiPa) {
     const listCtietDvi: any[] = [];
-    const maPaCha = this.maPa
+
     let maPa
     await this.giaoDuToanChiService.maPhuongAnGiao(this.maLoai).toPromise().then(
       (res) => {
@@ -437,7 +439,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       maDvi: this.maDviTao,
       maDviTien: this.maDviTien,
       maPa: maPa,
-      maPaCha: maPaCha,
+      maPaCha: this.maPaCha,
       namPa: this.namDtoan,
       maPhanGiao: "2",
       maLoaiDan: '1',
@@ -455,7 +457,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       maDvi: this.maDviTao,
       maDviTien: this.maDviTien,
       maPa: maPa,
-      maPaCha: maPaCha,
+      maPaCha: this.maPaCha,
       namPa: this.namDtoan,
       maPhanGiao: "2",
       maLoaiDan: '2',
@@ -478,7 +480,6 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
 
   async taoMoiBaoCao(loaiPa) {
     const listCtietDvi: any[] = [];
-    const maPaCha = this.maPa
     let maBcao
     await this.giaoDuToanChiService.SinhMaBaoCao().toPromise().then(
       (res) => {
@@ -527,7 +528,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       maDviTien: this.maDviTien,
       maBcao: maBcao,
       maPa: this.maPa,
-      maPaCha: maPaCha,
+      maPaCha: this.maPaCha,
       namPa: this.namDtoan,
       soQd: this.soQd,
       maPhanGiao: "2",
@@ -548,7 +549,7 @@ export class ChiTietDuToanTuCapTrenComponent implements OnInit {
       maDviTien: this.maDviTien,
       maBcao: maBcao,
       maPa: this.maPa,
-      maPaCha: maPaCha,
+      maPaCha: this.maPaCha,
       namPa: this.namDtoan,
       soQd: this.soQd,
       maPhanGiao: "2",

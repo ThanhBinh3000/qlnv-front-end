@@ -9,7 +9,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
-import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, mulNumber, sumNumber } from "src/app/Utility/utils";
+import { AMOUNT, displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, mulNumber, sumNumber } from "src/app/Utility/utils";
 import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/dialog-danh-sach-vat-tu-hang-hoa/dialog-danh-sach-vat-tu-hang-hoa.component';
 import * as uuid from "uuid";
 import { DANH_MUC } from './phu-luc-02.constant';
@@ -77,6 +77,7 @@ export class PhuLuc02Component implements OnInit {
 	allChecked = false;
 	maDviTao: string;
 	isSynthetic: any;
+	amount = AMOUNT;
 	constructor(
 		private _modalRef: NzModalRef,
 		private spinner: NgxSpinnerService,

@@ -207,10 +207,9 @@
                                     <td *ngFor="let item of lstDvi">
                                         <div *ngFor="let e of editCache[data.id].data.lstCtietDvis">
                                             <div *ngIf="e.maDviNhan == item.maDvi">
-                                                <fm-input-number class="search__input" [(ngModel)]="e.soTranChi"
+                                                <input class="money-input" currencyMask [(ngModel)]="e.soTranChi"
                                                     [class]="(e.soTranChi || e.soTranChi === 0) && e.soTranChi >= 0 ?'' : 'input-error-validate'"
-                                                    (ngModelChange)="changeModel(data.id)">
-                                                </fm-input-number>
+                                                    (ngModelChange)="changeModel(data.id)" [options]="amount" />
                                             </div>
                                         </div>
                                     </td>

@@ -21,14 +21,14 @@
             <div nz-col [nzSpan]="12" class="d-flex">
                 <div class="d-flex flex-column justify-content-between">
                     <label>Hệ số bảo hiểm kho từ 5000m³ (%):</label>
-                    <fm-input-number nz-input class="search__input" [(ngModel)]="hsBhTu" [disabled]="disableHs">
-                    </fm-input-number>
+                    <input class="money-input" currencyMask [(ngModel)]="hsBhTu" [disabled]="disableHs"
+                        [options]="amount" />
                 </div>
 
                 <div class="pl-2 d-flex flex-column justify-content-between">
                     <label>Hệ số bảo hiểm kho dưới 5000m³ (%):</label>
-                    <fm-input-number nz-input class="search__input" [(ngModel)]="hsBhDuoi" [disabled]="disableHs">
-                    </fm-input-number>
+                    <input class="money-input" currencyMask [(ngModel)]="hsBhDuoi" [disabled]="disableHs"
+                        [options]="amount" />
                 </div>
 
                 <div class="pl-2 d-flex flex-column justify-content-between">
@@ -140,25 +140,23 @@
                             <input nz-input class="search__input" [(ngModel)]="editCache[data.id].data.maDviTinh" />
                         </td>
                         <td>
-                            <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.slTuM3"
-                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                            <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.slTuM3"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                         </td>
                         <td>
-                            <fm-input-number nz-input class="search__input"
-                                [(ngModel)]="editCache[data.id].data.slDuoiM3"
-                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                            <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.slDuoiM3"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                         </td>
                         <td>
                             {{displayNumber(editCache[data.id].data.slTong)}}
                         </td>
                         <td>
-                            <fm-input-number nz-input class="search__input" [(ngModel)]="editCache[data.id].data.gtTuM3"
-                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                            <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.gtTuM3"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                         </td>
                         <td>
-                            <fm-input-number nz-input class=" search__input"
-                                [(ngModel)]="editCache[data.id].data.gtDuoiM3"
-                                (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                            <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.gtDuoiM3"
+                                (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
                         </td>
                         <td>
                             {{displayValue(editCache[data.id].data.gtTong)}}
