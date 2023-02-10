@@ -36,7 +36,7 @@ export class DanhMucDuAnComponent implements OnInit {
 
   STATUS = STATUS;
   rowItem: DanhMucKho = new DanhMucKho();
-  itemDetail : any;
+  itemDetail: any;
 
   dataEdit: { [key: string]: { edit: boolean; data: DanhMucKho } } = {};
 
@@ -57,7 +57,7 @@ export class DanhMucDuAnComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   dataTableAll: any[] = [];
-  dsKhoi : any[] = [];
+  dsKhoi: any[] = [];
   dataTable: any[] = [];
   danhSachCuc: any[] = [];
   page: number = 1;
@@ -72,7 +72,7 @@ export class DanhMucDuAnComponent implements OnInit {
     private modal: NzModalService,
     public userService: UserService,
     public globals: Globals,
-    private dviService : DonviService,
+    private dviService: DonviService,
     private danhMucKhoService: DanhMucKhoService,
   ) {
   }
@@ -127,8 +127,8 @@ export class DanhMucDuAnComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "role" : this.userService.isTongCuc() ? 'TC' : 'CUC',
-      "denNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[1] ).get('year'): null,
+      "role": this.userService.isTongCuc() ? 'TC' : 'CUC',
+      "denNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[1]).get('year') : null,
       "diaDiem": this.searchFilter.diaDiem,
       "khoi": this.searchFilter.khoi,
       "paggingReq": {
@@ -140,10 +140,10 @@ export class DanhMucDuAnComponent implements OnInit {
       "tgHoanThanhTu": this.searchFilter.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[0]).get('year') : null,
       "tgHoanThanhDen": this.searchFilter.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[1]).get('year') : null,
       "tgKhoiCongTu": this.searchFilter.tgKhoiCong ? dayjs(this.searchFilter.tgKhoiCong[0]).get('year') : null,
-      "tgKhoiCongDen": this.searchFilter.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[1]).get('year') : null,
+      "tgKhoiCongDen": this.searchFilter.tgKhoiCong ? dayjs(this.searchFilter.tgKhoiCong[1]).get('year') : null,
       "trangThai": this.searchFilter.trangThai,
       "tuNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[0]).get('year') : null,
-      "maDvi" : this.userService.isTongCuc() ? this.searchFilter.maDvi : this.userInfo.MA_DVI
+      "maDvi": this.userService.isTongCuc() ? this.searchFilter.maDvi : this.userInfo.MA_DVI
     };
     let res = await this.danhMucKhoService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
@@ -162,6 +162,7 @@ export class DanhMucDuAnComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
       this.spinner.hide();
     }
+    this.updateEditCache()
     this.spinner.hide();
   }
 
@@ -192,7 +193,7 @@ export class DanhMucDuAnComponent implements OnInit {
   clearFilter() {
     this.searchFilter = {
       soQd: '',
-      maDvi : null,
+      maDvi: null,
       khoi: '',
       tenDuAn: '',
       diaDiem: '',
@@ -236,50 +237,57 @@ export class DanhMucDuAnComponent implements OnInit {
   }
 
   async getDetail(id) {
-      let res = await this.danhMucKhoService.getDetail(id);
-      if (res.msg == MESSAGE.SUCCESS) {
-        this.itemDetail = res.data;
-      } else {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR )
-      }
+    let res = await this.danhMucKhoService.getDetail(id);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.itemDetail = res.data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR)
+    }
   }
 
 
   exportData() {
-      this.spinner.show();
-      try {
-        let body = {
-          "denNam": this.searchFilter.giaiDoan ? this.searchFilter.giaiDoan[1] : null,
-          "diaDiem": this.searchFilter.diaDiem,
-          "khoi": this.searchFilter.khoi,
-          "paggingReq": {
-            "limit": 10,
-            "page": this.page - 1
-          },
-          "soQd": this.searchFilter.soQd,
-          "tenDuAn": this.searchFilter.tenDuAn,
-          "tgHoanThanhTu": this.searchFilter.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[0]).get('year') : null,
-          "tgHoanThanhDen": this.searchFilter.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[1]).get('year') : null,
-          "tgKhoiCongTu": this.searchFilter.tgKhoiCong ? dayjs(this.searchFilter.tgKhoiCong[0]).get('year') : null,
-          "tgKhoiCongDen": this.searchFilter.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[1]).get('year') : null,
-          "trangThai": this.searchFilter.trangThai,
-          "tuNam": this.searchFilter.giaiDoan ? this.searchFilter.giaiDoan[0] : null,
-        };
-        this.danhMucKhoService
-          .export(body)
-          .subscribe((blob) =>
-            saveAs(blob, 'danh-muc-kho-tang.xlsx'),
-          );
-        this.spinner.hide();
-      } catch (e) {
-        console.log('error: ', e);
-        this.spinner.hide();
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
+    this.spinner.show();
+    try {
+      let body = {
+        "denNam": this.searchFilter.giaiDoan ? this.searchFilter.giaiDoan[1] : null,
+        "diaDiem": this.searchFilter.diaDiem,
+        "khoi": this.searchFilter.khoi,
+        "paggingReq": {
+          "limit": 10,
+          "page": this.page - 1
+        },
+        "soQd": this.searchFilter.soQd,
+        "tenDuAn": this.searchFilter.tenDuAn,
+        "tgHoanThanhTu": this.searchFilter.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[0]).get('year') : null,
+        "tgHoanThanhDen": this.searchFilter.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[1]).get('year') : null,
+        "tgKhoiCongTu": this.searchFilter.tgKhoiCong ? dayjs(this.searchFilter.tgKhoiCong[0]).get('year') : null,
+        "tgKhoiCongDen": this.searchFilter.tgKhoiCong ? dayjs(this.searchFilter.tgKhoiCong[1]).get('year') : null,
+        "trangThai": this.searchFilter.trangThai,
+        "tuNam": this.searchFilter.giaiDoan ? this.searchFilter.giaiDoan[0] : null,
+      };
+      this.danhMucKhoService
+        .export(body)
+        .subscribe((blob) =>
+          saveAs(blob, 'danh-muc-kho-tang.xlsx'),
+        );
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
+  }
 
-  startEdit(idx: number) {
+  async startEdit(idx: number, id: number) {
+    // console.log(  this.dataEdit[idx].data.tgKhoiCong)
+    // console.log(  this.dataEdit[idx].data.tgHoanThanh)
     this.dataEdit[idx].edit = true;
+    await this.getDetail(id);
+    if (this.itemDetail) {
+      this.dataEdit[idx].data.tgKhoiCong = [this.itemDetail.tgKhoiCongTu, this.itemDetail.tgKhoiCongDen];
+      this.dataEdit[idx].data.tgHoanThanh = [this.itemDetail.tgHoanThanhTu, this.itemDetail.tgHoanThanhDen];
+    }
   }
 
   cancelEdit(index: number) {
@@ -291,7 +299,7 @@ export class DanhMucDuAnComponent implements OnInit {
 
   async openDialog(id) {
     await this.getDetail(id);
-    let modalQD = this.modal.create({
+    this.modal.create({
       nzTitle: 'CHI TIẾT DỰ ÁN',
       nzContent: DialogDanhMucKhoComponent,
       nzMaskClosable: false,
@@ -300,21 +308,24 @@ export class DanhMucDuAnComponent implements OnInit {
       nzStyle: {top: '150px'},
       nzFooter: null,
       nzComponentParams: {
-        item : this.itemDetail
+        item: this.itemDetail
       },
     });
   }
 
-  async themMoiItem() {
+  async themMoiItem(id?, data? : DanhMucKho) {
     this.spinner.show();
-    if (!this.checkValidators(this.rowItem)) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng không để trống!!")
-      this.spinner.hide();
-      return;
-    }
+      if (!this.checkValidators(data)) {
+        this.notification.error(MESSAGE.ERROR, "Vui lòng không để trống!!")
+        this.spinner.hide();
+        return;
+      }
+      if (id && id > 0) {
+        this.rowItem = data
+      }
     let body = {
       "diaDiem": this.rowItem.diaDiem,
-      "id": null,
+      "id": id? id : null,
       "khoi": this.rowItem.khoi,
       "luyKeNstw": this.rowItem.luyKeNstw,
       "maDuAn": this.rowItem.maDuAn,
@@ -322,71 +333,42 @@ export class DanhMucDuAnComponent implements OnInit {
       "nstwDuyet": this.rowItem.nstwDuyet,
       "soQdPd": this.rowItem.soQdPd,
       "tenDuAn": this.rowItem.tenDuAn,
-      "tgHoanThanhTu": this.rowItem.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[0]).get('year') : null,
-      "tgHoanThanhDen": this.rowItem.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[1]).get('year') : null,
-      "tgKhoiCongTu": this.rowItem.tgKhoiCong ? dayjs(this.searchFilter.tgKhoiCong[0]).get('year') : null,
-      "tgKhoiCongDen": this.rowItem.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[1]).get('year') : null,
+      "tgHoanThanhTu": this.rowItem.tgHoanThanh ? dayjs(this.rowItem.tgHoanThanh[0]).get('year') : null,
+      "tgHoanThanhDen": this.rowItem.tgHoanThanh ? dayjs(this.rowItem.tgHoanThanh[1]).get('year') : null,
+      "tgKhoiCongTu": this.rowItem.tgKhoiCong ? dayjs(this.rowItem.tgKhoiCong[0]).get('year') : null,
+      "tgKhoiCongDen": this.rowItem.tgKhoiCong ? dayjs(this.rowItem.tgKhoiCong[1]).get('year') : null,
       "tmdtDuKien": this.rowItem.tmdtDuKien,
       "tmdtDuyet": this.rowItem.tmdtDuyet,
       "tongSoLuyKe": this.rowItem.tongSoLuyKe,
       "trangThai": STATUS.DU_THAO,
-      "maDvi" : this.userInfo.MA_DVI
+      "maDvi": this.userInfo.MA_DVI
     }
-    let res = await this.danhMucKhoService.create(body);
+    let res;
+    if (id && id>0) {
+       res = await this.danhMucKhoService.create(body);
+    } else {
+       res = await this.danhMucKhoService.create(body);
+    }
     if (res.msg == MESSAGE.SUCCESS) {
-        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
-      this.rowItem = new DanhMucKho();
-      await this.search();
-      this.updateEditCache();
-      }
-    this.spinner.hide();
-  }
-
-  async update() {
-    this.spinner.show();
-    if (!this.checkValidators(this.rowItem)) {
-      this.notification.error(MESSAGE.ERROR, "Vui lòng không để trống!!")
-      this.spinner.hide();
-      return;
-    }
-    let body = {
-      "diaDiem": this.rowItem.diaDiem,
-      "id": null,
-      "khoi": this.rowItem.khoi,
-      "luyKeNstw": this.rowItem.luyKeNstw,
-      "maDuAn": this.rowItem.maDuAn,
-      "nstwDuKien": this.rowItem.nstwDuKien,
-      "nstwDuyet": this.rowItem.nstwDuyet,
-      "soQdPd": this.rowItem.soQdPd,
-      "tenDuAn": this.rowItem.tenDuAn,
-      "tgHoanThanhTu": this.rowItem.tgHoanThanh && this.rowItem.tgHoanThanh[0] ? dayjs(this.rowItem.tgHoanThanh[0]).get('year')  :null,
-      "tgHoanThanhDen": this.rowItem.tgHoanThanh && this.rowItem.tgHoanThanh[1] ? dayjs(this.rowItem.tgHoanThanh[1]).get('year')  :null,
-      "tgKhoiCongTu": this.rowItem.tgKhoiCong && this.rowItem.tgKhoiCong[0] ? dayjs(this.rowItem.tgKhoiCong[0]).get('year') :null,
-      "tgKhoiCongDen": this.rowItem.tgKhoiCong && this.rowItem.tgKhoiCong[1] ? dayjs(this.rowItem.tgKhoiCong[1]).get('year') :null,
-      "tmdtDuKien": this.rowItem.tmdtDuKien,
-      "tmdtDuyet": this.rowItem.tmdtDuyet,
-      "tongSoLuyKe": this.rowItem.tongSoLuyKe,
-      "trangThai": this.rowItem.trangThai,
-      "maDvi" : this.userInfo.MA_DVI
-    }
-    let res = await this.danhMucKhoService.update(body);
-    if (res.msg == MESSAGE.SUCCESS) {
+      if(id && id>0) {
         this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      } else {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      }
       this.rowItem = new DanhMucKho();
       await this.search();
       this.updateEditCache();
     }
     this.spinner.hide();
   }
-
-  checkValidators(rowItem : DanhMucKho) {
+  checkValidators(rowItem: DanhMucKho) {
     let arr = [];
     let check = true;
     arr.push(
-      rowItem.maDuAn, rowItem.tenDuAn, rowItem.diaDiem, rowItem.khoi, rowItem.tgKcHt && rowItem.tgKcHt[0] ? rowItem.tgKcHt[0] : null,rowItem.tgKcHt && rowItem.tgKcHt[1] ? rowItem.tgKcHt[1] : null, rowItem.tmdtDuKien, rowItem.nstwDuKien
+      rowItem.maDuAn, rowItem.tenDuAn, rowItem.diaDiem, rowItem.khoi, rowItem.tgKhoiCong && rowItem.tgKhoiCong[0] ? rowItem.tgKhoiCong[0] : null, rowItem.tgKhoiCong && rowItem.tgKhoiCong[1] ? rowItem.tgKhoiCong[1] : null, rowItem.tgHoanThanh && rowItem.tgHoanThanh[1] ? rowItem.tgHoanThanh[1] : null, rowItem.tgHoanThanh && rowItem.tgHoanThanh[1] ? rowItem.tgHoanThanh[1] : null, rowItem.tmdtDuKien, rowItem.nstwDuKien
     )
     if (arr && arr.length > 0) {
-      for (let  i = 0; i < arr.length; i++) {
+      for (let i = 0; i < arr.length; i++) {
         if (arr[i] == '' || arr[i] == null || arr[i] == undefined) {
           check = false;
           break;
@@ -412,6 +394,13 @@ export class DanhMucDuAnComponent implements OnInit {
     this.dataEdit[idx].edit = false;
   }
 
+  huyEdit(idx: number): void {
+    this.dataEdit[idx] = {
+      data: {...this.dataTable[idx]},
+      edit: false,
+    };
+  }
+
   clearData() {
     this.rowItem = new DanhMucKho();
   }
@@ -424,12 +413,12 @@ export class DanhMucKho {
   diaDiem: string;
   khoi: string;
 
-  giaiDoan : any
-  tgKcHt : any
+  giaiDoan: any
+  tgKcHt: any
   tuNam: number;
   denNam: number;
-  tgKhoiCong: number;
-  tgHoanThanh: number;
+  tgKhoiCong: any;
+  tgHoanThanh: any;
   tmdtDuKien: number;
   nstwDuKien: number;
   soQdPd: string;
@@ -440,9 +429,9 @@ export class DanhMucKho {
   trangThai: string;
   tenTrangThai: string;
 
-  vonDauTu : number;
+  vonDauTu: number;
 
-  maDvi : string
+  maDvi: string
 
-  loaiDuAn : string;
+  loaiDuAn: string;
 }
