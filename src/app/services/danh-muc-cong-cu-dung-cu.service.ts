@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {OldResponseData} from "../interfaces/response";
@@ -7,14 +7,15 @@ import {BaseService} from "./base.service";
 @Injectable({
   providedIn: 'root'
 })
-export class DanhMucCongCuDungCuService extends BaseService{
+export class DanhMucCongCuDungCuService extends BaseService {
   gateway: string = '/qlnv-category'
+
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dmuc-congcu', '/qlnv-category');
   }
 
   search(body) {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/danh-sach`;
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/${this.table}/tra-cuu`;
     return this._httpClient.post<OldResponseData>(url, body).toPromise();
   }
 
