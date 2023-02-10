@@ -57,6 +57,7 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
       ngayHieuLuc: [''],
       trichYeu: [''],
       capDvi: [1],
+      loai: ['00'],
     });
     this.filterTable = {};
   }

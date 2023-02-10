@@ -337,6 +337,7 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
     let idTh = await this.userService.getId("KT_KH_TH_TRUNGHAN_SEQ");
     if (!idTh) {
       this.notification.error(MESSAGE.ERROR, "Lỗi hệ thống!")
+      this.spinner.hide();
       return;
     }
     let body = this.formData.value;
@@ -352,8 +353,8 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
         })
       } else  {
         this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu!")
-        return;
         this.spinner.hide();
+        return;
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg)
@@ -361,5 +362,42 @@ export class ThemMoiTongHopKhxdTrungHanComponent implements OnInit {
     }
     this.spinner.hide();
   }
+
+  calcTong(type) {
+    let sum;
+    if (this.dataTable && this.dataTable.length > 0) {
+      sum = this.dataTable.reduce((prev, cur) => {
+        switch (type) {
+          case '1' : {
+            prev += cur.tmdtDuKien;
+            break;
+          }
+          case '2' : {
+            prev += cur.nstwDuKien;
+            break;
+          }
+          case '3' : {
+            prev += cur.tongSoLuyKe;
+            break;
+          }
+          case '4' : {
+            prev += cur.luyKeNstw;
+            break;
+          }
+          case '5' : {
+            prev += cur.tmdtDuyet;
+            break;
+          }
+          case '6' : {
+            prev += cur.nstwDuyet;
+            break;
+          }
+        }
+        return prev;
+      }, 0);
+    }
+    return sum;
+  }
+
 }
 

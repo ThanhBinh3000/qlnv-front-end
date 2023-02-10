@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/guard/auth.guard';
 import { DinhMucPhiComponent } from './dinh-muc-phi-bao-quan/dinh-muc-phi.component';
 import { DinhMucComponent } from './dinh-muc.component';
+import {
+  DinhMucTrangBiCongCuDungCuComponent
+} from "./dinh-muc-trang-bi-cong-cu-dung-cu/dinh-muc-trang-bi-cong-cu-dung-cu.component";
 
 const routes: Routes = [
     {
@@ -21,11 +24,8 @@ const routes: Routes = [
                 canActivate: [AuthGuard],
             },
             {
-                path: 'dinh-muc-trang-bi-cong-cu',
-                loadChildren: () =>
-                    import(
-                        '../dinh-muc/dinh-muc-trang-bi-cong-cu/dinh-muc-trang-bi-cong-cu.module'
-                    ).then((m) => m.DinhMucTrangBiCongCuModule),
+                path: 'dinh-muc-trang-bi-cong-cu-dung-cu',
+                component: DinhMucTrangBiCongCuDungCuComponent,
                 canActivate: [AuthGuard],
             },
             {

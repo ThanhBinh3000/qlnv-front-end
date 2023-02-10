@@ -36,6 +36,7 @@ export class QdPdKetQuaBdgComponent extends Base2Component implements OnInit {
       trichYeu: [''],
       soQdKq: [''],
       ngayKy: [],
+      maDvi: this.userInfo.MA_DVI
     });
     this.filterTable = {
       soQdPdKqBdg: '',

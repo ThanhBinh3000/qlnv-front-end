@@ -8,6 +8,7 @@ import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
 import { QdPdKetQuaBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/tochuc-trienkhai/qdPdKetQuaBanDauGia.service';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-danh-sach-hop-dong',
@@ -32,7 +33,9 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
       soHd: '',
       tenHd: '',
       nhaCungCap: '',
-      trangThai: this.STATUS.BAN_HANH
+      trangThai: this.STATUS.BAN_HANH,
+      loaiVthh: '',
+      nam: '',
     });
     this.filterTable = {
       soHd: '',
@@ -49,6 +52,10 @@ export class DanhSachHopDongComponent extends Base2Component implements OnInit {
   async ngOnInit() {
     this.spinner.show();
     try {
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        nam: dayjs().get('year')
+      })
       await this.search();
       this.spinner.hide();
     } catch (e) {

@@ -68,7 +68,10 @@ export class ThemMoiTongHopKhBanTrucTiepComponent extends Base2Component impleme
       tenLoaiVthh: ['', [Validators.required]],
       tenCloaiVthh: ['', [Validators.required]],
       trangThai: [''],
-      tenTrangThai: ['Chưa Tạo QĐ']
+      tenTrangThai: ['Chưa Tạo QĐ'],
+      soQdCc: [''],
+      tchuanCluong: [''],
+
     })
   }
 

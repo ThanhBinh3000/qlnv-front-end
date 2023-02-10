@@ -25,19 +25,19 @@ export class DonviService extends BaseService {
     return this.httpClient.get<any>(url).toPromise();
   }
 
-  layTatCaDonViCha(type): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/danh-sach/dvi-cha/${type}`;
-    return this.httpClient.get<any>(url).toPromise();
+  layTatCaDonViCha(body): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/danh-sach/dvi-cha`;
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 
-  layTatCaDviDmKho(type, maDvi): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/danh-sach/dm-kho/${type}/${maDvi}`;
-    return this.httpClient.get<any>(url).toPromise();
+  layTatCaDviDmKho(body): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/danh-sach/dm-kho`;
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 
-  layTatCaByMaDvi(type, maDvi): Promise<any> {
-    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/danh-sach/all-tree/${type}/${maDvi}`;
-    return this.httpClient.get<any>(url).toPromise();
+  layTatCaByMaDvi(body): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dmuc-donvi/danh-sach/all-tree`;
+    return this.httpClient.post<any>(url, body).toPromise();
   }
 
   layDonViCon(): Promise<any> {

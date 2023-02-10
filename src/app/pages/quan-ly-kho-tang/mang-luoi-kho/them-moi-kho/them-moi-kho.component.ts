@@ -223,12 +223,18 @@ export class ThemMoiKhoComponent implements OnInit {
 
   }
 
+  listType = ["MLK", "DV"]
   async loadDsDvi() {
-    await this.donviService.layTatCaDviDmKho(LOAI_DON_VI.MLK, this.userInfo.MA_DVI).then((res: OldResponseData) => {
+    let body = {
+      maDvi : this.userInfo.MA_DVI,
+      type : this.listType
+    }
+    await this.donviService.layTatCaDviDmKho(body).then((res: OldResponseData) => {
       if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data && res.data.length >0)
         this.nodesTree = res.data;
+        this.nodesTree[0].expanded = false;
       }
-      this.nodesTree[0].expanded = false;
 
     })
   }

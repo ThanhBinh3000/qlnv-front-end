@@ -140,17 +140,26 @@
           </th>
           <th>
             <nz-form-control nz-col [nzSpan]="24">
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('save')">
-                <input class="search__input" formControlName="tenVthh" [readonly]="true" nz-input
-                       readonly="true"/>
-              </nz-input-group>
+              <!--              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('save')">-->
+              <!--                <input class="search__input" formControlName="tenVthh" [readonly]="true" nz-input-->
+              <!--                       readonly="true"/>-->
+              <!--              </nz-input-group>-->
+              <nz-select nzAllowClear formControlName="loaiVthh"
+                         (ngModelChange)="selectLoaiHangHoa($event)"
+                         nzPlaceHolder="Chọn loại hàng hóa" nzShowSearch>
+                <nz-option *ngFor="let p of listLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+              </nz-select>
             </nz-form-control>
           </th>
           <th>
-            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('save')">
-              <input class="search__input" formControlName="tenCloaiVthh" [readonly]="true" nz-input
-                     readonly="true"/>
-            </nz-input-group>
+            <!--            <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('save')">-->
+            <!--              <input class="search__input" formControlName="tenCloaiVthh" [readonly]="true" nz-input-->
+            <!--                     readonly="true"/>-->
+            <!--            </nz-input-group>-->
+            <nz-select nzAllowClear formControlName="cloaiVthh"
+                       nzPlaceHolder="Chọn chủng loại hàng hóa" nzShowSearch>
+              <nz-option *ngFor="let p of listChungLoaiVthh" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
+            </nz-select>
           </th>
           <th>
             <nz-form-control>
@@ -165,7 +174,7 @@
           <th>
             <nz-form-control>
               <nz-input-group>
-                <nz-select nzAllowClear formControlName="loaiHinhBq">
+                <nz-select nzAllowClear [nzDisabled]="checkLoaiDm('add')" formControlName="loaiHinhBq">
                   <nz-option *ngFor="let p of listLhbq" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                   </nz-option>
                 </nz-select>
@@ -175,7 +184,7 @@
           <th>
             <nz-form-control>
               <nz-input-group>
-                <nz-select nzAllowClear formControlName="hinhThucBq">
+                <nz-select nzAllowClear [nzDisabled]="checkLoaiDm('add')" formControlName="hinhThucBq">
                   <nz-option *ngFor="let p of listHtBq" [nzValue]="p.ma" [nzLabel]="p.giaTri">
                   </nz-option>
                 </nz-select>
@@ -209,7 +218,7 @@
               <i class="icon htvbdh_dau-cong"></i>
             </a>
             <a>
-              <i class="icon  htvbdh_nhap-lai1 "></i>
+              <i (click)="refresh()" class="icon  htvbdh_nhap-lai1 "></i>
             </a>
           </th>
         </tr>
@@ -230,7 +239,7 @@
             <td>{{data.tenLoaiHinhBq}}</td>
             <td>{{ data.tenHinhThucBq }}</td>
             <td>{{ data.dviTinh }}</td>
-            <td>{{ data.trangThai  == '01' ? 'Hoạt động' : 'Không hoạt động'}}</td>
+            <td>{{ data.trangThai == '01' ? 'Hoạt động' : 'Không hoạt động'}}</td>
             <td style="text-align: center;">
               <a (click)="startEdit(i)">
                 <i class="table-icon fa fa-pencil"></i>
@@ -244,89 +253,86 @@
             <th></th>
             <td class="text-center">{{i + 1}}</td>
             <th>
-              <nz-form-control>
-                <nz-input-group>
-                  <input [ngModelOptions]="{standalone: true}"
-                         type="text" nz-input [(ngModel)]=dataEdit[i].data.maDinhMuc/>
-                </nz-input-group>
-              </nz-form-control>
-            </th>
-            <th>
-              <nz-form-control>
-                <nz-input-group>
-                  <input [ngModelOptions]="{standalone: true}"
-                         type="text" nz-input [(ngModel)]=dataEdit[i].data.tenDinhMuc/>
-                </nz-input-group>
-              </nz-form-control>
-            </th>
-            <th>
-              <nz-form-control nz-col [nzSpan]="24">
-                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('edit' , i)">
-                  <input [ngModelOptions]="{standalone: true}" class="search__input"
-                         [(ngModel)]=dataEdit[i].data.tenLoaiVthh [readonly]="true" nz-input
-                         readonly="true"/>
-                </nz-input-group>
-              </nz-form-control>
-            </th>
-            <th>
-              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('edit' , i)">
-                <input [ngModelOptions]="{standalone: true}" class="search__input"
-                       [(ngModel)]=dataEdit[i].data.tencLoaiVthh [readonly]="true" nz-input
-                       readonly="true"/>
+              <nz-input-group>
+                <input [ngModelOptions]="{standalone: true}"
+                       type="text" nz-input [(ngModel)]=dataEdit[i].data.maDinhMuc/>
               </nz-input-group>
             </th>
             <th>
-              <nz-form-control>
-                <nz-input-group>
-                  <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear
-                             [(ngModel)]=dataEdit[i].data.loaiDinhMuc>
-                    <nz-option *ngFor="let p of listDinhMuc" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                    </nz-option>
-                  </nz-select>
-                </nz-input-group>
-              </nz-form-control>
+              <nz-input-group>
+                <input [ngModelOptions]="{standalone: true}"
+                       type="text" nz-input [(ngModel)]=dataEdit[i].data.tenDinhMuc/>
+              </nz-input-group>
             </th>
             <th>
-              <nz-form-control>
-                <nz-input-group>
-                  <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear [(ngModel)]=dataEdit[i].data.loaiHinhBq>
-                    <nz-option *ngFor="let p of listLhbq" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                    </nz-option>
-                  </nz-select>
-                </nz-input-group>
-              </nz-form-control>
+              <!--              <nz-form-control nz-col [nzSpan]="24">-->
+              <!--                <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('edit' , i)">-->
+              <!--                  <input [ngModelOptions]="{standalone: true}" class="search__input"-->
+              <!--                         [(ngModel)]=dataEdit[i].data.tenLoaiVthh [readonly]="true" nz-input-->
+              <!--                         readonly="true"/>-->
+              <!--                </nz-input-group>-->
+              <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear [(ngModel)]="dataEdit[i].data.loaiVthh"
+                         (ngModelChange)="selectLoaiHangHoa($event)"
+                         nzPlaceHolder="Chọn loại hàng hóa " nzShowSearch>
+                <nz-option *ngFor="let p of listLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+              </nz-select>
+              <!--              </nz-form-control>-->
             </th>
             <th>
-              <nz-form-control>
-                <nz-input-group>
-                  <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear [(ngModel)]=dataEdit[i].data.hinhThucBq>
-                    <nz-option *ngFor="let p of listHtBq" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                    </nz-option>
-                  </nz-select>
-                </nz-input-group>
-              </nz-form-control>
+              <!--              <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('edit' , i)">-->
+              <!--                <input [ngModelOptions]="{standalone: true}" class="search__input"-->
+              <!--                       [(ngModel)]=dataEdit[i].data.tencLoaiVthh [readonly]="true" nz-input-->
+              <!--                       readonly="true"/>-->
+              <!--              </nz-input-group>-->
+              <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear [(ngModel)]="dataEdit[i].data.cloaiVthh"
+                         nzPlaceHolder="Chọn chủng loại hàng hóa" nzShowSearch>
+                <nz-option *ngFor="let p of listChungLoaiVthh" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
+              </nz-select>
             </th>
             <th>
-              <nz-form-control>
-                <nz-input-group>
-                  <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear [(ngModel)]=dataEdit[i].data.dviTinh>
-                    <nz-option *ngFor="let p of listDviTinh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-                    </nz-option>
-                  </nz-select>
-                </nz-input-group>
-              </nz-form-control>
+              <nz-input-group>
+                <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear
+                           [(ngModel)]=dataEdit[i].data.loaiDinhMuc>
+                  <nz-option *ngFor="let p of listDinhMuc" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
             </th>
             <th>
-              <nz-form-control>
-                <nz-input-group>
-                  <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear [(ngModel)]=dataEdit[i].data.trangThai>
-                    <nz-option nzValue="01" nzLabel="Hoạt động">
-                    </nz-option>
-                    <nz-option nzValue="00" nzLabel="Không hoạt động">
-                    </nz-option>
-                  </nz-select>
-                </nz-input-group>
-              </nz-form-control>
+              <nz-input-group>
+                <nz-select [nzDisabled]="checkLoaiDm('edit',i)" [ngModelOptions]="{standalone: true}" nzAllowClear
+                           [(ngModel)]=dataEdit[i].data.loaiHinhBq>
+                  <nz-option *ngFor="let p of listLhbq" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <nz-select [nzDisabled]="checkLoaiDm('edit',i)" [ngModelOptions]="{standalone: true}" nzAllowClear
+                           [(ngModel)]=dataEdit[i].data.hinhThucBq>
+                  <nz-option *ngFor="let p of listHtBq" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear [(ngModel)]=dataEdit[i].data.dviTinh>
+                  <nz-option *ngFor="let p of listDviTinh" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group>
+                <nz-select [ngModelOptions]="{standalone: true}" nzAllowClear [(ngModel)]=dataEdit[i].data.trangThai>
+                  <nz-option nzValue="01" nzLabel="Hoạt động">
+                  </nz-option>
+                  <nz-option nzValue="00" nzLabel="Không hoạt động">
+                  </nz-option>
+                </nz-select>
+              </nz-input-group>
             </th>
             <th style="text-align: center;">
               <a (click)="themmoi(dataEdit[i].data, data.id)" [ngClass]="{'isDisabled': formDataChinhSua.invalid}">
