@@ -10,7 +10,7 @@ import {Subscription} from "rxjs";
 })
 export class DinhMucPhiComponent implements OnInit {
   $routerChange: Subscription;
-
+  capDvi : number = 1;
   constructor(
     public globals: Globals
   ) {
@@ -18,6 +18,11 @@ export class DinhMucPhiComponent implements OnInit {
   tabSelected = '01';
   selectTab(tab) {
     this.tabSelected = tab;
+    if(tab == '01'){
+      this.capDvi= 1;
+    }else{
+      this.capDvi= 2;
+    }
   }
 
   ngOnInit(): void {

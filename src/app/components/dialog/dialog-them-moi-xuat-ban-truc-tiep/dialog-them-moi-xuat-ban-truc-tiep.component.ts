@@ -275,16 +275,16 @@ export class DialogThemMoiXuatBanTrucTiepComponent implements OnInit {
   }
 
   addDiemKho() {
-    // if (this.validateDiemKho()) {
-    this.listOfData = [...this.listOfData, this.thongTinXuatBanTrucTiep];
-    this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
-    this.formData.patchValue({
-      soLuong: this.calcTong('soLuong')
-    })
-    this.updateEditCache();
-    this.disableChiCuc();
-    this.checkDisabledSave();
-
+    if (this.validateDiemKho()) {
+      this.listOfData = [...this.listOfData, this.thongTinXuatBanTrucTiep];
+      this.thongTinXuatBanTrucTiep = new DanhSachXuatBanTrucTiep();
+      this.formData.patchValue({
+        soLuong: this.calcTong('soLuong')
+      })
+      this.updateEditCache();
+      this.disableChiCuc();
+      this.checkDisabledSave();
+    }
   }
 
   validateDiemKho(): boolean {

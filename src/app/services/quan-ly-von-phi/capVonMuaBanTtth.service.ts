@@ -19,7 +19,7 @@ export class CapVonMuaBanTtthService extends BaseService {
 	//danh sach op dong
 	dsachHopDong(request: any): Observable<any> {
 		return this.httpClient.post(
-			this.urlTest + '/hop-dong/danh-sach/ds-hop-dong',
+			this.urlDefault + '/hop-dong/danh-sach/ds-hop-dong',
 			request,
 		);
 	}
@@ -27,7 +27,7 @@ export class CapVonMuaBanTtthService extends BaseService {
 	//search list bao cao
 	timKiemVonMuaBan(request: any): Observable<any> {
 		return this.httpClient.post(
-			this.urlTest + '/cap-von-ghi-nhan/danh-sach',
+			this.urlDefault + '/cap-von-ghi-nhan/danh-sach',
 			request,
 		);
 	}
@@ -35,7 +35,7 @@ export class CapVonMuaBanTtthService extends BaseService {
 	//xóa báo cáo nút xóa Báo cáo
 	xoaVonMuaBan(request: any): Observable<any> {
 		return this.httpClient.post(
-			this.urlTest + '/cap-von-ghi-nhan/xoa',
+			this.urlDefault + '/cap-von-ghi-nhan/xoa',
 			request
 		);
 	}
@@ -43,32 +43,32 @@ export class CapVonMuaBanTtthService extends BaseService {
 	//chi tiet ma phuong an
 	ctietVonMuaBan(id: any): Observable<any> {
 		return this.httpClient.get(
-			this.urlTest + '/cap-von-ghi-nhan/chi-tiet/' + id
+			this.urlDefault + '/cap-von-ghi-nhan/chi-tiet/' + id
 		);
 	}
 
 	themMoiVonMuaBan(request: any): Observable<any> {
 		return this.httpClient.post(
-			this.urlTest + '/cap-von-ghi-nhan/them-moi',
+			this.urlDefault + '/cap-von-ghi-nhan/them-moi',
 			request);
 	}
 
 	//cap nhat phuong an
 	capNhatVonMuaBan(requestUpdate: any): Observable<any> {
 		return this.httpClient.put(
-			this.urlTest + '/cap-von-ghi-nhan/cap-nhat'
+			this.urlDefault + '/cap-von-ghi-nhan/cap-nhat'
 			, requestUpdate);
 	}
 
 	maCapVonUng(): Observable<any> {
 		return this.httpClient.get(
-			this.urlTest + '/cap-von-ghi-nhan/sinh-ma'
+			this.urlDefault + '/cap-von-ghi-nhan/sinh-ma'
 		);
 	}
 
 	trinhDuyetVonMuaBan(request: any): Observable<any> {
 		return this.httpClient.put(
-			this.urlTest + '/cap-von-ghi-nhan/trang-thai',
+			this.urlDefault + '/cap-von-ghi-nhan/trang-thai',
 			request);
 	}
 }

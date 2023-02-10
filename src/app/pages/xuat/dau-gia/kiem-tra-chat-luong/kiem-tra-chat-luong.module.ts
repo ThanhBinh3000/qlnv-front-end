@@ -2,37 +2,21 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
-import { BienBanChuanBiKhoComponent } from './bien-ban-chuan-bi-kho/bien-ban-chuan-bi-kho.component';
-import { ThongTinBienBanChuanBiKhoComponent } from './bien-ban-chuan-bi-kho/thong-tin-bien-ban-chuan-bi-kho/thong-tin-bien-ban-chuan-bi-kho.component';
-import { ChucNangKiemTraComponent } from './chuc-nang-kiem-tra/chuc-nang-kiem-tra.component';
+import { ChucNangKiemTraComponent } from './main/chuc-nang-kiem-tra.component';
 import { HoSoKyThuatComponent } from './ho-so-ky-thuat/ho-so-ky-thuat.component';
 import { ThongTinHoSoKyThuatComponent } from './ho-so-ky-thuat/thong-tin-ho-so-ky-thuat/thong-tin-ho-so-ky-thuat.component';
 import { KiemTraChatLuongComponent } from './kiem-tra-chat-luong.component';
-import { LapBienBanNghiemThuBaoQuanComponent } from './lap-bien-ban-nghiem-thu-bao-quan/lap-bien-ban-nghiem-thu-bao-quan.component';
-import { ThongTinBienBanNghiemThuBaoQuanComponent } from './lap-bien-ban-nghiem-thu-bao-quan/thong-tin-bien-ban-nghiem-thu-bao-quan/thong-tin-bien-ban-nghiem-thu-bao-quan.component';
-import { QuanLyBienBanBanGiaoMauComponent } from './quan-ly-bien-ban-ban-giao-mau/quan-ly-bien-ban-ban-giao-mau.component';
-import { ThemMoiBienBanBanGiaoMauComponent } from './quan-ly-bien-ban-ban-giao-mau/them-moi-bien-ban-ban-giao-mau/them-moi-bien-ban-ban-giao-mau.component';
-import { QuanLyBienBanLayMauComponent } from './quan-ly-bien-ban-lay-mau/quan-ly-bien-ban-lay-mau.component';
-import { ThemMoiBienBanLayMauKhoComponent } from './quan-ly-bien-ban-lay-mau/them-moi-bien-ban-lay-mau/them-moi-bien-ban-lay-mau.component';
-import { QuanLyPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-tra-chat-luong-hang/quan-ly-phieu-kiem-tra-chat-luong-hang.component';
-import { ThemMoiPhieuKiemTraChatLuongHangComponent } from './quan-ly-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang/them-moi-phieu-kiem-tra-chat-luong-hang.component';
-import { QuanLyPhieuKiemNghiemChatLuongComponent } from './quan-ly-phieu-kiem-nghiem-chat-luong/quan-ly-phieu-kiem-nghiem-chat-luong.component';
-import { ThemMoiPhieuKiemNghiemChatLuongComponent } from './quan-ly-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component';
+import { TableBienBanLayMauComponent } from './bien-ban-lay-mau/table-bien-ban-lay-mau.component';
+import { CreateBienBanLayMauKhoComponent } from './bien-ban-lay-mau/create-bien-ban-lay-mau/create-bien-ban-lay-mau.component';
+import { QuanLyPhieuKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-cl/quan-ly-phieu-kiem-nghiem-chat-luong.component';
+import { ThemMoiPhieuKiemNghiemChatLuongComponent } from './phieu-kiem-nghiem-cl/them-moi-phieu-kiem-nghiem-chat-luong/them-moi-phieu-kiem-nghiem-chat-luong.component';
 
 @NgModule({
   declarations: [
     KiemTraChatLuongComponent,
     ChucNangKiemTraComponent,
-    LapBienBanNghiemThuBaoQuanComponent,
-    ThongTinBienBanNghiemThuBaoQuanComponent,
-    QuanLyPhieuKiemTraChatLuongHangComponent,
-    ThemMoiPhieuKiemTraChatLuongHangComponent,
-    QuanLyBienBanLayMauComponent,
-    QuanLyBienBanBanGiaoMauComponent,
-    ThemMoiBienBanLayMauKhoComponent,
-    ThemMoiBienBanBanGiaoMauComponent,
-    BienBanChuanBiKhoComponent,
-    ThongTinBienBanChuanBiKhoComponent,
+    TableBienBanLayMauComponent,
+    CreateBienBanLayMauKhoComponent,
     HoSoKyThuatComponent,
     ThongTinHoSoKyThuatComponent,
     QuanLyPhieuKiemNghiemChatLuongComponent,
@@ -46,11 +30,8 @@ import { ThemMoiPhieuKiemNghiemChatLuongComponent } from './quan-ly-phieu-kiem-n
   exports: [
     KiemTraChatLuongComponent,
     ChucNangKiemTraComponent,
-    LapBienBanNghiemThuBaoQuanComponent,
-    QuanLyPhieuKiemTraChatLuongHangComponent,
-    QuanLyBienBanLayMauComponent,
-    QuanLyBienBanBanGiaoMauComponent,
-    BienBanChuanBiKhoComponent,
+    TableBienBanLayMauComponent,
+    CreateBienBanLayMauKhoComponent,
     HoSoKyThuatComponent,
   ]
 })
