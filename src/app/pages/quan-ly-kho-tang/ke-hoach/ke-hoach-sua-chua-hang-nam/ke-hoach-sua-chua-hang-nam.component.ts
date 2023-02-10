@@ -7,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class KeHoachSuaChuaHangNamComponent implements OnInit {
 
+  tabSelected: string = "dxkh";
   constructor() { }
-
   ngOnInit(): void {
+  }
+
+  selectTab(tab) {
+    this.tabSelected = tab;
   }
 
 }
