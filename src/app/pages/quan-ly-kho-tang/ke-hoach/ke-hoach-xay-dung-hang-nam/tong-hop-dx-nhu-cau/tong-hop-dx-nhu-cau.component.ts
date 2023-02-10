@@ -4,20 +4,20 @@ import {
   OnInit,
 } from '@angular/core';
 import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
-import { DieuChinhQuyetDinhPdKhlcntService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/dieuchinh-khlcnt/dieuChinhQuyetDinhPdKhlcnt.service';
-import { TongHopDeXuatKHLCNTService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/tongHopDeXuatKHLCNT.service';
-import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import { saveAs } from 'file-saver';
+import {cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {UserService} from 'src/app/services/user.service';
+import {convertTrangThai} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
+import {saveAs} from 'file-saver';
+import {TongHopKhTrungHanService} from "../../../../../services/tong-hop-kh-trung-han.service";
+import {STATUS} from "../../../../../constants/status";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
 
 @Component({
   selector: 'app-tong-hop-dx-nhu-cau',
@@ -32,25 +32,31 @@ export class TongHopDxNhuCauComponent implements OnInit {
   tabSelected: string = 'phuong-an-tong-hop';
   searchValue = '';
   listNam: any[] = [];
-
+  listLoaiDuAn: any[] = [];
+  STATUS = STATUS
+  listTrangThai = [{"ma": "00", "giaTri": "Dự thảo"},
+    {"ma": "18", "giaTri": "Chờ duyệt LĐ Vụ"},
+    {"ma": "19", "giaTri": "Từ chối LĐ Vụ"},
+    {"ma": "20", "giaTri": "Chờ duyệt LĐ Tổng cục"},
+    {"ma": "21", "giaTri": "Từ chối LĐ Tổng cục"},
+    {"ma": "22", "giaTri": "Đã duyệt LĐ Tổng cục"}]
   searchFilter = {
-    soQd: '',
-    namKh: dayjs().get('year'),
-    ngayQd: '',
-    loaiVthh: '',
-    trichYeu: '',
-    soGoiThau: '',
+    namKeHoach: '',
+    maTongHop: '',
+    tenDuAn: '',
+    tgKhoiCongTu: '',
+    tgHoanThanhDen: '',
+    ngayTongHop: '',
+    trangThai: '',
   };
 
   filterTable: any = {
-    soQd: '',
-    ngayQd: '',
-    trichYeu: '',
-    soQdGoc: '',
-    namKhoach: '',
-    tenVthh: '',
-    soGoiThau: '',
-    trangThai: '',
+    maTongHop: '',
+    ngayTongHop: '',
+    soQuyetDinh: '',
+    namKeHoach: '',
+    noiDung: '',
+    tenTrangThai: '',
   };
 
   allChecked = false;
@@ -65,57 +71,55 @@ export class TongHopDxNhuCauComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private tongHopDeXuatKHLCNTService: TongHopDeXuatKHLCNTService,
-    private danhSachDauThauService: DanhSachDauThauService,
+    private tongHopTrungHanService: TongHopKhTrungHanService,
     private modal: NzModalService,
+    private danhMucService: DanhMucService,
     public userService: UserService,
-    private dieuChinhQuyetDinhPdKhlcntService: DieuChinhQuyetDinhPdKhlcntService,
     public globals: Globals,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     this.spinner.show();
     try {
       this.userInfo = this.userService.getUserLogin();
-      for (let i = -3; i < 23; i++) {
-        this.listNam.push({
-          value: dayjs().get('year') - i,
-          text: dayjs().get('year') - i,
-        });
-      }
       await this.search();
+      await this.getAllLoaiDuAn();
+      this.loadDsNam();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
       this.spinner.hide();
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
-    console.log(
-      this.dataTable
-    )
+  }
+
+  loadDsNam() {
+    for (let i = -3; i < 23; i++) {
+      this.listNam.push({
+        value: dayjs().get('year') - i,
+        text: dayjs().get('year') - i,
+      });
+    }
+  }
+
+  async getAllLoaiDuAn() {
+    let res = await this.danhMucService.danhMucChungGetAll("LOAI_DU_AN_KT");
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiDuAn = res.data;
+    }
   }
 
   async search() {
     this.spinner.show();
     let body = {
-      tuNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-        : null,
-      denNgayQd: this.searchFilter.ngayQd
-        ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-        : null,
-      soQdinh: this.searchFilter.soQd,
-      loaiVthh: this.searchFilter.loaiVthh,
-      namKhoach: this.searchFilter.namKh,
-      soGoiThau: this.searchFilter.soGoiThau,
-      trichYeu: this.searchFilter.trichYeu,
+      maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,
-      },
-      maDvi: this.userInfo.MA_DVI
+      }
     };
-    let res = await this.dieuChinhQuyetDinhPdKhlcntService.search(body);
+    let res = await this.tongHopTrungHanService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -132,11 +136,6 @@ export class TongHopDxNhuCauComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
     this.spinner.hide();
-  }
-
-  searchDanhSachDauThau(body, trangThai) {
-    body.trangThai = trangThai;
-    return this.danhSachDauThauService.search(body);
   }
 
   async changePageIndex(event) {
@@ -209,22 +208,6 @@ export class TongHopDxNhuCauComponent implements OnInit {
     await this.search();
   }
 
-  clearFilter() {
-    this.searchFilter = {
-      soQd: '',
-      namKh: dayjs().get('year'),
-      ngayQd: '',
-      loaiVthh: '',
-      trichYeu: '',
-      soGoiThau: '',
-    };
-    // this.namKeHoach = null;
-    // this.loaiVthh = null;
-    // this.startValue = null;
-    // this.endValue = null;
-    this.search();
-  }
-
   xoaItem(item: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -241,7 +224,8 @@ export class TongHopDxNhuCauComponent implements OnInit {
             id: item.id,
             maDvi: '',
           };
-          this.tongHopDeXuatKHLCNTService.delete(body).then(async () => {
+          this.tongHopTrungHanService.delete(body).then(async () => {
+            this.notification.success(MESSAGE.ERROR, MESSAGE.DELETE_SUCCESS);
             await this.search();
             this.spinner.hide();
           });
@@ -258,19 +242,8 @@ export class TongHopDxNhuCauComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        let body = {
-          tuNgayTao: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[0]).format('YYYY-MM-DD')
-            : null,
-          denNgayTao: this.searchFilter.ngayQd
-            ? dayjs(this.searchFilter.ngayQd[1]).format('YYYY-MM-DD')
-            : null,
-          soQd: this.searchFilter.soQd,
-          loaiVthh: this.searchFilter.loaiVthh,
-          namKhoach: this.searchFilter.namKh,
-          soGoiThau: this.searchFilter.soGoiThau,
-        };
-        this.dieuChinhQuyetDinhPdKhlcntService
+        let body = {};
+        this.tongHopTrungHanService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),
@@ -292,30 +265,29 @@ export class TongHopDxNhuCauComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
+          item.giaiDoan = item.namBatDau + '-' + item.namKetThuc
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
             temp.push(item)
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
 
-  clearFilterTable() {
+  async clearFilterTable() {
     this.filterTable = {
-      soQd: '',
-      ngayQd: '',
-      trichYeu: '',
-      soQdGoc: '',
-      namKhoach: '',
-      tenVthh: '',
-      soGoiThau: '',
+      namKeHoach: '',
+      maTongHop: '',
+      tenDuAn: '',
+      tgKhoiCongTu: '',
+      tgHoanThanhDen: '',
+      ngayTongHop: '',
       trangThai: '',
     };
+    await this.search();
   }
 }
-
 
