@@ -34,4 +34,5 @@ import { DinhMucTrangBiCongCuDungCuComponent } from './dinh-muc-trang-bi-cong-cu
   ],
 })
 export class DinhMucModule {
+
 }
