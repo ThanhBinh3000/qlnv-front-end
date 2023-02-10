@@ -12,10 +12,10 @@ export const DINH_MUC_ROUTE_LIST: Array<ChiTietMenu> = [
     },
     {
         icon: 'htvbdh_tcdt_dinhmucdungcu',
-        title: 'Định Mức trang bị công cụ dụng cụ',
-        url: `/${MAIN_ROUTE_DINH_MUC}/dinh-muc-trang-bi-cong-cu`,
-        dropdown: 'mua-truc-tiep',
-        idHover: 'muatructiep',
+        title: 'Định Mức trang bị công cụ, dụng cụ',
+        url: `/${MAIN_ROUTE_DINH_MUC}/dinh-muc-trang-bi-cong-cu-dung-cu`,
+        dropdown: 'dinh-muc-cc-dc',
+        idHover: 'dinhmucccdc',
         hasTab: true,
     },
     {

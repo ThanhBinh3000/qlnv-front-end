@@ -82,4 +82,8 @@ export class DinhMucComponent implements OnInit, AfterViewInit {
     redirect(url: string) {
         this.router.navigate([url]);
     }
+  // redirect(url: string) {
+  //   this.router.navigate([this.defaultUrl + url]);
+  //   this.routerUrl = this.defaultUrl + url;
+  // }
 }
