@@ -30,6 +30,7 @@ export class DialogTongHopComponent implements OnInit {
     maBcao: null,
     loai: null,
     maPa: null,
+    maPaCha: null,
     idSoTranChi: null,
   };
 
@@ -81,6 +82,7 @@ export class DialogTongHopComponent implements OnInit {
           console.log(data);
           this.response.lstCtietBcao = data.data.lstPa;
           this.response.lstDviTrucThuoc = data.data.lstGiaoDtoanDviTrucThuocs;
+          this.response.maPaCha = data.data.maPaCha;
           this.response.lstCtietBcao.forEach(item => {
             if (!item.id) {
               item.id = uuid.v4() + 'FE';
@@ -114,6 +116,7 @@ export class DialogTongHopComponent implements OnInit {
 
   //lay danh sach cac phuong an co the tong hop lai
   async getListPA() {
+    this.spinner.show()
     const requestReport = {
       maDvi: this.obj.maDvi,
       namPa: this.response.namHienTai
@@ -129,19 +132,30 @@ export class DialogTongHopComponent implements OnInit {
     }, err => {
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     })
+    this.spinner.hide()
   }
 
   changeLoai() {
     let lstPaTemp = []
     this.lstPaLoai = []
     lstPaTemp = this.lstPa.filter(s => s.maLoaiDan == this.response.loai);
-    lstPaTemp.forEach(s => {
-      this.lstPaLoai.push(
-        {
-          maPa: s.maPa
-        }
-      )
-    })
+    if (this.userInfo.CAP_DVI == "1") {
+      lstPaTemp.forEach(s => {
+        this.lstPaLoai.push(
+          {
+            maPa: s.maPaCha
+          }
+        )
+      })
+    } else {
+      lstPaTemp.forEach(s => {
+        this.lstPaLoai.push(
+          {
+            maPa: s.maPa
+          }
+        )
+      })
+    }
   }
 
   async handleOk() {
@@ -160,7 +174,7 @@ export class DialogTongHopComponent implements OnInit {
       return;
     }
 
-    const maPaCha = this.response.maPa
+    const maPaCha = this.response.maPaCha
     let maBcao
     await this.giaoDuToanChiService.SinhMaBaoCao().toPromise().then(
       (res) => {
@@ -187,7 +201,7 @@ export class DialogTongHopComponent implements OnInit {
       maDviTien: "1",
       maBcao: maBcao,
       maPa: this.response.maPa,
-      maPaCha: maPaCha,
+      maPaCha: this.response.maPaCha,
       namPa: this.response.namHienTai,
       // soQd: null,
       maPhanGiao: "2",
@@ -208,7 +222,7 @@ export class DialogTongHopComponent implements OnInit {
       maDviTien: "1",
       maBcao: maBcao,
       maPa: this.response.maPa,
-      maPaCha: maPaCha,
+      maPaCha: this.response.maPaCha,
       namPa: this.response.namHienTai,
       // soQd: null,
       maPhanGiao: "2",

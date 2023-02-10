@@ -9,7 +9,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA } from 'src/app/Utility/utils';
+import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA } from 'src/app/Utility/utils';
 import { chain, cloneDeep } from 'lodash';
 import * as uuid from 'uuid';
 
@@ -111,7 +111,7 @@ export class BaoHiemKhoComponent implements OnInit {
 
   disableTu: any;
   disableDuoi: any;
-
+  amount = AMOUNT;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,

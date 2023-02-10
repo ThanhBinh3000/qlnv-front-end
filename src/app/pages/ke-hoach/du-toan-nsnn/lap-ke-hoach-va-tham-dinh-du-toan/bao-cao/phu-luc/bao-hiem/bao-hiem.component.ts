@@ -7,7 +7,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, mulNumber, sumNumber, Utils } from "src/app/Utility/utils";
+import { AMOUNT, displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, mulNumber, sumNumber, Utils } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { DANH_MUC } from './bao-hiem.constant';
 
@@ -60,6 +60,7 @@ export class BaoHiemComponent implements OnInit {
   hsBhTu: number;
   userInfo: any;
   disableHs: boolean = true;
+  amount = AMOUNT;
   constructor(
     private _modalRef: NzModalRef,
     private spinner: NgxSpinnerService,

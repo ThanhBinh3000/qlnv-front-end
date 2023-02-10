@@ -5,7 +5,7 @@ import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/
 import { MESSAGE } from 'src/app/constants/message';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { UserService } from 'src/app/services/user.service';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, LA_MA, Utils } from 'src/app/Utility/utils';
 import { NOI_DUNG } from './phu-luc-phan-bo.constant';
 import * as uuid from 'uuid';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -58,6 +58,7 @@ export class PhuLucPhanBoComponent implements OnInit {
   userInfo: any;
   formDetail: any;
   isSynthetic: any;
+  amount = AMOUNT;
   constructor(
     private modal: NzModalService,
     private _modalRef: NzModalRef,

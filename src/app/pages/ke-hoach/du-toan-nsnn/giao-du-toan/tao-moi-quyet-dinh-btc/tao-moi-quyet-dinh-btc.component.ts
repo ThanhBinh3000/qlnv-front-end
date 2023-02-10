@@ -4,7 +4,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { displayNumber, DON_VI_TIEN, exchangeMoney, GDT, LA_MA, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, GDT, LA_MA, MONEY_LIMIT, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import { NOI_DUNG } from './tao-moi-quyet-dinh-btc.constant';
 import { Globals } from 'src/app/shared/globals';
 import { GiaoDuToanChiService } from 'src/app/services/quan-ly-von-phi/giaoDuToanChi.service';
@@ -122,7 +122,7 @@ export class TaoMoiQuyetDinhBtcComponent implements OnInit {
   listIdFilesDelete: any = [];                        // id file luc call chi tiet
   editMoneyUnit = false;
   isDataAvailable = false;
-
+  amount = AMOUNT;
   // before uploaf file
   beforeUpload = (file: NzUploadFile): boolean => {
     this.fileList = this.fileList.concat(file);
