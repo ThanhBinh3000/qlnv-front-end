@@ -1486,20 +1486,40 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
           soTien: item.lstCtietDvis.find(e => e.maDviNhan == maDviNhan).soTranChi,
         })
       });
-      lstGiao.push({
-        maGiao: this.maGiao,
-        maPa: this.maPa,
-        maDvi: this.maDonViTao,
-        maDviNhan: maDviNhan,
-        trangThai: '1',
-        maDviTien: this.maDviTien,
-        soQd: this.soQd,
-        listCtiet: lstCtiet,
-        maLoaiDan: "1",
-        namDtoan: this.namPa,
-        ngayGiao: this.ngayTao,
-        ngayTao: this.ngayTao,
-      });
+      if (this.userInfo.CAP_DVI == "1") {
+        lstGiao.push({
+          maGiao: this.maGiao,
+          maPa: this.maPa,
+          maPaCha: this.maPa,
+          maDvi: this.maDonViTao,
+          maDviNhan: maDviNhan,
+          trangThai: '1',
+          maDviTien: this.maDviTien,
+          soQd: this.soQd,
+          listCtiet: lstCtiet,
+          maLoaiDan: "1",
+          namDtoan: this.namPa,
+          ngayGiao: this.ngayTao,
+          ngayTao: this.ngayTao,
+        });
+      } else {
+        lstGiao.push({
+          maGiao: this.maGiao,
+          maPa: this.maPa,
+          maPaCha: this.maPaCha,
+          maDvi: this.maDonViTao,
+          maDviNhan: maDviNhan,
+          trangThai: '1',
+          maDviTien: this.maDviTien,
+          soQd: this.soQd,
+          listCtiet: lstCtiet,
+          maLoaiDan: "1",
+          namDtoan: this.namPa,
+          ngayGiao: this.ngayTao,
+          ngayTao: this.ngayTao,
+        });
+      }
+
     } else {
       if (this.lstCtietBcao.length > 0) {
         this.lstCtietBcao[0].lstCtietDvis.forEach(item => {
@@ -1514,26 +1534,44 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
                 soTien: soTien,
               })
             });
-
-            lstGiao.push({
-              maGiao: this.maGiao,
-              maPa: this.maPa,
-              maDvi: this.maDonViTao,
-              maDviNhan: item.maDviNhan,
-              trangThai: '1',
-              maDviTien: this.maDviTien,
-              soQd: this.soQd,
-              listCtiet: lstCtiet,
-              maLoaiDan: "1",
-              namDtoan: this.namPa,
-              ngayGiao: this.ngayTao,
-              ngayTao: this.ngayTao,
-            });
+            if (this.userInfo.CAP_DVI == "1") {
+              lstGiao.push({
+                maGiao: this.maGiao,
+                maPa: this.maPa,
+                maPaCha: this.maPa,
+                maDvi: this.maDonViTao,
+                maDviNhan: item.maDviNhan,
+                trangThai: '1',
+                maDviTien: this.maDviTien,
+                soQd: this.soQd,
+                listCtiet: lstCtiet,
+                maLoaiDan: "1",
+                namDtoan: this.namPa,
+                ngayGiao: this.ngayTao,
+                ngayTao: this.ngayTao,
+              });
+            } else {
+              lstGiao.push({
+                maGiao: this.maGiao,
+                maPa: this.maPa,
+                maPaCha: this.maPaCha,
+                maDvi: this.maDonViTao,
+                maDviNhan: item.maDviNhan,
+                trangThai: '1',
+                maDviTien: this.maDviTien,
+                soQd: this.soQd,
+                listCtiet: lstCtiet,
+                maLoaiDan: "1",
+                namDtoan: this.namPa,
+                ngayGiao: this.ngayTao,
+                ngayTao: this.ngayTao,
+              });
+            }
           }
         });
       }
     }
-    this.giaoDuToanChiService.giaoSoTranChiGiaoDuToan(lstGiao).toPromise().then(
+    this.giaoDuToanChiService.giaoSoTranChiGiaoDuToan1(lstGiao).toPromise().then(
       data => {
         if (data.statusCode == 0) {
           if (maDviNhan) {
