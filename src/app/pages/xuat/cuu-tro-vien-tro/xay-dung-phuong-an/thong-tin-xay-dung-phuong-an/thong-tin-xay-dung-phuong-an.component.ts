@@ -280,15 +280,16 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
     this.isVisible = true;
     this.listNoiDung = [...new Set(this.formData.value.deXuatPhuongAn.map(s => s.noiDung))];
     this.phuongAnRow.loaiVthh = this.formData.value.loaiVthh;
-    console.log(this.formData.value.deXuatPhuongAn, 'pa')
   }
 
   handleOk(): void {
-
     this.phuongAnRow.idVirtual = this.phuongAnRow.idVirtual ? this.phuongAnRow.idVirtual : uuid.v4();
     this.phuongAnRow.thanhTien = this.phuongAnRow.soLuongXuatChiCuc * this.phuongAnRow.donGiaKhongVat;
+    this.phuongAnRow.tenCloaiVthh = this.listChungLoaiHangHoa.find(s => s.ma = this.phuongAnRow.cloaiVthh)?.ten
     let index = this.formData.value.deXuatPhuongAn.findIndex(s => s.idVirtual === this.phuongAnRow.idVirtual);
     let table = this.formData.value.deXuatPhuongAn;
+    table.forEach(s => s.soLuongXuatCuc = this.phuongAnRow.soLuongXuatCuc)
+
     if (index != -1) {
       table.splice(index, 1, this.phuongAnRow);
     } else {
@@ -319,19 +320,18 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
           .map((v, k) => ({
               idVirtual: uuid.v4(),
               tenCuc: k,
-              // soLuongGiao: v[0].soLuongGiao,
-              // tenCloaiVthh: v[0].tenCloaiVthh,
+              soLuongXuatCuc: v[0].soLuongXuatCuc,
+              tenCloaiVthh: v[0].tenCloaiVthh,
               childData: v
             })
           ).value();
-        return {idVirtual: uuid.v4(), noiDung: key, childData: rs};
+        let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatCuc, 0)
+        return {idVirtual: uuid.v4(), noiDung: key, soLuongXuat: soLuongXuat, childData: rs};
       }).value();
-    console.log(dataView)
     this.phuongAnView = dataView
     this.expandAll()
 
     //
-    console.log(this.formData.value.deXuatPhuongAn, 11111111, !this.formData.value.deXuatPhuongAn);
     if (this.formData.value.deXuatPhuongAn.length !== 0) {
       this.listThanhTien = this.formData.value.deXuatPhuongAn.map(s => s.thanhTien);
       this.listSoLuong = this.formData.value.deXuatPhuongAn.map(s => s.soLuongXuatChiCuc);
@@ -342,6 +342,14 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
   }
 
   async changeCuc(event: any) {
+    let existRow = this.formData.value.deXuatPhuongAn
+      .find(s => s.noiDung === this.phuongAnRow.noiDung && s.maDvi === this.phuongAnRow.maDvi);
+    if (existRow) {
+      this.phuongAnRow.soLuongXuatCuc = existRow.soLuongXuatCuc;
+    } else {
+      this.phuongAnRow.soLuongXuatCuc = 0
+    }
+
     let data = this.dsDonVi.find(s => s.maDvi == event);
     this.phuongAnRow.tenCuc = data.tenDvi;
     let body = {
@@ -364,7 +372,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
 
   async save() {
     this.formData.patchValue({
-      noiDungCuuTro: this.flattenTree(this.phuongAnView)
+      deXuatPhuongAn: this.flattenTree(this.phuongAnView)
     })
     let result = await this.createUpdate(this.formData.value);
     if (result) {
@@ -374,7 +382,7 @@ export class ThongTinXayDungPhuongAnComponent extends Base2Component implements 
 
   async saveAndSend() {
     this.formData.patchValue({
-      noiDungCuuTro: this.flattenTree(this.phuongAnView)
+      deXuatPhuongAn: this.flattenTree(this.phuongAnView)
     })
     if (this.userService.isTongCuc()) {
       await this.createUpdate(this.formData.value);
