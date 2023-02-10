@@ -14,6 +14,7 @@ import {
   ThongTinDinhMucPhiNhapXuatBaoQuanComponent
 } from "./dinh-muc-phi-bao-quan/dinh-muc-phi-nhap-xuat-bao-quan/thong-tin-dinh-muc-phi-nhap-xuat-bao-quan/thong-tin-dinh-muc-phi-nhap-xuat-bao-quan.component";
 import { DinhMucTrangBiCongCuDungCuComponent } from './dinh-muc-trang-bi-cong-cu-dung-cu/dinh-muc-trang-bi-cong-cu-dung-cu.component';
+import { ThongTinDinhMucTrangBiCongCuDungCuComponent } from './dinh-muc-trang-bi-cong-cu-dung-cu/thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu/thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { DinhMucTrangBiCongCuDungCuComponent } from './dinh-muc-trang-bi-cong-cu
     DinhMucPhiComponent,
     DinhMucPhiNhapXuatBaoQuanComponent,
     ThongTinDinhMucPhiNhapXuatBaoQuanComponent,
-    DinhMucTrangBiCongCuDungCuComponent
+    DinhMucTrangBiCongCuDungCuComponent,
+    ThongTinDinhMucTrangBiCongCuDungCuComponent
   ],
   imports: [
     CommonModule,

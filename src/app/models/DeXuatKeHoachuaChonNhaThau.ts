@@ -175,6 +175,7 @@ export class DanhMucCongCuDungCu {
   donViTinh: string
   nhomCcdc: string
   trangThai: string
+  yeuCauKt: string
 }
 
 
