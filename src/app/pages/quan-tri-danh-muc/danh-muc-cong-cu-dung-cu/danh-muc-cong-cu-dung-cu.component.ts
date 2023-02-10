@@ -22,6 +22,10 @@ import {FormGroup, Validators} from "@angular/forms";
 export class DanhMucCongCuDungCuComponent extends Base2Component implements OnInit {
   formData: FormGroup;
   formDataChinhSua: FormGroup;
+  isVisible = false;
+  isVisibleEdit = false;
+  yeuCauKt: string;
+  yeuCauKtEdit: string;
 
   constructor(
     httpClient: HttpClient,
@@ -38,6 +42,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
       maCcdc: ['', [Validators.required]],
       tenCcdc: ['', [Validators.required]],
       moTa: ['',],
+      yeuCauKt: ['', [Validators.required]],
       donViTinh: ['', [Validators.required]],
       nhomCcdc: ['', [Validators.required]],
       trangThai: ['', [Validators.required]],
@@ -47,6 +52,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
       maCcdc: ['', [Validators.required]],
       tenCcdc: ['', [Validators.required]],
       moTa: ['',],
+      yeuCauKt: ['', [Validators.required]],
       donViTinh: ['', [Validators.required]],
       nhomCcdc: ['', [Validators.required]],
       trangThai: ['', [Validators.required]],
@@ -130,6 +136,15 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
   startEdit(i: number) {
     this.dataEdit[i].edit = true;
   }
+
+  inputYcKyThuat() {
+      this.isVisible = true;
+  }
+  inputYcKyThuatEdit(data) {
+    this.isVisibleEdit = true;
+    this.yeuCauKtEdit = data.yeuCauKt;
+  }
+
 
   xoaItem(item: any) {
     this.modal.confirm({
@@ -230,5 +245,28 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
         }
       });
     }
+  }
+
+  handleCancel(): void {
+    this.isVisible = false;
+  }
+
+
+  handleCancelEdit(): void {
+    this.isVisibleEdit = false;
+  }
+
+  handleOk(): void {
+    this.formData.patchValue({
+      yeuCauKt: this.yeuCauKt
+    });
+    this.isVisible = false;
+  }
+
+  handleOkEdit(): void {
+    this.formDataChinhSua.patchValue({
+      yeuCauKt: this.yeuCauKtEdit
+    });
+    this.isVisibleEdit = false;
   }
 }
