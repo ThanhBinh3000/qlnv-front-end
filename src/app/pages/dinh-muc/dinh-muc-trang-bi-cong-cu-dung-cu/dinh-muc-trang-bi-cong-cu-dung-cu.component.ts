@@ -14,6 +14,9 @@ import dayjs from "dayjs";
   styleUrls: ['./dinh-muc-trang-bi-cong-cu-dung-cu.component.scss']
 })
 export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implements OnInit {
+  selectedId: number = 0;
+  isViewDetail: boolean;
+  isDetail: boolean = false;
 
   constructor(
     httpClient: HttpClient,
@@ -51,5 +54,11 @@ export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implemen
       this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('DD/MM/YYYY');
     }
     this.search();
+  }
+
+  redirectToChiTiet(id: number, isView?: boolean) {
+    this.selectedId = id;
+    this.isDetail = true;
+    this.isViewDetail = isView ?? false;
   }
 }
