@@ -1,1 +1,22 @@
-<p>ke-hoach-sua-chua-hang-nam works!</p>
+<nz-affix [nzOffsetTop]="69" class="level1">
+  <ul nz-menu nzMode="horizontal">
+    <li nz-menu-item nzSelected (click)="selectTab('dxkh')">
+     Đề xuất kế hoạch sửa chữa lớn của Cục
+    </li>
+    <li nz-menu-item (click)="selectTab('qdtcdt')">
+      Quyết định kế hoạch vốn,cải tạo,sửa chữa năm của TCDT
+    </li>
+    <li nz-menu-item (click)="selectTab('qdbtc')">
+      Quyết định kế hoạch vốn,cải tạo,sửa chữa năm của BTC
+    </li>
+  </ul>
+</nz-affix>
+<ng-container *ngIf="tabSelected == 'dxkh'">
+  <app-de-xuat-kh-sc-lon></app-de-xuat-kh-sc-lon>
+</ng-container>
+<ng-container *ngIf="tabSelected == 'qdtcdt'">
+<app-quyet-dinh-sc-lon-tcdt></app-quyet-dinh-sc-lon-tcdt>
+</ng-container>
+<ng-container *ngIf="tabSelected == 'qdbtc'">
+  <app-quyet-dinh-sc-lon-btc></app-quyet-dinh-sc-lon-btc>
+</ng-container>
