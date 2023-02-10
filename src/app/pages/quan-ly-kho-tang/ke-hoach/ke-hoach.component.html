@@ -1,9 +1,9 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected *ngIf="userService.isCuc()" (click)="selectTab('dmk')">
+    <li nz-menu-item nzSelected (click)="selectTab('dmk')">
       Danh mục dự án kho DTQG
     </li>
-    <li nz-menu-item (click)="selectTab('qhk')">
+    <li nz-menu-item (click)="selectTab('qhk')" *ngIf="userService.isTongCuc()">
       Quy hoạch kho
     </li>
     <li nz-menu-item (click)="selectTab('khxdth')" >
@@ -35,10 +35,10 @@
       <app-ke-hoach-xay-dung-hang-nam></app-ke-hoach-xay-dung-hang-nam>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'khsclhn'">
-      <app-ke-hoach-sua-chua-lon></app-ke-hoach-sua-chua-lon>
+      <app-ke-hoach-sua-chua-hang-nam></app-ke-hoach-sua-chua-hang-nam>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'khschn'">
-      <app-ke-hoach-sua-chua-hang-nam></app-ke-hoach-sua-chua-hang-nam>
+      <app-ke-hoach-sc-hang-nam></app-ke-hoach-sc-hang-nam>
     </ng-container>
   </div>
 </div>

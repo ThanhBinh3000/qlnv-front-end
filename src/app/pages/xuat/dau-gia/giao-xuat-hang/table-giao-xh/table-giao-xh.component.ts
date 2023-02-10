@@ -25,11 +25,12 @@ export class TableGiaoXh extends Base2Component implements OnInit {
     spinner: NgxSpinnerService,
     modal: NzModalService,
     private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService,
-    public userService: UserService,
   ) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
     this.formData = this.fb.group({
       nam: dayjs().get('year'),
+      maDvi: null,
+      maChiCuc: null,
       soQd: null,
       loaiVthh: null,
       trichYeu: null,
@@ -57,7 +58,9 @@ export class TableGiaoXh extends Base2Component implements OnInit {
     await this.spinner.show();
     try {
       this.formData.patchValue({
-        loaiVthh: this.loaiVthh
+        loaiVthh: this.loaiVthh,
+        maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+        maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
       })
       await this.search();
     } catch (e) {

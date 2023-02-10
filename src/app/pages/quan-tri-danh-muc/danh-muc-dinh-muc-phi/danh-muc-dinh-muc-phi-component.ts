@@ -73,12 +73,12 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       id: [null],
       cloaiVthh: [null],
       tenCloaiVthh: [null],
-      hinhThucBq: [null, [Validators.required]],
+      hinhThucBq: [null],
       loaiDinhMuc: [null, [Validators.required]],
-      loaiHinhBq: [null, [Validators.required]],
+      loaiHinhBq: [null],
       loaiVthh: [null, [Validators.required]],
       tenVthh: [null],
-      dviTinh: [null],
+      dviTinh: [null, [Validators.required]],
       maDinhMuc: [null, [Validators.required]],
       tenDinhMuc: [null, [Validators.required]],
       trangThai: [null, [Validators.required]]
@@ -87,14 +87,15 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
       id: [null],
       cloaiVthh: [null],
       tenCloaiVthh: [null],
-      hinhThucBq: [null, [Validators.required]],
+      hinhThucBq: [null],
       loaiDinhMuc: [null, [Validators.required]],
-      loaiHinhBq: [null, [Validators.required]],
+      loaiHinhBq: [null],
       loaiVthh: [null, [Validators.required]],
       tenVthh: [null],
       maDinhMuc: [null, [Validators.required]],
       tenDinhMuc: [null, [Validators.required]],
       trangThai: [null, [Validators.required]],
+      dviTinh: [null, [Validators.required]],
     })
   }
 
@@ -215,6 +216,24 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
     this.spinner.hide();
   }
 
+  checkLoaiDm(type, idx?): boolean {
+    if (type == 'add') {
+      if (this.formData.value && this.formData.value.loaiDinhMuc && this.formData.value.loaiDinhMuc != '03') {
+        this.formData.patchValue({
+          loaiHinhBq: null,
+          hinhThucBq: null
+        })
+      }
+      return this.formData.value && this.formData.value.loaiDinhMuc && this.formData.value.loaiDinhMuc != '03';
+    } else {
+      if (this.dataEdit[idx] && this.dataEdit[idx].data && this.dataEdit[idx].data.loaiDinhMuc && this.dataEdit[idx].data.loaiDinhMuc != '03') {
+        this.dataEdit[idx].data.loaiHinhBq = null;
+        this.dataEdit[idx].data.hinhThucBq = null;
+      }
+      return this.dataEdit[idx] && this.dataEdit[idx].data && this.dataEdit[idx].data.loaiDinhMuc && this.dataEdit[idx].data.loaiDinhMuc != '03';
+    }
+  }
+
   async themmoi(data?, idInput?) {
     if (idInput && data) {
       this.formDataChinhSua.patchValue({
@@ -232,11 +251,18 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
         trangThai: data.trangThai,
       })
       this.helperService.markFormGroupTouched(this.formDataChinhSua);
-      console.log(this.formDataChinhSua,'22222');
+      if(this.formDataChinhSua.value && this.formDataChinhSua.value.loaiDinhMuc == '03'){
+        this.formDataChinhSua.controls["hinhThucBq"].setValidators([Validators.required]);
+        this.formDataChinhSua.controls["loaiHinhBq"].setValidators([Validators.required]);
+      }
       if (this.formDataChinhSua.invalid) {
         return;
       }
     } else {
+      if(this.formData.value && this.formData.value.loaiDinhMuc == '03'){
+        this.formData.controls["hinhThucBq"].setValidators([Validators.required]);
+        this.formData.controls["loaiHinhBq"].setValidators([Validators.required]);
+      }
       this.helperService.markFormGroupTouched(this.formData);
       if (this.formData.invalid) {
         return;
@@ -266,6 +292,9 @@ export class DanhMucDinhMucPhiComponent implements OnInit {
         this.notification.error(MESSAGE.ERROR, res.msg);
       }
     }
+  }
+  refresh(){
+    this.formData.reset();
   }
 
   clearFilter() {
