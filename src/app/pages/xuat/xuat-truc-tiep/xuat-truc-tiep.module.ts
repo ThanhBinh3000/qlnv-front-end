@@ -6,11 +6,14 @@ import { XuatTrucTiepComponent } from './xuat-truc-tiep.component';
 import { XuatTrucTiepRoutingModule } from './xuat-truc-tiep-routing.module';
 import { KeHoachBanTrucTiepComponent } from './ke-hoach-ban-truc-tiep/ke-hoach-ban-truc-tiep.component';
 import { KeHoachBanTrucTiepModule } from './ke-hoach-ban-truc-tiep/ke-hoach-ban-truc-tiep.module';
+import { ToChucTrienKhaiBanTrucTiepComponent } from './to-chuc-trien-khai-ban-truc-tiep/to-chuc-trien-khai-ban-truc-tiep.component';
+import { ToChucTrienKhaiBanTrucTiepModule } from './to-chuc-trien-khai-ban-truc-tiep/to-chuc-trien-khai-ban-truc-tiep.module';
 
 @NgModule({
   declarations: [
     XuatTrucTiepComponent,
     KeHoachBanTrucTiepComponent,
+    ToChucTrienKhaiBanTrucTiepComponent,
   ],
   imports: [
     CommonModule,
@@ -18,7 +21,7 @@ import { KeHoachBanTrucTiepModule } from './ke-hoach-ban-truc-tiep/ke-hoach-ban-
     ComponentsModule,
     DirectivesModule,
     KeHoachBanTrucTiepModule,
-
+    ToChucTrienKhaiBanTrucTiepModule,
   ],
 })
 export class XuatTrucTiepModule {
