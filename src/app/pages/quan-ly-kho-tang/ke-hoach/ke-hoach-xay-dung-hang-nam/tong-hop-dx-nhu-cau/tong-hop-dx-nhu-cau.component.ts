@@ -15,9 +15,9 @@ import {UserService} from 'src/app/services/user.service';
 import {convertTrangThai} from 'src/app/shared/commonFunction';
 import {Globals} from 'src/app/shared/globals';
 import {saveAs} from 'file-saver';
-import {TongHopKhTrungHanService} from "../../../../../services/tong-hop-kh-trung-han.service";
 import {STATUS} from "../../../../../constants/status";
 import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {KtTongHopXdHnService} from "../../../../../services/kt-tong-hop-xd-hn.service";
 
 @Component({
   selector: 'app-tong-hop-dx-nhu-cau',
@@ -71,7 +71,7 @@ export class TongHopDxNhuCauComponent implements OnInit {
   constructor(
     private spinner: NgxSpinnerService,
     private notification: NzNotificationService,
-    private tongHopTrungHanService: TongHopKhTrungHanService,
+    private tongHopHnService: KtTongHopXdHnService,
     private modal: NzModalService,
     private danhMucService: DanhMucService,
     public userService: UserService,
@@ -113,13 +113,21 @@ export class TongHopDxNhuCauComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      maDvi: this.userInfo.MA_DVI,
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page - 1,
-      }
-    };
-    let res = await this.tongHopTrungHanService.search(body);
+      "maDvi": this.userInfo.MA_DVI,
+      "maTongHop": this.searchFilter.maTongHop,
+      "namKeHoach": this.searchFilter.namKeHoach,
+      "namBatDau": this.searchFilter.tgKhoiCongTu,
+      "namKetThuc": this.searchFilter.tgHoanThanhDen,
+      "ngayTongHopDen": this.searchFilter.ngayTongHop ? this.searchFilter.ngayTongHop[0] : null,
+      "ngayTongHopTu": this.searchFilter.ngayTongHop ? this.searchFilter.ngayTongHop[1] : null,
+      "paggingReq": {
+        "limit": 10,
+        "page": this.page - 1
+      },
+      "tenDuAn": this.searchFilter.tenDuAn,
+      "trangThai": this.searchFilter.trangThai,
+    }
+    let res = await this.tongHopHnService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -224,7 +232,7 @@ export class TongHopDxNhuCauComponent implements OnInit {
             id: item.id,
             maDvi: '',
           };
-          this.tongHopTrungHanService.delete(body).then(async () => {
+          this.tongHopHnService.delete(body).then(async () => {
             this.notification.success(MESSAGE.ERROR, MESSAGE.DELETE_SUCCESS);
             await this.search();
             this.spinner.hide();
@@ -242,8 +250,23 @@ export class TongHopDxNhuCauComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        let body = {};
-        this.tongHopTrungHanService
+        let body = {
+          "maDvi": this.userInfo.MA_DVI,
+          "maTongHop": this.searchFilter.maTongHop,
+          "namKeHoach": this.searchFilter.namKeHoach,
+          "namBatDau": this.searchFilter.tgKhoiCongTu,
+          "namKetThuc": this.searchFilter.tgHoanThanhDen,
+          "ngayTongHopDen": this.searchFilter.ngayTongHop ? this.searchFilter.ngayTongHop[0] : null,
+          "ngayTongHopTu": this.searchFilter.ngayTongHop ? this.searchFilter.ngayTongHop[1] : null,
+          "paggingReq": {
+            "limit": 10,
+            "page": this.page - 1
+          },
+          "tenDuAn": this.searchFilter.tenDuAn,
+          "trangThai": this.searchFilter.trangThai,
+        }
+
+        this.tongHopHnService
           .export(body)
           .subscribe((blob) =>
             saveAs(blob, 'dieu-chinh-ke-hoach-lcnn.xlsx'),

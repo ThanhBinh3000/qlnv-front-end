@@ -15,6 +15,7 @@ import {UserLogin} from "../../../../../../models/userlogin";
 import {KeHoachXayDungTrungHan} from "../../../../../../models/QuyHoachVaKeHoachKhoTang";
 import {STATUS} from "../../../../../../constants/status";
 import {DialogTuChoiComponent} from "../../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
+import {KtTongHopXdHnService} from "../../../../../../services/kt-tong-hop-xd-hn.service";
 
 @Component({
   selector: 'app-them-moi-tong-hop-dx-nhu-cau',
@@ -48,7 +49,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
     private danhMucService: DanhMucService,
-    private tongHopDxXdTh: TongHopKhTrungHanService,
+    private tongHopDxXdTh: KtTongHopXdHnService,
     private fb: FormBuilder,
     private modal: NzModalService,
     private helperService: HelperService
@@ -56,8 +57,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
     this.formData = this.fb.group({
       id: [null],
       loaiDuAn: [null, [Validators.required]],
-      namBatDau: [null, [Validators.required]],
-      namKetThuc: [null, [Validators.required]],
+      namKeHoach: [null, [Validators.required]],
       ngayTongHop: [null],
       noiDung: [null],
       maToTrinh: [null],
@@ -133,11 +133,6 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
       this.spinner.hide();
       return;
-    }
-    if (this.formData.value.namBatDau > this.formData.value.namKetThuc) {
-      this.notification.error(MESSAGE.ERROR, "Năm bắt đàu không được lớn hơn năm kết thúc!")
-      this.spinner.hide();
-      return
     }
     let body = this.formData.value;
     body.ctiets = this.dataTableDx;
@@ -331,7 +326,7 @@ export class ThemMoiTongHopDxNhuCauComponent implements OnInit {
       this.spinner.hide();
       return;
     }
-    let idTh = await this.userService.getId("KT_KH_TH_TRUNGHAN_SEQ");
+    let idTh = await this.userService.getId("KT_THNC_HANGNAM_SEQ");
     if (!idTh) {
       this.notification.error(MESSAGE.ERROR, "Lỗi hệ thống!")
       this.spinner.hide();

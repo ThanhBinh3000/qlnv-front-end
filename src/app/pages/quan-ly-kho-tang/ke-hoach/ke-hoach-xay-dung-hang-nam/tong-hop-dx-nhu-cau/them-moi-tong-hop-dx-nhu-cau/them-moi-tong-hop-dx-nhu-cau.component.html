@@ -44,7 +44,7 @@
   <nz-card class="mt16 flex-card p-lr16">
     <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
       <div nz-row [nzGutter]="20">
-        <div nz-col nzSpan="18">
+        <div nz-col nzSpan="4">
           <nz-form-label>Loại dự án</nz-form-label>
           <nz-form-control [nzErrorTip]="error">
             <nz-select [nzDisabled]="isTongHop" formControlName="loaiDuAn" nzAllowClear>
@@ -53,38 +53,21 @@
             </nz-select>
           </nz-form-control>
         </div>
-        <div nz-col nzSpan="6">
-          <nz-form-label>Giai đoạn quy hoạch (năm bắt đầu - năm kết thúc)</nz-form-label>
-          <div nz-row>
-            <div nz-col nzSpan="11">
-              <nz-form-control [nzErrorTip]="error">
-                <nz-select [nzDisabled]="isTongHop" formControlName="namBatDau" nzPlaceHolder="Năm bắt đầu" nzSpan="2"
+        <div nz-col nzSpan="4">
+          <nz-form-label>Năm kế hoạch</nz-form-label>
+          <nz-form-control [nzErrorTip]="error">
+          <nz-select [nzDisabled]="isTongHop" formControlName="namKeHoach" nzPlaceHolder="Năm bắt đầu" nzSpan="2"
                            nzAllowClear>
                   <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
                   </nz-option>
                 </nz-select>
-              </nz-form-control>
-            </div>
-            <div nz-col nzSpan="2" class="text-center">
-              <i class="icon htvbdh_tcdt_lien-ket icon-lien-ket ng-tns-c190-48"></i>
-            </div>
-            <div nz-col nzSpan="11">
-              <nz-form-control [nzErrorTip]="error">
-                <nz-select [nzDisabled]="isTongHop" formControlName="namKetThuc" nzPlaceHolder="Năm kết thúc" nzSpan="2"
-                           nzAllowClear>
-                  <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text">
-                  </nz-option>
-                </nz-select>
-              </nz-form-control>
-
-            </div>
+          </nz-form-control>
           </div>
-        </div>
       </div>
       <div class="cangiua group-button-search">
         <button *ngIf="userService.isTongCuc() && !isTongHop" type="button" class="btn btn-main" (click)="tongHop()">
           <i nz-icon nzType="area-chart" nzTheme="outline"></i>
-          <span>Tổng hợp đề xuất KHĐTXD (5 năm)</span>
+          <span>Tổng hợp đề xuất KHĐTXD TH hàng năm</span>
         </button>
       </div>
     </form>

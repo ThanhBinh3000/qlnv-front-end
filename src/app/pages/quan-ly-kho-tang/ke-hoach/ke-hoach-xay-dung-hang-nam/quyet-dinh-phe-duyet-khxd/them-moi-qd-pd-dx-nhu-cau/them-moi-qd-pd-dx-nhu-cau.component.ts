@@ -11,6 +11,7 @@ import {Globals} from "../../../../../../shared/globals";
 import {DanhMucService} from "../../../../../../services/danhmuc.service";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {HelperService} from "../../../../../../services/helper.service";
+import {KtTongHopXdHnService} from "../../../../../../services/kt-tong-hop-xd-hn.service";
 
 @Component({
   selector: 'app-them-moi-qd-pd-dx-nhu-cau',
@@ -39,6 +40,7 @@ export class ThemMoiQdPdDxNhuCauComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
     private danhMucService: DanhMucService,
+    private tongHopDxXdTh: KtTongHopXdHnService,
     private fb: FormBuilder,
     private modal: NzModalService,
     private helperService: HelperService
