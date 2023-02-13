@@ -10,6 +10,12 @@ import { MangPvcCongCuDungCuRoutingModule } from './mang-pvc-cong-cu-dung-cu-rou
 import { MangPvcCongCuDungCuComponent } from './mang-pvc-cong-cu-dung-cu.component';
 import { ThongTinTongHopDeXuatNhuCauChiCucComponent } from './tong-hop-de-xuat-nhu-cau-chi-cuc/thong-tin-tong-hop-de-xuat-nhu-cau-chi-cuc/thong-tin-tong-hop-de-xuat-nhu-cau-chi-cuc.component';
 import { TongHopDeXuatNhuCauChiCucComponent } from './tong-hop-de-xuat-nhu-cau-chi-cuc/tong-hop-de-xuat-nhu-cau-chi-cuc.component';
+import { DeXuatNcChiCucPvcComponent } from './de-xuat-nc-chi-cuc-pvc/de-xuat-nc-chi-cuc-pvc.component';
+import { DeXuatNcCucPvcComponent } from './de-xuat-nc-cuc-pvc/de-xuat-nc-cuc-pvc.component';
+import { TongHopNcCucPvcComponent } from './tong-hop-nc-cuc-pvc/tong-hop-nc-cuc-pvc.component';
+import { HopDongMuaSamPvcComponent } from './hop-dong-mua-sam-pvc/hop-dong-mua-sam-pvc.component';
+import { BienBanGiaoNhanPvcComponent } from './bien-ban-giao-nhan-pvc/bien-ban-giao-nhan-pvc.component';
+import { HienTrangCcdcPvcComponent } from './hien-trang-ccdc-pvc/hien-trang-ccdc-pvc.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +24,12 @@ import { TongHopDeXuatNhuCauChiCucComponent } from './tong-hop-de-xuat-nhu-cau-c
     ThongTinDeXuatNhuCauComponent,
     TongHopDeXuatNhuCauChiCucComponent,
     ThongTinTongHopDeXuatNhuCauChiCucComponent,
+    DeXuatNcChiCucPvcComponent,
+    DeXuatNcCucPvcComponent,
+    TongHopNcCucPvcComponent,
+    HopDongMuaSamPvcComponent,
+    BienBanGiaoNhanPvcComponent,
+    HienTrangCcdcPvcComponent,
   ],
   imports: [
     CommonModule,

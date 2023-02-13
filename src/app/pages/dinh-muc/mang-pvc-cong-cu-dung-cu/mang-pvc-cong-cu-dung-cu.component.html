@@ -8,7 +8,7 @@
       Đề xuất nhu cầu của các cục
     </li>
     <li nz-menu-item (click)="selectTab('tonghopdexuat')" *ngIf="userService.isTongCuc()">
-      Tổng hợp đề xuất nhu cầu của các cục
+      Tổng hợp đề xuất nhu cầu của các Cục
     </li>
     <li nz-menu-item (click)="selectTab('tonghopdexuatchicuc')" *ngIf="userService.isCuc()">
       Tổng hợp đề xuất nhu cầu của các Chi cục
@@ -31,28 +31,28 @@
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 'dexuatchicuc'">
-      <app-de-xuat-nhu-cau-chi-cuc></app-de-xuat-nhu-cau-chi-cuc>
+      <app-de-xuat-nc-chi-cuc-pvc></app-de-xuat-nc-chi-cuc-pvc>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'dexuatcuc'">
-      <app-de-xuat-nhu-cau-cua-cac-cuc></app-de-xuat-nhu-cau-cua-cac-cuc>
+      <app-de-xuat-nc-cuc-pvc></app-de-xuat-nc-cuc-pvc>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'tonghopdexuat'">
       <app-tong-hop-de-xuat-nhu-cau-cua-cac-cuc></app-tong-hop-de-xuat-nhu-cau-cua-cac-cuc>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'tonghopdexuatchicuc'">
-      <app-tong-hop-de-xuat-nhu-cau-chi-cuc></app-tong-hop-de-xuat-nhu-cau-chi-cuc>
+      <app-tong-hop-nc-cuc-pvc></app-tong-hop-nc-cuc-pvc>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'hopdongmuasam'">
-      <app-hop-dong-mua-sam></app-hop-dong-mua-sam>
+      <app-hop-dong-mua-sam-pvc></app-hop-dong-mua-sam-pvc>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'dexuatnhucau'">
       <app-de-xuat-nhu-cau></app-de-xuat-nhu-cau>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'bienbangiaonhan'">
-      <app-bien-ban-giao-nhan></app-bien-ban-giao-nhan>
+      <app-bien-ban-giao-nhan-pvc></app-bien-ban-giao-nhan-pvc>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'hientrangmaymoc'">
-      <app-hien-trang-may-moc-thiet-bi></app-hien-trang-may-moc-thiet-bi>
+      <app-hien-trang-ccdc-pvc></app-hien-trang-ccdc-pvc>
     </ng-container>
   </div>
 </div>
