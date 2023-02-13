@@ -30,7 +30,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
     private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhPdKhBanTrucTiepService);
+    super(httpClient, storageService, notification, spinner, modal, chaoGiaMuaLeUyQuyenService);
     this.formData = this.fb.group({
       namKh: dayjs().get('year'),
       soDxuat: null,
