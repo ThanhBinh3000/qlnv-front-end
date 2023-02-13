@@ -4,74 +4,66 @@
     <div nz-row [nzGutter]="20">
       <div nz-col [nzSpan]="6">
         <label class="search__label">Mã định mức</label>
-        <nz-form-control>
           <nz-input-group id="ma-dm">
             <input type="text" nz-input [(ngModel)]="searchFilter.maDinhMuc"/>
           </nz-input-group>
-        </nz-form-control>
       </div>
       <div nz-col [nzSpan]="6">
         <label class="search__label">Tên định mức</label>
-        <nz-form-control>
-          <nz-input-group id="ten-dm">
-            <input type="text" nz-input [(ngModel)]="searchFilter.tenDinhMuc"/>
-          </nz-input-group>
-        </nz-form-control>
+        <nz-input-group id="ten-dm">
+          <input type="text" nz-input [(ngModel)]="searchFilter.tenDinhMuc"/>
+        </nz-input-group>
       </div>
       <div nz-col [nzSpan]="6">
         <label class="search__label">Loại hàng hóa</label>
-
-        <nz-form-control nz-col [nzSpan]="24">
-          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('search')">
-            <input class="search__input" [(ngModel)]="searchFilter.tenVthh" [readonly]="true" nz-input
-                   readonly="true"/>
-          </nz-input-group>
-        </nz-form-control>
+        <nz-select nzAllowClear [(ngModel)]="searchFilter.loaiVthh"
+                   (ngModelChange)="selectLoaiHangHoa($event)"
+                   nzPlaceHolder="Chọn loại hàng hóa" nzShowSearch>
+          <nz-option *ngFor="let p of listLoaiVthh" [nzValue]="p.ma" [nzLabel]="p.ten"></nz-option>
+        </nz-select>
+        <!--        <nz-form-control nz-col [nzSpan]="24">-->
+        <!--          -->
+        <!--          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('search')">-->
+        <!--            <input class="search__input" [(ngModel)]="searchFilter.tenVthh" [readonly]="true" nz-input-->
+        <!--                   readonly="true"/>-->
+        <!--          </nz-input-group>-->
+        <!--        </nz-form-control>-->
       </div>
 
       <div nz-col [nzSpan]="6">
         <label class="search__label">Chủng loại hàng hóa</label>
-
-        <nz-form-control nz-col [nzSpan]="24">
-          <nz-input-group nzAddOnAfterIcon="folder-open" (click)="selectHangHoa('search')">
-            <input class="search__input" [(ngModel)]="searchFilter.tenCloaiVthh" [readonly]="true" nz-input
-                   readonly="true"/>
-          </nz-input-group>
-        </nz-form-control>
+        <nz-select nzAllowClear [(ngModel)]="searchFilter.tenCloaiVthh"
+                   nzPlaceHolder="Chọn chủng loại hàng hóa" nzShowSearch>
+          <nz-option *ngFor="let p of listChungLoaiVthh" [nzLabel]="p.ten" [nzValue]="p.ma"></nz-option>
+        </nz-select>
       </div>
       <br>
       <div nz-col nzSpan="6">
         <label class="search__label">Loại đinh mức</label>
-        <nz-form-control>
-          <nz-input-group>
-            <nz-select nzAllowClear [(ngModel)]="searchFilter.loaiDinhMuc">
-              <nz-option *ngFor="let p of listDinhMuc" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-              </nz-option>
-            </nz-select>
-          </nz-input-group>
-        </nz-form-control>
+        <nz-input-group>
+          <nz-select nzAllowClear [(ngModel)]="searchFilter.loaiDinhMuc">
+            <nz-option *ngFor="let p of listDinhMuc" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
       </div>
       <div nz-col nzSpan="6">
         <label class="search__label">Loại hình bảo quản</label>
-        <nz-form-control>
-          <nz-input-group>
-            <nz-select nzAllowClear [(ngModel)]="searchFilter.loaiHinhBq">
-              <nz-option *ngFor="let p of listLhbq" [nzValue]="p.ma" [nzLabel]="p.giaTri">
-              </nz-option>
-            </nz-select>
-          </nz-input-group>
-        </nz-form-control>
+        <nz-input-group>
+          <nz-select nzAllowClear [(ngModel)]="searchFilter.loaiHinhBq">
+            <nz-option *ngFor="let p of listLhbq" [nzValue]="p.ma" [nzLabel]="p.giaTri">
+            </nz-option>
+          </nz-select>
+        </nz-input-group>
       </div>
       <div nz-col nzSpan="6">
         <label class="search__label">Hình thức bảo quản</label>
-        <nz-form-control>
           <nz-input-group>
             <nz-select nzAllowClear [(ngModel)]="searchFilter.hinhThucBq">
               <nz-option *ngFor="let p of listHtBq" [nzValue]="p.ma" [nzLabel]="p.giaTri">
               </nz-option>
             </nz-select>
           </nz-input-group>
-        </nz-form-control>
       </div>
     </div>
     <div class="cangiua group-button-search">
