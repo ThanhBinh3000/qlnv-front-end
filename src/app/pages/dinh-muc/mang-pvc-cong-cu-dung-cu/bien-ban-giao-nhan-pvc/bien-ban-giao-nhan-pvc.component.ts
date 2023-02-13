@@ -28,17 +28,19 @@ export class BienBanGiaoNhanPvcComponent extends Base2Component implements OnIni
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [null],
+      namKeHoach: [null],
       soCongVan: [null],
       trichYeu: [null],
       ngayKy: [null],
       role: [null],
     });
     this.filterTable = {
-      soCongVan: '',
+      soBienBan: '',
       namKeHoach: '',
-      trichYeu: '',
-      ngayKy: '',
-      soQdKh: '',
+      soHopDong: '',
+      ngayGiaoNhan: '',
+      benGiao: '',
+      benNhan: '',
       tenTrangThai: '',
     };
   }

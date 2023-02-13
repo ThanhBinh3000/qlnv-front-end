@@ -34,7 +34,7 @@ export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implemen
       ngayKy: [''],
       ngayHieuLuc: [''],
       trichYeu: [''],
-      capDvi: [''],
+      capDvi: [1],
       loai: ['01'],
     });
     this.filterTable = {};

@@ -1,8 +1,7 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
-  <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected == 'dexuatchicuc'" (click)="selectTab('dexuatchicuc')" *ngIf="!userService.isChiCuc()">
-      Đề xuất nhu cầu của Chi cục
+    <li nz-menu-item [nzSelected]="tabSelected == 'dexuatnhucau'" (click)="selectTab('dexuatnhucau')">
+      {{userService.isChiCuc() ? 'Đề xuất nhu cầu' : 'Đề xuất nhu cầu của Chi cục'}}
     </li>
     <li nz-menu-item (click)="selectTab('dexuatcuc')" *ngIf="userService.isTongCuc()">
       Đề xuất nhu cầu của các cục
@@ -16,9 +15,6 @@
     <li nz-menu-item (click)="selectTab('hopdongmuasam')" *ngIf="userService.isTongCuc()">
       Hợp đồng mua sắm
     </li>
-    <li nz-menu-item [nzSelected]="tabSelected == 'dexuatnhucau'" (click)="selectTab('dexuatnhucau')" *ngIf="userService.isChiCuc()">
-      Đề xuất nhu cầu
-    </li>
     <li nz-menu-item (click)="selectTab('bienbangiaonhan')">
       Biên bản giao nhận
     </li>
@@ -30,8 +26,8 @@
 
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
-    <ng-container *ngIf="tabSelected == 'dexuatchicuc'">
-      <app-de-xuat-nc-chi-cuc-pvc></app-de-xuat-nc-chi-cuc-pvc>
+    <ng-container *ngIf="tabSelected == 'dexuatnhucau'">
+      <app-de-xuat-nhu-cau></app-de-xuat-nhu-cau>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'dexuatcuc'">
       <app-de-xuat-nc-cuc-pvc></app-de-xuat-nc-cuc-pvc>
@@ -44,9 +40,6 @@
     </ng-container>
     <ng-container *ngIf="tabSelected == 'hopdongmuasam'">
       <app-hop-dong-mua-sam-pvc></app-hop-dong-mua-sam-pvc>
-    </ng-container>
-    <ng-container *ngIf="tabSelected == 'dexuatnhucau'">
-      <app-de-xuat-nhu-cau></app-de-xuat-nhu-cau>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'bienbangiaonhan'">
       <app-bien-ban-giao-nhan-pvc></app-bien-ban-giao-nhan-pvc>

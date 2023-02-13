@@ -28,6 +28,7 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
     super.ngOnInit()
     this.formData = this.fb.group({
       maDvi: [null],
+      namKeHoach: [null],
       soCongVan: [null],
       trichYeu: [null],
       ngayKy: [null],
