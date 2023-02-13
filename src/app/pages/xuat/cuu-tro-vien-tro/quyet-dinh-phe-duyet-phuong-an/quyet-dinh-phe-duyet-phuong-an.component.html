@@ -189,11 +189,10 @@
             <td>{{ data.trichYeu }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td class="text-left">
-              <a (click)="detail(data, true)">
+              <a (click)="redirectDetail(data.id, true)">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="data.trangThai==STATUS.DU_THAO || data.trangThai==STATUS.TU_CHOI_LDTC &&
-               (userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA_THEM'))" (click)="detail(data, false)">
+              <a (click)="redirectDetail(data.id, false)">
                 <i class="fa fa-pencil"></i>
               </a>
               <a *ngIf="data.trangThai==STATUS.DU_THAO && userService.isTongCuc() &&
