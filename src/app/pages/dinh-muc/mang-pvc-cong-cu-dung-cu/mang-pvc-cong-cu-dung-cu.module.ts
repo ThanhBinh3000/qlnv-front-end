@@ -16,6 +16,7 @@ import { TongHopNcCucPvcComponent } from './tong-hop-nc-cuc-pvc/tong-hop-nc-cuc-
 import { HopDongMuaSamPvcComponent } from './hop-dong-mua-sam-pvc/hop-dong-mua-sam-pvc.component';
 import { BienBanGiaoNhanPvcComponent } from './bien-ban-giao-nhan-pvc/bien-ban-giao-nhan-pvc.component';
 import { HienTrangCcdcPvcComponent } from './hien-trang-ccdc-pvc/hien-trang-ccdc-pvc.component';
+import { ThemMoiBienBanPvcComponent } from './bien-ban-giao-nhan-pvc/them-moi-bien-ban-pvc/them-moi-bien-ban-pvc.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { HienTrangCcdcPvcComponent } from './hien-trang-ccdc-pvc/hien-trang-ccdc
     HopDongMuaSamPvcComponent,
     BienBanGiaoNhanPvcComponent,
     HienTrangCcdcPvcComponent,
+    ThemMoiBienBanPvcComponent,
   ],
   imports: [
     CommonModule,
