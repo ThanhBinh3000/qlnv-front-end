@@ -8,13 +8,15 @@
             Điều chỉnh dự toán chi NSNN
             <!-- </button> -->
         </li>
+        <li nz-menu-item (click)="selectTab('giaodutoan1')" [nzSelected]="tabSelected == 'giaodutoan1'">
+            Giao số trần chi NSNN
+        </li>
         <!-- <li nz-menu-item (click)="selectTab('giaodutoan')" [nzSelected]="tabSelected == 'giaodutoan'">
             Giao dự toán chi NSNN
-        </li> -->
-        <li nz-menu-item (click)="selectTab('giaodutoan1')" [nzSelected]="tabSelected == 'giaodutoan1'">
-            Giao dự toán chi NSNN
         </li>
-
+        <li nz-menu-item (click)="selectTab('giaodutoanthucte')" [nzSelected]="tabSelected == 'giaodutoanthucte'">
+            Giao dự toán chi NSNN thực tế
+        </li> -->
     </ul>
 </nz-affix>
 
@@ -32,5 +34,8 @@
         <ng-container *ngIf="tabSelected == 'giaodutoan1'">
             <app-giao-du-toan></app-giao-du-toan>
         </ng-container>
+        <!-- <ng-container *ngIf="tabSelected == 'giaodutoanthucte'">
+            <app-giao-du-toan-thuc-te></app-giao-du-toan-thuc-te>
+        </ng-container> -->
     </div>
 </div>
