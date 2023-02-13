@@ -133,27 +133,21 @@
                                 [nzDisabled]="data.trangThai != '00'"></label>
                         </td>
                         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                        <td>{{data.soTrHdr }}</td>
-                        <td>{{data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
-                        <td>{{data.trichYeu }}</td>
-                        <td>{{data.soTrHdr }}</td>
-                        <td>{{data.idThHdr }}</td>
-                        <td>{{data.tenLoaiVthh}}</td>
-                        <td>{{data.tenCloaiVthh}}</td>
+                        <td>{{data.hdr.soQdPd }}</td>
+                        <td>{{data.pthucBanTrucTiep }}</td>
+                        <td>{{data.ngayNhanCgia | date: 'dd/MM/YYYY'}}</td>
+                        <td>{{data.soQdKqChaoGia }}</td>
+                        <td>{{data.hdr.tenLoaiVthh}}</td>
+                        <td>{{data.hdr.tenCloaiVthh}}</td>
                         <td>{{data.tenTrangThai}}</td>
                         <td class="text-left">
-                            <a (click)="goDetail(data.id)"
-                                *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XEM')">
+                            <a (click)="goDetail(data.id)">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a *ngIf="(data.trangThai == STATUS.DU_THAO || data.trangThai == STATUS.DA_DUYET_LDV || data.trangThai == STATUS.TU_CHOI_LDV || data.trangThai == STATUS.CHO_DUYET_LDV )
-                              && (userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_THEM')) && userService.isTongCuc()"
-                                (click)="goDetail(data.id)">
+                            <a (click)="goDetail(data.id)">
                                 <i class="fa fa-pencil"></i>
                             </a>
-                            <a *ngIf="data.trangThai == STATUS.DU_THAO
-                              && (userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XOA')) && userService.isTongCuc()"
-                                (click)="delete(data)">
+                            <a (click)="delete(data)">
                                 <i class="fa fa-trash-o do"></i>
                             </a>
                         </td>
@@ -180,7 +174,7 @@
         </nz-card>
     </div>
 </div>
-<!-- <div class="chi-tiet" *ngIf="isDetail">
-    <app-chi-tiet-thong-tin-dau-gia [idInput]="idSelected" (showListEvent)="showList()">
-    </app-chi-tiet-thong-tin-dau-gia>
-</div> -->
+<div class="chi-tiet" *ngIf="isDetail">
+    <app-them-moi-thong-tin-ban-truc-tiep [loaiVthh]="loaiVthh" [idInput]="idSelected" (showListEvent)="showList()">
+    </app-them-moi-thong-tin-ban-truc-tiep>
+</div>
