@@ -6,6 +6,7 @@ import {StorageService} from "../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
+import * as uuid from "uuid";
 import {QlDinhMucPhiService} from "../../../../services/qlnv-kho/QlDinhMucPhi.service";
 import {DanhMucDinhMucService} from "../../../../services/danh-muc-dinh-muc.service";
 import {DanhMucService} from "../../../../services/danhmuc.service";
@@ -30,7 +31,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
   listHangHoa: any = [];
   listHtBaoQuan: any = [];
   listdmBaoQuan: any = [];
-  isAddetail : boolean = true;
+  isAddetail: boolean = true;
   @Input()
   idInput: number;
 
@@ -89,6 +90,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
   initFormDataDetail(dvt: string = 'kg') {
     this.formDataDetail = this.fb.group({
       id: [''],
+      idVirtual: [''],
       tenCcdc: [''],
       maCcdc: ['', [Validators.required]],
       donViTinh: ['', [Validators.required]],
@@ -191,6 +193,7 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
   }
 
   async themMoi() {
+    this.initFormDataDetail();
     this.isVisible = true;
   }
 
@@ -204,10 +207,17 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
     if (this.formDataDetail.invalid) {
       return;
     }
-    // if(){}
-    this.dataTableDetail = [...this.dataTableDetail, this.formDataDetail.value];
+    this.formDataDetail.value.idVirtual = this.formDataDetail.value.idVirtual ? this.formDataDetail.value.idVirtual : uuid.v4();
+    let index = this.dataTableDetail.findIndex(s => s.idVirtual === this.formDataDetail.value.idVirtual);
+    let table = this.dataTableDetail;
+    if (index != -1) {
+      table.splice(index, 1, this.formDataDetail.value);
+    } else {
+      this.dataTableDetail = [...this.dataTableDetail, this.formDataDetail.value];
+    }
     this.isVisible = false;
-  }
+    this.initFormDataDetail();
+  };
 
   changeCcdc(): void {
     let item;
@@ -254,9 +264,10 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.fileDinhKem;
           this.dataTableDetail = data.listQlDinhMucTbCcdcDtl;
-          // this.dataTableDetail.forEach(item => {
-          //   // item.apDungTaiStr = this.getStrTenDonVi(item.apDungTai);
-          // })
+          this.dataTableDetail.forEach(s => s.idVirtual = uuid.v4());
+          this.dataTableDetail.forEach(item => {
+            item.apDungTaiStr = this.getStrTenDonVi(item.apDungTai);
+          })
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -270,13 +281,15 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
     }
   }
 
-  async editRow(stt: number) {
-    this.isAddetail = false;
+  async editRow(data: any) {
     this.initFormDataDetail();
-    let dataDetailItem = this.dataTableDetail[stt];
-    console.log(dataDetailItem)
+    let dataDetailItem;
+    if (data.id) {
+      dataDetailItem = this.dataTableDetail.find(s => s.id == data.id);
+    } else if (data.idVirtual) {
+      dataDetailItem = this.dataTableDetail.find(s => s.idVirtual == data.idVirtual)
+    }
     if (dataDetailItem.loaiHhBq && dataDetailItem.loaiHhBq.includes(",")) {
-      console.log("vao dayyy");
       dataDetailItem.loaiHhBq = dataDetailItem.loaiHhBq.split(",");
     }
     if (dataDetailItem.apDungTai && dataDetailItem.apDungTai.includes(",")) {
@@ -286,36 +299,31 @@ export class ThongTinDinhMucTrangBiCongCuDungCuComponent extends Base2Component 
       dataDetailItem.dmBaoQuan = dataDetailItem.dmBaoQuan.split(",");
     }
     if (dataDetailItem) {
+      this.formDataDetail.patchValue(dataDetailItem);
       this.formDataDetail.patchValue({
-        id: dataDetailItem.id,
-        tenCcdc: dataDetailItem.tenCcdc,
-        maCcdc: dataDetailItem.maCcdc,
-        donViTinh: dataDetailItem.donViTinh,
-        apDungTai: dataDetailItem.apDungTai,
-        dmVpCuc: dataDetailItem.dmVpCuc,
         dmVpChiCuc: dataDetailItem.dmVpChiCuc,
-        ccRaDm: dataDetailItem.ccRaDm,
-        loaiHhBq: dataDetailItem.loaiHhBq,
-        htBaoQuan: dataDetailItem.htBaoQuan,
-        dmBaoQuan: dataDetailItem.dmBaoQuan,
-        dmTheoDiemKho: dataDetailItem.dmTheoDiemKho,
-        ghiChu: dataDetailItem.ghiChu,
-        ycKyThuat: dataDetailItem.ycKyThuat,
-        trangBi: dataDetailItem.trangBi,
-        dmTrangBi: dataDetailItem.dmTrangBi,
-        khoiLuong: dataDetailItem.khoiLuong,
-        dvt: ['kg'],
-        tenNhomCcdc: dataDetailItem.tenNhomCcdc,
-        nhomCcdc: dataDetailItem.nhomCcdc,
+        dmVpCuc: dataDetailItem.dmVpCuc,
       });
     } else {
       this.notification.error(MESSAGE.ERROR, "Không tìm thấy dữ liệu");
     }
     await this.changeCanCu();
-    console.log(this.formDataDetail.value);
     this.isVisible = true;
   }
-
+  getStrTenDonVi(strMaDonVi) {
+    let str = "";
+    if (strMaDonVi) {
+      let arrMaDvi = strMaDonVi.split(",");
+      arrMaDvi.forEach((item) => {
+        this.listDonVi.forEach(donvi => {
+          if (item == donvi.maDvi) {
+            str = str + donvi.tenDvi + ",";
+          }
+        });
+      });
+    }
+    return str.slice(0, -1);
+  }
   deleteItem(index: any) {
     this.modal.confirm({
       nzClosable: false,
