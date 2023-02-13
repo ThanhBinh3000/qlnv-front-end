@@ -412,15 +412,15 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
        sum = this.dataTable.reduce((prev, cur) => {
         switch (type) {
           case '1' : {
-            prev += cur.tmdtTongSo;
+            prev += cur.tmdtDuKien;
             break;
           }
           case '2' : {
-            prev += cur.tmdtNstw;
+            prev += cur.nstwDuKien;
             break;
           }
           case '3' : {
-            prev += cur.luyKeTongSo;
+            prev += cur.tongSoLuyKe;
             break;
           }
           case '4' : {
@@ -428,11 +428,11 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
             break;
           }
           case '5' : {
-            prev += cur.ncKhTongSo;
+            prev += cur.tmdtDuyet;
             break;
           }
           case '6' : {
-            prev += cur.ncKhNstw;
+            prev += cur.nstwDuyet;
             break;
           }
         }

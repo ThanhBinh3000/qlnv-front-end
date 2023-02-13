@@ -179,7 +179,8 @@
 <ng-template #error let-control>
     <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}</ng-container>
 </ng-template>
-<!-- <div *ngIf="isQuyetDinh" class="chi-tiet">
-    <app-them-moi-de-xuat-kh-ban-truc-tiep [id]="idSelected" [dataTongHop]="formData.value" (showListEvent)="showTongHop()">
-    </app-them-quyet-dinh-ban-dau-gia>
-</div> -->
+<div *ngIf="isQuyetDinh" class="chi-tiet">
+    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [id]="idSelected" [dataTongHop]="formData.value"
+        (showListEvent)="showTongHop()">
+    </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
+</div>

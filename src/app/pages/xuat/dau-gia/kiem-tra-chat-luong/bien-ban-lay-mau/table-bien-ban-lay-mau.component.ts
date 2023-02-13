@@ -2,12 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { BienBanLayMauXhService } from 'src/app/services/qlnv-hang/xuat-hang/kiem-tra-chat-luong/bienBanLayMauXh.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
-import { QuyetDinhGiaoNhapHangService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/qd-giaonv-nh/quyetDinhGiaoNhapHang.service';
 import dayjs from 'dayjs';
+import { MESSAGE } from 'src/app/constants/message';
+import { QuyetDinhGiaoNvXuatHangService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/quyetdinh-nhiemvu-xuathang/quyet-dinh-giao-nv-xuat-hang.service';
 
 @Component({
   selector: 'app-table-bien-ban-lay-mau',
@@ -23,16 +23,16 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private bienBanLayMauXhService: BienBanLayMauXhService,
-    private quyetDinhGiaoNhapHangService: QuyetDinhGiaoNhapHangService
+    private quyetDinhGiaoNvXuatHangService: QuyetDinhGiaoNvXuatHangService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNhapHangService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvXuatHangService);
     this.formData = this.fb.group({
       nam: dayjs().get('year'),
       soQd: null,
       loaiVthh: null,
       trichYeu: null,
       ngayTao: null,
+      maChiCuc: null,
     })
 
     this.filterTable = {
@@ -52,16 +52,18 @@ export class TableBienBanLayMauComponent extends Base2Component implements OnIni
   }
 
   async ngOnInit() {
-    // this.spinner.show();
-    // try {
-    //   await this.initData();
-    //   Promise.all([, this.search()]);
-    //   this.spinner.hide();
-    // } catch (e) {
-    //   console.log('error: ', e);
-    //   this.spinner.hide();
-    //   this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-    // }
+    await this.spinner.show();
+    try {
+      this.formData.patchValue({
+        loaiVthh: this.loaiVthh,
+        maChiCuc: this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
+      })
+      await this.search();
+    } catch (e) {
+      console.log('error: ', e)
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
 }
