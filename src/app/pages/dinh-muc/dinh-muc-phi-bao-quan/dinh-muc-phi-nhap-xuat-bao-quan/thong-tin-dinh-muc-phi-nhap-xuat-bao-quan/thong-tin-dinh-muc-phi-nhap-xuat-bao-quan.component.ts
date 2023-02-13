@@ -144,6 +144,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.formData.value.capDvi = this.capDvi;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.createUpdate(this.formData.value)
+    this.goBack();
   }
 
   banHanh(id, trangThai) {
