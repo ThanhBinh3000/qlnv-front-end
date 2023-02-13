@@ -138,11 +138,11 @@
           <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
-          <td>
-            <a *ngIf="data.trangThai != STATUS.DU_THAO">
+          <td class="text-center">
+            <a *ngIf="data.trangThai != STATUS.DU_THAO" (click)="redirectToChiTiet(data.id,true)">
               <i class=" icon htvbdh_eye"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectToChiTiet(data.id)" >
               <i class="fa fa-pencil"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
@@ -173,5 +173,7 @@
   </div>
 </div>
 <ng-template #templateThemmoi>
-  <app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu></app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu>
+  <app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu [id]="selectedId" (showListEvent)="showList()"
+                                                   [isViewDetail]="isViewDetail"
+                                                   [idInput]="selectedId"></app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu>
 </ng-template>

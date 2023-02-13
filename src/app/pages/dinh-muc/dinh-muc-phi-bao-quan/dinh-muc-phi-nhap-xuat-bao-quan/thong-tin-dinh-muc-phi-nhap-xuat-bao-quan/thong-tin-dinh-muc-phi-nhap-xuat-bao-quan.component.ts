@@ -69,7 +69,8 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       ngayKy: ['', [Validators.required]],
       ngayHieuLuc: ['', [Validators.required]],
       ngayHetHieuLuc: [''],
-      capDvi: [],
+      capDvi: [''],
+      loai: ['00'],
       trichYeu: ['', [Validators.required]],
       listQlDinhMucPhis: [null],
       fileDinhKems: [null]
