@@ -98,7 +98,7 @@
   <div class="group-button">
     <h3 class="text-uppercase">Danh sách định mức trang bị công cụ, dụng cụ</h3>
     <div class="buttons">
-      <button type="button" class="btn btn-main" (click)="themMoi()">
+      <button type="button" class="btn btn-main"  *ngIf="!isViewDetail" (click)="themMoi()">
         <i class="icon htvbdh_tcdt_tao-qd"></i>
         <span>Thêm</span>
       </button>
@@ -128,17 +128,17 @@
       <tr *ngFor="let data of dataTableDetail; let idx = index">
         <td>{{idx + 1}}</td>
         <td>{{data.tenCcdc}}</td>
-        <td>aaaa</td>
+        <td>{{data.apDungTai ? data.apDungTaiStr : 'Tất cả'}}</td>
         <td>{{data.dmVpCuc}}</td>
         <td>{{data.dmVpChiCuc | number}}</td>
         <td>bbbb</td>
         <td>{{data.donViTinh}}</td>
         <td>{{data.ycKyThuat}}</td>
         <td class="text-center">
-          <a *ngIf="!isViewDetail" (click)="editRow(idx)">
+          <a *ngIf="!isViewDetail" (click)="editRow(data)">
             <i class="fa fa-pencil"></i>
           </a>
-          <a *ngIf="!isViewDetail" (click)="deleteItem(idx)">
+          <a *ngIf="!isViewDetail" (click)="deleteItem(data)">
             <i class="fa fa-trash-o do"></i>
           </a>
         </td>
@@ -219,7 +219,7 @@
             <nz-form-item>
               <nz-form-control [nzErrorTip]="error">
                 <nz-form-label [nzNoColon]="true" class="label-color-kh">Định mức cho VP Cục</nz-form-label>
-                <input type="number" nz-input formControlName="donViTinh" [readonly]="isViewDetail"/>
+                <input type="number" nz-input formControlName="dmVpCuc" [readonly]="isViewDetail"/>
               </nz-form-control>
             </nz-form-item>
           </div>
@@ -228,7 +228,7 @@
               <nz-form-control [nzErrorTip]="error">
                 <nz-form-label [nzNoColon]="true" class="label-color-kh">Định mức cho VP Chi cục
                 </nz-form-label>
-                <input type="number" nz-input formControlName="donViTinh" [readonly]="isViewDetail"/>
+                <input type="number" nz-input formControlName="dmVpChiCuc" [readonly]="isViewDetail"/>
               </nz-form-control>
             </nz-form-item>
           </div>
