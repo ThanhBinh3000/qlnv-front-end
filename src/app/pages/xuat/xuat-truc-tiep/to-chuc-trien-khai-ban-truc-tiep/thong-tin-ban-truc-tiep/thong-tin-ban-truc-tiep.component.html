@@ -2,59 +2,56 @@
     <div class="bg-trang">
         <nz-card class="mt16 flex-card p-lr16">
             <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
-                <div nz-row [nzGutter]="[20]">
-                    <div nz-col nzSpan="2">
+                <div nz-row [nzGutter]="24">
+                    <div nz-col nzSpan="4">
                         <label> Năm kế hoạch </label>
                         <nz-select formControlName="namKh">
                             <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
                         </nz-select>
                     </div>
                     <div nz-col nzSpan="4">
-                        <label>Số QĐ PĐ KH BTT</label>
-                        <input placeholder="Nhập số quyết định" nz-input formControlName="soQdPd" />
+                        <label>Ngày nhận chào giá/Ngày ủy quyền</label>
+                        <nz-range-picker formControlName="thoiGianThucHien" nzFormat="dd/MM/yyyy"></nz-range-picker>
                     </div>
-                    <div nz-col nzSpan="10">
-                        <label>Trích yếu</label>
-                        <input placeholder="Nhập nội dung" nz-input formControlName="trichYeu" />
+                    <div nz-col nzSpan="4">
+                        <label> Tên công ty chào giá</label>
+                        <input placeholder="" nz-input formControlName="soDxuat" />
                     </div>
-                    <div nz-col nzSpan="5">
-                        <label>Ngày Ký QĐ</label>
-                        <nz-range-picker formControlName="ngayKyQd" nzFormat="dd/MM/yyyy"></nz-range-picker>
+                    <div nz-col nzSpan="4">
+                        <label> Tên chi cục ủy quyền</label>
+                        <input placeholder="" nz-input formControlName="soQdPdKhBdg" />
                     </div>
-                    <div nz-col nzSpan="3">
-                        <label>Số KH/Tờ trình</label>
-                        <input placeholder="nhập số KH/Tờ trình" nz-input formControlName="soTrHdr" />
-                    </div>
+                    <!-- <div nz-col nzSpan="4">
+                        <label> Số QĐ PD kết quả BĐG</label>
+                        <input placeholder="" nz-input formControlName="soQdPdKqBdg" />
+                    </div> -->
                 </div>
             </form>
-            <div class="cangiua group-button-search">
-                <button nz-button class="search__button--clear" (click)="clearForm()">
-                    <i class="icon  htvbdh_nhap-lai1"></i>
-                    Xóa điều kiện
-                </button>
-                <button nz-button class="search__button--search" (click)="search()">
-                    <i nz-icon nzType="search"></i>
-                    Tìm kiếm
-                </button>
+            <div nz-col class="cangiua group-button-search">
+                <div>
+                    <button nz-button class="search__button--clear" (click)="clearForm()">
+                        <i class="icon  htvbdh_nhap-lai1"></i>
+                        Xóa điều kiện
+                    </button>
+                    <button nz-button class="search__button--search" (click)="search()">
+                        <i nz-icon nzType="search"></i>
+                        Tìm kiếm
+                    </button>
+                </div>
             </div>
         </nz-card>
         <div class="group-button">
-            <h3> DANH SÁCH QUYẾT ĐỊNH PHÊ DUYỆT KẾ HOẠCH BAN TRỰC TIẾP </h3>
+            <h3 class="text-uppercase"> THÔNG TIN TRIỂN KHAI KẾ HOẠCH BÁN TRỰC TIẾP </h3>
             <div class="buttons">
-                <button type="button" class="btn btn-do" (click)="deleteMulti()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XOA')">
-                    <i class="fa fa-trash-o do"></i>
-                    <span>Xóa</span>
-                </button>
                 <button type="button" class="btn btn-sub" (click)="exportData()"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_EXP')">
+                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_EXP')">
                     <i class="icon htvbdh_chuyen-xu-ly"></i>
                     <span>Xuất file</span>
                 </button>
-                <button type="button" class="btn btn-main" (click)="goDetail(null)"
-                    *ngIf="userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_THEM') && userService.isTongCuc()">
+                <button type="button" class="btn btn-main" (click)="goDetail(723)"
+                    *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA_THEM')">
                     <i class="icon htvbdh_tcdt_tao-qd"></i>
-                    <span>Tạo quyết định</span>
+                    <span>Thêm</span>
                 </button>
             </div>
         </div>
@@ -68,16 +65,12 @@
                                 [nzIndeterminate]="indeterminate"></label>
                         </th>
                         <th class="text-center" style="width: 2%;">STT</th>
-                        <th class="text-center" style="width: 10%;">Năm kế hoạch</th>
-                        <th class="text-center" style="width: 10%;">Số QĐ PĐ KH BTT</th>
-                        <th class="text-center" style="width: 10%;">Ngày ký QĐ</th>
-                        <th class="text-center" style="width: 35%;">Trích yếu</th>
-                        <th>Số KH/tờ trình</th>
-                        <th>Mã tổng hợp</th>
+                        <th class="text-center" style="width: 10%;">Số QĐ phê duyệt Kh bán trực tiếp</th>
+                        <th class="text-center" style="width: 10%;">Phương thức bán trực tiếp</th>
+                        <th class="text-center" style="width: 10%;">Ngày nhận chào giá/Ngày ủy quyền</th>
+                        <th class="text-center" style="width: 35%;">Số QĐ PD KQ chào giá</th>
                         <th class="text-center" style="width: 12%;">Loại hàng hóa</th>
                         <th class="text-center" style="width: 12%;">Chủng loại hành hóa</th>
-                        <th class="text-center" style="width: 8%;">Số ĐV tài sản</th>
-                        <th class="text-center" style="width: 8%;">SL HĐ đã ký</th>
                         <th>Trạng thái</th>
                         <th width="90px">Hành động</th>
                     </tr>
@@ -130,32 +123,6 @@
                                     (input)="filterInTable('tenLoaiVthh',filterTable.tenLoaiVthh)" size="small" />
                             </nz-input-group>
                         </th>
-                        <th>
-                            <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm"
-                                    [(ngModel)]="filterTable.tenCloaiVthh"
-                                    (input)="filterInTable('tenCloaiVthh',filterTable.tenCloaiVthh)" size="small" />
-                            </nz-input-group>
-                        </th>
-                        <th>
-                            <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soDviTsan"
-                                    (input)="filterInTable('soDviTsan',filterTable.soDviTsan)" size="small" />
-                            </nz-input-group>
-                        </th>
-                        <th>
-                            <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.slHdDaKy"
-                                    (input)="filterInTable('slHdDaKy',filterTable.soHopDong)" size="small" />
-                            </nz-input-group>
-                        </th>
-                        <th>
-                            <nz-input-group>
-                                <input type="text" nz-input placeholder="Tìm kiếm"
-                                    [(ngModel)]="filterTable.tenTrangThai"
-                                    (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)" size="small" />
-                            </nz-input-group>
-                        </th>
                         <th></th>
                     </tr>
                 </thead>
@@ -166,17 +133,14 @@
                                 [nzDisabled]="data.trangThai != '00'"></label>
                         </td>
                         <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-                        <td>{{data.namKh}}</td>
-                        <td>{{data.soQdPd }}</td>
+                        <td>{{data.soTrHdr }}</td>
                         <td>{{data.ngayKyQd | date: 'dd/MM/YYYY' }}</td>
                         <td>{{data.trichYeu }}</td>
                         <td>{{data.soTrHdr }}</td>
                         <td>{{data.idThHdr }}</td>
                         <td>{{data.tenLoaiVthh}}</td>
                         <td>{{data.tenCloaiVthh}}</td>
-                        <td>{{data.soDviTsan}}</td>
-                        <td>{{data.soHopDong}}</td>
-                        <td>{{ data.tenTrangThai }}</td>
+                        <td>{{data.tenTrangThai}}</td>
                         <td class="text-left">
                             <a (click)="goDetail(data.id)"
                                 *ngIf="data.trangThai == STATUS.BAN_HANH && userService.isAccessPermisson('XHDTQG_PTDG_KHBDG_QDLCNT_XEM')">
@@ -216,8 +180,7 @@
         </nz-card>
     </div>
 </div>
-<div *ngIf="isDetail" class="chi-tiet">
-    <app-them-moi-qd-phe-duyet-kh-ban-truc-tiep [idInput]="idSelected" [loaiVthh]="loaiVthh"
-        (showListEvent)="showList()">
-    </app-them-moi-qd-phe-duyet-kh-ban-truc-tiep>
-</div>
+<!-- <div class="chi-tiet" *ngIf="isDetail">
+    <app-chi-tiet-thong-tin-dau-gia [idInput]="idSelected" (showListEvent)="showList()">
+    </app-chi-tiet-thong-tin-dau-gia>
+</div> -->
