@@ -457,7 +457,7 @@ export const QTVP = {
 export const AMOUNT = {
   allowZero: true,
   allowNegative: false,
-  precision: 2,
+  precision: 4,
   prefix: '',
   thousands: '.',
   decimal: ',',
