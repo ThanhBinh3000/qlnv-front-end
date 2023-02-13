@@ -12,4 +12,9 @@ export class KtQdXdHangNamService extends BaseService{
   constructor(public httpClient: HttpClient) {
     super(httpClient, 'dt-tx-theo-nam/quyet-dinh','/qlnv-kho');
   }
+
+  getAllPaTc(): Promise<any> {
+    const url = `${environment.SERVICE_API}${this.GATEWAY}/dt-tx-theo-nam/quyet-dinh/list-tt`;
+    return this.httpClient.get(url).toPromise();
+  }
 }

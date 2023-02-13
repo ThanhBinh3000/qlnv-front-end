@@ -158,12 +158,12 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
         let trangThai;
         switch (this.formData.value.trangThai) {
           case STATUS.DU_THAO :
+          case STATUS.TU_CHOI_LDV:
           case STATUS.TU_CHOI_TP : {
             trangThai = STATUS.CHO_DUYET_TP;
             break;
           }
           case STATUS.TU_CHOI_LDC:
-          case STATUS.TU_CHOI_LDV:
           case STATUS.CHO_DUYET_TP : {
             trangThai = STATUS.CHO_DUYET_LDC;
             break;

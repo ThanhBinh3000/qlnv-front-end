@@ -59,13 +59,13 @@
             <label nz-checkbox [(ngModel)]="allChecked" (ngModelChange)="updateAllChecked()"
                    [nzIndeterminate]="indeterminate"></label>
           </th>
-          <th class="text-center" nzWidth = "40">STT</th>
+          <th class="text-center" nzWidth = "40px">STT</th>
           <th class="text-center" nzWidth = "90px">Số quyết định/Số thông báo</th>
           <th class="text-center" nzWidth = "90px">Phương án của Tổng cục</th>
           <th class="text-center" nzWidth = "90px">Ngày ký</th>
           <th class="text-center" nzWidth = "">Trích yếu</th>
           <th class="text-center" nzWidth = "90px">Số công văn</th>
-          <th class="text-center" nzWidth = "90px">Trạng thái</th>
+          <th class="text-center" nzWidth = "120px">Trạng thái</th>
           <th  class="text-center" nzWidth = "120px" >Hành động</th>
         </tr>
         <tr class="search-table">
@@ -127,11 +127,11 @@
           <td>{{ data.trichYeu }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td class="text-left">
-            <a (click)="redirectToChiTiet(data.id,false)" *ngIf="data.trangThai == status.BAN_HANH">
+            <a (click)="redirectToChiTiet(data.id,true)" *ngIf="data.trangThai == status.BAN_HANH">
               <i class="fa fa-eye"></i>
             </a>
             <a *ngIf="data.trangThai == status.DU_THAO && userService.isTongCuc()"
-              (click)="redirectToChiTiet(data.id,true)">
+              (click)="redirectToChiTiet(data.id,false)">
               <i class="fa fa-pencil"></i>
             </a>
             <a *ngIf="data.trangThai == status.DU_THAO && userService.isTongCuc()" (click)="xoaItem(data)">
