@@ -306,7 +306,6 @@ export class ThemmoiDieuchinhMuattComponent implements OnInit {
     event.target.parentElement.classList.add('selectedRow');
     this.dataInput = this.danhsachDxMtt[index];
     this.dataInputCache = this.danhsachDxMttCache[index];
-    console.log(this.dataInputCache, 12345);
     this.index = index;
     await this.spinner.hide();
   }

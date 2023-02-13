@@ -97,18 +97,14 @@ export class ThongtinDieuchinhComponent implements OnInit, OnChanges {
       if (this.dataInput) {
         let res;
         if (this.isCache) {
-          console.log(this.dataInput.idDxHdr, "chan");
           res = await this.danhSachMuaTrucTiepService.getDetail(this.dataInput.idDxHdr);
           if (res.msg == MESSAGE.SUCCESS) {
-            console.log(this.isCache, 4567);
-            console.log(res, 567);
             this.formData.patchValue(res.data)
             this.formData.patchValue({
               hhDcQdPduyetKhmttSlddList: res.data.dsSlddDtlList,
             })
           }
         } else {
-          console.log("comm");
           this.updateDonGiaVat()
           this.formData.patchValue(this.dataInput);
           this.formData.patchValue({
