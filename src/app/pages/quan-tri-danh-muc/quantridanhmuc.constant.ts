@@ -56,4 +56,11 @@ export const NHAP_ROUTE_LIST = [
     dropdown: 'danh-muc-cong-cu-dung-cu',
     idHover: 'danh-muc-cong-cu-dung-cu',
   },
+  {
+    icon: 'htvbdh_tcdt_icon-common',
+    title: 'Danh mục tài sản',
+    url: `/${NHAP_MAIN_ROUTE}/danh-muc-tai-san`,
+    dropdown: 'danh-muc-tai-san',
+    idHover: 'danh-muc-tai-san',
+  },
 ];
