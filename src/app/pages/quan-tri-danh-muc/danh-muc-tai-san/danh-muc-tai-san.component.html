@@ -44,10 +44,6 @@
     <div class="group-button">
       <h3 class="label_dm">DANH SÁCH DANH MỤC TÀI SẢN</h3>
       <div class="buttons">
-        <button type="button" class="btn btn-sub btn-xoa" (click)="xoa()">
-          <i class="fa fa-trash-o do"></i>
-          <span>Xoá</span>
-        </button>
         <button type="button" class="btn btn-sub" (click)="export()">
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
@@ -65,7 +61,7 @@
           <th class="text-center" nzWidth="">Mô tả tài sản</th>
           <th class="text-center" nzWidth="150px">Đơn vị tính</th>
           <th class="text-center" nzWidth="150px">Trạng thái</th>
-          <th class="text-center" nzWidth="150px">Hành động</th>
+          <th class="text-center" nzWidth="120px">Hành động</th>
         </tr>
         <tr class="search-table">
           <th></th>
@@ -86,14 +82,16 @@
           <th>
             <nz-form-control>
               <nz-input-group>
-                <input type="text" placeholder="Nhập text" nz-input [(ngModel)]="rowItem.mota"/>
+                <input type="text" placeholder="Nhập text" nz-input [(ngModel)]="rowItem.moTa"/>
               </nz-input-group>
             </nz-form-control>
           </th>
           <th>
             <nz-form-control>
               <nz-input-group>
-                <input type="text" placeholder="Nhập text" nz-input [(ngModel)]="rowItem.dviTinh"/>
+                <nz-select  [(ngModel)]="rowItem.dviTinh"  >
+                  <nz-option *ngFor="let item of listDviTinh" [nzLabel]="item.giaTri" [nzValue]="item.giaTri"></nz-option>
+                </nz-select>
               </nz-input-group>
             </nz-form-control>
           </th>
@@ -106,8 +104,8 @@
               </nz-input-group>
             </nz-form-control>
           </th>
-          <th class="text-left">
-            <a (click)="themmoi()">
+          <th class="text-center">
+            <a (click)="themMoiItem(null, rowItem)">
               <i class="icon htvbdh_dau-cong"></i>
             </a>
             <a>
@@ -120,6 +118,11 @@
         <tr *ngFor="let data of dataTable let i = index">
           <ng-container *ngIf="!dataEdit[i].edit; else editTemplate">
             <td class="text-center">{{i + 1}}</td>
+            <td>{{data.maTaiSan}}</td>
+            <td>{{data.tenTaiSan}}</td>
+            <td>{{data.moTa}}</td>
+            <td>{{data.dviTinh}}</td>
+            <td>{{data.tenTrangThai}}</td>
             <td style="text-align: center;">
               <a (click)="startEdit(i)">
                 <i class="table-icon fa fa-pencil"></i>
@@ -148,14 +151,18 @@
             <th>
               <nz-form-control>
                 <nz-input-group>
-                  <input type="text" nz-input [(ngModel)]="dataEdit[i].data.mota"/>
+                  <input type="text" nz-input [(ngModel)]="dataEdit[i].data.moTa"/>
                 </nz-input-group>
               </nz-form-control>
             </th>
             <th>
               <nz-form-control>
                 <nz-input-group>
-                  <input type="text" nz-input [(ngModel)]="dataEdit[i].data.dviTinh"/>
+                  <nz-input-group>
+                    <nz-select  [(ngModel)]="dataEdit[i].data.dviTinh">
+                      <nz-option *ngFor="let item of listDviTinh" [nzLabel]="item.giaTri" [nzValue]="item.giaTri"></nz-option>
+                    </nz-select>
+                  </nz-input-group>
                 </nz-input-group>
               </nz-form-control>
             </th>
@@ -169,7 +176,7 @@
               </nz-form-control>
             </th>
             <th style="text-align: center;">
-              <a (click)="themmoi(dataEdit[i].data, data.id)">
+              <a (click)="themMoiItem(data.id, dataEdit[i].data)">
                 <i class="fa fa-save mr-3"></i>
               </a>
               <a (click)="huyEdit(i)">

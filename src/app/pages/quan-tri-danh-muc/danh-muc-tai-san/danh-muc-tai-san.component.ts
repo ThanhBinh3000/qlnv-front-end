@@ -12,9 +12,10 @@ import {DanhMucService} from "../../../services/danhmuc.service";
 import {PAGE_SIZE_DEFAULT} from "../../../constants/config";
 import {UserLogin} from "../../../models/userlogin";
 import {cloneDeep} from 'lodash';
-import {DanhMucDinhMucService} from "../../../services/danh-muc-dinh-muc.service";
-import {DanhMucMucPhi} from "../../../models/DeXuatKeHoachuaChonNhaThau";
 import {Globals} from "../../../shared/globals";
+import {DanhMucTaiSanService} from "../../../services/danh-muc-tai-san.service";
+import {UserService} from "../../../services/user.service";
+import dayjs from "dayjs";
 import {DanhMucKho} from "../../quan-ly-kho-tang/ke-hoach/danh-muc-du-an/danh-muc-du-an.component";
 
 
@@ -28,6 +29,7 @@ export class DanhMucTaiSanComponent implements OnInit {
   allChecked = false;
   indeterminate = false;
   dataTableAll: any[] = [];
+  listDviTinh: any[] = [];
   page: number = 1;
   pageSize: number = PAGE_SIZE_DEFAULT;
   totalRecord: number = 0;
@@ -43,22 +45,29 @@ export class DanhMucTaiSanComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private donviService: DonviService,
-    private danhMucService: DanhMucService,
-    private danhMucDinhMucService: DanhMucDinhMucService,
+    private userService : UserService,
+    private dmHangService : DanhMucService,
+    private dmTaiSan: DanhMucTaiSanService,
     private notification: NzNotificationService,
     private formBuilder: FormBuilder,
     private helperService: HelperService,
     private modal: NzModalService,
     private spinner: NgxSpinnerService,
-    private fb: FormBuilder,
-    private notificationService: NzNotificationService,
-    private globals: Globals
   ) {
   }
 
-  ngOnInit() {
-    this.search();
+  async ngOnInit() {
+    this.spinner.show();
+    try {
+      this.userInfo = this.userService.getUserLogin();
+      await this.search();
+      await this.loadDviTinh();
+      this.spinner.hide();
+    } catch (e) {
+      console.log('error: ', e);
+      this.spinner.hide();
+      this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+    }
   }
 
   updateEditCache(): void {
@@ -75,12 +84,15 @@ export class DanhMucTaiSanComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      paggingReq: {
-        limit: this.pageSize,
-        page: this.page - 1,
-      }
-    };
-    let res = await this.danhMucDinhMucService.search(body);
+      "moTa": this.searchFilter.moTa,
+      "paggingReq": {
+        "limit": 10,
+        "page": this.page - 1
+      },
+      "tenTaiSan": this.searchFilter.tenTaiSan,
+      "trangThai": this.searchFilter.trangThai
+    }
+    let res = await this.dmTaiSan.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       let data = res.data;
       this.dataTable = data.content;
@@ -99,12 +111,72 @@ export class DanhMucTaiSanComponent implements OnInit {
     this.updateEditCache()
     this.spinner.hide();
   }
-  async themmoi(data?, idInput?) {
-
+  async themMoiItem(id?, data? : DmTaiSan) {
+    this.spinner.show();
+    if (!this.checkValidators(data)) {
+      this.notification.error(MESSAGE.ERROR, "Vui lòng không để trống!!")
+      this.spinner.hide();
+      return;
+    }
+    if (id && id > 0) {
+      this.rowItem = data
+    }
+    let body = {
+      "dviTinh": this.rowItem.dviTinh,
+      "id": id? id : null,
+      "maTaiSan": this.rowItem.maTaiSan,
+      "moTa": this.rowItem.moTa,
+      "tenTaiSan": this.rowItem.tenTaiSan,
+      "trangThai": this.rowItem.trangThai,
+      "maDvi": this.userInfo.MA_DVI
+    }
+    let res;
+    if (id && id>0) {
+      res = await this.dmTaiSan.update(body);
+    } else {
+      res = await this.dmTaiSan.create(body);
+    }
+    if (res.msg == MESSAGE.SUCCESS) {
+      if(id && id>0) {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
+      } else {
+        this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
+      }
+      this.rowItem = new DmTaiSan();
+      await this.search();
+      this.updateEditCache();
+    }
+    this.spinner.hide();
   }
 
-  refresh() {
+  async loadDviTinh() {
+    this.listDviTinh = [];
+    let res = await this.dmHangService.danhMucChungGetAll('DON_VI_TINH');
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDviTinh = res.data;
+    }
+  }
 
+  checkValidators(rowItem: DmTaiSan) {
+    let arr = [];
+    let check = true;
+    arr.push(
+      rowItem.maTaiSan, rowItem.tenTaiSan, rowItem.moTa, rowItem.dviTinh, rowItem.trangThai
+    )
+    if (arr && arr.length > 0) {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] == '' || arr[i] == null || arr[i] == undefined) {
+          check = false;
+          break;
+        }
+      }
+    }
+    return check;
+  }
+
+
+  refresh() {
+    this.rowItem = new DmTaiSan();
   }
 
   clearFilter() {
@@ -123,21 +195,24 @@ export class DanhMucTaiSanComponent implements OnInit {
     };
   }
 
-  luuEdit(index: number): void {
-
-  }
-
   export() {
     if (this.totalRecord && this.totalRecord > 0) {
       this.spinner.show();
       try {
         let body = {
+          "moTa": this.searchFilter.moTa,
+          "paggingReq": {
+            "limit": 10,
+            "page": this.page - 1
+          },
+          "tenTaiSan": this.searchFilter.tenTaiSan,
+          "trangThai": this.searchFilter.trangThai
         }
 
-        this.danhMucDinhMucService
+        this.dmTaiSan
           .export(body)
           .subscribe((blob) =>
-            saveAs(blob, 'danh-sach-dinh-muc-phi-nhap-xuat-bao-quan.xlsx'),
+            saveAs(blob, 'danh-sach-danh-muc-tai-san.xlsx'),
           );
         this.spinner.hide();
       } catch (e) {
@@ -151,48 +226,6 @@ export class DanhMucTaiSanComponent implements OnInit {
   }
 
 
-  xoa() {
-    let dataDelete = [];
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.forEach((item) => {
-        if (item.checked) {
-          dataDelete.push(item.id);
-        }
-      });
-    }
-    if (dataDelete && dataDelete.length > 0) {
-      this.modal.confirm({
-        nzClosable: false,
-        nzTitle: 'Xác nhận',
-        nzContent: 'Bạn có chắc chắn muốn xóa các bản ghi đã chọn?',
-        nzOkText: 'Đồng ý',
-        nzCancelText: 'Không',
-        nzOkDanger: true,
-        nzWidth: 310,
-        nzOnOk: async () => {
-          this.spinner.show();
-          try {
-            let res = await this.danhMucDinhMucService.deleteMuti({ids: dataDelete});
-            if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
-              await this.search();
-              this.allChecked = false;
-            } else {
-              this.notification.error(MESSAGE.ERROR, res.msg);
-            }
-          } catch (e) {
-            console.log('error: ', e);
-            this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-          } finally {
-            this.spinner.hide();
-          }
-        },
-      });
-    } else {
-      this.notification.error(MESSAGE.ERROR, "Không có dữ liệu phù hợp để xóa.");
-    }
-  }
-
   xoaItem(item: any) {
     this.modal.confirm({
       nzClosable: false,
@@ -205,13 +238,13 @@ export class DanhMucTaiSanComponent implements OnInit {
       nzOnOk: () => {
         this.spinner.show();
         try {
-          this.danhMucDinhMucService.delete(item.id).then(async (res) => {
+          let body = {
+            ids : item.id
+          }
+          this.dmTaiSan.delete(body).then(async (res) => {
             if (res.msg == MESSAGE.SUCCESS) {
-              this.notification.success(
-                MESSAGE.SUCCESS,
-                MESSAGE.DELETE_SUCCESS,
-              );
-              this.search();
+              this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS,);
+              await this.search();
             } else {
               this.notification.error(MESSAGE.ERROR, res.msg);
             }
@@ -307,7 +340,7 @@ export class DmTaiSan {
   id : number;
   maTaiSan : string;
   tenTaiSan : string;
-  mota: string;
+  moTa: string;
   dviTinh : string;
   trangThai : string;
 
