@@ -135,7 +135,7 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                 this.deletePermission = 'NO';
                 this.passPermission = CVMB.DUYET_REPORT_GNV_TH;
                 this.approvePermission = CVMB.PHE_DUYET_REPORT_GNV_TH;
-                this.trangThais.find(e => e.id == Utils.TT_BC_1).tenDm = 'Mới';
+                // this.trangThais.find(e => e.id == Utils.TT_BC_1).tenDm = 'Mới';
                 this.isSend = false;
                 break;
             case 'thanhtoan':
@@ -239,6 +239,9 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
     }
 
     getStatusName(trangThai: string) {
+        if (trangThai == Utils.TT_BC_1 && this.searchFilter.loaiTimKiem == '1') {
+            return 'Mới';
+        }
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 

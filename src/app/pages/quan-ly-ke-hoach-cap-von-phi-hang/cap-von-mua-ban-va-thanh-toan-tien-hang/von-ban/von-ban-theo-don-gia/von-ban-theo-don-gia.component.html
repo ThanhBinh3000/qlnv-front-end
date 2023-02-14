@@ -42,7 +42,7 @@
                 <div class="header-text">
                     <div class="title-chi-tieu">
                         <span [ngClass]="statusClass()">{{getStatusName()}}</span>
-                        <span>Nộp tiền vốn thừa</span>
+                        <span>Vốn bán nộp lên đơn vị cấp trên</span>
                     </div>
                 </div>
             </div>
@@ -115,28 +115,28 @@
                         </ng-template>
                     </div>
                 </div> -->
-                <nz-table class="nowrap mt-16 table-chi-tiet" nzBordered>
+                <nz-table class="table__body" nzBordered [nzScroll]="{x: scrollX}">
                     <thead>
                         <tr>
-                            <th rowspan="2">Đơn vị</th>
+                            <th rowspan="2" nzWidth="300px" nzLeft>Đơn vị</th>
                             <th colspan="2">Số lượng</th>
-                            <th rowspan="2">Đơn giá</th>
+                            <th rowspan="2">Đơn giá <br /> (theo quyết định)</th>
                             <th rowspan="2">Giá trị theo kế hoạch</th>
                             <th rowspan="2">Giá trị thực hiện</th>
-                            <th rowspan="2">Số đã nộp Tổng cục (lũy kế)</th>
+                            <th rowspan="2">Số đã nộp Tổng cục <br /> (lũy kế)</th>
                             <th colspan="2">Nộp lần này</th>
-                            <th rowspan="2">Lũy kế sau lần nộp này</th>
+                            <th rowspan="2">Lũy kế sau <br /> lần nộp này</th>
                             <th rowspan="2">Số còn phải nộp</th>
-                            <th [hidden]="statusGui" rowSpan="2"></th>
+                            <th *ngIf="statusGui" rowSpan="2" style="width: 50px;" nzRight></th>
                         </tr>
                         <tr>
                             <th>Kế hoạch</th>
-                            <th>Thực hiện</th>
+                            <th>Thực hiện (lũy kế đến <br /> thời điểm báo cáo)</th>
                             <th>Ủy nhiệm chi ngày</th>
                             <th>Số nộp lần này</th>
                         </tr>
                         <tr>
-                            <th>A</th>
+                            <th nzLeft>A</th>
                             <th>1</th>
                             <th>2</th>
                             <th>3</th>
@@ -147,13 +147,13 @@
                             <th>8</th>
                             <th>9=8+6</th>
                             <th>10=5-9</th>
-                            <th [hidden]="statusGui"></th>
+                            <th *ngIf="statusGui" nzRight></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let data of lstCtietBcaos; let i = index">
                             <ng-container *ngIf="!editCache[data.id].edit; else editTemplate">
-                                <td>
+                                <td nzLeft>
                                     {{ data.tenDvi }}
                                 </td>
                                 <td>
@@ -186,12 +186,12 @@
                                 <td>
                                     {{ displayValue(data.soConPhaiNop) }}
                                 </td>
-                                <td [hidden]="statusGui">
+                                <td *ngIf="statusGui" nzRight>
                                     <i class="fa fa-pencil" (click)="startEdit(data.id)"></i>
                                 </td>
                             </ng-container>
                             <ng-template #editTemplate>
-                                <td>
+                                <td nzLeft>
                                     {{ editCache[data.id].data.tenDvi }}
                                 </td>
                                 <td>
@@ -236,7 +236,7 @@
                                 <td>
                                     {{ displayValue(editCache[data.id].data.soConPhaiNop) }}
                                 </td>
-                                <td [hidden]="statusGui">
+                                <td *ngIf="statusGui" nzRight>
                                     <a (click)="saveEdit(data.id)" class="save">Lưu</a>
                                     <a nz-popconfirm nzPopconfirmTitle="Bạn có chắc muốn hủy thao tác này?"
                                         (nzOnConfirm)="cancelEdit(data.id)" class="save">
@@ -251,22 +251,22 @@
                     <div nz-col nzSpan="24">
                         <label class="search__label">Thuyết minh</label>
                         <textarea rows="2" nz-input [(ngModel)]="baoCao.ttGui.thuyetMinh"
-                            [disabled]="statusGui"></textarea>
+                            [disabled]="!statusGui"></textarea>
                     </div>
                 </div>
                 <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                     <div nz-col class="gutter-row" [nzSpan]="3">
                         Danh sách văn bản đính kèm
                         <nz-upload [(nzFileList)]="baoCao.ttGui.fileList" [nzBeforeUpload]="beforeUploadGui"
-                            [hidden]="statusGui">
+                            *ngIf="statusGui">
                             <button nz-button>
                                 <i nz-icon nzType="upload"></i>
                                 Select File
                             </button>
                         </nz-upload>
                         <button nz-button [nzType]="'primary'" (click)="handleUploadGui()"
-                            [disabled]="!baoCao.ttGui.fileList || baoCao.ttGui.fileList.length === 0"
-                            [hidden]="statusGui" style="margin-top: 16px">
+                            [disabled]="!baoCao.ttGui.fileList || baoCao.ttGui.fileList.length === 0" *ngIf="statusGui"
+                            style="margin-top: 16px">
                             Thêm vào danh sách
                         </button>
                     </div>
@@ -289,7 +289,7 @@
                                         <a (click)="downloadFileGui(data.id)">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <a *ngIf="!statusGui" (click)="deleteFileGui(data.id)">
+                                        <a *ngIf="statusGui" (click)="deleteFileGui(data.id)">
                                             <i class="fa fa-trash-o do"></i>
                                         </a>
                                     </td>
@@ -304,7 +304,7 @@
                 <nz-card class="mt-2px flex-card data-table card-border-content table-card"
                     nzTitle="Thông tin nơi nhận">
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
-                        <ng-container *ngIf="statusNhan; else nhap">
+                        <ng-container *ngIf="!statusNhan; else nhap">
                             <div nz-col nzSpan="6">
                                 Ngày nhận lệnh chuyển có: <span>{{ getDate(baoCao.ttNhan.ngayNhanLenhChuyenCo) }}</span>
                             </div>
@@ -332,14 +332,14 @@
                         <div nz-col nzSpan="24" style="margin-top: 10px;">
                             <label class="search__label">Thuyết minh</label>
                             <textarea rows="2" nz-input [(ngModel)]="baoCao.ttNhan.thuyetMinh"
-                                [disabled]="statusNhan"></textarea>
+                                [disabled]="!statusNhan"></textarea>
                         </div>
                     </div>
                     <div nz-row [nzGutter]="{ xs: 8, sm: 16, md: 24, lg: 32 }" style="margin-top: 10px">
                         <div nz-col class="gutter-row" [nzSpan]="3">
                             Danh sách văn bản đính kèm
                             <nz-upload [(nzFileList)]="baoCao.ttNhan.fileList" [nzBeforeUpload]="beforeUploadNhan"
-                                [hidden]="statusNhan">
+                                *ngIf="statusNhan">
                                 <button nz-button>
                                     <i nz-icon nzType="upload"></i>
                                     Select File
@@ -347,7 +347,7 @@
                             </nz-upload>
                             <button nz-button [nzType]="'primary'" (click)="handleUploadNhan()"
                                 [disabled]="!baoCao.ttNhan.fileList || baoCao.ttNhan.fileList?.length === 0"
-                                [hidden]="statusNhan" style="margin-top: 16px">
+                                *ngIf="statusNhan" style="margin-top: 16px">
                                 Thêm vào danh sách
                             </button>
                         </div>
@@ -370,7 +370,7 @@
                                             <a (click)="downloadFileNhan(data.id)">
                                                 <i class="fa fa-eye"></i>
                                             </a>
-                                            <a *ngIf="!statusNhan" (click)="deleteFileNhan(data.id)">
+                                            <a *ngIf="statusNhan" (click)="deleteFileNhan(data.id)">
                                                 <i class="fa fa-trash-o do"></i>
                                             </a>
                                         </td>

@@ -40,6 +40,9 @@ export class DialogTaoMoiVonBanComponent implements OnInit {
             this.response.canCuVeGia = Utils.QD_DON_GIA;
         }
         this.loaiDns = this.loaiDns.filter(e => e.id != Utils.MUA_VTU);
+        if (this.userService.isChiCuc()) {
+            this.loaiDns = this.loaiDns.filter(e => e.id == Utils.MUA_THOC);
+        }
         this.userInfo = this.userService.getUserLogin();
     }
 

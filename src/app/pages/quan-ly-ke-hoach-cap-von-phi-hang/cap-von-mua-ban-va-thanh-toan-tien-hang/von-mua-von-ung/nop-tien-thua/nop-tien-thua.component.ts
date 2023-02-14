@@ -8,12 +8,11 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVonMuaBanTtth.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { AMOUNT, CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, QUATITY, sumNumber, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, BOX_NUMBER_WIDTH, CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, numberOnly, QUATITY, sumNumber, Utils } from 'src/app/Utility/utils';
 import { luyKeTienThua, Report, TienThua, TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
@@ -39,6 +38,7 @@ export class NopTienThuaComponent implements OnInit {
     donViTiens: any[] = DON_VI_TIEN;
     amount = AMOUNT;
     quatity = QUATITY;
+    scrollX: string;
     //trang thai cac nut
     isParent = false;
     statusGui = false;
@@ -86,7 +86,6 @@ export class NopTienThuaComponent implements OnInit {
     constructor(
         private quanLyVonPhiService: QuanLyVonPhiService,
         private capVonMuaBanTtthService: CapVonMuaBanTtthService,
-        private danhMuc: DanhMucHDVService,
         private spinner: NgxSpinnerService,
         private datePipe: DatePipe,
         public userService: UserService,
@@ -192,23 +191,28 @@ export class NopTienThuaComponent implements OnInit {
     getStatusButton() {
         if (this.baoCao.maDvi == this.userInfo?.MA_DVI) {
             const trangThai = this.baoCao.ttGui.trangThai;
-            this.statusNhan = true;
-            this.statusGui = !(Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTVT));
+            this.statusNhan = false;
+            this.statusGui = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTVT);
             this.saveStatus = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTVT);
             this.submitStatus = Utils.statusApprove.includes(trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_NTVT) && !(!this.baoCao.id);
             this.passStatus = Utils.statusDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_NTVT);
             this.approveStatus = Utils.statusPheDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_NTVT);
         } else if (this.isParent) {
             const trangThai = this.baoCao.ttNhan.trangThai;
-            this.statusGui = true;
-            this.statusNhan = !(Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_TH));
+            this.statusGui = false;
+            this.statusNhan = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_TH);
             this.saveStatus = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_TH);
             this.submitStatus = Utils.statusApprove.includes(trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_TH) && !(!this.baoCao.id);
             this.passStatus = Utils.statusDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_TH);
             this.approveStatus = Utils.statusPheDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV_TH);
         } else {
-            this.statusGui = true;
-            this.statusNhan = true;
+            this.statusGui = false;
+            this.statusNhan = false;
+        }
+        if (this.statusGui) {
+            this.scrollX = (100 + (this.userService.isCuc() ? 18 : 15) * BOX_NUMBER_WIDTH).toString() + 'px';
+        } else {
+            this.scrollX = (50 + (this.userService.isCuc() ? 18 : 15) * BOX_NUMBER_WIDTH).toString() + 'px';
         }
     }
 
