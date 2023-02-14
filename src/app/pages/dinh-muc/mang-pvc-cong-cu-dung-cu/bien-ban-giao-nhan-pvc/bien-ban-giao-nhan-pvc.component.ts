@@ -8,11 +8,11 @@ import {NzModalService} from "ng-zorro-antd/modal";
 import {KtKhXdHangNamService} from "../../../../services/kt-kh-xd-hang-nam.service";
 import {DonviService} from "../../../../services/donvi.service";
 @Component({
-  selector: 'app-de-xuat-nhu-cau',
-  templateUrl: './de-xuat-nhu-cau.component.html',
-  styleUrls: ['./de-xuat-nhu-cau.component.scss']
+  selector: 'app-bien-ban-giao-nhan-pvc',
+  templateUrl: './bien-ban-giao-nhan-pvc.component.html',
+  styleUrls: ['./bien-ban-giao-nhan-pvc.component.scss']
 })
-export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
+export class BienBanGiaoNhanPvcComponent extends Base2Component implements OnInit {
   isViewDetail : boolean;
 
   constructor(
@@ -35,11 +35,12 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
       role: [null],
     });
     this.filterTable = {
-      soCongVan: '',
+      soBienBan: '',
       namKeHoach: '',
-      trichYeu: '',
-      ngayKy: '',
-      soQdKh: '',
+      soHopDong: '',
+      ngayGiaoNhan: '',
+      benGiao: '',
+      benNhan: '',
       tenTrangThai: '',
     };
   }
