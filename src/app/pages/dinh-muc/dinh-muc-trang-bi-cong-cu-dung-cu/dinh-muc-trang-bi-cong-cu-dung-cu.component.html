@@ -53,7 +53,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Export</span>
         </button>
-        <button
+        <button *ngIf="userService.isTongCuc()"
           type="button" class="btn btn-main" (click)="redirectToChiTiet(0,false)">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -80,7 +80,7 @@
           <th width="175px">Ngày hiệu lực</th>
           <th width="175px">Ngày hết hiệu lực</th>
           <th width="175px">Trạng thái</th>
-          <th width="130px">Hành động</th>
+          <th width="130px" *ngIf="userService.isTongCuc()">Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -123,7 +123,7 @@
                      (input)="filterInTable('tenTrangThai',filterTable.tenTrangThai)"/>
             </nz-input-group>
           </td>
-          <td>
+          <td *ngIf="userService.isTongCuc()">
           </td>
         </tr>
         <tr *ngFor="let data of basicTable.data; let i = index">
@@ -138,11 +138,11 @@
           <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.ngayHetHieuLuc | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
-          <td>
-            <a *ngIf="data.trangThai != STATUS.DU_THAO">
+          <td class="text-center" *ngIf="userService.isTongCuc()">
+            <a *ngIf="data.trangThai != STATUS.DU_THAO" (click)="redirectToChiTiet(data.id,true)">
               <i class=" icon htvbdh_eye"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO">
+            <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="redirectToChiTiet(data.id)" >
               <i class="fa fa-pencil"></i>
             </a>
             <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
@@ -173,5 +173,7 @@
   </div>
 </div>
 <ng-template #templateThemmoi>
-  <app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu></app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu>
+  <app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu [id]="selectedId" (showListEvent)="showList()"
+                                                   [isViewDetail]="isViewDetail"
+                                                   [idInput]="selectedId"></app-thong-tin-dinh-muc-trang-bi-cong-cu-dung-cu>
 </ng-template>
