@@ -13,7 +13,7 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { AMOUNT, CAN_CU_GIA, CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, mulNumber, numberOnly, QUATITY, sumNumber, Utils } from 'src/app/Utility/utils';
+import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVMB, displayNumber, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, mulNumber, numberOnly, QUATITY, sumNumber, Utils } from 'src/app/Utility/utils';
 import { LuyKeThanhToan, receivedInfo, Report, sendInfo, ThanhToan, TRANG_THAI } from '../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
@@ -38,6 +38,7 @@ export class VonBanTheoHopDongComponent implements OnInit {
     donViTiens: any[] = DON_VI_TIEN;
     amount = AMOUNT;
     quatity = QUATITY;
+    scrollX: string;
     //trang thai cac nut
     isParent = false;
     statusGui = false;
@@ -185,23 +186,28 @@ export class VonBanTheoHopDongComponent implements OnInit {
     getStatusButton() {
         if (this.baoCao.maDvi == this.userInfo?.MA_DVI) {
             const trangThai = this.baoCao.ttGui.trangThai;
-            this.statusNhan = true;
-            this.statusGui = !(Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTV_BH));
+            this.statusNhan = false;
+            this.statusGui = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTV_BH);
             this.saveStatus = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTV_BH);
             this.submitStatus = Utils.statusApprove.includes(trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_NTV_BH) && !(!this.baoCao.id);
             this.passStatus = Utils.statusDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_NTV_BH);
             this.approveStatus = Utils.statusPheDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_NTV_BH);
         } else if (this.isParent) {
             const trangThai = this.baoCao.ttNhan.trangThai;
-            this.statusGui = true;
-            this.statusNhan = !(Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH));
+            this.statusGui = false;
+            this.statusNhan = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH);
             this.saveStatus = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH);
             this.submitStatus = Utils.statusApprove.includes(trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_BH) && !(!this.baoCao.id);
             this.passStatus = Utils.statusDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_BH);
             this.approveStatus = Utils.statusPheDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV_BH);
         } else {
-            this.statusGui = true;
-            this.statusNhan = true;
+            this.statusGui = false;
+            this.statusNhan = false;
+        }
+        if (this.statusGui) {
+            this.scrollX = (500 + 11 * BOX_NUMBER_WIDTH).toString() + 'px';
+        } else {
+            this.scrollX = (450 + 11 * BOX_NUMBER_WIDTH).toString() + 'px';
         }
     }
 
