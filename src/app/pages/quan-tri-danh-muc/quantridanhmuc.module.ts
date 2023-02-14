@@ -18,6 +18,7 @@ import { DanhMucCongCuDungCuComponent } from './danh-muc-cong-cu-dung-cu/danh-mu
 import { DanhMucTaiSanComponent } from './danh-muc-tai-san/danh-muc-tai-san.component';
 import { DanhMucThuKhoComponent } from './danh-muc-thu-kho/danh-muc-thu-kho.component';
 import { DanhMucDviLqComponent } from './danh-muc-dvi-lq/danh-muc-dvi-lq.component';
+import { ThemMoiDmDviLqComponent } from './danh-muc-dvi-lq/them-moi-dm-dvi-lq/them-moi-dm-dvi-lq.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { DanhMucDviLqComponent } from './danh-muc-dvi-lq/danh-muc-dvi-lq.compone
     DanhMucCongCuDungCuComponent,
     DanhMucTaiSanComponent,
     DanhMucThuKhoComponent,
-    DanhMucDviLqComponent
+    DanhMucDviLqComponent,
+    ThemMoiDmDviLqComponent
   ],
   imports: [CommonModule, QuanTriDanhMucRoutingModule, ComponentsModule, MainModule, NzTreeViewModule],
 
