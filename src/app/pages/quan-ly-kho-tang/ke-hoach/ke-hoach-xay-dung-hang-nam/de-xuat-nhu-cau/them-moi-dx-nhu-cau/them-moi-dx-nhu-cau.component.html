@@ -3,7 +3,7 @@
     <div class="header-text">
       <div class="title-chi-tieu">
       <span
-        [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
+        [ngClass]="(formData.value.trangThai == STATUS.DA_DUYET_LDC || formData.value.trangThai == STATUS.DA_DUYET_LDV)  ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
         {{ formData.value.tenTrangThai }}
       </span>
         <span>ĐỀ XUẤT NHU CẦU XÂY DỰNG KHO TÀNG DTQG HÀNG NĂM</span>
@@ -15,37 +15,26 @@
         <span>Quay lại</span>
       </button>
       <button type="button" class="btn btn-sub xanh-nhat ml-2"
-              *ngIf=" (formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.DU_THAO) && userService.isCuc() "
+              *ngIf=" ((formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP || formData.value.trangThai == STATUS.DU_THAO) && userService.isCuc())|| (formData.value.trangThai == STATUS.TU_CHOI_LDV && userService.isTongCuc()) "
               (click)="save(true)">
         <i class="icon htvbdh_tcdt_print"></i>
         <span>Lưu và gửi duyệt</span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()"
-        type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_TP)">
+        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC ) && userService.isCuc()) || (formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isTongCuc())"
+        type="button" class="btn btn-sub ml-2" (click)="reject(idInput,STATUS.TU_CHOI_TP)">
         <i class="icon htvbdh_tcdt_tuchoi do"></i>
         <span>Từ chối</span>
       </button>
       <button
-        *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc()"
-        type="button" class="btn btn-sub" (click)="reject(idInput,STATUS.TU_CHOI_LDC)">
-        <i class="icon htvbdh_tcdt_tuchoi do"></i>
-        <span>Từ chối</span>
-      </button>
-      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_TP && userService.isCuc()"
-              type="button" class="btn btn-sub"
-              (click)="approve(idInput,STATUS.DA_DUYET_LDV,'Bạn có muốn duyệt quyết định này?')">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
-      </button>
-      <button *ngIf="formData.value.trangThai == STATUS.CHO_DUYET_LDC && userService.isCuc()"
-              type="button" class="btn btn-sub"
+        *ngIf="((formData.value.trangThai == STATUS.CHO_DUYET_TP || formData.value.trangThai == STATUS.CHO_DUYET_LDC ) && userService.isCuc()) || (formData.value.trangThai == STATUS.DA_DUYET_LDC && userService.isTongCuc())"
+                      type="button" class="btn btn-sub ml-2"
               (click)="approve(idInput,STATUS.DA_DUYET_LDV,'Bạn có muốn duyệt quyết định này?')">
         <i class="icon htvbdh_tcdt_pheduyet"></i>
         <span>Duyệt</span>
       </button>
       <button type="button" class="btn btn-sub xanh ml-2"
-              *ngIf=" (formData.value.trangThai == STATUS.DU_THAO  ||formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP ) && userService.isCuc()"
+              *ngIf=" ((formData.value.trangThai == STATUS.DU_THAO  ||formData.value.trangThai == STATUS.TU_CHOI_LDC || formData.value.trangThai == STATUS.TU_CHOI_TP ) && userService.isCuc()) || (formData.value.trangThai == STATUS.TU_CHOI_LDV && userService.isTongCuc())"
               (click)="save(false)">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -68,7 +57,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group>
-                <input class="search__input" formControlName="tenDvi" readonly="true" nz-input/>
+                <input class="search__input" formControlName="tenDvi" [readonly]="isViewDetail" nz-input/>
               </nz-input-group>
             </nz-form-control>
           </nz-form-item>
@@ -79,7 +68,7 @@
             </nz-form-label>
             <nz-form-control>
               <nz-input-group nzAddOnAfter="{{maQd}}">
-                <nz-input-number formControlName="soCongVan" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
+                <nz-input-number [nzDisabled]=" isViewDetail" formControlName="soCongVan" [nzMin]="1" [nzMax]="9999999" [nzStep]="1" [nzSize]="'small'">
                 </nz-input-number>
               </nz-input-group>
             </nz-form-control>
@@ -90,7 +79,7 @@
           </nz-form-label>
           <nz-form-control>
             <nz-input-group>
-              <nz-select formControlName="namKeHoach"  nzAllowClear >
+              <nz-select [nzDisabled]="isViewDetail" formControlName="namKeHoach"  nzAllowClear >
                 <nz-option *ngFor="let p of listNam" [nzValue]="p.text" [nzLabel]="p.value" >
                 </nz-option>
               </nz-select>
@@ -102,7 +91,7 @@
           </nz-form-label>
           <nz-form-control>
             <nz-input-group>
-              <nz-select formControlName="soQdTrunghan"  nzAllowClear (ngModelChange)="updateDx($event)">
+              <nz-select [nzDisabled]="isViewDetail" formControlName="soQdTrunghan"  nzAllowClear (ngModelChange)="updateDx($event)">
                 <nz-option *ngFor="let p of listQdKhTh" [nzValue]="p.soCongVan" [nzLabel]="p.soCongVan" >
                 </nz-option>
               </nz-select>
@@ -113,13 +102,13 @@
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired>Trích yếu
             </nz-form-label>
-            <input formControlName="trichYeu"  class="search__input" nz-input/>
+            <input [readonly]="isViewDetail" formControlName="trichYeu"  class="search__input" nz-input/>
           </nz-form-item>
         </div>
         <div nz-col nzSpan="3">
           <nz-form-item class="form-item">
             <nz-form-label [nzNoColon]="true" nzRequired> Ngày ký</nz-form-label>
-            <nz-date-picker formControlName="ngayKy"  nzFormat="dd/MM/yyyy"></nz-date-picker>
+            <nz-date-picker [nzDisabled]="isViewDetail" formControlName="ngayKy"  nzFormat="dd/MM/yyyy"></nz-date-picker>
           </nz-form-item>
         </div>
         <div nz-col [nzSpan]="24">
@@ -156,7 +145,7 @@
         <th class="text-center" width="296px" colSpan="2">Lũy kế vốn đã bố trí đến ngày 31/12/xx-1</th>
         <th class="text-center" width="330px" colSpan="2">Nhu cầu kế hoạch đầu tư giai đoạn 2021-2025</th>
         <th class="text-center" width="270px" rowSpan="2">KH vốn đầu tư <br> nguồn NSNN năm 2022</th>
-        <th class="text-center" width="69px" rowSpan="2" nzRight>Hành động</th>
+        <th class="text-center" *ngIf="!isViewDetail" width="69px" rowSpan="2" nzRight>Hành động</th>
       </tr>
       <tr>
         <th class="text-center" style="width: 10%;">Tổng số</th>
@@ -258,17 +247,17 @@
           <td>{{ data.tenDuAn }}</td>
           <td>{{ data.diaDiem }}</td>
           <td>{{ data.loaiDuAn }}</td>
-          <td>{{ data.tgKhoiCong + ' - ' + data.tgHoanThanh }}</td>
+          <td>{{ data.tgKhoiCongTu + ' - ' + data.tgHoanThanhDen }}</td>
           <td>{{ data.khoi }}</td>
           <td>{{ data.soQdPd }}</td>
           <td>{{ data.tmdtDuKien }}</td>
           <td>{{ data.nstwDuKien }}</td>
-          <td>{{ data.tmdtDuyet }}</td>
-          <td>{{ data.nstwDuyet }}</td>
           <td>{{ data.tongSoLuyKe }}</td>
           <td>{{ data.luyKeNstw }}</td>
+          <td>{{ data.tmdtDuyet }}</td>
+          <td>{{ data.nstwDuyet }}</td>
           <td>{{ data.vonDauTu }}</td>
-          <td style="text-align: center;" nzRight>
+          <td style="text-align: center;" nzRight *ngIf="!isViewDetail">
             <a (click)="editItem(idx)">
               <i class=" fa fa-pencil"></i>
             </a>

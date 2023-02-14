@@ -319,21 +319,14 @@
               </nz-form-control>
             </nz-form-item>
           </div>
-          <div nz-col nzSpan="2" *ngIf="formDataDetail.value.ccRaDm && formDataDetail.value.ccRaDm == 'KL'">
+          <div nz-col nzSpan="4" *ngIf="formDataDetail.value.ccRaDm && formDataDetail.value.ccRaDm == 'KL'">
             <nz-form-item>
               <nz-form-control [nzErrorTip]="error">
-                <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Định mức TB
+                <nz-form-label nzRequired [nzNoColon]="true" style="width: 200px"> Định mức TB / Khối lượng
                 </nz-form-label>
-                <input type="number" nz-input formControlName="dmTrangBi"/>
-              </nz-form-control>
-            </nz-form-item>
-          </div>
-          <div nz-col nzSpan="2" *ngIf="formDataDetail.value.ccRaDm && formDataDetail.value.ccRaDm == 'KL'">
-            <nz-form-item>
-              <nz-form-control [nzErrorTip]="error">
-                <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Khối lượng
-                </nz-form-label>
-                <input type="number" nz-input formControlName="khoiLuong"/>
+                <input style="width: 90px" type="number" nz-input formControlName="dmTrangBi"/>
+                <span>/</span>
+                <input style="width: 80px" type="number" nz-input formControlName="khoiLuong"/>
               </nz-form-control>
             </nz-form-item>
           </div>

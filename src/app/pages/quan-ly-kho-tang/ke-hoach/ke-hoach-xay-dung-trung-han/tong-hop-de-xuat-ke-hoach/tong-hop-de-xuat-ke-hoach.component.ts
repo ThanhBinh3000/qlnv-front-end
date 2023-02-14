@@ -119,6 +119,7 @@ export class TongHopDeXuatKeHoachComponent implements OnInit {
       ngayKyDen: this.searchFilter.ngayTongHop[1],
       namBatDau: this.searchFilter.namBatDau,
       namKetThuc: this.searchFilter.namKetThuc,
+      maDvi : this.userInfo.MA_DVI,
       paggingReq: {
         limit: this.pageSize,
         page: this.page - 1,

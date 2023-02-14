@@ -151,7 +151,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngIf="!isViewDetail">
+        <tr *ngIf="isViewDetail">
           <td class="text-center" ></td>
           <td class="text-center">
             <nz-input-group>
@@ -230,7 +230,7 @@
             <td>{{ data.tenDuAn }}</td>
             <td>{{ data.diaDiem }}</td>
             <td>{{ data.loaiDuAn }}</td>
-            <td>{{ data.tgKcHt }}</td>
+            <td>{{ data.tgKhoiCongTu + '-' + data.tgHoanThanhDen }}</td>
             <td>{{ data.khoi }}</td>
             <td>{{ data.soQdPd }}</td>
             <td>{{ data.tmdtDuKien }}</td>
@@ -270,7 +270,7 @@
             </td>
             <td >
               <nz-input-group>
-                <input nz-input [(ngModel)]="dataEdit[idx].data.tgKcHt" readonly  />
+                <input nz-input [(ngModel)]="dataEdit[idx].data.tgKhoiCongTu +'-' +dataEdit[idx].data.tgHoanThanhDen " readonly  />
               </nz-input-group>
             </td>
             <td >

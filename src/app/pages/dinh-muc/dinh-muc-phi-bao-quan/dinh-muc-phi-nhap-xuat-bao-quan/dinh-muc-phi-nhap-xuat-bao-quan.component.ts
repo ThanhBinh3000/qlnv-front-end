@@ -76,6 +76,7 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
       this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('DD/MM/YYYY');
       this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('DD/MM/YYYY');
     }
+    this.formData.value.capDvi = this.capDvi;
     this.search();
   }
 
