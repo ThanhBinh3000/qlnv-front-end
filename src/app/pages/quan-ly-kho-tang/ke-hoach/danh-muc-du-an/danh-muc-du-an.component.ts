@@ -250,7 +250,8 @@ export class DanhMucDuAnComponent implements OnInit {
     this.spinner.show();
     try {
       let body = {
-        "denNam": this.searchFilter.giaiDoan ? this.searchFilter.giaiDoan[1] : null,
+        "role": this.userService.isTongCuc() ? 'TC' : 'CUC',
+        "denNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[1]).get('year') : null,
         "diaDiem": this.searchFilter.diaDiem,
         "khoi": this.searchFilter.khoi,
         "paggingReq": {
@@ -264,7 +265,8 @@ export class DanhMucDuAnComponent implements OnInit {
         "tgKhoiCongTu": this.searchFilter.tgKhoiCong ? dayjs(this.searchFilter.tgKhoiCong[0]).get('year') : null,
         "tgKhoiCongDen": this.searchFilter.tgKhoiCong ? dayjs(this.searchFilter.tgKhoiCong[1]).get('year') : null,
         "trangThai": this.searchFilter.trangThai,
-        "tuNam": this.searchFilter.giaiDoan ? this.searchFilter.giaiDoan[0] : null,
+        "tuNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[0]).get('year') : null,
+        "maDvi": this.userService.isTongCuc() ? this.searchFilter.maDvi : this.userInfo.MA_DVI
       };
       this.danhMucKhoService
         .export(body)
@@ -280,13 +282,19 @@ export class DanhMucDuAnComponent implements OnInit {
   }
 
   async startEdit(idx: number, id: number) {
-    // console.log(  this.dataEdit[idx].data.tgKhoiCong)
-    // console.log(  this.dataEdit[idx].data.tgHoanThanh)
     this.dataEdit[idx].edit = true;
     await this.getDetail(id);
     if (this.itemDetail) {
-      this.dataEdit[idx].data.tgKhoiCong = [this.itemDetail.tgKhoiCongTu, this.itemDetail.tgKhoiCongDen];
-      this.dataEdit[idx].data.tgHoanThanh = [this.itemDetail.tgHoanThanhTu, this.itemDetail.tgHoanThanhDen];
+      const tgKhoiCongTu = new Date();
+      tgKhoiCongTu.setFullYear(this.itemDetail.tgKhoiCongTu)
+      const tgKhoiCongDen = new Date();
+      tgKhoiCongDen.setFullYear(this.itemDetail.tgKhoiCongDen)
+      const tgHoanThanhTu = new Date();
+      tgHoanThanhTu.setFullYear(this.itemDetail.tgHoanThanhTu)
+      const tgHoanThanhDen = new Date();
+      tgHoanThanhDen.setFullYear(this.itemDetail.tgHoanThanhDen)
+      this.dataEdit[idx].data.tgKhoiCong = [tgKhoiCongTu, tgKhoiCongDen];
+      this.dataEdit[idx].data.tgHoanThanh = [tgHoanThanhTu, tgHoanThanhDen];
     }
   }
 
@@ -418,7 +426,11 @@ export class DanhMucKho {
   tuNam: number;
   denNam: number;
   tgKhoiCong: any;
+  tgKhoiCongTu: number;
+  tgKhoiCongDen: number;
   tgHoanThanh: any;
+  tgHoanThanhTu: number;
+  tgHoanThanhDen: number;
   tmdtDuKien: number;
   nstwDuKien: number;
   soQdPd: string;
