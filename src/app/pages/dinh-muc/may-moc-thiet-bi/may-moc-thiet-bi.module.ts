@@ -7,12 +7,16 @@ import { DeXuatNhuCauChiCucComponent } from './de-xuat-nhu-cau-chi-cuc/de-xuat-n
 import { ThongTinDeXuatNhuCauChiCucComponent } from './de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component';
 import { MayMocThietBiRoutingModule } from './may-moc-thiet-bi-routing.module';
 import { MayMocThietBiComponent } from './may-moc-thiet-bi.component';
+import { MmBienBanGiaoNhanComponent } from './mm-bien-ban-giao-nhan/mm-bien-ban-giao-nhan.component';
+import { MmHienTrangCcdcComponent } from './mm-hien-trang-ccdc/mm-hien-trang-ccdc.component';
 
 @NgModule({
   declarations: [
     MayMocThietBiComponent,
     DeXuatNhuCauChiCucComponent,
-    ThongTinDeXuatNhuCauChiCucComponent
+    ThongTinDeXuatNhuCauChiCucComponent,
+    MmBienBanGiaoNhanComponent,
+    MmHienTrangCcdcComponent
   ],
   imports: [
     CommonModule,
