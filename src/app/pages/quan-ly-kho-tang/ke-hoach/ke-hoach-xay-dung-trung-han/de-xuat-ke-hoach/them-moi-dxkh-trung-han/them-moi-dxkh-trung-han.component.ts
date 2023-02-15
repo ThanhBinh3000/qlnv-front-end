@@ -101,6 +101,19 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     }
   }
 
+  checkExitsData(item, dataItem): boolean {
+    let rs = false;
+    if (dataItem && dataItem.length > 0) {
+      dataItem.forEach(it => {
+        if (it.maDuAn == item.maDuAn) {
+          rs = true;
+          return;
+        }
+      })
+    }
+    return rs;
+  }
+
   quayLai() {
     this.showListEvent.emit();
   }
@@ -376,6 +389,10 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     if (!this.dataTable) {
       this.dataTable = [];
     }
+    if(this.checkExitsData(this.rowItem, this.dataTable)) {
+      this.notification.error(MESSAGE.ERROR, 'Dữ liệu bị trùng lặp!')
+      return;
+    }
     this.rowItem.maDvi = this.userInfo.MA_DVI
     this.dataTable = [...this.dataTable, this.rowItem]
     this.rowItem = new DanhMucKho();
@@ -394,6 +411,10 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
   }
 
   luuEdit(index: number): void {
+    if (this.checkExitsData(this.dataEdit[index].data, this.dataTable)) {
+      this.notification.error(MESSAGE.ERROR, 'Dữ liệu bị trùng lặp!')
+      return;
+    }
     Object.assign(this.dataTable[index], this.dataEdit[index].data);
     this.dataEdit[index].edit = false;
   }
