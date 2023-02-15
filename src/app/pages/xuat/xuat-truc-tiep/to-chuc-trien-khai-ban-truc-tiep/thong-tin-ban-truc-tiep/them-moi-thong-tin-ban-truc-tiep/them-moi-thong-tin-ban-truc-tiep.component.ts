@@ -26,7 +26,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
   @Input() isView: boolean;
   @Output()
   showListEvent = new EventEmitter<any>();
-  fileDinhKem: any[] = [];
+  fileDinhKems: any[] = [];
   dataDetail: any;
   radioValue: string = 'Chào giá';
 
@@ -52,8 +52,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
         tenDvi: [''],
         pthucBanTrucTiep: [''],
         diaDiemChaoGia: [''],
-        ngayMkho: [''],
-        ngayKthuc: [''],
+        ngayMkho: [],
+        ngayKthuc: [],
         moTaHangHoa: [''],
         loaiVthh: [''],
         tenLoaiVthh: [''],
@@ -81,6 +81,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     } finally {
       this.spinner.hide();
     }
+    this.emitDataTable()
+    this.updateEditCache()
   }
 
 
@@ -88,7 +90,6 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     if (id > 0) {
       await this.quyetDinhPdKhBanTrucTiepService.getDtlDetail(id)
         .then(async (res) => {
-
           const dataDtl = res.data;
           this.dataTable = dataDtl.xhTcTtinBttList
           this.formData.patchValue({
@@ -96,6 +97,7 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
             diaDiemChaoGia: dataDtl.diaDiemChaoGia,
             ngayMkho: dataDtl.ngayMkho,
             ngayKthuc: dataDtl.ngayKthuc,
+            ghiChu: dataDtl.ghiChu
           })
           if (dataDtl) {
             await this.quyetDinhPdKhBanTrucTiepService.getDetail(dataDtl.idQdHdr).then(async (hdr) => {
@@ -175,7 +177,8 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
     let body = this.formData.value;
     body.children = this.dataTable;
     body.pthucBanTrucTiep = this.radioValue;
-    let res = await this.createUpdate(body);
+    body.fileDinhKems = this.fileDinhKems;
+    let res = await this.chaoGiaMuaLeUyQuyenService.create(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.notification.success(MESSAGE.SUCCESS, MESSAGE.UPDATE_SUCCESS);
       await this.loadDetail(this.idInput)
