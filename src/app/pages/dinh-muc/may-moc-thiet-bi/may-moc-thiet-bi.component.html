@@ -1,7 +1,7 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item nzSelected (click)="selectTab('dinhmuctrangbi')" *ngIf="userService.isTongCuc()">
+    <li nz-menu-item [nzSelected]="tabSelected == 'dinhmuctrangbi'" (click)="selectTab('dinhmuctrangbi')">
       Định mức trang bị
     </li>
     <li nz-menu-item (click)="selectTab('dexuatcuc')" *ngIf="userService.isTongCuc()">
@@ -16,7 +16,7 @@
     <li nz-menu-item (click)="selectTab('hopdong')" *ngIf="userService.isTongCuc()">
       Hợp đồng
     </li>
-    <li nz-menu-item (click)="selectTab('dexuatchicuc')" *ngIf="!userService.isTongCuc()">
+    <li nz-menu-item [nzSelected]="tabSelected == 'dexuatchicuc'" (click)="selectTab('dexuatchicuc')" *ngIf="!userService.isTongCuc()">
       Đề xuất nhu cầu của Chi cục
     </li>
     <li nz-menu-item (click)="selectTab('tonghopdexuatchicuc')" *ngIf="userService.isCuc()">
@@ -34,7 +34,7 @@
 <div class="contentBor chi-tieu__body giao-ke-hoach">
   <div class="contentDetail">
     <ng-container *ngIf="tabSelected == 'dinhmuctrangbi'">
-      <app-dinh-muc-trang-bi></app-dinh-muc-trang-bi>
+      <app-mm-dinh-muc-trang-bi></app-mm-dinh-muc-trang-bi>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'dexuatcuc'">
       <app-de-xuat-nhu-cau-cua-cac-cuc></app-de-xuat-nhu-cau-cua-cac-cuc>
