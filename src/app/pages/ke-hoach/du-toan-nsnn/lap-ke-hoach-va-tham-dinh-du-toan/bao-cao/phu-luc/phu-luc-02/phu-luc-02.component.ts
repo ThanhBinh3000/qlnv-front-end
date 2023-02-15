@@ -441,7 +441,7 @@ export class PhuLuc02Component implements OnInit {
 	}
 	changeModel(id: string): void {
 		this.editCache[id].data.ttienTaiKho = mulNumber(this.editCache[id].data.sluongTaiKho, this.editCache[id].data.dmucTaiKho);
-		this.editCache[id].data.binhQuanNgoaiKho = divNumber(this.editCache[id].data.ttienNgoaiKho, this.editCache[id].data.sluongTaiKho);
+		this.editCache[id].data.ttienNgoaiKho = mulNumber(this.editCache[id].data.binhQuanNgoaiKho, this.editCache[id].data.sluongTaiKho);
 		this.editCache[id].data.tongCong = sumNumber([this.editCache[id].data.ttienNgoaiKho, this.editCache[id].data.ttienTaiKho]);
 	}
 

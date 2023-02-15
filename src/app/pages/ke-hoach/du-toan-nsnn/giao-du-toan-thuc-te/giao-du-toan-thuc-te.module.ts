@@ -13,6 +13,12 @@ import { DialogThemThongTinQuyetToanComponent } from './dialog-them-thong-tin-qu
 import { ChiTietDuToanTuCapTrenComponent } from './chi-tiet-du-toan-tu-cap-tren/chi-tiet-du-toan-tu-cap-tren.component';
 import { TaoMoiGiaoDieuChinhDuToanComponent } from './tao-moi-giao-dieu-chinh-du-toan/tao-moi-giao-dieu-chinh-du-toan.component';
 import { TaoMoiGiaoDuToanComponent } from './tao-moi-giao-du-toan/tao-moi-giao-du-toan.component';
+import { BaoCaoTuDonViCapDuoiComponent } from './bao-cao-tu-don-vi-cap-duoi/bao-cao-tu-don-vi-cap-duoi.component';
+import { TongHopBaoCaoCapDuoiComponent } from './tong-hop-bao-cao-cap-duoi/tong-hop-bao-cao-cap-duoi.component';
+import { DanhSachBaoCaoComponent } from './danh-sach-bao-cao/danh-sach-bao-cao.component';
+import { DialogTongHopComponent } from './dialog-tong-hop/dialog-tong-hop.component';
+import { BaoCaoTongHopComponent } from './bao-cao-tong-hop/bao-cao-tong-hop.component';
+import { BaoCaoTuDonViCapDuoiModule } from './bao-cao-tu-don-vi-cap-duoi/bao-cao-tu-don-vi-cap-duoi.module';
 
 @NgModule({
   declarations: [
@@ -23,15 +29,20 @@ import { TaoMoiGiaoDuToanComponent } from './tao-moi-giao-du-toan/tao-moi-giao-d
     DialogTaoMoiComponent,
     DialogThemKhoanMucComponent,
     DialogThemThongTinQuyetToanComponent,
+    DialogTongHopComponent,
     DanhSachDuToanGiaoTuCapTrenComponent,
     ChiTietDuToanTuCapTrenComponent,
     TaoMoiGiaoDieuChinhDuToanComponent,
     TaoMoiGiaoDuToanComponent,
+    TongHopBaoCaoCapDuoiComponent,
+    DanhSachBaoCaoComponent,
+    BaoCaoTongHopComponent
   ],
   imports: [
     CommonModule,
     ComponentsModule,
     DirectivesModule,
+    BaoCaoTuDonViCapDuoiModule
   ],
   exports: [
     GiaoDuToanThucTeComponent,
@@ -41,10 +52,14 @@ import { TaoMoiGiaoDuToanComponent } from './tao-moi-giao-du-toan/tao-moi-giao-d
     DialogTaoMoiComponent,
     DialogThemKhoanMucComponent,
     DialogThemThongTinQuyetToanComponent,
+    DialogTongHopComponent,
     DanhSachDuToanGiaoTuCapTrenComponent,
     ChiTietDuToanTuCapTrenComponent,
     TaoMoiGiaoDieuChinhDuToanComponent,
     TaoMoiGiaoDuToanComponent,
+    TongHopBaoCaoCapDuoiComponent,
+    DanhSachBaoCaoComponent,
+    BaoCaoTongHopComponent
   ]
 
 })
