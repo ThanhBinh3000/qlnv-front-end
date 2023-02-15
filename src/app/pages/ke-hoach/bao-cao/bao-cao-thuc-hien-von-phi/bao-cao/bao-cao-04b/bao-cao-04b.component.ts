@@ -12,7 +12,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienVonPhi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { addChild, addHead, addParent, deleteRow, displayNumber, exchangeMoney, findIndex, getHead, getTail, mulNumber, sortByIndex, sumNumber } from 'src/app/Utility/func';
+import { addChild, addHead, addParent, deleteRow, displayNumber, exchangeMoney, findIndex, getHead, getTail, mulNumber, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, NOT_OK, OK, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
@@ -166,13 +166,6 @@ export class BaoCao04bComponent implements OnInit {
             }
         });
 
-        //sap xep lai so thu tu
-        if (!this.lstCtietBcao[0].stt) {
-            this.lstCtietBcao.forEach(item => {
-                item.stt = item.maNdungChi;
-            })
-        }
-
         if (this.trangThaiPhuLuc == '3' && this.data?.isOffice) {
             this.tinhDinhMuc(this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1'));
         }
@@ -182,7 +175,13 @@ export class BaoCao04bComponent implements OnInit {
         }
 
         this.setWidth();
-        this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+        if (this.lstCtietBcao.length > 0) {
+            if (!this.lstCtietBcao[0].stt) {
+                this.lstCtietBcao = sortWithoutIndex(this.lstCtietBcao, 'maNdungChi');
+            } else {
+                this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+            }
+        }
 
         this.updateEditCache();
         this.getStatusButton();

@@ -67,5 +67,4 @@ export class DeXuatKhBanTrucTiepComponent extends Base2Component implements OnIn
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
 }

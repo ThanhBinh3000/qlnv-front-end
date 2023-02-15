@@ -194,6 +194,9 @@ export class DanhSachVonBanComponent implements OnInit {
     }
 
     getStatusName(trangThai: string) {
+        if (this.searchFilter.loaiTimKiem == '1' && trangThai == Utils.TT_BC_1) {
+            return 'Mới';
+        }
         return this.trangThais.find(e => e.id == trangThai)?.tenDm;
     }
 
