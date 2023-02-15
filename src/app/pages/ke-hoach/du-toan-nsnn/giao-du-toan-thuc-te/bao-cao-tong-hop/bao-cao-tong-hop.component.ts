@@ -22,7 +22,8 @@ import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
 import { AMOUNT, displayNumber, DON_VI_TIEN, exchangeMoney, GDT, LA_MA, MONEY_LIMIT, ROLE_CAN_BO, ROLE_LANH_DAO, ROLE_TRUONG_BO_PHAN, TRANG_THAI_TIM_KIEM, Utils } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
-import { NOI_DUNG } from './tao-moi-giao-du-toan.constant';
+import { NOI_DUNG } from './bao-cao-tong-hop.constant';
+
 // khai báo class data request
 export class ItemData {
   id: string;
@@ -50,11 +51,11 @@ export class ItemSoQd {
 }
 
 @Component({
-  selector: 'app-tao-moi-giao-du-toan',
-  templateUrl: './tao-moi-giao-du-toan.component.html',
-  styleUrls: ['./tao-moi-giao-du-toan.component.scss']
+  selector: 'app-bao-cao-tong-hop',
+  templateUrl: './bao-cao-tong-hop.component.html',
+  styleUrls: ['./bao-cao-tong-hop.component.scss']
 })
-export class TaoMoiGiaoDuToanComponent implements OnInit {
+export class BaoCaoTongHopComponent implements OnInit {
   @Input() data;
 
   @Output() dataChange = new EventEmitter();
@@ -214,13 +215,13 @@ export class TaoMoiGiaoDuToanComponent implements OnInit {
           this.isDataAvailable = true;
         })
         break;
-      case 'refuse':
-        await this.tuChoi('8').then(() => {
+      case 'receive':
+        await this.onSubmit('8', null).then(() => {
           this.isDataAvailable = true;
         })
         break;
-      case 'receive':
-        await this.onSubmit('9', null).then(() => {
+      case 'refuse':
+        await this.tuChoi('9').then(() => {
           this.isDataAvailable = true;
         })
         break;
