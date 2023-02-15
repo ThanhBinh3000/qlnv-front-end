@@ -54,8 +54,8 @@
                     <tr>
                         <th>Dự toán</th>
                         <th>Ước thực hiện</th>
-                        <th>Định mức</th>
                         <th>Số lượng</th>
+                        <th>Định mức</th>
                         <th>Thành tiền</th>
                         <th *ngIf="viewAppraisalValue" nzWidth="150px">Số lượng</th>
                         <th *ngIf="viewAppraisalValue" nzWidth="150px">Thành tiền</th>
@@ -78,8 +78,8 @@
                             <td>{{displayValue(data.thienNamTruoc)}}</td>
                             <td>{{displayValue(data.dtoanNamHtai)}}</td>
                             <td>{{displayValue(data.uocNamHtai)}}</td>
-                            <td>{{displayValue(data.dmucNamDtoan)}}</td>
                             <td>{{displayValue(data.sluongNamDtoan)}}</td>
+                            <td>{{displayValue(data.dmucNamDtoan)}}</td>
                             <td>{{displayValue(data.ttienNamDtoan)}}</td>
                             <td *ngIf="viewAppraisalValue">
                                 {{displayValue(data.sluongTd)}}
@@ -114,8 +114,8 @@
                                 <td>{{displayValue(editCache[data.id].data.thienNamTruoc)}}</td>
                                 <td>{{displayValue(editCache[data.id].data.dtoanNamHtai)}}</td>
                                 <td>{{displayValue(editCache[data.id].data.uocNamHtai)}}</td>
-                                <td>{{displayValue(editCache[data.id].data.dmucNamDtoan)}}</td>
                                 <td>{{displayValue(editCache[data.id].data.sluongNamDtoan)}}</td>
+                                <td>{{displayValue(editCache[data.id].data.dmucNamDtoan)}}</td>
                                 <td>{{displayValue(editCache[data.id].data.ttienNamDtoan)}}</td>
                                 <td>
                                     <fm-input-number nz-input class="search__input"
@@ -143,12 +143,12 @@
                                         [(ngModel)]="editCache[data.id].data.uocNamHtai" [options]="amount" />
                                 </td>
                                 <td>
-                                    {{displayValue(editCache[data.id].data.dmucNamDtoan)}}
-                                </td>
-                                <td>
                                     <fm-input-number nz-input class="search__input"
                                         [(ngModel)]="editCache[data.id].data.sluongNamDtoan"
                                         (ngModelChange)="changeModel(editCache[data.id].data.id)"></fm-input-number>
+                                </td>
+                                <td>
+                                    {{displayValue(editCache[data.id].data.dmucNamDtoan)}}
                                 </td>
                                 <td>
                                     {{displayValue(editCache[data.id].data.ttienNamDtoan)}}
@@ -182,8 +182,8 @@
                         <td>{{displayValue(tongThienNamTruoc)}}</td>
                         <td>{{displayValue(tongDuToan)}}</td>
                         <td>{{displayValue(tongUoc)}}</td>
-                        <td>{{displayValue(tongDmuc)}}</td>
                         <td></td>
+                        <td>{{displayValue(tongDmuc)}}</td>
                         <td>{{displayValue(tongSo)}}</td>
                         <td *ngIf="viewAppraisalValue"></td>
                         <td *ngIf="viewAppraisalValue">{{displayValue(tongSoTd)}}</td>

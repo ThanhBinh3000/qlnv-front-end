@@ -29,14 +29,14 @@
       <app-chi-tiet-du-toan-tu-cap-tren [data]="data" (dataChange)="changeTab($event)">
       </app-chi-tiet-du-toan-tu-cap-tren>
     </ng-container>
-    <!-- <ng-container *ngIf="tabSelected == 'baoCaoCapDuoi'">
+    <ng-container *ngIf="tabSelected == 'baoCaoCapDuoi'">
       <app-bao-cao-tu-don-vi-cap-duoi (dataChange)="changeTab($event)">
       </app-bao-cao-tu-don-vi-cap-duoi>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'tongHopBaoCaoCapDuoi'">
       <app-tong-hop-bao-cao-cap-duoi (dataChange)="changeTab($event)">
       </app-tong-hop-bao-cao-cap-duoi>
-    </ng-container> -->
+    </ng-container>
 
     <ng-container *ngIf="tabSelected == 'phuongAnGiaoDieuChinh'">
       <app-tao-moi-giao-dieu-chinh-du-toan [data]="data" (dataChange)="changeTab($event)">
@@ -62,17 +62,17 @@
       <app-tao-moi-giao-du-toan [data]="data" (dataChange)="changeTab($event)">
       </app-tao-moi-giao-du-toan>
     </ng-container>
-    <!-- <ng-container *ngIf="tabSelected == 'addBaoCao'">
-      <app-add-bao-cao [data]="data" (dataChange)="changeTab($event)">
-      </app-add-bao-cao>
+    <ng-container *ngIf="tabSelected == 'addBaoCao'">
+      <app-bao-cao-tong-hop [data]="data" (dataChange)="changeTab($event)">
+      </app-bao-cao-tong-hop>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'nextaddBaoCao'">
-      <app-add-bao-cao [data]="data" (dataChange)="changeTab($event)">
-      </app-add-bao-cao>
+      <app-bao-cao-tong-hop [data]="data" (dataChange)="changeTab($event)">
+      </app-bao-cao-tong-hop>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'danhSachBaoCao'">
       <app-danh-sach-bao-cao (dataChange)="changeTab($event)">
       </app-danh-sach-bao-cao>
-    </ng-container> -->
+    </ng-container>
   </div>
 </div>

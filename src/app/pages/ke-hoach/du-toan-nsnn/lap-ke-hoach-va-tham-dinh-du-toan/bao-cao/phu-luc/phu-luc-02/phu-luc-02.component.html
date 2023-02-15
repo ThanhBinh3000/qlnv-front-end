@@ -166,11 +166,14 @@
                 {{displayValue(editCache[data.id].data.ttienTaiKho)}}
               </td>
               <td>
-                {{displayValue(editCache[data.id].data.binhQuanNgoaiKho)}}
+                <!-- {{displayValue(editCache[data.id].data.binhQuanNgoaiKho)}} -->
+                <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.binhQuanNgoaiKho"
+                  (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
               </td>
               <td>
-                <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.ttienNgoaiKho"
-                  (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" />
+                {{displayValue(editCache[data.id].data.ttienNgoaiKho)}}
+                <!-- <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.ttienNgoaiKho"
+                  (ngModelChange)="changeModel(editCache[data.id].data.id)" [options]="amount" /> -->
               </td>
               <td>
                 {{displayValue(editCache[data.id].data.tongCong)}}
