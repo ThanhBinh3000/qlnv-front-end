@@ -74,7 +74,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="3">
+                        <div nz-col [nzSpan]="4">
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Thời gian mở cửa kho bán trực tiếp
                                 </nz-form-label>
@@ -86,7 +86,7 @@
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="3">
+                        <div nz-col [nzSpan]="4">
                             <nz-form-item>
                                 <nz-form-label nzRequired [nzNoColon]="true"> Thời hạn bán trực tiếp </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
@@ -99,26 +99,31 @@
                         </div>
                         <div nz-col [nzSpan]="2">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
-                                <nz-form-control>
-                                    <input nz-input formControlName="tenLoaiVthh" readonly="true" />
+                                <nz-form-label nzRequired [nzNoColon]="true"> Loại hàng hóa </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-group nzAddOnAfterIcon="folder-open">
+                                        <input [readonly]="true" nz-input formControlName="tenLoaiVthh"
+                                            readonly="true" />
+                                    </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
                         <div nz-col [nzSpan]="3">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
-                                <nz-form-control>
-                                    <input nz-input formControlName="tenCloaiVthh" readonly="true" />
+                                <nz-form-label nzRequired [nzNoColon]="true"> Chủng loại hàng hóa </nz-form-label>
+                                <nz-form-control [nzErrorTip]="error">
+                                    <nz-input-group nzAddOnAfterIcon="folder-open">
+                                        <input [readonly]="true" nz-input formControlName="tenCloaiVthh"
+                                            readonly="true" />
+                                    </nz-input-group>
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
-                        <div nz-col [nzSpan]="6">
+                        <div nz-col [nzSpan]="4">
                             <nz-form-item>
-                                <nz-form-label [nzNoColon]="true" nzRequired> Tên hàng hóa
-                                </nz-form-label>
+                                <nz-form-label nzRequired [nzNoColon]="true"> Tên hàng hóa </nz-form-label>
                                 <nz-form-control [nzErrorTip]="error">
-                                    <input nz-input readonly formControlName="moTaHangHoa" />
+                                    <input nz-input formControlName="moTaHangHoa" [readonly]="true" />
                                 </nz-form-control>
                             </nz-form-item>
                         </div>
@@ -128,7 +133,7 @@
                                     File đính kèm QĐ ủy quyền (nếu có)
                                 </nz-form-label>
                                 <div class="list-file">
-                                    <!-- <file-list [data]="fileDinhKems"></file-list> -->
+                                    <file-list [data]="fileDinhKems"></file-list>
                                 </div>
                             </nz-form-item>
                         </div>
@@ -139,7 +144,7 @@
                                     (nếu có)
                                 </nz-form-label>
                                 <div class="list-file">
-                                    <!-- <file-list [data]="fileDinhKems"></file-list> -->
+                                    <file-list [data]="fileDinhKems"></file-list>
                                 </div>
                             </nz-form-item>
                         </div>
@@ -159,7 +164,7 @@
             </nz-collapse-panel>
         </nz-collapse>
         <!-- Thông tin các lần thực hiện đấu giá -->
-        <nz-collapse>
+        <nz-collapse *ngIf=" radioValue == 'Chào giá'">
             <nz-collapse-panel nzActive="true" nzHeader="Chi tiết thông tin chào giá">
                 <nz-table #basicTable nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                     [nzShowPagination]="false">
@@ -236,9 +241,9 @@
                             <ng-container
                                 *ngIf="(dataEdit && dataEdit[idx] && !dataEdit[idx].edit); else editTemplate ">
                                 <td class="text-center">{{idx+1}}</td>
-                                <td>{{ data.canhanTochuc }}</td>
+                                <td>{{ data.tochucCanhan }}</td>
                                 <td>{{ data.mst }}</td>
-                                <td>{{ data.diaChi }}</td>
+                                <td>{{ data.diaDiemChaoGia }}</td>
                                 <td>{{ data.sdt }}</td>
                                 <td>{{ data.ngayChaoGia }}</td>
                                 <td>{{ data.soLuong | number : '1.0-1' : 'vi_VN' }}</td>

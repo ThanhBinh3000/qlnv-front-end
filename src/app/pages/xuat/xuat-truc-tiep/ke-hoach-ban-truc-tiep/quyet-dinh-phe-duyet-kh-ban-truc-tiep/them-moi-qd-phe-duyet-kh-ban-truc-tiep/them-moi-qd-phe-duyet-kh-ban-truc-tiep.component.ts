@@ -224,7 +224,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     }
     await this.spinner.hide();
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách tổng hợp đề xuất kế hoạch bán đấu giá',
+      nzTitle: 'Danh sách tổng hợp đề xuất kế hoạch bán trực tiếp',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
@@ -285,7 +285,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     await this.spinner.show();
     // Get data tờ trình
     let bodyToTrinh = {
-      trangThai: STATUS.DA_DUYET_CBV,
+      trangThai: STATUS.DA_DUYET_LDC,
       trangThaiTh: STATUS.CHUA_TONG_HOP,
       namKh: this.formData.get('namKh').value,
       loaiVthh: this.loaiVthh,
@@ -301,7 +301,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
     await this.spinner.hide();
 
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách đề xuất kế hoạch lựa chọn nhà thầu',
+      nzTitle: 'Danh sách đề xuất kế hoạch bán trực tiếp',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
