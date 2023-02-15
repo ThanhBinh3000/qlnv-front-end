@@ -30,13 +30,11 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
     super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService)
     super.ngOnInit()
     this.formData = this.fb.group({
-      soQd: [''],
-      trangThai: [''],
-      ngayKy: [''],
-      ngayHieuLuc: [''],
+      namKeHoach: [''],
+      soCongVan: [''],
       trichYeu: [''],
-      capDvi: [null],
-      loai: ['02'],
+      ngayKy: [''],
+      maDvi: [''],
     });
     this.filterTable = {};
   }
