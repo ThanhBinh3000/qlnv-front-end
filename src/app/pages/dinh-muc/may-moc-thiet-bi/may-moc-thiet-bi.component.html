@@ -1,26 +1,29 @@
 <nz-affix [nzOffsetTop]="globals.prop.MENU_LV0" class="level0">
   <!-- (nzChange)="onChange($event)" -->
   <ul nz-menu nzMode="horizontal">
-    <li nz-menu-item [nzSelected]="tabSelected == 'dinhmuctrangbi'" (click)="selectTab('dinhmuctrangbi')">
+    <li nz-menu-item [nzSelected]="tabSelected == 'dinhmuctrangbi'" (click)="selectTab('dinhmuctrangbi')" *ngIf="!userService.isChiCuc()">
       Định mức trang bị
-    </li>
-    <li nz-menu-item (click)="selectTab('dexuatcuc')" *ngIf="userService.isTongCuc()">
-      Đề xuất nhu cầu của các cục
-    </li>
-    <li nz-menu-item (click)="selectTab('tonghopdexuat')" *ngIf="userService.isTongCuc()">
-      Tổng hợp đề xuất nhu cầu của các cục
-    </li>
-    <li nz-menu-item (click)="selectTab('quyetdinhmuasam')" *ngIf="userService.isTongCuc()">
-      Quyết định mua sắm
-    </li>
-    <li nz-menu-item (click)="selectTab('hopdong')" *ngIf="userService.isTongCuc()">
-      Hợp đồng
     </li>
     <li nz-menu-item [nzSelected]="tabSelected == 'dexuatchicuc'" (click)="selectTab('dexuatchicuc')" *ngIf="!userService.isTongCuc()">
       Đề xuất nhu cầu của Chi cục
     </li>
+    <li nz-menu-item (click)="selectTab('dexuatcuc')" *ngIf="userService.isTongCuc()">
+      Đề xuất nhu cầu của các cục
+    </li>
     <li nz-menu-item (click)="selectTab('tonghopdexuatchicuc')" *ngIf="userService.isCuc()">
-      Tổng hợp đề xuất nhu cầu của các Chi cục
+      Tổng hợp nhu cầu của Chi cục và đề xuất lên TC
+    </li>
+    <li nz-menu-item (click)="selectTab('tonghopdexuat')" *ngIf="userService.isTongCuc()">
+      Tổng hợp đề xuất nhu cầu của các cục
+    </li>
+    <li nz-menu-item (click)="selectTab('quyetdinhmuasam')" *ngIf="!userService.isChiCuc()">
+      Quyết định mua sắm
+    </li>
+    <li nz-menu-item (click)="selectTab('thongtinphanbo')" >
+     Thông tin phân bổ
+    </li>
+    <li nz-menu-item (click)="selectTab('hopdong')" >
+      Hợp đồng
     </li>
     <li nz-menu-item (click)="selectTab('bienbangiaonhan')">
       Biên bản giao nhận
@@ -46,7 +49,10 @@
       <app-quyet-dinh-mua-sam></app-quyet-dinh-mua-sam>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'hopdong'">
-      <app-hop-dong-mua-sam></app-hop-dong-mua-sam>
+      <app-mm-hop-dong></app-mm-hop-dong>
+    </ng-container>
+    <ng-container *ngIf="tabSelected == 'thongtinphanbo'">
+      <app-mm-tt-phan-bo></app-mm-tt-phan-bo>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'dexuatchicuc'">
       <app-de-xuat-nhu-cau-chi-cuc></app-de-xuat-nhu-cau-chi-cuc>
