@@ -229,7 +229,7 @@ export class CapUngVonChoDvcdComponent implements OnInit {
             this.passStatus = this.passStatus && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV);
             this.approveStatus = this.approveStatus && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV);
             this.copyStatus = this.copyStatus && this.userService.isAccessPermisson(CVMB.COPY_REPORT_GNV);
-            this.statusGui = false;
+            this.statusGui = this.userService.isTongCuc() ? this.saveStatus : false;
             this.statusNhan = this.saveStatus;
             if (this.statusNhan) {
                 this.scrollX = (15 * BOX_NUMBER_WIDTH + 250).toString() + 'px';

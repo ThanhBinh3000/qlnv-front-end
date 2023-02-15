@@ -89,8 +89,8 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
             case 'gnv':
                 this.title = 'DANH SÁCH GHI NHẬN CẤP ỨNG VỐN TỪ ĐƠN VỊ CẤP TRÊN';
                 this.searchFilter.loaiTimKiem = '0';
+                this.searchFilter.maLoai = 2;
                 if (this.userService.isTongCuc()) {
-                    this.searchFilter.maLoai = 1;
                     this.createPermission = CVMB.ADD_REPORT_TC_GNV;
                     this.deletePermission = CVMB.DELETE_REPORT_GNV;
                 } else {
@@ -273,9 +273,9 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
                     tabSelected: null,
                 }
                 switch (this.searchFilter.maLoai) {
-                    case 1:
-                        obj.tabSelected = 'gnv-btc';
-                        break;
+                    // case 1:
+                    //     obj.tabSelected = 'gnv-btc';
+                    //     break;
                     case 2:
                         obj.tabSelected = 'gnv-cv';
                         break;
@@ -311,9 +311,9 @@ export class DanhSachVonMuaVonUngComponent implements OnInit {
             tabSelected: '',
         }
         switch (this.searchFilter.maLoai) {
-            case 1:
-                obj.tabSelected = 'gnv-btc';
-                break;
+            // case 1:
+            //     obj.tabSelected = 'gnv-btc';
+            //     break;
             case 2:
                 obj.tabSelected = 'gnv-cv';
                 break;

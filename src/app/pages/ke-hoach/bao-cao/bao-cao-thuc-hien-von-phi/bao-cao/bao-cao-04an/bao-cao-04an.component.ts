@@ -167,12 +167,6 @@ export class BaoCao04anComponent implements OnInit {
 
         this.setWidth();
 
-        //sap xep lai so thu tu
-        if (!this.lstCtietBcao[0].stt) {
-            this.lstCtietBcao.forEach(item => {
-                item.stt = item.maNdungChi;
-            })
-        }
         // tinh toan dinh muc trong man hinh neu bao cao la bao cao van phong
         if (this.trangThaiPhuLuc == '3' && this.data?.isOffice) {
             this.tinhDinhMuc(this.lstCtietBcao.find(e => e.maNdungChi == '0.1.1'));
@@ -182,15 +176,13 @@ export class BaoCao04anComponent implements OnInit {
             this.getColTotal2();
         }
 
-        // if (this.lstCtietBcao.length > 0) {
-        //     if (!this.lstCtietBcao[0].stt) {
-        //         this.lstCtietBcao = sortWithoutIndex(this.lstCtietBcao, 'maNdungChi');
-        //     } else {
-
-        //     }
-        // }
-
-        this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+        if (this.lstCtietBcao.length > 0) {
+            if (!this.lstCtietBcao[0].stt) {
+                this.lstCtietBcao = sortWithoutIndex(this.lstCtietBcao, 'maNdungChi');
+            } else {
+                this.lstCtietBcao = sortByIndex(this.lstCtietBcao);
+            }
+        }
 
         // this.sortByIndex();
         this.updateEditCache();
