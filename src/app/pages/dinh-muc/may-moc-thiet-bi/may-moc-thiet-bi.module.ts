@@ -9,15 +9,21 @@ import { MayMocThietBiRoutingModule } from './may-moc-thiet-bi-routing.module';
 import { MayMocThietBiComponent } from './may-moc-thiet-bi.component';
 import { MmBienBanGiaoNhanComponent } from './mm-bien-ban-giao-nhan/mm-bien-ban-giao-nhan.component';
 import { MmHienTrangCcdcComponent } from './mm-hien-trang-ccdc/mm-hien-trang-ccdc.component';
+import { MmDinhMucTrangBiComponent } from './mm-dinh-muc-trang-bi/mm-dinh-muc-trang-bi.component';
+import {
+    MmThemMoiDmTrangBiComponent
+} from "./mm-dinh-muc-trang-bi/mm-them-moi-dm-trang-bi/mm-them-moi-dm-trang-bi.component";
 
 @NgModule({
-  declarations: [
-    MayMocThietBiComponent,
-    DeXuatNhuCauChiCucComponent,
-    ThongTinDeXuatNhuCauChiCucComponent,
-    MmBienBanGiaoNhanComponent,
-    MmHienTrangCcdcComponent
-  ],
+    declarations: [
+        MayMocThietBiComponent,
+        DeXuatNhuCauChiCucComponent,
+        ThongTinDeXuatNhuCauChiCucComponent,
+        MmBienBanGiaoNhanComponent,
+        MmHienTrangCcdcComponent,
+        MmDinhMucTrangBiComponent,
+        MmThemMoiDmTrangBiComponent
+    ],
   imports: [
     CommonModule,
     ComponentsModule,
