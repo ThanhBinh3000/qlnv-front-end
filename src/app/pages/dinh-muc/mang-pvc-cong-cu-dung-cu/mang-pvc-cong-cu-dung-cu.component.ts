@@ -17,12 +17,7 @@ export class MangPvcCongCuDungCuComponent implements OnInit {
     public userService: UserService,
     public globals: Globals,
   ) { }
-
-  ngOnDestroy(): void {
-    this.$routerChange.unsubscribe();
-  }
-
-  tabSelected = 'dexuatchicuc';
+  tabSelected = this.userService.isCuc() ? 'dexuatnhucau' : 'dexuatchicuc' ;
   selectTab(tab) {
     this.tabSelected = tab;
   }

@@ -1,17 +1,19 @@
-import { Component, Input, OnInit, } from '@angular/core';
+import {Component, Input, OnInit,} from '@angular/core';
 import dayjs from 'dayjs';
-import { cloneDeep } from 'lodash';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { PAGE_SIZE_DEFAULT } from 'src/app/constants/config';
-import { MESSAGE } from 'src/app/constants/message';
-import { UserLogin } from 'src/app/models/userlogin';
-import { DanhSachDauThauService } from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
-import { UserService } from 'src/app/services/user.service';
-import { convertTrangThai } from 'src/app/shared/commonFunction';
-import { Globals } from 'src/app/shared/globals';
-import { saveAs } from 'file-saver';
+import {cloneDeep} from 'lodash';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {PAGE_SIZE_DEFAULT} from 'src/app/constants/config';
+import {MESSAGE} from 'src/app/constants/message';
+import {UserLogin} from 'src/app/models/userlogin';
+import {
+  DanhSachDauThauService
+} from 'src/app/services/qlnv-hang/nhap-hang/dau-thau/kehoach-lcnt/danhSachDauThau.service';
+import {UserService} from 'src/app/services/user.service';
+import {convertTrangThai} from 'src/app/shared/commonFunction';
+import {Globals} from 'src/app/shared/globals';
+import {saveAs} from 'file-saver';
 import {QuyetDinhKhTrungHanService} from "../../../../../services/quyet-dinh-kh-trung-han.service";
 import {STATUS} from "../../../../../constants/status";
 
@@ -33,11 +35,11 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
   listNam: any[] = [];
 
   searchFilter = {
-    soCongVan : '',
-    phuongAnTc : '',
-    trichYeu : '',
-    ngayKyBtc : '',
-    trangThai : ''
+    soCongVan: '',
+    phuongAnTc: '',
+    trichYeu: '',
+    ngayKyBtc: '',
+    trangThai: ''
   };
 
   filterTable: any = {
@@ -68,7 +70,8 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     public userService: UserService,
     private quyetDinhService: QuyetDinhKhTrungHanService,
     public globals: Globals,
-  ) { }
+  ) {
+  }
 
   async ngOnInit() {
     this.spinner.show();
@@ -203,16 +206,16 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
 
   clearFilter() {
     this.searchFilter = {
-      soCongVan : '',
-      phuongAnTc : '',
-      trichYeu : '',
-      ngayKyBtc : '',
-      trangThai : ''
+      soCongVan: '',
+      phuongAnTc: '',
+      trichYeu: '',
+      ngayKyBtc: '',
+      trangThai: ''
     }
     this.search();
   }
 
-  xoaItem(item: any) {
+  xoaItem(item) {
     this.modal.confirm({
       nzClosable: false,
       nzTitle: 'Xác nhận',
@@ -221,21 +224,23 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       nzCancelText: 'Không',
       nzOkDanger: true,
       nzWidth: 310,
-      nzOnOk: () => {
+      nzOnOk: async () => {
         this.spinner.show();
         try {
           let body = {
-            id: item.id,
-            maDvi: '',
-          };
-          this.quyetDinhService.delete(body).then(async () => {
+            "id": item.id,
+          }
+          const res = await this.quyetDinhService.delete(body);
+          if (res.msg == MESSAGE.SUCCESS) {
+            this.notification.success(MESSAGE.SUCCESS, MESSAGE.DELETE_SUCCESS);
             await this.search();
-            this.spinner.hide();
-          });
+          } else {
+            this.notification.error(MESSAGE.ERROR, res.msg);
+          }
         } catch (e) {
-          console.log('error: ', e);
-          this.spinner.hide();
           this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+        } finally {
+          this.spinner.hide();
         }
       },
     });
@@ -245,8 +250,7 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
     if (this.totalRecord > 0) {
       this.spinner.show();
       try {
-        let body = {
-        };
+        let body = {};
         this.quyetDinhService
           .export(body)
           .subscribe((blob) =>
@@ -269,15 +273,14 @@ export class QuyetDinhPheDuyetKeHoachComponent implements OnInit {
       let temp = [];
       if (this.dataTableAll && this.dataTableAll.length > 0) {
         this.dataTableAll.forEach((item) => {
-          item.namKeHoach = item.namBatDau+ '-' + item.namKetThuc
+          item.namKeHoach = item.namBatDau + '-' + item.namKetThuc
           if (item[key] && item[key].toString().toLowerCase().indexOf(value.toString().toLowerCase()) != -1) {
             temp.push(item)
           }
         });
       }
       this.dataTable = [...this.dataTable, ...temp];
-    }
-    else {
+    } else {
       this.dataTable = cloneDeep(this.dataTableAll);
     }
   }
