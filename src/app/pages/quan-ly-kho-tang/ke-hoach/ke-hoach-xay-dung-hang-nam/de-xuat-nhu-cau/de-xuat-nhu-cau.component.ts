@@ -25,13 +25,14 @@ export class DeXuatNhuCauComponent extends Base2Component implements OnInit {
   danhSachCuc : any[] = [];
 
   listTrangThai = [{"ma": "00", "giaTri": "Dự thảo"},
-    {"ma": "03", "giaTri": "Chờ duyệt - LĐ Cục"},
-    {"ma": "04", "giaTri": "Từ chối - lĐ Cục"},
-    {"ma": "05", "giaTri": "Đã duyệt - lĐ Cục"},
-    {"ma": "18", "giaTri": "Chờ duyệt - lĐ Vụ"},
-    {"ma": "19", "giaTri": "Từ chối - lĐ Vụ"},
-    {"ma": "20", "giaTri": "Đã duyệt - lĐ Vụ"},
-  ];
+    {"ma": "01", "giaTri": "Chờ duyệt TP"},
+    {"ma": "02", "giaTri": "Từ chối TP"},
+    {"ma": "03", "giaTri": "Chờ duyệt LĐ Cục"},
+    {"ma": "04", "giaTri": "Từ chối LĐ Cục"},
+    {"ma": "05", "giaTri": "Đã duyệt LĐ Cục"},
+    {"ma": "18", "giaTri": "Chờ duyệt CB Vụ"},
+    {"ma": "19", "giaTri": "Từ chối CB Vụ"},
+    {"ma": "20", "giaTri": "Đã duyệt CB Vụ"}];
 
   constructor(
     private httpClient: HttpClient,

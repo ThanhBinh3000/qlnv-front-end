@@ -19,6 +19,7 @@ import {DanhMucKho} from "../../../danh-muc-du-an/danh-muc-du-an.component";
 import {MESSAGE} from "../../../../../../constants/message";
 import {DanhMucKhoService} from "../../../../../../services/danh-muc-kho.service";
 import {QuyetDinhKhTrungHanService} from "../../../../../../services/quyet-dinh-kh-trung-han.service";
+import {STATUS} from "../../../../../../constants/status";
 
 @Component({
   selector: 'app-them-moi-dx-nhu-cau',
@@ -154,11 +155,63 @@ export class ThemMoiDxNhuCauComponent extends Base2Component implements OnInit {
     let data = await this.createUpdate(body);
     if (data) {
       if (isOther) {
-        this.approve(data.id, this.STATUS.DA_KY, "Bạn có muốn ký hợp đồng ?")
+        let trangThai;
+        switch (this.formData.value.trangThai) {
+          case STATUS.DU_THAO :
+          case STATUS.TU_CHOI_LDV:
+          case STATUS.TU_CHOI_TP : {
+            trangThai = STATUS.CHO_DUYET_TP;
+            break;
+          }
+          case STATUS.TU_CHOI_LDC:
+          case STATUS.CHO_DUYET_TP : {
+            trangThai = STATUS.CHO_DUYET_LDC;
+            break;
+          }
+        }
+        this.approve(data.id, trangThai, "Bạn có chắc chắn muốn gửi duyệt?");
       } else {
         this.goBack()
       }
     }
+  }
+
+  async duyet() {
+    let trangThai;
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_TP : {
+        trangThai = STATUS.CHO_DUYET_LDC;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC : {
+        trangThai = STATUS.DA_DUYET_LDC;
+        break;
+      }
+      case STATUS.DA_DUYET_LDC : {
+        trangThai = STATUS.DA_DUYET_LDV;
+        break;
+      }
+    }
+    await this.approve(this.formData.value.id, trangThai, "Bạn có chắc chắn muốn duyệt?")
+  }
+
+  async tuChoi() {
+    let trangThai;
+    switch (this.formData.value.trangThai) {
+      case STATUS.CHO_DUYET_TP : {
+        trangThai = STATUS.TU_CHOI_TP;
+        break;
+      }
+      case STATUS.CHO_DUYET_LDC : {
+        trangThai = STATUS.TU_CHOI_LDC;
+        break;
+      }
+      case STATUS.DA_DUYET_LDC : {
+        trangThai = STATUS.TU_CHOI_LDV;
+        break;
+      }
+    }
+    await this.reject(this.formData.value.id, trangThai, "Bạn có chắc chắn muốn từ chối?")
   }
 
   xoaItem(index: number) {
