@@ -28,5 +28,6 @@ export enum PATH {
   DX_KH_BTT = "dx-kh-btt",
   TH_KH_BTT = "thop-kh-btt",
   QD_PD_BTT = "qd-pd-btt",
-  TTIN_BTT = "ttin-btt"
+  TTIN_BTT = "ttin-btt",
+  KQUA_BTT = "kq-btt",
 }

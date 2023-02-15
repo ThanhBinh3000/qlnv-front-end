@@ -1,57 +1,58 @@
 import { Component, Input, OnInit } from '@angular/core';
-import dayjs from "dayjs";
-import { NgxSpinnerService } from "ngx-spinner";
+import { HttpClient } from "@angular/common/http";
 import { NzNotificationService } from "ng-zorro-antd/notification";
+import { NgxSpinnerService } from "ngx-spinner";
 import { NzModalService } from "ng-zorro-antd/modal";
-import { Base2Component } from 'src/app/components/base2/base2.component';
-import { HttpClient } from '@angular/common/http';
-import { StorageService } from 'src/app/services/storage.service';
+import dayjs from "dayjs";
 import { MESSAGE } from 'src/app/constants/message';
-import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
-import { ChaoGiaMuaLeUyQuyenService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/chao-gia-mua-le-uy-quyen.service';
-import { isEmpty } from 'lodash';
+import { Base2Component } from 'src/app/components/base2/base2.component';
+import { StorageService } from 'src/app/services/storage.service';
+import { QdPdKetQuaBttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/to-chu-trien-khai-btt/qd-pd-ket-qua-btt.service';
 import { DonviService } from 'src/app/services/donvi.service';
+import { isEmpty } from 'lodash';
 @Component({
-  selector: 'app-thong-tin-ban-truc-tiep',
-  templateUrl: './thong-tin-ban-truc-tiep.component.html',
-  styleUrls: ['./thong-tin-ban-truc-tiep.component.scss']
+  selector: 'app-qd-pd-ket-qua-btt',
+  templateUrl: './qd-pd-ket-qua-btt.component.html',
+  styleUrls: ['./qd-pd-ket-qua-btt.component.scss']
 })
-export class ThongTinBanTrucTiepComponent extends Base2Component implements OnInit {
-
+export class QdPdKetQuaBttComponent extends Base2Component implements OnInit {
   @Input()
   loaiVthh: string;
 
   dsDonvi: any[] = [];
   userdetail: any = {};
-
   constructor(
-    httpClient: HttpClient,
-    storageService: StorageService,
+    private httpClient: HttpClient,
+    private donviService: DonviService,
+    private storageService: StorageService,
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private donviService: DonviService,
-    private chaoGiaMuaLeUyQuyenService: ChaoGiaMuaLeUyQuyenService,
-    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService
+    private qdPdKetQuaBttService: QdPdKetQuaBttService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, chaoGiaMuaLeUyQuyenService);
+    super(httpClient, storageService, notification, spinner, modal, qdPdKetQuaBttService);
+    super.ngOnInit();
     this.formData = this.fb.group({
-      namKh: dayjs().get('year'),
-      ngayChaoGia: null,
-      toChucCaNhan: null,
-      maDvi: null,
-      tenDvi: null,
-      lastest: 1
-    })
-
+      namKh: [dayjs().get('year')],
+      loaiVthh: [''],
+      trichYeu: [''],
+      ngayKy: [],
+      maDvi: this.userInfo.MA_DVI,
+      tenDvi: [],
+    });
     this.filterTable = {
-      soQdPd: '',
-      pthucBanTrucTiep: '',
-      ngayNhanCgia: '',
       soQdKq: '',
+      ngayKy: '',
+      maDvi: '',
+      tenDvi: '',
+      soQdPd: '',
+      loaiVthh: '',
       tenLoaiVthh: '',
+      cloaiVthh: '',
       tenCloaiVthh: '',
+      trangThai: '',
       tenTrangThai: '',
+
     };
   }
 
@@ -82,4 +83,5 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
     this.userdetail.tenDvi = this.userInfo.TEN_DVI;
     await this.loadDsTong();
   }
+
 }
