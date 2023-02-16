@@ -268,8 +268,12 @@ export class ThemMoiQdDcComponent implements OnInit {
   }
 
 
-  clearData() {
-
+  clearData(type: string) {
+   if(type == 'TL') {
+     this.rowItemTL = new QuyHoachKho();
+   } else {
+     this.rowItemDTM = new QuyHoachKho();
+   }
   }
 
   huyEdit(idx: number, type): void {
