@@ -86,7 +86,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       await this.loaiVTHHGetAll();
       await this.loadDmDinhMuc();
       await this.loadDonVi();
-      await this.search();
       if (this.idInput > 0) {
         this.detail(this.idInput);
       }
@@ -399,5 +398,10 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
         }
       },
     });
+  }
+
+
+  maxValueInput(): number {
+    return 1000;
   }
 }
