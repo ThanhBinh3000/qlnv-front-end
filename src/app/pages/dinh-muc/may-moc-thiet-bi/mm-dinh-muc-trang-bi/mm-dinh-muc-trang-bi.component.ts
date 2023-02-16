@@ -42,10 +42,10 @@ export class MmDinhMucTrangBiComponent extends Base2Component implements OnInit 
   }
 
   async ngOnInit() {
-    this.filter();
+    await this.filter();
   }
 
-  filter() {
+  async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
       this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY');
       this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY');
@@ -54,7 +54,7 @@ export class MmDinhMucTrangBiComponent extends Base2Component implements OnInit 
       this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('DD/MM/YYYY');
       this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('DD/MM/YYYY');
     }
-    this.search();
+    await this.search();
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {

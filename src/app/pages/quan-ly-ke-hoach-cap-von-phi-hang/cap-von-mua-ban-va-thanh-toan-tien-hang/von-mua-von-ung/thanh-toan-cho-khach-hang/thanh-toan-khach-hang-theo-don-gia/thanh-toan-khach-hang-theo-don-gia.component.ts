@@ -5,8 +5,6 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { DialogCopyComponent } from 'src/app/components/dialog/dialog-copy/dialog-copy.component';
-import { DialogDoCopyComponent } from 'src/app/components/dialog/dialog-do-copy/dialog-do-copy.component';
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
@@ -15,9 +13,9 @@ import { CapVonMuaBanTtthService } from 'src/app/services/quan-ly-von-phi/capVon
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
 import { Globals } from 'src/app/shared/globals';
-import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVMB, displayNumber, DON_VI_TIEN, exchangeMoney, LOAI_DE_NGHI, MONEY_LIMIT, mulMoney, mulNumber, numberOnly, QUATITY, sumNumber, Utils } from 'src/app/Utility/utils';
-import * as uuid from "uuid";
-import { CapUng, LuyKeCapUng, LuyKeThanhToan, receivedInfo, Report, sendInfo, ThanhToan, TRANG_THAI } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
+import { displayNumber, mulNumber, sumNumber } from 'src/app/Utility/func';
+import { AMOUNT, BOX_NUMBER_WIDTH, CAN_CU_GIA, CVMB, DON_VI_TIEN, LOAI_DE_NGHI, MONEY_LIMIT, QUATITY, Utils } from 'src/app/Utility/utils';
+import { LuyKeThanhToan, Report, ThanhToan, TRANG_THAI } from '../../../cap-von-mua-ban-va-thanh-toan-tien-hang.constant';
 
 @Component({
     selector: 'app-thanh-toan-khach-hang-theo-don-gia',

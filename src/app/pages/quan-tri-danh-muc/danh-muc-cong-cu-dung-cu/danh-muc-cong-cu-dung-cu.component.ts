@@ -195,6 +195,7 @@ export class DanhMucCongCuDungCuComponent extends Base2Component implements OnIn
         tenCcdc: data.tenCcdc,
         donViTinh: data.donViTinh,
         nhomCcdc: data.nhomCcdc,
+        yeuCauKt: data.yeuCauKt,
         moTa: data.moTa,
         trangThai: data.trangThai,
       })
