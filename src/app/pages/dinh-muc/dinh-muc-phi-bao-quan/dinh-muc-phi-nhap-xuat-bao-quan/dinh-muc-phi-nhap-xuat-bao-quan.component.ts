@@ -35,7 +35,7 @@ import {
   styleUrls: ['./dinh-muc-phi-nhap-xuat-bao-quan.component.scss']
 })
 export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implements OnInit {
-  @Input() capDvi: number =1;
+  @Input() capDvi: number = 1;
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
@@ -50,20 +50,19 @@ export class DinhMucPhiNhapXuatBaoQuanComponent extends Base2Component implement
   ) {
     super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService)
     super.ngOnInit()
+    this.filterTable = {};
+  }
+
+  async ngOnInit() {
     this.formData = this.fb.group({
       soQd: [''],
       trangThai: [''],
       ngayKy: [''],
       ngayHieuLuc: [''],
       trichYeu: [''],
-      capDvi: [1],
+      capDvi: [this.capDvi],
       loai: ['00'],
     });
-    this.filterTable = {};
-  }
-
-  async ngOnInit() {
-    this.formData.value.capDvi = this.capDvi;
     this.filter();
   }
 

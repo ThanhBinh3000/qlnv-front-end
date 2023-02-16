@@ -101,36 +101,37 @@
   </nz-card>
   <div style="height: 30px"></div>
   <nz-card class="mt-2px flex-card data-table card-border-content table-card">
-    <nz-table #basicTable class="nowrap" [nzFrontPagination]="false" [nzShowPagination]="false"
-              [nzData]="dataTableDetail"
+    <nz-table #basicTable [nzFrontPagination]="false" [nzShowPagination]="false"
+              [nzData]="dataTableDetail" [nzScroll]="{ x: '1600px' }"
               nzBordered>
       <thead>
       <tr>
         <th rowspan="3">STT</th>
-        <th rowspan="3">Mã định mức</th>
-        <th rowspan="3">Tên định mức</th>
-        <th rowspan="3">Áp dụng tại cục</th>
+        <th rowspan="3" width="100px">Mã định mức</th>
+        <th rowspan="3" width="100px">Tên định mức</th>
+        <th rowspan="3" width="200px">Áp dụng tại {{capDvi == 1 ? 'cục' : 'chi cục'}}</th>
         <th rowspan="3" [nzWidth]="'150px'">Đơn vị tính</th>
-        <th rowspan="3">Tổng định mức</th>
-        <th colspan="5">Mức chi giao văn phòng {{capDvi == 1 ? 'Tổng cục' : 'cục'}}</th>
-        <th colspan="5">{{capDvi == 1 ? 'Mức chi giao cục DTNN KV' : 'Mức chi giao Chi cục DTNN trực thuộc'}}</th>
-        <th rowspan="3">Hành động</th>
+        <th rowspan="3" width="150px">Tổng định mức</th>
+        <th colspan="5" width="680px">Mức chi giao văn phòng {{capDvi == 1 ? 'Tổng cục' : 'cục'}}</th>
+        <th colspan="5"
+            width="680px">{{capDvi == 1 ? 'Mức chi giao cục DTNN KV' : 'Mức chi giao Chi cục DTNN trực thuộc'}}</th>
+        <th rowspan="3" width="100px">Hành động</th>
       </tr>
       <tr>
-        <th rowspan="2">Tổng cộng</th>
-        <th colspan="3">Văn phòng chủ động</th>
-        <th rowspan="2">{{capDvi== 1 ? 'Tổng cục':'Cục'}} điều hành</th>
-        <th rowspan="2">Tổng cộng</th>
-        <th colspan="3">{{capDvi== 1 ? 'Cục':'Chi cục'}} chủ động thực hiện</th>
-        <th rowspan="2">{{capDvi== 1 ? 'Tổng cục':'Cục'}} điều hành</th>
+        <th rowspan="2" width="80px">Tổng cộng</th>
+        <th colspan="3" width="480px">Văn phòng chủ động</th>
+        <th rowspan="2" width="120px">{{capDvi == 1 ? 'Tổng cục' : 'Cục'}} điều hành</th>
+        <th rowspan="2" width="80px">Tổng cộng</th>
+        <th colspan="3" width="480px">{{capDvi == 1 ? 'Cục' : 'Chi cục'}} chủ động thực hiện</th>
+        <th rowspan="2" width="120px">{{capDvi == 1 ? 'Tổng cục' : 'Cục'}} điều hành</th>
       </tr>
       <tr>
-        <th [nzWidth]="'150px'">Cộng</th>
-        <th>NV chuyên môn</th>
-        <th>Thanh toán cá nhân</th>
-        <th>Cộng</th>
-        <th>NV chuyên môn</th>
-        <th>Thanh toán cá nhân</th>
+        <th width="80px">Cộng</th>
+        <th width="200px">NV chuyên môn</th>
+        <th width="200px">Thanh toán cá nhân</th>
+        <th width="80px">Cộng</th>
+        <th width="200px">NV chuyên môn</th>
+        <th width="200px">Thanh toán cá nhân</th>
       </tr>
       <tr>
         <th></th>
@@ -177,13 +178,13 @@
         </th>
         <th>
           <input type="text" [disabled]="true"
-                 [(ngModel)]="rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc" nz-input/>
+                 [(ngModel)]="rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc"  nz-input/>
         </th>
         <th>
-          <input type="text" [disabled]="true" [(ngModel)]="rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc " nz-input/>
+          <input type="text" [disabled]="true" [(ngModel)]="rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc"  nz-input/>
         </th>
         <th>
-          <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.nvChuyenMonTc" [nzFormatter]="globals.formatter"
+          <nz-input-number [nzSize]="'small'"  [nzMax]="maxValueInput()" [(ngModel)]="rowItem.nvChuyenMonTc" [nzFormatter]="globals.formatter"
                            [nzParser]="globals.parser">
           </nz-input-number>
         </th>
