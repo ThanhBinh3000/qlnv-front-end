@@ -327,14 +327,14 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
   }
 
   changeDm(event, type?: any) {
-    // let result = this.listDmTaiSan.filter(item => item.maTaiSan == event)
-    // if (result && result.length > 0) {
-    //   if (!type) {
-    //     this.rowItem.donViTinh = result[0].dviTinh;
-    //   } else {
-    //     type.donViTinh = result[0].dviTinh;
-    //   }
-    // }
+    let result = this.listDmTaiSan.filter(item => item.maTaiSan == event)
+    if (result && result.length > 0) {
+      if (!type) {
+        this.rowItem.donViTinh = result[0].dviTinh;
+      } else {
+        type.donViTinh = result[0].dviTinh;
+      }
+    }
   }
 
   refresh() {

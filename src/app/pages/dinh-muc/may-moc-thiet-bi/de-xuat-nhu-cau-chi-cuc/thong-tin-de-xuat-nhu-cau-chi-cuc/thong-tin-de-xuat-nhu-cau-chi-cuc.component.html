@@ -13,17 +13,9 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub btn-sm waves-effect waves-light ml-2">
-        <i class="icon htvbdh_tcdt_guiduyet"></i>
-        <span>Lưu và gửi duyệt</span>
-      </button>
-      <button class="btn btn-sub btn-sm waves-effect waves-light ml-2">
-        <i class="icon htvbdh_tcdt_pheduyet"></i>
-        <span>Duyệt</span>
-      </button>
-      <button type="button" class="btn btn-sub ml-2">
-        <i class="icon htvbdh_tcdt_tuchoi do"></i>
-        <span>Từ chối</span>
+      <button class="btn btn-sub" (click)="approve(formData.value.id, STATUS.DA_KY, 'Bạn có chắc chắn muốn ký?')" *ngIf="formData.value.id && userService.isChiCuc()">
+        <i class="icon htvbdh_trinh"></i>
+        <span>Đã ký</span>
       </button>
       <button
         class="btn btn-main btn-sm waves-effect waves-light ml-2">
@@ -32,15 +24,15 @@
       </button>
     </div>
   </div>
-  <nz-card class="mt16 flex-card p-lr16">
+  <nz-card class="mt16 flex-card p-lr16 mg-t-10">
     <form nz-form nzLayout="vertical" [formGroup]="formData">
       <div nz-row [nzGutter]="24">
         <div nz-col nzSpan="4">
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
-              <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh">Năm kế hoạch</nz-form-label>
-              <nz-select nzAllowClear formControlName="namKeHoach">
-                <nz-option *ngFor="let item of listNam" [nzLabel]="item.text" [nzValue]="item.giaTri"></nz-option>
+              <nz-form-label nzRequired [nzNoColon]="true">Năm kế hoạch</nz-form-label>
+              <nz-select formControlName="namKeHoach">
+                <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
               </nz-select>
             </nz-form-control>
           </nz-form-item>
@@ -49,7 +41,7 @@
           <nz-form-item>
             <nz-form-control [nzErrorTip]="error">
               <nz-form-label nzRequired [nzNoColon]="true" class="label-color-kh"> Số công văn</nz-form-label>
-              <input nz-input formControlName="soCongVan" [readonly]="isView"/>
+              <input nz-input formControlName="soCv" [readonly]="isView"/>
             </nz-form-control>
           </nz-form-item>
         </div>
@@ -145,40 +137,44 @@
     <tr *ngIf="!isView">
       <th></th>
       <th>
-        <input type="text"  [(ngModel)]="rowItem.tenTaiSan" nz-input/>
+        <nz-select [(ngModel)]="rowItem.maTaiSan" [nzDisabled]="isDetail" (ngModelChange)="changeDm($event)"
+                   nzAllowClear="true">
+          <nz-option *ngFor="let p of listDmTaiSan" [nzValue]="p.maTaiSan" [nzLabel]="p.tenTaiSan">
+          </nz-option>
+        </nz-select>
       </th>
       <th>
-        <input type="text"  [(ngModel)]="rowItem.maTaiSan" nz-input/>
+        <input type="text" [(ngModel)]="rowItem.donViTinh" readonly nz-input/>
       </th>
       <th>
-        <input type="text"  [(ngModel)]="rowItem.donViTinh" nz-input/>
+        <input type="text" [(ngModel)]="rowItem.slHienCo" readonly nz-input/>
       </th>
       <th>
-        <input type="text"  [(ngModel)]="rowItem.donViTinh" nz-input/>
+        <input type="text" [(ngModel)]="rowItem.slNhapThem" readonly nz-input/>
       </th>
       <th>
-        <input type="text"  [(ngModel)]="rowItem.donViTinh" nz-input/>
+        <input type="text" [(ngModel)]="rowItem.tongCong" readonly nz-input/>
       </th>
       <th>
-        <input type="text"  [(ngModel)]="rowItem.donViTinh" nz-input/>
+        <input type="text" [(ngModel)]="rowItem.slTieuChuan" readonly nz-input/>
       </th>
       <th>
-        <input type="text"  [(ngModel)]="rowItem.donViTinh" nz-input/>
+        <input type="text" [(ngModel)]="rowItem.chenhLechThieu" readonly nz-input/>
       </th>
       <th>
-        <input type="text"  [(ngModel)]="rowItem.donViTinh" nz-input/>
+        <input type="text" [(ngModel)]="rowItem.chenhLechThua" readonly nz-input/>
       </th>
       <th>
-        <input type="text"  [(ngModel)]="rowItem.donViTinh" nz-input/>
+        <input type="text" [(ngModel)]="rowItem.soLuong" readonly nz-input/>
       </th>
       <th>
-        <input type="text"  [(ngModel)]="rowItem.donViTinh" nz-input/>
+        <input type="text" [(ngModel)]="rowItem.donGiaNc" readonly nz-input/>
       </th>
       <th>
-        <input type="text"  [(ngModel)]="rowItem.donViTinh" nz-input/>
+        <input type="text" [(ngModel)]="rowItem.thanhTienNc" readonly nz-input/>
       </th>
       <th>
-        <input type="text"  [(ngModel)]="rowItem.donViTinh" nz-input/>
+        <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
       </th>
       <th class="text-center" *ngIf="!isView">
         <a (click)="themMoiCtiet()">
@@ -216,43 +212,47 @@
         </td>
       </ng-container>
       <ng-template #editTemplate>
-        <td></td>
-        <td>
-          <input type="text"  [(ngModel)]="dataEdit[idx].data.tenTaiSan" nz-input/>
-        </td>
-        <td>
-          <input type="text"  [(ngModel)]="dataEdit[idx].data.maTaiSan" nz-input/>
-        </td>
-        <td>
-          <input type="text"  [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>
-        </td>
-        <td>
-          <input type="text"  [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>
-        </td>
-        <td>
-          <input type="text"  [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>
-        </td>
-        <td>
-          <input type="text"  [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>
-        </td>
-        <td>
-          <input type="text"  [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>
-        </td>
-        <td>
-          <input type="text"  [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>
-        </td>
-        <td>
-          <input type="text"  [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>
-        </td>
-        <td>
-          <input type="text"  [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>
-        </td>
-        <td>
-          <input type="text"  [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>
-        </td>
-        <td>
-          <input type="text"  [(ngModel)]="dataEdit[idx].data.donViTinh" nz-input/>
-        </td>
+        <th></th>
+        <th>
+          <nz-select [(ngModel)]="data[idx].data.maTaiSan" [nzDisabled]="isDetail" (ngModelChange)="changeDm($event)"
+                     nzAllowClear="true">
+            <nz-option *ngFor="let p of listDmTaiSan" [nzValue]="p.maTaiSan" [nzLabel]="p.tenTaiSan">
+            </nz-option>
+          </nz-select>
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="data[idx].data.donViTinh" readonly nz-input/>
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="data[idx].data.slHienCo" readonly nz-input/>
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="data[idx].data.slNhapThem" readonly nz-input/>
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="data[idx].data.tongCong" readonly nz-input/>
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="data[idx].data.slTieuChuan" readonly nz-input/>
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="data[idx].data.chenhLechThieu" readonly nz-input/>
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="data[idx].data.chenhLechThua" readonly nz-input/>
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="data[idx].data.soLuong" readonly nz-input/>
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="data[idx].data.donGiaNc" readonly nz-input/>
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="data[idx].data.thanhTienNc" readonly nz-input/>
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="data[idx].data.ghiChu" nz-input/>
+        </th>
         <td class="text-center" *ngIf="!isView">
           <a class="save" (click)="saveDinhMuc(idx)">
             <i class="fa fa-save"></i>
@@ -264,6 +264,23 @@
     </tr>
     </tbody>
   </nz-table>
+  <nz-card class="mt16 flex-card p-lr16 mg-t-10">
+    <form [nzLayout]="'vertical'" nz-form [formGroup]="formData">
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="24">
+          <nz-form-item>
+            <nz-form-label [nzNoColon]="true">
+              Tài liệu đính kèm
+            </nz-form-label>
+            <div class="list-file">
+              <file-list [data]="fileDinhKem"></file-list>
+            </div>
+          </nz-form-item>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+
 </div>
 <ng-template #error let-control>
   <ng-container *ngIf="control.hasError('required')">{{globals.prop.REQUIRED}}

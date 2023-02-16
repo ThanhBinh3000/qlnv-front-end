@@ -6,15 +6,13 @@ import { MESSAGE } from 'src/app/constants/message';
 import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
-import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
-import dayjs from "dayjs";
-
+import {QlDinhMucPhiService} from "../../../../services/qlnv-kho/QlDinhMucPhi.service";
 @Component({
-  selector: 'app-de-xuat-nhu-cau-chi-cuc',
-  templateUrl: './de-xuat-nhu-cau-chi-cuc.component.html',
-  styleUrls: ['./de-xuat-nhu-cau-chi-cuc.component.scss']
+  selector: 'app-mm-tong-hop-dx-cuc',
+  templateUrl: './mm-tong-hop-dx-cuc.component.html',
+  styleUrls: ['./mm-tong-hop-dx-cuc.component.scss']
 })
-export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnInit {
+export class MmTongHopDxCucComponent extends Base2Component implements OnInit {
 
   selectedId: number = 0;
   isViewDetail: boolean;
@@ -26,23 +24,23 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    dxChiCucService: MmDxChiCucService
+    qlDinhMucPhiService: QlDinhMucPhiService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
+    super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService)
     super.ngOnInit()
     this.formData = this.fb.group({
-      maDvi: [''],
       namKeHoach: [''],
-      soCv: [''],
+      soCongVan: [''],
       trichYeu: [''],
       ngayKy: [''],
+      maDvi: [''],
     });
     this.filterTable = {};
   }
   async ngOnInit() {
     this.spinner.show();
     try {
-      await this.filter();
+      await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -50,15 +48,6 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
     }
   }
-
-  async filter() {
-    if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
-      this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY');
-      this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY');
-    }
-    await this.search();
-  }
-
 
   redirectToChiTiet(isView: boolean, id: number) {
     this.selectedId = id;

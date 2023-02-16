@@ -15,19 +15,27 @@ import {
 } from "./mm-dinh-muc-trang-bi/mm-them-moi-dm-trang-bi/mm-them-moi-dm-trang-bi.component";
 import { MmHopDongComponent } from './mm-hop-dong/mm-hop-dong.component';
 import { MmTtPhanBoComponent } from './mm-tt-phan-bo/mm-tt-phan-bo.component';
+import {MmDxCucComponent} from "./mm-dx-cuc/mm-dx-cuc.component";
+import {ThemMoiMmDxCucComponent} from "./mm-dx-cuc/them-moi-mm-dx-cuc/them-moi-mm-dx-cuc.component";
+import { MmTongHopDxCucComponent } from './mm-tong-hop-dx-cuc/mm-tong-hop-dx-cuc.component';
+import { MmThemMoiTongHopDxCucComponent } from './mm-tong-hop-dx-cuc/mm-them-moi-tong-hop-dx-cuc/mm-them-moi-tong-hop-dx-cuc.component';
 
 @NgModule({
-    declarations: [
-        MayMocThietBiComponent,
-        DeXuatNhuCauChiCucComponent,
-        ThongTinDeXuatNhuCauChiCucComponent,
-        MmBienBanGiaoNhanComponent,
-        MmHienTrangCcdcComponent,
-        MmDinhMucTrangBiComponent,
-        MmThemMoiDmTrangBiComponent,
-        MmHopDongComponent,
-        MmTtPhanBoComponent
-    ],
+  declarations: [
+    MayMocThietBiComponent,
+    DeXuatNhuCauChiCucComponent,
+    ThongTinDeXuatNhuCauChiCucComponent,
+    MmBienBanGiaoNhanComponent,
+    MmHienTrangCcdcComponent,
+    MmDinhMucTrangBiComponent,
+    MmThemMoiDmTrangBiComponent,
+    MmHopDongComponent,
+    MmTtPhanBoComponent,
+    MmDxCucComponent,
+    ThemMoiMmDxCucComponent,
+    MmTongHopDxCucComponent,
+    MmThemMoiTongHopDxCucComponent
+  ],
   imports: [
     CommonModule,
     ComponentsModule,
