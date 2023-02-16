@@ -10,7 +10,7 @@ import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { addChild, addHead, addParent, deleteRow, displayNumber, divNumber, exchangeMoney, getHead, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
-import { AMOUNT, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
+import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 import { DIADIEM } from '../bao-cao.constant';
 
@@ -98,7 +98,7 @@ export class PhuLucIIIComponent implements OnInit {
     trangThaiPhuLuc = '1';
     initItem: ItemData = new ItemData();
     total: ItemData = new ItemData();
-    scrollX = '5900px'
+    scrollX = (500 + 41 * BOX_NUMBER_WIDTH + 1000).toString() + 'px';
     amount = AMOUNT;
     quatity = QUATITY;
     //trang thai cac nut
@@ -160,7 +160,7 @@ export class PhuLucIIIComponent implements OnInit {
         this.status = this.data?.status;
         this.statusEdit = !this.status && this.maLoaiBcao != '527';
         if (this.startEdit) {
-            this.scrollX = '5700px';
+            this.scrollX = (500 + 41 * BOX_NUMBER_WIDTH + 800).toString() + 'px';
         }
         this.statusBtnFinish = this.data?.statusBtnFinish;
         this.data?.lstCtietBcaos.forEach(item => {
