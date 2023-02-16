@@ -244,7 +244,7 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
     let rs = false;
     if (dataItem && dataItem.length > 0) {
       dataItem.forEach(it => {
-        if (it.maDinhMuc == item.maDinhMuc) {
+        if (it.maTaiSan == item.maTaiSan) {
           rs = true;
           return;
         }
