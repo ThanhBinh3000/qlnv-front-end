@@ -4,12 +4,14 @@ import {ChiTietQdGnvXuatHangComponent} from './chi-tiet-qd-gnv-xuat-hang/chi-tie
 import {ComponentsModule} from "../../../../components/components.module";
 import {DirectivesModule} from "../../../../directives/directives.module";
 import {QuyetDinhGnvXuatHangComponent} from "./quyet-dinh-gnv-xuat-hang.component";
+import { ThongTinQdGnvXuatHangComponent } from './thong-tin-qd-gnv-xuat-hang/thong-tin-qd-gnv-xuat-hang.component';
 
 
 @NgModule({
   declarations: [
     ChiTietQdGnvXuatHangComponent,
-    QuyetDinhGnvXuatHangComponent
+    QuyetDinhGnvXuatHangComponent,
+    ThongTinQdGnvXuatHangComponent
   ],
   imports: [
     CommonModule,
