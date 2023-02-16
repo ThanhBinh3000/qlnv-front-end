@@ -1,20 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {Base2Component} from "../../../components/base2/base2.component";
+
+import {Component, Input, OnInit} from '@angular/core';
+import dayjs from 'dayjs';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
 import {HttpClient} from "@angular/common/http";
-import {StorageService} from "../../../services/storage.service";
-import {NzNotificationService} from "ng-zorro-antd/notification";
-import {NgxSpinnerService} from "ngx-spinner";
-import {NzModalService} from "ng-zorro-antd/modal";
-import {QlDinhMucPhiService} from "../../../services/qlnv-kho/QlDinhMucPhi.service";
-import dayjs from "dayjs";
-import {MESSAGE} from "../../../constants/message";
+import {StorageService} from "../../../../services/storage.service";
+import {QlDinhMucPhiService} from "../../../../services/qlnv-kho/QlDinhMucPhi.service";
+import {Base2Component} from "../../../../components/base2/base2.component";
 
 @Component({
-  selector: 'app-dinh-muc-trang-bi-cong-cu-dung-cu',
-  templateUrl: './dinh-muc-trang-bi-cong-cu-dung-cu.component.html',
-  styleUrls: ['./dinh-muc-trang-bi-cong-cu-dung-cu.component.scss']
+  selector: 'app-mm-dinh-muc-trang-bi',
+  templateUrl: './mm-dinh-muc-trang-bi.component.html',
+  styleUrls: ['./mm-dinh-muc-trang-bi.component.scss']
 })
-export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implements OnInit {
+export class MmDinhMucTrangBiComponent extends Base2Component implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
@@ -29,19 +29,19 @@ export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implemen
   ) {
     super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService)
     super.ngOnInit()
-    this.filterTable = {};
-  }
-
-  async ngOnInit() {
     this.formData = this.fb.group({
       soQd: [''],
       trangThai: [''],
       ngayKy: [''],
       ngayHieuLuc: [''],
       trichYeu: [''],
-      capDvi: [''],
-      loai: ['01'],
+      capDvi: [null],
+      loai: ['02'],
     });
+    this.filterTable = {};
+  }
+
+  async ngOnInit() {
     await this.filter();
   }
 
@@ -58,10 +58,6 @@ export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implemen
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {
-    if (!this.userService.isTongCuc()) {
-      this.notification.error(MESSAGE.ERROR, "Bạn không có quyền thực hiện chức năng này.");
-      return;
-    }
     this.selectedId = id;
     this.isDetail = true;
     this.isViewDetail = isView ?? false;

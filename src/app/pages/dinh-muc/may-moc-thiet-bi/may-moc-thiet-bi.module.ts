@@ -9,6 +9,16 @@ import { MayMocThietBiRoutingModule } from './may-moc-thiet-bi-routing.module';
 import { MayMocThietBiComponent } from './may-moc-thiet-bi.component';
 import { MmBienBanGiaoNhanComponent } from './mm-bien-ban-giao-nhan/mm-bien-ban-giao-nhan.component';
 import { MmHienTrangCcdcComponent } from './mm-hien-trang-ccdc/mm-hien-trang-ccdc.component';
+import { MmDinhMucTrangBiComponent } from './mm-dinh-muc-trang-bi/mm-dinh-muc-trang-bi.component';
+import {
+    MmThemMoiDmTrangBiComponent
+} from "./mm-dinh-muc-trang-bi/mm-them-moi-dm-trang-bi/mm-them-moi-dm-trang-bi.component";
+import { MmHopDongComponent } from './mm-hop-dong/mm-hop-dong.component';
+import { MmTtPhanBoComponent } from './mm-tt-phan-bo/mm-tt-phan-bo.component';
+import {MmDxCucComponent} from "./mm-dx-cuc/mm-dx-cuc.component";
+import {ThemMoiMmDxCucComponent} from "./mm-dx-cuc/them-moi-mm-dx-cuc/them-moi-mm-dx-cuc.component";
+import { MmTongHopDxCucComponent } from './mm-tong-hop-dx-cuc/mm-tong-hop-dx-cuc.component';
+import { MmThemMoiTongHopDxCucComponent } from './mm-tong-hop-dx-cuc/mm-them-moi-tong-hop-dx-cuc/mm-them-moi-tong-hop-dx-cuc.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +26,15 @@ import { MmHienTrangCcdcComponent } from './mm-hien-trang-ccdc/mm-hien-trang-ccd
     DeXuatNhuCauChiCucComponent,
     ThongTinDeXuatNhuCauChiCucComponent,
     MmBienBanGiaoNhanComponent,
-    MmHienTrangCcdcComponent
+    MmHienTrangCcdcComponent,
+    MmDinhMucTrangBiComponent,
+    MmThemMoiDmTrangBiComponent,
+    MmHopDongComponent,
+    MmTtPhanBoComponent,
+    MmDxCucComponent,
+    ThemMoiMmDxCucComponent,
+    MmTongHopDxCucComponent,
+    MmThemMoiTongHopDxCucComponent
   ],
   imports: [
     CommonModule,
