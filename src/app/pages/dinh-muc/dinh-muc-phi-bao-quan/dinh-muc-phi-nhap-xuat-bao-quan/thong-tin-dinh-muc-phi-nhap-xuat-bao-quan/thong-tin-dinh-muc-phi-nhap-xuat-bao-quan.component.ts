@@ -86,7 +86,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       await this.loaiVTHHGetAll();
       await this.loadDmDinhMuc();
       await this.loadDonVi();
-      await this.search();
       if (this.idInput > 0) {
         this.detail(this.idInput);
       }
@@ -378,7 +377,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.dataEdit[idx].data.apDungTai = this.dataEdit[idx].data.apDungTai ? this.dataEdit[idx].data.apDungTai.toString() : null;
     Object.assign(this.dataTableDetail[idx], this.dataEdit[idx].data);
     this.dataEdit[idx].edit = false;
-    // this.updateEditCache();
   }
 
   deleteItem(index: any) {
@@ -399,5 +397,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
         }
       },
     });
+  }
+
+  maxValueInput(): number {
+    return 1000;
   }
 }
