@@ -73,15 +73,13 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
 
   async getAllDmTaiSan() {
     let body = {
-      paggingReq: {
-        limit: 10000,
-        page: 0,
-      }
+      loai: '02',
+      trangThai: STATUS.BAN_HANH
     };
-    let res = await this.dmTaiSanService.searchDsChuaSuDung(body);
+    let res = await this.dxChiCucService.searchDsChuaSuDung(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.content && res.data.content.length > 0) {
-        this.listDmTaiSan = res.data.content;
+      if (res.data && res.data.length > 0) {
+        this.listDmTaiSan = res.data
       }
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
@@ -94,9 +92,11 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       if (!type) {
         this.rowItem.tenTaiSan = result[0].tenTaiSan
         this.rowItem.donViTinh = result[0].dviTinh;
+        this.rowItem.donGiaTd = result[0].donGiaTd
       } else {
         type.tenTaiSan = result[0].tenTaiSan
         type.donViTinh = result[0].dviTinh;
+        type.donGiaTd = result[0].donGiaTd;
       }
     }
   }
@@ -128,6 +128,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       this.spinner.hide();
       return;
     }
+    this.rowItem.thanhTienNc = this.rowItem.soLuong * this.rowItem.donGiaTd
     this.dataTable = [...this.dataTable, this.rowItem];
     this.rowItem = new MmThongTinNcChiCuc();
     this.updateEditCache();
@@ -157,7 +158,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     return msgRequired;
   }
 
-  updateEditCache(): void {
+  updateEditCache() {
     if (this.dataTable) {
       this.dataTable.forEach((item, index) => {
         this.dataEdit[index] = {
@@ -190,7 +191,9 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
       this.spinner.hide();
       return;
     }
+    this.dataEdit[idx].data.thanhTienNc = this.dataEdit[idx].data.donGiaTd * this.dataEdit[idx].data.soLuong
     this.dataEdit[idx].edit = false;
+    Object.assign(this.dataTable[idx], this.dataEdit[idx].data);
     this.updateEditCache();
   }
 
@@ -278,9 +281,9 @@ export class MmThongTinNcChiCuc {
   slTieuChuan: number;
   chenhLechThieu: number;
   chenhLechThua: number;
-  soLuong: number;
-  donGiaNc: number;
-  thanhTienNc: number;
+  soLuong: number = 0;
+  donGiaTd: number = 0;
+  thanhTienNc: number = 0;
   ghiChu: number;
 }
 

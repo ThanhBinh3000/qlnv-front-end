@@ -191,13 +191,16 @@
         <input type="text" [(ngModel)]="rowItem.chenhLechThua" readonly nz-input/>
       </th>
       <th>
-        <input type="text" [(ngModel)]="rowItem.soLuong"  nz-input/>
+        <nz-input-number  [(ngModel)]="rowItem.soLuong" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                          [nzParser]="globals.parser"></nz-input-number>
       </th>
       <th>
-        <input type="text" [(ngModel)]="rowItem.donGiaNc" readonly nz-input/>
+        <nz-input-number  [(ngModel)]="rowItem.donGiaTd" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
+                          [nzParser]="globals.parser"></nz-input-number>
       </th>
       <th>
-        <input type="text" [(ngModel)]="rowItem.thanhTienNc" readonly nz-input/>
+        <nz-input-number  [(ngModel)]="rowItem.soLuong * rowItem.donGiaTd" nzDisabled [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                          [nzParser]="globals.parser"></nz-input-number>
       </th>
       <th>
         <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
@@ -224,9 +227,9 @@
         <td>{{0}}</td>
         <td>{{0}}</td>
         <td>{{0}}</td>
-        <td>{{data.soLuong}}</td>
-        <td>{{0}}</td>
-        <td>{{0}}</td>
+        <td>{{data.soLuong  | number: '1.0-1'  }}</td>
+        <td>{{data.donGiaTd  | number: '1.0-1' }}</td>
+        <td>{{data.soLuong * data.donGiaTd    | number: '1.0-1' }}</td>
         <td>{{data.ghiChu}}</td>
         <td class="text-center" *ngIf="!isView">
           <a (click)="editRow(idx)">
@@ -240,44 +243,47 @@
       <ng-template #editTemplate>
         <th></th>
         <th>
-          <nz-select [(ngModel)]="data[idx].data.maTaiSan" [nzDisabled]="isView" (ngModelChange)="changeDm($event)"
-                     nzAllowClear="true">
+          <nz-select [(ngModel)]="dataEdit[idx].data.maTaiSan" [nzDisabled]="isView"
+                     nzAllowClear="true" (ngModelChange)="changeDm($event)">
             <nz-option *ngFor="let p of listDmTaiSan" [nzValue]="p.maTaiSan" [nzLabel]="p.tenTaiSan">
             </nz-option>
           </nz-select>
         </th>
         <th>
-          <input type="text" [(ngModel)]="data[idx].data.donViTinh" readonly nz-input/>
+          <input type="text" [(ngModel)]="dataEdit[idx].data.donViTinh" readonly nz-input/>
         </th>
         <th>
-          <input type="text" [(ngModel)]="data[idx].data.slHienCo" readonly nz-input/>
+          <input type="text" [(ngModel)]="dataEdit[idx].data.slHienCo" readonly nz-input/>
         </th>
         <th>
-          <input type="text" [(ngModel)]="data[idx].data.slNhapThem" readonly nz-input/>
+          <input type="text" [(ngModel)]="dataEdit[idx].data.slNhapThem" readonly nz-input/>
         </th>
         <th>
-          <input type="text" [(ngModel)]="data[idx].data.tongCong" readonly nz-input/>
+          <input type="text" [(ngModel)]="dataEdit[idx].data.tongCong" readonly nz-input/>
         </th>
         <th>
-          <input type="text" [(ngModel)]="data[idx].data.slTieuChuan" readonly nz-input/>
+          <input type="text" [(ngModel)]="dataEdit[idx].data.slTieuChuan" readonly nz-input/>
         </th>
         <th>
-          <input type="text" [(ngModel)]="data[idx].data.chenhLechThieu" readonly nz-input/>
+          <input type="text" [(ngModel)]="dataEdit[idx].data.chenhLechThieu" readonly nz-input/>
         </th>
         <th>
-          <input type="text" [(ngModel)]="data[idx].data.chenhLechThua" readonly nz-input/>
+          <input type="text" [(ngModel)]="dataEdit[idx].data.chenhLechThua" readonly nz-input/>
         </th>
         <th>
-          <input type="text" [(ngModel)]="data[idx].data.soLuong"  nz-input/>
+          <nz-input-number  [(ngModel)]="dataEdit[idx].data.soLuong" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                            [nzParser]="globals.parser"></nz-input-number>
         </th>
         <th>
-          <input type="text" [(ngModel)]="data[idx].data.donGiaNc" readonly nz-input/>
+          <nz-input-number  [(ngModel)]="dataEdit[idx].data.donGiaTd" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
+                            [nzParser]="globals.parser"></nz-input-number>
         </th>
         <th>
-          <input type="text" [(ngModel)]="data[idx].data.thanhTienNc" readonly nz-input/>
+          <nz-input-number  [(ngModel)]="dataEdit[idx].data.soLuong * rowItem.donGiaTd" nzDisabled [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                            [nzParser]="globals.parser"></nz-input-number>
         </th>
         <th>
-          <input type="text" [(ngModel)]="data[idx].data.ghiChu" nz-input/>
+          <input type="text" [(ngModel)]="dataEdit[idx].data.ghiChu" nz-input/>
         </th>
         <td class="text-center" *ngIf="!isView">
           <a class="save" (click)="saveDinhMuc(idx)">
