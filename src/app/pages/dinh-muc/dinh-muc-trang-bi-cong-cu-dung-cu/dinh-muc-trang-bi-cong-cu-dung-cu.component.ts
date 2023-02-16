@@ -29,23 +29,23 @@ export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implemen
   ) {
     super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService)
     super.ngOnInit()
+    this.filterTable = {};
+  }
+
+  async ngOnInit() {
     this.formData = this.fb.group({
       soQd: [''],
       trangThai: [''],
       ngayKy: [''],
       ngayHieuLuc: [''],
       trichYeu: [''],
-      capDvi: [1],
+      capDvi: [''],
       loai: ['01'],
     });
-    this.filterTable = {};
+    await this.filter();
   }
 
-  ngOnInit(): void {
-    this.filter();
-  }
-
-  filter() {
+  async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
       this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY');
       this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY');
@@ -54,11 +54,11 @@ export class DinhMucTrangBiCongCuDungCuComponent extends Base2Component implemen
       this.formData.value.ngayHieuLucTu = dayjs(this.formData.value.ngayHieuLuc[0]).format('DD/MM/YYYY');
       this.formData.value.ngayHieuLucDen = dayjs(this.formData.value.ngayHieuLuc[1]).format('DD/MM/YYYY');
     }
-    this.search();
+    await this.search();
   }
 
   redirectToChiTiet(id: number, isView?: boolean) {
-    if(!this.userService.isTongCuc()){
+    if (!this.userService.isTongCuc()) {
       this.notification.error(MESSAGE.ERROR, "Bạn không có quyền thực hiện chức năng này.");
       return;
     }

@@ -110,16 +110,18 @@ export class DanhMucDuAnComponent implements OnInit {
   }
 
   async loadDanhSachCuc() {
-    const body = {
-      maDviCha: this.userInfo.MA_DVI,
-      trangThai: '01',
-    };
+    if (this.userService.isTongCuc()) {
+      const body = {
+        maDviCha: this.userInfo.MA_DVI,
+        trangThai: '01',
+      };
 
-    const dsTong = await this.dviService.layDonViTheoCapDo(body);
-    this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
-    this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB")
-    if (this.userService.isCuc()) {
-      this.searchFilter.maDvi = this.userInfo.MA_DVI
+      const dsTong = await this.dviService.layDonViTheoCapDo(body);
+      this.danhSachCuc = dsTong[DANH_MUC_LEVEL.CUC];
+      this.danhSachCuc = this.danhSachCuc.filter(item => item.type != "PB")
+      if (this.userService.isCuc()) {
+        this.searchFilter.maDvi = this.userInfo.MA_DVI
+      }
     }
   }
 

@@ -86,7 +86,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       await this.loaiVTHHGetAll();
       await this.loadDmDinhMuc();
       await this.loadDonVi();
-      await this.search();
       if (this.idInput > 0) {
         this.detail(this.idInput);
       }
@@ -128,7 +127,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
 
-  save() {
+  async  save() {
     if (this.dataTableDetail.length <= 0) {
       this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập chi tiết định mức phí nhập xuất bảo quản.");
       return;
@@ -143,8 +142,10 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.formData.value.listQlDinhMucPhis = this.dataTableDetail;
     this.formData.value.capDvi = this.capDvi;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
-    this.createUpdate(this.formData.value)
-    this.goBack();
+    let res = await  this.createUpdate(this.formData.value)
+    if (res) {
+      this.goBack();
+    }
   }
 
   banHanh(id, trangThai) {
@@ -378,7 +379,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.dataEdit[idx].data.apDungTai = this.dataEdit[idx].data.apDungTai ? this.dataEdit[idx].data.apDungTai.toString() : null;
     Object.assign(this.dataTableDetail[idx], this.dataEdit[idx].data);
     this.dataEdit[idx].edit = false;
-    // this.updateEditCache();
   }
 
   deleteItem(index: any) {
@@ -399,5 +399,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
         }
       },
     });
+  }
+
+  maxValueInput(): number {
+    return 1000;
   }
 }
