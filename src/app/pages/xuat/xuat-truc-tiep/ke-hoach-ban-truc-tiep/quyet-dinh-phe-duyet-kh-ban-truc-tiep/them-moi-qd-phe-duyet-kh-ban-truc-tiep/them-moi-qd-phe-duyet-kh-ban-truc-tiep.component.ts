@@ -148,7 +148,7 @@ export class ThemMoiQdPheDuyetKhBanTrucTiepComponent extends Base2Component impl
         tenCloaiVthh: dataTongHop.tenCloaiVthh,
         loaiVthh: dataTongHop.loaiVthh,
         tenLoaiVthh: dataTongHop.tenLoaiVthh,
-        nam: dataTongHop.namKh,
+        namKh: dataTongHop.namKh,
         idThHdr: dataTongHop.id,
         tchuanCluong: dataTongHop.tchuanCluong,
         phanLoai: 'TH',

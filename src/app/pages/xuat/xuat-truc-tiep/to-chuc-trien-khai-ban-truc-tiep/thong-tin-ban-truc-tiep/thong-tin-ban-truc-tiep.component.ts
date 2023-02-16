@@ -58,7 +58,7 @@ export class ThongTinBanTrucTiepComponent extends Base2Component implements OnIn
   async ngOnInit() {
     try {
       this.formData.patchValue({
-        loaiVthh: this.loaiVthh
+        loaiVthh: this.loaiVthh, maDvi: this.userService.isCuc() ? this.userInfo.MA_DVI : null,
       })
       await this.search();
       await this.initData()

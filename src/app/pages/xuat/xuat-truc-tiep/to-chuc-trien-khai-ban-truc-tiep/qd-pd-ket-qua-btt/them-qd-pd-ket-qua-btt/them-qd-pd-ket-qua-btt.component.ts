@@ -155,9 +155,10 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
 
   async openThongtinChaoGia() {
     let body = {
-      "namKh": this.formData.value.nam,
+      "namKh": this.formData.value.namKh,
       "loaiVthh": this.loaiVthh,
       "maDvi": this.userInfo.MA_DVI,
+      "trangThai": STATUS.HOAN_THANH_CAP_NHAT,
       "paggingReq": {
         limit: this.globals.prop.MAX_INTERGER,
         page: 0,
@@ -169,7 +170,7 @@ export class ThemQdPdKetQuaBttComponent extends Base2Component implements OnInit
       listTb = res.data.content;
     }
     const modalQD = this.modal.create({
-      nzTitle: 'Danh sách thông báo bán đấu giá',
+      nzTitle: 'Danh sách thông tin chào giá',
       nzContent: DialogTableSelectionComponent,
       nzMaskClosable: false,
       nzClosable: false,
