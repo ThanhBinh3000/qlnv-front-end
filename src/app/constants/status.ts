@@ -56,6 +56,8 @@ export enum STATUS {
   TU_CHOI_CBV = '54',
   KHONG_BAN_HANH = '55',
   HET_HIEU_LUC = '56',
+  DADUYET_CB_CUC = '57',
+  TUCHOI_CB_CUC = '58',
 }
 
 export enum LoaiTaiLieu {

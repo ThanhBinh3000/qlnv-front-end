@@ -46,7 +46,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" (click)="redirectToChiTiet(false, 0)"
+        <button type="button" class="btn btn-sub xanh" (click)="redirectToChiTiet(false, null)"
           *ngIf="userService.isChiCuc()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -127,19 +127,19 @@
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
             <td>{{ data.soCv }}</td>
             <td>{{ data.namKeHoach }}</td>
+            <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
             <td>{{ data.trichYeu }}</td>
-            <td>{{ data.ngayKy }}</td>
-            <td>{{ data.ngayKy }}</td>
+            <td>{{ data.soQdGiaoCt }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td>
-              <a (click)="redirectToChiTiet(true, data.id)" *ngIf="data.trangThai == STATUS.BAN_HANH || data.trangThai == STATUS.DA_KY">
+              <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.DA_KY || data.trangThai == STATUS.DADUYET_CB_CUC) && userService.isChiCuc()) || userService.isCuc()">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || userService.isChiCuc())"
+              <a *ngIf="((data.trangThai == STATUS.TUCHOI_CB_CUC || data.trangThai == STATUS.DU_THAO) && userService.isChiCuc())"
                 (click)="redirectToChiTiet(false, data.id)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO  || userService.isChiCuc()" (click)="delete(data)">
+              <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isChiCuc()" (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
+import {Component, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
 import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
@@ -30,19 +30,14 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
   ) {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
-    this.formData = this.fb.group({
-      maDvi: [''],
-      namKeHoach: [''],
-      soCv: [''],
-      trichYeu: [''],
-      ngayKy: [''],
-    });
     this.filterTable = {};
   }
-  async ngOnInit() {
+
+  ngOnInit() {
     this.spinner.show();
     try {
-      await this.filter();
+      this.initFormSearch();
+      this.filter();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -51,11 +46,24 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
     }
   }
 
+  initFormSearch(){
+    this.formData = this.fb.group({
+      maDvi: [''],
+      namKeHoach: [''],
+      soCv: [''],
+      trichYeu: [''],
+      ngayKy: [''],
+    });
+  }
+
   async filter() {
     if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
       this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY');
       this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY');
     }
+    this.formData.patchValue({
+      maDvi : this.userService.isChiCuc()  ? this.userInfo.MA_DVI : null
+    })
     await this.search();
   }
 

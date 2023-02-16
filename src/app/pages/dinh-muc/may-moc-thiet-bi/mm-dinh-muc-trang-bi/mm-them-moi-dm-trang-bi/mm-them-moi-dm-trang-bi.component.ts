@@ -19,8 +19,6 @@ import {DanhMucTaiSanService} from "../../../../../services/danh-muc-tai-san.ser
 })
 export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnInit {
   @Input('isViewDetail') isViewDetail: boolean;
-  @Output()
-  showListEvent = new EventEmitter<any>();
   @Input() idInput: number;
   rowItem: DinhMucTrangBiMm = new DinhMucTrangBiMm();
   dataTableDetail: any[] = [];
@@ -62,7 +60,6 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
     this.dataTableDetail = [];
     this.spinner.show();
     try {
-      await this.search();
       await this.getAllDmTaiSan();
       if (this.idInput > 0) {
         this.detail(this.idInput);
@@ -174,8 +171,10 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
     }
     this.formData.value.listQlDinhMucPhiTbMmtbCd = this.dataTableDetail;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
-    await this.createUpdate(this.formData.value)
-    this.goBack();
+    let res = await this.createUpdate(this.formData.value)
+    if (res) {
+      this.goBack();
+    }
   }
 
   banHanh(id, trangThai) {
@@ -330,9 +329,11 @@ export class MmThemMoiDmTrangBiComponent extends Base2Component implements OnIni
     let result = this.listDmTaiSan.filter(item => item.maTaiSan == event)
     if (result && result.length > 0) {
       if (!type) {
+        this.rowItem.tenTaiSan = result[0].tenTaiSan;
         this.rowItem.donViTinh = result[0].dviTinh;
       } else {
         type.donViTinh = result[0].dviTinh;
+        type.tenTaiSan = result[0].tenTaiSan;
       }
     }
   }

@@ -161,7 +161,7 @@
       <tr *ngFor="let data of dataTableDetail; let idx = index">
         <ng-container *ngIf="!dataEdit[idx].edit ; else editTemplate">
           <td>{{idx + 1}}</td>
-          <td>{{data.maTaiSan}}</td>
+          <td>{{data.tenTaiSan}}</td>
           <td>{{data.donViTinh}}</td>
           <td>{{data.slVpCucKv}} </td>
           <td>{{data.slChiCuc}} / {{data.klChiCuc}} tấn lương thực ({{data.tenLoaiHinh}})</td>

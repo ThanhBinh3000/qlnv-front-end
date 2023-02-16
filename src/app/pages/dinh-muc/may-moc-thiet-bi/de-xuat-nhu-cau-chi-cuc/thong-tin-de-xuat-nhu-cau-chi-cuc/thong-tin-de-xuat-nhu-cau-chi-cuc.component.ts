@@ -1,16 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NzModalService } from 'ng-zorro-antd/modal';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { MESSAGE } from 'src/app/constants/message';
+import {Component, Input, OnInit} from '@angular/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {NzNotificationService} from 'ng-zorro-antd/notification';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {MESSAGE} from 'src/app/constants/message';
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../../services/storage.service";
-import {QlDinhMucPhiService} from "../../../../../services/qlnv-kho/QlDinhMucPhi.service";
 import {Validators} from "@angular/forms";
-import {DinhMucTrangBiMm} from "../../mm-dinh-muc-trang-bi/mm-them-moi-dm-trang-bi/mm-them-moi-dm-trang-bi.component";
 import {DanhMucTaiSanService} from "../../../../../services/danh-muc-tai-san.service";
 import dayjs from "dayjs";
+import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
+import {STATUS} from "../../../../../constants/status";
+import {DialogTuChoiComponent} from "../../../../../components/dialog/dialog-tu-choi/dialog-tu-choi.component";
 
 @Component({
   selector: 'app-thong-tin-de-xuat-nhu-cau-chi-cuc',
@@ -30,22 +31,26 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private qlDinhMucPhiService: QlDinhMucPhiService,
+    private dxChiCucService: MmDxChiCucService,
     private dmTaiSanService: DanhMucTaiSanService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService)
+    super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
     this.formData = this.fb.group({
-      id : [null],
-      maDvi : [null],
-      soCv : [null, Validators.required],
-      ngayKy : [null, Validators.required],
-      namKeHoach : [dayjs().get('year'), Validators.required],
-      soQdCtieu : [null, Validators.required],
-      trichYeu : [null, Validators.required],
-      trangThai : ['00'],
-      tenTrangThai : ['Dự thảo'],
-      fileDinhKems : [null],
+      id: [null],
+      maDvi: [null],
+      soCv: [null, Validators.required],
+      ngayKy: [null, Validators.required],
+      namKeHoach: [dayjs().get('year'), Validators.required],
+      soQdGiaoCt: [null],
+      klLtBaoQuan: [null],
+      klLtNhap: [null],
+      klLtXuat: [null],
+      trichYeu: [null, Validators.required],
+      trangThai: ['00'],
+      tenTrangThai: ['Dự thảo'],
+      fileDinhKems: [null],
+      lyDoTuChoi: [null],
     });
   }
 
@@ -53,8 +58,11 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     this.spinner.show();
     try {
       await Promise.all([
-        this.getAllDmTaiSan()
+        this.getAllDmTaiSan(),
       ]);
+      if (this.id) {
+        this.detail(this.id)
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -84,11 +92,28 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     let result = this.listDmTaiSan.filter(item => item.maTaiSan == event)
     if (result && result.length > 0) {
       if (!type) {
+        this.rowItem.tenTaiSan = result[0].tenTaiSan
         this.rowItem.donViTinh = result[0].dviTinh;
       } else {
+        type.tenTaiSan = result[0].tenTaiSan
         type.donViTinh = result[0].dviTinh;
       }
     }
+  }
+
+  async pheDuyet() {
+    let trangThai;
+    switch (this.formData.value.trangThai) {
+      case STATUS.DU_THAO :
+      case STATUS.TUCHOI_CB_CUC : {
+        trangThai = STATUS.DA_KY;
+        break;
+      }
+      case STATUS.DA_KY : {
+        trangThai = STATUS.DADUYET_CB_CUC
+      }
+    }
+    await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
   }
 
   async themMoiCtiet() {
@@ -189,7 +214,7 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     });
   }
 
-  save() {
+  async save() {
     if (this.dataTable.length <= 0) {
       this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập chi tiết đề xuất");
       return;
@@ -203,25 +228,59 @@ export class ThongTinDeXuatNhuCauChiCucComponent extends Base2Component implemen
     }
     this.formData.value.listQlDinhMucDxTbmmTbcdDtl = this.dataTable;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
-    this.createUpdate(this.formData.value)
-    this.goBack();
+    let res = await this.createUpdate(this.formData.value)
+    if (res) {
+      this.goBack();
+    }
+  }
+
+  async detail(id) {
+    this.spinner.show();
+    try {
+      let res = await this.dxChiCucService.getDetail(id);
+      if (res.msg == MESSAGE.SUCCESS) {
+        if (res.data) {
+          const data = res.data;
+          this.helperService.bidingDataInFormGroup(this.formData, data);
+          this.fileDinhKem = data.listFileDinhKems;
+          this.dataTable = data.listQlDinhMucDxTbmmTbcdDtl;
+          if (this.dataTable && this.dataTable.length > 0) {
+            this.dataTable.forEach(item => {
+              let result = this.listDmTaiSan.filter(p => p.maTaiSan == item.maTaiSan)
+              if (result && result.length > 0) {
+                item.tenTaiSan = result[0].tenTaiSan
+              }
+            })
+          }
+          this.updateEditCache();
+        }
+      } else {
+        this.notification.error(MESSAGE.ERROR, res.msg);
+        this.spinner.hide();
+      }
+    } catch (e) {
+      this.notification.error(MESSAGE.ERROR, e);
+      this.spinner.hide();
+    } finally {
+      this.spinner.hide();
+    }
   }
 }
 
 export class MmThongTinNcChiCuc {
-  id : number;
-  tenTaiSan : string;
-  maTaiSan : string;
-  donViTinh : string;
-  slHienCo : number;
-  slNhapThem : number;
-  tongCong : number;
-  slTieuChuan : number;
-  chenhLechThieu : number;
-  chenhLechThua : number;
-  soLuong  : number;
-  donGiaNc : number;
-  thanhTienNc : number;
-  ghiChu : number;
+  id: number;
+  tenTaiSan: string;
+  maTaiSan: string;
+  donViTinh: string;
+  slHienCo: number;
+  slNhapThem: number;
+  tongCong: number;
+  slTieuChuan: number;
+  chenhLechThieu: number;
+  chenhLechThua: number;
+  soLuong: number;
+  donGiaNc: number;
+  thanhTienNc: number;
+  ghiChu: number;
 }
 
