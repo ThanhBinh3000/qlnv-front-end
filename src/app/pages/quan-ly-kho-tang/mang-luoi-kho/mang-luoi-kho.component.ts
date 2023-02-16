@@ -10,13 +10,11 @@ import {HelperService} from 'src/app/services/helper.service';
 import {NzTreeSelectComponent} from 'ng-zorro-antd/tree-select';
 import {LOAI_DON_VI, TrangThaiHoatDong} from 'src/app/constants/status';
 import {NzModalService} from 'ng-zorro-antd/modal';
-// import { NewDonViComponent } from './new-don-vi/new-don-vi.component';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {MangLuoiKhoService} from 'src/app/services/quan-ly-kho-tang/mangLuoiKho.service';
 import {Globals} from 'src/app/shared/globals';
 import dayjs  from 'dayjs';
 import {DanhMucService} from 'src/app/services/danhmuc.service';
-import {NewDonViComponent} from "../../quan-tri-danh-muc/danh-muc-don-vi/new-don-vi/new-don-vi.component";
 import {ThemMoiKhoComponent} from "./them-moi-kho/them-moi-kho.component";
 import {UserLogin} from "../../../models/userlogin";
 import {UserService} from "../../../services/user.service";
@@ -220,6 +218,7 @@ export class MangLuoiKhoComponent implements OnInit {
   theTich: string = 'm³';
   listTinhTrang: any[] = [];
   nzClickNodeTree(event: any): void {
+    console.log(event)
     this.detailDonVi.reset();
     if (event.keys.length > 0) {
       this.isEditData = true;
