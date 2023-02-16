@@ -377,7 +377,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.dataEdit[idx].data.apDungTai = this.dataEdit[idx].data.apDungTai ? this.dataEdit[idx].data.apDungTai.toString() : null;
     Object.assign(this.dataTableDetail[idx], this.dataEdit[idx].data);
     this.dataEdit[idx].edit = false;
-    // this.updateEditCache();
   }
 
   deleteItem(index: any) {
@@ -399,7 +398,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       },
     });
   }
-
 
   maxValueInput(): number {
     return 1000;
