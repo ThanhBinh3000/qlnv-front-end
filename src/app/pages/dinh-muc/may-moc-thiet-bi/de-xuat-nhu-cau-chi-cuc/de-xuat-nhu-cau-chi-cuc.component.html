@@ -6,12 +6,12 @@
         <div nz-col nzSpan="3">
           <label class="search__label">Năm kế hoạch</label>
           <nz-select nzAllowClear formControlName="namKeHoach">
-            <nz-option *ngFor="let item of listNam" [nzValue]="item.giaTri" [nzLabel]="item.text"></nz-option>
+            <nz-option *ngFor="let p of listNam" [nzValue]="p.value" [nzLabel]="p.text"></nz-option>
           </nz-select>
         </div>
         <div nz-col nzSpan="3">
           <label class="search__label">Số công văn</label>
-          <input class="search__input" placeholder="Nhập Số công văn" nz-input formControlName="soCongVan"/>
+          <input class="search__input" placeholder="Nhập Số công văn" nz-input formControlName="soCv"/>
         </div>
         <div nz-col nzSpan="14">
           <label class="search__label">Trích yếu</label>
@@ -46,7 +46,7 @@
           <i class="icon htvbdh_chuyen-xu-ly"></i>
           <span>Xuất file</span>
         </button>
-        <button type="button" class="btn btn-sub xanh" (click)="redirectToChiTiet(false, 0)"
+        <button type="button" class="btn btn-sub xanh" (click)="redirectToChiTiet(false, null)"
           *ngIf="userService.isChiCuc()">
           <i class="icon htvbdh_dau-cong"></i>
           <span>Thêm</span>
@@ -66,31 +66,34 @@
             <th width="45px">STT</th>
             <th width="130px">Số công văn</th>
             <th width="130px">Năm kế hoạch</th>
-            <th>Trích yếu</th>
             <th width="130px">Ngày ký</th>
+            <th>Trích yếu</th>
             <th width="130px">Số QĐ giao chỉ tiêu</th>
             <th width="130px">Trạng thái</th>
-            <th width="150px">Hành động</th>
+            <th width="120px">Hành động</th>
           </tr>
           <tr class="search-table">
             <th></th>
             <th></th>
             <th>
               <nz-input-group >
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCongVan"
-                  (input)="filterInTable('soCongVan',filterTable.soCongVan)" />
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCv"
+                  (input)="filterInTable('soCv',filterTable.soCv)" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
             </th>
             <th>
               <nz-input-group >
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.namKeHoach"
                   (input)="filterInTable('namKeHoach',filterTable.namKeHoach)" />
               </nz-input-group>
+            </th>
+            <th>
+              <nz-input-group [nzSuffix]="suffixTemplateInfo">
+                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
+                       (input)="filterInTable('ngayKy',filterTable.ngayKy)" />
+              </nz-input-group>
               <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
+                <i nz-icon nzType="calendar"></i>
               </ng-template>
             </th>
             <th>
@@ -98,18 +101,6 @@
                 <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.trichYeu"
                   (input)="filterInTable('trichYeu',filterTable.trichYeu)" />
               </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="search"></i>
-              </ng-template>
-            </th>
-            <th>
-              <nz-input-group [nzSuffix]="suffixTemplateInfo">
-                <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.ngayKy"
-                  (input)="filterInTable('ngayKy',filterTable.ngayKy)" />
-              </nz-input-group>
-              <ng-template #suffixTemplateInfo>
-                <i nz-icon nzType="calendar"></i>
-              </ng-template>
             </th>
             <th>
               <nz-input-group >
@@ -134,21 +125,21 @@
                 [nzDisabled]="data.trangThai != globals.prop.NHAP_DU_THAO"></label>
             </td>
             <td class="text-center">{{(page-1)*pageSize+i+1}}</td>
-            <td>{{ data.soBienBan }}</td>
-            <td>{{ data.soQuyetDinhNhap }}</td>
-            <td>{{ data.soQuyetDinhNhap }}</td>
-            <td>{{ data.ngayNghiemThu }}</td>
-            <td>{{ data.tenVatTu }}</td>
+            <td>{{ data.soCv }}</td>
+            <td>{{ data.namKeHoach }}</td>
+            <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
+            <td>{{ data.trichYeu }}</td>
+            <td>{{ data.soQdGiaoCt }}</td>
             <td>{{ data.tenTrangThai }}</td>
             <td>
-              <a (click)="redirectToChiTiet(true, data.id)">
+              <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.DA_KY || data.trangThai == STATUS.DADUYET_CB_CUC) && userService.isChiCuc()) || userService.isCuc()">
                 <i class="fa fa-eye"></i>
               </a>
-              <a *ngIf="(data.trangThai == globals.prop.NHAP_DU_THAO || data.trangThai == globals.prop.NHAP_TU_CHOI_TP || data.trangThai == globals.prop.NHAP_TU_CHOI_LD_CHI_CUC)"
+              <a *ngIf="((data.trangThai == STATUS.TUCHOI_CB_CUC || data.trangThai == STATUS.DU_THAO) && userService.isChiCuc())"
                 (click)="redirectToChiTiet(false, data.id)">
                 <i class="fa fa-pencil"></i>
               </a>
-              <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO" (click)="delete(data)">
+              <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isChiCuc()" (click)="delete(data)">
                 <i class="fa fa-trash-o do"></i>
               </a>
             </td>
