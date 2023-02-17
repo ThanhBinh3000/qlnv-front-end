@@ -97,7 +97,9 @@ export class ThemMoiThongTinBanTrucTiepComponent extends Base2Component implemen
             diaDiemChaoGia: dataDtl.diaDiemChaoGia,
             ngayMkho: dataDtl.ngayMkho,
             ngayKthuc: dataDtl.ngayKthuc,
-            ghiChu: dataDtl.ghiChu
+            ghiChu: dataDtl.ghiChu,
+            soQdPd: dataDtl.soQdPd,
+
           })
           if (dataDtl) {
             await this.quyetDinhPdKhBanTrucTiepService.getDetail(dataDtl.idQdHdr).then(async (hdr) => {
