@@ -225,17 +225,17 @@ export class BaoCao04bComponent implements OnInit {
             res => {
                 if (res.statusCode == 0) {
                     this.dinhMucs = res.data;
-                    this.dinhMucs.forEach(item => {
-                        if (!item.cloaiVthh.startsWith('02')) {
-                            item.nvChuyenMonDviTt = (item.nvChuyenMonDviTt ? item.nvChuyenMonDviTt : 0) / 1000;
-                            item.nvChuyenMonVp = (item.nvChuyenMonVp ? item.nvChuyenMonVp : 0) / 1000;
-                            item.dieuHanhDviTt = (item.dieuHanhDviTt ? item.dieuHanhDviTt : 0) / 1000;
-                            item.dieuHanhVp = (item.dieuHanhVp ? item.dieuHanhVp : 0) / 1000;
-                            item.ttCaNhanDviTt = (item.ttCaNhanDviTt ? item.ttCaNhanDviTt : 0) / 1000;
-                            item.ttCaNhanVp = (item.ttCaNhanVp ? item.ttCaNhanVp : 0) / 1000;
-                            item.tcDhNvCm = (item.tcDhNvCm ? item.tcDhNvCm : 0) / 1000;
-                        }
-                    })
+                    // this.dinhMucs.forEach(item => {
+                    //     if (!item.cloaiVthh.startsWith('02')) {
+                    //         item.nvChuyenMonDviTt = (item.nvChuyenMonDviTt ? item.nvChuyenMonDviTt : 0) / 1000;
+                    //         item.nvChuyenMonVp = (item.nvChuyenMonVp ? item.nvChuyenMonVp : 0) / 1000;
+                    //         item.dieuHanhDviTt = (item.dieuHanhDviTt ? item.dieuHanhDviTt : 0) / 1000;
+                    //         item.dieuHanhVp = (item.dieuHanhVp ? item.dieuHanhVp : 0) / 1000;
+                    //         item.ttCaNhanDviTt = (item.ttCaNhanDviTt ? item.ttCaNhanDviTt : 0) / 1000;
+                    //         item.ttCaNhanVp = (item.ttCaNhanVp ? item.ttCaNhanVp : 0) / 1000;
+                    //         item.tcDhNvCm = (item.tcDhNvCm ? item.tcDhNvCm : 0) / 1000;
+                    //     }
+                    // })
                 } else {
                     this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
