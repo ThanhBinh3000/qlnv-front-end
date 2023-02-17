@@ -115,7 +115,7 @@
         <th colspan="5" width="680px">Mức chi giao văn phòng {{capDvi == 1 ? 'Tổng cục' : 'cục'}}</th>
         <th colspan="5"
             width="680px">{{capDvi == 1 ? 'Mức chi giao cục DTNN KV' : 'Mức chi giao Chi cục DTNN trực thuộc'}}</th>
-        <th rowspan="3" width="100px">Hành động</th>
+        <th rowspan="3" width="100px" *ngIf="!isViewDetail">Hành động</th>
       </tr>
       <tr>
         <th rowspan="2" width="80px">Tổng cộng</th>
@@ -261,7 +261,7 @@
                            [nzParser]="globals.parser">
           </nz-input-number>
         </th>
-        <th>
+        <th class="text-center" *ngIf="!isViewDetail">
           <a (click)="addDetailDinhMuc()" [ngClass]="{'isDisabled' : !isAddDetail}">
             <i class="icon htvbdh_dau-cong"></i>
           </a>
@@ -290,11 +290,11 @@
           <td>{{data.nvChuyenMonKv}}</td>
           <td>{{data.ttCaNhanKv}}</td>
           <td>{{data.tcDieuHanhKv}}</td>
-          <td>
-            <a *ngIf="!isViewDetail" (click)="editRow(idx)">
+          <td *ngIf="!isViewDetail">
+            <a (click)="editRow(idx)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="!isViewDetail" (click)="deleteItem(idx)">
+            <a (click)="deleteItem(idx)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>
