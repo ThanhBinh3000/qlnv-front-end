@@ -43,6 +43,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     trangThaiPdBtc: '',
   };
   listDonVi: any[] = []
+  listDonViPreview: any[] = []
   listDmDinhMuc: any[] = [];
   listHangHoa: any[] = [];
   listLoaiDinhMuc: any[] = [];
@@ -88,6 +89,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       await this.loadDmDinhMuc();
       await this.loadDonVi();
       await this.getTongDinhMucTongCucPhan();
+      await this.loadAllDonViTheoCap();
       if (this.idInput > 0) {
         this.detail(this.idInput);
       }
@@ -165,13 +167,19 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   async loadDmDinhMuc() {
     let body = {
-      capDvi: this.capDvi,
+      capDvi: 1,
+      maDvi: this.userInfo.MA_DVI,
       paggingReq: {
         limit: 10000,
         page: 0,
       }
     };
-    let res = await this.danhMucDinhMucService.searchDsChuaSuDung(body);
+    let res;
+    if (this.capDvi == 1) {
+      res = await this.danhMucDinhMucService.searchDsChuaSuDung(body);
+    } else {
+      res = await this.danhMucDinhMucService.searchDsTongCucApDung(body);
+    }
     if (res.msg == MESSAGE.SUCCESS) {
       if (res.data && res.data.content && res.data.content.length > 0) {
         for (let item of res.data.content) {
@@ -202,6 +210,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.rowItem.cloaiVthh = item.cloaiVthh ? item.cloaiVthh.toString() : null;
       if (tongDinhMucTongCuc && this.capDvi == 2) {
         this.rowItem.tongDinhMucTc = tongDinhMucTongCuc.tongDinhMuc;
+        this.rowItem.tcTongCucDieuHanhKv = tongDinhMucTongCuc.tcTongCucDieuHanhKv;
       }
     } else {
       this.rowItem.tenDinhMuc = null;
@@ -253,6 +262,13 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     }
   }
 
+  async loadAllDonViTheoCap() {
+    const res = await this.donViService.layTatCaDonViByLevel(this.capDvi + 1);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listDonViPreview = res.data.filter(item => item.type !== 'PB');
+    }
+  }
+
   async getAllLoaiDinhMuc() {
     let resLoaiDinhMuc = await this.danhMucService.danhMucChungGetAll('LOAI_DINH_MUC');
     if (resLoaiDinhMuc.msg == MESSAGE.SUCCESS) {
@@ -278,7 +294,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
 
   async getTongDinhMucTongCucPhan() {
     this.listTongDinhMucTongCucPhan = [];
-    let body = {trangThai: "29", loai: "00", capDvi: 1};
+    let body = {trangThai: "29", loai: "00", capDvi: 1, maDvi: this.userInfo.MA_DVI};
     let res = await this.qlDinhMucPhiService.layDanhSachTongDinhMucTongCucPhan(body);
     if (res.msg == MESSAGE.SUCCESS) {
       this.listTongDinhMucTongCucPhan = res.data;
@@ -334,7 +350,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     if (strMaDonVi) {
       let arrMaDvi = strMaDonVi.split(",");
       arrMaDvi.forEach((item) => {
-        this.listDonVi.forEach(donvi => {
+        this.listDonViPreview.forEach(donvi => {
           if (item == donvi.maDvi) {
             str = str + donvi.tenDvi + ",";
           }
