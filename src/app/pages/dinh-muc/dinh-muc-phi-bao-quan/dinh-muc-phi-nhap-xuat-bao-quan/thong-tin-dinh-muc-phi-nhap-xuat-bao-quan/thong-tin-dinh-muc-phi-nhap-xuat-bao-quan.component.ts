@@ -47,6 +47,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   listHangHoa: any[] = [];
   listLoaiDinhMuc: any[] = [];
   listLoaiBaoQuan: any[] = [];
+  listTongDinhMucTongCucPhan: any[] = []
 
   constructor(
     httpClient: HttpClient,
@@ -86,6 +87,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       await this.loaiVTHHGetAll();
       await this.loadDmDinhMuc();
       await this.loadDonVi();
+      await this.getTongDinhMucTongCucPhan();
       if (this.idInput > 0) {
         this.detail(this.idInput);
       }
@@ -127,7 +129,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
   }
 
 
-  save() {
+  async save() {
     if (this.dataTableDetail.length <= 0) {
       this.notification.error(MESSAGE.ERROR, "Bạn chưa nhập chi tiết định mức phí nhập xuất bảo quản.");
       return;
@@ -142,8 +144,10 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.formData.value.listQlDinhMucPhis = this.dataTableDetail;
     this.formData.value.capDvi = this.capDvi;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
-    this.createUpdate(this.formData.value)
-    this.goBack();
+    let res = await this.createUpdate(this.formData.value)
+    if (res) {
+      this.goBack();
+    }
   }
 
   banHanh(id, trangThai) {
@@ -187,6 +191,7 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       item = this.listDmDinhMuc.filter(item => item.tenDinhMuc == this.rowItem.tenDinhMuc)[0];
     }
     if (item) {
+      let tongDinhMucTongCuc = this.listTongDinhMucTongCucPhan.filter(it => it.maDinhMuc == item.maDinhMuc)[0];
       this.rowItem.tenDinhMuc = item.tenDinhMuc ? item.tenDinhMuc.toString() : null;
       this.rowItem.maDinhMuc = item.maDinhMuc ? item.maDinhMuc.toString() : null;
       this.rowItem.donViTinh = item.dviTinh ? item.dviTinh.toString() : null;
@@ -195,6 +200,9 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       this.rowItem.htBaoQuan = item.hinhThucBq ? item.hinhThucBq.toString() : null;
       this.rowItem.loaiVthh = item.loaiVthh ? item.loaiVthh.toString() : null;
       this.rowItem.cloaiVthh = item.cloaiVthh ? item.cloaiVthh.toString() : null;
+      if (tongDinhMucTongCuc && this.capDvi == 2) {
+        this.rowItem.tongDinhMucTc = tongDinhMucTongCuc.tongDinhMuc;
+      }
     } else {
       this.rowItem.tenDinhMuc = null;
       this.rowItem.maDinhMuc = null;
@@ -265,6 +273,15 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
         this.listHangHoa = res.data?.filter(x => x.ma == this.typeVthh);
       }
       ;
+    }
+  }
+
+  async getTongDinhMucTongCucPhan() {
+    this.listTongDinhMucTongCucPhan = [];
+    let body = {trangThai: "29", loai: "00", capDvi: 1};
+    let res = await this.qlDinhMucPhiService.layDanhSachTongDinhMucTongCucPhan(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listTongDinhMucTongCucPhan = res.data;
     }
   }
 
@@ -377,7 +394,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
     this.dataEdit[idx].data.apDungTai = this.dataEdit[idx].data.apDungTai ? this.dataEdit[idx].data.apDungTai.toString() : null;
     Object.assign(this.dataTableDetail[idx], this.dataEdit[idx].data);
     this.dataEdit[idx].edit = false;
-    // this.updateEditCache();
   }
 
   deleteItem(index: any) {
@@ -399,7 +415,6 @@ export class ThongTinDinhMucPhiNhapXuatBaoQuanComponent extends Base2Component i
       },
     });
   }
-
 
   maxValueInput(): number {
     return 1000;

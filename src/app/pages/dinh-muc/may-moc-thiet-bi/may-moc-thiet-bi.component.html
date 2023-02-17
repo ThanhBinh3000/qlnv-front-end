@@ -7,11 +7,8 @@
     <li nz-menu-item [nzSelected]="tabSelected == 'dexuatchicuc'" (click)="selectTab('dexuatchicuc')" *ngIf="!userService.isTongCuc()">
       Đề xuất nhu cầu của Chi cục
     </li>
-    <li nz-menu-item (click)="selectTab('dexuatcuc')" *ngIf="userService.isTongCuc()">
-      Đề xuất nhu cầu của các cục
-    </li>
-    <li nz-menu-item (click)="selectTab('tonghopdexuatchicuc')" *ngIf="userService.isCuc()">
-      Tổng hợp nhu cầu của Chi cục và đề xuất lên TC
+    <li nz-menu-item (click)="selectTab('dexuatcuc')" *ngIf="!userService.isChiCuc()">
+      {{userService.isTongCuc() ? 'Đề xuất nhu cầu của các Cục' : 'Tổng hợp nhu cầu của Chi cục và đề xuất lên TC'}}
     </li>
     <li nz-menu-item (click)="selectTab('tonghopdexuat')" *ngIf="userService.isTongCuc()">
       Tổng hợp đề xuất nhu cầu của các cục
@@ -40,10 +37,10 @@
       <app-mm-dinh-muc-trang-bi></app-mm-dinh-muc-trang-bi>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'dexuatcuc'">
-      <app-de-xuat-nhu-cau-cua-cac-cuc></app-de-xuat-nhu-cau-cua-cac-cuc>
+      <app-mm-dx-cuc></app-mm-dx-cuc>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'tonghopdexuat'">
-      <app-tong-hop-de-xuat-nhu-cau-cua-cac-cuc></app-tong-hop-de-xuat-nhu-cau-cua-cac-cuc>
+      <app-mm-tong-hop-dx-cuc></app-mm-tong-hop-dx-cuc>
     </ng-container>
     <ng-container *ngIf="tabSelected == 'quyetdinhmuasam'">
       <app-quyet-dinh-mua-sam></app-quyet-dinh-mua-sam>
