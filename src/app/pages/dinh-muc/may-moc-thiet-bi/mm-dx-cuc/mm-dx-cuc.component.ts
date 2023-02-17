@@ -7,6 +7,8 @@ import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import {QlDinhMucPhiService} from "../../../../services/qlnv-kho/QlDinhMucPhi.service";
+import dayjs from "dayjs";
+import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
 
 @Component({
   selector: 'app-mm-dx-cuc',
@@ -18,6 +20,7 @@ export class MmDxCucComponent extends Base2Component implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
+  listDxChiCuc : any[] = []
 
   constructor(
     httpClient: HttpClient,
@@ -25,23 +28,24 @@ export class MmDxCucComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    qlDinhMucPhiService: QlDinhMucPhiService
+    dxChiCucService: MmDxChiCucService
   ) {
-    super(httpClient, storageService, notification, spinner, modal, qlDinhMucPhiService)
+    super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
     this.formData = this.fb.group({
+      maDvi: [''],
+      capDvi: [''],
       namKeHoach: [''],
-      soCongVan: [''],
+      soCv: [''],
       trichYeu: [''],
       ngayKy: [''],
-      maDvi: [''],
     });
     this.filterTable = {};
   }
   async ngOnInit() {
     this.spinner.show();
     try {
-      await this.search();
+      await this.filter();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -55,6 +59,28 @@ export class MmDxCucComponent extends Base2Component implements OnInit {
     this.isDetail = true;
     this.isViewDetail = isView;
   }
+
+  async filter() {
+    if (this.formData.value.ngayKy && this.formData.value.ngayKy.length > 0) {
+      this.formData.value.ngayKyTu = dayjs(this.formData.value.ngayKy[0]).format('DD/MM/YYYY');
+      this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY');
+    }
+    this.formData.patchValue({
+      maDvi : this.userService.isCuc()  ? this.userInfo.MA_DVI : null,
+      capDvi : this.userInfo.CAP_DVI
+    })
+    await this.search();
+  }
+
+  async clearForm() {
+    this.formData.reset();
+    this.formData.patchValue({
+      maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
+      capDvi : this.userInfo.CAP_DVI
+    })
+    await this.search();
+  }
+
 
   async showList() {
     this.isDetail = false;

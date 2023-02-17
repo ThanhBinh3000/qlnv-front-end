@@ -8,6 +8,7 @@ import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
 import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
 import dayjs from "dayjs";
+import {toNumber} from "ng-zorro-antd/core/util";
 
 @Component({
   selector: 'app-de-xuat-nhu-cau-chi-cuc',
@@ -64,7 +65,7 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
     }
     this.formData.patchValue({
       maDvi : this.userService.isChiCuc()  ? this.userInfo.MA_DVI : null,
-      capDvi : this.userInfo.CAP_DVI
+      capDvi : this.userService.isChiCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
     })
     await this.search();
   }
@@ -80,7 +81,7 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
     this.formData.reset();
     this.formData.patchValue({
       maDvi : this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
-      capDvi : this.userInfo.CAP_DVI
+      capDvi : this.userService.isChiCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
     })
     await this.search();
   }
