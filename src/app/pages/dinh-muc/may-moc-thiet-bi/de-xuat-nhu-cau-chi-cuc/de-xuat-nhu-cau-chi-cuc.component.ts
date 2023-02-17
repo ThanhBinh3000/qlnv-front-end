@@ -49,6 +49,7 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
   initFormSearch(){
     this.formData = this.fb.group({
       maDvi: [''],
+      capDvi: [''],
       namKeHoach: [''],
       soCv: [''],
       trichYeu: [''],
@@ -62,7 +63,8 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
       this.formData.value.ngayKyDen = dayjs(this.formData.value.ngayKy[1]).format('DD/MM/YYYY');
     }
     this.formData.patchValue({
-      maDvi : this.userService.isChiCuc()  ? this.userInfo.MA_DVI : null
+      maDvi : this.userService.isChiCuc()  ? this.userInfo.MA_DVI : null,
+      capDvi : this.userInfo.CAP_DVI
     })
     await this.search();
   }
@@ -77,7 +79,8 @@ export class DeXuatNhuCauChiCucComponent extends Base2Component implements OnIni
   async clearForm() {
     this.formData.reset();
     this.formData.patchValue({
-      maDvi : this.userService.isChiCuc() ? this.userInfo.MA_DVI : null
+      maDvi : this.userService.isChiCuc() ? this.userInfo.MA_DVI : null,
+      capDvi : this.userInfo.CAP_DVI
     })
     await this.search();
   }
