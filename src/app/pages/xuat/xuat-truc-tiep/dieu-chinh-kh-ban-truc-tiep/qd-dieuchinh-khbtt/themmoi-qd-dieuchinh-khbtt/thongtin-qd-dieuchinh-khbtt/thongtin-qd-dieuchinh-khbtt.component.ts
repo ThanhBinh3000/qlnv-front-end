@@ -12,6 +12,7 @@ import {
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
 import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
+import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
 
 
 @Component({
@@ -38,7 +39,7 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
     private fb: FormBuilder,
     public globals: Globals,
     private danhMucService: DanhMucService,
-    private deXuatKhBanDauGiaService: DeXuatKhBanDauGiaService,
+    private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
     private modal: NzModalService,
@@ -77,7 +78,7 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
     if (changes) {
       if (this.dataInput) {
         if (this.isCache) {
-          let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
+          let res = await this.deXuatKhBanTrucTiepService.getDetail(this.dataInput.idDxHdr);
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
             this.formData.patchValue({

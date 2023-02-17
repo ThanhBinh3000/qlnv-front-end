@@ -7,21 +7,16 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
-import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
-import {
-  QuyetDinhPdKhBdgService
-} from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/quyetDinhPdKhBdg.service';
-import { TongHopDeXuatKeHoachBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/tongHopDeXuatKeHoachBanDauGia.service';
 import { STATUS } from 'src/app/constants/status';
-import {
-  QuyetDinhDchinhKhBdgService
-} from "../../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
-import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from 'src/app/services/storage.service';
+import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
+import { QuyetDinhPdKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/quyet-dinh-pd-kh-ban-truc-tiep.service';
+import { QuyetDinhDcBanttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/dieuchinh-kehoach-bantt/quyet-dinh-dc-bantt.service';
+import { TongHopKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/tong-hop-kh-ban-truc-tiep.service';
 
 @Component({
   selector: 'app-themmoi-qd-dieuchinh-khbtt',
@@ -42,18 +37,21 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private deXuatKhBanDauGiaService: DeXuatKhBanDauGiaService,
-    private quyetDinhPdKhBdgService: QuyetDinhPdKhBdgService,
-    private quyetDinhDchinhKhBdgService: QuyetDinhDchinhKhBdgService,
-    private tongHopDeXuatKeHoachBanDauGiaService: TongHopDeXuatKeHoachBanDauGiaService,
+    private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
+    private quyetDinhPdKhBanTrucTiepService: QuyetDinhPdKhBanTrucTiepService,
+    private quyetDinhDcBanttService: QuyetDinhDcBanttService,
+    private tongHopKhBanTrucTiepService: TongHopKhBanTrucTiepService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDchinhKhBdgService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhDcBanttService);
     this.formData = this.fb.group({
       id: [null],
-      nam: [dayjs().get('year'), Validators.required],
+      namKh: [dayjs().get('year'), Validators.required],
+      maDvi: [''],
+      tenDvi: [''],
       soQdDc: ['',],
-      ngayHlucDc: ['',],
       ngayKyDc: ['',],
+      ngayHluc: ['',],
+      trichYeu: [''],
       soQdGoc: ['',],
       idQdGoc: [''],
       ngayKyQdGoc: ['',],
@@ -62,8 +60,6 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
       cloaiVthh: [''],
       tenCloaiVthh: [''],
       moTaHangHoa: [''],
-      soQdCc: [''],
-      trichYeu: [''],
       fileName: [''],
       trangThai: [STATUS.DU_THAO],
       tenTrangThai: ['Dự thảo'],
@@ -108,16 +104,16 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
 
   initForm() {
     this.formData.patchValue({
-      nam: dayjs().get('year'),
+      namKh: dayjs().get('year'),
     })
   }
 
   async openDialogSoQdGoc() {
     this.spinner.show();
     let dsQdPd = []
-    await this.quyetDinhPdKhBdgService.search({
+    await this.quyetDinhPdKhBanTrucTiepService.search({
       trangThai: STATUS.BAN_HANH,
-      namKh: this.formData.value.nam,
+      namKh: this.formData.value.namKh,
       lastest: 1,
       paggingReq: {
         limit: this.globals.prop.MAX_INTERGER,
@@ -147,7 +143,7 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
     });
     modalQD.afterClose.subscribe(async (data) => {
       if (data) {
-        await this.quyetDinhPdKhBdgService.getDetail(data.id).then(res => {
+        await this.quyetDinhPdKhBanTrucTiepService.getDetail(data.id).then(res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data) {
               const data = res.data;
@@ -159,6 +155,7 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
                 tenLoaiVthh: data.tenLoaiVthh,
                 cloaiVthh: data.cloaiVthh,
                 tenCloaiVthh: data.tenCloaiVthh,
+                moTaHangHoa: data.moTaHangHoa
               })
               console.log(data);
               this.dataTable = data.children;
@@ -195,7 +192,7 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
 
   async loadChiTiet(id: number) {
     if (id > 0) {
-      let res = await this.quyetDinhDchinhKhBdgService.getDetail(id);
+      let res = await this.quyetDinhDcBanttService.getDetail(id);
       const data = res.data;
       this.helperService.bidingDataInFormGroup(this.formData, data);
       this.formData.patchValue({
