@@ -171,31 +171,53 @@
         <th>
           <input type="text" [disabled]="true" [(ngModel)]="rowItem.donViTinh" nz-input/>
         </th>
-        <th>
+        <th *ngIf="capDvi == 1">
           <input type="text" [disabled]="true"
                  [(ngModel)]="rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc + rowItem.nvChuyenMonKv + rowItem.ttCaNhanKv + rowItem.tcDieuHanhKv"
                  nz-input/>
         </th>
+        <th *ngIf="capDvi == 2">
+          <input type="text" [disabled]="true"
+                 [(ngModel)]="rowItem.tongDinhMucTc"
+                 nz-input/>
+        </th>
         <th>
           <input type="text" [disabled]="true"
-                 [(ngModel)]="rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc"  nz-input/>
+                 [(ngModel)]="rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc" nz-input/>
         </th>
         <th>
-          <input type="text" [disabled]="true" [(ngModel)]="rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc"  nz-input/>
+          <input type="text" [disabled]="true" [(ngModel)]="rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc" nz-input/>
         </th>
-        <th>
-          <nz-input-number [nzSize]="'small'"  [nzMax]="maxValueInput()" [(ngModel)]="rowItem.nvChuyenMonTc" [nzFormatter]="globals.formatter"
-
+        <th *ngIf="capDvi == 1">
+          <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.nvChuyenMonTc" [nzFormatter]="globals.formatter"
                            [nzParser]="globals.parser">
           </nz-input-number>
         </th>
-        <th>
+        <th *ngIf="capDvi == 2">
+          <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.nvChuyenMonTc" [nzFormatter]="globals.formatter"
+                           [nzMax]="rowItem.tongDinhMucTc > (rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc + rowItem.nvChuyenMonKv + rowItem.ttCaNhanKv + rowItem.tcDieuHanhKv) ? rowItem.tongDinhMucTc : 0"
+                           [nzParser]="globals.parser">
+          </nz-input-number>
+        </th>
+        <th *ngIf="capDvi == 1">
           <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.ttCaNhanTc" [nzFormatter]="globals.formatter"
                            [nzParser]="globals.parser">
           </nz-input-number>
         </th>
-        <th>
+        <th *ngIf="capDvi == 2">
+          <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.ttCaNhanTc" [nzFormatter]="globals.formatter"
+                           [nzMax]="rowItem.tongDinhMucTc > (rowItem.nvChuyenMonTc + rowItem.tcDieuHanhTc + rowItem.nvChuyenMonKv + rowItem.ttCaNhanKv + rowItem.tcDieuHanhKv) ? rowItem.tongDinhMucTc : 0"
+                           [nzParser]="globals.parser">
+          </nz-input-number>
+        </th>
+        <th *ngIf="capDvi == 1">
           <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.tcDieuHanhTc" [nzFormatter]="globals.formatter"
+                           [nzParser]="globals.parser">
+          </nz-input-number>
+        </th>
+        <th *ngIf="capDvi == 2">
+          <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.tcDieuHanhTc" [nzFormatter]="globals.formatter"
+                           [nzMax]="rowItem.tongDinhMucTc > (rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.nvChuyenMonKv + rowItem.ttCaNhanKv + rowItem.tcDieuHanhKv) ? rowItem.tongDinhMucTc : 0"
                            [nzParser]="globals.parser">
           </nz-input-number>
         </th>
@@ -206,18 +228,36 @@
         <th>
           <input type="text" [disabled]="true" [(ngModel)]="rowItem.nvChuyenMonKv + rowItem.ttCaNhanKv " nz-input/>
         </th>
-        <th>
+        <th *ngIf="capDvi == 1">
           <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.nvChuyenMonKv" [nzFormatter]="globals.formatter"
                            [nzParser]="globals.parser">
           </nz-input-number>
         </th>
-        <th>
+        <th *ngIf="capDvi == 2">
+          <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.nvChuyenMonKv" [nzFormatter]="globals.formatter"
+                           [nzMax]="rowItem.tongDinhMucTc > (rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc + rowItem.ttCaNhanKv + rowItem.tcDieuHanhKv) ? rowItem.tongDinhMucTc : 0"
+                           [nzParser]="globals.parser">
+          </nz-input-number>
+        </th>
+        <th *ngIf="capDvi == 1">
           <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.ttCaNhanKv" [nzFormatter]="globals.formatter"
                            [nzParser]="globals.parser">
           </nz-input-number>
         </th>
-        <th>
+        <th *ngIf="capDvi == 2">
+          <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.ttCaNhanKv" [nzFormatter]="globals.formatter"
+                           [nzMax]="rowItem.tongDinhMucTc > (rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc + rowItem.tcDieuHanhTc + rowItem.tcDieuHanhKv) ? rowItem.tongDinhMucTc : 0"
+                           [nzParser]="globals.parser">
+          </nz-input-number>
+        </th>
+        <th *ngIf="capDvi == 1">
           <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.tcDieuHanhKv" [nzFormatter]="globals.formatter"
+                           [nzParser]="globals.parser">
+          </nz-input-number>
+        </th>
+        <th *ngIf="capDvi == 2">
+          <nz-input-number [nzSize]="'small'" [(ngModel)]="rowItem.tcDieuHanhKv" [nzFormatter]="globals.formatter"
+                           [nzMax]="rowItem.tongDinhMucTc > (rowItem.nvChuyenMonTc + rowItem.ttCaNhanTc + rowItem.tcDieuHanhTc + rowItem.tcDieuHanhTc + rowItem.ttCaNhanKv) ? rowItem.tongDinhMucTc : 0"
                            [nzParser]="globals.parser">
           </nz-input-number>
         </th>
