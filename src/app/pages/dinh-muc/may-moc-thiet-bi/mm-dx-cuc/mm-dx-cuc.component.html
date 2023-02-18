@@ -6,7 +6,7 @@
           <div nz-col nzSpan="3">
             <label class="search__label">Năm kế hoạch</label>
             <nz-select nzAllowClear formControlName="namKeHoach">
-              <nz-option *ngFor="let item of listNam" [nzValue]="item.giaTri" [nzLabel]="item.text"></nz-option>
+              <nz-option *ngFor="let item of listNam" [nzValue]="item.value" [nzLabel]="item.text"></nz-option>
             </nz-select>
           </div>
           <div nz-col nzSpan="3">
@@ -80,7 +80,7 @@
           <th>
             <nz-input-group >
               <input type="text" nz-input placeholder="Tìm kiếm" [(ngModel)]="filterTable.soCv"
-                     (input)="filterInTable('soCongVan',filterTable.soCv)" />
+                     (input)="filterInTable('soCv',filterTable.soCv)" />
             </nz-input-group>
           </th>
           <th>
@@ -148,14 +148,14 @@
           <td>{{ data.soQdGiaoCt }}</td>
           <td>{{ data.tenTrangThai }}</td>
           <td>
-            <a (click)="redirectToChiTiet(true, data.id)">
+            <a (click)="redirectToChiTiet(true, data.id)" *ngIf="((data.trangThai == STATUS.DA_KY || data.trangThai == STATUS.DA_DUYET_CBV) && userService.isCuc()) || userService.isTongCuc()">
               <i class="fa fa-eye"></i>
             </a>
-            <a *ngIf="(data.trangThai == STATUS.DU_THAO && userService.isCuc())"
+            <a *ngIf="((data.trangThai == STATUS.TU_CHOI_CBV || data.trangThai == STATUS.DU_THAO) && userService.isCuc())"
                (click)="redirectToChiTiet(false, data.id)">
               <i class="fa fa-pencil"></i>
             </a>
-            <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()" (click)="delete(data)">
+            <a *ngIf="data.trangThai == globals.prop.NHAP_DU_THAO && userService.isCuc()" (click)="delete(data)">
               <i class="fa fa-trash-o do"></i>
             </a>
           </td>

@@ -6,7 +6,9 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
 import {FormGroup, Validators} from "@angular/forms";
 import {Base2Component} from "../../../../../components/base2/base2.component";
-import { cloneDeep, chain } from 'lodash';
+import { chain } from 'lodash';
+import * as uuid from "uuid";
+import {v4 as uuidv4} from 'uuid';
 import {
   MmThongTinNcChiCuc
 } from "../../de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component";
@@ -28,6 +30,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
   rowItem: MmThongTinNcChiCuc = new MmThongTinNcChiCuc();
   dataEdit: { [key: string]: { edit: boolean; data: MmThongTinNcChiCuc } } = {};
   formDataTongHop : FormGroup
+  expandSet = new Set<number>();
   constructor(
     httpClient: HttpClient,
     storageService: StorageService,
@@ -109,6 +112,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
         this.dataTable = detail.listQlDinhMucDxTbmmTbcdDtl
         this.dataTable.forEach(item => {
           item.id = null;
+          idVirtual:uuidv4();
         })
         this.convertListData()
       }
@@ -160,11 +164,7 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
-    if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable.forEach(item => {
-        item.thanhTienNc = item.donGiaTd * item.soLuong
-      })
-    }
+    this.conVertTreToList();
     this.formData.value.listQlDinhMucDxTbmmTbcdDtl = this.dataTable;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
@@ -185,6 +185,8 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
           this.helperService.bidingDataInFormGroup(this.formData, data);
           this.fileDinhKem = data.listFileDinhKems;
           this.dataTable = data.listQlDinhMucDxTbmmTbcdDtl;
+          this.convertListData()
+          this.expandAll();
         }
       } else {
         this.notification.error(MESSAGE.ERROR, res.msg);
@@ -215,36 +217,72 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
 
   convertListData() {
     if (this.dataTable && this.dataTable.length > 0) {
-      this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({ tenTaiSan: key, dataChild: value }))
-        .value()
+      this.dataTable = chain(this.dataTable).groupBy('tenTaiSan').map((value, key) => ({ tenTaiSan: key, dataChild: value, idVirtual: uuidv4(),})
+      ).value()
+    }
+    if (this.dataTable && this.dataTable.length > 0) {
       this.dataTable.forEach(item => {
-        if (item && item.dataChild && item.dataChild.length >0) {
-          let sl = 0;
-          item.dataChild.forEach(data => {
-            sl = sl + data.soLuong
-            item.donViTinh = data.donViTinh;
-            item.donGiaTd = data.donGiaTd
-          })
-          item.soLuong = sl
-        }
+          if (item && item.dataChild && item.dataChild.length > 0) {
+            item.dataChild.forEach(data => {
+              item.donViTinh = data.donViTinh
+              item.donGiaTd = data.donGiaTd
+            })
+          }
       })
     }
+    this.expandAll();
   }
 
-  sumTongByTenTs(tenTaiSan  :string) {
-    let sum = 0;
-    if (this.dataTable && this.dataTable.length >0) {
-      this.dataTable.forEach(item => {
-        if (item.tenTaiSan == tenTaiSan) {
-          sum += item.soLuong
-        }
+  conVertTreToList() {
+    let arr = [];
+    this.dataTable.forEach(item => {
+      if (item.dataChild && item.dataChild.length > 0) {
+        item.dataChild.forEach(data => {
+          data.thanhTienNc = data.donGiaTd * data.soLuong
+          arr.push(data)
+        })
+      }
+    })
+    this.dataTable = arr
+    console.log(this.dataTable)
+  }
+
+  sumSoLuong(data : any) {
+    let sl = 0;
+    if (data && data.dataChild && data.dataChild.length > 0) {
+      data.dataChild.forEach(item => {
+        sl = sl + item.soLuong
       })
     }
-    return sum
+    return sl
   }
 
-  expandSet = new Set<number>();
+  disableForm() {
+    let check = false;
+    if (this.isView) {
+      check = true
+    } else {
+      if (this.id > 0) {
+        check = true
+      } else {
+        check = false;
+      }
+    }
+    return check;
+  }
+
+
+
+  expandAll() {
+    this.dataTable.forEach(s => {
+      this.expandSet.add(s.idVirtual);
+    })
+    console.log(this.expandSet,128912893)
+  }
+
+
   onExpandChange(id: number, checked: boolean): void {
+    console.log(this.expandSet,1111)
     if (checked) {
       this.expandSet.add(id);
     } else {

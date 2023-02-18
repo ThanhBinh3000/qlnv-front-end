@@ -6,7 +6,7 @@ import { MESSAGE } from 'src/app/constants/message';
 import {Base2Component} from "../../../../components/base2/base2.component";
 import {HttpClient} from "@angular/common/http";
 import {StorageService} from "../../../../services/storage.service";
-import {QlDinhMucPhiService} from "../../../../services/qlnv-kho/QlDinhMucPhi.service";
+import { saveAs } from 'file-saver';
 import dayjs from "dayjs";
 import {MmDxChiCucService} from "../../../../services/mm-dx-chi-cuc.service";
 
@@ -28,7 +28,7 @@ export class MmDxCucComponent extends Base2Component implements OnInit {
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    dxChiCucService: MmDxChiCucService
+    private dxChiCucService: MmDxChiCucService
   ) {
     super(httpClient, storageService, notification, spinner, modal, dxChiCucService)
     super.ngOnInit()
@@ -67,7 +67,7 @@ export class MmDxCucComponent extends Base2Component implements OnInit {
     }
     this.formData.patchValue({
       maDvi : this.userService.isCuc()  ? this.userInfo.MA_DVI : null,
-      capDvi : this.userInfo.CAP_DVI
+      capDvi : this.userService.isCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
     })
     await this.search();
   }
@@ -76,7 +76,7 @@ export class MmDxCucComponent extends Base2Component implements OnInit {
     this.formData.reset();
     this.formData.patchValue({
       maDvi : this.userService.isCuc() ? this.userInfo.MA_DVI : null,
-      capDvi : this.userInfo.CAP_DVI
+      capDvi : this.userService.isCuc() ? this.userInfo.CAP_DVI : (Number(this.userInfo.CAP_DVI) + 1).toString()
     })
     await this.search();
   }
@@ -86,4 +86,30 @@ export class MmDxCucComponent extends Base2Component implements OnInit {
     this.isDetail = false;
     await this.search();
   }
+
+  exportData() {
+    if (this.totalRecord > 0) {
+      this.spinner.show();
+      try {
+        let body = this.formData.value;
+        body.paggingReq = {
+          limit: this.pageSize,
+          page: this.page - 1
+        }
+        this.dxChiCucService
+          .export(body)
+          .subscribe((blob) =>
+            saveAs(blob, 'tong-hop-dx-chi-cuc.xlsx'),
+          );
+        this.spinner.hide();
+      } catch (e) {
+        console.log('error: ', e);
+        this.spinner.hide();
+        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, MESSAGE.DATA_EMPTY);
+    }
+  }
+
 }
