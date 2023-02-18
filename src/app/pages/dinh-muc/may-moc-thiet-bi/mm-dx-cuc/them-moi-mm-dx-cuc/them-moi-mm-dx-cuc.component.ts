@@ -55,10 +55,11 @@ export class ThemMoiMmDxCucComponent extends Base2Component implements OnInit {
       tenTrangThai : ['Dự thảo'],
       fileDinhKems : [null],
       lyDoTuChoi : [null],
+      listQlDinhMucDxTbmmTbcdDtl : [null],
     });
     this.formDataTongHop = this.fb.group({
       namKeHoach : [dayjs().get('year'), Validators.required],
-      ngayDx : [null, Validators.required],
+      ngayDx : [null],
       listSoCv : [null]
     });
   }
