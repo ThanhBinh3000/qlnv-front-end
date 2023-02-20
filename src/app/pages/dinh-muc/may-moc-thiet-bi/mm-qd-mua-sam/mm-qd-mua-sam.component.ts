@@ -20,7 +20,6 @@ export class MmQdMuaSamComponent extends Base2Component implements OnInit {
   selectedId: number = 0;
   isViewDetail: boolean;
   isDetail: boolean = false;
-  listDxChiCuc : any[] = []
 
   constructor(
     httpClient: HttpClient,

@@ -4,7 +4,7 @@ import {StorageService} from "../../../../../services/storage.service";
 import {NzNotificationService} from "ng-zorro-antd/notification";
 import {NgxSpinnerService} from "ngx-spinner";
 import {NzModalService} from "ng-zorro-antd/modal";
-import {FormGroup, Validators} from "@angular/forms";
+import { Validators} from "@angular/forms";
 import {Base2Component} from "../../../../../components/base2/base2.component";
 import { chain } from 'lodash';
 import {v4 as uuidv4} from 'uuid';
@@ -13,15 +13,14 @@ import {
 } from "../../de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc/thong-tin-de-xuat-nhu-cau-chi-cuc.component";
 import {MmDxChiCucService} from "../../../../../services/mm-dx-chi-cuc.service";
 import {MESSAGE} from "../../../../../constants/message";
-import dayjs from "dayjs";
 import {STATUS} from "../../../../../constants/status";
 
 @Component({
-  selector: 'app-mm-them-moi-qd-mua-sam',
-  templateUrl: './mm-them-moi-qd-mua-sam.component.html',
-  styleUrls: ['./mm-them-moi-qd-mua-sam.component.scss']
+  selector: 'app-mm-them-moi-tt-phan-bo',
+  templateUrl: './mm-them-moi-tt-phan-bo.component.html',
+  styleUrls: ['./mm-them-moi-tt-phan-bo.component.scss']
 })
-export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit {
+export class MmThemMoiTtPhanBoComponent extends Base2Component implements OnInit {
   @Input() id: number;
   @Input() isView: boolean;
   @Input()   listTongHop : any[] = [];
@@ -58,7 +57,7 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
   async ngOnInit() {
     this.spinner.show();
     try {
-      this.maQd = '/QĐ-TCDT'
+      this.maQd = '/' + this.userInfo.MA_QD
       await this.loadDsDxCc();
       // if (this.id > 0) {
       //   await this.detail(this.id);
@@ -102,28 +101,21 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     }
   }
 
-  async save(isOther: boolean) {
-    this.helperService.markFormGroupTouched(this.formData);
+  async save() {
+    this.helperService.markFormGroupTouched(this.formData)
     if (this.formData.invalid) {
-      this.notification.error(MESSAGE.ERROR, MESSAGE.FORM_REQUIRED_ERROR)
-      this.spinner.hide();
       return;
     }
-    this.conVertTreToList();
     if (this.fileDinhKem && this.fileDinhKem.length > 0) {
       this.formData.value.fileDinhKems = this.fileDinhKem;
     }
+    this.conVertTreToList();
     this.formData.value.listQlDinhMucDxTbmmTbcdDtl = this.dataTable;
     this.formData.value.maDvi = this.userInfo.MA_DVI;
     this.formData.value.capDvi = this.userInfo.CAP_DVI;
-    let body = this.formData.value;
-    let data = await this.createUpdate(body);
-    if (data) {
-      if (isOther) {
-        this.approve(data.id, STATUS.CHO_DUYET_LDV, "Bạn có chắc chắn muốn gửi duyệt?");
-      } else {
-        this.goBack()
-      }
+    let res = await this.createUpdate(this.formData.value)
+    if (res) {
+      this.goBack();
     }
   }
 
@@ -150,21 +142,6 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
     } finally {
       this.spinner.hide();
     }
-  }
-
-  async pheDuyet() {
-    let trangThai;
-    switch (this.formData.value.trangThai) {
-      case STATUS.DU_THAO :
-      case STATUS.TU_CHOI_LDTC : {
-        trangThai = STATUS.CHO_DUYET_LDTC;
-        break;
-      }
-      case STATUS.CHO_DUYET_LDTC : {
-        trangThai = STATUS.DA_DUYET_LDTC
-      }
-    }
-    await this.approve(this.id, trangThai, 'Bạn có chắc chắn muốn duyệt?')
   }
 
   convertListData() {
@@ -236,5 +213,73 @@ export class MmThemMoiQdMuaSamComponent extends Base2Component implements OnInit
         this.convertListData()
       }
     }
+  }
+
+  async themMoiCtiet() {
+    let msgRequired = this.required(this.rowItem);
+    if (msgRequired) {
+      this.notification.error(MESSAGE.ERROR, msgRequired);
+      this.spinner.hide();
+      return;
+    }
+    if (this.checkExitsData(this.rowItem, this.dataTable)) {
+      this.notification.error(MESSAGE.ERROR, "Dữ liệu trùng lặp, đề nghị nhập lại.");
+      this.spinner.hide();
+      return;
+    }
+    this.rowItem.thanhTienNc = this.rowItem.soLuong * this.rowItem.donGiaTd
+    this.dataTable = [...this.dataTable, this.rowItem];
+    this.rowItem = new MmThongTinNcChiCuc();
+    this.updateEditCache();
+  }
+
+  checkExitsData(item, dataItem): boolean {
+    let rs = false;
+    if (dataItem && dataItem.length > 0) {
+      dataItem.forEach(it => {
+        if (it.maTaiSan == item.maTaiSan) {
+          rs = true;
+          return;
+        }
+      })
+    }
+    return rs;
+  }
+
+  required(item: MmThongTinNcChiCuc) {
+    let msgRequired = '';
+    //validator
+    if (!item.maTaiSan) {
+      msgRequired = "Loại tài sản không được để trống";
+    } else if (!item.soLuong) {
+      msgRequired = "Số lượng không được để trống";
+    }
+    return msgRequired;
+  }
+
+  updateEditCache() {
+    if (this.dataTable) {
+      this.dataTable.forEach((item, index) => {
+        this.dataEdit[index] = {
+          edit: false,
+          data: {...item},
+        };
+      });
+    }
+  }
+
+  refresh() {
+    this.rowItem = new MmThongTinNcChiCuc();
+  }
+
+  editRow(stt: number) {
+    this.dataEdit[stt].edit = true;
+  }
+
+  cancelEdit(stt: number): void {
+    this.dataEdit[stt] = {
+      data: {...this.dataTable[stt]},
+      edit: false
+    };
   }
 }

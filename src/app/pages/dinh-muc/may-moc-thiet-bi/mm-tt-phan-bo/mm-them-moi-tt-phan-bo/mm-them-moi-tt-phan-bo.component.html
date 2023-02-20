@@ -14,24 +14,12 @@
         <i class="fa fa-arrow-left"></i>
         <span>Quay lại</span>
       </button>
-      <button class="btn btn-sub ml-2" (click)="save(true)"
-              *ngIf="(formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC)  && userService.isTongCuc()">
+      <button class="btn btn-sub ml-2" (click)="approve(id, STATUS.DA_KY, 'Bạn có chắc chắn muốn duyệt?')"
+              *ngIf="(formData.value.trangThai == STATUS.DU_THAO)  && userService.isTongCuc()">
         <i class="icon htvbdh_trinh"></i>
-        <span>Lưu và gửi duyệt</span>
+        <span>Đã ký</span>
       </button>
-      <button type="button" class="btn btn-sub btn-xoa  ml-2"
-              *ngIf=" (formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc())"
-              (click)="reject(id, STATUS.TU_CHOI_LDTC)">
-        <i class="icon htvbdh_tcdt_tuchoi"></i>
-        <span>Từ chối</span>
-      </button>
-      <button type="button" class="btn btn-sub xanh-nhat  ml-2"
-              *ngIf="(formData.value.trangThai == STATUS.CHO_DUYET_LDTC && userService.isTongCuc())"
-              (click)="pheDuyet()">
-        <i class="icon htvbdh_dakyduyet"></i>
-        <span>Duyệt</span>
-      </button>
-      <button type="button" class="btn btn-sub xanh ml-2" (click)="save(false)"
+      <button type="button" class="btn btn-sub xanh ml-2" (click)="save()"
               *ngIf=" !isView && (formData.value.trangThai == STATUS.DU_THAO || formData.value.trangThai == STATUS.TU_CHOI_LDTC) && userService.isTongCuc() ">
         <i class="icon htvbdh_tcdt_save"></i>
         <span>Lưu</span>
@@ -59,7 +47,7 @@
         </div>
         <div nz-col nzSpan="3">
           <nz-form-item>
-            <nz-form-label nzRequired>Số quyết định</nz-form-label>
+            <nz-form-label nzRequired>Số văn bản</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group [nzAddOnAfter]="maQd">
                 <input nz-input formControlName="soCv" [readonly]="isView"/>
@@ -69,7 +57,7 @@
         </div>
         <div nz-col nzSpan="3">
           <nz-form-item>
-            <nz-form-label nzRequired>Số tổng hợp</nz-form-label>
+            <nz-form-label nzRequired>Số quyết định mua sắm</nz-form-label>
             <nz-form-control [nzErrorTip]="error">
               <nz-input-group>
                 <nz-select nzAllowClear formControlName="soTh" (ngModelChange)="changSoTh($event)">
@@ -125,6 +113,7 @@
       <th colSpan="2" nzWidth="150px">Chênh lệch</th>
       <th colSpan="3" nzWidth="200px">Nhu cầu trang bị năm 2022</th>
       <th rowSpan="2" nzWidth="200px">Ghi chú</th>
+      <th rowSpan="2" nzWidth="150px" *ngIf="!isView">Hành động</th>
     </tr>
     <tr>
       <th nzWidth="75px">Còn thiếu</th>
@@ -133,6 +122,61 @@
       <th nzWidth="100px">Đơn giá</th>
       <th nzWidth="100px">Thành tiền</th>
     </tr>
+    <tr *ngIf="!isView">
+      <th></th>
+      <th>
+        <nz-select [(ngModel)]="rowItem.maTaiSan" [nzDisabled]="isView"
+                   nzAllowClear="true">
+          <nz-option>
+          </nz-option>
+        </nz-select>
+      </th>
+      <th>
+        <input type="text" [(ngModel)]="rowItem.donViTinh" readonly nz-input/>
+      </th>
+      <th>
+        <input type="text" [(ngModel)]="rowItem.slHienCo" readonly nz-input/>
+      </th>
+      <th>
+        <input type="text" [(ngModel)]="rowItem.slNhapThem" readonly nz-input/>
+      </th>
+      <th>
+        <input type="text" [(ngModel)]="rowItem.tongCong" readonly nz-input/>
+      </th>
+      <th>
+        <input type="text" [(ngModel)]="rowItem.slTieuChuan" readonly nz-input/>
+      </th>
+      <th>
+        <input type="text" [(ngModel)]="rowItem.chenhLechThieu" readonly nz-input/>
+      </th>
+      <th>
+        <input type="text" [(ngModel)]="rowItem.chenhLechThua" readonly nz-input/>
+      </th>
+      <th>
+        <nz-input-number  [(ngModel)]="rowItem.soLuong" [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                          [nzParser]="globals.parser"></nz-input-number>
+      </th>
+      <th>
+        <nz-input-number  [(ngModel)]="rowItem.donGiaTd" [nzSize]="'small'" nzDisabled [nzFormatter]="globals.formatter"
+                          [nzParser]="globals.parser"></nz-input-number>
+      </th>
+      <th>
+        <nz-input-number  [(ngModel)]="rowItem.soLuong * rowItem.donGiaTd" nzDisabled [nzSize]="'small'" [nzFormatter]="globals.formatter"
+                          [nzParser]="globals.parser"></nz-input-number>
+      </th>
+      <th>
+        <input type="text" [(ngModel)]="rowItem.ghiChu" nz-input/>
+      </th>
+      <th class="text-center" *ngIf="!isView">
+        <a (click)="themMoiCtiet()">
+          <i class="icon htvbdh_dau-cong"></i>
+        </a>
+        <a (click)="refresh()">
+          <i class="fa fa-refresh"></i>
+        </a>
+      </th>
+    </tr>
+
     </thead>
     <tbody>
     <ng-container *ngFor="let data of dataTable , let idx = index">
