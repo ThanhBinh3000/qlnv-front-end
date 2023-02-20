@@ -84,7 +84,6 @@ export class BaoHiemComponent implements OnInit {
   }
 
   async initialization() {
-    await this.getTle()
     this.spinner.show();
     this.formDetail = this.dataInfo?.data;
     this.namBcao = this.dataInfo?.namBcao;
@@ -95,6 +94,7 @@ export class BaoHiemComponent implements OnInit {
     this.userInfo = this.userService.getUserLogin()
     this.hsBhDuoi = this.formDetail?.hsBhDuoi;
     this.hsBhTu = this.formDetail?.hsBhTu;
+    await this.getTle()
 
     this.formDetail?.lstCtietLapThamDinhs.forEach(item => {
       this.lstCtietBcao.push({
