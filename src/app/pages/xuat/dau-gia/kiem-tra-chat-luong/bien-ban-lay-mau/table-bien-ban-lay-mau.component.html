@@ -95,7 +95,7 @@
               <td></td>
               <td></td>
               <td class="text-left">
-                <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="goDetail(data.id,'XHDTQG_PTDG_QDGNVXH_XEM')">
+                <!-- <a *ngIf="data.trangThai == STATUS.BAN_HANH" (click)="goDetail(data.id,'XHDTQG_PTDG_QDGNVXH_XEM')">
                   <i class="fa fa-eye"></i>
                 </a>
                 <a *ngIf="data.trangThai != STATUS.BAN_HANH" (click)="goDetail(data.id,'XHDTQG_PTDG_QDGNVXH_THEM')">
@@ -103,12 +103,39 @@
                 </a>
                 <a *ngIf="data.trangThai == STATUS.DU_THAO" (click)="delete(data)">
                   <i class="fa fa-trash-o do"></i>
-                </a>
+                </a> -->
               </td>
             </tr>
             <ng-container *ngIf="expandSet.has(i)">
-              <tr>
-
+              <tr *ngFor="let dataChild of data.xhBbLayMauList">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ dataChild.soBienBan }}</td>
+                <td>{{ dataChild.ngayLayMau | date: 'dd/MM/YYYY' }}</td>
+                <td>{{ dataChild.tenDiemKho }}</td>
+                <td>{{ dataChild.tenNhaKho }}</td>
+                <td>{{ dataChild.tenNganKho }}</td>
+                <td>{{ dataChild.tenLoKho }}</td>
+                <td>BB tịnh kho</td>
+                <td>BB tịnh kho</td>
+                <td>BB tịnh kho</td>
+                <td>{{ dataChild.tenTrangThai }}</td>
+                <td class="text-left">
+                  <a *ngIf="dataChild.trangThai == STATUS.DA_DUYET_LDCC"
+                    (click)="goDetail(dataChild.id,'XHDTQG_PTDG_QDGNVXH_XEM')">
+                    <i class="fa fa-eye"></i>
+                  </a>
+                  <a *ngIf="dataChild.trangThai != STATUS.DA_DUYET_LDCC"
+                    (click)="goDetail(dataChild.id,'XHDTQG_PTDG_QDGNVXH_THEM')">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                  <a *ngIf="dataChild.trangThai == STATUS.DU_THAO" (click)="delete(dataChild)">
+                    <i class="fa fa-trash-o do"></i>
+                  </a>
+                </td>
               </tr>
             </ng-container>
           </ng-container>
