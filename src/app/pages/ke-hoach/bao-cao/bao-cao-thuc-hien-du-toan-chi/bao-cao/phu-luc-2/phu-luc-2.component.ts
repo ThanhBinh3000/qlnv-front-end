@@ -6,6 +6,7 @@ import { DialogChonDanhMucComponent } from 'src/app/components/dialog/dialog-cho
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienDuToanChi.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { addChild, addHead, addParent, deleteRow, displayNumber, divNumber, exchangeMoney, getHead, getName, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
@@ -84,7 +85,7 @@ export class PhuLucIIComponent implements OnInit {
 
     constructor(
         private spinner: NgxSpinnerService,
-        private quanLyVonPhiService: QuanLyVonPhiService,
+        private danhMucService: DanhMucDungChungService,
         private baoCaoThucHienDuToanChiService: BaoCaoThucHienDuToanChiService,
         private notification: NzNotificationService,
         private modal: NzModalService,
@@ -99,6 +100,7 @@ export class PhuLucIIComponent implements OnInit {
 
     async initialization() {
         this.spinner.show();
+
         this.id = this.data?.id;
         this.idBcao = this.data.idBcao;
         this.maPhuLuc = this.data?.maPhuLuc;
@@ -112,14 +114,19 @@ export class PhuLucIIComponent implements OnInit {
             this.scrollX = (350 + 20 * BOX_NUMBER_WIDTH).toString() + 'px';
         }
         this.statusBtnFinish = this.data?.statusBtnFinish;
-        //tinh toan level va ten cho danh muc
-        DANH_MUC.forEach(item => {
-            this.noiDungs.push({
-                ...item,
-                level: item.ma.split('.').length - 2,
-                giaTri: getName(this.namBcao, item.giaTri),
-            })
-        })
+        //lay danh muc va ten danh muc
+        const category = await this.danhMucService.danhMucChungGetAll('BC_DTC_PL2');
+        if (category) {
+            category.data.forEach(
+                item => {
+                    this.noiDungs.push({
+                        ...item,
+                        level: item.ma?.split('.').length - 2,
+                        giaTri: getName(this.namBcao, item.giaTri),
+                    })
+                }
+            )
+        }
         //them cac ban ghi va tinh toan lai ty le cho chung
         this.data?.lstCtietBcaos.forEach(item => {
             this.lstCtietBcao.push({

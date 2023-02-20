@@ -187,19 +187,19 @@ export class VonBanTheoDonGiaComponent implements OnInit {
         if (this.baoCao.maDvi == this.userInfo?.MA_DVI) {
             const trangThai = this.baoCao.ttGui.trangThai;
             this.statusNhan = false;
-            this.statusGui = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTV_BH);
-            this.saveStatus = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_NTV_BH);
-            this.submitStatus = Utils.statusApprove.includes(trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_NTV_BH) && !(!this.baoCao.id);
-            this.passStatus = Utils.statusDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_NTV_BH);
-            this.approveStatus = Utils.statusPheDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_NTV_BH);
+            this.statusGui = this.getStatus(Utils.statusSave, trangThai, CVMB.EDIT_REPORT_NTV_BH);
+            this.saveStatus = this.getStatus(Utils.statusSave, trangThai, CVMB.EDIT_REPORT_NTV_BH);
+            this.submitStatus = this.getStatus(Utils.statusApprove, trangThai, CVMB.APPROVE_REPORT_NTV_BH) && !(!this.baoCao.id);
+            this.passStatus = this.getStatus(Utils.statusDuyet, trangThai, CVMB.DUYET_REPORT_NTV_BH);
+            this.approveStatus = this.getStatus(Utils.statusPheDuyet, trangThai, CVMB.PHE_DUYET_REPORT_NTV_BH);
         } else if (this.isParent) {
             const trangThai = this.baoCao.ttNhan.trangThai;
             this.statusGui = false;
-            this.statusNhan = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH);
-            this.saveStatus = Utils.statusSave.includes(trangThai) && this.userService.isAccessPermisson(CVMB.EDIT_REPORT_GNV_BH);
-            this.submitStatus = Utils.statusApprove.includes(trangThai) && this.userService.isAccessPermisson(CVMB.APPROVE_REPORT_GNV_BH) && !(!this.baoCao.id);
-            this.passStatus = Utils.statusDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.DUYET_REPORT_GNV_BH);
-            this.approveStatus = Utils.statusPheDuyet.includes(trangThai) && this.userService.isAccessPermisson(CVMB.PHE_DUYET_REPORT_GNV_BH);
+            this.statusNhan = this.getStatus(Utils.statusSave, trangThai, CVMB.EDIT_REPORT_GNV_BH);
+            this.saveStatus = this.getStatus(Utils.statusSave, trangThai, CVMB.EDIT_REPORT_GNV_BH);
+            this.submitStatus = this.getStatus(Utils.statusApprove, trangThai, CVMB.APPROVE_REPORT_GNV_BH) && !(!this.baoCao.id);
+            this.passStatus = this.getStatus(Utils.statusDuyet, trangThai, CVMB.DUYET_REPORT_GNV_BH);
+            this.approveStatus = this.getStatus(Utils.statusPheDuyet, trangThai, CVMB.PHE_DUYET_REPORT_GNV_BH);
         } else {
             this.statusGui = false;
             this.statusNhan = false;
@@ -209,6 +209,10 @@ export class VonBanTheoDonGiaComponent implements OnInit {
         } else {
             this.scrollX = (300 + 10 * BOX_NUMBER_WIDTH).toString() + 'px';
         }
+    }
+
+    getStatus(lstSatus: any[], trangThai: string, role: string) {
+        return lstSatus.includes(trangThai) && this.userService.isAccessPermisson(role) && this.baoCao.maLoai == 4;
     }
 
     back() {
@@ -477,6 +481,7 @@ export class VonBanTheoDonGiaComponent implements OnInit {
                         this.notification.success(MESSAGE.SUCCESS, MESSAGE.ADD_SUCCESS);
                         this.baoCao.id = data.data.id;
                         this.action('detail');
+                        // await addVonBanGuiDvct();
                     } else {
                         this.notification.error(MESSAGE.ERROR, data?.msg);
                     }
