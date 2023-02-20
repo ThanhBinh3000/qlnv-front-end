@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
 
 @Component({
-  selector: 'app-thanh-phan-lay-mau',
-  templateUrl: './thanh-phan-lay-mau.component.html',
-  styleUrls: ['./thanh-phan-lay-mau.component.scss']
+  selector: 'app-thanh-phan-tham-gia',
+  templateUrl: './thanh-phan-tham-gia.component.html',
+  styleUrls: ['./thanh-phan-tham-gia.component.scss']
 })
-export class ThanhPhanLayMauComponent implements OnInit {
+export class ThanhPhanThamGiaComponent implements OnInit {
 
   @Input() loaiDaiDien: string;
   @Input() dataTable: any[] = [];
@@ -38,8 +39,3 @@ export class ItemDaiDien {
   loaiDaiDien: string;
   isEdit: boolean = false;
 }
-
-
-
-
-

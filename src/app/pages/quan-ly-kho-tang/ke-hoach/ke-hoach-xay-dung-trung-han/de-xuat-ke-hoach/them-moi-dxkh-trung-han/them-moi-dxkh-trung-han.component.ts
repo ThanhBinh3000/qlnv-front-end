@@ -217,6 +217,10 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
               trangThai = STATUS.TU_CHOI_LDC
               break;
             }
+            case STATUS.DA_DUYET_LDC: {
+              trangThai = STATUS.TU_CHOI_CBV
+              break;
+            }
           }
           let body = {
             id: this.formData.value.id,
@@ -261,6 +265,10 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
               trangThai = STATUS.DA_DUYET_LDC;
               break;
             }
+            case STATUS.DA_DUYET_LDC : {
+              trangThai = STATUS.DA_DUYET_CBV;
+              break;
+            }
           }
           let body = {
             id: this.formData.get('id').value,
@@ -301,11 +309,9 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
         try {
           let trangThai;
           switch (this.formData.value.trangThai) {
-            case STATUS.DU_THAO : {
-              trangThai = STATUS.CHO_DUYET_TP;
-              break;
-            }
-            case STATUS.TU_CHOI_TP : {
+            case STATUS.DU_THAO :
+            case STATUS.TU_CHOI_TP :
+            case STATUS.TU_CHOI_CBV : {
               trangThai = STATUS.CHO_DUYET_TP;
               break;
             }

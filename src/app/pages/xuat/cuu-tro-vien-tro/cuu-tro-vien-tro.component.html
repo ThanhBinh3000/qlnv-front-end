@@ -4,7 +4,8 @@
     <li nz-menu-item nzSelected (click)="selectTab(0)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_XDPA')">
       Xây dựng phương án
     </li>
-    <li nz-menu-item (click)="selectTab(1)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_THPA') && userService.isTongCuc()">
+    <li nz-menu-item (click)="selectTab(1)"
+      *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_THPA') && userService.isTongCuc()">
       Tổng hợp phương án
     </li>
     <li nz-menu-item (click)="selectTab(2)" *ngIf="userService.isAccessPermisson('XHDTQG_XCTVT_QDPDPA')">
@@ -36,10 +37,10 @@
       <!-- <app-hop-dong></app-hop-dong> -->
     </ng-container>
     <ng-container *ngIf="tabSelected == 4">
-       <app-quyet-dinh-gnv-xuat-hang></app-quyet-dinh-gnv-xuat-hang>
+      <app-quyet-dinh-gnv-xuat-hang></app-quyet-dinh-gnv-xuat-hang>
     </ng-container>
     <ng-container *ngIf="tabSelected == 5">
-      <!-- <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong> -->
+      <app-kiem-tra-chat-luong></app-kiem-tra-chat-luong>
     </ng-container>
     <ng-container *ngIf="tabSelected == 6">
       <!-- <app-xuat-kho></app-xuat-kho> -->
