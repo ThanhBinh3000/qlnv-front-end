@@ -12,6 +12,8 @@ import {
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import dayjs from 'dayjs';
 import { DeXuatKhBanDauGiaService } from 'src/app/services/qlnv-hang/xuat-hang/ban-dau-gia/de-xuat-kh-bdg/deXuatKhBanDauGia.service';
+import { DeXuatKhBanTrucTiepService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/de-xuat-kh-btt/de-xuat-kh-ban-truc-tiep.service';
+import { DialogThemMoiXuatBanTrucTiepComponent } from 'src/app/components/dialog/dialog-them-moi-xuat-ban-truc-tiep/dialog-them-moi-xuat-ban-truc-tiep.component';
 
 
 @Component({
@@ -31,14 +33,14 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
   formData: FormGroup
   listNguonVon: any[] = [];
   listDataGroup: any[] = [];
-  listOfData: any[] = [];
+  dataTable: any[] = [];
   dataChiTieu: any;
 
   constructor(
     private fb: FormBuilder,
     public globals: Globals,
     private danhMucService: DanhMucService,
-    private deXuatKhBanDauGiaService: DeXuatKhBanDauGiaService,
+    private deXuatKhBanTrucTiepService: DeXuatKhBanTrucTiepService,
     private spinner: NgxSpinnerService,
     private helperService: HelperService,
     private modal: NzModalService,
@@ -47,6 +49,7 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
 
     this.formData = this.fb.group({
       id: [],
+      idDxHdr: [],
       maDvi: [''],
       tenDvi: [''],
       tgianBdauTchuc: [],
@@ -68,30 +71,32 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
       soDxuat: [null,],
       trichYeu: [null],
       ldoTuchoi: [],
-      dsPhanLoList: []
+      children: []
     });
   }
 
   async ngOnChanges(changes: SimpleChanges) {
     await this.spinner.show()
     if (changes) {
+      console.log(this.dataInput, 111)
       if (this.dataInput) {
         if (this.isCache) {
-          let res = await this.deXuatKhBanDauGiaService.getDetail(this.dataInput.idDxHdr);
+          let res = await this.deXuatKhBanTrucTiepService.getDetail(this.dataInput.idDxHdr);
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
             this.formData.patchValue({
               tgianBdauTchuc: [res.data?.tgianDkienTu, res.data?.tgianDkienDen],
+
             });
           }
         } else {
           this.formData.patchValue(this.dataInput);
           this.formData.patchValue({
-            dsPhanLoList: this.dataInput.children,
+            children: this.dataInput.children,
             tgianBdauTchuc: [this.dataInput.tgianDkienTu, this.dataInput.tgianDkienDen]
           })
         }
-        for (let i = 0; i < this.formData.value.dsPhanLoList.length; i++) {
+        for (let i = 0; i < this.formData.value.children.length; i++) {
           this.expandSet.add(i);
         }
       } else {
@@ -119,7 +124,7 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
   themMoiBangPhanLoTaiSan(data?: any, index?: number) {
     const modalGT = this.modal.create({
       nzTitle: 'Thêm địa điểm giao nhận hàng',
-      nzContent: DialogThemDiaDiemPhanLoComponent,
+      nzContent: DialogThemMoiXuatBanTrucTiepComponent,
       nzMaskClosable: false,
       nzClosable: false,
       nzWidth: '2000px',
@@ -129,38 +134,33 @@ export class ThongtinQdDieuchinhKhbttComponent implements OnInit {
       },
     });
     modalGT.afterClose.subscribe((res) => {
-      if (!res) {
+      if (!data) {
         return;
       }
       if (index >= 0) {
-        this.listOfData[index] = res.value;
-      } else {
-        this.listOfData = [...this.listOfData, res.value];
+        this.dataTable[index] = data;
       }
-      let tongSoLuong: number = 0;
-      let tongTienKdiem: number = 0;
-      let tongTienKdienDonGia: number = 0;
-      let tongTienDatTruoc: number = 0;
-      let tongTienDatTruocDonGia: number = 0;
-      let soLuong: number = 0;
-      this.listOfData.forEach((item) => {
-        tongSoLuong = tongSoLuong + item.soLuong;
-        tongTienKdiem = tongTienKdiem + item.giaKhoiDiem;
-        tongTienKdienDonGia = tongTienKdienDonGia + item.giaKhoiDiemDduyet;
-        tongTienDatTruoc = tongTienDatTruoc + item.tienDatTruoc;
-        tongTienDatTruocDonGia = tongTienDatTruocDonGia + item.tienDatTruocDduyet;
-      });
-      this.formData.patchValue({
-        tongSoLuong: tongSoLuong,
-        tongTienKdiem: tongTienKdiem,
-        tongTienKdienDonGia: tongTienKdienDonGia,
-        tongTienDatTruoc: tongTienDatTruoc,
-        tongTienDatTruocDonGia: tongTienDatTruocDonGia,
-      });
-      this.soLuongChange.emit(soLuong);
-      this.helperService.setIndexArray(this.listOfData);
+      this.calculatorTable();
     });
   }
+
+  calculatorTable() {
+    let tongSoLuong: number = 0;
+
+    this.dataTable.forEach((item) => {
+      let soLuongChiCuc = 0;
+      item.children.forEach(child => {
+        soLuongChiCuc += child.soLuong;
+        tongSoLuong += child.soLuong / 1000;
+      })
+      item.soLuong = soLuongChiCuc;
+    });
+    this.formData.patchValue({
+      tongSoLuong: tongSoLuong,
+    });
+    this.dataInput.soLuong = tongSoLuong * 1000
+  }
+
 
   changeFormData() {
     if (this.formData.value.id) {
