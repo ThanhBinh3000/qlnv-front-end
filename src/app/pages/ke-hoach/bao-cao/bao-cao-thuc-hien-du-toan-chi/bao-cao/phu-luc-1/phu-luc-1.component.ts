@@ -6,9 +6,9 @@ import { DialogChonDanhMucComponent } from 'src/app/components/dialog/dialog-cho
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { BaoCaoThucHienDuToanChiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienDuToanChi.service';
-import { addChild, addHead, addParent, deleteRow, displayNumber, divNumber, exchangeMoney, getHead, replaceIndex, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
+import { addChild, addHead, addParent, deleteRow, displayNumber, divNumber, exchangeMoney, getHead, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
@@ -111,7 +111,7 @@ export class PhuLucIComponent implements OnInit {
     constructor(
         private spinner: NgxSpinnerService,
         private baoCaoThucHienDuToanChiService: BaoCaoThucHienDuToanChiService,
-        private danhMucService: DanhMucHDVService,
+        private danhMucService: DanhMucDungChungService,
         private notification: NzNotificationService,
         private modal: NzModalService,
     ) {
@@ -125,23 +125,17 @@ export class PhuLucIComponent implements OnInit {
 
     async initialization() {
         this.spinner.show();
-        await this.danhMucService.dMNoiDungPhuLuc1().toPromise().then(
-            (data) => {
-                if (data.statusCode == 0) {
-                    data.data.forEach(item => {
-                        this.noiDungs.push({
-                            ...item,
-                            level: item.ma.split('.').length - 2,
-                        })
+        const category = await this.danhMucService.danhMucChungGetAll('BC_DTC_PL1');
+        if (category) {
+            category.data.forEach(
+                item => {
+                    this.noiDungs.push({
+                        ...item,
+                        level: item.ma?.split('.').length - 2,
                     })
-                } else {
-                    this.notification.error(MESSAGE.ERROR, data?.msg);
                 }
-            },
-            (err) => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.ERROR_CALL_SERVICE);
-            }
-        );
+            )
+        }
         this.id = this.data?.id;
         this.idBcao = this.data?.idBcao;
         this.maPhuLuc = this.data?.maPhuLuc;

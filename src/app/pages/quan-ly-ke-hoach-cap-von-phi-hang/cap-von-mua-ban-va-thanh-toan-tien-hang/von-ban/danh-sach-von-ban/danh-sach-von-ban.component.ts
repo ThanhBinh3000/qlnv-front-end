@@ -95,13 +95,13 @@ export class DanhSachVonBanComponent implements OnInit {
                 break;
             case 'gn':
                 this.title = 'DANH SÁCH GHI NHẬN VỐN BÁN HÀNG TỪ ĐƠN VỊ CẤP DƯỚI';
-                this.searchFilter.loaiTimKiem = '1';
-                this.searchFilter.maLoai = 4;
+                this.searchFilter.loaiTimKiem = '0';
+                this.searchFilter.maLoai = 1;
                 this.createPermission = 'NO';
-                this.editPermission = CVMB.EDIT_REPORT_GNV_BH;
+                this.editPermission = 'NO';
                 this.deletePermission = 'NO';
-                this.passPermission = CVMB.DUYET_REPORT_GNV_BH;
-                this.approvePermission = CVMB.PHE_DUYET_REPORT_GNV_BH;
+                this.passPermission = 'NO';
+                this.approvePermission = 'NO';
                 this.isSend = false;
                 break;
             default:

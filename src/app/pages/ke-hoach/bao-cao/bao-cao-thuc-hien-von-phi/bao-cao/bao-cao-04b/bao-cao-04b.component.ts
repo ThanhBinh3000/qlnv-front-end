@@ -8,11 +8,10 @@ import { DialogDanhSachVatTuHangHoaComponent } from 'src/app/components/dialog/d
 import { DialogTuChoiComponent } from 'src/app/components/dialog/dialog-tu-choi/dialog-tu-choi.component';
 import { MESSAGE } from 'src/app/constants/message';
 import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
-import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
+import { DanhMucDungChungService } from 'src/app/services/danh-muc-dung-chung.service';
 import { BaoCaoThucHienVonPhiService } from 'src/app/services/quan-ly-von-phi/baoCaoThucHienVonPhi.service';
-import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
 import { UserService } from 'src/app/services/user.service';
-import { addChild, addHead, addParent, deleteRow, displayNumber, exchangeMoney, findIndex, getHead, getTail, mulNumber, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
+import { addChild, addHead, addParent, deleteRow, displayNumber, exchangeMoney, getHead, mulNumber, sortByIndex, sortWithoutIndex, sumNumber } from 'src/app/Utility/func';
 import { AMOUNT, BOX_NUMBER_WIDTH, DON_VI_TIEN, LA_MA, MONEY_LIMIT, NOT_OK, OK, QUATITY } from "src/app/Utility/utils";
 import * as uuid from "uuid";
 
@@ -81,9 +80,8 @@ export class BaoCao04bComponent implements OnInit {
     constructor(
         private spinner: NgxSpinnerService,
         private userService: UserService,
-        private quanLyVonPhiService: QuanLyVonPhiService,
         private baoCaoThucHienVonPhiService: BaoCaoThucHienVonPhiService,
-        private danhMucService: DanhMucHDVService,
+        private danhMucService: DanhMucDungChungService,
         private notification: NzNotificationService,
         private modal: NzModalService,
     ) {
@@ -197,23 +195,17 @@ export class BaoCao04bComponent implements OnInit {
     }
 
     async getListNdung() {
-        //lay danh muc noi dung chi
-        await this.quanLyVonPhiService.getListCategory('NOI_DUNG_CHI04B').toPromise().then(
-            res => {
-                if (res.statusCode == 0) {
-                    res.data.forEach(item => {
-                        this.noiDungChis.push({
-                            ...item,
-                            level: item.ma?.split('.').length - 2,
-                        })
+        const data = await this.danhMucService.danhMucChungGetAll('BC_VP_04A');
+        if (data) {
+            data.data.forEach(
+                item => {
+                    this.noiDungChis.push({
+                        ...item,
+                        level: item.ma?.split('.').length - 2,
                     })
-                } else {
-                    this.notification.error(MESSAGE.ERROR, res?.msg);
                 }
-            }, err => {
-                this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-            }
-        )
+            )
+        }
     }
 
     async getDinhMuc() {
