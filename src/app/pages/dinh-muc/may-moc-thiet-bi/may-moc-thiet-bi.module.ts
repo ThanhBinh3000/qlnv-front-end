@@ -19,6 +19,8 @@ import {MmDxCucComponent} from "./mm-dx-cuc/mm-dx-cuc.component";
 import {ThemMoiMmDxCucComponent} from "./mm-dx-cuc/them-moi-mm-dx-cuc/them-moi-mm-dx-cuc.component";
 import { MmTongHopDxCucComponent } from './mm-tong-hop-dx-cuc/mm-tong-hop-dx-cuc.component';
 import { MmThemMoiTongHopDxCucComponent } from './mm-tong-hop-dx-cuc/mm-them-moi-tong-hop-dx-cuc/mm-them-moi-tong-hop-dx-cuc.component';
+import { MmQdMuaSamComponent } from './mm-qd-mua-sam/mm-qd-mua-sam.component';
+import { MmThemMoiQdMuaSamComponent } from './mm-qd-mua-sam/mm-them-moi-qd-mua-sam/mm-them-moi-qd-mua-sam.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { MmThemMoiTongHopDxCucComponent } from './mm-tong-hop-dx-cuc/mm-them-moi
     MmDxCucComponent,
     ThemMoiMmDxCucComponent,
     MmTongHopDxCucComponent,
-    MmThemMoiTongHopDxCucComponent
+    MmThemMoiTongHopDxCucComponent,
+    MmQdMuaSamComponent,
+    MmThemMoiQdMuaSamComponent
   ],
   imports: [
     CommonModule,
