@@ -404,7 +404,6 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
     this.rowItem = new DanhMucKho();
     this.updateEditCache()
   }
-
   clearData() {
     this.rowItem = new DanhMucKho();
   }
@@ -477,7 +476,7 @@ export class ThemMoiDxkhTrungHanComponent implements OnInit {
       let result = this.listDmKho.filter(item => item.maDuAn == event)
       if (result && result.length > 0) {
         this.rowItem = result[0];
-        this.rowItem.tgKcHt = this.rowItem.tgKhoiCongTu + ' - ' + this.rowItem.tgHoanThanhDen
+        this.rowItem.tgKcHt = this.rowItem.tgKhoiCong + ' - ' + this.rowItem.tgHoanThanh
       }
     }
   }

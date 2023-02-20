@@ -124,12 +124,10 @@
           </nz-input-group>
         </td>
         <td class="text-center">
-          <nz-range-picker [nzPlaceHolder]="['Từ', 'Đến']" [(ngModel)]="rowItem.tgKhoiCong"
-                           nzMode="year"></nz-range-picker>
+          <nz-input-number [nzSize]="'small'" nz-input [nzMin]="2023" [(ngModel)]="rowItem.tgKhoiCong"></nz-input-number>
         </td>
         <td class="text-center">
-          <nz-range-picker [nzPlaceHolder]="['Từ', 'Đến']" [(ngModel)]="rowItem.tgHoanThanh"
-                           nzMode="year"></nz-range-picker>
+          <nz-input-number [nzSize]="'small'" nz-input [nzMin]="2023" [(ngModel)]="rowItem.tgHoanThanh"></nz-input-number>
         </td>
         <td class="text-center">
           <nz-input-number [(ngModel)]="rowItem.tmdtDuKien" [nzSize]="'small'" [nzFormatter]="globals.formatter"
@@ -186,8 +184,8 @@
         <td>{{ data.tenDuAn}}</td>
         <td>{{ data.diaDiem }}</td>
         <td>{{ data.khoi }}</td>
-        <td>{{data.tgKhoiCongTu + ' - ' + data.tgKhoiCongDen}}</td>
-        <td>{{data.tgHoanThanhTu + ' - ' + data.tgHoanThanhDen}}</td>
+        <td>{{data.tgKhoiCong}}</td>
+        <td>{{data.tgHoanThanh}}</td>
         <td>{{ data.tmdtDuKien }}</td>
         <td>{{ data.nstwDuKien }}</td>
         <td>{{ data.soQdPd }}</td>
@@ -200,7 +198,7 @@
           <a (click)="openDialog(data.id)" *ngIf="data.trangThai == STATUS.BAN_HANH">
             <i class="fa fa-eye"></i>
           </a>
-          <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()" (click)="startEdit(i, data.id)" >
+          <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()" (click)="startEdit(i)" >
             <i class="fa fa-pencil"></i>
           </a>
           <a *ngIf="data.trangThai == STATUS.DU_THAO && userService.isCuc()" (click)="xoaItem(data.id)">
@@ -235,12 +233,10 @@
               </nz-input-group>
             </td>
             <td class="text-center">
-              <nz-range-picker [nzPlaceHolder]="['Từ năm', 'Đến năm']" [(ngModel)]="dataEdit[i].data.tgKhoiCong"
-                               nzMode="year"></nz-range-picker>
+              <nz-input-number [nzSize]="'small'" nz-input [nzMin]="2023" [(ngModel)]="dataEdit[i].data.tgKhoiCong"></nz-input-number>
             </td>
             <td class="text-center">
-              <nz-range-picker [nzPlaceHolder]="['Từ năm', 'Đến năm']" [(ngModel)]="dataEdit[i].data.tgHoanThanh"
-                               nzMode="year"></nz-range-picker>
+              <nz-input-number [nzSize]="'small'" nz-input [nzMin]="2023" [(ngModel)]="dataEdit[i].data.tgHoanThanh"></nz-input-number>
             </td>
             <td class="text-center">
               <nz-input-number [(ngModel)]="dataEdit[i].data.tmdtDuKien" [nzSize]="'small'" [nzFormatter]="globals.formatter"

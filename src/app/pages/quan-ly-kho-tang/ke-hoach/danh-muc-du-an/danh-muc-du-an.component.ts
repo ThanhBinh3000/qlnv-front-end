@@ -129,7 +129,6 @@ export class DanhMucDuAnComponent implements OnInit {
   async search() {
     this.spinner.show();
     let body = {
-      "role": this.userService.isTongCuc() ? 'TC' : 'CUC',
       "denNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[1]).get('year') : null,
       "diaDiem": this.searchFilter.diaDiem,
       "khoi": this.searchFilter.khoi,
@@ -139,10 +138,10 @@ export class DanhMucDuAnComponent implements OnInit {
       },
       "soQd": this.searchFilter.soQd,
       "tenDuAn": this.searchFilter.tenDuAn,
-      "tgHoanThanhTu": this.searchFilter.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[0]).get('year') : null,
-      "tgHoanThanhDen": this.searchFilter.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[1]).get('year') : null,
-      "tgKhoiCongTu": this.searchFilter.tgKhoiCong ? dayjs(this.searchFilter.tgKhoiCong[0]).get('year') : null,
-      "tgKhoiCongDen": this.searchFilter.tgKhoiCong ? dayjs(this.searchFilter.tgKhoiCong[1]).get('year') : null,
+      "tgHoanThanhTu":  this.searchFilter.tgHoanThanh ? this.searchFilter.tgHoanThanh[0] : null,
+      "tgHoanThanhDen":  this.searchFilter.tgHoanThanh ? this.searchFilter.tgHoanThanh[1] : null,
+      "tgKhoiCongTu": this.searchFilter.tgKhoiCong ? this.searchFilter.tgKhoiCong[0] : null,
+      "tgKhoiCongDen": this.searchFilter.tgKhoiCong ? this.searchFilter.tgKhoiCong[1] : null,
       "trangThai": this.searchFilter.trangThai,
       "tuNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[0]).get('year') : null,
       "maDvi": this.userService.isTongCuc() ? this.searchFilter.maDvi : this.userInfo.MA_DVI
@@ -172,6 +171,7 @@ export class DanhMucDuAnComponent implements OnInit {
     this.spinner.show();
     try {
       this.page = event;
+      await this.search();
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -184,6 +184,9 @@ export class DanhMucDuAnComponent implements OnInit {
     this.spinner.show();
     try {
       this.pageSize = event;
+      if (this.page === 1) {
+        await this.search();
+      }
       this.spinner.hide();
     } catch (e) {
       console.log('error: ', e);
@@ -252,7 +255,6 @@ export class DanhMucDuAnComponent implements OnInit {
     this.spinner.show();
     try {
       let body = {
-        "role": this.userService.isTongCuc() ? 'TC' : 'CUC',
         "denNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[1]).get('year') : null,
         "diaDiem": this.searchFilter.diaDiem,
         "khoi": this.searchFilter.khoi,
@@ -262,10 +264,10 @@ export class DanhMucDuAnComponent implements OnInit {
         },
         "soQd": this.searchFilter.soQd,
         "tenDuAn": this.searchFilter.tenDuAn,
-        "tgHoanThanhTu": this.searchFilter.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[0]).get('year') : null,
-        "tgHoanThanhDen": this.searchFilter.tgHoanThanh ? dayjs(this.searchFilter.tgHoanThanh[1]).get('year') : null,
-        "tgKhoiCongTu": this.searchFilter.tgKhoiCong ? dayjs(this.searchFilter.tgKhoiCong[0]).get('year') : null,
-        "tgKhoiCongDen": this.searchFilter.tgKhoiCong ? dayjs(this.searchFilter.tgKhoiCong[1]).get('year') : null,
+        "tgHoanThanhTu":  this.searchFilter.tgHoanThanh ? this.searchFilter.tgHoanThanh[0] : null,
+        "tgHoanThanhDen":  this.searchFilter.tgHoanThanh ? this.searchFilter.tgHoanThanh[1] : null,
+        "tgKhoiCongTu": this.searchFilter.tgKhoiCong ? this.searchFilter.tgKhoiCong[0] : null,
+        "tgKhoiCongDen": this.searchFilter.tgKhoiCong ? this.searchFilter.tgKhoiCong[1] : null,
         "trangThai": this.searchFilter.trangThai,
         "tuNam": this.searchFilter.giaiDoan ? dayjs(this.searchFilter.giaiDoan[0]).get('year') : null,
         "maDvi": this.userService.isTongCuc() ? this.searchFilter.maDvi : this.userInfo.MA_DVI
@@ -283,21 +285,8 @@ export class DanhMucDuAnComponent implements OnInit {
     }
   }
 
-  async startEdit(idx: number, id: number) {
+  async startEdit(idx: number) {
     this.dataEdit[idx].edit = true;
-    await this.getDetail(id);
-    if (this.itemDetail) {
-      const tgKhoiCongTu = new Date();
-      tgKhoiCongTu.setFullYear(this.itemDetail.tgKhoiCongTu)
-      const tgKhoiCongDen = new Date();
-      tgKhoiCongDen.setFullYear(this.itemDetail.tgKhoiCongDen)
-      const tgHoanThanhTu = new Date();
-      tgHoanThanhTu.setFullYear(this.itemDetail.tgHoanThanhTu)
-      const tgHoanThanhDen = new Date();
-      tgHoanThanhDen.setFullYear(this.itemDetail.tgHoanThanhDen)
-      this.dataEdit[idx].data.tgKhoiCong = [tgKhoiCongTu, tgKhoiCongDen];
-      this.dataEdit[idx].data.tgHoanThanh = [tgHoanThanhTu, tgHoanThanhDen];
-    }
   }
 
   cancelEdit(index: number) {
@@ -375,7 +364,7 @@ export class DanhMucDuAnComponent implements OnInit {
     let arr = [];
     let check = true;
     arr.push(
-      rowItem.maDuAn, rowItem.tenDuAn, rowItem.diaDiem, rowItem.khoi, rowItem.tgKhoiCong && rowItem.tgKhoiCong[0] ? rowItem.tgKhoiCong[0] : null, rowItem.tgKhoiCong && rowItem.tgKhoiCong[1] ? rowItem.tgKhoiCong[1] : null, rowItem.tgHoanThanh && rowItem.tgHoanThanh[1] ? rowItem.tgHoanThanh[1] : null, rowItem.tgHoanThanh && rowItem.tgHoanThanh[1] ? rowItem.tgHoanThanh[1] : null, rowItem.tmdtDuKien, rowItem.nstwDuKien
+      rowItem.maDuAn, rowItem.tenDuAn, rowItem.diaDiem, rowItem.khoi, rowItem.tgKhoiCong ,rowItem.tgHoanThanh, rowItem.tmdtDuKien, rowItem.nstwDuKien
     )
     if (arr && arr.length > 0) {
       for (let i = 0; i < arr.length; i++) {
@@ -428,11 +417,7 @@ export class DanhMucKho {
   tuNam: number;
   denNam: number;
   tgKhoiCong: any;
-  tgKhoiCongTu: number;
-  tgKhoiCongDen: number;
   tgHoanThanh: any;
-  tgHoanThanhTu: number;
-  tgHoanThanhDen: number;
   tmdtDuKien: number;
   nstwDuKien: number;
   soQdPd: string;
