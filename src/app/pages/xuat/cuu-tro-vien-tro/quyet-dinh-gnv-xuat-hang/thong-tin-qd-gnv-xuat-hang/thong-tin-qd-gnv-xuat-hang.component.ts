@@ -1,24 +1,41 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Base2Component } from "../../../../../components/base2/base2.component";
-import { chain } from 'lodash';
-import { HttpClient } from "@angular/common/http";
-import { StorageService } from "../../../../../services/storage.service";
-import { NzNotificationService } from "ng-zorro-antd/notification";
-import { NgxSpinnerService } from "ngx-spinner";
-import { NzModalService } from "ng-zorro-antd/modal";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Base2Component} from "../../../../../components/base2/base2.component";
+import {chain} from 'lodash';
+import {HttpClient} from "@angular/common/http";
+import {StorageService} from "../../../../../services/storage.service";
+import {NzNotificationService} from "ng-zorro-antd/notification";
+import {NgxSpinnerService} from "ngx-spinner";
+import {NzModalService} from "ng-zorro-antd/modal";
 import {
   QuyetDinhGiaoNvCuuTroService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhGiaoNvCuuTro.service";
-import { DanhMucService } from "../../../../../services/danhmuc.service";
-import { DanhMucTieuChuanService } from "../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
+import {DanhMucService} from "../../../../../services/danhmuc.service";
+import {DanhMucTieuChuanService} from "../../../../../services/quantri-danhmuc/danhMucTieuChuan.service";
 import dayjs from "dayjs";
-import { MESSAGE } from "../../../../../constants/message";
+import {MESSAGE} from "../../../../../constants/message";
 import {
   QuyetDinhPheDuyetPhuongAnCuuTroService
 } from "../../../../../services/qlnv-hang/xuat-hang/xuat-cuu-tro-vien-tro/QuyetDinhPheDuyetPhuongAnCuuTro.service";
-import { STATUS } from "../../../../../constants/status";
+import {STATUS} from "../../../../../constants/status";
 import * as uuid from "uuid";
-import { DonviService } from "../../../../../services/donvi.service";
+import {DonviService} from "../../../../../services/donvi.service";
+
+/*export class noiDungCuuTro {
+  idVirtual: number;
+  id: number;
+  idHdr: number;
+  idDx: number;
+  soDx: string;
+  maDviDx: string;
+  ngayPduyetDx: Date;
+  trichYeuDx: string;
+  tongSoLuongDx: number;
+  soLuongXuatCap: number;
+  thanhTienDx: number;
+  ngayKetThucDx: Date;
+  tenDviDx: string;
+  quyetDinhPdDx: Array<any> = [];
+}*/
 
 @Component({
   selector: 'app-thong-tin-qd-gnv-xuat-hang',
@@ -27,6 +44,7 @@ import { DonviService } from "../../../../../services/donvi.service";
 })
 export class ThongTinQdGnvXuatHangComponent extends Base2Component implements OnInit {
   @Input() isViewDetail: boolean;
+  @Input() isView: boolean;
   @Input() loaiVthh: string;
   @Input() id: number;
   @Output() showListEvent = new EventEmitter<any>();
@@ -34,25 +52,30 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   public dsQdPd: any;
   public dsNoiDung: any;
   public dsDonVi: any;
+  listLoaiHangHoa: any[] = []
   listChiCuc: any[] = [];
   listDiemKho: any[] = [];
   listNhaKho: any[] = [];
   listNganKho: any[] = [];
-  listNganLo: any[] = [];
+  listLoKho: any[] = [];
   expandSetString = new Set<string>();
   noiDungCuuTroView = [];
   noiDungRow: any = {};
   isVisible = false;
+  listNoiDung: any;
+  listChungLoaiHangHoa: any[] = [];
+  statusForm: any = [];
+
   constructor(httpClient: HttpClient,
-    storageService: StorageService,
-    notification: NzNotificationService,
-    spinner: NgxSpinnerService,
-    modal: NzModalService,
-    private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
-    private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
-    private danhMucService: DanhMucService,
-    private donViService: DonviService,
-    private danhMucTieuChuanService: DanhMucTieuChuanService) {
+              storageService: StorageService,
+              notification: NzNotificationService,
+              spinner: NgxSpinnerService,
+              modal: NzModalService,
+              private quyetDinhGiaoNvCuuTroService: QuyetDinhGiaoNvCuuTroService,
+              private quyetDinhPheDuyetPhuongAnCuuTroService: QuyetDinhPheDuyetPhuongAnCuuTroService,
+              private danhMucService: DanhMucService,
+              private donViService: DonviService,
+              private danhMucTieuChuanService: DanhMucTieuChuanService) {
     super(httpClient, storageService, notification, spinner, modal, quyetDinhGiaoNvCuuTroService);
     this.formData = this.fb.group({
       id: [],
@@ -75,7 +98,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       trangThaiXh: [],
       tenTrangThaiXh: [],
       lyDoTuChoi: [],
-      noiDungCuuTro: [],
+      noiDungCuuTro: [new Array()],
       donViTinh: ['kg'],
       tenDvi: [],
       soLuong: [0],
@@ -91,9 +114,10 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     try {
       this.spinner.show();
       await Promise.all([
+        this.loadDsVthh(),
         this.loadDsQdPd(),
         this.loadDsDonVi(),
-        this.loadDiemKho()
+        this.loadDsDiemKho()
       ])
       await this.loadDetail(this.id)
       this.spinner.hide();
@@ -112,10 +136,9 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
           if (res.msg == MESSAGE.SUCCESS) {
             this.formData.patchValue(res.data);
             this.formData.value.noiDungCuuTro.forEach(s => s.idVirtual = uuid.v4());
+            this.selectHangHoa(res.data.loaiVthh);
             this.buildTableView();
-
           }
-
         })
         .catch((e) => {
           console.log('error: ', e);
@@ -127,6 +150,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     }
 
   }
+
   buildTableView() {
     let dataView = chain(this.formData.value.noiDungCuuTro)
       .groupBy("noiDung")
@@ -134,19 +158,20 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
         let rs = chain(value)
           .groupBy("tenChiCuc")
           .map((v, k) => ({
-            idVirtual: uuid.v4(),
-            tenChiCuc: k,
-            soLuongXuatChiCuc: v[0].soLuongXuatChiCuc,
-            tenCloaiVthh: v[0].tenCloaiVthh,
-            tonKhoChiCuc: v[0].tonKhoChiCuc,
-            childData: v
-          })
+              idVirtual: uuid.v4(),
+              tenChiCuc: k,
+              soLuongXuatChiCuc: v[0].soLuongXuatChiCuc,
+              tenCloaiVthh: v[0].tenCloaiVthh,
+              tonKhoChiCuc: v[0].tonKhoChiCuc,
+              childData: v
+            })
           ).value();
         let soLuongXuat = rs.reduce((prev, cur) => prev + cur.soLuongXuatChiCuc, 0);
         let donViTinh = value[0].donViTinh;
-        return { idVirtual: uuid.v4(), noiDung: key, soLuongXuat: soLuongXuat, childData: rs, donViTinh: donViTinh };
+        return {idVirtual: uuid.v4(), noiDung: key, soLuongXuat: soLuongXuat, childData: rs, donViTinh: donViTinh};
       }).value();
     this.noiDungCuuTroView = dataView
+    console.log(JSON.stringify(this.noiDungCuuTroView), 'noiDungCuuTroView')
     this.expandAll()
 
   }
@@ -168,27 +193,20 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
         this.quyetDinhPheDuyetPhuongAnCuuTroService.getDetail(id).then(res => {
           if (res.msg == MESSAGE.SUCCESS) {
             if (res.data) {
-              let soQdPd = res.data.soQd
-              delete res.data.trangThai
-              delete res.data.tenTrangThai
-              delete res.data.id
-              delete res.data.soQd
-              delete res.data.nam
-              delete res.data.canCu
-              delete res.data.fileDinhKem
-              this.formData.patchValue(res.data)
+              let noiDungCuuTro = []
+              if (this.userInfo.CAP_DVI === "2") {
+                noiDungCuuTro = res.data.quyetDinhPdDtl.filter(q => q.quyetDinhPdDx.some(dx => dx.maDviCuc === this.userInfo.MA_DVI));
+              } else if (this.userInfo.CAP_DVI === "3") {
+                noiDungCuuTro = res.data.quyetDinhPdDtl.filter(q => q.quyetDinhPdDx.some(dx => dx.maDviChiCuc === this.userInfo.MA_DVI));
+              }
+
               this.formData.patchValue({
-                soQdPd: soQdPd,
-                soLuong: res.data.tongSoLuong,
-                noiDungCuuTro: res.data.thongTinQuyetDinh
-              })
-              let dataView = chain(this.formData.value.noiDungCuuTro)
-                .groupBy("noiDung")
-                .map((value, key) => {
-                  return { idVirtual: uuid.v4(), noiDung: key, soLuong: value[0].soLuong, tenCloaiVthh: '' };
-                }).value();
-              this.noiDungCuuTroView = dataView;
-              this.dsNoiDung = dataView
+                loaiVthh: res.data.loaiVthh,
+                noiDungCuuTro: noiDungCuuTro[0].quyetDinhPdDx
+              });
+              this.selectHangHoa(res.data.loaiVthh);
+              console.log(JSON.stringify(this.formData.value), 2929)
+              this.buildTableView()
             }
           }
         })
@@ -198,6 +216,13 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       } finally {
         this.spinner.hide();
       }
+    }
+  }
+
+  async loadDsVthh() {
+    let res = await this.danhMucService.getDanhMucHangDvqlAsyn({});
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoaiHangHoa = res.data?.filter((x) => x.ma.length == 4);
     }
   }
 
@@ -264,76 +289,85 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     }
   }
 
-  async loadDiemKho() {
+  async loadDsDiemKho() {
     let body = {
+      trangThai: "01",
       maDviCha: this.userInfo.MA_DVI,
-      trangThai: '01',
-    }
-    const res = await this.donViService.getTreeAll(body);
+      type: "MLK"
+    };
+    let res = await this.donViService.getDonViTheoMaCha(body);
     if (res.msg == MESSAGE.SUCCESS) {
-      if (res.data && res.data.length > 0) {
-        res.data.forEach(element => {
-          if (element && element.capDvi == '3' && element.children) {
-            this.listDiemKho = [
-              ...this.listDiemKho,
-              ...element.children
-            ]
-          }
-          if (element && element.capDvi == '2' && element.children) {
-            this.listChiCuc = [
-              ...this.listChiCuc,
-              ...element.children
-            ]
-          }
-        });
-      };
+      this.listDiemKho = res.data;
     } else {
       this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
-  changeDiemKho() {
-    this.listNhaKho = [];
-    this.listNganKho = [];
-    this.listNganLo = [];
-    this.noiDungRow.maNhaKho = null;
-    this.noiDungRow.maNganKho = null;
-    this.noiDungRow.maLoKho = null;
-    let diemKho = this.listDiemKho.filter(x => x.key == this.noiDungRow.maDiemKho);
-    if (diemKho && diemKho.length > 0) {
-      this.listNhaKho = diemKho[0].children;
-      this.noiDungRow.tenDiemKho = diemKho[0].tenDvi;
-      this.noiDungRow.soLuongDiemKho = diemKho[0].soLuongDiemKho;
+  // async loadDsLoKho() {
+  //   let body = {
+  //     trangThai: "01",
+  //     maDviCha: this.userInfo.MA_DVI + "______",
+  //   };
+  //   let res = await this.donViService.getDonViTheoMaCha(body);
+  //   if (res.msg == MESSAGE.SUCCESS) {
+  //     this.dsLoKho = res.data;
+  //   } else {
+  //     this.notification.error(MESSAGE.ERROR, res.msg);
+  //   }
+  // }
+
+
+  async changeDiemKho() {
+    //this.noiDungRow.maDiaDiem = null;
+    // this.listNhaKho = this.listNhaKho.filter(s => s.maDvi.substring(0, 10) === this.noiDungRow.maDiemKho);
+    this.statusForm = '';
+    let body = {
+      trangThai: "01",
+      maDviCha: this.noiDungRow.maDiemKho,
+      // type: "MLK"
+    };
+    let res = await this.donViService.getDonViTheoMaCha(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listNhaKho = res.data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
-  changeNhaKho() {
-    this.listNganKho = [];
-    this.listNganLo = [];
-    this.noiDungRow.maNganKho = null;
-    this.noiDungRow.maLoKho = null;
-    let nhaKho = this.listNhaKho.filter(x => x.key == this.noiDungRow.maNhaKho);
-    if (nhaKho && nhaKho.length > 0) {
-      this.listNganKho = nhaKho[0].children;
-      this.noiDungRow.tenNhaKho = nhaKho[0].tenDvi
+  async changeNhaKho() {
+    //this.noiDungRow.maDiaDiem = null;
+    // this.listNhaKho = this.listNhaKho.filter(s => s.maDvi.substring(0, 10) === this.noiDungRow.maDiemKho);
+    this.statusForm = '';
+    let body = {
+      trangThai: "01",
+      maDviCha: this.noiDungRow.maNhaKho,
+      // type: "MLK"
+    };
+    let res = await this.donViService.getDonViTheoMaCha(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listNganKho = res.data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
-  changeNganKho() {
-    this.listNganLo = [];
-    this.noiDungRow.maLoKho = null;
-    let nganKho = this.listNganKho.filter(x => x.key == this.noiDungRow.maNganKho);
-    if (nganKho && nganKho.length > 0) {
-      this.listNganLo = nganKho[0].children;
-      this.noiDungRow.tenNganKho = nganKho[0].tenDvi
+  async changeNganKho() {
+    this.statusForm = '';
+    let body = {
+      trangThai: "01",
+      maDviCha: this.noiDungRow.maNganKho,
+      // type: "MLK"
+    };
+    let res = await this.donViService.getDonViTheoMaCha(body);
+    if (res.msg == MESSAGE.SUCCESS) {
+      this.listLoKho = res.data;
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
     }
   }
 
-  changeLoKho() {
-    let loKho = this.listNganLo.filter(x => x.key == this.noiDungRow.maLoKho);
-    if (loKho && loKho.length > 0) {
-      this.noiDungRow.tenLoKho = loKho[0].tenDvi
-    }
+  async changeLoKho() {
+
   }
 
 
@@ -404,7 +438,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
   clearDiaDiemNhap() {
     this.listNhaKho = [];
     this.listNganKho = [];
-    this.listNganLo = [];
+    this.listLoKho = [];
     this.noiDungRow = {};
   }
 
@@ -413,7 +447,7 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     this.formData.value.noiDungCuuTro.forEach(item => {
       item.trangThai = statusSave
     })
-
+    this.formData.value.trangThaiXh = statusSave;
     let body = this.formData.value
 
     let res = await this.quyetDinhGiaoNvCuuTroService.updateDdiemNhap(body);
@@ -425,9 +459,11 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
       this.spinner.hide();
     }
   }
+
   redirectQdNhapXuat() {
     this.showListEvent.emit();
   }
+
   xoaItem(data: any) {
     let noiDungCuuTro;
     if (data.id) {
@@ -441,5 +477,89 @@ export class ThongTinQdGnvXuatHangComponent extends Base2Component implements On
     this.buildTableView();
   }
 
+  handleCancel() {
+    this.isVisible = false;
+    this.noiDungRow = {}
+  }
+
+  handleOk() {
+    if (!this.noiDungRow.maDiemKho || !this.noiDungRow.maNhaKho || !this.noiDungRow.maNganKho) {
+      this.statusForm = 'error';
+      this.notification.error(MESSAGE.ERROR, 'Bạn cần điền đầy đủ thông tin');
+      return;
+    }
+    this.noiDungRow.tenDiemKho = this.listDiemKho.find(s => s.maDvi === this.noiDungRow.maDiemKho).tenDvi;
+    this.noiDungRow.tenNhaKho = this.listNhaKho.find(s => s.maDvi === this.noiDungRow.maNhaKho).tenDvi;
+    this.noiDungRow.tenNganKho = this.listNganKho.find(s => s.maDvi === this.noiDungRow.maNganKho).tenDvi;
+    if (this.noiDungRow.maLoKho) {
+      this.noiDungRow.tenLoKho = this.listLoKho.find(s => s.maDvi === this.noiDungRow.maLoKho).tenDvi;
+    }
+    this.noiDungRow.tenCloaiVthh = this.listChungLoaiHangHoa.find(s => s.ma = this.noiDungRow.cloaiVthh)?.ten;
+    this.noiDungRow.thanhTien = this.noiDungRow.soLuongXuatChiCuc * this.noiDungRow.donGiaKhongVat;
+    let index = this.formData.value.noiDungCuuTro.findIndex(s => s.idVirtual === this.noiDungRow.idVirtual);
+    let table = this.formData.value.noiDungCuuTro;
+    table.forEach(s => {
+      s.soLuongXuatCuc = this.noiDungRow.soLuongXuatCuc
+    })
+
+    if (index != -1) {
+      table.splice(index, 1, this.noiDungRow);
+    } else {
+      table = [...table, this.noiDungRow]
+    }
+    table = table.filter(s => s.maDiemKho);
+    this.formData.patchValue({
+      noiDungCuuTro: table
+    })
+    this.buildTableView();
+    this.isVisible = false;
+    //clean
+    this.noiDungRow = {}
+    this.listChiCuc = []
+  }
+
+  showModal(item: any): void {
+    console.log(item, "item")
+    this.isVisible = true;
+    this.noiDungRow.noiDung = item.noiDung;
+    this.noiDungRow.maDviChiCuc = this.userInfo.MA_DVI;
+    this.noiDungRow.idVirtual = item.idVirtual ? item.idVirtual : uuid.v4();
+    this.noiDungRow.tenChiCuc = this.userInfo.TEN_DVI;
+    this.noiDungRow.soLuongXuat = item.soLuongXuat;
+    let chiCucHienTai = this.formData.value.noiDungCuuTro.find(s => s.maDviChiCuc === this.userInfo.MA_DVI);
+    if (chiCucHienTai) {
+      this.noiDungRow.soLuongXuatChiCuc = chiCucHienTai.soLuongXuatChiCuc;
+      this.noiDungRow.loaiVthh = chiCucHienTai.loaiVthh;
+    }
+
+    // this.listNoiDung = [...new Set(this.formData.value.deXuatPhuongAn.map(s => s.noiDung))];
+    // this.phuongAnRow.loaiVthh = this.formData.value.loaiVthh;
+  }
+
+  async suaPhuongAn(data: any) {
+    let currentRow;
+    if (data.id) {
+      currentRow = this.formData.value.noiDungCuuTro.find(s => s.id == data.id);
+    } else if (data.idVirtual) {
+      currentRow = this.formData.value.noiDungCuuTro.find(s => s.idVirtual == data.idVirtual)
+    }
+    this.noiDungRow = currentRow;
+    await this.changeDiemKho();
+    await this.changeNhaKho();
+    await this.changeNganKho();
+
+    this.showModal(data);
+  }
+
+  async selectHangHoa(event: any) {
+    let res = await this.danhMucService.loadDanhMucHangHoaTheoMaCha({str: event});
+    if (res.msg == MESSAGE.SUCCESS) {
+      if (res.data) {
+        this.listChungLoaiHangHoa = res.data;
+      }
+    } else {
+      this.notification.error(MESSAGE.ERROR, res.msg);
+    }
+  }
 }
 
