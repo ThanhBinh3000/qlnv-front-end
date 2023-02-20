@@ -80,7 +80,7 @@
           <th width="175px">Ngày ký</th>
           <th width="175px">Ngày hiệu lực</th>
           <th [width]="checkRolesTemplate() ? '175px' : '305px'">Trạng thái</th>
-          <th width="130px" *ngIf="checkRolesTemplate()">Hành động</th>
+          <th width="130px" class="text-center">Hành động</th>
         </tr>
         </thead>
         <tbody>
@@ -131,7 +131,7 @@
           <td>{{ data.ngayKy | date: 'dd/MM/YYYY' }}</td>
           <td>{{ data.ngayHieuLuc | date: 'dd/MM/YYYY' }}</td>
           <td class="text-left">{{ data.tenTrangThai }}</td>
-          <td>
+          <td class="text-center">
             <a *ngIf="(checkRolesTemplate() && data.trangThai != STATUS.DU_THAO) || (!checkRolesTemplate() ) "
                (click)="redirectToChiTiet(data.id, true)">
               <i class=" icon htvbdh_eye"></i>

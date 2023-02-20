@@ -64,7 +64,7 @@
     </div>
   </nz-card>
   <div class="group-button">
-    <h3> DANH SÁCH DỰ ÁN</h3>
+    <h3> DANH SÁCH DỰ ÁN KHO DTQG</h3>
     <div class="buttons">
       <button type="button" class="btn btn-sub" (click)="exportData()">
         <i class="icon htvbdh_chuyen-xu-ly"></i>
@@ -124,11 +124,11 @@
           </nz-input-group>
         </td>
         <td class="text-center">
-          <nz-range-picker [nzPlaceHolder]="['Từ năm', 'Đến năm']" [(ngModel)]="rowItem.tgKhoiCong"
+          <nz-range-picker [nzPlaceHolder]="['Từ', 'Đến']" [(ngModel)]="rowItem.tgKhoiCong"
                            nzMode="year"></nz-range-picker>
         </td>
         <td class="text-center">
-          <nz-range-picker [nzPlaceHolder]="['Từ năm', 'Đến năm']" [(ngModel)]="rowItem.tgHoanThanh"
+          <nz-range-picker [nzPlaceHolder]="['Từ', 'Đến']" [(ngModel)]="rowItem.tgHoanThanh"
                            nzMode="year"></nz-range-picker>
         </td>
         <td class="text-center">
