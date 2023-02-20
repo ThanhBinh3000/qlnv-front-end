@@ -38,6 +38,7 @@ import { MmThemMoiQdMuaSamComponent } from './mm-qd-mua-sam/mm-them-moi-qd-mua-s
     MmTongHopDxCucComponent,
     MmThemMoiTongHopDxCucComponent,
     MmQdMuaSamComponent,
+    MmThemMoiQdMuaSamComponent,
     MmThemMoiQdMuaSamComponent
   ],
   imports: [
