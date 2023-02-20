@@ -5,13 +5,10 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 import { NzModalService } from "ng-zorro-antd/modal";
 import { UserService } from "../../../../../services/user.service";
-
-import {
-  QuyetDinhDchinhKhBdgService
-} from "../../../../../services/qlnv-hang/xuat-hang/ban-dau-gia/dieuchinh-kehoach/quyetDinhDchinhKhBdg.service";
 import { Base2Component } from 'src/app/components/base2/base2.component';
 import { StorageService } from 'src/app/services/storage.service';
 import { HttpClient } from '@angular/common/http';
+import { QuyetDinhDcBanttService } from 'src/app/services/qlnv-hang/xuat-hang/ban-truc-tiep/dieuchinh-kehoach-bantt/quyet-dinh-dc-bantt.service';
 
 @Component({
   selector: 'app-qd-dieuchinh-khbtt',
@@ -27,31 +24,31 @@ export class QdDieuchinhKhbttComponent extends Base2Component implements OnInit 
     notification: NzNotificationService,
     spinner: NgxSpinnerService,
     modal: NzModalService,
-    private quyetDinhDchinhKhBdgService: QuyetDinhDchinhKhBdgService,
+    private quyetDinhDcBanttService: QuyetDinhDcBanttService,
     public userService: UserService,
   ) {
-    super(httpClient, storageService, notification, spinner, modal, quyetDinhDchinhKhBdgService);
+    super(httpClient, storageService, notification, spinner, modal, quyetDinhDcBanttService);
     this.formData = this.fb.group({
       namKh: dayjs().get('year'),
+      ngayKyDc: null,
+      soQdDc: null,
       soQdPd: null,
       trichYeu: null,
       loaiVthh: null,
-      ngayKyQd: null,
       soTrHdr: null,
-      soQdDc: null,
     })
 
     this.filterTable = {
       namKh: '',
-      soQdPd: '',
-      ngayKyQd: '',
+      soQdDc: '',
+      ngayKyDc: '',
+      soQdGoc: '',
       trichYeu: '',
-      soTrHdr: '',
-      idThHdr: '',
+      loaiVthh: '',
       tenLoaiVthh: '',
+      cloaiVthh: '',
       tenCloaiVthh: '',
-      soDviTsan: '',
-      slHdDaKy: '',
+      trangThai: '',
       tenTrangThai: '',
     };
 
