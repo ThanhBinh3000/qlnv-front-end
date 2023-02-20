@@ -332,10 +332,8 @@ export class DanhMucDuAnComponent implements OnInit {
       "nstwDuyet": this.rowItem.nstwDuyet,
       "soQdPd": this.rowItem.soQdPd,
       "tenDuAn": this.rowItem.tenDuAn,
-      "tgHoanThanhTu": this.rowItem.tgHoanThanh ? dayjs(this.rowItem.tgHoanThanh[0]).get('year') : null,
-      "tgHoanThanhDen": this.rowItem.tgHoanThanh ? dayjs(this.rowItem.tgHoanThanh[1]).get('year') : null,
-      "tgKhoiCongTu": this.rowItem.tgKhoiCong ? dayjs(this.rowItem.tgKhoiCong[0]).get('year') : null,
-      "tgKhoiCongDen": this.rowItem.tgKhoiCong ? dayjs(this.rowItem.tgKhoiCong[1]).get('year') : null,
+      "tgHoanThanh": this.rowItem.tgHoanThanh,
+      "tgKhoiCong": this.rowItem.tgKhoiCong,
       "tmdtDuKien": this.rowItem.tmdtDuKien,
       "tmdtDuyet": this.rowItem.tmdtDuyet,
       "tongSoLuyKe": this.rowItem.tongSoLuyKe,
@@ -357,6 +355,10 @@ export class DanhMucDuAnComponent implements OnInit {
       this.rowItem = new DanhMucKho();
       await this.search();
       this.updateEditCache();
+    } else {
+      this.notification.error(MESSAGE.SUCCESS, res.msg);
+      this.spinner.hide()
+      return;
     }
     this.spinner.hide();
   }

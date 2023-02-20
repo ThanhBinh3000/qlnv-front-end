@@ -186,13 +186,13 @@
         <td>{{ data.khoi }}</td>
         <td>{{data.tgKhoiCong}}</td>
         <td>{{data.tgHoanThanh}}</td>
-        <td>{{ data.tmdtDuKien }}</td>
-        <td>{{ data.nstwDuKien }}</td>
+        <td>{{ data.tmdtDuKien | number : '1.0-1' : 'vi_VN' }}</td>
+        <td>{{ data.nstwDuKien | number : '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.soQdPd }}</td>
-        <td>{{ data.tmdtDuyet }}</td>
-        <td>{{ data.nstwDuyet }}</td>
-        <td>{{ data.tongSoLuyKe }}</td>
-        <td>{{ data.luyKeNstw }}</td>
+        <td>{{ data.tmdtDuyet | number : '1.0-1' : 'vi_VN' }}</td>
+        <td>{{ data.nstwDuyet | number : '1.0-1' : 'vi_VN' }}</td>
+        <td>{{ data.tongSoLuyKe | number : '1.0-1' : 'vi_VN' }}</td>
+        <td>{{ data.luyKeNstw | number : '1.0-1' : 'vi_VN' }}</td>
         <td>{{ data.tenTrangThai }}</td>
         <td class="text-left" nzRight>
           <a (click)="openDialog(data.id)" *ngIf="data.trangThai == STATUS.BAN_HANH">
