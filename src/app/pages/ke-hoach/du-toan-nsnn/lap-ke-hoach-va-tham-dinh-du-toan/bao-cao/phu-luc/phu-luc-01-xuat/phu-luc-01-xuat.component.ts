@@ -34,11 +34,11 @@ export class ItemData {
 }
 
 @Component({
-  selector: 'app-phu-luc-01',
-  templateUrl: './phu-luc-01.component.html',
-  styleUrls: ['../../bao-cao.component.scss']
+  selector: 'app-phu-luc-01-xuat',
+  templateUrl: './phu-luc-01-xuat.component.html',
+  styleUrls: ['./phu-luc-01-xuat.component.scss']
 })
-export class PhuLuc01Component implements OnInit {
+export class PhuLuc01XuatComponent implements OnInit {
   @Input() dataInfo;
   donViTiens: any[] = DON_VI_TIEN;
   editMoneyUnit = false;
@@ -107,10 +107,12 @@ export class PhuLuc01Component implements OnInit {
         ...item,
       })
     })
-    await this.getDinhMucPL2N();
-    // await this.getDinhMucPL2X();
+    // await this.getDinhMucPL2N();
+    await this.getDinhMucPL2X();
 
-    this.dsDinhMuc = this.dsDinhMucN
+    this.dsDinhMuc = this.dsDinhMucX
+    // console.log(this.dsDinhMuc);
+
 
     this.lstCtietBcao.forEach(item => {
       if (!item.tenDanhMuc) {
@@ -148,25 +150,25 @@ export class PhuLuc01Component implements OnInit {
     this.spinner.hide();
   }
 
-  async getDinhMucPL2N() {
-    const request = {
-      loaiDinhMuc: '01',
-      maDvi: this.maDviTao,
-    }
+  // async getDinhMucPL2N() {
+  //   const request = {
+  //     loaiDinhMuc: '01',
+  //     maDvi: this.maDviTao,
+  //   }
 
-    await this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
-      res => {
-        if (res.statusCode == 0) {
-          this.dsDinhMucN = res.data;
-        } else {
-          this.notification.error(MESSAGE.ERROR, res?.msg);
-        }
-      },
-      err => {
-        this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
-      }
-    )
-  };
+  //   await this.quanLyVonPhiService.getDinhMuc(request).toPromise().then(
+  //     res => {
+  //       if (res.statusCode == 0) {
+  //         this.dsDinhMucN = res.data;
+  //       } else {
+  //         this.notification.error(MESSAGE.ERROR, res?.msg);
+  //       }
+  //     },
+  //     err => {
+  //       this.notification.error(MESSAGE.ERROR, MESSAGE.SYSTEM_ERROR);
+  //     }
+  //   )
+  // };
   async getDinhMucPL2X() {
     const request = {
       loaiDinhMuc: '02',

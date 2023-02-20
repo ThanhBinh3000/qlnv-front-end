@@ -1,8 +1,14 @@
 export const PHU_LUC = [
     {
-        id: 'pl01',
-        tenDm: 'Dự toán phí nhập xuất',
-        tenPl: 'Phụ lục 1',
+        id: 'pl01N',
+        tenDm: 'Dự toán phí nhập ',
+        tenPl: 'Phụ lục 1 Nhập',
+        status: false,
+    },
+    {
+        id: 'pl01X',
+        tenDm: 'Dự toán phí xuất ',
+        tenPl: 'Phụ lục 1 Xuất',
         status: false,
     },
     {
