@@ -131,49 +131,19 @@
 
         <div nz-col [nzSpan]="24" *ngIf="isView">
             <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> Thông báo bán đấu giá</nz-form-label>
+                <nz-form-label nzRequired [nzNoColon]="true"> Thông báo kế hoạch bán trực tiếp</nz-form-label>
                 <nz-form-control nz-col>
                     <textarea rows="5" class="search__input" nz-input formControlName="thongBaoKh"
                         [readonly]="true"></textarea>
                 </nz-form-control>
             </nz-form-item>
         </div>
-        <div nz-col [nzSpan]="5">
-            <nz-form-item>
-                <nz-form-label nzRequired [nzNoColon]="true"> % Khoản tiền đặt trước</nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                    <nz-input-group nzAddOnAfter="%">
-                        <nz-input-number formControlName="khoanTienDatTruoc" nz-input [nzMin]="1"
-                            [nzMax]="globals.prop.MAX_INPUT" [nzStep]="1" [nzSize]="'small'"
-                            [nzDisabled]="formData.value.trangThai !== globals.prop.NHAP_DU_THAO && formData.value.trangThai !== globals.prop.NHAP_CHO_DUYET_LD_CUC && formData.value.trangThai !== ''">
-                        </nz-input-number>
-                    </nz-input-group>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="5">
-            <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Tổng SL xuất bán đề xuất</nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24">
-                    <span class="text-green" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}} Tấn</span>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
         <div nz-col [nzSpan]="7">
             <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Tổng tiền giá KĐ theo ĐG được duyệt</nz-form-label>
+                <nz-form-label [nzNoColon]="true"> Tổng số lượng xuất bán trực tiếp đề xuất </nz-form-label>
                 <nz-form-control nz-col [nzSpan]="24">
-                    <span class="text-green" nzDisabled>{{formData.value.tongTienKdienDonGia |number: '1.0-1'}}
-                        (vnd)</span>
-                </nz-form-control>
-            </nz-form-item>
-        </div>
-        <div nz-col [nzSpan]="7">
-            <nz-form-item>
-                <nz-form-label [nzNoColon]="true"> Tổng khoản tiền ĐT theo ĐG được duyệt</nz-form-label>
-                <nz-form-control nz-col [nzSpan]="24">
-                    <span class="text-green" nzDisabled>{{formData.value.tongTienDatTruocDonGia |number: '1.0-1'}}
-                        (vnd)</span>
+                    <span class="text-green" nzDisabled>{{formData.value.tongSoLuong |number: '1.0-1'}}
+                        (tấn)</span>
                 </nz-form-control>
             </nz-form-item>
         </div>
@@ -187,12 +157,12 @@
         <div class="title-chi-tieu">
             <span>
             </span>
-            <span> Danh mục đơn vị tài sản bán đấu giá </span>
+            <span> Số lượng, Địa điểm </span>
         </div>
     </div>
 </div>
 <nz-card class="mg-t-16 flex-card p-lr16 table-card">
-    <nz-table #tableData [nzData]="formData.value.dsPhanLoList" class="nowrap" nzBordered>
+    <nz-table #tableData [nzData]="formData.value.children" class="nowrap" nzBordered>
         <thead>
             <tr>
                 <th style="width: 2%;">STT</th>
@@ -202,10 +172,10 @@
                 <th>Ngăn kho</th>
                 <th>Lô kho</th>
                 <th>Mã ĐVTS</th>
-                <th>SL xuất</th>
+                <th>SL xuất bán TT đề xuất</th>
                 <th>ĐVT</th>
-                <th>Đơn giá được duyệt VAT (đ/kg)</th>
-                <th>Giá khởi điểm (đ)</th>
+                <th>Đơn giá được duyệt(đ/kg)</th>
+                <th>Thành tiền</th>
                 <th>Số tiền đặt trước (đ)</th>
                 <th *ngIf="!isView"></th>
             </tr>

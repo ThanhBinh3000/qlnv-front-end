@@ -7,6 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import {
   DialogTableSelectionComponent
 } from 'src/app/components/dialog/dialog-table-selection/dialog-table-selection.component';
+import { cloneDeep } from 'lodash';
 import { MESSAGE } from 'src/app/constants/message';
 import { FileDinhKem } from 'src/app/models/DeXuatKeHoachuaChonNhaThau';
 import { STATUS } from 'src/app/constants/status';
@@ -30,6 +31,9 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
   maQd: string = null;
   dataInput: any;
   dataInputCache: any;
+
+  isTongHop: boolean
+  dataTableCache: any;
 
   constructor(
     httpClient: HttpClient,
@@ -157,8 +161,8 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
                 tenCloaiVthh: data.tenCloaiVthh,
                 moTaHangHoa: data.moTaHangHoa
               })
-              console.log(data);
               this.dataTable = data.children;
+              this.dataTableCache = cloneDeep(this.dataTable);
             }
           } else {
             this.notification.error(MESSAGE.ERROR, res.msg);
@@ -199,34 +203,34 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
         soQdDc: data.soQdDc?.split("/")[0],
         soQdGoc: data.soQdGoc,
       });
-      // if (data.loaiVthh.startsWith("02")) {
-      //   this.dataTable = data.children;
-      // } else {
-      //   this.dataTable = data.children;
-      //   this.danhsachDxCache = cloneDeep(this.danhsachDx);
-      //   for (const item of this.danhsachDxCache) {
-      //     await this.deXuatKhBanDauGiaService.getDetail(item.idDxHdr).then((res) => {
-      //       if (res.msg == MESSAGE.SUCCESS) {
-      //         item.dsPhanLoList = res.data.dsPhanLoList;
-      //       }
-      //     })
-      //   }
-      // }
+      if (data.loaiVthh.startsWith("02")) {
+        this.dataTable = data.children;
+      } else {
+        this.dataTable = data.children;
+        this.dataTableCache = cloneDeep(this.dataTable);
+        for (const item of this.dataTableCache) {
+          await this.deXuatKhBanTrucTiepService.getDetail(item.idDxHdr).then((res) => {
+            if (res.msg == MESSAGE.SUCCESS) {
+              item.children = res.data.children;
+            }
+          })
+        }
+      }
     }
     ;
   }
 
   index = 0;
   async showDetail($event, index) {
-    // await this.spinner.show();
+    await this.spinner.show();
     // console.log(this.bodyChiTiet.nativeElement)
-    // $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
-    // $event.target.parentElement.classList.add('selectedRow');
-    // this.isTongHop = this.formData.value.phanLoai == 'TH';
-    // this.dataInput = this.danhsachDx[index];
-    // this.dataInputCache = this.danhsachDxCache[index];
-    // this.index = index;
-    // await this.spinner.hide();
+    $event.target.parentElement.parentElement.querySelector('.selectedRow')?.classList.remove('selectedRow');
+    $event.target.parentElement.classList.add('selectedRow');
+    this.isTongHop = this.formData.value.phanLoai == 'TH';
+    this.dataInput = this.dataTable[index];
+    this.dataInputCache = this.dataTableCache[index];
+    this.index = index;
+    await this.spinner.hide();
   }
 
   getNameFileQD($event: any) {
@@ -250,4 +254,6 @@ export class ThemmoiQdDieuchinhKhbttComponent extends Base2Component implements 
 
 
 }
+
+
 

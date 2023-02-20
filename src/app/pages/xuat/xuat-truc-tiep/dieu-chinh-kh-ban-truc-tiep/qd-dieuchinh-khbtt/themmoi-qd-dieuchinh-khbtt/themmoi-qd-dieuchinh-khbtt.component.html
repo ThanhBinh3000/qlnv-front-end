@@ -24,7 +24,7 @@
                     [ngClass]="formData.value.trangThai == STATUS.BAN_HANH ? 'da-ban-hanh' : 'du-thao-va-lanh-dao-duyet'">
                     {{ formData.value.tenTrangThai }}
                 </span>
-                <span> QUYẾT ĐỊNH ĐIỀU CHỈNH KẾ HOẠCH BÁN ĐẤU GIÁ </span>
+                <span> QUYẾT ĐỊNH ĐIỀU CHỈNH KH BÁN TRỰC TIẾP </span>
             </div>
         </div>
     </div>
@@ -175,7 +175,7 @@
             </nz-collapse-panel>
         </nz-collapse>
         <nz-collapse>
-            <nz-collapse-panel nzActive="true" nzHeader="Thông tin quyết định điều chỉnh KH BĐG">
+            <nz-collapse-panel nzActive="true" nzHeader="Thông tin đề xuất của các cục DTNN KV">
                 <nz-table class="pd-10" nzBordered [nzData]="dataTable" [nzFrontPagination]="false"
                     [nzShowPagination]="false">
                     <thead>
