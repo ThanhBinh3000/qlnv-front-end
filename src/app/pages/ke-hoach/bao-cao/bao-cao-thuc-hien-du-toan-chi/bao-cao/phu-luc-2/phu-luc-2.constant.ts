@@ -17,7 +17,7 @@ export const DANH_MUC = [
     },
     {
         ma: '0.1.1.3',
-        giaTri: 'Dự án mở rộng triển khai giám sát tập trung kho hnags dự trữ quốc gia tại các đơn vị TCDRNN',
+        giaTri: 'Dự án mở rộng triển khai giám sát tập trung kho hàng dự trữ quốc gia tại các đơn vị TCDRNN',
     },
     {
         ma: '0.1.2',

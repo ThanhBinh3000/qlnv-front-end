@@ -9,7 +9,7 @@ import { MESSAGEVALIDATE } from 'src/app/constants/messageValidate';
 import { DanhMucHDVService } from 'src/app/services/danhMucHDV.service';
 import { LapThamDinhService } from 'src/app/services/quan-ly-von-phi/lapThamDinh.service';
 import { QuanLyVonPhiService } from 'src/app/services/quanLyVonPhi.service';
-import { displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber, sumNumber } from 'src/app/Utility/utils';
+import { AMOUNT, displayNumber, divNumber, DON_VI_TIEN, exchangeMoney, LA_MA, MONEY_LIMIT, mulNumber, sumNumber } from 'src/app/Utility/utils';
 import * as uuid from 'uuid';
 export class ItemData {
   id: any;
@@ -59,7 +59,7 @@ export class PhuLuc01Component implements OnInit {
   maDviTao: any;
   soLaMa: any[] = LA_MA;
   allChecked = false;
-
+  amount = AMOUNT;
   tongSo: number;
   tongSoTd: number;
   tongThienNamTruoc: number;
@@ -108,9 +108,9 @@ export class PhuLuc01Component implements OnInit {
       })
     })
     await this.getDinhMucPL2N();
-    await this.getDinhMucPL2X();
+    // await this.getDinhMucPL2X();
 
-    this.dsDinhMuc = this.dsDinhMucN.concat(this.dsDinhMucX);
+    this.dsDinhMuc = this.dsDinhMucN
 
     this.lstCtietBcao.forEach(item => {
       if (!item.tenDanhMuc) {
@@ -555,7 +555,7 @@ export class PhuLuc01Component implements OnInit {
         stt: data.stt,
         tenDanhMuc: data.tenDanhMuc,
         level: data.level,
-        ttienTd: data.ttienTd,
+        // ttienTd: data.ttienTd,
         danhMuc: data.danhMuc,
         // sluongNamDtoan:data.sluongNamDtoan,
         // ttienNamDtoan: data.ttienNamDtoan,

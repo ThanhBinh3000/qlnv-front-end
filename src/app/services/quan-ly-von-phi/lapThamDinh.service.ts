@@ -203,4 +203,14 @@ export class LapThamDinhService extends BaseService {
             this.urlDefault + '/lap-tham-dinh/tong-hop-theo-ma-pa',
             request);
     }
+
+    getDsTle(request: any): Observable<any> {
+        return this.httpClient.get(
+            this.urlDefault + '/chung/tham-so-he-thong/' + request.nam);
+    }
+    getDsTle1(request: any): Observable<any> {
+        return this.httpClient.get(
+            'http://localhost:9159/chung/tham-so-he-thong/' + request.nam
+        );
+    }
 }

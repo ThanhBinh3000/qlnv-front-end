@@ -96,7 +96,7 @@
             <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Số hợp đồng
+                  Số QĐ giao nhiệm vụ XH
                 </nz-form-label>
                 <nz-form-control [nzErrorTip]="error">
                   <nz-input-group>
@@ -106,9 +106,19 @@
               </nz-form-item>
             </div>
             <div nz-col nzSpan="4">
+              <nz-form-item class="form-item">
+                <nz-form-label [nzNoColon]="true" nzRequired>
+                  Số phiếu kiểm nghiệm chất lượng
+                </nz-form-label>
+                <nz-form-control [nzErrorTip]="error">
+                  <input nz-input [readonly]="true" formControlName="soBienBan" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">
-                  Ngày ký hợp đồng
+                  Ngày lập phiếu
                 </nz-form-label>
                 <nz-date-picker nzFormat="dd/MM/YYYY" formControlName="ngayHd" nzDisabled>
                 </nz-date-picker>
@@ -118,22 +128,11 @@
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true"> KTV bảo quản</nz-form-label>
                 <nz-form-control>
-                  <input nz-input formControlName="tenKtv" readonly />
+                  <input nz-input formControlName="tenNguoiKiemNghiem" readonly />
                 </nz-form-control>
               </nz-form-item>
             </div>
-            <div nz-col nzSpan="4">
-              <nz-form-item class="form-item">
-                <nz-form-label [nzNoColon]="true" nzRequired>
-                  Số biên bản lấy mẫu/bàn giao mẫu
-                </nz-form-label>
-                <nz-form-control [nzErrorTip]="error">
-                  <nz-input-number formControlName="soBienBan" nzDisabled [nzMin]="1" [nzMax]="globals.prop.MAX_INPUT"
-                    nzPlaceHolder="Nhập số biên bản" [nzStep]="1" [nzSize]="'small'">
-                  </nz-input-number>
-                </nz-form-control>
-              </nz-form-item>
-            </div>
+
             <div nz-col nzSpan="4">
               <nz-form-item>
                 <nz-form-label [nzNoColon]="true">

@@ -457,7 +457,7 @@ export const QTVP = {
 export const AMOUNT = {
   allowZero: true,
   allowNegative: false,
-  precision: 2,
+  precision: 4,
   prefix: '',
   thousands: '.',
   decimal: ',',
@@ -950,19 +950,19 @@ export const LA_MA = [
 export const LOAI_DE_NGHI = [
   {
     id: Utils.MUA_GAO,
-    tenDm: "Mua gạo",
+    tenDm: "Gạo",
   },
   {
     id: Utils.MUA_THOC,
-    tenDm: "Mua thóc",
+    tenDm: "Thóc",
   },
   {
     id: Utils.MUA_MUOI,
-    tenDm: "Mua muối",
+    tenDm: "Muối",
   },
   {
     id: Utils.MUA_VTU,
-    tenDm: "Mua vật tư",
+    tenDm: "Vật tư",
   },
 ]
 
@@ -984,7 +984,7 @@ export const CAN_CU_GIA = [
   },
   {
     id: Utils.QD_DON_GIA,
-    tenDm: "Quyết định đơn giá mua",
+    tenDm: "Quyết định đơn giá",
   }
 ]
 

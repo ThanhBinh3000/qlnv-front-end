@@ -182,10 +182,10 @@
                     </fm-input-number>
                   </td>
                   <td>
-                    <fm-input-number class="search__input" [(ngModel)]="editCache[data.id].data.donGiaMua"
+                    <input class="money-input" currencyMask [(ngModel)]="editCache[data.id].data.donGiaMua"
                       (ngModelChange)="changeModel(data.id)"
-                      [class]="(editCache[data.id].data.donGiaMua || editCache[data.id].data.donGiaMua ===0) &&  editCache[data.id].data.donGiaMua >= 0?'' : 'input-error-validate'">
-                    </fm-input-number>
+                      [class]="(editCache[data.id].data.donGiaMua || editCache[data.id].data.donGiaMua ===0) &&  editCache[data.id].data.donGiaMua >= 0?'' : 'input-error-validate'"
+                      [options]="amount" />
                   </td>
                   <td>
                     {{displayValue(editCache[data.id].data.thanhTien)}}

@@ -55,8 +55,8 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
       soHd: [''],
       ngayHd: [''],
 
-      idKtv: [''],
-      tenKtv: [''],
+      idNguoiKiemNghiem: [''],
+      tenNguoiKiemNghiem: [''],
 
       soBienBan: ['', [Validators.required]],
       ngayLayMau: [dayjs().format('YYYY-MM-DD'), [Validators.required]],
@@ -105,10 +105,10 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
     let body = {
       nam: dayjs().get('year'),
       loaiVthh: this.loaiVthh,
-      trangThai: this.STATUS.BAN_HANH,
-      maChiCuc: this.userInfo.MA_DVI
+      trangThai: this.STATUS.DA_DUYET_LDCC,
+      maDvi: this.userInfo.MA_DVI
     }
-    let res = await this.quyetDinhGiaoNhiemVuXuatHangService.search(body);
+    let res = await this.bienBanLayMauXhService.search(body);
     if (res.msg == MESSAGE.SUCCESS) {
       data = res.data?.content;
     } else {
@@ -262,14 +262,14 @@ export class ThemMoiPhieuKiemNghiemChatLuongComponent extends Base2Component imp
 
 
   async initForm() {
-    let id = await this.userService.getId('XH_BB_LAY_MAU_SEQ')
+    // let id = await this.userService.getId('XH_BB_LAY_MAU_SEQ')
     this.formData.patchValue({
       maDvi: this.userInfo.MA_DVI,
       tenDvi: this.userInfo.TEN_DVI,
       maQhns: this.userInfo.DON_VI.maQhns,
       loaiBienBan: this.listBienBan[0].ma,
-      soBienBan: `${id}/${this.formData.get('nam').value}/BBLM-CCDTVP`,
-      tenKtv: this.userInfo.TEN_DAY_DU,
+      // soBienBan: `${id}/${this.formData.get('nam').value}/BBLM-CCDTVP`,
+      tenNguoiKiemNghiem: this.userInfo.TEN_DAY_DU,
     });
   }
 

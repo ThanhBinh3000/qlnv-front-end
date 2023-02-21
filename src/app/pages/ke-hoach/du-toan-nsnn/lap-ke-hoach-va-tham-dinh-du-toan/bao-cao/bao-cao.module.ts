@@ -7,6 +7,7 @@ import { BaoHiemHangComponent } from './phu-luc/bao-hiem-hang/bao-hiem-hang.comp
 import { BaoHiemKhoComponent } from './phu-luc/bao-hiem-kho/bao-hiem-kho.component';
 import { BaoHiemComponent } from './phu-luc/bao-hiem/bao-hiem.component';
 import { PhuLuc01Component } from './phu-luc/phu-luc-01/phu-luc-01.component';
+import { PhuLuc01XuatComponent } from './phu-luc/phu-luc-01-xuat/phu-luc-01-xuat.component';
 import { PhuLuc02Component } from './phu-luc/phu-luc-02/phu-luc-02.component';
 import { PhuLuc03Component } from './phu-luc/phu-luc-03/phu-luc-03.component';
 import { PhuLuc04Component } from './phu-luc/phu-luc-04/phu-luc-04.component';
@@ -48,6 +49,7 @@ import { BieuMau18Component } from './thong-tu-69/bieu-mau-18/bieu-mau-18.compon
         BieuMau160Component,
         // //phu luc
         PhuLuc01Component,
+        PhuLuc01XuatComponent,
         PhuLuc02Component,
         PhuLuc03Component,
         PhuLuc04Component,
